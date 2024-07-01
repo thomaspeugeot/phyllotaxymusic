@@ -1,0 +1,5 @@
+go/cmd/phylotaxymusic/phylotaxymusic
+__debug_bin*
+*.exe
+.DS_Store
+node_modules
