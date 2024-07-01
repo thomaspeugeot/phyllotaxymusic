@@ -5,6 +5,7 @@ go 1.22.1
 require (
 	github.com/fullstack-lang/gong v0.0.0-20240701144345-e970d0d19e1c
 	github.com/fullstack-lang/gongdoc v0.0.0-20240701144602-627f6522aad0
+	github.com/fullstack-lang/gongsvg v0.0.0-20240624050825-79bef4e50896
 	github.com/fullstack-lang/gongtable v0.0.0-20240615172404-508f6f98fd0e
 	github.com/fullstack-lang/gongtree v0.0.0-20240508082129-b45cc316a35b
 	github.com/fullstack-lang/maticons v0.0.0-20230823061653-70c364fbdd00
@@ -26,7 +27,6 @@ require (
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/fullstack-lang/gongsvg v0.0.0-20240511050616-94ec9013069f // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/glebarez/go-sqlite v1.22.0 // indirect

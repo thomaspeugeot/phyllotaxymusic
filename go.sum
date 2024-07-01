@@ -18,8 +18,8 @@ github.com/fullstack-lang/gong v0.0.0-20240701144345-e970d0d19e1c h1:aVsSTXn5QFQ
 github.com/fullstack-lang/gong v0.0.0-20240701144345-e970d0d19e1c/go.mod h1:bI1GEl9J6vhYpCSUJ180wHqv/6zwftp3mXVvxEFHP98=
 github.com/fullstack-lang/gongdoc v0.0.0-20240701144602-627f6522aad0 h1:LQ8eZ5GeT/uQwjsX7zJxZb7fGt25VrS8Le+DnaGjOxk=
 github.com/fullstack-lang/gongdoc v0.0.0-20240701144602-627f6522aad0/go.mod h1:fdEvTR7hXNLLO8IfZY63wJrTigLkaMmCeJZPayKIHNE=
-github.com/fullstack-lang/gongsvg v0.0.0-20240511050616-94ec9013069f h1:3WQBn7hmXnCGWd/JTTTauQDBKkAunP5GweMAdS8psT0=
-github.com/fullstack-lang/gongsvg v0.0.0-20240511050616-94ec9013069f/go.mod h1:/XhrztpwdzFhelUcLFbrkOwwxjaET78aN2AZglf1IU8=
+github.com/fullstack-lang/gongsvg v0.0.0-20240624050825-79bef4e50896 h1:XuLPDTlFxucUiS+9SgB+93Dt0//IVqniixLB665JeZw=
+github.com/fullstack-lang/gongsvg v0.0.0-20240624050825-79bef4e50896/go.mod h1:/XhrztpwdzFhelUcLFbrkOwwxjaET78aN2AZglf1IU8=
 github.com/fullstack-lang/gongtable v0.0.0-20240615172404-508f6f98fd0e h1:RzWqLNTWF35ow3fu+w7FUefCVdk/WAa3KYQ3yQc9ajg=
 github.com/fullstack-lang/gongtable v0.0.0-20240615172404-508f6f98fd0e/go.mod h1:3wj89Kenlx9fK3bN8BEN+XhJh92MdBeV2iO+LR5R5RA=
 github.com/fullstack-lang/gongtree v0.0.0-20240508082129-b45cc316a35b h1:7cEspjmq8q1n8SS53ruzNlUtQkepC5mpe6Mv/WJOlYE=

@@ -18,3 +18,4 @@ export * from './lib/diagram'
 export * from './lib/diagram.service'
 
 
+export * from './lib/StacksNames'
