@@ -28,10 +28,10 @@ func _(stage *models.StageStruct) {
 	// Setup of values
 
 	__Diagram__000000_Reference.Name = `Reference`
-	__Diagram__000000_Reference.N = 3
-	__Diagram__000000_Reference.M = 5
-	__Diagram__000000_Reference.DiamondAngle = 45.000000
-	__Diagram__000000_Reference.OriginX = 50.000000
+	__Diagram__000000_Reference.N = 2
+	__Diagram__000000_Reference.M = 3
+	__Diagram__000000_Reference.DiamondAngle = 60.000000
+	__Diagram__000000_Reference.OriginX = 100.000000
 	__Diagram__000000_Reference.OriginY = 500.000000
 	__Diagram__000000_Reference.DiamondSideLenght = 100.000000
 

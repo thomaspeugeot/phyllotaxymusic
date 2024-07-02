@@ -37,6 +37,7 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	var diamondRoot LineSet
 
 	diamondBottom := new(gongsvg_models.Line).Stage(gongsvgStage)
+	diamondBottom.Name = "B"
 	layer.Lines = append(layer.Lines, diamondBottom)
 	diamondRoot = append(diamondRoot, diamondBottom)
 	diamondBottom.X1 = diagram.OriginX
@@ -49,6 +50,7 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	deltaY := diagram.DiamondSideLenght * math.Sin(math.Pi*diagram.DiamondAngle/180.0)
 
 	diamondLeftSide := new(gongsvg_models.Line).Stage(gongsvgStage)
+	diamondLeftSide.Name = "L"
 	diamondRoot = append(diamondRoot, diamondLeftSide)
 	layer.Lines = append(layer.Lines, diamondLeftSide)
 	diamondLeftSide.X1 = diagram.OriginX
@@ -58,22 +60,31 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	diamondLeftSide.Presentation = presentation
 
 	diamondRightSide := copyLine(gongsvgStage, layer, diamondLeftSide, diagram.DiamondSideLenght, 0.0)
+	diamondRightSide.Name = "R"
 	diamondRoot = append(diamondRoot, diamondRightSide)
 
 	diamondTopSide := copyLine(gongsvgStage, layer, diamondBottom, deltaX, -deltaY)
+	diamondTopSide.Name = "T"
 	diamondRoot = append(diamondRoot, diamondTopSide)
 
 	currentDiamond := diamondRoot
-	for j := range diagram.M {
+	for j := range diagram.M - 1 {
 		copyLineSet(gongsvgStage, layer, currentDiamond, float64(j+1)*deltaX, -float64(j+1)*deltaY)
 	}
-	for i := range diagram.N {
+	for i := range diagram.N - 1 {
 		currentDiamond = copyLineSet(gongsvgStage, layer, diamondRoot, float64(i+1)*diagram.DiamondSideLenght, 0)
-		for j := range diagram.M {
+		for j := range diagram.M - 1 {
 			copyLineSet(gongsvgStage, layer, currentDiamond, float64(j+1)*deltaX, -float64(j+1)*deltaY)
 		}
-
 	}
+
+	circle := new(gongsvg_models.Circle).Stage(gongsvgStage)
+	layer.Circles = append(layer.Circles, circle)
+	circle.Presentation = presentation
+
+	circle.CX = diagram.OriginX + float64(diagram.N)*diagram.DiamondSideLenght + float64(diagram.M)*deltaX
+	circle.CY = diagram.OriginY - float64(diagram.M)*deltaY
+	circle.Radius = 20
 
 	gongsvgStage.Commit()
 }
@@ -87,6 +98,11 @@ func copyLine(
 	copy = new(gongsvg_models.Line).Stage(gongsvgStage)
 	layer.Lines = append(layer.Lines, copy)
 	*copy = *origin
+	if deltaY != 0 {
+		copy.Name = origin.Name + "v"
+	} else {
+		copy.Name = origin.Name + "h"
+	}
 	copy.X1 += deltaX
 	copy.X2 += deltaX
 	copy.Y1 += deltaY
