@@ -520,7 +520,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Diagram:
-		res = []string{"Name"}
+		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSide"}
 	}
 	return
 }
@@ -554,7 +554,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *Diagram:
-		res = []string{"Name"}
+		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSide"}
 	}
 	return
 }
@@ -568,6 +568,18 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 		// string value of fields
 		case "Name":
 			res = inferedInstance.Name
+		case "N":
+			res = fmt.Sprintf("%d", inferedInstance.N)
+		case "M":
+			res = fmt.Sprintf("%d", inferedInstance.M)
+		case "DiamondAngle":
+			res = fmt.Sprintf("%f", inferedInstance.DiamondAngle)
+		case "OriginX":
+			res = fmt.Sprintf("%f", inferedInstance.OriginX)
+		case "OriginY":
+			res = fmt.Sprintf("%f", inferedInstance.OriginY)
+		case "DiamondSide":
+			res = fmt.Sprintf("%f", inferedInstance.DiamondSide)
 		}
 	default:
 		_ = inferedInstance
@@ -584,6 +596,18 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = inferedInstance.Name
+		case "N":
+			res = fmt.Sprintf("%d", inferedInstance.N)
+		case "M":
+			res = fmt.Sprintf("%d", inferedInstance.M)
+		case "DiamondAngle":
+			res = fmt.Sprintf("%f", inferedInstance.DiamondAngle)
+		case "OriginX":
+			res = fmt.Sprintf("%f", inferedInstance.OriginX)
+		case "OriginY":
+			res = fmt.Sprintf("%f", inferedInstance.OriginY)
+		case "DiamondSide":
+			res = fmt.Sprintf("%f", inferedInstance.DiamondSide)
 		}
 	default:
 		_ = inferedInstance

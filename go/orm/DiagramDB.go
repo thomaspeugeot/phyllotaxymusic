@@ -61,6 +61,24 @@ type DiagramDB struct {
 
 	// Declation for basic field diagramDB.Name
 	Name_Data sql.NullString
+
+	// Declation for basic field diagramDB.N
+	N_Data sql.NullInt64
+
+	// Declation for basic field diagramDB.M
+	M_Data sql.NullInt64
+
+	// Declation for basic field diagramDB.DiamondAngle
+	DiamondAngle_Data sql.NullFloat64
+
+	// Declation for basic field diagramDB.OriginX
+	OriginX_Data sql.NullFloat64
+
+	// Declation for basic field diagramDB.OriginY
+	OriginY_Data sql.NullFloat64
+
+	// Declation for basic field diagramDB.DiamondSide
+	DiamondSide_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -85,6 +103,18 @@ type DiagramWOP struct {
 	// insertion for WOP basic fields
 
 	Name string `xlsx:"1"`
+
+	N int `xlsx:"2"`
+
+	M int `xlsx:"3"`
+
+	DiamondAngle float64 `xlsx:"4"`
+
+	OriginX float64 `xlsx:"5"`
+
+	OriginY float64 `xlsx:"6"`
+
+	DiamondSide float64 `xlsx:"7"`
 	// insertion for WOP pointer fields
 }
 
@@ -92,6 +122,12 @@ var Diagram_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
+	"N",
+	"M",
+	"DiamondAngle",
+	"OriginX",
+	"OriginY",
+	"DiamondSide",
 }
 
 type BackRepoDiagramStruct struct {
@@ -360,6 +396,24 @@ func (diagramDB *DiagramDB) CopyBasicFieldsFromDiagram(diagram *models.Diagram) 
 
 	diagramDB.Name_Data.String = diagram.Name
 	diagramDB.Name_Data.Valid = true
+
+	diagramDB.N_Data.Int64 = int64(diagram.N)
+	diagramDB.N_Data.Valid = true
+
+	diagramDB.M_Data.Int64 = int64(diagram.M)
+	diagramDB.M_Data.Valid = true
+
+	diagramDB.DiamondAngle_Data.Float64 = diagram.DiamondAngle
+	diagramDB.DiamondAngle_Data.Valid = true
+
+	diagramDB.OriginX_Data.Float64 = diagram.OriginX
+	diagramDB.OriginX_Data.Valid = true
+
+	diagramDB.OriginY_Data.Float64 = diagram.OriginY
+	diagramDB.OriginY_Data.Valid = true
+
+	diagramDB.DiamondSide_Data.Float64 = diagram.DiamondSide
+	diagramDB.DiamondSide_Data.Valid = true
 }
 
 // CopyBasicFieldsFromDiagram_WOP
@@ -368,6 +422,24 @@ func (diagramDB *DiagramDB) CopyBasicFieldsFromDiagram_WOP(diagram *models.Diagr
 
 	diagramDB.Name_Data.String = diagram.Name
 	diagramDB.Name_Data.Valid = true
+
+	diagramDB.N_Data.Int64 = int64(diagram.N)
+	diagramDB.N_Data.Valid = true
+
+	diagramDB.M_Data.Int64 = int64(diagram.M)
+	diagramDB.M_Data.Valid = true
+
+	diagramDB.DiamondAngle_Data.Float64 = diagram.DiamondAngle
+	diagramDB.DiamondAngle_Data.Valid = true
+
+	diagramDB.OriginX_Data.Float64 = diagram.OriginX
+	diagramDB.OriginX_Data.Valid = true
+
+	diagramDB.OriginY_Data.Float64 = diagram.OriginY
+	diagramDB.OriginY_Data.Valid = true
+
+	diagramDB.DiamondSide_Data.Float64 = diagram.DiamondSide
+	diagramDB.DiamondSide_Data.Valid = true
 }
 
 // CopyBasicFieldsFromDiagramWOP
@@ -376,18 +448,48 @@ func (diagramDB *DiagramDB) CopyBasicFieldsFromDiagramWOP(diagram *DiagramWOP) {
 
 	diagramDB.Name_Data.String = diagram.Name
 	diagramDB.Name_Data.Valid = true
+
+	diagramDB.N_Data.Int64 = int64(diagram.N)
+	diagramDB.N_Data.Valid = true
+
+	diagramDB.M_Data.Int64 = int64(diagram.M)
+	diagramDB.M_Data.Valid = true
+
+	diagramDB.DiamondAngle_Data.Float64 = diagram.DiamondAngle
+	diagramDB.DiamondAngle_Data.Valid = true
+
+	diagramDB.OriginX_Data.Float64 = diagram.OriginX
+	diagramDB.OriginX_Data.Valid = true
+
+	diagramDB.OriginY_Data.Float64 = diagram.OriginY
+	diagramDB.OriginY_Data.Valid = true
+
+	diagramDB.DiamondSide_Data.Float64 = diagram.DiamondSide
+	diagramDB.DiamondSide_Data.Valid = true
 }
 
 // CopyBasicFieldsToDiagram
 func (diagramDB *DiagramDB) CopyBasicFieldsToDiagram(diagram *models.Diagram) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	diagram.Name = diagramDB.Name_Data.String
+	diagram.N = int(diagramDB.N_Data.Int64)
+	diagram.M = int(diagramDB.M_Data.Int64)
+	diagram.DiamondAngle = diagramDB.DiamondAngle_Data.Float64
+	diagram.OriginX = diagramDB.OriginX_Data.Float64
+	diagram.OriginY = diagramDB.OriginY_Data.Float64
+	diagram.DiamondSide = diagramDB.DiamondSide_Data.Float64
 }
 
 // CopyBasicFieldsToDiagram_WOP
 func (diagramDB *DiagramDB) CopyBasicFieldsToDiagram_WOP(diagram *models.Diagram_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	diagram.Name = diagramDB.Name_Data.String
+	diagram.N = int(diagramDB.N_Data.Int64)
+	diagram.M = int(diagramDB.M_Data.Int64)
+	diagram.DiamondAngle = diagramDB.DiamondAngle_Data.Float64
+	diagram.OriginX = diagramDB.OriginX_Data.Float64
+	diagram.OriginY = diagramDB.OriginY_Data.Float64
+	diagram.DiamondSide = diagramDB.DiamondSide_Data.Float64
 }
 
 // CopyBasicFieldsToDiagramWOP
@@ -395,6 +497,12 @@ func (diagramDB *DiagramDB) CopyBasicFieldsToDiagramWOP(diagram *DiagramWOP) {
 	diagram.ID = int(diagramDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	diagram.Name = diagramDB.Name_Data.String
+	diagram.N = int(diagramDB.N_Data.Int64)
+	diagram.M = int(diagramDB.M_Data.Int64)
+	diagram.DiamondAngle = diagramDB.DiamondAngle_Data.Float64
+	diagram.OriginX = diagramDB.OriginX_Data.Float64
+	diagram.OriginY = diagramDB.OriginY_Data.Float64
+	diagram.DiamondSide = diagramDB.DiamondSide_Data.Float64
 }
 
 // Backup generates a json file from a slice of all DiagramDB instances in the backrepo

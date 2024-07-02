@@ -63,6 +63,18 @@ func (diagramFormCallback *DiagramFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(diagram_.Name), formDiv)
+		case "N":
+			FormDivBasicFieldToField(&(diagram_.N), formDiv)
+		case "M":
+			FormDivBasicFieldToField(&(diagram_.M), formDiv)
+		case "DiamondAngle":
+			FormDivBasicFieldToField(&(diagram_.DiamondAngle), formDiv)
+		case "OriginX":
+			FormDivBasicFieldToField(&(diagram_.OriginX), formDiv)
+		case "OriginY":
+			FormDivBasicFieldToField(&(diagram_.OriginY), formDiv)
+		case "DiamondSide":
+			FormDivBasicFieldToField(&(diagram_.DiamondSide), formDiv)
 		}
 	}
 

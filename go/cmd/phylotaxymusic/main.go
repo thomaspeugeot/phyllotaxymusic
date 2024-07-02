@@ -6,10 +6,11 @@ import (
 	"strconv"
 
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
+	phylotaxymusic_svg "github.com/thomaspeugeot/phylotaxymusic/go/svg"
+
 	phylotaxymusic_stack "github.com/thomaspeugeot/phylotaxymusic/go/stack"
 	phylotaxymusic_static "github.com/thomaspeugeot/phylotaxymusic/go/static"
 
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongsvg_stack "github.com/fullstack-lang/gongsvg/go/stack"
 )
 
@@ -36,33 +37,14 @@ func main() {
 	// setup the static file server and get the controller
 	r := phylotaxymusic_static.ServeStaticFiles(*logGINFlag)
 
-	// setup stack
-	stack := phylotaxymusic_stack.NewStack(r, "phylotaxymusic", *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
-	stack.Probe.Refresh()
+	// setup phylotaxymusicStack
+	phylotaxymusicStack := phylotaxymusic_stack.NewStack(r, "phylotaxymusic", *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+	phylotaxymusicStack.Probe.Refresh()
+	phylotaxymusicStack.Stage.Checkout()
 
 	gongsvg_stack := gongsvg_stack.NewStack(r, phylotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
 
-	svg := (&gongsvg_models.SVG{Name: `SVG`}).Stage(gongsvg_stack.Stage)
-	layer := new(gongsvg_models.Layer).Stage(gongsvg_stack.Stage)
-	svg.Layers = append(svg.Layers, layer)
-
-	circle := new(gongsvg_models.Circle).Stage(gongsvg_stack.Stage)
-	layer.Circles = append(layer.Circles, circle)
-
-	circle.Name = `C1a`
-	circle.CX = 100.000000
-	circle.CY = 100.000000
-	circle.Radius = 50.000000
-	circle.Color = `greenlight`
-	circle.FillOpacity = 0.800000
-	circle.Stroke = `blue`
-	circle.StrokeOpacity = 0.000000
-	circle.StrokeWidth = 1.000000
-	circle.StrokeDashArray = ``
-	circle.StrokeDashArrayWhenSelected = ``
-	circle.Transform = ``
-
-	gongsvg_stack.Stage.Commit()
+	phylotaxymusic_svg.GenerateSvg(gongsvg_stack.Stage, phylotaxymusicStack.Stage)
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
