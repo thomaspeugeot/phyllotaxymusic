@@ -73,8 +73,8 @@ func (diagramFormCallback *DiagramFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(diagram_.OriginX), formDiv)
 		case "OriginY":
 			FormDivBasicFieldToField(&(diagram_.OriginY), formDiv)
-		case "DiamondSide":
-			FormDivBasicFieldToField(&(diagram_.DiamondSide), formDiv)
+		case "DiamondSideLenght":
+			FormDivBasicFieldToField(&(diagram_.DiamondSideLenght), formDiv)
 		}
 	}
 

@@ -32,7 +32,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("DiamondSide", instanceWithInferedType.DiamondSide, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("DiamondSideLenght", instanceWithInferedType.DiamondSideLenght, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 
 	default:

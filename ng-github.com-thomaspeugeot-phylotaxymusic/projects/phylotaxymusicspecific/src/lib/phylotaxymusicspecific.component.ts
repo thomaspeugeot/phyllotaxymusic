@@ -12,10 +12,6 @@ import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/ful
     GongsvgDiagrammingComponent
   ],
   template: `
-
-    <p>
-      Hello
-    </p>
     <lib-gongsvg-diagramming [GONG__StackPath]="StacksNames.GongsvgStackName">
     </lib-gongsvg-diagramming>
   

@@ -651,13 +651,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Diagram[identifier].OriginY = exprSign * fielValue
-				case "DiamondSide":
+				case "DiamondSideLenght":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Diagram[identifier].DiamondSide = exprSign * fielValue
+					__gong__map_Diagram[identifier].DiamondSideLenght = exprSign * fielValue
 				}
 			}
 		case *ast.Ident:
