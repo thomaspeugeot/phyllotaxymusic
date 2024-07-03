@@ -9,7 +9,8 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
-type LineSet []*gongsvg_models.Line
+type Diamond []*gongsvg_models.Line
+type DiamondGrid []*Diamond
 
 func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *phylotaxymusic_models.StageStruct) {
 
@@ -38,7 +39,7 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	presentation.StrokeWidth = 4
 
 	// build the first diamondRoot
-	var diamondRoot LineSet
+	var diamondRoot Diamond
 
 	diamondBottom := new(gongsvg_models.Line).Stage(gongsvgStage)
 	diamondBottom.Name = "B"
@@ -83,24 +84,33 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	angleForTheGridEnd = 180 * angleForTheGridEnd / math.Pi
 
 	currentDiamond := diamondRoot
-	RotateLineSet(gongsvgStage, rotatedObjectsLayer, diamondRoot, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+	rotatedCurrentDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, diamondRoot, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+
+	var rotatedDiamondGrid DiamondGrid
+	rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedCurrentDiamond)
 
 	for j := range diagram.M - 1 {
 		copiedDiamond := CopyLineSet(gongsvgStage, layer, currentDiamond, float64(j+1)*deltaX, -float64(j+1)*deltaY)
-		RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+		rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+		rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedDiamond)
 	}
 	for i := range diagram.N - 1 {
 		currentDiamond = CopyLineSet(gongsvgStage, layer, diamondRoot, float64(i+1)*diagram.DiamondSideLenght, 0)
-		RotateLineSet(gongsvgStage, rotatedObjectsLayer, currentDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+		rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, currentDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+		rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedDiamond)
 
 		for j := range diagram.M - 1 {
 			copiedDiamond := CopyLineSet(gongsvgStage, layer, currentDiamond, float64(j+1)*deltaX, -float64(j+1)*deltaY)
-			RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+			rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+			rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedDiamond)
 		}
 	}
 
 	rotatedCircle := RotateCircle(gongsvgStage, rotatedObjectsLayer, circle, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
 	_ = rotatedCircle
+
+	//
+	// create the circle on each rotated diamond tip in the diamond grid
 
 	gongsvgStage.Commit()
 }
@@ -130,8 +140,8 @@ func CopyLine(
 func CopyLineSet(
 	gongsvgStage *gongsvg_models.StageStruct,
 	layer *gongsvg_models.Layer,
-	originSet LineSet,
-	deltaX, deltaY float64) (copy LineSet) {
+	originSet Diamond,
+	deltaX, deltaY float64) (copy Diamond) {
 
 	for _, _line := range originSet {
 		copy = append(copy, CopyLine(gongsvgStage, layer, _line, deltaX, deltaY))
@@ -175,12 +185,14 @@ func RotateLine(
 func RotateLineSet(
 	gongsvgStage *gongsvg_models.StageStruct,
 	layer *gongsvg_models.Layer,
-	originSet LineSet,
-	deltaX, deltaY, angle float64) (copy LineSet) {
+	originSet Diamond,
+	deltaX, deltaY, angle float64) (copy Diamond) {
 
 	for _, _line := range originSet {
 		copy = append(copy, RotateLine(gongsvgStage, layer, _line, deltaX, deltaY, angle))
 	}
+
+	applyRotatedObjectPresentation(copy)
 
 	return
 }
@@ -209,4 +221,11 @@ func RotateCircle(
 	copy.CY = tempCY + originY
 
 	return
+}
+
+func applyRotatedObjectPresentation(lineSet Diamond) {
+
+	for _, _line := range lineSet {
+		_line.Stroke = "green"
+	}
 }
