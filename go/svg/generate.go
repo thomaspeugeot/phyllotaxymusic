@@ -28,6 +28,10 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	layer.Display = true
 	svg.Layers = append(svg.Layers, layer)
 
+	rotatedObjectsLayer := new(gongsvg_models.Layer).Stage(gongsvgStage)
+	rotatedObjectsLayer.Display = true
+	svg.Layers = append(svg.Layers, rotatedObjectsLayer)
+
 	var presentation gongsvg_models.Presentation
 	presentation.Stroke = "black"
 	presentation.StrokeOpacity = 0.2
@@ -79,23 +83,23 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	angleForTheGridEnd = 180 * angleForTheGridEnd / math.Pi
 
 	currentDiamond := diamondRoot
-	RotateLineSet(gongsvgStage, layer, diamondRoot, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+	RotateLineSet(gongsvgStage, rotatedObjectsLayer, diamondRoot, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
 
 	for j := range diagram.M - 1 {
 		copiedDiamond := CopyLineSet(gongsvgStage, layer, currentDiamond, float64(j+1)*deltaX, -float64(j+1)*deltaY)
-		RotateLineSet(gongsvgStage, layer, copiedDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+		RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
 	}
 	for i := range diagram.N - 1 {
 		currentDiamond = CopyLineSet(gongsvgStage, layer, diamondRoot, float64(i+1)*diagram.DiamondSideLenght, 0)
-		RotateLineSet(gongsvgStage, layer, currentDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+		RotateLineSet(gongsvgStage, rotatedObjectsLayer, currentDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
 
 		for j := range diagram.M - 1 {
 			copiedDiamond := CopyLineSet(gongsvgStage, layer, currentDiamond, float64(j+1)*deltaX, -float64(j+1)*deltaY)
-			RotateLineSet(gongsvgStage, layer, copiedDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+			RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
 		}
 	}
 
-	rotatedCircle := RotateCircle(gongsvgStage, layer, circle, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
+	rotatedCircle := RotateCircle(gongsvgStage, rotatedObjectsLayer, circle, diagram.OriginX, diagram.OriginY, -angleForTheGridEnd)
 	_ = rotatedCircle
 
 	gongsvgStage.Commit()
