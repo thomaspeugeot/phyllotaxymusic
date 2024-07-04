@@ -1,7 +1,7 @@
 // generated from ng_file_enum.ts.go
 export enum StacksNames {
 	// insertion point	
-	Phylotaxy = "phylotaxy",
+	Phylotaxy = "phylotaxymusic",
 	GongsvgStackName = "gongsvg",
 	GongtreeStackName = "gongtree",
 	GongtableStackName = "gongtable",
@@ -14,7 +14,7 @@ export interface StacksNamesSelect {
 }
 
 export const StacksNamesList: StacksNamesSelect[] = [ // insertion point	
-	{ value: StacksNames.Phylotaxy, viewValue: "phylotaxy" },
+	{ value: StacksNames.Phylotaxy, viewValue: "phylotaxymusic" },
 	{ value: StacksNames.GongsvgStackName, viewValue: "gongsvg" },
 	{ value: StacksNames.GongtreeStackName, viewValue: "gongtree" },
 	{ value: StacksNames.GongtableStackName, viewValue: "gongtable" },

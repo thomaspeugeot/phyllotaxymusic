@@ -22,6 +22,7 @@ import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/ful
 export class PhylotaxymusicspecificComponent implements OnInit {
 
   StacksNames = phylotaxymusic.StacksNames
+  StackName = phylotaxymusic.StacksNames.Phylotaxy
 
   public gongtableFrontRepo?: phylotaxymusic.FrontRepo
 

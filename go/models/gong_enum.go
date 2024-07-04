@@ -11,7 +11,7 @@ func (stacksnames StacksNames) ToString() (res string) {
 	switch stacksnames {
 	// insertion code per enum code
 	case Phylotaxy:
-		res = "phylotaxy"
+		res = "phylotaxymusic"
 	case GongsvgStackName:
 		res = "gongsvg"
 	case GongtreeStackName:
@@ -28,7 +28,7 @@ func (stacksnames *StacksNames) FromString(input string) (err error) {
 
 	switch input {
 	// insertion code per enum code
-	case "phylotaxy":
+	case "phylotaxymusic":
 		*stacksnames = Phylotaxy
 	case "gongsvg":
 		*stacksnames = GongsvgStackName
@@ -101,7 +101,7 @@ func (stacksnames StacksNames) CodeValues() (res []string) {
 	res = make([]string, 0)
 
 	// insertion code per enum code
-	res = append(res, "phylotaxy")
+	res = append(res, "phylotaxymusic")
 	res = append(res, "gongsvg")
 	res = append(res, "gongtree")
 	res = append(res, "gongtable")
