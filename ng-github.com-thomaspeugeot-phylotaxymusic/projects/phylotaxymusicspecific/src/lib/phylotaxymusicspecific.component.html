@@ -1,0 +1,16 @@
+<h1></h1>
+
+@if (frontRepo) {
+    <mat-slider  min="0" max="90.0" step="1" 
+    showTickMarks discrete [displayWith]="formatLabel" 
+    >
+        <input matSliderThumb [(ngModel)]="frontRepo.array_Diagrams[0].DiamondAngle" (input)="input($event)" 
+        >
+    </mat-slider>
+}
+
+
+
+<lib-gongsvg-diagramming [GONG__StackPath]="StacksNames.GongsvgStackName">
+</lib-gongsvg-diagramming>
+  

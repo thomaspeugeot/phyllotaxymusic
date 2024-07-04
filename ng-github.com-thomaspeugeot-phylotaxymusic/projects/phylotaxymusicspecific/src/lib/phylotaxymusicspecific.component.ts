@@ -2,32 +2,53 @@ import { Component, OnInit } from '@angular/core';
 
 import * as phylotaxymusic from '../../../phylotaxymusic/src/public-api'
 
+import { MatSliderModule } from '@angular/material/slider'
+import { FormsModule } from '@angular/forms';  // Import FormsModule
 
 import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'lib-phylotaxymusicspecific',
   standalone: true,
   imports: [
+    CommonModule,
+    MatSliderModule,
+    FormsModule,
     GongsvgDiagrammingComponent
   ],
-  template: `
-
-    <lib-gongsvg-diagramming [GONG__StackPath]="StacksNames.GongsvgStackName">
-    </lib-gongsvg-diagramming>
-  
-  `,
-  styles: ``
+  templateUrl: './phylotaxymusicspecific.component.html',
+  styles: `
+  mat-slider {
+  width: 300px;
+  }`
 })
 export class PhylotaxymusicspecificComponent implements OnInit {
+
+
+  input($event: Event) {
+    console.log(this.frontRepo!.array_Diagrams[0].DiamondAngle)
+
+    let diagram = this.frontRepo!.array_Diagrams[0]
+
+    this.diagramService.updateFront(diagram, this.StacksNames.Phylotaxy).subscribe(
+      () => {
+
+      }
+    )
+  }
 
   StacksNames = phylotaxymusic.StacksNames
   StackName = phylotaxymusic.StacksNames.Phylotaxy
 
-  public gongtableFrontRepo?: phylotaxymusic.FrontRepo
+  toto: number = 40.0
+
+  public frontRepo?: phylotaxymusic.FrontRepo
 
   constructor(
     private frontRepoService: phylotaxymusic.FrontRepoService,
+
+    private diagramService: phylotaxymusic.DiagramService,
   ) {
 
   }
@@ -38,8 +59,16 @@ export class PhylotaxymusicspecificComponent implements OnInit {
 
     this.frontRepoService.connectToWebSocket(this.StacksNames.Phylotaxy).subscribe(
       gongtablesFrontRepo => {
-        this.gongtableFrontRepo = gongtablesFrontRepo
+        this.frontRepo = gongtablesFrontRepo
       }
     )
+  }
+
+  formatLabel(value: number): string {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+
+    return `${value}`;
   }
 }
