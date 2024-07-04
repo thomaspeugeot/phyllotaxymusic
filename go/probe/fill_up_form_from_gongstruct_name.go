@@ -26,19 +26,6 @@ func FillUpFormFromGongstructName(
 
 	switch gongstructName {
 	// insertion point
-	case "Diagram":
-		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
-			Label: prefix + "Diagram Form",
-		}).Stage(formStage)
-		formGroup.OnSave = __gong__New__DiagramFormCallback(
-			nil,
-			probe,
-			formGroup,
-		)
-		diagram := new(models.Diagram)
-		formGroup.HasSuppressButton = !isNewInstance
-		FillUpForm(diagram, formGroup, probe)
 	case "Line":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
@@ -52,6 +39,19 @@ func FillUpFormFromGongstructName(
 		line := new(models.Line)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(line, formGroup, probe)
+	case "Parameter":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "Parameter Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__ParameterFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		parameter := new(models.Parameter)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(parameter, formGroup, probe)
 	}
 	formStage.Commit()
 }

@@ -18,95 +18,6 @@ var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
 var __dummy_orm = orm.BackRepoStruct{}
 
 // insertion point
-func __gong__New__DiagramFormCallback(
-	diagram *models.Diagram,
-	probe *Probe,
-	formGroup *table.FormGroup,
-) (diagramFormCallback *DiagramFormCallback) {
-	diagramFormCallback = new(DiagramFormCallback)
-	diagramFormCallback.probe = probe
-	diagramFormCallback.diagram = diagram
-	diagramFormCallback.formGroup = formGroup
-
-	diagramFormCallback.CreationMode = (diagram == nil)
-
-	return
-}
-
-type DiagramFormCallback struct {
-	diagram *models.Diagram
-
-	// If the form call is called on the creation of a new instnace
-	CreationMode bool
-
-	probe *Probe
-
-	formGroup *table.FormGroup
-}
-
-func (diagramFormCallback *DiagramFormCallback) OnSave() {
-
-	log.Println("DiagramFormCallback, OnSave")
-
-	// checkout formStage to have the form group on the stage synchronized with the
-	// back repo (and front repo)
-	diagramFormCallback.probe.formStage.Checkout()
-
-	if diagramFormCallback.diagram == nil {
-		diagramFormCallback.diagram = new(models.Diagram).Stage(diagramFormCallback.probe.stageOfInterest)
-	}
-	diagram_ := diagramFormCallback.diagram
-	_ = diagram_
-
-	for _, formDiv := range diagramFormCallback.formGroup.FormDivs {
-		switch formDiv.Name {
-		// insertion point per field
-		case "Name":
-			FormDivBasicFieldToField(&(diagram_.Name), formDiv)
-		case "N":
-			FormDivBasicFieldToField(&(diagram_.N), formDiv)
-		case "M":
-			FormDivBasicFieldToField(&(diagram_.M), formDiv)
-		case "DiamondAngle":
-			FormDivBasicFieldToField(&(diagram_.DiamondAngle), formDiv)
-		case "OriginX":
-			FormDivBasicFieldToField(&(diagram_.OriginX), formDiv)
-		case "OriginY":
-			FormDivBasicFieldToField(&(diagram_.OriginY), formDiv)
-		case "DiamondSideLenght":
-			FormDivBasicFieldToField(&(diagram_.DiamondSideLenght), formDiv)
-		}
-	}
-
-	// manage the suppress operation
-	if diagramFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		diagram_.Unstage(diagramFormCallback.probe.stageOfInterest)
-	}
-
-	diagramFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.Diagram](
-		diagramFormCallback.probe,
-	)
-	diagramFormCallback.probe.tableStage.Commit()
-
-	// display a new form by reset the form stage
-	if diagramFormCallback.CreationMode || diagramFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		diagramFormCallback.probe.formStage.Reset()
-		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
-		}).Stage(diagramFormCallback.probe.formStage)
-		newFormGroup.OnSave = __gong__New__DiagramFormCallback(
-			nil,
-			diagramFormCallback.probe,
-			newFormGroup,
-		)
-		diagram := new(models.Diagram)
-		FillUpForm(diagram, newFormGroup, diagramFormCallback.probe)
-		diagramFormCallback.probe.formStage.Commit()
-	}
-
-	fillUpTree(diagramFormCallback.probe)
-}
 func __gong__New__LineFormCallback(
 	line *models.Line,
 	probe *Probe,
@@ -191,4 +102,93 @@ func (lineFormCallback *LineFormCallback) OnSave() {
 	}
 
 	fillUpTree(lineFormCallback.probe)
+}
+func __gong__New__ParameterFormCallback(
+	parameter *models.Parameter,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (parameterFormCallback *ParameterFormCallback) {
+	parameterFormCallback = new(ParameterFormCallback)
+	parameterFormCallback.probe = probe
+	parameterFormCallback.parameter = parameter
+	parameterFormCallback.formGroup = formGroup
+
+	parameterFormCallback.CreationMode = (parameter == nil)
+
+	return
+}
+
+type ParameterFormCallback struct {
+	parameter *models.Parameter
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (parameterFormCallback *ParameterFormCallback) OnSave() {
+
+	log.Println("ParameterFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	parameterFormCallback.probe.formStage.Checkout()
+
+	if parameterFormCallback.parameter == nil {
+		parameterFormCallback.parameter = new(models.Parameter).Stage(parameterFormCallback.probe.stageOfInterest)
+	}
+	parameter_ := parameterFormCallback.parameter
+	_ = parameter_
+
+	for _, formDiv := range parameterFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(parameter_.Name), formDiv)
+		case "N":
+			FormDivBasicFieldToField(&(parameter_.N), formDiv)
+		case "M":
+			FormDivBasicFieldToField(&(parameter_.M), formDiv)
+		case "DiamondAngle":
+			FormDivBasicFieldToField(&(parameter_.DiamondAngle), formDiv)
+		case "OriginX":
+			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
+		case "OriginY":
+			FormDivBasicFieldToField(&(parameter_.OriginY), formDiv)
+		case "DiamondSideLenght":
+			FormDivBasicFieldToField(&(parameter_.DiamondSideLenght), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if parameterFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		parameter_.Unstage(parameterFormCallback.probe.stageOfInterest)
+	}
+
+	parameterFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.Parameter](
+		parameterFormCallback.probe,
+	)
+	parameterFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if parameterFormCallback.CreationMode || parameterFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		parameterFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(parameterFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__ParameterFormCallback(
+			nil,
+			parameterFormCallback.probe,
+			newFormGroup,
+		)
+		parameter := new(models.Parameter)
+		FillUpForm(parameter, newFormGroup, parameterFormCallback.probe)
+		parameterFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(parameterFormCallback.probe)
 }

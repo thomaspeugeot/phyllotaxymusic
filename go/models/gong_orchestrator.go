@@ -2,15 +2,15 @@
 package models
 
 // insertion point
-// DiagramOrchestrator
-type DiagramOrchestrator struct {
+// ParameterOrchestrator
+type ParameterOrchestrator struct {
 }
 
-func (orchestrator *DiagramOrchestrator) OnAfterUpdate(
+func (orchestrator *ParameterOrchestrator) OnAfterUpdate(
 	gongsvgStage *StageStruct,
-	stagedDiagram, backRepoDiagram *Diagram) {
+	stagedParameter, backRepoParameter *Parameter) {
 
-	stagedDiagram.OnAfterUpdate(gongsvgStage, stagedDiagram, backRepoDiagram)
+	stagedParameter.OnAfterUpdate(gongsvgStage, stagedParameter, backRepoParameter)
 }
 
 func SetOrchestratorOnAfterUpdate[Type Gongstruct](stage *StageStruct) {
@@ -19,8 +19,8 @@ func SetOrchestratorOnAfterUpdate[Type Gongstruct](stage *StageStruct) {
 
 	switch any(ret).(type) {
 	// insertion point
-	case Diagram:
-		stage.OnAfterDiagramUpdateCallback = new(DiagramOrchestrator)
+	case Parameter:
+		stage.OnAfterParameterUpdateCallback = new(ParameterOrchestrator)
 
 	}
 

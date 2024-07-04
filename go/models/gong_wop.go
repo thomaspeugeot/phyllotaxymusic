@@ -7,28 +7,6 @@ import "time"
 var __GONG_time_The_fool_doth_think_he_is_wise__ = time.Hour
 
 // insertion point
-type Diagram_WOP struct {
-	// insertion point
-	Name string
-	N int
-	M int
-	DiamondAngle float64
-	OriginX float64
-	OriginY float64
-	DiamondSideLenght float64
-}
-
-func (from *Diagram) CopyBasicFields(to *Diagram) {
-	// insertion point
-	to.Name = from.Name
-	to.N = from.N
-	to.M = from.M
-	to.DiamondAngle = from.DiamondAngle
-	to.OriginX = from.OriginX
-	to.OriginY = from.OriginY
-	to.DiamondSideLenght = from.DiamondSideLenght
-}
-
 type Line_WOP struct {
 	// insertion point
 	Name string
@@ -45,5 +23,27 @@ func (from *Line) CopyBasicFields(to *Line) {
 	to.Y1 = from.Y1
 	to.X2 = from.X2
 	to.Y2 = from.Y2
+}
+
+type Parameter_WOP struct {
+	// insertion point
+	Name string
+	N int
+	M int
+	DiamondAngle float64
+	OriginX float64
+	OriginY float64
+	DiamondSideLenght float64
+}
+
+func (from *Parameter) CopyBasicFields(to *Parameter) {
+	// insertion point
+	to.Name = from.Name
+	to.N = from.N
+	to.M = from.M
+	to.DiamondAngle = from.DiamondAngle
+	to.OriginX = from.OriginX
+	to.OriginY = from.OriginY
+	to.DiamondSideLenght = from.DiamondSideLenght
 }
 

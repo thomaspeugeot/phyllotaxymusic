@@ -6,13 +6,13 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point
-	case *Diagram:
-		if stage.OnAfterDiagramCreateCallback != nil {
-			stage.OnAfterDiagramCreateCallback.OnAfterCreate(stage, target)
-		}
 	case *Line:
 		if stage.OnAfterLineCreateCallback != nil {
 			stage.OnAfterLineCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *Parameter:
+		if stage.OnAfterParameterCreateCallback != nil {
+			stage.OnAfterParameterCreateCallback.OnAfterCreate(stage, target)
 		}
 	default:
 		_ = target
@@ -24,15 +24,15 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 
 	switch oldTarget := any(old).(type) {
 	// insertion point
-	case *Diagram:
-		newTarget := any(new).(*Diagram)
-		if stage.OnAfterDiagramUpdateCallback != nil {
-			stage.OnAfterDiagramUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
-		}
 	case *Line:
 		newTarget := any(new).(*Line)
 		if stage.OnAfterLineUpdateCallback != nil {
 			stage.OnAfterLineUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *Parameter:
+		newTarget := any(new).(*Parameter)
+		if stage.OnAfterParameterUpdateCallback != nil {
+			stage.OnAfterParameterUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	default:
 		_ = oldTarget
@@ -44,15 +44,15 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 
 	switch front := any(front).(type) {
 	// insertion point
-	case *Diagram:
-		if stage.OnAfterDiagramDeleteCallback != nil {
-			staged := any(staged).(*Diagram)
-			stage.OnAfterDiagramDeleteCallback.OnAfterDelete(stage, staged, front)
-		}
 	case *Line:
 		if stage.OnAfterLineDeleteCallback != nil {
 			staged := any(staged).(*Line)
 			stage.OnAfterLineDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *Parameter:
+		if stage.OnAfterParameterDeleteCallback != nil {
+			staged := any(staged).(*Parameter)
+			stage.OnAfterParameterDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	default:
 		_ = front
@@ -64,13 +64,13 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point
-	case *Diagram:
-		if stage.OnAfterDiagramReadCallback != nil {
-			stage.OnAfterDiagramReadCallback.OnAfterRead(stage, target)
-		}
 	case *Line:
 		if stage.OnAfterLineReadCallback != nil {
 			stage.OnAfterLineReadCallback.OnAfterRead(stage, target)
+		}
+	case *Parameter:
+		if stage.OnAfterParameterReadCallback != nil {
+			stage.OnAfterParameterReadCallback.OnAfterRead(stage, target)
 		}
 	default:
 		_ = target
@@ -83,11 +83,11 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *Diagram:
-		stage.OnAfterDiagramUpdateCallback = any(callback).(OnAfterUpdateInterface[Diagram])
-	
 	case *Line:
 		stage.OnAfterLineUpdateCallback = any(callback).(OnAfterUpdateInterface[Line])
+	
+	case *Parameter:
+		stage.OnAfterParameterUpdateCallback = any(callback).(OnAfterUpdateInterface[Parameter])
 	
 	}
 }
@@ -96,11 +96,11 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *Diagram:
-		stage.OnAfterDiagramCreateCallback = any(callback).(OnAfterCreateInterface[Diagram])
-	
 	case *Line:
 		stage.OnAfterLineCreateCallback = any(callback).(OnAfterCreateInterface[Line])
+	
+	case *Parameter:
+		stage.OnAfterParameterCreateCallback = any(callback).(OnAfterCreateInterface[Parameter])
 	
 	}
 }
@@ -109,11 +109,11 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *Diagram:
-		stage.OnAfterDiagramDeleteCallback = any(callback).(OnAfterDeleteInterface[Diagram])
-	
 	case *Line:
 		stage.OnAfterLineDeleteCallback = any(callback).(OnAfterDeleteInterface[Line])
+	
+	case *Parameter:
+		stage.OnAfterParameterDeleteCallback = any(callback).(OnAfterDeleteInterface[Parameter])
 	
 	}
 }
@@ -122,11 +122,11 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *Diagram:
-		stage.OnAfterDiagramReadCallback = any(callback).(OnAfterReadInterface[Diagram])
-	
 	case *Line:
 		stage.OnAfterLineReadCallback = any(callback).(OnAfterReadInterface[Line])
+	
+	case *Parameter:
+		stage.OnAfterParameterReadCallback = any(callback).(OnAfterReadInterface[Parameter])
 	
 	}
 }

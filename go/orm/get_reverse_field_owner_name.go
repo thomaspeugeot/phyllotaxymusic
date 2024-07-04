@@ -14,21 +14,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 	res = ""
 	switch inst := any(instance).(type) {
 	// insertion point
-	case *models.Diagram:
-		tmp := GetInstanceDBFromInstance[models.Diagram, DiagramDB](
-			stage, backRepo, inst,
-		)
-		_ = tmp
-		switch reverseField.GongstructName {
-		// insertion point
-		case "Diagram":
-			switch reverseField.Fieldname {
-			}
-		case "Line":
-			switch reverseField.Fieldname {
-			}
-		}
-
 	case *models.Line:
 		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
 			stage, backRepo, inst,
@@ -36,10 +21,25 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
-		case "Diagram":
+		case "Line":
 			switch reverseField.Fieldname {
 			}
+		case "Parameter":
+			switch reverseField.Fieldname {
+			}
+		}
+
+	case *models.Parameter:
+		tmp := GetInstanceDBFromInstance[models.Parameter, ParameterDB](
+			stage, backRepo, inst,
+		)
+		_ = tmp
+		switch reverseField.GongstructName {
+		// insertion point
 		case "Line":
+			switch reverseField.Fieldname {
+			}
+		case "Parameter":
 			switch reverseField.Fieldname {
 			}
 		}
@@ -59,21 +59,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 	res = nil
 	switch inst := any(instance).(type) {
 	// insertion point
-	case *models.Diagram:
-		tmp := GetInstanceDBFromInstance[models.Diagram, DiagramDB](
-			stage, backRepo, inst,
-		)
-		_ = tmp
-		switch reverseField.GongstructName {
-		// insertion point
-		case "Diagram":
-			switch reverseField.Fieldname {
-			}
-		case "Line":
-			switch reverseField.Fieldname {
-			}
-		}
-
 	case *models.Line:
 		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
 			stage, backRepo, inst,
@@ -81,10 +66,25 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
-		case "Diagram":
+		case "Line":
 			switch reverseField.Fieldname {
 			}
+		case "Parameter":
+			switch reverseField.Fieldname {
+			}
+		}
+
+	case *models.Parameter:
+		tmp := GetInstanceDBFromInstance[models.Parameter, ParameterDB](
+			stage, backRepo, inst,
+		)
+		_ = tmp
+		switch reverseField.GongstructName {
+		// insertion point
 		case "Line":
+			switch reverseField.Fieldname {
+			}
+		case "Parameter":
 			switch reverseField.Fieldname {
 			}
 		}

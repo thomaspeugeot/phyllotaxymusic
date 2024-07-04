@@ -2,7 +2,7 @@ package models
 
 import "log"
 
-type Diagram struct {
+type Parameter struct {
 	Name string
 	N    int
 	M    int
@@ -17,7 +17,7 @@ type Diagram struct {
 	Impl DiagramImplInterface
 }
 
-func (diagram *Diagram) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Diagram) {
+func (diagram *Parameter) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Parameter) {
 
 	log.Println("Diagram, OnAfterUpdate", diagram.Name)
 	diagram.Impl.OnDiagramUpdated(diagram)
@@ -25,5 +25,5 @@ func (diagram *Diagram) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Diagr
 }
 
 type DiagramImplInterface interface {
-	OnDiagramUpdated(updatedDiagram *Diagram)
+	OnDiagramUpdated(updatedDiagram *Parameter)
 }

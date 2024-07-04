@@ -13,13 +13,13 @@ export * from './lib/back-repo-data'
 export * from './lib/web-socket-service'
 
 
-export * from './lib/diagram-api'
-export * from './lib/diagram'
-export * from './lib/diagram.service'
-
 export * from './lib/line-api'
 export * from './lib/line'
 export * from './lib/line.service'
+
+export * from './lib/parameter-api'
+export * from './lib/parameter'
+export * from './lib/parameter.service'
 
 
 export * from './lib/StacksNames'

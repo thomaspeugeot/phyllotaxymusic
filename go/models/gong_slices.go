@@ -33,10 +33,10 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 
 	switch owningInstanceInfered := any(owningInstance).(type) {
 	// insertion point
-	case *Diagram:
+	case *Line:
 		// insertion point per field
 
-	case *Line:
+	case *Parameter:
 		// insertion point per field
 
 	default:
@@ -48,10 +48,10 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 // Its complexity is in O(n)O(p) where p is the number of pointers
 func (stage *StageStruct) ComputeReverseMaps() {
 	// insertion point per named struct
-	// Compute reverse map for named struct Diagram
+	// Compute reverse map for named struct Line
 	// insertion point per field
 
-	// Compute reverse map for named struct Line
+	// Compute reverse map for named struct Parameter
 	// insertion point per field
 
 }

@@ -27,11 +27,11 @@ export class PhylotaxymusicspecificComponent implements OnInit {
 
 
   input($event: Event) {
-    console.log(this.frontRepo!.array_Diagrams[0].DiamondAngle)
+    console.log(this.frontRepo!.array_Parameters[0].DiamondAngle)
 
-    let diagram = this.frontRepo!.array_Diagrams[0]
+    let parameter = this.frontRepo!.array_Parameters[0]
 
-    this.diagramService.updateFront(diagram, this.StacksNames.Phylotaxy).subscribe(
+    this.parameterService.updateFront(parameter, this.StacksNames.Phylotaxy).subscribe(
       () => {
 
       }
@@ -48,7 +48,7 @@ export class PhylotaxymusicspecificComponent implements OnInit {
   constructor(
     private frontRepoService: phylotaxymusic.FrontRepoService,
 
-    private diagramService: phylotaxymusic.DiagramService,
+    private parameterService: phylotaxymusic.ParameterService,
   ) {
 
   }

@@ -4,23 +4,13 @@ package orm
 type BackRepoData struct {
 	// insertion point for slices
 
-	DiagramAPIs []*DiagramAPI
-
 	LineAPIs []*LineAPI
+
+	ParameterAPIs []*ParameterAPI
 }
 
 func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepoData) {
 	// insertion point for slices copies
-	for _, diagramDB := range backRepo.BackRepoDiagram.Map_DiagramDBID_DiagramDB {
-
-		var diagramAPI DiagramAPI
-		diagramAPI.ID = diagramDB.ID
-		diagramAPI.DiagramPointersEncoding = diagramDB.DiagramPointersEncoding
-		diagramDB.CopyBasicFieldsToDiagram_WOP(&diagramAPI.Diagram_WOP)
-
-		backRepoData.DiagramAPIs = append(backRepoData.DiagramAPIs, &diagramAPI)
-	}
-
 	for _, lineDB := range backRepo.BackRepoLine.Map_LineDBID_LineDB {
 
 		var lineAPI LineAPI
@@ -29,6 +19,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		lineDB.CopyBasicFieldsToLine_WOP(&lineAPI.Line_WOP)
 
 		backRepoData.LineAPIs = append(backRepoData.LineAPIs, &lineAPI)
+	}
+
+	for _, parameterDB := range backRepo.BackRepoParameter.Map_ParameterDBID_ParameterDB {
+
+		var parameterAPI ParameterAPI
+		parameterAPI.ID = parameterDB.ID
+		parameterAPI.ParameterPointersEncoding = parameterDB.ParameterPointersEncoding
+		parameterDB.CopyBasicFieldsToParameter_WOP(&parameterAPI.Parameter_WOP)
+
+		backRepoData.ParameterAPIs = append(backRepoData.ParameterAPIs, &parameterAPI)
 	}
 
 }

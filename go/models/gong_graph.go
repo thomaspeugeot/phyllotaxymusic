@@ -5,11 +5,11 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage
-	case *Diagram:
-		ok = stage.IsStagedDiagram(target)
-
 	case *Line:
 		ok = stage.IsStagedLine(target)
+
+	case *Parameter:
+		ok = stage.IsStagedParameter(target)
 
 	default:
 		_ = target
@@ -18,16 +18,16 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 }
 
 // insertion point for stage per struct
-func (stage *StageStruct) IsStagedDiagram(diagram *Diagram) (ok bool) {
+func (stage *StageStruct) IsStagedLine(line *Line) (ok bool) {
 
-	_, ok = stage.Diagrams[diagram]
+	_, ok = stage.Lines[line]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedLine(line *Line) (ok bool) {
+func (stage *StageStruct) IsStagedParameter(parameter *Parameter) (ok bool) {
 
-	_, ok = stage.Lines[line]
+	_, ok = stage.Parameters[parameter]
 
 	return
 }
@@ -40,11 +40,11 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage branch
-	case *Diagram:
-		stage.StageBranchDiagram(target)
-
 	case *Line:
 		stage.StageBranchLine(target)
+
+	case *Parameter:
+		stage.StageBranchParameter(target)
 
 	default:
 		_ = target
@@ -52,21 +52,6 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for stage branch per struct
-func (stage *StageStruct) StageBranchDiagram(diagram *Diagram) {
-
-	// check if instance is already staged
-	if IsStaged(stage, diagram) {
-		return
-	}
-
-	diagram.Stage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
 func (stage *StageStruct) StageBranchLine(line *Line) {
 
 	// check if instance is already staged
@@ -75,6 +60,21 @@ func (stage *StageStruct) StageBranchLine(line *Line) {
 	}
 
 	line.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
+
+	// check if instance is already staged
+	if IsStaged(stage, parameter) {
+		return
+	}
+
+	parameter.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -93,12 +93,12 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	switch fromT := any(from).(type) {
 	// insertion point for stage branch
-	case *Diagram:
-		toT := CopyBranchDiagram(mapOrigCopy, fromT)
-		return any(toT).(*Type)
-
 	case *Line:
 		toT := CopyBranchLine(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *Parameter:
+		toT := CopyBranchParameter(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	default:
@@ -108,25 +108,6 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 }
 
 // insertion point for stage branch per struct
-func CopyBranchDiagram(mapOrigCopy map[any]any, diagramFrom *Diagram) (diagramTo *Diagram) {
-
-	// diagramFrom has already been copied
-	if _diagramTo, ok := mapOrigCopy[diagramFrom]; ok {
-		diagramTo = _diagramTo.(*Diagram)
-		return
-	}
-
-	diagramTo = new(Diagram)
-	mapOrigCopy[diagramFrom] = diagramTo
-	diagramFrom.CopyBasicFields(diagramTo)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-	return
-}
-
 func CopyBranchLine(mapOrigCopy map[any]any, lineFrom *Line) (lineTo *Line) {
 
 	// lineFrom has already been copied
@@ -146,6 +127,25 @@ func CopyBranchLine(mapOrigCopy map[any]any, lineFrom *Line) (lineTo *Line) {
 	return
 }
 
+func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (parameterTo *Parameter) {
+
+	// parameterFrom has already been copied
+	if _parameterTo, ok := mapOrigCopy[parameterFrom]; ok {
+		parameterTo = _parameterTo.(*Parameter)
+		return
+	}
+
+	parameterTo = new(Parameter)
+	mapOrigCopy[parameterFrom] = parameterTo
+	parameterFrom.CopyBasicFields(parameterTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 // UnstageBranch stages instance and apply UnstageBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the insance
 //
@@ -154,11 +154,11 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for unstage branch
-	case *Diagram:
-		stage.UnstageBranchDiagram(target)
-
 	case *Line:
 		stage.UnstageBranchLine(target)
+
+	case *Parameter:
+		stage.UnstageBranchParameter(target)
 
 	default:
 		_ = target
@@ -166,21 +166,6 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for unstage branch per struct
-func (stage *StageStruct) UnstageBranchDiagram(diagram *Diagram) {
-
-	// check if instance is already staged
-	if !IsStaged(stage, diagram) {
-		return
-	}
-
-	diagram.Unstage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
 func (stage *StageStruct) UnstageBranchLine(line *Line) {
 
 	// check if instance is already staged
@@ -189,6 +174,21 @@ func (stage *StageStruct) UnstageBranchLine(line *Line) {
 	}
 
 	line.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, parameter) {
+		return
+	}
+
+	parameter.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 

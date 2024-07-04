@@ -47,19 +47,19 @@ type ValidationError struct {
 func registerControllers(r *gin.Engine) {
 	v1 := r.Group("/api/github.com/thomaspeugeot/phylotaxymusic/go")
 	{ // insertion point for registrations
-		v1.GET("/v1/diagrams", GetController().GetDiagrams)
-		v1.GET("/v1/diagrams/:id", GetController().GetDiagram)
-		v1.POST("/v1/diagrams", GetController().PostDiagram)
-		v1.PATCH("/v1/diagrams/:id", GetController().UpdateDiagram)
-		v1.PUT("/v1/diagrams/:id", GetController().UpdateDiagram)
-		v1.DELETE("/v1/diagrams/:id", GetController().DeleteDiagram)
-
 		v1.GET("/v1/lines", GetController().GetLines)
 		v1.GET("/v1/lines/:id", GetController().GetLine)
 		v1.POST("/v1/lines", GetController().PostLine)
 		v1.PATCH("/v1/lines/:id", GetController().UpdateLine)
 		v1.PUT("/v1/lines/:id", GetController().UpdateLine)
 		v1.DELETE("/v1/lines/:id", GetController().DeleteLine)
+
+		v1.GET("/v1/parameters", GetController().GetParameters)
+		v1.GET("/v1/parameters/:id", GetController().GetParameter)
+		v1.POST("/v1/parameters", GetController().PostParameter)
+		v1.PATCH("/v1/parameters/:id", GetController().UpdateParameter)
+		v1.PUT("/v1/parameters/:id", GetController().UpdateParameter)
+		v1.DELETE("/v1/parameters/:id", GetController().DeleteParameter)
 
 		v1.GET("/v1/commitfrombacknb", GetController().GetLastCommitFromBackNb)
 		v1.GET("/v1/pushfromfrontnb", GetController().GetLastPushFromFrontNb)

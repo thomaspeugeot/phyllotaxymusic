@@ -49,7 +49,7 @@ func main() {
 	phylotaxymusic_svg.GenerateSvg(gongsvg_stack.Stage, phylotaxymusicStack.Stage)
 
 	// get the only diagram
-	diagrams := phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.Diagram](phylotaxymusicStack.Stage)
+	diagrams := phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.Parameter](phylotaxymusicStack.Stage)
 
 	if len(*diagrams) == 0 {
 		log.Println("")
@@ -75,10 +75,10 @@ func main() {
 type DiagramImpl struct {
 	gongsvgStage        *gongsvg_models.StageStruct
 	phylotaxymusicStage *phylotaxymusic_models.StageStruct
-	diagram             *phylotaxymusic_models.Diagram
+	diagram             *phylotaxymusic_models.Parameter
 }
 
-func (diagramImpl *DiagramImpl) OnDiagramUpdated(updatedDiagram *phylotaxymusic_models.Diagram) {
+func (diagramImpl *DiagramImpl) OnDiagramUpdated(updatedDiagram *phylotaxymusic_models.Parameter) {
 
 	log.Println("", diagramImpl.diagram.DiamondAngle)
 	phylotaxymusic_svg.GenerateSvg(diagramImpl.gongsvgStage, diagramImpl.phylotaxymusicStage)

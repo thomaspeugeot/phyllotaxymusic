@@ -314,8 +314,8 @@ func ParseAstFileFromAst(stage *StageStruct, inFile *ast.File, fset *token.FileS
 var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 
 // insertion point for identifiers maps
-var __gong__map_Diagram = make(map[string]*Diagram)
 var __gong__map_Line = make(map[string]*Line)
+var __gong__map_Parameter = make(map[string]*Parameter)
 
 // Parser needs to be configured for having the [Name1.Name2] or [pkg.Name1] ...
 // to be recognized as a proper identifier.
@@ -488,14 +488,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 									// this is the place where an instance is created
 									switch gongstructName {
 									// insertion point for identifiers
-									case "Diagram":
-										instanceDiagram := (&Diagram{Name: instanceName}).Stage(stage)
-										instance = any(instanceDiagram)
-										__gong__map_Diagram[identifier] = instanceDiagram
 									case "Line":
 										instanceLine := (&Line{Name: instanceName}).Stage(stage)
 										instance = any(instanceLine)
 										__gong__map_Line[identifier] = instanceLine
+									case "Parameter":
+										instanceParameter := (&Parameter{Name: instanceName}).Stage(stage)
+										instance = any(instanceParameter)
+										__gong__map_Parameter[identifier] = instanceParameter
 									}
 									__gong__map_Indentifiers_gongstructName[identifier] = gongstructName
 									return
@@ -532,11 +532,11 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						}
 						switch gongstructName {
 						// insertion point for basic lit assignments
-						case "Diagram":
+						case "Line":
 							switch fieldName {
 							// insertion point for date assign code
 							}
-						case "Line":
+						case "Parameter":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -565,11 +565,11 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
-					case "Diagram":
+					case "Line":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
-					case "Line":
+					case "Parameter":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -622,56 +622,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 
 			switch gongstructName {
 			// insertion point for basic lit assignments
-			case "Diagram":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Diagram[identifier].Name = fielValue
-				case "N":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Diagram[identifier].N = int(exprSign) * int(fielValue)
-				case "M":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Diagram[identifier].M = int(exprSign) * int(fielValue)
-				case "DiamondAngle":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Diagram[identifier].DiamondAngle = exprSign * fielValue
-				case "OriginX":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Diagram[identifier].OriginX = exprSign * fielValue
-				case "OriginY":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Diagram[identifier].OriginY = exprSign * fielValue
-				case "DiamondSideLenght":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Diagram[identifier].DiamondSideLenght = exprSign * fielValue
-				}
 			case "Line":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -708,6 +658,56 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_Line[identifier].Y2 = exprSign * fielValue
 				}
+			case "Parameter":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Parameter[identifier].Name = fielValue
+				case "N":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].N = int(exprSign) * int(fielValue)
+				case "M":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].M = int(exprSign) * int(fielValue)
+				case "DiamondAngle":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].DiamondAngle = exprSign * fielValue
+				case "OriginX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].OriginX = exprSign * fielValue
+				case "OriginY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].OriginY = exprSign * fielValue
+				case "DiamondSideLenght":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].DiamondSideLenght = exprSign * fielValue
+				}
 			}
 		case *ast.Ident:
 			// assignment to boolean field ?
@@ -722,11 +722,11 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			}
 			switch gongstructName {
 			// insertion point for bool & pointers assignments
-			case "Diagram":
+			case "Line":
 				switch fieldName {
 				// insertion point for field dependant code
 				}
-			case "Line":
+			case "Parameter":
 				switch fieldName {
 				// insertion point for field dependant code
 				}
@@ -758,11 +758,11 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				_ = enumValue
 				switch gongstructName {
 				// insertion point for enums assignments
-				case "Diagram":
+				case "Line":
 					switch fieldName {
 					// insertion point for enum assign code
 					}
-				case "Line":
+				case "Parameter":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

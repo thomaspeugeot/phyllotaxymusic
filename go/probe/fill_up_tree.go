@@ -62,16 +62,6 @@ func fillUpTree(
 
 		switch gongStruct.Name {
 		// insertion point
-		case "Diagram":
-			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Diagram](probe.stageOfInterest)
-			for _diagram := range set {
-				nodeInstance := (&tree.Node{Name: _diagram.GetName()}).Stage(probe.treeStage)
-				nodeInstance.IsNodeClickable = true
-				nodeInstance.Impl = NewInstanceNodeCallback(_diagram, "Diagram", probe)
-
-				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
-			}
 		case "Line":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.Line](probe.stageOfInterest)
@@ -79,6 +69,16 @@ func fillUpTree(
 				nodeInstance := (&tree.Node{Name: _line.GetName()}).Stage(probe.treeStage)
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_line, "Line", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "Parameter":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.Parameter](probe.stageOfInterest)
+			for _parameter := range set {
+				nodeInstance := (&tree.Node{Name: _parameter.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_parameter, "Parameter", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}

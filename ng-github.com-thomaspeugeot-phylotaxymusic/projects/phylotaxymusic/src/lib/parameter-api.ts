@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class DiagramAPI {
+export class ParameterAPI {
 
-	static GONGSTRUCT_NAME = "Diagram"
+	static GONGSTRUCT_NAME = "Parameter"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -22,9 +22,9 @@ export class DiagramAPI {
 
 	// insertion point for other decls
 
-	DiagramPointersEncoding: DiagramPointersEncoding = new DiagramPointersEncoding
+	ParameterPointersEncoding: ParameterPointersEncoding = new ParameterPointersEncoding
 }
 
-export class DiagramPointersEncoding {
+export class ParameterPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

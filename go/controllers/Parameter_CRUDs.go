@@ -14,16 +14,16 @@ import (
 )
 
 // declaration in order to justify use of the models import
-var __Diagram__dummysDeclaration__ models.Diagram
-var __Diagram_time__dummyDeclaration time.Duration
+var __Parameter__dummysDeclaration__ models.Parameter
+var __Parameter_time__dummyDeclaration time.Duration
 
-var mutexDiagram sync.Mutex
+var mutexParameter sync.Mutex
 
-// An DiagramID parameter model.
+// An ParameterID parameter model.
 //
 // This is used for operations that want the ID of an order in the path
-// swagger:parameters getDiagram updateDiagram deleteDiagram
-type DiagramID struct {
+// swagger:parameters getParameter updateParameter deleteParameter
+type ParameterID struct {
 	// The ID of the order
 	//
 	// in: path
@@ -31,29 +31,29 @@ type DiagramID struct {
 	ID int64
 }
 
-// DiagramInput is a schema that can validate the user’s
+// ParameterInput is a schema that can validate the user’s
 // input to prevent us from getting invalid data
-// swagger:parameters postDiagram updateDiagram
-type DiagramInput struct {
-	// The Diagram to submit or modify
+// swagger:parameters postParameter updateParameter
+type ParameterInput struct {
+	// The Parameter to submit or modify
 	// in: body
-	Diagram *orm.DiagramAPI
+	Parameter *orm.ParameterAPI
 }
 
-// GetDiagrams
+// GetParameters
 //
-// swagger:route GET /diagrams diagrams getDiagrams
+// swagger:route GET /parameters parameters getParameters
 //
-// # Get all diagrams
+// # Get all parameters
 //
 // Responses:
 // default: genericError
 //
-//	200: diagramDBResponse
-func (controller *Controller) GetDiagrams(c *gin.Context) {
+//	200: parameterDBResponse
+func (controller *Controller) GetParameters(c *gin.Context) {
 
 	// source slice
-	var diagramDBs []orm.DiagramDB
+	var parameterDBs []orm.ParameterDB
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -61,16 +61,16 @@ func (controller *Controller) GetDiagrams(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetDiagrams", "GONG__StackPath", stackPath)
+			// log.Println("GetParameters", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoDiagram.GetDB()
+	db := backRepo.BackRepoParameter.GetDB()
 
-	query := db.Find(&diagramDBs)
+	query := db.Find(&parameterDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -81,29 +81,29 @@ func (controller *Controller) GetDiagrams(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	diagramAPIs := make([]orm.DiagramAPI, 0)
+	parameterAPIs := make([]orm.ParameterAPI, 0)
 
-	// for each diagram, update fields from the database nullable fields
-	for idx := range diagramDBs {
-		diagramDB := &diagramDBs[idx]
-		_ = diagramDB
-		var diagramAPI orm.DiagramAPI
+	// for each parameter, update fields from the database nullable fields
+	for idx := range parameterDBs {
+		parameterDB := &parameterDBs[idx]
+		_ = parameterDB
+		var parameterAPI orm.ParameterAPI
 
 		// insertion point for updating fields
-		diagramAPI.ID = diagramDB.ID
-		diagramDB.CopyBasicFieldsToDiagram_WOP(&diagramAPI.Diagram_WOP)
-		diagramAPI.DiagramPointersEncoding = diagramDB.DiagramPointersEncoding
-		diagramAPIs = append(diagramAPIs, diagramAPI)
+		parameterAPI.ID = parameterDB.ID
+		parameterDB.CopyBasicFieldsToParameter_WOP(&parameterAPI.Parameter_WOP)
+		parameterAPI.ParameterPointersEncoding = parameterDB.ParameterPointersEncoding
+		parameterAPIs = append(parameterAPIs, parameterAPI)
 	}
 
-	c.JSON(http.StatusOK, diagramAPIs)
+	c.JSON(http.StatusOK, parameterAPIs)
 }
 
-// PostDiagram
+// PostParameter
 //
-// swagger:route POST /diagrams diagrams postDiagram
+// swagger:route POST /parameters parameters postParameter
 //
-// Creates a diagram
+// Creates a parameter
 //
 //	Consumes:
 //	- application/json
@@ -113,10 +113,10 @@ func (controller *Controller) GetDiagrams(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func (controller *Controller) PostDiagram(c *gin.Context) {
+func (controller *Controller) PostParameter(c *gin.Context) {
 
-	mutexDiagram.Lock()
-	defer mutexDiagram.Unlock()
+	mutexParameter.Lock()
+	defer mutexParameter.Unlock()
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -124,17 +124,17 @@ func (controller *Controller) PostDiagram(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("PostDiagrams", "GONG__StackPath", stackPath)
+			// log.Println("PostParameters", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoDiagram.GetDB()
+	db := backRepo.BackRepoParameter.GetDB()
 
 	// Validate input
-	var input orm.DiagramAPI
+	var input orm.ParameterAPI
 
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
@@ -146,12 +146,12 @@ func (controller *Controller) PostDiagram(c *gin.Context) {
 		return
 	}
 
-	// Create diagram
-	diagramDB := orm.DiagramDB{}
-	diagramDB.DiagramPointersEncoding = input.DiagramPointersEncoding
-	diagramDB.CopyBasicFieldsFromDiagram_WOP(&input.Diagram_WOP)
+	// Create parameter
+	parameterDB := orm.ParameterDB{}
+	parameterDB.ParameterPointersEncoding = input.ParameterPointersEncoding
+	parameterDB.CopyBasicFieldsFromParameter_WOP(&input.Parameter_WOP)
 
-	query := db.Create(&diagramDB)
+	query := db.Create(&parameterDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -162,31 +162,31 @@ func (controller *Controller) PostDiagram(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	backRepo.BackRepoDiagram.CheckoutPhaseOneInstance(&diagramDB)
-	diagram := backRepo.BackRepoDiagram.Map_DiagramDBID_DiagramPtr[diagramDB.ID]
+	backRepo.BackRepoParameter.CheckoutPhaseOneInstance(&parameterDB)
+	parameter := backRepo.BackRepoParameter.Map_ParameterDBID_ParameterPtr[parameterDB.ID]
 
-	if diagram != nil {
-		models.AfterCreateFromFront(backRepo.GetStage(), diagram)
+	if parameter != nil {
+		models.AfterCreateFromFront(backRepo.GetStage(), parameter)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	backRepo.IncrementPushFromFrontNb()
 
-	c.JSON(http.StatusOK, diagramDB)
+	c.JSON(http.StatusOK, parameterDB)
 }
 
-// GetDiagram
+// GetParameter
 //
-// swagger:route GET /diagrams/{ID} diagrams getDiagram
+// swagger:route GET /parameters/{ID} parameters getParameter
 //
-// Gets the details for a diagram.
+// Gets the details for a parameter.
 //
 // Responses:
 // default: genericError
 //
-//	200: diagramDBResponse
-func (controller *Controller) GetDiagram(c *gin.Context) {
+//	200: parameterDBResponse
+func (controller *Controller) GetParameter(c *gin.Context) {
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -194,18 +194,18 @@ func (controller *Controller) GetDiagram(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetDiagram", "GONG__StackPath", stackPath)
+			// log.Println("GetParameter", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoDiagram.GetDB()
+	db := backRepo.BackRepoParameter.GetDB()
 
-	// Get diagramDB in DB
-	var diagramDB orm.DiagramDB
-	if err := db.First(&diagramDB, c.Param("id")).Error; err != nil {
+	// Get parameterDB in DB
+	var parameterDB orm.ParameterDB
+	if err := db.First(&parameterDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -214,28 +214,28 @@ func (controller *Controller) GetDiagram(c *gin.Context) {
 		return
 	}
 
-	var diagramAPI orm.DiagramAPI
-	diagramAPI.ID = diagramDB.ID
-	diagramAPI.DiagramPointersEncoding = diagramDB.DiagramPointersEncoding
-	diagramDB.CopyBasicFieldsToDiagram_WOP(&diagramAPI.Diagram_WOP)
+	var parameterAPI orm.ParameterAPI
+	parameterAPI.ID = parameterDB.ID
+	parameterAPI.ParameterPointersEncoding = parameterDB.ParameterPointersEncoding
+	parameterDB.CopyBasicFieldsToParameter_WOP(&parameterAPI.Parameter_WOP)
 
-	c.JSON(http.StatusOK, diagramAPI)
+	c.JSON(http.StatusOK, parameterAPI)
 }
 
-// UpdateDiagram
+// UpdateParameter
 //
-// swagger:route PATCH /diagrams/{ID} diagrams updateDiagram
+// swagger:route PATCH /parameters/{ID} parameters updateParameter
 //
-// # Update a diagram
+// # Update a parameter
 //
 // Responses:
 // default: genericError
 //
-//	200: diagramDBResponse
-func (controller *Controller) UpdateDiagram(c *gin.Context) {
+//	200: parameterDBResponse
+func (controller *Controller) UpdateParameter(c *gin.Context) {
 
-	mutexDiagram.Lock()
-	defer mutexDiagram.Unlock()
+	mutexParameter.Lock()
+	defer mutexParameter.Unlock()
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -243,17 +243,17 @@ func (controller *Controller) UpdateDiagram(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("UpdateDiagram", "GONG__StackPath", stackPath)
+			// log.Println("UpdateParameter", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoDiagram.GetDB()
+	db := backRepo.BackRepoParameter.GetDB()
 
 	// Validate input
-	var input orm.DiagramAPI
+	var input orm.ParameterAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -261,10 +261,10 @@ func (controller *Controller) UpdateDiagram(c *gin.Context) {
 	}
 
 	// Get model if exist
-	var diagramDB orm.DiagramDB
+	var parameterDB orm.ParameterDB
 
-	// fetch the diagram
-	query := db.First(&diagramDB, c.Param("id"))
+	// fetch the parameter
+	query := db.First(&parameterDB, c.Param("id"))
 
 	if query.Error != nil {
 		var returnError GenericError
@@ -276,10 +276,10 @@ func (controller *Controller) UpdateDiagram(c *gin.Context) {
 	}
 
 	// update
-	diagramDB.CopyBasicFieldsFromDiagram_WOP(&input.Diagram_WOP)
-	diagramDB.DiagramPointersEncoding = input.DiagramPointersEncoding
+	parameterDB.CopyBasicFieldsFromParameter_WOP(&input.Parameter_WOP)
+	parameterDB.ParameterPointersEncoding = input.ParameterPointersEncoding
 
-	query = db.Model(&diagramDB).Updates(diagramDB)
+	query = db.Model(&parameterDB).Updates(parameterDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -290,16 +290,16 @@ func (controller *Controller) UpdateDiagram(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	diagramNew := new(models.Diagram)
-	diagramDB.CopyBasicFieldsToDiagram(diagramNew)
+	parameterNew := new(models.Parameter)
+	parameterDB.CopyBasicFieldsToParameter(parameterNew)
 
 	// redeem pointers
-	diagramDB.DecodePointers(backRepo, diagramNew)
+	parameterDB.DecodePointers(backRepo, parameterNew)
 
 	// get stage instance from DB instance, and call callback function
-	diagramOld := backRepo.BackRepoDiagram.Map_DiagramDBID_DiagramPtr[diagramDB.ID]
-	if diagramOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), diagramOld, diagramNew)
+	parameterOld := backRepo.BackRepoParameter.Map_ParameterDBID_ParameterPtr[parameterDB.ID]
+	if parameterOld != nil {
+		models.AfterUpdateFromFront(backRepo.GetStage(), parameterOld, parameterNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -308,23 +308,23 @@ func (controller *Controller) UpdateDiagram(c *gin.Context) {
 	// generates a checkout
 	backRepo.IncrementPushFromFrontNb()
 
-	// return status OK with the marshalling of the the diagramDB
-	c.JSON(http.StatusOK, diagramDB)
+	// return status OK with the marshalling of the the parameterDB
+	c.JSON(http.StatusOK, parameterDB)
 }
 
-// DeleteDiagram
+// DeleteParameter
 //
-// swagger:route DELETE /diagrams/{ID} diagrams deleteDiagram
+// swagger:route DELETE /parameters/{ID} parameters deleteParameter
 //
-// # Delete a diagram
+// # Delete a parameter
 //
 // default: genericError
 //
-//	200: diagramDBResponse
-func (controller *Controller) DeleteDiagram(c *gin.Context) {
+//	200: parameterDBResponse
+func (controller *Controller) DeleteParameter(c *gin.Context) {
 
-	mutexDiagram.Lock()
-	defer mutexDiagram.Unlock()
+	mutexParameter.Lock()
+	defer mutexParameter.Unlock()
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -332,18 +332,18 @@ func (controller *Controller) DeleteDiagram(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("DeleteDiagram", "GONG__StackPath", stackPath)
+			// log.Println("DeleteParameter", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoDiagram.GetDB()
+	db := backRepo.BackRepoParameter.GetDB()
 
 	// Get model if exist
-	var diagramDB orm.DiagramDB
-	if err := db.First(&diagramDB, c.Param("id")).Error; err != nil {
+	var parameterDB orm.ParameterDB
+	if err := db.First(&parameterDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,16 +353,16 @@ func (controller *Controller) DeleteDiagram(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&diagramDB)
+	db.Unscoped().Delete(&parameterDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
-	diagramDeleted := new(models.Diagram)
-	diagramDB.CopyBasicFieldsToDiagram(diagramDeleted)
+	parameterDeleted := new(models.Parameter)
+	parameterDB.CopyBasicFieldsToParameter(parameterDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	diagramStaged := backRepo.BackRepoDiagram.Map_DiagramDBID_DiagramPtr[diagramDB.ID]
-	if diagramStaged != nil {
-		models.AfterDeleteFromFront(backRepo.GetStage(), diagramStaged, diagramDeleted)
+	parameterStaged := backRepo.BackRepoParameter.Map_ParameterDBID_ParameterPtr[parameterDB.ID]
+	if parameterStaged != nil {
+		models.AfterDeleteFromFront(backRepo.GetStage(), parameterStaged, parameterDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase
