@@ -3,7 +3,6 @@ package svg
 import (
 	"log"
 	"math"
-	"slices"
 
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
@@ -136,56 +135,35 @@ func generateCircleFromDiamondGrid(
 
 	for _, diamond := range diamondGrid {
 
-		for _, line := range *diamond {
+		x, y := computeDiamonCenter(*diamond)
+		// if y <= diagram.OriginY {
+		circle := new(gongsvg_models.Circle).Stage(gongsvgStage)
+		layer.Circles = append(layer.Circles, circle)
+		circle.CX = x
+		circle.CY = y
+		circle.Radius = diagram.DiamondSideLenght / 2.0
 
-			// only keep circles above 0
-			if line.Y1 <= diagram.OriginY {
-				startCircle := new(gongsvg_models.Circle)
-				layer.Circles = append(layer.Circles, startCircle)
-				startCircle.CX = line.X1
-				startCircle.CY = line.Y1
-				startCircle.Radius = diagram.DiamondSideLenght / 2.0
-
-				startCircle.Presentation = presentation
-				circles = append(circles, startCircle)
-			}
-
-			if line.Y2 <= diagram.OriginY {
-				endCircle := new(gongsvg_models.Circle)
-				layer.Circles = append(layer.Circles, endCircle)
-				endCircle.CX = line.X2
-				endCircle.CY = line.Y2
-				endCircle.Radius = diagram.DiamondSideLenght / 2.0
-
-				endCircle.Presentation = presentation
-				circles = append(circles, endCircle)
-			}
-
-		}
+		circle.Presentation = presentation
+		circles = append(circles, circle)
+		// }
 	}
 
-	// remove duplicates
-	slices.SortFunc(circles, func(c1, c2 *gongsvg_models.Circle) int {
-		if c1.CX < c2.CX {
-			return 1
-		}
-		if c1.CX > c2.CX {
-			return -1
-		}
-		if c1.CY < c2.CY {
-			return 1
-		}
-		if c1.CY > c2.CY {
-			return -1
-		}
-		return 0
-	})
-	circles = slices.CompactFunc(circles, func(c1, c2 *gongsvg_models.Circle) bool {
-		return c1.CX == c2.CX && c1.CY == c2.CY
-	})
-	for _, circle := range circles {
-		circle.Stage(gongsvgStage)
+	return
+}
+
+func computeDiamonCenter(diamond Diamond) (x, y float64) {
+
+	for _, line := range diamond {
+		x += line.X1
+		x += line.X2
 	}
+	x /= 8.0
+
+	for _, line := range diamond {
+		y += line.Y1
+		y += line.Y2
+	}
+	y /= 8.0
 
 	return
 }

@@ -1,7 +1,7 @@
 <h1></h1>
 
 @if (frontRepo) {
-    <mat-slider  min="0" max="90.0" step="1" 
+    <mat-slider  min="60.0" max="120.0" step="1" 
     showTickMarks discrete [displayWith]="formatLabel" 
     >
         <input matSliderThumb [(ngModel)]="frontRepo.array_Diagrams[0].DiamondAngle" (input)="input($event)" 
