@@ -245,7 +245,7 @@ func generateCircleFromDiamondGrid(
 		for _, line := range *diamond {
 
 			// only keep circles above 0
-			if line.Y1 > 0 {
+			if line.Y1 <= diagram.OriginY {
 				startCircle := new(gongsvg_models.Circle)
 				layer.Circles = append(layer.Circles, startCircle)
 				startCircle.CX = line.X1
@@ -256,7 +256,7 @@ func generateCircleFromDiamondGrid(
 				circles = append(circles, startCircle)
 			}
 
-			if line.Y2 > 0 {
+			if line.Y2 <= diagram.OriginY {
 				endCircle := new(gongsvg_models.Circle)
 				layer.Circles = append(layer.Circles, endCircle)
 				endCircle.CX = line.X2
