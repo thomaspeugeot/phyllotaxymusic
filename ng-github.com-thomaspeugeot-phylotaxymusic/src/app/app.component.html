@@ -11,11 +11,11 @@
     <as-split-area [size]=40>
         <ng-container *ngTemplateOutlet="radioToolbar"></ng-container>
     </as-split-area>
-    <as-split-area [size]="800">
+    <as-split-area [size]="$any('*')">
         <lib-phylotaxymusicspecific GONG__StackPath="phylotaxymusic">
         </lib-phylotaxymusicspecific>
     </as-split-area>
-    <as-split-area [size]="$any('*')">
+    <!-- <as-split-area [size]="$any('*')">
 
         <as-split direction="vertical">
             <as-split-area [size]=50>
@@ -38,7 +38,7 @@
             </as-split-area>
         </as-split>
 
-    </as-split-area>
+    </as-split-area> -->
 </as-split>
 
 <as-split unit="pixel" *ngIf="view==probe" direction="vertical">

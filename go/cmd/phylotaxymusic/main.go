@@ -38,7 +38,8 @@ func main() {
 	r := phylotaxymusic_static.ServeStaticFiles(*logGINFlag)
 
 	// setup phylotaxymusicStack
-	phylotaxymusicStack := phylotaxymusic_stack.NewStack(r, "phylotaxymusic", *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+	phylotaxymusicStack := phylotaxymusic_stack.NewStack(r,
+		phylotaxymusic_models.Phylotaxy.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
 	phylotaxymusicStack.Probe.Refresh()
 	phylotaxymusicStack.Stage.Checkout()
 
