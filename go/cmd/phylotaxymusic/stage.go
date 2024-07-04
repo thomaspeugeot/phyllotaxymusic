@@ -34,7 +34,6 @@ func _(stage *models.StageStruct) {
 	__Diagram__000000_Reference.OriginX = 100.000000
 	__Diagram__000000_Reference.OriginY = 300.000000
 	__Diagram__000000_Reference.DiamondSideLenght = 100.000000
-	__Diagram__000000_Reference.CircleRadius = 50
 
 	// Setup of pointers
 }

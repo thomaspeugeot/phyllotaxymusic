@@ -18,6 +18,12 @@ export class Diagram {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	N: number = 0
+	M: number = 0
+	DiamondAngle: number = 0
+	OriginX: number = 0
+	OriginY: number = 0
+	DiamondSideLenght: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -30,6 +36,12 @@ export function CopyDiagramToDiagramAPI(diagram: Diagram, diagramAPI: DiagramAPI
 
 	// insertion point for basic fields copy operations
 	diagramAPI.Name = diagram.Name
+	diagramAPI.N = diagram.N
+	diagramAPI.M = diagram.M
+	diagramAPI.DiamondAngle = diagram.DiamondAngle
+	diagramAPI.OriginX = diagram.OriginX
+	diagramAPI.OriginY = diagram.OriginY
+	diagramAPI.DiamondSideLenght = diagram.DiamondSideLenght
 
 	// insertion point for pointer fields encoding
 
@@ -48,6 +60,12 @@ export function CopyDiagramAPIToDiagram(diagramAPI: DiagramAPI, diagram: Diagram
 
 	// insertion point for basic fields copy operations
 	diagram.Name = diagramAPI.Name
+	diagram.N = diagramAPI.N
+	diagram.M = diagramAPI.M
+	diagram.DiamondAngle = diagramAPI.DiamondAngle
+	diagram.OriginX = diagramAPI.OriginX
+	diagram.OriginY = diagramAPI.OriginY
+	diagram.DiamondSideLenght = diagramAPI.DiamondSideLenght
 
 	// insertion point for pointer fields encoding
 

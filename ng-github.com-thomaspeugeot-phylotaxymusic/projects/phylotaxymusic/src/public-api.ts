@@ -17,5 +17,9 @@ export * from './lib/diagram-api'
 export * from './lib/diagram'
 export * from './lib/diagram.service'
 
+export * from './lib/line-api'
+export * from './lib/line'
+export * from './lib/line.service'
+
 
 export * from './lib/StacksNames'

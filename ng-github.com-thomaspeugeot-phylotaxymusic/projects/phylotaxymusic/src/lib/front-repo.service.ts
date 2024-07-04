@@ -8,6 +8,10 @@ import { DiagramAPI } from './diagram-api'
 import { Diagram, CopyDiagramAPIToDiagram } from './diagram'
 import { DiagramService } from './diagram.service'
 
+import { LineAPI } from './line-api'
+import { Line, CopyLineAPIToLine } from './line'
+import { LineService } from './line.service'
+
 
 import { BackRepoData } from './back-repo-data'
 
@@ -18,6 +22,9 @@ export class FrontRepo { // insertion point sub template
 	array_Diagrams = new Array<Diagram>() // array of front instances
 	map_ID_Diagram = new Map<number, Diagram>() // map of front instances
 
+	array_Lines = new Array<Line>() // array of front instances
+	map_ID_Line = new Map<number, Line>() // map of front instances
+
 
 	// getFrontArray allows for a get function that is robust to refactoring of the named struct name
 	// for instance frontRepo.getArray<Astruct>( Astruct.GONGSTRUCT_NAME), is robust to a refactoring of Astruct identifier
@@ -27,6 +34,8 @@ export class FrontRepo { // insertion point sub template
 			// insertion point
 			case 'Diagram':
 				return this.array_Diagrams as unknown as Array<Type>
+			case 'Line':
+				return this.array_Lines as unknown as Array<Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -37,6 +46,8 @@ export class FrontRepo { // insertion point sub template
 			// insertion point
 			case 'Diagram':
 				return this.map_ID_Diagram as unknown as Map<number, Type>
+			case 'Line':
+				return this.map_ID_Line as unknown as Map<number, Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -105,6 +116,7 @@ export class FrontRepoService {
 	constructor(
 		private http: HttpClient, // insertion point sub template 
 		private diagramService: DiagramService,
+		private lineService: LineService,
 	) { }
 
 	// postService provides a post function for each struct name
@@ -138,6 +150,7 @@ export class FrontRepoService {
 		Observable<null>, // see below for the of(null) observable
 		// insertion point sub template 
 		Observable<DiagramAPI[]>,
+		Observable<LineAPI[]>,
 	] = [
 			// Using "combineLatest" with a placeholder observable.
 			//
@@ -149,6 +162,7 @@ export class FrontRepoService {
 			of(null), // 
 			// insertion point sub template
 			this.diagramService.getDiagrams(this.GONG__StackPath, this.frontRepo),
+			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
 		];
 
 	//
@@ -165,6 +179,7 @@ export class FrontRepoService {
 			of(null), // see above for justification
 			// insertion point sub template
 			this.diagramService.getDiagrams(this.GONG__StackPath, this.frontRepo),
+			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
 		]
 
 		return new Observable<FrontRepo>(
@@ -176,12 +191,15 @@ export class FrontRepoService {
 						___of_null, // see above for the explanation about of
 						// insertion point sub template for declarations 
 						diagrams_,
+						lines_,
 					]) => {
 						let _this = this
 						// Typing can be messy with many items. Therefore, type casting is necessary here
 						// insertion point sub template for type casting 
 						var diagrams: DiagramAPI[]
 						diagrams = diagrams_ as DiagramAPI[]
+						var lines: LineAPI[]
+						lines = lines_ as LineAPI[]
 
 						// 
 						// First Step: init map of instances
@@ -198,6 +216,18 @@ export class FrontRepoService {
 							}
 						)
 
+						// init the arrays
+						this.frontRepo.array_Lines = []
+						this.frontRepo.map_ID_Line.clear()
+
+						lines.forEach(
+							lineAPI => {
+								let line = new Line
+								this.frontRepo.array_Lines.push(line)
+								this.frontRepo.map_ID_Line.set(lineAPI.ID, line)
+							}
+						)
+
 
 						// 
 						// Second Step: reddeem front objects
@@ -207,6 +237,14 @@ export class FrontRepoService {
 							diagramAPI => {
 								let diagram = this.frontRepo.map_ID_Diagram.get(diagramAPI.ID)
 								CopyDiagramAPIToDiagram(diagramAPI, diagram!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						lines.forEach(
+							lineAPI => {
+								let line = this.frontRepo.map_ID_Line.get(lineAPI.ID)
+								CopyLineAPIToLine(lineAPI, line!, this.frontRepo)
 							}
 						)
 
@@ -253,6 +291,18 @@ export class FrontRepoService {
 					}
 				)
 
+				// init the arrays
+				this.frontRepo.array_Lines = []
+				this.frontRepo.map_ID_Line.clear()
+
+				backRepoData.LineAPIs.forEach(
+					lineAPI => {
+						let line = new Line
+						this.frontRepo.array_Lines.push(line)
+						this.frontRepo.map_ID_Line.set(lineAPI.ID, line)
+					}
+				)
+
 
 				// 
 				// Second Step: reddeem front objects
@@ -264,6 +314,14 @@ export class FrontRepoService {
 					diagramAPI => {
 						let diagram = this.frontRepo.map_ID_Diagram.get(diagramAPI.ID)
 						CopyDiagramAPIToDiagram(diagramAPI, diagram!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.LineAPIs.forEach(
+					lineAPI => {
+						let line = this.frontRepo.map_ID_Line.get(lineAPI.ID)
+						CopyLineAPIToLine(lineAPI, line!, this.frontRepo)
 					}
 				)
 
@@ -288,4 +346,7 @@ export class FrontRepoService {
 // insertion point for get unique ID per struct 
 export function getDiagramUniqueID(id: number): number {
 	return 31 * id
+}
+export function getLineUniqueID(id: number): number {
+	return 37 * id
 }

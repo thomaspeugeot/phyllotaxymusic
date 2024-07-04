@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class DiagramAPI {
+export class LineAPI {
 
-	static GONGSTRUCT_NAME = "Diagram"
+	static GONGSTRUCT_NAME = "Line"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,18 +13,16 @@ export class DiagramAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	N: number = 0
-	M: number = 0
-	DiamondAngle: number = 0
-	OriginX: number = 0
-	OriginY: number = 0
-	DiamondSideLenght: number = 0
+	X1: number = 0
+	Y1: number = 0
+	X2: number = 0
+	Y2: number = 0
 
 	// insertion point for other decls
 
-	DiagramPointersEncoding: DiagramPointersEncoding = new DiagramPointersEncoding
+	LinePointersEncoding: LinePointersEncoding = new LinePointersEncoding
 }
 
-export class DiagramPointersEncoding {
+export class LinePointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }
