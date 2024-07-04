@@ -113,3 +113,19 @@ func RotateCircle(
 
 	return
 }
+
+func CopyCircle(
+	gongsvgStage *gongsvg_models.StageStruct,
+	layer *gongsvg_models.Layer,
+	origin *gongsvg_models.Circle, x, y float64) (copy *gongsvg_models.Circle) {
+
+	copy = new(gongsvg_models.Circle).Stage(gongsvgStage)
+	layer.Circles = append(layer.Circles, copy)
+	*copy = *origin
+
+	// Translate the Circle back to its original position
+	copy.CX += x
+	copy.CY += y
+
+	return
+}
