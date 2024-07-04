@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './phylotaxymusicspecific.component.html',
   styles: `
   mat-slider {
-  width: 300px;
+  width: 800px;
   }`
 })
 export class PhylotaxymusicspecificComponent implements OnInit {

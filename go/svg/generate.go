@@ -23,6 +23,8 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 		// log.Fatalln("")
 	}
 
+	gongsvgStage.Reset()
+
 	diagram := (*diagrams)["Reference"]
 	_ = diagram
 
