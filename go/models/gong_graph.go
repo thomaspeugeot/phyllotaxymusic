@@ -8,6 +8,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *Diagram:
 		ok = stage.IsStagedDiagram(target)
 
+	case *Line:
+		ok = stage.IsStagedLine(target)
+
 	default:
 		_ = target
 	}
@@ -22,6 +25,13 @@ func (stage *StageStruct) IsStagedDiagram(diagram *Diagram) (ok bool) {
 	return
 }
 
+func (stage *StageStruct) IsStagedLine(line *Line) (ok bool) {
+
+	_, ok = stage.Lines[line]
+
+	return
+}
+
 // StageBranch stages instance and apply StageBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the instance
 //
@@ -32,6 +42,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	// insertion point for stage branch
 	case *Diagram:
 		stage.StageBranchDiagram(target)
+
+	case *Line:
+		stage.StageBranchLine(target)
 
 	default:
 		_ = target
@@ -54,6 +67,21 @@ func (stage *StageStruct) StageBranchDiagram(diagram *Diagram) {
 
 }
 
+func (stage *StageStruct) StageBranchLine(line *Line) {
+
+	// check if instance is already staged
+	if IsStaged(stage, line) {
+		return
+	}
+
+	line.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 // CopyBranch stages instance and apply CopyBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the instance
 //
@@ -67,6 +95,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 	// insertion point for stage branch
 	case *Diagram:
 		toT := CopyBranchDiagram(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *Line:
+		toT := CopyBranchLine(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	default:
@@ -95,6 +127,25 @@ func CopyBranchDiagram(mapOrigCopy map[any]any, diagramFrom *Diagram) (diagramTo
 	return
 }
 
+func CopyBranchLine(mapOrigCopy map[any]any, lineFrom *Line) (lineTo *Line) {
+
+	// lineFrom has already been copied
+	if _lineTo, ok := mapOrigCopy[lineFrom]; ok {
+		lineTo = _lineTo.(*Line)
+		return
+	}
+
+	lineTo = new(Line)
+	mapOrigCopy[lineFrom] = lineTo
+	lineFrom.CopyBasicFields(lineTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 // UnstageBranch stages instance and apply UnstageBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the insance
 //
@@ -105,6 +156,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	// insertion point for unstage branch
 	case *Diagram:
 		stage.UnstageBranchDiagram(target)
+
+	case *Line:
+		stage.UnstageBranchLine(target)
 
 	default:
 		_ = target
@@ -120,6 +174,21 @@ func (stage *StageStruct) UnstageBranchDiagram(diagram *Diagram) {
 	}
 
 	diagram.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchLine(line *Line) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, line) {
+		return
+	}
+
+	line.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 

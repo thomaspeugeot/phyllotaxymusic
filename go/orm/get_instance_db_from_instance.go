@@ -8,7 +8,7 @@ import (
 type GongstructDB interface {
 	// insertion point for generic types
 	// "int" is present to handle the case when no struct is present
-	int | DiagramDB
+	int | DiagramDB | LineDB
 }
 
 func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
@@ -21,6 +21,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 	case *models.Diagram:
 		diagramInstance := any(concreteInstance).(*models.Diagram)
 		ret2 := backRepo.BackRepoDiagram.GetDiagramDBFromDiagramPtr(diagramInstance)
+		ret = any(ret2).(*T2)
+	case *models.Line:
+		lineInstance := any(concreteInstance).(*models.Line)
+		ret2 := backRepo.BackRepoLine.GetLineDBFromLinePtr(lineInstance)
 		ret = any(ret2).(*T2)
 	default:
 		_ = concreteInstance
@@ -40,6 +44,11 @@ func GetID[T models.Gongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.Line:
+		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	default:
 		_ = inst
 	}
@@ -55,6 +64,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 	// insertion point for per struct backup
 	case *models.Diagram:
 		tmp := GetInstanceDBFromInstance[models.Diagram, DiagramDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Line:
+		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

@@ -162,6 +162,70 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", diagram.DiamondSideLenght))
 		initializerStatements += setValueField
 
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CircleRadius")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", diagram.CircleRadius))
+		initializerStatements += setValueField
+
+	}
+
+	map_Line_Identifiers := make(map[*Line]string)
+	_ = map_Line_Identifiers
+
+	lineOrdered := []*Line{}
+	for line := range stage.Lines {
+		lineOrdered = append(lineOrdered, line)
+	}
+	sort.Slice(lineOrdered[:], func(i, j int) bool {
+		return lineOrdered[i].Name < lineOrdered[j].Name
+	})
+	if len(lineOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, line := range lineOrdered {
+
+		id = generatesIdentifier("Line", idx, line.Name)
+		map_Line_Identifiers[line] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Line")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", line.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(line.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "X1")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", line.X1))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Y1")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", line.Y1))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "X2")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", line.X2))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Y2")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", line.Y2))
+		initializerStatements += setValueField
+
 	}
 
 	// insertion initialization of objects to stage
@@ -171,6 +235,16 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		id = generatesIdentifier("Diagram", idx, diagram.Name)
 		map_Diagram_Identifiers[diagram] = id
+
+		// Initialisation of values
+	}
+
+	for idx, line := range lineOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Line", idx, line.Name)
+		map_Line_Identifiers[line] = id
 
 		// Initialisation of values
 	}

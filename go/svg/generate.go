@@ -3,7 +3,9 @@ package svg
 import (
 	"log"
 	"math"
+	"slices"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
@@ -78,7 +80,7 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 
 	circle.CX = diagram.OriginX + float64(diagram.N)*diagram.DiamondSideLenght + float64(diagram.M)*deltaX
 	circle.CY = diagram.OriginY - float64(diagram.M)*deltaY
-	circle.Radius = 20
+	circle.Radius = diagram.CircleRadius
 
 	angleForTheGridEnd := math.Atan2(circle.CY-diagram.OriginY, circle.CX-diagram.OriginX)
 	angleForTheGridEnd = 180 * angleForTheGridEnd / math.Pi
@@ -111,6 +113,7 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 
 	//
 	// create the circle on each rotated diamond tip in the diamond grid
+	generateCircleFromDiamondGrid(gongsvgStage, layer, presentation, diagram, rotatedDiamondGrid)
 
 	gongsvgStage.Commit()
 }
@@ -228,4 +231,67 @@ func applyRotatedObjectPresentation(lineSet Diamond) {
 	for _, _line := range lineSet {
 		_line.Stroke = "green"
 	}
+}
+
+func generateCircleFromDiamondGrid(
+	gongsvgStage *gongsvg_models.StageStruct,
+	layer *gongsvg_models.Layer,
+	presentation gongsvg_models.Presentation,
+	diagram *models.Diagram,
+	diamondGrid DiamondGrid) (circles []*gongsvg_models.Circle) {
+
+	for _, diamond := range diamondGrid {
+
+		for _, line := range *diamond {
+
+			// only keep circles above 0
+			if line.Y1 > 0 {
+				startCircle := new(gongsvg_models.Circle)
+				layer.Circles = append(layer.Circles, startCircle)
+				startCircle.CX = line.X1
+				startCircle.CY = line.Y1
+				startCircle.Radius = diagram.CircleRadius
+
+				startCircle.Presentation = presentation
+				circles = append(circles, startCircle)
+			}
+
+			if line.Y2 > 0 {
+				endCircle := new(gongsvg_models.Circle)
+				layer.Circles = append(layer.Circles, endCircle)
+				endCircle.CX = line.X2
+				endCircle.CY = line.Y2
+				endCircle.Radius = diagram.CircleRadius
+
+				endCircle.Presentation = presentation
+				circles = append(circles, endCircle)
+			}
+
+		}
+	}
+
+	// remove duplicates
+	slices.SortFunc(circles, func(c1, c2 *gongsvg_models.Circle) int {
+		if c1.CX < c2.CX {
+			return 1
+		}
+		if c1.CX > c2.CX {
+			return -1
+		}
+		if c1.CY < c2.CY {
+			return 1
+		}
+		if c1.CY > c2.CY {
+			return -1
+		}
+		return 0
+	})
+	circles = slices.CompactFunc(circles, func(c1, c2 *gongsvg_models.Circle) bool {
+		return c1.CX == c2.CX && c1.CY == c2.CY
+	})
+	for _, circle := range circles {
+		circle.Stage(gongsvgStage)
+	}
+
+	return
 }

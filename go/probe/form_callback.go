@@ -75,6 +75,8 @@ func (diagramFormCallback *DiagramFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(diagram_.OriginY), formDiv)
 		case "DiamondSideLenght":
 			FormDivBasicFieldToField(&(diagram_.DiamondSideLenght), formDiv)
+		case "CircleRadius":
+			FormDivBasicFieldToField(&(diagram_.CircleRadius), formDiv)
 		}
 	}
 
@@ -106,4 +108,89 @@ func (diagramFormCallback *DiagramFormCallback) OnSave() {
 	}
 
 	fillUpTree(diagramFormCallback.probe)
+}
+func __gong__New__LineFormCallback(
+	line *models.Line,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (lineFormCallback *LineFormCallback) {
+	lineFormCallback = new(LineFormCallback)
+	lineFormCallback.probe = probe
+	lineFormCallback.line = line
+	lineFormCallback.formGroup = formGroup
+
+	lineFormCallback.CreationMode = (line == nil)
+
+	return
+}
+
+type LineFormCallback struct {
+	line *models.Line
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (lineFormCallback *LineFormCallback) OnSave() {
+
+	log.Println("LineFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	lineFormCallback.probe.formStage.Checkout()
+
+	if lineFormCallback.line == nil {
+		lineFormCallback.line = new(models.Line).Stage(lineFormCallback.probe.stageOfInterest)
+	}
+	line_ := lineFormCallback.line
+	_ = line_
+
+	for _, formDiv := range lineFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(line_.Name), formDiv)
+		case "X1":
+			FormDivBasicFieldToField(&(line_.X1), formDiv)
+		case "Y1":
+			FormDivBasicFieldToField(&(line_.Y1), formDiv)
+		case "X2":
+			FormDivBasicFieldToField(&(line_.X2), formDiv)
+		case "Y2":
+			FormDivBasicFieldToField(&(line_.Y2), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if lineFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		line_.Unstage(lineFormCallback.probe.stageOfInterest)
+	}
+
+	lineFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.Line](
+		lineFormCallback.probe,
+	)
+	lineFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if lineFormCallback.CreationMode || lineFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		lineFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(lineFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__LineFormCallback(
+			nil,
+			lineFormCallback.probe,
+			newFormGroup,
+		)
+		line := new(models.Line)
+		FillUpForm(line, newFormGroup, lineFormCallback.probe)
+		lineFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(lineFormCallback.probe)
 }

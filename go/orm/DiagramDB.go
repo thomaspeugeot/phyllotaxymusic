@@ -79,6 +79,9 @@ type DiagramDB struct {
 
 	// Declation for basic field diagramDB.DiamondSideLenght
 	DiamondSideLenght_Data sql.NullFloat64
+
+	// Declation for basic field diagramDB.CircleRadius
+	CircleRadius_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -115,6 +118,8 @@ type DiagramWOP struct {
 	OriginY float64 `xlsx:"6"`
 
 	DiamondSideLenght float64 `xlsx:"7"`
+
+	CircleRadius float64 `xlsx:"8"`
 	// insertion for WOP pointer fields
 }
 
@@ -128,6 +133,7 @@ var Diagram_Fields = []string{
 	"OriginX",
 	"OriginY",
 	"DiamondSideLenght",
+	"CircleRadius",
 }
 
 type BackRepoDiagramStruct struct {
@@ -414,6 +420,9 @@ func (diagramDB *DiagramDB) CopyBasicFieldsFromDiagram(diagram *models.Diagram) 
 
 	diagramDB.DiamondSideLenght_Data.Float64 = diagram.DiamondSideLenght
 	diagramDB.DiamondSideLenght_Data.Valid = true
+
+	diagramDB.CircleRadius_Data.Float64 = diagram.CircleRadius
+	diagramDB.CircleRadius_Data.Valid = true
 }
 
 // CopyBasicFieldsFromDiagram_WOP
@@ -440,6 +449,9 @@ func (diagramDB *DiagramDB) CopyBasicFieldsFromDiagram_WOP(diagram *models.Diagr
 
 	diagramDB.DiamondSideLenght_Data.Float64 = diagram.DiamondSideLenght
 	diagramDB.DiamondSideLenght_Data.Valid = true
+
+	diagramDB.CircleRadius_Data.Float64 = diagram.CircleRadius
+	diagramDB.CircleRadius_Data.Valid = true
 }
 
 // CopyBasicFieldsFromDiagramWOP
@@ -466,6 +478,9 @@ func (diagramDB *DiagramDB) CopyBasicFieldsFromDiagramWOP(diagram *DiagramWOP) {
 
 	diagramDB.DiamondSideLenght_Data.Float64 = diagram.DiamondSideLenght
 	diagramDB.DiamondSideLenght_Data.Valid = true
+
+	diagramDB.CircleRadius_Data.Float64 = diagram.CircleRadius
+	diagramDB.CircleRadius_Data.Valid = true
 }
 
 // CopyBasicFieldsToDiagram
@@ -478,6 +493,7 @@ func (diagramDB *DiagramDB) CopyBasicFieldsToDiagram(diagram *models.Diagram) {
 	diagram.OriginX = diagramDB.OriginX_Data.Float64
 	diagram.OriginY = diagramDB.OriginY_Data.Float64
 	diagram.DiamondSideLenght = diagramDB.DiamondSideLenght_Data.Float64
+	diagram.CircleRadius = diagramDB.CircleRadius_Data.Float64
 }
 
 // CopyBasicFieldsToDiagram_WOP
@@ -490,6 +506,7 @@ func (diagramDB *DiagramDB) CopyBasicFieldsToDiagram_WOP(diagram *models.Diagram
 	diagram.OriginX = diagramDB.OriginX_Data.Float64
 	diagram.OriginY = diagramDB.OriginY_Data.Float64
 	diagram.DiamondSideLenght = diagramDB.DiamondSideLenght_Data.Float64
+	diagram.CircleRadius = diagramDB.CircleRadius_Data.Float64
 }
 
 // CopyBasicFieldsToDiagramWOP
@@ -503,6 +520,7 @@ func (diagramDB *DiagramDB) CopyBasicFieldsToDiagramWOP(diagram *DiagramWOP) {
 	diagram.OriginX = diagramDB.OriginX_Data.Float64
 	diagram.OriginY = diagramDB.OriginY_Data.Float64
 	diagram.DiamondSideLenght = diagramDB.DiamondSideLenght_Data.Float64
+	diagram.CircleRadius = diagramDB.CircleRadius_Data.Float64
 }
 
 // Backup generates a json file from a slice of all DiagramDB instances in the backrepo

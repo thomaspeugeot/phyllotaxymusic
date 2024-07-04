@@ -10,6 +10,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterDiagramCreateCallback != nil {
 			stage.OnAfterDiagramCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *Line:
+		if stage.OnAfterLineCreateCallback != nil {
+			stage.OnAfterLineCreateCallback.OnAfterCreate(stage, target)
+		}
 	default:
 		_ = target
 	}
@@ -24,6 +28,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*Diagram)
 		if stage.OnAfterDiagramUpdateCallback != nil {
 			stage.OnAfterDiagramUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *Line:
+		newTarget := any(new).(*Line)
+		if stage.OnAfterLineUpdateCallback != nil {
+			stage.OnAfterLineUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	default:
 		_ = oldTarget
@@ -40,6 +49,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*Diagram)
 			stage.OnAfterDiagramDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *Line:
+		if stage.OnAfterLineDeleteCallback != nil {
+			staged := any(staged).(*Line)
+			stage.OnAfterLineDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	default:
 		_ = front
 	}
@@ -53,6 +67,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *Diagram:
 		if stage.OnAfterDiagramReadCallback != nil {
 			stage.OnAfterDiagramReadCallback.OnAfterRead(stage, target)
+		}
+	case *Line:
+		if stage.OnAfterLineReadCallback != nil {
+			stage.OnAfterLineReadCallback.OnAfterRead(stage, target)
 		}
 	default:
 		_ = target
@@ -68,6 +86,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Diagram:
 		stage.OnAfterDiagramUpdateCallback = any(callback).(OnAfterUpdateInterface[Diagram])
 	
+	case *Line:
+		stage.OnAfterLineUpdateCallback = any(callback).(OnAfterUpdateInterface[Line])
+	
 	}
 }
 func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callback OnAfterCreateInterface[Type]) {
@@ -77,6 +98,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 		// insertion point
 	case *Diagram:
 		stage.OnAfterDiagramCreateCallback = any(callback).(OnAfterCreateInterface[Diagram])
+	
+	case *Line:
+		stage.OnAfterLineCreateCallback = any(callback).(OnAfterCreateInterface[Line])
 	
 	}
 }
@@ -88,6 +112,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Diagram:
 		stage.OnAfterDiagramDeleteCallback = any(callback).(OnAfterDeleteInterface[Diagram])
 	
+	case *Line:
+		stage.OnAfterLineDeleteCallback = any(callback).(OnAfterDeleteInterface[Line])
+	
 	}
 }
 func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback OnAfterReadInterface[Type]) {
@@ -97,6 +124,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 		// insertion point
 	case *Diagram:
 		stage.OnAfterDiagramReadCallback = any(callback).(OnAfterReadInterface[Diagram])
+	
+	case *Line:
+		stage.OnAfterLineReadCallback = any(callback).(OnAfterReadInterface[Line])
 	
 	}
 }

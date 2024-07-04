@@ -5,6 +5,8 @@ type BackRepoData struct {
 	// insertion point for slices
 
 	DiagramAPIs []*DiagramAPI
+
+	LineAPIs []*LineAPI
 }
 
 func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepoData) {
@@ -17,6 +19,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		diagramDB.CopyBasicFieldsToDiagram_WOP(&diagramAPI.Diagram_WOP)
 
 		backRepoData.DiagramAPIs = append(backRepoData.DiagramAPIs, &diagramAPI)
+	}
+
+	for _, lineDB := range backRepo.BackRepoLine.Map_LineDBID_LineDB {
+
+		var lineAPI LineAPI
+		lineAPI.ID = lineDB.ID
+		lineAPI.LinePointersEncoding = lineDB.LinePointersEncoding
+		lineDB.CopyBasicFieldsToLine_WOP(&lineAPI.Line_WOP)
+
+		backRepoData.LineAPIs = append(backRepoData.LineAPIs, &lineAPI)
 	}
 
 }

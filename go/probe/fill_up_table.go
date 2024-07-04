@@ -22,6 +22,8 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 	// insertion point
 	case *models.Diagram:
 		fillUpTable[models.Diagram](probe)
+	case *models.Line:
+		fillUpTable[models.Line](probe)
 	default:
 		log.Println("unknow type")
 	}

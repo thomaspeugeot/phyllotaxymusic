@@ -59,6 +59,16 @@ type StageStruct struct {
 	OnAfterDiagramDeleteCallback OnAfterDeleteInterface[Diagram]
 	OnAfterDiagramReadCallback   OnAfterReadInterface[Diagram]
 
+	Lines           map[*Line]any
+	Lines_mapString map[string]*Line
+
+	// insertion point for slice of pointers maps
+
+	OnAfterLineCreateCallback OnAfterCreateInterface[Line]
+	OnAfterLineUpdateCallback OnAfterUpdateInterface[Line]
+	OnAfterLineDeleteCallback OnAfterDeleteInterface[Line]
+	OnAfterLineReadCallback   OnAfterReadInterface[Line]
+
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
 	AllModelsStructDeleteCallback AllModelsStructDeleteInterface
@@ -129,6 +139,8 @@ type BackRepoInterface interface {
 	// insertion point for Commit and Checkout signatures
 	CommitDiagram(diagram *Diagram)
 	CheckoutDiagram(diagram *Diagram)
+	CommitLine(line *Line)
+	CheckoutLine(line *Line)
 	GetLastCommitFromBackNb() uint
 	GetLastPushFromFrontNb() uint
 }
@@ -138,6 +150,9 @@ func NewStage(path string) (stage *StageStruct) {
 	stage = &StageStruct{ // insertion point for array initiatialisation
 		Diagrams:           make(map[*Diagram]any),
 		Diagrams_mapString: make(map[string]*Diagram),
+
+		Lines:           make(map[*Line]any),
+		Lines_mapString: make(map[string]*Line),
 
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
@@ -173,6 +188,7 @@ func (stage *StageStruct) Commit() {
 
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Diagram"] = len(stage.Diagrams)
+	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
 
 }
 
@@ -184,6 +200,7 @@ func (stage *StageStruct) Checkout() {
 	stage.ComputeReverseMaps()
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Diagram"] = len(stage.Diagrams)
+	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
 
 }
 
@@ -266,18 +283,73 @@ func (diagram *Diagram) GetName() (res string) {
 	return diagram.Name
 }
 
+// Stage puts line to the model stage
+func (line *Line) Stage(stage *StageStruct) *Line {
+	stage.Lines[line] = __member
+	stage.Lines_mapString[line.Name] = line
+
+	return line
+}
+
+// Unstage removes line off the model stage
+func (line *Line) Unstage(stage *StageStruct) *Line {
+	delete(stage.Lines, line)
+	delete(stage.Lines_mapString, line.Name)
+	return line
+}
+
+// UnstageVoid removes line off the model stage
+func (line *Line) UnstageVoid(stage *StageStruct) {
+	delete(stage.Lines, line)
+	delete(stage.Lines_mapString, line.Name)
+}
+
+// commit line to the back repo (if it is already staged)
+func (line *Line) Commit(stage *StageStruct) *Line {
+	if _, ok := stage.Lines[line]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitLine(line)
+		}
+	}
+	return line
+}
+
+func (line *Line) CommitVoid(stage *StageStruct) {
+	line.Commit(stage)
+}
+
+// Checkout line to the back repo (if it is already staged)
+func (line *Line) Checkout(stage *StageStruct) *Line {
+	if _, ok := stage.Lines[line]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutLine(line)
+		}
+	}
+	return line
+}
+
+// for satisfaction of GongStruct interface
+func (line *Line) GetName() (res string) {
+	return line.Name
+}
+
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMDiagram(Diagram *Diagram)
+	CreateORMLine(Line *Line)
 }
 
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
 	DeleteORMDiagram(Diagram *Diagram)
+	DeleteORMLine(Line *Line)
 }
 
 func (stage *StageStruct) Reset() { // insertion point for array reset
 	stage.Diagrams = make(map[*Diagram]any)
 	stage.Diagrams_mapString = make(map[string]*Diagram)
+
+	stage.Lines = make(map[*Line]any)
+	stage.Lines_mapString = make(map[string]*Line)
 
 }
 
@@ -285,11 +357,18 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 	stage.Diagrams = nil
 	stage.Diagrams_mapString = nil
 
+	stage.Lines = nil
+	stage.Lines_mapString = nil
+
 }
 
 func (stage *StageStruct) Unstage() { // insertion point for array nil
 	for diagram := range stage.Diagrams {
 		diagram.Unstage(stage)
+	}
+
+	for line := range stage.Lines {
+		line.Unstage(stage)
 	}
 
 }
@@ -300,7 +379,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Diagram
+	Diagram | Line
 }
 
 type GongtructBasicField interface {
@@ -313,7 +392,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Diagram
+	*Diagram | *Line
 	GetName() string
 	CommitVoid(*StageStruct)
 	UnstageVoid(stage *StageStruct)
@@ -343,6 +422,7 @@ type GongstructSet interface {
 	map[any]any |
 		// insertion point for generic types
 		map[*Diagram]any |
+		map[*Line]any |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
 
@@ -350,6 +430,7 @@ type GongstructMapString interface {
 	map[any]any |
 		// insertion point for generic types
 		map[string]*Diagram |
+		map[string]*Line |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
 
@@ -362,6 +443,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 	// insertion point for generic get functions
 	case map[*Diagram]any:
 		return any(&stage.Diagrams).(*Type)
+	case map[*Line]any:
+		return any(&stage.Lines).(*Type)
 	default:
 		return nil
 	}
@@ -376,6 +459,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 	// insertion point for generic get functions
 	case map[string]*Diagram:
 		return any(&stage.Diagrams_mapString).(*Type)
+	case map[string]*Line:
+		return any(&stage.Lines_mapString).(*Type)
 	default:
 		return nil
 	}
@@ -390,6 +475,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 	// insertion point for generic get functions
 	case Diagram:
 		return any(&stage.Diagrams).(*map[*Type]any)
+	case Line:
+		return any(&stage.Lines).(*map[*Type]any)
 	default:
 		return nil
 	}
@@ -404,6 +491,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 	// insertion point for generic get functions
 	case *Diagram:
 		return any(&stage.Diagrams).(*map[Type]any)
+	case *Line:
+		return any(&stage.Lines).(*map[Type]any)
 	default:
 		return nil
 	}
@@ -418,6 +507,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 	// insertion point for generic get functions
 	case Diagram:
 		return any(&stage.Diagrams_mapString).(*map[string]*Type)
+	case Line:
+		return any(&stage.Lines_mapString).(*map[string]*Type)
 	default:
 		return nil
 	}
@@ -434,6 +525,10 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	// insertion point for instance with special fields
 	case Diagram:
 		return any(&Diagram{
+			// Initialisation of associations
+		}).(*Type)
+	case Line:
+		return any(&Line{
 			// Initialisation of associations
 		}).(*Type)
 	default:
@@ -459,6 +554,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 		switch fieldname {
 		// insertion point for per direct association field
 		}
+	// reverse maps of direct associations of Line
+	case Line:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	}
 	return nil
 }
@@ -480,6 +580,11 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		}
+	// reverse maps of direct associations of Line
+	case Line:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	}
 	return nil
 }
@@ -494,6 +599,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 	// insertion point for generic get gongstruct name
 	case Diagram:
 		res = "Diagram"
+	case Line:
+		res = "Line"
 	}
 	return res
 }
@@ -508,6 +615,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	// insertion point for generic get gongstruct name
 	case *Diagram:
 		res = "Diagram"
+	case *Line:
+		res = "Line"
 	}
 	return res
 }
@@ -520,7 +629,9 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Diagram:
-		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght"}
+		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght", "CircleRadius"}
+	case Line:
+		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	}
 	return
 }
@@ -542,6 +653,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case Diagram:
 		var rf ReverseField
 		_ = rf
+	case Line:
+		var rf ReverseField
+		_ = rf
 	}
 	return
 }
@@ -554,7 +668,9 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *Diagram:
-		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght"}
+		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght", "CircleRadius"}
+	case *Line:
+		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	}
 	return
 }
@@ -580,6 +696,22 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.OriginY)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
+		case "CircleRadius":
+			res = fmt.Sprintf("%f", inferedInstance.CircleRadius)
+		}
+	case *Line:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "X1":
+			res = fmt.Sprintf("%f", inferedInstance.X1)
+		case "Y1":
+			res = fmt.Sprintf("%f", inferedInstance.Y1)
+		case "X2":
+			res = fmt.Sprintf("%f", inferedInstance.X2)
+		case "Y2":
+			res = fmt.Sprintf("%f", inferedInstance.Y2)
 		}
 	default:
 		_ = inferedInstance
@@ -608,6 +740,22 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.OriginY)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
+		case "CircleRadius":
+			res = fmt.Sprintf("%f", inferedInstance.CircleRadius)
+		}
+	case Line:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "X1":
+			res = fmt.Sprintf("%f", inferedInstance.X1)
+		case "Y1":
+			res = fmt.Sprintf("%f", inferedInstance.Y1)
+		case "X2":
+			res = fmt.Sprintf("%f", inferedInstance.X2)
+		case "Y2":
+			res = fmt.Sprintf("%f", inferedInstance.Y2)
 		}
 	default:
 		_ = inferedInstance

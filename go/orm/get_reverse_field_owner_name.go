@@ -24,6 +24,24 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		case "Diagram":
 			switch reverseField.Fieldname {
 			}
+		case "Line":
+			switch reverseField.Fieldname {
+			}
+		}
+
+	case *models.Line:
+		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
+			stage, backRepo, inst,
+		)
+		_ = tmp
+		switch reverseField.GongstructName {
+		// insertion point
+		case "Diagram":
+			switch reverseField.Fieldname {
+			}
+		case "Line":
+			switch reverseField.Fieldname {
+			}
 		}
 
 	default:
@@ -49,6 +67,24 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		switch reverseField.GongstructName {
 		// insertion point
 		case "Diagram":
+			switch reverseField.Fieldname {
+			}
+		case "Line":
+			switch reverseField.Fieldname {
+			}
+		}
+
+	case *models.Line:
+		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
+			stage, backRepo, inst,
+		)
+		_ = tmp
+		switch reverseField.GongstructName {
+		// insertion point
+		case "Diagram":
+			switch reverseField.Fieldname {
+			}
+		case "Line":
 			switch reverseField.Fieldname {
 			}
 		}
