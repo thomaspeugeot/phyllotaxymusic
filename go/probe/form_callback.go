@@ -75,8 +75,6 @@ func (diagramFormCallback *DiagramFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(diagram_.OriginY), formDiv)
 		case "DiamondSideLenght":
 			FormDivBasicFieldToField(&(diagram_.DiamondSideLenght), formDiv)
-		case "CircleRadius":
-			FormDivBasicFieldToField(&(diagram_.CircleRadius), formDiv)
 		}
 	}
 

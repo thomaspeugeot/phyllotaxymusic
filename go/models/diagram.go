@@ -11,6 +11,4 @@ type Diagram struct {
 	OriginX           float64
 	OriginY           float64
 	DiamondSideLenght float64
-
-	CircleRadius float64
 }

@@ -16,7 +16,6 @@ type Diagram_WOP struct {
 	OriginX float64
 	OriginY float64
 	DiamondSideLenght float64
-	CircleRadius float64
 }
 
 func (from *Diagram) CopyBasicFields(to *Diagram) {
@@ -28,7 +27,6 @@ func (from *Diagram) CopyBasicFields(to *Diagram) {
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
 	to.DiamondSideLenght = from.DiamondSideLenght
-	to.CircleRadius = from.CircleRadius
 }
 
 type Line_WOP struct {

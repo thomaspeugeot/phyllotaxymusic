@@ -671,13 +671,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Diagram[identifier].DiamondSideLenght = exprSign * fielValue
-				case "CircleRadius":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Diagram[identifier].CircleRadius = exprSign * fielValue
 				}
 			case "Line":
 				switch fieldName {
