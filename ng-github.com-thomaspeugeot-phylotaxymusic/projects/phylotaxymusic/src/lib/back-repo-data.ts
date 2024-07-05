@@ -5,12 +5,16 @@ import { LineAPI } from './line-api'
 
 import { ParameterAPI } from './parameter-api'
 
+import { RhombusAPI } from './rhombus-api'
+
 
 export class BackRepoData {
 	// insertion point for declarations
 	LineAPIs = new Array<LineAPI>()
 
 	ParameterAPIs = new Array<ParameterAPI>()
+
+	RhombusAPIs = new Array<RhombusAPI>()
 
 
 
@@ -19,6 +23,8 @@ export class BackRepoData {
 		this.LineAPIs = data?.LineAPIs || [];
 
 		this.ParameterAPIs = data?.ParameterAPIs || [];
+
+		this.RhombusAPIs = data?.RhombusAPIs || [];
 
 	}
 

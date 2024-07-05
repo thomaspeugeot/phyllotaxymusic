@@ -4,6 +4,7 @@ import { ParameterAPI } from './parameter-api'
 import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
+import { Rhombus } from './rhombus'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -20,12 +21,14 @@ export class Parameter {
 	Name: string = ""
 	N: number = 0
 	M: number = 0
-	DiamondAngle: number = 0
+	Angle: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 	DiamondSideLenght: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
+	InitialRhombus?: Rhombus
+
 }
 
 export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: ParameterAPI) {
@@ -38,12 +41,19 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.Name = parameter.Name
 	parameterAPI.N = parameter.N
 	parameterAPI.M = parameter.M
-	parameterAPI.DiamondAngle = parameter.DiamondAngle
+	parameterAPI.Angle = parameter.Angle
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 	parameterAPI.DiamondSideLenght = parameter.DiamondSideLenght
 
 	// insertion point for pointer fields encoding
+	parameterAPI.ParameterPointersEncoding.InitialRhombusID.Valid = true
+	if (parameter.InitialRhombus != undefined) {
+		parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64 = parameter.InitialRhombus.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 }
@@ -62,12 +72,13 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.Name = parameterAPI.Name
 	parameter.N = parameterAPI.N
 	parameter.M = parameterAPI.M
-	parameter.DiamondAngle = parameterAPI.DiamondAngle
+	parameter.Angle = parameterAPI.Angle
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 	parameter.DiamondSideLenght = parameterAPI.DiamondSideLenght
 
 	// insertion point for pointer fields encoding
+	parameter.InitialRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

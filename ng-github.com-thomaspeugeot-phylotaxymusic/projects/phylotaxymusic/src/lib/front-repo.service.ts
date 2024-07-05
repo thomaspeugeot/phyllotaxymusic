@@ -12,6 +12,10 @@ import { ParameterAPI } from './parameter-api'
 import { Parameter, CopyParameterAPIToParameter } from './parameter'
 import { ParameterService } from './parameter.service'
 
+import { RhombusAPI } from './rhombus-api'
+import { Rhombus, CopyRhombusAPIToRhombus } from './rhombus'
+import { RhombusService } from './rhombus.service'
+
 
 import { BackRepoData } from './back-repo-data'
 
@@ -25,6 +29,9 @@ export class FrontRepo { // insertion point sub template
 	array_Parameters = new Array<Parameter>() // array of front instances
 	map_ID_Parameter = new Map<number, Parameter>() // map of front instances
 
+	array_Rhombuss = new Array<Rhombus>() // array of front instances
+	map_ID_Rhombus = new Map<number, Rhombus>() // map of front instances
+
 
 	// getFrontArray allows for a get function that is robust to refactoring of the named struct name
 	// for instance frontRepo.getArray<Astruct>( Astruct.GONGSTRUCT_NAME), is robust to a refactoring of Astruct identifier
@@ -36,6 +43,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Lines as unknown as Array<Type>
 			case 'Parameter':
 				return this.array_Parameters as unknown as Array<Type>
+			case 'Rhombus':
+				return this.array_Rhombuss as unknown as Array<Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -48,6 +57,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Line as unknown as Map<number, Type>
 			case 'Parameter':
 				return this.map_ID_Parameter as unknown as Map<number, Type>
+			case 'Rhombus':
+				return this.map_ID_Rhombus as unknown as Map<number, Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -117,6 +128,7 @@ export class FrontRepoService {
 		private http: HttpClient, // insertion point sub template 
 		private lineService: LineService,
 		private parameterService: ParameterService,
+		private rhombusService: RhombusService,
 	) { }
 
 	// postService provides a post function for each struct name
@@ -151,6 +163,7 @@ export class FrontRepoService {
 		// insertion point sub template 
 		Observable<LineAPI[]>,
 		Observable<ParameterAPI[]>,
+		Observable<RhombusAPI[]>,
 	] = [
 			// Using "combineLatest" with a placeholder observable.
 			//
@@ -163,6 +176,7 @@ export class FrontRepoService {
 			// insertion point sub template
 			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
+			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 		];
 
 	//
@@ -180,6 +194,7 @@ export class FrontRepoService {
 			// insertion point sub template
 			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
+			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 		]
 
 		return new Observable<FrontRepo>(
@@ -192,6 +207,7 @@ export class FrontRepoService {
 						// insertion point sub template for declarations 
 						lines_,
 						parameters_,
+						rhombuss_,
 					]) => {
 						let _this = this
 						// Typing can be messy with many items. Therefore, type casting is necessary here
@@ -200,6 +216,8 @@ export class FrontRepoService {
 						lines = lines_ as LineAPI[]
 						var parameters: ParameterAPI[]
 						parameters = parameters_ as ParameterAPI[]
+						var rhombuss: RhombusAPI[]
+						rhombuss = rhombuss_ as RhombusAPI[]
 
 						// 
 						// First Step: init map of instances
@@ -228,6 +246,18 @@ export class FrontRepoService {
 							}
 						)
 
+						// init the arrays
+						this.frontRepo.array_Rhombuss = []
+						this.frontRepo.map_ID_Rhombus.clear()
+
+						rhombuss.forEach(
+							rhombusAPI => {
+								let rhombus = new Rhombus
+								this.frontRepo.array_Rhombuss.push(rhombus)
+								this.frontRepo.map_ID_Rhombus.set(rhombusAPI.ID, rhombus)
+							}
+						)
+
 
 						// 
 						// Second Step: reddeem front objects
@@ -245,6 +275,14 @@ export class FrontRepoService {
 							parameterAPI => {
 								let parameter = this.frontRepo.map_ID_Parameter.get(parameterAPI.ID)
 								CopyParameterAPIToParameter(parameterAPI, parameter!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						rhombuss.forEach(
+							rhombusAPI => {
+								let rhombus = this.frontRepo.map_ID_Rhombus.get(rhombusAPI.ID)
+								CopyRhombusAPIToRhombus(rhombusAPI, rhombus!, this.frontRepo)
 							}
 						)
 
@@ -303,6 +341,18 @@ export class FrontRepoService {
 					}
 				)
 
+				// init the arrays
+				this.frontRepo.array_Rhombuss = []
+				this.frontRepo.map_ID_Rhombus.clear()
+
+				backRepoData.RhombusAPIs.forEach(
+					rhombusAPI => {
+						let rhombus = new Rhombus
+						this.frontRepo.array_Rhombuss.push(rhombus)
+						this.frontRepo.map_ID_Rhombus.set(rhombusAPI.ID, rhombus)
+					}
+				)
+
 
 				// 
 				// Second Step: reddeem front objects
@@ -322,6 +372,14 @@ export class FrontRepoService {
 					parameterAPI => {
 						let parameter = this.frontRepo.map_ID_Parameter.get(parameterAPI.ID)
 						CopyParameterAPIToParameter(parameterAPI, parameter!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.RhombusAPIs.forEach(
+					rhombusAPI => {
+						let rhombus = this.frontRepo.map_ID_Rhombus.get(rhombusAPI.ID)
+						CopyRhombusAPIToRhombus(rhombusAPI, rhombus!, this.frontRepo)
 					}
 				)
 
@@ -349,4 +407,7 @@ export function getLineUniqueID(id: number): number {
 }
 export function getParameterUniqueID(id: number): number {
 	return 37 * id
+}
+export function getRhombusUniqueID(id: number): number {
+	return 41 * id
 }

@@ -84,8 +84,9 @@ type ParameterImpl struct {
 
 func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {
 
-	log.Println("", parameterImpl.parameter.DiamondAngle)
+	log.Println("", parameterImpl.parameter.Angle)
 	phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 
+	updatedParameter.GenerateInitialRhombus()
 	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, updatedParameter)
 }

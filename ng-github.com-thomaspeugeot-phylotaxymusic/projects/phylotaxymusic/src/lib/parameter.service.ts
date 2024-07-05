@@ -17,6 +17,7 @@ import { Parameter, CopyParameterToParameterAPI } from './parameter'
 import { FrontRepo, FrontRepoService } from './front-repo.service';
 
 // insertion point for imports
+import { RhombusAPI } from './rhombus-api'
 
 @Injectable({
   providedIn: 'root'

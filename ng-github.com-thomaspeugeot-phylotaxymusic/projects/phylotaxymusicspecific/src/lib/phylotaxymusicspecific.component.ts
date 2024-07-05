@@ -27,7 +27,7 @@ export class PhylotaxymusicspecificComponent implements OnInit {
 
 
   input($event: Event) {
-    console.log(this.frontRepo!.array_Parameters[0].DiamondAngle)
+    console.log(this.frontRepo!.array_Parameters[0].Angle)
 
     let parameter = this.frontRepo!.array_Parameters[0]
 

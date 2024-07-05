@@ -21,5 +21,9 @@ export * from './lib/parameter-api'
 export * from './lib/parameter'
 export * from './lib/parameter.service'
 
+export * from './lib/rhombus-api'
+export * from './lib/rhombus'
+export * from './lib/rhombus.service'
+
 
 export * from './lib/StacksNames'

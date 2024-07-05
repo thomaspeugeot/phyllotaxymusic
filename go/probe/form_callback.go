@@ -152,8 +152,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.N), formDiv)
 		case "M":
 			FormDivBasicFieldToField(&(parameter_.M), formDiv)
-		case "DiamondAngle":
-			FormDivBasicFieldToField(&(parameter_.DiamondAngle), formDiv)
+		case "Angle":
+			FormDivBasicFieldToField(&(parameter_.Angle), formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

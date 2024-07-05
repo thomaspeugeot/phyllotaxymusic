@@ -759,7 +759,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght", "InitialRhombus"}
+		res = []string{"Name", "N", "M", "Angle", "OriginX", "OriginY", "DiamondSideLenght", "InitialRhombus"}
 	case Rhombus:
 		res = []string{"Name", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle"}
 	}
@@ -803,7 +803,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght", "InitialRhombus"}
+		res = []string{"Name", "N", "M", "Angle", "OriginX", "OriginY", "DiamondSideLenght", "InitialRhombus"}
 	case *Rhombus:
 		res = []string{"Name", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle"}
 	}
@@ -837,8 +837,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%d", inferedInstance.N)
 		case "M":
 			res = fmt.Sprintf("%d", inferedInstance.M)
-		case "DiamondAngle":
-			res = fmt.Sprintf("%f", inferedInstance.DiamondAngle)
+		case "Angle":
+			res = fmt.Sprintf("%f", inferedInstance.Angle)
 		case "OriginX":
 			res = fmt.Sprintf("%f", inferedInstance.OriginX)
 		case "OriginY":
@@ -899,8 +899,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%d", inferedInstance.N)
 		case "M":
 			res = fmt.Sprintf("%d", inferedInstance.M)
-		case "DiamondAngle":
-			res = fmt.Sprintf("%f", inferedInstance.DiamondAngle)
+		case "Angle":
+			res = fmt.Sprintf("%f", inferedInstance.Angle)
 		case "OriginX":
 			res = fmt.Sprintf("%f", inferedInstance.OriginX)
 		case "OriginY":

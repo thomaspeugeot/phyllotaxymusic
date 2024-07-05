@@ -7,8 +7,8 @@ type Parameter struct {
 	N    int
 	M    int
 
-	// DiamondAngle is the angle in degree of the diamond at the origin 0,0
-	DiamondAngle float64
+	// Angle is the angle in degree of the diamond at the origin 0,0
+	Angle float64
 
 	OriginX           float64
 	OriginY           float64

@@ -692,13 +692,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].M = int(exprSign) * int(fielValue)
-				case "DiamondAngle":
+				case "Angle":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].DiamondAngle = exprSign * fielValue
+					__gong__map_Parameter[identifier].Angle = exprSign * fielValue
 				case "OriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)

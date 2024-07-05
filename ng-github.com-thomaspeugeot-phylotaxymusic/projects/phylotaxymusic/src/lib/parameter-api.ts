@@ -1,4 +1,5 @@
 // insertion point for imports
+import { RhombusAPI } from './rhombus-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -15,7 +16,7 @@ export class ParameterAPI {
 	Name: string = ""
 	N: number = 0
 	M: number = 0
-	DiamondAngle: number = 0
+	Angle: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 	DiamondSideLenght: number = 0
@@ -27,4 +28,6 @@ export class ParameterAPI {
 
 export class ParameterPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	InitialRhombusID: NullInt64 = new NullInt64 // if pointer is null, InitialRhombus.ID = 0
+
 }

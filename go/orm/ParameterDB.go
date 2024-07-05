@@ -72,8 +72,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.M
 	M_Data sql.NullInt64
 
-	// Declation for basic field parameterDB.DiamondAngle
-	DiamondAngle_Data sql.NullFloat64
+	// Declation for basic field parameterDB.Angle
+	Angle_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
@@ -112,7 +112,7 @@ type ParameterWOP struct {
 
 	M int `xlsx:"3"`
 
-	DiamondAngle float64 `xlsx:"4"`
+	Angle float64 `xlsx:"4"`
 
 	OriginX float64 `xlsx:"5"`
 
@@ -128,7 +128,7 @@ var Parameter_Fields = []string{
 	"Name",
 	"N",
 	"M",
-	"DiamondAngle",
+	"Angle",
 	"OriginX",
 	"OriginY",
 	"DiamondSideLenght",
@@ -424,8 +424,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.M_Data.Int64 = int64(parameter.M)
 	parameterDB.M_Data.Valid = true
 
-	parameterDB.DiamondAngle_Data.Float64 = parameter.DiamondAngle
-	parameterDB.DiamondAngle_Data.Valid = true
+	parameterDB.Angle_Data.Float64 = parameter.Angle
+	parameterDB.Angle_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -450,8 +450,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.M_Data.Int64 = int64(parameter.M)
 	parameterDB.M_Data.Valid = true
 
-	parameterDB.DiamondAngle_Data.Float64 = parameter.DiamondAngle
-	parameterDB.DiamondAngle_Data.Valid = true
+	parameterDB.Angle_Data.Float64 = parameter.Angle
+	parameterDB.Angle_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -476,8 +476,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.M_Data.Int64 = int64(parameter.M)
 	parameterDB.M_Data.Valid = true
 
-	parameterDB.DiamondAngle_Data.Float64 = parameter.DiamondAngle
-	parameterDB.DiamondAngle_Data.Valid = true
+	parameterDB.Angle_Data.Float64 = parameter.Angle
+	parameterDB.Angle_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -495,7 +495,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.Name = parameterDB.Name_Data.String
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
-	parameter.DiamondAngle = parameterDB.DiamondAngle_Data.Float64
+	parameter.Angle = parameterDB.Angle_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
@@ -507,7 +507,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.Name = parameterDB.Name_Data.String
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
-	parameter.DiamondAngle = parameterDB.DiamondAngle_Data.Float64
+	parameter.Angle = parameterDB.Angle_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
@@ -520,7 +520,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.Name = parameterDB.Name_Data.String
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
-	parameter.DiamondAngle = parameterDB.DiamondAngle_Data.Float64
+	parameter.Angle = parameterDB.Angle_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
