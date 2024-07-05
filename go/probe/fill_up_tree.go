@@ -82,6 +82,16 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "Rhombus":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.Rhombus](probe.stageOfInterest)
+			for _rhombus := range set {
+				nodeInstance := (&tree.Node{Name: _rhombus.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_rhombus, "Rhombus", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		}
 
 		nodeGongstruct.IsNodeClickable = true

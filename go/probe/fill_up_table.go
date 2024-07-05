@@ -24,6 +24,8 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.Line](probe)
 	case *models.Parameter:
 		fillUpTable[models.Parameter](probe)
+	case *models.Rhombus:
+		fillUpTable[models.Rhombus](probe)
 	default:
 		log.Println("unknow type")
 	}

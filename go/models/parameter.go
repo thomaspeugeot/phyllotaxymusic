@@ -14,16 +14,16 @@ type Parameter struct {
 	OriginY           float64
 	DiamondSideLenght float64
 
-	Impl DiagramImplInterface
+	Impl ParameterImplInterface
 }
 
 func (diagram *Parameter) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Parameter) {
 
 	log.Println("Diagram, OnAfterUpdate", diagram.Name)
-	diagram.Impl.OnDiagramUpdated(diagram)
+	diagram.Impl.OnUpdated(diagram)
 
 }
 
-type DiagramImplInterface interface {
-	OnDiagramUpdated(updatedDiagram *Parameter)
+type ParameterImplInterface interface {
+	OnUpdated(updatedDiagram *Parameter)
 }

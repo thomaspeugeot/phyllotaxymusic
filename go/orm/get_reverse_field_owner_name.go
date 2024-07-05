@@ -27,6 +27,9 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		case "Parameter":
 			switch reverseField.Fieldname {
 			}
+		case "Rhombus":
+			switch reverseField.Fieldname {
+			}
 		}
 
 	case *models.Parameter:
@@ -40,6 +43,27 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "Parameter":
+			switch reverseField.Fieldname {
+			}
+		case "Rhombus":
+			switch reverseField.Fieldname {
+			}
+		}
+
+	case *models.Rhombus:
+		tmp := GetInstanceDBFromInstance[models.Rhombus, RhombusDB](
+			stage, backRepo, inst,
+		)
+		_ = tmp
+		switch reverseField.GongstructName {
+		// insertion point
+		case "Line":
+			switch reverseField.Fieldname {
+			}
+		case "Parameter":
+			switch reverseField.Fieldname {
+			}
+		case "Rhombus":
 			switch reverseField.Fieldname {
 			}
 		}
@@ -72,6 +96,9 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		case "Parameter":
 			switch reverseField.Fieldname {
 			}
+		case "Rhombus":
+			switch reverseField.Fieldname {
+			}
 		}
 
 	case *models.Parameter:
@@ -85,6 +112,27 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "Parameter":
+			switch reverseField.Fieldname {
+			}
+		case "Rhombus":
+			switch reverseField.Fieldname {
+			}
+		}
+
+	case *models.Rhombus:
+		tmp := GetInstanceDBFromInstance[models.Rhombus, RhombusDB](
+			stage, backRepo, inst,
+		)
+		_ = tmp
+		switch reverseField.GongstructName {
+		// insertion point
+		case "Line":
+			switch reverseField.Fieldname {
+			}
+		case "Parameter":
+			switch reverseField.Fieldname {
+			}
+		case "Rhombus":
 			switch reverseField.Fieldname {
 			}
 		}

@@ -7,6 +7,8 @@ type BackRepoData struct {
 	LineAPIs []*LineAPI
 
 	ParameterAPIs []*ParameterAPI
+
+	RhombusAPIs []*RhombusAPI
 }
 
 func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepoData) {
@@ -29,6 +31,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		parameterDB.CopyBasicFieldsToParameter_WOP(&parameterAPI.Parameter_WOP)
 
 		backRepoData.ParameterAPIs = append(backRepoData.ParameterAPIs, &parameterAPI)
+	}
+
+	for _, rhombusDB := range backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusDB {
+
+		var rhombusAPI RhombusAPI
+		rhombusAPI.ID = rhombusDB.ID
+		rhombusAPI.RhombusPointersEncoding = rhombusDB.RhombusPointersEncoding
+		rhombusDB.CopyBasicFieldsToRhombus_WOP(&rhombusAPI.Rhombus_WOP)
+
+		backRepoData.RhombusAPIs = append(backRepoData.RhombusAPIs, &rhombusAPI)
 	}
 
 }

@@ -316,6 +316,7 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 // insertion point for identifiers maps
 var __gong__map_Line = make(map[string]*Line)
 var __gong__map_Parameter = make(map[string]*Parameter)
+var __gong__map_Rhombus = make(map[string]*Rhombus)
 
 // Parser needs to be configured for having the [Name1.Name2] or [pkg.Name1] ...
 // to be recognized as a proper identifier.
@@ -496,6 +497,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceParameter := (&Parameter{Name: instanceName}).Stage(stage)
 										instance = any(instanceParameter)
 										__gong__map_Parameter[identifier] = instanceParameter
+									case "Rhombus":
+										instanceRhombus := (&Rhombus{Name: instanceName}).Stage(stage)
+										instance = any(instanceRhombus)
+										__gong__map_Rhombus[identifier] = instanceRhombus
 									}
 									__gong__map_Indentifiers_gongstructName[identifier] = gongstructName
 									return
@@ -540,6 +545,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "Rhombus":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						}
 					}
 				}
@@ -570,6 +579,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						// insertion point for slice of pointers assign code
 						}
 					case "Parameter":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "Rhombus":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -708,6 +721,49 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_Parameter[identifier].DiamondSideLenght = exprSign * fielValue
 				}
+			case "Rhombus":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Rhombus[identifier].Name = fielValue
+				case "CenterX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Rhombus[identifier].CenterX = exprSign * fielValue
+				case "CenterY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Rhombus[identifier].CenterY = exprSign * fielValue
+				case "SideLength":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Rhombus[identifier].SideLength = exprSign * fielValue
+				case "Angle":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Rhombus[identifier].Angle = exprSign * fielValue
+				case "InsideAngle":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Rhombus[identifier].InsideAngle = exprSign * fielValue
+				}
 			}
 		case *ast.Ident:
 			// assignment to boolean field ?
@@ -727,6 +783,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				// insertion point for field dependant code
 				}
 			case "Parameter":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
+			case "Rhombus":
 				switch fieldName {
 				// insertion point for field dependant code
 				}
@@ -763,6 +823,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "Parameter":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "Rhombus":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

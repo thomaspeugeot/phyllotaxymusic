@@ -16,6 +16,7 @@ func SerializeStage(stage *StageStruct, filename string) {
 		// insertion point
 		SerializeExcelize[Line](stage, f)
 		SerializeExcelize[Parameter](stage, f)
+		SerializeExcelize[Rhombus](stage, f)
 	}
 
 	var tab ExcelizeTabulator

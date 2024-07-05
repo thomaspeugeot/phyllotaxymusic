@@ -46,6 +46,7 @@ func NewStackInstance(
 	// insertion point
 	models.SetOrchestratorOnAfterUpdate[models.Line](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Parameter](stage)
+	models.SetOrchestratorOnAfterUpdate[models.Rhombus](stage)
 
 	return
 }

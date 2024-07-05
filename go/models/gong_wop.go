@@ -47,3 +47,23 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.DiamondSideLenght = from.DiamondSideLenght
 }
 
+type Rhombus_WOP struct {
+	// insertion point
+	Name string
+	CenterX float64
+	CenterY float64
+	SideLength float64
+	Angle float64
+	InsideAngle float64
+}
+
+func (from *Rhombus) CopyBasicFields(to *Rhombus) {
+	// insertion point
+	to.Name = from.Name
+	to.CenterX = from.CenterX
+	to.CenterY = from.CenterY
+	to.SideLength = from.SideLength
+	to.Angle = from.Angle
+	to.InsideAngle = from.InsideAngle
+}
+

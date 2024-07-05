@@ -192,3 +192,90 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 
 	fillUpTree(parameterFormCallback.probe)
 }
+func __gong__New__RhombusFormCallback(
+	rhombus *models.Rhombus,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (rhombusFormCallback *RhombusFormCallback) {
+	rhombusFormCallback = new(RhombusFormCallback)
+	rhombusFormCallback.probe = probe
+	rhombusFormCallback.rhombus = rhombus
+	rhombusFormCallback.formGroup = formGroup
+
+	rhombusFormCallback.CreationMode = (rhombus == nil)
+
+	return
+}
+
+type RhombusFormCallback struct {
+	rhombus *models.Rhombus
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (rhombusFormCallback *RhombusFormCallback) OnSave() {
+
+	log.Println("RhombusFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	rhombusFormCallback.probe.formStage.Checkout()
+
+	if rhombusFormCallback.rhombus == nil {
+		rhombusFormCallback.rhombus = new(models.Rhombus).Stage(rhombusFormCallback.probe.stageOfInterest)
+	}
+	rhombus_ := rhombusFormCallback.rhombus
+	_ = rhombus_
+
+	for _, formDiv := range rhombusFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(rhombus_.Name), formDiv)
+		case "CenterX":
+			FormDivBasicFieldToField(&(rhombus_.CenterX), formDiv)
+		case "CenterY":
+			FormDivBasicFieldToField(&(rhombus_.CenterY), formDiv)
+		case "SideLength":
+			FormDivBasicFieldToField(&(rhombus_.SideLength), formDiv)
+		case "Angle":
+			FormDivBasicFieldToField(&(rhombus_.Angle), formDiv)
+		case "InsideAngle":
+			FormDivBasicFieldToField(&(rhombus_.InsideAngle), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if rhombusFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		rhombus_.Unstage(rhombusFormCallback.probe.stageOfInterest)
+	}
+
+	rhombusFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.Rhombus](
+		rhombusFormCallback.probe,
+	)
+	rhombusFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if rhombusFormCallback.CreationMode || rhombusFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		rhombusFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(rhombusFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__RhombusFormCallback(
+			nil,
+			rhombusFormCallback.probe,
+			newFormGroup,
+		)
+		rhombus := new(models.Rhombus)
+		FillUpForm(rhombus, newFormGroup, rhombusFormCallback.probe)
+		rhombusFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(rhombusFormCallback.probe)
+}

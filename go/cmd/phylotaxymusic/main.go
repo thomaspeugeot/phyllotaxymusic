@@ -49,21 +49,21 @@ func main() {
 	phylotaxymusic_svg.GenerateSvg(gongsvg_stack.Stage, phylotaxymusicStack.Stage)
 
 	// get the only diagram
-	diagrams := phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.Parameter](phylotaxymusicStack.Stage)
+	parameters := phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.Parameter](phylotaxymusicStack.Stage)
 
-	if len(*diagrams) == 0 {
+	if len(*parameters) == 0 {
 		log.Println("")
 		// log.Fatalln("")
 	}
 
-	diagram := (*diagrams)["Reference"]
-	_ = diagram
+	parameter := (*parameters)["Reference"]
+	_ = parameter
 
 	impl := new(DiagramImpl)
-	impl.diagram = diagram
+	impl.diagram = parameter
 	impl.gongsvgStage = gongsvg_stack.Stage
 	impl.phylotaxymusicStage = phylotaxymusicStack.Stage
-	diagram.Impl = impl
+	parameter.Impl = impl
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
@@ -78,7 +78,7 @@ type DiagramImpl struct {
 	diagram             *phylotaxymusic_models.Parameter
 }
 
-func (diagramImpl *DiagramImpl) OnDiagramUpdated(updatedDiagram *phylotaxymusic_models.Parameter) {
+func (diagramImpl *DiagramImpl) OnUpdated(updatedDiagram *phylotaxymusic_models.Parameter) {
 
 	log.Println("", diagramImpl.diagram.DiamondAngle)
 	phylotaxymusic_svg.GenerateSvg(diagramImpl.gongsvgStage, diagramImpl.phylotaxymusicStage)

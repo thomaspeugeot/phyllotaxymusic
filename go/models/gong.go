@@ -69,6 +69,16 @@ type StageStruct struct {
 	OnAfterParameterDeleteCallback OnAfterDeleteInterface[Parameter]
 	OnAfterParameterReadCallback   OnAfterReadInterface[Parameter]
 
+	Rhombuss           map[*Rhombus]any
+	Rhombuss_mapString map[string]*Rhombus
+
+	// insertion point for slice of pointers maps
+
+	OnAfterRhombusCreateCallback OnAfterCreateInterface[Rhombus]
+	OnAfterRhombusUpdateCallback OnAfterUpdateInterface[Rhombus]
+	OnAfterRhombusDeleteCallback OnAfterDeleteInterface[Rhombus]
+	OnAfterRhombusReadCallback   OnAfterReadInterface[Rhombus]
+
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
 	AllModelsStructDeleteCallback AllModelsStructDeleteInterface
@@ -141,6 +151,8 @@ type BackRepoInterface interface {
 	CheckoutLine(line *Line)
 	CommitParameter(parameter *Parameter)
 	CheckoutParameter(parameter *Parameter)
+	CommitRhombus(rhombus *Rhombus)
+	CheckoutRhombus(rhombus *Rhombus)
 	GetLastCommitFromBackNb() uint
 	GetLastPushFromFrontNb() uint
 }
@@ -153,6 +165,9 @@ func NewStage(path string) (stage *StageStruct) {
 
 		Parameters:           make(map[*Parameter]any),
 		Parameters_mapString: make(map[string]*Parameter),
+
+		Rhombuss:           make(map[*Rhombus]any),
+		Rhombuss_mapString: make(map[string]*Rhombus),
 
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
@@ -189,6 +204,7 @@ func (stage *StageStruct) Commit() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
 	stage.Map_GongStructName_InstancesNb["Parameter"] = len(stage.Parameters)
+	stage.Map_GongStructName_InstancesNb["Rhombus"] = len(stage.Rhombuss)
 
 }
 
@@ -201,6 +217,7 @@ func (stage *StageStruct) Checkout() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
 	stage.Map_GongStructName_InstancesNb["Parameter"] = len(stage.Parameters)
+	stage.Map_GongStructName_InstancesNb["Rhombus"] = len(stage.Rhombuss)
 
 }
 
@@ -333,15 +350,67 @@ func (parameter *Parameter) GetName() (res string) {
 	return parameter.Name
 }
 
+// Stage puts rhombus to the model stage
+func (rhombus *Rhombus) Stage(stage *StageStruct) *Rhombus {
+	stage.Rhombuss[rhombus] = __member
+	stage.Rhombuss_mapString[rhombus.Name] = rhombus
+
+	return rhombus
+}
+
+// Unstage removes rhombus off the model stage
+func (rhombus *Rhombus) Unstage(stage *StageStruct) *Rhombus {
+	delete(stage.Rhombuss, rhombus)
+	delete(stage.Rhombuss_mapString, rhombus.Name)
+	return rhombus
+}
+
+// UnstageVoid removes rhombus off the model stage
+func (rhombus *Rhombus) UnstageVoid(stage *StageStruct) {
+	delete(stage.Rhombuss, rhombus)
+	delete(stage.Rhombuss_mapString, rhombus.Name)
+}
+
+// commit rhombus to the back repo (if it is already staged)
+func (rhombus *Rhombus) Commit(stage *StageStruct) *Rhombus {
+	if _, ok := stage.Rhombuss[rhombus]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitRhombus(rhombus)
+		}
+	}
+	return rhombus
+}
+
+func (rhombus *Rhombus) CommitVoid(stage *StageStruct) {
+	rhombus.Commit(stage)
+}
+
+// Checkout rhombus to the back repo (if it is already staged)
+func (rhombus *Rhombus) Checkout(stage *StageStruct) *Rhombus {
+	if _, ok := stage.Rhombuss[rhombus]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutRhombus(rhombus)
+		}
+	}
+	return rhombus
+}
+
+// for satisfaction of GongStruct interface
+func (rhombus *Rhombus) GetName() (res string) {
+	return rhombus.Name
+}
+
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMLine(Line *Line)
 	CreateORMParameter(Parameter *Parameter)
+	CreateORMRhombus(Rhombus *Rhombus)
 }
 
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
 	DeleteORMLine(Line *Line)
 	DeleteORMParameter(Parameter *Parameter)
+	DeleteORMRhombus(Rhombus *Rhombus)
 }
 
 func (stage *StageStruct) Reset() { // insertion point for array reset
@@ -351,6 +420,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 	stage.Parameters = make(map[*Parameter]any)
 	stage.Parameters_mapString = make(map[string]*Parameter)
 
+	stage.Rhombuss = make(map[*Rhombus]any)
+	stage.Rhombuss_mapString = make(map[string]*Rhombus)
+
 }
 
 func (stage *StageStruct) Nil() { // insertion point for array nil
@@ -359,6 +431,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.Parameters = nil
 	stage.Parameters_mapString = nil
+
+	stage.Rhombuss = nil
+	stage.Rhombuss_mapString = nil
 
 }
 
@@ -371,6 +446,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 		parameter.Unstage(stage)
 	}
 
+	for rhombus := range stage.Rhombuss {
+		rhombus.Unstage(stage)
+	}
+
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -379,7 +458,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Line | Parameter
+	Line | Parameter | Rhombus
 }
 
 type GongtructBasicField interface {
@@ -392,7 +471,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Line | *Parameter
+	*Line | *Parameter | *Rhombus
 	GetName() string
 	CommitVoid(*StageStruct)
 	UnstageVoid(stage *StageStruct)
@@ -423,6 +502,7 @@ type GongstructSet interface {
 		// insertion point for generic types
 		map[*Line]any |
 		map[*Parameter]any |
+		map[*Rhombus]any |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
 
@@ -431,6 +511,7 @@ type GongstructMapString interface {
 		// insertion point for generic types
 		map[string]*Line |
 		map[string]*Parameter |
+		map[string]*Rhombus |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
 
@@ -445,6 +526,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Lines).(*Type)
 	case map[*Parameter]any:
 		return any(&stage.Parameters).(*Type)
+	case map[*Rhombus]any:
+		return any(&stage.Rhombuss).(*Type)
 	default:
 		return nil
 	}
@@ -461,6 +544,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Lines_mapString).(*Type)
 	case map[string]*Parameter:
 		return any(&stage.Parameters_mapString).(*Type)
+	case map[string]*Rhombus:
+		return any(&stage.Rhombuss_mapString).(*Type)
 	default:
 		return nil
 	}
@@ -477,6 +562,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Lines).(*map[*Type]any)
 	case Parameter:
 		return any(&stage.Parameters).(*map[*Type]any)
+	case Rhombus:
+		return any(&stage.Rhombuss).(*map[*Type]any)
 	default:
 		return nil
 	}
@@ -493,6 +580,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.Lines).(*map[Type]any)
 	case *Parameter:
 		return any(&stage.Parameters).(*map[Type]any)
+	case *Rhombus:
+		return any(&stage.Rhombuss).(*map[Type]any)
 	default:
 		return nil
 	}
@@ -509,6 +598,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Lines_mapString).(*map[string]*Type)
 	case Parameter:
 		return any(&stage.Parameters_mapString).(*map[string]*Type)
+	case Rhombus:
+		return any(&stage.Rhombuss_mapString).(*map[string]*Type)
 	default:
 		return nil
 	}
@@ -529,6 +620,10 @@ func GetAssociationName[Type Gongstruct]() *Type {
 		}).(*Type)
 	case Parameter:
 		return any(&Parameter{
+			// Initialisation of associations
+		}).(*Type)
+	case Rhombus:
+		return any(&Rhombus{
 			// Initialisation of associations
 		}).(*Type)
 	default:
@@ -559,6 +654,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 		switch fieldname {
 		// insertion point for per direct association field
 		}
+	// reverse maps of direct associations of Rhombus
+	case Rhombus:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	}
 	return nil
 }
@@ -585,6 +685,11 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		}
+	// reverse maps of direct associations of Rhombus
+	case Rhombus:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	}
 	return nil
 }
@@ -601,6 +706,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Line"
 	case Parameter:
 		res = "Parameter"
+	case Rhombus:
+		res = "Rhombus"
 	}
 	return res
 }
@@ -617,6 +724,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "Line"
 	case *Parameter:
 		res = "Parameter"
+	case *Rhombus:
+		res = "Rhombus"
 	}
 	return res
 }
@@ -632,6 +741,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case Parameter:
 		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght"}
+	case Rhombus:
+		res = []string{"Name", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle"}
 	}
 	return
 }
@@ -656,6 +767,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case Parameter:
 		var rf ReverseField
 		_ = rf
+	case Rhombus:
+		var rf ReverseField
+		_ = rf
 	}
 	return
 }
@@ -671,6 +785,8 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case *Parameter:
 		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght"}
+	case *Rhombus:
+		res = []string{"Name", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle"}
 	}
 	return
 }
@@ -710,6 +826,22 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.OriginY)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
+		}
+	case *Rhombus:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "CenterX":
+			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+		case "CenterY":
+			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+		case "SideLength":
+			res = fmt.Sprintf("%f", inferedInstance.SideLength)
+		case "Angle":
+			res = fmt.Sprintf("%f", inferedInstance.Angle)
+		case "InsideAngle":
+			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
 		}
 	default:
 		_ = inferedInstance
@@ -752,6 +884,22 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.OriginY)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
+		}
+	case Rhombus:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "CenterX":
+			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+		case "CenterY":
+			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+		case "SideLength":
+			res = fmt.Sprintf("%f", inferedInstance.SideLength)
+		case "Angle":
+			res = fmt.Sprintf("%f", inferedInstance.Angle)
+		case "InsideAngle":
+			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
 		}
 	default:
 		_ = inferedInstance

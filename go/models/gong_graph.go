@@ -11,6 +11,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *Parameter:
 		ok = stage.IsStagedParameter(target)
 
+	case *Rhombus:
+		ok = stage.IsStagedRhombus(target)
+
 	default:
 		_ = target
 	}
@@ -32,6 +35,13 @@ func (stage *StageStruct) IsStagedParameter(parameter *Parameter) (ok bool) {
 	return
 }
 
+func (stage *StageStruct) IsStagedRhombus(rhombus *Rhombus) (ok bool) {
+
+	_, ok = stage.Rhombuss[rhombus]
+
+	return
+}
+
 // StageBranch stages instance and apply StageBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the instance
 //
@@ -45,6 +55,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Parameter:
 		stage.StageBranchParameter(target)
+
+	case *Rhombus:
+		stage.StageBranchRhombus(target)
 
 	default:
 		_ = target
@@ -82,6 +95,21 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 
 }
 
+func (stage *StageStruct) StageBranchRhombus(rhombus *Rhombus) {
+
+	// check if instance is already staged
+	if IsStaged(stage, rhombus) {
+		return
+	}
+
+	rhombus.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 // CopyBranch stages instance and apply CopyBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the instance
 //
@@ -99,6 +127,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *Parameter:
 		toT := CopyBranchParameter(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *Rhombus:
+		toT := CopyBranchRhombus(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	default:
@@ -146,6 +178,25 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	return
 }
 
+func CopyBranchRhombus(mapOrigCopy map[any]any, rhombusFrom *Rhombus) (rhombusTo *Rhombus) {
+
+	// rhombusFrom has already been copied
+	if _rhombusTo, ok := mapOrigCopy[rhombusFrom]; ok {
+		rhombusTo = _rhombusTo.(*Rhombus)
+		return
+	}
+
+	rhombusTo = new(Rhombus)
+	mapOrigCopy[rhombusFrom] = rhombusTo
+	rhombusFrom.CopyBasicFields(rhombusTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 // UnstageBranch stages instance and apply UnstageBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the insance
 //
@@ -159,6 +210,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Parameter:
 		stage.UnstageBranchParameter(target)
+
+	case *Rhombus:
+		stage.UnstageBranchRhombus(target)
 
 	default:
 		_ = target
@@ -189,6 +243,21 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 
 	parameter.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchRhombus(rhombus *Rhombus) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, rhombus) {
+		return
+	}
+
+	rhombus.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
