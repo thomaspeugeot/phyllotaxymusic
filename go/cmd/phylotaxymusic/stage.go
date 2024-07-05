@@ -33,7 +33,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
-	__Parameter__000000_Reference.Angle = 75.000000
+	__Parameter__000000_Reference.Angle = 107.000000
 	__Parameter__000000_Reference.OriginX = 100.000000
 	__Parameter__000000_Reference.OriginY = 300.000000
 	__Parameter__000000_Reference.DiamondSideLenght = 100.000000

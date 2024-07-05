@@ -44,8 +44,6 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.Parameter.Angle": (ref_models.Parameter{}).Angle,
 
-	"ref_models.Parameter.Angle": (ref_models.Parameter{}).Angle,
-
 	"ref_models.Parameter.DiamondSideLenght": (ref_models.Parameter{}).DiamondSideLenght,
 
 	"ref_models.Parameter.InitialRhombus": (ref_models.Parameter{}).InitialRhombus,
