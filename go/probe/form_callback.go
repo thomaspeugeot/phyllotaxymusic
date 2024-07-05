@@ -160,6 +160,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.OriginY), formDiv)
 		case "DiamondSideLenght":
 			FormDivBasicFieldToField(&(parameter_.DiamondSideLenght), formDiv)
+		case "InitialRhombus":
+			FormDivSelectFieldToField(&(parameter_.InitialRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 

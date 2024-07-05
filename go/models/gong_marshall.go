@@ -305,6 +305,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Parameter_Identifiers[parameter] = id
 
 		// Initialisation of values
+		if parameter.InitialRhombus != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialRhombus")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[parameter.InitialRhombus])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, rhombus := range rhombusOrdered {

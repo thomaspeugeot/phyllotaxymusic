@@ -90,6 +90,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	parameter.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if parameter.InitialRhombus != nil {
+		StageBranch(stage, parameter.InitialRhombus)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -172,6 +175,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	parameterFrom.CopyBasicFields(parameterTo)
 
 	//insertion point for the staging of instances referenced by pointers
+	if parameterFrom.InitialRhombus != nil {
+		parameterTo.InitialRhombus = CopyBranchRhombus(mapOrigCopy, parameterFrom.InitialRhombus)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -245,6 +251,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	parameter.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if parameter.InitialRhombus != nil {
+		UnstageBranch(stage, parameter.InitialRhombus)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 

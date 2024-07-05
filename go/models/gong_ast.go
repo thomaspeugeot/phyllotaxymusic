@@ -785,6 +785,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			case "Parameter":
 				switch fieldName {
 				// insertion point for field dependant code
+				case "InitialRhombus":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].InitialRhombus = __gong__map_Rhombus[targetIdentifier]
 				}
 			case "Rhombus":
 				switch fieldName {

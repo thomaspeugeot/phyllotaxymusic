@@ -15,15 +15,21 @@ type Parameter struct {
 	DiamondSideLenght float64
 
 	Impl ParameterImplInterface
+
+	InitialRhombus *Rhombus
 }
 
-func (diagram *Parameter) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Parameter) {
+func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Parameter) {
 
-	log.Println("Diagram, OnAfterUpdate", diagram.Name)
-	diagram.Impl.OnUpdated(diagram)
+	log.Println("Diagram, OnAfterUpdate", parameter.Name)
+	parameter.Impl.OnUpdated(parameter)
 
 }
 
 type ParameterImplInterface interface {
 	OnUpdated(updatedDiagram *Parameter)
+}
+
+func (parameter *Parameter) GenerateRhombus() {
+
 }

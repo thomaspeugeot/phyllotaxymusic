@@ -621,6 +621,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Parameter:
 		return any(&Parameter{
 			// Initialisation of associations
+			// field is initialized with an instance of Rhombus with the name of the field
+			InitialRhombus: &Rhombus{Name: "InitialRhombus"},
 		}).(*Type)
 	case Rhombus:
 		return any(&Rhombus{
@@ -653,6 +655,23 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 	case Parameter:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "InitialRhombus":
+			res := make(map[*Rhombus][]*Parameter)
+			for parameter := range stage.Parameters {
+				if parameter.InitialRhombus != nil {
+					rhombus_ := parameter.InitialRhombus
+					var parameters []*Parameter
+					_, ok := res[rhombus_]
+					if ok {
+						parameters = res[rhombus_]
+					} else {
+						parameters = make([]*Parameter, 0)
+					}
+					parameters = append(parameters, parameter)
+					res[rhombus_] = parameters
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Rhombus
 	case Rhombus:
@@ -740,7 +759,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght"}
+		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght", "InitialRhombus"}
 	case Rhombus:
 		res = []string{"Name", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle"}
 	}
@@ -784,7 +803,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght"}
+		res = []string{"Name", "N", "M", "DiamondAngle", "OriginX", "OriginY", "DiamondSideLenght", "InitialRhombus"}
 	case *Rhombus:
 		res = []string{"Name", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle"}
 	}
@@ -826,6 +845,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.OriginY)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
+		case "InitialRhombus":
+			if inferedInstance.InitialRhombus != nil {
+				res = inferedInstance.InitialRhombus.Name
+			}
 		}
 	case *Rhombus:
 		switch fieldName {
@@ -884,6 +907,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.OriginY)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
+		case "InitialRhombus":
+			if inferedInstance.InitialRhombus != nil {
+				res = inferedInstance.InitialRhombus.Name
+			}
 		}
 	case Rhombus:
 		switch fieldName {

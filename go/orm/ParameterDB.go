@@ -46,6 +46,10 @@ type ParameterAPI struct {
 // reverse pointers of slice of poitners to Struct
 type ParameterPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
+
+	// field InitialRhombus is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	InitialRhombusID sql.NullInt64
 }
 
 // ParameterDB describes a parameter in the database
@@ -247,6 +251,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		parameterDB.CopyBasicFieldsFromParameter(parameter)
 
 		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value parameter.InitialRhombus translates to updating the parameter.InitialRhombusID
+		parameterDB.InitialRhombusID.Valid = true // allow for a 0 value (nil association)
+		if parameter.InitialRhombus != nil {
+			if InitialRhombusId, ok := backRepo.BackRepoRhombus.Map_RhombusPtr_RhombusDBID[parameter.InitialRhombus]; ok {
+				parameterDB.InitialRhombusID.Int64 = int64(InitialRhombusId)
+				parameterDB.InitialRhombusID.Valid = true
+			}
+		} else {
+			parameterDB.InitialRhombusID.Int64 = 0
+			parameterDB.InitialRhombusID.Valid = true
+		}
+
 		query := backRepoParameter.db.Save(&parameterDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -360,6 +376,11 @@ func (backRepoParameter *BackRepoParameterStruct) CheckoutPhaseTwoInstance(backR
 func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, parameter *models.Parameter) {
 
 	// insertion point for checkout of pointer encoding
+	// InitialRhombus field
+	parameter.InitialRhombus = nil
+	if parameterDB.InitialRhombusID.Int64 != 0 {
+		parameter.InitialRhombus = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(parameterDB.InitialRhombusID.Int64)]
+	}
 	return
 }
 
@@ -660,6 +681,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		_ = parameterDB
 
 		// insertion point for reindexing pointers encoding
+		// reindexing InitialRhombus field
+		if parameterDB.InitialRhombusID.Int64 != 0 {
+			parameterDB.InitialRhombusID.Int64 = int64(BackRepoRhombusid_atBckpTime_newID[uint(parameterDB.InitialRhombusID.Int64)])
+			parameterDB.InitialRhombusID.Valid = true
+		}
+
 		// update databse with new index encoding
 		query := backRepoParameter.db.Model(parameterDB).Updates(*parameterDB)
 		if query.Error != nil {
