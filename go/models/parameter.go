@@ -30,6 +30,6 @@ type ParameterImplInterface interface {
 	OnUpdated(updatedDiagram *Parameter)
 }
 
-func (parameter *Parameter) GenerateRhombus() {
+func (parameter *Parameter) GenerateInitialRhombus() {
 
 }

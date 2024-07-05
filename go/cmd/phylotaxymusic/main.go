@@ -59,11 +59,15 @@ func main() {
 	parameter := (*parameters)["Reference"]
 	_ = parameter
 
-	impl := new(DiagramImpl)
-	impl.diagram = parameter
+	impl := new(ParameterImpl)
+	impl.parameter = parameter
 	impl.gongsvgStage = gongsvg_stack.Stage
 	impl.phylotaxymusicStage = phylotaxymusicStack.Stage
 	parameter.Impl = impl
+
+	parameter.GenerateInitialRhombus()
+
+	phylotaxymusic_svg.GenerateSvg2(gongsvg_stack.Stage, parameter)
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
@@ -72,14 +76,16 @@ func main() {
 	}
 }
 
-type DiagramImpl struct {
+type ParameterImpl struct {
 	gongsvgStage        *gongsvg_models.StageStruct
 	phylotaxymusicStage *phylotaxymusic_models.StageStruct
-	diagram             *phylotaxymusic_models.Parameter
+	parameter           *phylotaxymusic_models.Parameter
 }
 
-func (diagramImpl *DiagramImpl) OnUpdated(updatedDiagram *phylotaxymusic_models.Parameter) {
+func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {
 
-	log.Println("", diagramImpl.diagram.DiamondAngle)
-	phylotaxymusic_svg.GenerateSvg(diagramImpl.gongsvgStage, diagramImpl.phylotaxymusicStage)
+	log.Println("", parameterImpl.parameter.DiamondAngle)
+	phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
+
+	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, updatedParameter)
 }
