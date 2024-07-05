@@ -13,7 +13,7 @@ import (
 // if there are no elements in the stage to marshall
 var _ time.Time
 
-// _ point for meta package dummy declaration
+// Injection point for meta package dummy declaration
 var _ ref_models.StageStruct
 
 // When parsed, those maps will help with the renaming process
@@ -42,9 +42,13 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.Parameter": &(ref_models.Parameter{}),
 
-	"ref_models.Parameter.DiamondAngle": (ref_models.Parameter{}).Angle,
+	"ref_models.Parameter.Angle": (ref_models.Parameter{}).Angle,
+
+	"ref_models.Parameter.Angle": (ref_models.Parameter{}).Angle,
 
 	"ref_models.Parameter.DiamondSideLenght": (ref_models.Parameter{}).DiamondSideLenght,
+
+	"ref_models.Parameter.InitialRhombus": (ref_models.Parameter{}).InitialRhombus,
 
 	"ref_models.Parameter.M": (ref_models.Parameter{}).M,
 
@@ -57,6 +61,20 @@ var _ map[string]any = map[string]any{
 	"ref_models.Parameter.OriginY": (ref_models.Parameter{}).OriginY,
 
 	"ref_models.Phylotaxy": ref_models.Phylotaxy,
+
+	"ref_models.Rhombus": &(ref_models.Rhombus{}),
+
+	"ref_models.Rhombus.Angle": (ref_models.Rhombus{}).Angle,
+
+	"ref_models.Rhombus.CenterX": (ref_models.Rhombus{}).CenterX,
+
+	"ref_models.Rhombus.CenterY": (ref_models.Rhombus{}).CenterY,
+
+	"ref_models.Rhombus.InsideAngle": (ref_models.Rhombus{}).InsideAngle,
+
+	"ref_models.Rhombus.Name": (ref_models.Rhombus{}).Name,
+
+	"ref_models.Rhombus.SideLength": (ref_models.Rhombus{}).SideLength,
 
 	"ref_models.StacksNames": ref_models.StacksNames(""),
 }
@@ -87,8 +105,8 @@ func _(stage *models.StageStruct) {
 
 	__Field__000000_DiamondAngle.Name = `DiamondAngle`
 
-	//gong:ident [ref_models.Parameter.DiamondAngle] comment added to overcome the problem with the comment map association
-	__Field__000000_DiamondAngle.Identifier = `ref_models.Parameter.DiamondAngle`
+	//gong:ident [ref_models.Parameter.Angle] comment added to overcome the problem with the comment map association
+	__Field__000000_DiamondAngle.Identifier = `ref_models.Parameter.Angle`
 	__Field__000000_DiamondAngle.FieldTypeAsString = ``
 	__Field__000000_DiamondAngle.Structname = `Parameter`
 	__Field__000000_DiamondAngle.Fieldtypename = `float64`
@@ -146,7 +164,7 @@ func _(stage *models.StageStruct) {
 	//gong:ident [ref_models.Parameter] comment added to overcome the problem with the comment map association
 	__GongStructShape__000000_Default_Parameter.Identifier = `ref_models.Parameter`
 	__GongStructShape__000000_Default_Parameter.ShowNbInstances = false
-	__GongStructShape__000000_Default_Parameter.NbInstances = 0
+	__GongStructShape__000000_Default_Parameter.NbInstances = 1
 	__GongStructShape__000000_Default_Parameter.Width = 240.000000
 	__GongStructShape__000000_Default_Parameter.Height = 168.000000
 	__GongStructShape__000000_Default_Parameter.IsSelected = false
