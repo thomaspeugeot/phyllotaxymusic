@@ -10,13 +10,21 @@ type Parameter struct {
 	// Angle is the angle in degree of the diamond at the origin 0,0
 	Angle float64
 
-	OriginX           float64
-	OriginY           float64
 	DiamondSideLenght float64
 
 	Impl ParameterImplInterface
 
 	InitialRhombus *Rhombus
+
+	// for drawing purpose
+	IsHorizontalAxisDisplayed bool
+	AxisHandleBorderLength    float64
+	OriginX                   float64
+	OriginY                   float64
+	HorizontalAxis_Length     float64
+	VerticalAxis_Length       float64
+
+	Axis_StrokeWidth float64
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Parameter) {

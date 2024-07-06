@@ -31,9 +31,14 @@ type Parameter_WOP struct {
 	N int
 	M int
 	Angle float64
+	DiamondSideLenght float64
+	IsHorizontalAxisDisplayed bool
+	AxisHandleBorderLength float64
 	OriginX float64
 	OriginY float64
-	DiamondSideLenght float64
+	HorizontalAxis_Length float64
+	VerticalAxis_Length float64
+	Axis_StrokeWidth float64
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -42,9 +47,14 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.N = from.N
 	to.M = from.M
 	to.Angle = from.Angle
+	to.DiamondSideLenght = from.DiamondSideLenght
+	to.IsHorizontalAxisDisplayed = from.IsHorizontalAxisDisplayed
+	to.AxisHandleBorderLength = from.AxisHandleBorderLength
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
-	to.DiamondSideLenght = from.DiamondSideLenght
+	to.HorizontalAxis_Length = from.HorizontalAxis_Length
+	to.VerticalAxis_Length = from.VerticalAxis_Length
+	to.Axis_StrokeWidth = from.Axis_StrokeWidth
 }
 
 type Rhombus_WOP struct {

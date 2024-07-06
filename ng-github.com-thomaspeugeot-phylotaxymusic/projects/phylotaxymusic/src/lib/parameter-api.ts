@@ -17,9 +17,14 @@ export class ParameterAPI {
 	N: number = 0
 	M: number = 0
 	Angle: number = 0
+	DiamondSideLenght: number = 0
+	IsHorizontalAxisDisplayed: boolean = false
+	AxisHandleBorderLength: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
-	DiamondSideLenght: number = 0
+	HorizontalAxis_Length: number = 0
+	VerticalAxis_Length: number = 0
+	Axis_StrokeWidth: number = 0
 
 	// insertion point for other decls
 

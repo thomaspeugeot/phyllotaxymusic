@@ -154,14 +154,24 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.M), formDiv)
 		case "Angle":
 			FormDivBasicFieldToField(&(parameter_.Angle), formDiv)
-		case "OriginX":
-			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
-		case "OriginY":
-			FormDivBasicFieldToField(&(parameter_.OriginY), formDiv)
 		case "DiamondSideLenght":
 			FormDivBasicFieldToField(&(parameter_.DiamondSideLenght), formDiv)
 		case "InitialRhombus":
 			FormDivSelectFieldToField(&(parameter_.InitialRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "IsHorizontalAxisDisplayed":
+			FormDivBasicFieldToField(&(parameter_.IsHorizontalAxisDisplayed), formDiv)
+		case "AxisHandleBorderLength":
+			FormDivBasicFieldToField(&(parameter_.AxisHandleBorderLength), formDiv)
+		case "OriginX":
+			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
+		case "OriginY":
+			FormDivBasicFieldToField(&(parameter_.OriginY), formDiv)
+		case "HorizontalAxis_Length":
+			FormDivBasicFieldToField(&(parameter_.HorizontalAxis_Length), formDiv)
+		case "VerticalAxis_Length":
+			FormDivBasicFieldToField(&(parameter_.VerticalAxis_Length), formDiv)
+		case "Axis_StrokeWidth":
+			FormDivBasicFieldToField(&(parameter_.Axis_StrokeWidth), formDiv)
 		}
 	}
 

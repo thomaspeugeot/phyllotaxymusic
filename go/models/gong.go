@@ -759,7 +759,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "Angle", "OriginX", "OriginY", "DiamondSideLenght", "InitialRhombus"}
+		res = []string{"Name", "N", "M", "Angle", "DiamondSideLenght", "InitialRhombus", "IsHorizontalAxisDisplayed", "AxisHandleBorderLength", "OriginX", "OriginY", "HorizontalAxis_Length", "VerticalAxis_Length", "Axis_StrokeWidth"}
 	case Rhombus:
 		res = []string{"Name", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle"}
 	}
@@ -803,7 +803,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "Angle", "OriginX", "OriginY", "DiamondSideLenght", "InitialRhombus"}
+		res = []string{"Name", "N", "M", "Angle", "DiamondSideLenght", "InitialRhombus", "IsHorizontalAxisDisplayed", "AxisHandleBorderLength", "OriginX", "OriginY", "HorizontalAxis_Length", "VerticalAxis_Length", "Axis_StrokeWidth"}
 	case *Rhombus:
 		res = []string{"Name", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle"}
 	}
@@ -839,16 +839,26 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%d", inferedInstance.M)
 		case "Angle":
 			res = fmt.Sprintf("%f", inferedInstance.Angle)
-		case "OriginX":
-			res = fmt.Sprintf("%f", inferedInstance.OriginX)
-		case "OriginY":
-			res = fmt.Sprintf("%f", inferedInstance.OriginY)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
 		case "InitialRhombus":
 			if inferedInstance.InitialRhombus != nil {
 				res = inferedInstance.InitialRhombus.Name
 			}
+		case "IsHorizontalAxisDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsHorizontalAxisDisplayed)
+		case "AxisHandleBorderLength":
+			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+		case "OriginX":
+			res = fmt.Sprintf("%f", inferedInstance.OriginX)
+		case "OriginY":
+			res = fmt.Sprintf("%f", inferedInstance.OriginY)
+		case "HorizontalAxis_Length":
+			res = fmt.Sprintf("%f", inferedInstance.HorizontalAxis_Length)
+		case "VerticalAxis_Length":
+			res = fmt.Sprintf("%f", inferedInstance.VerticalAxis_Length)
+		case "Axis_StrokeWidth":
+			res = fmt.Sprintf("%f", inferedInstance.Axis_StrokeWidth)
 		}
 	case *Rhombus:
 		switch fieldName {
@@ -901,16 +911,26 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%d", inferedInstance.M)
 		case "Angle":
 			res = fmt.Sprintf("%f", inferedInstance.Angle)
-		case "OriginX":
-			res = fmt.Sprintf("%f", inferedInstance.OriginX)
-		case "OriginY":
-			res = fmt.Sprintf("%f", inferedInstance.OriginY)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
 		case "InitialRhombus":
 			if inferedInstance.InitialRhombus != nil {
 				res = inferedInstance.InitialRhombus.Name
 			}
+		case "IsHorizontalAxisDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsHorizontalAxisDisplayed)
+		case "AxisHandleBorderLength":
+			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+		case "OriginX":
+			res = fmt.Sprintf("%f", inferedInstance.OriginX)
+		case "OriginY":
+			res = fmt.Sprintf("%f", inferedInstance.OriginY)
+		case "HorizontalAxis_Length":
+			res = fmt.Sprintf("%f", inferedInstance.HorizontalAxis_Length)
+		case "VerticalAxis_Length":
+			res = fmt.Sprintf("%f", inferedInstance.VerticalAxis_Length)
+		case "Axis_StrokeWidth":
+			res = fmt.Sprintf("%f", inferedInstance.Axis_StrokeWidth)
 		}
 	case Rhombus:
 		switch fieldName {

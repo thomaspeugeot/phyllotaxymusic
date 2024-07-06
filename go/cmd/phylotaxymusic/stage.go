@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
-
 	// injection point for ident package import declaration{{ImportPackageDeclaration}}
 )
 
@@ -33,10 +32,15 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
-	__Parameter__000000_Reference.Angle = 76.000000
-	__Parameter__000000_Reference.OriginX = 100.000000
-	__Parameter__000000_Reference.OriginY = 300.000000
+	__Parameter__000000_Reference.Angle = 92.000000
 	__Parameter__000000_Reference.DiamondSideLenght = 100.000000
+	__Parameter__000000_Reference.AxisHandleBorderLength = 0.000000
+	__Parameter__000000_Reference.OriginX = 100.000000
+	__Parameter__000000_Reference.OriginY = 600.000000
+	__Parameter__000000_Reference.HorizontalAxis_Length = 600.000000
+	__Parameter__000000_Reference.VerticalAxis_Length = 550.000000
+	__Parameter__000000_Reference.Axis_StrokeWidth = 1.000000
+	__Parameter__000000_Reference.IsHorizontalAxisDisplayed = true
 
 	__Rhombus__000000_Initial.Name = `Initial`
 	__Rhombus__000000_Initial.CenterX = 0.000000

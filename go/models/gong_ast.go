@@ -699,6 +699,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].Angle = exprSign * fielValue
+				case "DiamondSideLenght":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].DiamondSideLenght = exprSign * fielValue
+				case "AxisHandleBorderLength":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].AxisHandleBorderLength = exprSign * fielValue
 				case "OriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -713,13 +727,27 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].OriginY = exprSign * fielValue
-				case "DiamondSideLenght":
+				case "HorizontalAxis_Length":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].DiamondSideLenght = exprSign * fielValue
+					__gong__map_Parameter[identifier].HorizontalAxis_Length = exprSign * fielValue
+				case "VerticalAxis_Length":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].VerticalAxis_Length = exprSign * fielValue
+				case "Axis_StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].Axis_StrokeWidth = exprSign * fielValue
 				}
 			case "Rhombus":
 				switch fieldName {
@@ -788,6 +816,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "InitialRhombus":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].InitialRhombus = __gong__map_Rhombus[targetIdentifier]
+				case "IsHorizontalAxisDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].IsHorizontalAxisDisplayed = fielValue
 				}
 			case "Rhombus":
 				switch fieldName {

@@ -75,14 +75,30 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.Angle
 	Angle_Data sql.NullFloat64
 
+	// Declation for basic field parameterDB.DiamondSideLenght
+	DiamondSideLenght_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.IsHorizontalAxisDisplayed
+	// provide the sql storage for the boolan
+	IsHorizontalAxisDisplayed_Data sql.NullBool
+
+	// Declation for basic field parameterDB.AxisHandleBorderLength
+	AxisHandleBorderLength_Data sql.NullFloat64
+
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.OriginY
 	OriginY_Data sql.NullFloat64
 
-	// Declation for basic field parameterDB.DiamondSideLenght
-	DiamondSideLenght_Data sql.NullFloat64
+	// Declation for basic field parameterDB.HorizontalAxis_Length
+	HorizontalAxis_Length_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.VerticalAxis_Length
+	VerticalAxis_Length_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.Axis_StrokeWidth
+	Axis_StrokeWidth_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -114,11 +130,21 @@ type ParameterWOP struct {
 
 	Angle float64 `xlsx:"4"`
 
-	OriginX float64 `xlsx:"5"`
+	DiamondSideLenght float64 `xlsx:"5"`
 
-	OriginY float64 `xlsx:"6"`
+	IsHorizontalAxisDisplayed bool `xlsx:"6"`
 
-	DiamondSideLenght float64 `xlsx:"7"`
+	AxisHandleBorderLength float64 `xlsx:"7"`
+
+	OriginX float64 `xlsx:"8"`
+
+	OriginY float64 `xlsx:"9"`
+
+	HorizontalAxis_Length float64 `xlsx:"10"`
+
+	VerticalAxis_Length float64 `xlsx:"11"`
+
+	Axis_StrokeWidth float64 `xlsx:"12"`
 	// insertion for WOP pointer fields
 }
 
@@ -129,9 +155,14 @@ var Parameter_Fields = []string{
 	"N",
 	"M",
 	"Angle",
+	"DiamondSideLenght",
+	"IsHorizontalAxisDisplayed",
+	"AxisHandleBorderLength",
 	"OriginX",
 	"OriginY",
-	"DiamondSideLenght",
+	"HorizontalAxis_Length",
+	"VerticalAxis_Length",
+	"Axis_StrokeWidth",
 }
 
 type BackRepoParameterStruct struct {
@@ -427,14 +458,29 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.Angle_Data.Float64 = parameter.Angle
 	parameterDB.Angle_Data.Valid = true
 
+	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
+	parameterDB.DiamondSideLenght_Data.Valid = true
+
+	parameterDB.IsHorizontalAxisDisplayed_Data.Bool = parameter.IsHorizontalAxisDisplayed
+	parameterDB.IsHorizontalAxisDisplayed_Data.Valid = true
+
+	parameterDB.AxisHandleBorderLength_Data.Float64 = parameter.AxisHandleBorderLength
+	parameterDB.AxisHandleBorderLength_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
 	parameterDB.OriginY_Data.Float64 = parameter.OriginY
 	parameterDB.OriginY_Data.Valid = true
 
-	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
-	parameterDB.DiamondSideLenght_Data.Valid = true
+	parameterDB.HorizontalAxis_Length_Data.Float64 = parameter.HorizontalAxis_Length
+	parameterDB.HorizontalAxis_Length_Data.Valid = true
+
+	parameterDB.VerticalAxis_Length_Data.Float64 = parameter.VerticalAxis_Length
+	parameterDB.VerticalAxis_Length_Data.Valid = true
+
+	parameterDB.Axis_StrokeWidth_Data.Float64 = parameter.Axis_StrokeWidth
+	parameterDB.Axis_StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -453,14 +499,29 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.Angle_Data.Float64 = parameter.Angle
 	parameterDB.Angle_Data.Valid = true
 
+	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
+	parameterDB.DiamondSideLenght_Data.Valid = true
+
+	parameterDB.IsHorizontalAxisDisplayed_Data.Bool = parameter.IsHorizontalAxisDisplayed
+	parameterDB.IsHorizontalAxisDisplayed_Data.Valid = true
+
+	parameterDB.AxisHandleBorderLength_Data.Float64 = parameter.AxisHandleBorderLength
+	parameterDB.AxisHandleBorderLength_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
 	parameterDB.OriginY_Data.Float64 = parameter.OriginY
 	parameterDB.OriginY_Data.Valid = true
 
-	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
-	parameterDB.DiamondSideLenght_Data.Valid = true
+	parameterDB.HorizontalAxis_Length_Data.Float64 = parameter.HorizontalAxis_Length
+	parameterDB.HorizontalAxis_Length_Data.Valid = true
+
+	parameterDB.VerticalAxis_Length_Data.Float64 = parameter.VerticalAxis_Length
+	parameterDB.VerticalAxis_Length_Data.Valid = true
+
+	parameterDB.Axis_StrokeWidth_Data.Float64 = parameter.Axis_StrokeWidth
+	parameterDB.Axis_StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -479,14 +540,29 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.Angle_Data.Float64 = parameter.Angle
 	parameterDB.Angle_Data.Valid = true
 
+	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
+	parameterDB.DiamondSideLenght_Data.Valid = true
+
+	parameterDB.IsHorizontalAxisDisplayed_Data.Bool = parameter.IsHorizontalAxisDisplayed
+	parameterDB.IsHorizontalAxisDisplayed_Data.Valid = true
+
+	parameterDB.AxisHandleBorderLength_Data.Float64 = parameter.AxisHandleBorderLength
+	parameterDB.AxisHandleBorderLength_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
 	parameterDB.OriginY_Data.Float64 = parameter.OriginY
 	parameterDB.OriginY_Data.Valid = true
 
-	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
-	parameterDB.DiamondSideLenght_Data.Valid = true
+	parameterDB.HorizontalAxis_Length_Data.Float64 = parameter.HorizontalAxis_Length
+	parameterDB.HorizontalAxis_Length_Data.Valid = true
+
+	parameterDB.VerticalAxis_Length_Data.Float64 = parameter.VerticalAxis_Length
+	parameterDB.VerticalAxis_Length_Data.Valid = true
+
+	parameterDB.Axis_StrokeWidth_Data.Float64 = parameter.Axis_StrokeWidth
+	parameterDB.Axis_StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -496,9 +572,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Angle = parameterDB.Angle_Data.Float64
+	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.IsHorizontalAxisDisplayed = parameterDB.IsHorizontalAxisDisplayed_Data.Bool
+	parameter.AxisHandleBorderLength = parameterDB.AxisHandleBorderLength_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
-	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.HorizontalAxis_Length = parameterDB.HorizontalAxis_Length_Data.Float64
+	parameter.VerticalAxis_Length = parameterDB.VerticalAxis_Length_Data.Float64
+	parameter.Axis_StrokeWidth = parameterDB.Axis_StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -508,9 +589,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Angle = parameterDB.Angle_Data.Float64
+	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.IsHorizontalAxisDisplayed = parameterDB.IsHorizontalAxisDisplayed_Data.Bool
+	parameter.AxisHandleBorderLength = parameterDB.AxisHandleBorderLength_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
-	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.HorizontalAxis_Length = parameterDB.HorizontalAxis_Length_Data.Float64
+	parameter.VerticalAxis_Length = parameterDB.VerticalAxis_Length_Data.Float64
+	parameter.Axis_StrokeWidth = parameterDB.Axis_StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -521,9 +607,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Angle = parameterDB.Angle_Data.Float64
+	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.IsHorizontalAxisDisplayed = parameterDB.IsHorizontalAxisDisplayed_Data.Bool
+	parameter.AxisHandleBorderLength = parameterDB.AxisHandleBorderLength_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
-	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.HorizontalAxis_Length = parameterDB.HorizontalAxis_Length_Data.Float64
+	parameter.VerticalAxis_Length = parameterDB.VerticalAxis_Length_Data.Float64
+	parameter.Axis_StrokeWidth = parameterDB.Axis_StrokeWidth_Data.Float64
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo
