@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+
 	// injection point for ident package import declaration{{ImportPackageDeclaration}}
 )
 
@@ -11,7 +12,7 @@ import (
 // if there are no elements in the stage to marshall
 var _ time.Time
 
-// _ point for meta package dummy declaration{{ImportPackageDummyDeclaration}}
+// Injection point for meta package dummy declaration{{ImportPackageDummyDeclaration}}
 
 // When parsed, those maps will help with the renaming process
 var _ map[string]any = map[string]any{
@@ -53,8 +54,8 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000000_Initial.CenterY = 0.000000
 	__Rhombus__000000_Initial.SideLength = 100.000000
 	__Rhombus__000000_Initial.Angle = 0.000000
-	__Rhombus__000000_Initial.InsideAngle = 60.000000
-	__Rhombus__000000_Initial.StrokeWidth = 1
+	__Rhombus__000000_Initial.InsideAngle = 73.740000
+	__Rhombus__000000_Initial.StrokeWidth = 1.000000
 
 	__VerticalAxis__000000_Initial.Name = `Initial`
 	__VerticalAxis__000000_Initial.IsAxisDisplayed = true
