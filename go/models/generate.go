@@ -7,7 +7,9 @@ type Generator struct {
 }
 
 func (generator *Generator) Generate() {
-
+	if generator.Impl != nil {
+		generator.Impl.Generate()
+	}
 }
 
 type GeneratorInterface interface {

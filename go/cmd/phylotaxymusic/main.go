@@ -94,6 +94,7 @@ type ParameterImpl struct {
 // Generate implements models.GeneratorInterface.
 func (parameterImpl *ParameterImpl) Generate() {
 	parameterImpl.parameter.GenerateInitialRhombus()
+	parameterImpl.phylotaxymusicStage.Commit()
 	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, parameterImpl.parameter)
 }
 

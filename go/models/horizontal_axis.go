@@ -24,11 +24,13 @@ func (horizontalAxis *HorizontalAxis) OnAfterUpdate(stage *models.StageStruct, s
 	log.Println("Node clicked", frontNode.GetName())
 
 	if frontNode.IsChecked && !stagedNode.IsChecked {
-		horizontalAxis.IsHorizontalAxisDisplayed = false
+		horizontalAxis.IsHorizontalAxisDisplayed = true
+		stagedNode.IsChecked = frontNode.IsChecked
 		GeneratorSingloton.Generate()
 	}
 	if !frontNode.IsChecked && stagedNode.IsChecked {
-		horizontalAxis.IsHorizontalAxisDisplayed = true
+		horizontalAxis.IsHorizontalAxisDisplayed = false
+		stagedNode.IsChecked = frontNode.IsChecked
 		GeneratorSingloton.Generate()
 	}
 }
