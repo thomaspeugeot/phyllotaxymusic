@@ -72,6 +72,8 @@ func main() {
 	impl.phylotaxymusicStage = phylotaxymusicStack.Stage
 	parameter.Impl = impl
 
+	phylotaxymusic_models.GeneratorSingloton.Impl = impl
+
 	parameter.GenerateInitialRhombus()
 
 	phylotaxymusic_svg.GenerateSvg2(gongsvg_stack.Stage, parameter)
@@ -87,6 +89,12 @@ type ParameterImpl struct {
 	gongsvgStage        *gongsvg_models.StageStruct
 	phylotaxymusicStage *phylotaxymusic_models.StageStruct
 	parameter           *phylotaxymusic_models.Parameter
+}
+
+// Generate implements models.GeneratorInterface.
+func (parameterImpl *ParameterImpl) Generate() {
+	parameterImpl.parameter.GenerateInitialRhombus()
+	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, parameterImpl.parameter)
 }
 
 func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {

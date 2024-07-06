@@ -1,6 +1,10 @@
 package models
 
-import "github.com/fullstack-lang/gongtree/go/models"
+import (
+	"log"
+
+	"github.com/fullstack-lang/gongtree/go/models"
+)
 
 type HorizontalAxis struct {
 	Name string
@@ -16,6 +20,15 @@ type HorizontalAxis struct {
 }
 
 // OnAfterUpdate implements models.NodeImplInterface.
-func (n *HorizontalAxis) OnAfterUpdate(stage *models.StageStruct, stagedNode *models.Node, frontNode *models.Node) {
+func (horizontalAxis *HorizontalAxis) OnAfterUpdate(stage *models.StageStruct, stagedNode *models.Node, frontNode *models.Node) {
+	log.Println("Node clicked", frontNode.GetName())
 
+	if frontNode.IsChecked && !stagedNode.IsChecked {
+		horizontalAxis.IsHorizontalAxisDisplayed = false
+		GeneratorSingloton.Generate()
+	}
+	if !frontNode.IsChecked && stagedNode.IsChecked {
+		horizontalAxis.IsHorizontalAxisDisplayed = true
+		GeneratorSingloton.Generate()
+	}
 }
