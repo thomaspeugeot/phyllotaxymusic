@@ -12,10 +12,8 @@ type HorizontalAxis_WOP struct {
 	Name string
 	IsAxisDisplayed bool
 	AxisHandleBorderLength float64
-	OriginX float64
-	OriginY float64
 	Axis_Length float64
-	Axis_StrokeWidth float64
+	StrokeWidth float64
 }
 
 func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
@@ -23,10 +21,8 @@ func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
 	to.Name = from.Name
 	to.IsAxisDisplayed = from.IsAxisDisplayed
 	to.AxisHandleBorderLength = from.AxisHandleBorderLength
-	to.OriginX = from.OriginX
-	to.OriginY = from.OriginY
 	to.Axis_Length = from.Axis_Length
-	to.Axis_StrokeWidth = from.Axis_StrokeWidth
+	to.StrokeWidth = from.StrokeWidth
 }
 
 type Line_WOP struct {
@@ -54,6 +50,8 @@ type Parameter_WOP struct {
 	M int
 	Angle float64
 	DiamondSideLenght float64
+	OriginX float64
+	OriginY float64
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -63,26 +61,32 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.M = from.M
 	to.Angle = from.Angle
 	to.DiamondSideLenght = from.DiamondSideLenght
+	to.OriginX = from.OriginX
+	to.OriginY = from.OriginY
 }
 
 type Rhombus_WOP struct {
 	// insertion point
 	Name string
+	IsDisplayed bool
 	CenterX float64
 	CenterY float64
 	SideLength float64
 	Angle float64
 	InsideAngle float64
+	StrokeWidth float64
 }
 
 func (from *Rhombus) CopyBasicFields(to *Rhombus) {
 	// insertion point
 	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
 	to.CenterX = from.CenterX
 	to.CenterY = from.CenterY
 	to.SideLength = from.SideLength
 	to.Angle = from.Angle
 	to.InsideAngle = from.InsideAngle
+	to.StrokeWidth = from.StrokeWidth
 }
 
 type VerticalAxis_WOP struct {
@@ -90,10 +94,8 @@ type VerticalAxis_WOP struct {
 	Name string
 	IsAxisDisplayed bool
 	AxisHandleBorderLength float64
-	OriginX float64
-	OriginY float64
 	Axis_Length float64
-	Axis_StrokeWidth float64
+	StrokeWidth float64
 }
 
 func (from *VerticalAxis) CopyBasicFields(to *VerticalAxis) {
@@ -101,9 +103,7 @@ func (from *VerticalAxis) CopyBasicFields(to *VerticalAxis) {
 	to.Name = from.Name
 	to.IsAxisDisplayed = from.IsAxisDisplayed
 	to.AxisHandleBorderLength = from.AxisHandleBorderLength
-	to.OriginX = from.OriginX
-	to.OriginY = from.OriginY
 	to.Axis_Length = from.Axis_Length
-	to.Axis_StrokeWidth = from.Axis_StrokeWidth
+	to.StrokeWidth = from.StrokeWidth
 }
 

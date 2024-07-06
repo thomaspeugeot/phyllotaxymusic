@@ -69,17 +69,11 @@ type HorizontalAxisDB struct {
 	// Declation for basic field horizontalaxisDB.AxisHandleBorderLength
 	AxisHandleBorderLength_Data sql.NullFloat64
 
-	// Declation for basic field horizontalaxisDB.OriginX
-	OriginX_Data sql.NullFloat64
-
-	// Declation for basic field horizontalaxisDB.OriginY
-	OriginY_Data sql.NullFloat64
-
 	// Declation for basic field horizontalaxisDB.Axis_Length
 	Axis_Length_Data sql.NullFloat64
 
-	// Declation for basic field horizontalaxisDB.Axis_StrokeWidth
-	Axis_StrokeWidth_Data sql.NullFloat64
+	// Declation for basic field horizontalaxisDB.StrokeWidth
+	StrokeWidth_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -109,13 +103,9 @@ type HorizontalAxisWOP struct {
 
 	AxisHandleBorderLength float64 `xlsx:"3"`
 
-	OriginX float64 `xlsx:"4"`
+	Axis_Length float64 `xlsx:"4"`
 
-	OriginY float64 `xlsx:"5"`
-
-	Axis_Length float64 `xlsx:"6"`
-
-	Axis_StrokeWidth float64 `xlsx:"7"`
+	StrokeWidth float64 `xlsx:"5"`
 	// insertion for WOP pointer fields
 }
 
@@ -125,10 +115,8 @@ var HorizontalAxis_Fields = []string{
 	"Name",
 	"IsAxisDisplayed",
 	"AxisHandleBorderLength",
-	"OriginX",
-	"OriginY",
 	"Axis_Length",
-	"Axis_StrokeWidth",
+	"StrokeWidth",
 }
 
 type BackRepoHorizontalAxisStruct struct {
@@ -404,17 +392,11 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxis(hori
 	horizontalaxisDB.AxisHandleBorderLength_Data.Float64 = horizontalaxis.AxisHandleBorderLength
 	horizontalaxisDB.AxisHandleBorderLength_Data.Valid = true
 
-	horizontalaxisDB.OriginX_Data.Float64 = horizontalaxis.OriginX
-	horizontalaxisDB.OriginX_Data.Valid = true
-
-	horizontalaxisDB.OriginY_Data.Float64 = horizontalaxis.OriginY
-	horizontalaxisDB.OriginY_Data.Valid = true
-
 	horizontalaxisDB.Axis_Length_Data.Float64 = horizontalaxis.Axis_Length
 	horizontalaxisDB.Axis_Length_Data.Valid = true
 
-	horizontalaxisDB.Axis_StrokeWidth_Data.Float64 = horizontalaxis.Axis_StrokeWidth
-	horizontalaxisDB.Axis_StrokeWidth_Data.Valid = true
+	horizontalaxisDB.StrokeWidth_Data.Float64 = horizontalaxis.StrokeWidth
+	horizontalaxisDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromHorizontalAxis_WOP
@@ -430,17 +412,11 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxis_WOP(
 	horizontalaxisDB.AxisHandleBorderLength_Data.Float64 = horizontalaxis.AxisHandleBorderLength
 	horizontalaxisDB.AxisHandleBorderLength_Data.Valid = true
 
-	horizontalaxisDB.OriginX_Data.Float64 = horizontalaxis.OriginX
-	horizontalaxisDB.OriginX_Data.Valid = true
-
-	horizontalaxisDB.OriginY_Data.Float64 = horizontalaxis.OriginY
-	horizontalaxisDB.OriginY_Data.Valid = true
-
 	horizontalaxisDB.Axis_Length_Data.Float64 = horizontalaxis.Axis_Length
 	horizontalaxisDB.Axis_Length_Data.Valid = true
 
-	horizontalaxisDB.Axis_StrokeWidth_Data.Float64 = horizontalaxis.Axis_StrokeWidth
-	horizontalaxisDB.Axis_StrokeWidth_Data.Valid = true
+	horizontalaxisDB.StrokeWidth_Data.Float64 = horizontalaxis.StrokeWidth
+	horizontalaxisDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromHorizontalAxisWOP
@@ -456,17 +432,11 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxisWOP(h
 	horizontalaxisDB.AxisHandleBorderLength_Data.Float64 = horizontalaxis.AxisHandleBorderLength
 	horizontalaxisDB.AxisHandleBorderLength_Data.Valid = true
 
-	horizontalaxisDB.OriginX_Data.Float64 = horizontalaxis.OriginX
-	horizontalaxisDB.OriginX_Data.Valid = true
-
-	horizontalaxisDB.OriginY_Data.Float64 = horizontalaxis.OriginY
-	horizontalaxisDB.OriginY_Data.Valid = true
-
 	horizontalaxisDB.Axis_Length_Data.Float64 = horizontalaxis.Axis_Length
 	horizontalaxisDB.Axis_Length_Data.Valid = true
 
-	horizontalaxisDB.Axis_StrokeWidth_Data.Float64 = horizontalaxis.Axis_StrokeWidth
-	horizontalaxisDB.Axis_StrokeWidth_Data.Valid = true
+	horizontalaxisDB.StrokeWidth_Data.Float64 = horizontalaxis.StrokeWidth
+	horizontalaxisDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsToHorizontalAxis
@@ -475,10 +445,8 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxis(horizo
 	horizontalaxis.Name = horizontalaxisDB.Name_Data.String
 	horizontalaxis.IsAxisDisplayed = horizontalaxisDB.IsAxisDisplayed_Data.Bool
 	horizontalaxis.AxisHandleBorderLength = horizontalaxisDB.AxisHandleBorderLength_Data.Float64
-	horizontalaxis.OriginX = horizontalaxisDB.OriginX_Data.Float64
-	horizontalaxis.OriginY = horizontalaxisDB.OriginY_Data.Float64
 	horizontalaxis.Axis_Length = horizontalaxisDB.Axis_Length_Data.Float64
-	horizontalaxis.Axis_StrokeWidth = horizontalaxisDB.Axis_StrokeWidth_Data.Float64
+	horizontalaxis.StrokeWidth = horizontalaxisDB.StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToHorizontalAxis_WOP
@@ -487,10 +455,8 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxis_WOP(ho
 	horizontalaxis.Name = horizontalaxisDB.Name_Data.String
 	horizontalaxis.IsAxisDisplayed = horizontalaxisDB.IsAxisDisplayed_Data.Bool
 	horizontalaxis.AxisHandleBorderLength = horizontalaxisDB.AxisHandleBorderLength_Data.Float64
-	horizontalaxis.OriginX = horizontalaxisDB.OriginX_Data.Float64
-	horizontalaxis.OriginY = horizontalaxisDB.OriginY_Data.Float64
 	horizontalaxis.Axis_Length = horizontalaxisDB.Axis_Length_Data.Float64
-	horizontalaxis.Axis_StrokeWidth = horizontalaxisDB.Axis_StrokeWidth_Data.Float64
+	horizontalaxis.StrokeWidth = horizontalaxisDB.StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToHorizontalAxisWOP
@@ -500,10 +466,8 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxisWOP(hor
 	horizontalaxis.Name = horizontalaxisDB.Name_Data.String
 	horizontalaxis.IsAxisDisplayed = horizontalaxisDB.IsAxisDisplayed_Data.Bool
 	horizontalaxis.AxisHandleBorderLength = horizontalaxisDB.AxisHandleBorderLength_Data.Float64
-	horizontalaxis.OriginX = horizontalaxisDB.OriginX_Data.Float64
-	horizontalaxis.OriginY = horizontalaxisDB.OriginY_Data.Float64
 	horizontalaxis.Axis_Length = horizontalaxisDB.Axis_Length_Data.Float64
-	horizontalaxis.Axis_StrokeWidth = horizontalaxisDB.Axis_StrokeWidth_Data.Float64
+	horizontalaxis.StrokeWidth = horizontalaxisDB.StrokeWidth_Data.Float64
 }
 
 // Backup generates a json file from a slice of all HorizontalAxisDB instances in the backrepo

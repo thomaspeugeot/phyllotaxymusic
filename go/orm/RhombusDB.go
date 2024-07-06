@@ -62,6 +62,10 @@ type RhombusDB struct {
 	// Declation for basic field rhombusDB.Name
 	Name_Data sql.NullString
 
+	// Declation for basic field rhombusDB.IsDisplayed
+	// provide the sql storage for the boolan
+	IsDisplayed_Data sql.NullBool
+
 	// Declation for basic field rhombusDB.CenterX
 	CenterX_Data sql.NullFloat64
 
@@ -76,6 +80,9 @@ type RhombusDB struct {
 
 	// Declation for basic field rhombusDB.InsideAngle
 	InsideAngle_Data sql.NullFloat64
+
+	// Declation for basic field rhombusDB.StrokeWidth
+	StrokeWidth_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -101,15 +108,19 @@ type RhombusWOP struct {
 
 	Name string `xlsx:"1"`
 
-	CenterX float64 `xlsx:"2"`
+	IsDisplayed bool `xlsx:"2"`
 
-	CenterY float64 `xlsx:"3"`
+	CenterX float64 `xlsx:"3"`
 
-	SideLength float64 `xlsx:"4"`
+	CenterY float64 `xlsx:"4"`
 
-	Angle float64 `xlsx:"5"`
+	SideLength float64 `xlsx:"5"`
 
-	InsideAngle float64 `xlsx:"6"`
+	Angle float64 `xlsx:"6"`
+
+	InsideAngle float64 `xlsx:"7"`
+
+	StrokeWidth float64 `xlsx:"8"`
 	// insertion for WOP pointer fields
 }
 
@@ -117,11 +128,13 @@ var Rhombus_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
+	"IsDisplayed",
 	"CenterX",
 	"CenterY",
 	"SideLength",
 	"Angle",
 	"InsideAngle",
+	"StrokeWidth",
 }
 
 type BackRepoRhombusStruct struct {
@@ -391,6 +404,9 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombus(rhombus *models.Rhombus) 
 	rhombusDB.Name_Data.String = rhombus.Name
 	rhombusDB.Name_Data.Valid = true
 
+	rhombusDB.IsDisplayed_Data.Bool = rhombus.IsDisplayed
+	rhombusDB.IsDisplayed_Data.Valid = true
+
 	rhombusDB.CenterX_Data.Float64 = rhombus.CenterX
 	rhombusDB.CenterX_Data.Valid = true
 
@@ -405,6 +421,9 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombus(rhombus *models.Rhombus) 
 
 	rhombusDB.InsideAngle_Data.Float64 = rhombus.InsideAngle
 	rhombusDB.InsideAngle_Data.Valid = true
+
+	rhombusDB.StrokeWidth_Data.Float64 = rhombus.StrokeWidth
+	rhombusDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromRhombus_WOP
@@ -414,6 +433,9 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombus_WOP(rhombus *models.Rhomb
 	rhombusDB.Name_Data.String = rhombus.Name
 	rhombusDB.Name_Data.Valid = true
 
+	rhombusDB.IsDisplayed_Data.Bool = rhombus.IsDisplayed
+	rhombusDB.IsDisplayed_Data.Valid = true
+
 	rhombusDB.CenterX_Data.Float64 = rhombus.CenterX
 	rhombusDB.CenterX_Data.Valid = true
 
@@ -428,6 +450,9 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombus_WOP(rhombus *models.Rhomb
 
 	rhombusDB.InsideAngle_Data.Float64 = rhombus.InsideAngle
 	rhombusDB.InsideAngle_Data.Valid = true
+
+	rhombusDB.StrokeWidth_Data.Float64 = rhombus.StrokeWidth
+	rhombusDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromRhombusWOP
@@ -437,6 +462,9 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombusWOP(rhombus *RhombusWOP) {
 	rhombusDB.Name_Data.String = rhombus.Name
 	rhombusDB.Name_Data.Valid = true
 
+	rhombusDB.IsDisplayed_Data.Bool = rhombus.IsDisplayed
+	rhombusDB.IsDisplayed_Data.Valid = true
+
 	rhombusDB.CenterX_Data.Float64 = rhombus.CenterX
 	rhombusDB.CenterX_Data.Valid = true
 
@@ -451,28 +479,35 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombusWOP(rhombus *RhombusWOP) {
 
 	rhombusDB.InsideAngle_Data.Float64 = rhombus.InsideAngle
 	rhombusDB.InsideAngle_Data.Valid = true
+
+	rhombusDB.StrokeWidth_Data.Float64 = rhombus.StrokeWidth
+	rhombusDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsToRhombus
 func (rhombusDB *RhombusDB) CopyBasicFieldsToRhombus(rhombus *models.Rhombus) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	rhombus.Name = rhombusDB.Name_Data.String
+	rhombus.IsDisplayed = rhombusDB.IsDisplayed_Data.Bool
 	rhombus.CenterX = rhombusDB.CenterX_Data.Float64
 	rhombus.CenterY = rhombusDB.CenterY_Data.Float64
 	rhombus.SideLength = rhombusDB.SideLength_Data.Float64
 	rhombus.Angle = rhombusDB.Angle_Data.Float64
 	rhombus.InsideAngle = rhombusDB.InsideAngle_Data.Float64
+	rhombus.StrokeWidth = rhombusDB.StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToRhombus_WOP
 func (rhombusDB *RhombusDB) CopyBasicFieldsToRhombus_WOP(rhombus *models.Rhombus_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	rhombus.Name = rhombusDB.Name_Data.String
+	rhombus.IsDisplayed = rhombusDB.IsDisplayed_Data.Bool
 	rhombus.CenterX = rhombusDB.CenterX_Data.Float64
 	rhombus.CenterY = rhombusDB.CenterY_Data.Float64
 	rhombus.SideLength = rhombusDB.SideLength_Data.Float64
 	rhombus.Angle = rhombusDB.Angle_Data.Float64
 	rhombus.InsideAngle = rhombusDB.InsideAngle_Data.Float64
+	rhombus.StrokeWidth = rhombusDB.StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToRhombusWOP
@@ -480,11 +515,13 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsToRhombusWOP(rhombus *RhombusWOP) {
 	rhombus.ID = int(rhombusDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	rhombus.Name = rhombusDB.Name_Data.String
+	rhombus.IsDisplayed = rhombusDB.IsDisplayed_Data.Bool
 	rhombus.CenterX = rhombusDB.CenterX_Data.Float64
 	rhombus.CenterY = rhombusDB.CenterY_Data.Float64
 	rhombus.SideLength = rhombusDB.SideLength_Data.Float64
 	rhombus.Angle = rhombusDB.Angle_Data.Float64
 	rhombus.InsideAngle = rhombusDB.InsideAngle_Data.Float64
+	rhombus.StrokeWidth = rhombusDB.StrokeWidth_Data.Float64
 }
 
 // Backup generates a json file from a slice of all RhombusDB instances in the backrepo

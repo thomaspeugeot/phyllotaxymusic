@@ -11,11 +11,9 @@ type VerticalAxis struct {
 
 	IsAxisDisplayed        bool
 	AxisHandleBorderLength float64
-	OriginX                float64
-	OriginY                float64
 	Axis_Length            float64
 
-	Axis_StrokeWidth float64
+	StrokeWidth float64
 }
 
 // OnAfterUpdate implements models.NodeImplInterface.

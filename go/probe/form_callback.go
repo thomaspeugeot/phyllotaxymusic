@@ -67,14 +67,10 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(horizontalaxis_.IsAxisDisplayed), formDiv)
 		case "AxisHandleBorderLength":
 			FormDivBasicFieldToField(&(horizontalaxis_.AxisHandleBorderLength), formDiv)
-		case "OriginX":
-			FormDivBasicFieldToField(&(horizontalaxis_.OriginX), formDiv)
-		case "OriginY":
-			FormDivBasicFieldToField(&(horizontalaxis_.OriginY), formDiv)
 		case "Axis_Length":
 			FormDivBasicFieldToField(&(horizontalaxis_.Axis_Length), formDiv)
-		case "Axis_StrokeWidth":
-			FormDivBasicFieldToField(&(horizontalaxis_.Axis_StrokeWidth), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(horizontalaxis_.StrokeWidth), formDiv)
 		}
 	}
 
@@ -247,6 +243,10 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.DiamondSideLenght), formDiv)
 		case "InitialRhombus":
 			FormDivSelectFieldToField(&(parameter_.InitialRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "OriginX":
+			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
+		case "OriginY":
+			FormDivBasicFieldToField(&(parameter_.OriginY), formDiv)
 		case "HorizontalAxis":
 			FormDivSelectFieldToField(&(parameter_.HorizontalAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "VerticalAxis":
@@ -328,6 +328,8 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(rhombus_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(rhombus_.IsDisplayed), formDiv)
 		case "CenterX":
 			FormDivBasicFieldToField(&(rhombus_.CenterX), formDiv)
 		case "CenterY":
@@ -338,6 +340,8 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rhombus_.Angle), formDiv)
 		case "InsideAngle":
 			FormDivBasicFieldToField(&(rhombus_.InsideAngle), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(rhombus_.StrokeWidth), formDiv)
 		}
 	}
 
@@ -419,14 +423,10 @@ func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(verticalaxis_.IsAxisDisplayed), formDiv)
 		case "AxisHandleBorderLength":
 			FormDivBasicFieldToField(&(verticalaxis_.AxisHandleBorderLength), formDiv)
-		case "OriginX":
-			FormDivBasicFieldToField(&(verticalaxis_.OriginX), formDiv)
-		case "OriginY":
-			FormDivBasicFieldToField(&(verticalaxis_.OriginY), formDiv)
 		case "Axis_Length":
 			FormDivBasicFieldToField(&(verticalaxis_.Axis_Length), formDiv)
-		case "Axis_StrokeWidth":
-			FormDivBasicFieldToField(&(verticalaxis_.Axis_StrokeWidth), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(verticalaxis_.StrokeWidth), formDiv)
 		}
 	}
 

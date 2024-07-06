@@ -9,6 +9,7 @@ import (
 func drawVerticalAxis(
 	gongsvgStage *gongsvg_models.StageStruct,
 	axisLayer *gongsvg_models.Layer,
+	parameter *phylotaxymusic_models.Parameter,
 	verticalAxis *phylotaxymusic_models.VerticalAxis,
 
 ) {
@@ -16,8 +17,8 @@ func drawVerticalAxis(
 	verticalAxisLeftHandle := new(gongsvg_models.Rect).Stage(gongsvgStage)
 	verticalAxisLeftHandle.Name = "Vertical axis bottom handle"
 	axisLayer.Rects = append(axisLayer.Rects, verticalAxisLeftHandle)
-	verticalAxisLeftHandle.X = verticalAxis.OriginX - verticalAxis.AxisHandleBorderLength/2.0
-	verticalAxisLeftHandle.Y = verticalAxis.OriginY - verticalAxis.AxisHandleBorderLength
+	verticalAxisLeftHandle.X = parameter.OriginX - verticalAxis.AxisHandleBorderLength/2.0
+	verticalAxisLeftHandle.Y = parameter.OriginY - verticalAxis.AxisHandleBorderLength
 	verticalAxisLeftHandle.Width = verticalAxis.AxisHandleBorderLength
 	verticalAxisLeftHandle.Height = verticalAxis.AxisHandleBorderLength
 
@@ -25,15 +26,15 @@ func drawVerticalAxis(
 	verticalAxisRightHandle.Name = "Vertical axis top handle"
 	axisLayer.Rects = append(axisLayer.Rects, verticalAxisRightHandle)
 
-	verticalAxisRightHandle.X = verticalAxis.OriginX - verticalAxis.AxisHandleBorderLength/2.0
-	verticalAxisRightHandle.Y = verticalAxis.OriginY - verticalAxis.Axis_Length
+	verticalAxisRightHandle.X = parameter.OriginX - verticalAxis.AxisHandleBorderLength/2.0
+	verticalAxisRightHandle.Y = parameter.OriginY - verticalAxis.Axis_Length
 	verticalAxisRightHandle.Width = verticalAxis.AxisHandleBorderLength
 	verticalAxisRightHandle.Height = verticalAxis.AxisHandleBorderLength
 
 	verticalAxisLine := new(gongsvg_models.Link).Stage(gongsvgStage)
 	axisLayer.Links = append(axisLayer.Links, verticalAxisLine)
 
-	verticalAxisLine.StrokeWidth = verticalAxis.Axis_StrokeWidth
+	verticalAxisLine.StrokeWidth = verticalAxis.StrokeWidth
 	verticalAxisLine.StrokeOpacity = 1
 	verticalAxisLine.Name = "Vertical Axis"
 	verticalAxisLine.Stroke = gongsvg_models.Black.ToString()

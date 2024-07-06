@@ -85,6 +85,12 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.DiamondSideLenght
 	DiamondSideLenght_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.OriginX
+	OriginX_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.OriginY
+	OriginY_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -117,6 +123,10 @@ type ParameterWOP struct {
 	Angle float64 `xlsx:"4"`
 
 	DiamondSideLenght float64 `xlsx:"5"`
+
+	OriginX float64 `xlsx:"6"`
+
+	OriginY float64 `xlsx:"7"`
 	// insertion for WOP pointer fields
 }
 
@@ -128,6 +138,8 @@ var Parameter_Fields = []string{
 	"M",
 	"Angle",
 	"DiamondSideLenght",
+	"OriginX",
+	"OriginY",
 }
 
 type BackRepoParameterStruct struct {
@@ -459,6 +471,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
 	parameterDB.DiamondSideLenght_Data.Valid = true
+
+	parameterDB.OriginX_Data.Float64 = parameter.OriginX
+	parameterDB.OriginX_Data.Valid = true
+
+	parameterDB.OriginY_Data.Float64 = parameter.OriginY
+	parameterDB.OriginY_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -479,6 +497,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
 	parameterDB.DiamondSideLenght_Data.Valid = true
+
+	parameterDB.OriginX_Data.Float64 = parameter.OriginX
+	parameterDB.OriginX_Data.Valid = true
+
+	parameterDB.OriginY_Data.Float64 = parameter.OriginY
+	parameterDB.OriginY_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -499,6 +523,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
 	parameterDB.DiamondSideLenght_Data.Valid = true
+
+	parameterDB.OriginX_Data.Float64 = parameter.OriginX
+	parameterDB.OriginX_Data.Valid = true
+
+	parameterDB.OriginY_Data.Float64 = parameter.OriginY
+	parameterDB.OriginY_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -509,6 +539,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Angle = parameterDB.Angle_Data.Float64
 	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.OriginX = parameterDB.OriginX_Data.Float64
+	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -519,6 +551,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Angle = parameterDB.Angle_Data.Float64
 	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.OriginX = parameterDB.OriginX_Data.Float64
+	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -530,6 +564,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Angle = parameterDB.Angle_Data.Float64
 	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.OriginX = parameterDB.OriginX_Data.Float64
+	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo

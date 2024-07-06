@@ -7,6 +7,8 @@ import "math"
 type Rhombus struct {
 	Name string
 
+	IsDisplayed bool
+
 	CenterX, CenterY float64
 
 	SideLength float64
@@ -18,6 +20,8 @@ type Rhombus struct {
 	// InsideAngle is the angle inside the rhombus in the edge that
 	// crosses the axis of the rhombus
 	InsideAngle float64
+
+	StrokeWidth float64
 }
 
 func GetRightSideLine(r Rhombus) (line *Line) {

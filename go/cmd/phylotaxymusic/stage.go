@@ -36,31 +36,31 @@ func _(stage *models.StageStruct) {
 	__HorizontalAxis__000000_Initial.Name = `Initial`
 	__HorizontalAxis__000000_Initial.IsAxisDisplayed = true
 	__HorizontalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
-	__HorizontalAxis__000000_Initial.OriginX = 100.000000
-	__HorizontalAxis__000000_Initial.OriginY = 700.000000
 	__HorizontalAxis__000000_Initial.Axis_Length = 600.000000
-	__HorizontalAxis__000000_Initial.Axis_StrokeWidth = 1.000000
+	__HorizontalAxis__000000_Initial.StrokeWidth = 1.000000
 
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
 	__Parameter__000000_Reference.Angle = 92.000000
 	__Parameter__000000_Reference.DiamondSideLenght = 100.000000
+	__Parameter__000000_Reference.OriginX = 100.000000
+	__Parameter__000000_Reference.OriginY = 700.000000
 
 	__Rhombus__000000_Initial.Name = `Initial`
+	__Rhombus__000000_Initial.IsDisplayed = true
 	__Rhombus__000000_Initial.CenterX = 0.000000
 	__Rhombus__000000_Initial.CenterY = 0.000000
-	__Rhombus__000000_Initial.SideLength = 0.000000
+	__Rhombus__000000_Initial.SideLength = 100.000000
 	__Rhombus__000000_Initial.Angle = 0.000000
-	__Rhombus__000000_Initial.InsideAngle = 0.000000
+	__Rhombus__000000_Initial.InsideAngle = 60.000000
+	__Rhombus__000000_Initial.StrokeWidth = 1
 
 	__VerticalAxis__000000_Initial.Name = `Initial`
 	__VerticalAxis__000000_Initial.IsAxisDisplayed = true
 	__VerticalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
-	__VerticalAxis__000000_Initial.OriginX = 100.000000
-	__VerticalAxis__000000_Initial.OriginY = 700.000000
 	__VerticalAxis__000000_Initial.Axis_Length = 600.000000
-	__VerticalAxis__000000_Initial.Axis_StrokeWidth = 1.000000
+	__VerticalAxis__000000_Initial.StrokeWidth = 1.000000
 
 	// Setup of pointers
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000000_Initial

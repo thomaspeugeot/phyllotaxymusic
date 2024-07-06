@@ -69,17 +69,11 @@ type VerticalAxisDB struct {
 	// Declation for basic field verticalaxisDB.AxisHandleBorderLength
 	AxisHandleBorderLength_Data sql.NullFloat64
 
-	// Declation for basic field verticalaxisDB.OriginX
-	OriginX_Data sql.NullFloat64
-
-	// Declation for basic field verticalaxisDB.OriginY
-	OriginY_Data sql.NullFloat64
-
 	// Declation for basic field verticalaxisDB.Axis_Length
 	Axis_Length_Data sql.NullFloat64
 
-	// Declation for basic field verticalaxisDB.Axis_StrokeWidth
-	Axis_StrokeWidth_Data sql.NullFloat64
+	// Declation for basic field verticalaxisDB.StrokeWidth
+	StrokeWidth_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -109,13 +103,9 @@ type VerticalAxisWOP struct {
 
 	AxisHandleBorderLength float64 `xlsx:"3"`
 
-	OriginX float64 `xlsx:"4"`
+	Axis_Length float64 `xlsx:"4"`
 
-	OriginY float64 `xlsx:"5"`
-
-	Axis_Length float64 `xlsx:"6"`
-
-	Axis_StrokeWidth float64 `xlsx:"7"`
+	StrokeWidth float64 `xlsx:"5"`
 	// insertion for WOP pointer fields
 }
 
@@ -125,10 +115,8 @@ var VerticalAxis_Fields = []string{
 	"Name",
 	"IsAxisDisplayed",
 	"AxisHandleBorderLength",
-	"OriginX",
-	"OriginY",
 	"Axis_Length",
-	"Axis_StrokeWidth",
+	"StrokeWidth",
 }
 
 type BackRepoVerticalAxisStruct struct {
@@ -404,17 +392,11 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxis(verticalax
 	verticalaxisDB.AxisHandleBorderLength_Data.Float64 = verticalaxis.AxisHandleBorderLength
 	verticalaxisDB.AxisHandleBorderLength_Data.Valid = true
 
-	verticalaxisDB.OriginX_Data.Float64 = verticalaxis.OriginX
-	verticalaxisDB.OriginX_Data.Valid = true
-
-	verticalaxisDB.OriginY_Data.Float64 = verticalaxis.OriginY
-	verticalaxisDB.OriginY_Data.Valid = true
-
 	verticalaxisDB.Axis_Length_Data.Float64 = verticalaxis.Axis_Length
 	verticalaxisDB.Axis_Length_Data.Valid = true
 
-	verticalaxisDB.Axis_StrokeWidth_Data.Float64 = verticalaxis.Axis_StrokeWidth
-	verticalaxisDB.Axis_StrokeWidth_Data.Valid = true
+	verticalaxisDB.StrokeWidth_Data.Float64 = verticalaxis.StrokeWidth
+	verticalaxisDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromVerticalAxis_WOP
@@ -430,17 +412,11 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxis_WOP(vertic
 	verticalaxisDB.AxisHandleBorderLength_Data.Float64 = verticalaxis.AxisHandleBorderLength
 	verticalaxisDB.AxisHandleBorderLength_Data.Valid = true
 
-	verticalaxisDB.OriginX_Data.Float64 = verticalaxis.OriginX
-	verticalaxisDB.OriginX_Data.Valid = true
-
-	verticalaxisDB.OriginY_Data.Float64 = verticalaxis.OriginY
-	verticalaxisDB.OriginY_Data.Valid = true
-
 	verticalaxisDB.Axis_Length_Data.Float64 = verticalaxis.Axis_Length
 	verticalaxisDB.Axis_Length_Data.Valid = true
 
-	verticalaxisDB.Axis_StrokeWidth_Data.Float64 = verticalaxis.Axis_StrokeWidth
-	verticalaxisDB.Axis_StrokeWidth_Data.Valid = true
+	verticalaxisDB.StrokeWidth_Data.Float64 = verticalaxis.StrokeWidth
+	verticalaxisDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromVerticalAxisWOP
@@ -456,17 +432,11 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxisWOP(vertica
 	verticalaxisDB.AxisHandleBorderLength_Data.Float64 = verticalaxis.AxisHandleBorderLength
 	verticalaxisDB.AxisHandleBorderLength_Data.Valid = true
 
-	verticalaxisDB.OriginX_Data.Float64 = verticalaxis.OriginX
-	verticalaxisDB.OriginX_Data.Valid = true
-
-	verticalaxisDB.OriginY_Data.Float64 = verticalaxis.OriginY
-	verticalaxisDB.OriginY_Data.Valid = true
-
 	verticalaxisDB.Axis_Length_Data.Float64 = verticalaxis.Axis_Length
 	verticalaxisDB.Axis_Length_Data.Valid = true
 
-	verticalaxisDB.Axis_StrokeWidth_Data.Float64 = verticalaxis.Axis_StrokeWidth
-	verticalaxisDB.Axis_StrokeWidth_Data.Valid = true
+	verticalaxisDB.StrokeWidth_Data.Float64 = verticalaxis.StrokeWidth
+	verticalaxisDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsToVerticalAxis
@@ -475,10 +445,8 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxis(verticalaxis
 	verticalaxis.Name = verticalaxisDB.Name_Data.String
 	verticalaxis.IsAxisDisplayed = verticalaxisDB.IsAxisDisplayed_Data.Bool
 	verticalaxis.AxisHandleBorderLength = verticalaxisDB.AxisHandleBorderLength_Data.Float64
-	verticalaxis.OriginX = verticalaxisDB.OriginX_Data.Float64
-	verticalaxis.OriginY = verticalaxisDB.OriginY_Data.Float64
 	verticalaxis.Axis_Length = verticalaxisDB.Axis_Length_Data.Float64
-	verticalaxis.Axis_StrokeWidth = verticalaxisDB.Axis_StrokeWidth_Data.Float64
+	verticalaxis.StrokeWidth = verticalaxisDB.StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToVerticalAxis_WOP
@@ -487,10 +455,8 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxis_WOP(vertical
 	verticalaxis.Name = verticalaxisDB.Name_Data.String
 	verticalaxis.IsAxisDisplayed = verticalaxisDB.IsAxisDisplayed_Data.Bool
 	verticalaxis.AxisHandleBorderLength = verticalaxisDB.AxisHandleBorderLength_Data.Float64
-	verticalaxis.OriginX = verticalaxisDB.OriginX_Data.Float64
-	verticalaxis.OriginY = verticalaxisDB.OriginY_Data.Float64
 	verticalaxis.Axis_Length = verticalaxisDB.Axis_Length_Data.Float64
-	verticalaxis.Axis_StrokeWidth = verticalaxisDB.Axis_StrokeWidth_Data.Float64
+	verticalaxis.StrokeWidth = verticalaxisDB.StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToVerticalAxisWOP
@@ -500,10 +466,8 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxisWOP(verticala
 	verticalaxis.Name = verticalaxisDB.Name_Data.String
 	verticalaxis.IsAxisDisplayed = verticalaxisDB.IsAxisDisplayed_Data.Bool
 	verticalaxis.AxisHandleBorderLength = verticalaxisDB.AxisHandleBorderLength_Data.Float64
-	verticalaxis.OriginX = verticalaxisDB.OriginX_Data.Float64
-	verticalaxis.OriginY = verticalaxisDB.OriginY_Data.Float64
 	verticalaxis.Axis_Length = verticalaxisDB.Axis_Length_Data.Float64
-	verticalaxis.Axis_StrokeWidth = verticalaxisDB.Axis_StrokeWidth_Data.Float64
+	verticalaxis.StrokeWidth = verticalaxisDB.StrokeWidth_Data.Float64
 }
 
 // Backup generates a json file from a slice of all VerticalAxisDB instances in the backrepo

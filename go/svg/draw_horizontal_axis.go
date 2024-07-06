@@ -9,6 +9,7 @@ import (
 func drawHorizontalAxis(
 	gongsvgStage *gongsvg_models.StageStruct,
 	axisLayer *gongsvg_models.Layer,
+	parameter *phylotaxymusic_models.Parameter,
 	horizontalAxis *phylotaxymusic_models.HorizontalAxis,
 
 ) {
@@ -16,8 +17,8 @@ func drawHorizontalAxis(
 	horizontalAxisLeftHandle := new(gongsvg_models.Rect).Stage(gongsvgStage)
 	horizontalAxisLeftHandle.Name = "Horizontal axis left handle"
 	axisLayer.Rects = append(axisLayer.Rects, horizontalAxisLeftHandle)
-	horizontalAxisLeftHandle.X = horizontalAxis.OriginX - horizontalAxis.AxisHandleBorderLength
-	horizontalAxisLeftHandle.Y = horizontalAxis.OriginY - horizontalAxis.AxisHandleBorderLength/2.0
+	horizontalAxisLeftHandle.X = parameter.OriginX - horizontalAxis.AxisHandleBorderLength
+	horizontalAxisLeftHandle.Y = parameter.OriginY - horizontalAxis.AxisHandleBorderLength/2.0
 	horizontalAxisLeftHandle.Width = horizontalAxis.AxisHandleBorderLength
 	horizontalAxisLeftHandle.Height = horizontalAxis.AxisHandleBorderLength
 
@@ -25,15 +26,15 @@ func drawHorizontalAxis(
 	horizontalAxisRightHandle.Name = "Horizontal axis rigth handle"
 	axisLayer.Rects = append(axisLayer.Rects, horizontalAxisRightHandle)
 
-	horizontalAxisRightHandle.X = horizontalAxis.OriginX + horizontalAxis.Axis_Length
-	horizontalAxisRightHandle.Y = horizontalAxis.OriginY - horizontalAxis.AxisHandleBorderLength/2.0
+	horizontalAxisRightHandle.X = parameter.OriginX + horizontalAxis.Axis_Length
+	horizontalAxisRightHandle.Y = parameter.OriginY - horizontalAxis.AxisHandleBorderLength/2.0
 	horizontalAxisRightHandle.Width = horizontalAxis.AxisHandleBorderLength
 	horizontalAxisRightHandle.Height = horizontalAxis.AxisHandleBorderLength
 
 	horizontalAxisLine := new(gongsvg_models.Link).Stage(gongsvgStage)
 	axisLayer.Links = append(axisLayer.Links, horizontalAxisLine)
 
-	horizontalAxisLine.StrokeWidth = horizontalAxis.Axis_StrokeWidth
+	horizontalAxisLine.StrokeWidth = horizontalAxis.StrokeWidth
 	horizontalAxisLine.StrokeOpacity = 1
 	horizontalAxisLine.Name = "Horizontal Axis"
 	horizontalAxisLine.Stroke = gongsvg_models.Black.ToString()

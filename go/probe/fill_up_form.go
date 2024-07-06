@@ -26,13 +26,9 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("AxisHandleBorderLength", instanceWithInferedType.AxisHandleBorderLength, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
 		BasicFieldtoForm("Axis_Length", instanceWithInferedType.Axis_Length, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("Axis_StrokeWidth", instanceWithInferedType.Axis_StrokeWidth, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("StrokeWidth", instanceWithInferedType.StrokeWidth, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 
 	case *models.Line:
@@ -61,12 +57,18 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("DiamondSideLenght", instanceWithInferedType.DiamondSideLenght, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("InitialRhombus", instanceWithInferedType.InitialRhombus, formGroup, probe)
+		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		AssociationFieldToForm("HorizontalAxis", instanceWithInferedType.HorizontalAxis, formGroup, probe)
 		AssociationFieldToForm("VerticalAxis", instanceWithInferedType.VerticalAxis, formGroup, probe)
 
 	case *models.Rhombus:
 		// insertion point
 		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("CenterX", instanceWithInferedType.CenterX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -78,6 +80,8 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("InsideAngle", instanceWithInferedType.InsideAngle, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("StrokeWidth", instanceWithInferedType.StrokeWidth, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 
 	case *models.VerticalAxis:
 		// insertion point
@@ -87,13 +91,9 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("AxisHandleBorderLength", instanceWithInferedType.AxisHandleBorderLength, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
 		BasicFieldtoForm("Axis_Length", instanceWithInferedType.Axis_Length, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("Axis_StrokeWidth", instanceWithInferedType.Axis_StrokeWidth, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("StrokeWidth", instanceWithInferedType.StrokeWidth, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 
 	default:

@@ -17,6 +17,8 @@ type Parameter struct {
 	InitialRhombus *Rhombus
 
 	// for drawing purpose
+	OriginX        float64
+	OriginY        float64
 	HorizontalAxis *HorizontalAxis
 	VerticalAxis   *VerticalAxis
 }
