@@ -48,8 +48,8 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	diamondBottom.Name = "B"
 	layer.Lines = append(layer.Lines, diamondBottom)
 	diamondRoot = append(diamondRoot, diamondBottom)
-	diamondBottom.X1 = parameter.OriginX
-	diamondBottom.Y1 = parameter.OriginY
+	diamondBottom.X1 = parameter.HorizontalAxis.OriginX
+	diamondBottom.Y1 = parameter.HorizontalAxis.OriginY
 	diamondBottom.X2 = diamondBottom.X1 + parameter.DiamondSideLenght
 	diamondBottom.Y2 = diamondBottom.Y1
 	diamondBottom.Presentation = presentation
@@ -61,8 +61,8 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	diamondLeftSide.Name = "L"
 	diamondRoot = append(diamondRoot, diamondLeftSide)
 	layer.Lines = append(layer.Lines, diamondLeftSide)
-	diamondLeftSide.X1 = parameter.OriginX
-	diamondLeftSide.Y1 = parameter.OriginY
+	diamondLeftSide.X1 = parameter.HorizontalAxis.OriginX
+	diamondLeftSide.Y1 = parameter.HorizontalAxis.OriginY
 	diamondLeftSide.X2 = diamondLeftSide.X1 + deltaX
 	diamondLeftSide.Y2 = diamondLeftSide.Y1 - deltaY
 	diamondLeftSide.Presentation = presentation
@@ -79,41 +79,41 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	layer.Circles = append(layer.Circles, circle)
 	circle.Presentation = presentation
 
-	circle.CX = parameter.OriginX + float64(parameter.N)*parameter.DiamondSideLenght + float64(parameter.M)*deltaX
-	circle.CY = parameter.OriginY - float64(parameter.M)*deltaY
+	circle.CX = parameter.HorizontalAxis.OriginX + float64(parameter.N)*parameter.DiamondSideLenght + float64(parameter.M)*deltaX
+	circle.CY = parameter.HorizontalAxis.OriginY - float64(parameter.M)*deltaY
 	circle.Radius = parameter.DiamondSideLenght / 2.0
 
-	angleForTheGridEndRad := math.Atan2(circle.CY-parameter.OriginY, circle.CX-parameter.OriginX)
+	angleForTheGridEndRad := math.Atan2(circle.CY-parameter.HorizontalAxis.OriginY, circle.CX-parameter.HorizontalAxis.OriginX)
 	angleForTheGridEndDegree := 180 * angleForTheGridEndRad / math.Pi
 
 	distanceForTheGridEnd := math.Sqrt(
-		(circle.CY-parameter.OriginY)*(circle.CY-parameter.OriginY) +
-			(circle.CX-parameter.OriginX)*(circle.CX-parameter.OriginX))
+		(circle.CY-parameter.HorizontalAxis.OriginY)*(circle.CY-parameter.HorizontalAxis.OriginY) +
+			(circle.CX-parameter.HorizontalAxis.OriginX)*(circle.CX-parameter.HorizontalAxis.OriginX))
 
 	currentDiamond := diamondRoot
-	rotatedCurrentDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, diamondRoot, parameter.OriginX, parameter.OriginY, -angleForTheGridEndDegree)
+	rotatedCurrentDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, diamondRoot, parameter.HorizontalAxis.OriginX, parameter.HorizontalAxis.OriginY, -angleForTheGridEndDegree)
 
 	var rotatedDiamondGrid DiamondGrid
 	rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedCurrentDiamond)
 
 	for j := range parameter.M - 1 {
 		copiedDiamond := CopyLineSet(gongsvgStage, layer, currentDiamond, float64(j+1)*deltaX, -float64(j+1)*deltaY)
-		rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, parameter.OriginX, parameter.OriginY, -angleForTheGridEndDegree)
+		rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, parameter.HorizontalAxis.OriginX, parameter.HorizontalAxis.OriginY, -angleForTheGridEndDegree)
 		rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedDiamond)
 	}
 	for i := range parameter.N - 1 {
 		currentDiamond = CopyLineSet(gongsvgStage, layer, diamondRoot, float64(i+1)*parameter.DiamondSideLenght, 0)
-		rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, currentDiamond, parameter.OriginX, parameter.OriginY, -angleForTheGridEndDegree)
+		rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, currentDiamond, parameter.HorizontalAxis.OriginX, parameter.HorizontalAxis.OriginY, -angleForTheGridEndDegree)
 		rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedDiamond)
 
 		for j := range parameter.M - 1 {
 			copiedDiamond := CopyLineSet(gongsvgStage, layer, currentDiamond, float64(j+1)*deltaX, -float64(j+1)*deltaY)
-			rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, parameter.OriginX, parameter.OriginY, -angleForTheGridEndDegree)
+			rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, copiedDiamond, parameter.HorizontalAxis.OriginX, parameter.HorizontalAxis.OriginY, -angleForTheGridEndDegree)
 			rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedDiamond)
 		}
 	}
 
-	// rotatedCircle := RotateCircle(gongsvgStage, rotatedObjectsLayer, circle, parameter.OriginX, parameter.OriginY, -angleForTheGridEnd)
+	// rotatedCircle := RotateCircle(gongsvgStage, rotatedObjectsLayer, circle, parameter.HorizontalAxis.OriginX, parameter.HorizontalAxis.OriginY, -angleForTheGridEnd)
 	// _ = rotatedCircle
 
 	//
@@ -156,7 +156,7 @@ func generateCircleFromDiamondGrid(
 	for _, diamond := range diamondGrid {
 
 		x, y := computeDiamonCenter(*diamond)
-		// if y <= parameter.OriginY {
+		// if y <= parameter.HorizontalAxis.OriginY {
 		circle := new(gongsvg_models.Circle).Stage(gongsvgStage)
 		layer.Circles = append(layer.Circles, circle)
 		circle.CX = x

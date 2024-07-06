@@ -50,6 +50,10 @@ type ParameterPointersEncoding struct {
 	// field InitialRhombus is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	InitialRhombusID sql.NullInt64
+
+	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	HorizontalAxisID sql.NullInt64
 }
 
 // ParameterDB describes a parameter in the database
@@ -77,28 +81,6 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.DiamondSideLenght
 	DiamondSideLenght_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.IsHorizontalAxisDisplayed
-	// provide the sql storage for the boolan
-	IsHorizontalAxisDisplayed_Data sql.NullBool
-
-	// Declation for basic field parameterDB.AxisHandleBorderLength
-	AxisHandleBorderLength_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.OriginX
-	OriginX_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.OriginY
-	OriginY_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.HorizontalAxis_Length
-	HorizontalAxis_Length_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.VerticalAxis_Length
-	VerticalAxis_Length_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.Axis_StrokeWidth
-	Axis_StrokeWidth_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -131,20 +113,6 @@ type ParameterWOP struct {
 	Angle float64 `xlsx:"4"`
 
 	DiamondSideLenght float64 `xlsx:"5"`
-
-	IsHorizontalAxisDisplayed bool `xlsx:"6"`
-
-	AxisHandleBorderLength float64 `xlsx:"7"`
-
-	OriginX float64 `xlsx:"8"`
-
-	OriginY float64 `xlsx:"9"`
-
-	HorizontalAxis_Length float64 `xlsx:"10"`
-
-	VerticalAxis_Length float64 `xlsx:"11"`
-
-	Axis_StrokeWidth float64 `xlsx:"12"`
 	// insertion for WOP pointer fields
 }
 
@@ -156,13 +124,6 @@ var Parameter_Fields = []string{
 	"M",
 	"Angle",
 	"DiamondSideLenght",
-	"IsHorizontalAxisDisplayed",
-	"AxisHandleBorderLength",
-	"OriginX",
-	"OriginY",
-	"HorizontalAxis_Length",
-	"VerticalAxis_Length",
-	"Axis_StrokeWidth",
 }
 
 type BackRepoParameterStruct struct {
@@ -294,6 +255,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.InitialRhombusID.Valid = true
 		}
 
+		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
+		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
+		if parameter.HorizontalAxis != nil {
+			if HorizontalAxisId, ok := backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisPtr_HorizontalAxisDBID[parameter.HorizontalAxis]; ok {
+				parameterDB.HorizontalAxisID.Int64 = int64(HorizontalAxisId)
+				parameterDB.HorizontalAxisID.Valid = true
+			}
+		} else {
+			parameterDB.HorizontalAxisID.Int64 = 0
+			parameterDB.HorizontalAxisID.Valid = true
+		}
+
 		query := backRepoParameter.db.Save(&parameterDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -412,6 +385,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.InitialRhombusID.Int64 != 0 {
 		parameter.InitialRhombus = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(parameterDB.InitialRhombusID.Int64)]
 	}
+	// HorizontalAxis field
+	parameter.HorizontalAxis = nil
+	if parameterDB.HorizontalAxisID.Int64 != 0 {
+		parameter.HorizontalAxis = backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisPtr[uint(parameterDB.HorizontalAxisID.Int64)]
+	}
 	return
 }
 
@@ -460,27 +438,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
 	parameterDB.DiamondSideLenght_Data.Valid = true
-
-	parameterDB.IsHorizontalAxisDisplayed_Data.Bool = parameter.IsHorizontalAxisDisplayed
-	parameterDB.IsHorizontalAxisDisplayed_Data.Valid = true
-
-	parameterDB.AxisHandleBorderLength_Data.Float64 = parameter.AxisHandleBorderLength
-	parameterDB.AxisHandleBorderLength_Data.Valid = true
-
-	parameterDB.OriginX_Data.Float64 = parameter.OriginX
-	parameterDB.OriginX_Data.Valid = true
-
-	parameterDB.OriginY_Data.Float64 = parameter.OriginY
-	parameterDB.OriginY_Data.Valid = true
-
-	parameterDB.HorizontalAxis_Length_Data.Float64 = parameter.HorizontalAxis_Length
-	parameterDB.HorizontalAxis_Length_Data.Valid = true
-
-	parameterDB.VerticalAxis_Length_Data.Float64 = parameter.VerticalAxis_Length
-	parameterDB.VerticalAxis_Length_Data.Valid = true
-
-	parameterDB.Axis_StrokeWidth_Data.Float64 = parameter.Axis_StrokeWidth
-	parameterDB.Axis_StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -501,27 +458,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
 	parameterDB.DiamondSideLenght_Data.Valid = true
-
-	parameterDB.IsHorizontalAxisDisplayed_Data.Bool = parameter.IsHorizontalAxisDisplayed
-	parameterDB.IsHorizontalAxisDisplayed_Data.Valid = true
-
-	parameterDB.AxisHandleBorderLength_Data.Float64 = parameter.AxisHandleBorderLength
-	parameterDB.AxisHandleBorderLength_Data.Valid = true
-
-	parameterDB.OriginX_Data.Float64 = parameter.OriginX
-	parameterDB.OriginX_Data.Valid = true
-
-	parameterDB.OriginY_Data.Float64 = parameter.OriginY
-	parameterDB.OriginY_Data.Valid = true
-
-	parameterDB.HorizontalAxis_Length_Data.Float64 = parameter.HorizontalAxis_Length
-	parameterDB.HorizontalAxis_Length_Data.Valid = true
-
-	parameterDB.VerticalAxis_Length_Data.Float64 = parameter.VerticalAxis_Length
-	parameterDB.VerticalAxis_Length_Data.Valid = true
-
-	parameterDB.Axis_StrokeWidth_Data.Float64 = parameter.Axis_StrokeWidth
-	parameterDB.Axis_StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -542,27 +478,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
 	parameterDB.DiamondSideLenght_Data.Valid = true
-
-	parameterDB.IsHorizontalAxisDisplayed_Data.Bool = parameter.IsHorizontalAxisDisplayed
-	parameterDB.IsHorizontalAxisDisplayed_Data.Valid = true
-
-	parameterDB.AxisHandleBorderLength_Data.Float64 = parameter.AxisHandleBorderLength
-	parameterDB.AxisHandleBorderLength_Data.Valid = true
-
-	parameterDB.OriginX_Data.Float64 = parameter.OriginX
-	parameterDB.OriginX_Data.Valid = true
-
-	parameterDB.OriginY_Data.Float64 = parameter.OriginY
-	parameterDB.OriginY_Data.Valid = true
-
-	parameterDB.HorizontalAxis_Length_Data.Float64 = parameter.HorizontalAxis_Length
-	parameterDB.HorizontalAxis_Length_Data.Valid = true
-
-	parameterDB.VerticalAxis_Length_Data.Float64 = parameter.VerticalAxis_Length
-	parameterDB.VerticalAxis_Length_Data.Valid = true
-
-	parameterDB.Axis_StrokeWidth_Data.Float64 = parameter.Axis_StrokeWidth
-	parameterDB.Axis_StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -573,13 +488,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Angle = parameterDB.Angle_Data.Float64
 	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
-	parameter.IsHorizontalAxisDisplayed = parameterDB.IsHorizontalAxisDisplayed_Data.Bool
-	parameter.AxisHandleBorderLength = parameterDB.AxisHandleBorderLength_Data.Float64
-	parameter.OriginX = parameterDB.OriginX_Data.Float64
-	parameter.OriginY = parameterDB.OriginY_Data.Float64
-	parameter.HorizontalAxis_Length = parameterDB.HorizontalAxis_Length_Data.Float64
-	parameter.VerticalAxis_Length = parameterDB.VerticalAxis_Length_Data.Float64
-	parameter.Axis_StrokeWidth = parameterDB.Axis_StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -590,13 +498,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Angle = parameterDB.Angle_Data.Float64
 	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
-	parameter.IsHorizontalAxisDisplayed = parameterDB.IsHorizontalAxisDisplayed_Data.Bool
-	parameter.AxisHandleBorderLength = parameterDB.AxisHandleBorderLength_Data.Float64
-	parameter.OriginX = parameterDB.OriginX_Data.Float64
-	parameter.OriginY = parameterDB.OriginY_Data.Float64
-	parameter.HorizontalAxis_Length = parameterDB.HorizontalAxis_Length_Data.Float64
-	parameter.VerticalAxis_Length = parameterDB.VerticalAxis_Length_Data.Float64
-	parameter.Axis_StrokeWidth = parameterDB.Axis_StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -608,13 +509,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Angle = parameterDB.Angle_Data.Float64
 	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
-	parameter.IsHorizontalAxisDisplayed = parameterDB.IsHorizontalAxisDisplayed_Data.Bool
-	parameter.AxisHandleBorderLength = parameterDB.AxisHandleBorderLength_Data.Float64
-	parameter.OriginX = parameterDB.OriginX_Data.Float64
-	parameter.OriginY = parameterDB.OriginY_Data.Float64
-	parameter.HorizontalAxis_Length = parameterDB.HorizontalAxis_Length_Data.Float64
-	parameter.VerticalAxis_Length = parameterDB.VerticalAxis_Length_Data.Float64
-	parameter.Axis_StrokeWidth = parameterDB.Axis_StrokeWidth_Data.Float64
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo
@@ -776,6 +670,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.InitialRhombusID.Int64 != 0 {
 			parameterDB.InitialRhombusID.Int64 = int64(BackRepoRhombusid_atBckpTime_newID[uint(parameterDB.InitialRhombusID.Int64)])
 			parameterDB.InitialRhombusID.Valid = true
+		}
+
+		// reindexing HorizontalAxis field
+		if parameterDB.HorizontalAxisID.Int64 != 0 {
+			parameterDB.HorizontalAxisID.Int64 = int64(BackRepoHorizontalAxisid_atBckpTime_newID[uint(parameterDB.HorizontalAxisID.Int64)])
+			parameterDB.HorizontalAxisID.Valid = true
 		}
 
 		// update databse with new index encoding

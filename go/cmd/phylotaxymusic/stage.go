@@ -27,6 +27,8 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000000_Initial := (&models.Rhombus{Name: `Initial`}).Stage(stage)
 
+	_h := (&models.HorizontalAxis{Name: `Initial`}).Stage(stage)
+
 	// Setup of values
 
 	__Parameter__000000_Reference.Name = `Reference`
@@ -34,13 +36,17 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.M = 2
 	__Parameter__000000_Reference.Angle = 92.000000
 	__Parameter__000000_Reference.DiamondSideLenght = 100.000000
-	__Parameter__000000_Reference.AxisHandleBorderLength = 0.000000
-	__Parameter__000000_Reference.OriginX = 100.000000
-	__Parameter__000000_Reference.OriginY = 600.000000
-	__Parameter__000000_Reference.HorizontalAxis_Length = 600.000000
-	__Parameter__000000_Reference.VerticalAxis_Length = 550.000000
-	__Parameter__000000_Reference.Axis_StrokeWidth = 1.000000
-	__Parameter__000000_Reference.IsHorizontalAxisDisplayed = true
+
+
+	__Parameter__000000_Reference.HorizontalAxis = _h
+
+	_h.AxisHandleBorderLength = 0.000000
+	_h.OriginX = 100.000000
+	_h.OriginY = 600.000000
+	_h.HorizontalAxis_Length = 600.000000
+	_h.VerticalAxis_Length = 550.000000
+	_h.Axis_StrokeWidth = 1.000000
+	_h.IsHorizontalAxisDisplayed = true
 
 	__Rhombus__000000_Initial.Name = `Initial`
 	__Rhombus__000000_Initial.CenterX = 0.000000

@@ -17,14 +17,7 @@ type Parameter struct {
 	InitialRhombus *Rhombus
 
 	// for drawing purpose
-	IsHorizontalAxisDisplayed bool
-	AxisHandleBorderLength    float64
-	OriginX                   float64
-	OriginY                   float64
-	HorizontalAxis_Length     float64
-	VerticalAxis_Length       float64
-
-	Axis_StrokeWidth float64
+	HorizontalAxis *HorizontalAxis
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Parameter) {

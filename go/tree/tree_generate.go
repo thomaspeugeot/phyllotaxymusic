@@ -6,7 +6,7 @@ import (
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
-func (tree *Tree) Generate() {
+func (tree *Tree) Generate(parameter *phylotaxymusic_models.Parameter) {
 
 	tree.TreeStack.Stage.Reset()
 
@@ -14,7 +14,7 @@ func (tree *Tree) Generate() {
 	tree.NodeTree.Name = string(phylotaxymusic_models.Sidebar)
 
 	firstNode := new(gongtree_models.Node).Stage(tree.TreeStack.Stage)
-	firstNode.Name = "Iniital Rhombus"
+	firstNode.Name = "Axis"
 	// firstNode.IsWithPreceedingIcon = true
 	// firstNode.PreceedingIcon = string(maticons.BUTTON_library_books)
 
@@ -24,8 +24,9 @@ func (tree *Tree) Generate() {
 	firstNode.HasCheckboxButton = true
 	firstNode.IsChecked = true
 
+	firstNode.Impl = parameter.HorizontalAxis
+
 	tree.NodeTree.RootNodes = append(tree.NodeTree.RootNodes, firstNode)
 
 	tree.TreeStack.Stage.Commit()
-
 }

@@ -50,10 +50,6 @@ func main() {
 	gongsvg_stack := gongsvg_stack.NewStack(r, phylotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
 	gongtree_stack := gongtree_stack.NewStack(r, phylotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
 
-	tree := new(phylotaxymusic_tree.Tree)
-	tree.TreeStack = gongtree_stack
-	tree.Generate()
-
 	phylotaxymusic_svg.GenerateSvg(gongsvg_stack.Stage, phylotaxymusicStack.Stage)
 
 	// get the only diagram
@@ -66,6 +62,9 @@ func main() {
 
 	parameter := (*parameters)["Reference"]
 	_ = parameter
+	tree := new(phylotaxymusic_tree.Tree)
+	tree.TreeStack = gongtree_stack
+	tree.Generate(parameter)
 
 	impl := new(ParameterImpl)
 	impl.parameter = parameter

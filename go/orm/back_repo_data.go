@@ -4,6 +4,8 @@ package orm
 type BackRepoData struct {
 	// insertion point for slices
 
+	HorizontalAxisAPIs []*HorizontalAxisAPI
+
 	LineAPIs []*LineAPI
 
 	ParameterAPIs []*ParameterAPI
@@ -13,6 +15,16 @@ type BackRepoData struct {
 
 func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepoData) {
 	// insertion point for slices copies
+	for _, horizontalaxisDB := range backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisDB {
+
+		var horizontalaxisAPI HorizontalAxisAPI
+		horizontalaxisAPI.ID = horizontalaxisDB.ID
+		horizontalaxisAPI.HorizontalAxisPointersEncoding = horizontalaxisDB.HorizontalAxisPointersEncoding
+		horizontalaxisDB.CopyBasicFieldsToHorizontalAxis_WOP(&horizontalaxisAPI.HorizontalAxis_WOP)
+
+		backRepoData.HorizontalAxisAPIs = append(backRepoData.HorizontalAxisAPIs, &horizontalaxisAPI)
+	}
+
 	for _, lineDB := range backRepo.BackRepoLine.Map_LineDBID_LineDB {
 
 		var lineAPI LineAPI

@@ -62,6 +62,16 @@ func fillUpTree(
 
 		switch gongStruct.Name {
 		// insertion point
+		case "HorizontalAxis":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.HorizontalAxis](probe.stageOfInterest)
+			for _horizontalaxis := range set {
+				nodeInstance := (&tree.Node{Name: _horizontalaxis.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_horizontalaxis, "HorizontalAxis", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "Line":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.Line](probe.stageOfInterest)

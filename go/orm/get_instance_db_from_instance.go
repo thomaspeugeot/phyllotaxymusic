@@ -8,7 +8,7 @@ import (
 type GongstructDB interface {
 	// insertion point for generic types
 	// "int" is present to handle the case when no struct is present
-	int | LineDB | ParameterDB | RhombusDB
+	int | HorizontalAxisDB | LineDB | ParameterDB | RhombusDB
 }
 
 func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
@@ -18,6 +18,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 
 	switch concreteInstance := any(instance).(type) {
 	// insertion point for per struct backup
+	case *models.HorizontalAxis:
+		horizontalaxisInstance := any(concreteInstance).(*models.HorizontalAxis)
+		ret2 := backRepo.BackRepoHorizontalAxis.GetHorizontalAxisDBFromHorizontalAxisPtr(horizontalaxisInstance)
+		ret = any(ret2).(*T2)
 	case *models.Line:
 		lineInstance := any(concreteInstance).(*models.Line)
 		ret2 := backRepo.BackRepoLine.GetLineDBFromLinePtr(lineInstance)
@@ -43,6 +47,11 @@ func GetID[T models.Gongstruct](
 
 	switch inst := any(instance).(type) {
 	// insertion point for per struct backup
+	case *models.HorizontalAxis:
+		tmp := GetInstanceDBFromInstance[models.HorizontalAxis, HorizontalAxisDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.Line:
 		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
 			stage, backRepo, inst,
@@ -71,6 +80,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 
 	switch inst := any(instance).(type) {
 	// insertion point for per struct backup
+	case *models.HorizontalAxis:
+		tmp := GetInstanceDBFromInstance[models.HorizontalAxis, HorizontalAxisDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.Line:
 		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
 			stage, backRepo, inst,

@@ -18,6 +18,97 @@ var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
 var __dummy_orm = orm.BackRepoStruct{}
 
 // insertion point
+func __gong__New__HorizontalAxisFormCallback(
+	horizontalaxis *models.HorizontalAxis,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (horizontalaxisFormCallback *HorizontalAxisFormCallback) {
+	horizontalaxisFormCallback = new(HorizontalAxisFormCallback)
+	horizontalaxisFormCallback.probe = probe
+	horizontalaxisFormCallback.horizontalaxis = horizontalaxis
+	horizontalaxisFormCallback.formGroup = formGroup
+
+	horizontalaxisFormCallback.CreationMode = (horizontalaxis == nil)
+
+	return
+}
+
+type HorizontalAxisFormCallback struct {
+	horizontalaxis *models.HorizontalAxis
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
+
+	log.Println("HorizontalAxisFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	horizontalaxisFormCallback.probe.formStage.Checkout()
+
+	if horizontalaxisFormCallback.horizontalaxis == nil {
+		horizontalaxisFormCallback.horizontalaxis = new(models.HorizontalAxis).Stage(horizontalaxisFormCallback.probe.stageOfInterest)
+	}
+	horizontalaxis_ := horizontalaxisFormCallback.horizontalaxis
+	_ = horizontalaxis_
+
+	for _, formDiv := range horizontalaxisFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(horizontalaxis_.Name), formDiv)
+		case "IsHorizontalAxisDisplayed":
+			FormDivBasicFieldToField(&(horizontalaxis_.IsHorizontalAxisDisplayed), formDiv)
+		case "AxisHandleBorderLength":
+			FormDivBasicFieldToField(&(horizontalaxis_.AxisHandleBorderLength), formDiv)
+		case "OriginX":
+			FormDivBasicFieldToField(&(horizontalaxis_.OriginX), formDiv)
+		case "OriginY":
+			FormDivBasicFieldToField(&(horizontalaxis_.OriginY), formDiv)
+		case "HorizontalAxis_Length":
+			FormDivBasicFieldToField(&(horizontalaxis_.HorizontalAxis_Length), formDiv)
+		case "VerticalAxis_Length":
+			FormDivBasicFieldToField(&(horizontalaxis_.VerticalAxis_Length), formDiv)
+		case "Axis_StrokeWidth":
+			FormDivBasicFieldToField(&(horizontalaxis_.Axis_StrokeWidth), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if horizontalaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		horizontalaxis_.Unstage(horizontalaxisFormCallback.probe.stageOfInterest)
+	}
+
+	horizontalaxisFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.HorizontalAxis](
+		horizontalaxisFormCallback.probe,
+	)
+	horizontalaxisFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if horizontalaxisFormCallback.CreationMode || horizontalaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		horizontalaxisFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(horizontalaxisFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__HorizontalAxisFormCallback(
+			nil,
+			horizontalaxisFormCallback.probe,
+			newFormGroup,
+		)
+		horizontalaxis := new(models.HorizontalAxis)
+		FillUpForm(horizontalaxis, newFormGroup, horizontalaxisFormCallback.probe)
+		horizontalaxisFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(horizontalaxisFormCallback.probe)
+}
 func __gong__New__LineFormCallback(
 	line *models.Line,
 	probe *Probe,
@@ -158,20 +249,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.DiamondSideLenght), formDiv)
 		case "InitialRhombus":
 			FormDivSelectFieldToField(&(parameter_.InitialRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "IsHorizontalAxisDisplayed":
-			FormDivBasicFieldToField(&(parameter_.IsHorizontalAxisDisplayed), formDiv)
-		case "AxisHandleBorderLength":
-			FormDivBasicFieldToField(&(parameter_.AxisHandleBorderLength), formDiv)
-		case "OriginX":
-			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
-		case "OriginY":
-			FormDivBasicFieldToField(&(parameter_.OriginY), formDiv)
-		case "HorizontalAxis_Length":
-			FormDivBasicFieldToField(&(parameter_.HorizontalAxis_Length), formDiv)
-		case "VerticalAxis_Length":
-			FormDivBasicFieldToField(&(parameter_.VerticalAxis_Length), formDiv)
-		case "Axis_StrokeWidth":
-			FormDivBasicFieldToField(&(parameter_.Axis_StrokeWidth), formDiv)
+		case "HorizontalAxis":
+			FormDivSelectFieldToField(&(parameter_.HorizontalAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 

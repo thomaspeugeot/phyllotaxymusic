@@ -52,6 +52,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	log.Println("NodeImplGongstruct:OnAfterUpdate with: ", nodeImplGongstruct.gongStruct.GetName())
 
 	// insertion point
+	if nodeImplGongstruct.gongStruct.GetName() == "HorizontalAxis" {
+		fillUpTable[models.HorizontalAxis](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Line" {
 		fillUpTable[models.Line](nodeImplGongstruct.probe)
 	}

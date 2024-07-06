@@ -7,6 +7,30 @@ import "time"
 var __GONG_time_The_fool_doth_think_he_is_wise__ = time.Hour
 
 // insertion point
+type HorizontalAxis_WOP struct {
+	// insertion point
+	Name string
+	IsHorizontalAxisDisplayed bool
+	AxisHandleBorderLength float64
+	OriginX float64
+	OriginY float64
+	HorizontalAxis_Length float64
+	VerticalAxis_Length float64
+	Axis_StrokeWidth float64
+}
+
+func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
+	// insertion point
+	to.Name = from.Name
+	to.IsHorizontalAxisDisplayed = from.IsHorizontalAxisDisplayed
+	to.AxisHandleBorderLength = from.AxisHandleBorderLength
+	to.OriginX = from.OriginX
+	to.OriginY = from.OriginY
+	to.HorizontalAxis_Length = from.HorizontalAxis_Length
+	to.VerticalAxis_Length = from.VerticalAxis_Length
+	to.Axis_StrokeWidth = from.Axis_StrokeWidth
+}
+
 type Line_WOP struct {
 	// insertion point
 	Name string
@@ -32,13 +56,6 @@ type Parameter_WOP struct {
 	M int
 	Angle float64
 	DiamondSideLenght float64
-	IsHorizontalAxisDisplayed bool
-	AxisHandleBorderLength float64
-	OriginX float64
-	OriginY float64
-	HorizontalAxis_Length float64
-	VerticalAxis_Length float64
-	Axis_StrokeWidth float64
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -48,13 +65,6 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.M = from.M
 	to.Angle = from.Angle
 	to.DiamondSideLenght = from.DiamondSideLenght
-	to.IsHorizontalAxisDisplayed = from.IsHorizontalAxisDisplayed
-	to.AxisHandleBorderLength = from.AxisHandleBorderLength
-	to.OriginX = from.OriginX
-	to.OriginY = from.OriginY
-	to.HorizontalAxis_Length = from.HorizontalAxis_Length
-	to.VerticalAxis_Length = from.VerticalAxis_Length
-	to.Axis_StrokeWidth = from.Axis_StrokeWidth
 }
 
 type Rhombus_WOP struct {
