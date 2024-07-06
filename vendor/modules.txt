@@ -76,11 +76,14 @@ github.com/fullstack-lang/gongtable/go/orm
 github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects
 # github.com/fullstack-lang/gongtree v0.0.0-20240508082129-b45cc316a35b
 ## explicit; go 1.21.0
+github.com/fullstack-lang/gongtree/go
 github.com/fullstack-lang/gongtree/go/buttons
 github.com/fullstack-lang/gongtree/go/controllers
 github.com/fullstack-lang/gongtree/go/fullstack
 github.com/fullstack-lang/gongtree/go/models
 github.com/fullstack-lang/gongtree/go/orm
+github.com/fullstack-lang/gongtree/go/probe
+github.com/fullstack-lang/gongtree/go/stack
 github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects
 # github.com/fullstack-lang/maticons v0.0.0-20230823061653-70c364fbdd00
 ## explicit; go 1.21.0

@@ -9,7 +9,9 @@ const (
 	// we have three application stacks. All have the same name
 	Phylotaxy StacksNames = "phylotaxymusic"
 
-	GongsvgStackName   StacksNames = "gongsvg"
+	GongsvgStackName StacksNames = "gongsvg"
+	SidebarTree      StacksNames = "sidebar tree"
+
 	GongtreeStackName  StacksNames = "gongtree"
 	GongtableStackName StacksNames = "gongtable"
 	GongsimStackName   StacksNames = "gongsim"

@@ -1,0 +1,75 @@
+// generated code - do not edit
+package probe
+
+import (
+	gongtable "github.com/fullstack-lang/gongtable/go/models"
+
+	"github.com/fullstack-lang/gongtree/go/models"
+)
+
+func FillUpFormFromGongstruct[T models.Gongstruct](instance *T, probe *Probe) {
+	formStage := probe.formStage
+	formStage.Reset()
+	formStage.Commit()
+
+	FillUpNamedFormFromGongstruct[T](instance, probe, formStage, gongtable.FormGroupDefaultName.ToString())
+
+}
+
+func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Probe, formStage *gongtable.StageStruct, formName string) {
+
+	switch instancesTyped := any(instance).(type) {
+	// insertion point
+	case *models.Button:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "Button Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__ButtonFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.Node:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "Node Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__NodeFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SVGIcon:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SVGIcon Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SVGIconFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.Tree:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "Tree Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__TreeFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	default:
+		_ = instancesTyped
+	}
+	formStage.Commit()
+}

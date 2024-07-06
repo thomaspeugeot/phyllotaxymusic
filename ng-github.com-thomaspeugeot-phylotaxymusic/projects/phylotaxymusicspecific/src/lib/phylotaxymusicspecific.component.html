@@ -1,16 +1,27 @@
-<h1></h1>
+<as-split direction="horizontal">
+    <as-split-area [size]="15">
+        <lib-tree [GONG__StackPath]="StacksNames.SidebarTree" [name]="TreeNames.Sidebar"></lib-tree>
+    </as-split-area>
+    <as-split-area [size]="65">
+        <lib-gongsvg-diagramming [GONG__StackPath]="StacksNames.GongsvgStackName">
+        </lib-gongsvg-diagramming>
+    </as-split-area>
+    <as-split-area [size]="20">
+        <h4>Angle</h4>
+        @if (frontRepo) {
+            <mat-slider  min="60.0" max="120.0" step="1" 
+            showTickMarks discrete [displayWith]="formatLabel" 
+            >
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Angle" (input)="input($event)" 
+                >
+            </mat-slider>
+        }
+    </as-split-area>
+</as-split>
 
-@if (frontRepo) {
-    <mat-slider  min="60.0" max="120.0" step="1" 
-    showTickMarks discrete [displayWith]="formatLabel" 
-    >
-        <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Angle" (input)="input($event)" 
-        >
-    </mat-slider>
-}
 
 
 
-<lib-gongsvg-diagramming [GONG__StackPath]="StacksNames.GongsvgStackName">
-</lib-gongsvg-diagramming>
+
+
   

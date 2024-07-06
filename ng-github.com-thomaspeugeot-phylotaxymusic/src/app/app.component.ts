@@ -23,6 +23,7 @@ import { PanelComponent } from '@vendored_components/github.com/fullstack-lang/g
 import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
 
 import * as gongsvg from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvg/src/public-api';
+import * as gongtree from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtree/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -54,9 +55,10 @@ export class AppComponent implements OnInit {
   phylotaxymusic = 'Phylotaxymusic'
   probe = 'Phylotaxymusic Data/Model'
   svg_probe = 'svg probe'
+  tree_probe = "tree probe"
   view = this.phylotaxymusic
 
-  views: string[] = [this.phylotaxymusic, this.probe, this.svg_probe];
+  views: string[] = [this.phylotaxymusic, this.probe, this.svg_probe, this.tree_probe];
 
   scrollStyle = {
     'overflow- x': 'auto',
@@ -70,6 +72,7 @@ export class AppComponent implements OnInit {
 
   StacksNames = phylotaxymusic.StacksNames
   SVGStackType = gongsvg.StackType
+  TreeStackType = gongtree.StackType
 
 
   constructor(

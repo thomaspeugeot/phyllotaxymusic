@@ -7,12 +7,15 @@ import (
 
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
 	phylotaxymusic_svg "github.com/thomaspeugeot/phylotaxymusic/go/svg"
+	phylotaxymusic_tree "github.com/thomaspeugeot/phylotaxymusic/go/tree"
 
 	phylotaxymusic_stack "github.com/thomaspeugeot/phylotaxymusic/go/stack"
 	phylotaxymusic_static "github.com/thomaspeugeot/phylotaxymusic/go/static"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongsvg_stack "github.com/fullstack-lang/gongsvg/go/stack"
+
+	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
 )
 
 var (
@@ -45,6 +48,11 @@ func main() {
 	phylotaxymusicStack.Stage.Checkout()
 
 	gongsvg_stack := gongsvg_stack.NewStack(r, phylotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
+	gongtree_stack := gongtree_stack.NewStack(r, phylotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
+
+	tree := new(phylotaxymusic_tree.Tree)
+	tree.TreeStack = gongtree_stack
+	tree.Generate()
 
 	phylotaxymusic_svg.GenerateSvg(gongsvg_stack.Stage, phylotaxymusicStack.Stage)
 

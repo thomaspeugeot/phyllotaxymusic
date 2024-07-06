@@ -27,3 +27,4 @@ export * from './lib/rhombus.service'
 
 
 export * from './lib/StacksNames'
+export * from './lib/TreeNames'
