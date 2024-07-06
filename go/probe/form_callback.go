@@ -249,6 +249,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.InitialRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "HorizontalAxis":
 			FormDivSelectFieldToField(&(parameter_.HorizontalAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "VerticalAxis":
+			FormDivSelectFieldToField(&(parameter_.VerticalAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 
@@ -367,4 +369,93 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 	}
 
 	fillUpTree(rhombusFormCallback.probe)
+}
+func __gong__New__VerticalAxisFormCallback(
+	verticalaxis *models.VerticalAxis,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (verticalaxisFormCallback *VerticalAxisFormCallback) {
+	verticalaxisFormCallback = new(VerticalAxisFormCallback)
+	verticalaxisFormCallback.probe = probe
+	verticalaxisFormCallback.verticalaxis = verticalaxis
+	verticalaxisFormCallback.formGroup = formGroup
+
+	verticalaxisFormCallback.CreationMode = (verticalaxis == nil)
+
+	return
+}
+
+type VerticalAxisFormCallback struct {
+	verticalaxis *models.VerticalAxis
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
+
+	log.Println("VerticalAxisFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	verticalaxisFormCallback.probe.formStage.Checkout()
+
+	if verticalaxisFormCallback.verticalaxis == nil {
+		verticalaxisFormCallback.verticalaxis = new(models.VerticalAxis).Stage(verticalaxisFormCallback.probe.stageOfInterest)
+	}
+	verticalaxis_ := verticalaxisFormCallback.verticalaxis
+	_ = verticalaxis_
+
+	for _, formDiv := range verticalaxisFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(verticalaxis_.Name), formDiv)
+		case "IsAxisDisplayed":
+			FormDivBasicFieldToField(&(verticalaxis_.IsAxisDisplayed), formDiv)
+		case "AxisHandleBorderLength":
+			FormDivBasicFieldToField(&(verticalaxis_.AxisHandleBorderLength), formDiv)
+		case "OriginX":
+			FormDivBasicFieldToField(&(verticalaxis_.OriginX), formDiv)
+		case "OriginY":
+			FormDivBasicFieldToField(&(verticalaxis_.OriginY), formDiv)
+		case "Axis_Length":
+			FormDivBasicFieldToField(&(verticalaxis_.Axis_Length), formDiv)
+		case "Axis_StrokeWidth":
+			FormDivBasicFieldToField(&(verticalaxis_.Axis_StrokeWidth), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if verticalaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		verticalaxis_.Unstage(verticalaxisFormCallback.probe.stageOfInterest)
+	}
+
+	verticalaxisFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.VerticalAxis](
+		verticalaxisFormCallback.probe,
+	)
+	verticalaxisFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if verticalaxisFormCallback.CreationMode || verticalaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		verticalaxisFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(verticalaxisFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__VerticalAxisFormCallback(
+			nil,
+			verticalaxisFormCallback.probe,
+			newFormGroup,
+		)
+		verticalaxis := new(models.VerticalAxis)
+		FillUpForm(verticalaxis, newFormGroup, verticalaxisFormCallback.probe)
+		verticalaxisFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(verticalaxisFormCallback.probe)
 }

@@ -64,6 +64,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "Rhombus" {
 		fillUpTable[models.Rhombus](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "VerticalAxis" {
+		fillUpTable[models.VerticalAxis](nodeImplGongstruct.probe)
+	}
 
 	// set color for node and reset all other nodes color
 	for node := range *gongtree_models.GetGongstructInstancesSet[gongtree_models.Node](gongtreeStage) {

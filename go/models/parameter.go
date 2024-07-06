@@ -18,6 +18,7 @@ type Parameter struct {
 
 	// for drawing purpose
 	HorizontalAxis *HorizontalAxis
+	VerticalAxis   *VerticalAxis
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Parameter) {

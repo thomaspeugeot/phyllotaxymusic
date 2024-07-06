@@ -85,3 +85,25 @@ func (from *Rhombus) CopyBasicFields(to *Rhombus) {
 	to.InsideAngle = from.InsideAngle
 }
 
+type VerticalAxis_WOP struct {
+	// insertion point
+	Name string
+	IsAxisDisplayed bool
+	AxisHandleBorderLength float64
+	OriginX float64
+	OriginY float64
+	Axis_Length float64
+	Axis_StrokeWidth float64
+}
+
+func (from *VerticalAxis) CopyBasicFields(to *VerticalAxis) {
+	// insertion point
+	to.Name = from.Name
+	to.IsAxisDisplayed = from.IsAxisDisplayed
+	to.AxisHandleBorderLength = from.AxisHandleBorderLength
+	to.OriginX = from.OriginX
+	to.OriginY = from.OriginY
+	to.Axis_Length = from.Axis_Length
+	to.Axis_StrokeWidth = from.Axis_StrokeWidth
+}
+

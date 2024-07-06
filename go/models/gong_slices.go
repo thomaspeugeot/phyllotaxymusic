@@ -45,6 +45,9 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 	case *Rhombus:
 		// insertion point per field
 
+	case *VerticalAxis:
+		// insertion point per field
+
 	default:
 		_ = owningInstanceInfered // to avoid "declared and not used" error if no named struct has slices
 	}
@@ -64,6 +67,9 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	// insertion point per field
 
 	// Compute reverse map for named struct Rhombus
+	// insertion point per field
+
+	// Compute reverse map for named struct VerticalAxis
 	// insertion point per field
 
 }

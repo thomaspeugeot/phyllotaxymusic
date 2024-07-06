@@ -54,6 +54,10 @@ type ParameterPointersEncoding struct {
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
+
+	// field VerticalAxis is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	VerticalAxisID sql.NullInt64
 }
 
 // ParameterDB describes a parameter in the database
@@ -267,6 +271,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.HorizontalAxisID.Valid = true
 		}
 
+		// commit pointer value parameter.VerticalAxis translates to updating the parameter.VerticalAxisID
+		parameterDB.VerticalAxisID.Valid = true // allow for a 0 value (nil association)
+		if parameter.VerticalAxis != nil {
+			if VerticalAxisId, ok := backRepo.BackRepoVerticalAxis.Map_VerticalAxisPtr_VerticalAxisDBID[parameter.VerticalAxis]; ok {
+				parameterDB.VerticalAxisID.Int64 = int64(VerticalAxisId)
+				parameterDB.VerticalAxisID.Valid = true
+			}
+		} else {
+			parameterDB.VerticalAxisID.Int64 = 0
+			parameterDB.VerticalAxisID.Valid = true
+		}
+
 		query := backRepoParameter.db.Save(&parameterDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -389,6 +405,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.HorizontalAxis = nil
 	if parameterDB.HorizontalAxisID.Int64 != 0 {
 		parameter.HorizontalAxis = backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisPtr[uint(parameterDB.HorizontalAxisID.Int64)]
+	}
+	// VerticalAxis field
+	parameter.VerticalAxis = nil
+	if parameterDB.VerticalAxisID.Int64 != 0 {
+		parameter.VerticalAxis = backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisPtr[uint(parameterDB.VerticalAxisID.Int64)]
 	}
 	return
 }
@@ -676,6 +697,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.HorizontalAxisID.Int64 != 0 {
 			parameterDB.HorizontalAxisID.Int64 = int64(BackRepoHorizontalAxisid_atBckpTime_newID[uint(parameterDB.HorizontalAxisID.Int64)])
 			parameterDB.HorizontalAxisID.Valid = true
+		}
+
+		// reindexing VerticalAxis field
+		if parameterDB.VerticalAxisID.Int64 != 0 {
+			parameterDB.VerticalAxisID.Int64 = int64(BackRepoVerticalAxisid_atBckpTime_newID[uint(parameterDB.VerticalAxisID.Int64)])
+			parameterDB.VerticalAxisID.Valid = true
 		}
 
 		// update databse with new index encoding

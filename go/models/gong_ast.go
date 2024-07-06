@@ -318,6 +318,7 @@ var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
 var __gong__map_Line = make(map[string]*Line)
 var __gong__map_Parameter = make(map[string]*Parameter)
 var __gong__map_Rhombus = make(map[string]*Rhombus)
+var __gong__map_VerticalAxis = make(map[string]*VerticalAxis)
 
 // Parser needs to be configured for having the [Name1.Name2] or [pkg.Name1] ...
 // to be recognized as a proper identifier.
@@ -506,6 +507,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceRhombus := (&Rhombus{Name: instanceName}).Stage(stage)
 										instance = any(instanceRhombus)
 										__gong__map_Rhombus[identifier] = instanceRhombus
+									case "VerticalAxis":
+										instanceVerticalAxis := (&VerticalAxis{Name: instanceName}).Stage(stage)
+										instance = any(instanceVerticalAxis)
+										__gong__map_VerticalAxis[identifier] = instanceVerticalAxis
 									}
 									__gong__map_Indentifiers_gongstructName[identifier] = gongstructName
 									return
@@ -558,6 +563,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "VerticalAxis":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						}
 					}
 				}
@@ -596,6 +605,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						// insertion point for slice of pointers assign code
 						}
 					case "Rhombus":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "VerticalAxis":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -806,6 +819,49 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_Rhombus[identifier].InsideAngle = exprSign * fielValue
 				}
+			case "VerticalAxis":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_VerticalAxis[identifier].Name = fielValue
+				case "AxisHandleBorderLength":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_VerticalAxis[identifier].AxisHandleBorderLength = exprSign * fielValue
+				case "OriginX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_VerticalAxis[identifier].OriginX = exprSign * fielValue
+				case "OriginY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_VerticalAxis[identifier].OriginY = exprSign * fielValue
+				case "Axis_Length":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_VerticalAxis[identifier].Axis_Length = exprSign * fielValue
+				case "Axis_StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_VerticalAxis[identifier].Axis_StrokeWidth = exprSign * fielValue
+				}
 			}
 		case *ast.Ident:
 			// assignment to boolean field ?
@@ -844,10 +900,24 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]
+				case "VerticalAxis":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].VerticalAxis = __gong__map_VerticalAxis[targetIdentifier]
 				}
 			case "Rhombus":
 				switch fieldName {
 				// insertion point for field dependant code
+				}
+			case "VerticalAxis":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsAxisDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_VerticalAxis[identifier].IsAxisDisplayed = fielValue
 				}
 			}
 		case *ast.SelectorExpr:
@@ -890,6 +960,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "Rhombus":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "VerticalAxis":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

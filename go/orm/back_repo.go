@@ -30,6 +30,8 @@ type BackRepoStruct struct {
 
 	BackRepoRhombus BackRepoRhombusStruct
 
+	BackRepoVerticalAxis BackRepoVerticalAxisStruct
+
 	CommitFromBackNb uint // records commit increments when performed by the back
 
 	PushFromFrontNb uint // records commit increments when performed by the front
@@ -74,6 +76,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		&LineDB{},
 		&ParameterDB{},
 		&RhombusDB{},
+		&VerticalAxisDB{},
 	)
 
 	if err != nil {
@@ -112,6 +115,14 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		Map_RhombusDBID_RhombusPtr: make(map[uint]*models.Rhombus, 0),
 		Map_RhombusDBID_RhombusDB:  make(map[uint]*RhombusDB, 0),
 		Map_RhombusPtr_RhombusDBID: make(map[*models.Rhombus]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoVerticalAxis = BackRepoVerticalAxisStruct{
+		Map_VerticalAxisDBID_VerticalAxisPtr: make(map[uint]*models.VerticalAxis, 0),
+		Map_VerticalAxisDBID_VerticalAxisDB:  make(map[uint]*VerticalAxisDB, 0),
+		Map_VerticalAxisPtr_VerticalAxisDBID: make(map[*models.VerticalAxis]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -168,12 +179,14 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoLine.CommitPhaseOne(stage)
 	backRepo.BackRepoParameter.CommitPhaseOne(stage)
 	backRepo.BackRepoRhombus.CommitPhaseOne(stage)
+	backRepo.BackRepoVerticalAxis.CommitPhaseOne(stage)
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoHorizontalAxis.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoLine.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoParameter.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoRhombus.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoVerticalAxis.CommitPhaseTwo(backRepo)
 
 	backRepo.IncrementCommitFromBackNb()
 }
@@ -185,12 +198,14 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoLine.CheckoutPhaseOne()
 	backRepo.BackRepoParameter.CheckoutPhaseOne()
 	backRepo.BackRepoRhombus.CheckoutPhaseOne()
+	backRepo.BackRepoVerticalAxis.CheckoutPhaseOne()
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoLine.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoParameter.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoRhombus.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoVerticalAxis.CheckoutPhaseTwo(backRepo)
 }
 
 // Backup the BackRepoStruct
@@ -202,6 +217,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	backRepo.BackRepoLine.Backup(dirPath)
 	backRepo.BackRepoParameter.Backup(dirPath)
 	backRepo.BackRepoRhombus.Backup(dirPath)
+	backRepo.BackRepoVerticalAxis.Backup(dirPath)
 }
 
 // Backup in XL the BackRepoStruct
@@ -216,6 +232,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	backRepo.BackRepoLine.BackupXL(file)
 	backRepo.BackRepoParameter.BackupXL(file)
 	backRepo.BackRepoRhombus.BackupXL(file)
+	backRepo.BackRepoVerticalAxis.BackupXL(file)
 
 	var b bytes.Buffer
 	writer := bufio.NewWriter(&b)
@@ -244,6 +261,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoLine.RestorePhaseOne(dirPath)
 	backRepo.BackRepoParameter.RestorePhaseOne(dirPath)
 	backRepo.BackRepoRhombus.RestorePhaseOne(dirPath)
+	backRepo.BackRepoVerticalAxis.RestorePhaseOne(dirPath)
 
 	//
 	// restauration second phase (reindex pointers with the new ID)
@@ -254,6 +272,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoLine.RestorePhaseTwo()
 	backRepo.BackRepoParameter.RestorePhaseTwo()
 	backRepo.BackRepoRhombus.RestorePhaseTwo()
+	backRepo.BackRepoVerticalAxis.RestorePhaseTwo()
 
 	backRepo.stage.Checkout()
 }
@@ -285,6 +304,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoLine.RestoreXLPhaseOne(file)
 	backRepo.BackRepoParameter.RestoreXLPhaseOne(file)
 	backRepo.BackRepoRhombus.RestoreXLPhaseOne(file)
+	backRepo.BackRepoVerticalAxis.RestoreXLPhaseOne(file)
 
 	// commit the restored stage
 	backRepo.stage.Commit()
