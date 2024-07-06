@@ -63,18 +63,16 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(horizontalaxis_.Name), formDiv)
-		case "IsHorizontalAxisDisplayed":
-			FormDivBasicFieldToField(&(horizontalaxis_.IsHorizontalAxisDisplayed), formDiv)
+		case "IsAxisDisplayed":
+			FormDivBasicFieldToField(&(horizontalaxis_.IsAxisDisplayed), formDiv)
 		case "AxisHandleBorderLength":
 			FormDivBasicFieldToField(&(horizontalaxis_.AxisHandleBorderLength), formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(horizontalaxis_.OriginX), formDiv)
 		case "OriginY":
 			FormDivBasicFieldToField(&(horizontalaxis_.OriginY), formDiv)
-		case "HorizontalAxis_Length":
-			FormDivBasicFieldToField(&(horizontalaxis_.HorizontalAxis_Length), formDiv)
-		case "VerticalAxis_Length":
-			FormDivBasicFieldToField(&(horizontalaxis_.VerticalAxis_Length), formDiv)
+		case "Axis_Length":
+			FormDivBasicFieldToField(&(horizontalaxis_.Axis_Length), formDiv)
 		case "Axis_StrokeWidth":
 			FormDivBasicFieldToField(&(horizontalaxis_.Axis_StrokeWidth), formDiv)
 		}

@@ -33,12 +33,11 @@ func _(stage *models.StageStruct) {
 	// Setup of values
 
 	__HorizontalAxis__000000_Initial.Name = `Initial`
-	__HorizontalAxis__000000_Initial.IsHorizontalAxisDisplayed = true
+	__HorizontalAxis__000000_Initial.IsAxisDisplayed = true
 	__HorizontalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Initial.OriginX = 100.000000
 	__HorizontalAxis__000000_Initial.OriginY = 600.000000
-	__HorizontalAxis__000000_Initial.HorizontalAxis_Length = 600.000000
-	__HorizontalAxis__000000_Initial.VerticalAxis_Length = 550.000000
+	__HorizontalAxis__000000_Initial.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Initial.Axis_StrokeWidth = 1.000000
 
 	__Parameter__000000_Reference.Name = `Reference`

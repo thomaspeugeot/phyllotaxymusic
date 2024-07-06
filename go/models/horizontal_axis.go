@@ -9,12 +9,11 @@ import (
 type HorizontalAxis struct {
 	Name string
 
-	IsHorizontalAxisDisplayed bool
-	AxisHandleBorderLength    float64
-	OriginX                   float64
-	OriginY                   float64
-	HorizontalAxis_Length     float64
-	VerticalAxis_Length       float64
+	IsAxisDisplayed        bool
+	AxisHandleBorderLength float64
+	OriginX                float64
+	OriginY                float64
+	Axis_Length            float64
 
 	Axis_StrokeWidth float64
 }
@@ -24,12 +23,12 @@ func (horizontalAxis *HorizontalAxis) OnAfterUpdate(stage *models.StageStruct, s
 	log.Println("Node clicked", frontNode.GetName())
 
 	if frontNode.IsChecked && !stagedNode.IsChecked {
-		horizontalAxis.IsHorizontalAxisDisplayed = true
+		horizontalAxis.IsAxisDisplayed = true
 		stagedNode.IsChecked = frontNode.IsChecked
 		GeneratorSingloton.Generate()
 	}
 	if !frontNode.IsChecked && stagedNode.IsChecked {
-		horizontalAxis.IsHorizontalAxisDisplayed = false
+		horizontalAxis.IsAxisDisplayed = false
 		stagedNode.IsChecked = frontNode.IsChecked
 		GeneratorSingloton.Generate()
 	}

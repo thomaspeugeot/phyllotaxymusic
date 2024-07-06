@@ -62,9 +62,9 @@ type HorizontalAxisDB struct {
 	// Declation for basic field horizontalaxisDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field horizontalaxisDB.IsHorizontalAxisDisplayed
+	// Declation for basic field horizontalaxisDB.IsAxisDisplayed
 	// provide the sql storage for the boolan
-	IsHorizontalAxisDisplayed_Data sql.NullBool
+	IsAxisDisplayed_Data sql.NullBool
 
 	// Declation for basic field horizontalaxisDB.AxisHandleBorderLength
 	AxisHandleBorderLength_Data sql.NullFloat64
@@ -75,11 +75,8 @@ type HorizontalAxisDB struct {
 	// Declation for basic field horizontalaxisDB.OriginY
 	OriginY_Data sql.NullFloat64
 
-	// Declation for basic field horizontalaxisDB.HorizontalAxis_Length
-	HorizontalAxis_Length_Data sql.NullFloat64
-
-	// Declation for basic field horizontalaxisDB.VerticalAxis_Length
-	VerticalAxis_Length_Data sql.NullFloat64
+	// Declation for basic field horizontalaxisDB.Axis_Length
+	Axis_Length_Data sql.NullFloat64
 
 	// Declation for basic field horizontalaxisDB.Axis_StrokeWidth
 	Axis_StrokeWidth_Data sql.NullFloat64
@@ -108,7 +105,7 @@ type HorizontalAxisWOP struct {
 
 	Name string `xlsx:"1"`
 
-	IsHorizontalAxisDisplayed bool `xlsx:"2"`
+	IsAxisDisplayed bool `xlsx:"2"`
 
 	AxisHandleBorderLength float64 `xlsx:"3"`
 
@@ -116,11 +113,9 @@ type HorizontalAxisWOP struct {
 
 	OriginY float64 `xlsx:"5"`
 
-	HorizontalAxis_Length float64 `xlsx:"6"`
+	Axis_Length float64 `xlsx:"6"`
 
-	VerticalAxis_Length float64 `xlsx:"7"`
-
-	Axis_StrokeWidth float64 `xlsx:"8"`
+	Axis_StrokeWidth float64 `xlsx:"7"`
 	// insertion for WOP pointer fields
 }
 
@@ -128,12 +123,11 @@ var HorizontalAxis_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"IsHorizontalAxisDisplayed",
+	"IsAxisDisplayed",
 	"AxisHandleBorderLength",
 	"OriginX",
 	"OriginY",
-	"HorizontalAxis_Length",
-	"VerticalAxis_Length",
+	"Axis_Length",
 	"Axis_StrokeWidth",
 }
 
@@ -404,8 +398,8 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxis(hori
 	horizontalaxisDB.Name_Data.String = horizontalaxis.Name
 	horizontalaxisDB.Name_Data.Valid = true
 
-	horizontalaxisDB.IsHorizontalAxisDisplayed_Data.Bool = horizontalaxis.IsHorizontalAxisDisplayed
-	horizontalaxisDB.IsHorizontalAxisDisplayed_Data.Valid = true
+	horizontalaxisDB.IsAxisDisplayed_Data.Bool = horizontalaxis.IsAxisDisplayed
+	horizontalaxisDB.IsAxisDisplayed_Data.Valid = true
 
 	horizontalaxisDB.AxisHandleBorderLength_Data.Float64 = horizontalaxis.AxisHandleBorderLength
 	horizontalaxisDB.AxisHandleBorderLength_Data.Valid = true
@@ -416,11 +410,8 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxis(hori
 	horizontalaxisDB.OriginY_Data.Float64 = horizontalaxis.OriginY
 	horizontalaxisDB.OriginY_Data.Valid = true
 
-	horizontalaxisDB.HorizontalAxis_Length_Data.Float64 = horizontalaxis.HorizontalAxis_Length
-	horizontalaxisDB.HorizontalAxis_Length_Data.Valid = true
-
-	horizontalaxisDB.VerticalAxis_Length_Data.Float64 = horizontalaxis.VerticalAxis_Length
-	horizontalaxisDB.VerticalAxis_Length_Data.Valid = true
+	horizontalaxisDB.Axis_Length_Data.Float64 = horizontalaxis.Axis_Length
+	horizontalaxisDB.Axis_Length_Data.Valid = true
 
 	horizontalaxisDB.Axis_StrokeWidth_Data.Float64 = horizontalaxis.Axis_StrokeWidth
 	horizontalaxisDB.Axis_StrokeWidth_Data.Valid = true
@@ -433,8 +424,8 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxis_WOP(
 	horizontalaxisDB.Name_Data.String = horizontalaxis.Name
 	horizontalaxisDB.Name_Data.Valid = true
 
-	horizontalaxisDB.IsHorizontalAxisDisplayed_Data.Bool = horizontalaxis.IsHorizontalAxisDisplayed
-	horizontalaxisDB.IsHorizontalAxisDisplayed_Data.Valid = true
+	horizontalaxisDB.IsAxisDisplayed_Data.Bool = horizontalaxis.IsAxisDisplayed
+	horizontalaxisDB.IsAxisDisplayed_Data.Valid = true
 
 	horizontalaxisDB.AxisHandleBorderLength_Data.Float64 = horizontalaxis.AxisHandleBorderLength
 	horizontalaxisDB.AxisHandleBorderLength_Data.Valid = true
@@ -445,11 +436,8 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxis_WOP(
 	horizontalaxisDB.OriginY_Data.Float64 = horizontalaxis.OriginY
 	horizontalaxisDB.OriginY_Data.Valid = true
 
-	horizontalaxisDB.HorizontalAxis_Length_Data.Float64 = horizontalaxis.HorizontalAxis_Length
-	horizontalaxisDB.HorizontalAxis_Length_Data.Valid = true
-
-	horizontalaxisDB.VerticalAxis_Length_Data.Float64 = horizontalaxis.VerticalAxis_Length
-	horizontalaxisDB.VerticalAxis_Length_Data.Valid = true
+	horizontalaxisDB.Axis_Length_Data.Float64 = horizontalaxis.Axis_Length
+	horizontalaxisDB.Axis_Length_Data.Valid = true
 
 	horizontalaxisDB.Axis_StrokeWidth_Data.Float64 = horizontalaxis.Axis_StrokeWidth
 	horizontalaxisDB.Axis_StrokeWidth_Data.Valid = true
@@ -462,8 +450,8 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxisWOP(h
 	horizontalaxisDB.Name_Data.String = horizontalaxis.Name
 	horizontalaxisDB.Name_Data.Valid = true
 
-	horizontalaxisDB.IsHorizontalAxisDisplayed_Data.Bool = horizontalaxis.IsHorizontalAxisDisplayed
-	horizontalaxisDB.IsHorizontalAxisDisplayed_Data.Valid = true
+	horizontalaxisDB.IsAxisDisplayed_Data.Bool = horizontalaxis.IsAxisDisplayed
+	horizontalaxisDB.IsAxisDisplayed_Data.Valid = true
 
 	horizontalaxisDB.AxisHandleBorderLength_Data.Float64 = horizontalaxis.AxisHandleBorderLength
 	horizontalaxisDB.AxisHandleBorderLength_Data.Valid = true
@@ -474,11 +462,8 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxisWOP(h
 	horizontalaxisDB.OriginY_Data.Float64 = horizontalaxis.OriginY
 	horizontalaxisDB.OriginY_Data.Valid = true
 
-	horizontalaxisDB.HorizontalAxis_Length_Data.Float64 = horizontalaxis.HorizontalAxis_Length
-	horizontalaxisDB.HorizontalAxis_Length_Data.Valid = true
-
-	horizontalaxisDB.VerticalAxis_Length_Data.Float64 = horizontalaxis.VerticalAxis_Length
-	horizontalaxisDB.VerticalAxis_Length_Data.Valid = true
+	horizontalaxisDB.Axis_Length_Data.Float64 = horizontalaxis.Axis_Length
+	horizontalaxisDB.Axis_Length_Data.Valid = true
 
 	horizontalaxisDB.Axis_StrokeWidth_Data.Float64 = horizontalaxis.Axis_StrokeWidth
 	horizontalaxisDB.Axis_StrokeWidth_Data.Valid = true
@@ -488,12 +473,11 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxisWOP(h
 func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxis(horizontalaxis *models.HorizontalAxis) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	horizontalaxis.Name = horizontalaxisDB.Name_Data.String
-	horizontalaxis.IsHorizontalAxisDisplayed = horizontalaxisDB.IsHorizontalAxisDisplayed_Data.Bool
+	horizontalaxis.IsAxisDisplayed = horizontalaxisDB.IsAxisDisplayed_Data.Bool
 	horizontalaxis.AxisHandleBorderLength = horizontalaxisDB.AxisHandleBorderLength_Data.Float64
 	horizontalaxis.OriginX = horizontalaxisDB.OriginX_Data.Float64
 	horizontalaxis.OriginY = horizontalaxisDB.OriginY_Data.Float64
-	horizontalaxis.HorizontalAxis_Length = horizontalaxisDB.HorizontalAxis_Length_Data.Float64
-	horizontalaxis.VerticalAxis_Length = horizontalaxisDB.VerticalAxis_Length_Data.Float64
+	horizontalaxis.Axis_Length = horizontalaxisDB.Axis_Length_Data.Float64
 	horizontalaxis.Axis_StrokeWidth = horizontalaxisDB.Axis_StrokeWidth_Data.Float64
 }
 
@@ -501,12 +485,11 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxis(horizo
 func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxis_WOP(horizontalaxis *models.HorizontalAxis_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	horizontalaxis.Name = horizontalaxisDB.Name_Data.String
-	horizontalaxis.IsHorizontalAxisDisplayed = horizontalaxisDB.IsHorizontalAxisDisplayed_Data.Bool
+	horizontalaxis.IsAxisDisplayed = horizontalaxisDB.IsAxisDisplayed_Data.Bool
 	horizontalaxis.AxisHandleBorderLength = horizontalaxisDB.AxisHandleBorderLength_Data.Float64
 	horizontalaxis.OriginX = horizontalaxisDB.OriginX_Data.Float64
 	horizontalaxis.OriginY = horizontalaxisDB.OriginY_Data.Float64
-	horizontalaxis.HorizontalAxis_Length = horizontalaxisDB.HorizontalAxis_Length_Data.Float64
-	horizontalaxis.VerticalAxis_Length = horizontalaxisDB.VerticalAxis_Length_Data.Float64
+	horizontalaxis.Axis_Length = horizontalaxisDB.Axis_Length_Data.Float64
 	horizontalaxis.Axis_StrokeWidth = horizontalaxisDB.Axis_StrokeWidth_Data.Float64
 }
 
@@ -515,12 +498,11 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxisWOP(hor
 	horizontalaxis.ID = int(horizontalaxisDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	horizontalaxis.Name = horizontalaxisDB.Name_Data.String
-	horizontalaxis.IsHorizontalAxisDisplayed = horizontalaxisDB.IsHorizontalAxisDisplayed_Data.Bool
+	horizontalaxis.IsAxisDisplayed = horizontalaxisDB.IsAxisDisplayed_Data.Bool
 	horizontalaxis.AxisHandleBorderLength = horizontalaxisDB.AxisHandleBorderLength_Data.Float64
 	horizontalaxis.OriginX = horizontalaxisDB.OriginX_Data.Float64
 	horizontalaxis.OriginY = horizontalaxisDB.OriginY_Data.Float64
-	horizontalaxis.HorizontalAxis_Length = horizontalaxisDB.HorizontalAxis_Length_Data.Float64
-	horizontalaxis.VerticalAxis_Length = horizontalaxisDB.VerticalAxis_Length_Data.Float64
+	horizontalaxis.Axis_Length = horizontalaxisDB.Axis_Length_Data.Float64
 	horizontalaxis.Axis_StrokeWidth = horizontalaxisDB.Axis_StrokeWidth_Data.Float64
 }
 

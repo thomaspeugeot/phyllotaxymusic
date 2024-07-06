@@ -25,7 +25,7 @@ func drawHorizontalAxis(
 	horizontalAxisRightHandle.Name = "Horizontal axis rigth handle"
 	axisLayer.Rects = append(axisLayer.Rects, horizontalAxisRightHandle)
 
-	horizontalAxisRightHandle.X = horizontalAxis.OriginX + horizontalAxis.HorizontalAxis_Length
+	horizontalAxisRightHandle.X = horizontalAxis.OriginX + horizontalAxis.Axis_Length
 	horizontalAxisRightHandle.Y = horizontalAxis.OriginY - horizontalAxis.AxisHandleBorderLength/2.0
 	horizontalAxisRightHandle.Width = horizontalAxis.AxisHandleBorderLength
 	horizontalAxisRightHandle.Height = horizontalAxis.AxisHandleBorderLength

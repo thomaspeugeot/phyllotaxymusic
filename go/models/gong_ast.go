@@ -676,20 +676,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_HorizontalAxis[identifier].OriginY = exprSign * fielValue
-				case "HorizontalAxis_Length":
+				case "Axis_Length":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_HorizontalAxis[identifier].HorizontalAxis_Length = exprSign * fielValue
-				case "VerticalAxis_Length":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_HorizontalAxis[identifier].VerticalAxis_Length = exprSign * fielValue
+					__gong__map_HorizontalAxis[identifier].Axis_Length = exprSign * fielValue
 				case "Axis_StrokeWidth":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -830,13 +823,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			case "HorizontalAxis":
 				switch fieldName {
 				// insertion point for field dependant code
-				case "IsHorizontalAxisDisplayed":
+				case "IsAxisDisplayed":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_HorizontalAxis[identifier].IsHorizontalAxisDisplayed = fielValue
+					__gong__map_HorizontalAxis[identifier].IsAxisDisplayed = fielValue
 				}
 			case "Line":
 				switch fieldName {
