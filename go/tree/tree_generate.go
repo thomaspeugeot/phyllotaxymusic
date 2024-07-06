@@ -15,8 +15,9 @@ func (tree *Tree) Generate(parameter *phylotaxymusic_models.Parameter) {
 
 	// firstNode.IsWithPreceedingIcon = true
 	// firstNode.PreceedingIcon = string(maticons.BUTTON_library_books)
-	tree.addNode("Horizontal Axis", parameter.HorizontalAxis, parameter.HorizontalAxis.IsAxisDisplayed)
-	tree.addNode("Vertical Axis", parameter.VerticalAxis, parameter.VerticalAxis.IsAxisDisplayed)
+	tree.addNode("Horizontal Axis", parameter.HorizontalAxis, parameter.HorizontalAxis.IsDisplayed)
+	tree.addNode("Vertical Axis", parameter.VerticalAxis, parameter.VerticalAxis.IsDisplayed)
+	tree.addNode("Initial Rhombus", parameter.InitialRhombus, parameter.InitialRhombus.IsDisplayed)
 
 	tree.TreeStack.Stage.Commit()
 }
@@ -25,16 +26,16 @@ func (tree *Tree) addNode(
 	name string,
 	impl gongtree_models.NodeImplInterface,
 	isChecked bool) {
-	firstNode := new(gongtree_models.Node).Stage(tree.TreeStack.Stage)
-	firstNode.Name = name
+	node := new(gongtree_models.Node).Stage(tree.TreeStack.Stage)
+	node.Name = name
 
-	firstNode.IsNodeClickable = true
-	firstNode.IsCheckboxDisabled = false
+	node.IsNodeClickable = true
+	node.IsCheckboxDisabled = false
 
-	firstNode.HasCheckboxButton = true
-	firstNode.IsChecked = isChecked
+	node.HasCheckboxButton = true
+	node.IsChecked = isChecked
 
-	firstNode.Impl = impl
+	node.Impl = impl
 
-	tree.NodeTree.RootNodes = append(tree.NodeTree.RootNodes, firstNode)
+	tree.NodeTree.RootNodes = append(tree.NodeTree.RootNodes, node)
 }

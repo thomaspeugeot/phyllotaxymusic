@@ -907,13 +907,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			case "HorizontalAxis":
 				switch fieldName {
 				// insertion point for field dependant code
-				case "IsAxisDisplayed":
+				case "IsDisplayed":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_HorizontalAxis[identifier].IsAxisDisplayed = fielValue
+					__gong__map_HorizontalAxis[identifier].IsDisplayed = fielValue
 				}
 			case "Line":
 				switch fieldName {
@@ -956,13 +956,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			case "VerticalAxis":
 				switch fieldName {
 				// insertion point for field dependant code
-				case "IsAxisDisplayed":
+				case "IsDisplayed":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_VerticalAxis[identifier].IsAxisDisplayed = fielValue
+					__gong__map_VerticalAxis[identifier].IsDisplayed = fielValue
 				}
 			}
 		case *ast.SelectorExpr:

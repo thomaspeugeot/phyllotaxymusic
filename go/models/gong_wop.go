@@ -10,7 +10,7 @@ var __GONG_time_The_fool_doth_think_he_is_wise__ = time.Hour
 type HorizontalAxis_WOP struct {
 	// insertion point
 	Name string
-	IsAxisDisplayed bool
+	IsDisplayed bool
 	AxisHandleBorderLength float64
 	Axis_Length float64
 	StrokeWidth float64
@@ -19,7 +19,7 @@ type HorizontalAxis_WOP struct {
 func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
 	// insertion point
 	to.Name = from.Name
-	to.IsAxisDisplayed = from.IsAxisDisplayed
+	to.IsDisplayed = from.IsDisplayed
 	to.AxisHandleBorderLength = from.AxisHandleBorderLength
 	to.Axis_Length = from.Axis_Length
 	to.StrokeWidth = from.StrokeWidth
@@ -106,7 +106,7 @@ func (from *RhombusGrid) CopyBasicFields(to *RhombusGrid) {
 type VerticalAxis_WOP struct {
 	// insertion point
 	Name string
-	IsAxisDisplayed bool
+	IsDisplayed bool
 	AxisHandleBorderLength float64
 	Axis_Length float64
 	StrokeWidth float64
@@ -115,7 +115,7 @@ type VerticalAxis_WOP struct {
 func (from *VerticalAxis) CopyBasicFields(to *VerticalAxis) {
 	// insertion point
 	to.Name = from.Name
-	to.IsAxisDisplayed = from.IsAxisDisplayed
+	to.IsDisplayed = from.IsDisplayed
 	to.AxisHandleBorderLength = from.AxisHandleBorderLength
 	to.Axis_Length = from.Axis_Length
 	to.StrokeWidth = from.StrokeWidth

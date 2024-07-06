@@ -62,9 +62,9 @@ type VerticalAxisDB struct {
 	// Declation for basic field verticalaxisDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field verticalaxisDB.IsAxisDisplayed
+	// Declation for basic field verticalaxisDB.IsDisplayed
 	// provide the sql storage for the boolan
-	IsAxisDisplayed_Data sql.NullBool
+	IsDisplayed_Data sql.NullBool
 
 	// Declation for basic field verticalaxisDB.AxisHandleBorderLength
 	AxisHandleBorderLength_Data sql.NullFloat64
@@ -99,7 +99,7 @@ type VerticalAxisWOP struct {
 
 	Name string `xlsx:"1"`
 
-	IsAxisDisplayed bool `xlsx:"2"`
+	IsDisplayed bool `xlsx:"2"`
 
 	AxisHandleBorderLength float64 `xlsx:"3"`
 
@@ -113,7 +113,7 @@ var VerticalAxis_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"IsAxisDisplayed",
+	"IsDisplayed",
 	"AxisHandleBorderLength",
 	"Axis_Length",
 	"StrokeWidth",
@@ -386,8 +386,8 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxis(verticalax
 	verticalaxisDB.Name_Data.String = verticalaxis.Name
 	verticalaxisDB.Name_Data.Valid = true
 
-	verticalaxisDB.IsAxisDisplayed_Data.Bool = verticalaxis.IsAxisDisplayed
-	verticalaxisDB.IsAxisDisplayed_Data.Valid = true
+	verticalaxisDB.IsDisplayed_Data.Bool = verticalaxis.IsDisplayed
+	verticalaxisDB.IsDisplayed_Data.Valid = true
 
 	verticalaxisDB.AxisHandleBorderLength_Data.Float64 = verticalaxis.AxisHandleBorderLength
 	verticalaxisDB.AxisHandleBorderLength_Data.Valid = true
@@ -406,8 +406,8 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxis_WOP(vertic
 	verticalaxisDB.Name_Data.String = verticalaxis.Name
 	verticalaxisDB.Name_Data.Valid = true
 
-	verticalaxisDB.IsAxisDisplayed_Data.Bool = verticalaxis.IsAxisDisplayed
-	verticalaxisDB.IsAxisDisplayed_Data.Valid = true
+	verticalaxisDB.IsDisplayed_Data.Bool = verticalaxis.IsDisplayed
+	verticalaxisDB.IsDisplayed_Data.Valid = true
 
 	verticalaxisDB.AxisHandleBorderLength_Data.Float64 = verticalaxis.AxisHandleBorderLength
 	verticalaxisDB.AxisHandleBorderLength_Data.Valid = true
@@ -426,8 +426,8 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxisWOP(vertica
 	verticalaxisDB.Name_Data.String = verticalaxis.Name
 	verticalaxisDB.Name_Data.Valid = true
 
-	verticalaxisDB.IsAxisDisplayed_Data.Bool = verticalaxis.IsAxisDisplayed
-	verticalaxisDB.IsAxisDisplayed_Data.Valid = true
+	verticalaxisDB.IsDisplayed_Data.Bool = verticalaxis.IsDisplayed
+	verticalaxisDB.IsDisplayed_Data.Valid = true
 
 	verticalaxisDB.AxisHandleBorderLength_Data.Float64 = verticalaxis.AxisHandleBorderLength
 	verticalaxisDB.AxisHandleBorderLength_Data.Valid = true
@@ -443,7 +443,7 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxisWOP(vertica
 func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxis(verticalaxis *models.VerticalAxis) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	verticalaxis.Name = verticalaxisDB.Name_Data.String
-	verticalaxis.IsAxisDisplayed = verticalaxisDB.IsAxisDisplayed_Data.Bool
+	verticalaxis.IsDisplayed = verticalaxisDB.IsDisplayed_Data.Bool
 	verticalaxis.AxisHandleBorderLength = verticalaxisDB.AxisHandleBorderLength_Data.Float64
 	verticalaxis.Axis_Length = verticalaxisDB.Axis_Length_Data.Float64
 	verticalaxis.StrokeWidth = verticalaxisDB.StrokeWidth_Data.Float64
@@ -453,7 +453,7 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxis(verticalaxis
 func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxis_WOP(verticalaxis *models.VerticalAxis_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	verticalaxis.Name = verticalaxisDB.Name_Data.String
-	verticalaxis.IsAxisDisplayed = verticalaxisDB.IsAxisDisplayed_Data.Bool
+	verticalaxis.IsDisplayed = verticalaxisDB.IsDisplayed_Data.Bool
 	verticalaxis.AxisHandleBorderLength = verticalaxisDB.AxisHandleBorderLength_Data.Float64
 	verticalaxis.Axis_Length = verticalaxisDB.Axis_Length_Data.Float64
 	verticalaxis.StrokeWidth = verticalaxisDB.StrokeWidth_Data.Float64
@@ -464,7 +464,7 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxisWOP(verticala
 	verticalaxis.ID = int(verticalaxisDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	verticalaxis.Name = verticalaxisDB.Name_Data.String
-	verticalaxis.IsAxisDisplayed = verticalaxisDB.IsAxisDisplayed_Data.Bool
+	verticalaxis.IsDisplayed = verticalaxisDB.IsDisplayed_Data.Bool
 	verticalaxis.AxisHandleBorderLength = verticalaxisDB.AxisHandleBorderLength_Data.Float64
 	verticalaxis.Axis_Length = verticalaxisDB.Axis_Length_Data.Float64
 	verticalaxis.StrokeWidth = verticalaxisDB.StrokeWidth_Data.Float64

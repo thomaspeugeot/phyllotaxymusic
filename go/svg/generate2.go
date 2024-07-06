@@ -15,10 +15,10 @@ func GenerateSvg2(gongsvgStage *gongsvg_models.StageStruct, parameter *phylotaxy
 	layer.Display = true
 	svg.Layers = append(svg.Layers, layer)
 
-	if parameter.HorizontalAxis.IsAxisDisplayed {
+	if parameter.HorizontalAxis.IsDisplayed {
 		drawHorizontalAxis(gongsvgStage, layer, parameter, parameter.HorizontalAxis)
 	}
-	if parameter.VerticalAxis.IsAxisDisplayed {
+	if parameter.VerticalAxis.IsDisplayed {
 		drawVerticalAxis(gongsvgStage, layer, parameter, parameter.VerticalAxis)
 	}
 	if parameter.InitialRhombus.IsDisplayed {

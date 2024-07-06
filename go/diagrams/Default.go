@@ -36,7 +36,7 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.HorizontalAxis.Axis_StrokeWidth": (ref_models.HorizontalAxis{}).StrokeWidth,
 
-	"ref_models.HorizontalAxis.IsAxisDisplayed": (ref_models.HorizontalAxis{}).IsAxisDisplayed,
+	"ref_models.HorizontalAxis.IsAxisDisplayed": (ref_models.HorizontalAxis{}).IsDisplayed,
 
 	"ref_models.HorizontalAxis.Name": (ref_models.HorizontalAxis{}).Name,
 
@@ -108,7 +108,7 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.VerticalAxis.Axis_StrokeWidth": (ref_models.VerticalAxis{}).StrokeWidth,
 
-	"ref_models.VerticalAxis.IsAxisDisplayed": (ref_models.VerticalAxis{}).IsAxisDisplayed,
+	"ref_models.VerticalAxis.IsAxisDisplayed": (ref_models.VerticalAxis{}).IsDisplayed,
 
 	"ref_models.VerticalAxis.Name": (ref_models.VerticalAxis{}).Name,
 }

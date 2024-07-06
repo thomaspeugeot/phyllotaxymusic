@@ -63,8 +63,8 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(horizontalaxis_.Name), formDiv)
-		case "IsAxisDisplayed":
-			FormDivBasicFieldToField(&(horizontalaxis_.IsAxisDisplayed), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(horizontalaxis_.IsDisplayed), formDiv)
 		case "AxisHandleBorderLength":
 			FormDivBasicFieldToField(&(horizontalaxis_.AxisHandleBorderLength), formDiv)
 		case "Axis_Length":
@@ -504,8 +504,8 @@ func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(verticalaxis_.Name), formDiv)
-		case "IsAxisDisplayed":
-			FormDivBasicFieldToField(&(verticalaxis_.IsAxisDisplayed), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(verticalaxis_.IsDisplayed), formDiv)
 		case "AxisHandleBorderLength":
 			FormDivBasicFieldToField(&(verticalaxis_.AxisHandleBorderLength), formDiv)
 		case "Axis_Length":

@@ -37,7 +37,7 @@ func _(stage *models.StageStruct) {
 	// Setup of values
 
 	__HorizontalAxis__000000_Initial.Name = `Initial`
-	__HorizontalAxis__000000_Initial.IsAxisDisplayed = true
+	__HorizontalAxis__000000_Initial.IsDisplayed = true
 	__HorizontalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Initial.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Initial.StrokeWidth = 1.000000
@@ -64,7 +64,7 @@ func _(stage *models.StageStruct) {
 	__RhombusGrid__000000_Initial.M = 3
 
 	__VerticalAxis__000000_Initial.Name = `Initial`
-	__VerticalAxis__000000_Initial.IsAxisDisplayed = true
+	__VerticalAxis__000000_Initial.IsDisplayed = true
 	__VerticalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
 	__VerticalAxis__000000_Initial.Axis_Length = 600.000000
 	__VerticalAxis__000000_Initial.StrokeWidth = 1.000000
