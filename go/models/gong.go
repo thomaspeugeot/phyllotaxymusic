@@ -89,6 +89,16 @@ type StageStruct struct {
 	OnAfterRhombusDeleteCallback OnAfterDeleteInterface[Rhombus]
 	OnAfterRhombusReadCallback   OnAfterReadInterface[Rhombus]
 
+	RhombusGrids           map[*RhombusGrid]any
+	RhombusGrids_mapString map[string]*RhombusGrid
+
+	// insertion point for slice of pointers maps
+
+	OnAfterRhombusGridCreateCallback OnAfterCreateInterface[RhombusGrid]
+	OnAfterRhombusGridUpdateCallback OnAfterUpdateInterface[RhombusGrid]
+	OnAfterRhombusGridDeleteCallback OnAfterDeleteInterface[RhombusGrid]
+	OnAfterRhombusGridReadCallback   OnAfterReadInterface[RhombusGrid]
+
 	VerticalAxiss           map[*VerticalAxis]any
 	VerticalAxiss_mapString map[string]*VerticalAxis
 
@@ -175,6 +185,8 @@ type BackRepoInterface interface {
 	CheckoutParameter(parameter *Parameter)
 	CommitRhombus(rhombus *Rhombus)
 	CheckoutRhombus(rhombus *Rhombus)
+	CommitRhombusGrid(rhombusgrid *RhombusGrid)
+	CheckoutRhombusGrid(rhombusgrid *RhombusGrid)
 	CommitVerticalAxis(verticalaxis *VerticalAxis)
 	CheckoutVerticalAxis(verticalaxis *VerticalAxis)
 	GetLastCommitFromBackNb() uint
@@ -195,6 +207,9 @@ func NewStage(path string) (stage *StageStruct) {
 
 		Rhombuss:           make(map[*Rhombus]any),
 		Rhombuss_mapString: make(map[string]*Rhombus),
+
+		RhombusGrids:           make(map[*RhombusGrid]any),
+		RhombusGrids_mapString: make(map[string]*RhombusGrid),
 
 		VerticalAxiss:           make(map[*VerticalAxis]any),
 		VerticalAxiss_mapString: make(map[string]*VerticalAxis),
@@ -236,6 +251,7 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
 	stage.Map_GongStructName_InstancesNb["Parameter"] = len(stage.Parameters)
 	stage.Map_GongStructName_InstancesNb["Rhombus"] = len(stage.Rhombuss)
+	stage.Map_GongStructName_InstancesNb["RhombusGrid"] = len(stage.RhombusGrids)
 	stage.Map_GongStructName_InstancesNb["VerticalAxis"] = len(stage.VerticalAxiss)
 
 }
@@ -251,6 +267,7 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
 	stage.Map_GongStructName_InstancesNb["Parameter"] = len(stage.Parameters)
 	stage.Map_GongStructName_InstancesNb["Rhombus"] = len(stage.Rhombuss)
+	stage.Map_GongStructName_InstancesNb["RhombusGrid"] = len(stage.RhombusGrids)
 	stage.Map_GongStructName_InstancesNb["VerticalAxis"] = len(stage.VerticalAxiss)
 
 }
@@ -484,6 +501,56 @@ func (rhombus *Rhombus) GetName() (res string) {
 	return rhombus.Name
 }
 
+// Stage puts rhombusgrid to the model stage
+func (rhombusgrid *RhombusGrid) Stage(stage *StageStruct) *RhombusGrid {
+	stage.RhombusGrids[rhombusgrid] = __member
+	stage.RhombusGrids_mapString[rhombusgrid.Name] = rhombusgrid
+
+	return rhombusgrid
+}
+
+// Unstage removes rhombusgrid off the model stage
+func (rhombusgrid *RhombusGrid) Unstage(stage *StageStruct) *RhombusGrid {
+	delete(stage.RhombusGrids, rhombusgrid)
+	delete(stage.RhombusGrids_mapString, rhombusgrid.Name)
+	return rhombusgrid
+}
+
+// UnstageVoid removes rhombusgrid off the model stage
+func (rhombusgrid *RhombusGrid) UnstageVoid(stage *StageStruct) {
+	delete(stage.RhombusGrids, rhombusgrid)
+	delete(stage.RhombusGrids_mapString, rhombusgrid.Name)
+}
+
+// commit rhombusgrid to the back repo (if it is already staged)
+func (rhombusgrid *RhombusGrid) Commit(stage *StageStruct) *RhombusGrid {
+	if _, ok := stage.RhombusGrids[rhombusgrid]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitRhombusGrid(rhombusgrid)
+		}
+	}
+	return rhombusgrid
+}
+
+func (rhombusgrid *RhombusGrid) CommitVoid(stage *StageStruct) {
+	rhombusgrid.Commit(stage)
+}
+
+// Checkout rhombusgrid to the back repo (if it is already staged)
+func (rhombusgrid *RhombusGrid) Checkout(stage *StageStruct) *RhombusGrid {
+	if _, ok := stage.RhombusGrids[rhombusgrid]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutRhombusGrid(rhombusgrid)
+		}
+	}
+	return rhombusgrid
+}
+
+// for satisfaction of GongStruct interface
+func (rhombusgrid *RhombusGrid) GetName() (res string) {
+	return rhombusgrid.Name
+}
+
 // Stage puts verticalaxis to the model stage
 func (verticalaxis *VerticalAxis) Stage(stage *StageStruct) *VerticalAxis {
 	stage.VerticalAxiss[verticalaxis] = __member
@@ -540,6 +607,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMLine(Line *Line)
 	CreateORMParameter(Parameter *Parameter)
 	CreateORMRhombus(Rhombus *Rhombus)
+	CreateORMRhombusGrid(RhombusGrid *RhombusGrid)
 	CreateORMVerticalAxis(VerticalAxis *VerticalAxis)
 }
 
@@ -548,6 +616,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMLine(Line *Line)
 	DeleteORMParameter(Parameter *Parameter)
 	DeleteORMRhombus(Rhombus *Rhombus)
+	DeleteORMRhombusGrid(RhombusGrid *RhombusGrid)
 	DeleteORMVerticalAxis(VerticalAxis *VerticalAxis)
 }
 
@@ -563,6 +632,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.Rhombuss = make(map[*Rhombus]any)
 	stage.Rhombuss_mapString = make(map[string]*Rhombus)
+
+	stage.RhombusGrids = make(map[*RhombusGrid]any)
+	stage.RhombusGrids_mapString = make(map[string]*RhombusGrid)
 
 	stage.VerticalAxiss = make(map[*VerticalAxis]any)
 	stage.VerticalAxiss_mapString = make(map[string]*VerticalAxis)
@@ -581,6 +653,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.Rhombuss = nil
 	stage.Rhombuss_mapString = nil
+
+	stage.RhombusGrids = nil
+	stage.RhombusGrids_mapString = nil
 
 	stage.VerticalAxiss = nil
 	stage.VerticalAxiss_mapString = nil
@@ -604,6 +679,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 		rhombus.Unstage(stage)
 	}
 
+	for rhombusgrid := range stage.RhombusGrids {
+		rhombusgrid.Unstage(stage)
+	}
+
 	for verticalaxis := range stage.VerticalAxiss {
 		verticalaxis.Unstage(stage)
 	}
@@ -616,7 +695,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	HorizontalAxis | Line | Parameter | Rhombus | VerticalAxis
+	HorizontalAxis | Line | Parameter | Rhombus | RhombusGrid | VerticalAxis
 }
 
 type GongtructBasicField interface {
@@ -629,7 +708,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*HorizontalAxis | *Line | *Parameter | *Rhombus | *VerticalAxis
+	*HorizontalAxis | *Line | *Parameter | *Rhombus | *RhombusGrid | *VerticalAxis
 	GetName() string
 	CommitVoid(*StageStruct)
 	UnstageVoid(stage *StageStruct)
@@ -662,6 +741,7 @@ type GongstructSet interface {
 		map[*Line]any |
 		map[*Parameter]any |
 		map[*Rhombus]any |
+		map[*RhombusGrid]any |
 		map[*VerticalAxis]any |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
@@ -673,6 +753,7 @@ type GongstructMapString interface {
 		map[string]*Line |
 		map[string]*Parameter |
 		map[string]*Rhombus |
+		map[string]*RhombusGrid |
 		map[string]*VerticalAxis |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
@@ -692,6 +773,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Parameters).(*Type)
 	case map[*Rhombus]any:
 		return any(&stage.Rhombuss).(*Type)
+	case map[*RhombusGrid]any:
+		return any(&stage.RhombusGrids).(*Type)
 	case map[*VerticalAxis]any:
 		return any(&stage.VerticalAxiss).(*Type)
 	default:
@@ -714,6 +797,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Parameters_mapString).(*Type)
 	case map[string]*Rhombus:
 		return any(&stage.Rhombuss_mapString).(*Type)
+	case map[string]*RhombusGrid:
+		return any(&stage.RhombusGrids_mapString).(*Type)
 	case map[string]*VerticalAxis:
 		return any(&stage.VerticalAxiss_mapString).(*Type)
 	default:
@@ -736,6 +821,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Parameters).(*map[*Type]any)
 	case Rhombus:
 		return any(&stage.Rhombuss).(*map[*Type]any)
+	case RhombusGrid:
+		return any(&stage.RhombusGrids).(*map[*Type]any)
 	case VerticalAxis:
 		return any(&stage.VerticalAxiss).(*map[*Type]any)
 	default:
@@ -758,6 +845,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.Parameters).(*map[Type]any)
 	case *Rhombus:
 		return any(&stage.Rhombuss).(*map[Type]any)
+	case *RhombusGrid:
+		return any(&stage.RhombusGrids).(*map[Type]any)
 	case *VerticalAxis:
 		return any(&stage.VerticalAxiss).(*map[Type]any)
 	default:
@@ -780,6 +869,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Parameters_mapString).(*map[string]*Type)
 	case Rhombus:
 		return any(&stage.Rhombuss_mapString).(*map[string]*Type)
+	case RhombusGrid:
+		return any(&stage.RhombusGrids_mapString).(*map[string]*Type)
 	case VerticalAxis:
 		return any(&stage.VerticalAxiss_mapString).(*map[string]*Type)
 	default:
@@ -809,6 +900,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of Rhombus with the name of the field
 			InitialRhombus: &Rhombus{Name: "InitialRhombus"},
+			// field is initialized with an instance of RhombusGrid with the name of the field
+			InitialRhombusGrid: &RhombusGrid{Name: "InitialRhombusGrid"},
 			// field is initialized with an instance of HorizontalAxis with the name of the field
 			HorizontalAxis: &HorizontalAxis{Name: "HorizontalAxis"},
 			// field is initialized with an instance of VerticalAxis with the name of the field
@@ -817,6 +910,12 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Rhombus:
 		return any(&Rhombus{
 			// Initialisation of associations
+		}).(*Type)
+	case RhombusGrid:
+		return any(&RhombusGrid{
+			// Initialisation of associations
+			// field is initialized with an instance of Rhombus with the name of the field
+			Reference: &Rhombus{Name: "Reference"},
 		}).(*Type)
 	case VerticalAxis:
 		return any(&VerticalAxis{
@@ -871,6 +970,23 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		case "InitialRhombusGrid":
+			res := make(map[*RhombusGrid][]*Parameter)
+			for parameter := range stage.Parameters {
+				if parameter.InitialRhombusGrid != nil {
+					rhombusgrid_ := parameter.InitialRhombusGrid
+					var parameters []*Parameter
+					_, ok := res[rhombusgrid_]
+					if ok {
+						parameters = res[rhombusgrid_]
+					} else {
+						parameters = make([]*Parameter, 0)
+					}
+					parameters = append(parameters, parameter)
+					res[rhombusgrid_] = parameters
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		case "HorizontalAxis":
 			res := make(map[*HorizontalAxis][]*Parameter)
 			for parameter := range stage.Parameters {
@@ -910,6 +1026,28 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 	case Rhombus:
 		switch fieldname {
 		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of RhombusGrid
+	case RhombusGrid:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Reference":
+			res := make(map[*Rhombus][]*RhombusGrid)
+			for rhombusgrid := range stage.RhombusGrids {
+				if rhombusgrid.Reference != nil {
+					rhombus_ := rhombusgrid.Reference
+					var rhombusgrids []*RhombusGrid
+					_, ok := res[rhombus_]
+					if ok {
+						rhombusgrids = res[rhombus_]
+					} else {
+						rhombusgrids = make([]*RhombusGrid, 0)
+					}
+					rhombusgrids = append(rhombusgrids, rhombusgrid)
+					res[rhombus_] = rhombusgrids
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of VerticalAxis
 	case VerticalAxis:
@@ -952,6 +1090,11 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		}
+	// reverse maps of direct associations of RhombusGrid
+	case RhombusGrid:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	// reverse maps of direct associations of VerticalAxis
 	case VerticalAxis:
 		switch fieldname {
@@ -977,6 +1120,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Parameter"
 	case Rhombus:
 		res = "Rhombus"
+	case RhombusGrid:
+		res = "RhombusGrid"
 	case VerticalAxis:
 		res = "VerticalAxis"
 	}
@@ -999,6 +1144,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "Parameter"
 	case *Rhombus:
 		res = "Rhombus"
+	case *RhombusGrid:
+		res = "RhombusGrid"
 	case *VerticalAxis:
 		res = "VerticalAxis"
 	}
@@ -1017,9 +1164,11 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "Angle", "DiamondSideLenght", "InitialRhombus", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "Angle", "DiamondSideLenght", "InitialRhombus", "InitialRhombusGrid", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "StrokeWidth"}
+	case RhombusGrid:
+		res = []string{"Name", "Reference", "N", "M"}
 	case VerticalAxis:
 		res = []string{"Name", "IsAxisDisplayed", "AxisHandleBorderLength", "Axis_Length", "StrokeWidth"}
 	}
@@ -1052,6 +1201,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case Rhombus:
 		var rf ReverseField
 		_ = rf
+	case RhombusGrid:
+		var rf ReverseField
+		_ = rf
 	case VerticalAxis:
 		var rf ReverseField
 		_ = rf
@@ -1071,9 +1223,11 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "Angle", "DiamondSideLenght", "InitialRhombus", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "Angle", "DiamondSideLenght", "InitialRhombus", "InitialRhombusGrid", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "StrokeWidth"}
+	case *RhombusGrid:
+		res = []string{"Name", "Reference", "N", "M"}
 	case *VerticalAxis:
 		res = []string{"Name", "IsAxisDisplayed", "AxisHandleBorderLength", "Axis_Length", "StrokeWidth"}
 	}
@@ -1129,6 +1283,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.InitialRhombus != nil {
 				res = inferedInstance.InitialRhombus.Name
 			}
+		case "InitialRhombusGrid":
+			if inferedInstance.InitialRhombusGrid != nil {
+				res = inferedInstance.InitialRhombusGrid.Name
+			}
 		case "OriginX":
 			res = fmt.Sprintf("%f", inferedInstance.OriginX)
 		case "OriginY":
@@ -1161,6 +1319,20 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+		}
+	case *RhombusGrid:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "Reference":
+			if inferedInstance.Reference != nil {
+				res = inferedInstance.Reference.Name
+			}
+		case "N":
+			res = fmt.Sprintf("%d", inferedInstance.N)
+		case "M":
+			res = fmt.Sprintf("%d", inferedInstance.M)
 		}
 	case *VerticalAxis:
 		switch fieldName {
@@ -1231,6 +1403,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.InitialRhombus != nil {
 				res = inferedInstance.InitialRhombus.Name
 			}
+		case "InitialRhombusGrid":
+			if inferedInstance.InitialRhombusGrid != nil {
+				res = inferedInstance.InitialRhombusGrid.Name
+			}
 		case "OriginX":
 			res = fmt.Sprintf("%f", inferedInstance.OriginX)
 		case "OriginY":
@@ -1263,6 +1439,20 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+		}
+	case RhombusGrid:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "Reference":
+			if inferedInstance.Reference != nil {
+				res = inferedInstance.Reference.Name
+			}
+		case "N":
+			res = fmt.Sprintf("%d", inferedInstance.N)
+		case "M":
+			res = fmt.Sprintf("%d", inferedInstance.M)
 		}
 	case VerticalAxis:
 		switch fieldName {

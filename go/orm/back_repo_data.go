@@ -12,6 +12,8 @@ type BackRepoData struct {
 
 	RhombusAPIs []*RhombusAPI
 
+	RhombusGridAPIs []*RhombusGridAPI
+
 	VerticalAxisAPIs []*VerticalAxisAPI
 }
 
@@ -55,6 +57,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		rhombusDB.CopyBasicFieldsToRhombus_WOP(&rhombusAPI.Rhombus_WOP)
 
 		backRepoData.RhombusAPIs = append(backRepoData.RhombusAPIs, &rhombusAPI)
+	}
+
+	for _, rhombusgridDB := range backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridDB {
+
+		var rhombusgridAPI RhombusGridAPI
+		rhombusgridAPI.ID = rhombusgridDB.ID
+		rhombusgridAPI.RhombusGridPointersEncoding = rhombusgridDB.RhombusGridPointersEncoding
+		rhombusgridDB.CopyBasicFieldsToRhombusGrid_WOP(&rhombusgridAPI.RhombusGrid_WOP)
+
+		backRepoData.RhombusGridAPIs = append(backRepoData.RhombusGridAPIs, &rhombusgridAPI)
 	}
 
 	for _, verticalaxisDB := range backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisDB {

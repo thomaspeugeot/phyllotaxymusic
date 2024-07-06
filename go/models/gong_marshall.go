@@ -356,6 +356,52 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_RhombusGrid_Identifiers := make(map[*RhombusGrid]string)
+	_ = map_RhombusGrid_Identifiers
+
+	rhombusgridOrdered := []*RhombusGrid{}
+	for rhombusgrid := range stage.RhombusGrids {
+		rhombusgridOrdered = append(rhombusgridOrdered, rhombusgrid)
+	}
+	sort.Slice(rhombusgridOrdered[:], func(i, j int) bool {
+		return rhombusgridOrdered[i].Name < rhombusgridOrdered[j].Name
+	})
+	if len(rhombusgridOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, rhombusgrid := range rhombusgridOrdered {
+
+		id = generatesIdentifier("RhombusGrid", idx, rhombusgrid.Name)
+		map_RhombusGrid_Identifiers[rhombusgrid] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "RhombusGrid")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", rhombusgrid.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rhombusgrid.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "N")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", rhombusgrid.N))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "M")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", rhombusgrid.M))
+		initializerStatements += setValueField
+
+	}
+
 	map_VerticalAxis_Identifiers := make(map[*VerticalAxis]string)
 	_ = map_VerticalAxis_Identifiers
 
@@ -451,6 +497,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
+		if parameter.InitialRhombusGrid != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialRhombusGrid")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_RhombusGrid_Identifiers[parameter.InitialRhombusGrid])
+			pointersInitializesStatements += setPointerField
+		}
+
 		if parameter.HorizontalAxis != nil {
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -477,6 +531,24 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Rhombus_Identifiers[rhombus] = id
 
 		// Initialisation of values
+	}
+
+	for idx, rhombusgrid := range rhombusgridOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("RhombusGrid", idx, rhombusgrid.Name)
+		map_RhombusGrid_Identifiers[rhombusgrid] = id
+
+		// Initialisation of values
+		if rhombusgrid.Reference != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[rhombusgrid.Reference])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, verticalaxis := range verticalaxisOrdered {

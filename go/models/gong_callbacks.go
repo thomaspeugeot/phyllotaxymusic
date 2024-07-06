@@ -22,6 +22,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterRhombusCreateCallback != nil {
 			stage.OnAfterRhombusCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *RhombusGrid:
+		if stage.OnAfterRhombusGridCreateCallback != nil {
+			stage.OnAfterRhombusGridCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *VerticalAxis:
 		if stage.OnAfterVerticalAxisCreateCallback != nil {
 			stage.OnAfterVerticalAxisCreateCallback.OnAfterCreate(stage, target)
@@ -55,6 +59,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*Rhombus)
 		if stage.OnAfterRhombusUpdateCallback != nil {
 			stage.OnAfterRhombusUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *RhombusGrid:
+		newTarget := any(new).(*RhombusGrid)
+		if stage.OnAfterRhombusGridUpdateCallback != nil {
+			stage.OnAfterRhombusGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *VerticalAxis:
 		newTarget := any(new).(*VerticalAxis)
@@ -91,6 +100,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*Rhombus)
 			stage.OnAfterRhombusDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *RhombusGrid:
+		if stage.OnAfterRhombusGridDeleteCallback != nil {
+			staged := any(staged).(*RhombusGrid)
+			stage.OnAfterRhombusGridDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *VerticalAxis:
 		if stage.OnAfterVerticalAxisDeleteCallback != nil {
 			staged := any(staged).(*VerticalAxis)
@@ -122,6 +136,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterRhombusReadCallback != nil {
 			stage.OnAfterRhombusReadCallback.OnAfterRead(stage, target)
 		}
+	case *RhombusGrid:
+		if stage.OnAfterRhombusGridReadCallback != nil {
+			stage.OnAfterRhombusGridReadCallback.OnAfterRead(stage, target)
+		}
 	case *VerticalAxis:
 		if stage.OnAfterVerticalAxisReadCallback != nil {
 			stage.OnAfterVerticalAxisReadCallback.OnAfterRead(stage, target)
@@ -149,6 +167,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Rhombus:
 		stage.OnAfterRhombusUpdateCallback = any(callback).(OnAfterUpdateInterface[Rhombus])
 	
+	case *RhombusGrid:
+		stage.OnAfterRhombusGridUpdateCallback = any(callback).(OnAfterUpdateInterface[RhombusGrid])
+	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[VerticalAxis])
 	
@@ -170,6 +191,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *Rhombus:
 		stage.OnAfterRhombusCreateCallback = any(callback).(OnAfterCreateInterface[Rhombus])
+	
+	case *RhombusGrid:
+		stage.OnAfterRhombusGridCreateCallback = any(callback).(OnAfterCreateInterface[RhombusGrid])
 	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisCreateCallback = any(callback).(OnAfterCreateInterface[VerticalAxis])
@@ -193,6 +217,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Rhombus:
 		stage.OnAfterRhombusDeleteCallback = any(callback).(OnAfterDeleteInterface[Rhombus])
 	
+	case *RhombusGrid:
+		stage.OnAfterRhombusGridDeleteCallback = any(callback).(OnAfterDeleteInterface[RhombusGrid])
+	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[VerticalAxis])
 	
@@ -214,6 +241,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *Rhombus:
 		stage.OnAfterRhombusReadCallback = any(callback).(OnAfterReadInterface[Rhombus])
+	
+	case *RhombusGrid:
+		stage.OnAfterRhombusGridReadCallback = any(callback).(OnAfterReadInterface[RhombusGrid])
 	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisReadCallback = any(callback).(OnAfterReadInterface[VerticalAxis])

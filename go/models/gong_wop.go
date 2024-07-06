@@ -89,6 +89,20 @@ func (from *Rhombus) CopyBasicFields(to *Rhombus) {
 	to.StrokeWidth = from.StrokeWidth
 }
 
+type RhombusGrid_WOP struct {
+	// insertion point
+	Name string
+	N int
+	M int
+}
+
+func (from *RhombusGrid) CopyBasicFields(to *RhombusGrid) {
+	// insertion point
+	to.Name = from.Name
+	to.N = from.N
+	to.M = from.M
+}
+
 type VerticalAxis_WOP struct {
 	// insertion point
 	Name string

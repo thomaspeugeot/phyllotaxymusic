@@ -8,7 +8,7 @@ import (
 type GongstructDB interface {
 	// insertion point for generic types
 	// "int" is present to handle the case when no struct is present
-	int | HorizontalAxisDB | LineDB | ParameterDB | RhombusDB | VerticalAxisDB
+	int | HorizontalAxisDB | LineDB | ParameterDB | RhombusDB | RhombusGridDB | VerticalAxisDB
 }
 
 func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
@@ -33,6 +33,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 	case *models.Rhombus:
 		rhombusInstance := any(concreteInstance).(*models.Rhombus)
 		ret2 := backRepo.BackRepoRhombus.GetRhombusDBFromRhombusPtr(rhombusInstance)
+		ret = any(ret2).(*T2)
+	case *models.RhombusGrid:
+		rhombusgridInstance := any(concreteInstance).(*models.RhombusGrid)
+		ret2 := backRepo.BackRepoRhombusGrid.GetRhombusGridDBFromRhombusGridPtr(rhombusgridInstance)
 		ret = any(ret2).(*T2)
 	case *models.VerticalAxis:
 		verticalaxisInstance := any(concreteInstance).(*models.VerticalAxis)
@@ -71,6 +75,11 @@ func GetID[T models.Gongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.RhombusGrid:
+		tmp := GetInstanceDBFromInstance[models.RhombusGrid, RhombusGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.VerticalAxis:
 		tmp := GetInstanceDBFromInstance[models.VerticalAxis, VerticalAxisDB](
 			stage, backRepo, inst,
@@ -106,6 +115,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.Rhombus:
 		tmp := GetInstanceDBFromInstance[models.Rhombus, RhombusDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.RhombusGrid:
+		tmp := GetInstanceDBFromInstance[models.RhombusGrid, RhombusGridDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

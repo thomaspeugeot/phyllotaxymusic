@@ -78,6 +78,19 @@ func FillUpFormFromGongstructName(
 		rhombus := new(models.Rhombus)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(rhombus, formGroup, probe)
+	case "RhombusGrid":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "RhombusGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__RhombusGridFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		rhombusgrid := new(models.RhombusGrid)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(rhombusgrid, formGroup, probe)
 	case "VerticalAxis":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),

@@ -30,6 +30,8 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000000_Initial := (&models.Rhombus{Name: `Initial`}).Stage(stage)
 
+	__RhombusGrid__000000_Initial := (&models.RhombusGrid{Name: `Initial`}).Stage(stage)
+
 	__VerticalAxis__000000_Initial := (&models.VerticalAxis{Name: `Initial`}).Stage(stage)
 
 	// Setup of values
@@ -57,6 +59,10 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000000_Initial.InsideAngle = 73.740000
 	__Rhombus__000000_Initial.StrokeWidth = 1.000000
 
+	__RhombusGrid__000000_Initial.Name = `Initial`
+	__RhombusGrid__000000_Initial.N = 2
+	__RhombusGrid__000000_Initial.M = 3
+
 	__VerticalAxis__000000_Initial.Name = `Initial`
 	__VerticalAxis__000000_Initial.IsAxisDisplayed = true
 	__VerticalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
@@ -65,6 +71,8 @@ func _(stage *models.StageStruct) {
 
 	// Setup of pointers
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000000_Initial
+	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000000_Initial
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Initial
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Initial
+	__RhombusGrid__000000_Initial.Reference = __Rhombus__000000_Initial
 }

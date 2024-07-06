@@ -38,6 +38,8 @@ func (cellDeleteIconImpl *CellDeleteIconImpl[T]) CellIconUpdated(stage *gongtabl
 		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.Rhombus:
 		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
+	case *models.RhombusGrid:
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.VerticalAxis:
 		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	default:

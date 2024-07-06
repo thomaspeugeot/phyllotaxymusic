@@ -243,6 +243,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.DiamondSideLenght), formDiv)
 		case "InitialRhombus":
 			FormDivSelectFieldToField(&(parameter_.InitialRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "InitialRhombusGrid":
+			FormDivSelectFieldToField(&(parameter_.InitialRhombusGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":
@@ -373,6 +375,89 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 	}
 
 	fillUpTree(rhombusFormCallback.probe)
+}
+func __gong__New__RhombusGridFormCallback(
+	rhombusgrid *models.RhombusGrid,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (rhombusgridFormCallback *RhombusGridFormCallback) {
+	rhombusgridFormCallback = new(RhombusGridFormCallback)
+	rhombusgridFormCallback.probe = probe
+	rhombusgridFormCallback.rhombusgrid = rhombusgrid
+	rhombusgridFormCallback.formGroup = formGroup
+
+	rhombusgridFormCallback.CreationMode = (rhombusgrid == nil)
+
+	return
+}
+
+type RhombusGridFormCallback struct {
+	rhombusgrid *models.RhombusGrid
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
+
+	log.Println("RhombusGridFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	rhombusgridFormCallback.probe.formStage.Checkout()
+
+	if rhombusgridFormCallback.rhombusgrid == nil {
+		rhombusgridFormCallback.rhombusgrid = new(models.RhombusGrid).Stage(rhombusgridFormCallback.probe.stageOfInterest)
+	}
+	rhombusgrid_ := rhombusgridFormCallback.rhombusgrid
+	_ = rhombusgrid_
+
+	for _, formDiv := range rhombusgridFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(rhombusgrid_.Name), formDiv)
+		case "Reference":
+			FormDivSelectFieldToField(&(rhombusgrid_.Reference), rhombusgridFormCallback.probe.stageOfInterest, formDiv)
+		case "N":
+			FormDivBasicFieldToField(&(rhombusgrid_.N), formDiv)
+		case "M":
+			FormDivBasicFieldToField(&(rhombusgrid_.M), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if rhombusgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		rhombusgrid_.Unstage(rhombusgridFormCallback.probe.stageOfInterest)
+	}
+
+	rhombusgridFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.RhombusGrid](
+		rhombusgridFormCallback.probe,
+	)
+	rhombusgridFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if rhombusgridFormCallback.CreationMode || rhombusgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		rhombusgridFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(rhombusgridFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__RhombusGridFormCallback(
+			nil,
+			rhombusgridFormCallback.probe,
+			newFormGroup,
+		)
+		rhombusgrid := new(models.RhombusGrid)
+		FillUpForm(rhombusgrid, newFormGroup, rhombusgridFormCallback.probe)
+		rhombusgridFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(rhombusgridFormCallback.probe)
 }
 func __gong__New__VerticalAxisFormCallback(
 	verticalaxis *models.VerticalAxis,

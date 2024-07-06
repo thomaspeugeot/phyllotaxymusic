@@ -14,7 +14,8 @@ type Parameter struct {
 
 	Impl ParameterImplInterface
 
-	InitialRhombus *Rhombus
+	InitialRhombus     *Rhombus
+	InitialRhombusGrid *RhombusGrid
 
 	// for drawing purpose
 	OriginX        float64
