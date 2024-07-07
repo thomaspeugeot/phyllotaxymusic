@@ -55,6 +55,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	InitialRhombusGridID sql.NullInt64
 
+	// field InitialAxis is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	InitialAxisID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -287,6 +291,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.InitialRhombusGridID.Valid = true
 		}
 
+		// commit pointer value parameter.InitialAxis translates to updating the parameter.InitialAxisID
+		parameterDB.InitialAxisID.Valid = true // allow for a 0 value (nil association)
+		if parameter.InitialAxis != nil {
+			if InitialAxisId, ok := backRepo.BackRepoInitialAxis.Map_InitialAxisPtr_InitialAxisDBID[parameter.InitialAxis]; ok {
+				parameterDB.InitialAxisID.Int64 = int64(InitialAxisId)
+				parameterDB.InitialAxisID.Valid = true
+			}
+		} else {
+			parameterDB.InitialAxisID.Int64 = 0
+			parameterDB.InitialAxisID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -433,6 +449,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.InitialRhombusGrid = nil
 	if parameterDB.InitialRhombusGridID.Int64 != 0 {
 		parameter.InitialRhombusGrid = backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(parameterDB.InitialRhombusGridID.Int64)]
+	}
+	// InitialAxis field
+	parameter.InitialAxis = nil
+	if parameterDB.InitialAxisID.Int64 != 0 {
+		parameter.InitialAxis = backRepo.BackRepoInitialAxis.Map_InitialAxisDBID_InitialAxisPtr[uint(parameterDB.InitialAxisID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -754,6 +775,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.InitialRhombusGridID.Int64 != 0 {
 			parameterDB.InitialRhombusGridID.Int64 = int64(BackRepoRhombusGridid_atBckpTime_newID[uint(parameterDB.InitialRhombusGridID.Int64)])
 			parameterDB.InitialRhombusGridID.Valid = true
+		}
+
+		// reindexing InitialAxis field
+		if parameterDB.InitialAxisID.Int64 != 0 {
+			parameterDB.InitialAxisID.Int64 = int64(BackRepoInitialAxisid_atBckpTime_newID[uint(parameterDB.InitialAxisID.Int64)])
+			parameterDB.InitialAxisID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

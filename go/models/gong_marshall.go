@@ -152,6 +152,52 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_InitialAxis_Identifiers := make(map[*InitialAxis]string)
+	_ = map_InitialAxis_Identifiers
+
+	initialaxisOrdered := []*InitialAxis{}
+	for initialaxis := range stage.InitialAxiss {
+		initialaxisOrdered = append(initialaxisOrdered, initialaxis)
+	}
+	sort.Slice(initialaxisOrdered[:], func(i, j int) bool {
+		return initialaxisOrdered[i].Name < initialaxisOrdered[j].Name
+	})
+	if len(initialaxisOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, initialaxis := range initialaxisOrdered {
+
+		id = generatesIdentifier("InitialAxis", idx, initialaxis.Name)
+		map_InitialAxis_Identifiers[initialaxis] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "InitialAxis")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", initialaxis.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(initialaxis.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", initialaxis.IsDisplayed))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Angle")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", initialaxis.Angle))
+		initializerStatements += setValueField
+
+	}
+
 	map_Line_Identifiers := make(map[*Line]string)
 	_ = map_Line_Identifiers
 
@@ -477,6 +523,16 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		// Initialisation of values
 	}
 
+	for idx, initialaxis := range initialaxisOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("InitialAxis", idx, initialaxis.Name)
+		map_InitialAxis_Identifiers[initialaxis] = id
+
+		// Initialisation of values
+	}
+
 	for idx, line := range lineOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -508,6 +564,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialRhombusGrid")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_RhombusGrid_Identifiers[parameter.InitialRhombusGrid])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if parameter.InitialAxis != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialAxis")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_InitialAxis_Identifiers[parameter.InitialAxis])
 			pointersInitializesStatements += setPointerField
 		}
 

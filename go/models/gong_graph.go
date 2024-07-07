@@ -8,6 +8,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *HorizontalAxis:
 		ok = stage.IsStagedHorizontalAxis(target)
 
+	case *InitialAxis:
+		ok = stage.IsStagedInitialAxis(target)
+
 	case *Line:
 		ok = stage.IsStagedLine(target)
 
@@ -33,6 +36,13 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 func (stage *StageStruct) IsStagedHorizontalAxis(horizontalaxis *HorizontalAxis) (ok bool) {
 
 	_, ok = stage.HorizontalAxiss[horizontalaxis]
+
+	return
+}
+
+func (stage *StageStruct) IsStagedInitialAxis(initialaxis *InitialAxis) (ok bool) {
+
+	_, ok = stage.InitialAxiss[initialaxis]
 
 	return
 }
@@ -83,6 +93,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *HorizontalAxis:
 		stage.StageBranchHorizontalAxis(target)
 
+	case *InitialAxis:
+		stage.StageBranchInitialAxis(target)
+
 	case *Line:
 		stage.StageBranchLine(target)
 
@@ -112,6 +125,21 @@ func (stage *StageStruct) StageBranchHorizontalAxis(horizontalaxis *HorizontalAx
 	}
 
 	horizontalaxis.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) StageBranchInitialAxis(initialaxis *InitialAxis) {
+
+	// check if instance is already staged
+	if IsStaged(stage, initialaxis) {
+		return
+	}
+
+	initialaxis.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -149,6 +177,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.InitialRhombusGrid != nil {
 		StageBranch(stage, parameter.InitialRhombusGrid)
+	}
+	if parameter.InitialAxis != nil {
+		StageBranch(stage, parameter.InitialAxis)
 	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
@@ -227,6 +258,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchHorizontalAxis(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
+	case *InitialAxis:
+		toT := CopyBranchInitialAxis(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *Line:
 		toT := CopyBranchLine(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -273,6 +308,25 @@ func CopyBranchHorizontalAxis(mapOrigCopy map[any]any, horizontalaxisFrom *Horiz
 	return
 }
 
+func CopyBranchInitialAxis(mapOrigCopy map[any]any, initialaxisFrom *InitialAxis) (initialaxisTo *InitialAxis) {
+
+	// initialaxisFrom has already been copied
+	if _initialaxisTo, ok := mapOrigCopy[initialaxisFrom]; ok {
+		initialaxisTo = _initialaxisTo.(*InitialAxis)
+		return
+	}
+
+	initialaxisTo = new(InitialAxis)
+	mapOrigCopy[initialaxisFrom] = initialaxisTo
+	initialaxisFrom.CopyBasicFields(initialaxisTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 func CopyBranchLine(mapOrigCopy map[any]any, lineFrom *Line) (lineTo *Line) {
 
 	// lineFrom has already been copied
@@ -310,6 +364,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	}
 	if parameterFrom.InitialRhombusGrid != nil {
 		parameterTo.InitialRhombusGrid = CopyBranchRhombusGrid(mapOrigCopy, parameterFrom.InitialRhombusGrid)
+	}
+	if parameterFrom.InitialAxis != nil {
+		parameterTo.InitialAxis = CopyBranchInitialAxis(mapOrigCopy, parameterFrom.InitialAxis)
 	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
@@ -397,6 +454,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *HorizontalAxis:
 		stage.UnstageBranchHorizontalAxis(target)
 
+	case *InitialAxis:
+		stage.UnstageBranchInitialAxis(target)
+
 	case *Line:
 		stage.UnstageBranchLine(target)
 
@@ -426,6 +486,21 @@ func (stage *StageStruct) UnstageBranchHorizontalAxis(horizontalaxis *Horizontal
 	}
 
 	horizontalaxis.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchInitialAxis(initialaxis *InitialAxis) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, initialaxis) {
+		return
+	}
+
+	initialaxis.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -463,6 +538,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.InitialRhombusGrid != nil {
 		UnstageBranch(stage, parameter.InitialRhombusGrid)
+	}
+	if parameter.InitialAxis != nil {
+		UnstageBranch(stage, parameter.InitialAxis)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

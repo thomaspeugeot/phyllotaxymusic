@@ -26,6 +26,8 @@ func _(stage *models.StageStruct) {
 
 	__HorizontalAxis__000000_Initial := (&models.HorizontalAxis{Name: `Initial`}).Stage(stage)
 
+	__InitialAxis__000000_Reference := (&models.InitialAxis{Name: `Reference`}).Stage(stage)
+
 	__Parameter__000000_Reference := (&models.Parameter{Name: `Reference`}).Stage(stage)
 
 	__Rhombus__000000_0_0 := (&models.Rhombus{Name: `0 0`}).Stage(stage)
@@ -47,6 +49,10 @@ func _(stage *models.StageStruct) {
 	__HorizontalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Initial.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Initial.StrokeWidth = 1.000000
+
+	__InitialAxis__000000_Reference.Name = `Reference`
+	__InitialAxis__000000_Reference.IsDisplayed = false
+	__InitialAxis__000000_Reference.Angle = 0.000000
 
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 2
@@ -133,6 +139,7 @@ func _(stage *models.StageStruct) {
 	// Setup of pointers
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000006_Initial
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000000_Initial
+	__Parameter__000000_Reference.InitialAxis = __InitialAxis__000000_Reference
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Initial
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Initial
 	__RhombusGrid__000000_Initial.Reference = __Rhombus__000006_Initial

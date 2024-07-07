@@ -20,6 +20,7 @@ type Parameter struct {
 
 	InitialRhombus     *Rhombus
 	InitialRhombusGrid *RhombusGrid
+	InitialAxis        *InitialAxis
 
 	// for drawing purpose
 	OriginX        float64
@@ -37,6 +38,11 @@ func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, _, frontDiagram *P
 
 type ParameterImplInterface interface {
 	OnUpdated(updatedDiagram *Parameter)
+}
+
+func (p *Parameter) ComputeShapes(stage *StageStruct) {
+	p.ComputeInitialRhombus()
+	p.ComputeInitialRhombusGrid(stage)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {

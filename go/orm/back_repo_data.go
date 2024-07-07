@@ -6,6 +6,8 @@ type BackRepoData struct {
 
 	HorizontalAxisAPIs []*HorizontalAxisAPI
 
+	InitialAxisAPIs []*InitialAxisAPI
+
 	LineAPIs []*LineAPI
 
 	ParameterAPIs []*ParameterAPI
@@ -27,6 +29,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		horizontalaxisDB.CopyBasicFieldsToHorizontalAxis_WOP(&horizontalaxisAPI.HorizontalAxis_WOP)
 
 		backRepoData.HorizontalAxisAPIs = append(backRepoData.HorizontalAxisAPIs, &horizontalaxisAPI)
+	}
+
+	for _, initialaxisDB := range backRepo.BackRepoInitialAxis.Map_InitialAxisDBID_InitialAxisDB {
+
+		var initialaxisAPI InitialAxisAPI
+		initialaxisAPI.ID = initialaxisDB.ID
+		initialaxisAPI.InitialAxisPointersEncoding = initialaxisDB.InitialAxisPointersEncoding
+		initialaxisDB.CopyBasicFieldsToInitialAxis_WOP(&initialaxisAPI.InitialAxis_WOP)
+
+		backRepoData.InitialAxisAPIs = append(backRepoData.InitialAxisAPIs, &initialaxisAPI)
 	}
 
 	for _, lineDB := range backRepo.BackRepoLine.Map_LineDBID_LineDB {

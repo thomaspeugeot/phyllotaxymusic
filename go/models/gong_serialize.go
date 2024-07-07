@@ -15,6 +15,7 @@ func SerializeStage(stage *StageStruct, filename string) {
 	{
 		// insertion point
 		SerializeExcelize[HorizontalAxis](stage, f)
+		SerializeExcelize[InitialAxis](stage, f)
 		SerializeExcelize[Line](stage, f)
 		SerializeExcelize[Parameter](stage, f)
 		SerializeExcelize[Rhombus](stage, f)

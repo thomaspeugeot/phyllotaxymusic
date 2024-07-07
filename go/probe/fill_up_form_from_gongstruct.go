@@ -32,6 +32,18 @@ func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Prob
 		)
 		formGroup.HasSuppressButton = true
 		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.InitialAxis:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "InitialAxis Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__InitialAxisFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
 	case *models.Line:
 		formGroup := (&gongtable.FormGroup{
 			Name:  formName,

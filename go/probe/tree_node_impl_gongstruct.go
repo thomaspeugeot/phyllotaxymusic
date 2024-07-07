@@ -55,6 +55,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "HorizontalAxis" {
 		fillUpTable[models.HorizontalAxis](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "InitialAxis" {
+		fillUpTable[models.InitialAxis](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Line" {
 		fillUpTable[models.Line](nodeImplGongstruct.probe)
 	}

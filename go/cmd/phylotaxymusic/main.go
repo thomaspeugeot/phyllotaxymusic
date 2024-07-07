@@ -96,7 +96,7 @@ type ParameterImpl struct {
 
 // Generate implements models.GeneratorInterface.
 func (parameterImpl *ParameterImpl) Generate() {
-	parameterImpl.parameter.ComputeInitialRhombus()
+	parameterImpl.parameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	parameterImpl.phylotaxymusicStage.Commit()
 	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, parameterImpl.parameter)
 }
@@ -106,7 +106,6 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	log.Println("", parameterImpl.parameter.InsideAngle)
 	// phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 
-	updatedParameter.ComputeInitialRhombus()
-	updatedParameter.ComputeInitialRhombusGrid(parameterImpl.phylotaxymusicStage)
+	updatedParameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, updatedParameter)
 }

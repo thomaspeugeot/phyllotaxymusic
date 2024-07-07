@@ -10,6 +10,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterHorizontalAxisCreateCallback != nil {
 			stage.OnAfterHorizontalAxisCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *InitialAxis:
+		if stage.OnAfterInitialAxisCreateCallback != nil {
+			stage.OnAfterInitialAxisCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *Line:
 		if stage.OnAfterLineCreateCallback != nil {
 			stage.OnAfterLineCreateCallback.OnAfterCreate(stage, target)
@@ -44,6 +48,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*HorizontalAxis)
 		if stage.OnAfterHorizontalAxisUpdateCallback != nil {
 			stage.OnAfterHorizontalAxisUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *InitialAxis:
+		newTarget := any(new).(*InitialAxis)
+		if stage.OnAfterInitialAxisUpdateCallback != nil {
+			stage.OnAfterInitialAxisUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *Line:
 		newTarget := any(new).(*Line)
@@ -85,6 +94,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*HorizontalAxis)
 			stage.OnAfterHorizontalAxisDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *InitialAxis:
+		if stage.OnAfterInitialAxisDeleteCallback != nil {
+			staged := any(staged).(*InitialAxis)
+			stage.OnAfterInitialAxisDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *Line:
 		if stage.OnAfterLineDeleteCallback != nil {
 			staged := any(staged).(*Line)
@@ -124,6 +138,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterHorizontalAxisReadCallback != nil {
 			stage.OnAfterHorizontalAxisReadCallback.OnAfterRead(stage, target)
 		}
+	case *InitialAxis:
+		if stage.OnAfterInitialAxisReadCallback != nil {
+			stage.OnAfterInitialAxisReadCallback.OnAfterRead(stage, target)
+		}
 	case *Line:
 		if stage.OnAfterLineReadCallback != nil {
 			stage.OnAfterLineReadCallback.OnAfterRead(stage, target)
@@ -158,6 +176,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[HorizontalAxis])
 	
+	case *InitialAxis:
+		stage.OnAfterInitialAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[InitialAxis])
+	
 	case *Line:
 		stage.OnAfterLineUpdateCallback = any(callback).(OnAfterUpdateInterface[Line])
 	
@@ -182,6 +203,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 		// insertion point
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisCreateCallback = any(callback).(OnAfterCreateInterface[HorizontalAxis])
+	
+	case *InitialAxis:
+		stage.OnAfterInitialAxisCreateCallback = any(callback).(OnAfterCreateInterface[InitialAxis])
 	
 	case *Line:
 		stage.OnAfterLineCreateCallback = any(callback).(OnAfterCreateInterface[Line])
@@ -208,6 +232,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[HorizontalAxis])
 	
+	case *InitialAxis:
+		stage.OnAfterInitialAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[InitialAxis])
+	
 	case *Line:
 		stage.OnAfterLineDeleteCallback = any(callback).(OnAfterDeleteInterface[Line])
 	
@@ -232,6 +259,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 		// insertion point
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisReadCallback = any(callback).(OnAfterReadInterface[HorizontalAxis])
+	
+	case *InitialAxis:
+		stage.OnAfterInitialAxisReadCallback = any(callback).(OnAfterReadInterface[InitialAxis])
 	
 	case *Line:
 		stage.OnAfterLineReadCallback = any(callback).(OnAfterReadInterface[Line])

@@ -103,6 +103,87 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 
 	fillUpTree(horizontalaxisFormCallback.probe)
 }
+func __gong__New__InitialAxisFormCallback(
+	initialaxis *models.InitialAxis,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (initialaxisFormCallback *InitialAxisFormCallback) {
+	initialaxisFormCallback = new(InitialAxisFormCallback)
+	initialaxisFormCallback.probe = probe
+	initialaxisFormCallback.initialaxis = initialaxis
+	initialaxisFormCallback.formGroup = formGroup
+
+	initialaxisFormCallback.CreationMode = (initialaxis == nil)
+
+	return
+}
+
+type InitialAxisFormCallback struct {
+	initialaxis *models.InitialAxis
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (initialaxisFormCallback *InitialAxisFormCallback) OnSave() {
+
+	log.Println("InitialAxisFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	initialaxisFormCallback.probe.formStage.Checkout()
+
+	if initialaxisFormCallback.initialaxis == nil {
+		initialaxisFormCallback.initialaxis = new(models.InitialAxis).Stage(initialaxisFormCallback.probe.stageOfInterest)
+	}
+	initialaxis_ := initialaxisFormCallback.initialaxis
+	_ = initialaxis_
+
+	for _, formDiv := range initialaxisFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(initialaxis_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(initialaxis_.IsDisplayed), formDiv)
+		case "Angle":
+			FormDivBasicFieldToField(&(initialaxis_.Angle), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if initialaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		initialaxis_.Unstage(initialaxisFormCallback.probe.stageOfInterest)
+	}
+
+	initialaxisFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.InitialAxis](
+		initialaxisFormCallback.probe,
+	)
+	initialaxisFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if initialaxisFormCallback.CreationMode || initialaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		initialaxisFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(initialaxisFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__InitialAxisFormCallback(
+			nil,
+			initialaxisFormCallback.probe,
+			newFormGroup,
+		)
+		initialaxis := new(models.InitialAxis)
+		FillUpForm(initialaxis, newFormGroup, initialaxisFormCallback.probe)
+		initialaxisFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(initialaxisFormCallback.probe)
+}
 func __gong__New__LineFormCallback(
 	line *models.Line,
 	probe *Probe,
@@ -245,6 +326,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.InitialRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "InitialRhombusGrid":
 			FormDivSelectFieldToField(&(parameter_.InitialRhombusGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "InitialAxis":
+			FormDivSelectFieldToField(&(parameter_.InitialAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

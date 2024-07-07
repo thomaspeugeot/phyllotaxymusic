@@ -25,6 +25,20 @@ func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
 	to.StrokeWidth = from.StrokeWidth
 }
 
+type InitialAxis_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+	Angle float64
+}
+
+func (from *InitialAxis) CopyBasicFields(to *InitialAxis) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+	to.Angle = from.Angle
+}
+
 type Line_WOP struct {
 	// insertion point
 	Name string

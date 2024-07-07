@@ -22,6 +22,8 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 	// insertion point
 	case *models.HorizontalAxis:
 		fillUpTable[models.HorizontalAxis](probe)
+	case *models.InitialAxis:
+		fillUpTable[models.InitialAxis](probe)
 	case *models.Line:
 		fillUpTable[models.Line](probe)
 	case *models.Parameter:

@@ -315,6 +315,7 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 
 // insertion point for identifiers maps
 var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
+var __gong__map_InitialAxis = make(map[string]*InitialAxis)
 var __gong__map_Line = make(map[string]*Line)
 var __gong__map_Parameter = make(map[string]*Parameter)
 var __gong__map_Rhombus = make(map[string]*Rhombus)
@@ -496,6 +497,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceHorizontalAxis := (&HorizontalAxis{Name: instanceName}).Stage(stage)
 										instance = any(instanceHorizontalAxis)
 										__gong__map_HorizontalAxis[identifier] = instanceHorizontalAxis
+									case "InitialAxis":
+										instanceInitialAxis := (&InitialAxis{Name: instanceName}).Stage(stage)
+										instance = any(instanceInitialAxis)
+										__gong__map_InitialAxis[identifier] = instanceInitialAxis
 									case "Line":
 										instanceLine := (&Line{Name: instanceName}).Stage(stage)
 										instance = any(instanceLine)
@@ -556,6 +561,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "InitialAxis":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "Line":
 							switch fieldName {
 							// insertion point for date assign code
@@ -602,6 +611,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
 					case "HorizontalAxis":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "InitialAxis":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -708,6 +721,21 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_HorizontalAxis[identifier].StrokeWidth = exprSign * fielValue
+				}
+			case "InitialAxis":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_InitialAxis[identifier].Name = fielValue
+				case "Angle":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_InitialAxis[identifier].Angle = exprSign * fielValue
 				}
 			case "Line":
 				switch fieldName {
@@ -921,6 +949,17 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_HorizontalAxis[identifier].IsDisplayed = fielValue
 				}
+			case "InitialAxis":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_InitialAxis[identifier].IsDisplayed = fielValue
+				}
 			case "Line":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -934,6 +973,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "InitialRhombusGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].InitialRhombusGrid = __gong__map_RhombusGrid[targetIdentifier]
+				case "InitialAxis":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].InitialAxis = __gong__map_InitialAxis[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]
@@ -1006,6 +1048,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				switch gongstructName {
 				// insertion point for enums assignments
 				case "HorizontalAxis":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "InitialAxis":
 					switch fieldName {
 					// insertion point for enum assign code
 					}
