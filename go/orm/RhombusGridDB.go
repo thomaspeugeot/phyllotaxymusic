@@ -50,6 +50,9 @@ type RhombusGridPointersEncoding struct {
 	// field Reference is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	ReferenceID sql.NullInt64
+
+	// field Rhombuses is a slice of pointers to another Struct (optional or 0..1)
+	Rhombuses IntSlice `gorm:"type:TEXT"`
 }
 
 // RhombusGridDB describes a rhombusgrid in the database
@@ -71,6 +74,10 @@ type RhombusGridDB struct {
 
 	// Declation for basic field rhombusgridDB.M
 	M_Data sql.NullInt64
+
+	// Declation for basic field rhombusgridDB.IsDisplayed
+	// provide the sql storage for the boolan
+	IsDisplayed_Data sql.NullBool
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -99,6 +106,8 @@ type RhombusGridWOP struct {
 	N int `xlsx:"2"`
 
 	M int `xlsx:"3"`
+
+	IsDisplayed bool `xlsx:"4"`
 	// insertion for WOP pointer fields
 }
 
@@ -108,6 +117,7 @@ var RhombusGrid_Fields = []string{
 	"Name",
 	"N",
 	"M",
+	"IsDisplayed",
 }
 
 type BackRepoRhombusGridStruct struct {
@@ -239,6 +249,24 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseTwoInstance(bac
 			rhombusgridDB.ReferenceID.Valid = true
 		}
 
+		// 1. reset
+		rhombusgridDB.RhombusGridPointersEncoding.Rhombuses = make([]int, 0)
+		// 2. encode
+		for _, rhombusAssocEnd := range rhombusgrid.Rhombuses {
+			rhombusAssocEnd_DB :=
+				backRepo.BackRepoRhombus.GetRhombusDBFromRhombusPtr(rhombusAssocEnd)
+			
+			// the stage might be inconsistant, meaning that the rhombusAssocEnd_DB might
+			// be missing from the stage. In this case, the commit operation is robust
+			// An alternative would be to crash here to reveal the missing element.
+			if rhombusAssocEnd_DB == nil {
+				continue
+			}
+			
+			rhombusgridDB.RhombusGridPointersEncoding.Rhombuses =
+				append(rhombusgridDB.RhombusGridPointersEncoding.Rhombuses, int(rhombusAssocEnd_DB.ID))
+		}
+
 		query := backRepoRhombusGrid.db.Save(&rhombusgridDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -357,6 +385,15 @@ func (rhombusgridDB *RhombusGridDB) DecodePointers(backRepo *BackRepoStruct, rho
 	if rhombusgridDB.ReferenceID.Int64 != 0 {
 		rhombusgrid.Reference = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(rhombusgridDB.ReferenceID.Int64)]
 	}
+	// This loop redeem rhombusgrid.Rhombuses in the stage from the encode in the back repo
+	// It parses all RhombusDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	rhombusgrid.Rhombuses = rhombusgrid.Rhombuses[:0]
+	for _, _Rhombusid := range rhombusgridDB.RhombusGridPointersEncoding.Rhombuses {
+		rhombusgrid.Rhombuses = append(rhombusgrid.Rhombuses, backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(_Rhombusid)])
+	}
+
 	return
 }
 
@@ -399,6 +436,9 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsFromRhombusGrid(rhombusgrid *
 
 	rhombusgridDB.M_Data.Int64 = int64(rhombusgrid.M)
 	rhombusgridDB.M_Data.Valid = true
+
+	rhombusgridDB.IsDisplayed_Data.Bool = rhombusgrid.IsDisplayed
+	rhombusgridDB.IsDisplayed_Data.Valid = true
 }
 
 // CopyBasicFieldsFromRhombusGrid_WOP
@@ -413,6 +453,9 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsFromRhombusGrid_WOP(rhombusgr
 
 	rhombusgridDB.M_Data.Int64 = int64(rhombusgrid.M)
 	rhombusgridDB.M_Data.Valid = true
+
+	rhombusgridDB.IsDisplayed_Data.Bool = rhombusgrid.IsDisplayed
+	rhombusgridDB.IsDisplayed_Data.Valid = true
 }
 
 // CopyBasicFieldsFromRhombusGridWOP
@@ -427,6 +470,9 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsFromRhombusGridWOP(rhombusgri
 
 	rhombusgridDB.M_Data.Int64 = int64(rhombusgrid.M)
 	rhombusgridDB.M_Data.Valid = true
+
+	rhombusgridDB.IsDisplayed_Data.Bool = rhombusgrid.IsDisplayed
+	rhombusgridDB.IsDisplayed_Data.Valid = true
 }
 
 // CopyBasicFieldsToRhombusGrid
@@ -435,6 +481,7 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsToRhombusGrid(rhombusgrid *mo
 	rhombusgrid.Name = rhombusgridDB.Name_Data.String
 	rhombusgrid.N = int(rhombusgridDB.N_Data.Int64)
 	rhombusgrid.M = int(rhombusgridDB.M_Data.Int64)
+	rhombusgrid.IsDisplayed = rhombusgridDB.IsDisplayed_Data.Bool
 }
 
 // CopyBasicFieldsToRhombusGrid_WOP
@@ -443,6 +490,7 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsToRhombusGrid_WOP(rhombusgrid
 	rhombusgrid.Name = rhombusgridDB.Name_Data.String
 	rhombusgrid.N = int(rhombusgridDB.N_Data.Int64)
 	rhombusgrid.M = int(rhombusgridDB.M_Data.Int64)
+	rhombusgrid.IsDisplayed = rhombusgridDB.IsDisplayed_Data.Bool
 }
 
 // CopyBasicFieldsToRhombusGridWOP
@@ -452,6 +500,7 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsToRhombusGridWOP(rhombusgrid 
 	rhombusgrid.Name = rhombusgridDB.Name_Data.String
 	rhombusgrid.N = int(rhombusgridDB.N_Data.Int64)
 	rhombusgrid.M = int(rhombusgridDB.M_Data.Int64)
+	rhombusgrid.IsDisplayed = rhombusgridDB.IsDisplayed_Data.Bool
 }
 
 // Backup generates a json file from a slice of all RhombusGridDB instances in the backrepo

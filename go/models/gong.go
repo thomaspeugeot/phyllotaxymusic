@@ -93,6 +93,7 @@ type StageStruct struct {
 	RhombusGrids_mapString map[string]*RhombusGrid
 
 	// insertion point for slice of pointers maps
+	RhombusGrid_Rhombuses_reverseMap map[*Rhombus]*RhombusGrid
 
 	OnAfterRhombusGridCreateCallback OnAfterCreateInterface[RhombusGrid]
 	OnAfterRhombusGridUpdateCallback OnAfterUpdateInterface[RhombusGrid]
@@ -916,6 +917,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of Rhombus with the name of the field
 			Reference: &Rhombus{Name: "Reference"},
+			// field is initialized with an instance of Rhombus with the name of the field
+			Rhombuses: []*Rhombus{{Name: "Rhombuses"}},
 		}).(*Type)
 	case VerticalAxis:
 		return any(&VerticalAxis{
@@ -1094,6 +1097,14 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	case RhombusGrid:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "Rhombuses":
+			res := make(map[*Rhombus]*RhombusGrid)
+			for rhombusgrid := range stage.RhombusGrids {
+				for _, rhombus_ := range rhombusgrid.Rhombuses {
+					res[rhombus_] = rhombusgrid
+				}
+			}
+			return any(res).(map[*End]*Start)
 		}
 	// reverse maps of direct associations of VerticalAxis
 	case VerticalAxis:
@@ -1168,7 +1179,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "StrokeWidth"}
 	case RhombusGrid:
-		res = []string{"Name", "Reference", "N", "M"}
+		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Rhombuses"}
 	case VerticalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "StrokeWidth"}
 	}
@@ -1201,6 +1212,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case Rhombus:
 		var rf ReverseField
 		_ = rf
+		rf.GongstructName = "RhombusGrid"
+		rf.Fieldname = "Rhombuses"
+		res = append(res, rf)
 	case RhombusGrid:
 		var rf ReverseField
 		_ = rf
@@ -1227,7 +1241,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "StrokeWidth"}
 	case *RhombusGrid:
-		res = []string{"Name", "Reference", "N", "M"}
+		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Rhombuses"}
 	case *VerticalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "StrokeWidth"}
 	}
@@ -1333,6 +1347,15 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%d", inferedInstance.N)
 		case "M":
 			res = fmt.Sprintf("%d", inferedInstance.M)
+		case "IsDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "Rhombuses":
+			for idx, __instance__ := range inferedInstance.Rhombuses {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
 		}
 	case *VerticalAxis:
 		switch fieldName {
@@ -1453,6 +1476,15 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%d", inferedInstance.N)
 		case "M":
 			res = fmt.Sprintf("%d", inferedInstance.M)
+		case "IsDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "Rhombuses":
+			for idx, __instance__ := range inferedInstance.Rhombuses {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
 		}
 	case VerticalAxis:
 		switch fieldName {

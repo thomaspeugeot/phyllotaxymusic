@@ -620,6 +620,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					case "RhombusGrid":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
+						case "Rhombuses":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Rhombus[targetIdentifier]
+							__gong__map_RhombusGrid[identifier].Rhombuses =
+								append(__gong__map_RhombusGrid[identifier].Rhombuses, target)
 						}
 					case "VerticalAxis":
 						switch fieldName {
@@ -952,6 +958,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "Reference":
 					targetIdentifier := ident.Name
 					__gong__map_RhombusGrid[identifier].Reference = __gong__map_Rhombus[targetIdentifier]
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_RhombusGrid[identifier].IsDisplayed = fielValue
 				}
 			case "VerticalAxis":
 				switch fieldName {

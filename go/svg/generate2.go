@@ -24,6 +24,9 @@ func GenerateSvg2(gongsvgStage *gongsvg_models.StageStruct, parameter *phylotaxy
 	if parameter.InitialRhombus.IsDisplayed {
 		drawRhombus(gongsvgStage, layer, parameter, parameter.InitialRhombus)
 	}
+	if parameter.InitialRhombusGrid.IsDisplayed {
+		drawRhombusGrid(gongsvgStage, layer, parameter, parameter.InitialRhombusGrid)
+	}
 
 	gongsvgStage.Commit()
 

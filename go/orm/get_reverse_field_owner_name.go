@@ -116,6 +116,10 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 			}
 		case "RhombusGrid":
 			switch reverseField.Fieldname {
+			case "Rhombuses":
+				if _rhombusgrid, ok := stage.RhombusGrid_Rhombuses_reverseMap[inst]; ok {
+					res = _rhombusgrid.Name
+				}
 			}
 		case "VerticalAxis":
 			switch reverseField.Fieldname {
@@ -293,6 +297,8 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		case "RhombusGrid":
 			switch reverseField.Fieldname {
+			case "Rhombuses":
+				res = stage.RhombusGrid_Rhombuses_reverseMap[inst]
 			}
 		case "VerticalAxis":
 			switch reverseField.Fieldname {

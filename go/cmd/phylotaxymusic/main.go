@@ -74,7 +74,10 @@ func main() {
 
 	phylotaxymusic_models.GeneratorSingloton.Impl = impl
 
-	parameter.GenerateInitialRhombus()
+	parameter.ComputeInitialRhombus()
+	parameter.ComputeInitialRhombusGrid(phylotaxymusicStack.Stage)
+
+	phylotaxymusicStack.Stage.Commit()
 
 	phylotaxymusic_svg.GenerateSvg2(gongsvg_stack.Stage, parameter)
 
@@ -93,7 +96,7 @@ type ParameterImpl struct {
 
 // Generate implements models.GeneratorInterface.
 func (parameterImpl *ParameterImpl) Generate() {
-	parameterImpl.parameter.GenerateInitialRhombus()
+	parameterImpl.parameter.ComputeInitialRhombus()
 	parameterImpl.phylotaxymusicStage.Commit()
 	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, parameterImpl.parameter)
 }
@@ -103,6 +106,6 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	log.Println("", parameterImpl.parameter.Angle)
 	phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 
-	updatedParameter.GenerateInitialRhombus()
+	updatedParameter.ComputeInitialRhombus()
 	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, updatedParameter)
 }

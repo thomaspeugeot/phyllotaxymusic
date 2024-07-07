@@ -191,6 +191,9 @@ func (stage *StageStruct) StageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _rhombus := range rhombusgrid.Rhombuses {
+		StageBranch(stage, _rhombus)
+	}
 
 }
 
@@ -357,6 +360,9 @@ func CopyBranchRhombusGrid(mapOrigCopy map[any]any, rhombusgridFrom *RhombusGrid
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _rhombus := range rhombusgridFrom.Rhombuses {
+		rhombusgridTo.Rhombuses = append(rhombusgridTo.Rhombuses, CopyBranchRhombus(mapOrigCopy, _rhombus))
+	}
 
 	return
 }
@@ -499,6 +505,9 @@ func (stage *StageStruct) UnstageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _rhombus := range rhombusgrid.Rhombuses {
+		UnstageBranch(stage, _rhombus)
+	}
 
 }
 

@@ -94,6 +94,7 @@ type RhombusGrid_WOP struct {
 	Name string
 	N int
 	M int
+	IsDisplayed bool
 }
 
 func (from *RhombusGrid) CopyBasicFields(to *RhombusGrid) {
@@ -101,6 +102,7 @@ func (from *RhombusGrid) CopyBasicFields(to *RhombusGrid) {
 	to.Name = from.Name
 	to.N = from.N
 	to.M = from.M
+	to.IsDisplayed = from.IsDisplayed
 }
 
 type VerticalAxis_WOP struct {

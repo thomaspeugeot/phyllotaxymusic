@@ -344,6 +344,48 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rhombus_.InsideAngle), formDiv)
 		case "StrokeWidth":
 			FormDivBasicFieldToField(&(rhombus_.StrokeWidth), formDiv)
+		case "RhombusGrid:Rhombuses":
+			// we need to retrieve the field owner before the change
+			var pastRhombusGridOwner *models.RhombusGrid
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "RhombusGrid"
+			rf.Fieldname = "Rhombuses"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				rhombusFormCallback.probe.stageOfInterest,
+				rhombusFormCallback.probe.backRepoOfInterest,
+				rhombus_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastRhombusGridOwner = reverseFieldOwner.(*models.RhombusGrid)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastRhombusGridOwner != nil {
+					idx := slices.Index(pastRhombusGridOwner.Rhombuses, rhombus_)
+					pastRhombusGridOwner.Rhombuses = slices.Delete(pastRhombusGridOwner.Rhombuses, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _rhombusgrid := range *models.GetGongstructInstancesSet[models.RhombusGrid](rhombusFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _rhombusgrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newRhombusGridOwner := _rhombusgrid // we have a match
+						if pastRhombusGridOwner != nil {
+							if newRhombusGridOwner != pastRhombusGridOwner {
+								idx := slices.Index(pastRhombusGridOwner.Rhombuses, rhombus_)
+								pastRhombusGridOwner.Rhombuses = slices.Delete(pastRhombusGridOwner.Rhombuses, idx, idx+1)
+								newRhombusGridOwner.Rhombuses = append(newRhombusGridOwner.Rhombuses, rhombus_)
+							}
+						} else {
+							newRhombusGridOwner.Rhombuses = append(newRhombusGridOwner.Rhombuses, rhombus_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -427,6 +469,8 @@ func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rhombusgrid_.N), formDiv)
 		case "M":
 			FormDivBasicFieldToField(&(rhombusgrid_.M), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(rhombusgrid_.IsDisplayed), formDiv)
 		}
 	}
 

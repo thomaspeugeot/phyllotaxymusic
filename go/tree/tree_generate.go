@@ -18,6 +18,7 @@ func (tree *Tree) Generate(parameter *phylotaxymusic_models.Parameter) {
 	tree.addNode("Horizontal Axis", parameter.HorizontalAxis, parameter.HorizontalAxis.IsDisplayed)
 	tree.addNode("Vertical Axis", parameter.VerticalAxis, parameter.VerticalAxis.IsDisplayed)
 	tree.addNode("Initial Rhombus", parameter.InitialRhombus, parameter.InitialRhombus.IsDisplayed)
+	tree.addNode("Initial Rhombus grid", parameter.InitialRhombusGrid, parameter.InitialRhombusGrid.IsDisplayed)
 
 	tree.TreeStack.Stage.Commit()
 }

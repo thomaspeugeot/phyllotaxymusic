@@ -47,6 +47,25 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 
 	case *RhombusGrid:
 		// insertion point per field
+		if fieldName == "Rhombuses" {
+
+			// walk all instances of the owning type
+			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
+				if any(_instance).(*RhombusGrid) != owningInstanceInfered {
+					_inferedTypeInstance := any(_instance).(*RhombusGrid)
+					reference := make([]FieldType, 0)
+					targetFieldSlice := any(_inferedTypeInstance.Rhombuses).([]FieldType)
+					copy(targetFieldSlice, reference)
+					_inferedTypeInstance.Rhombuses = _inferedTypeInstance.Rhombuses[0:]
+					for _, fieldInstance := range reference {
+						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
+							_inferedTypeInstance.Rhombuses =
+								append(_inferedTypeInstance.Rhombuses, any(fieldInstance).(*Rhombus))
+						}
+					}
+				}
+			}
+		}
 
 	case *VerticalAxis:
 		// insertion point per field
@@ -74,6 +93,14 @@ func (stage *StageStruct) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct RhombusGrid
 	// insertion point per field
+	clear(stage.RhombusGrid_Rhombuses_reverseMap)
+	stage.RhombusGrid_Rhombuses_reverseMap = make(map[*Rhombus]*RhombusGrid)
+	for rhombusgrid := range stage.RhombusGrids {
+		_ = rhombusgrid
+		for _, _rhombus := range rhombusgrid.Rhombuses {
+			stage.RhombusGrid_Rhombuses_reverseMap[_rhombus] = rhombusgrid
+		}
+	}
 
 	// Compute reverse map for named struct VerticalAxis
 	// insertion point per field
