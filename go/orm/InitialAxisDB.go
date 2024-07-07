@@ -68,6 +68,12 @@ type InitialAxisDB struct {
 
 	// Declation for basic field initialaxisDB.Angle
 	Angle_Data sql.NullFloat64
+
+	// Declation for basic field initialaxisDB.Length
+	Length_Data sql.NullFloat64
+
+	// Declation for basic field initialaxisDB.StrokeWidth
+	StrokeWidth_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -96,6 +102,10 @@ type InitialAxisWOP struct {
 	IsDisplayed bool `xlsx:"2"`
 
 	Angle float64 `xlsx:"3"`
+
+	Length float64 `xlsx:"4"`
+
+	StrokeWidth float64 `xlsx:"5"`
 	// insertion for WOP pointer fields
 }
 
@@ -105,6 +115,8 @@ var InitialAxis_Fields = []string{
 	"Name",
 	"IsDisplayed",
 	"Angle",
+	"Length",
+	"StrokeWidth",
 }
 
 type BackRepoInitialAxisStruct struct {
@@ -379,6 +391,12 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsFromInitialAxis(initialaxis *
 
 	initialaxisDB.Angle_Data.Float64 = initialaxis.Angle
 	initialaxisDB.Angle_Data.Valid = true
+
+	initialaxisDB.Length_Data.Float64 = initialaxis.Length
+	initialaxisDB.Length_Data.Valid = true
+
+	initialaxisDB.StrokeWidth_Data.Float64 = initialaxis.StrokeWidth
+	initialaxisDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromInitialAxis_WOP
@@ -393,6 +411,12 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsFromInitialAxis_WOP(initialax
 
 	initialaxisDB.Angle_Data.Float64 = initialaxis.Angle
 	initialaxisDB.Angle_Data.Valid = true
+
+	initialaxisDB.Length_Data.Float64 = initialaxis.Length
+	initialaxisDB.Length_Data.Valid = true
+
+	initialaxisDB.StrokeWidth_Data.Float64 = initialaxis.StrokeWidth
+	initialaxisDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsFromInitialAxisWOP
@@ -407,6 +431,12 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsFromInitialAxisWOP(initialaxi
 
 	initialaxisDB.Angle_Data.Float64 = initialaxis.Angle
 	initialaxisDB.Angle_Data.Valid = true
+
+	initialaxisDB.Length_Data.Float64 = initialaxis.Length
+	initialaxisDB.Length_Data.Valid = true
+
+	initialaxisDB.StrokeWidth_Data.Float64 = initialaxis.StrokeWidth
+	initialaxisDB.StrokeWidth_Data.Valid = true
 }
 
 // CopyBasicFieldsToInitialAxis
@@ -415,6 +445,8 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsToInitialAxis(initialaxis *mo
 	initialaxis.Name = initialaxisDB.Name_Data.String
 	initialaxis.IsDisplayed = initialaxisDB.IsDisplayed_Data.Bool
 	initialaxis.Angle = initialaxisDB.Angle_Data.Float64
+	initialaxis.Length = initialaxisDB.Length_Data.Float64
+	initialaxis.StrokeWidth = initialaxisDB.StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToInitialAxis_WOP
@@ -423,6 +455,8 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsToInitialAxis_WOP(initialaxis
 	initialaxis.Name = initialaxisDB.Name_Data.String
 	initialaxis.IsDisplayed = initialaxisDB.IsDisplayed_Data.Bool
 	initialaxis.Angle = initialaxisDB.Angle_Data.Float64
+	initialaxis.Length = initialaxisDB.Length_Data.Float64
+	initialaxis.StrokeWidth = initialaxisDB.StrokeWidth_Data.Float64
 }
 
 // CopyBasicFieldsToInitialAxisWOP
@@ -432,6 +466,8 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsToInitialAxisWOP(initialaxis 
 	initialaxis.Name = initialaxisDB.Name_Data.String
 	initialaxis.IsDisplayed = initialaxisDB.IsDisplayed_Data.Bool
 	initialaxis.Angle = initialaxisDB.Angle_Data.Float64
+	initialaxis.Length = initialaxisDB.Length_Data.Float64
+	initialaxis.StrokeWidth = initialaxisDB.StrokeWidth_Data.Float64
 }
 
 // Backup generates a json file from a slice of all InitialAxisDB instances in the backrepo

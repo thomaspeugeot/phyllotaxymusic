@@ -51,8 +51,10 @@ func _(stage *models.StageStruct) {
 	__HorizontalAxis__000000_Initial.StrokeWidth = 1.000000
 
 	__InitialAxis__000000_Reference.Name = `Reference`
-	__InitialAxis__000000_Reference.IsDisplayed = false
-	__InitialAxis__000000_Reference.Angle = 0.000000
+	__InitialAxis__000000_Reference.IsDisplayed = true
+	__InitialAxis__000000_Reference.Angle = 112.736483
+	__InitialAxis__000000_Reference.Length = 202.489402
+	__InitialAxis__000000_Reference.StrokeWidth = 2.000000
 
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 2

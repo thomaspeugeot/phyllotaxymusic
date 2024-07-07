@@ -736,6 +736,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_InitialAxis[identifier].Angle = exprSign * fielValue
+				case "Length":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_InitialAxis[identifier].Length = exprSign * fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_InitialAxis[identifier].StrokeWidth = exprSign * fielValue
 				}
 			case "Line":
 				switch fieldName {

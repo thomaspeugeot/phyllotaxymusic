@@ -50,8 +50,6 @@ func main() {
 	gongsvg_stack := gongsvg_stack.NewStack(r, phylotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
 	gongtree_stack := gongtree_stack.NewStack(r, phylotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
 
-	phylotaxymusic_svg.GenerateSvg(gongsvg_stack.Stage, phylotaxymusicStack.Stage)
-
 	// get the only diagram
 	parameters := phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.Parameter](phylotaxymusicStack.Stage)
 
@@ -61,7 +59,10 @@ func main() {
 	}
 
 	parameter := (*parameters)["Reference"]
-	_ = parameter
+	parameter.ComputeShapes(phylotaxymusicStack.Stage)
+	phylotaxymusicStack.Stage.Commit()
+	phylotaxymusic_svg.GenerateSvg2(gongsvg_stack.Stage, parameter)
+
 	tree := new(phylotaxymusic_tree.Tree)
 	tree.TreeStack = gongtree_stack
 	tree.Generate(parameter)
@@ -73,13 +74,6 @@ func main() {
 	parameter.Impl = impl
 
 	phylotaxymusic_models.GeneratorSingloton.Impl = impl
-
-	parameter.ComputeInitialRhombus()
-	parameter.ComputeInitialRhombusGrid(phylotaxymusicStack.Stage)
-
-	phylotaxymusicStack.Stage.Commit()
-
-	phylotaxymusic_svg.GenerateSvg2(gongsvg_stack.Stage, parameter)
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))

@@ -1301,7 +1301,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "StrokeWidth"}
 	case InitialAxis:
-		res = []string{"Name", "IsDisplayed", "Angle"}
+		res = []string{"Name", "IsDisplayed", "Angle", "Length", "StrokeWidth"}
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case Parameter:
@@ -1368,7 +1368,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "StrokeWidth"}
 	case *InitialAxis:
-		res = []string{"Name", "IsDisplayed", "Angle"}
+		res = []string{"Name", "IsDisplayed", "Angle", "Length", "StrokeWidth"}
 	case *Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case *Parameter:
@@ -1410,6 +1410,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
 		case "Angle":
 			res = fmt.Sprintf("%f", inferedInstance.Angle)
+		case "Length":
+			res = fmt.Sprintf("%f", inferedInstance.Length)
+		case "StrokeWidth":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		}
 	case *Line:
 		switch fieldName {
@@ -1553,6 +1557,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
 		case "Angle":
 			res = fmt.Sprintf("%f", inferedInstance.Angle)
+		case "Length":
+			res = fmt.Sprintf("%f", inferedInstance.Length)
+		case "StrokeWidth":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		}
 	case Line:
 		switch fieldName {

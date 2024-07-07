@@ -30,6 +30,8 @@ type InitialAxis_WOP struct {
 	Name string
 	IsDisplayed bool
 	Angle float64
+	Length float64
+	StrokeWidth float64
 }
 
 func (from *InitialAxis) CopyBasicFields(to *InitialAxis) {
@@ -37,6 +39,8 @@ func (from *InitialAxis) CopyBasicFields(to *InitialAxis) {
 	to.Name = from.Name
 	to.IsDisplayed = from.IsDisplayed
 	to.Angle = from.Angle
+	to.Length = from.Length
+	to.StrokeWidth = from.StrokeWidth
 }
 
 type Line_WOP struct {

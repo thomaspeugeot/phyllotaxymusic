@@ -43,6 +43,7 @@ type ParameterImplInterface interface {
 func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeInitialRhombus()
 	p.ComputeInitialRhombusGrid(stage)
+	p.ComputeInitialAxis()
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -79,4 +80,19 @@ func (p *Parameter) ComputeInitialRhombusGrid(stage *StageStruct) {
 					float64(j)*r.SideLength*sinHalfInsideAngle
 		}
 	}
+}
+
+func (p *Parameter) ComputeInitialAxis() {
+	insideAngleRad := p.InsideAngle * math.Pi / 180
+	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
+	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
+	sideLength := p.InitialRhombus.SideLength
+
+	y := float64(p.N-1)*sideLength*sinHalfInsideAngle +
+		float64(p.M-1)*sideLength*sinHalfInsideAngle
+	x := float64(p.N-1)*sideLength*cosHalfInsideAngle -
+		float64(p.M-1)*sideLength*cosHalfInsideAngle
+
+	p.InitialAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
+	p.InitialAxis.Length = math.Sqrt(x*x + y*y)
 }

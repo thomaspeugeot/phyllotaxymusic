@@ -152,6 +152,10 @@ func (initialaxisFormCallback *InitialAxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(initialaxis_.IsDisplayed), formDiv)
 		case "Angle":
 			FormDivBasicFieldToField(&(initialaxis_.Angle), formDiv)
+		case "Length":
+			FormDivBasicFieldToField(&(initialaxis_.Length), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(initialaxis_.StrokeWidth), formDiv)
 		}
 	}
 
