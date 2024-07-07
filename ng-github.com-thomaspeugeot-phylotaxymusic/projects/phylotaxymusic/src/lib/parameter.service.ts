@@ -18,7 +18,9 @@ import { FrontRepo, FrontRepoService } from './front-repo.service';
 
 // insertion point for imports
 import { RhombusAPI } from './rhombus-api'
+import { CircleAPI } from './circle-api'
 import { RhombusGridAPI } from './rhombusgrid-api'
+import { InitialAxisAPI } from './initialaxis-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 

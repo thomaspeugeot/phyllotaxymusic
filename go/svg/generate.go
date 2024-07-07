@@ -50,12 +50,12 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	diamondRoot = append(diamondRoot, diamondBottom)
 	diamondBottom.X1 = parameter.OriginX
 	diamondBottom.Y1 = parameter.OriginY
-	diamondBottom.X2 = diamondBottom.X1 + parameter.DiamondSideLenght
+	diamondBottom.X2 = diamondBottom.X1 + parameter.SideLength
 	diamondBottom.Y2 = diamondBottom.Y1
 	diamondBottom.Presentation = presentation
 
-	deltaX := parameter.DiamondSideLenght * math.Cos(math.Pi*parameter.InsideAngle/180.0)
-	deltaY := parameter.DiamondSideLenght * math.Sin(math.Pi*parameter.InsideAngle/180.0)
+	deltaX := parameter.SideLength * math.Cos(math.Pi*parameter.InsideAngle/180.0)
+	deltaY := parameter.SideLength * math.Sin(math.Pi*parameter.InsideAngle/180.0)
 
 	diamondLeftSide := new(gongsvg_models.Line).Stage(gongsvgStage)
 	diamondLeftSide.Name = "L"
@@ -67,7 +67,7 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	diamondLeftSide.Y2 = diamondLeftSide.Y1 - deltaY
 	diamondLeftSide.Presentation = presentation
 
-	diamondRightSide := CopyLine(gongsvgStage, layer, diamondLeftSide, parameter.DiamondSideLenght, 0.0)
+	diamondRightSide := CopyLine(gongsvgStage, layer, diamondLeftSide, parameter.SideLength, 0.0)
 	diamondRightSide.Name = "R"
 	diamondRoot = append(diamondRoot, diamondRightSide)
 
@@ -79,9 +79,9 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	layer.Circles = append(layer.Circles, circle)
 	circle.Presentation = presentation
 
-	circle.CX = parameter.OriginX + float64(parameter.N)*parameter.DiamondSideLenght + float64(parameter.M)*deltaX
+	circle.CX = parameter.OriginX + float64(parameter.N)*parameter.SideLength + float64(parameter.M)*deltaX
 	circle.CY = parameter.OriginY - float64(parameter.M)*deltaY
-	circle.Radius = parameter.DiamondSideLenght / 2.0
+	circle.Radius = parameter.SideLength / 2.0
 
 	angleForTheGridEndRad := math.Atan2(circle.CY-parameter.OriginY, circle.CX-parameter.OriginX)
 	angleForTheGridEndDegree := 180 * angleForTheGridEndRad / math.Pi
@@ -102,7 +102,7 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 		rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedDiamond)
 	}
 	for i := range parameter.N - 1 {
-		currentDiamond = CopyLineSet(gongsvgStage, layer, diamondRoot, float64(i+1)*parameter.DiamondSideLenght, 0)
+		currentDiamond = CopyLineSet(gongsvgStage, layer, diamondRoot, float64(i+1)*parameter.SideLength, 0)
 		rotatedDiamond := RotateLineSet(gongsvgStage, rotatedObjectsLayer, currentDiamond, parameter.OriginX, parameter.OriginY, -angleForTheGridEndDegree)
 		rotatedDiamondGrid = append(rotatedDiamondGrid, &rotatedDiamond)
 
@@ -128,8 +128,8 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	for _, circle := range circles {
 		radians := angleForTheGridEndDegree * math.Pi / 180
 
-		rotatedDeltaX := parameter.DiamondSideLenght * math.Cos(angleForTheGridEndRad+radians)
-		rotatedDeltaY := parameter.DiamondSideLenght * math.Sin(angleForTheGridEndRad+radians)
+		rotatedDeltaX := parameter.SideLength * math.Cos(angleForTheGridEndRad+radians)
+		rotatedDeltaY := parameter.SideLength * math.Sin(angleForTheGridEndRad+radians)
 		replicatedCircle := CopyCircle(gongsvgStage, rotatedObjectsLayer, circle,
 			rotatedDeltaX, rotatedDeltaY)
 		replicatedCircle.Presentation.Stroke = "lightgreen"
@@ -161,7 +161,7 @@ func generateCircleFromDiamondGrid(
 		layer.Circles = append(layer.Circles, circle)
 		circle.CX = x
 		circle.CY = y
-		circle.Radius = parameter.DiamondSideLenght / 2.0
+		circle.Radius = parameter.SideLength / 2.0
 
 		circle.Presentation = presentation
 		circles = append(circles, circle)

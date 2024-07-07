@@ -18,6 +18,91 @@ var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
 var __dummy_orm = orm.BackRepoStruct{}
 
 // insertion point
+func __gong__New__CircleFormCallback(
+	circle *models.Circle,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (circleFormCallback *CircleFormCallback) {
+	circleFormCallback = new(CircleFormCallback)
+	circleFormCallback.probe = probe
+	circleFormCallback.circle = circle
+	circleFormCallback.formGroup = formGroup
+
+	circleFormCallback.CreationMode = (circle == nil)
+
+	return
+}
+
+type CircleFormCallback struct {
+	circle *models.Circle
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (circleFormCallback *CircleFormCallback) OnSave() {
+
+	log.Println("CircleFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	circleFormCallback.probe.formStage.Checkout()
+
+	if circleFormCallback.circle == nil {
+		circleFormCallback.circle = new(models.Circle).Stage(circleFormCallback.probe.stageOfInterest)
+	}
+	circle_ := circleFormCallback.circle
+	_ = circle_
+
+	for _, formDiv := range circleFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(circle_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(circle_.IsDisplayed), formDiv)
+		case "CenterX":
+			FormDivBasicFieldToField(&(circle_.CenterX), formDiv)
+		case "CenterY":
+			FormDivBasicFieldToField(&(circle_.CenterY), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(circle_.StrokeWidth), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if circleFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		circle_.Unstage(circleFormCallback.probe.stageOfInterest)
+	}
+
+	circleFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.Circle](
+		circleFormCallback.probe,
+	)
+	circleFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if circleFormCallback.CreationMode || circleFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		circleFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(circleFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__CircleFormCallback(
+			nil,
+			circleFormCallback.probe,
+			newFormGroup,
+		)
+		circle := new(models.Circle)
+		FillUpForm(circle, newFormGroup, circleFormCallback.probe)
+		circleFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(circleFormCallback.probe)
+}
 func __gong__New__HorizontalAxisFormCallback(
 	horizontalaxis *models.HorizontalAxis,
 	probe *Probe,
@@ -324,10 +409,12 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.M), formDiv)
 		case "InsideAngle":
 			FormDivBasicFieldToField(&(parameter_.InsideAngle), formDiv)
-		case "DiamondSideLenght":
-			FormDivBasicFieldToField(&(parameter_.DiamondSideLenght), formDiv)
+		case "SideLength":
+			FormDivBasicFieldToField(&(parameter_.SideLength), formDiv)
 		case "InitialRhombus":
 			FormDivSelectFieldToField(&(parameter_.InitialRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "InitialCircle":
+			FormDivSelectFieldToField(&(parameter_.InitialCircle), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "InitialRhombusGrid":
 			FormDivSelectFieldToField(&(parameter_.InitialRhombusGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "InitialAxis":

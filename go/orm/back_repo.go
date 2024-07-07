@@ -22,6 +22,8 @@ import (
 // BackRepoStruct supports callback functions
 type BackRepoStruct struct {
 	// insertion point for per struct back repo declarations
+	BackRepoCircle BackRepoCircleStruct
+
 	BackRepoHorizontalAxis BackRepoHorizontalAxisStruct
 
 	BackRepoInitialAxis BackRepoInitialAxisStruct
@@ -76,6 +78,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 	}
 
 	err = db.AutoMigrate( // insertion point for reference to structs
+		&CircleDB{},
 		&HorizontalAxisDB{},
 		&InitialAxisDB{},
 		&LineDB{},
@@ -93,6 +96,14 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 	backRepo = new(BackRepoStruct)
 
 	// insertion point for per struct back repo declarations
+	backRepo.BackRepoCircle = BackRepoCircleStruct{
+		Map_CircleDBID_CirclePtr: make(map[uint]*models.Circle, 0),
+		Map_CircleDBID_CircleDB:  make(map[uint]*CircleDB, 0),
+		Map_CirclePtr_CircleDBID: make(map[*models.Circle]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
 	backRepo.BackRepoHorizontalAxis = BackRepoHorizontalAxisStruct{
 		Map_HorizontalAxisDBID_HorizontalAxisPtr: make(map[uint]*models.HorizontalAxis, 0),
 		Map_HorizontalAxisDBID_HorizontalAxisDB:  make(map[uint]*HorizontalAxisDB, 0),
@@ -197,6 +208,7 @@ func (backRepo *BackRepoStruct) IncrementPushFromFrontNb() uint {
 // Commit the BackRepoStruct inner variables and link to the database
 func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
+	backRepo.BackRepoCircle.CommitPhaseOne(stage)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseOne(stage)
 	backRepo.BackRepoInitialAxis.CommitPhaseOne(stage)
 	backRepo.BackRepoLine.CommitPhaseOne(stage)
@@ -206,6 +218,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoVerticalAxis.CommitPhaseOne(stage)
 
 	// insertion point for per struct back repo phase two commit
+	backRepo.BackRepoCircle.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoInitialAxis.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoLine.CommitPhaseTwo(backRepo)
@@ -220,6 +233,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 // Checkout the database into the stage
 func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
+	backRepo.BackRepoCircle.CheckoutPhaseOne()
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseOne()
 	backRepo.BackRepoInitialAxis.CheckoutPhaseOne()
 	backRepo.BackRepoLine.CheckoutPhaseOne()
@@ -229,6 +243,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoVerticalAxis.CheckoutPhaseOne()
 
 	// insertion point for per struct back repo phase two commit
+	backRepo.BackRepoCircle.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoInitialAxis.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoLine.CheckoutPhaseTwo(backRepo)
@@ -243,6 +258,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	os.MkdirAll(dirPath, os.ModePerm)
 
 	// insertion point for per struct backup
+	backRepo.BackRepoCircle.Backup(dirPath)
 	backRepo.BackRepoHorizontalAxis.Backup(dirPath)
 	backRepo.BackRepoInitialAxis.Backup(dirPath)
 	backRepo.BackRepoLine.Backup(dirPath)
@@ -260,6 +276,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	file := xlsx.NewFile()
 
 	// insertion point for per struct backup
+	backRepo.BackRepoCircle.BackupXL(file)
 	backRepo.BackRepoHorizontalAxis.BackupXL(file)
 	backRepo.BackRepoInitialAxis.BackupXL(file)
 	backRepo.BackRepoLine.BackupXL(file)
@@ -291,6 +308,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	//
 
 	// insertion point for per struct backup
+	backRepo.BackRepoCircle.RestorePhaseOne(dirPath)
 	backRepo.BackRepoHorizontalAxis.RestorePhaseOne(dirPath)
 	backRepo.BackRepoInitialAxis.RestorePhaseOne(dirPath)
 	backRepo.BackRepoLine.RestorePhaseOne(dirPath)
@@ -304,6 +322,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	//
 
 	// insertion point for per struct backup
+	backRepo.BackRepoCircle.RestorePhaseTwo()
 	backRepo.BackRepoHorizontalAxis.RestorePhaseTwo()
 	backRepo.BackRepoInitialAxis.RestorePhaseTwo()
 	backRepo.BackRepoLine.RestorePhaseTwo()
@@ -338,6 +357,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	//
 
 	// insertion point for per struct backup
+	backRepo.BackRepoCircle.RestoreXLPhaseOne(file)
 	backRepo.BackRepoHorizontalAxis.RestoreXLPhaseOne(file)
 	backRepo.BackRepoInitialAxis.RestoreXLPhaseOne(file)
 	backRepo.BackRepoLine.RestoreXLPhaseOne(file)

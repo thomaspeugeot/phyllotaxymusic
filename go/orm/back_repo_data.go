@@ -4,6 +4,8 @@ package orm
 type BackRepoData struct {
 	// insertion point for slices
 
+	CircleAPIs []*CircleAPI
+
 	HorizontalAxisAPIs []*HorizontalAxisAPI
 
 	InitialAxisAPIs []*InitialAxisAPI
@@ -21,6 +23,16 @@ type BackRepoData struct {
 
 func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepoData) {
 	// insertion point for slices copies
+	for _, circleDB := range backRepo.BackRepoCircle.Map_CircleDBID_CircleDB {
+
+		var circleAPI CircleAPI
+		circleAPI.ID = circleDB.ID
+		circleAPI.CirclePointersEncoding = circleDB.CirclePointersEncoding
+		circleDB.CopyBasicFieldsToCircle_WOP(&circleAPI.Circle_WOP)
+
+		backRepoData.CircleAPIs = append(backRepoData.CircleAPIs, &circleAPI)
+	}
+
 	for _, horizontalaxisDB := range backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisDB {
 
 		var horizontalaxisAPI HorizontalAxisAPI

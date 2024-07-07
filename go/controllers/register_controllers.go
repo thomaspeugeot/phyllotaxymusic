@@ -47,6 +47,13 @@ type ValidationError struct {
 func registerControllers(r *gin.Engine) {
 	v1 := r.Group("/api/github.com/thomaspeugeot/phylotaxymusic/go")
 	{ // insertion point for registrations
+		v1.GET("/v1/circles", GetController().GetCircles)
+		v1.GET("/v1/circles/:id", GetController().GetCircle)
+		v1.POST("/v1/circles", GetController().PostCircle)
+		v1.PATCH("/v1/circles/:id", GetController().UpdateCircle)
+		v1.PUT("/v1/circles/:id", GetController().UpdateCircle)
+		v1.DELETE("/v1/circles/:id", GetController().DeleteCircle)
+
 		v1.GET("/v1/horizontalaxiss", GetController().GetHorizontalAxiss)
 		v1.GET("/v1/horizontalaxiss/:id", GetController().GetHorizontalAxis)
 		v1.POST("/v1/horizontalaxiss", GetController().PostHorizontalAxis)

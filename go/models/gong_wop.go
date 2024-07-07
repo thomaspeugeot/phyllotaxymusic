@@ -7,6 +7,24 @@ import "time"
 var __GONG_time_The_fool_doth_think_he_is_wise__ = time.Hour
 
 // insertion point
+type Circle_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+	CenterX float64
+	CenterY float64
+	StrokeWidth float64
+}
+
+func (from *Circle) CopyBasicFields(to *Circle) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+	to.CenterX = from.CenterX
+	to.CenterY = from.CenterY
+	to.StrokeWidth = from.StrokeWidth
+}
+
 type HorizontalAxis_WOP struct {
 	// insertion point
 	Name string
@@ -67,7 +85,7 @@ type Parameter_WOP struct {
 	N int
 	M int
 	InsideAngle float64
-	DiamondSideLenght float64
+	SideLength float64
 	OriginX float64
 	OriginY float64
 }
@@ -78,7 +96,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.N = from.N
 	to.M = from.M
 	to.InsideAngle = from.InsideAngle
-	to.DiamondSideLenght = from.DiamondSideLenght
+	to.SideLength = from.SideLength
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
 }

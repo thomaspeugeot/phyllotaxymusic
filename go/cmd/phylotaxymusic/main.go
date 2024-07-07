@@ -97,7 +97,7 @@ func (parameterImpl *ParameterImpl) Generate() {
 
 func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {
 
-	log.Println("", parameterImpl.parameter.InsideAngle)
+	log.Println("OnUpdated", parameterImpl.parameter.InsideAngle, parameterImpl.parameter.SideLength)
 	// phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 
 	updatedParameter.ComputeShapes(parameterImpl.phylotaxymusicStage)

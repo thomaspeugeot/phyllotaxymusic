@@ -5,7 +5,9 @@ import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
 import { Rhombus } from './rhombus'
+import { Circle } from './circle'
 import { RhombusGrid } from './rhombusgrid'
+import { InitialAxis } from './initialaxis'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 
@@ -25,14 +27,18 @@ export class Parameter {
 	N: number = 0
 	M: number = 0
 	InsideAngle: number = 0
-	DiamondSideLenght: number = 0
+	SideLength: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 	InitialRhombus?: Rhombus
 
+	InitialCircle?: Circle
+
 	InitialRhombusGrid?: RhombusGrid
+
+	InitialAxis?: InitialAxis
 
 	HorizontalAxis?: HorizontalAxis
 
@@ -51,7 +57,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.N = parameter.N
 	parameterAPI.M = parameter.M
 	parameterAPI.InsideAngle = parameter.InsideAngle
-	parameterAPI.DiamondSideLenght = parameter.DiamondSideLenght
+	parameterAPI.SideLength = parameter.SideLength
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 
@@ -63,11 +69,25 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.InitialCircleID.Valid = true
+	if (parameter.InitialCircle != undefined) {
+		parameterAPI.ParameterPointersEncoding.InitialCircleID.Int64 = parameter.InitialCircle.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.InitialCircleID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.InitialRhombusGridID.Valid = true
 	if (parameter.InitialRhombusGrid != undefined) {
 		parameterAPI.ParameterPointersEncoding.InitialRhombusGridID.Int64 = parameter.InitialRhombusGrid.ID  
 	} else {
 		parameterAPI.ParameterPointersEncoding.InitialRhombusGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.InitialAxisID.Valid = true
+	if (parameter.InitialAxis != undefined) {
+		parameterAPI.ParameterPointersEncoding.InitialAxisID.Int64 = parameter.InitialAxis.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.InitialAxisID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
@@ -103,13 +123,15 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.N = parameterAPI.N
 	parameter.M = parameterAPI.M
 	parameter.InsideAngle = parameterAPI.InsideAngle
-	parameter.DiamondSideLenght = parameterAPI.DiamondSideLenght
+	parameter.SideLength = parameterAPI.SideLength
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 
 	// insertion point for pointer fields encoding
 	parameter.InitialRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64)
+	parameter.InitialCircle = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.InitialCircleID.Int64)
 	parameter.InitialRhombusGrid = frontRepo.map_ID_RhombusGrid.get(parameterAPI.ParameterPointersEncoding.InitialRhombusGridID.Int64)
+	parameter.InitialAxis = frontRepo.map_ID_InitialAxis.get(parameterAPI.ParameterPointersEncoding.InitialAxisID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

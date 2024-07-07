@@ -8,13 +8,13 @@ import (
 
 func drawRhombusGrid(
 	gongsvgStage *gongsvg_models.StageStruct,
-	axisLayer *gongsvg_models.Layer,
+	layer *gongsvg_models.Layer,
 	p *phylotaxymusic_models.Parameter,
 	g *phylotaxymusic_models.RhombusGrid,
 ) {
 
 	for _, r := range g.Rhombuses {
-		drawRhombus(gongsvgStage, axisLayer, p, r)
+		drawRhombus(gongsvgStage, layer, p, r)
 	}
 
 }

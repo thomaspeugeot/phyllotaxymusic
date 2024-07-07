@@ -94,6 +94,64 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	_ = setValueField
 
 	// insertion initialization of objects to stage
+	map_Circle_Identifiers := make(map[*Circle]string)
+	_ = map_Circle_Identifiers
+
+	circleOrdered := []*Circle{}
+	for circle := range stage.Circles {
+		circleOrdered = append(circleOrdered, circle)
+	}
+	sort.Slice(circleOrdered[:], func(i, j int) bool {
+		return circleOrdered[i].Name < circleOrdered[j].Name
+	})
+	if len(circleOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, circle := range circleOrdered {
+
+		id = generatesIdentifier("Circle", idx, circle.Name)
+		map_Circle_Identifiers[circle] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Circle")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", circle.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circle.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circle.IsDisplayed))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterX")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.CenterX))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterY")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.CenterY))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.StrokeWidth))
+		initializerStatements += setValueField
+
+	}
+
 	map_HorizontalAxis_Identifiers := make(map[*HorizontalAxis]string)
 	_ = map_HorizontalAxis_Identifiers
 
@@ -320,8 +378,8 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "DiamondSideLenght")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.DiamondSideLenght))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SideLength")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SideLength))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
@@ -525,6 +583,16 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	}
 
 	// insertion initialization of objects to stage
+	for idx, circle := range circleOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Circle", idx, circle.Name)
+		map_Circle_Identifiers[circle] = id
+
+		// Initialisation of values
+	}
+
 	for idx, horizontalaxis := range horizontalaxisOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -568,6 +636,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialRhombus")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[parameter.InitialRhombus])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if parameter.InitialCircle != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialCircle")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[parameter.InitialCircle])
 			pointersInitializesStatements += setPointerField
 		}
 

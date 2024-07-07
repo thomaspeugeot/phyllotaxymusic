@@ -14,11 +14,12 @@ type Parameter struct {
 	// InsideAngle is the angle in degree of the diamond at the origin 0,0
 	InsideAngle float64
 
-	DiamondSideLenght float64
+	SideLength float64
 
 	Impl ParameterImplInterface
 
 	InitialRhombus     *Rhombus
+	InitialCircle      *Circle
 	InitialRhombusGrid *RhombusGrid
 	InitialAxis        *InitialAxis
 
@@ -42,12 +43,21 @@ type ParameterImplInterface interface {
 
 func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeInitialRhombus()
+	p.ComputeInitialCircle()
 	p.ComputeInitialRhombusGrid(stage)
 	p.ComputeInitialAxis()
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
 	p.InitialRhombus.InsideAngle = p.InsideAngle
+	p.InitialRhombus.SideLength = p.SideLength
+	p.InitialRhombus.CenterX = 0
+	p.InitialRhombus.CenterY = 0
+}
+
+func (p *Parameter) ComputeInitialCircle() {
+	p.InitialCircle.CenterX = 0
+	p.InitialCircle.CenterY = 0
 }
 
 func (p *Parameter) ComputeInitialRhombusGrid(stage *StageStruct) {

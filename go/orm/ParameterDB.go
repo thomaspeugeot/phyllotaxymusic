@@ -51,6 +51,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	InitialRhombusID sql.NullInt64
 
+	// field InitialCircle is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	InitialCircleID sql.NullInt64
+
 	// field InitialRhombusGrid is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	InitialRhombusGridID sql.NullInt64
@@ -91,8 +95,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.InsideAngle
 	InsideAngle_Data sql.NullFloat64
 
-	// Declation for basic field parameterDB.DiamondSideLenght
-	DiamondSideLenght_Data sql.NullFloat64
+	// Declation for basic field parameterDB.SideLength
+	SideLength_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
@@ -130,7 +134,7 @@ type ParameterWOP struct {
 
 	InsideAngle float64 `xlsx:"4"`
 
-	DiamondSideLenght float64 `xlsx:"5"`
+	SideLength float64 `xlsx:"5"`
 
 	OriginX float64 `xlsx:"6"`
 
@@ -145,7 +149,7 @@ var Parameter_Fields = []string{
 	"N",
 	"M",
 	"InsideAngle",
-	"DiamondSideLenght",
+	"SideLength",
 	"OriginX",
 	"OriginY",
 }
@@ -277,6 +281,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		} else {
 			parameterDB.InitialRhombusID.Int64 = 0
 			parameterDB.InitialRhombusID.Valid = true
+		}
+
+		// commit pointer value parameter.InitialCircle translates to updating the parameter.InitialCircleID
+		parameterDB.InitialCircleID.Valid = true // allow for a 0 value (nil association)
+		if parameter.InitialCircle != nil {
+			if InitialCircleId, ok := backRepo.BackRepoCircle.Map_CirclePtr_CircleDBID[parameter.InitialCircle]; ok {
+				parameterDB.InitialCircleID.Int64 = int64(InitialCircleId)
+				parameterDB.InitialCircleID.Valid = true
+			}
+		} else {
+			parameterDB.InitialCircleID.Int64 = 0
+			parameterDB.InitialCircleID.Valid = true
 		}
 
 		// commit pointer value parameter.InitialRhombusGrid translates to updating the parameter.InitialRhombusGridID
@@ -445,6 +461,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.InitialRhombusID.Int64 != 0 {
 		parameter.InitialRhombus = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(parameterDB.InitialRhombusID.Int64)]
 	}
+	// InitialCircle field
+	parameter.InitialCircle = nil
+	if parameterDB.InitialCircleID.Int64 != 0 {
+		parameter.InitialCircle = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(parameterDB.InitialCircleID.Int64)]
+	}
 	// InitialRhombusGrid field
 	parameter.InitialRhombusGrid = nil
 	if parameterDB.InitialRhombusGridID.Int64 != 0 {
@@ -511,8 +532,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
-	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
-	parameterDB.DiamondSideLenght_Data.Valid = true
+	parameterDB.SideLength_Data.Float64 = parameter.SideLength
+	parameterDB.SideLength_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -537,8 +558,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
-	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
-	parameterDB.DiamondSideLenght_Data.Valid = true
+	parameterDB.SideLength_Data.Float64 = parameter.SideLength
+	parameterDB.SideLength_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -563,8 +584,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
-	parameterDB.DiamondSideLenght_Data.Float64 = parameter.DiamondSideLenght
-	parameterDB.DiamondSideLenght_Data.Valid = true
+	parameterDB.SideLength_Data.Float64 = parameter.SideLength
+	parameterDB.SideLength_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -580,7 +601,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
-	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -592,7 +613,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
-	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -605,7 +626,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
-	parameter.DiamondSideLenght = parameterDB.DiamondSideLenght_Data.Float64
+	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -769,6 +790,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.InitialRhombusID.Int64 != 0 {
 			parameterDB.InitialRhombusID.Int64 = int64(BackRepoRhombusid_atBckpTime_newID[uint(parameterDB.InitialRhombusID.Int64)])
 			parameterDB.InitialRhombusID.Valid = true
+		}
+
+		// reindexing InitialCircle field
+		if parameterDB.InitialCircleID.Int64 != 0 {
+			parameterDB.InitialCircleID.Int64 = int64(BackRepoCircleid_atBckpTime_newID[uint(parameterDB.InitialCircleID.Int64)])
+			parameterDB.InitialCircleID.Valid = true
 		}
 
 		// reindexing InitialRhombusGrid field

@@ -10,7 +10,7 @@ import (
 
 func drawRhombus(
 	gongsvgStage *gongsvg_models.StageStruct,
-	axisLayer *gongsvg_models.Layer,
+	layer *gongsvg_models.Layer,
 	p *phylotaxymusic_models.Parameter,
 	r *phylotaxymusic_models.Rhombus,
 ) {
@@ -58,7 +58,7 @@ func drawRhombus(
 			},
 		}).Stage(gongsvgStage)
 
-		axisLayer.Lines = append(axisLayer.Lines, line)
+		layer.Lines = append(layer.Lines, line)
 	}
 
 }
