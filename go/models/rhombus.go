@@ -1,10 +1,7 @@
 package models
 
 import (
-	"log"
 	"math"
-
-	"github.com/fullstack-lang/gongtree/go/models"
 )
 
 // Rhombus is defined by its center, a side length, a direction (with an angle)
@@ -12,7 +9,7 @@ import (
 type Rhombus struct {
 	Name string
 
-	IsDisplayed bool
+	HideableShape
 
 	CenterX, CenterY float64
 
@@ -27,22 +24,6 @@ type Rhombus struct {
 	InsideAngle float64
 
 	StrokeWidth float64
-}
-
-// OnAfterUpdate implements models.NodeImplInterface.
-func (rhombus *Rhombus) OnAfterUpdate(stage *models.StageStruct, stagedNode *models.Node, frontNode *models.Node) {
-	log.Println("Node clicked", frontNode.GetName())
-
-	if frontNode.IsChecked && !stagedNode.IsChecked {
-		rhombus.IsDisplayed = true
-		stagedNode.IsChecked = frontNode.IsChecked
-		GeneratorSingloton.Generate()
-	}
-	if !frontNode.IsChecked && stagedNode.IsChecked {
-		rhombus.IsDisplayed = false
-		stagedNode.IsChecked = frontNode.IsChecked
-		GeneratorSingloton.Generate()
-	}
 }
 
 func GetRightSideLine(r Rhombus) (line *Line) {

@@ -53,7 +53,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.M = 3
 	__Parameter__000000_Reference.InsideAngle = 77.000000
 	__Parameter__000000_Reference.DiamondSideLenght = 100.000000
-	__Parameter__000000_Reference.OriginX = 100.000000
+	__Parameter__000000_Reference.OriginX = 300.000000
 	__Parameter__000000_Reference.OriginY = 700.000000
 
 	__Rhombus__000000_0_0.Name = `0 0`
@@ -62,52 +62,52 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000000_0_0.CenterY = 0.000000
 	__Rhombus__000000_0_0.SideLength = 100.000000
 	__Rhombus__000000_0_0.Angle = 0.000000
-	__Rhombus__000000_0_0.InsideAngle = 62.000000
+	__Rhombus__000000_0_0.InsideAngle = 77.000000
 	__Rhombus__000000_0_0.StrokeWidth = 1.000000
 
 	__Rhombus__000001_0_1.Name = `0 1`
 	__Rhombus__000001_0_1.IsDisplayed = true
-	__Rhombus__000001_0_1.CenterX = -85.716730
-	__Rhombus__000001_0_1.CenterY = 51.503807
+	__Rhombus__000001_0_1.CenterX = -78.260816
+	__Rhombus__000001_0_1.CenterY = 62.251464
 	__Rhombus__000001_0_1.SideLength = 100.000000
 	__Rhombus__000001_0_1.Angle = 0.000000
-	__Rhombus__000001_0_1.InsideAngle = 62.000000
+	__Rhombus__000001_0_1.InsideAngle = 77.000000
 	__Rhombus__000001_0_1.StrokeWidth = 1.000000
 
 	__Rhombus__000002_0_2.Name = `0 2`
 	__Rhombus__000002_0_2.IsDisplayed = true
-	__Rhombus__000002_0_2.CenterX = -171.433460
-	__Rhombus__000002_0_2.CenterY = 103.007615
+	__Rhombus__000002_0_2.CenterX = -156.521631
+	__Rhombus__000002_0_2.CenterY = 124.502927
 	__Rhombus__000002_0_2.SideLength = 100.000000
 	__Rhombus__000002_0_2.Angle = 0.000000
-	__Rhombus__000002_0_2.InsideAngle = 62.000000
+	__Rhombus__000002_0_2.InsideAngle = 77.000000
 	__Rhombus__000002_0_2.StrokeWidth = 1.000000
 
 	__Rhombus__000003_1_0.Name = `1 0`
 	__Rhombus__000003_1_0.IsDisplayed = true
-	__Rhombus__000003_1_0.CenterX = 85.716730
-	__Rhombus__000003_1_0.CenterY = 51.503807
+	__Rhombus__000003_1_0.CenterX = 78.260816
+	__Rhombus__000003_1_0.CenterY = 62.251464
 	__Rhombus__000003_1_0.SideLength = 100.000000
 	__Rhombus__000003_1_0.Angle = 0.000000
-	__Rhombus__000003_1_0.InsideAngle = 62.000000
+	__Rhombus__000003_1_0.InsideAngle = 77.000000
 	__Rhombus__000003_1_0.StrokeWidth = 1.000000
 
 	__Rhombus__000004_1_1.Name = `1 1`
 	__Rhombus__000004_1_1.IsDisplayed = true
 	__Rhombus__000004_1_1.CenterX = 0.000000
-	__Rhombus__000004_1_1.CenterY = 103.007615
+	__Rhombus__000004_1_1.CenterY = 124.502927
 	__Rhombus__000004_1_1.SideLength = 100.000000
 	__Rhombus__000004_1_1.Angle = 0.000000
-	__Rhombus__000004_1_1.InsideAngle = 62.000000
+	__Rhombus__000004_1_1.InsideAngle = 77.000000
 	__Rhombus__000004_1_1.StrokeWidth = 1.000000
 
 	__Rhombus__000005_1_2.Name = `1 2`
 	__Rhombus__000005_1_2.IsDisplayed = true
-	__Rhombus__000005_1_2.CenterX = -85.716730
-	__Rhombus__000005_1_2.CenterY = 154.511422
+	__Rhombus__000005_1_2.CenterX = -78.260816
+	__Rhombus__000005_1_2.CenterY = 186.754391
 	__Rhombus__000005_1_2.SideLength = 100.000000
 	__Rhombus__000005_1_2.Angle = 0.000000
-	__Rhombus__000005_1_2.InsideAngle = 62.000000
+	__Rhombus__000005_1_2.InsideAngle = 77.000000
 	__Rhombus__000005_1_2.StrokeWidth = 1.000000
 
 	__Rhombus__000006_Initial.Name = `Initial`
@@ -116,7 +116,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000006_Initial.CenterY = 0.000000
 	__Rhombus__000006_Initial.SideLength = 100.000000
 	__Rhombus__000006_Initial.Angle = 0.000000
-	__Rhombus__000006_Initial.InsideAngle = 62.000000
+	__Rhombus__000006_Initial.InsideAngle = 77.000000
 	__Rhombus__000006_Initial.StrokeWidth = 1.000000
 
 	__RhombusGrid__000000_Initial.Name = `Initial`
