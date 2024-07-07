@@ -51,7 +51,7 @@ func _(stage *models.StageStruct) {
 	__HorizontalAxis__000000_Initial.StrokeWidth = 1.000000
 
 	__InitialAxis__000000_Reference.Name = `Reference`
-	__InitialAxis__000000_Reference.IsDisplayed = true
+	__InitialAxis__000000_Reference.IsDisplayed = false
 	__InitialAxis__000000_Reference.Angle = 112.736483
 	__InitialAxis__000000_Reference.Length = 202.489402
 	__InitialAxis__000000_Reference.StrokeWidth = 2.000000
@@ -65,7 +65,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.OriginY = 700.000000
 
 	__Rhombus__000000_0_0.Name = `0 0`
-	__Rhombus__000000_0_0.IsDisplayed = true
+	__Rhombus__000000_0_0.IsDisplayed = false
 	__Rhombus__000000_0_0.CenterX = 0.000000
 	__Rhombus__000000_0_0.CenterY = 0.000000
 	__Rhombus__000000_0_0.SideLength = 100.000000
@@ -74,7 +74,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000000_0_0.StrokeWidth = 1.000000
 
 	__Rhombus__000001_0_1.Name = `0 1`
-	__Rhombus__000001_0_1.IsDisplayed = true
+	__Rhombus__000001_0_1.IsDisplayed = false
 	__Rhombus__000001_0_1.CenterX = -78.260816
 	__Rhombus__000001_0_1.CenterY = 62.251464
 	__Rhombus__000001_0_1.SideLength = 100.000000
@@ -83,7 +83,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000001_0_1.StrokeWidth = 1.000000
 
 	__Rhombus__000002_0_2.Name = `0 2`
-	__Rhombus__000002_0_2.IsDisplayed = true
+	__Rhombus__000002_0_2.IsDisplayed = false
 	__Rhombus__000002_0_2.CenterX = -156.521631
 	__Rhombus__000002_0_2.CenterY = 124.502927
 	__Rhombus__000002_0_2.SideLength = 100.000000
@@ -92,7 +92,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000002_0_2.StrokeWidth = 1.000000
 
 	__Rhombus__000003_1_0.Name = `1 0`
-	__Rhombus__000003_1_0.IsDisplayed = true
+	__Rhombus__000003_1_0.IsDisplayed = false
 	__Rhombus__000003_1_0.CenterX = 78.260816
 	__Rhombus__000003_1_0.CenterY = 62.251464
 	__Rhombus__000003_1_0.SideLength = 100.000000
@@ -101,7 +101,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000003_1_0.StrokeWidth = 1.000000
 
 	__Rhombus__000004_1_1.Name = `1 1`
-	__Rhombus__000004_1_1.IsDisplayed = true
+	__Rhombus__000004_1_1.IsDisplayed = false
 	__Rhombus__000004_1_1.CenterX = 0.000000
 	__Rhombus__000004_1_1.CenterY = 124.502927
 	__Rhombus__000004_1_1.SideLength = 100.000000
@@ -110,7 +110,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000004_1_1.StrokeWidth = 1.000000
 
 	__Rhombus__000005_1_2.Name = `1 2`
-	__Rhombus__000005_1_2.IsDisplayed = true
+	__Rhombus__000005_1_2.IsDisplayed = false
 	__Rhombus__000005_1_2.CenterX = -78.260816
 	__Rhombus__000005_1_2.CenterY = 186.754391
 	__Rhombus__000005_1_2.SideLength = 100.000000
@@ -119,7 +119,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000005_1_2.StrokeWidth = 1.000000
 
 	__Rhombus__000006_Initial.Name = `Initial`
-	__Rhombus__000006_Initial.IsDisplayed = true
+	__Rhombus__000006_Initial.IsDisplayed = false
 	__Rhombus__000006_Initial.CenterX = 0.000000
 	__Rhombus__000006_Initial.CenterY = 0.000000
 	__Rhombus__000006_Initial.SideLength = 100.000000
@@ -130,7 +130,7 @@ func _(stage *models.StageStruct) {
 	__RhombusGrid__000000_Initial.Name = `Initial`
 	__RhombusGrid__000000_Initial.N = 2
 	__RhombusGrid__000000_Initial.M = 3
-	__RhombusGrid__000000_Initial.IsDisplayed = true
+	__RhombusGrid__000000_Initial.IsDisplayed = false
 
 	__VerticalAxis__000000_Initial.Name = `Initial`
 	__VerticalAxis__000000_Initial.IsDisplayed = true
