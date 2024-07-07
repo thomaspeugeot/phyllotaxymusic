@@ -25,6 +25,22 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 	to.StrokeWidth = from.StrokeWidth
 }
 
+type CircleGrid_WOP struct {
+	// insertion point
+	Name string
+	N int
+	M int
+	IsDisplayed bool
+}
+
+func (from *CircleGrid) CopyBasicFields(to *CircleGrid) {
+	// insertion point
+	to.Name = from.Name
+	to.N = from.N
+	to.M = from.M
+	to.IsDisplayed = from.IsDisplayed
+}
+
 type HorizontalAxis_WOP struct {
 	// insertion point
 	Name string

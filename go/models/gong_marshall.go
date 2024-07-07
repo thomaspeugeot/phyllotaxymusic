@@ -152,6 +152,58 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_CircleGrid_Identifiers := make(map[*CircleGrid]string)
+	_ = map_CircleGrid_Identifiers
+
+	circlegridOrdered := []*CircleGrid{}
+	for circlegrid := range stage.CircleGrids {
+		circlegridOrdered = append(circlegridOrdered, circlegrid)
+	}
+	sort.Slice(circlegridOrdered[:], func(i, j int) bool {
+		return circlegridOrdered[i].Name < circlegridOrdered[j].Name
+	})
+	if len(circlegridOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, circlegrid := range circlegridOrdered {
+
+		id = generatesIdentifier("CircleGrid", idx, circlegrid.Name)
+		map_CircleGrid_Identifiers[circlegrid] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "CircleGrid")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", circlegrid.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circlegrid.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "N")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", circlegrid.N))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "M")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", circlegrid.M))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circlegrid.IsDisplayed))
+		initializerStatements += setValueField
+
+	}
+
 	map_HorizontalAxis_Identifiers := make(map[*HorizontalAxis]string)
 	_ = map_HorizontalAxis_Identifiers
 
@@ -593,6 +645,32 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		// Initialisation of values
 	}
 
+	for idx, circlegrid := range circlegridOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("CircleGrid", idx, circlegrid.Name)
+		map_CircleGrid_Identifiers[circlegrid] = id
+
+		// Initialisation of values
+		if circlegrid.Reference != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[circlegrid.Reference])
+			pointersInitializesStatements += setPointerField
+		}
+
+		for _, _circle := range circlegrid.Circles {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Circles")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[_circle])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
 	for idx, horizontalaxis := range horizontalaxisOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -652,6 +730,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialRhombusGrid")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_RhombusGrid_Identifiers[parameter.InitialRhombusGrid])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if parameter.InitialCircleGrid != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialCircleGrid")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.InitialCircleGrid])
 			pointersInitializesStatements += setPointerField
 		}
 

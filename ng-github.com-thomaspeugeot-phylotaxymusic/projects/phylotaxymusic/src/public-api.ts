@@ -17,6 +17,10 @@ export * from './lib/circle-api'
 export * from './lib/circle'
 export * from './lib/circle.service'
 
+export * from './lib/circlegrid-api'
+export * from './lib/circlegrid'
+export * from './lib/circlegrid.service'
+
 export * from './lib/horizontalaxis-api'
 export * from './lib/horizontalaxis'
 export * from './lib/horizontalaxis.service'

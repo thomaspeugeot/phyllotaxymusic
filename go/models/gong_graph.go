@@ -8,6 +8,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *Circle:
 		ok = stage.IsStagedCircle(target)
 
+	case *CircleGrid:
+		ok = stage.IsStagedCircleGrid(target)
+
 	case *HorizontalAxis:
 		ok = stage.IsStagedHorizontalAxis(target)
 
@@ -39,6 +42,13 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 func (stage *StageStruct) IsStagedCircle(circle *Circle) (ok bool) {
 
 	_, ok = stage.Circles[circle]
+
+	return
+}
+
+func (stage *StageStruct) IsStagedCircleGrid(circlegrid *CircleGrid) (ok bool) {
+
+	_, ok = stage.CircleGrids[circlegrid]
 
 	return
 }
@@ -103,6 +113,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *Circle:
 		stage.StageBranchCircle(target)
 
+	case *CircleGrid:
+		stage.StageBranchCircleGrid(target)
+
 	case *HorizontalAxis:
 		stage.StageBranchHorizontalAxis(target)
 
@@ -142,6 +155,27 @@ func (stage *StageStruct) StageBranchCircle(circle *Circle) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) StageBranchCircleGrid(circlegrid *CircleGrid) {
+
+	// check if instance is already staged
+	if IsStaged(stage, circlegrid) {
+		return
+	}
+
+	circlegrid.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if circlegrid.Reference != nil {
+		StageBranch(stage, circlegrid.Reference)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _circle := range circlegrid.Circles {
+		StageBranch(stage, _circle)
+	}
 
 }
 
@@ -208,6 +242,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.InitialRhombusGrid != nil {
 		StageBranch(stage, parameter.InitialRhombusGrid)
+	}
+	if parameter.InitialCircleGrid != nil {
+		StageBranch(stage, parameter.InitialCircleGrid)
 	}
 	if parameter.InitialAxis != nil {
 		StageBranch(stage, parameter.InitialAxis)
@@ -289,6 +326,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchCircle(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
+	case *CircleGrid:
+		toT := CopyBranchCircleGrid(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *HorizontalAxis:
 		toT := CopyBranchHorizontalAxis(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -339,6 +380,31 @@ func CopyBranchCircle(mapOrigCopy map[any]any, circleFrom *Circle) (circleTo *Ci
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchCircleGrid(mapOrigCopy map[any]any, circlegridFrom *CircleGrid) (circlegridTo *CircleGrid) {
+
+	// circlegridFrom has already been copied
+	if _circlegridTo, ok := mapOrigCopy[circlegridFrom]; ok {
+		circlegridTo = _circlegridTo.(*CircleGrid)
+		return
+	}
+
+	circlegridTo = new(CircleGrid)
+	mapOrigCopy[circlegridFrom] = circlegridTo
+	circlegridFrom.CopyBasicFields(circlegridTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if circlegridFrom.Reference != nil {
+		circlegridTo.Reference = CopyBranchCircle(mapOrigCopy, circlegridFrom.Reference)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _circle := range circlegridFrom.Circles {
+		circlegridTo.Circles = append(circlegridTo.Circles, CopyBranchCircle(mapOrigCopy, _circle))
+	}
 
 	return
 }
@@ -421,6 +487,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	}
 	if parameterFrom.InitialRhombusGrid != nil {
 		parameterTo.InitialRhombusGrid = CopyBranchRhombusGrid(mapOrigCopy, parameterFrom.InitialRhombusGrid)
+	}
+	if parameterFrom.InitialCircleGrid != nil {
+		parameterTo.InitialCircleGrid = CopyBranchCircleGrid(mapOrigCopy, parameterFrom.InitialCircleGrid)
 	}
 	if parameterFrom.InitialAxis != nil {
 		parameterTo.InitialAxis = CopyBranchInitialAxis(mapOrigCopy, parameterFrom.InitialAxis)
@@ -511,6 +580,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *Circle:
 		stage.UnstageBranchCircle(target)
 
+	case *CircleGrid:
+		stage.UnstageBranchCircleGrid(target)
+
 	case *HorizontalAxis:
 		stage.UnstageBranchHorizontalAxis(target)
 
@@ -550,6 +622,27 @@ func (stage *StageStruct) UnstageBranchCircle(circle *Circle) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, circlegrid) {
+		return
+	}
+
+	circlegrid.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if circlegrid.Reference != nil {
+		UnstageBranch(stage, circlegrid.Reference)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _circle := range circlegrid.Circles {
+		UnstageBranch(stage, _circle)
+	}
 
 }
 
@@ -616,6 +709,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.InitialRhombusGrid != nil {
 		UnstageBranch(stage, parameter.InitialRhombusGrid)
+	}
+	if parameter.InitialCircleGrid != nil {
+		UnstageBranch(stage, parameter.InitialCircleGrid)
 	}
 	if parameter.InitialAxis != nil {
 		UnstageBranch(stage, parameter.InitialAxis)

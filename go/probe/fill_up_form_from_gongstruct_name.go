@@ -39,6 +39,19 @@ func FillUpFormFromGongstructName(
 		circle := new(models.Circle)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(circle, formGroup, probe)
+	case "CircleGrid":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "CircleGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__CircleGridFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		circlegrid := new(models.CircleGrid)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(circlegrid, formGroup, probe)
 	case "HorizontalAxis":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),

@@ -71,6 +71,48 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circle_.CenterY), formDiv)
 		case "StrokeWidth":
 			FormDivBasicFieldToField(&(circle_.StrokeWidth), formDiv)
+		case "CircleGrid:Circles":
+			// we need to retrieve the field owner before the change
+			var pastCircleGridOwner *models.CircleGrid
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "CircleGrid"
+			rf.Fieldname = "Circles"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				circleFormCallback.probe.stageOfInterest,
+				circleFormCallback.probe.backRepoOfInterest,
+				circle_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastCircleGridOwner = reverseFieldOwner.(*models.CircleGrid)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastCircleGridOwner != nil {
+					idx := slices.Index(pastCircleGridOwner.Circles, circle_)
+					pastCircleGridOwner.Circles = slices.Delete(pastCircleGridOwner.Circles, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _circlegrid := range *models.GetGongstructInstancesSet[models.CircleGrid](circleFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _circlegrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newCircleGridOwner := _circlegrid // we have a match
+						if pastCircleGridOwner != nil {
+							if newCircleGridOwner != pastCircleGridOwner {
+								idx := slices.Index(pastCircleGridOwner.Circles, circle_)
+								pastCircleGridOwner.Circles = slices.Delete(pastCircleGridOwner.Circles, idx, idx+1)
+								newCircleGridOwner.Circles = append(newCircleGridOwner.Circles, circle_)
+							}
+						} else {
+							newCircleGridOwner.Circles = append(newCircleGridOwner.Circles, circle_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -102,6 +144,91 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 	}
 
 	fillUpTree(circleFormCallback.probe)
+}
+func __gong__New__CircleGridFormCallback(
+	circlegrid *models.CircleGrid,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (circlegridFormCallback *CircleGridFormCallback) {
+	circlegridFormCallback = new(CircleGridFormCallback)
+	circlegridFormCallback.probe = probe
+	circlegridFormCallback.circlegrid = circlegrid
+	circlegridFormCallback.formGroup = formGroup
+
+	circlegridFormCallback.CreationMode = (circlegrid == nil)
+
+	return
+}
+
+type CircleGridFormCallback struct {
+	circlegrid *models.CircleGrid
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
+
+	log.Println("CircleGridFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	circlegridFormCallback.probe.formStage.Checkout()
+
+	if circlegridFormCallback.circlegrid == nil {
+		circlegridFormCallback.circlegrid = new(models.CircleGrid).Stage(circlegridFormCallback.probe.stageOfInterest)
+	}
+	circlegrid_ := circlegridFormCallback.circlegrid
+	_ = circlegrid_
+
+	for _, formDiv := range circlegridFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(circlegrid_.Name), formDiv)
+		case "Reference":
+			FormDivSelectFieldToField(&(circlegrid_.Reference), circlegridFormCallback.probe.stageOfInterest, formDiv)
+		case "N":
+			FormDivBasicFieldToField(&(circlegrid_.N), formDiv)
+		case "M":
+			FormDivBasicFieldToField(&(circlegrid_.M), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(circlegrid_.IsDisplayed), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if circlegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		circlegrid_.Unstage(circlegridFormCallback.probe.stageOfInterest)
+	}
+
+	circlegridFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.CircleGrid](
+		circlegridFormCallback.probe,
+	)
+	circlegridFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if circlegridFormCallback.CreationMode || circlegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		circlegridFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(circlegridFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__CircleGridFormCallback(
+			nil,
+			circlegridFormCallback.probe,
+			newFormGroup,
+		)
+		circlegrid := new(models.CircleGrid)
+		FillUpForm(circlegrid, newFormGroup, circlegridFormCallback.probe)
+		circlegridFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(circlegridFormCallback.probe)
 }
 func __gong__New__HorizontalAxisFormCallback(
 	horizontalaxis *models.HorizontalAxis,
@@ -417,6 +544,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.InitialCircle), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "InitialRhombusGrid":
 			FormDivSelectFieldToField(&(parameter_.InitialRhombusGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "InitialCircleGrid":
+			FormDivSelectFieldToField(&(parameter_.InitialCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "InitialAxis":
 			FormDivSelectFieldToField(&(parameter_.InitialAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "OriginX":

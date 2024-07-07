@@ -8,6 +8,10 @@ import { CircleAPI } from './circle-api'
 import { Circle, CopyCircleAPIToCircle } from './circle'
 import { CircleService } from './circle.service'
 
+import { CircleGridAPI } from './circlegrid-api'
+import { CircleGrid, CopyCircleGridAPIToCircleGrid } from './circlegrid'
+import { CircleGridService } from './circlegrid.service'
+
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { HorizontalAxis, CopyHorizontalAxisAPIToHorizontalAxis } from './horizontalaxis'
 import { HorizontalAxisService } from './horizontalaxis.service'
@@ -46,6 +50,9 @@ export class FrontRepo { // insertion point sub template
 	array_Circles = new Array<Circle>() // array of front instances
 	map_ID_Circle = new Map<number, Circle>() // map of front instances
 
+	array_CircleGrids = new Array<CircleGrid>() // array of front instances
+	map_ID_CircleGrid = new Map<number, CircleGrid>() // map of front instances
+
 	array_HorizontalAxiss = new Array<HorizontalAxis>() // array of front instances
 	map_ID_HorizontalAxis = new Map<number, HorizontalAxis>() // map of front instances
 
@@ -76,6 +83,8 @@ export class FrontRepo { // insertion point sub template
 			// insertion point
 			case 'Circle':
 				return this.array_Circles as unknown as Array<Type>
+			case 'CircleGrid':
+				return this.array_CircleGrids as unknown as Array<Type>
 			case 'HorizontalAxis':
 				return this.array_HorizontalAxiss as unknown as Array<Type>
 			case 'InitialAxis':
@@ -100,6 +109,8 @@ export class FrontRepo { // insertion point sub template
 			// insertion point
 			case 'Circle':
 				return this.map_ID_Circle as unknown as Map<number, Type>
+			case 'CircleGrid':
+				return this.map_ID_CircleGrid as unknown as Map<number, Type>
 			case 'HorizontalAxis':
 				return this.map_ID_HorizontalAxis as unknown as Map<number, Type>
 			case 'InitialAxis':
@@ -182,6 +193,7 @@ export class FrontRepoService {
 	constructor(
 		private http: HttpClient, // insertion point sub template 
 		private circleService: CircleService,
+		private circlegridService: CircleGridService,
 		private horizontalaxisService: HorizontalAxisService,
 		private initialaxisService: InitialAxisService,
 		private lineService: LineService,
@@ -222,6 +234,7 @@ export class FrontRepoService {
 		Observable<null>, // see below for the of(null) observable
 		// insertion point sub template 
 		Observable<CircleAPI[]>,
+		Observable<CircleGridAPI[]>,
 		Observable<HorizontalAxisAPI[]>,
 		Observable<InitialAxisAPI[]>,
 		Observable<LineAPI[]>,
@@ -240,6 +253,7 @@ export class FrontRepoService {
 			of(null), // 
 			// insertion point sub template
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
+			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.initialaxisService.getInitialAxiss(this.GONG__StackPath, this.frontRepo),
 			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
@@ -263,6 +277,7 @@ export class FrontRepoService {
 			of(null), // see above for justification
 			// insertion point sub template
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
+			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.initialaxisService.getInitialAxiss(this.GONG__StackPath, this.frontRepo),
 			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
@@ -281,6 +296,7 @@ export class FrontRepoService {
 						___of_null, // see above for the explanation about of
 						// insertion point sub template for declarations 
 						circles_,
+						circlegrids_,
 						horizontalaxiss_,
 						initialaxiss_,
 						lines_,
@@ -294,6 +310,8 @@ export class FrontRepoService {
 						// insertion point sub template for type casting 
 						var circles: CircleAPI[]
 						circles = circles_ as CircleAPI[]
+						var circlegrids: CircleGridAPI[]
+						circlegrids = circlegrids_ as CircleGridAPI[]
 						var horizontalaxiss: HorizontalAxisAPI[]
 						horizontalaxiss = horizontalaxiss_ as HorizontalAxisAPI[]
 						var initialaxiss: InitialAxisAPI[]
@@ -321,6 +339,18 @@ export class FrontRepoService {
 								let circle = new Circle
 								this.frontRepo.array_Circles.push(circle)
 								this.frontRepo.map_ID_Circle.set(circleAPI.ID, circle)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_CircleGrids = []
+						this.frontRepo.map_ID_CircleGrid.clear()
+
+						circlegrids.forEach(
+							circlegridAPI => {
+								let circlegrid = new CircleGrid
+								this.frontRepo.array_CircleGrids.push(circlegrid)
+								this.frontRepo.map_ID_CircleGrid.set(circlegridAPI.ID, circlegrid)
 							}
 						)
 
@@ -417,6 +447,14 @@ export class FrontRepoService {
 							circleAPI => {
 								let circle = this.frontRepo.map_ID_Circle.get(circleAPI.ID)
 								CopyCircleAPIToCircle(circleAPI, circle!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						circlegrids.forEach(
+							circlegridAPI => {
+								let circlegrid = this.frontRepo.map_ID_CircleGrid.get(circlegridAPI.ID)
+								CopyCircleGridAPIToCircleGrid(circlegridAPI, circlegrid!, this.frontRepo)
 							}
 						)
 
@@ -520,6 +558,18 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				this.frontRepo.array_CircleGrids = []
+				this.frontRepo.map_ID_CircleGrid.clear()
+
+				backRepoData.CircleGridAPIs.forEach(
+					circlegridAPI => {
+						let circlegrid = new CircleGrid
+						this.frontRepo.array_CircleGrids.push(circlegrid)
+						this.frontRepo.map_ID_CircleGrid.set(circlegridAPI.ID, circlegrid)
+					}
+				)
+
+				// init the arrays
 				this.frontRepo.array_HorizontalAxiss = []
 				this.frontRepo.map_ID_HorizontalAxis.clear()
 
@@ -618,6 +668,14 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.CircleGridAPIs.forEach(
+					circlegridAPI => {
+						let circlegrid = this.frontRepo.map_ID_CircleGrid.get(circlegridAPI.ID)
+						CopyCircleGridAPIToCircleGrid(circlegridAPI, circlegrid!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.HorizontalAxisAPIs.forEach(
 					horizontalaxisAPI => {
 						let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
@@ -695,24 +753,27 @@ export class FrontRepoService {
 export function getCircleUniqueID(id: number): number {
 	return 31 * id
 }
-export function getHorizontalAxisUniqueID(id: number): number {
+export function getCircleGridUniqueID(id: number): number {
 	return 37 * id
 }
-export function getInitialAxisUniqueID(id: number): number {
+export function getHorizontalAxisUniqueID(id: number): number {
 	return 41 * id
 }
-export function getLineUniqueID(id: number): number {
+export function getInitialAxisUniqueID(id: number): number {
 	return 43 * id
 }
-export function getParameterUniqueID(id: number): number {
+export function getLineUniqueID(id: number): number {
 	return 47 * id
 }
-export function getRhombusUniqueID(id: number): number {
+export function getParameterUniqueID(id: number): number {
 	return 53 * id
 }
-export function getRhombusGridUniqueID(id: number): number {
+export function getRhombusUniqueID(id: number): number {
 	return 59 * id
 }
-export function getVerticalAxisUniqueID(id: number): number {
+export function getRhombusGridUniqueID(id: number): number {
 	return 61 * id
+}
+export function getVerticalAxisUniqueID(id: number): number {
+	return 67 * id
 }

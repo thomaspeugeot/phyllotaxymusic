@@ -59,6 +59,17 @@ type StageStruct struct {
 	OnAfterCircleDeleteCallback OnAfterDeleteInterface[Circle]
 	OnAfterCircleReadCallback   OnAfterReadInterface[Circle]
 
+	CircleGrids           map[*CircleGrid]any
+	CircleGrids_mapString map[string]*CircleGrid
+
+	// insertion point for slice of pointers maps
+	CircleGrid_Circles_reverseMap map[*Circle]*CircleGrid
+
+	OnAfterCircleGridCreateCallback OnAfterCreateInterface[CircleGrid]
+	OnAfterCircleGridUpdateCallback OnAfterUpdateInterface[CircleGrid]
+	OnAfterCircleGridDeleteCallback OnAfterDeleteInterface[CircleGrid]
+	OnAfterCircleGridReadCallback   OnAfterReadInterface[CircleGrid]
+
 	HorizontalAxiss           map[*HorizontalAxis]any
 	HorizontalAxiss_mapString map[string]*HorizontalAxis
 
@@ -200,6 +211,8 @@ type BackRepoInterface interface {
 	// insertion point for Commit and Checkout signatures
 	CommitCircle(circle *Circle)
 	CheckoutCircle(circle *Circle)
+	CommitCircleGrid(circlegrid *CircleGrid)
+	CheckoutCircleGrid(circlegrid *CircleGrid)
 	CommitHorizontalAxis(horizontalaxis *HorizontalAxis)
 	CheckoutHorizontalAxis(horizontalaxis *HorizontalAxis)
 	CommitInitialAxis(initialaxis *InitialAxis)
@@ -223,6 +236,9 @@ func NewStage(path string) (stage *StageStruct) {
 	stage = &StageStruct{ // insertion point for array initiatialisation
 		Circles:           make(map[*Circle]any),
 		Circles_mapString: make(map[string]*Circle),
+
+		CircleGrids:           make(map[*CircleGrid]any),
+		CircleGrids_mapString: make(map[string]*CircleGrid),
 
 		HorizontalAxiss:           make(map[*HorizontalAxis]any),
 		HorizontalAxiss_mapString: make(map[string]*HorizontalAxis),
@@ -279,6 +295,7 @@ func (stage *StageStruct) Commit() {
 
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
+	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
 	stage.Map_GongStructName_InstancesNb["InitialAxis"] = len(stage.InitialAxiss)
 	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
@@ -297,6 +314,7 @@ func (stage *StageStruct) Checkout() {
 	stage.ComputeReverseMaps()
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
+	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
 	stage.Map_GongStructName_InstancesNb["InitialAxis"] = len(stage.InitialAxiss)
 	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
@@ -384,6 +402,56 @@ func (circle *Circle) Checkout(stage *StageStruct) *Circle {
 // for satisfaction of GongStruct interface
 func (circle *Circle) GetName() (res string) {
 	return circle.Name
+}
+
+// Stage puts circlegrid to the model stage
+func (circlegrid *CircleGrid) Stage(stage *StageStruct) *CircleGrid {
+	stage.CircleGrids[circlegrid] = __member
+	stage.CircleGrids_mapString[circlegrid.Name] = circlegrid
+
+	return circlegrid
+}
+
+// Unstage removes circlegrid off the model stage
+func (circlegrid *CircleGrid) Unstage(stage *StageStruct) *CircleGrid {
+	delete(stage.CircleGrids, circlegrid)
+	delete(stage.CircleGrids_mapString, circlegrid.Name)
+	return circlegrid
+}
+
+// UnstageVoid removes circlegrid off the model stage
+func (circlegrid *CircleGrid) UnstageVoid(stage *StageStruct) {
+	delete(stage.CircleGrids, circlegrid)
+	delete(stage.CircleGrids_mapString, circlegrid.Name)
+}
+
+// commit circlegrid to the back repo (if it is already staged)
+func (circlegrid *CircleGrid) Commit(stage *StageStruct) *CircleGrid {
+	if _, ok := stage.CircleGrids[circlegrid]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitCircleGrid(circlegrid)
+		}
+	}
+	return circlegrid
+}
+
+func (circlegrid *CircleGrid) CommitVoid(stage *StageStruct) {
+	circlegrid.Commit(stage)
+}
+
+// Checkout circlegrid to the back repo (if it is already staged)
+func (circlegrid *CircleGrid) Checkout(stage *StageStruct) *CircleGrid {
+	if _, ok := stage.CircleGrids[circlegrid]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutCircleGrid(circlegrid)
+		}
+	}
+	return circlegrid
+}
+
+// for satisfaction of GongStruct interface
+func (circlegrid *CircleGrid) GetName() (res string) {
+	return circlegrid.Name
 }
 
 // Stage puts horizontalaxis to the model stage
@@ -739,6 +807,7 @@ func (verticalaxis *VerticalAxis) GetName() (res string) {
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMCircle(Circle *Circle)
+	CreateORMCircleGrid(CircleGrid *CircleGrid)
 	CreateORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
 	CreateORMInitialAxis(InitialAxis *InitialAxis)
 	CreateORMLine(Line *Line)
@@ -750,6 +819,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
 	DeleteORMCircle(Circle *Circle)
+	DeleteORMCircleGrid(CircleGrid *CircleGrid)
 	DeleteORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
 	DeleteORMInitialAxis(InitialAxis *InitialAxis)
 	DeleteORMLine(Line *Line)
@@ -762,6 +832,9 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 func (stage *StageStruct) Reset() { // insertion point for array reset
 	stage.Circles = make(map[*Circle]any)
 	stage.Circles_mapString = make(map[string]*Circle)
+
+	stage.CircleGrids = make(map[*CircleGrid]any)
+	stage.CircleGrids_mapString = make(map[string]*CircleGrid)
 
 	stage.HorizontalAxiss = make(map[*HorizontalAxis]any)
 	stage.HorizontalAxiss_mapString = make(map[string]*HorizontalAxis)
@@ -790,6 +863,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 	stage.Circles = nil
 	stage.Circles_mapString = nil
 
+	stage.CircleGrids = nil
+	stage.CircleGrids_mapString = nil
+
 	stage.HorizontalAxiss = nil
 	stage.HorizontalAxiss_mapString = nil
 
@@ -816,6 +892,10 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 func (stage *StageStruct) Unstage() { // insertion point for array nil
 	for circle := range stage.Circles {
 		circle.Unstage(stage)
+	}
+
+	for circlegrid := range stage.CircleGrids {
+		circlegrid.Unstage(stage)
 	}
 
 	for horizontalaxis := range stage.HorizontalAxiss {
@@ -854,7 +934,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Circle | HorizontalAxis | InitialAxis | Line | Parameter | Rhombus | RhombusGrid | VerticalAxis
+	Circle | CircleGrid | HorizontalAxis | InitialAxis | Line | Parameter | Rhombus | RhombusGrid | VerticalAxis
 }
 
 type GongtructBasicField interface {
@@ -867,7 +947,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Circle | *HorizontalAxis | *InitialAxis | *Line | *Parameter | *Rhombus | *RhombusGrid | *VerticalAxis
+	*Circle | *CircleGrid | *HorizontalAxis | *InitialAxis | *Line | *Parameter | *Rhombus | *RhombusGrid | *VerticalAxis
 	GetName() string
 	CommitVoid(*StageStruct)
 	UnstageVoid(stage *StageStruct)
@@ -897,6 +977,7 @@ type GongstructSet interface {
 	map[any]any |
 		// insertion point for generic types
 		map[*Circle]any |
+		map[*CircleGrid]any |
 		map[*HorizontalAxis]any |
 		map[*InitialAxis]any |
 		map[*Line]any |
@@ -911,6 +992,7 @@ type GongstructMapString interface {
 	map[any]any |
 		// insertion point for generic types
 		map[string]*Circle |
+		map[string]*CircleGrid |
 		map[string]*HorizontalAxis |
 		map[string]*InitialAxis |
 		map[string]*Line |
@@ -930,6 +1012,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 	// insertion point for generic get functions
 	case map[*Circle]any:
 		return any(&stage.Circles).(*Type)
+	case map[*CircleGrid]any:
+		return any(&stage.CircleGrids).(*Type)
 	case map[*HorizontalAxis]any:
 		return any(&stage.HorizontalAxiss).(*Type)
 	case map[*InitialAxis]any:
@@ -958,6 +1042,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 	// insertion point for generic get functions
 	case map[string]*Circle:
 		return any(&stage.Circles_mapString).(*Type)
+	case map[string]*CircleGrid:
+		return any(&stage.CircleGrids_mapString).(*Type)
 	case map[string]*HorizontalAxis:
 		return any(&stage.HorizontalAxiss_mapString).(*Type)
 	case map[string]*InitialAxis:
@@ -986,6 +1072,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 	// insertion point for generic get functions
 	case Circle:
 		return any(&stage.Circles).(*map[*Type]any)
+	case CircleGrid:
+		return any(&stage.CircleGrids).(*map[*Type]any)
 	case HorizontalAxis:
 		return any(&stage.HorizontalAxiss).(*map[*Type]any)
 	case InitialAxis:
@@ -1014,6 +1102,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 	// insertion point for generic get functions
 	case *Circle:
 		return any(&stage.Circles).(*map[Type]any)
+	case *CircleGrid:
+		return any(&stage.CircleGrids).(*map[Type]any)
 	case *HorizontalAxis:
 		return any(&stage.HorizontalAxiss).(*map[Type]any)
 	case *InitialAxis:
@@ -1042,6 +1132,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 	// insertion point for generic get functions
 	case Circle:
 		return any(&stage.Circles_mapString).(*map[string]*Type)
+	case CircleGrid:
+		return any(&stage.CircleGrids_mapString).(*map[string]*Type)
 	case HorizontalAxis:
 		return any(&stage.HorizontalAxiss_mapString).(*map[string]*Type)
 	case InitialAxis:
@@ -1074,6 +1166,14 @@ func GetAssociationName[Type Gongstruct]() *Type {
 		return any(&Circle{
 			// Initialisation of associations
 		}).(*Type)
+	case CircleGrid:
+		return any(&CircleGrid{
+			// Initialisation of associations
+			// field is initialized with an instance of Circle with the name of the field
+			Reference: &Circle{Name: "Reference"},
+			// field is initialized with an instance of Circle with the name of the field
+			Circles: []*Circle{{Name: "Circles"}},
+		}).(*Type)
 	case HorizontalAxis:
 		return any(&HorizontalAxis{
 			// Initialisation of associations
@@ -1095,6 +1195,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			InitialCircle: &Circle{Name: "InitialCircle"},
 			// field is initialized with an instance of RhombusGrid with the name of the field
 			InitialRhombusGrid: &RhombusGrid{Name: "InitialRhombusGrid"},
+			// field is initialized with an instance of CircleGrid with the name of the field
+			InitialCircleGrid: &CircleGrid{Name: "InitialCircleGrid"},
 			// field is initialized with an instance of InitialAxis with the name of the field
 			InitialAxis: &InitialAxis{Name: "InitialAxis"},
 			// field is initialized with an instance of HorizontalAxis with the name of the field
@@ -1140,6 +1242,28 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 	case Circle:
 		switch fieldname {
 		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of CircleGrid
+	case CircleGrid:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Reference":
+			res := make(map[*Circle][]*CircleGrid)
+			for circlegrid := range stage.CircleGrids {
+				if circlegrid.Reference != nil {
+					circle_ := circlegrid.Reference
+					var circlegrids []*CircleGrid
+					_, ok := res[circle_]
+					if ok {
+						circlegrids = res[circle_]
+					} else {
+						circlegrids = make([]*CircleGrid, 0)
+					}
+					circlegrids = append(circlegrids, circlegrid)
+					res[circle_] = circlegrids
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of HorizontalAxis
 	case HorizontalAxis:
@@ -1208,6 +1332,23 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 					}
 					parameters = append(parameters, parameter)
 					res[rhombusgrid_] = parameters
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		case "InitialCircleGrid":
+			res := make(map[*CircleGrid][]*Parameter)
+			for parameter := range stage.Parameters {
+				if parameter.InitialCircleGrid != nil {
+					circlegrid_ := parameter.InitialCircleGrid
+					var parameters []*Parameter
+					_, ok := res[circlegrid_]
+					if ok {
+						parameters = res[circlegrid_]
+					} else {
+						parameters = make([]*Parameter, 0)
+					}
+					parameters = append(parameters, parameter)
+					res[circlegrid_] = parameters
 				}
 			}
 			return any(res).(map[*End][]*Start)
@@ -1316,6 +1457,19 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		}
+	// reverse maps of direct associations of CircleGrid
+	case CircleGrid:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "Circles":
+			res := make(map[*Circle]*CircleGrid)
+			for circlegrid := range stage.CircleGrids {
+				for _, circle_ := range circlegrid.Circles {
+					res[circle_] = circlegrid
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
 	// reverse maps of direct associations of HorizontalAxis
 	case HorizontalAxis:
 		switch fieldname {
@@ -1373,6 +1527,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 	// insertion point for generic get gongstruct name
 	case Circle:
 		res = "Circle"
+	case CircleGrid:
+		res = "CircleGrid"
 	case HorizontalAxis:
 		res = "HorizontalAxis"
 	case InitialAxis:
@@ -1401,6 +1557,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	// insertion point for generic get gongstruct name
 	case *Circle:
 		res = "Circle"
+	case *CircleGrid:
+		res = "CircleGrid"
 	case *HorizontalAxis:
 		res = "HorizontalAxis"
 	case *InitialAxis:
@@ -1428,6 +1586,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 	// insertion point for generic get gongstruct name
 	case Circle:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "StrokeWidth"}
+	case CircleGrid:
+		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Circles"}
 	case HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "StrokeWidth"}
 	case InitialAxis:
@@ -1435,7 +1595,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialAxis", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "StrokeWidth"}
 	case RhombusGrid:
@@ -1461,6 +1621,12 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 
 	// insertion point for generic get gongstruct name
 	case Circle:
+		var rf ReverseField
+		_ = rf
+		rf.GongstructName = "CircleGrid"
+		rf.Fieldname = "Circles"
+		res = append(res, rf)
+	case CircleGrid:
 		var rf ReverseField
 		_ = rf
 	case HorizontalAxis:
@@ -1500,6 +1666,8 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	// insertion point for generic get gongstruct name
 	case *Circle:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "StrokeWidth"}
+	case *CircleGrid:
+		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Circles"}
 	case *HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "StrokeWidth"}
 	case *InitialAxis:
@@ -1507,7 +1675,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialAxis", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "StrokeWidth"}
 	case *RhombusGrid:
@@ -1535,6 +1703,29 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.CenterY)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+		}
+	case *CircleGrid:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "Reference":
+			if inferedInstance.Reference != nil {
+				res = inferedInstance.Reference.Name
+			}
+		case "N":
+			res = fmt.Sprintf("%d", inferedInstance.N)
+		case "M":
+			res = fmt.Sprintf("%d", inferedInstance.M)
+		case "IsDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "Circles":
+			for idx, __instance__ := range inferedInstance.Circles {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
 		}
 	case *HorizontalAxis:
 		switch fieldName {
@@ -1602,6 +1793,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 		case "InitialRhombusGrid":
 			if inferedInstance.InitialRhombusGrid != nil {
 				res = inferedInstance.InitialRhombusGrid.Name
+			}
+		case "InitialCircleGrid":
+			if inferedInstance.InitialCircleGrid != nil {
+				res = inferedInstance.InitialCircleGrid.Name
 			}
 		case "InitialAxis":
 			if inferedInstance.InitialAxis != nil {
@@ -1701,6 +1896,29 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
 		}
+	case CircleGrid:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "Reference":
+			if inferedInstance.Reference != nil {
+				res = inferedInstance.Reference.Name
+			}
+		case "N":
+			res = fmt.Sprintf("%d", inferedInstance.N)
+		case "M":
+			res = fmt.Sprintf("%d", inferedInstance.M)
+		case "IsDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "Circles":
+			for idx, __instance__ := range inferedInstance.Circles {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		}
 	case HorizontalAxis:
 		switch fieldName {
 		// string value of fields
@@ -1767,6 +1985,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		case "InitialRhombusGrid":
 			if inferedInstance.InitialRhombusGrid != nil {
 				res = inferedInstance.InitialRhombusGrid.Name
+			}
+		case "InitialCircleGrid":
+			if inferedInstance.InitialCircleGrid != nil {
+				res = inferedInstance.InitialCircleGrid.Name
 			}
 		case "InitialAxis":
 			if inferedInstance.InitialAxis != nil {

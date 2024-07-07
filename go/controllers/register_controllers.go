@@ -54,6 +54,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/circles/:id", GetController().UpdateCircle)
 		v1.DELETE("/v1/circles/:id", GetController().DeleteCircle)
 
+		v1.GET("/v1/circlegrids", GetController().GetCircleGrids)
+		v1.GET("/v1/circlegrids/:id", GetController().GetCircleGrid)
+		v1.POST("/v1/circlegrids", GetController().PostCircleGrid)
+		v1.PATCH("/v1/circlegrids/:id", GetController().UpdateCircleGrid)
+		v1.PUT("/v1/circlegrids/:id", GetController().UpdateCircleGrid)
+		v1.DELETE("/v1/circlegrids/:id", GetController().DeleteCircleGrid)
+
 		v1.GET("/v1/horizontalaxiss", GetController().GetHorizontalAxiss)
 		v1.GET("/v1/horizontalaxiss/:id", GetController().GetHorizontalAxis)
 		v1.POST("/v1/horizontalaxiss", GetController().PostHorizontalAxis)

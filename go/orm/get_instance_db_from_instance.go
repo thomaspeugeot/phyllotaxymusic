@@ -8,7 +8,7 @@ import (
 type GongstructDB interface {
 	// insertion point for generic types
 	// "int" is present to handle the case when no struct is present
-	int | CircleDB | HorizontalAxisDB | InitialAxisDB | LineDB | ParameterDB | RhombusDB | RhombusGridDB | VerticalAxisDB
+	int | CircleDB | CircleGridDB | HorizontalAxisDB | InitialAxisDB | LineDB | ParameterDB | RhombusDB | RhombusGridDB | VerticalAxisDB
 }
 
 func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
@@ -21,6 +21,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 	case *models.Circle:
 		circleInstance := any(concreteInstance).(*models.Circle)
 		ret2 := backRepo.BackRepoCircle.GetCircleDBFromCirclePtr(circleInstance)
+		ret = any(ret2).(*T2)
+	case *models.CircleGrid:
+		circlegridInstance := any(concreteInstance).(*models.CircleGrid)
+		ret2 := backRepo.BackRepoCircleGrid.GetCircleGridDBFromCircleGridPtr(circlegridInstance)
 		ret = any(ret2).(*T2)
 	case *models.HorizontalAxis:
 		horizontalaxisInstance := any(concreteInstance).(*models.HorizontalAxis)
@@ -65,6 +69,11 @@ func GetID[T models.Gongstruct](
 	// insertion point for per struct backup
 	case *models.Circle:
 		tmp := GetInstanceDBFromInstance[models.Circle, CircleDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.CircleGrid:
+		tmp := GetInstanceDBFromInstance[models.CircleGrid, CircleGridDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -118,6 +127,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 	// insertion point for per struct backup
 	case *models.Circle:
 		tmp := GetInstanceDBFromInstance[models.Circle, CircleDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.CircleGrid:
+		tmp := GetInstanceDBFromInstance[models.CircleGrid, CircleGridDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

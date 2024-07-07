@@ -3,6 +3,8 @@
 //insertion point for imports
 import { CircleAPI } from './circle-api'
 
+import { CircleGridAPI } from './circlegrid-api'
+
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 
 import { InitialAxisAPI } from './initialaxis-api'
@@ -21,6 +23,8 @@ import { VerticalAxisAPI } from './verticalaxis-api'
 export class BackRepoData {
 	// insertion point for declarations
 	CircleAPIs = new Array<CircleAPI>()
+
+	CircleGridAPIs = new Array<CircleGridAPI>()
 
 	HorizontalAxisAPIs = new Array<HorizontalAxisAPI>()
 
@@ -41,6 +45,8 @@ export class BackRepoData {
 	constructor(data?: Partial<BackRepoData>) {
 		// insertion point for copies
 		this.CircleAPIs = data?.CircleAPIs || [];
+
+		this.CircleGridAPIs = data?.CircleGridAPIs || [];
 
 		this.HorizontalAxisAPIs = data?.HorizontalAxisAPIs || [];
 

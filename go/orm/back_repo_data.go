@@ -6,6 +6,8 @@ type BackRepoData struct {
 
 	CircleAPIs []*CircleAPI
 
+	CircleGridAPIs []*CircleGridAPI
+
 	HorizontalAxisAPIs []*HorizontalAxisAPI
 
 	InitialAxisAPIs []*InitialAxisAPI
@@ -31,6 +33,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		circleDB.CopyBasicFieldsToCircle_WOP(&circleAPI.Circle_WOP)
 
 		backRepoData.CircleAPIs = append(backRepoData.CircleAPIs, &circleAPI)
+	}
+
+	for _, circlegridDB := range backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridDB {
+
+		var circlegridAPI CircleGridAPI
+		circlegridAPI.ID = circlegridDB.ID
+		circlegridAPI.CircleGridPointersEncoding = circlegridDB.CircleGridPointersEncoding
+		circlegridDB.CopyBasicFieldsToCircleGrid_WOP(&circlegridAPI.CircleGrid_WOP)
+
+		backRepoData.CircleGridAPIs = append(backRepoData.CircleGridAPIs, &circlegridAPI)
 	}
 
 	for _, horizontalaxisDB := range backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisDB {

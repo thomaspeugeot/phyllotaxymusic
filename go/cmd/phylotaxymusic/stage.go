@@ -26,6 +26,8 @@ func _(stage *models.StageStruct) {
 
 	__Circle__000000_Initial_Circle := (&models.Circle{Name: `Initial Circle`}).Stage(stage)
 
+	__CircleGrid__000000_Initial := (&models.CircleGrid{Name: `Initial`}).Stage(stage)
+
 	__HorizontalAxis__000000_Initial := (&models.HorizontalAxis{Name: `Initial`}).Stage(stage)
 
 	__InitialAxis__000000_Reference := (&models.InitialAxis{Name: `Reference`}).Stage(stage)
@@ -52,22 +54,27 @@ func _(stage *models.StageStruct) {
 	__Circle__000000_Initial_Circle.CenterY = 0.000000
 	__Circle__000000_Initial_Circle.StrokeWidth = 1.500000
 
+	__CircleGrid__000000_Initial.Name = `Initial`
+	__CircleGrid__000000_Initial.N = 0
+	__CircleGrid__000000_Initial.M = 0
+	__CircleGrid__000000_Initial.IsDisplayed = false
+
 	__HorizontalAxis__000000_Initial.Name = `Initial`
-	__HorizontalAxis__000000_Initial.IsDisplayed = true
+	__HorizontalAxis__000000_Initial.IsDisplayed = false
 	__HorizontalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Initial.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Initial.StrokeWidth = 1.000000
 
 	__InitialAxis__000000_Reference.Name = `Reference`
-	__InitialAxis__000000_Reference.IsDisplayed = true
-	__InitialAxis__000000_Reference.Angle = 115.873525
-	__InitialAxis__000000_Reference.Length = 188.852540
+	__InitialAxis__000000_Reference.IsDisplayed = false
+	__InitialAxis__000000_Reference.Angle = 109.669747
+	__InitialAxis__000000_Reference.Length = 217.278027
 	__InitialAxis__000000_Reference.StrokeWidth = 2.000000
 
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 2
 	__Parameter__000000_Reference.M = 3
-	__Parameter__000000_Reference.InsideAngle = 60.000000
+	__Parameter__000000_Reference.InsideAngle = 86.000000
 	__Parameter__000000_Reference.SideLength = 100.000000
 	__Parameter__000000_Reference.OriginX = 300.000000
 	__Parameter__000000_Reference.OriginY = 700.000000
@@ -78,52 +85,52 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000000_0_0.CenterY = 0.000000
 	__Rhombus__000000_0_0.SideLength = 100.000000
 	__Rhombus__000000_0_0.Angle = 0.000000
-	__Rhombus__000000_0_0.InsideAngle = 69.000000
+	__Rhombus__000000_0_0.InsideAngle = 86.000000
 	__Rhombus__000000_0_0.StrokeWidth = 1.000000
 
 	__Rhombus__000001_0_1.Name = `0 1`
 	__Rhombus__000001_0_1.IsDisplayed = true
-	__Rhombus__000001_0_1.CenterX = -82.412619
-	__Rhombus__000001_0_1.CenterY = 56.640624
+	__Rhombus__000001_0_1.CenterX = -73.135370
+	__Rhombus__000001_0_1.CenterY = 68.199836
 	__Rhombus__000001_0_1.SideLength = 100.000000
 	__Rhombus__000001_0_1.Angle = 0.000000
-	__Rhombus__000001_0_1.InsideAngle = 69.000000
+	__Rhombus__000001_0_1.InsideAngle = 86.000000
 	__Rhombus__000001_0_1.StrokeWidth = 1.000000
 
 	__Rhombus__000002_0_2.Name = `0 2`
 	__Rhombus__000002_0_2.IsDisplayed = true
-	__Rhombus__000002_0_2.CenterX = -164.825238
-	__Rhombus__000002_0_2.CenterY = 113.281247
+	__Rhombus__000002_0_2.CenterX = -146.270740
+	__Rhombus__000002_0_2.CenterY = 136.399672
 	__Rhombus__000002_0_2.SideLength = 100.000000
 	__Rhombus__000002_0_2.Angle = 0.000000
-	__Rhombus__000002_0_2.InsideAngle = 69.000000
+	__Rhombus__000002_0_2.InsideAngle = 86.000000
 	__Rhombus__000002_0_2.StrokeWidth = 1.000000
 
 	__Rhombus__000003_1_0.Name = `1 0`
 	__Rhombus__000003_1_0.IsDisplayed = true
-	__Rhombus__000003_1_0.CenterX = 82.412619
-	__Rhombus__000003_1_0.CenterY = 56.640624
+	__Rhombus__000003_1_0.CenterX = 73.135370
+	__Rhombus__000003_1_0.CenterY = 68.199836
 	__Rhombus__000003_1_0.SideLength = 100.000000
 	__Rhombus__000003_1_0.Angle = 0.000000
-	__Rhombus__000003_1_0.InsideAngle = 69.000000
+	__Rhombus__000003_1_0.InsideAngle = 86.000000
 	__Rhombus__000003_1_0.StrokeWidth = 1.000000
 
 	__Rhombus__000004_1_1.Name = `1 1`
 	__Rhombus__000004_1_1.IsDisplayed = true
 	__Rhombus__000004_1_1.CenterX = 0.000000
-	__Rhombus__000004_1_1.CenterY = 113.281247
+	__Rhombus__000004_1_1.CenterY = 136.399672
 	__Rhombus__000004_1_1.SideLength = 100.000000
 	__Rhombus__000004_1_1.Angle = 0.000000
-	__Rhombus__000004_1_1.InsideAngle = 69.000000
+	__Rhombus__000004_1_1.InsideAngle = 86.000000
 	__Rhombus__000004_1_1.StrokeWidth = 1.000000
 
 	__Rhombus__000005_1_2.Name = `1 2`
 	__Rhombus__000005_1_2.IsDisplayed = true
-	__Rhombus__000005_1_2.CenterX = -82.412619
-	__Rhombus__000005_1_2.CenterY = 169.921871
+	__Rhombus__000005_1_2.CenterX = -73.135370
+	__Rhombus__000005_1_2.CenterY = 204.599508
 	__Rhombus__000005_1_2.SideLength = 100.000000
 	__Rhombus__000005_1_2.Angle = 0.000000
-	__Rhombus__000005_1_2.InsideAngle = 69.000000
+	__Rhombus__000005_1_2.InsideAngle = 86.000000
 	__Rhombus__000005_1_2.StrokeWidth = 1.000000
 
 	__Rhombus__000006_Initial.Name = `Initial`
@@ -132,24 +139,26 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000006_Initial.CenterY = 0.000000
 	__Rhombus__000006_Initial.SideLength = 100.000000
 	__Rhombus__000006_Initial.Angle = 0.000000
-	__Rhombus__000006_Initial.InsideAngle = 69.000000
+	__Rhombus__000006_Initial.InsideAngle = 86.000000
 	__Rhombus__000006_Initial.StrokeWidth = 1.000000
 
 	__RhombusGrid__000000_Initial.Name = `Initial`
 	__RhombusGrid__000000_Initial.N = 2
 	__RhombusGrid__000000_Initial.M = 3
-	__RhombusGrid__000000_Initial.IsDisplayed = true
+	__RhombusGrid__000000_Initial.IsDisplayed = false
 
 	__VerticalAxis__000000_Initial.Name = `Initial`
-	__VerticalAxis__000000_Initial.IsDisplayed = true
+	__VerticalAxis__000000_Initial.IsDisplayed = false
 	__VerticalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
 	__VerticalAxis__000000_Initial.Axis_Length = 600.000000
 	__VerticalAxis__000000_Initial.StrokeWidth = 1.000000
 
 	// Setup of pointers
+	__CircleGrid__000000_Initial.Reference = __Circle__000000_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000006_Initial
 	__Parameter__000000_Reference.InitialCircle = __Circle__000000_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000000_Initial
+	__Parameter__000000_Reference.InitialCircleGrid = __CircleGrid__000000_Initial
 	__Parameter__000000_Reference.InitialAxis = __InitialAxis__000000_Reference
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Initial
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Initial

@@ -36,6 +36,28 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 	case *Circle:
 		// insertion point per field
 
+	case *CircleGrid:
+		// insertion point per field
+		if fieldName == "Circles" {
+
+			// walk all instances of the owning type
+			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
+				if any(_instance).(*CircleGrid) != owningInstanceInfered {
+					_inferedTypeInstance := any(_instance).(*CircleGrid)
+					reference := make([]FieldType, 0)
+					targetFieldSlice := any(_inferedTypeInstance.Circles).([]FieldType)
+					copy(targetFieldSlice, reference)
+					_inferedTypeInstance.Circles = _inferedTypeInstance.Circles[0:]
+					for _, fieldInstance := range reference {
+						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
+							_inferedTypeInstance.Circles =
+								append(_inferedTypeInstance.Circles, any(fieldInstance).(*Circle))
+						}
+					}
+				}
+			}
+		}
+
 	case *HorizontalAxis:
 		// insertion point per field
 
@@ -87,6 +109,17 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	// insertion point per named struct
 	// Compute reverse map for named struct Circle
 	// insertion point per field
+
+	// Compute reverse map for named struct CircleGrid
+	// insertion point per field
+	clear(stage.CircleGrid_Circles_reverseMap)
+	stage.CircleGrid_Circles_reverseMap = make(map[*Circle]*CircleGrid)
+	for circlegrid := range stage.CircleGrids {
+		_ = circlegrid
+		for _, _circle := range circlegrid.Circles {
+			stage.CircleGrid_Circles_reverseMap[_circle] = circlegrid
+		}
+	}
 
 	// Compute reverse map for named struct HorizontalAxis
 	// insertion point per field

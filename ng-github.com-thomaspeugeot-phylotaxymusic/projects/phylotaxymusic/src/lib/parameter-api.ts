@@ -2,6 +2,7 @@
 import { RhombusAPI } from './rhombus-api'
 import { CircleAPI } from './circle-api'
 import { RhombusGridAPI } from './rhombusgrid-api'
+import { CircleGridAPI } from './circlegrid-api'
 import { InitialAxisAPI } from './initialaxis-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
@@ -38,6 +39,8 @@ export class ParameterPointersEncoding {
 	InitialCircleID: NullInt64 = new NullInt64 // if pointer is null, InitialCircle.ID = 0
 
 	InitialRhombusGridID: NullInt64 = new NullInt64 // if pointer is null, InitialRhombusGrid.ID = 0
+
+	InitialCircleGridID: NullInt64 = new NullInt64 // if pointer is null, InitialCircleGrid.ID = 0
 
 	InitialAxisID: NullInt64 = new NullInt64 // if pointer is null, InitialAxis.ID = 0
 

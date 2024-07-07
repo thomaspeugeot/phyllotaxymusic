@@ -21,6 +21,7 @@ type Parameter struct {
 	InitialRhombus     *Rhombus
 	InitialCircle      *Circle
 	InitialRhombusGrid *RhombusGrid
+	InitialCircleGrid  *CircleGrid
 	InitialAxis        *InitialAxis
 
 	// for drawing purpose
@@ -45,6 +46,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeInitialRhombus()
 	p.ComputeInitialCircle()
 	p.ComputeInitialRhombusGrid(stage)
+	p.ComputeInitialCircleGrid(stage)
 	p.ComputeInitialAxis()
 }
 
@@ -88,6 +90,36 @@ func (p *Parameter) ComputeInitialRhombusGrid(stage *StageStruct) {
 			r.CenterY +=
 				float64(i)*r.SideLength*sinHalfInsideAngle +
 					float64(j)*r.SideLength*sinHalfInsideAngle
+		}
+	}
+}
+
+func (p *Parameter) ComputeInitialCircleGrid(stage *StageStruct) {
+
+	// remove the attached rhombus
+	for _, c := range p.InitialCircleGrid.Circles {
+		c.Unstage(stage)
+	}
+	p.InitialCircleGrid.Circles = p.InitialCircleGrid.Circles[:0]
+
+	g := p.InitialCircleGrid
+
+	insideAngleRad := p.InsideAngle * math.Pi / 180
+	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
+	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
+
+	for i := range g.N {
+		for j := range g.M {
+			c := new(Circle).Stage(stage)
+			*c = *g.Reference
+			g.Circles = append(g.Circles, c)
+			c.Name = fmt.Sprintf("%d %d", i, j)
+			c.CenterX +=
+				float64(i)*p.SideLength*cosHalfInsideAngle -
+					float64(j)*p.SideLength*cosHalfInsideAngle
+			c.CenterY +=
+				float64(i)*p.SideLength*sinHalfInsideAngle +
+					float64(j)*p.SideLength*sinHalfInsideAngle
 		}
 	}
 }

@@ -59,6 +59,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	InitialRhombusGridID sql.NullInt64
 
+	// field InitialCircleGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	InitialCircleGridID sql.NullInt64
+
 	// field InitialAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	InitialAxisID sql.NullInt64
@@ -307,6 +311,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.InitialRhombusGridID.Valid = true
 		}
 
+		// commit pointer value parameter.InitialCircleGrid translates to updating the parameter.InitialCircleGridID
+		parameterDB.InitialCircleGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.InitialCircleGrid != nil {
+			if InitialCircleGridId, ok := backRepo.BackRepoCircleGrid.Map_CircleGridPtr_CircleGridDBID[parameter.InitialCircleGrid]; ok {
+				parameterDB.InitialCircleGridID.Int64 = int64(InitialCircleGridId)
+				parameterDB.InitialCircleGridID.Valid = true
+			}
+		} else {
+			parameterDB.InitialCircleGridID.Int64 = 0
+			parameterDB.InitialCircleGridID.Valid = true
+		}
+
 		// commit pointer value parameter.InitialAxis translates to updating the parameter.InitialAxisID
 		parameterDB.InitialAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.InitialAxis != nil {
@@ -470,6 +486,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.InitialRhombusGrid = nil
 	if parameterDB.InitialRhombusGridID.Int64 != 0 {
 		parameter.InitialRhombusGrid = backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(parameterDB.InitialRhombusGridID.Int64)]
+	}
+	// InitialCircleGrid field
+	parameter.InitialCircleGrid = nil
+	if parameterDB.InitialCircleGridID.Int64 != 0 {
+		parameter.InitialCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.InitialCircleGridID.Int64)]
 	}
 	// InitialAxis field
 	parameter.InitialAxis = nil
@@ -802,6 +823,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.InitialRhombusGridID.Int64 != 0 {
 			parameterDB.InitialRhombusGridID.Int64 = int64(BackRepoRhombusGridid_atBckpTime_newID[uint(parameterDB.InitialRhombusGridID.Int64)])
 			parameterDB.InitialRhombusGridID.Valid = true
+		}
+
+		// reindexing InitialCircleGrid field
+		if parameterDB.InitialCircleGridID.Int64 != 0 {
+			parameterDB.InitialCircleGridID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.InitialCircleGridID.Int64)])
+			parameterDB.InitialCircleGridID.Valid = true
 		}
 
 		// reindexing InitialAxis field
