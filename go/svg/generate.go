@@ -54,8 +54,8 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, phylotaxymusicStage *
 	diamondBottom.Y2 = diamondBottom.Y1
 	diamondBottom.Presentation = presentation
 
-	deltaX := parameter.DiamondSideLenght * math.Cos(math.Pi*parameter.Angle/180.0)
-	deltaY := parameter.DiamondSideLenght * math.Sin(math.Pi*parameter.Angle/180.0)
+	deltaX := parameter.DiamondSideLenght * math.Cos(math.Pi*parameter.InsideAngle/180.0)
+	deltaY := parameter.DiamondSideLenght * math.Sin(math.Pi*parameter.InsideAngle/180.0)
 
 	diamondLeftSide := new(gongsvg_models.Line).Stage(gongsvgStage)
 	diamondLeftSide.Name = "L"

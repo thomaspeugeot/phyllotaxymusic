@@ -19,31 +19,31 @@ func drawRhombus(
 	angleRad := r.Angle * math.Pi / 180
 	insideAngleRad := r.InsideAngle * math.Pi / 180
 
-	sinInsideAngle := math.Sin(insideAngleRad / 2)
-	cosInsideAngle := math.Cos(insideAngleRad / 2)
+	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
+	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
 
 	// Calculate half of the inside angles to position the vertices
-	halfVerticalDiagonal := r.SideLength * sinInsideAngle
-	halfHorizontalDiagonal := r.SideLength * cosInsideAngle
+	halfVerticalDiagonal := r.SideLength * sinHalfInsideAngle
+	halfHorizontalDiagonal := r.SideLength * cosHalfInsideAngle
 
 	var x_s [4]float64
 	var y_s [4]float64
 
 	// Coordinates of the first vertex (using the angle + half of the inside angle)
-	x_s[0] = r.CenterX + halfVerticalDiagonal*math.Cos(angleRad)
-	y_s[0] = r.CenterY + halfVerticalDiagonal*math.Sin(angleRad)
+	x_s[0] = r.CenterX + halfHorizontalDiagonal*math.Cos(angleRad)
+	y_s[0] = r.CenterY + halfHorizontalDiagonal*math.Sin(angleRad)
 
 	// Coordinates of the second vertex (using the angle - half of the inside angle)
-	x_s[1] = r.CenterX + halfHorizontalDiagonal*math.Cos(angleRad+math.Pi/2.0)
-	y_s[1] = r.CenterY + halfHorizontalDiagonal*math.Sin(angleRad+math.Pi/2.0)
+	x_s[1] = r.CenterX + halfVerticalDiagonal*math.Cos(angleRad+math.Pi/2.0)
+	y_s[1] = r.CenterY + halfVerticalDiagonal*math.Sin(angleRad+math.Pi/2.0)
 
 	// Coordinates of the third vertex (opposite of the first vertex)
-	x_s[2] = r.CenterX + halfVerticalDiagonal*math.Cos(angleRad+math.Pi)
-	y_s[2] = r.CenterY + halfVerticalDiagonal*math.Sin(angleRad+math.Pi)
+	x_s[2] = r.CenterX + halfHorizontalDiagonal*math.Cos(angleRad+math.Pi)
+	y_s[2] = r.CenterY + halfHorizontalDiagonal*math.Sin(angleRad+math.Pi)
 
 	// Coordinates of the fourth vertex (opposite of the second vertex)
-	x_s[3] = r.CenterX + halfHorizontalDiagonal*math.Cos(angleRad+math.Pi*1.5)
-	y_s[3] = r.CenterY + halfHorizontalDiagonal*math.Sin(angleRad+math.Pi*1.5)
+	x_s[3] = r.CenterX + halfVerticalDiagonal*math.Cos(angleRad+math.Pi*1.5)
+	y_s[3] = r.CenterY + halfVerticalDiagonal*math.Sin(angleRad+math.Pi*1.5)
 
 	for i := range 4 {
 		line := (&gongsvg_models.Line{

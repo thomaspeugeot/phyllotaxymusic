@@ -5,6 +5,9 @@ import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
 import { Rhombus } from './rhombus'
+import { RhombusGrid } from './rhombusgrid'
+import { HorizontalAxis } from './horizontalaxis'
+import { VerticalAxis } from './verticalaxis'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -21,18 +24,19 @@ export class Parameter {
 	Name: string = ""
 	N: number = 0
 	M: number = 0
-	Angle: number = 0
+	InsideAngle: number = 0
 	DiamondSideLenght: number = 0
-	IsHorizontalAxisDisplayed: boolean = false
-	AxisHandleBorderLength: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
-	HorizontalAxis_Length: number = 0
-	VerticalAxis_Length: number = 0
-	Axis_StrokeWidth: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 	InitialRhombus?: Rhombus
+
+	InitialRhombusGrid?: RhombusGrid
+
+	HorizontalAxis?: HorizontalAxis
+
+	VerticalAxis?: VerticalAxis
 
 }
 
@@ -46,15 +50,10 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.Name = parameter.Name
 	parameterAPI.N = parameter.N
 	parameterAPI.M = parameter.M
-	parameterAPI.Angle = parameter.Angle
+	parameterAPI.InsideAngle = parameter.InsideAngle
 	parameterAPI.DiamondSideLenght = parameter.DiamondSideLenght
-	parameterAPI.IsHorizontalAxisDisplayed = parameter.IsHorizontalAxisDisplayed
-	parameterAPI.AxisHandleBorderLength = parameter.AxisHandleBorderLength
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
-	parameterAPI.HorizontalAxis_Length = parameter.HorizontalAxis_Length
-	parameterAPI.VerticalAxis_Length = parameter.VerticalAxis_Length
-	parameterAPI.Axis_StrokeWidth = parameter.Axis_StrokeWidth
 
 	// insertion point for pointer fields encoding
 	parameterAPI.ParameterPointersEncoding.InitialRhombusID.Valid = true
@@ -62,6 +61,27 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64 = parameter.InitialRhombus.ID  
 	} else {
 		parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.InitialRhombusGridID.Valid = true
+	if (parameter.InitialRhombusGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.InitialRhombusGridID.Int64 = parameter.InitialRhombusGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.InitialRhombusGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
+	if (parameter.HorizontalAxis != undefined) {
+		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.VerticalAxisID.Valid = true
+	if (parameter.VerticalAxis != undefined) {
+		parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64 = parameter.VerticalAxis.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64 = 0 		
 	}
 
 
@@ -82,18 +102,16 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.Name = parameterAPI.Name
 	parameter.N = parameterAPI.N
 	parameter.M = parameterAPI.M
-	parameter.Angle = parameterAPI.Angle
+	parameter.InsideAngle = parameterAPI.InsideAngle
 	parameter.DiamondSideLenght = parameterAPI.DiamondSideLenght
-	parameter.IsHorizontalAxisDisplayed = parameterAPI.IsHorizontalAxisDisplayed
-	parameter.AxisHandleBorderLength = parameterAPI.AxisHandleBorderLength
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
-	parameter.HorizontalAxis_Length = parameterAPI.HorizontalAxis_Length
-	parameter.VerticalAxis_Length = parameterAPI.VerticalAxis_Length
-	parameter.Axis_StrokeWidth = parameterAPI.Axis_StrokeWidth
 
 	// insertion point for pointer fields encoding
 	parameter.InitialRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64)
+	parameter.InitialRhombusGrid = frontRepo.map_ID_RhombusGrid.get(parameterAPI.ParameterPointersEncoding.InitialRhombusGridID.Int64)
+	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
+	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

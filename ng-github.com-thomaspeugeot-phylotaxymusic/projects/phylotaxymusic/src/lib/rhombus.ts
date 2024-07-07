@@ -18,11 +18,13 @@ export class Rhombus {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	IsDisplayed: boolean = false
 	CenterX: number = 0
 	CenterY: number = 0
 	SideLength: number = 0
 	Angle: number = 0
 	InsideAngle: number = 0
+	StrokeWidth: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -35,11 +37,13 @@ export function CopyRhombusToRhombusAPI(rhombus: Rhombus, rhombusAPI: RhombusAPI
 
 	// insertion point for basic fields copy operations
 	rhombusAPI.Name = rhombus.Name
+	rhombusAPI.IsDisplayed = rhombus.IsDisplayed
 	rhombusAPI.CenterX = rhombus.CenterX
 	rhombusAPI.CenterY = rhombus.CenterY
 	rhombusAPI.SideLength = rhombus.SideLength
 	rhombusAPI.Angle = rhombus.Angle
 	rhombusAPI.InsideAngle = rhombus.InsideAngle
+	rhombusAPI.StrokeWidth = rhombus.StrokeWidth
 
 	// insertion point for pointer fields encoding
 
@@ -58,11 +62,13 @@ export function CopyRhombusAPIToRhombus(rhombusAPI: RhombusAPI, rhombus: Rhombus
 
 	// insertion point for basic fields copy operations
 	rhombus.Name = rhombusAPI.Name
+	rhombus.IsDisplayed = rhombusAPI.IsDisplayed
 	rhombus.CenterX = rhombusAPI.CenterX
 	rhombus.CenterY = rhombusAPI.CenterY
 	rhombus.SideLength = rhombusAPI.SideLength
 	rhombus.Angle = rhombusAPI.Angle
 	rhombus.InsideAngle = rhombusAPI.InsideAngle
+	rhombus.StrokeWidth = rhombusAPI.StrokeWidth
 
 	// insertion point for pointer fields encoding
 

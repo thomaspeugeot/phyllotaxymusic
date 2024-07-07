@@ -48,7 +48,7 @@ type Parameter_WOP struct {
 	Name string
 	N int
 	M int
-	Angle float64
+	InsideAngle float64
 	DiamondSideLenght float64
 	OriginX float64
 	OriginY float64
@@ -59,7 +59,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.Name = from.Name
 	to.N = from.N
 	to.M = from.M
-	to.Angle = from.Angle
+	to.InsideAngle = from.InsideAngle
 	to.DiamondSideLenght = from.DiamondSideLenght
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY

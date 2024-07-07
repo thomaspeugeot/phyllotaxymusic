@@ -1,11 +1,12 @@
 // insertion point for imports
+import { RhombusAPI } from './rhombus-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class RhombusAPI {
+export class RhombusGridAPI {
 
-	static GONGSTRUCT_NAME = "Rhombus"
+	static GONGSTRUCT_NAME = "RhombusGrid"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,19 +14,18 @@ export class RhombusAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	N: number = 0
+	M: number = 0
 	IsDisplayed: boolean = false
-	CenterX: number = 0
-	CenterY: number = 0
-	SideLength: number = 0
-	Angle: number = 0
-	InsideAngle: number = 0
-	StrokeWidth: number = 0
 
 	// insertion point for other decls
 
-	RhombusPointersEncoding: RhombusPointersEncoding = new RhombusPointersEncoding
+	RhombusGridPointersEncoding: RhombusGridPointersEncoding = new RhombusGridPointersEncoding
 }
 
-export class RhombusPointersEncoding {
+export class RhombusGridPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	ReferenceID: NullInt64 = new NullInt64 // if pointer is null, Reference.ID = 0
+
+	Rhombuses: number[] = []
 }

@@ -4,6 +4,10 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Observable, combineLatest, BehaviorSubject, of } from 'rxjs'
 
 // insertion point sub template for services imports
+import { HorizontalAxisAPI } from './horizontalaxis-api'
+import { HorizontalAxis, CopyHorizontalAxisAPIToHorizontalAxis } from './horizontalaxis'
+import { HorizontalAxisService } from './horizontalaxis.service'
+
 import { LineAPI } from './line-api'
 import { Line, CopyLineAPIToLine } from './line'
 import { LineService } from './line.service'
@@ -16,6 +20,14 @@ import { RhombusAPI } from './rhombus-api'
 import { Rhombus, CopyRhombusAPIToRhombus } from './rhombus'
 import { RhombusService } from './rhombus.service'
 
+import { RhombusGridAPI } from './rhombusgrid-api'
+import { RhombusGrid, CopyRhombusGridAPIToRhombusGrid } from './rhombusgrid'
+import { RhombusGridService } from './rhombusgrid.service'
+
+import { VerticalAxisAPI } from './verticalaxis-api'
+import { VerticalAxis, CopyVerticalAxisAPIToVerticalAxis } from './verticalaxis'
+import { VerticalAxisService } from './verticalaxis.service'
+
 
 import { BackRepoData } from './back-repo-data'
 
@@ -23,6 +35,9 @@ export const StackType = "github.com/thomaspeugeot/phylotaxymusic/go/models"
 
 // FrontRepo stores all instances in a front repository (design pattern repository)
 export class FrontRepo { // insertion point sub template
+	array_HorizontalAxiss = new Array<HorizontalAxis>() // array of front instances
+	map_ID_HorizontalAxis = new Map<number, HorizontalAxis>() // map of front instances
+
 	array_Lines = new Array<Line>() // array of front instances
 	map_ID_Line = new Map<number, Line>() // map of front instances
 
@@ -32,6 +47,12 @@ export class FrontRepo { // insertion point sub template
 	array_Rhombuss = new Array<Rhombus>() // array of front instances
 	map_ID_Rhombus = new Map<number, Rhombus>() // map of front instances
 
+	array_RhombusGrids = new Array<RhombusGrid>() // array of front instances
+	map_ID_RhombusGrid = new Map<number, RhombusGrid>() // map of front instances
+
+	array_VerticalAxiss = new Array<VerticalAxis>() // array of front instances
+	map_ID_VerticalAxis = new Map<number, VerticalAxis>() // map of front instances
+
 
 	// getFrontArray allows for a get function that is robust to refactoring of the named struct name
 	// for instance frontRepo.getArray<Astruct>( Astruct.GONGSTRUCT_NAME), is robust to a refactoring of Astruct identifier
@@ -39,12 +60,18 @@ export class FrontRepo { // insertion point sub template
 	getFrontArray<Type>(gongStructName: string): Array<Type> {
 		switch (gongStructName) {
 			// insertion point
+			case 'HorizontalAxis':
+				return this.array_HorizontalAxiss as unknown as Array<Type>
 			case 'Line':
 				return this.array_Lines as unknown as Array<Type>
 			case 'Parameter':
 				return this.array_Parameters as unknown as Array<Type>
 			case 'Rhombus':
 				return this.array_Rhombuss as unknown as Array<Type>
+			case 'RhombusGrid':
+				return this.array_RhombusGrids as unknown as Array<Type>
+			case 'VerticalAxis':
+				return this.array_VerticalAxiss as unknown as Array<Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -53,12 +80,18 @@ export class FrontRepo { // insertion point sub template
 	getFrontMap<Type>(gongStructName: string): Map<number, Type> {
 		switch (gongStructName) {
 			// insertion point
+			case 'HorizontalAxis':
+				return this.map_ID_HorizontalAxis as unknown as Map<number, Type>
 			case 'Line':
 				return this.map_ID_Line as unknown as Map<number, Type>
 			case 'Parameter':
 				return this.map_ID_Parameter as unknown as Map<number, Type>
 			case 'Rhombus':
 				return this.map_ID_Rhombus as unknown as Map<number, Type>
+			case 'RhombusGrid':
+				return this.map_ID_RhombusGrid as unknown as Map<number, Type>
+			case 'VerticalAxis':
+				return this.map_ID_VerticalAxis as unknown as Map<number, Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -126,9 +159,12 @@ export class FrontRepoService {
 
 	constructor(
 		private http: HttpClient, // insertion point sub template 
+		private horizontalaxisService: HorizontalAxisService,
 		private lineService: LineService,
 		private parameterService: ParameterService,
 		private rhombusService: RhombusService,
+		private rhombusgridService: RhombusGridService,
+		private verticalaxisService: VerticalAxisService,
 	) { }
 
 	// postService provides a post function for each struct name
@@ -161,9 +197,12 @@ export class FrontRepoService {
 	observableFrontRepo: [
 		Observable<null>, // see below for the of(null) observable
 		// insertion point sub template 
+		Observable<HorizontalAxisAPI[]>,
 		Observable<LineAPI[]>,
 		Observable<ParameterAPI[]>,
 		Observable<RhombusAPI[]>,
+		Observable<RhombusGridAPI[]>,
+		Observable<VerticalAxisAPI[]>,
 	] = [
 			// Using "combineLatest" with a placeholder observable.
 			//
@@ -174,9 +213,12 @@ export class FrontRepoService {
 			// expectation for a non-empty array of observables.
 			of(null), // 
 			// insertion point sub template
+			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
+			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
+			this.verticalaxisService.getVerticalAxiss(this.GONG__StackPath, this.frontRepo),
 		];
 
 	//
@@ -192,9 +234,12 @@ export class FrontRepoService {
 		this.observableFrontRepo = [
 			of(null), // see above for justification
 			// insertion point sub template
+			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
+			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
+			this.verticalaxisService.getVerticalAxiss(this.GONG__StackPath, this.frontRepo),
 		]
 
 		return new Observable<FrontRepo>(
@@ -205,23 +250,44 @@ export class FrontRepoService {
 					([
 						___of_null, // see above for the explanation about of
 						// insertion point sub template for declarations 
+						horizontalaxiss_,
 						lines_,
 						parameters_,
 						rhombuss_,
+						rhombusgrids_,
+						verticalaxiss_,
 					]) => {
 						let _this = this
 						// Typing can be messy with many items. Therefore, type casting is necessary here
 						// insertion point sub template for type casting 
+						var horizontalaxiss: HorizontalAxisAPI[]
+						horizontalaxiss = horizontalaxiss_ as HorizontalAxisAPI[]
 						var lines: LineAPI[]
 						lines = lines_ as LineAPI[]
 						var parameters: ParameterAPI[]
 						parameters = parameters_ as ParameterAPI[]
 						var rhombuss: RhombusAPI[]
 						rhombuss = rhombuss_ as RhombusAPI[]
+						var rhombusgrids: RhombusGridAPI[]
+						rhombusgrids = rhombusgrids_ as RhombusGridAPI[]
+						var verticalaxiss: VerticalAxisAPI[]
+						verticalaxiss = verticalaxiss_ as VerticalAxisAPI[]
 
 						// 
 						// First Step: init map of instances
 						// insertion point sub template for init 
+						// init the arrays
+						this.frontRepo.array_HorizontalAxiss = []
+						this.frontRepo.map_ID_HorizontalAxis.clear()
+
+						horizontalaxiss.forEach(
+							horizontalaxisAPI => {
+								let horizontalaxis = new HorizontalAxis
+								this.frontRepo.array_HorizontalAxiss.push(horizontalaxis)
+								this.frontRepo.map_ID_HorizontalAxis.set(horizontalaxisAPI.ID, horizontalaxis)
+							}
+						)
+
 						// init the arrays
 						this.frontRepo.array_Lines = []
 						this.frontRepo.map_ID_Line.clear()
@@ -258,10 +324,42 @@ export class FrontRepoService {
 							}
 						)
 
+						// init the arrays
+						this.frontRepo.array_RhombusGrids = []
+						this.frontRepo.map_ID_RhombusGrid.clear()
+
+						rhombusgrids.forEach(
+							rhombusgridAPI => {
+								let rhombusgrid = new RhombusGrid
+								this.frontRepo.array_RhombusGrids.push(rhombusgrid)
+								this.frontRepo.map_ID_RhombusGrid.set(rhombusgridAPI.ID, rhombusgrid)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_VerticalAxiss = []
+						this.frontRepo.map_ID_VerticalAxis.clear()
+
+						verticalaxiss.forEach(
+							verticalaxisAPI => {
+								let verticalaxis = new VerticalAxis
+								this.frontRepo.array_VerticalAxiss.push(verticalaxis)
+								this.frontRepo.map_ID_VerticalAxis.set(verticalaxisAPI.ID, verticalaxis)
+							}
+						)
+
 
 						// 
 						// Second Step: reddeem front objects
 						// insertion point sub template for redeem 
+						// fill up front objects
+						horizontalaxiss.forEach(
+							horizontalaxisAPI => {
+								let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
+								CopyHorizontalAxisAPIToHorizontalAxis(horizontalaxisAPI, horizontalaxis!, this.frontRepo)
+							}
+						)
+
 						// fill up front objects
 						lines.forEach(
 							lineAPI => {
@@ -283,6 +381,22 @@ export class FrontRepoService {
 							rhombusAPI => {
 								let rhombus = this.frontRepo.map_ID_Rhombus.get(rhombusAPI.ID)
 								CopyRhombusAPIToRhombus(rhombusAPI, rhombus!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						rhombusgrids.forEach(
+							rhombusgridAPI => {
+								let rhombusgrid = this.frontRepo.map_ID_RhombusGrid.get(rhombusgridAPI.ID)
+								CopyRhombusGridAPIToRhombusGrid(rhombusgridAPI, rhombusgrid!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						verticalaxiss.forEach(
+							verticalaxisAPI => {
+								let verticalaxis = this.frontRepo.map_ID_VerticalAxis.get(verticalaxisAPI.ID)
+								CopyVerticalAxisAPIToVerticalAxis(verticalaxisAPI, verticalaxis!, this.frontRepo)
 							}
 						)
 
@@ -317,6 +431,18 @@ export class FrontRepoService {
 				// insertion point sub template for init 
 				// init the arrays
 				// insertion point sub template for init 
+				// init the arrays
+				this.frontRepo.array_HorizontalAxiss = []
+				this.frontRepo.map_ID_HorizontalAxis.clear()
+
+				backRepoData.HorizontalAxisAPIs.forEach(
+					horizontalaxisAPI => {
+						let horizontalaxis = new HorizontalAxis
+						this.frontRepo.array_HorizontalAxiss.push(horizontalaxis)
+						this.frontRepo.map_ID_HorizontalAxis.set(horizontalaxisAPI.ID, horizontalaxis)
+					}
+				)
+
 				// init the arrays
 				this.frontRepo.array_Lines = []
 				this.frontRepo.map_ID_Line.clear()
@@ -353,12 +479,44 @@ export class FrontRepoService {
 					}
 				)
 
+				// init the arrays
+				this.frontRepo.array_RhombusGrids = []
+				this.frontRepo.map_ID_RhombusGrid.clear()
+
+				backRepoData.RhombusGridAPIs.forEach(
+					rhombusgridAPI => {
+						let rhombusgrid = new RhombusGrid
+						this.frontRepo.array_RhombusGrids.push(rhombusgrid)
+						this.frontRepo.map_ID_RhombusGrid.set(rhombusgridAPI.ID, rhombusgrid)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_VerticalAxiss = []
+				this.frontRepo.map_ID_VerticalAxis.clear()
+
+				backRepoData.VerticalAxisAPIs.forEach(
+					verticalaxisAPI => {
+						let verticalaxis = new VerticalAxis
+						this.frontRepo.array_VerticalAxiss.push(verticalaxis)
+						this.frontRepo.map_ID_VerticalAxis.set(verticalaxisAPI.ID, verticalaxis)
+					}
+				)
+
 
 				// 
 				// Second Step: reddeem front objects
 				// insertion point sub template for redeem 
 				// fill up front objects
 				// insertion point sub template for redeem 
+				// fill up front objects
+				backRepoData.HorizontalAxisAPIs.forEach(
+					horizontalaxisAPI => {
+						let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
+						CopyHorizontalAxisAPIToHorizontalAxis(horizontalaxisAPI, horizontalaxis!, this.frontRepo)
+					}
+				)
+
 				// fill up front objects
 				backRepoData.LineAPIs.forEach(
 					lineAPI => {
@@ -383,6 +541,22 @@ export class FrontRepoService {
 					}
 				)
 
+				// fill up front objects
+				backRepoData.RhombusGridAPIs.forEach(
+					rhombusgridAPI => {
+						let rhombusgrid = this.frontRepo.map_ID_RhombusGrid.get(rhombusgridAPI.ID)
+						CopyRhombusGridAPIToRhombusGrid(rhombusgridAPI, rhombusgrid!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.VerticalAxisAPIs.forEach(
+					verticalaxisAPI => {
+						let verticalaxis = this.frontRepo.map_ID_VerticalAxis.get(verticalaxisAPI.ID)
+						CopyVerticalAxisAPIToVerticalAxis(verticalaxisAPI, verticalaxis!, this.frontRepo)
+					}
+				)
+
 
 
 				observer.next(this.frontRepo)
@@ -402,12 +576,21 @@ export class FrontRepoService {
 }
 
 // insertion point for get unique ID per struct 
-export function getLineUniqueID(id: number): number {
+export function getHorizontalAxisUniqueID(id: number): number {
 	return 31 * id
 }
-export function getParameterUniqueID(id: number): number {
+export function getLineUniqueID(id: number): number {
 	return 37 * id
 }
-export function getRhombusUniqueID(id: number): number {
+export function getParameterUniqueID(id: number): number {
 	return 41 * id
+}
+export function getRhombusUniqueID(id: number): number {
+	return 43 * id
+}
+export function getRhombusGridUniqueID(id: number): number {
+	return 47 * id
+}
+export function getVerticalAxisUniqueID(id: number): number {
+	return 53 * id
 }

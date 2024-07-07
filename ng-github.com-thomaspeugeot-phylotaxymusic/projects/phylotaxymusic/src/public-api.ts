@@ -13,6 +13,10 @@ export * from './lib/back-repo-data'
 export * from './lib/web-socket-service'
 
 
+export * from './lib/horizontalaxis-api'
+export * from './lib/horizontalaxis'
+export * from './lib/horizontalaxis.service'
+
 export * from './lib/line-api'
 export * from './lib/line'
 export * from './lib/line.service'
@@ -24,6 +28,14 @@ export * from './lib/parameter.service'
 export * from './lib/rhombus-api'
 export * from './lib/rhombus'
 export * from './lib/rhombus.service'
+
+export * from './lib/rhombusgrid-api'
+export * from './lib/rhombusgrid'
+export * from './lib/rhombusgrid.service'
+
+export * from './lib/verticalaxis-api'
+export * from './lib/verticalaxis'
+export * from './lib/verticalaxis.service'
 
 
 export * from './lib/StacksNames'

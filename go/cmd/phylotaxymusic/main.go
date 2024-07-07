@@ -103,9 +103,10 @@ func (parameterImpl *ParameterImpl) Generate() {
 
 func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {
 
-	log.Println("", parameterImpl.parameter.Angle)
-	phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
+	log.Println("", parameterImpl.parameter.InsideAngle)
+	// phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 
 	updatedParameter.ComputeInitialRhombus()
+	updatedParameter.ComputeInitialRhombusGrid(parameterImpl.phylotaxymusicStage)
 	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, updatedParameter)
 }

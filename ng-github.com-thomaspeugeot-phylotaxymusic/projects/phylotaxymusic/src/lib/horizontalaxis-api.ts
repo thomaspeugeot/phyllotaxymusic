@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class RhombusAPI {
+export class HorizontalAxisAPI {
 
-	static GONGSTRUCT_NAME = "Rhombus"
+	static GONGSTRUCT_NAME = "HorizontalAxis"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -14,18 +14,15 @@ export class RhombusAPI {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	IsDisplayed: boolean = false
-	CenterX: number = 0
-	CenterY: number = 0
-	SideLength: number = 0
-	Angle: number = 0
-	InsideAngle: number = 0
+	AxisHandleBorderLength: number = 0
+	Axis_Length: number = 0
 	StrokeWidth: number = 0
 
 	// insertion point for other decls
 
-	RhombusPointersEncoding: RhombusPointersEncoding = new RhombusPointersEncoding
+	HorizontalAxisPointersEncoding: HorizontalAxisPointersEncoding = new HorizontalAxisPointersEncoding
 }
 
-export class RhombusPointersEncoding {
+export class HorizontalAxisPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

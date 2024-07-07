@@ -1175,7 +1175,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "Angle", "DiamondSideLenght", "InitialRhombus", "InitialRhombusGrid", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "InsideAngle", "DiamondSideLenght", "InitialRhombus", "InitialRhombusGrid", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "StrokeWidth"}
 	case RhombusGrid:
@@ -1237,7 +1237,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "Angle", "DiamondSideLenght", "InitialRhombus", "InitialRhombusGrid", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "InsideAngle", "DiamondSideLenght", "InitialRhombus", "InitialRhombusGrid", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "StrokeWidth"}
 	case *RhombusGrid:
@@ -1289,8 +1289,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%d", inferedInstance.N)
 		case "M":
 			res = fmt.Sprintf("%d", inferedInstance.M)
-		case "Angle":
-			res = fmt.Sprintf("%f", inferedInstance.Angle)
+		case "InsideAngle":
+			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
 		case "InitialRhombus":
@@ -1418,8 +1418,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%d", inferedInstance.N)
 		case "M":
 			res = fmt.Sprintf("%d", inferedInstance.M)
-		case "Angle":
-			res = fmt.Sprintf("%f", inferedInstance.Angle)
+		case "InsideAngle":
+			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
 		case "DiamondSideLenght":
 			res = fmt.Sprintf("%f", inferedInstance.DiamondSideLenght)
 		case "InitialRhombus":
