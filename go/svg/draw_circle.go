@@ -16,7 +16,7 @@ func drawCircle(
 	layer.Circles = append(layer.Circles, circle)
 
 	circle.CX = p.OriginX + c.CenterX
-	circle.CY = p.OriginY + c.CenterY
+	circle.CY = p.OriginY - c.CenterY
 	circle.Radius = p.SideLength / 2.0
 
 	circle.StrokeWidth = c.StrokeWidth

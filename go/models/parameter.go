@@ -103,6 +103,8 @@ func (p *Parameter) ComputeInitialCircleGrid(stage *StageStruct) {
 	p.InitialCircleGrid.Circles = p.InitialCircleGrid.Circles[:0]
 
 	g := p.InitialCircleGrid
+	g.N = p.N
+	g.M = p.M
 
 	insideAngleRad := p.InsideAngle * math.Pi / 180
 	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
