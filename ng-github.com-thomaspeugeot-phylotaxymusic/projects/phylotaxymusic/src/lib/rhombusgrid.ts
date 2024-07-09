@@ -19,8 +19,6 @@ export class RhombusGrid {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	N: number = 0
-	M: number = 0
 	IsDisplayed: boolean = false
 
 	// insertion point for pointers and slices of pointers declarations
@@ -37,8 +35,6 @@ export function CopyRhombusGridToRhombusGridAPI(rhombusgrid: RhombusGrid, rhombu
 
 	// insertion point for basic fields copy operations
 	rhombusgridAPI.Name = rhombusgrid.Name
-	rhombusgridAPI.N = rhombusgrid.N
-	rhombusgridAPI.M = rhombusgrid.M
 	rhombusgridAPI.IsDisplayed = rhombusgrid.IsDisplayed
 
 	// insertion point for pointer fields encoding
@@ -70,8 +66,6 @@ export function CopyRhombusGridAPIToRhombusGrid(rhombusgridAPI: RhombusGridAPI, 
 
 	// insertion point for basic fields copy operations
 	rhombusgrid.Name = rhombusgridAPI.Name
-	rhombusgrid.N = rhombusgridAPI.N
-	rhombusgrid.M = rhombusgridAPI.M
 	rhombusgrid.IsDisplayed = rhombusgridAPI.IsDisplayed
 
 	// insertion point for pointer fields encoding

@@ -69,12 +69,6 @@ type CircleGridDB struct {
 	// Declation for basic field circlegridDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field circlegridDB.N
-	N_Data sql.NullInt64
-
-	// Declation for basic field circlegridDB.M
-	M_Data sql.NullInt64
-
 	// Declation for basic field circlegridDB.IsDisplayed
 	// provide the sql storage for the boolan
 	IsDisplayed_Data sql.NullBool
@@ -103,11 +97,7 @@ type CircleGridWOP struct {
 
 	Name string `xlsx:"1"`
 
-	N int `xlsx:"2"`
-
-	M int `xlsx:"3"`
-
-	IsDisplayed bool `xlsx:"4"`
+	IsDisplayed bool `xlsx:"2"`
 	// insertion for WOP pointer fields
 }
 
@@ -115,8 +105,6 @@ var CircleGrid_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"N",
-	"M",
 	"IsDisplayed",
 }
 
@@ -431,12 +419,6 @@ func (circlegridDB *CircleGridDB) CopyBasicFieldsFromCircleGrid(circlegrid *mode
 	circlegridDB.Name_Data.String = circlegrid.Name
 	circlegridDB.Name_Data.Valid = true
 
-	circlegridDB.N_Data.Int64 = int64(circlegrid.N)
-	circlegridDB.N_Data.Valid = true
-
-	circlegridDB.M_Data.Int64 = int64(circlegrid.M)
-	circlegridDB.M_Data.Valid = true
-
 	circlegridDB.IsDisplayed_Data.Bool = circlegrid.IsDisplayed
 	circlegridDB.IsDisplayed_Data.Valid = true
 }
@@ -447,12 +429,6 @@ func (circlegridDB *CircleGridDB) CopyBasicFieldsFromCircleGrid_WOP(circlegrid *
 
 	circlegridDB.Name_Data.String = circlegrid.Name
 	circlegridDB.Name_Data.Valid = true
-
-	circlegridDB.N_Data.Int64 = int64(circlegrid.N)
-	circlegridDB.N_Data.Valid = true
-
-	circlegridDB.M_Data.Int64 = int64(circlegrid.M)
-	circlegridDB.M_Data.Valid = true
 
 	circlegridDB.IsDisplayed_Data.Bool = circlegrid.IsDisplayed
 	circlegridDB.IsDisplayed_Data.Valid = true
@@ -465,12 +441,6 @@ func (circlegridDB *CircleGridDB) CopyBasicFieldsFromCircleGridWOP(circlegrid *C
 	circlegridDB.Name_Data.String = circlegrid.Name
 	circlegridDB.Name_Data.Valid = true
 
-	circlegridDB.N_Data.Int64 = int64(circlegrid.N)
-	circlegridDB.N_Data.Valid = true
-
-	circlegridDB.M_Data.Int64 = int64(circlegrid.M)
-	circlegridDB.M_Data.Valid = true
-
 	circlegridDB.IsDisplayed_Data.Bool = circlegrid.IsDisplayed
 	circlegridDB.IsDisplayed_Data.Valid = true
 }
@@ -479,8 +449,6 @@ func (circlegridDB *CircleGridDB) CopyBasicFieldsFromCircleGridWOP(circlegrid *C
 func (circlegridDB *CircleGridDB) CopyBasicFieldsToCircleGrid(circlegrid *models.CircleGrid) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	circlegrid.Name = circlegridDB.Name_Data.String
-	circlegrid.N = int(circlegridDB.N_Data.Int64)
-	circlegrid.M = int(circlegridDB.M_Data.Int64)
 	circlegrid.IsDisplayed = circlegridDB.IsDisplayed_Data.Bool
 }
 
@@ -488,8 +456,6 @@ func (circlegridDB *CircleGridDB) CopyBasicFieldsToCircleGrid(circlegrid *models
 func (circlegridDB *CircleGridDB) CopyBasicFieldsToCircleGrid_WOP(circlegrid *models.CircleGrid_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	circlegrid.Name = circlegridDB.Name_Data.String
-	circlegrid.N = int(circlegridDB.N_Data.Int64)
-	circlegrid.M = int(circlegridDB.M_Data.Int64)
 	circlegrid.IsDisplayed = circlegridDB.IsDisplayed_Data.Bool
 }
 
@@ -498,8 +464,6 @@ func (circlegridDB *CircleGridDB) CopyBasicFieldsToCircleGridWOP(circlegrid *Cir
 	circlegrid.ID = int(circlegridDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	circlegrid.Name = circlegridDB.Name_Data.String
-	circlegrid.N = int(circlegridDB.N_Data.Int64)
-	circlegrid.M = int(circlegridDB.M_Data.Int64)
 	circlegrid.IsDisplayed = circlegridDB.IsDisplayed_Data.Bool
 }
 

@@ -1665,7 +1665,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Circle:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case CircleGrid:
-		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Circles"}
+		res = []string{"Name", "Reference", "IsDisplayed", "Circles"}
 	case HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case Line:
@@ -1675,7 +1675,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
-		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Rhombuses"}
+		res = []string{"Name", "Reference", "IsDisplayed", "Rhombuses"}
 	case VerticalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	}
@@ -1745,7 +1745,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Circle:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *CircleGrid:
-		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Circles"}
+		res = []string{"Name", "Reference", "IsDisplayed", "Circles"}
 	case *HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *Line:
@@ -1755,7 +1755,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
-		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Rhombuses"}
+		res = []string{"Name", "Reference", "IsDisplayed", "Rhombuses"}
 	case *VerticalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	}
@@ -1831,10 +1831,6 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.Reference != nil {
 				res = inferedInstance.Reference.Name
 			}
-		case "N":
-			res = fmt.Sprintf("%d", inferedInstance.N)
-		case "M":
-			res = fmt.Sprintf("%d", inferedInstance.M)
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
 		case "Circles":
@@ -1992,10 +1988,6 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.Reference != nil {
 				res = inferedInstance.Reference.Name
 			}
-		case "N":
-			res = fmt.Sprintf("%d", inferedInstance.N)
-		case "M":
-			res = fmt.Sprintf("%d", inferedInstance.M)
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
 		case "Rhombuses":
@@ -2109,10 +2101,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.Reference != nil {
 				res = inferedInstance.Reference.Name
 			}
-		case "N":
-			res = fmt.Sprintf("%d", inferedInstance.N)
-		case "M":
-			res = fmt.Sprintf("%d", inferedInstance.M)
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
 		case "Circles":
@@ -2270,10 +2258,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.Reference != nil {
 				res = inferedInstance.Reference.Name
 			}
-		case "N":
-			res = fmt.Sprintf("%d", inferedInstance.N)
-		case "M":
-			res = fmt.Sprintf("%d", inferedInstance.M)
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
 		case "Rhombuses":

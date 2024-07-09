@@ -87,8 +87,8 @@ func (p *Parameter) ComputeInitialRhombusGrid(stage *StageStruct) {
 	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
 	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
 
-	for i := range g.N + 1 {
-		for j := range g.M + 1 {
+	for i := range p.N + 1 {
+		for j := range p.M + 1 {
 			r := new(Rhombus) // .Stage(stage)
 			*r = *g.Reference
 			g.Rhombuses = append(g.Rhombuses, r)
@@ -112,15 +112,13 @@ func (p *Parameter) ComputeInitialCircleGrid(stage *StageStruct) {
 	p.InitialCircleGrid.Circles = p.InitialCircleGrid.Circles[:0]
 
 	g := p.InitialCircleGrid
-	g.N = p.N
-	g.M = p.M
 
 	insideAngleRad := p.InsideAngle * math.Pi / 180
 	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
 	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
 
-	for i := range g.N + 1 {
-		for j := range g.M + 1 {
+	for i := range p.N + 1 {
+		for j := range p.M + 1 {
 			c := new(Circle) // .Stage(stage)
 			*c = *g.Reference
 			g.Circles = append(g.Circles, c)

@@ -74,16 +74,12 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 type CircleGrid_WOP struct {
 	// insertion point
 	Name string
-	N int
-	M int
 	IsDisplayed bool
 }
 
 func (from *CircleGrid) CopyBasicFields(to *CircleGrid) {
 	// insertion point
 	to.Name = from.Name
-	to.N = from.N
-	to.M = from.M
 	to.IsDisplayed = from.IsDisplayed
 }
 
@@ -200,16 +196,12 @@ func (from *Rhombus) CopyBasicFields(to *Rhombus) {
 type RhombusGrid_WOP struct {
 	// insertion point
 	Name string
-	N int
-	M int
 	IsDisplayed bool
 }
 
 func (from *RhombusGrid) CopyBasicFields(to *RhombusGrid) {
 	// insertion point
 	to.Name = from.Name
-	to.N = from.N
-	to.M = from.M
 	to.IsDisplayed = from.IsDisplayed
 }
 

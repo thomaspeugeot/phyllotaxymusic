@@ -49,7 +49,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000000_Reference.Name = `Reference`
 	__Axis__000000_Reference.IsDisplayed = true
 	__Axis__000000_Reference.Angle = 0.000000
-	__Axis__000000_Reference.Length = 415.937680
+	__Axis__000000_Reference.Length = 393.636130
 	__Axis__000000_Reference.Color = ``
 	__Axis__000000_Reference.FillOpacity = 0.000000
 	__Axis__000000_Reference.Stroke = `black`
@@ -61,8 +61,8 @@ func _(stage *models.StageStruct) {
 
 	__Axis__000001_Rotated.Name = `Rotated`
 	__Axis__000001_Rotated.IsDisplayed = false
-	__Axis__000001_Rotated.Angle = 82.173387
-	__Axis__000001_Rotated.Length = 415.937680
+	__Axis__000001_Rotated.Angle = 80.800438
+	__Axis__000001_Rotated.Length = 393.636130
 	__Axis__000001_Rotated.Color = ``
 	__Axis__000001_Rotated.FillOpacity = 0.000000
 	__Axis__000001_Rotated.Stroke = `black`
@@ -78,21 +78,17 @@ func _(stage *models.StageStruct) {
 	__Circle__000000_Initial_Circle.CenterY = 0.000000
 	__Circle__000000_Initial_Circle.Color = ``
 	__Circle__000000_Initial_Circle.FillOpacity = 0.000000
-	__Circle__000000_Initial_Circle.Stroke = `black`
-	__Circle__000000_Initial_Circle.StrokeOpacity = 0.500000
-	__Circle__000000_Initial_Circle.StrokeWidth = 1.000000
+	__Circle__000000_Initial_Circle.Stroke = `lightblue`
+	__Circle__000000_Initial_Circle.StrokeOpacity = 0.800000
+	__Circle__000000_Initial_Circle.StrokeWidth = 3.000000
 	__Circle__000000_Initial_Circle.StrokeDashArray = ``
 	__Circle__000000_Initial_Circle.StrokeDashArrayWhenSelected = ``
 	__Circle__000000_Initial_Circle.Transform = ``
 
 	__CircleGrid__000000_Initial.Name = `Initial`
-	__CircleGrid__000000_Initial.N = 3
-	__CircleGrid__000000_Initial.M = 2
 	__CircleGrid__000000_Initial.IsDisplayed = false
 
 	__CircleGrid__000001_Rotated.Name = `Rotated`
-	__CircleGrid__000001_Rotated.N = 0
-	__CircleGrid__000001_Rotated.M = 0
 	__CircleGrid__000001_Rotated.IsDisplayed = true
 
 	__HorizontalAxis__000000_Initial.Name = `Initial`
@@ -111,10 +107,10 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
-	__Parameter__000000_Reference.InsideAngle = 120.000000
+	__Parameter__000000_Reference.InsideAngle = 102.000000
 	__Parameter__000000_Reference.SideLength = 100.000000
 	__Parameter__000000_Reference.OriginX = 300.000000
-	__Parameter__000000_Reference.OriginY = 700.000000
+	__Parameter__000000_Reference.OriginY = 300.000000
 
 	__Rhombus__000000_Initial.Name = `Initial`
 	__Rhombus__000000_Initial.IsDisplayed = false
@@ -122,7 +118,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000000_Initial.CenterY = 0.000000
 	__Rhombus__000000_Initial.SideLength = 100.000000
 	__Rhombus__000000_Initial.Angle = 0.000000
-	__Rhombus__000000_Initial.InsideAngle = 111.000000
+	__Rhombus__000000_Initial.InsideAngle = 102.000000
 	__Rhombus__000000_Initial.Color = ``
 	__Rhombus__000000_Initial.FillOpacity = 0.000000
 	__Rhombus__000000_Initial.Stroke = ``
@@ -133,12 +129,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000000_Initial.Transform = ``
 
 	__Rhombus__000001_Rotated.Name = `Rotated`
-	__Rhombus__000001_Rotated.IsDisplayed = false
+	__Rhombus__000001_Rotated.IsDisplayed = true
 	__Rhombus__000001_Rotated.CenterX = 0.000000
 	__Rhombus__000001_Rotated.CenterY = 0.000000
 	__Rhombus__000001_Rotated.SideLength = 100.000000
-	__Rhombus__000001_Rotated.Angle = -82.173387
-	__Rhombus__000001_Rotated.InsideAngle = 111.000000
+	__Rhombus__000001_Rotated.Angle = -80.800438
+	__Rhombus__000001_Rotated.InsideAngle = 102.000000
 	__Rhombus__000001_Rotated.Color = ``
 	__Rhombus__000001_Rotated.FillOpacity = 0.000000
 	__Rhombus__000001_Rotated.Stroke = `black`
@@ -149,14 +145,10 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000001_Rotated.Transform = ``
 
 	__RhombusGrid__000000_Initial.Name = `Initial`
-	__RhombusGrid__000000_Initial.N = 2
-	__RhombusGrid__000000_Initial.M = 3
 	__RhombusGrid__000000_Initial.IsDisplayed = false
 
 	__RhombusGrid__000001_Rotated.Name = `Rotated`
-	__RhombusGrid__000001_Rotated.N = 0
-	__RhombusGrid__000001_Rotated.M = 0
-	__RhombusGrid__000001_Rotated.IsDisplayed = false
+	__RhombusGrid__000001_Rotated.IsDisplayed = true
 
 	__VerticalAxis__000000_Initial.Name = `Initial`
 	__VerticalAxis__000000_Initial.IsDisplayed = true

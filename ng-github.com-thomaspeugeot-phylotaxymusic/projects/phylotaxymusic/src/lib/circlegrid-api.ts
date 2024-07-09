@@ -14,8 +14,6 @@ export class CircleGridAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	N: number = 0
-	M: number = 0
 	IsDisplayed: boolean = false
 
 	// insertion point for other decls

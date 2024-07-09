@@ -858,20 +858,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_CircleGrid[identifier].Name = fielValue
-				case "N":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_CircleGrid[identifier].N = int(exprSign) * int(fielValue)
-				case "M":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_CircleGrid[identifier].M = int(exprSign) * int(fielValue)
 				}
 			case "HorizontalAxis":
 				switch fieldName {
@@ -1113,20 +1099,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_RhombusGrid[identifier].Name = fielValue
-				case "N":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_RhombusGrid[identifier].N = int(exprSign) * int(fielValue)
-				case "M":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_RhombusGrid[identifier].M = int(exprSign) * int(fielValue)
 				}
 			case "VerticalAxis":
 				switch fieldName {

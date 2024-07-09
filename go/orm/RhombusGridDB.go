@@ -69,12 +69,6 @@ type RhombusGridDB struct {
 	// Declation for basic field rhombusgridDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field rhombusgridDB.N
-	N_Data sql.NullInt64
-
-	// Declation for basic field rhombusgridDB.M
-	M_Data sql.NullInt64
-
 	// Declation for basic field rhombusgridDB.IsDisplayed
 	// provide the sql storage for the boolan
 	IsDisplayed_Data sql.NullBool
@@ -103,11 +97,7 @@ type RhombusGridWOP struct {
 
 	Name string `xlsx:"1"`
 
-	N int `xlsx:"2"`
-
-	M int `xlsx:"3"`
-
-	IsDisplayed bool `xlsx:"4"`
+	IsDisplayed bool `xlsx:"2"`
 	// insertion for WOP pointer fields
 }
 
@@ -115,8 +105,6 @@ var RhombusGrid_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"N",
-	"M",
 	"IsDisplayed",
 }
 
@@ -431,12 +419,6 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsFromRhombusGrid(rhombusgrid *
 	rhombusgridDB.Name_Data.String = rhombusgrid.Name
 	rhombusgridDB.Name_Data.Valid = true
 
-	rhombusgridDB.N_Data.Int64 = int64(rhombusgrid.N)
-	rhombusgridDB.N_Data.Valid = true
-
-	rhombusgridDB.M_Data.Int64 = int64(rhombusgrid.M)
-	rhombusgridDB.M_Data.Valid = true
-
 	rhombusgridDB.IsDisplayed_Data.Bool = rhombusgrid.IsDisplayed
 	rhombusgridDB.IsDisplayed_Data.Valid = true
 }
@@ -447,12 +429,6 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsFromRhombusGrid_WOP(rhombusgr
 
 	rhombusgridDB.Name_Data.String = rhombusgrid.Name
 	rhombusgridDB.Name_Data.Valid = true
-
-	rhombusgridDB.N_Data.Int64 = int64(rhombusgrid.N)
-	rhombusgridDB.N_Data.Valid = true
-
-	rhombusgridDB.M_Data.Int64 = int64(rhombusgrid.M)
-	rhombusgridDB.M_Data.Valid = true
 
 	rhombusgridDB.IsDisplayed_Data.Bool = rhombusgrid.IsDisplayed
 	rhombusgridDB.IsDisplayed_Data.Valid = true
@@ -465,12 +441,6 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsFromRhombusGridWOP(rhombusgri
 	rhombusgridDB.Name_Data.String = rhombusgrid.Name
 	rhombusgridDB.Name_Data.Valid = true
 
-	rhombusgridDB.N_Data.Int64 = int64(rhombusgrid.N)
-	rhombusgridDB.N_Data.Valid = true
-
-	rhombusgridDB.M_Data.Int64 = int64(rhombusgrid.M)
-	rhombusgridDB.M_Data.Valid = true
-
 	rhombusgridDB.IsDisplayed_Data.Bool = rhombusgrid.IsDisplayed
 	rhombusgridDB.IsDisplayed_Data.Valid = true
 }
@@ -479,8 +449,6 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsFromRhombusGridWOP(rhombusgri
 func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsToRhombusGrid(rhombusgrid *models.RhombusGrid) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	rhombusgrid.Name = rhombusgridDB.Name_Data.String
-	rhombusgrid.N = int(rhombusgridDB.N_Data.Int64)
-	rhombusgrid.M = int(rhombusgridDB.M_Data.Int64)
 	rhombusgrid.IsDisplayed = rhombusgridDB.IsDisplayed_Data.Bool
 }
 
@@ -488,8 +456,6 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsToRhombusGrid(rhombusgrid *mo
 func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsToRhombusGrid_WOP(rhombusgrid *models.RhombusGrid_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	rhombusgrid.Name = rhombusgridDB.Name_Data.String
-	rhombusgrid.N = int(rhombusgridDB.N_Data.Int64)
-	rhombusgrid.M = int(rhombusgridDB.M_Data.Int64)
 	rhombusgrid.IsDisplayed = rhombusgridDB.IsDisplayed_Data.Bool
 }
 
@@ -498,8 +464,6 @@ func (rhombusgridDB *RhombusGridDB) CopyBasicFieldsToRhombusGridWOP(rhombusgrid 
 	rhombusgrid.ID = int(rhombusgridDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	rhombusgrid.Name = rhombusgridDB.Name_Data.String
-	rhombusgrid.N = int(rhombusgridDB.N_Data.Int64)
-	rhombusgrid.M = int(rhombusgridDB.M_Data.Int64)
 	rhombusgrid.IsDisplayed = rhombusgridDB.IsDisplayed_Data.Bool
 }
 

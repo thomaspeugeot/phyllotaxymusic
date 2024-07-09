@@ -305,10 +305,6 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circlegrid_.Name), formDiv)
 		case "Reference":
 			FormDivSelectFieldToField(&(circlegrid_.Reference), circlegridFormCallback.probe.stageOfInterest, formDiv)
-		case "N":
-			FormDivBasicFieldToField(&(circlegrid_.N), formDiv)
-		case "M":
-			FormDivBasicFieldToField(&(circlegrid_.M), formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(circlegrid_.IsDisplayed), formDiv)
 		}
@@ -832,10 +828,6 @@ func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rhombusgrid_.Name), formDiv)
 		case "Reference":
 			FormDivSelectFieldToField(&(rhombusgrid_.Reference), rhombusgridFormCallback.probe.stageOfInterest, formDiv)
-		case "N":
-			FormDivBasicFieldToField(&(rhombusgrid_.N), formDiv)
-		case "M":
-			FormDivBasicFieldToField(&(rhombusgrid_.M), formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(rhombusgrid_.IsDisplayed), formDiv)
 		}

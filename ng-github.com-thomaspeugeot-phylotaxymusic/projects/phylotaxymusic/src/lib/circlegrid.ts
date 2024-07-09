@@ -19,8 +19,6 @@ export class CircleGrid {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	N: number = 0
-	M: number = 0
 	IsDisplayed: boolean = false
 
 	// insertion point for pointers and slices of pointers declarations
@@ -37,8 +35,6 @@ export function CopyCircleGridToCircleGridAPI(circlegrid: CircleGrid, circlegrid
 
 	// insertion point for basic fields copy operations
 	circlegridAPI.Name = circlegrid.Name
-	circlegridAPI.N = circlegrid.N
-	circlegridAPI.M = circlegrid.M
 	circlegridAPI.IsDisplayed = circlegrid.IsDisplayed
 
 	// insertion point for pointer fields encoding
@@ -70,8 +66,6 @@ export function CopyCircleGridAPIToCircleGrid(circlegridAPI: CircleGridAPI, circ
 
 	// insertion point for basic fields copy operations
 	circlegrid.Name = circlegridAPI.Name
-	circlegrid.N = circlegridAPI.N
-	circlegrid.M = circlegridAPI.M
 	circlegrid.IsDisplayed = circlegridAPI.IsDisplayed
 
 	// insertion point for pointer fields encoding
