@@ -91,8 +91,8 @@ type ParameterImpl struct {
 // Generate implements models.GeneratorInterface.
 func (parameterImpl *ParameterImpl) Generate() {
 	parameterImpl.parameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
-	parameterImpl.phylotaxymusicStage.Commit()
 	phylotaxymusic_svg.GenerateSvg2(parameterImpl.gongsvgStage, parameterImpl.parameter)
+	parameterImpl.phylotaxymusicStage.Commit()
 }
 
 func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {

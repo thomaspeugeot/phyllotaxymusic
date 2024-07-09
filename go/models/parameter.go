@@ -89,7 +89,7 @@ func (p *Parameter) ComputeInitialRhombusGrid(stage *StageStruct) {
 
 	for i := range g.N + 1 {
 		for j := range g.M + 1 {
-			r := new(Rhombus).Stage(stage)
+			r := new(Rhombus) // .Stage(stage)
 			*r = *g.Reference
 			g.Rhombuses = append(g.Rhombuses, r)
 			r.Name = fmt.Sprintf("%d %d", i, j)
@@ -121,7 +121,7 @@ func (p *Parameter) ComputeInitialCircleGrid(stage *StageStruct) {
 
 	for i := range g.N + 1 {
 		for j := range g.M + 1 {
-			c := new(Circle).Stage(stage)
+			c := new(Circle) // .Stage(stage)
 			*c = *g.Reference
 			g.Circles = append(g.Circles, c)
 			c.Name = fmt.Sprintf("%d %d", i, j)
@@ -174,7 +174,7 @@ func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
 	sinAngle := math.Sin(angleRad)
 
 	for _, _r := range p.InitialRhombusGrid.Rhombuses {
-		r := new(Rhombus).Stage(stage)
+		r := new(Rhombus) // .Stage(stage)
 		g.Rhombuses = append(g.Rhombuses, r)
 		*r = *_r
 		r.SideLength = _r.SideLength
@@ -202,7 +202,7 @@ func (p *Parameter) computeRotatedCircleGrid(stage *StageStruct) {
 	sinAngle := math.Sin(angleRad)
 
 	for _, _c := range p.InitialCircleGrid.Circles {
-		c := new(Circle).Stage(stage)
+		c := new(Circle) // .Stage(stage)
 		g.Circles = append(g.Circles, c)
 		*c = *_c
 
