@@ -34,7 +34,7 @@ func GenerateSvg2(gongsvgStage *gongsvg_models.StageStruct, parameter *phylotaxy
 		drawCircleGrid(gongsvgStage, layer, parameter, parameter.InitialCircleGrid)
 	}
 	if parameter.InitialAxis.IsDisplayed {
-		drawInitialAxis(gongsvgStage, layer, parameter, parameter.InitialAxis)
+		drawAxis(gongsvgStage, layer, parameter, parameter.InitialAxis)
 	}
 
 	gongsvgStage.Commit()

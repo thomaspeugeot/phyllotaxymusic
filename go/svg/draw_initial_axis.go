@@ -8,25 +8,24 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
-func drawInitialAxis(gongsvgStage *gongsvg_models.StageStruct,
+func drawAxis(gongsvgStage *gongsvg_models.StageStruct,
 	layer *gongsvg_models.Layer,
 	parameter *phylotaxymusic_models.Parameter,
-	initialAxis *phylotaxymusic_models.Axis) {
+	axis *phylotaxymusic_models.Axis) {
 
-	initialAxisLine := new(gongsvg_models.Line).Stage(gongsvgStage)
-	initialAxisLine.Name = "Initial Axis Line"
-	layer.Lines = append(layer.Lines, initialAxisLine)
+	line := new(gongsvg_models.Line).Stage(gongsvgStage)
+	line.Name = "Initial Axis Line"
+	layer.Lines = append(layer.Lines, line)
 
-	angleRad := initialAxis.Angle * math.Pi / 180
+	angleRad := axis.Angle * math.Pi / 180
 
-	initialAxisLine.X1 = parameter.OriginX
-	initialAxisLine.Y1 = parameter.OriginY
+	line.X1 = parameter.OriginX
+	line.Y1 = parameter.OriginY
 
-	initialAxisLine.X2 = parameter.OriginX + initialAxis.Length*math.Cos(angleRad)
-	initialAxisLine.Y2 = parameter.OriginY - initialAxis.Length*math.Sin(angleRad)
+	line.X2 = parameter.OriginX + axis.Length*math.Cos(angleRad)
+	line.Y2 = parameter.OriginY - axis.Length*math.Sin(angleRad)
 
-	initialAxisLine.StrokeWidth = initialAxis.StrokeWidth
-	initialAxisLine.StrokeOpacity = 1
-	initialAxisLine.Name = "Vertical Axis"
-	initialAxisLine.Stroke = gongsvg_models.Black.ToString()
+	axis.Presentation.CopyTo(&line.Presentation)
+
+	line.Name = "Vertical Axis"
 }

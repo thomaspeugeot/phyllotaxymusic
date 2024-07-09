@@ -20,6 +20,84 @@ var _ ref_models.StageStruct
 var _ map[string]any = map[string]any{
 	// injection point for docLink to identifiers
 
+	"ref_models.Axis": &(ref_models.Axis{}),
+
+	"ref_models.Axis": &(ref_models.Axis{}),
+
+	"ref_models.Axis.Angle": (ref_models.Axis{}).Angle,
+
+	"ref_models.Axis.Angle": (ref_models.Axis{}).Angle,
+
+	"ref_models.Axis.Color": (ref_models.Axis{}).Color,
+
+	"ref_models.Axis.FillOpacity": (ref_models.Axis{}).FillOpacity,
+
+	"ref_models.Axis.IsDisplayed": (ref_models.Axis{}).IsDisplayed,
+
+	"ref_models.Axis.IsDisplayed": (ref_models.Axis{}).IsDisplayed,
+
+	"ref_models.Axis.Length": (ref_models.Axis{}).Length,
+
+	"ref_models.Axis.Length": (ref_models.Axis{}).Length,
+
+	"ref_models.Axis.Name": (ref_models.Axis{}).Name,
+
+	"ref_models.Axis.Name": (ref_models.Axis{}).Name,
+
+	"ref_models.Axis.Stroke": (ref_models.Axis{}).Stroke,
+
+	"ref_models.Axis.StrokeDashArray": (ref_models.Axis{}).StrokeDashArray,
+
+	"ref_models.Axis.StrokeDashArrayWhenSelected": (ref_models.Axis{}).StrokeDashArrayWhenSelected,
+
+	"ref_models.Axis.StrokeOpacity": (ref_models.Axis{}).StrokeOpacity,
+
+	"ref_models.Axis.StrokeWidth": (ref_models.Axis{}).StrokeWidth,
+
+	"ref_models.Axis.StrokeWidth": (ref_models.Axis{}).StrokeWidth,
+
+	"ref_models.Axis.Transform": (ref_models.Axis{}).Transform,
+
+	"ref_models.Circle": &(ref_models.Circle{}),
+
+	"ref_models.Circle.CenterX": (ref_models.Circle{}).CenterX,
+
+	"ref_models.Circle.CenterY": (ref_models.Circle{}).CenterY,
+
+	"ref_models.Circle.Color": (ref_models.Circle{}).Color,
+
+	"ref_models.Circle.FillOpacity": (ref_models.Circle{}).FillOpacity,
+
+	"ref_models.Circle.IsDisplayed": (ref_models.Circle{}).IsDisplayed,
+
+	"ref_models.Circle.Name": (ref_models.Circle{}).Name,
+
+	"ref_models.Circle.Stroke": (ref_models.Circle{}).Stroke,
+
+	"ref_models.Circle.StrokeDashArray": (ref_models.Circle{}).StrokeDashArray,
+
+	"ref_models.Circle.StrokeDashArrayWhenSelected": (ref_models.Circle{}).StrokeDashArrayWhenSelected,
+
+	"ref_models.Circle.StrokeOpacity": (ref_models.Circle{}).StrokeOpacity,
+
+	"ref_models.Circle.StrokeWidth": (ref_models.Circle{}).StrokeWidth,
+
+	"ref_models.Circle.Transform": (ref_models.Circle{}).Transform,
+
+	"ref_models.CircleGrid": &(ref_models.CircleGrid{}),
+
+	"ref_models.CircleGrid.Circles": (ref_models.CircleGrid{}).Circles,
+
+	"ref_models.CircleGrid.IsDisplayed": (ref_models.CircleGrid{}).IsDisplayed,
+
+	"ref_models.CircleGrid.M": (ref_models.CircleGrid{}).M,
+
+	"ref_models.CircleGrid.N": (ref_models.CircleGrid{}).N,
+
+	"ref_models.CircleGrid.Name": (ref_models.CircleGrid{}).Name,
+
+	"ref_models.CircleGrid.Reference": (ref_models.CircleGrid{}).Reference,
+
 	"ref_models.GongsimStackName": ref_models.GongsimStackName,
 
 	"ref_models.GongsvgStackName": ref_models.GongsvgStackName,
@@ -34,27 +112,25 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.HorizontalAxis.Axis_Length": (ref_models.HorizontalAxis{}).Axis_Length,
 
-	"ref_models.HorizontalAxis.IsDisplayed": (ref_models.HorizontalAxis{}).IsDisplayed,
+	"ref_models.HorizontalAxis.Color": (ref_models.HorizontalAxis{}).Color,
+
+	"ref_models.HorizontalAxis.FillOpacity": (ref_models.HorizontalAxis{}).FillOpacity,
 
 	"ref_models.HorizontalAxis.IsDisplayed": (ref_models.HorizontalAxis{}).IsDisplayed,
 
 	"ref_models.HorizontalAxis.Name": (ref_models.HorizontalAxis{}).Name,
 
-	"ref_models.HorizontalAxis.StrokeWidth": (ref_models.HorizontalAxis{}).StrokeWidth,
+	"ref_models.HorizontalAxis.Stroke": (ref_models.HorizontalAxis{}).Stroke,
+
+	"ref_models.HorizontalAxis.StrokeDashArray": (ref_models.HorizontalAxis{}).StrokeDashArray,
+
+	"ref_models.HorizontalAxis.StrokeDashArrayWhenSelected": (ref_models.HorizontalAxis{}).StrokeDashArrayWhenSelected,
+
+	"ref_models.HorizontalAxis.StrokeOpacity": (ref_models.HorizontalAxis{}).StrokeOpacity,
 
 	"ref_models.HorizontalAxis.StrokeWidth": (ref_models.HorizontalAxis{}).StrokeWidth,
 
-	"ref_models.InitialAxis": &(ref_models.Axis{}),
-
-	"ref_models.InitialAxis.Angle": (ref_models.Axis{}).Angle,
-
-	"ref_models.InitialAxis.IsDisplayed": (ref_models.Axis{}).IsDisplayed,
-
-	"ref_models.InitialAxis.Length": (ref_models.Axis{}).Length,
-
-	"ref_models.InitialAxis.Name": (ref_models.Axis{}).Name,
-
-	"ref_models.InitialAxis.StrokeWidth": (ref_models.Axis{}).StrokeWidth,
+	"ref_models.HorizontalAxis.Transform": (ref_models.HorizontalAxis{}).Transform,
 
 	"ref_models.Line": &(ref_models.Line{}),
 
@@ -70,17 +146,17 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.Parameter": &(ref_models.Parameter{}),
 
-	"ref_models.Parameter.DiamondSideLenght": (ref_models.Parameter{}).SideLength,
-
 	"ref_models.Parameter.HorizontalAxis": (ref_models.Parameter{}).HorizontalAxis,
 
 	"ref_models.Parameter.InitialAxis": (ref_models.Parameter{}).InitialAxis,
 
+	"ref_models.Parameter.InitialCircle": (ref_models.Parameter{}).InitialCircle,
+
+	"ref_models.Parameter.InitialCircleGrid": (ref_models.Parameter{}).InitialCircleGrid,
+
 	"ref_models.Parameter.InitialRhombus": (ref_models.Parameter{}).InitialRhombus,
 
 	"ref_models.Parameter.InitialRhombusGrid": (ref_models.Parameter{}).InitialRhombusGrid,
-
-	"ref_models.Parameter.InsideAngle": (ref_models.Parameter{}).InsideAngle,
 
 	"ref_models.Parameter.InsideAngle": (ref_models.Parameter{}).InsideAngle,
 
@@ -94,6 +170,10 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.Parameter.OriginY": (ref_models.Parameter{}).OriginY,
 
+	"ref_models.Parameter.SideLength": (ref_models.Parameter{}).SideLength,
+
+	"ref_models.Parameter.SideLength": (ref_models.Parameter{}).SideLength,
+
 	"ref_models.Parameter.VerticalAxis": (ref_models.Parameter{}).VerticalAxis,
 
 	"ref_models.Phylotaxy": ref_models.Phylotaxy,
@@ -106,6 +186,10 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.Rhombus.CenterY": (ref_models.Rhombus{}).CenterY,
 
+	"ref_models.Rhombus.Color": (ref_models.Rhombus{}).Color,
+
+	"ref_models.Rhombus.FillOpacity": (ref_models.Rhombus{}).FillOpacity,
+
 	"ref_models.Rhombus.InsideAngle": (ref_models.Rhombus{}).InsideAngle,
 
 	"ref_models.Rhombus.IsDisplayed": (ref_models.Rhombus{}).IsDisplayed,
@@ -114,7 +198,17 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.Rhombus.SideLength": (ref_models.Rhombus{}).SideLength,
 
+	"ref_models.Rhombus.Stroke": (ref_models.Rhombus{}).Stroke,
+
+	"ref_models.Rhombus.StrokeDashArray": (ref_models.Rhombus{}).StrokeDashArray,
+
+	"ref_models.Rhombus.StrokeDashArrayWhenSelected": (ref_models.Rhombus{}).StrokeDashArrayWhenSelected,
+
+	"ref_models.Rhombus.StrokeOpacity": (ref_models.Rhombus{}).StrokeOpacity,
+
 	"ref_models.Rhombus.StrokeWidth": (ref_models.Rhombus{}).StrokeWidth,
+
+	"ref_models.Rhombus.Transform": (ref_models.Rhombus{}).Transform,
 
 	"ref_models.RhombusGrid": &(ref_models.RhombusGrid{}),
 
@@ -144,15 +238,25 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.VerticalAxis.Axis_Length": (ref_models.VerticalAxis{}).Axis_Length,
 
-	"ref_models.VerticalAxis.IsDisplayed": (ref_models.VerticalAxis{}).IsDisplayed,
+	"ref_models.VerticalAxis.Color": (ref_models.VerticalAxis{}).Color,
+
+	"ref_models.VerticalAxis.FillOpacity": (ref_models.VerticalAxis{}).FillOpacity,
 
 	"ref_models.VerticalAxis.IsDisplayed": (ref_models.VerticalAxis{}).IsDisplayed,
 
 	"ref_models.VerticalAxis.Name": (ref_models.VerticalAxis{}).Name,
 
-	"ref_models.VerticalAxis.StrokeWidth": (ref_models.VerticalAxis{}).StrokeWidth,
+	"ref_models.VerticalAxis.Stroke": (ref_models.VerticalAxis{}).Stroke,
+
+	"ref_models.VerticalAxis.StrokeDashArray": (ref_models.VerticalAxis{}).StrokeDashArray,
+
+	"ref_models.VerticalAxis.StrokeDashArrayWhenSelected": (ref_models.VerticalAxis{}).StrokeDashArrayWhenSelected,
+
+	"ref_models.VerticalAxis.StrokeOpacity": (ref_models.VerticalAxis{}).StrokeOpacity,
 
 	"ref_models.VerticalAxis.StrokeWidth": (ref_models.VerticalAxis{}).StrokeWidth,
+
+	"ref_models.VerticalAxis.Transform": (ref_models.VerticalAxis{}).Transform,
 }
 
 // function will stage objects
@@ -163,32 +267,35 @@ func _(stage *models.StageStruct) {
 	__Classdiagram__000000_Default := (&models.Classdiagram{Name: `Default`}).Stage(stage)
 
 	__Field__000000_Angle := (&models.Field{Name: `Angle`}).Stage(stage)
-	__Field__000001_AxisHandleBorderLength := (&models.Field{Name: `AxisHandleBorderLength`}).Stage(stage)
+	__Field__000001_Angle := (&models.Field{Name: `Angle`}).Stage(stage)
 	__Field__000002_AxisHandleBorderLength := (&models.Field{Name: `AxisHandleBorderLength`}).Stage(stage)
-	__Field__000003_Axis_Length := (&models.Field{Name: `Axis_Length`}).Stage(stage)
+	__Field__000003_AxisHandleBorderLength := (&models.Field{Name: `AxisHandleBorderLength`}).Stage(stage)
 	__Field__000004_Axis_Length := (&models.Field{Name: `Axis_Length`}).Stage(stage)
-	__Field__000005_Axis_StrokeWidth := (&models.Field{Name: `Axis_StrokeWidth`}).Stage(stage)
+	__Field__000005_Axis_Length := (&models.Field{Name: `Axis_Length`}).Stage(stage)
 	__Field__000006_Axis_StrokeWidth := (&models.Field{Name: `Axis_StrokeWidth`}).Stage(stage)
-	__Field__000007_CenterX := (&models.Field{Name: `CenterX`}).Stage(stage)
-	__Field__000008_CenterY := (&models.Field{Name: `CenterY`}).Stage(stage)
-	__Field__000009_DiamondAngle := (&models.Field{Name: `DiamondAngle`}).Stage(stage)
-	__Field__000010_DiamondSideLenght := (&models.Field{Name: `DiamondSideLenght`}).Stage(stage)
-	__Field__000011_InsideAngle := (&models.Field{Name: `InsideAngle`}).Stage(stage)
-	__Field__000012_IsAxisDisplayed := (&models.Field{Name: `IsAxisDisplayed`}).Stage(stage)
+	__Field__000007_Axis_StrokeWidth := (&models.Field{Name: `Axis_StrokeWidth`}).Stage(stage)
+	__Field__000008_CenterX := (&models.Field{Name: `CenterX`}).Stage(stage)
+	__Field__000009_CenterY := (&models.Field{Name: `CenterY`}).Stage(stage)
+	__Field__000010_DiamondAngle := (&models.Field{Name: `DiamondAngle`}).Stage(stage)
+	__Field__000011_DiamondSideLenght := (&models.Field{Name: `DiamondSideLenght`}).Stage(stage)
+	__Field__000012_InsideAngle := (&models.Field{Name: `InsideAngle`}).Stage(stage)
 	__Field__000013_IsAxisDisplayed := (&models.Field{Name: `IsAxisDisplayed`}).Stage(stage)
-	__Field__000014_IsDisplayed := (&models.Field{Name: `IsDisplayed`}).Stage(stage)
-	__Field__000015_M := (&models.Field{Name: `M`}).Stage(stage)
-	__Field__000016_M := (&models.Field{Name: `M`}).Stage(stage)
-	__Field__000017_N := (&models.Field{Name: `N`}).Stage(stage)
-	__Field__000018_N := (&models.Field{Name: `N`}).Stage(stage)
-	__Field__000019_Name := (&models.Field{Name: `Name`}).Stage(stage)
-	__Field__000020_Name := (&models.Field{Name: `Name`}).Stage(stage)
+	__Field__000014_IsAxisDisplayed := (&models.Field{Name: `IsAxisDisplayed`}).Stage(stage)
+	__Field__000015_IsDisplayed := (&models.Field{Name: `IsDisplayed`}).Stage(stage)
+	__Field__000016_Length := (&models.Field{Name: `Length`}).Stage(stage)
+	__Field__000017_M := (&models.Field{Name: `M`}).Stage(stage)
+	__Field__000018_M := (&models.Field{Name: `M`}).Stage(stage)
+	__Field__000019_N := (&models.Field{Name: `N`}).Stage(stage)
+	__Field__000020_N := (&models.Field{Name: `N`}).Stage(stage)
 	__Field__000021_Name := (&models.Field{Name: `Name`}).Stage(stage)
 	__Field__000022_Name := (&models.Field{Name: `Name`}).Stage(stage)
 	__Field__000023_Name := (&models.Field{Name: `Name`}).Stage(stage)
-	__Field__000024_OriginX := (&models.Field{Name: `OriginX`}).Stage(stage)
-	__Field__000025_OriginY := (&models.Field{Name: `OriginY`}).Stage(stage)
-	__Field__000026_SideLength := (&models.Field{Name: `SideLength`}).Stage(stage)
+	__Field__000024_Name := (&models.Field{Name: `Name`}).Stage(stage)
+	__Field__000025_Name := (&models.Field{Name: `Name`}).Stage(stage)
+	__Field__000026_Name := (&models.Field{Name: `Name`}).Stage(stage)
+	__Field__000027_OriginX := (&models.Field{Name: `OriginX`}).Stage(stage)
+	__Field__000028_OriginY := (&models.Field{Name: `OriginY`}).Stage(stage)
+	__Field__000029_SideLength := (&models.Field{Name: `SideLength`}).Stage(stage)
 
 	__GongStructShape__000000_Default_HorizontalAxis := (&models.GongStructShape{Name: `Default-HorizontalAxis`}).Stage(stage)
 	__GongStructShape__000001_Default_InitialAxis := (&models.GongStructShape{Name: `Default-InitialAxis`}).Stage(stage)
@@ -233,165 +340,165 @@ func _(stage *models.StageStruct) {
 	__Field__000000_Angle.Structname = `Rhombus`
 	__Field__000000_Angle.Fieldtypename = `float64`
 
-	__Field__000001_AxisHandleBorderLength.Name = `AxisHandleBorderLength`
+	__Field__000001_Angle.Name = `Angle`
 
-	//gong:ident [ref_models.HorizontalAxis.AxisHandleBorderLength] comment added to overcome the problem with the comment map association
-	__Field__000001_AxisHandleBorderLength.Identifier = `ref_models.HorizontalAxis.AxisHandleBorderLength`
-	__Field__000001_AxisHandleBorderLength.FieldTypeAsString = ``
-	__Field__000001_AxisHandleBorderLength.Structname = `HorizontalAxis`
-	__Field__000001_AxisHandleBorderLength.Fieldtypename = `float64`
+	//gong:ident [ref_models.Axis.Angle] comment added to overcome the problem with the comment map association
+	__Field__000001_Angle.Identifier = `ref_models.Axis.Angle`
+	__Field__000001_Angle.FieldTypeAsString = ``
+	__Field__000001_Angle.Structname = `Axis`
+	__Field__000001_Angle.Fieldtypename = `float64`
 
 	__Field__000002_AxisHandleBorderLength.Name = `AxisHandleBorderLength`
 
-	//gong:ident [ref_models.VerticalAxis.AxisHandleBorderLength] comment added to overcome the problem with the comment map association
-	__Field__000002_AxisHandleBorderLength.Identifier = `ref_models.VerticalAxis.AxisHandleBorderLength`
+	//gong:ident [ref_models.HorizontalAxis.AxisHandleBorderLength] comment added to overcome the problem with the comment map association
+	__Field__000002_AxisHandleBorderLength.Identifier = `ref_models.HorizontalAxis.AxisHandleBorderLength`
 	__Field__000002_AxisHandleBorderLength.FieldTypeAsString = ``
-	__Field__000002_AxisHandleBorderLength.Structname = `VerticalAxis`
+	__Field__000002_AxisHandleBorderLength.Structname = `HorizontalAxis`
 	__Field__000002_AxisHandleBorderLength.Fieldtypename = `float64`
 
-	__Field__000003_Axis_Length.Name = `Axis_Length`
+	__Field__000003_AxisHandleBorderLength.Name = `AxisHandleBorderLength`
 
-	//gong:ident [ref_models.HorizontalAxis.Axis_Length] comment added to overcome the problem with the comment map association
-	__Field__000003_Axis_Length.Identifier = `ref_models.HorizontalAxis.Axis_Length`
-	__Field__000003_Axis_Length.FieldTypeAsString = ``
-	__Field__000003_Axis_Length.Structname = `HorizontalAxis`
-	__Field__000003_Axis_Length.Fieldtypename = `float64`
+	//gong:ident [ref_models.VerticalAxis.AxisHandleBorderLength] comment added to overcome the problem with the comment map association
+	__Field__000003_AxisHandleBorderLength.Identifier = `ref_models.VerticalAxis.AxisHandleBorderLength`
+	__Field__000003_AxisHandleBorderLength.FieldTypeAsString = ``
+	__Field__000003_AxisHandleBorderLength.Structname = `VerticalAxis`
+	__Field__000003_AxisHandleBorderLength.Fieldtypename = `float64`
 
 	__Field__000004_Axis_Length.Name = `Axis_Length`
 
-	//gong:ident [ref_models.VerticalAxis.Axis_Length] comment added to overcome the problem with the comment map association
-	__Field__000004_Axis_Length.Identifier = `ref_models.VerticalAxis.Axis_Length`
+	//gong:ident [ref_models.HorizontalAxis.Axis_Length] comment added to overcome the problem with the comment map association
+	__Field__000004_Axis_Length.Identifier = `ref_models.HorizontalAxis.Axis_Length`
 	__Field__000004_Axis_Length.FieldTypeAsString = ``
-	__Field__000004_Axis_Length.Structname = `VerticalAxis`
+	__Field__000004_Axis_Length.Structname = `HorizontalAxis`
 	__Field__000004_Axis_Length.Fieldtypename = `float64`
 
-	__Field__000005_Axis_StrokeWidth.Name = `Axis_StrokeWidth`
+	__Field__000005_Axis_Length.Name = `Axis_Length`
 
-	//gong:ident [ref_models.HorizontalAxis.StrokeWidth] comment added to overcome the problem with the comment map association
-	__Field__000005_Axis_StrokeWidth.Identifier = `ref_models.HorizontalAxis.StrokeWidth`
-	__Field__000005_Axis_StrokeWidth.FieldTypeAsString = ``
-	__Field__000005_Axis_StrokeWidth.Structname = `HorizontalAxis`
-	__Field__000005_Axis_StrokeWidth.Fieldtypename = `float64`
+	//gong:ident [ref_models.VerticalAxis.Axis_Length] comment added to overcome the problem with the comment map association
+	__Field__000005_Axis_Length.Identifier = `ref_models.VerticalAxis.Axis_Length`
+	__Field__000005_Axis_Length.FieldTypeAsString = ``
+	__Field__000005_Axis_Length.Structname = `VerticalAxis`
+	__Field__000005_Axis_Length.Fieldtypename = `float64`
 
 	__Field__000006_Axis_StrokeWidth.Name = `Axis_StrokeWidth`
 
-	//gong:ident [ref_models.VerticalAxis.StrokeWidth] comment added to overcome the problem with the comment map association
-	__Field__000006_Axis_StrokeWidth.Identifier = `ref_models.VerticalAxis.StrokeWidth`
+	//gong:ident [ref_models.HorizontalAxis.StrokeWidth] comment added to overcome the problem with the comment map association
+	__Field__000006_Axis_StrokeWidth.Identifier = `ref_models.HorizontalAxis.StrokeWidth`
 	__Field__000006_Axis_StrokeWidth.FieldTypeAsString = ``
-	__Field__000006_Axis_StrokeWidth.Structname = `VerticalAxis`
+	__Field__000006_Axis_StrokeWidth.Structname = `HorizontalAxis`
 	__Field__000006_Axis_StrokeWidth.Fieldtypename = `float64`
 
-	__Field__000007_CenterX.Name = `CenterX`
+	__Field__000007_Axis_StrokeWidth.Name = `Axis_StrokeWidth`
+
+	//gong:ident [ref_models.VerticalAxis.StrokeWidth] comment added to overcome the problem with the comment map association
+	__Field__000007_Axis_StrokeWidth.Identifier = `ref_models.VerticalAxis.StrokeWidth`
+	__Field__000007_Axis_StrokeWidth.FieldTypeAsString = ``
+	__Field__000007_Axis_StrokeWidth.Structname = `VerticalAxis`
+	__Field__000007_Axis_StrokeWidth.Fieldtypename = `float64`
+
+	__Field__000008_CenterX.Name = `CenterX`
 
 	//gong:ident [ref_models.Rhombus.CenterX] comment added to overcome the problem with the comment map association
-	__Field__000007_CenterX.Identifier = `ref_models.Rhombus.CenterX`
-	__Field__000007_CenterX.FieldTypeAsString = ``
-	__Field__000007_CenterX.Structname = `Rhombus`
-	__Field__000007_CenterX.Fieldtypename = `float64`
+	__Field__000008_CenterX.Identifier = `ref_models.Rhombus.CenterX`
+	__Field__000008_CenterX.FieldTypeAsString = ``
+	__Field__000008_CenterX.Structname = `Rhombus`
+	__Field__000008_CenterX.Fieldtypename = `float64`
 
-	__Field__000008_CenterY.Name = `CenterY`
+	__Field__000009_CenterY.Name = `CenterY`
 
 	//gong:ident [ref_models.Rhombus.CenterY] comment added to overcome the problem with the comment map association
-	__Field__000008_CenterY.Identifier = `ref_models.Rhombus.CenterY`
-	__Field__000008_CenterY.FieldTypeAsString = ``
-	__Field__000008_CenterY.Structname = `Rhombus`
-	__Field__000008_CenterY.Fieldtypename = `float64`
+	__Field__000009_CenterY.Identifier = `ref_models.Rhombus.CenterY`
+	__Field__000009_CenterY.FieldTypeAsString = ``
+	__Field__000009_CenterY.Structname = `Rhombus`
+	__Field__000009_CenterY.Fieldtypename = `float64`
 
-	__Field__000009_DiamondAngle.Name = `DiamondAngle`
+	__Field__000010_DiamondAngle.Name = `DiamondAngle`
 
 	//gong:ident [ref_models.Parameter.InsideAngle] comment added to overcome the problem with the comment map association
-	__Field__000009_DiamondAngle.Identifier = `ref_models.Parameter.InsideAngle`
-	__Field__000009_DiamondAngle.FieldTypeAsString = ``
-	__Field__000009_DiamondAngle.Structname = `Parameter`
-	__Field__000009_DiamondAngle.Fieldtypename = `float64`
+	__Field__000010_DiamondAngle.Identifier = `ref_models.Parameter.InsideAngle`
+	__Field__000010_DiamondAngle.FieldTypeAsString = ``
+	__Field__000010_DiamondAngle.Structname = `Parameter`
+	__Field__000010_DiamondAngle.Fieldtypename = `float64`
 
-	__Field__000010_DiamondSideLenght.Name = `DiamondSideLenght`
+	__Field__000011_DiamondSideLenght.Name = `DiamondSideLenght`
 
-	//gong:ident [ref_models.Parameter.DiamondSideLenght] comment added to overcome the problem with the comment map association
-	__Field__000010_DiamondSideLenght.Identifier = `ref_models.Parameter.DiamondSideLenght`
-	__Field__000010_DiamondSideLenght.FieldTypeAsString = ``
-	__Field__000010_DiamondSideLenght.Structname = `Parameter`
-	__Field__000010_DiamondSideLenght.Fieldtypename = `float64`
+	//gong:ident [ref_models.Parameter.SideLength] comment added to overcome the problem with the comment map association
+	__Field__000011_DiamondSideLenght.Identifier = `ref_models.Parameter.SideLength`
+	__Field__000011_DiamondSideLenght.FieldTypeAsString = ``
+	__Field__000011_DiamondSideLenght.Structname = `Parameter`
+	__Field__000011_DiamondSideLenght.Fieldtypename = `float64`
 
-	__Field__000011_InsideAngle.Name = `InsideAngle`
+	__Field__000012_InsideAngle.Name = `InsideAngle`
 
 	//gong:ident [ref_models.Rhombus.InsideAngle] comment added to overcome the problem with the comment map association
-	__Field__000011_InsideAngle.Identifier = `ref_models.Rhombus.InsideAngle`
-	__Field__000011_InsideAngle.FieldTypeAsString = ``
-	__Field__000011_InsideAngle.Structname = `Rhombus`
-	__Field__000011_InsideAngle.Fieldtypename = `float64`
-
-	__Field__000012_IsAxisDisplayed.Name = `IsAxisDisplayed`
-
-	//gong:ident [ref_models.VerticalAxis.IsDisplayed] comment added to overcome the problem with the comment map association
-	__Field__000012_IsAxisDisplayed.Identifier = `ref_models.VerticalAxis.IsDisplayed`
-	__Field__000012_IsAxisDisplayed.FieldTypeAsString = ``
-	__Field__000012_IsAxisDisplayed.Structname = `VerticalAxis`
-	__Field__000012_IsAxisDisplayed.Fieldtypename = `bool`
+	__Field__000012_InsideAngle.Identifier = `ref_models.Rhombus.InsideAngle`
+	__Field__000012_InsideAngle.FieldTypeAsString = ``
+	__Field__000012_InsideAngle.Structname = `Rhombus`
+	__Field__000012_InsideAngle.Fieldtypename = `float64`
 
 	__Field__000013_IsAxisDisplayed.Name = `IsAxisDisplayed`
 
-	//gong:ident [ref_models.HorizontalAxis.IsDisplayed] comment added to overcome the problem with the comment map association
-	__Field__000013_IsAxisDisplayed.Identifier = `ref_models.HorizontalAxis.IsDisplayed`
+	//gong:ident [ref_models.VerticalAxis.IsDisplayed] comment added to overcome the problem with the comment map association
+	__Field__000013_IsAxisDisplayed.Identifier = `ref_models.VerticalAxis.IsDisplayed`
 	__Field__000013_IsAxisDisplayed.FieldTypeAsString = ``
-	__Field__000013_IsAxisDisplayed.Structname = `HorizontalAxis`
+	__Field__000013_IsAxisDisplayed.Structname = `VerticalAxis`
 	__Field__000013_IsAxisDisplayed.Fieldtypename = `bool`
 
-	__Field__000014_IsDisplayed.Name = `IsDisplayed`
+	__Field__000014_IsAxisDisplayed.Name = `IsAxisDisplayed`
+
+	//gong:ident [ref_models.HorizontalAxis.IsDisplayed] comment added to overcome the problem with the comment map association
+	__Field__000014_IsAxisDisplayed.Identifier = `ref_models.HorizontalAxis.IsDisplayed`
+	__Field__000014_IsAxisDisplayed.FieldTypeAsString = ``
+	__Field__000014_IsAxisDisplayed.Structname = `HorizontalAxis`
+	__Field__000014_IsAxisDisplayed.Fieldtypename = `bool`
+
+	__Field__000015_IsDisplayed.Name = `IsDisplayed`
 
 	//gong:ident [ref_models.Rhombus.IsDisplayed] comment added to overcome the problem with the comment map association
-	__Field__000014_IsDisplayed.Identifier = `ref_models.Rhombus.IsDisplayed`
-	__Field__000014_IsDisplayed.FieldTypeAsString = ``
-	__Field__000014_IsDisplayed.Structname = `Rhombus`
-	__Field__000014_IsDisplayed.Fieldtypename = `bool`
+	__Field__000015_IsDisplayed.Identifier = `ref_models.Rhombus.IsDisplayed`
+	__Field__000015_IsDisplayed.FieldTypeAsString = ``
+	__Field__000015_IsDisplayed.Structname = `Rhombus`
+	__Field__000015_IsDisplayed.Fieldtypename = `bool`
 
-	__Field__000015_M.Name = `M`
+	__Field__000016_Length.Name = `Length`
 
-	//gong:ident [ref_models.Parameter.M] comment added to overcome the problem with the comment map association
-	__Field__000015_M.Identifier = `ref_models.Parameter.M`
-	__Field__000015_M.FieldTypeAsString = ``
-	__Field__000015_M.Structname = `Parameter`
-	__Field__000015_M.Fieldtypename = `int`
+	//gong:ident [ref_models.Axis.Length] comment added to overcome the problem with the comment map association
+	__Field__000016_Length.Identifier = `ref_models.Axis.Length`
+	__Field__000016_Length.FieldTypeAsString = ``
+	__Field__000016_Length.Structname = `Axis`
+	__Field__000016_Length.Fieldtypename = `float64`
 
-	__Field__000016_M.Name = `M`
+	__Field__000017_M.Name = `M`
 
 	//gong:ident [ref_models.RhombusGrid.M] comment added to overcome the problem with the comment map association
-	__Field__000016_M.Identifier = `ref_models.RhombusGrid.M`
-	__Field__000016_M.FieldTypeAsString = ``
-	__Field__000016_M.Structname = `RhombusGrid`
-	__Field__000016_M.Fieldtypename = `int`
+	__Field__000017_M.Identifier = `ref_models.RhombusGrid.M`
+	__Field__000017_M.FieldTypeAsString = ``
+	__Field__000017_M.Structname = `RhombusGrid`
+	__Field__000017_M.Fieldtypename = `int`
 
-	__Field__000017_N.Name = `N`
+	__Field__000018_M.Name = `M`
+
+	//gong:ident [ref_models.Parameter.M] comment added to overcome the problem with the comment map association
+	__Field__000018_M.Identifier = `ref_models.Parameter.M`
+	__Field__000018_M.FieldTypeAsString = ``
+	__Field__000018_M.Structname = `Parameter`
+	__Field__000018_M.Fieldtypename = `int`
+
+	__Field__000019_N.Name = `N`
 
 	//gong:ident [ref_models.Parameter.N] comment added to overcome the problem with the comment map association
-	__Field__000017_N.Identifier = `ref_models.Parameter.N`
-	__Field__000017_N.FieldTypeAsString = ``
-	__Field__000017_N.Structname = `Parameter`
-	__Field__000017_N.Fieldtypename = `int`
+	__Field__000019_N.Identifier = `ref_models.Parameter.N`
+	__Field__000019_N.FieldTypeAsString = ``
+	__Field__000019_N.Structname = `Parameter`
+	__Field__000019_N.Fieldtypename = `int`
 
-	__Field__000018_N.Name = `N`
+	__Field__000020_N.Name = `N`
 
 	//gong:ident [ref_models.RhombusGrid.N] comment added to overcome the problem with the comment map association
-	__Field__000018_N.Identifier = `ref_models.RhombusGrid.N`
-	__Field__000018_N.FieldTypeAsString = ``
-	__Field__000018_N.Structname = `RhombusGrid`
-	__Field__000018_N.Fieldtypename = `int`
-
-	__Field__000019_Name.Name = `Name`
-
-	//gong:ident [ref_models.Rhombus.Name] comment added to overcome the problem with the comment map association
-	__Field__000019_Name.Identifier = `ref_models.Rhombus.Name`
-	__Field__000019_Name.FieldTypeAsString = ``
-	__Field__000019_Name.Structname = `Rhombus`
-	__Field__000019_Name.Fieldtypename = `string`
-
-	__Field__000020_Name.Name = `Name`
-
-	//gong:ident [ref_models.HorizontalAxis.Name] comment added to overcome the problem with the comment map association
-	__Field__000020_Name.Identifier = `ref_models.HorizontalAxis.Name`
-	__Field__000020_Name.FieldTypeAsString = ``
-	__Field__000020_Name.Structname = `HorizontalAxis`
-	__Field__000020_Name.Fieldtypename = `string`
+	__Field__000020_N.Identifier = `ref_models.RhombusGrid.N`
+	__Field__000020_N.FieldTypeAsString = ``
+	__Field__000020_N.Structname = `RhombusGrid`
+	__Field__000020_N.Fieldtypename = `int`
 
 	__Field__000021_Name.Name = `Name`
 
@@ -403,43 +510,67 @@ func _(stage *models.StageStruct) {
 
 	__Field__000022_Name.Name = `Name`
 
-	//gong:ident [ref_models.VerticalAxis.Name] comment added to overcome the problem with the comment map association
-	__Field__000022_Name.Identifier = `ref_models.VerticalAxis.Name`
+	//gong:ident [ref_models.Axis.Name] comment added to overcome the problem with the comment map association
+	__Field__000022_Name.Identifier = `ref_models.Axis.Name`
 	__Field__000022_Name.FieldTypeAsString = ``
-	__Field__000022_Name.Structname = `VerticalAxis`
+	__Field__000022_Name.Structname = `Axis`
 	__Field__000022_Name.Fieldtypename = `string`
 
 	__Field__000023_Name.Name = `Name`
 
-	//gong:ident [ref_models.Parameter.Name] comment added to overcome the problem with the comment map association
-	__Field__000023_Name.Identifier = `ref_models.Parameter.Name`
+	//gong:ident [ref_models.Rhombus.Name] comment added to overcome the problem with the comment map association
+	__Field__000023_Name.Identifier = `ref_models.Rhombus.Name`
 	__Field__000023_Name.FieldTypeAsString = ``
-	__Field__000023_Name.Structname = `Parameter`
+	__Field__000023_Name.Structname = `Rhombus`
 	__Field__000023_Name.Fieldtypename = `string`
 
-	__Field__000024_OriginX.Name = `OriginX`
+	__Field__000024_Name.Name = `Name`
+
+	//gong:ident [ref_models.HorizontalAxis.Name] comment added to overcome the problem with the comment map association
+	__Field__000024_Name.Identifier = `ref_models.HorizontalAxis.Name`
+	__Field__000024_Name.FieldTypeAsString = ``
+	__Field__000024_Name.Structname = `HorizontalAxis`
+	__Field__000024_Name.Fieldtypename = `string`
+
+	__Field__000025_Name.Name = `Name`
+
+	//gong:ident [ref_models.Parameter.Name] comment added to overcome the problem with the comment map association
+	__Field__000025_Name.Identifier = `ref_models.Parameter.Name`
+	__Field__000025_Name.FieldTypeAsString = ``
+	__Field__000025_Name.Structname = `Parameter`
+	__Field__000025_Name.Fieldtypename = `string`
+
+	__Field__000026_Name.Name = `Name`
+
+	//gong:ident [ref_models.VerticalAxis.Name] comment added to overcome the problem with the comment map association
+	__Field__000026_Name.Identifier = `ref_models.VerticalAxis.Name`
+	__Field__000026_Name.FieldTypeAsString = ``
+	__Field__000026_Name.Structname = `VerticalAxis`
+	__Field__000026_Name.Fieldtypename = `string`
+
+	__Field__000027_OriginX.Name = `OriginX`
 
 	//gong:ident [ref_models.Parameter.OriginX] comment added to overcome the problem with the comment map association
-	__Field__000024_OriginX.Identifier = `ref_models.Parameter.OriginX`
-	__Field__000024_OriginX.FieldTypeAsString = ``
-	__Field__000024_OriginX.Structname = `Parameter`
-	__Field__000024_OriginX.Fieldtypename = `float64`
+	__Field__000027_OriginX.Identifier = `ref_models.Parameter.OriginX`
+	__Field__000027_OriginX.FieldTypeAsString = ``
+	__Field__000027_OriginX.Structname = `Parameter`
+	__Field__000027_OriginX.Fieldtypename = `float64`
 
-	__Field__000025_OriginY.Name = `OriginY`
+	__Field__000028_OriginY.Name = `OriginY`
 
 	//gong:ident [ref_models.Parameter.OriginY] comment added to overcome the problem with the comment map association
-	__Field__000025_OriginY.Identifier = `ref_models.Parameter.OriginY`
-	__Field__000025_OriginY.FieldTypeAsString = ``
-	__Field__000025_OriginY.Structname = `Parameter`
-	__Field__000025_OriginY.Fieldtypename = `float64`
+	__Field__000028_OriginY.Identifier = `ref_models.Parameter.OriginY`
+	__Field__000028_OriginY.FieldTypeAsString = ``
+	__Field__000028_OriginY.Structname = `Parameter`
+	__Field__000028_OriginY.Fieldtypename = `float64`
 
-	__Field__000026_SideLength.Name = `SideLength`
+	__Field__000029_SideLength.Name = `SideLength`
 
 	//gong:ident [ref_models.Rhombus.SideLength] comment added to overcome the problem with the comment map association
-	__Field__000026_SideLength.Identifier = `ref_models.Rhombus.SideLength`
-	__Field__000026_SideLength.FieldTypeAsString = ``
-	__Field__000026_SideLength.Structname = `Rhombus`
-	__Field__000026_SideLength.Fieldtypename = `float64`
+	__Field__000029_SideLength.Identifier = `ref_models.Rhombus.SideLength`
+	__Field__000029_SideLength.FieldTypeAsString = ``
+	__Field__000029_SideLength.Structname = `Rhombus`
+	__Field__000029_SideLength.Fieldtypename = `float64`
 
 	__GongStructShape__000000_Default_HorizontalAxis.Name = `Default-HorizontalAxis`
 
@@ -453,12 +584,12 @@ func _(stage *models.StageStruct) {
 
 	__GongStructShape__000001_Default_InitialAxis.Name = `Default-InitialAxis`
 
-	//gong:ident [ref_models.InitialAxis] comment added to overcome the problem with the comment map association
-	__GongStructShape__000001_Default_InitialAxis.Identifier = `ref_models.InitialAxis`
+	//gong:ident [ref_models.Axis] comment added to overcome the problem with the comment map association
+	__GongStructShape__000001_Default_InitialAxis.Identifier = `ref_models.Axis`
 	__GongStructShape__000001_Default_InitialAxis.ShowNbInstances = false
-	__GongStructShape__000001_Default_InitialAxis.NbInstances = 0
+	__GongStructShape__000001_Default_InitialAxis.NbInstances = 1
 	__GongStructShape__000001_Default_InitialAxis.Width = 240.000000
-	__GongStructShape__000001_Default_InitialAxis.Height = 63.000000
+	__GongStructShape__000001_Default_InitialAxis.Height = 108.000000
 	__GongStructShape__000001_Default_InitialAxis.IsSelected = false
 
 	__GongStructShape__000002_Default_Parameter.Name = `Default-Parameter`
@@ -476,7 +607,7 @@ func _(stage *models.StageStruct) {
 	//gong:ident [ref_models.Rhombus] comment added to overcome the problem with the comment map association
 	__GongStructShape__000003_Default_Rhombus.Identifier = `ref_models.Rhombus`
 	__GongStructShape__000003_Default_Rhombus.ShowNbInstances = false
-	__GongStructShape__000003_Default_Rhombus.NbInstances = 7
+	__GongStructShape__000003_Default_Rhombus.NbInstances = 13
 	__GongStructShape__000003_Default_Rhombus.Width = 314.000000
 	__GongStructShape__000003_Default_Rhombus.Height = 168.000000
 	__GongStructShape__000003_Default_Rhombus.IsSelected = false
@@ -486,7 +617,7 @@ func _(stage *models.StageStruct) {
 	//gong:ident [ref_models.RhombusGrid] comment added to overcome the problem with the comment map association
 	__GongStructShape__000004_Default_RhombusGrid.Identifier = `ref_models.RhombusGrid`
 	__GongStructShape__000004_Default_RhombusGrid.ShowNbInstances = false
-	__GongStructShape__000004_Default_RhombusGrid.NbInstances = 0
+	__GongStructShape__000004_Default_RhombusGrid.NbInstances = 1
 	__GongStructShape__000004_Default_RhombusGrid.Width = 307.000000
 	__GongStructShape__000004_Default_RhombusGrid.Height = 108.000000
 	__GongStructShape__000004_Default_RhombusGrid.IsSelected = false
@@ -527,8 +658,8 @@ func _(stage *models.StageStruct) {
 	//gong:ident [ref_models.Parameter.InitialAxis] comment added to overcome the problem with the comment map association
 	__Link__000001_InitialAxis.Identifier = `ref_models.Parameter.InitialAxis`
 
-	//gong:ident [ref_models.InitialAxis] comment added to overcome the problem with the comment map association
-	__Link__000001_InitialAxis.Fieldtypename = `ref_models.InitialAxis`
+	//gong:ident [ref_models.Axis] comment added to overcome the problem with the comment map association
+	__Link__000001_InitialAxis.Fieldtypename = `ref_models.Axis`
 	__Link__000001_InitialAxis.FieldOffsetX = -50.000000
 	__Link__000001_InitialAxis.FieldOffsetY = -16.000000
 	__Link__000001_InitialAxis.TargetMultiplicity = models.ZERO_ONE
@@ -708,45 +839,48 @@ func _(stage *models.StageStruct) {
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000004_Default_RhombusGrid)
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000001_Default_InitialAxis)
 	__GongStructShape__000000_Default_HorizontalAxis.Position = __Position__000000_Pos_Default_HorizontalAxis
-	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000020_Name)
-	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000013_IsAxisDisplayed)
-	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000001_AxisHandleBorderLength)
-	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000003_Axis_Length)
-	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000005_Axis_StrokeWidth)
+	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000024_Name)
+	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000014_IsAxisDisplayed)
+	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000002_AxisHandleBorderLength)
+	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000004_Axis_Length)
+	__GongStructShape__000000_Default_HorizontalAxis.Fields = append(__GongStructShape__000000_Default_HorizontalAxis.Fields, __Field__000006_Axis_StrokeWidth)
 	__GongStructShape__000001_Default_InitialAxis.Position = __Position__000001_Pos_Default_InitialAxis
+	__GongStructShape__000001_Default_InitialAxis.Fields = append(__GongStructShape__000001_Default_InitialAxis.Fields, __Field__000022_Name)
+	__GongStructShape__000001_Default_InitialAxis.Fields = append(__GongStructShape__000001_Default_InitialAxis.Fields, __Field__000001_Angle)
+	__GongStructShape__000001_Default_InitialAxis.Fields = append(__GongStructShape__000001_Default_InitialAxis.Fields, __Field__000016_Length)
 	__GongStructShape__000002_Default_Parameter.Position = __Position__000002_Pos_Default_Parameter
-	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000023_Name)
-	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000017_N)
-	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000015_M)
-	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000009_DiamondAngle)
-	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000024_OriginX)
-	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000025_OriginY)
-	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000010_DiamondSideLenght)
+	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000025_Name)
+	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000019_N)
+	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000018_M)
+	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000010_DiamondAngle)
+	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000027_OriginX)
+	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000028_OriginY)
+	__GongStructShape__000002_Default_Parameter.Fields = append(__GongStructShape__000002_Default_Parameter.Fields, __Field__000011_DiamondSideLenght)
 	__GongStructShape__000002_Default_Parameter.Links = append(__GongStructShape__000002_Default_Parameter.Links, __Link__000002_InitialRhombus)
 	__GongStructShape__000002_Default_Parameter.Links = append(__GongStructShape__000002_Default_Parameter.Links, __Link__000000_HorizontalAxis)
 	__GongStructShape__000002_Default_Parameter.Links = append(__GongStructShape__000002_Default_Parameter.Links, __Link__000006_VerticalAxis)
 	__GongStructShape__000002_Default_Parameter.Links = append(__GongStructShape__000002_Default_Parameter.Links, __Link__000003_InitialRhombusGrid)
 	__GongStructShape__000002_Default_Parameter.Links = append(__GongStructShape__000002_Default_Parameter.Links, __Link__000001_InitialAxis)
 	__GongStructShape__000003_Default_Rhombus.Position = __Position__000003_Pos_Default_Rhombus
-	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000019_Name)
-	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000014_IsDisplayed)
-	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000007_CenterX)
-	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000008_CenterY)
-	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000026_SideLength)
+	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000023_Name)
+	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000015_IsDisplayed)
+	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000008_CenterX)
+	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000009_CenterY)
+	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000029_SideLength)
 	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000000_Angle)
-	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000011_InsideAngle)
+	__GongStructShape__000003_Default_Rhombus.Fields = append(__GongStructShape__000003_Default_Rhombus.Fields, __Field__000012_InsideAngle)
 	__GongStructShape__000004_Default_RhombusGrid.Position = __Position__000004_Pos_Default_RhombusGrid
 	__GongStructShape__000004_Default_RhombusGrid.Fields = append(__GongStructShape__000004_Default_RhombusGrid.Fields, __Field__000021_Name)
-	__GongStructShape__000004_Default_RhombusGrid.Fields = append(__GongStructShape__000004_Default_RhombusGrid.Fields, __Field__000018_N)
-	__GongStructShape__000004_Default_RhombusGrid.Fields = append(__GongStructShape__000004_Default_RhombusGrid.Fields, __Field__000016_M)
+	__GongStructShape__000004_Default_RhombusGrid.Fields = append(__GongStructShape__000004_Default_RhombusGrid.Fields, __Field__000020_N)
+	__GongStructShape__000004_Default_RhombusGrid.Fields = append(__GongStructShape__000004_Default_RhombusGrid.Fields, __Field__000017_M)
 	__GongStructShape__000004_Default_RhombusGrid.Links = append(__GongStructShape__000004_Default_RhombusGrid.Links, __Link__000004_Reference)
 	__GongStructShape__000004_Default_RhombusGrid.Links = append(__GongStructShape__000004_Default_RhombusGrid.Links, __Link__000005_Rhombuses)
 	__GongStructShape__000005_Default_VerticalAxis.Position = __Position__000005_Pos_Default_VerticalAxis
-	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000022_Name)
-	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000012_IsAxisDisplayed)
-	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000002_AxisHandleBorderLength)
-	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000004_Axis_Length)
-	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000006_Axis_StrokeWidth)
+	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000026_Name)
+	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000013_IsAxisDisplayed)
+	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000003_AxisHandleBorderLength)
+	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000005_Axis_Length)
+	__GongStructShape__000005_Default_VerticalAxis.Fields = append(__GongStructShape__000005_Default_VerticalAxis.Fields, __Field__000007_Axis_StrokeWidth)
 	__Link__000000_HorizontalAxis.Middlevertice = __Vertice__000000_Verticle_in_class_diagram_Default_in_middle_between_Default_Parameter_and_Default_HorizontalAxis
 	__Link__000001_InitialAxis.Middlevertice = __Vertice__000001_Verticle_in_class_diagram_Default_in_middle_between_Default_Parameter_and_Default_InitialAxis
 	__Link__000002_InitialRhombus.Middlevertice = __Vertice__000002_Verticle_in_class_diagram_Default_in_middle_between_Default_Parameter_and_Default_Rhombus

@@ -24,6 +24,8 @@ type Parameter struct {
 	InitialCircleGrid  *CircleGrid
 	InitialAxis        *Axis
 
+	RotatedAxis *Axis
+
 	// for drawing purpose
 	OriginX        float64
 	OriginY        float64
