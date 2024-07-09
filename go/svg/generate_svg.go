@@ -6,7 +6,7 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
-func GenerateSvg2(gongsvgStage *gongsvg_models.StageStruct, parameter *phylotaxymusic_models.Parameter) {
+func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, parameter *phylotaxymusic_models.Parameter) {
 
 	gongsvgStage.Reset()
 

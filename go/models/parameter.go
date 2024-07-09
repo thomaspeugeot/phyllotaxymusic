@@ -152,6 +152,7 @@ func (p *Parameter) ComputeInitialAxis() {
 
 func (p *Parameter) computeRotatedAxis() {
 	p.RotatedAxis.Length = p.InitialAxis.Length
+	p.RotatedAxis.Angle = 0
 }
 
 func (p *Parameter) computeRotatedRhombus() {
