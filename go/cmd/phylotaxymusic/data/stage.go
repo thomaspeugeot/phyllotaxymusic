@@ -263,8 +263,8 @@ func _(stage *models.StageStruct) {
 
 	__Axis__000000_Reference.Name = `Reference`
 	__Axis__000000_Reference.IsDisplayed = true
-	__Axis__000000_Reference.Angle = 99.693487
-	__Axis__000000_Reference.Length = 385.709911
+	__Axis__000000_Reference.Angle = 99.862709
+	__Axis__000000_Reference.Length = 383.015368
 	__Axis__000000_Reference.Color = ``
 	__Axis__000000_Reference.FillOpacity = 0.000000
 	__Axis__000000_Reference.Stroke = `black`
@@ -277,7 +277,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000001_Rotated.Name = `Rotated`
 	__Axis__000001_Rotated.IsDisplayed = true
 	__Axis__000001_Rotated.Angle = 0.000000
-	__Axis__000001_Rotated.Length = 385.709911
+	__Axis__000001_Rotated.Length = 383.015368
 	__Axis__000001_Rotated.Color = ``
 	__Axis__000001_Rotated.FillOpacity = 0.000000
 	__Axis__000001_Rotated.Stroke = `black`
@@ -288,7 +288,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000001_Rotated.Transform = ``
 
 	__Circle__000000_0_0.Name = `0 0`
-	__Circle__000000_0_0.IsDisplayed = false
+	__Circle__000000_0_0.IsDisplayed = true
 	__Circle__000000_0_0.CenterX = 0.000000
 	__Circle__000000_0_0.CenterY = 0.000000
 	__Circle__000000_0_0.Color = ``
@@ -301,9 +301,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000000_0_0.Transform = ``
 
 	__Circle__000001_0_1.Name = `0 1`
-	__Circle__000001_0_1.IsDisplayed = false
-	__Circle__000001_0_1.CenterX = -64.944805
-	__Circle__000001_0_1.CenterY = 76.040597
+	__Circle__000001_0_1.IsDisplayed = true
+	__Circle__000001_0_1.CenterX = -65.605903
+	__Circle__000001_0_1.CenterY = 75.470958
 	__Circle__000001_0_1.Color = ``
 	__Circle__000001_0_1.FillOpacity = 0.000000
 	__Circle__000001_0_1.Stroke = `black`
@@ -314,9 +314,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000001_0_1.Transform = ``
 
 	__Circle__000002_0_2.Name = `0 2`
-	__Circle__000002_0_2.IsDisplayed = false
-	__Circle__000002_0_2.CenterX = -129.889610
-	__Circle__000002_0_2.CenterY = 152.081193
+	__Circle__000002_0_2.IsDisplayed = true
+	__Circle__000002_0_2.CenterX = -131.211806
+	__Circle__000002_0_2.CenterY = 150.941916
 	__Circle__000002_0_2.Color = ``
 	__Circle__000002_0_2.FillOpacity = 0.000000
 	__Circle__000002_0_2.Stroke = `black`
@@ -327,9 +327,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000002_0_2.Transform = ``
 
 	__Circle__000003_0_3.Name = `0 3`
-	__Circle__000003_0_3.IsDisplayed = false
-	__Circle__000003_0_3.CenterX = -194.834414
-	__Circle__000003_0_3.CenterY = 228.121790
+	__Circle__000003_0_3.IsDisplayed = true
+	__Circle__000003_0_3.CenterX = -196.817709
+	__Circle__000003_0_3.CenterY = 226.412874
 	__Circle__000003_0_3.Color = ``
 	__Circle__000003_0_3.FillOpacity = 0.000000
 	__Circle__000003_0_3.Stroke = `black`
@@ -340,9 +340,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000003_0_3.Transform = ``
 
 	__Circle__000004_1_0.Name = `1 0`
-	__Circle__000004_1_0.IsDisplayed = false
-	__Circle__000004_1_0.CenterX = 64.944805
-	__Circle__000004_1_0.CenterY = 76.040597
+	__Circle__000004_1_0.IsDisplayed = true
+	__Circle__000004_1_0.CenterX = 65.605903
+	__Circle__000004_1_0.CenterY = 75.470958
 	__Circle__000004_1_0.Color = ``
 	__Circle__000004_1_0.FillOpacity = 0.000000
 	__Circle__000004_1_0.Stroke = `black`
@@ -353,9 +353,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000004_1_0.Transform = ``
 
 	__Circle__000005_1_1.Name = `1 1`
-	__Circle__000005_1_1.IsDisplayed = false
+	__Circle__000005_1_1.IsDisplayed = true
 	__Circle__000005_1_1.CenterX = 0.000000
-	__Circle__000005_1_1.CenterY = 152.081193
+	__Circle__000005_1_1.CenterY = 150.941916
 	__Circle__000005_1_1.Color = ``
 	__Circle__000005_1_1.FillOpacity = 0.000000
 	__Circle__000005_1_1.Stroke = `black`
@@ -366,9 +366,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000005_1_1.Transform = ``
 
 	__Circle__000006_1_2.Name = `1 2`
-	__Circle__000006_1_2.IsDisplayed = false
-	__Circle__000006_1_2.CenterX = -64.944805
-	__Circle__000006_1_2.CenterY = 228.121790
+	__Circle__000006_1_2.IsDisplayed = true
+	__Circle__000006_1_2.CenterX = -65.605903
+	__Circle__000006_1_2.CenterY = 226.412874
 	__Circle__000006_1_2.Color = ``
 	__Circle__000006_1_2.FillOpacity = 0.000000
 	__Circle__000006_1_2.Stroke = `black`
@@ -379,9 +379,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000006_1_2.Transform = ``
 
 	__Circle__000007_1_3.Name = `1 3`
-	__Circle__000007_1_3.IsDisplayed = false
-	__Circle__000007_1_3.CenterX = -129.889610
-	__Circle__000007_1_3.CenterY = 304.162386
+	__Circle__000007_1_3.IsDisplayed = true
+	__Circle__000007_1_3.CenterX = -131.211806
+	__Circle__000007_1_3.CenterY = 301.883832
 	__Circle__000007_1_3.Color = ``
 	__Circle__000007_1_3.FillOpacity = 0.000000
 	__Circle__000007_1_3.Stroke = `black`
@@ -392,9 +392,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000007_1_3.Transform = ``
 
 	__Circle__000008_2_0.Name = `2 0`
-	__Circle__000008_2_0.IsDisplayed = false
-	__Circle__000008_2_0.CenterX = 129.889610
-	__Circle__000008_2_0.CenterY = 152.081193
+	__Circle__000008_2_0.IsDisplayed = true
+	__Circle__000008_2_0.CenterX = 131.211806
+	__Circle__000008_2_0.CenterY = 150.941916
 	__Circle__000008_2_0.Color = ``
 	__Circle__000008_2_0.FillOpacity = 0.000000
 	__Circle__000008_2_0.Stroke = `black`
@@ -405,9 +405,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000008_2_0.Transform = ``
 
 	__Circle__000009_2_1.Name = `2 1`
-	__Circle__000009_2_1.IsDisplayed = false
-	__Circle__000009_2_1.CenterX = 64.944805
-	__Circle__000009_2_1.CenterY = 228.121790
+	__Circle__000009_2_1.IsDisplayed = true
+	__Circle__000009_2_1.CenterX = 65.605903
+	__Circle__000009_2_1.CenterY = 226.412874
 	__Circle__000009_2_1.Color = ``
 	__Circle__000009_2_1.FillOpacity = 0.000000
 	__Circle__000009_2_1.Stroke = `black`
@@ -418,9 +418,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000009_2_1.Transform = ``
 
 	__Circle__000010_2_2.Name = `2 2`
-	__Circle__000010_2_2.IsDisplayed = false
+	__Circle__000010_2_2.IsDisplayed = true
 	__Circle__000010_2_2.CenterX = 0.000000
-	__Circle__000010_2_2.CenterY = 304.162386
+	__Circle__000010_2_2.CenterY = 301.883832
 	__Circle__000010_2_2.Color = ``
 	__Circle__000010_2_2.FillOpacity = 0.000000
 	__Circle__000010_2_2.Stroke = `black`
@@ -431,9 +431,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000010_2_2.Transform = ``
 
 	__Circle__000011_2_3.Name = `2 3`
-	__Circle__000011_2_3.IsDisplayed = false
-	__Circle__000011_2_3.CenterX = -64.944805
-	__Circle__000011_2_3.CenterY = 380.202983
+	__Circle__000011_2_3.IsDisplayed = true
+	__Circle__000011_2_3.CenterX = -65.605903
+	__Circle__000011_2_3.CenterY = 377.354790
 	__Circle__000011_2_3.Color = ``
 	__Circle__000011_2_3.FillOpacity = 0.000000
 	__Circle__000011_2_3.Stroke = `black`
@@ -444,7 +444,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000011_2_3.Transform = ``
 
 	__Circle__000012_Initial_Circle.Name = `Initial Circle`
-	__Circle__000012_Initial_Circle.IsDisplayed = false
+	__Circle__000012_Initial_Circle.IsDisplayed = true
 	__Circle__000012_Initial_Circle.CenterX = 0.000000
 	__Circle__000012_Initial_Circle.CenterY = 0.000000
 	__Circle__000012_Initial_Circle.Color = ``
@@ -459,10 +459,10 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000000_Initial.Name = `Initial`
 	__CircleGrid__000000_Initial.N = 2
 	__CircleGrid__000000_Initial.M = 3
-	__CircleGrid__000000_Initial.IsDisplayed = false
+	__CircleGrid__000000_Initial.IsDisplayed = true
 
 	__HorizontalAxis__000000_Initial.Name = `Initial`
-	__HorizontalAxis__000000_Initial.IsDisplayed = false
+	__HorizontalAxis__000000_Initial.IsDisplayed = true
 	__HorizontalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Initial.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Initial.Color = ``
@@ -477,18 +477,18 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 2
 	__Parameter__000000_Reference.M = 3
-	__Parameter__000000_Reference.InsideAngle = 66.000000
+	__Parameter__000000_Reference.InsideAngle = 98.000000
 	__Parameter__000000_Reference.SideLength = 100.000000
 	__Parameter__000000_Reference.OriginX = 300.000000
 	__Parameter__000000_Reference.OriginY = 700.000000
 
 	__Rhombus__000000_0_0.Name = `0 0`
-	__Rhombus__000000_0_0.IsDisplayed = false
+	__Rhombus__000000_0_0.IsDisplayed = true
 	__Rhombus__000000_0_0.CenterX = 0.000000
 	__Rhombus__000000_0_0.CenterY = 0.000000
 	__Rhombus__000000_0_0.SideLength = 100.000000
 	__Rhombus__000000_0_0.Angle = 0.000000
-	__Rhombus__000000_0_0.InsideAngle = 99.000000
+	__Rhombus__000000_0_0.InsideAngle = 98.000000
 	__Rhombus__000000_0_0.Color = ``
 	__Rhombus__000000_0_0.FillOpacity = 0.000000
 	__Rhombus__000000_0_0.Stroke = ``
@@ -515,7 +515,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000001_0_0_Rotated.Transform = ``
 
 	__Rhombus__000002_0_0_Rotated.Name = `0 0 Rotated`
-	__Rhombus__000002_0_0_Rotated.IsDisplayed = false
+	__Rhombus__000002_0_0_Rotated.IsDisplayed = true
 	__Rhombus__000002_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000002_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000002_0_0_Rotated.SideLength = 100.000000
@@ -531,7 +531,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000002_0_0_Rotated.Transform = ``
 
 	__Rhombus__000003_0_0_Rotated.Name = `0 0 Rotated`
-	__Rhombus__000003_0_0_Rotated.IsDisplayed = false
+	__Rhombus__000003_0_0_Rotated.IsDisplayed = true
 	__Rhombus__000003_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000003_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000003_0_0_Rotated.SideLength = 100.000000
@@ -563,7 +563,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000004_0_0_Rotated.Transform = ``
 
 	__Rhombus__000005_0_0_Rotated.Name = `0 0 Rotated`
-	__Rhombus__000005_0_0_Rotated.IsDisplayed = false
+	__Rhombus__000005_0_0_Rotated.IsDisplayed = true
 	__Rhombus__000005_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000005_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000005_0_0_Rotated.SideLength = 100.000000
@@ -595,7 +595,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000006_0_0_Rotated.Transform = ``
 
 	__Rhombus__000007_0_0_Rotated.Name = `0 0 Rotated`
-	__Rhombus__000007_0_0_Rotated.IsDisplayed = true
+	__Rhombus__000007_0_0_Rotated.IsDisplayed = false
 	__Rhombus__000007_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000007_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000007_0_0_Rotated.SideLength = 100.000000
@@ -611,7 +611,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000007_0_0_Rotated.Transform = ``
 
 	__Rhombus__000008_0_0_Rotated.Name = `0 0 Rotated`
-	__Rhombus__000008_0_0_Rotated.IsDisplayed = true
+	__Rhombus__000008_0_0_Rotated.IsDisplayed = false
 	__Rhombus__000008_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000008_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000008_0_0_Rotated.SideLength = 100.000000
@@ -647,8 +647,8 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000010_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000010_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000010_0_0_Rotated.SideLength = 100.000000
-	__Rhombus__000010_0_0_Rotated.Angle = 98.118955
-	__Rhombus__000010_0_0_Rotated.InsideAngle = 109.000000
+	__Rhombus__000010_0_0_Rotated.Angle = -99.862709
+	__Rhombus__000010_0_0_Rotated.InsideAngle = 98.000000
 	__Rhombus__000010_0_0_Rotated.Color = ``
 	__Rhombus__000010_0_0_Rotated.FillOpacity = 0.000000
 	__Rhombus__000010_0_0_Rotated.Stroke = ``
@@ -659,7 +659,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000010_0_0_Rotated.Transform = ``
 
 	__Rhombus__000011_0_0_Rotated.Name = `0 0 Rotated`
-	__Rhombus__000011_0_0_Rotated.IsDisplayed = true
+	__Rhombus__000011_0_0_Rotated.IsDisplayed = false
 	__Rhombus__000011_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000011_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000011_0_0_Rotated.SideLength = 100.000000
@@ -691,12 +691,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000012_0_0_Rotated.Transform = ``
 
 	__Rhombus__000013_0_0_Rotated.Name = `0 0 Rotated`
-	__Rhombus__000013_0_0_Rotated.IsDisplayed = false
+	__Rhombus__000013_0_0_Rotated.IsDisplayed = true
 	__Rhombus__000013_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000013_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000013_0_0_Rotated.SideLength = 100.000000
-	__Rhombus__000013_0_0_Rotated.Angle = -99.693487
-	__Rhombus__000013_0_0_Rotated.InsideAngle = 99.000000
+	__Rhombus__000013_0_0_Rotated.Angle = 98.118955
+	__Rhombus__000013_0_0_Rotated.InsideAngle = 109.000000
 	__Rhombus__000013_0_0_Rotated.Color = ``
 	__Rhombus__000013_0_0_Rotated.FillOpacity = 0.000000
 	__Rhombus__000013_0_0_Rotated.Stroke = ``
@@ -707,7 +707,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000013_0_0_Rotated.Transform = ``
 
 	__Rhombus__000014_0_0_Rotated.Name = `0 0 Rotated`
-	__Rhombus__000014_0_0_Rotated.IsDisplayed = true
+	__Rhombus__000014_0_0_Rotated.IsDisplayed = false
 	__Rhombus__000014_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000014_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000014_0_0_Rotated.SideLength = 100.000000
@@ -739,7 +739,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000015_0_0_Rotated.Transform = ``
 
 	__Rhombus__000016_0_0_Rotated.Name = `0 0 Rotated`
-	__Rhombus__000016_0_0_Rotated.IsDisplayed = false
+	__Rhombus__000016_0_0_Rotated.IsDisplayed = true
 	__Rhombus__000016_0_0_Rotated.CenterX = 0.000000
 	__Rhombus__000016_0_0_Rotated.CenterY = 0.000000
 	__Rhombus__000016_0_0_Rotated.SideLength = 100.000000
@@ -755,12 +755,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000016_0_0_Rotated.Transform = ``
 
 	__Rhombus__000017_0_1.Name = `0 1`
-	__Rhombus__000017_0_1.IsDisplayed = false
-	__Rhombus__000017_0_1.CenterX = -64.944805
-	__Rhombus__000017_0_1.CenterY = 76.040597
+	__Rhombus__000017_0_1.IsDisplayed = true
+	__Rhombus__000017_0_1.CenterX = -65.605903
+	__Rhombus__000017_0_1.CenterY = 75.470958
 	__Rhombus__000017_0_1.SideLength = 100.000000
 	__Rhombus__000017_0_1.Angle = 0.000000
-	__Rhombus__000017_0_1.InsideAngle = 99.000000
+	__Rhombus__000017_0_1.InsideAngle = 98.000000
 	__Rhombus__000017_0_1.Color = ``
 	__Rhombus__000017_0_1.FillOpacity = 0.000000
 	__Rhombus__000017_0_1.Stroke = ``
@@ -771,7 +771,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000017_0_1.Transform = ``
 
 	__Rhombus__000018_0_1_Rotated.Name = `0 1 Rotated`
-	__Rhombus__000018_0_1_Rotated.IsDisplayed = false
+	__Rhombus__000018_0_1_Rotated.IsDisplayed = true
 	__Rhombus__000018_0_1_Rotated.CenterX = -72.394368
 	__Rhombus__000018_0_1_Rotated.CenterY = -68.985908
 	__Rhombus__000018_0_1_Rotated.SideLength = 100.000000
@@ -803,7 +803,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000019_0_1_Rotated.Transform = ``
 
 	__Rhombus__000020_0_1_Rotated.Name = `0 1 Rotated`
-	__Rhombus__000020_0_1_Rotated.IsDisplayed = false
+	__Rhombus__000020_0_1_Rotated.IsDisplayed = true
 	__Rhombus__000020_0_1_Rotated.CenterX = -72.394368
 	__Rhombus__000020_0_1_Rotated.CenterY = -68.985908
 	__Rhombus__000020_0_1_Rotated.SideLength = 100.000000
@@ -867,7 +867,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000023_0_1_Rotated.Transform = ``
 
 	__Rhombus__000024_0_1_Rotated.Name = `0 1 Rotated`
-	__Rhombus__000024_0_1_Rotated.IsDisplayed = true
+	__Rhombus__000024_0_1_Rotated.IsDisplayed = false
 	__Rhombus__000024_0_1_Rotated.CenterX = -72.394368
 	__Rhombus__000024_0_1_Rotated.CenterY = -68.985908
 	__Rhombus__000024_0_1_Rotated.SideLength = 100.000000
@@ -883,7 +883,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000024_0_1_Rotated.Transform = ``
 
 	__Rhombus__000025_0_1_Rotated.Name = `0 1 Rotated`
-	__Rhombus__000025_0_1_Rotated.IsDisplayed = false
+	__Rhombus__000025_0_1_Rotated.IsDisplayed = true
 	__Rhombus__000025_0_1_Rotated.CenterX = -72.394368
 	__Rhombus__000025_0_1_Rotated.CenterY = -68.985908
 	__Rhombus__000025_0_1_Rotated.SideLength = 100.000000
@@ -900,11 +900,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000026_0_1_Rotated.Name = `0 1 Rotated`
 	__Rhombus__000026_0_1_Rotated.IsDisplayed = true
-	__Rhombus__000026_0_1_Rotated.CenterX = -72.394368
-	__Rhombus__000026_0_1_Rotated.CenterY = -68.985908
+	__Rhombus__000026_0_1_Rotated.CenterX = 85.593072
+	__Rhombus__000026_0_1_Rotated.CenterY = 51.709051
 	__Rhombus__000026_0_1_Rotated.SideLength = 100.000000
-	__Rhombus__000026_0_1_Rotated.Angle = 98.118955
-	__Rhombus__000026_0_1_Rotated.InsideAngle = 109.000000
+	__Rhombus__000026_0_1_Rotated.Angle = -99.862709
+	__Rhombus__000026_0_1_Rotated.InsideAngle = 98.000000
 	__Rhombus__000026_0_1_Rotated.Color = ``
 	__Rhombus__000026_0_1_Rotated.FillOpacity = 0.000000
 	__Rhombus__000026_0_1_Rotated.Stroke = ``
@@ -947,7 +947,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000028_0_1_Rotated.Transform = ``
 
 	__Rhombus__000029_0_1_Rotated.Name = `0 1 Rotated`
-	__Rhombus__000029_0_1_Rotated.IsDisplayed = true
+	__Rhombus__000029_0_1_Rotated.IsDisplayed = false
 	__Rhombus__000029_0_1_Rotated.CenterX = -72.394368
 	__Rhombus__000029_0_1_Rotated.CenterY = -68.985908
 	__Rhombus__000029_0_1_Rotated.SideLength = 100.000000
@@ -963,12 +963,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000029_0_1_Rotated.Transform = ``
 
 	__Rhombus__000030_0_1_Rotated.Name = `0 1 Rotated`
-	__Rhombus__000030_0_1_Rotated.IsDisplayed = false
-	__Rhombus__000030_0_1_Rotated.CenterX = 85.890169
-	__Rhombus__000030_0_1_Rotated.CenterY = 51.214050
+	__Rhombus__000030_0_1_Rotated.IsDisplayed = true
+	__Rhombus__000030_0_1_Rotated.CenterX = -72.394368
+	__Rhombus__000030_0_1_Rotated.CenterY = -68.985908
 	__Rhombus__000030_0_1_Rotated.SideLength = 100.000000
-	__Rhombus__000030_0_1_Rotated.Angle = -99.693487
-	__Rhombus__000030_0_1_Rotated.InsideAngle = 99.000000
+	__Rhombus__000030_0_1_Rotated.Angle = 98.118955
+	__Rhombus__000030_0_1_Rotated.InsideAngle = 109.000000
 	__Rhombus__000030_0_1_Rotated.Color = ``
 	__Rhombus__000030_0_1_Rotated.FillOpacity = 0.000000
 	__Rhombus__000030_0_1_Rotated.Stroke = ``
@@ -979,7 +979,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000030_0_1_Rotated.Transform = ``
 
 	__Rhombus__000031_0_1_Rotated.Name = `0 1 Rotated`
-	__Rhombus__000031_0_1_Rotated.IsDisplayed = true
+	__Rhombus__000031_0_1_Rotated.IsDisplayed = false
 	__Rhombus__000031_0_1_Rotated.CenterX = -72.394368
 	__Rhombus__000031_0_1_Rotated.CenterY = -68.985908
 	__Rhombus__000031_0_1_Rotated.SideLength = 100.000000
@@ -1027,12 +1027,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000033_0_1_Rotated.Transform = ``
 
 	__Rhombus__000034_0_2.Name = `0 2`
-	__Rhombus__000034_0_2.IsDisplayed = false
-	__Rhombus__000034_0_2.CenterX = -129.889610
-	__Rhombus__000034_0_2.CenterY = 152.081193
+	__Rhombus__000034_0_2.IsDisplayed = true
+	__Rhombus__000034_0_2.CenterX = -131.211806
+	__Rhombus__000034_0_2.CenterY = 150.941916
 	__Rhombus__000034_0_2.SideLength = 100.000000
 	__Rhombus__000034_0_2.Angle = 0.000000
-	__Rhombus__000034_0_2.InsideAngle = 99.000000
+	__Rhombus__000034_0_2.InsideAngle = 98.000000
 	__Rhombus__000034_0_2.Color = ``
 	__Rhombus__000034_0_2.FillOpacity = 0.000000
 	__Rhombus__000034_0_2.Stroke = ``
@@ -1043,7 +1043,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000034_0_2.Transform = ``
 
 	__Rhombus__000035_0_2_Rotated.Name = `0 2 Rotated`
-	__Rhombus__000035_0_2_Rotated.IsDisplayed = false
+	__Rhombus__000035_0_2_Rotated.IsDisplayed = true
 	__Rhombus__000035_0_2_Rotated.CenterX = -144.788736
 	__Rhombus__000035_0_2_Rotated.CenterY = -137.971815
 	__Rhombus__000035_0_2_Rotated.SideLength = 100.000000
@@ -1091,7 +1091,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000037_0_2_Rotated.Transform = ``
 
 	__Rhombus__000038_0_2_Rotated.Name = `0 2 Rotated`
-	__Rhombus__000038_0_2_Rotated.IsDisplayed = true
+	__Rhombus__000038_0_2_Rotated.IsDisplayed = false
 	__Rhombus__000038_0_2_Rotated.CenterX = -144.788736
 	__Rhombus__000038_0_2_Rotated.CenterY = -137.971815
 	__Rhombus__000038_0_2_Rotated.SideLength = 100.000000
@@ -1107,7 +1107,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000038_0_2_Rotated.Transform = ``
 
 	__Rhombus__000039_0_2_Rotated.Name = `0 2 Rotated`
-	__Rhombus__000039_0_2_Rotated.IsDisplayed = true
+	__Rhombus__000039_0_2_Rotated.IsDisplayed = false
 	__Rhombus__000039_0_2_Rotated.CenterX = -144.788736
 	__Rhombus__000039_0_2_Rotated.CenterY = -137.971815
 	__Rhombus__000039_0_2_Rotated.SideLength = 100.000000
@@ -1171,7 +1171,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000042_0_2_Rotated.Transform = ``
 
 	__Rhombus__000043_0_2_Rotated.Name = `0 2 Rotated`
-	__Rhombus__000043_0_2_Rotated.IsDisplayed = false
+	__Rhombus__000043_0_2_Rotated.IsDisplayed = true
 	__Rhombus__000043_0_2_Rotated.CenterX = -144.788736
 	__Rhombus__000043_0_2_Rotated.CenterY = -137.971815
 	__Rhombus__000043_0_2_Rotated.SideLength = 100.000000
@@ -1203,7 +1203,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000044_0_2_Rotated.Transform = ``
 
 	__Rhombus__000045_0_2_Rotated.Name = `0 2 Rotated`
-	__Rhombus__000045_0_2_Rotated.IsDisplayed = true
+	__Rhombus__000045_0_2_Rotated.IsDisplayed = false
 	__Rhombus__000045_0_2_Rotated.CenterX = -144.788736
 	__Rhombus__000045_0_2_Rotated.CenterY = -137.971815
 	__Rhombus__000045_0_2_Rotated.SideLength = 100.000000
@@ -1236,11 +1236,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000047_0_2_Rotated.Name = `0 2 Rotated`
 	__Rhombus__000047_0_2_Rotated.IsDisplayed = true
-	__Rhombus__000047_0_2_Rotated.CenterX = -144.788736
-	__Rhombus__000047_0_2_Rotated.CenterY = -137.971815
+	__Rhombus__000047_0_2_Rotated.CenterX = 171.186144
+	__Rhombus__000047_0_2_Rotated.CenterY = 103.418103
 	__Rhombus__000047_0_2_Rotated.SideLength = 100.000000
-	__Rhombus__000047_0_2_Rotated.Angle = 98.118955
-	__Rhombus__000047_0_2_Rotated.InsideAngle = 109.000000
+	__Rhombus__000047_0_2_Rotated.Angle = -99.862709
+	__Rhombus__000047_0_2_Rotated.InsideAngle = 98.000000
 	__Rhombus__000047_0_2_Rotated.Color = ``
 	__Rhombus__000047_0_2_Rotated.FillOpacity = 0.000000
 	__Rhombus__000047_0_2_Rotated.Stroke = ``
@@ -1251,7 +1251,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000047_0_2_Rotated.Transform = ``
 
 	__Rhombus__000048_0_2_Rotated.Name = `0 2 Rotated`
-	__Rhombus__000048_0_2_Rotated.IsDisplayed = false
+	__Rhombus__000048_0_2_Rotated.IsDisplayed = true
 	__Rhombus__000048_0_2_Rotated.CenterX = -144.788736
 	__Rhombus__000048_0_2_Rotated.CenterY = -137.971815
 	__Rhombus__000048_0_2_Rotated.SideLength = 100.000000
@@ -1267,12 +1267,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000048_0_2_Rotated.Transform = ``
 
 	__Rhombus__000049_0_2_Rotated.Name = `0 2 Rotated`
-	__Rhombus__000049_0_2_Rotated.IsDisplayed = false
-	__Rhombus__000049_0_2_Rotated.CenterX = 171.780337
-	__Rhombus__000049_0_2_Rotated.CenterY = 102.428101
+	__Rhombus__000049_0_2_Rotated.IsDisplayed = true
+	__Rhombus__000049_0_2_Rotated.CenterX = -144.788736
+	__Rhombus__000049_0_2_Rotated.CenterY = -137.971815
 	__Rhombus__000049_0_2_Rotated.SideLength = 100.000000
-	__Rhombus__000049_0_2_Rotated.Angle = -99.693487
-	__Rhombus__000049_0_2_Rotated.InsideAngle = 99.000000
+	__Rhombus__000049_0_2_Rotated.Angle = 98.118955
+	__Rhombus__000049_0_2_Rotated.InsideAngle = 109.000000
 	__Rhombus__000049_0_2_Rotated.Color = ``
 	__Rhombus__000049_0_2_Rotated.FillOpacity = 0.000000
 	__Rhombus__000049_0_2_Rotated.Stroke = ``
@@ -1299,12 +1299,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000050_0_2_Rotated.Transform = ``
 
 	__Rhombus__000051_0_3.Name = `0 3`
-	__Rhombus__000051_0_3.IsDisplayed = false
-	__Rhombus__000051_0_3.CenterX = -194.834414
-	__Rhombus__000051_0_3.CenterY = 228.121790
+	__Rhombus__000051_0_3.IsDisplayed = true
+	__Rhombus__000051_0_3.CenterX = -196.817709
+	__Rhombus__000051_0_3.CenterY = 226.412874
 	__Rhombus__000051_0_3.SideLength = 100.000000
 	__Rhombus__000051_0_3.Angle = 0.000000
-	__Rhombus__000051_0_3.InsideAngle = 99.000000
+	__Rhombus__000051_0_3.InsideAngle = 98.000000
 	__Rhombus__000051_0_3.Color = ``
 	__Rhombus__000051_0_3.FillOpacity = 0.000000
 	__Rhombus__000051_0_3.Stroke = ``
@@ -1315,7 +1315,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000051_0_3.Transform = ``
 
 	__Rhombus__000052_0_3_Rotated.Name = `0 3 Rotated`
-	__Rhombus__000052_0_3_Rotated.IsDisplayed = false
+	__Rhombus__000052_0_3_Rotated.IsDisplayed = true
 	__Rhombus__000052_0_3_Rotated.CenterX = -217.183104
 	__Rhombus__000052_0_3_Rotated.CenterY = -206.957723
 	__Rhombus__000052_0_3_Rotated.SideLength = 100.000000
@@ -1347,7 +1347,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000053_0_3_Rotated.Transform = ``
 
 	__Rhombus__000054_0_3_Rotated.Name = `0 3 Rotated`
-	__Rhombus__000054_0_3_Rotated.IsDisplayed = false
+	__Rhombus__000054_0_3_Rotated.IsDisplayed = true
 	__Rhombus__000054_0_3_Rotated.CenterX = -217.183104
 	__Rhombus__000054_0_3_Rotated.CenterY = -206.957723
 	__Rhombus__000054_0_3_Rotated.SideLength = 100.000000
@@ -1395,7 +1395,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000056_0_3_Rotated.Transform = ``
 
 	__Rhombus__000057_0_3_Rotated.Name = `0 3 Rotated`
-	__Rhombus__000057_0_3_Rotated.IsDisplayed = true
+	__Rhombus__000057_0_3_Rotated.IsDisplayed = false
 	__Rhombus__000057_0_3_Rotated.CenterX = -217.183104
 	__Rhombus__000057_0_3_Rotated.CenterY = -206.957723
 	__Rhombus__000057_0_3_Rotated.SideLength = 100.000000
@@ -1459,7 +1459,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000060_0_3_Rotated.Transform = ``
 
 	__Rhombus__000061_0_3_Rotated.Name = `0 3 Rotated`
-	__Rhombus__000061_0_3_Rotated.IsDisplayed = true
+	__Rhombus__000061_0_3_Rotated.IsDisplayed = false
 	__Rhombus__000061_0_3_Rotated.CenterX = -217.183104
 	__Rhombus__000061_0_3_Rotated.CenterY = -206.957723
 	__Rhombus__000061_0_3_Rotated.SideLength = 100.000000
@@ -1507,7 +1507,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000063_0_3_Rotated.Transform = ``
 
 	__Rhombus__000064_0_3_Rotated.Name = `0 3 Rotated`
-	__Rhombus__000064_0_3_Rotated.IsDisplayed = false
+	__Rhombus__000064_0_3_Rotated.IsDisplayed = true
 	__Rhombus__000064_0_3_Rotated.CenterX = -217.183104
 	__Rhombus__000064_0_3_Rotated.CenterY = -206.957723
 	__Rhombus__000064_0_3_Rotated.SideLength = 100.000000
@@ -1524,11 +1524,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000065_0_3_Rotated.Name = `0 3 Rotated`
 	__Rhombus__000065_0_3_Rotated.IsDisplayed = false
-	__Rhombus__000065_0_3_Rotated.CenterX = 257.670506
-	__Rhombus__000065_0_3_Rotated.CenterY = 153.642151
+	__Rhombus__000065_0_3_Rotated.CenterX = -217.183104
+	__Rhombus__000065_0_3_Rotated.CenterY = -206.957723
 	__Rhombus__000065_0_3_Rotated.SideLength = 100.000000
-	__Rhombus__000065_0_3_Rotated.Angle = -99.693487
-	__Rhombus__000065_0_3_Rotated.InsideAngle = 99.000000
+	__Rhombus__000065_0_3_Rotated.Angle = 98.118955
+	__Rhombus__000065_0_3_Rotated.InsideAngle = 109.000000
 	__Rhombus__000065_0_3_Rotated.Color = ``
 	__Rhombus__000065_0_3_Rotated.FillOpacity = 0.000000
 	__Rhombus__000065_0_3_Rotated.Stroke = ``
@@ -1540,11 +1540,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000066_0_3_Rotated.Name = `0 3 Rotated`
 	__Rhombus__000066_0_3_Rotated.IsDisplayed = true
-	__Rhombus__000066_0_3_Rotated.CenterX = -217.183104
-	__Rhombus__000066_0_3_Rotated.CenterY = -206.957723
+	__Rhombus__000066_0_3_Rotated.CenterX = 256.779216
+	__Rhombus__000066_0_3_Rotated.CenterY = 155.127154
 	__Rhombus__000066_0_3_Rotated.SideLength = 100.000000
-	__Rhombus__000066_0_3_Rotated.Angle = 98.118955
-	__Rhombus__000066_0_3_Rotated.InsideAngle = 109.000000
+	__Rhombus__000066_0_3_Rotated.Angle = -99.862709
+	__Rhombus__000066_0_3_Rotated.InsideAngle = 98.000000
 	__Rhombus__000066_0_3_Rotated.Color = ``
 	__Rhombus__000066_0_3_Rotated.FillOpacity = 0.000000
 	__Rhombus__000066_0_3_Rotated.Stroke = ``
@@ -1571,12 +1571,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000067_0_3_Rotated.Transform = ``
 
 	__Rhombus__000068_1_0.Name = `1 0`
-	__Rhombus__000068_1_0.IsDisplayed = false
-	__Rhombus__000068_1_0.CenterX = 64.944805
-	__Rhombus__000068_1_0.CenterY = 76.040597
+	__Rhombus__000068_1_0.IsDisplayed = true
+	__Rhombus__000068_1_0.CenterX = 65.605903
+	__Rhombus__000068_1_0.CenterY = 75.470958
 	__Rhombus__000068_1_0.SideLength = 100.000000
 	__Rhombus__000068_1_0.Angle = 0.000000
-	__Rhombus__000068_1_0.InsideAngle = 99.000000
+	__Rhombus__000068_1_0.InsideAngle = 98.000000
 	__Rhombus__000068_1_0.Color = ``
 	__Rhombus__000068_1_0.FillOpacity = 0.000000
 	__Rhombus__000068_1_0.Stroke = ``
@@ -1603,12 +1603,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000069_1_0_Rotated.Transform = ``
 
 	__Rhombus__000070_1_0_Rotated.Name = `1 0 Rotated`
-	__Rhombus__000070_1_0_Rotated.IsDisplayed = false
-	__Rhombus__000070_1_0_Rotated.CenterX = -88.796758
-	__Rhombus__000070_1_0_Rotated.CenterY = 45.990605
+	__Rhombus__000070_1_0_Rotated.IsDisplayed = true
+	__Rhombus__000070_1_0_Rotated.CenterX = 63.118076
+	__Rhombus__000070_1_0_Rotated.CenterY = -77.563577
 	__Rhombus__000070_1_0_Rotated.SideLength = 100.000000
-	__Rhombus__000070_1_0_Rotated.Angle = 98.118955
-	__Rhombus__000070_1_0_Rotated.InsideAngle = 109.000000
+	__Rhombus__000070_1_0_Rotated.Angle = -99.862709
+	__Rhombus__000070_1_0_Rotated.InsideAngle = 98.000000
 	__Rhombus__000070_1_0_Rotated.Color = ``
 	__Rhombus__000070_1_0_Rotated.FillOpacity = 0.000000
 	__Rhombus__000070_1_0_Rotated.Stroke = ``
@@ -1620,11 +1620,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000071_1_0_Rotated.Name = `1 0 Rotated`
 	__Rhombus__000071_1_0_Rotated.IsDisplayed = false
-	__Rhombus__000071_1_0_Rotated.CenterX = 64.019703
-	__Rhombus__000071_1_0_Rotated.CenterY = -76.821075
+	__Rhombus__000071_1_0_Rotated.CenterX = -88.796758
+	__Rhombus__000071_1_0_Rotated.CenterY = 45.990605
 	__Rhombus__000071_1_0_Rotated.SideLength = 100.000000
-	__Rhombus__000071_1_0_Rotated.Angle = -99.693487
-	__Rhombus__000071_1_0_Rotated.InsideAngle = 99.000000
+	__Rhombus__000071_1_0_Rotated.Angle = 98.118955
+	__Rhombus__000071_1_0_Rotated.InsideAngle = 109.000000
 	__Rhombus__000071_1_0_Rotated.Color = ``
 	__Rhombus__000071_1_0_Rotated.FillOpacity = 0.000000
 	__Rhombus__000071_1_0_Rotated.Stroke = ``
@@ -1635,7 +1635,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000071_1_0_Rotated.Transform = ``
 
 	__Rhombus__000072_1_0_Rotated.Name = `1 0 Rotated`
-	__Rhombus__000072_1_0_Rotated.IsDisplayed = true
+	__Rhombus__000072_1_0_Rotated.IsDisplayed = false
 	__Rhombus__000072_1_0_Rotated.CenterX = -88.796758
 	__Rhombus__000072_1_0_Rotated.CenterY = 45.990605
 	__Rhombus__000072_1_0_Rotated.SideLength = 100.000000
@@ -1683,7 +1683,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000074_1_0_Rotated.Transform = ``
 
 	__Rhombus__000075_1_0_Rotated.Name = `1 0 Rotated`
-	__Rhombus__000075_1_0_Rotated.IsDisplayed = false
+	__Rhombus__000075_1_0_Rotated.IsDisplayed = true
 	__Rhombus__000075_1_0_Rotated.CenterX = -88.796758
 	__Rhombus__000075_1_0_Rotated.CenterY = 45.990605
 	__Rhombus__000075_1_0_Rotated.SideLength = 100.000000
@@ -1699,7 +1699,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000075_1_0_Rotated.Transform = ``
 
 	__Rhombus__000076_1_0_Rotated.Name = `1 0 Rotated`
-	__Rhombus__000076_1_0_Rotated.IsDisplayed = true
+	__Rhombus__000076_1_0_Rotated.IsDisplayed = false
 	__Rhombus__000076_1_0_Rotated.CenterX = -88.796758
 	__Rhombus__000076_1_0_Rotated.CenterY = 45.990605
 	__Rhombus__000076_1_0_Rotated.SideLength = 100.000000
@@ -1747,7 +1747,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000078_1_0_Rotated.Transform = ``
 
 	__Rhombus__000079_1_0_Rotated.Name = `1 0 Rotated`
-	__Rhombus__000079_1_0_Rotated.IsDisplayed = true
+	__Rhombus__000079_1_0_Rotated.IsDisplayed = false
 	__Rhombus__000079_1_0_Rotated.CenterX = -88.796758
 	__Rhombus__000079_1_0_Rotated.CenterY = 45.990605
 	__Rhombus__000079_1_0_Rotated.SideLength = 100.000000
@@ -1795,7 +1795,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000081_1_0_Rotated.Transform = ``
 
 	__Rhombus__000082_1_0_Rotated.Name = `1 0 Rotated`
-	__Rhombus__000082_1_0_Rotated.IsDisplayed = false
+	__Rhombus__000082_1_0_Rotated.IsDisplayed = true
 	__Rhombus__000082_1_0_Rotated.CenterX = -88.796758
 	__Rhombus__000082_1_0_Rotated.CenterY = 45.990605
 	__Rhombus__000082_1_0_Rotated.SideLength = 100.000000
@@ -1811,7 +1811,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000082_1_0_Rotated.Transform = ``
 
 	__Rhombus__000083_1_0_Rotated.Name = `1 0 Rotated`
-	__Rhombus__000083_1_0_Rotated.IsDisplayed = false
+	__Rhombus__000083_1_0_Rotated.IsDisplayed = true
 	__Rhombus__000083_1_0_Rotated.CenterX = -88.796758
 	__Rhombus__000083_1_0_Rotated.CenterY = 45.990605
 	__Rhombus__000083_1_0_Rotated.SideLength = 100.000000
@@ -1843,12 +1843,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000084_1_0_Rotated.Transform = ``
 
 	__Rhombus__000085_1_1.Name = `1 1`
-	__Rhombus__000085_1_1.IsDisplayed = false
+	__Rhombus__000085_1_1.IsDisplayed = true
 	__Rhombus__000085_1_1.CenterX = 0.000000
-	__Rhombus__000085_1_1.CenterY = 152.081193
+	__Rhombus__000085_1_1.CenterY = 150.941916
 	__Rhombus__000085_1_1.SideLength = 100.000000
 	__Rhombus__000085_1_1.Angle = 0.000000
-	__Rhombus__000085_1_1.InsideAngle = 99.000000
+	__Rhombus__000085_1_1.InsideAngle = 98.000000
 	__Rhombus__000085_1_1.Color = ``
 	__Rhombus__000085_1_1.FillOpacity = 0.000000
 	__Rhombus__000085_1_1.Stroke = ``
@@ -1859,12 +1859,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000085_1_1.Transform = ``
 
 	__Rhombus__000086_1_1_Rotated.Name = `1 1 Rotated`
-	__Rhombus__000086_1_1_Rotated.IsDisplayed = false
-	__Rhombus__000086_1_1_Rotated.CenterX = -161.191126
-	__Rhombus__000086_1_1_Rotated.CenterY = -22.995303
+	__Rhombus__000086_1_1_Rotated.IsDisplayed = true
+	__Rhombus__000086_1_1_Rotated.CenterX = 148.711148
+	__Rhombus__000086_1_1_Rotated.CenterY = -25.854526
 	__Rhombus__000086_1_1_Rotated.SideLength = 100.000000
-	__Rhombus__000086_1_1_Rotated.Angle = 98.118955
-	__Rhombus__000086_1_1_Rotated.InsideAngle = 109.000000
+	__Rhombus__000086_1_1_Rotated.Angle = -99.862709
+	__Rhombus__000086_1_1_Rotated.InsideAngle = 98.000000
 	__Rhombus__000086_1_1_Rotated.Color = ``
 	__Rhombus__000086_1_1_Rotated.FillOpacity = 0.000000
 	__Rhombus__000086_1_1_Rotated.Stroke = ``
@@ -1891,7 +1891,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000087_1_1_Rotated.Transform = ``
 
 	__Rhombus__000088_1_1_Rotated.Name = `1 1 Rotated`
-	__Rhombus__000088_1_1_Rotated.IsDisplayed = true
+	__Rhombus__000088_1_1_Rotated.IsDisplayed = false
 	__Rhombus__000088_1_1_Rotated.CenterX = -161.191126
 	__Rhombus__000088_1_1_Rotated.CenterY = -22.995303
 	__Rhombus__000088_1_1_Rotated.SideLength = 100.000000
@@ -1955,7 +1955,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000091_1_1_Rotated.Transform = ``
 
 	__Rhombus__000092_1_1_Rotated.Name = `1 1 Rotated`
-	__Rhombus__000092_1_1_Rotated.IsDisplayed = true
+	__Rhombus__000092_1_1_Rotated.IsDisplayed = false
 	__Rhombus__000092_1_1_Rotated.CenterX = -161.191126
 	__Rhombus__000092_1_1_Rotated.CenterY = -22.995303
 	__Rhombus__000092_1_1_Rotated.SideLength = 100.000000
@@ -1987,7 +1987,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000093_1_1_Rotated.Transform = ``
 
 	__Rhombus__000094_1_1_Rotated.Name = `1 1 Rotated`
-	__Rhombus__000094_1_1_Rotated.IsDisplayed = false
+	__Rhombus__000094_1_1_Rotated.IsDisplayed = true
 	__Rhombus__000094_1_1_Rotated.CenterX = -161.191126
 	__Rhombus__000094_1_1_Rotated.CenterY = -22.995303
 	__Rhombus__000094_1_1_Rotated.SideLength = 100.000000
@@ -2067,7 +2067,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000098_1_1_Rotated.Transform = ``
 
 	__Rhombus__000099_1_1_Rotated.Name = `1 1 Rotated`
-	__Rhombus__000099_1_1_Rotated.IsDisplayed = false
+	__Rhombus__000099_1_1_Rotated.IsDisplayed = true
 	__Rhombus__000099_1_1_Rotated.CenterX = -161.191126
 	__Rhombus__000099_1_1_Rotated.CenterY = -22.995303
 	__Rhombus__000099_1_1_Rotated.SideLength = 100.000000
@@ -2100,11 +2100,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000101_1_1_Rotated.Name = `1 1 Rotated`
 	__Rhombus__000101_1_1_Rotated.IsDisplayed = false
-	__Rhombus__000101_1_1_Rotated.CenterX = 149.909871
-	__Rhombus__000101_1_1_Rotated.CenterY = -25.607025
+	__Rhombus__000101_1_1_Rotated.CenterX = -161.191126
+	__Rhombus__000101_1_1_Rotated.CenterY = -22.995303
 	__Rhombus__000101_1_1_Rotated.SideLength = 100.000000
-	__Rhombus__000101_1_1_Rotated.Angle = -99.693487
-	__Rhombus__000101_1_1_Rotated.InsideAngle = 99.000000
+	__Rhombus__000101_1_1_Rotated.Angle = 98.118955
+	__Rhombus__000101_1_1_Rotated.InsideAngle = 109.000000
 	__Rhombus__000101_1_1_Rotated.Color = ``
 	__Rhombus__000101_1_1_Rotated.FillOpacity = 0.000000
 	__Rhombus__000101_1_1_Rotated.Stroke = ``
@@ -2115,12 +2115,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000101_1_1_Rotated.Transform = ``
 
 	__Rhombus__000102_1_2.Name = `1 2`
-	__Rhombus__000102_1_2.IsDisplayed = false
-	__Rhombus__000102_1_2.CenterX = -64.944805
-	__Rhombus__000102_1_2.CenterY = 228.121790
+	__Rhombus__000102_1_2.IsDisplayed = true
+	__Rhombus__000102_1_2.CenterX = -65.605903
+	__Rhombus__000102_1_2.CenterY = 226.412874
 	__Rhombus__000102_1_2.SideLength = 100.000000
 	__Rhombus__000102_1_2.Angle = 0.000000
-	__Rhombus__000102_1_2.InsideAngle = 99.000000
+	__Rhombus__000102_1_2.InsideAngle = 98.000000
 	__Rhombus__000102_1_2.Color = ``
 	__Rhombus__000102_1_2.FillOpacity = 0.000000
 	__Rhombus__000102_1_2.Stroke = ``
@@ -2131,7 +2131,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000102_1_2.Transform = ``
 
 	__Rhombus__000103_1_2_Rotated.Name = `1 2 Rotated`
-	__Rhombus__000103_1_2_Rotated.IsDisplayed = true
+	__Rhombus__000103_1_2_Rotated.IsDisplayed = false
 	__Rhombus__000103_1_2_Rotated.CenterX = -233.585494
 	__Rhombus__000103_1_2_Rotated.CenterY = -91.981210
 	__Rhombus__000103_1_2_Rotated.SideLength = 100.000000
@@ -2195,7 +2195,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000106_1_2_Rotated.Transform = ``
 
 	__Rhombus__000107_1_2_Rotated.Name = `1 2 Rotated`
-	__Rhombus__000107_1_2_Rotated.IsDisplayed = true
+	__Rhombus__000107_1_2_Rotated.IsDisplayed = false
 	__Rhombus__000107_1_2_Rotated.CenterX = -233.585494
 	__Rhombus__000107_1_2_Rotated.CenterY = -91.981210
 	__Rhombus__000107_1_2_Rotated.SideLength = 100.000000
@@ -2227,7 +2227,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000108_1_2_Rotated.Transform = ``
 
 	__Rhombus__000109_1_2_Rotated.Name = `1 2 Rotated`
-	__Rhombus__000109_1_2_Rotated.IsDisplayed = false
+	__Rhombus__000109_1_2_Rotated.IsDisplayed = true
 	__Rhombus__000109_1_2_Rotated.CenterX = -233.585494
 	__Rhombus__000109_1_2_Rotated.CenterY = -91.981210
 	__Rhombus__000109_1_2_Rotated.SideLength = 100.000000
@@ -2259,12 +2259,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000110_1_2_Rotated.Transform = ``
 
 	__Rhombus__000111_1_2_Rotated.Name = `1 2 Rotated`
-	__Rhombus__000111_1_2_Rotated.IsDisplayed = false
-	__Rhombus__000111_1_2_Rotated.CenterX = 235.800040
-	__Rhombus__000111_1_2_Rotated.CenterY = 25.607025
+	__Rhombus__000111_1_2_Rotated.IsDisplayed = true
+	__Rhombus__000111_1_2_Rotated.CenterX = -233.585494
+	__Rhombus__000111_1_2_Rotated.CenterY = -91.981210
 	__Rhombus__000111_1_2_Rotated.SideLength = 100.000000
-	__Rhombus__000111_1_2_Rotated.Angle = -99.693487
-	__Rhombus__000111_1_2_Rotated.InsideAngle = 99.000000
+	__Rhombus__000111_1_2_Rotated.Angle = 98.118955
+	__Rhombus__000111_1_2_Rotated.InsideAngle = 109.000000
 	__Rhombus__000111_1_2_Rotated.Color = ``
 	__Rhombus__000111_1_2_Rotated.FillOpacity = 0.000000
 	__Rhombus__000111_1_2_Rotated.Stroke = ``
@@ -2275,7 +2275,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000111_1_2_Rotated.Transform = ``
 
 	__Rhombus__000112_1_2_Rotated.Name = `1 2 Rotated`
-	__Rhombus__000112_1_2_Rotated.IsDisplayed = false
+	__Rhombus__000112_1_2_Rotated.IsDisplayed = true
 	__Rhombus__000112_1_2_Rotated.CenterX = -233.585494
 	__Rhombus__000112_1_2_Rotated.CenterY = -91.981210
 	__Rhombus__000112_1_2_Rotated.SideLength = 100.000000
@@ -2307,12 +2307,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000113_1_2_Rotated.Transform = ``
 
 	__Rhombus__000114_1_2_Rotated.Name = `1 2 Rotated`
-	__Rhombus__000114_1_2_Rotated.IsDisplayed = false
-	__Rhombus__000114_1_2_Rotated.CenterX = -233.585494
-	__Rhombus__000114_1_2_Rotated.CenterY = -91.981210
+	__Rhombus__000114_1_2_Rotated.IsDisplayed = true
+	__Rhombus__000114_1_2_Rotated.CenterX = 234.304220
+	__Rhombus__000114_1_2_Rotated.CenterY = 25.854526
 	__Rhombus__000114_1_2_Rotated.SideLength = 100.000000
-	__Rhombus__000114_1_2_Rotated.Angle = 98.118955
-	__Rhombus__000114_1_2_Rotated.InsideAngle = 109.000000
+	__Rhombus__000114_1_2_Rotated.Angle = -99.862709
+	__Rhombus__000114_1_2_Rotated.InsideAngle = 98.000000
 	__Rhombus__000114_1_2_Rotated.Color = ``
 	__Rhombus__000114_1_2_Rotated.FillOpacity = 0.000000
 	__Rhombus__000114_1_2_Rotated.Stroke = ``
@@ -2371,7 +2371,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000117_1_2_Rotated.Transform = ``
 
 	__Rhombus__000118_1_2_Rotated.Name = `1 2 Rotated`
-	__Rhombus__000118_1_2_Rotated.IsDisplayed = true
+	__Rhombus__000118_1_2_Rotated.IsDisplayed = false
 	__Rhombus__000118_1_2_Rotated.CenterX = -233.585494
 	__Rhombus__000118_1_2_Rotated.CenterY = -91.981210
 	__Rhombus__000118_1_2_Rotated.SideLength = 100.000000
@@ -2387,12 +2387,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000118_1_2_Rotated.Transform = ``
 
 	__Rhombus__000119_1_3.Name = `1 3`
-	__Rhombus__000119_1_3.IsDisplayed = false
-	__Rhombus__000119_1_3.CenterX = -129.889610
-	__Rhombus__000119_1_3.CenterY = 304.162386
+	__Rhombus__000119_1_3.IsDisplayed = true
+	__Rhombus__000119_1_3.CenterX = -131.211806
+	__Rhombus__000119_1_3.CenterY = 301.883832
 	__Rhombus__000119_1_3.SideLength = 100.000000
 	__Rhombus__000119_1_3.Angle = 0.000000
-	__Rhombus__000119_1_3.InsideAngle = 99.000000
+	__Rhombus__000119_1_3.InsideAngle = 98.000000
 	__Rhombus__000119_1_3.Color = ``
 	__Rhombus__000119_1_3.FillOpacity = 0.000000
 	__Rhombus__000119_1_3.Stroke = ``
@@ -2420,11 +2420,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000121_1_3_Rotated.Name = `1 3 Rotated`
 	__Rhombus__000121_1_3_Rotated.IsDisplayed = true
-	__Rhombus__000121_1_3_Rotated.CenterX = -305.979862
-	__Rhombus__000121_1_3_Rotated.CenterY = -160.967118
+	__Rhombus__000121_1_3_Rotated.CenterX = 319.897292
+	__Rhombus__000121_1_3_Rotated.CenterY = 77.563577
 	__Rhombus__000121_1_3_Rotated.SideLength = 100.000000
-	__Rhombus__000121_1_3_Rotated.Angle = 98.118955
-	__Rhombus__000121_1_3_Rotated.InsideAngle = 109.000000
+	__Rhombus__000121_1_3_Rotated.Angle = -99.862709
+	__Rhombus__000121_1_3_Rotated.InsideAngle = 98.000000
 	__Rhombus__000121_1_3_Rotated.Color = ``
 	__Rhombus__000121_1_3_Rotated.FillOpacity = 0.000000
 	__Rhombus__000121_1_3_Rotated.Stroke = ``
@@ -2467,7 +2467,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000123_1_3_Rotated.Transform = ``
 
 	__Rhombus__000124_1_3_Rotated.Name = `1 3 Rotated`
-	__Rhombus__000124_1_3_Rotated.IsDisplayed = true
+	__Rhombus__000124_1_3_Rotated.IsDisplayed = false
 	__Rhombus__000124_1_3_Rotated.CenterX = -305.979862
 	__Rhombus__000124_1_3_Rotated.CenterY = -160.967118
 	__Rhombus__000124_1_3_Rotated.SideLength = 100.000000
@@ -2483,7 +2483,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000124_1_3_Rotated.Transform = ``
 
 	__Rhombus__000125_1_3_Rotated.Name = `1 3 Rotated`
-	__Rhombus__000125_1_3_Rotated.IsDisplayed = false
+	__Rhombus__000125_1_3_Rotated.IsDisplayed = true
 	__Rhombus__000125_1_3_Rotated.CenterX = -305.979862
 	__Rhombus__000125_1_3_Rotated.CenterY = -160.967118
 	__Rhombus__000125_1_3_Rotated.SideLength = 100.000000
@@ -2531,7 +2531,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000127_1_3_Rotated.Transform = ``
 
 	__Rhombus__000128_1_3_Rotated.Name = `1 3 Rotated`
-	__Rhombus__000128_1_3_Rotated.IsDisplayed = false
+	__Rhombus__000128_1_3_Rotated.IsDisplayed = true
 	__Rhombus__000128_1_3_Rotated.CenterX = -305.979862
 	__Rhombus__000128_1_3_Rotated.CenterY = -160.967118
 	__Rhombus__000128_1_3_Rotated.SideLength = 100.000000
@@ -2563,7 +2563,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000129_1_3_Rotated.Transform = ``
 
 	__Rhombus__000130_1_3_Rotated.Name = `1 3 Rotated`
-	__Rhombus__000130_1_3_Rotated.IsDisplayed = true
+	__Rhombus__000130_1_3_Rotated.IsDisplayed = false
 	__Rhombus__000130_1_3_Rotated.CenterX = -305.979862
 	__Rhombus__000130_1_3_Rotated.CenterY = -160.967118
 	__Rhombus__000130_1_3_Rotated.SideLength = 100.000000
@@ -2579,12 +2579,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000130_1_3_Rotated.Transform = ``
 
 	__Rhombus__000131_1_3_Rotated.Name = `1 3 Rotated`
-	__Rhombus__000131_1_3_Rotated.IsDisplayed = false
-	__Rhombus__000131_1_3_Rotated.CenterX = 321.690209
-	__Rhombus__000131_1_3_Rotated.CenterY = 76.821075
+	__Rhombus__000131_1_3_Rotated.IsDisplayed = true
+	__Rhombus__000131_1_3_Rotated.CenterX = -305.979862
+	__Rhombus__000131_1_3_Rotated.CenterY = -160.967118
 	__Rhombus__000131_1_3_Rotated.SideLength = 100.000000
-	__Rhombus__000131_1_3_Rotated.Angle = -99.693487
-	__Rhombus__000131_1_3_Rotated.InsideAngle = 99.000000
+	__Rhombus__000131_1_3_Rotated.Angle = 98.118955
+	__Rhombus__000131_1_3_Rotated.InsideAngle = 109.000000
 	__Rhombus__000131_1_3_Rotated.Color = ``
 	__Rhombus__000131_1_3_Rotated.FillOpacity = 0.000000
 	__Rhombus__000131_1_3_Rotated.Stroke = ``
@@ -2627,7 +2627,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000133_1_3_Rotated.Transform = ``
 
 	__Rhombus__000134_1_3_Rotated.Name = `1 3 Rotated`
-	__Rhombus__000134_1_3_Rotated.IsDisplayed = true
+	__Rhombus__000134_1_3_Rotated.IsDisplayed = false
 	__Rhombus__000134_1_3_Rotated.CenterX = -305.979862
 	__Rhombus__000134_1_3_Rotated.CenterY = -160.967118
 	__Rhombus__000134_1_3_Rotated.SideLength = 100.000000
@@ -2643,7 +2643,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000134_1_3_Rotated.Transform = ``
 
 	__Rhombus__000135_1_3_Rotated.Name = `1 3 Rotated`
-	__Rhombus__000135_1_3_Rotated.IsDisplayed = false
+	__Rhombus__000135_1_3_Rotated.IsDisplayed = true
 	__Rhombus__000135_1_3_Rotated.CenterX = -305.979862
 	__Rhombus__000135_1_3_Rotated.CenterY = -160.967118
 	__Rhombus__000135_1_3_Rotated.SideLength = 100.000000
@@ -2659,12 +2659,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000135_1_3_Rotated.Transform = ``
 
 	__Rhombus__000136_2_0.Name = `2 0`
-	__Rhombus__000136_2_0.IsDisplayed = false
-	__Rhombus__000136_2_0.CenterX = 129.889610
-	__Rhombus__000136_2_0.CenterY = 152.081193
+	__Rhombus__000136_2_0.IsDisplayed = true
+	__Rhombus__000136_2_0.CenterX = 131.211806
+	__Rhombus__000136_2_0.CenterY = 150.941916
 	__Rhombus__000136_2_0.SideLength = 100.000000
 	__Rhombus__000136_2_0.Angle = 0.000000
-	__Rhombus__000136_2_0.InsideAngle = 99.000000
+	__Rhombus__000136_2_0.InsideAngle = 98.000000
 	__Rhombus__000136_2_0.Color = ``
 	__Rhombus__000136_2_0.FillOpacity = 0.000000
 	__Rhombus__000136_2_0.Stroke = ``
@@ -2675,7 +2675,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000136_2_0.Transform = ``
 
 	__Rhombus__000137_2_0_Rotated.Name = `2 0 Rotated`
-	__Rhombus__000137_2_0_Rotated.IsDisplayed = false
+	__Rhombus__000137_2_0_Rotated.IsDisplayed = true
 	__Rhombus__000137_2_0_Rotated.CenterX = -177.593516
 	__Rhombus__000137_2_0_Rotated.CenterY = 91.981210
 	__Rhombus__000137_2_0_Rotated.SideLength = 100.000000
@@ -2691,7 +2691,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000137_2_0_Rotated.Transform = ``
 
 	__Rhombus__000138_2_0_Rotated.Name = `2 0 Rotated`
-	__Rhombus__000138_2_0_Rotated.IsDisplayed = false
+	__Rhombus__000138_2_0_Rotated.IsDisplayed = true
 	__Rhombus__000138_2_0_Rotated.CenterX = -177.593516
 	__Rhombus__000138_2_0_Rotated.CenterY = 91.981210
 	__Rhombus__000138_2_0_Rotated.SideLength = 100.000000
@@ -2707,7 +2707,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000138_2_0_Rotated.Transform = ``
 
 	__Rhombus__000139_2_0_Rotated.Name = `2 0 Rotated`
-	__Rhombus__000139_2_0_Rotated.IsDisplayed = false
+	__Rhombus__000139_2_0_Rotated.IsDisplayed = true
 	__Rhombus__000139_2_0_Rotated.CenterX = -177.593516
 	__Rhombus__000139_2_0_Rotated.CenterY = 91.981210
 	__Rhombus__000139_2_0_Rotated.SideLength = 100.000000
@@ -2723,12 +2723,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000139_2_0_Rotated.Transform = ``
 
 	__Rhombus__000140_2_0_Rotated.Name = `2 0 Rotated`
-	__Rhombus__000140_2_0_Rotated.IsDisplayed = false
-	__Rhombus__000140_2_0_Rotated.CenterX = 128.039406
-	__Rhombus__000140_2_0_Rotated.CenterY = -153.642151
+	__Rhombus__000140_2_0_Rotated.IsDisplayed = true
+	__Rhombus__000140_2_0_Rotated.CenterX = -177.593516
+	__Rhombus__000140_2_0_Rotated.CenterY = 91.981210
 	__Rhombus__000140_2_0_Rotated.SideLength = 100.000000
-	__Rhombus__000140_2_0_Rotated.Angle = -99.693487
-	__Rhombus__000140_2_0_Rotated.InsideAngle = 99.000000
+	__Rhombus__000140_2_0_Rotated.Angle = 98.118955
+	__Rhombus__000140_2_0_Rotated.InsideAngle = 109.000000
 	__Rhombus__000140_2_0_Rotated.Color = ``
 	__Rhombus__000140_2_0_Rotated.FillOpacity = 0.000000
 	__Rhombus__000140_2_0_Rotated.Stroke = ``
@@ -2772,11 +2772,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000143_2_0_Rotated.Name = `2 0 Rotated`
 	__Rhombus__000143_2_0_Rotated.IsDisplayed = true
-	__Rhombus__000143_2_0_Rotated.CenterX = -177.593516
-	__Rhombus__000143_2_0_Rotated.CenterY = 91.981210
+	__Rhombus__000143_2_0_Rotated.CenterX = 126.236152
+	__Rhombus__000143_2_0_Rotated.CenterY = -155.127154
 	__Rhombus__000143_2_0_Rotated.SideLength = 100.000000
-	__Rhombus__000143_2_0_Rotated.Angle = 98.118955
-	__Rhombus__000143_2_0_Rotated.InsideAngle = 109.000000
+	__Rhombus__000143_2_0_Rotated.Angle = -99.862709
+	__Rhombus__000143_2_0_Rotated.InsideAngle = 98.000000
 	__Rhombus__000143_2_0_Rotated.Color = ``
 	__Rhombus__000143_2_0_Rotated.FillOpacity = 0.000000
 	__Rhombus__000143_2_0_Rotated.Stroke = ``
@@ -2819,7 +2819,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000145_2_0_Rotated.Transform = ``
 
 	__Rhombus__000146_2_0_Rotated.Name = `2 0 Rotated`
-	__Rhombus__000146_2_0_Rotated.IsDisplayed = true
+	__Rhombus__000146_2_0_Rotated.IsDisplayed = false
 	__Rhombus__000146_2_0_Rotated.CenterX = -177.593516
 	__Rhombus__000146_2_0_Rotated.CenterY = 91.981210
 	__Rhombus__000146_2_0_Rotated.SideLength = 100.000000
@@ -2835,7 +2835,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000146_2_0_Rotated.Transform = ``
 
 	__Rhombus__000147_2_0_Rotated.Name = `2 0 Rotated`
-	__Rhombus__000147_2_0_Rotated.IsDisplayed = true
+	__Rhombus__000147_2_0_Rotated.IsDisplayed = false
 	__Rhombus__000147_2_0_Rotated.CenterX = -177.593516
 	__Rhombus__000147_2_0_Rotated.CenterY = 91.981210
 	__Rhombus__000147_2_0_Rotated.SideLength = 100.000000
@@ -2851,7 +2851,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000147_2_0_Rotated.Transform = ``
 
 	__Rhombus__000148_2_0_Rotated.Name = `2 0 Rotated`
-	__Rhombus__000148_2_0_Rotated.IsDisplayed = true
+	__Rhombus__000148_2_0_Rotated.IsDisplayed = false
 	__Rhombus__000148_2_0_Rotated.CenterX = -177.593516
 	__Rhombus__000148_2_0_Rotated.CenterY = 91.981210
 	__Rhombus__000148_2_0_Rotated.SideLength = 100.000000
@@ -2931,12 +2931,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000152_2_0_Rotated.Transform = ``
 
 	__Rhombus__000153_2_1.Name = `2 1`
-	__Rhombus__000153_2_1.IsDisplayed = false
-	__Rhombus__000153_2_1.CenterX = 64.944805
-	__Rhombus__000153_2_1.CenterY = 228.121790
+	__Rhombus__000153_2_1.IsDisplayed = true
+	__Rhombus__000153_2_1.CenterX = 65.605903
+	__Rhombus__000153_2_1.CenterY = 226.412874
 	__Rhombus__000153_2_1.SideLength = 100.000000
 	__Rhombus__000153_2_1.Angle = 0.000000
-	__Rhombus__000153_2_1.InsideAngle = 99.000000
+	__Rhombus__000153_2_1.InsideAngle = 98.000000
 	__Rhombus__000153_2_1.Color = ``
 	__Rhombus__000153_2_1.FillOpacity = 0.000000
 	__Rhombus__000153_2_1.Stroke = ``
@@ -2979,7 +2979,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000155_2_1_Rotated.Transform = ``
 
 	__Rhombus__000156_2_1_Rotated.Name = `2 1 Rotated`
-	__Rhombus__000156_2_1_Rotated.IsDisplayed = false
+	__Rhombus__000156_2_1_Rotated.IsDisplayed = true
 	__Rhombus__000156_2_1_Rotated.CenterX = -249.987884
 	__Rhombus__000156_2_1_Rotated.CenterY = 22.995303
 	__Rhombus__000156_2_1_Rotated.SideLength = 100.000000
@@ -3060,11 +3060,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000161_2_1_Rotated.Name = `2 1 Rotated`
 	__Rhombus__000161_2_1_Rotated.IsDisplayed = false
-	__Rhombus__000161_2_1_Rotated.CenterX = 213.929574
-	__Rhombus__000161_2_1_Rotated.CenterY = -102.428101
+	__Rhombus__000161_2_1_Rotated.CenterX = -249.987884
+	__Rhombus__000161_2_1_Rotated.CenterY = 22.995303
 	__Rhombus__000161_2_1_Rotated.SideLength = 100.000000
-	__Rhombus__000161_2_1_Rotated.Angle = -99.693487
-	__Rhombus__000161_2_1_Rotated.InsideAngle = 99.000000
+	__Rhombus__000161_2_1_Rotated.Angle = 98.118955
+	__Rhombus__000161_2_1_Rotated.InsideAngle = 109.000000
 	__Rhombus__000161_2_1_Rotated.Color = ``
 	__Rhombus__000161_2_1_Rotated.FillOpacity = 0.000000
 	__Rhombus__000161_2_1_Rotated.Stroke = ``
@@ -3124,11 +3124,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000165_2_1_Rotated.Name = `2 1 Rotated`
 	__Rhombus__000165_2_1_Rotated.IsDisplayed = true
-	__Rhombus__000165_2_1_Rotated.CenterX = -249.987884
-	__Rhombus__000165_2_1_Rotated.CenterY = 22.995303
+	__Rhombus__000165_2_1_Rotated.CenterX = 211.829224
+	__Rhombus__000165_2_1_Rotated.CenterY = -103.418103
 	__Rhombus__000165_2_1_Rotated.SideLength = 100.000000
-	__Rhombus__000165_2_1_Rotated.Angle = 98.118955
-	__Rhombus__000165_2_1_Rotated.InsideAngle = 109.000000
+	__Rhombus__000165_2_1_Rotated.Angle = -99.862709
+	__Rhombus__000165_2_1_Rotated.InsideAngle = 98.000000
 	__Rhombus__000165_2_1_Rotated.Color = ``
 	__Rhombus__000165_2_1_Rotated.FillOpacity = 0.000000
 	__Rhombus__000165_2_1_Rotated.Stroke = ``
@@ -3139,7 +3139,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000165_2_1_Rotated.Transform = ``
 
 	__Rhombus__000166_2_1_Rotated.Name = `2 1 Rotated`
-	__Rhombus__000166_2_1_Rotated.IsDisplayed = true
+	__Rhombus__000166_2_1_Rotated.IsDisplayed = false
 	__Rhombus__000166_2_1_Rotated.CenterX = -249.987884
 	__Rhombus__000166_2_1_Rotated.CenterY = 22.995303
 	__Rhombus__000166_2_1_Rotated.SideLength = 100.000000
@@ -3187,7 +3187,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000168_2_1_Rotated.Transform = ``
 
 	__Rhombus__000169_2_1_Rotated.Name = `2 1 Rotated`
-	__Rhombus__000169_2_1_Rotated.IsDisplayed = false
+	__Rhombus__000169_2_1_Rotated.IsDisplayed = true
 	__Rhombus__000169_2_1_Rotated.CenterX = -249.987884
 	__Rhombus__000169_2_1_Rotated.CenterY = 22.995303
 	__Rhombus__000169_2_1_Rotated.SideLength = 100.000000
@@ -3203,12 +3203,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000169_2_1_Rotated.Transform = ``
 
 	__Rhombus__000170_2_2.Name = `2 2`
-	__Rhombus__000170_2_2.IsDisplayed = false
+	__Rhombus__000170_2_2.IsDisplayed = true
 	__Rhombus__000170_2_2.CenterX = 0.000000
-	__Rhombus__000170_2_2.CenterY = 304.162386
+	__Rhombus__000170_2_2.CenterY = 301.883832
 	__Rhombus__000170_2_2.SideLength = 100.000000
 	__Rhombus__000170_2_2.Angle = 0.000000
-	__Rhombus__000170_2_2.InsideAngle = 99.000000
+	__Rhombus__000170_2_2.InsideAngle = 98.000000
 	__Rhombus__000170_2_2.Color = ``
 	__Rhombus__000170_2_2.FillOpacity = 0.000000
 	__Rhombus__000170_2_2.Stroke = ``
@@ -3219,7 +3219,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000170_2_2.Transform = ``
 
 	__Rhombus__000171_2_2_Rotated.Name = `2 2 Rotated`
-	__Rhombus__000171_2_2_Rotated.IsDisplayed = false
+	__Rhombus__000171_2_2_Rotated.IsDisplayed = true
 	__Rhombus__000171_2_2_Rotated.CenterX = -322.382252
 	__Rhombus__000171_2_2_Rotated.CenterY = -45.990605
 	__Rhombus__000171_2_2_Rotated.SideLength = 100.000000
@@ -3251,12 +3251,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000172_2_2_Rotated.Transform = ``
 
 	__Rhombus__000173_2_2_Rotated.Name = `2 2 Rotated`
-	__Rhombus__000173_2_2_Rotated.IsDisplayed = false
-	__Rhombus__000173_2_2_Rotated.CenterX = 299.819743
-	__Rhombus__000173_2_2_Rotated.CenterY = -51.214050
+	__Rhombus__000173_2_2_Rotated.IsDisplayed = true
+	__Rhombus__000173_2_2_Rotated.CenterX = -322.382252
+	__Rhombus__000173_2_2_Rotated.CenterY = -45.990605
 	__Rhombus__000173_2_2_Rotated.SideLength = 100.000000
-	__Rhombus__000173_2_2_Rotated.Angle = -99.693487
-	__Rhombus__000173_2_2_Rotated.InsideAngle = 99.000000
+	__Rhombus__000173_2_2_Rotated.Angle = 98.118955
+	__Rhombus__000173_2_2_Rotated.InsideAngle = 109.000000
 	__Rhombus__000173_2_2_Rotated.Color = ``
 	__Rhombus__000173_2_2_Rotated.FillOpacity = 0.000000
 	__Rhombus__000173_2_2_Rotated.Stroke = ``
@@ -3267,7 +3267,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000173_2_2_Rotated.Transform = ``
 
 	__Rhombus__000174_2_2_Rotated.Name = `2 2 Rotated`
-	__Rhombus__000174_2_2_Rotated.IsDisplayed = true
+	__Rhombus__000174_2_2_Rotated.IsDisplayed = false
 	__Rhombus__000174_2_2_Rotated.CenterX = -322.382252
 	__Rhombus__000174_2_2_Rotated.CenterY = -45.990605
 	__Rhombus__000174_2_2_Rotated.SideLength = 100.000000
@@ -3331,7 +3331,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000177_2_2_Rotated.Transform = ``
 
 	__Rhombus__000178_2_2_Rotated.Name = `2 2 Rotated`
-	__Rhombus__000178_2_2_Rotated.IsDisplayed = true
+	__Rhombus__000178_2_2_Rotated.IsDisplayed = false
 	__Rhombus__000178_2_2_Rotated.CenterX = -322.382252
 	__Rhombus__000178_2_2_Rotated.CenterY = -45.990605
 	__Rhombus__000178_2_2_Rotated.SideLength = 100.000000
@@ -3347,7 +3347,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000178_2_2_Rotated.Transform = ``
 
 	__Rhombus__000179_2_2_Rotated.Name = `2 2 Rotated`
-	__Rhombus__000179_2_2_Rotated.IsDisplayed = false
+	__Rhombus__000179_2_2_Rotated.IsDisplayed = true
 	__Rhombus__000179_2_2_Rotated.CenterX = -322.382252
 	__Rhombus__000179_2_2_Rotated.CenterY = -45.990605
 	__Rhombus__000179_2_2_Rotated.SideLength = 100.000000
@@ -3396,11 +3396,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000182_2_2_Rotated.Name = `2 2 Rotated`
 	__Rhombus__000182_2_2_Rotated.IsDisplayed = true
-	__Rhombus__000182_2_2_Rotated.CenterX = -322.382252
-	__Rhombus__000182_2_2_Rotated.CenterY = -45.990605
+	__Rhombus__000182_2_2_Rotated.CenterX = 297.422296
+	__Rhombus__000182_2_2_Rotated.CenterY = -51.709051
 	__Rhombus__000182_2_2_Rotated.SideLength = 100.000000
-	__Rhombus__000182_2_2_Rotated.Angle = 98.118955
-	__Rhombus__000182_2_2_Rotated.InsideAngle = 109.000000
+	__Rhombus__000182_2_2_Rotated.Angle = -99.862709
+	__Rhombus__000182_2_2_Rotated.InsideAngle = 98.000000
 	__Rhombus__000182_2_2_Rotated.Color = ``
 	__Rhombus__000182_2_2_Rotated.FillOpacity = 0.000000
 	__Rhombus__000182_2_2_Rotated.Stroke = ``
@@ -3411,7 +3411,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000182_2_2_Rotated.Transform = ``
 
 	__Rhombus__000183_2_2_Rotated.Name = `2 2 Rotated`
-	__Rhombus__000183_2_2_Rotated.IsDisplayed = false
+	__Rhombus__000183_2_2_Rotated.IsDisplayed = true
 	__Rhombus__000183_2_2_Rotated.CenterX = -322.382252
 	__Rhombus__000183_2_2_Rotated.CenterY = -45.990605
 	__Rhombus__000183_2_2_Rotated.SideLength = 100.000000
@@ -3443,7 +3443,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000184_2_2_Rotated.Transform = ``
 
 	__Rhombus__000185_2_2_Rotated.Name = `2 2 Rotated`
-	__Rhombus__000185_2_2_Rotated.IsDisplayed = true
+	__Rhombus__000185_2_2_Rotated.IsDisplayed = false
 	__Rhombus__000185_2_2_Rotated.CenterX = -322.382252
 	__Rhombus__000185_2_2_Rotated.CenterY = -45.990605
 	__Rhombus__000185_2_2_Rotated.SideLength = 100.000000
@@ -3475,12 +3475,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000186_2_2_Rotated.Transform = ``
 
 	__Rhombus__000187_2_3.Name = `2 3`
-	__Rhombus__000187_2_3.IsDisplayed = false
-	__Rhombus__000187_2_3.CenterX = -64.944805
-	__Rhombus__000187_2_3.CenterY = 380.202983
+	__Rhombus__000187_2_3.IsDisplayed = true
+	__Rhombus__000187_2_3.CenterX = -65.605903
+	__Rhombus__000187_2_3.CenterY = 377.354790
 	__Rhombus__000187_2_3.SideLength = 100.000000
 	__Rhombus__000187_2_3.Angle = 0.000000
-	__Rhombus__000187_2_3.InsideAngle = 99.000000
+	__Rhombus__000187_2_3.InsideAngle = 98.000000
 	__Rhombus__000187_2_3.Color = ``
 	__Rhombus__000187_2_3.FillOpacity = 0.000000
 	__Rhombus__000187_2_3.Stroke = ``
@@ -3491,7 +3491,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000187_2_3.Transform = ``
 
 	__Rhombus__000188_2_3_Rotated.Name = `2 3 Rotated`
-	__Rhombus__000188_2_3_Rotated.IsDisplayed = true
+	__Rhombus__000188_2_3_Rotated.IsDisplayed = false
 	__Rhombus__000188_2_3_Rotated.CenterX = -394.776620
 	__Rhombus__000188_2_3_Rotated.CenterY = -114.976513
 	__Rhombus__000188_2_3_Rotated.SideLength = 100.000000
@@ -3507,12 +3507,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000188_2_3_Rotated.Transform = ``
 
 	__Rhombus__000189_2_3_Rotated.Name = `2 3 Rotated`
-	__Rhombus__000189_2_3_Rotated.IsDisplayed = false
-	__Rhombus__000189_2_3_Rotated.CenterX = 385.709911
-	__Rhombus__000189_2_3_Rotated.CenterY = 0.000000
+	__Rhombus__000189_2_3_Rotated.IsDisplayed = true
+	__Rhombus__000189_2_3_Rotated.CenterX = -394.776620
+	__Rhombus__000189_2_3_Rotated.CenterY = -114.976513
 	__Rhombus__000189_2_3_Rotated.SideLength = 100.000000
-	__Rhombus__000189_2_3_Rotated.Angle = -99.693487
-	__Rhombus__000189_2_3_Rotated.InsideAngle = 99.000000
+	__Rhombus__000189_2_3_Rotated.Angle = 98.118955
+	__Rhombus__000189_2_3_Rotated.InsideAngle = 109.000000
 	__Rhombus__000189_2_3_Rotated.Color = ``
 	__Rhombus__000189_2_3_Rotated.FillOpacity = 0.000000
 	__Rhombus__000189_2_3_Rotated.Stroke = ``
@@ -3571,7 +3571,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000192_2_3_Rotated.Transform = ``
 
 	__Rhombus__000193_2_3_Rotated.Name = `2 3 Rotated`
-	__Rhombus__000193_2_3_Rotated.IsDisplayed = false
+	__Rhombus__000193_2_3_Rotated.IsDisplayed = true
 	__Rhombus__000193_2_3_Rotated.CenterX = -394.776620
 	__Rhombus__000193_2_3_Rotated.CenterY = -114.976513
 	__Rhombus__000193_2_3_Rotated.SideLength = 100.000000
@@ -3604,11 +3604,11 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000195_2_3_Rotated.Name = `2 3 Rotated`
 	__Rhombus__000195_2_3_Rotated.IsDisplayed = true
-	__Rhombus__000195_2_3_Rotated.CenterX = -394.776620
-	__Rhombus__000195_2_3_Rotated.CenterY = -114.976513
+	__Rhombus__000195_2_3_Rotated.CenterX = 383.015368
+	__Rhombus__000195_2_3_Rotated.CenterY = 0.000000
 	__Rhombus__000195_2_3_Rotated.SideLength = 100.000000
-	__Rhombus__000195_2_3_Rotated.Angle = 98.118955
-	__Rhombus__000195_2_3_Rotated.InsideAngle = 109.000000
+	__Rhombus__000195_2_3_Rotated.Angle = -99.862709
+	__Rhombus__000195_2_3_Rotated.InsideAngle = 98.000000
 	__Rhombus__000195_2_3_Rotated.Color = ``
 	__Rhombus__000195_2_3_Rotated.FillOpacity = 0.000000
 	__Rhombus__000195_2_3_Rotated.Stroke = ``
@@ -3635,7 +3635,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000196_2_3_Rotated.Transform = ``
 
 	__Rhombus__000197_2_3_Rotated.Name = `2 3 Rotated`
-	__Rhombus__000197_2_3_Rotated.IsDisplayed = true
+	__Rhombus__000197_2_3_Rotated.IsDisplayed = false
 	__Rhombus__000197_2_3_Rotated.CenterX = -394.776620
 	__Rhombus__000197_2_3_Rotated.CenterY = -114.976513
 	__Rhombus__000197_2_3_Rotated.SideLength = 100.000000
@@ -3715,7 +3715,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000201_2_3_Rotated.Transform = ``
 
 	__Rhombus__000202_2_3_Rotated.Name = `2 3 Rotated`
-	__Rhombus__000202_2_3_Rotated.IsDisplayed = false
+	__Rhombus__000202_2_3_Rotated.IsDisplayed = true
 	__Rhombus__000202_2_3_Rotated.CenterX = -394.776620
 	__Rhombus__000202_2_3_Rotated.CenterY = -114.976513
 	__Rhombus__000202_2_3_Rotated.SideLength = 100.000000
@@ -3747,12 +3747,12 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000203_2_3_Rotated.Transform = ``
 
 	__Rhombus__000204_Initial.Name = `Initial`
-	__Rhombus__000204_Initial.IsDisplayed = false
+	__Rhombus__000204_Initial.IsDisplayed = true
 	__Rhombus__000204_Initial.CenterX = 0.000000
 	__Rhombus__000204_Initial.CenterY = 0.000000
 	__Rhombus__000204_Initial.SideLength = 100.000000
 	__Rhombus__000204_Initial.Angle = 0.000000
-	__Rhombus__000204_Initial.InsideAngle = 99.000000
+	__Rhombus__000204_Initial.InsideAngle = 98.000000
 	__Rhombus__000204_Initial.Color = ``
 	__Rhombus__000204_Initial.FillOpacity = 0.000000
 	__Rhombus__000204_Initial.Stroke = ``
@@ -3767,8 +3767,8 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000205_Rotated.CenterX = 0.000000
 	__Rhombus__000205_Rotated.CenterY = 0.000000
 	__Rhombus__000205_Rotated.SideLength = 100.000000
-	__Rhombus__000205_Rotated.Angle = -99.693487
-	__Rhombus__000205_Rotated.InsideAngle = 99.000000
+	__Rhombus__000205_Rotated.Angle = -99.862709
+	__Rhombus__000205_Rotated.InsideAngle = 98.000000
 	__Rhombus__000205_Rotated.Color = ``
 	__Rhombus__000205_Rotated.FillOpacity = 0.000000
 	__Rhombus__000205_Rotated.Stroke = `black`
@@ -3789,7 +3789,7 @@ func _(stage *models.StageStruct) {
 	__RhombusGrid__000001_Rotated.IsDisplayed = true
 
 	__VerticalAxis__000000_Initial.Name = `Initial`
-	__VerticalAxis__000000_Initial.IsDisplayed = false
+	__VerticalAxis__000000_Initial.IsDisplayed = true
 	__VerticalAxis__000000_Initial.AxisHandleBorderLength = 0.000000
 	__VerticalAxis__000000_Initial.Axis_Length = 600.000000
 	__VerticalAxis__000000_Initial.Color = ``
@@ -3838,16 +3838,16 @@ func _(stage *models.StageStruct) {
 	__RhombusGrid__000000_Initial.Rhombuses = append(__RhombusGrid__000000_Initial.Rhombuses, __Rhombus__000153_2_1)
 	__RhombusGrid__000000_Initial.Rhombuses = append(__RhombusGrid__000000_Initial.Rhombuses, __Rhombus__000170_2_2)
 	__RhombusGrid__000000_Initial.Rhombuses = append(__RhombusGrid__000000_Initial.Rhombuses, __Rhombus__000187_2_3)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000013_0_0_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000030_0_1_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000049_0_2_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000065_0_3_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000071_1_0_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000101_1_1_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000111_1_2_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000131_1_3_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000140_2_0_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000161_2_1_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000173_2_2_Rotated)
-	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000189_2_3_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000010_0_0_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000026_0_1_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000047_0_2_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000066_0_3_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000070_1_0_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000086_1_1_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000114_1_2_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000121_1_3_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000143_2_0_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000165_2_1_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000182_2_2_Rotated)
+	__RhombusGrid__000001_Rotated.Rhombuses = append(__RhombusGrid__000001_Rotated.Rhombuses, __Rhombus__000195_2_3_Rotated)
 }
