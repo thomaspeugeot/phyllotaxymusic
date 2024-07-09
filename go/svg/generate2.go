@@ -36,6 +36,9 @@ func GenerateSvg2(gongsvgStage *gongsvg_models.StageStruct, parameter *phylotaxy
 	if parameter.InitialAxis.IsDisplayed {
 		drawAxis(gongsvgStage, layer, parameter, parameter.InitialAxis)
 	}
+	if parameter.RotatedAxis.IsDisplayed {
+		drawAxis(gongsvgStage, layer, parameter, parameter.RotatedAxis)
+	}
 
 	gongsvgStage.Commit()
 

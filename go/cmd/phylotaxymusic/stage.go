@@ -25,6 +25,7 @@ func _(stage *models.StageStruct) {
 	// Declaration of instances to stage
 
 	__Axis__000000_Reference := (&models.Axis{Name: `Reference`}).Stage(stage)
+	__Axis__000001_Rotated := (&models.Axis{Name: `Rotated`}).Stage(stage)
 
 	__Circle__000000_0_0 := (&models.Circle{Name: `0 0`}).Stage(stage)
 	__Circle__000001_0_1 := (&models.Circle{Name: `0 1`}).Stage(stage)
@@ -78,6 +79,19 @@ func _(stage *models.StageStruct) {
 	__Axis__000000_Reference.StrokeDashArray = ``
 	__Axis__000000_Reference.StrokeDashArrayWhenSelected = ``
 	__Axis__000000_Reference.Transform = ``
+
+	__Axis__000001_Rotated.Name = `Rotated`
+	__Axis__000001_Rotated.IsDisplayed = true
+	__Axis__000001_Rotated.Angle = 0.000000
+	__Axis__000001_Rotated.Length = 411.179010
+	__Axis__000001_Rotated.Color = ``
+	__Axis__000001_Rotated.FillOpacity = 0.000000
+	__Axis__000001_Rotated.Stroke = `black`
+	__Axis__000001_Rotated.StrokeOpacity = 1.000000
+	__Axis__000001_Rotated.StrokeWidth = 2.000000
+	__Axis__000001_Rotated.StrokeDashArray = ``
+	__Axis__000001_Rotated.StrokeDashArrayWhenSelected = ``
+	__Axis__000001_Rotated.Transform = ``
 
 	__Circle__000000_0_0.Name = `0 0`
 	__Circle__000000_0_0.IsDisplayed = true
@@ -519,6 +533,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000000_Initial
 	__Parameter__000000_Reference.InitialCircleGrid = __CircleGrid__000000_Initial
 	__Parameter__000000_Reference.InitialAxis = __Axis__000000_Reference
+	__Parameter__000000_Reference.RotatedAxis = __Axis__000001_Rotated
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Initial
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Initial
 	__RhombusGrid__000000_Initial.Reference = __Rhombus__000012_Initial

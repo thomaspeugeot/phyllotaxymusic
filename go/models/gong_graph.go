@@ -249,6 +249,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.InitialAxis != nil {
 		StageBranch(stage, parameter.InitialAxis)
 	}
+	if parameter.RotatedAxis != nil {
+		StageBranch(stage, parameter.RotatedAxis)
+	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
 	}
@@ -494,6 +497,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.InitialAxis != nil {
 		parameterTo.InitialAxis = CopyBranchAxis(mapOrigCopy, parameterFrom.InitialAxis)
 	}
+	if parameterFrom.RotatedAxis != nil {
+		parameterTo.RotatedAxis = CopyBranchAxis(mapOrigCopy, parameterFrom.RotatedAxis)
+	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
 	}
@@ -715,6 +721,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.InitialAxis != nil {
 		UnstageBranch(stage, parameter.InitialAxis)
+	}
+	if parameter.RotatedAxis != nil {
+		UnstageBranch(stage, parameter.RotatedAxis)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

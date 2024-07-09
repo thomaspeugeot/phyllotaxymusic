@@ -50,6 +50,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeInitialRhombusGrid(stage)
 	p.ComputeInitialCircleGrid(stage)
 	p.ComputeInitialAxis()
+	p.computeRotatedAxis()
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -141,4 +142,8 @@ func (p *Parameter) ComputeInitialAxis() {
 
 	p.InitialAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
 	p.InitialAxis.Length = math.Sqrt(x*x + y*y)
+}
+
+func (p *Parameter) computeRotatedAxis() {
+	p.RotatedAxis.Length = p.InitialAxis.Length
 }

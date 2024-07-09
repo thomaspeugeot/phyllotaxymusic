@@ -164,6 +164,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("InitialRhombusGrid", instanceWithInferedType.InitialRhombusGrid, formGroup, probe)
 		AssociationFieldToForm("InitialCircleGrid", instanceWithInferedType.InitialCircleGrid, formGroup, probe)
 		AssociationFieldToForm("InitialAxis", instanceWithInferedType.InitialAxis, formGroup, probe)
+		AssociationFieldToForm("RotatedAxis", instanceWithInferedType.RotatedAxis, formGroup, probe)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,

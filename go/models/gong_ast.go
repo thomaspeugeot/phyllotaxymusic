@@ -1274,6 +1274,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "InitialAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].InitialAxis = __gong__map_Axis[targetIdentifier]
+				case "RotatedAxis":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].RotatedAxis = __gong__map_Axis[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

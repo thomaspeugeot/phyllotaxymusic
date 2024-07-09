@@ -67,6 +67,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	InitialAxisID sql.NullInt64
 
+	// field RotatedAxis is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	RotatedAxisID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -335,6 +339,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.InitialAxisID.Valid = true
 		}
 
+		// commit pointer value parameter.RotatedAxis translates to updating the parameter.RotatedAxisID
+		parameterDB.RotatedAxisID.Valid = true // allow for a 0 value (nil association)
+		if parameter.RotatedAxis != nil {
+			if RotatedAxisId, ok := backRepo.BackRepoAxis.Map_AxisPtr_AxisDBID[parameter.RotatedAxis]; ok {
+				parameterDB.RotatedAxisID.Int64 = int64(RotatedAxisId)
+				parameterDB.RotatedAxisID.Valid = true
+			}
+		} else {
+			parameterDB.RotatedAxisID.Int64 = 0
+			parameterDB.RotatedAxisID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -496,6 +512,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.InitialAxis = nil
 	if parameterDB.InitialAxisID.Int64 != 0 {
 		parameter.InitialAxis = backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(parameterDB.InitialAxisID.Int64)]
+	}
+	// RotatedAxis field
+	parameter.RotatedAxis = nil
+	if parameterDB.RotatedAxisID.Int64 != 0 {
+		parameter.RotatedAxis = backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(parameterDB.RotatedAxisID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -835,6 +856,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.InitialAxisID.Int64 != 0 {
 			parameterDB.InitialAxisID.Int64 = int64(BackRepoAxisid_atBckpTime_newID[uint(parameterDB.InitialAxisID.Int64)])
 			parameterDB.InitialAxisID.Valid = true
+		}
+
+		// reindexing RotatedAxis field
+		if parameterDB.RotatedAxisID.Int64 != 0 {
+			parameterDB.RotatedAxisID.Int64 = int64(BackRepoAxisid_atBckpTime_newID[uint(parameterDB.RotatedAxisID.Int64)])
+			parameterDB.RotatedAxisID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field
