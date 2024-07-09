@@ -78,8 +78,8 @@ func (p *Parameter) ComputeInitialRhombusGrid(stage *StageStruct) {
 	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
 	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
 
-	for i := range g.N {
-		for j := range g.M {
+	for i := range g.N + 1 {
+		for j := range g.M + 1 {
 			r := new(Rhombus).Stage(stage)
 			*r = *g.Reference
 			g.Rhombuses = append(g.Rhombuses, r)
@@ -110,8 +110,8 @@ func (p *Parameter) ComputeInitialCircleGrid(stage *StageStruct) {
 	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
 	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
 
-	for i := range g.N {
-		for j := range g.M {
+	for i := range g.N + 1 {
+		for j := range g.M + 1 {
 			c := new(Circle).Stage(stage)
 			*c = *g.Reference
 			g.Circles = append(g.Circles, c)
@@ -132,10 +132,10 @@ func (p *Parameter) ComputeInitialAxis() {
 	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
 	sideLength := p.InitialRhombus.SideLength
 
-	y := float64(p.N-1)*sideLength*sinHalfInsideAngle +
-		float64(p.M-1)*sideLength*sinHalfInsideAngle
-	x := float64(p.N-1)*sideLength*cosHalfInsideAngle -
-		float64(p.M-1)*sideLength*cosHalfInsideAngle
+	y := float64(p.N)*sideLength*sinHalfInsideAngle +
+		float64(p.M)*sideLength*sinHalfInsideAngle
+	x := float64(p.N)*sideLength*cosHalfInsideAngle -
+		float64(p.M)*sideLength*cosHalfInsideAngle
 
 	p.InitialAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
 	p.InitialAxis.Length = math.Sqrt(x*x + y*y)
