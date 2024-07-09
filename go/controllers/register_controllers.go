@@ -47,6 +47,13 @@ type ValidationError struct {
 func registerControllers(r *gin.Engine) {
 	v1 := r.Group("/api/github.com/thomaspeugeot/phylotaxymusic/go")
 	{ // insertion point for registrations
+		v1.GET("/v1/axiss", GetController().GetAxiss)
+		v1.GET("/v1/axiss/:id", GetController().GetAxis)
+		v1.POST("/v1/axiss", GetController().PostAxis)
+		v1.PATCH("/v1/axiss/:id", GetController().UpdateAxis)
+		v1.PUT("/v1/axiss/:id", GetController().UpdateAxis)
+		v1.DELETE("/v1/axiss/:id", GetController().DeleteAxis)
+
 		v1.GET("/v1/circles", GetController().GetCircles)
 		v1.GET("/v1/circles/:id", GetController().GetCircle)
 		v1.POST("/v1/circles", GetController().PostCircle)
@@ -67,13 +74,6 @@ func registerControllers(r *gin.Engine) {
 		v1.PATCH("/v1/horizontalaxiss/:id", GetController().UpdateHorizontalAxis)
 		v1.PUT("/v1/horizontalaxiss/:id", GetController().UpdateHorizontalAxis)
 		v1.DELETE("/v1/horizontalaxiss/:id", GetController().DeleteHorizontalAxis)
-
-		v1.GET("/v1/initialaxiss", GetController().GetInitialAxiss)
-		v1.GET("/v1/initialaxiss/:id", GetController().GetInitialAxis)
-		v1.POST("/v1/initialaxiss", GetController().PostInitialAxis)
-		v1.PATCH("/v1/initialaxiss/:id", GetController().UpdateInitialAxis)
-		v1.PUT("/v1/initialaxiss/:id", GetController().UpdateInitialAxis)
-		v1.DELETE("/v1/initialaxiss/:id", GetController().DeleteInitialAxis)
 
 		v1.GET("/v1/lines", GetController().GetLines)
 		v1.GET("/v1/lines/:id", GetController().GetLine)

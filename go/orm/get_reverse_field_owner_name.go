@@ -14,6 +14,42 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 	res = ""
 	switch inst := any(instance).(type) {
 	// insertion point
+	case *models.Axis:
+		tmp := GetInstanceDBFromInstance[models.Axis, AxisDB](
+			stage, backRepo, inst,
+		)
+		_ = tmp
+		switch reverseField.GongstructName {
+		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
+		case "Circle":
+			switch reverseField.Fieldname {
+			}
+		case "CircleGrid":
+			switch reverseField.Fieldname {
+			}
+		case "HorizontalAxis":
+			switch reverseField.Fieldname {
+			}
+		case "Line":
+			switch reverseField.Fieldname {
+			}
+		case "Parameter":
+			switch reverseField.Fieldname {
+			}
+		case "Rhombus":
+			switch reverseField.Fieldname {
+			}
+		case "RhombusGrid":
+			switch reverseField.Fieldname {
+			}
+		case "VerticalAxis":
+			switch reverseField.Fieldname {
+			}
+		}
+
 	case *models.Circle:
 		tmp := GetInstanceDBFromInstance[models.Circle, CircleDB](
 			stage, backRepo, inst,
@@ -21,6 +57,9 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -32,9 +71,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 				}
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -61,6 +97,9 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -68,9 +107,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -97,6 +133,9 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -104,45 +143,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
-			switch reverseField.Fieldname {
-			}
-		case "Line":
-			switch reverseField.Fieldname {
-			}
-		case "Parameter":
-			switch reverseField.Fieldname {
-			}
-		case "Rhombus":
-			switch reverseField.Fieldname {
-			}
-		case "RhombusGrid":
-			switch reverseField.Fieldname {
-			}
-		case "VerticalAxis":
-			switch reverseField.Fieldname {
-			}
-		}
-
-	case *models.InitialAxis:
-		tmp := GetInstanceDBFromInstance[models.InitialAxis, InitialAxisDB](
-			stage, backRepo, inst,
-		)
-		_ = tmp
-		switch reverseField.GongstructName {
-		// insertion point
-		case "Circle":
-			switch reverseField.Fieldname {
-			}
-		case "CircleGrid":
-			switch reverseField.Fieldname {
-			}
-		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -169,6 +169,9 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -176,9 +179,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -205,6 +205,9 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -212,9 +215,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -241,6 +241,9 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -248,9 +251,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -281,6 +281,9 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -288,9 +291,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -317,6 +317,9 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -324,9 +327,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -361,6 +361,42 @@ func GetReverseFieldOwner[T models.Gongstruct](
 	res = nil
 	switch inst := any(instance).(type) {
 	// insertion point
+	case *models.Axis:
+		tmp := GetInstanceDBFromInstance[models.Axis, AxisDB](
+			stage, backRepo, inst,
+		)
+		_ = tmp
+		switch reverseField.GongstructName {
+		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
+		case "Circle":
+			switch reverseField.Fieldname {
+			}
+		case "CircleGrid":
+			switch reverseField.Fieldname {
+			}
+		case "HorizontalAxis":
+			switch reverseField.Fieldname {
+			}
+		case "Line":
+			switch reverseField.Fieldname {
+			}
+		case "Parameter":
+			switch reverseField.Fieldname {
+			}
+		case "Rhombus":
+			switch reverseField.Fieldname {
+			}
+		case "RhombusGrid":
+			switch reverseField.Fieldname {
+			}
+		case "VerticalAxis":
+			switch reverseField.Fieldname {
+			}
+		}
+
 	case *models.Circle:
 		tmp := GetInstanceDBFromInstance[models.Circle, CircleDB](
 			stage, backRepo, inst,
@@ -368,6 +404,9 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -377,9 +416,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 				res = stage.CircleGrid_Circles_reverseMap[inst]
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -406,6 +442,9 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -413,9 +452,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -442,6 +478,9 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -449,45 +488,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
-			switch reverseField.Fieldname {
-			}
-		case "Line":
-			switch reverseField.Fieldname {
-			}
-		case "Parameter":
-			switch reverseField.Fieldname {
-			}
-		case "Rhombus":
-			switch reverseField.Fieldname {
-			}
-		case "RhombusGrid":
-			switch reverseField.Fieldname {
-			}
-		case "VerticalAxis":
-			switch reverseField.Fieldname {
-			}
-		}
-
-	case *models.InitialAxis:
-		tmp := GetInstanceDBFromInstance[models.InitialAxis, InitialAxisDB](
-			stage, backRepo, inst,
-		)
-		_ = tmp
-		switch reverseField.GongstructName {
-		// insertion point
-		case "Circle":
-			switch reverseField.Fieldname {
-			}
-		case "CircleGrid":
-			switch reverseField.Fieldname {
-			}
-		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -514,6 +514,9 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -521,9 +524,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -550,6 +550,9 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -557,9 +560,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -586,6 +586,9 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -593,9 +596,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -624,6 +624,9 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -631,9 +634,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":
@@ -660,6 +660,9 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		_ = tmp
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Axis":
+			switch reverseField.Fieldname {
+			}
 		case "Circle":
 			switch reverseField.Fieldname {
 			}
@@ -667,9 +670,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			switch reverseField.Fieldname {
 			}
 		case "HorizontalAxis":
-			switch reverseField.Fieldname {
-			}
-		case "InitialAxis":
 			switch reverseField.Fieldname {
 			}
 		case "Line":

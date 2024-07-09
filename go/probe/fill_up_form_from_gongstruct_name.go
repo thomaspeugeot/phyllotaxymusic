@@ -26,6 +26,19 @@ func FillUpFormFromGongstructName(
 
 	switch gongstructName {
 	// insertion point
+	case "Axis":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "Axis Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__AxisFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		axis := new(models.Axis)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(axis, formGroup, probe)
 	case "Circle":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
@@ -65,19 +78,6 @@ func FillUpFormFromGongstructName(
 		horizontalaxis := new(models.HorizontalAxis)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(horizontalaxis, formGroup, probe)
-	case "InitialAxis":
-		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
-			Label: prefix + "InitialAxis Form",
-		}).Stage(formStage)
-		formGroup.OnSave = __gong__New__InitialAxisFormCallback(
-			nil,
-			probe,
-			formGroup,
-		)
-		initialaxis := new(models.InitialAxis)
-		formGroup.HasSuppressButton = !isNewInstance
-		FillUpForm(initialaxis, formGroup, probe)
 	case "Line":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),

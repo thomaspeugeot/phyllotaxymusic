@@ -20,14 +20,14 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 	var typedInstance T
 	switch any(typedInstance).(type) {
 	// insertion point
+	case *models.Axis:
+		fillUpTable[models.Axis](probe)
 	case *models.Circle:
 		fillUpTable[models.Circle](probe)
 	case *models.CircleGrid:
 		fillUpTable[models.CircleGrid](probe)
 	case *models.HorizontalAxis:
 		fillUpTable[models.HorizontalAxis](probe)
-	case *models.InitialAxis:
-		fillUpTable[models.InitialAxis](probe)
 	case *models.Line:
 		fillUpTable[models.Line](probe)
 	case *models.Parameter:

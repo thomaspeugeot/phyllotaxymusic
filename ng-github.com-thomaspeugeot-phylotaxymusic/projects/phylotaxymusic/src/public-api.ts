@@ -13,6 +13,10 @@ export * from './lib/back-repo-data'
 export * from './lib/web-socket-service'
 
 
+export * from './lib/axis-api'
+export * from './lib/axis'
+export * from './lib/axis.service'
+
 export * from './lib/circle-api'
 export * from './lib/circle'
 export * from './lib/circle.service'
@@ -24,10 +28,6 @@ export * from './lib/circlegrid.service'
 export * from './lib/horizontalaxis-api'
 export * from './lib/horizontalaxis'
 export * from './lib/horizontalaxis.service'
-
-export * from './lib/initialaxis-api'
-export * from './lib/initialaxis'
-export * from './lib/initialaxis.service'
 
 export * from './lib/line-api'
 export * from './lib/line'

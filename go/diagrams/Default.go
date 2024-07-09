@@ -44,17 +44,17 @@ var _ map[string]any = map[string]any{
 
 	"ref_models.HorizontalAxis.StrokeWidth": (ref_models.HorizontalAxis{}).StrokeWidth,
 
-	"ref_models.InitialAxis": &(ref_models.InitialAxis{}),
+	"ref_models.InitialAxis": &(ref_models.Axis{}),
 
-	"ref_models.InitialAxis.Angle": (ref_models.InitialAxis{}).Angle,
+	"ref_models.InitialAxis.Angle": (ref_models.Axis{}).Angle,
 
-	"ref_models.InitialAxis.IsDisplayed": (ref_models.InitialAxis{}).IsDisplayed,
+	"ref_models.InitialAxis.IsDisplayed": (ref_models.Axis{}).IsDisplayed,
 
-	"ref_models.InitialAxis.Length": (ref_models.InitialAxis{}).Length,
+	"ref_models.InitialAxis.Length": (ref_models.Axis{}).Length,
 
-	"ref_models.InitialAxis.Name": (ref_models.InitialAxis{}).Name,
+	"ref_models.InitialAxis.Name": (ref_models.Axis{}).Name,
 
-	"ref_models.InitialAxis.StrokeWidth": (ref_models.InitialAxis{}).StrokeWidth,
+	"ref_models.InitialAxis.StrokeWidth": (ref_models.Axis{}).StrokeWidth,
 
 	"ref_models.Line": &(ref_models.Line{}),
 

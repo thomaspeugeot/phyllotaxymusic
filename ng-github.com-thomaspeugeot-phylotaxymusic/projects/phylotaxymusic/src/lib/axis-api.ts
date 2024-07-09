@@ -3,9 +3,9 @@
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class InitialAxisAPI {
+export class AxisAPI {
 
-	static GONGSTRUCT_NAME = "InitialAxis"
+	static GONGSTRUCT_NAME = "Axis"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -27,9 +27,9 @@ export class InitialAxisAPI {
 
 	// insertion point for other decls
 
-	InitialAxisPointersEncoding: InitialAxisPointersEncoding = new InitialAxisPointersEncoding
+	AxisPointersEncoding: AxisPointersEncoding = new AxisPointersEncoding
 }
 
-export class InitialAxisPointersEncoding {
+export class AxisPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 }

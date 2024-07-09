@@ -11,7 +11,7 @@ import (
 func drawInitialAxis(gongsvgStage *gongsvg_models.StageStruct,
 	layer *gongsvg_models.Layer,
 	parameter *phylotaxymusic_models.Parameter,
-	initialAxis *phylotaxymusic_models.InitialAxis) {
+	initialAxis *phylotaxymusic_models.Axis) {
 
 	initialAxisLine := new(gongsvg_models.Line).Stage(gongsvgStage)
 	initialAxisLine.Name = "Initial Axis Line"

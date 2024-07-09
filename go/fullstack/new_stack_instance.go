@@ -44,10 +44,10 @@ func NewStackInstance(
 
 	// add orchestration
 	// insertion point
+	models.SetOrchestratorOnAfterUpdate[models.Axis](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Circle](stage)
 	models.SetOrchestratorOnAfterUpdate[models.CircleGrid](stage)
 	models.SetOrchestratorOnAfterUpdate[models.HorizontalAxis](stage)
-	models.SetOrchestratorOnAfterUpdate[models.InitialAxis](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Line](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Parameter](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Rhombus](stage)

@@ -22,7 +22,7 @@ type Parameter struct {
 	InitialCircle      *Circle
 	InitialRhombusGrid *RhombusGrid
 	InitialCircleGrid  *CircleGrid
-	InitialAxis        *InitialAxis
+	InitialAxis        *Axis
 
 	// for drawing purpose
 	OriginX        float64

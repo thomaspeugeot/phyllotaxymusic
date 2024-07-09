@@ -4,13 +4,13 @@ package orm
 type BackRepoData struct {
 	// insertion point for slices
 
+	AxisAPIs []*AxisAPI
+
 	CircleAPIs []*CircleAPI
 
 	CircleGridAPIs []*CircleGridAPI
 
 	HorizontalAxisAPIs []*HorizontalAxisAPI
-
-	InitialAxisAPIs []*InitialAxisAPI
 
 	LineAPIs []*LineAPI
 
@@ -25,6 +25,16 @@ type BackRepoData struct {
 
 func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepoData) {
 	// insertion point for slices copies
+	for _, axisDB := range backRepo.BackRepoAxis.Map_AxisDBID_AxisDB {
+
+		var axisAPI AxisAPI
+		axisAPI.ID = axisDB.ID
+		axisAPI.AxisPointersEncoding = axisDB.AxisPointersEncoding
+		axisDB.CopyBasicFieldsToAxis_WOP(&axisAPI.Axis_WOP)
+
+		backRepoData.AxisAPIs = append(backRepoData.AxisAPIs, &axisAPI)
+	}
+
 	for _, circleDB := range backRepo.BackRepoCircle.Map_CircleDBID_CircleDB {
 
 		var circleAPI CircleAPI
@@ -53,16 +63,6 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		horizontalaxisDB.CopyBasicFieldsToHorizontalAxis_WOP(&horizontalaxisAPI.HorizontalAxis_WOP)
 
 		backRepoData.HorizontalAxisAPIs = append(backRepoData.HorizontalAxisAPIs, &horizontalaxisAPI)
-	}
-
-	for _, initialaxisDB := range backRepo.BackRepoInitialAxis.Map_InitialAxisDBID_InitialAxisDB {
-
-		var initialaxisAPI InitialAxisAPI
-		initialaxisAPI.ID = initialaxisDB.ID
-		initialaxisAPI.InitialAxisPointersEncoding = initialaxisDB.InitialAxisPointersEncoding
-		initialaxisDB.CopyBasicFieldsToInitialAxis_WOP(&initialaxisAPI.InitialAxis_WOP)
-
-		backRepoData.InitialAxisAPIs = append(backRepoData.InitialAxisAPIs, &initialaxisAPI)
 	}
 
 	for _, lineDB := range backRepo.BackRepoLine.Map_LineDBID_LineDB {

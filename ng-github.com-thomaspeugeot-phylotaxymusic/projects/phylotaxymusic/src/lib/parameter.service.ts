@@ -21,7 +21,7 @@ import { RhombusAPI } from './rhombus-api'
 import { CircleAPI } from './circle-api'
 import { RhombusGridAPI } from './rhombusgrid-api'
 import { CircleGridAPI } from './circlegrid-api'
-import { InitialAxisAPI } from './initialaxis-api'
+import { AxisAPI } from './axis-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 

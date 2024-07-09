@@ -14,16 +14,16 @@ import (
 )
 
 // declaration in order to justify use of the models import
-var __InitialAxis__dummysDeclaration__ models.InitialAxis
-var __InitialAxis_time__dummyDeclaration time.Duration
+var __Axis__dummysDeclaration__ models.Axis
+var __Axis_time__dummyDeclaration time.Duration
 
-var mutexInitialAxis sync.Mutex
+var mutexAxis sync.Mutex
 
-// An InitialAxisID parameter model.
+// An AxisID parameter model.
 //
 // This is used for operations that want the ID of an order in the path
-// swagger:parameters getInitialAxis updateInitialAxis deleteInitialAxis
-type InitialAxisID struct {
+// swagger:parameters getAxis updateAxis deleteAxis
+type AxisID struct {
 	// The ID of the order
 	//
 	// in: path
@@ -31,29 +31,29 @@ type InitialAxisID struct {
 	ID int64
 }
 
-// InitialAxisInput is a schema that can validate the user’s
+// AxisInput is a schema that can validate the user’s
 // input to prevent us from getting invalid data
-// swagger:parameters postInitialAxis updateInitialAxis
-type InitialAxisInput struct {
-	// The InitialAxis to submit or modify
+// swagger:parameters postAxis updateAxis
+type AxisInput struct {
+	// The Axis to submit or modify
 	// in: body
-	InitialAxis *orm.InitialAxisAPI
+	Axis *orm.AxisAPI
 }
 
-// GetInitialAxiss
+// GetAxiss
 //
-// swagger:route GET /initialaxiss initialaxiss getInitialAxiss
+// swagger:route GET /axiss axiss getAxiss
 //
-// # Get all initialaxiss
+// # Get all axiss
 //
 // Responses:
 // default: genericError
 //
-//	200: initialaxisDBResponse
-func (controller *Controller) GetInitialAxiss(c *gin.Context) {
+//	200: axisDBResponse
+func (controller *Controller) GetAxiss(c *gin.Context) {
 
 	// source slice
-	var initialaxisDBs []orm.InitialAxisDB
+	var axisDBs []orm.AxisDB
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -61,16 +61,16 @@ func (controller *Controller) GetInitialAxiss(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetInitialAxiss", "GONG__StackPath", stackPath)
+			// log.Println("GetAxiss", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoInitialAxis.GetDB()
+	db := backRepo.BackRepoAxis.GetDB()
 
-	query := db.Find(&initialaxisDBs)
+	query := db.Find(&axisDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -81,29 +81,29 @@ func (controller *Controller) GetInitialAxiss(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	initialaxisAPIs := make([]orm.InitialAxisAPI, 0)
+	axisAPIs := make([]orm.AxisAPI, 0)
 
-	// for each initialaxis, update fields from the database nullable fields
-	for idx := range initialaxisDBs {
-		initialaxisDB := &initialaxisDBs[idx]
-		_ = initialaxisDB
-		var initialaxisAPI orm.InitialAxisAPI
+	// for each axis, update fields from the database nullable fields
+	for idx := range axisDBs {
+		axisDB := &axisDBs[idx]
+		_ = axisDB
+		var axisAPI orm.AxisAPI
 
 		// insertion point for updating fields
-		initialaxisAPI.ID = initialaxisDB.ID
-		initialaxisDB.CopyBasicFieldsToInitialAxis_WOP(&initialaxisAPI.InitialAxis_WOP)
-		initialaxisAPI.InitialAxisPointersEncoding = initialaxisDB.InitialAxisPointersEncoding
-		initialaxisAPIs = append(initialaxisAPIs, initialaxisAPI)
+		axisAPI.ID = axisDB.ID
+		axisDB.CopyBasicFieldsToAxis_WOP(&axisAPI.Axis_WOP)
+		axisAPI.AxisPointersEncoding = axisDB.AxisPointersEncoding
+		axisAPIs = append(axisAPIs, axisAPI)
 	}
 
-	c.JSON(http.StatusOK, initialaxisAPIs)
+	c.JSON(http.StatusOK, axisAPIs)
 }
 
-// PostInitialAxis
+// PostAxis
 //
-// swagger:route POST /initialaxiss initialaxiss postInitialAxis
+// swagger:route POST /axiss axiss postAxis
 //
-// Creates a initialaxis
+// Creates a axis
 //
 //	Consumes:
 //	- application/json
@@ -113,10 +113,10 @@ func (controller *Controller) GetInitialAxiss(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func (controller *Controller) PostInitialAxis(c *gin.Context) {
+func (controller *Controller) PostAxis(c *gin.Context) {
 
-	mutexInitialAxis.Lock()
-	defer mutexInitialAxis.Unlock()
+	mutexAxis.Lock()
+	defer mutexAxis.Unlock()
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -124,17 +124,17 @@ func (controller *Controller) PostInitialAxis(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("PostInitialAxiss", "GONG__StackPath", stackPath)
+			// log.Println("PostAxiss", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoInitialAxis.GetDB()
+	db := backRepo.BackRepoAxis.GetDB()
 
 	// Validate input
-	var input orm.InitialAxisAPI
+	var input orm.AxisAPI
 
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
@@ -146,12 +146,12 @@ func (controller *Controller) PostInitialAxis(c *gin.Context) {
 		return
 	}
 
-	// Create initialaxis
-	initialaxisDB := orm.InitialAxisDB{}
-	initialaxisDB.InitialAxisPointersEncoding = input.InitialAxisPointersEncoding
-	initialaxisDB.CopyBasicFieldsFromInitialAxis_WOP(&input.InitialAxis_WOP)
+	// Create axis
+	axisDB := orm.AxisDB{}
+	axisDB.AxisPointersEncoding = input.AxisPointersEncoding
+	axisDB.CopyBasicFieldsFromAxis_WOP(&input.Axis_WOP)
 
-	query := db.Create(&initialaxisDB)
+	query := db.Create(&axisDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -162,31 +162,31 @@ func (controller *Controller) PostInitialAxis(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	backRepo.BackRepoInitialAxis.CheckoutPhaseOneInstance(&initialaxisDB)
-	initialaxis := backRepo.BackRepoInitialAxis.Map_InitialAxisDBID_InitialAxisPtr[initialaxisDB.ID]
+	backRepo.BackRepoAxis.CheckoutPhaseOneInstance(&axisDB)
+	axis := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[axisDB.ID]
 
-	if initialaxis != nil {
-		models.AfterCreateFromFront(backRepo.GetStage(), initialaxis)
+	if axis != nil {
+		models.AfterCreateFromFront(backRepo.GetStage(), axis)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	backRepo.IncrementPushFromFrontNb()
 
-	c.JSON(http.StatusOK, initialaxisDB)
+	c.JSON(http.StatusOK, axisDB)
 }
 
-// GetInitialAxis
+// GetAxis
 //
-// swagger:route GET /initialaxiss/{ID} initialaxiss getInitialAxis
+// swagger:route GET /axiss/{ID} axiss getAxis
 //
-// Gets the details for a initialaxis.
+// Gets the details for a axis.
 //
 // Responses:
 // default: genericError
 //
-//	200: initialaxisDBResponse
-func (controller *Controller) GetInitialAxis(c *gin.Context) {
+//	200: axisDBResponse
+func (controller *Controller) GetAxis(c *gin.Context) {
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -194,18 +194,18 @@ func (controller *Controller) GetInitialAxis(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetInitialAxis", "GONG__StackPath", stackPath)
+			// log.Println("GetAxis", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoInitialAxis.GetDB()
+	db := backRepo.BackRepoAxis.GetDB()
 
-	// Get initialaxisDB in DB
-	var initialaxisDB orm.InitialAxisDB
-	if err := db.First(&initialaxisDB, c.Param("id")).Error; err != nil {
+	// Get axisDB in DB
+	var axisDB orm.AxisDB
+	if err := db.First(&axisDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -214,28 +214,28 @@ func (controller *Controller) GetInitialAxis(c *gin.Context) {
 		return
 	}
 
-	var initialaxisAPI orm.InitialAxisAPI
-	initialaxisAPI.ID = initialaxisDB.ID
-	initialaxisAPI.InitialAxisPointersEncoding = initialaxisDB.InitialAxisPointersEncoding
-	initialaxisDB.CopyBasicFieldsToInitialAxis_WOP(&initialaxisAPI.InitialAxis_WOP)
+	var axisAPI orm.AxisAPI
+	axisAPI.ID = axisDB.ID
+	axisAPI.AxisPointersEncoding = axisDB.AxisPointersEncoding
+	axisDB.CopyBasicFieldsToAxis_WOP(&axisAPI.Axis_WOP)
 
-	c.JSON(http.StatusOK, initialaxisAPI)
+	c.JSON(http.StatusOK, axisAPI)
 }
 
-// UpdateInitialAxis
+// UpdateAxis
 //
-// swagger:route PATCH /initialaxiss/{ID} initialaxiss updateInitialAxis
+// swagger:route PATCH /axiss/{ID} axiss updateAxis
 //
-// # Update a initialaxis
+// # Update a axis
 //
 // Responses:
 // default: genericError
 //
-//	200: initialaxisDBResponse
-func (controller *Controller) UpdateInitialAxis(c *gin.Context) {
+//	200: axisDBResponse
+func (controller *Controller) UpdateAxis(c *gin.Context) {
 
-	mutexInitialAxis.Lock()
-	defer mutexInitialAxis.Unlock()
+	mutexAxis.Lock()
+	defer mutexAxis.Unlock()
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -243,17 +243,17 @@ func (controller *Controller) UpdateInitialAxis(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("UpdateInitialAxis", "GONG__StackPath", stackPath)
+			// log.Println("UpdateAxis", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoInitialAxis.GetDB()
+	db := backRepo.BackRepoAxis.GetDB()
 
 	// Validate input
-	var input orm.InitialAxisAPI
+	var input orm.AxisAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -261,10 +261,10 @@ func (controller *Controller) UpdateInitialAxis(c *gin.Context) {
 	}
 
 	// Get model if exist
-	var initialaxisDB orm.InitialAxisDB
+	var axisDB orm.AxisDB
 
-	// fetch the initialaxis
-	query := db.First(&initialaxisDB, c.Param("id"))
+	// fetch the axis
+	query := db.First(&axisDB, c.Param("id"))
 
 	if query.Error != nil {
 		var returnError GenericError
@@ -276,10 +276,10 @@ func (controller *Controller) UpdateInitialAxis(c *gin.Context) {
 	}
 
 	// update
-	initialaxisDB.CopyBasicFieldsFromInitialAxis_WOP(&input.InitialAxis_WOP)
-	initialaxisDB.InitialAxisPointersEncoding = input.InitialAxisPointersEncoding
+	axisDB.CopyBasicFieldsFromAxis_WOP(&input.Axis_WOP)
+	axisDB.AxisPointersEncoding = input.AxisPointersEncoding
 
-	query = db.Model(&initialaxisDB).Updates(initialaxisDB)
+	query = db.Model(&axisDB).Updates(axisDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -290,16 +290,16 @@ func (controller *Controller) UpdateInitialAxis(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	initialaxisNew := new(models.InitialAxis)
-	initialaxisDB.CopyBasicFieldsToInitialAxis(initialaxisNew)
+	axisNew := new(models.Axis)
+	axisDB.CopyBasicFieldsToAxis(axisNew)
 
 	// redeem pointers
-	initialaxisDB.DecodePointers(backRepo, initialaxisNew)
+	axisDB.DecodePointers(backRepo, axisNew)
 
 	// get stage instance from DB instance, and call callback function
-	initialaxisOld := backRepo.BackRepoInitialAxis.Map_InitialAxisDBID_InitialAxisPtr[initialaxisDB.ID]
-	if initialaxisOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), initialaxisOld, initialaxisNew)
+	axisOld := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[axisDB.ID]
+	if axisOld != nil {
+		models.AfterUpdateFromFront(backRepo.GetStage(), axisOld, axisNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -308,23 +308,23 @@ func (controller *Controller) UpdateInitialAxis(c *gin.Context) {
 	// generates a checkout
 	backRepo.IncrementPushFromFrontNb()
 
-	// return status OK with the marshalling of the the initialaxisDB
-	c.JSON(http.StatusOK, initialaxisDB)
+	// return status OK with the marshalling of the the axisDB
+	c.JSON(http.StatusOK, axisDB)
 }
 
-// DeleteInitialAxis
+// DeleteAxis
 //
-// swagger:route DELETE /initialaxiss/{ID} initialaxiss deleteInitialAxis
+// swagger:route DELETE /axiss/{ID} axiss deleteAxis
 //
-// # Delete a initialaxis
+// # Delete a axis
 //
 // default: genericError
 //
-//	200: initialaxisDBResponse
-func (controller *Controller) DeleteInitialAxis(c *gin.Context) {
+//	200: axisDBResponse
+func (controller *Controller) DeleteAxis(c *gin.Context) {
 
-	mutexInitialAxis.Lock()
-	defer mutexInitialAxis.Unlock()
+	mutexAxis.Lock()
+	defer mutexAxis.Unlock()
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -332,18 +332,18 @@ func (controller *Controller) DeleteInitialAxis(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("DeleteInitialAxis", "GONG__StackPath", stackPath)
+			// log.Println("DeleteAxis", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoInitialAxis.GetDB()
+	db := backRepo.BackRepoAxis.GetDB()
 
 	// Get model if exist
-	var initialaxisDB orm.InitialAxisDB
-	if err := db.First(&initialaxisDB, c.Param("id")).Error; err != nil {
+	var axisDB orm.AxisDB
+	if err := db.First(&axisDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,16 +353,16 @@ func (controller *Controller) DeleteInitialAxis(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&initialaxisDB)
+	db.Unscoped().Delete(&axisDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
-	initialaxisDeleted := new(models.InitialAxis)
-	initialaxisDB.CopyBasicFieldsToInitialAxis(initialaxisDeleted)
+	axisDeleted := new(models.Axis)
+	axisDB.CopyBasicFieldsToAxis(axisDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	initialaxisStaged := backRepo.BackRepoInitialAxis.Map_InitialAxisDBID_InitialAxisPtr[initialaxisDB.ID]
-	if initialaxisStaged != nil {
-		models.AfterDeleteFromFront(backRepo.GetStage(), initialaxisStaged, initialaxisDeleted)
+	axisStaged := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[axisDB.ID]
+	if axisStaged != nil {
+		models.AfterDeleteFromFront(backRepo.GetStage(), axisStaged, axisDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

@@ -8,7 +8,7 @@ import { Rhombus } from './rhombus'
 import { Circle } from './circle'
 import { RhombusGrid } from './rhombusgrid'
 import { CircleGrid } from './circlegrid'
-import { InitialAxis } from './initialaxis'
+import { Axis } from './axis'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 
@@ -41,7 +41,7 @@ export class Parameter {
 
 	InitialCircleGrid?: CircleGrid
 
-	InitialAxis?: InitialAxis
+	InitialAxis?: Axis
 
 	HorizontalAxis?: HorizontalAxis
 
@@ -142,7 +142,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.InitialCircle = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.InitialCircleID.Int64)
 	parameter.InitialRhombusGrid = frontRepo.map_ID_RhombusGrid.get(parameterAPI.ParameterPointersEncoding.InitialRhombusGridID.Int64)
 	parameter.InitialCircleGrid = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.InitialCircleGridID.Int64)
-	parameter.InitialAxis = frontRepo.map_ID_InitialAxis.get(parameterAPI.ParameterPointersEncoding.InitialAxisID.Int64)
+	parameter.InitialAxis = frontRepo.map_ID_Axis.get(parameterAPI.ParameterPointersEncoding.InitialAxisID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

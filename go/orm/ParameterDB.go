@@ -326,7 +326,7 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		// commit pointer value parameter.InitialAxis translates to updating the parameter.InitialAxisID
 		parameterDB.InitialAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.InitialAxis != nil {
-			if InitialAxisId, ok := backRepo.BackRepoInitialAxis.Map_InitialAxisPtr_InitialAxisDBID[parameter.InitialAxis]; ok {
+			if InitialAxisId, ok := backRepo.BackRepoAxis.Map_AxisPtr_AxisDBID[parameter.InitialAxis]; ok {
 				parameterDB.InitialAxisID.Int64 = int64(InitialAxisId)
 				parameterDB.InitialAxisID.Valid = true
 			}
@@ -495,7 +495,7 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	// InitialAxis field
 	parameter.InitialAxis = nil
 	if parameterDB.InitialAxisID.Int64 != 0 {
-		parameter.InitialAxis = backRepo.BackRepoInitialAxis.Map_InitialAxisDBID_InitialAxisPtr[uint(parameterDB.InitialAxisID.Int64)]
+		parameter.InitialAxis = backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(parameterDB.InitialAxisID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -833,7 +833,7 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 
 		// reindexing InitialAxis field
 		if parameterDB.InitialAxisID.Int64 != 0 {
-			parameterDB.InitialAxisID.Int64 = int64(BackRepoInitialAxisid_atBckpTime_newID[uint(parameterDB.InitialAxisID.Int64)])
+			parameterDB.InitialAxisID.Int64 = int64(BackRepoAxisid_atBckpTime_newID[uint(parameterDB.InitialAxisID.Int64)])
 			parameterDB.InitialAxisID.Valid = true
 		}
 

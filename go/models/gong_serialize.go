@@ -14,10 +14,10 @@ func SerializeStage(stage *StageStruct, filename string) {
 	f := excelize.NewFile()
 	{
 		// insertion point
+		SerializeExcelize[Axis](stage, f)
 		SerializeExcelize[Circle](stage, f)
 		SerializeExcelize[CircleGrid](stage, f)
 		SerializeExcelize[HorizontalAxis](stage, f)
-		SerializeExcelize[InitialAxis](stage, f)
 		SerializeExcelize[Line](stage, f)
 		SerializeExcelize[Parameter](stage, f)
 		SerializeExcelize[Rhombus](stage, f)

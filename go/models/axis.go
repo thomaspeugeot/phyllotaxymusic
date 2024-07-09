@@ -1,6 +1,6 @@
 package models
 
-type InitialAxis struct {
+type Axis struct {
 	Name string
 	HideableShape
 

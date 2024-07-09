@@ -4,6 +4,10 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Observable, combineLatest, BehaviorSubject, of } from 'rxjs'
 
 // insertion point sub template for services imports
+import { AxisAPI } from './axis-api'
+import { Axis, CopyAxisAPIToAxis } from './axis'
+import { AxisService } from './axis.service'
+
 import { CircleAPI } from './circle-api'
 import { Circle, CopyCircleAPIToCircle } from './circle'
 import { CircleService } from './circle.service'
@@ -15,10 +19,6 @@ import { CircleGridService } from './circlegrid.service'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { HorizontalAxis, CopyHorizontalAxisAPIToHorizontalAxis } from './horizontalaxis'
 import { HorizontalAxisService } from './horizontalaxis.service'
-
-import { InitialAxisAPI } from './initialaxis-api'
-import { InitialAxis, CopyInitialAxisAPIToInitialAxis } from './initialaxis'
-import { InitialAxisService } from './initialaxis.service'
 
 import { LineAPI } from './line-api'
 import { Line, CopyLineAPIToLine } from './line'
@@ -47,6 +47,9 @@ export const StackType = "github.com/thomaspeugeot/phylotaxymusic/go/models"
 
 // FrontRepo stores all instances in a front repository (design pattern repository)
 export class FrontRepo { // insertion point sub template
+	array_Axiss = new Array<Axis>() // array of front instances
+	map_ID_Axis = new Map<number, Axis>() // map of front instances
+
 	array_Circles = new Array<Circle>() // array of front instances
 	map_ID_Circle = new Map<number, Circle>() // map of front instances
 
@@ -55,9 +58,6 @@ export class FrontRepo { // insertion point sub template
 
 	array_HorizontalAxiss = new Array<HorizontalAxis>() // array of front instances
 	map_ID_HorizontalAxis = new Map<number, HorizontalAxis>() // map of front instances
-
-	array_InitialAxiss = new Array<InitialAxis>() // array of front instances
-	map_ID_InitialAxis = new Map<number, InitialAxis>() // map of front instances
 
 	array_Lines = new Array<Line>() // array of front instances
 	map_ID_Line = new Map<number, Line>() // map of front instances
@@ -81,14 +81,14 @@ export class FrontRepo { // insertion point sub template
 	getFrontArray<Type>(gongStructName: string): Array<Type> {
 		switch (gongStructName) {
 			// insertion point
+			case 'Axis':
+				return this.array_Axiss as unknown as Array<Type>
 			case 'Circle':
 				return this.array_Circles as unknown as Array<Type>
 			case 'CircleGrid':
 				return this.array_CircleGrids as unknown as Array<Type>
 			case 'HorizontalAxis':
 				return this.array_HorizontalAxiss as unknown as Array<Type>
-			case 'InitialAxis':
-				return this.array_InitialAxiss as unknown as Array<Type>
 			case 'Line':
 				return this.array_Lines as unknown as Array<Type>
 			case 'Parameter':
@@ -107,14 +107,14 @@ export class FrontRepo { // insertion point sub template
 	getFrontMap<Type>(gongStructName: string): Map<number, Type> {
 		switch (gongStructName) {
 			// insertion point
+			case 'Axis':
+				return this.map_ID_Axis as unknown as Map<number, Type>
 			case 'Circle':
 				return this.map_ID_Circle as unknown as Map<number, Type>
 			case 'CircleGrid':
 				return this.map_ID_CircleGrid as unknown as Map<number, Type>
 			case 'HorizontalAxis':
 				return this.map_ID_HorizontalAxis as unknown as Map<number, Type>
-			case 'InitialAxis':
-				return this.map_ID_InitialAxis as unknown as Map<number, Type>
 			case 'Line':
 				return this.map_ID_Line as unknown as Map<number, Type>
 			case 'Parameter':
@@ -192,10 +192,10 @@ export class FrontRepoService {
 
 	constructor(
 		private http: HttpClient, // insertion point sub template 
+		private axisService: AxisService,
 		private circleService: CircleService,
 		private circlegridService: CircleGridService,
 		private horizontalaxisService: HorizontalAxisService,
-		private initialaxisService: InitialAxisService,
 		private lineService: LineService,
 		private parameterService: ParameterService,
 		private rhombusService: RhombusService,
@@ -233,10 +233,10 @@ export class FrontRepoService {
 	observableFrontRepo: [
 		Observable<null>, // see below for the of(null) observable
 		// insertion point sub template 
+		Observable<AxisAPI[]>,
 		Observable<CircleAPI[]>,
 		Observable<CircleGridAPI[]>,
 		Observable<HorizontalAxisAPI[]>,
-		Observable<InitialAxisAPI[]>,
 		Observable<LineAPI[]>,
 		Observable<ParameterAPI[]>,
 		Observable<RhombusAPI[]>,
@@ -252,10 +252,10 @@ export class FrontRepoService {
 			// expectation for a non-empty array of observables.
 			of(null), // 
 			// insertion point sub template
+			this.axisService.getAxiss(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
-			this.initialaxisService.getInitialAxiss(this.GONG__StackPath, this.frontRepo),
 			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
@@ -276,10 +276,10 @@ export class FrontRepoService {
 		this.observableFrontRepo = [
 			of(null), // see above for justification
 			// insertion point sub template
+			this.axisService.getAxiss(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
-			this.initialaxisService.getInitialAxiss(this.GONG__StackPath, this.frontRepo),
 			this.lineService.getLines(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
@@ -295,10 +295,10 @@ export class FrontRepoService {
 					([
 						___of_null, // see above for the explanation about of
 						// insertion point sub template for declarations 
+						axiss_,
 						circles_,
 						circlegrids_,
 						horizontalaxiss_,
-						initialaxiss_,
 						lines_,
 						parameters_,
 						rhombuss_,
@@ -308,14 +308,14 @@ export class FrontRepoService {
 						let _this = this
 						// Typing can be messy with many items. Therefore, type casting is necessary here
 						// insertion point sub template for type casting 
+						var axiss: AxisAPI[]
+						axiss = axiss_ as AxisAPI[]
 						var circles: CircleAPI[]
 						circles = circles_ as CircleAPI[]
 						var circlegrids: CircleGridAPI[]
 						circlegrids = circlegrids_ as CircleGridAPI[]
 						var horizontalaxiss: HorizontalAxisAPI[]
 						horizontalaxiss = horizontalaxiss_ as HorizontalAxisAPI[]
-						var initialaxiss: InitialAxisAPI[]
-						initialaxiss = initialaxiss_ as InitialAxisAPI[]
 						var lines: LineAPI[]
 						lines = lines_ as LineAPI[]
 						var parameters: ParameterAPI[]
@@ -330,6 +330,18 @@ export class FrontRepoService {
 						// 
 						// First Step: init map of instances
 						// insertion point sub template for init 
+						// init the arrays
+						this.frontRepo.array_Axiss = []
+						this.frontRepo.map_ID_Axis.clear()
+
+						axiss.forEach(
+							axisAPI => {
+								let axis = new Axis
+								this.frontRepo.array_Axiss.push(axis)
+								this.frontRepo.map_ID_Axis.set(axisAPI.ID, axis)
+							}
+						)
+
 						// init the arrays
 						this.frontRepo.array_Circles = []
 						this.frontRepo.map_ID_Circle.clear()
@@ -363,18 +375,6 @@ export class FrontRepoService {
 								let horizontalaxis = new HorizontalAxis
 								this.frontRepo.array_HorizontalAxiss.push(horizontalaxis)
 								this.frontRepo.map_ID_HorizontalAxis.set(horizontalaxisAPI.ID, horizontalaxis)
-							}
-						)
-
-						// init the arrays
-						this.frontRepo.array_InitialAxiss = []
-						this.frontRepo.map_ID_InitialAxis.clear()
-
-						initialaxiss.forEach(
-							initialaxisAPI => {
-								let initialaxis = new InitialAxis
-								this.frontRepo.array_InitialAxiss.push(initialaxis)
-								this.frontRepo.map_ID_InitialAxis.set(initialaxisAPI.ID, initialaxis)
 							}
 						)
 
@@ -443,6 +443,14 @@ export class FrontRepoService {
 						// Second Step: reddeem front objects
 						// insertion point sub template for redeem 
 						// fill up front objects
+						axiss.forEach(
+							axisAPI => {
+								let axis = this.frontRepo.map_ID_Axis.get(axisAPI.ID)
+								CopyAxisAPIToAxis(axisAPI, axis!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
 						circles.forEach(
 							circleAPI => {
 								let circle = this.frontRepo.map_ID_Circle.get(circleAPI.ID)
@@ -463,14 +471,6 @@ export class FrontRepoService {
 							horizontalaxisAPI => {
 								let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
 								CopyHorizontalAxisAPIToHorizontalAxis(horizontalaxisAPI, horizontalaxis!, this.frontRepo)
-							}
-						)
-
-						// fill up front objects
-						initialaxiss.forEach(
-							initialaxisAPI => {
-								let initialaxis = this.frontRepo.map_ID_InitialAxis.get(initialaxisAPI.ID)
-								CopyInitialAxisAPIToInitialAxis(initialaxisAPI, initialaxis!, this.frontRepo)
 							}
 						)
 
@@ -546,6 +546,18 @@ export class FrontRepoService {
 				// init the arrays
 				// insertion point sub template for init 
 				// init the arrays
+				this.frontRepo.array_Axiss = []
+				this.frontRepo.map_ID_Axis.clear()
+
+				backRepoData.AxisAPIs.forEach(
+					axisAPI => {
+						let axis = new Axis
+						this.frontRepo.array_Axiss.push(axis)
+						this.frontRepo.map_ID_Axis.set(axisAPI.ID, axis)
+					}
+				)
+
+				// init the arrays
 				this.frontRepo.array_Circles = []
 				this.frontRepo.map_ID_Circle.clear()
 
@@ -578,18 +590,6 @@ export class FrontRepoService {
 						let horizontalaxis = new HorizontalAxis
 						this.frontRepo.array_HorizontalAxiss.push(horizontalaxis)
 						this.frontRepo.map_ID_HorizontalAxis.set(horizontalaxisAPI.ID, horizontalaxis)
-					}
-				)
-
-				// init the arrays
-				this.frontRepo.array_InitialAxiss = []
-				this.frontRepo.map_ID_InitialAxis.clear()
-
-				backRepoData.InitialAxisAPIs.forEach(
-					initialaxisAPI => {
-						let initialaxis = new InitialAxis
-						this.frontRepo.array_InitialAxiss.push(initialaxis)
-						this.frontRepo.map_ID_InitialAxis.set(initialaxisAPI.ID, initialaxis)
 					}
 				)
 
@@ -660,6 +660,14 @@ export class FrontRepoService {
 				// fill up front objects
 				// insertion point sub template for redeem 
 				// fill up front objects
+				backRepoData.AxisAPIs.forEach(
+					axisAPI => {
+						let axis = this.frontRepo.map_ID_Axis.get(axisAPI.ID)
+						CopyAxisAPIToAxis(axisAPI, axis!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.CircleAPIs.forEach(
 					circleAPI => {
 						let circle = this.frontRepo.map_ID_Circle.get(circleAPI.ID)
@@ -680,14 +688,6 @@ export class FrontRepoService {
 					horizontalaxisAPI => {
 						let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
 						CopyHorizontalAxisAPIToHorizontalAxis(horizontalaxisAPI, horizontalaxis!, this.frontRepo)
-					}
-				)
-
-				// fill up front objects
-				backRepoData.InitialAxisAPIs.forEach(
-					initialaxisAPI => {
-						let initialaxis = this.frontRepo.map_ID_InitialAxis.get(initialaxisAPI.ID)
-						CopyInitialAxisAPIToInitialAxis(initialaxisAPI, initialaxis!, this.frontRepo)
 					}
 				)
 
@@ -750,16 +750,16 @@ export class FrontRepoService {
 }
 
 // insertion point for get unique ID per struct 
-export function getCircleUniqueID(id: number): number {
+export function getAxisUniqueID(id: number): number {
 	return 31 * id
 }
-export function getCircleGridUniqueID(id: number): number {
+export function getCircleUniqueID(id: number): number {
 	return 37 * id
 }
-export function getHorizontalAxisUniqueID(id: number): number {
+export function getCircleGridUniqueID(id: number): number {
 	return 41 * id
 }
-export function getInitialAxisUniqueID(id: number): number {
+export function getHorizontalAxisUniqueID(id: number): number {
 	return 43 * id
 }
 export function getLineUniqueID(id: number): number {

@@ -5,6 +5,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage
+	case *Axis:
+		ok = stage.IsStagedAxis(target)
+
 	case *Circle:
 		ok = stage.IsStagedCircle(target)
 
@@ -13,9 +16,6 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 	case *HorizontalAxis:
 		ok = stage.IsStagedHorizontalAxis(target)
-
-	case *InitialAxis:
-		ok = stage.IsStagedInitialAxis(target)
 
 	case *Line:
 		ok = stage.IsStagedLine(target)
@@ -39,6 +39,13 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 }
 
 // insertion point for stage per struct
+func (stage *StageStruct) IsStagedAxis(axis *Axis) (ok bool) {
+
+	_, ok = stage.Axiss[axis]
+
+	return
+}
+
 func (stage *StageStruct) IsStagedCircle(circle *Circle) (ok bool) {
 
 	_, ok = stage.Circles[circle]
@@ -56,13 +63,6 @@ func (stage *StageStruct) IsStagedCircleGrid(circlegrid *CircleGrid) (ok bool) {
 func (stage *StageStruct) IsStagedHorizontalAxis(horizontalaxis *HorizontalAxis) (ok bool) {
 
 	_, ok = stage.HorizontalAxiss[horizontalaxis]
-
-	return
-}
-
-func (stage *StageStruct) IsStagedInitialAxis(initialaxis *InitialAxis) (ok bool) {
-
-	_, ok = stage.InitialAxiss[initialaxis]
 
 	return
 }
@@ -110,6 +110,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage branch
+	case *Axis:
+		stage.StageBranchAxis(target)
+
 	case *Circle:
 		stage.StageBranchCircle(target)
 
@@ -118,9 +121,6 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *HorizontalAxis:
 		stage.StageBranchHorizontalAxis(target)
-
-	case *InitialAxis:
-		stage.StageBranchInitialAxis(target)
 
 	case *Line:
 		stage.StageBranchLine(target)
@@ -143,6 +143,21 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for stage branch per struct
+func (stage *StageStruct) StageBranchAxis(axis *Axis) {
+
+	// check if instance is already staged
+	if IsStaged(stage, axis) {
+		return
+	}
+
+	axis.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *StageStruct) StageBranchCircle(circle *Circle) {
 
 	// check if instance is already staged
@@ -187,21 +202,6 @@ func (stage *StageStruct) StageBranchHorizontalAxis(horizontalaxis *HorizontalAx
 	}
 
 	horizontalaxis.Stage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
-func (stage *StageStruct) StageBranchInitialAxis(initialaxis *InitialAxis) {
-
-	// check if instance is already staged
-	if IsStaged(stage, initialaxis) {
-		return
-	}
-
-	initialaxis.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -322,6 +322,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	switch fromT := any(from).(type) {
 	// insertion point for stage branch
+	case *Axis:
+		toT := CopyBranchAxis(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *Circle:
 		toT := CopyBranchCircle(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -332,10 +336,6 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *HorizontalAxis:
 		toT := CopyBranchHorizontalAxis(mapOrigCopy, fromT)
-		return any(toT).(*Type)
-
-	case *InitialAxis:
-		toT := CopyBranchInitialAxis(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *Line:
@@ -365,6 +365,25 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 }
 
 // insertion point for stage branch per struct
+func CopyBranchAxis(mapOrigCopy map[any]any, axisFrom *Axis) (axisTo *Axis) {
+
+	// axisFrom has already been copied
+	if _axisTo, ok := mapOrigCopy[axisFrom]; ok {
+		axisTo = _axisTo.(*Axis)
+		return
+	}
+
+	axisTo = new(Axis)
+	mapOrigCopy[axisFrom] = axisTo
+	axisFrom.CopyBasicFields(axisTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 func CopyBranchCircle(mapOrigCopy map[any]any, circleFrom *Circle) (circleTo *Circle) {
 
 	// circleFrom has already been copied
@@ -428,25 +447,6 @@ func CopyBranchHorizontalAxis(mapOrigCopy map[any]any, horizontalaxisFrom *Horiz
 	return
 }
 
-func CopyBranchInitialAxis(mapOrigCopy map[any]any, initialaxisFrom *InitialAxis) (initialaxisTo *InitialAxis) {
-
-	// initialaxisFrom has already been copied
-	if _initialaxisTo, ok := mapOrigCopy[initialaxisFrom]; ok {
-		initialaxisTo = _initialaxisTo.(*InitialAxis)
-		return
-	}
-
-	initialaxisTo = new(InitialAxis)
-	mapOrigCopy[initialaxisFrom] = initialaxisTo
-	initialaxisFrom.CopyBasicFields(initialaxisTo)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-	return
-}
-
 func CopyBranchLine(mapOrigCopy map[any]any, lineFrom *Line) (lineTo *Line) {
 
 	// lineFrom has already been copied
@@ -492,7 +492,7 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 		parameterTo.InitialCircleGrid = CopyBranchCircleGrid(mapOrigCopy, parameterFrom.InitialCircleGrid)
 	}
 	if parameterFrom.InitialAxis != nil {
-		parameterTo.InitialAxis = CopyBranchInitialAxis(mapOrigCopy, parameterFrom.InitialAxis)
+		parameterTo.InitialAxis = CopyBranchAxis(mapOrigCopy, parameterFrom.InitialAxis)
 	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
@@ -577,6 +577,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for unstage branch
+	case *Axis:
+		stage.UnstageBranchAxis(target)
+
 	case *Circle:
 		stage.UnstageBranchCircle(target)
 
@@ -585,9 +588,6 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *HorizontalAxis:
 		stage.UnstageBranchHorizontalAxis(target)
-
-	case *InitialAxis:
-		stage.UnstageBranchInitialAxis(target)
 
 	case *Line:
 		stage.UnstageBranchLine(target)
@@ -610,6 +610,21 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for unstage branch per struct
+func (stage *StageStruct) UnstageBranchAxis(axis *Axis) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, axis) {
+		return
+	}
+
+	axis.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *StageStruct) UnstageBranchCircle(circle *Circle) {
 
 	// check if instance is already staged
@@ -654,21 +669,6 @@ func (stage *StageStruct) UnstageBranchHorizontalAxis(horizontalaxis *Horizontal
 	}
 
 	horizontalaxis.Unstage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
-func (stage *StageStruct) UnstageBranchInitialAxis(initialaxis *InitialAxis) {
-
-	// check if instance is already staged
-	if !IsStaged(stage, initialaxis) {
-		return
-	}
-
-	initialaxis.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 

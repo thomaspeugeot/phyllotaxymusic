@@ -7,6 +7,38 @@ import "time"
 var __GONG_time_The_fool_doth_think_he_is_wise__ = time.Hour
 
 // insertion point
+type Axis_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+	Angle float64
+	Length float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
+	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
+}
+
+func (from *Axis) CopyBasicFields(to *Axis) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+	to.Angle = from.Angle
+	to.Length = from.Length
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
+	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
+}
+
 type Circle_WOP struct {
 	// insertion point
 	Name string
@@ -77,38 +109,6 @@ func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
 	to.IsDisplayed = from.IsDisplayed
 	to.AxisHandleBorderLength = from.AxisHandleBorderLength
 	to.Axis_Length = from.Axis_Length
-	to.Color = from.Color
-	to.FillOpacity = from.FillOpacity
-	to.Stroke = from.Stroke
-	to.StrokeOpacity = from.StrokeOpacity
-	to.StrokeWidth = from.StrokeWidth
-	to.StrokeDashArray = from.StrokeDashArray
-	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
-	to.Transform = from.Transform
-}
-
-type InitialAxis_WOP struct {
-	// insertion point
-	Name string
-	IsDisplayed bool
-	Angle float64
-	Length float64
-	Color string
-	FillOpacity float64
-	Stroke string
-	StrokeOpacity float64
-	StrokeWidth float64
-	StrokeDashArray string
-	StrokeDashArrayWhenSelected string
-	Transform string
-}
-
-func (from *InitialAxis) CopyBasicFields(to *InitialAxis) {
-	// insertion point
-	to.Name = from.Name
-	to.IsDisplayed = from.IsDisplayed
-	to.Angle = from.Angle
-	to.Length = from.Length
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
