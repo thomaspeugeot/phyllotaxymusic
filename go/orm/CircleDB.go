@@ -72,8 +72,29 @@ type CircleDB struct {
 	// Declation for basic field circleDB.CenterY
 	CenterY_Data sql.NullFloat64
 
+	// Declation for basic field circleDB.Color
+	Color_Data sql.NullString
+
+	// Declation for basic field circleDB.FillOpacity
+	FillOpacity_Data sql.NullFloat64
+
+	// Declation for basic field circleDB.Stroke
+	Stroke_Data sql.NullString
+
+	// Declation for basic field circleDB.StrokeOpacity
+	StrokeOpacity_Data sql.NullFloat64
+
 	// Declation for basic field circleDB.StrokeWidth
 	StrokeWidth_Data sql.NullFloat64
+
+	// Declation for basic field circleDB.StrokeDashArray
+	StrokeDashArray_Data sql.NullString
+
+	// Declation for basic field circleDB.StrokeDashArrayWhenSelected
+	StrokeDashArrayWhenSelected_Data sql.NullString
+
+	// Declation for basic field circleDB.Transform
+	Transform_Data sql.NullString
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -105,7 +126,21 @@ type CircleWOP struct {
 
 	CenterY float64 `xlsx:"4"`
 
-	StrokeWidth float64 `xlsx:"5"`
+	Color string `xlsx:"5"`
+
+	FillOpacity float64 `xlsx:"6"`
+
+	Stroke string `xlsx:"7"`
+
+	StrokeOpacity float64 `xlsx:"8"`
+
+	StrokeWidth float64 `xlsx:"9"`
+
+	StrokeDashArray string `xlsx:"10"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"11"`
+
+	Transform string `xlsx:"12"`
 	// insertion for WOP pointer fields
 }
 
@@ -116,7 +151,14 @@ var Circle_Fields = []string{
 	"IsDisplayed",
 	"CenterX",
 	"CenterY",
+	"Color",
+	"FillOpacity",
+	"Stroke",
+	"StrokeOpacity",
 	"StrokeWidth",
+	"StrokeDashArray",
+	"StrokeDashArrayWhenSelected",
+	"Transform",
 }
 
 type BackRepoCircleStruct struct {
@@ -395,8 +437,29 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle(circle *models.Circle) {
 	circleDB.CenterY_Data.Float64 = circle.CenterY
 	circleDB.CenterY_Data.Valid = true
 
+	circleDB.Color_Data.String = circle.Color
+	circleDB.Color_Data.Valid = true
+
+	circleDB.FillOpacity_Data.Float64 = circle.FillOpacity
+	circleDB.FillOpacity_Data.Valid = true
+
+	circleDB.Stroke_Data.String = circle.Stroke
+	circleDB.Stroke_Data.Valid = true
+
+	circleDB.StrokeOpacity_Data.Float64 = circle.StrokeOpacity
+	circleDB.StrokeOpacity_Data.Valid = true
+
 	circleDB.StrokeWidth_Data.Float64 = circle.StrokeWidth
 	circleDB.StrokeWidth_Data.Valid = true
+
+	circleDB.StrokeDashArray_Data.String = circle.StrokeDashArray
+	circleDB.StrokeDashArray_Data.Valid = true
+
+	circleDB.StrokeDashArrayWhenSelected_Data.String = circle.StrokeDashArrayWhenSelected
+	circleDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	circleDB.Transform_Data.String = circle.Transform
+	circleDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromCircle_WOP
@@ -415,8 +478,29 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle_WOP(circle *models.Circle_WO
 	circleDB.CenterY_Data.Float64 = circle.CenterY
 	circleDB.CenterY_Data.Valid = true
 
+	circleDB.Color_Data.String = circle.Color
+	circleDB.Color_Data.Valid = true
+
+	circleDB.FillOpacity_Data.Float64 = circle.FillOpacity
+	circleDB.FillOpacity_Data.Valid = true
+
+	circleDB.Stroke_Data.String = circle.Stroke
+	circleDB.Stroke_Data.Valid = true
+
+	circleDB.StrokeOpacity_Data.Float64 = circle.StrokeOpacity
+	circleDB.StrokeOpacity_Data.Valid = true
+
 	circleDB.StrokeWidth_Data.Float64 = circle.StrokeWidth
 	circleDB.StrokeWidth_Data.Valid = true
+
+	circleDB.StrokeDashArray_Data.String = circle.StrokeDashArray
+	circleDB.StrokeDashArray_Data.Valid = true
+
+	circleDB.StrokeDashArrayWhenSelected_Data.String = circle.StrokeDashArrayWhenSelected
+	circleDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	circleDB.Transform_Data.String = circle.Transform
+	circleDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromCircleWOP
@@ -435,8 +519,29 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircleWOP(circle *CircleWOP) {
 	circleDB.CenterY_Data.Float64 = circle.CenterY
 	circleDB.CenterY_Data.Valid = true
 
+	circleDB.Color_Data.String = circle.Color
+	circleDB.Color_Data.Valid = true
+
+	circleDB.FillOpacity_Data.Float64 = circle.FillOpacity
+	circleDB.FillOpacity_Data.Valid = true
+
+	circleDB.Stroke_Data.String = circle.Stroke
+	circleDB.Stroke_Data.Valid = true
+
+	circleDB.StrokeOpacity_Data.Float64 = circle.StrokeOpacity
+	circleDB.StrokeOpacity_Data.Valid = true
+
 	circleDB.StrokeWidth_Data.Float64 = circle.StrokeWidth
 	circleDB.StrokeWidth_Data.Valid = true
+
+	circleDB.StrokeDashArray_Data.String = circle.StrokeDashArray
+	circleDB.StrokeDashArray_Data.Valid = true
+
+	circleDB.StrokeDashArrayWhenSelected_Data.String = circle.StrokeDashArrayWhenSelected
+	circleDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	circleDB.Transform_Data.String = circle.Transform
+	circleDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsToCircle
@@ -446,7 +551,14 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle(circle *models.Circle) {
 	circle.IsDisplayed = circleDB.IsDisplayed_Data.Bool
 	circle.CenterX = circleDB.CenterX_Data.Float64
 	circle.CenterY = circleDB.CenterY_Data.Float64
+	circle.Color = circleDB.Color_Data.String
+	circle.FillOpacity = circleDB.FillOpacity_Data.Float64
+	circle.Stroke = circleDB.Stroke_Data.String
+	circle.StrokeOpacity = circleDB.StrokeOpacity_Data.Float64
 	circle.StrokeWidth = circleDB.StrokeWidth_Data.Float64
+	circle.StrokeDashArray = circleDB.StrokeDashArray_Data.String
+	circle.StrokeDashArrayWhenSelected = circleDB.StrokeDashArrayWhenSelected_Data.String
+	circle.Transform = circleDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToCircle_WOP
@@ -456,7 +568,14 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle_WOP(circle *models.Circle_WOP)
 	circle.IsDisplayed = circleDB.IsDisplayed_Data.Bool
 	circle.CenterX = circleDB.CenterX_Data.Float64
 	circle.CenterY = circleDB.CenterY_Data.Float64
+	circle.Color = circleDB.Color_Data.String
+	circle.FillOpacity = circleDB.FillOpacity_Data.Float64
+	circle.Stroke = circleDB.Stroke_Data.String
+	circle.StrokeOpacity = circleDB.StrokeOpacity_Data.Float64
 	circle.StrokeWidth = circleDB.StrokeWidth_Data.Float64
+	circle.StrokeDashArray = circleDB.StrokeDashArray_Data.String
+	circle.StrokeDashArrayWhenSelected = circleDB.StrokeDashArrayWhenSelected_Data.String
+	circle.Transform = circleDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToCircleWOP
@@ -467,7 +586,14 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircleWOP(circle *CircleWOP) {
 	circle.IsDisplayed = circleDB.IsDisplayed_Data.Bool
 	circle.CenterX = circleDB.CenterX_Data.Float64
 	circle.CenterY = circleDB.CenterY_Data.Float64
+	circle.Color = circleDB.Color_Data.String
+	circle.FillOpacity = circleDB.FillOpacity_Data.Float64
+	circle.Stroke = circleDB.Stroke_Data.String
+	circle.StrokeOpacity = circleDB.StrokeOpacity_Data.Float64
 	circle.StrokeWidth = circleDB.StrokeWidth_Data.Float64
+	circle.StrokeDashArray = circleDB.StrokeDashArray_Data.String
+	circle.StrokeDashArrayWhenSelected = circleDB.StrokeDashArrayWhenSelected_Data.String
+	circle.Transform = circleDB.Transform_Data.String
 }
 
 // Backup generates a json file from a slice of all CircleDB instances in the backrepo

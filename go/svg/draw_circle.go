@@ -19,8 +19,7 @@ func drawCircle(
 	circle.CY = p.OriginY - c.CenterY
 	circle.Radius = p.SideLength / 2.0
 
-	circle.StrokeWidth = c.StrokeWidth
-	circle.StrokeOpacity = 1
+	c.Presentation.CopyTo(&circle.Presentation)
+
 	circle.Name = "Vertical Axis"
-	circle.Stroke = gongsvg_models.Black.ToString()
 }

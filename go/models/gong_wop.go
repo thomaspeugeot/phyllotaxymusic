@@ -13,7 +13,14 @@ type Circle_WOP struct {
 	IsDisplayed bool
 	CenterX float64
 	CenterY float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
 }
 
 func (from *Circle) CopyBasicFields(to *Circle) {
@@ -22,7 +29,14 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 	to.IsDisplayed = from.IsDisplayed
 	to.CenterX = from.CenterX
 	to.CenterY = from.CenterY
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
 }
 
 type CircleGrid_WOP struct {

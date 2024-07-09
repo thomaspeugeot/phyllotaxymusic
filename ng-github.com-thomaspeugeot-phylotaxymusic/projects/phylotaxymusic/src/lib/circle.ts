@@ -21,7 +21,14 @@ export class Circle {
 	IsDisplayed: boolean = false
 	CenterX: number = 0
 	CenterY: number = 0
+	Color: string = ""
+	FillOpacity: number = 0
+	Stroke: string = ""
+	StrokeOpacity: number = 0
 	StrokeWidth: number = 0
+	StrokeDashArray: string = ""
+	StrokeDashArrayWhenSelected: string = ""
+	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -37,7 +44,14 @@ export function CopyCircleToCircleAPI(circle: Circle, circleAPI: CircleAPI) {
 	circleAPI.IsDisplayed = circle.IsDisplayed
 	circleAPI.CenterX = circle.CenterX
 	circleAPI.CenterY = circle.CenterY
+	circleAPI.Color = circle.Color
+	circleAPI.FillOpacity = circle.FillOpacity
+	circleAPI.Stroke = circle.Stroke
+	circleAPI.StrokeOpacity = circle.StrokeOpacity
 	circleAPI.StrokeWidth = circle.StrokeWidth
+	circleAPI.StrokeDashArray = circle.StrokeDashArray
+	circleAPI.StrokeDashArrayWhenSelected = circle.StrokeDashArrayWhenSelected
+	circleAPI.Transform = circle.Transform
 
 	// insertion point for pointer fields encoding
 
@@ -59,7 +73,14 @@ export function CopyCircleAPIToCircle(circleAPI: CircleAPI, circle: Circle, fron
 	circle.IsDisplayed = circleAPI.IsDisplayed
 	circle.CenterX = circleAPI.CenterX
 	circle.CenterY = circleAPI.CenterY
+	circle.Color = circleAPI.Color
+	circle.FillOpacity = circleAPI.FillOpacity
+	circle.Stroke = circleAPI.Stroke
+	circle.StrokeOpacity = circleAPI.StrokeOpacity
 	circle.StrokeWidth = circleAPI.StrokeWidth
+	circle.StrokeDashArray = circleAPI.StrokeDashArray
+	circle.StrokeDashArrayWhenSelected = circleAPI.StrokeDashArrayWhenSelected
+	circle.Transform = circleAPI.Transform
 
 	// insertion point for pointer fields encoding
 

@@ -1585,7 +1585,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Circle:
-		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "StrokeWidth"}
+		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case CircleGrid:
 		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Circles"}
 	case HorizontalAxis:
@@ -1665,7 +1665,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *Circle:
-		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "StrokeWidth"}
+		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *CircleGrid:
 		res = []string{"Name", "Reference", "N", "M", "IsDisplayed", "Circles"}
 	case *HorizontalAxis:
@@ -1701,8 +1701,22 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.CenterX)
 		case "CenterY":
 			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+		case "Color":
+			res = inferedInstance.Color
+		case "FillOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+		case "Stroke":
+			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+		case "StrokeDashArray":
+			res = inferedInstance.StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res = inferedInstance.StrokeDashArrayWhenSelected
+		case "Transform":
+			res = inferedInstance.Transform
 		}
 	case *CircleGrid:
 		switch fieldName {
@@ -1893,8 +1907,22 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.CenterX)
 		case "CenterY":
 			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+		case "Color":
+			res = inferedInstance.Color
+		case "FillOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+		case "Stroke":
+			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
 		case "StrokeWidth":
 			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+		case "StrokeDashArray":
+			res = inferedInstance.StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res = inferedInstance.StrokeDashArrayWhenSelected
+		case "Transform":
+			res = inferedInstance.Transform
 		}
 	case CircleGrid:
 		switch fieldName {

@@ -6,5 +6,5 @@ type Circle struct {
 	HideableShape
 	CenterX, CenterY float64
 
-	StrokeWidth float64
+	Presentation
 }

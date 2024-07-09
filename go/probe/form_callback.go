@@ -69,8 +69,22 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circle_.CenterX), formDiv)
 		case "CenterY":
 			FormDivBasicFieldToField(&(circle_.CenterY), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(circle_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(circle_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(circle_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(circle_.StrokeOpacity), formDiv)
 		case "StrokeWidth":
 			FormDivBasicFieldToField(&(circle_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(circle_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(circle_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(circle_.Transform), formDiv)
 		case "CircleGrid:Circles":
 			// we need to retrieve the field owner before the change
 			var pastCircleGridOwner *models.CircleGrid
