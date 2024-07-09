@@ -47,6 +47,8 @@ export class Parameter {
 
 	RotatedRhombus?: Rhombus
 
+	RotatedRhombusGrid?: RhombusGrid
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -118,6 +120,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.RotatedRhombusID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.RotatedRhombusGridID.Valid = true
+	if (parameter.RotatedRhombusGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.RotatedRhombusGridID.Int64 = parameter.RotatedRhombusGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.RotatedRhombusGridID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -163,6 +172,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.InitialAxis = frontRepo.map_ID_Axis.get(parameterAPI.ParameterPointersEncoding.InitialAxisID.Int64)
 	parameter.RotatedAxis = frontRepo.map_ID_Axis.get(parameterAPI.ParameterPointersEncoding.RotatedAxisID.Int64)
 	parameter.RotatedRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.RotatedRhombusID.Int64)
+	parameter.RotatedRhombusGrid = frontRepo.map_ID_RhombusGrid.get(parameterAPI.ParameterPointersEncoding.RotatedRhombusGridID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

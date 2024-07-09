@@ -24,8 +24,9 @@ type Parameter struct {
 	InitialCircleGrid  *CircleGrid
 	InitialAxis        *Axis
 
-	RotatedAxis    *Axis
-	RotatedRhombus *Rhombus
+	RotatedAxis        *Axis
+	RotatedRhombus     *Rhombus
+	RotatedRhombusGrid *RhombusGrid
 
 	// for drawing purpose
 	OriginX        float64
@@ -53,6 +54,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeInitialAxis()
 	p.computeRotatedAxis()
 	p.computeRotatedRhombus()
+	p.computeRotatedRhombusGrid(stage)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -153,5 +155,33 @@ func (p *Parameter) computeRotatedAxis() {
 func (p *Parameter) computeRotatedRhombus() {
 	p.RotatedRhombus.SideLength = p.InitialRhombus.SideLength
 	p.RotatedRhombus.InsideAngle = p.InitialRhombus.InsideAngle
-	p.RotatedRhombus.Angle = p.InitialAxis.Angle
+	p.RotatedRhombus.Angle = -p.InitialAxis.Angle
+}
+
+func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
+	g := p.RotatedRhombusGrid
+
+	// remove the attached rhombus
+	for _, r := range g.Rhombuses {
+		r.Unstage(stage)
+	}
+	g.Rhombuses = g.Rhombuses[:0]
+
+	angleRad := -p.InitialAxis.Angle * math.Pi / 180
+	cosAngle := math.Cos(angleRad)
+	sinAngle := math.Sin(angleRad)
+
+	for _, _r := range p.InitialRhombusGrid.Rhombuses {
+		r := new(Rhombus).Stage(stage)
+		g.Rhombuses = append(g.Rhombuses, r)
+		*r = *_r
+		r.SideLength = _r.SideLength
+		r.InsideAngle = _r.InsideAngle
+		r.Angle = -p.InitialAxis.Angle
+
+		r.Name += " Rotated"
+
+		r.CenterX = _r.CenterX*cosAngle - _r.CenterY*sinAngle
+		r.CenterY = _r.CenterX*sinAngle + _r.CenterY*cosAngle
+	}
 }

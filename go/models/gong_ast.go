@@ -1280,6 +1280,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "RotatedRhombus":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].RotatedRhombus = __gong__map_Rhombus[targetIdentifier]
+				case "RotatedRhombusGrid":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].RotatedRhombusGrid = __gong__map_RhombusGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

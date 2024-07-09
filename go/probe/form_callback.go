@@ -594,6 +594,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.RotatedAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "RotatedRhombus":
 			FormDivSelectFieldToField(&(parameter_.RotatedRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "RotatedRhombusGrid":
+			FormDivSelectFieldToField(&(parameter_.RotatedRhombusGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":
