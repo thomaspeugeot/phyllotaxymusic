@@ -7,5 +7,5 @@ type InitialAxis struct {
 	Angle  float64
 	Length float64
 
-	StrokeWidth float64
+	Presentation
 }

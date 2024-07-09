@@ -295,8 +295,22 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(horizontalaxis_.AxisHandleBorderLength), formDiv)
 		case "Axis_Length":
 			FormDivBasicFieldToField(&(horizontalaxis_.Axis_Length), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(horizontalaxis_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(horizontalaxis_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(horizontalaxis_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(horizontalaxis_.StrokeOpacity), formDiv)
 		case "StrokeWidth":
 			FormDivBasicFieldToField(&(horizontalaxis_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(horizontalaxis_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(horizontalaxis_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(horizontalaxis_.Transform), formDiv)
 		}
 	}
 
@@ -380,8 +394,22 @@ func (initialaxisFormCallback *InitialAxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(initialaxis_.Angle), formDiv)
 		case "Length":
 			FormDivBasicFieldToField(&(initialaxis_.Length), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(initialaxis_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(initialaxis_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(initialaxis_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(initialaxis_.StrokeOpacity), formDiv)
 		case "StrokeWidth":
 			FormDivBasicFieldToField(&(initialaxis_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(initialaxis_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(initialaxis_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(initialaxis_.Transform), formDiv)
 		}
 	}
 
@@ -659,8 +687,22 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rhombus_.Angle), formDiv)
 		case "InsideAngle":
 			FormDivBasicFieldToField(&(rhombus_.InsideAngle), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(rhombus_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(rhombus_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(rhombus_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(rhombus_.StrokeOpacity), formDiv)
 		case "StrokeWidth":
 			FormDivBasicFieldToField(&(rhombus_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(rhombus_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(rhombus_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(rhombus_.Transform), formDiv)
 		case "RhombusGrid:Rhombuses":
 			// we need to retrieve the field owner before the change
 			var pastRhombusGridOwner *models.RhombusGrid
@@ -871,8 +913,22 @@ func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(verticalaxis_.AxisHandleBorderLength), formDiv)
 		case "Axis_Length":
 			FormDivBasicFieldToField(&(verticalaxis_.Axis_Length), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(verticalaxis_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(verticalaxis_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(verticalaxis_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(verticalaxis_.StrokeOpacity), formDiv)
 		case "StrokeWidth":
 			FormDivBasicFieldToField(&(verticalaxis_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(verticalaxis_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(verticalaxis_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(verticalaxis_.Transform), formDiv)
 		}
 	}
 

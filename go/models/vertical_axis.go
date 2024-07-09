@@ -7,5 +7,5 @@ type VerticalAxis struct {
 	AxisHandleBorderLength float64
 	Axis_Length            float64
 
-	StrokeWidth float64
+	Presentation
 }

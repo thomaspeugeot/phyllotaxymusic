@@ -21,7 +21,14 @@ export class InitialAxis {
 	IsDisplayed: boolean = false
 	Angle: number = 0
 	Length: number = 0
+	Color: string = ""
+	FillOpacity: number = 0
+	Stroke: string = ""
+	StrokeOpacity: number = 0
 	StrokeWidth: number = 0
+	StrokeDashArray: string = ""
+	StrokeDashArrayWhenSelected: string = ""
+	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -37,7 +44,14 @@ export function CopyInitialAxisToInitialAxisAPI(initialaxis: InitialAxis, initia
 	initialaxisAPI.IsDisplayed = initialaxis.IsDisplayed
 	initialaxisAPI.Angle = initialaxis.Angle
 	initialaxisAPI.Length = initialaxis.Length
+	initialaxisAPI.Color = initialaxis.Color
+	initialaxisAPI.FillOpacity = initialaxis.FillOpacity
+	initialaxisAPI.Stroke = initialaxis.Stroke
+	initialaxisAPI.StrokeOpacity = initialaxis.StrokeOpacity
 	initialaxisAPI.StrokeWidth = initialaxis.StrokeWidth
+	initialaxisAPI.StrokeDashArray = initialaxis.StrokeDashArray
+	initialaxisAPI.StrokeDashArrayWhenSelected = initialaxis.StrokeDashArrayWhenSelected
+	initialaxisAPI.Transform = initialaxis.Transform
 
 	// insertion point for pointer fields encoding
 
@@ -59,7 +73,14 @@ export function CopyInitialAxisAPIToInitialAxis(initialaxisAPI: InitialAxisAPI, 
 	initialaxis.IsDisplayed = initialaxisAPI.IsDisplayed
 	initialaxis.Angle = initialaxisAPI.Angle
 	initialaxis.Length = initialaxisAPI.Length
+	initialaxis.Color = initialaxisAPI.Color
+	initialaxis.FillOpacity = initialaxisAPI.FillOpacity
+	initialaxis.Stroke = initialaxisAPI.Stroke
+	initialaxis.StrokeOpacity = initialaxisAPI.StrokeOpacity
 	initialaxis.StrokeWidth = initialaxisAPI.StrokeWidth
+	initialaxis.StrokeDashArray = initialaxisAPI.StrokeDashArray
+	initialaxis.StrokeDashArrayWhenSelected = initialaxisAPI.StrokeDashArrayWhenSelected
+	initialaxis.Transform = initialaxisAPI.Transform
 
 	// insertion point for pointer fields encoding
 

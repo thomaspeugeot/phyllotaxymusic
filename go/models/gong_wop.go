@@ -61,7 +61,14 @@ type HorizontalAxis_WOP struct {
 	IsDisplayed bool
 	AxisHandleBorderLength float64
 	Axis_Length float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
 }
 
 func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
@@ -70,7 +77,14 @@ func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
 	to.IsDisplayed = from.IsDisplayed
 	to.AxisHandleBorderLength = from.AxisHandleBorderLength
 	to.Axis_Length = from.Axis_Length
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
 }
 
 type InitialAxis_WOP struct {
@@ -79,7 +93,14 @@ type InitialAxis_WOP struct {
 	IsDisplayed bool
 	Angle float64
 	Length float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
 }
 
 func (from *InitialAxis) CopyBasicFields(to *InitialAxis) {
@@ -88,7 +109,14 @@ func (from *InitialAxis) CopyBasicFields(to *InitialAxis) {
 	to.IsDisplayed = from.IsDisplayed
 	to.Angle = from.Angle
 	to.Length = from.Length
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
 }
 
 type Line_WOP struct {
@@ -140,7 +168,14 @@ type Rhombus_WOP struct {
 	SideLength float64
 	Angle float64
 	InsideAngle float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
 }
 
 func (from *Rhombus) CopyBasicFields(to *Rhombus) {
@@ -152,7 +187,14 @@ func (from *Rhombus) CopyBasicFields(to *Rhombus) {
 	to.SideLength = from.SideLength
 	to.Angle = from.Angle
 	to.InsideAngle = from.InsideAngle
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
 }
 
 type RhombusGrid_WOP struct {
@@ -177,7 +219,14 @@ type VerticalAxis_WOP struct {
 	IsDisplayed bool
 	AxisHandleBorderLength float64
 	Axis_Length float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
 	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
 }
 
 func (from *VerticalAxis) CopyBasicFields(to *VerticalAxis) {
@@ -186,6 +235,13 @@ func (from *VerticalAxis) CopyBasicFields(to *VerticalAxis) {
 	to.IsDisplayed = from.IsDisplayed
 	to.AxisHandleBorderLength = from.AxisHandleBorderLength
 	to.Axis_Length = from.Axis_Length
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
 	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
 }
 

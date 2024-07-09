@@ -19,7 +19,14 @@ export class RhombusAPI {
 	SideLength: number = 0
 	Angle: number = 0
 	InsideAngle: number = 0
+	Color: string = ""
+	FillOpacity: number = 0
+	Stroke: string = ""
+	StrokeOpacity: number = 0
 	StrokeWidth: number = 0
+	StrokeDashArray: string = ""
+	StrokeDashArrayWhenSelected: string = ""
+	Transform: string = ""
 
 	// insertion point for other decls
 

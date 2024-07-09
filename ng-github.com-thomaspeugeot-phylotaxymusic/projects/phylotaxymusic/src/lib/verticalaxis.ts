@@ -21,7 +21,14 @@ export class VerticalAxis {
 	IsDisplayed: boolean = false
 	AxisHandleBorderLength: number = 0
 	Axis_Length: number = 0
+	Color: string = ""
+	FillOpacity: number = 0
+	Stroke: string = ""
+	StrokeOpacity: number = 0
 	StrokeWidth: number = 0
+	StrokeDashArray: string = ""
+	StrokeDashArrayWhenSelected: string = ""
+	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -37,7 +44,14 @@ export function CopyVerticalAxisToVerticalAxisAPI(verticalaxis: VerticalAxis, ve
 	verticalaxisAPI.IsDisplayed = verticalaxis.IsDisplayed
 	verticalaxisAPI.AxisHandleBorderLength = verticalaxis.AxisHandleBorderLength
 	verticalaxisAPI.Axis_Length = verticalaxis.Axis_Length
+	verticalaxisAPI.Color = verticalaxis.Color
+	verticalaxisAPI.FillOpacity = verticalaxis.FillOpacity
+	verticalaxisAPI.Stroke = verticalaxis.Stroke
+	verticalaxisAPI.StrokeOpacity = verticalaxis.StrokeOpacity
 	verticalaxisAPI.StrokeWidth = verticalaxis.StrokeWidth
+	verticalaxisAPI.StrokeDashArray = verticalaxis.StrokeDashArray
+	verticalaxisAPI.StrokeDashArrayWhenSelected = verticalaxis.StrokeDashArrayWhenSelected
+	verticalaxisAPI.Transform = verticalaxis.Transform
 
 	// insertion point for pointer fields encoding
 
@@ -59,7 +73,14 @@ export function CopyVerticalAxisAPIToVerticalAxis(verticalaxisAPI: VerticalAxisA
 	verticalaxis.IsDisplayed = verticalaxisAPI.IsDisplayed
 	verticalaxis.AxisHandleBorderLength = verticalaxisAPI.AxisHandleBorderLength
 	verticalaxis.Axis_Length = verticalaxisAPI.Axis_Length
+	verticalaxis.Color = verticalaxisAPI.Color
+	verticalaxis.FillOpacity = verticalaxisAPI.FillOpacity
+	verticalaxis.Stroke = verticalaxisAPI.Stroke
+	verticalaxis.StrokeOpacity = verticalaxisAPI.StrokeOpacity
 	verticalaxis.StrokeWidth = verticalaxisAPI.StrokeWidth
+	verticalaxis.StrokeDashArray = verticalaxisAPI.StrokeDashArray
+	verticalaxis.StrokeDashArrayWhenSelected = verticalaxisAPI.StrokeDashArrayWhenSelected
+	verticalaxis.Transform = verticalaxisAPI.Transform
 
 	// insertion point for pointer fields encoding
 

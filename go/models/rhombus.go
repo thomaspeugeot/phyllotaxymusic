@@ -23,7 +23,7 @@ type Rhombus struct {
 	// crosses the axis of the rhombus
 	InsideAngle float64
 
-	StrokeWidth float64
+	Presentation
 }
 
 func GetRightSideLine(r Rhombus) (line *Line) {

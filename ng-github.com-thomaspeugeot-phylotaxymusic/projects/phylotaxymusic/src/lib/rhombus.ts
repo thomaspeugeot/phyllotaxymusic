@@ -24,7 +24,14 @@ export class Rhombus {
 	SideLength: number = 0
 	Angle: number = 0
 	InsideAngle: number = 0
+	Color: string = ""
+	FillOpacity: number = 0
+	Stroke: string = ""
+	StrokeOpacity: number = 0
 	StrokeWidth: number = 0
+	StrokeDashArray: string = ""
+	StrokeDashArrayWhenSelected: string = ""
+	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -43,7 +50,14 @@ export function CopyRhombusToRhombusAPI(rhombus: Rhombus, rhombusAPI: RhombusAPI
 	rhombusAPI.SideLength = rhombus.SideLength
 	rhombusAPI.Angle = rhombus.Angle
 	rhombusAPI.InsideAngle = rhombus.InsideAngle
+	rhombusAPI.Color = rhombus.Color
+	rhombusAPI.FillOpacity = rhombus.FillOpacity
+	rhombusAPI.Stroke = rhombus.Stroke
+	rhombusAPI.StrokeOpacity = rhombus.StrokeOpacity
 	rhombusAPI.StrokeWidth = rhombus.StrokeWidth
+	rhombusAPI.StrokeDashArray = rhombus.StrokeDashArray
+	rhombusAPI.StrokeDashArrayWhenSelected = rhombus.StrokeDashArrayWhenSelected
+	rhombusAPI.Transform = rhombus.Transform
 
 	// insertion point for pointer fields encoding
 
@@ -68,7 +82,14 @@ export function CopyRhombusAPIToRhombus(rhombusAPI: RhombusAPI, rhombus: Rhombus
 	rhombus.SideLength = rhombusAPI.SideLength
 	rhombus.Angle = rhombusAPI.Angle
 	rhombus.InsideAngle = rhombusAPI.InsideAngle
+	rhombus.Color = rhombusAPI.Color
+	rhombus.FillOpacity = rhombusAPI.FillOpacity
+	rhombus.Stroke = rhombusAPI.Stroke
+	rhombus.StrokeOpacity = rhombusAPI.StrokeOpacity
 	rhombus.StrokeWidth = rhombusAPI.StrokeWidth
+	rhombus.StrokeDashArray = rhombusAPI.StrokeDashArray
+	rhombus.StrokeDashArrayWhenSelected = rhombusAPI.StrokeDashArrayWhenSelected
+	rhombus.Transform = rhombusAPI.Transform
 
 	// insertion point for pointer fields encoding
 

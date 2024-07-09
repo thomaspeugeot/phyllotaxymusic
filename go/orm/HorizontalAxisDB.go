@@ -72,8 +72,29 @@ type HorizontalAxisDB struct {
 	// Declation for basic field horizontalaxisDB.Axis_Length
 	Axis_Length_Data sql.NullFloat64
 
+	// Declation for basic field horizontalaxisDB.Color
+	Color_Data sql.NullString
+
+	// Declation for basic field horizontalaxisDB.FillOpacity
+	FillOpacity_Data sql.NullFloat64
+
+	// Declation for basic field horizontalaxisDB.Stroke
+	Stroke_Data sql.NullString
+
+	// Declation for basic field horizontalaxisDB.StrokeOpacity
+	StrokeOpacity_Data sql.NullFloat64
+
 	// Declation for basic field horizontalaxisDB.StrokeWidth
 	StrokeWidth_Data sql.NullFloat64
+
+	// Declation for basic field horizontalaxisDB.StrokeDashArray
+	StrokeDashArray_Data sql.NullString
+
+	// Declation for basic field horizontalaxisDB.StrokeDashArrayWhenSelected
+	StrokeDashArrayWhenSelected_Data sql.NullString
+
+	// Declation for basic field horizontalaxisDB.Transform
+	Transform_Data sql.NullString
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -105,7 +126,21 @@ type HorizontalAxisWOP struct {
 
 	Axis_Length float64 `xlsx:"4"`
 
-	StrokeWidth float64 `xlsx:"5"`
+	Color string `xlsx:"5"`
+
+	FillOpacity float64 `xlsx:"6"`
+
+	Stroke string `xlsx:"7"`
+
+	StrokeOpacity float64 `xlsx:"8"`
+
+	StrokeWidth float64 `xlsx:"9"`
+
+	StrokeDashArray string `xlsx:"10"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"11"`
+
+	Transform string `xlsx:"12"`
 	// insertion for WOP pointer fields
 }
 
@@ -116,7 +151,14 @@ var HorizontalAxis_Fields = []string{
 	"IsDisplayed",
 	"AxisHandleBorderLength",
 	"Axis_Length",
+	"Color",
+	"FillOpacity",
+	"Stroke",
+	"StrokeOpacity",
 	"StrokeWidth",
+	"StrokeDashArray",
+	"StrokeDashArrayWhenSelected",
+	"Transform",
 }
 
 type BackRepoHorizontalAxisStruct struct {
@@ -395,8 +437,29 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxis(hori
 	horizontalaxisDB.Axis_Length_Data.Float64 = horizontalaxis.Axis_Length
 	horizontalaxisDB.Axis_Length_Data.Valid = true
 
+	horizontalaxisDB.Color_Data.String = horizontalaxis.Color
+	horizontalaxisDB.Color_Data.Valid = true
+
+	horizontalaxisDB.FillOpacity_Data.Float64 = horizontalaxis.FillOpacity
+	horizontalaxisDB.FillOpacity_Data.Valid = true
+
+	horizontalaxisDB.Stroke_Data.String = horizontalaxis.Stroke
+	horizontalaxisDB.Stroke_Data.Valid = true
+
+	horizontalaxisDB.StrokeOpacity_Data.Float64 = horizontalaxis.StrokeOpacity
+	horizontalaxisDB.StrokeOpacity_Data.Valid = true
+
 	horizontalaxisDB.StrokeWidth_Data.Float64 = horizontalaxis.StrokeWidth
 	horizontalaxisDB.StrokeWidth_Data.Valid = true
+
+	horizontalaxisDB.StrokeDashArray_Data.String = horizontalaxis.StrokeDashArray
+	horizontalaxisDB.StrokeDashArray_Data.Valid = true
+
+	horizontalaxisDB.StrokeDashArrayWhenSelected_Data.String = horizontalaxis.StrokeDashArrayWhenSelected
+	horizontalaxisDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	horizontalaxisDB.Transform_Data.String = horizontalaxis.Transform
+	horizontalaxisDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromHorizontalAxis_WOP
@@ -415,8 +478,29 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxis_WOP(
 	horizontalaxisDB.Axis_Length_Data.Float64 = horizontalaxis.Axis_Length
 	horizontalaxisDB.Axis_Length_Data.Valid = true
 
+	horizontalaxisDB.Color_Data.String = horizontalaxis.Color
+	horizontalaxisDB.Color_Data.Valid = true
+
+	horizontalaxisDB.FillOpacity_Data.Float64 = horizontalaxis.FillOpacity
+	horizontalaxisDB.FillOpacity_Data.Valid = true
+
+	horizontalaxisDB.Stroke_Data.String = horizontalaxis.Stroke
+	horizontalaxisDB.Stroke_Data.Valid = true
+
+	horizontalaxisDB.StrokeOpacity_Data.Float64 = horizontalaxis.StrokeOpacity
+	horizontalaxisDB.StrokeOpacity_Data.Valid = true
+
 	horizontalaxisDB.StrokeWidth_Data.Float64 = horizontalaxis.StrokeWidth
 	horizontalaxisDB.StrokeWidth_Data.Valid = true
+
+	horizontalaxisDB.StrokeDashArray_Data.String = horizontalaxis.StrokeDashArray
+	horizontalaxisDB.StrokeDashArray_Data.Valid = true
+
+	horizontalaxisDB.StrokeDashArrayWhenSelected_Data.String = horizontalaxis.StrokeDashArrayWhenSelected
+	horizontalaxisDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	horizontalaxisDB.Transform_Data.String = horizontalaxis.Transform
+	horizontalaxisDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromHorizontalAxisWOP
@@ -435,8 +519,29 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsFromHorizontalAxisWOP(h
 	horizontalaxisDB.Axis_Length_Data.Float64 = horizontalaxis.Axis_Length
 	horizontalaxisDB.Axis_Length_Data.Valid = true
 
+	horizontalaxisDB.Color_Data.String = horizontalaxis.Color
+	horizontalaxisDB.Color_Data.Valid = true
+
+	horizontalaxisDB.FillOpacity_Data.Float64 = horizontalaxis.FillOpacity
+	horizontalaxisDB.FillOpacity_Data.Valid = true
+
+	horizontalaxisDB.Stroke_Data.String = horizontalaxis.Stroke
+	horizontalaxisDB.Stroke_Data.Valid = true
+
+	horizontalaxisDB.StrokeOpacity_Data.Float64 = horizontalaxis.StrokeOpacity
+	horizontalaxisDB.StrokeOpacity_Data.Valid = true
+
 	horizontalaxisDB.StrokeWidth_Data.Float64 = horizontalaxis.StrokeWidth
 	horizontalaxisDB.StrokeWidth_Data.Valid = true
+
+	horizontalaxisDB.StrokeDashArray_Data.String = horizontalaxis.StrokeDashArray
+	horizontalaxisDB.StrokeDashArray_Data.Valid = true
+
+	horizontalaxisDB.StrokeDashArrayWhenSelected_Data.String = horizontalaxis.StrokeDashArrayWhenSelected
+	horizontalaxisDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	horizontalaxisDB.Transform_Data.String = horizontalaxis.Transform
+	horizontalaxisDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsToHorizontalAxis
@@ -446,7 +551,14 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxis(horizo
 	horizontalaxis.IsDisplayed = horizontalaxisDB.IsDisplayed_Data.Bool
 	horizontalaxis.AxisHandleBorderLength = horizontalaxisDB.AxisHandleBorderLength_Data.Float64
 	horizontalaxis.Axis_Length = horizontalaxisDB.Axis_Length_Data.Float64
+	horizontalaxis.Color = horizontalaxisDB.Color_Data.String
+	horizontalaxis.FillOpacity = horizontalaxisDB.FillOpacity_Data.Float64
+	horizontalaxis.Stroke = horizontalaxisDB.Stroke_Data.String
+	horizontalaxis.StrokeOpacity = horizontalaxisDB.StrokeOpacity_Data.Float64
 	horizontalaxis.StrokeWidth = horizontalaxisDB.StrokeWidth_Data.Float64
+	horizontalaxis.StrokeDashArray = horizontalaxisDB.StrokeDashArray_Data.String
+	horizontalaxis.StrokeDashArrayWhenSelected = horizontalaxisDB.StrokeDashArrayWhenSelected_Data.String
+	horizontalaxis.Transform = horizontalaxisDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToHorizontalAxis_WOP
@@ -456,7 +568,14 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxis_WOP(ho
 	horizontalaxis.IsDisplayed = horizontalaxisDB.IsDisplayed_Data.Bool
 	horizontalaxis.AxisHandleBorderLength = horizontalaxisDB.AxisHandleBorderLength_Data.Float64
 	horizontalaxis.Axis_Length = horizontalaxisDB.Axis_Length_Data.Float64
+	horizontalaxis.Color = horizontalaxisDB.Color_Data.String
+	horizontalaxis.FillOpacity = horizontalaxisDB.FillOpacity_Data.Float64
+	horizontalaxis.Stroke = horizontalaxisDB.Stroke_Data.String
+	horizontalaxis.StrokeOpacity = horizontalaxisDB.StrokeOpacity_Data.Float64
 	horizontalaxis.StrokeWidth = horizontalaxisDB.StrokeWidth_Data.Float64
+	horizontalaxis.StrokeDashArray = horizontalaxisDB.StrokeDashArray_Data.String
+	horizontalaxis.StrokeDashArrayWhenSelected = horizontalaxisDB.StrokeDashArrayWhenSelected_Data.String
+	horizontalaxis.Transform = horizontalaxisDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToHorizontalAxisWOP
@@ -467,7 +586,14 @@ func (horizontalaxisDB *HorizontalAxisDB) CopyBasicFieldsToHorizontalAxisWOP(hor
 	horizontalaxis.IsDisplayed = horizontalaxisDB.IsDisplayed_Data.Bool
 	horizontalaxis.AxisHandleBorderLength = horizontalaxisDB.AxisHandleBorderLength_Data.Float64
 	horizontalaxis.Axis_Length = horizontalaxisDB.Axis_Length_Data.Float64
+	horizontalaxis.Color = horizontalaxisDB.Color_Data.String
+	horizontalaxis.FillOpacity = horizontalaxisDB.FillOpacity_Data.Float64
+	horizontalaxis.Stroke = horizontalaxisDB.Stroke_Data.String
+	horizontalaxis.StrokeOpacity = horizontalaxisDB.StrokeOpacity_Data.Float64
 	horizontalaxis.StrokeWidth = horizontalaxisDB.StrokeWidth_Data.Float64
+	horizontalaxis.StrokeDashArray = horizontalaxisDB.StrokeDashArray_Data.String
+	horizontalaxis.StrokeDashArrayWhenSelected = horizontalaxisDB.StrokeDashArrayWhenSelected_Data.String
+	horizontalaxis.Transform = horizontalaxisDB.Transform_Data.String
 }
 
 // Backup generates a json file from a slice of all HorizontalAxisDB instances in the backrepo

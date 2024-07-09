@@ -81,8 +81,29 @@ type RhombusDB struct {
 	// Declation for basic field rhombusDB.InsideAngle
 	InsideAngle_Data sql.NullFloat64
 
+	// Declation for basic field rhombusDB.Color
+	Color_Data sql.NullString
+
+	// Declation for basic field rhombusDB.FillOpacity
+	FillOpacity_Data sql.NullFloat64
+
+	// Declation for basic field rhombusDB.Stroke
+	Stroke_Data sql.NullString
+
+	// Declation for basic field rhombusDB.StrokeOpacity
+	StrokeOpacity_Data sql.NullFloat64
+
 	// Declation for basic field rhombusDB.StrokeWidth
 	StrokeWidth_Data sql.NullFloat64
+
+	// Declation for basic field rhombusDB.StrokeDashArray
+	StrokeDashArray_Data sql.NullString
+
+	// Declation for basic field rhombusDB.StrokeDashArrayWhenSelected
+	StrokeDashArrayWhenSelected_Data sql.NullString
+
+	// Declation for basic field rhombusDB.Transform
+	Transform_Data sql.NullString
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -120,7 +141,21 @@ type RhombusWOP struct {
 
 	InsideAngle float64 `xlsx:"7"`
 
-	StrokeWidth float64 `xlsx:"8"`
+	Color string `xlsx:"8"`
+
+	FillOpacity float64 `xlsx:"9"`
+
+	Stroke string `xlsx:"10"`
+
+	StrokeOpacity float64 `xlsx:"11"`
+
+	StrokeWidth float64 `xlsx:"12"`
+
+	StrokeDashArray string `xlsx:"13"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"14"`
+
+	Transform string `xlsx:"15"`
 	// insertion for WOP pointer fields
 }
 
@@ -134,7 +169,14 @@ var Rhombus_Fields = []string{
 	"SideLength",
 	"Angle",
 	"InsideAngle",
+	"Color",
+	"FillOpacity",
+	"Stroke",
+	"StrokeOpacity",
 	"StrokeWidth",
+	"StrokeDashArray",
+	"StrokeDashArrayWhenSelected",
+	"Transform",
 }
 
 type BackRepoRhombusStruct struct {
@@ -422,8 +464,29 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombus(rhombus *models.Rhombus) 
 	rhombusDB.InsideAngle_Data.Float64 = rhombus.InsideAngle
 	rhombusDB.InsideAngle_Data.Valid = true
 
+	rhombusDB.Color_Data.String = rhombus.Color
+	rhombusDB.Color_Data.Valid = true
+
+	rhombusDB.FillOpacity_Data.Float64 = rhombus.FillOpacity
+	rhombusDB.FillOpacity_Data.Valid = true
+
+	rhombusDB.Stroke_Data.String = rhombus.Stroke
+	rhombusDB.Stroke_Data.Valid = true
+
+	rhombusDB.StrokeOpacity_Data.Float64 = rhombus.StrokeOpacity
+	rhombusDB.StrokeOpacity_Data.Valid = true
+
 	rhombusDB.StrokeWidth_Data.Float64 = rhombus.StrokeWidth
 	rhombusDB.StrokeWidth_Data.Valid = true
+
+	rhombusDB.StrokeDashArray_Data.String = rhombus.StrokeDashArray
+	rhombusDB.StrokeDashArray_Data.Valid = true
+
+	rhombusDB.StrokeDashArrayWhenSelected_Data.String = rhombus.StrokeDashArrayWhenSelected
+	rhombusDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	rhombusDB.Transform_Data.String = rhombus.Transform
+	rhombusDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromRhombus_WOP
@@ -451,8 +514,29 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombus_WOP(rhombus *models.Rhomb
 	rhombusDB.InsideAngle_Data.Float64 = rhombus.InsideAngle
 	rhombusDB.InsideAngle_Data.Valid = true
 
+	rhombusDB.Color_Data.String = rhombus.Color
+	rhombusDB.Color_Data.Valid = true
+
+	rhombusDB.FillOpacity_Data.Float64 = rhombus.FillOpacity
+	rhombusDB.FillOpacity_Data.Valid = true
+
+	rhombusDB.Stroke_Data.String = rhombus.Stroke
+	rhombusDB.Stroke_Data.Valid = true
+
+	rhombusDB.StrokeOpacity_Data.Float64 = rhombus.StrokeOpacity
+	rhombusDB.StrokeOpacity_Data.Valid = true
+
 	rhombusDB.StrokeWidth_Data.Float64 = rhombus.StrokeWidth
 	rhombusDB.StrokeWidth_Data.Valid = true
+
+	rhombusDB.StrokeDashArray_Data.String = rhombus.StrokeDashArray
+	rhombusDB.StrokeDashArray_Data.Valid = true
+
+	rhombusDB.StrokeDashArrayWhenSelected_Data.String = rhombus.StrokeDashArrayWhenSelected
+	rhombusDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	rhombusDB.Transform_Data.String = rhombus.Transform
+	rhombusDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromRhombusWOP
@@ -480,8 +564,29 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombusWOP(rhombus *RhombusWOP) {
 	rhombusDB.InsideAngle_Data.Float64 = rhombus.InsideAngle
 	rhombusDB.InsideAngle_Data.Valid = true
 
+	rhombusDB.Color_Data.String = rhombus.Color
+	rhombusDB.Color_Data.Valid = true
+
+	rhombusDB.FillOpacity_Data.Float64 = rhombus.FillOpacity
+	rhombusDB.FillOpacity_Data.Valid = true
+
+	rhombusDB.Stroke_Data.String = rhombus.Stroke
+	rhombusDB.Stroke_Data.Valid = true
+
+	rhombusDB.StrokeOpacity_Data.Float64 = rhombus.StrokeOpacity
+	rhombusDB.StrokeOpacity_Data.Valid = true
+
 	rhombusDB.StrokeWidth_Data.Float64 = rhombus.StrokeWidth
 	rhombusDB.StrokeWidth_Data.Valid = true
+
+	rhombusDB.StrokeDashArray_Data.String = rhombus.StrokeDashArray
+	rhombusDB.StrokeDashArray_Data.Valid = true
+
+	rhombusDB.StrokeDashArrayWhenSelected_Data.String = rhombus.StrokeDashArrayWhenSelected
+	rhombusDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	rhombusDB.Transform_Data.String = rhombus.Transform
+	rhombusDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsToRhombus
@@ -494,7 +599,14 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsToRhombus(rhombus *models.Rhombus) {
 	rhombus.SideLength = rhombusDB.SideLength_Data.Float64
 	rhombus.Angle = rhombusDB.Angle_Data.Float64
 	rhombus.InsideAngle = rhombusDB.InsideAngle_Data.Float64
+	rhombus.Color = rhombusDB.Color_Data.String
+	rhombus.FillOpacity = rhombusDB.FillOpacity_Data.Float64
+	rhombus.Stroke = rhombusDB.Stroke_Data.String
+	rhombus.StrokeOpacity = rhombusDB.StrokeOpacity_Data.Float64
 	rhombus.StrokeWidth = rhombusDB.StrokeWidth_Data.Float64
+	rhombus.StrokeDashArray = rhombusDB.StrokeDashArray_Data.String
+	rhombus.StrokeDashArrayWhenSelected = rhombusDB.StrokeDashArrayWhenSelected_Data.String
+	rhombus.Transform = rhombusDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToRhombus_WOP
@@ -507,7 +619,14 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsToRhombus_WOP(rhombus *models.Rhombus
 	rhombus.SideLength = rhombusDB.SideLength_Data.Float64
 	rhombus.Angle = rhombusDB.Angle_Data.Float64
 	rhombus.InsideAngle = rhombusDB.InsideAngle_Data.Float64
+	rhombus.Color = rhombusDB.Color_Data.String
+	rhombus.FillOpacity = rhombusDB.FillOpacity_Data.Float64
+	rhombus.Stroke = rhombusDB.Stroke_Data.String
+	rhombus.StrokeOpacity = rhombusDB.StrokeOpacity_Data.Float64
 	rhombus.StrokeWidth = rhombusDB.StrokeWidth_Data.Float64
+	rhombus.StrokeDashArray = rhombusDB.StrokeDashArray_Data.String
+	rhombus.StrokeDashArrayWhenSelected = rhombusDB.StrokeDashArrayWhenSelected_Data.String
+	rhombus.Transform = rhombusDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToRhombusWOP
@@ -521,7 +640,14 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsToRhombusWOP(rhombus *RhombusWOP) {
 	rhombus.SideLength = rhombusDB.SideLength_Data.Float64
 	rhombus.Angle = rhombusDB.Angle_Data.Float64
 	rhombus.InsideAngle = rhombusDB.InsideAngle_Data.Float64
+	rhombus.Color = rhombusDB.Color_Data.String
+	rhombus.FillOpacity = rhombusDB.FillOpacity_Data.Float64
+	rhombus.Stroke = rhombusDB.Stroke_Data.String
+	rhombus.StrokeOpacity = rhombusDB.StrokeOpacity_Data.Float64
 	rhombus.StrokeWidth = rhombusDB.StrokeWidth_Data.Float64
+	rhombus.StrokeDashArray = rhombusDB.StrokeDashArray_Data.String
+	rhombus.StrokeDashArrayWhenSelected = rhombusDB.StrokeDashArrayWhenSelected_Data.String
+	rhombus.Transform = rhombusDB.Transform_Data.String
 }
 
 // Backup generates a json file from a slice of all RhombusDB instances in the backrepo

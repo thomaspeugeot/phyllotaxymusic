@@ -72,8 +72,29 @@ type VerticalAxisDB struct {
 	// Declation for basic field verticalaxisDB.Axis_Length
 	Axis_Length_Data sql.NullFloat64
 
+	// Declation for basic field verticalaxisDB.Color
+	Color_Data sql.NullString
+
+	// Declation for basic field verticalaxisDB.FillOpacity
+	FillOpacity_Data sql.NullFloat64
+
+	// Declation for basic field verticalaxisDB.Stroke
+	Stroke_Data sql.NullString
+
+	// Declation for basic field verticalaxisDB.StrokeOpacity
+	StrokeOpacity_Data sql.NullFloat64
+
 	// Declation for basic field verticalaxisDB.StrokeWidth
 	StrokeWidth_Data sql.NullFloat64
+
+	// Declation for basic field verticalaxisDB.StrokeDashArray
+	StrokeDashArray_Data sql.NullString
+
+	// Declation for basic field verticalaxisDB.StrokeDashArrayWhenSelected
+	StrokeDashArrayWhenSelected_Data sql.NullString
+
+	// Declation for basic field verticalaxisDB.Transform
+	Transform_Data sql.NullString
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -105,7 +126,21 @@ type VerticalAxisWOP struct {
 
 	Axis_Length float64 `xlsx:"4"`
 
-	StrokeWidth float64 `xlsx:"5"`
+	Color string `xlsx:"5"`
+
+	FillOpacity float64 `xlsx:"6"`
+
+	Stroke string `xlsx:"7"`
+
+	StrokeOpacity float64 `xlsx:"8"`
+
+	StrokeWidth float64 `xlsx:"9"`
+
+	StrokeDashArray string `xlsx:"10"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"11"`
+
+	Transform string `xlsx:"12"`
 	// insertion for WOP pointer fields
 }
 
@@ -116,7 +151,14 @@ var VerticalAxis_Fields = []string{
 	"IsDisplayed",
 	"AxisHandleBorderLength",
 	"Axis_Length",
+	"Color",
+	"FillOpacity",
+	"Stroke",
+	"StrokeOpacity",
 	"StrokeWidth",
+	"StrokeDashArray",
+	"StrokeDashArrayWhenSelected",
+	"Transform",
 }
 
 type BackRepoVerticalAxisStruct struct {
@@ -395,8 +437,29 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxis(verticalax
 	verticalaxisDB.Axis_Length_Data.Float64 = verticalaxis.Axis_Length
 	verticalaxisDB.Axis_Length_Data.Valid = true
 
+	verticalaxisDB.Color_Data.String = verticalaxis.Color
+	verticalaxisDB.Color_Data.Valid = true
+
+	verticalaxisDB.FillOpacity_Data.Float64 = verticalaxis.FillOpacity
+	verticalaxisDB.FillOpacity_Data.Valid = true
+
+	verticalaxisDB.Stroke_Data.String = verticalaxis.Stroke
+	verticalaxisDB.Stroke_Data.Valid = true
+
+	verticalaxisDB.StrokeOpacity_Data.Float64 = verticalaxis.StrokeOpacity
+	verticalaxisDB.StrokeOpacity_Data.Valid = true
+
 	verticalaxisDB.StrokeWidth_Data.Float64 = verticalaxis.StrokeWidth
 	verticalaxisDB.StrokeWidth_Data.Valid = true
+
+	verticalaxisDB.StrokeDashArray_Data.String = verticalaxis.StrokeDashArray
+	verticalaxisDB.StrokeDashArray_Data.Valid = true
+
+	verticalaxisDB.StrokeDashArrayWhenSelected_Data.String = verticalaxis.StrokeDashArrayWhenSelected
+	verticalaxisDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	verticalaxisDB.Transform_Data.String = verticalaxis.Transform
+	verticalaxisDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromVerticalAxis_WOP
@@ -415,8 +478,29 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxis_WOP(vertic
 	verticalaxisDB.Axis_Length_Data.Float64 = verticalaxis.Axis_Length
 	verticalaxisDB.Axis_Length_Data.Valid = true
 
+	verticalaxisDB.Color_Data.String = verticalaxis.Color
+	verticalaxisDB.Color_Data.Valid = true
+
+	verticalaxisDB.FillOpacity_Data.Float64 = verticalaxis.FillOpacity
+	verticalaxisDB.FillOpacity_Data.Valid = true
+
+	verticalaxisDB.Stroke_Data.String = verticalaxis.Stroke
+	verticalaxisDB.Stroke_Data.Valid = true
+
+	verticalaxisDB.StrokeOpacity_Data.Float64 = verticalaxis.StrokeOpacity
+	verticalaxisDB.StrokeOpacity_Data.Valid = true
+
 	verticalaxisDB.StrokeWidth_Data.Float64 = verticalaxis.StrokeWidth
 	verticalaxisDB.StrokeWidth_Data.Valid = true
+
+	verticalaxisDB.StrokeDashArray_Data.String = verticalaxis.StrokeDashArray
+	verticalaxisDB.StrokeDashArray_Data.Valid = true
+
+	verticalaxisDB.StrokeDashArrayWhenSelected_Data.String = verticalaxis.StrokeDashArrayWhenSelected
+	verticalaxisDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	verticalaxisDB.Transform_Data.String = verticalaxis.Transform
+	verticalaxisDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromVerticalAxisWOP
@@ -435,8 +519,29 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsFromVerticalAxisWOP(vertica
 	verticalaxisDB.Axis_Length_Data.Float64 = verticalaxis.Axis_Length
 	verticalaxisDB.Axis_Length_Data.Valid = true
 
+	verticalaxisDB.Color_Data.String = verticalaxis.Color
+	verticalaxisDB.Color_Data.Valid = true
+
+	verticalaxisDB.FillOpacity_Data.Float64 = verticalaxis.FillOpacity
+	verticalaxisDB.FillOpacity_Data.Valid = true
+
+	verticalaxisDB.Stroke_Data.String = verticalaxis.Stroke
+	verticalaxisDB.Stroke_Data.Valid = true
+
+	verticalaxisDB.StrokeOpacity_Data.Float64 = verticalaxis.StrokeOpacity
+	verticalaxisDB.StrokeOpacity_Data.Valid = true
+
 	verticalaxisDB.StrokeWidth_Data.Float64 = verticalaxis.StrokeWidth
 	verticalaxisDB.StrokeWidth_Data.Valid = true
+
+	verticalaxisDB.StrokeDashArray_Data.String = verticalaxis.StrokeDashArray
+	verticalaxisDB.StrokeDashArray_Data.Valid = true
+
+	verticalaxisDB.StrokeDashArrayWhenSelected_Data.String = verticalaxis.StrokeDashArrayWhenSelected
+	verticalaxisDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	verticalaxisDB.Transform_Data.String = verticalaxis.Transform
+	verticalaxisDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsToVerticalAxis
@@ -446,7 +551,14 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxis(verticalaxis
 	verticalaxis.IsDisplayed = verticalaxisDB.IsDisplayed_Data.Bool
 	verticalaxis.AxisHandleBorderLength = verticalaxisDB.AxisHandleBorderLength_Data.Float64
 	verticalaxis.Axis_Length = verticalaxisDB.Axis_Length_Data.Float64
+	verticalaxis.Color = verticalaxisDB.Color_Data.String
+	verticalaxis.FillOpacity = verticalaxisDB.FillOpacity_Data.Float64
+	verticalaxis.Stroke = verticalaxisDB.Stroke_Data.String
+	verticalaxis.StrokeOpacity = verticalaxisDB.StrokeOpacity_Data.Float64
 	verticalaxis.StrokeWidth = verticalaxisDB.StrokeWidth_Data.Float64
+	verticalaxis.StrokeDashArray = verticalaxisDB.StrokeDashArray_Data.String
+	verticalaxis.StrokeDashArrayWhenSelected = verticalaxisDB.StrokeDashArrayWhenSelected_Data.String
+	verticalaxis.Transform = verticalaxisDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToVerticalAxis_WOP
@@ -456,7 +568,14 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxis_WOP(vertical
 	verticalaxis.IsDisplayed = verticalaxisDB.IsDisplayed_Data.Bool
 	verticalaxis.AxisHandleBorderLength = verticalaxisDB.AxisHandleBorderLength_Data.Float64
 	verticalaxis.Axis_Length = verticalaxisDB.Axis_Length_Data.Float64
+	verticalaxis.Color = verticalaxisDB.Color_Data.String
+	verticalaxis.FillOpacity = verticalaxisDB.FillOpacity_Data.Float64
+	verticalaxis.Stroke = verticalaxisDB.Stroke_Data.String
+	verticalaxis.StrokeOpacity = verticalaxisDB.StrokeOpacity_Data.Float64
 	verticalaxis.StrokeWidth = verticalaxisDB.StrokeWidth_Data.Float64
+	verticalaxis.StrokeDashArray = verticalaxisDB.StrokeDashArray_Data.String
+	verticalaxis.StrokeDashArrayWhenSelected = verticalaxisDB.StrokeDashArrayWhenSelected_Data.String
+	verticalaxis.Transform = verticalaxisDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToVerticalAxisWOP
@@ -467,7 +586,14 @@ func (verticalaxisDB *VerticalAxisDB) CopyBasicFieldsToVerticalAxisWOP(verticala
 	verticalaxis.IsDisplayed = verticalaxisDB.IsDisplayed_Data.Bool
 	verticalaxis.AxisHandleBorderLength = verticalaxisDB.AxisHandleBorderLength_Data.Float64
 	verticalaxis.Axis_Length = verticalaxisDB.Axis_Length_Data.Float64
+	verticalaxis.Color = verticalaxisDB.Color_Data.String
+	verticalaxis.FillOpacity = verticalaxisDB.FillOpacity_Data.Float64
+	verticalaxis.Stroke = verticalaxisDB.Stroke_Data.String
+	verticalaxis.StrokeOpacity = verticalaxisDB.StrokeOpacity_Data.Float64
 	verticalaxis.StrokeWidth = verticalaxisDB.StrokeWidth_Data.Float64
+	verticalaxis.StrokeDashArray = verticalaxisDB.StrokeDashArray_Data.String
+	verticalaxis.StrokeDashArrayWhenSelected = verticalaxisDB.StrokeDashArrayWhenSelected_Data.String
+	verticalaxis.Transform = verticalaxisDB.Transform_Data.String
 }
 
 // Backup generates a json file from a slice of all VerticalAxisDB instances in the backrepo

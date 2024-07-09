@@ -72,8 +72,29 @@ type InitialAxisDB struct {
 	// Declation for basic field initialaxisDB.Length
 	Length_Data sql.NullFloat64
 
+	// Declation for basic field initialaxisDB.Color
+	Color_Data sql.NullString
+
+	// Declation for basic field initialaxisDB.FillOpacity
+	FillOpacity_Data sql.NullFloat64
+
+	// Declation for basic field initialaxisDB.Stroke
+	Stroke_Data sql.NullString
+
+	// Declation for basic field initialaxisDB.StrokeOpacity
+	StrokeOpacity_Data sql.NullFloat64
+
 	// Declation for basic field initialaxisDB.StrokeWidth
 	StrokeWidth_Data sql.NullFloat64
+
+	// Declation for basic field initialaxisDB.StrokeDashArray
+	StrokeDashArray_Data sql.NullString
+
+	// Declation for basic field initialaxisDB.StrokeDashArrayWhenSelected
+	StrokeDashArrayWhenSelected_Data sql.NullString
+
+	// Declation for basic field initialaxisDB.Transform
+	Transform_Data sql.NullString
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -105,7 +126,21 @@ type InitialAxisWOP struct {
 
 	Length float64 `xlsx:"4"`
 
-	StrokeWidth float64 `xlsx:"5"`
+	Color string `xlsx:"5"`
+
+	FillOpacity float64 `xlsx:"6"`
+
+	Stroke string `xlsx:"7"`
+
+	StrokeOpacity float64 `xlsx:"8"`
+
+	StrokeWidth float64 `xlsx:"9"`
+
+	StrokeDashArray string `xlsx:"10"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"11"`
+
+	Transform string `xlsx:"12"`
 	// insertion for WOP pointer fields
 }
 
@@ -116,7 +151,14 @@ var InitialAxis_Fields = []string{
 	"IsDisplayed",
 	"Angle",
 	"Length",
+	"Color",
+	"FillOpacity",
+	"Stroke",
+	"StrokeOpacity",
 	"StrokeWidth",
+	"StrokeDashArray",
+	"StrokeDashArrayWhenSelected",
+	"Transform",
 }
 
 type BackRepoInitialAxisStruct struct {
@@ -395,8 +437,29 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsFromInitialAxis(initialaxis *
 	initialaxisDB.Length_Data.Float64 = initialaxis.Length
 	initialaxisDB.Length_Data.Valid = true
 
+	initialaxisDB.Color_Data.String = initialaxis.Color
+	initialaxisDB.Color_Data.Valid = true
+
+	initialaxisDB.FillOpacity_Data.Float64 = initialaxis.FillOpacity
+	initialaxisDB.FillOpacity_Data.Valid = true
+
+	initialaxisDB.Stroke_Data.String = initialaxis.Stroke
+	initialaxisDB.Stroke_Data.Valid = true
+
+	initialaxisDB.StrokeOpacity_Data.Float64 = initialaxis.StrokeOpacity
+	initialaxisDB.StrokeOpacity_Data.Valid = true
+
 	initialaxisDB.StrokeWidth_Data.Float64 = initialaxis.StrokeWidth
 	initialaxisDB.StrokeWidth_Data.Valid = true
+
+	initialaxisDB.StrokeDashArray_Data.String = initialaxis.StrokeDashArray
+	initialaxisDB.StrokeDashArray_Data.Valid = true
+
+	initialaxisDB.StrokeDashArrayWhenSelected_Data.String = initialaxis.StrokeDashArrayWhenSelected
+	initialaxisDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	initialaxisDB.Transform_Data.String = initialaxis.Transform
+	initialaxisDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromInitialAxis_WOP
@@ -415,8 +478,29 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsFromInitialAxis_WOP(initialax
 	initialaxisDB.Length_Data.Float64 = initialaxis.Length
 	initialaxisDB.Length_Data.Valid = true
 
+	initialaxisDB.Color_Data.String = initialaxis.Color
+	initialaxisDB.Color_Data.Valid = true
+
+	initialaxisDB.FillOpacity_Data.Float64 = initialaxis.FillOpacity
+	initialaxisDB.FillOpacity_Data.Valid = true
+
+	initialaxisDB.Stroke_Data.String = initialaxis.Stroke
+	initialaxisDB.Stroke_Data.Valid = true
+
+	initialaxisDB.StrokeOpacity_Data.Float64 = initialaxis.StrokeOpacity
+	initialaxisDB.StrokeOpacity_Data.Valid = true
+
 	initialaxisDB.StrokeWidth_Data.Float64 = initialaxis.StrokeWidth
 	initialaxisDB.StrokeWidth_Data.Valid = true
+
+	initialaxisDB.StrokeDashArray_Data.String = initialaxis.StrokeDashArray
+	initialaxisDB.StrokeDashArray_Data.Valid = true
+
+	initialaxisDB.StrokeDashArrayWhenSelected_Data.String = initialaxis.StrokeDashArrayWhenSelected
+	initialaxisDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	initialaxisDB.Transform_Data.String = initialaxis.Transform
+	initialaxisDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromInitialAxisWOP
@@ -435,8 +519,29 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsFromInitialAxisWOP(initialaxi
 	initialaxisDB.Length_Data.Float64 = initialaxis.Length
 	initialaxisDB.Length_Data.Valid = true
 
+	initialaxisDB.Color_Data.String = initialaxis.Color
+	initialaxisDB.Color_Data.Valid = true
+
+	initialaxisDB.FillOpacity_Data.Float64 = initialaxis.FillOpacity
+	initialaxisDB.FillOpacity_Data.Valid = true
+
+	initialaxisDB.Stroke_Data.String = initialaxis.Stroke
+	initialaxisDB.Stroke_Data.Valid = true
+
+	initialaxisDB.StrokeOpacity_Data.Float64 = initialaxis.StrokeOpacity
+	initialaxisDB.StrokeOpacity_Data.Valid = true
+
 	initialaxisDB.StrokeWidth_Data.Float64 = initialaxis.StrokeWidth
 	initialaxisDB.StrokeWidth_Data.Valid = true
+
+	initialaxisDB.StrokeDashArray_Data.String = initialaxis.StrokeDashArray
+	initialaxisDB.StrokeDashArray_Data.Valid = true
+
+	initialaxisDB.StrokeDashArrayWhenSelected_Data.String = initialaxis.StrokeDashArrayWhenSelected
+	initialaxisDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	initialaxisDB.Transform_Data.String = initialaxis.Transform
+	initialaxisDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsToInitialAxis
@@ -446,7 +551,14 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsToInitialAxis(initialaxis *mo
 	initialaxis.IsDisplayed = initialaxisDB.IsDisplayed_Data.Bool
 	initialaxis.Angle = initialaxisDB.Angle_Data.Float64
 	initialaxis.Length = initialaxisDB.Length_Data.Float64
+	initialaxis.Color = initialaxisDB.Color_Data.String
+	initialaxis.FillOpacity = initialaxisDB.FillOpacity_Data.Float64
+	initialaxis.Stroke = initialaxisDB.Stroke_Data.String
+	initialaxis.StrokeOpacity = initialaxisDB.StrokeOpacity_Data.Float64
 	initialaxis.StrokeWidth = initialaxisDB.StrokeWidth_Data.Float64
+	initialaxis.StrokeDashArray = initialaxisDB.StrokeDashArray_Data.String
+	initialaxis.StrokeDashArrayWhenSelected = initialaxisDB.StrokeDashArrayWhenSelected_Data.String
+	initialaxis.Transform = initialaxisDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToInitialAxis_WOP
@@ -456,7 +568,14 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsToInitialAxis_WOP(initialaxis
 	initialaxis.IsDisplayed = initialaxisDB.IsDisplayed_Data.Bool
 	initialaxis.Angle = initialaxisDB.Angle_Data.Float64
 	initialaxis.Length = initialaxisDB.Length_Data.Float64
+	initialaxis.Color = initialaxisDB.Color_Data.String
+	initialaxis.FillOpacity = initialaxisDB.FillOpacity_Data.Float64
+	initialaxis.Stroke = initialaxisDB.Stroke_Data.String
+	initialaxis.StrokeOpacity = initialaxisDB.StrokeOpacity_Data.Float64
 	initialaxis.StrokeWidth = initialaxisDB.StrokeWidth_Data.Float64
+	initialaxis.StrokeDashArray = initialaxisDB.StrokeDashArray_Data.String
+	initialaxis.StrokeDashArrayWhenSelected = initialaxisDB.StrokeDashArrayWhenSelected_Data.String
+	initialaxis.Transform = initialaxisDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToInitialAxisWOP
@@ -467,7 +586,14 @@ func (initialaxisDB *InitialAxisDB) CopyBasicFieldsToInitialAxisWOP(initialaxis 
 	initialaxis.IsDisplayed = initialaxisDB.IsDisplayed_Data.Bool
 	initialaxis.Angle = initialaxisDB.Angle_Data.Float64
 	initialaxis.Length = initialaxisDB.Length_Data.Float64
+	initialaxis.Color = initialaxisDB.Color_Data.String
+	initialaxis.FillOpacity = initialaxisDB.FillOpacity_Data.Float64
+	initialaxis.Stroke = initialaxisDB.Stroke_Data.String
+	initialaxis.StrokeOpacity = initialaxisDB.StrokeOpacity_Data.Float64
 	initialaxis.StrokeWidth = initialaxisDB.StrokeWidth_Data.Float64
+	initialaxis.StrokeDashArray = initialaxisDB.StrokeDashArray_Data.String
+	initialaxis.StrokeDashArrayWhenSelected = initialaxisDB.StrokeDashArrayWhenSelected_Data.String
+	initialaxis.Transform = initialaxisDB.Transform_Data.String
 }
 
 // Backup generates a json file from a slice of all InitialAxisDB instances in the backrepo
