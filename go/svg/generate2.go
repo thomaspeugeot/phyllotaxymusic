@@ -39,7 +39,9 @@ func GenerateSvg2(gongsvgStage *gongsvg_models.StageStruct, parameter *phylotaxy
 	if parameter.RotatedAxis.IsDisplayed {
 		drawAxis(gongsvgStage, layer, parameter, parameter.RotatedAxis)
 	}
-
+	if parameter.RotatedRhombus.IsDisplayed {
+		drawRhombus(gongsvgStage, layer, parameter, parameter.RotatedRhombus)
+	}
 	gongsvgStage.Commit()
 
 }

@@ -46,6 +46,8 @@ export class ParameterPointersEncoding {
 
 	RotatedAxisID: NullInt64 = new NullInt64 // if pointer is null, RotatedAxis.ID = 0
 
+	RotatedRhombusID: NullInt64 = new NullInt64 // if pointer is null, RotatedRhombus.ID = 0
+
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 
 	VerticalAxisID: NullInt64 = new NullInt64 // if pointer is null, VerticalAxis.ID = 0

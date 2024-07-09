@@ -24,7 +24,8 @@ type Parameter struct {
 	InitialCircleGrid  *CircleGrid
 	InitialAxis        *Axis
 
-	RotatedAxis *Axis
+	RotatedAxis    *Axis
+	RotatedRhombus *Rhombus
 
 	// for drawing purpose
 	OriginX        float64
@@ -51,6 +52,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeInitialCircleGrid(stage)
 	p.ComputeInitialAxis()
 	p.computeRotatedAxis()
+	p.computeRotatedRhombus()
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -146,4 +148,10 @@ func (p *Parameter) ComputeInitialAxis() {
 
 func (p *Parameter) computeRotatedAxis() {
 	p.RotatedAxis.Length = p.InitialAxis.Length
+}
+
+func (p *Parameter) computeRotatedRhombus() {
+	p.RotatedRhombus.SideLength = p.InitialRhombus.SideLength
+	p.RotatedRhombus.InsideAngle = p.InitialRhombus.InsideAngle
+	p.RotatedRhombus.Angle = p.InitialAxis.Angle
 }
