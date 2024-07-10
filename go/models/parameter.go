@@ -11,6 +11,7 @@ type Parameter struct {
 	Name string
 	N    int
 	M    int
+	Z    int // number of rhombus
 
 	// InsideAngle is the angle in degree of the diamond at the origin 0,0
 	InsideAngle float64
@@ -35,7 +36,6 @@ type Parameter struct {
 
 	GrowingRhombusGridSeed *Rhombus
 	GrowingRhombusGrid     *RhombusGrid
-	Z                      int // number of rhombus
 
 	// for drawing purpose
 	OriginX        float64
@@ -295,4 +295,5 @@ func (p *Parameter) ComputeGrowingRhombusGrid() {
 
 		p.GrowingRhombusGrid.Rhombuses = append(p.GrowingRhombusGrid.Rhombuses, r)
 	}
+	log.Println("z", p.Z)
 }

@@ -572,6 +572,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.N), formDiv)
 		case "M":
 			FormDivBasicFieldToField(&(parameter_.M), formDiv)
+		case "Z":
+			FormDivBasicFieldToField(&(parameter_.Z), formDiv)
 		case "InsideAngle":
 			FormDivBasicFieldToField(&(parameter_.InsideAngle), formDiv)
 		case "SideLength":
@@ -602,8 +604,6 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.GrowingRhombusGridSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "GrowingRhombusGrid":
 			FormDivSelectFieldToField(&(parameter_.GrowingRhombusGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "Z":
-			FormDivBasicFieldToField(&(parameter_.Z), formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

@@ -128,14 +128,14 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.M
 	M_Data sql.NullInt64
 
+	// Declation for basic field parameterDB.Z
+	Z_Data sql.NullInt64
+
 	// Declation for basic field parameterDB.InsideAngle
 	InsideAngle_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.SideLength
 	SideLength_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.Z
-	Z_Data sql.NullInt64
 
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
@@ -171,11 +171,11 @@ type ParameterWOP struct {
 
 	M int `xlsx:"3"`
 
-	InsideAngle float64 `xlsx:"4"`
+	Z int `xlsx:"4"`
 
-	SideLength float64 `xlsx:"5"`
+	InsideAngle float64 `xlsx:"5"`
 
-	Z int `xlsx:"6"`
+	SideLength float64 `xlsx:"6"`
 
 	OriginX float64 `xlsx:"7"`
 
@@ -189,9 +189,9 @@ var Parameter_Fields = []string{
 	"Name",
 	"N",
 	"M",
+	"Z",
 	"InsideAngle",
 	"SideLength",
-	"Z",
 	"OriginX",
 	"OriginY",
 }
@@ -724,14 +724,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.M_Data.Int64 = int64(parameter.M)
 	parameterDB.M_Data.Valid = true
 
+	parameterDB.Z_Data.Int64 = int64(parameter.Z)
+	parameterDB.Z_Data.Valid = true
+
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
-
-	parameterDB.Z_Data.Int64 = int64(parameter.Z)
-	parameterDB.Z_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -753,14 +753,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.M_Data.Int64 = int64(parameter.M)
 	parameterDB.M_Data.Valid = true
 
+	parameterDB.Z_Data.Int64 = int64(parameter.Z)
+	parameterDB.Z_Data.Valid = true
+
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
-
-	parameterDB.Z_Data.Int64 = int64(parameter.Z)
-	parameterDB.Z_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -782,14 +782,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.M_Data.Int64 = int64(parameter.M)
 	parameterDB.M_Data.Valid = true
 
+	parameterDB.Z_Data.Int64 = int64(parameter.Z)
+	parameterDB.Z_Data.Valid = true
+
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
-
-	parameterDB.Z_Data.Int64 = int64(parameter.Z)
-	parameterDB.Z_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -804,9 +804,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.Name = parameterDB.Name_Data.String
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
+	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
-	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -817,9 +817,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.Name = parameterDB.Name_Data.String
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
+	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
-	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -831,9 +831,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.Name = parameterDB.Name_Data.String
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
+	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
-	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }

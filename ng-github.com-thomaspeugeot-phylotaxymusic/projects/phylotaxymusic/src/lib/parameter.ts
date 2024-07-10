@@ -27,9 +27,9 @@ export class Parameter {
 	Name: string = ""
 	N: number = 0
 	M: number = 0
+	Z: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
-	Z: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -76,9 +76,9 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.Name = parameter.Name
 	parameterAPI.N = parameter.N
 	parameterAPI.M = parameter.M
+	parameterAPI.Z = parameter.Z
 	parameterAPI.InsideAngle = parameter.InsideAngle
 	parameterAPI.SideLength = parameter.SideLength
-	parameterAPI.Z = parameter.Z
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 
@@ -206,9 +206,9 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.Name = parameterAPI.Name
 	parameter.N = parameterAPI.N
 	parameter.M = parameterAPI.M
+	parameter.Z = parameterAPI.Z
 	parameter.InsideAngle = parameterAPI.InsideAngle
 	parameter.SideLength = parameterAPI.SideLength
-	parameter.Z = parameterAPI.Z
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 

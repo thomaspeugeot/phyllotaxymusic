@@ -22,9 +22,9 @@ export class ParameterAPI {
 	Name: string = ""
 	N: number = 0
 	M: number = 0
+	Z: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
-	Z: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
