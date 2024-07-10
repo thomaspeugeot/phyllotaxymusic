@@ -174,7 +174,6 @@ func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
 
 	for _, _r := range p.InitialRhombusGrid.Rhombuses {
 		r := new(Rhombus) // .Stage(stage)
-		g.Rhombuses = append(g.Rhombuses, r)
 		*r = *_r
 		r.SideLength = _r.SideLength
 		r.InsideAngle = _r.InsideAngle
@@ -184,6 +183,14 @@ func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
 
 		r.CenterX = _r.CenterX*cosAngle - _r.CenterY*sinAngle
 		r.CenterY = _r.CenterX*sinAngle + _r.CenterY*cosAngle
+
+		// keep only rhombus above 0
+		if r.CenterY < 0.0 {
+			continue
+		}
+
+		g.Rhombuses = append(g.Rhombuses, r)
+
 	}
 }
 
@@ -202,12 +209,18 @@ func (p *Parameter) computeRotatedCircleGrid(stage *StageStruct) {
 
 	for _, _c := range p.InitialCircleGrid.Circles {
 		c := new(Circle) // .Stage(stage)
-		g.Circles = append(g.Circles, c)
 		*c = *_c
 
 		c.Name += " Rotated"
 
 		c.CenterX = _c.CenterX*cosAngle - _c.CenterY*sinAngle
 		c.CenterY = _c.CenterX*sinAngle + _c.CenterY*cosAngle
+
+		// keep only rhombus above 0
+		if c.CenterY < 0.0 {
+			continue
+		}
+		g.Circles = append(g.Circles, c)
+
 	}
 }
