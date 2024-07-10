@@ -52,9 +52,9 @@ func drawRhombus(
 			X2: x_s[(i+1)%4] + p.OriginX,
 			Y2: p.OriginY - y_s[(i+1)%4],
 			Presentation: gongsvg_models.Presentation{
-				Stroke:        gongsvg_models.Black.ToString(),
+				Stroke:        r.Stroke,
 				StrokeWidth:   r.StrokeWidth,
-				StrokeOpacity: 1,
+				StrokeOpacity: r.StrokeOpacity,
 			},
 		}).Stage(gongsvgStage)
 

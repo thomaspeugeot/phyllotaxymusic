@@ -124,7 +124,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
-	__Parameter__000000_Reference.Z = 1
+	__Parameter__000000_Reference.Z = 5
 	__Parameter__000000_Reference.InsideAngle = 70.000000
 	__Parameter__000000_Reference.SideLength = 100.000000
 	__Parameter__000000_Reference.OriginX = 300.000000
@@ -173,7 +173,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000002_Next_Rhombus.FillOpacity = 0.000000
 	__Rhombus__000002_Next_Rhombus.Stroke = `lavender`
 	__Rhombus__000002_Next_Rhombus.StrokeOpacity = 0.700000
-	__Rhombus__000002_Next_Rhombus.StrokeWidth = 3.000000
+	__Rhombus__000002_Next_Rhombus.StrokeWidth = 6.000000
 	__Rhombus__000002_Next_Rhombus.StrokeDashArray = ``
 	__Rhombus__000002_Next_Rhombus.StrokeDashArrayWhenSelected = ``
 	__Rhombus__000002_Next_Rhombus.Transform = ``
@@ -195,7 +195,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000003_Rotated.Transform = ``
 
 	__RhombusGrid__000000_Growing_Rhombus_Grid.Name = `Growing Rhombus Grid`
-	__RhombusGrid__000000_Growing_Rhombus_Grid.IsDisplayed = true
+	__RhombusGrid__000000_Growing_Rhombus_Grid.IsDisplayed = false
 
 	__RhombusGrid__000001_Initial.Name = `Initial`
 	__RhombusGrid__000001_Initial.IsDisplayed = false
