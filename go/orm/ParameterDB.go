@@ -91,6 +91,14 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	NextCircleID sql.NullInt64
 
+	// field GrowingRhombusGridSeed is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	GrowingRhombusGridSeedID sql.NullInt64
+
+	// field GrowingRhombusGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	GrowingRhombusGridID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -125,6 +133,9 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.SideLength
 	SideLength_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.Z
+	Z_Data sql.NullInt64
 
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
@@ -164,9 +175,11 @@ type ParameterWOP struct {
 
 	SideLength float64 `xlsx:"5"`
 
-	OriginX float64 `xlsx:"6"`
+	Z int `xlsx:"6"`
 
-	OriginY float64 `xlsx:"7"`
+	OriginX float64 `xlsx:"7"`
+
+	OriginY float64 `xlsx:"8"`
 	// insertion for WOP pointer fields
 }
 
@@ -178,6 +191,7 @@ var Parameter_Fields = []string{
 	"M",
 	"InsideAngle",
 	"SideLength",
+	"Z",
 	"OriginX",
 	"OriginY",
 }
@@ -431,6 +445,30 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.NextCircleID.Valid = true
 		}
 
+		// commit pointer value parameter.GrowingRhombusGridSeed translates to updating the parameter.GrowingRhombusGridSeedID
+		parameterDB.GrowingRhombusGridSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowingRhombusGridSeed != nil {
+			if GrowingRhombusGridSeedId, ok := backRepo.BackRepoRhombus.Map_RhombusPtr_RhombusDBID[parameter.GrowingRhombusGridSeed]; ok {
+				parameterDB.GrowingRhombusGridSeedID.Int64 = int64(GrowingRhombusGridSeedId)
+				parameterDB.GrowingRhombusGridSeedID.Valid = true
+			}
+		} else {
+			parameterDB.GrowingRhombusGridSeedID.Int64 = 0
+			parameterDB.GrowingRhombusGridSeedID.Valid = true
+		}
+
+		// commit pointer value parameter.GrowingRhombusGrid translates to updating the parameter.GrowingRhombusGridID
+		parameterDB.GrowingRhombusGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowingRhombusGrid != nil {
+			if GrowingRhombusGridId, ok := backRepo.BackRepoRhombusGrid.Map_RhombusGridPtr_RhombusGridDBID[parameter.GrowingRhombusGrid]; ok {
+				parameterDB.GrowingRhombusGridID.Int64 = int64(GrowingRhombusGridId)
+				parameterDB.GrowingRhombusGridID.Valid = true
+			}
+		} else {
+			parameterDB.GrowingRhombusGridID.Int64 = 0
+			parameterDB.GrowingRhombusGridID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -623,6 +661,16 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.NextCircleID.Int64 != 0 {
 		parameter.NextCircle = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(parameterDB.NextCircleID.Int64)]
 	}
+	// GrowingRhombusGridSeed field
+	parameter.GrowingRhombusGridSeed = nil
+	if parameterDB.GrowingRhombusGridSeedID.Int64 != 0 {
+		parameter.GrowingRhombusGridSeed = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(parameterDB.GrowingRhombusGridSeedID.Int64)]
+	}
+	// GrowingRhombusGrid field
+	parameter.GrowingRhombusGrid = nil
+	if parameterDB.GrowingRhombusGridID.Int64 != 0 {
+		parameter.GrowingRhombusGrid = backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(parameterDB.GrowingRhombusGridID.Int64)]
+	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
 	if parameterDB.HorizontalAxisID.Int64 != 0 {
@@ -682,6 +730,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
 
+	parameterDB.Z_Data.Int64 = int64(parameter.Z)
+	parameterDB.Z_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -707,6 +758,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
+
+	parameterDB.Z_Data.Int64 = int64(parameter.Z)
+	parameterDB.Z_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -734,6 +788,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
 
+	parameterDB.Z_Data.Int64 = int64(parameter.Z)
+	parameterDB.Z_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -749,6 +806,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
+	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -761,6 +819,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
+	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -774,6 +833,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
+	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -997,6 +1057,18 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.NextCircleID.Int64 != 0 {
 			parameterDB.NextCircleID.Int64 = int64(BackRepoCircleid_atBckpTime_newID[uint(parameterDB.NextCircleID.Int64)])
 			parameterDB.NextCircleID.Valid = true
+		}
+
+		// reindexing GrowingRhombusGridSeed field
+		if parameterDB.GrowingRhombusGridSeedID.Int64 != 0 {
+			parameterDB.GrowingRhombusGridSeedID.Int64 = int64(BackRepoRhombusid_atBckpTime_newID[uint(parameterDB.GrowingRhombusGridSeedID.Int64)])
+			parameterDB.GrowingRhombusGridSeedID.Valid = true
+		}
+
+		// reindexing GrowingRhombusGrid field
+		if parameterDB.GrowingRhombusGridID.Int64 != 0 {
+			parameterDB.GrowingRhombusGridID.Int64 = int64(BackRepoRhombusGridid_atBckpTime_newID[uint(parameterDB.GrowingRhombusGridID.Int64)])
+			parameterDB.GrowingRhombusGridID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

@@ -993,6 +993,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].SideLength = exprSign * fielValue
+				case "Z":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].Z = int(exprSign) * int(fielValue)
 				case "OriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1264,6 +1271,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "NextCircle":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].NextCircle = __gong__map_Circle[targetIdentifier]
+				case "GrowingRhombusGridSeed":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].GrowingRhombusGridSeed = __gong__map_Rhombus[targetIdentifier]
+				case "GrowingRhombusGrid":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].GrowingRhombusGrid = __gong__map_RhombusGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

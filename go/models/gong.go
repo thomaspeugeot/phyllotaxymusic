@@ -1211,6 +1211,10 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			NextRhombus: &Rhombus{Name: "NextRhombus"},
 			// field is initialized with an instance of Circle with the name of the field
 			NextCircle: &Circle{Name: "NextCircle"},
+			// field is initialized with an instance of Rhombus with the name of the field
+			GrowingRhombusGridSeed: &Rhombus{Name: "GrowingRhombusGridSeed"},
+			// field is initialized with an instance of RhombusGrid with the name of the field
+			GrowingRhombusGrid: &RhombusGrid{Name: "GrowingRhombusGrid"},
 			// field is initialized with an instance of HorizontalAxis with the name of the field
 			HorizontalAxis: &HorizontalAxis{Name: "HorizontalAxis"},
 			// field is initialized with an instance of VerticalAxis with the name of the field
@@ -1483,6 +1487,40 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		case "GrowingRhombusGridSeed":
+			res := make(map[*Rhombus][]*Parameter)
+			for parameter := range stage.Parameters {
+				if parameter.GrowingRhombusGridSeed != nil {
+					rhombus_ := parameter.GrowingRhombusGridSeed
+					var parameters []*Parameter
+					_, ok := res[rhombus_]
+					if ok {
+						parameters = res[rhombus_]
+					} else {
+						parameters = make([]*Parameter, 0)
+					}
+					parameters = append(parameters, parameter)
+					res[rhombus_] = parameters
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		case "GrowingRhombusGrid":
+			res := make(map[*RhombusGrid][]*Parameter)
+			for parameter := range stage.Parameters {
+				if parameter.GrowingRhombusGrid != nil {
+					rhombusgrid_ := parameter.GrowingRhombusGrid
+					var parameters []*Parameter
+					_, ok := res[rhombusgrid_]
+					if ok {
+						parameters = res[rhombusgrid_]
+					} else {
+						parameters = make([]*Parameter, 0)
+					}
+					parameters = append(parameters, parameter)
+					res[rhombusgrid_] = parameters
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		case "HorizontalAxis":
 			res := make(map[*HorizontalAxis][]*Parameter)
 			for parameter := range stage.Parameters {
@@ -1709,7 +1747,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "Z", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
@@ -1789,7 +1827,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "Z", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
@@ -1978,6 +2016,16 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.NextCircle != nil {
 				res = inferedInstance.NextCircle.Name
 			}
+		case "GrowingRhombusGridSeed":
+			if inferedInstance.GrowingRhombusGridSeed != nil {
+				res = inferedInstance.GrowingRhombusGridSeed.Name
+			}
+		case "GrowingRhombusGrid":
+			if inferedInstance.GrowingRhombusGrid != nil {
+				res = inferedInstance.GrowingRhombusGrid.Name
+			}
+		case "Z":
+			res = fmt.Sprintf("%d", inferedInstance.Z)
 		case "OriginX":
 			res = fmt.Sprintf("%f", inferedInstance.OriginX)
 		case "OriginY":
@@ -2256,6 +2304,16 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.NextCircle != nil {
 				res = inferedInstance.NextCircle.Name
 			}
+		case "GrowingRhombusGridSeed":
+			if inferedInstance.GrowingRhombusGridSeed != nil {
+				res = inferedInstance.GrowingRhombusGridSeed.Name
+			}
+		case "GrowingRhombusGrid":
+			if inferedInstance.GrowingRhombusGrid != nil {
+				res = inferedInstance.GrowingRhombusGrid.Name
+			}
+		case "Z":
+			res = fmt.Sprintf("%d", inferedInstance.Z)
 		case "OriginX":
 			res = fmt.Sprintf("%f", inferedInstance.OriginX)
 		case "OriginY":

@@ -140,6 +140,7 @@ type Parameter_WOP struct {
 	M int
 	InsideAngle float64
 	SideLength float64
+	Z int
 	OriginX float64
 	OriginY float64
 }
@@ -151,6 +152,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.M = from.M
 	to.InsideAngle = from.InsideAngle
 	to.SideLength = from.SideLength
+	to.Z = from.Z
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
 }

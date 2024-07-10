@@ -54,6 +54,9 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, parameter *phylotaxym
 	if parameter.NextCircle.IsDisplayed {
 		drawCircle(gongsvgStage, layer, parameter, parameter.NextCircle)
 	}
+	if parameter.GrowingRhombusGrid.IsDisplayed {
+		drawRhombusGrid(gongsvgStage, layer, parameter, parameter.GrowingRhombusGrid)
+	}
 	gongsvgStage.Commit()
 
 }

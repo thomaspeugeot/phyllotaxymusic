@@ -24,6 +24,7 @@ export class ParameterAPI {
 	M: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
+	Z: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -55,6 +56,10 @@ export class ParameterPointersEncoding {
 	NextRhombusID: NullInt64 = new NullInt64 // if pointer is null, NextRhombus.ID = 0
 
 	NextCircleID: NullInt64 = new NullInt64 // if pointer is null, NextCircle.ID = 0
+
+	GrowingRhombusGridSeedID: NullInt64 = new NullInt64 // if pointer is null, GrowingRhombusGridSeed.ID = 0
+
+	GrowingRhombusGridID: NullInt64 = new NullInt64 // if pointer is null, GrowingRhombusGrid.ID = 0
 
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 

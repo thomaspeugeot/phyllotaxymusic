@@ -267,6 +267,12 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.NextCircle != nil {
 		StageBranch(stage, parameter.NextCircle)
 	}
+	if parameter.GrowingRhombusGridSeed != nil {
+		StageBranch(stage, parameter.GrowingRhombusGridSeed)
+	}
+	if parameter.GrowingRhombusGrid != nil {
+		StageBranch(stage, parameter.GrowingRhombusGrid)
+	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
 	}
@@ -530,6 +536,12 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.NextCircle != nil {
 		parameterTo.NextCircle = CopyBranchCircle(mapOrigCopy, parameterFrom.NextCircle)
 	}
+	if parameterFrom.GrowingRhombusGridSeed != nil {
+		parameterTo.GrowingRhombusGridSeed = CopyBranchRhombus(mapOrigCopy, parameterFrom.GrowingRhombusGridSeed)
+	}
+	if parameterFrom.GrowingRhombusGrid != nil {
+		parameterTo.GrowingRhombusGrid = CopyBranchRhombusGrid(mapOrigCopy, parameterFrom.GrowingRhombusGrid)
+	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
 	}
@@ -769,6 +781,12 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.NextCircle != nil {
 		UnstageBranch(stage, parameter.NextCircle)
+	}
+	if parameter.GrowingRhombusGridSeed != nil {
+		UnstageBranch(stage, parameter.GrowingRhombusGridSeed)
+	}
+	if parameter.GrowingRhombusGrid != nil {
+		UnstageBranch(stage, parameter.GrowingRhombusGrid)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

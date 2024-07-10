@@ -33,6 +33,10 @@ type Parameter struct {
 	NextRhombus *Rhombus
 	NextCircle  *Circle
 
+	GrowingRhombusGridSeed *Rhombus
+	GrowingRhombusGrid     *RhombusGrid
+	Z                      int // number of rhombus
+
 	// for drawing purpose
 	OriginX        float64
 	OriginY        float64
@@ -63,6 +67,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.computeRotatedCircleGrid(stage)
 	p.ComputeNextRhombus()
 	p.ComputeNextCircle()
+	p.ComputeGrowingRhombusGrid()
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -266,4 +271,28 @@ func (p *Parameter) ComputeNextCircle() {
 		})
 	p.NextCircle.CenterX = p.RotatedCircleGrid.Circles[2].CenterX
 	p.NextCircle.CenterY = p.RotatedCircleGrid.Circles[2].CenterY
+}
+
+func (p *Parameter) ComputeGrowingRhombusGrid() {
+
+	// configure seed rhombus
+	p.GrowingRhombusGridSeed.SideLength = p.RotatedRhombus.SideLength
+	p.GrowingRhombusGridSeed.Angle = p.RotatedRhombus.Angle
+	p.GrowingRhombusGridSeed.InsideAngle = p.RotatedRhombus.InsideAngle
+
+	p.GrowingRhombusGrid.Rhombuses = p.GrowingRhombusGrid.Rhombuses[:0]
+	for i := range p.Z {
+		r := new(Rhombus) // .Stage(stage)
+		*r = *p.GrowingRhombusGridSeed
+
+		// compute
+		x := float64(i) * p.NextRhombus.CenterX
+		y := float64(i) * p.NextRhombus.CenterY
+
+		nbRotations := int(x / p.RotatedAxis.Length)
+		r.CenterX = x - float64(nbRotations)*p.RotatedAxis.Length
+		r.CenterY = y
+
+		p.GrowingRhombusGrid.Rhombuses = append(p.GrowingRhombusGrid.Rhombuses, r)
+	}
 }

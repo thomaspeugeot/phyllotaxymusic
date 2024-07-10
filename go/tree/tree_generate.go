@@ -28,6 +28,7 @@ func (tree *Tree) Generate(parameter *phylotaxymusic_models.Parameter) {
 	tree.addNode("Rotated Circle Grid", parameter.RotatedCircleGrid, parameter.RotatedCircleGrid.IsDisplayed)
 	tree.addNode("Next Rhombus", parameter.NextRhombus, parameter.NextRhombus.IsDisplayed)
 	tree.addNode("Next Circle", parameter.NextCircle, parameter.NextCircle.IsDisplayed)
+	tree.addNode("Growing Rhombus Circle", parameter.GrowingRhombusGrid, parameter.GrowingRhombusGrid.IsDisplayed)
 
 	tree.TreeStack.Stage.Commit()
 }

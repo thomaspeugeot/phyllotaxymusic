@@ -29,6 +29,7 @@ export class Parameter {
 	M: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
+	Z: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -55,6 +56,10 @@ export class Parameter {
 
 	NextCircle?: Circle
 
+	GrowingRhombusGridSeed?: Rhombus
+
+	GrowingRhombusGrid?: RhombusGrid
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -73,6 +78,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.M = parameter.M
 	parameterAPI.InsideAngle = parameter.InsideAngle
 	parameterAPI.SideLength = parameter.SideLength
+	parameterAPI.Z = parameter.Z
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 
@@ -154,6 +160,20 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.NextCircleID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.GrowingRhombusGridSeedID.Valid = true
+	if (parameter.GrowingRhombusGridSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowingRhombusGridSeedID.Int64 = parameter.GrowingRhombusGridSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowingRhombusGridSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.GrowingRhombusGridID.Valid = true
+	if (parameter.GrowingRhombusGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowingRhombusGridID.Int64 = parameter.GrowingRhombusGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowingRhombusGridID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -188,6 +208,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.M = parameterAPI.M
 	parameter.InsideAngle = parameterAPI.InsideAngle
 	parameter.SideLength = parameterAPI.SideLength
+	parameter.Z = parameterAPI.Z
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 
@@ -203,6 +224,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.RotatedCircleGrid = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.RotatedCircleGridID.Int64)
 	parameter.NextRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.NextRhombusID.Int64)
 	parameter.NextCircle = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.NextCircleID.Int64)
+	parameter.GrowingRhombusGridSeed = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.GrowingRhombusGridSeedID.Int64)
+	parameter.GrowingRhombusGrid = frontRepo.map_ID_RhombusGrid.get(parameterAPI.ParameterPointersEncoding.GrowingRhombusGridID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 
