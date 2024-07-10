@@ -1277,6 +1277,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "GrowingRhombusGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].GrowingRhombusGrid = __gong__map_RhombusGrid[targetIdentifier]
+				case "GrowingCircleGridSeed":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].GrowingCircleGridSeed = __gong__map_Circle[targetIdentifier]
+				case "GrowingCircleGrid":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].GrowingCircleGrid = __gong__map_CircleGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

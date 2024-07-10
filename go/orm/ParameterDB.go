@@ -99,6 +99,14 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	GrowingRhombusGridID sql.NullInt64
 
+	// field GrowingCircleGridSeed is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	GrowingCircleGridSeedID sql.NullInt64
+
+	// field GrowingCircleGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	GrowingCircleGridID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -469,6 +477,30 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.GrowingRhombusGridID.Valid = true
 		}
 
+		// commit pointer value parameter.GrowingCircleGridSeed translates to updating the parameter.GrowingCircleGridSeedID
+		parameterDB.GrowingCircleGridSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowingCircleGridSeed != nil {
+			if GrowingCircleGridSeedId, ok := backRepo.BackRepoCircle.Map_CirclePtr_CircleDBID[parameter.GrowingCircleGridSeed]; ok {
+				parameterDB.GrowingCircleGridSeedID.Int64 = int64(GrowingCircleGridSeedId)
+				parameterDB.GrowingCircleGridSeedID.Valid = true
+			}
+		} else {
+			parameterDB.GrowingCircleGridSeedID.Int64 = 0
+			parameterDB.GrowingCircleGridSeedID.Valid = true
+		}
+
+		// commit pointer value parameter.GrowingCircleGrid translates to updating the parameter.GrowingCircleGridID
+		parameterDB.GrowingCircleGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowingCircleGrid != nil {
+			if GrowingCircleGridId, ok := backRepo.BackRepoCircleGrid.Map_CircleGridPtr_CircleGridDBID[parameter.GrowingCircleGrid]; ok {
+				parameterDB.GrowingCircleGridID.Int64 = int64(GrowingCircleGridId)
+				parameterDB.GrowingCircleGridID.Valid = true
+			}
+		} else {
+			parameterDB.GrowingCircleGridID.Int64 = 0
+			parameterDB.GrowingCircleGridID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -670,6 +702,16 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.GrowingRhombusGrid = nil
 	if parameterDB.GrowingRhombusGridID.Int64 != 0 {
 		parameter.GrowingRhombusGrid = backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(parameterDB.GrowingRhombusGridID.Int64)]
+	}
+	// GrowingCircleGridSeed field
+	parameter.GrowingCircleGridSeed = nil
+	if parameterDB.GrowingCircleGridSeedID.Int64 != 0 {
+		parameter.GrowingCircleGridSeed = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(parameterDB.GrowingCircleGridSeedID.Int64)]
+	}
+	// GrowingCircleGrid field
+	parameter.GrowingCircleGrid = nil
+	if parameterDB.GrowingCircleGridID.Int64 != 0 {
+		parameter.GrowingCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.GrowingCircleGridID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -1069,6 +1111,18 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.GrowingRhombusGridID.Int64 != 0 {
 			parameterDB.GrowingRhombusGridID.Int64 = int64(BackRepoRhombusGridid_atBckpTime_newID[uint(parameterDB.GrowingRhombusGridID.Int64)])
 			parameterDB.GrowingRhombusGridID.Valid = true
+		}
+
+		// reindexing GrowingCircleGridSeed field
+		if parameterDB.GrowingCircleGridSeedID.Int64 != 0 {
+			parameterDB.GrowingCircleGridSeedID.Int64 = int64(BackRepoCircleid_atBckpTime_newID[uint(parameterDB.GrowingCircleGridSeedID.Int64)])
+			parameterDB.GrowingCircleGridSeedID.Valid = true
+		}
+
+		// reindexing GrowingCircleGrid field
+		if parameterDB.GrowingCircleGridID.Int64 != 0 {
+			parameterDB.GrowingCircleGridID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.GrowingCircleGridID.Int64)])
+			parameterDB.GrowingCircleGridID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

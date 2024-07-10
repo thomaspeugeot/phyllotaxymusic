@@ -604,6 +604,10 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.GrowingRhombusGridSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "GrowingRhombusGrid":
 			FormDivSelectFieldToField(&(parameter_.GrowingRhombusGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowingCircleGridSeed":
+			FormDivSelectFieldToField(&(parameter_.GrowingCircleGridSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowingCircleGrid":
+			FormDivSelectFieldToField(&(parameter_.GrowingCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":
