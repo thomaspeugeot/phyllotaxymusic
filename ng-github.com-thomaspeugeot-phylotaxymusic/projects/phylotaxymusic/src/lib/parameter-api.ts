@@ -52,6 +52,10 @@ export class ParameterPointersEncoding {
 
 	RotatedCircleGridID: NullInt64 = new NullInt64 // if pointer is null, RotatedCircleGrid.ID = 0
 
+	NextRhombusID: NullInt64 = new NullInt64 // if pointer is null, NextRhombus.ID = 0
+
+	NextCircleID: NullInt64 = new NullInt64 // if pointer is null, NextCircle.ID = 0
+
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 
 	VerticalAxisID: NullInt64 = new NullInt64 // if pointer is null, VerticalAxis.ID = 0

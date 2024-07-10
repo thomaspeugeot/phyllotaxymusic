@@ -261,6 +261,12 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.RotatedCircleGrid != nil {
 		StageBranch(stage, parameter.RotatedCircleGrid)
 	}
+	if parameter.NextRhombus != nil {
+		StageBranch(stage, parameter.NextRhombus)
+	}
+	if parameter.NextCircle != nil {
+		StageBranch(stage, parameter.NextCircle)
+	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
 	}
@@ -518,6 +524,12 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.RotatedCircleGrid != nil {
 		parameterTo.RotatedCircleGrid = CopyBranchCircleGrid(mapOrigCopy, parameterFrom.RotatedCircleGrid)
 	}
+	if parameterFrom.NextRhombus != nil {
+		parameterTo.NextRhombus = CopyBranchRhombus(mapOrigCopy, parameterFrom.NextRhombus)
+	}
+	if parameterFrom.NextCircle != nil {
+		parameterTo.NextCircle = CopyBranchCircle(mapOrigCopy, parameterFrom.NextCircle)
+	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
 	}
@@ -751,6 +763,12 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.RotatedCircleGrid != nil {
 		UnstageBranch(stage, parameter.RotatedCircleGrid)
+	}
+	if parameter.NextRhombus != nil {
+		UnstageBranch(stage, parameter.NextRhombus)
+	}
+	if parameter.NextCircle != nil {
+		UnstageBranch(stage, parameter.NextCircle)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

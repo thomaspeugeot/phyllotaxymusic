@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"slices"
 )
 
 type Parameter struct {
@@ -28,6 +29,9 @@ type Parameter struct {
 	RotatedRhombus     *Rhombus
 	RotatedRhombusGrid *RhombusGrid
 	RotatedCircleGrid  *CircleGrid
+
+	NextRhombus *Rhombus
+	NextCircle  *Circle
 
 	// for drawing purpose
 	OriginX        float64
@@ -57,6 +61,8 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.computeRotatedRhombus()
 	p.computeRotatedRhombusGrid(stage)
 	p.computeRotatedCircleGrid(stage)
+	p.ComputeNextRhombus()
+	p.ComputeNextCircle()
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -223,4 +229,41 @@ func (p *Parameter) computeRotatedCircleGrid(stage *StageStruct) {
 		g.Circles = append(g.Circles, c)
 
 	}
+}
+
+func (p *Parameter) ComputeNextRhombus() {
+
+	// parse all rhombus in the rotated rhombus grid
+	// and get the first that is not with a non nil ordinate
+	slices.SortFunc(p.RotatedRhombusGrid.Rhombuses,
+		func(r1, r2 *Rhombus) int {
+			if r1.CenterY > r2.CenterY {
+				return 1
+			} else {
+				return -1
+			}
+
+		})
+	p.NextRhombus.CenterX = p.RotatedRhombusGrid.Rhombuses[2].CenterX
+	p.NextRhombus.CenterY = p.RotatedRhombusGrid.Rhombuses[2].CenterY
+	p.NextRhombus.SideLength = p.SideLength
+	p.NextRhombus.Angle = p.RotatedRhombus.Angle
+	p.NextRhombus.InsideAngle = p.InsideAngle
+}
+
+func (p *Parameter) ComputeNextCircle() {
+
+	// parse all circle in the rotated circle grid
+	// and get the first that is not with a non nil ordinate
+	slices.SortFunc(p.RotatedCircleGrid.Circles,
+		func(r1, r2 *Circle) int {
+			if r1.CenterY > r2.CenterY {
+				return 1
+			} else {
+				return -1
+			}
+
+		})
+	p.NextCircle.CenterX = p.RotatedCircleGrid.Circles[2].CenterX
+	p.NextCircle.CenterY = p.RotatedCircleGrid.Circles[2].CenterY
 }
