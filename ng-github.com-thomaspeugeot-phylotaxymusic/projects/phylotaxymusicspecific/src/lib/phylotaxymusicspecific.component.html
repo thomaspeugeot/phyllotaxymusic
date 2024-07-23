@@ -26,6 +26,25 @@
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Z" (input)="input($event)" 
                 >
             </mat-slider>
+
+            <h4>M {{frontRepo.array_Parameters[0].M}}</h4>
+
+            <mat-slider  min="1" max="20" step="1" 
+            showTickMarks discrete [displayWith]="formatLabel" 
+            >
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].M" (input)="input($event)" 
+                >
+            </mat-slider>
+
+
+            <h4>N {{frontRepo.array_Parameters[0].N}}</h4>
+
+            <mat-slider  min="1" max="20" step="1" 
+            showTickMarks discrete [displayWith]="formatLabel" 
+            >
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].N" (input)="input($event)" 
+                >
+            </mat-slider>
         }
     </as-split-area>
 </as-split>
