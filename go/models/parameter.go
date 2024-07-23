@@ -200,7 +200,7 @@ func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
 		r.CenterY = _r.CenterX*sinAngle + _r.CenterY*cosAngle
 
 		// keep only rhombus above 0
-		if r.CenterY < 0.0 {
+		if r.CenterY < -0.00001 {
 			continue
 		}
 
@@ -232,7 +232,7 @@ func (p *Parameter) computeRotatedCircleGrid(stage *StageStruct) {
 		c.CenterY = _c.CenterX*sinAngle + _c.CenterY*cosAngle
 
 		// keep only rhombus above 0
-		if c.CenterY < 0.0 {
+		if c.CenterY < -0.00001 {
 			continue
 		}
 		g.Circles = append(g.Circles, c)
