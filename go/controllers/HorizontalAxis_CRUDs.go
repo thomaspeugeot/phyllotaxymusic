@@ -55,10 +55,10 @@ func (controller *Controller) GetHorizontalAxiss(c *gin.Context) {
 	// source slice
 	var horizontalaxisDBs []orm.HorizontalAxisDB
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("GetHorizontalAxiss", "GONG__StackPath", stackPath)
@@ -118,10 +118,10 @@ func (controller *Controller) PostHorizontalAxis(c *gin.Context) {
 	mutexHorizontalAxis.Lock()
 	defer mutexHorizontalAxis.Unlock()
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("PostHorizontalAxiss", "GONG__StackPath", stackPath)
@@ -188,10 +188,10 @@ func (controller *Controller) PostHorizontalAxis(c *gin.Context) {
 //	200: horizontalaxisDBResponse
 func (controller *Controller) GetHorizontalAxis(c *gin.Context) {
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("GetHorizontalAxis", "GONG__StackPath", stackPath)
@@ -237,10 +237,10 @@ func (controller *Controller) UpdateHorizontalAxis(c *gin.Context) {
 	mutexHorizontalAxis.Lock()
 	defer mutexHorizontalAxis.Unlock()
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("UpdateHorizontalAxis", "GONG__StackPath", stackPath)
@@ -326,10 +326,10 @@ func (controller *Controller) DeleteHorizontalAxis(c *gin.Context) {
 	mutexHorizontalAxis.Lock()
 	defer mutexHorizontalAxis.Unlock()
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("DeleteHorizontalAxis", "GONG__StackPath", stackPath)

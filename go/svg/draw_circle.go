@@ -20,6 +20,4 @@ func drawCircle(
 	circle.Radius = p.SideLength / 2.0
 
 	c.Presentation.CopyTo(&circle.Presentation)
-
-	circle.Name = "Vertical Axis"
 }

@@ -55,10 +55,10 @@ func (controller *Controller) GetVerticalAxiss(c *gin.Context) {
 	// source slice
 	var verticalaxisDBs []orm.VerticalAxisDB
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("GetVerticalAxiss", "GONG__StackPath", stackPath)
@@ -118,10 +118,10 @@ func (controller *Controller) PostVerticalAxis(c *gin.Context) {
 	mutexVerticalAxis.Lock()
 	defer mutexVerticalAxis.Unlock()
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("PostVerticalAxiss", "GONG__StackPath", stackPath)
@@ -188,10 +188,10 @@ func (controller *Controller) PostVerticalAxis(c *gin.Context) {
 //	200: verticalaxisDBResponse
 func (controller *Controller) GetVerticalAxis(c *gin.Context) {
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("GetVerticalAxis", "GONG__StackPath", stackPath)
@@ -237,10 +237,10 @@ func (controller *Controller) UpdateVerticalAxis(c *gin.Context) {
 	mutexVerticalAxis.Lock()
 	defer mutexVerticalAxis.Unlock()
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("UpdateVerticalAxis", "GONG__StackPath", stackPath)
@@ -326,10 +326,10 @@ func (controller *Controller) DeleteVerticalAxis(c *gin.Context) {
 	mutexVerticalAxis.Lock()
 	defer mutexVerticalAxis.Unlock()
 
-	values := c.Request.URL.Query()
+	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+	if len(_values) == 1 {
+		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
 			// log.Println("DeleteVerticalAxis", "GONG__StackPath", stackPath)

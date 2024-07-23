@@ -3,6 +3,7 @@ package models
 import (
 	"log"
 
+	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	"github.com/fullstack-lang/gongtree/go/models"
 )
 
@@ -24,4 +25,17 @@ func (hideableShape *HideableShape) OnAfterUpdate(stage *models.StageStruct, sta
 		stagedNode.IsChecked = frontNode.IsChecked
 		GeneratorSingloton.Generate()
 	}
+}
+
+func (s *HideableShape) DrawIfDisplayed(
+	gongsvgStage *gongsvg_models.StageStruct,
+	p *Parameter,
+	layer *gongsvg_models.Layer) {
+}
+
+type HideableShapeInterface interface {
+	DrawIfDisplayed(
+		gongsvgStage *gongsvg_models.StageStruct,
+		p *Parameter,
+		layer *gongsvg_models.Layer)
 }
