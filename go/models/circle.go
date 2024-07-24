@@ -15,8 +15,9 @@ type Circle struct {
 
 func (c *Circle) Draw(
 	gongsvgStage *gongsvg_models.StageStruct,
+	layer *gongsvg_models.Layer,
 	p *Parameter,
-	layer *gongsvg_models.Layer) {
+) {
 
 	circle := new(gongsvg_models.Circle).Stage(gongsvgStage)
 	layer.Circles = append(layer.Circles, circle)

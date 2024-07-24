@@ -16,5 +16,4 @@ func drawRhombusGrid(
 	for _, r := range g.Rhombuses {
 		drawRhombus(gongsvgStage, layer, p, r)
 	}
-
 }

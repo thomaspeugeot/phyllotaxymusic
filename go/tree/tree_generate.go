@@ -34,13 +34,7 @@ func (tree *Tree) Generate(parameter *phylotaxymusic_models.Parameter) {
 	tree.TreeStack.Stage.Commit()
 }
 
-type Shape interface {
-	gongtree_models.NodeImplInterface
-	GetName() string
-	GetIsDisplayed() bool
-}
-
-func AddShape[T Shape](tree *Tree, s T) {
+func AddShape[T phylotaxymusic_models.Shape](tree *Tree, s T) {
 	tree.addNode(s.GetName(), s, s.GetIsDisplayed())
 }
 
