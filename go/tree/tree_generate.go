@@ -31,8 +31,20 @@ func (tree *Tree) Generate(parameter *phylotaxymusic_models.Parameter) {
 	tree.addNode("Growing Rhombus Grid", parameter.GrowingRhombusGrid, parameter.GrowingRhombusGrid.IsDisplayed)
 	tree.addNode("Growing Circle Grid", parameter.GrowingCircleGrid, parameter.GrowingCircleGrid.IsDisplayed)
 	tree.addNode("Growing Circle Grid Left", parameter.GrowingCircleGridLeft, parameter.GrowingCircleGridLeft.IsDisplayed)
+	// tree.addNode("Construction Axis", parameter.ConstructionAxis, parameter.ConstructionAxis.IsDisplayed)
+	AddShape(tree, parameter.ConstructionAxis)
 
 	tree.TreeStack.Stage.Commit()
+}
+
+type Shape interface {
+	gongtree_models.NodeImplInterface
+	GetName() string
+	GetIsDisplayed() bool
+}
+
+func AddShape[T Shape](tree *Tree, s T) {
+	tree.addNode(s.GetName(), s, s.GetIsDisplayed())
 }
 
 func (tree *Tree) addNode(

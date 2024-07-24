@@ -11,6 +11,10 @@ type HideableShape struct {
 	IsDisplayed bool
 }
 
+func (hideableShape *HideableShape) GetIsDisplayed() bool {
+	return hideableShape.IsDisplayed
+}
+
 // OnAfterUpdate implements models.NodeImplInterface.
 func (hideableShape *HideableShape) OnAfterUpdate(stage *models.StageStruct, stagedNode *models.Node, frontNode *models.Node) {
 	log.Println("Node clicked", frontNode.GetName())

@@ -69,6 +69,8 @@ export class ParameterPointersEncoding {
 
 	GrowingCircleGridLeftID: NullInt64 = new NullInt64 // if pointer is null, GrowingCircleGridLeft.ID = 0
 
+	ConstructionAxisID: NullInt64 = new NullInt64 // if pointer is null, ConstructionAxis.ID = 0
+
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 
 	VerticalAxisID: NullInt64 = new NullInt64 // if pointer is null, VerticalAxis.ID = 0

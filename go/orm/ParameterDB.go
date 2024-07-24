@@ -115,6 +115,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	GrowingCircleGridLeftID sql.NullInt64
 
+	// field ConstructionAxis is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ConstructionAxisID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -533,6 +537,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.GrowingCircleGridLeftID.Valid = true
 		}
 
+		// commit pointer value parameter.ConstructionAxis translates to updating the parameter.ConstructionAxisID
+		parameterDB.ConstructionAxisID.Valid = true // allow for a 0 value (nil association)
+		if parameter.ConstructionAxis != nil {
+			if ConstructionAxisId, ok := backRepo.BackRepoAxis.Map_AxisPtr_AxisDBID[parameter.ConstructionAxis]; ok {
+				parameterDB.ConstructionAxisID.Int64 = int64(ConstructionAxisId)
+				parameterDB.ConstructionAxisID.Valid = true
+			}
+		} else {
+			parameterDB.ConstructionAxisID.Int64 = 0
+			parameterDB.ConstructionAxisID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -754,6 +770,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.GrowingCircleGridLeft = nil
 	if parameterDB.GrowingCircleGridLeftID.Int64 != 0 {
 		parameter.GrowingCircleGridLeft = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.GrowingCircleGridLeftID.Int64)]
+	}
+	// ConstructionAxis field
+	parameter.ConstructionAxis = nil
+	if parameterDB.ConstructionAxisID.Int64 != 0 {
+		parameter.ConstructionAxis = backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(parameterDB.ConstructionAxisID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -1177,6 +1198,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.GrowingCircleGridLeftID.Int64 != 0 {
 			parameterDB.GrowingCircleGridLeftID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.GrowingCircleGridLeftID.Int64)])
 			parameterDB.GrowingCircleGridLeftID.Valid = true
+		}
+
+		// reindexing ConstructionAxis field
+		if parameterDB.ConstructionAxisID.Int64 != 0 {
+			parameterDB.ConstructionAxisID.Int64 = int64(BackRepoAxisid_atBckpTime_newID[uint(parameterDB.ConstructionAxisID.Int64)])
+			parameterDB.ConstructionAxisID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

@@ -63,6 +63,9 @@ func GenerateSvg(gongsvgStage *gongsvg_models.StageStruct, parameter *phylotaxym
 	if parameter.GrowingCircleGridLeft.IsDisplayed {
 		drawCircleGrid(gongsvgStage, layer, parameter, parameter.GrowingCircleGridLeft)
 	}
+	if parameter.ConstructionAxis.IsDisplayed {
+		drawAxis(gongsvgStage, layer, parameter, parameter.ConstructionAxis)
+	}
 	gongsvgStage.Commit()
 
 }

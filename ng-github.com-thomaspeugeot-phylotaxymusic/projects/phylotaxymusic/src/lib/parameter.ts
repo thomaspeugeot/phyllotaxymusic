@@ -68,6 +68,8 @@ export class Parameter {
 
 	GrowingCircleGridLeft?: CircleGrid
 
+	ConstructionAxis?: Axis
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -210,6 +212,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.ConstructionAxisID.Valid = true
+	if (parameter.ConstructionAxis != undefined) {
+		parameterAPI.ParameterPointersEncoding.ConstructionAxisID.Int64 = parameter.ConstructionAxis.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.ConstructionAxisID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -266,6 +275,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.GrowingCircleGrid = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.GrowingCircleGridID.Int64)
 	parameter.GrowingCircleGridLeftSeed = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftSeedID.Int64)
 	parameter.GrowingCircleGridLeft = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftID.Int64)
+	parameter.ConstructionAxis = frontRepo.map_ID_Axis.get(parameterAPI.ParameterPointersEncoding.ConstructionAxisID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

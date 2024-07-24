@@ -43,6 +43,13 @@ type Parameter struct {
 	GrowingCircleGridLeftSeed *Circle
 	GrowingCircleGridLeft     *CircleGrid
 
+	// Axis between initial circle and the N+M circle
+	// shifted to the left. The midle of the axis will serve
+	// for building the growth line. The growth line with
+	// interpolate the middle of the construction axis
+	// for the next circles.
+	ConstructionAxis *Axis
+
 	// for drawing purpose
 	OriginX        float64
 	OriginY        float64
@@ -76,6 +83,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeGrowingRhombusGrid()
 	p.ComputeGrowingCircleGrid()
 	p.ComputeGrowingCircleGridLeft()
+	p.computeConstructionAxis()
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -343,4 +351,15 @@ func (p *Parameter) ComputeGrowingCircleGridLeft() {
 		p.GrowingCircleGridLeft.Circles = append(p.GrowingCircleGridLeft.Circles, r)
 	}
 	log.Println("z", p.Z)
+}
+
+func (p *Parameter) computeConstructionAxis() {
+
+	// get the N+M circles
+	circleNPlusM := p.GrowingCircleGrid.Circles[p.M+p.N]
+	x := circleNPlusM.CenterX - p.RotatedAxis.Length
+	y := circleNPlusM.CenterY
+
+	p.ConstructionAxis.Length = math.Sqrt(x*x + y*y)
+	p.ConstructionAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
 }
