@@ -9,6 +9,15 @@
     <as-split-area [size]="20">
 
         @if (frontRepo && frontRepo.array_Parameters[0]) {
+            <h4>Side Length {{frontRepo.array_Parameters[0].SideLength}}</h4>
+
+            <mat-slider  min="50.0" max="600.0" step="10" 
+            showTickMarks discrete [displayWith]="formatLabel" 
+            >
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SideLength" (input)="input($event)" 
+                >
+            </mat-slider>
+
             <h4>Inside Angle {{frontRepo.array_Parameters[0].InsideAngle}}</h4>
 
             <mat-slider  min="60.0" max="120.0" step="1" 
