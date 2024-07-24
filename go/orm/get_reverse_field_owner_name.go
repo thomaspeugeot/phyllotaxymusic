@@ -17,6 +17,18 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 	case *models.Axis:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "AxisGrid":
+			switch reverseField.Fieldname {
+			case "Axiss":
+				if _axisgrid, ok := stage.AxisGrid_Axiss_reverseMap[inst]; ok {
+					res = _axisgrid.Name
+				}
+			}
+		}
+
+	case *models.AxisGrid:
+		switch reverseField.GongstructName {
+		// insertion point
 		}
 
 	case *models.Circle:
@@ -37,11 +49,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		}
 
 	case *models.HorizontalAxis:
-		switch reverseField.GongstructName {
-		// insertion point
-		}
-
-	case *models.Line:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
@@ -91,6 +98,16 @@ func GetReverseFieldOwner[T models.Gongstruct](
 	case *models.Axis:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "AxisGrid":
+			switch reverseField.Fieldname {
+			case "Axiss":
+				res = stage.AxisGrid_Axiss_reverseMap[inst]
+			}
+		}
+
+	case *models.AxisGrid:
+		switch reverseField.GongstructName {
+		// insertion point
 		}
 
 	case *models.Circle:
@@ -109,11 +126,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		}
 
 	case *models.HorizontalAxis:
-		switch reverseField.GongstructName {
-		// insertion point
-		}
-
-	case *models.Line:
 		switch reverseField.GongstructName {
 		// insertion point
 		}

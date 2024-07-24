@@ -54,6 +54,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/axiss/:id", GetController().UpdateAxis)
 		v1.DELETE("/v1/axiss/:id", GetController().DeleteAxis)
 
+		v1.GET("/v1/axisgrids", GetController().GetAxisGrids)
+		v1.GET("/v1/axisgrids/:id", GetController().GetAxisGrid)
+		v1.POST("/v1/axisgrids", GetController().PostAxisGrid)
+		v1.PATCH("/v1/axisgrids/:id", GetController().UpdateAxisGrid)
+		v1.PUT("/v1/axisgrids/:id", GetController().UpdateAxisGrid)
+		v1.DELETE("/v1/axisgrids/:id", GetController().DeleteAxisGrid)
+
 		v1.GET("/v1/circles", GetController().GetCircles)
 		v1.GET("/v1/circles/:id", GetController().GetCircle)
 		v1.POST("/v1/circles", GetController().PostCircle)
@@ -74,13 +81,6 @@ func registerControllers(r *gin.Engine) {
 		v1.PATCH("/v1/horizontalaxiss/:id", GetController().UpdateHorizontalAxis)
 		v1.PUT("/v1/horizontalaxiss/:id", GetController().UpdateHorizontalAxis)
 		v1.DELETE("/v1/horizontalaxiss/:id", GetController().DeleteHorizontalAxis)
-
-		v1.GET("/v1/lines", GetController().GetLines)
-		v1.GET("/v1/lines/:id", GetController().GetLine)
-		v1.POST("/v1/lines", GetController().PostLine)
-		v1.PATCH("/v1/lines/:id", GetController().UpdateLine)
-		v1.PUT("/v1/lines/:id", GetController().UpdateLine)
-		v1.DELETE("/v1/lines/:id", GetController().DeleteLine)
 
 		v1.GET("/v1/parameters", GetController().GetParameters)
 		v1.GET("/v1/parameters/:id", GetController().GetParameter)

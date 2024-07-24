@@ -8,7 +8,7 @@ import (
 type GongstructDB interface {
 	// insertion point for generic types
 	// "int" is present to handle the case when no struct is present
-	int | AxisDB | CircleDB | CircleGridDB | HorizontalAxisDB | LineDB | ParameterDB | RhombusDB | RhombusGridDB | VerticalAxisDB
+	int | AxisDB | AxisGridDB | CircleDB | CircleGridDB | HorizontalAxisDB | ParameterDB | RhombusDB | RhombusGridDB | VerticalAxisDB
 }
 
 func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
@@ -22,6 +22,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 		axisInstance := any(concreteInstance).(*models.Axis)
 		ret2 := backRepo.BackRepoAxis.GetAxisDBFromAxisPtr(axisInstance)
 		ret = any(ret2).(*T2)
+	case *models.AxisGrid:
+		axisgridInstance := any(concreteInstance).(*models.AxisGrid)
+		ret2 := backRepo.BackRepoAxisGrid.GetAxisGridDBFromAxisGridPtr(axisgridInstance)
+		ret = any(ret2).(*T2)
 	case *models.Circle:
 		circleInstance := any(concreteInstance).(*models.Circle)
 		ret2 := backRepo.BackRepoCircle.GetCircleDBFromCirclePtr(circleInstance)
@@ -33,10 +37,6 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 	case *models.HorizontalAxis:
 		horizontalaxisInstance := any(concreteInstance).(*models.HorizontalAxis)
 		ret2 := backRepo.BackRepoHorizontalAxis.GetHorizontalAxisDBFromHorizontalAxisPtr(horizontalaxisInstance)
-		ret = any(ret2).(*T2)
-	case *models.Line:
-		lineInstance := any(concreteInstance).(*models.Line)
-		ret2 := backRepo.BackRepoLine.GetLineDBFromLinePtr(lineInstance)
 		ret = any(ret2).(*T2)
 	case *models.Parameter:
 		parameterInstance := any(concreteInstance).(*models.Parameter)
@@ -72,6 +72,11 @@ func GetID[T models.Gongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.AxisGrid:
+		tmp := GetInstanceDBFromInstance[models.AxisGrid, AxisGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.Circle:
 		tmp := GetInstanceDBFromInstance[models.Circle, CircleDB](
 			stage, backRepo, inst,
@@ -84,11 +89,6 @@ func GetID[T models.Gongstruct](
 		id = int(tmp.ID)
 	case *models.HorizontalAxis:
 		tmp := GetInstanceDBFromInstance[models.HorizontalAxis, HorizontalAxisDB](
-			stage, backRepo, inst,
-		)
-		id = int(tmp.ID)
-	case *models.Line:
-		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -130,6 +130,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.AxisGrid:
+		tmp := GetInstanceDBFromInstance[models.AxisGrid, AxisGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.Circle:
 		tmp := GetInstanceDBFromInstance[models.Circle, CircleDB](
 			stage, backRepo, inst,
@@ -142,11 +147,6 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.HorizontalAxis:
 		tmp := GetInstanceDBFromInstance[models.HorizontalAxis, HorizontalAxisDB](
-			stage, backRepo, inst,
-		)
-		id = int(tmp.ID)
-	case *models.Line:
-		tmp := GetInstanceDBFromInstance[models.Line, LineDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

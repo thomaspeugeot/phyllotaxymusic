@@ -3,13 +3,13 @@
 //insertion point for imports
 import { AxisAPI } from './axis-api'
 
+import { AxisGridAPI } from './axisgrid-api'
+
 import { CircleAPI } from './circle-api'
 
 import { CircleGridAPI } from './circlegrid-api'
 
 import { HorizontalAxisAPI } from './horizontalaxis-api'
-
-import { LineAPI } from './line-api'
 
 import { ParameterAPI } from './parameter-api'
 
@@ -24,13 +24,13 @@ export class BackRepoData {
 	// insertion point for declarations
 	AxisAPIs = new Array<AxisAPI>()
 
+	AxisGridAPIs = new Array<AxisGridAPI>()
+
 	CircleAPIs = new Array<CircleAPI>()
 
 	CircleGridAPIs = new Array<CircleGridAPI>()
 
 	HorizontalAxisAPIs = new Array<HorizontalAxisAPI>()
-
-	LineAPIs = new Array<LineAPI>()
 
 	ParameterAPIs = new Array<ParameterAPI>()
 
@@ -46,13 +46,13 @@ export class BackRepoData {
 		// insertion point for copies
 		this.AxisAPIs = data?.AxisAPIs || [];
 
+		this.AxisGridAPIs = data?.AxisGridAPIs || [];
+
 		this.CircleAPIs = data?.CircleAPIs || [];
 
 		this.CircleGridAPIs = data?.CircleGridAPIs || [];
 
 		this.HorizontalAxisAPIs = data?.HorizontalAxisAPIs || [];
-
-		this.LineAPIs = data?.LineAPIs || [];
 
 		this.ParameterAPIs = data?.ParameterAPIs || [];
 

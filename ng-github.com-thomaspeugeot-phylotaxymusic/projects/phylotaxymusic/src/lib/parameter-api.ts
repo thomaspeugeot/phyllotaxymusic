@@ -4,6 +4,7 @@ import { CircleAPI } from './circle-api'
 import { RhombusGridAPI } from './rhombusgrid-api'
 import { CircleGridAPI } from './circlegrid-api'
 import { AxisAPI } from './axis-api'
+import { AxisGridAPI } from './axisgrid-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 
@@ -70,6 +71,10 @@ export class ParameterPointersEncoding {
 	GrowingCircleGridLeftID: NullInt64 = new NullInt64 // if pointer is null, GrowingCircleGridLeft.ID = 0
 
 	ConstructionAxisID: NullInt64 = new NullInt64 // if pointer is null, ConstructionAxis.ID = 0
+
+	ConstructionAxisGridID: NullInt64 = new NullInt64 // if pointer is null, ConstructionAxisGrid.ID = 0
+
+	ConstructionCircleID: NullInt64 = new NullInt64 // if pointer is null, ConstructionCircle.ID = 0
 
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 

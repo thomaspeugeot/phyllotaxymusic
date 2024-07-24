@@ -48,6 +48,37 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
 			true, true, 600, true, 400)
+		{
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "AxisGrid"
+			rf.Fieldname = "Axiss"
+			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			if reverseFieldOwner != nil {
+				AssociationReverseFieldToForm(
+					reverseFieldOwner.(*models.AxisGrid),
+					"Axiss",
+					instanceWithInferedType,
+					formGroup,
+					probe)
+			} else {
+				AssociationReverseFieldToForm[*models.AxisGrid, *models.Axis](
+					nil,
+					"Axiss",
+					instanceWithInferedType,
+					formGroup,
+					probe)
+			}
+		}
+
+	case *models.AxisGrid:
+		// insertion point
+		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationFieldToForm("Reference", instanceWithInferedType.Reference, formGroup, probe)
+		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationSliceToForm("Axiss", instanceWithInferedType, &instanceWithInferedType.Axiss, formGroup, probe)
 
 	case *models.Circle:
 		// insertion point
@@ -138,19 +169,6 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
 			true, true, 600, true, 400)
 
-	case *models.Line:
-		// insertion point
-		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("X1", instanceWithInferedType.X1, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("Y1", instanceWithInferedType.Y1, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("X2", instanceWithInferedType.X2, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("Y2", instanceWithInferedType.Y2, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-
 	case *models.Parameter:
 		// insertion point
 		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
@@ -183,6 +201,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("GrowingCircleGridLeftSeed", instanceWithInferedType.GrowingCircleGridLeftSeed, formGroup, probe)
 		AssociationFieldToForm("GrowingCircleGridLeft", instanceWithInferedType.GrowingCircleGridLeft, formGroup, probe)
 		AssociationFieldToForm("ConstructionAxis", instanceWithInferedType.ConstructionAxis, formGroup, probe)
+		AssociationFieldToForm("ConstructionAxisGrid", instanceWithInferedType.ConstructionAxisGrid, formGroup, probe)
 		AssociationFieldToForm("ConstructionCircle", instanceWithInferedType.ConstructionCircle, formGroup, probe)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)

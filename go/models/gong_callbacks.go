@@ -10,6 +10,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterAxisCreateCallback != nil {
 			stage.OnAfterAxisCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *AxisGrid:
+		if stage.OnAfterAxisGridCreateCallback != nil {
+			stage.OnAfterAxisGridCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *Circle:
 		if stage.OnAfterCircleCreateCallback != nil {
 			stage.OnAfterCircleCreateCallback.OnAfterCreate(stage, target)
@@ -21,10 +25,6 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *HorizontalAxis:
 		if stage.OnAfterHorizontalAxisCreateCallback != nil {
 			stage.OnAfterHorizontalAxisCreateCallback.OnAfterCreate(stage, target)
-		}
-	case *Line:
-		if stage.OnAfterLineCreateCallback != nil {
-			stage.OnAfterLineCreateCallback.OnAfterCreate(stage, target)
 		}
 	case *Parameter:
 		if stage.OnAfterParameterCreateCallback != nil {
@@ -57,6 +57,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		if stage.OnAfterAxisUpdateCallback != nil {
 			stage.OnAfterAxisUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
+	case *AxisGrid:
+		newTarget := any(new).(*AxisGrid)
+		if stage.OnAfterAxisGridUpdateCallback != nil {
+			stage.OnAfterAxisGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
 	case *Circle:
 		newTarget := any(new).(*Circle)
 		if stage.OnAfterCircleUpdateCallback != nil {
@@ -71,11 +76,6 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*HorizontalAxis)
 		if stage.OnAfterHorizontalAxisUpdateCallback != nil {
 			stage.OnAfterHorizontalAxisUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
-		}
-	case *Line:
-		newTarget := any(new).(*Line)
-		if stage.OnAfterLineUpdateCallback != nil {
-			stage.OnAfterLineUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *Parameter:
 		newTarget := any(new).(*Parameter)
@@ -112,6 +112,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*Axis)
 			stage.OnAfterAxisDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *AxisGrid:
+		if stage.OnAfterAxisGridDeleteCallback != nil {
+			staged := any(staged).(*AxisGrid)
+			stage.OnAfterAxisGridDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *Circle:
 		if stage.OnAfterCircleDeleteCallback != nil {
 			staged := any(staged).(*Circle)
@@ -126,11 +131,6 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 		if stage.OnAfterHorizontalAxisDeleteCallback != nil {
 			staged := any(staged).(*HorizontalAxis)
 			stage.OnAfterHorizontalAxisDeleteCallback.OnAfterDelete(stage, staged, front)
-		}
-	case *Line:
-		if stage.OnAfterLineDeleteCallback != nil {
-			staged := any(staged).(*Line)
-			stage.OnAfterLineDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Parameter:
 		if stage.OnAfterParameterDeleteCallback != nil {
@@ -166,6 +166,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterAxisReadCallback != nil {
 			stage.OnAfterAxisReadCallback.OnAfterRead(stage, target)
 		}
+	case *AxisGrid:
+		if stage.OnAfterAxisGridReadCallback != nil {
+			stage.OnAfterAxisGridReadCallback.OnAfterRead(stage, target)
+		}
 	case *Circle:
 		if stage.OnAfterCircleReadCallback != nil {
 			stage.OnAfterCircleReadCallback.OnAfterRead(stage, target)
@@ -177,10 +181,6 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *HorizontalAxis:
 		if stage.OnAfterHorizontalAxisReadCallback != nil {
 			stage.OnAfterHorizontalAxisReadCallback.OnAfterRead(stage, target)
-		}
-	case *Line:
-		if stage.OnAfterLineReadCallback != nil {
-			stage.OnAfterLineReadCallback.OnAfterRead(stage, target)
 		}
 	case *Parameter:
 		if stage.OnAfterParameterReadCallback != nil {
@@ -212,6 +212,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Axis:
 		stage.OnAfterAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[Axis])
 	
+	case *AxisGrid:
+		stage.OnAfterAxisGridUpdateCallback = any(callback).(OnAfterUpdateInterface[AxisGrid])
+	
 	case *Circle:
 		stage.OnAfterCircleUpdateCallback = any(callback).(OnAfterUpdateInterface[Circle])
 	
@@ -220,9 +223,6 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[HorizontalAxis])
-	
-	case *Line:
-		stage.OnAfterLineUpdateCallback = any(callback).(OnAfterUpdateInterface[Line])
 	
 	case *Parameter:
 		stage.OnAfterParameterUpdateCallback = any(callback).(OnAfterUpdateInterface[Parameter])
@@ -246,6 +246,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Axis:
 		stage.OnAfterAxisCreateCallback = any(callback).(OnAfterCreateInterface[Axis])
 	
+	case *AxisGrid:
+		stage.OnAfterAxisGridCreateCallback = any(callback).(OnAfterCreateInterface[AxisGrid])
+	
 	case *Circle:
 		stage.OnAfterCircleCreateCallback = any(callback).(OnAfterCreateInterface[Circle])
 	
@@ -254,9 +257,6 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisCreateCallback = any(callback).(OnAfterCreateInterface[HorizontalAxis])
-	
-	case *Line:
-		stage.OnAfterLineCreateCallback = any(callback).(OnAfterCreateInterface[Line])
 	
 	case *Parameter:
 		stage.OnAfterParameterCreateCallback = any(callback).(OnAfterCreateInterface[Parameter])
@@ -280,6 +280,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Axis:
 		stage.OnAfterAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[Axis])
 	
+	case *AxisGrid:
+		stage.OnAfterAxisGridDeleteCallback = any(callback).(OnAfterDeleteInterface[AxisGrid])
+	
 	case *Circle:
 		stage.OnAfterCircleDeleteCallback = any(callback).(OnAfterDeleteInterface[Circle])
 	
@@ -288,9 +291,6 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[HorizontalAxis])
-	
-	case *Line:
-		stage.OnAfterLineDeleteCallback = any(callback).(OnAfterDeleteInterface[Line])
 	
 	case *Parameter:
 		stage.OnAfterParameterDeleteCallback = any(callback).(OnAfterDeleteInterface[Parameter])
@@ -314,6 +314,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	case *Axis:
 		stage.OnAfterAxisReadCallback = any(callback).(OnAfterReadInterface[Axis])
 	
+	case *AxisGrid:
+		stage.OnAfterAxisGridReadCallback = any(callback).(OnAfterReadInterface[AxisGrid])
+	
 	case *Circle:
 		stage.OnAfterCircleReadCallback = any(callback).(OnAfterReadInterface[Circle])
 	
@@ -322,9 +325,6 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisReadCallback = any(callback).(OnAfterReadInterface[HorizontalAxis])
-	
-	case *Line:
-		stage.OnAfterLineReadCallback = any(callback).(OnAfterReadInterface[Line])
 	
 	case *Parameter:
 		stage.OnAfterParameterReadCallback = any(callback).(OnAfterReadInterface[Parameter])

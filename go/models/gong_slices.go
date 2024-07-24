@@ -36,6 +36,28 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 	case *Axis:
 		// insertion point per field
 
+	case *AxisGrid:
+		// insertion point per field
+		if fieldName == "Axiss" {
+
+			// walk all instances of the owning type
+			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
+				if any(_instance).(*AxisGrid) != owningInstanceInfered {
+					_inferedTypeInstance := any(_instance).(*AxisGrid)
+					reference := make([]FieldType, 0)
+					targetFieldSlice := any(_inferedTypeInstance.Axiss).([]FieldType)
+					copy(targetFieldSlice, reference)
+					_inferedTypeInstance.Axiss = _inferedTypeInstance.Axiss[0:]
+					for _, fieldInstance := range reference {
+						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
+							_inferedTypeInstance.Axiss =
+								append(_inferedTypeInstance.Axiss, any(fieldInstance).(*Axis))
+						}
+					}
+				}
+			}
+		}
+
 	case *Circle:
 		// insertion point per field
 
@@ -62,9 +84,6 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 		}
 
 	case *HorizontalAxis:
-		// insertion point per field
-
-	case *Line:
 		// insertion point per field
 
 	case *Parameter:
@@ -110,6 +129,17 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	// Compute reverse map for named struct Axis
 	// insertion point per field
 
+	// Compute reverse map for named struct AxisGrid
+	// insertion point per field
+	clear(stage.AxisGrid_Axiss_reverseMap)
+	stage.AxisGrid_Axiss_reverseMap = make(map[*Axis]*AxisGrid)
+	for axisgrid := range stage.AxisGrids {
+		_ = axisgrid
+		for _, _axis := range axisgrid.Axiss {
+			stage.AxisGrid_Axiss_reverseMap[_axis] = axisgrid
+		}
+	}
+
 	// Compute reverse map for named struct Circle
 	// insertion point per field
 
@@ -125,9 +155,6 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	}
 
 	// Compute reverse map for named struct HorizontalAxis
-	// insertion point per field
-
-	// Compute reverse map for named struct Line
 	// insertion point per field
 
 	// Compute reverse map for named struct Parameter

@@ -16,6 +16,8 @@ export class CircleAPI {
 	IsDisplayed: boolean = false
 	CenterX: number = 0
 	CenterY: number = 0
+	HasBespokeRadius: boolean = false
+	BespopkeRadius: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""

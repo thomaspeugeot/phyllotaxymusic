@@ -16,6 +16,8 @@ export class AxisAPI {
 	IsDisplayed: boolean = false
 	Angle: number = 0
 	Length: number = 0
+	CenterX: number = 0
+	CenterY: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""

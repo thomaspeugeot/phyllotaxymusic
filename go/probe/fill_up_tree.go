@@ -72,6 +72,16 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "AxisGrid":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.AxisGrid](probe.stageOfInterest)
+			for _axisgrid := range set {
+				nodeInstance := (&tree.Node{Name: _axisgrid.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_axisgrid, "AxisGrid", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "Circle":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.Circle](probe.stageOfInterest)
@@ -99,16 +109,6 @@ func fillUpTree(
 				nodeInstance := (&tree.Node{Name: _horizontalaxis.GetName()}).Stage(probe.treeStage)
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_horizontalaxis, "HorizontalAxis", probe)
-
-				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
-			}
-		case "Line":
-			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Line](probe.stageOfInterest)
-			for _line := range set {
-				nodeInstance := (&tree.Node{Name: _line.GetName()}).Stage(probe.treeStage)
-				nodeInstance.IsNodeClickable = true
-				nodeInstance.Impl = NewInstanceNodeCallback(_line, "Line", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}

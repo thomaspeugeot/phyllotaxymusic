@@ -14,16 +14,16 @@ import (
 )
 
 // declaration in order to justify use of the models import
-var __Line__dummysDeclaration__ models.Line
-var __Line_time__dummyDeclaration time.Duration
+var __AxisGrid__dummysDeclaration__ models.AxisGrid
+var __AxisGrid_time__dummyDeclaration time.Duration
 
-var mutexLine sync.Mutex
+var mutexAxisGrid sync.Mutex
 
-// An LineID parameter model.
+// An AxisGridID parameter model.
 //
 // This is used for operations that want the ID of an order in the path
-// swagger:parameters getLine updateLine deleteLine
-type LineID struct {
+// swagger:parameters getAxisGrid updateAxisGrid deleteAxisGrid
+type AxisGridID struct {
 	// The ID of the order
 	//
 	// in: path
@@ -31,29 +31,29 @@ type LineID struct {
 	ID int64
 }
 
-// LineInput is a schema that can validate the user’s
+// AxisGridInput is a schema that can validate the user’s
 // input to prevent us from getting invalid data
-// swagger:parameters postLine updateLine
-type LineInput struct {
-	// The Line to submit or modify
+// swagger:parameters postAxisGrid updateAxisGrid
+type AxisGridInput struct {
+	// The AxisGrid to submit or modify
 	// in: body
-	Line *orm.LineAPI
+	AxisGrid *orm.AxisGridAPI
 }
 
-// GetLines
+// GetAxisGrids
 //
-// swagger:route GET /lines lines getLines
+// swagger:route GET /axisgrids axisgrids getAxisGrids
 //
-// # Get all lines
+// # Get all axisgrids
 //
 // Responses:
 // default: genericError
 //
-//	200: lineDBResponse
-func (controller *Controller) GetLines(c *gin.Context) {
+//	200: axisgridDBResponse
+func (controller *Controller) GetAxisGrids(c *gin.Context) {
 
 	// source slice
-	var lineDBs []orm.LineDB
+	var axisgridDBs []orm.AxisGridDB
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -61,16 +61,16 @@ func (controller *Controller) GetLines(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetLines", "GONG__StackPath", stackPath)
+			// log.Println("GetAxisGrids", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoLine.GetDB()
+	db := backRepo.BackRepoAxisGrid.GetDB()
 
-	query := db.Find(&lineDBs)
+	query := db.Find(&axisgridDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -81,29 +81,29 @@ func (controller *Controller) GetLines(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	lineAPIs := make([]orm.LineAPI, 0)
+	axisgridAPIs := make([]orm.AxisGridAPI, 0)
 
-	// for each line, update fields from the database nullable fields
-	for idx := range lineDBs {
-		lineDB := &lineDBs[idx]
-		_ = lineDB
-		var lineAPI orm.LineAPI
+	// for each axisgrid, update fields from the database nullable fields
+	for idx := range axisgridDBs {
+		axisgridDB := &axisgridDBs[idx]
+		_ = axisgridDB
+		var axisgridAPI orm.AxisGridAPI
 
 		// insertion point for updating fields
-		lineAPI.ID = lineDB.ID
-		lineDB.CopyBasicFieldsToLine_WOP(&lineAPI.Line_WOP)
-		lineAPI.LinePointersEncoding = lineDB.LinePointersEncoding
-		lineAPIs = append(lineAPIs, lineAPI)
+		axisgridAPI.ID = axisgridDB.ID
+		axisgridDB.CopyBasicFieldsToAxisGrid_WOP(&axisgridAPI.AxisGrid_WOP)
+		axisgridAPI.AxisGridPointersEncoding = axisgridDB.AxisGridPointersEncoding
+		axisgridAPIs = append(axisgridAPIs, axisgridAPI)
 	}
 
-	c.JSON(http.StatusOK, lineAPIs)
+	c.JSON(http.StatusOK, axisgridAPIs)
 }
 
-// PostLine
+// PostAxisGrid
 //
-// swagger:route POST /lines lines postLine
+// swagger:route POST /axisgrids axisgrids postAxisGrid
 //
-// Creates a line
+// Creates a axisgrid
 //
 //	Consumes:
 //	- application/json
@@ -113,10 +113,10 @@ func (controller *Controller) GetLines(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func (controller *Controller) PostLine(c *gin.Context) {
+func (controller *Controller) PostAxisGrid(c *gin.Context) {
 
-	mutexLine.Lock()
-	defer mutexLine.Unlock()
+	mutexAxisGrid.Lock()
+	defer mutexAxisGrid.Unlock()
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -124,17 +124,17 @@ func (controller *Controller) PostLine(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("PostLines", "GONG__StackPath", stackPath)
+			// log.Println("PostAxisGrids", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoLine.GetDB()
+	db := backRepo.BackRepoAxisGrid.GetDB()
 
 	// Validate input
-	var input orm.LineAPI
+	var input orm.AxisGridAPI
 
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
@@ -146,12 +146,12 @@ func (controller *Controller) PostLine(c *gin.Context) {
 		return
 	}
 
-	// Create line
-	lineDB := orm.LineDB{}
-	lineDB.LinePointersEncoding = input.LinePointersEncoding
-	lineDB.CopyBasicFieldsFromLine_WOP(&input.Line_WOP)
+	// Create axisgrid
+	axisgridDB := orm.AxisGridDB{}
+	axisgridDB.AxisGridPointersEncoding = input.AxisGridPointersEncoding
+	axisgridDB.CopyBasicFieldsFromAxisGrid_WOP(&input.AxisGrid_WOP)
 
-	query := db.Create(&lineDB)
+	query := db.Create(&axisgridDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -162,31 +162,31 @@ func (controller *Controller) PostLine(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	backRepo.BackRepoLine.CheckoutPhaseOneInstance(&lineDB)
-	line := backRepo.BackRepoLine.Map_LineDBID_LinePtr[lineDB.ID]
+	backRepo.BackRepoAxisGrid.CheckoutPhaseOneInstance(&axisgridDB)
+	axisgrid := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[axisgridDB.ID]
 
-	if line != nil {
-		models.AfterCreateFromFront(backRepo.GetStage(), line)
+	if axisgrid != nil {
+		models.AfterCreateFromFront(backRepo.GetStage(), axisgrid)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	backRepo.IncrementPushFromFrontNb()
 
-	c.JSON(http.StatusOK, lineDB)
+	c.JSON(http.StatusOK, axisgridDB)
 }
 
-// GetLine
+// GetAxisGrid
 //
-// swagger:route GET /lines/{ID} lines getLine
+// swagger:route GET /axisgrids/{ID} axisgrids getAxisGrid
 //
-// Gets the details for a line.
+// Gets the details for a axisgrid.
 //
 // Responses:
 // default: genericError
 //
-//	200: lineDBResponse
-func (controller *Controller) GetLine(c *gin.Context) {
+//	200: axisgridDBResponse
+func (controller *Controller) GetAxisGrid(c *gin.Context) {
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -194,18 +194,18 @@ func (controller *Controller) GetLine(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetLine", "GONG__StackPath", stackPath)
+			// log.Println("GetAxisGrid", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoLine.GetDB()
+	db := backRepo.BackRepoAxisGrid.GetDB()
 
-	// Get lineDB in DB
-	var lineDB orm.LineDB
-	if err := db.First(&lineDB, c.Param("id")).Error; err != nil {
+	// Get axisgridDB in DB
+	var axisgridDB orm.AxisGridDB
+	if err := db.First(&axisgridDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -214,28 +214,28 @@ func (controller *Controller) GetLine(c *gin.Context) {
 		return
 	}
 
-	var lineAPI orm.LineAPI
-	lineAPI.ID = lineDB.ID
-	lineAPI.LinePointersEncoding = lineDB.LinePointersEncoding
-	lineDB.CopyBasicFieldsToLine_WOP(&lineAPI.Line_WOP)
+	var axisgridAPI orm.AxisGridAPI
+	axisgridAPI.ID = axisgridDB.ID
+	axisgridAPI.AxisGridPointersEncoding = axisgridDB.AxisGridPointersEncoding
+	axisgridDB.CopyBasicFieldsToAxisGrid_WOP(&axisgridAPI.AxisGrid_WOP)
 
-	c.JSON(http.StatusOK, lineAPI)
+	c.JSON(http.StatusOK, axisgridAPI)
 }
 
-// UpdateLine
+// UpdateAxisGrid
 //
-// swagger:route PATCH /lines/{ID} lines updateLine
+// swagger:route PATCH /axisgrids/{ID} axisgrids updateAxisGrid
 //
-// # Update a line
+// # Update a axisgrid
 //
 // Responses:
 // default: genericError
 //
-//	200: lineDBResponse
-func (controller *Controller) UpdateLine(c *gin.Context) {
+//	200: axisgridDBResponse
+func (controller *Controller) UpdateAxisGrid(c *gin.Context) {
 
-	mutexLine.Lock()
-	defer mutexLine.Unlock()
+	mutexAxisGrid.Lock()
+	defer mutexAxisGrid.Unlock()
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -243,17 +243,17 @@ func (controller *Controller) UpdateLine(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("UpdateLine", "GONG__StackPath", stackPath)
+			// log.Println("UpdateAxisGrid", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoLine.GetDB()
+	db := backRepo.BackRepoAxisGrid.GetDB()
 
 	// Validate input
-	var input orm.LineAPI
+	var input orm.AxisGridAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -261,10 +261,10 @@ func (controller *Controller) UpdateLine(c *gin.Context) {
 	}
 
 	// Get model if exist
-	var lineDB orm.LineDB
+	var axisgridDB orm.AxisGridDB
 
-	// fetch the line
-	query := db.First(&lineDB, c.Param("id"))
+	// fetch the axisgrid
+	query := db.First(&axisgridDB, c.Param("id"))
 
 	if query.Error != nil {
 		var returnError GenericError
@@ -276,10 +276,10 @@ func (controller *Controller) UpdateLine(c *gin.Context) {
 	}
 
 	// update
-	lineDB.CopyBasicFieldsFromLine_WOP(&input.Line_WOP)
-	lineDB.LinePointersEncoding = input.LinePointersEncoding
+	axisgridDB.CopyBasicFieldsFromAxisGrid_WOP(&input.AxisGrid_WOP)
+	axisgridDB.AxisGridPointersEncoding = input.AxisGridPointersEncoding
 
-	query = db.Model(&lineDB).Updates(lineDB)
+	query = db.Model(&axisgridDB).Updates(axisgridDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -290,16 +290,16 @@ func (controller *Controller) UpdateLine(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	lineNew := new(models.Line)
-	lineDB.CopyBasicFieldsToLine(lineNew)
+	axisgridNew := new(models.AxisGrid)
+	axisgridDB.CopyBasicFieldsToAxisGrid(axisgridNew)
 
 	// redeem pointers
-	lineDB.DecodePointers(backRepo, lineNew)
+	axisgridDB.DecodePointers(backRepo, axisgridNew)
 
 	// get stage instance from DB instance, and call callback function
-	lineOld := backRepo.BackRepoLine.Map_LineDBID_LinePtr[lineDB.ID]
-	if lineOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), lineOld, lineNew)
+	axisgridOld := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[axisgridDB.ID]
+	if axisgridOld != nil {
+		models.AfterUpdateFromFront(backRepo.GetStage(), axisgridOld, axisgridNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -308,23 +308,23 @@ func (controller *Controller) UpdateLine(c *gin.Context) {
 	// generates a checkout
 	backRepo.IncrementPushFromFrontNb()
 
-	// return status OK with the marshalling of the the lineDB
-	c.JSON(http.StatusOK, lineDB)
+	// return status OK with the marshalling of the the axisgridDB
+	c.JSON(http.StatusOK, axisgridDB)
 }
 
-// DeleteLine
+// DeleteAxisGrid
 //
-// swagger:route DELETE /lines/{ID} lines deleteLine
+// swagger:route DELETE /axisgrids/{ID} axisgrids deleteAxisGrid
 //
-// # Delete a line
+// # Delete a axisgrid
 //
 // default: genericError
 //
-//	200: lineDBResponse
-func (controller *Controller) DeleteLine(c *gin.Context) {
+//	200: axisgridDBResponse
+func (controller *Controller) DeleteAxisGrid(c *gin.Context) {
 
-	mutexLine.Lock()
-	defer mutexLine.Unlock()
+	mutexAxisGrid.Lock()
+	defer mutexAxisGrid.Unlock()
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -332,18 +332,18 @@ func (controller *Controller) DeleteLine(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("DeleteLine", "GONG__StackPath", stackPath)
+			// log.Println("DeleteAxisGrid", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoLine.GetDB()
+	db := backRepo.BackRepoAxisGrid.GetDB()
 
 	// Get model if exist
-	var lineDB orm.LineDB
-	if err := db.First(&lineDB, c.Param("id")).Error; err != nil {
+	var axisgridDB orm.AxisGridDB
+	if err := db.First(&axisgridDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,16 +353,16 @@ func (controller *Controller) DeleteLine(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&lineDB)
+	db.Unscoped().Delete(&axisgridDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
-	lineDeleted := new(models.Line)
-	lineDB.CopyBasicFieldsToLine(lineDeleted)
+	axisgridDeleted := new(models.AxisGrid)
+	axisgridDB.CopyBasicFieldsToAxisGrid(axisgridDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	lineStaged := backRepo.BackRepoLine.Map_LineDBID_LinePtr[lineDB.ID]
-	if lineStaged != nil {
-		models.AfterDeleteFromFront(backRepo.GetStage(), lineStaged, lineDeleted)
+	axisgridStaged := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[axisgridDB.ID]
+	if axisgridStaged != nil {
+		models.AfterDeleteFromFront(backRepo.GetStage(), axisgridStaged, axisgridDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

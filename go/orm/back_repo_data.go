@@ -6,13 +6,13 @@ type BackRepoData struct {
 
 	AxisAPIs []*AxisAPI
 
+	AxisGridAPIs []*AxisGridAPI
+
 	CircleAPIs []*CircleAPI
 
 	CircleGridAPIs []*CircleGridAPI
 
 	HorizontalAxisAPIs []*HorizontalAxisAPI
-
-	LineAPIs []*LineAPI
 
 	ParameterAPIs []*ParameterAPI
 
@@ -33,6 +33,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		axisDB.CopyBasicFieldsToAxis_WOP(&axisAPI.Axis_WOP)
 
 		backRepoData.AxisAPIs = append(backRepoData.AxisAPIs, &axisAPI)
+	}
+
+	for _, axisgridDB := range backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridDB {
+
+		var axisgridAPI AxisGridAPI
+		axisgridAPI.ID = axisgridDB.ID
+		axisgridAPI.AxisGridPointersEncoding = axisgridDB.AxisGridPointersEncoding
+		axisgridDB.CopyBasicFieldsToAxisGrid_WOP(&axisgridAPI.AxisGrid_WOP)
+
+		backRepoData.AxisGridAPIs = append(backRepoData.AxisGridAPIs, &axisgridAPI)
 	}
 
 	for _, circleDB := range backRepo.BackRepoCircle.Map_CircleDBID_CircleDB {
@@ -63,16 +73,6 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		horizontalaxisDB.CopyBasicFieldsToHorizontalAxis_WOP(&horizontalaxisAPI.HorizontalAxis_WOP)
 
 		backRepoData.HorizontalAxisAPIs = append(backRepoData.HorizontalAxisAPIs, &horizontalaxisAPI)
-	}
-
-	for _, lineDB := range backRepo.BackRepoLine.Map_LineDBID_LineDB {
-
-		var lineAPI LineAPI
-		lineAPI.ID = lineDB.ID
-		lineAPI.LinePointersEncoding = lineDB.LinePointersEncoding
-		lineDB.CopyBasicFieldsToLine_WOP(&lineAPI.Line_WOP)
-
-		backRepoData.LineAPIs = append(backRepoData.LineAPIs, &lineAPI)
 	}
 
 	for _, parameterDB := range backRepo.BackRepoParameter.Map_ParameterDBID_ParameterDB {

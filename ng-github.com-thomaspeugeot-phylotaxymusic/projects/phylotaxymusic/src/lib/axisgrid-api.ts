@@ -1,11 +1,12 @@
 // insertion point for imports
+import { AxisAPI } from './axis-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class LineAPI {
+export class AxisGridAPI {
 
-	static GONGSTRUCT_NAME = "Line"
+	static GONGSTRUCT_NAME = "AxisGrid"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,16 +14,16 @@ export class LineAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	X1: number = 0
-	Y1: number = 0
-	X2: number = 0
-	Y2: number = 0
+	IsDisplayed: boolean = false
 
 	// insertion point for other decls
 
-	LinePointersEncoding: LinePointersEncoding = new LinePointersEncoding
+	AxisGridPointersEncoding: AxisGridPointersEncoding = new AxisGridPointersEncoding
 }
 
-export class LinePointersEncoding {
+export class AxisGridPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	ReferenceID: NullInt64 = new NullInt64 // if pointer is null, Reference.ID = 0
+
+	Axiss: number[] = []
 }

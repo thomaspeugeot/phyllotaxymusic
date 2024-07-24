@@ -32,6 +32,18 @@ func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Prob
 		)
 		formGroup.HasSuppressButton = true
 		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.AxisGrid:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "AxisGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__AxisGridFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
 	case *models.Circle:
 		formGroup := (&gongtable.FormGroup{
 			Name:  formName,
@@ -62,18 +74,6 @@ func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Prob
 			Label: "HorizontalAxis Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__HorizontalAxisFormCallback(
-			instancesTyped,
-			probe,
-			formGroup,
-		)
-		formGroup.HasSuppressButton = true
-		FillUpForm(instancesTyped, formGroup, probe)
-	case *models.Line:
-		formGroup := (&gongtable.FormGroup{
-			Name:  formName,
-			Label: "Line Form",
-		}).Stage(formStage)
-		formGroup.OnSave = __gong__New__LineFormCallback(
 			instancesTyped,
 			probe,
 			formGroup,

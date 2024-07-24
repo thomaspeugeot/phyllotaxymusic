@@ -21,6 +21,8 @@ export class Circle {
 	IsDisplayed: boolean = false
 	CenterX: number = 0
 	CenterY: number = 0
+	HasBespokeRadius: boolean = false
+	BespopkeRadius: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -44,6 +46,8 @@ export function CopyCircleToCircleAPI(circle: Circle, circleAPI: CircleAPI) {
 	circleAPI.IsDisplayed = circle.IsDisplayed
 	circleAPI.CenterX = circle.CenterX
 	circleAPI.CenterY = circle.CenterY
+	circleAPI.HasBespokeRadius = circle.HasBespokeRadius
+	circleAPI.BespopkeRadius = circle.BespopkeRadius
 	circleAPI.Color = circle.Color
 	circleAPI.FillOpacity = circle.FillOpacity
 	circleAPI.Stroke = circle.Stroke
@@ -73,6 +77,8 @@ export function CopyCircleAPIToCircle(circleAPI: CircleAPI, circle: Circle, fron
 	circle.IsDisplayed = circleAPI.IsDisplayed
 	circle.CenterX = circleAPI.CenterX
 	circle.CenterY = circleAPI.CenterY
+	circle.HasBespokeRadius = circleAPI.HasBespokeRadius
+	circle.BespopkeRadius = circleAPI.BespopkeRadius
 	circle.Color = circleAPI.Color
 	circle.FillOpacity = circleAPI.FillOpacity
 	circle.Stroke = circleAPI.Stroke

@@ -22,14 +22,14 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 	// insertion point
 	case *models.Axis:
 		fillUpTable[models.Axis](probe)
+	case *models.AxisGrid:
+		fillUpTable[models.AxisGrid](probe)
 	case *models.Circle:
 		fillUpTable[models.Circle](probe)
 	case *models.CircleGrid:
 		fillUpTable[models.CircleGrid](probe)
 	case *models.HorizontalAxis:
 		fillUpTable[models.HorizontalAxis](probe)
-	case *models.Line:
-		fillUpTable[models.Line](probe)
 	case *models.Parameter:
 		fillUpTable[models.Parameter](probe)
 	case *models.Rhombus:

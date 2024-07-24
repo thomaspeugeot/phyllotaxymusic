@@ -21,6 +21,8 @@ export class Axis {
 	IsDisplayed: boolean = false
 	Angle: number = 0
 	Length: number = 0
+	CenterX: number = 0
+	CenterY: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -44,6 +46,8 @@ export function CopyAxisToAxisAPI(axis: Axis, axisAPI: AxisAPI) {
 	axisAPI.IsDisplayed = axis.IsDisplayed
 	axisAPI.Angle = axis.Angle
 	axisAPI.Length = axis.Length
+	axisAPI.CenterX = axis.CenterX
+	axisAPI.CenterY = axis.CenterY
 	axisAPI.Color = axis.Color
 	axisAPI.FillOpacity = axis.FillOpacity
 	axisAPI.Stroke = axis.Stroke
@@ -73,6 +77,8 @@ export function CopyAxisAPIToAxis(axisAPI: AxisAPI, axis: Axis, frontRepo: Front
 	axis.IsDisplayed = axisAPI.IsDisplayed
 	axis.Angle = axisAPI.Angle
 	axis.Length = axisAPI.Length
+	axis.CenterX = axisAPI.CenterX
+	axis.CenterY = axisAPI.CenterY
 	axis.Color = axisAPI.Color
 	axis.FillOpacity = axisAPI.FillOpacity
 	axis.Stroke = axisAPI.Stroke

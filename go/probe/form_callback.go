@@ -89,6 +89,48 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(axis_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(axis_.Transform), formDiv)
+		case "AxisGrid:Axiss":
+			// we need to retrieve the field owner before the change
+			var pastAxisGridOwner *models.AxisGrid
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "AxisGrid"
+			rf.Fieldname = "Axiss"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				axisFormCallback.probe.stageOfInterest,
+				axisFormCallback.probe.backRepoOfInterest,
+				axis_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastAxisGridOwner = reverseFieldOwner.(*models.AxisGrid)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastAxisGridOwner != nil {
+					idx := slices.Index(pastAxisGridOwner.Axiss, axis_)
+					pastAxisGridOwner.Axiss = slices.Delete(pastAxisGridOwner.Axiss, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _axisgrid := range *models.GetGongstructInstancesSet[models.AxisGrid](axisFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _axisgrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newAxisGridOwner := _axisgrid // we have a match
+						if pastAxisGridOwner != nil {
+							if newAxisGridOwner != pastAxisGridOwner {
+								idx := slices.Index(pastAxisGridOwner.Axiss, axis_)
+								pastAxisGridOwner.Axiss = slices.Delete(pastAxisGridOwner.Axiss, idx, idx+1)
+								newAxisGridOwner.Axiss = append(newAxisGridOwner.Axiss, axis_)
+							}
+						} else {
+							newAxisGridOwner.Axiss = append(newAxisGridOwner.Axiss, axis_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -120,6 +162,87 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 	}
 
 	fillUpTree(axisFormCallback.probe)
+}
+func __gong__New__AxisGridFormCallback(
+	axisgrid *models.AxisGrid,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (axisgridFormCallback *AxisGridFormCallback) {
+	axisgridFormCallback = new(AxisGridFormCallback)
+	axisgridFormCallback.probe = probe
+	axisgridFormCallback.axisgrid = axisgrid
+	axisgridFormCallback.formGroup = formGroup
+
+	axisgridFormCallback.CreationMode = (axisgrid == nil)
+
+	return
+}
+
+type AxisGridFormCallback struct {
+	axisgrid *models.AxisGrid
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
+
+	log.Println("AxisGridFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	axisgridFormCallback.probe.formStage.Checkout()
+
+	if axisgridFormCallback.axisgrid == nil {
+		axisgridFormCallback.axisgrid = new(models.AxisGrid).Stage(axisgridFormCallback.probe.stageOfInterest)
+	}
+	axisgrid_ := axisgridFormCallback.axisgrid
+	_ = axisgrid_
+
+	for _, formDiv := range axisgridFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(axisgrid_.Name), formDiv)
+		case "Reference":
+			FormDivSelectFieldToField(&(axisgrid_.Reference), axisgridFormCallback.probe.stageOfInterest, formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(axisgrid_.IsDisplayed), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if axisgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		axisgrid_.Unstage(axisgridFormCallback.probe.stageOfInterest)
+	}
+
+	axisgridFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.AxisGrid](
+		axisgridFormCallback.probe,
+	)
+	axisgridFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if axisgridFormCallback.CreationMode || axisgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		axisgridFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(axisgridFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__AxisGridFormCallback(
+			nil,
+			axisgridFormCallback.probe,
+			newFormGroup,
+		)
+		axisgrid := new(models.AxisGrid)
+		FillUpForm(axisgrid, newFormGroup, axisgridFormCallback.probe)
+		axisgridFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(axisgridFormCallback.probe)
 }
 func __gong__New__CircleFormCallback(
 	circle *models.Circle,
@@ -446,91 +569,6 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 
 	fillUpTree(horizontalaxisFormCallback.probe)
 }
-func __gong__New__LineFormCallback(
-	line *models.Line,
-	probe *Probe,
-	formGroup *table.FormGroup,
-) (lineFormCallback *LineFormCallback) {
-	lineFormCallback = new(LineFormCallback)
-	lineFormCallback.probe = probe
-	lineFormCallback.line = line
-	lineFormCallback.formGroup = formGroup
-
-	lineFormCallback.CreationMode = (line == nil)
-
-	return
-}
-
-type LineFormCallback struct {
-	line *models.Line
-
-	// If the form call is called on the creation of a new instnace
-	CreationMode bool
-
-	probe *Probe
-
-	formGroup *table.FormGroup
-}
-
-func (lineFormCallback *LineFormCallback) OnSave() {
-
-	log.Println("LineFormCallback, OnSave")
-
-	// checkout formStage to have the form group on the stage synchronized with the
-	// back repo (and front repo)
-	lineFormCallback.probe.formStage.Checkout()
-
-	if lineFormCallback.line == nil {
-		lineFormCallback.line = new(models.Line).Stage(lineFormCallback.probe.stageOfInterest)
-	}
-	line_ := lineFormCallback.line
-	_ = line_
-
-	for _, formDiv := range lineFormCallback.formGroup.FormDivs {
-		switch formDiv.Name {
-		// insertion point per field
-		case "Name":
-			FormDivBasicFieldToField(&(line_.Name), formDiv)
-		case "X1":
-			FormDivBasicFieldToField(&(line_.X1), formDiv)
-		case "Y1":
-			FormDivBasicFieldToField(&(line_.Y1), formDiv)
-		case "X2":
-			FormDivBasicFieldToField(&(line_.X2), formDiv)
-		case "Y2":
-			FormDivBasicFieldToField(&(line_.Y2), formDiv)
-		}
-	}
-
-	// manage the suppress operation
-	if lineFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		line_.Unstage(lineFormCallback.probe.stageOfInterest)
-	}
-
-	lineFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.Line](
-		lineFormCallback.probe,
-	)
-	lineFormCallback.probe.tableStage.Commit()
-
-	// display a new form by reset the form stage
-	if lineFormCallback.CreationMode || lineFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		lineFormCallback.probe.formStage.Reset()
-		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
-		}).Stage(lineFormCallback.probe.formStage)
-		newFormGroup.OnSave = __gong__New__LineFormCallback(
-			nil,
-			lineFormCallback.probe,
-			newFormGroup,
-		)
-		line := new(models.Line)
-		FillUpForm(line, newFormGroup, lineFormCallback.probe)
-		lineFormCallback.probe.formStage.Commit()
-	}
-
-	fillUpTree(lineFormCallback.probe)
-}
 func __gong__New__ParameterFormCallback(
 	parameter *models.Parameter,
 	probe *Probe,
@@ -622,6 +660,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.GrowingCircleGridLeft), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "ConstructionAxis":
 			FormDivSelectFieldToField(&(parameter_.ConstructionAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "ConstructionAxisGrid":
+			FormDivSelectFieldToField(&(parameter_.ConstructionAxisGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "ConstructionCircle":
 			FormDivSelectFieldToField(&(parameter_.ConstructionCircle), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "OriginX":

@@ -28,6 +28,8 @@ func _(stage *models.StageStruct) {
 	__Axis__000001_Reference_Axis := (&models.Axis{Name: `Reference Axis`}).Stage(stage)
 	__Axis__000002_Rotated_Axis := (&models.Axis{Name: `Rotated Axis`}).Stage(stage)
 
+	__AxisGrid__000000_Construction_Axis_Grid := (&models.AxisGrid{Name: `Construction Axis Grid`}).Stage(stage)
+
 	__Circle__000000_Construction_Circle := (&models.Circle{Name: `Construction Circle`}).Stage(stage)
 	__Circle__000001_Growing := (&models.Circle{Name: `Growing`}).Stage(stage)
 	__Circle__000002_Growing_Seed_Left := (&models.Circle{Name: `Growing Seed Left`}).Stage(stage)
@@ -100,6 +102,9 @@ func _(stage *models.StageStruct) {
 	__Axis__000002_Rotated_Axis.StrokeDashArray = ``
 	__Axis__000002_Rotated_Axis.StrokeDashArrayWhenSelected = ``
 	__Axis__000002_Rotated_Axis.Transform = ``
+
+	__AxisGrid__000000_Construction_Axis_Grid.Name = `Construction Axis Grid`
+	__AxisGrid__000000_Construction_Axis_Grid.IsDisplayed = false
 
 	__Circle__000000_Construction_Circle.Name = `Construction Circle`
 	__Circle__000000_Construction_Circle.IsDisplayed = true
@@ -297,6 +302,7 @@ func _(stage *models.StageStruct) {
 	__VerticalAxis__000000_Vertical_Axis.Transform = ``
 
 	// Setup of pointers
+	__AxisGrid__000000_Construction_Axis_Grid.Reference = __Axis__000000_Construction_Axis
 	__CircleGrid__000000_Growing_Circle_Grid.Reference = __Circle__000001_Growing
 	__CircleGrid__000002_Initial_Circle_Grid.Reference = __Circle__000003_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000001_Initial_Rhombus
@@ -317,6 +323,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.GrowingCircleGridLeftSeed = __Circle__000002_Growing_Seed_Left
 	__Parameter__000000_Reference.GrowingCircleGridLeft = __CircleGrid__000001_Growing_Circle_Grid_Shifted_Left
 	__Parameter__000000_Reference.ConstructionAxis = __Axis__000000_Construction_Axis
+	__Parameter__000000_Reference.ConstructionAxisGrid = __AxisGrid__000000_Construction_Axis_Grid
 	__Parameter__000000_Reference.ConstructionCircle = __Circle__000000_Construction_Circle
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis

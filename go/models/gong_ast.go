@@ -315,10 +315,10 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 
 // insertion point for identifiers maps
 var __gong__map_Axis = make(map[string]*Axis)
+var __gong__map_AxisGrid = make(map[string]*AxisGrid)
 var __gong__map_Circle = make(map[string]*Circle)
 var __gong__map_CircleGrid = make(map[string]*CircleGrid)
 var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
-var __gong__map_Line = make(map[string]*Line)
 var __gong__map_Parameter = make(map[string]*Parameter)
 var __gong__map_Rhombus = make(map[string]*Rhombus)
 var __gong__map_RhombusGrid = make(map[string]*RhombusGrid)
@@ -499,6 +499,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceAxis := (&Axis{Name: instanceName}).Stage(stage)
 										instance = any(instanceAxis)
 										__gong__map_Axis[identifier] = instanceAxis
+									case "AxisGrid":
+										instanceAxisGrid := (&AxisGrid{Name: instanceName}).Stage(stage)
+										instance = any(instanceAxisGrid)
+										__gong__map_AxisGrid[identifier] = instanceAxisGrid
 									case "Circle":
 										instanceCircle := (&Circle{Name: instanceName}).Stage(stage)
 										instance = any(instanceCircle)
@@ -511,10 +515,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceHorizontalAxis := (&HorizontalAxis{Name: instanceName}).Stage(stage)
 										instance = any(instanceHorizontalAxis)
 										__gong__map_HorizontalAxis[identifier] = instanceHorizontalAxis
-									case "Line":
-										instanceLine := (&Line{Name: instanceName}).Stage(stage)
-										instance = any(instanceLine)
-										__gong__map_Line[identifier] = instanceLine
 									case "Parameter":
 										instanceParameter := (&Parameter{Name: instanceName}).Stage(stage)
 										instance = any(instanceParameter)
@@ -571,6 +571,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "AxisGrid":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "Circle":
 							switch fieldName {
 							// insertion point for date assign code
@@ -580,10 +584,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							// insertion point for date assign code
 							}
 						case "HorizontalAxis":
-							switch fieldName {
-							// insertion point for date assign code
-							}
-						case "Line":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -632,6 +632,16 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
+					case "AxisGrid":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "Axiss":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Axis[targetIdentifier]
+							__gong__map_AxisGrid[identifier].Axiss =
+								append(__gong__map_AxisGrid[identifier].Axiss, target)
+						}
 					case "Circle":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
@@ -647,10 +657,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 								append(__gong__map_CircleGrid[identifier].Circles, target)
 						}
 					case "HorizontalAxis":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						}
-					case "Line":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -802,6 +808,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Axis[identifier].Transform = fielValue
 				}
+			case "AxisGrid":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_AxisGrid[identifier].Name = fielValue
+				}
 			case "Circle":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -942,42 +956,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_HorizontalAxis[identifier].Transform = fielValue
-				}
-			case "Line":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Line[identifier].Name = fielValue
-				case "X1":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Line[identifier].X1 = exprSign * fielValue
-				case "Y1":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Line[identifier].Y1 = exprSign * fielValue
-				case "X2":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Line[identifier].X2 = exprSign * fielValue
-				case "Y2":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Line[identifier].Y2 = exprSign * fielValue
 				}
 			case "Parameter":
 				switch fieldName {
@@ -1216,6 +1194,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_Axis[identifier].IsDisplayed = fielValue
 				}
+			case "AxisGrid":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Reference":
+					targetIdentifier := ident.Name
+					__gong__map_AxisGrid[identifier].Reference = __gong__map_Axis[targetIdentifier]
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_AxisGrid[identifier].IsDisplayed = fielValue
+				}
 			case "Circle":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1258,10 +1250,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_HorizontalAxis[identifier].IsDisplayed = fielValue
-				}
-			case "Line":
-				switch fieldName {
-				// insertion point for field dependant code
 				}
 			case "Parameter":
 				switch fieldName {
@@ -1320,6 +1308,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "ConstructionAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].ConstructionAxis = __gong__map_Axis[targetIdentifier]
+				case "ConstructionAxisGrid":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].ConstructionAxisGrid = __gong__map_AxisGrid[targetIdentifier]
 				case "ConstructionCircle":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].ConstructionCircle = __gong__map_Circle[targetIdentifier]
@@ -1398,6 +1389,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					switch fieldName {
 					// insertion point for enum assign code
 					}
+				case "AxisGrid":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
 				case "Circle":
 					switch fieldName {
 					// insertion point for enum assign code
@@ -1407,10 +1402,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "HorizontalAxis":
-					switch fieldName {
-					// insertion point for enum assign code
-					}
-				case "Line":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

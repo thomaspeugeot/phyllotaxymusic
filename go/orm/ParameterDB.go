@@ -119,6 +119,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	ConstructionAxisID sql.NullInt64
 
+	// field ConstructionAxisGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ConstructionAxisGridID sql.NullInt64
+
 	// field ConstructionCircle is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	ConstructionCircleID sql.NullInt64
@@ -553,6 +557,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.ConstructionAxisID.Valid = true
 		}
 
+		// commit pointer value parameter.ConstructionAxisGrid translates to updating the parameter.ConstructionAxisGridID
+		parameterDB.ConstructionAxisGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.ConstructionAxisGrid != nil {
+			if ConstructionAxisGridId, ok := backRepo.BackRepoAxisGrid.Map_AxisGridPtr_AxisGridDBID[parameter.ConstructionAxisGrid]; ok {
+				parameterDB.ConstructionAxisGridID.Int64 = int64(ConstructionAxisGridId)
+				parameterDB.ConstructionAxisGridID.Valid = true
+			}
+		} else {
+			parameterDB.ConstructionAxisGridID.Int64 = 0
+			parameterDB.ConstructionAxisGridID.Valid = true
+		}
+
 		// commit pointer value parameter.ConstructionCircle translates to updating the parameter.ConstructionCircleID
 		parameterDB.ConstructionCircleID.Valid = true // allow for a 0 value (nil association)
 		if parameter.ConstructionCircle != nil {
@@ -791,6 +807,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.ConstructionAxis = nil
 	if parameterDB.ConstructionAxisID.Int64 != 0 {
 		parameter.ConstructionAxis = backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(parameterDB.ConstructionAxisID.Int64)]
+	}
+	// ConstructionAxisGrid field
+	parameter.ConstructionAxisGrid = nil
+	if parameterDB.ConstructionAxisGridID.Int64 != 0 {
+		parameter.ConstructionAxisGrid = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.ConstructionAxisGridID.Int64)]
 	}
 	// ConstructionCircle field
 	parameter.ConstructionCircle = nil
@@ -1225,6 +1246,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.ConstructionAxisID.Int64 != 0 {
 			parameterDB.ConstructionAxisID.Int64 = int64(BackRepoAxisid_atBckpTime_newID[uint(parameterDB.ConstructionAxisID.Int64)])
 			parameterDB.ConstructionAxisID.Valid = true
+		}
+
+		// reindexing ConstructionAxisGrid field
+		if parameterDB.ConstructionAxisGridID.Int64 != 0 {
+			parameterDB.ConstructionAxisGridID.Int64 = int64(BackRepoAxisGridid_atBckpTime_newID[uint(parameterDB.ConstructionAxisGridID.Int64)])
+			parameterDB.ConstructionAxisGridID.Valid = true
 		}
 
 		// reindexing ConstructionCircle field

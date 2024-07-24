@@ -43,6 +43,18 @@ func (from *Axis) CopyBasicFields(to *Axis) {
 	to.Transform = from.Transform
 }
 
+type AxisGrid_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+}
+
+func (from *AxisGrid) CopyBasicFields(to *AxisGrid) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+}
+
 type Circle_WOP struct {
 	// insertion point
 	Name string
@@ -121,24 +133,6 @@ func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
 	to.Transform = from.Transform
-}
-
-type Line_WOP struct {
-	// insertion point
-	Name string
-	X1 float64
-	Y1 float64
-	X2 float64
-	Y2 float64
-}
-
-func (from *Line) CopyBasicFields(to *Line) {
-	// insertion point
-	to.Name = from.Name
-	to.X1 = from.X1
-	to.Y1 = from.Y1
-	to.X2 = from.X2
-	to.Y2 = from.Y2
 }
 
 type Parameter_WOP struct {

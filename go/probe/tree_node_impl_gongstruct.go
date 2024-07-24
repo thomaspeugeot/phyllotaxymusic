@@ -55,6 +55,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "Axis" {
 		fillUpTable[models.Axis](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "AxisGrid" {
+		fillUpTable[models.AxisGrid](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Circle" {
 		fillUpTable[models.Circle](nodeImplGongstruct.probe)
 	}
@@ -63,9 +66,6 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "HorizontalAxis" {
 		fillUpTable[models.HorizontalAxis](nodeImplGongstruct.probe)
-	}
-	if nodeImplGongstruct.gongStruct.GetName() == "Line" {
-		fillUpTable[models.Line](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Parameter" {
 		fillUpTable[models.Parameter](nodeImplGongstruct.probe)

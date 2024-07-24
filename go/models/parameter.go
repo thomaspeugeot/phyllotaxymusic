@@ -48,8 +48,9 @@ type Parameter struct {
 	// for building the growth line. The growth line with
 	// interpolate the middle of the construction axis
 	// for the next circles.
-	ConstructionAxis   *Axis
-	ConstructionCircle *Circle
+	ConstructionAxis     *Axis
+	ConstructionAxisGrid *AxisGrid
+	ConstructionCircle   *Circle
 
 	// for drawing purpose
 	OriginX        float64

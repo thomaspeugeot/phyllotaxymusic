@@ -17,6 +17,10 @@ export * from './lib/axis-api'
 export * from './lib/axis'
 export * from './lib/axis.service'
 
+export * from './lib/axisgrid-api'
+export * from './lib/axisgrid'
+export * from './lib/axisgrid.service'
+
 export * from './lib/circle-api'
 export * from './lib/circle'
 export * from './lib/circle.service'
@@ -28,10 +32,6 @@ export * from './lib/circlegrid.service'
 export * from './lib/horizontalaxis-api'
 export * from './lib/horizontalaxis'
 export * from './lib/horizontalaxis.service'
-
-export * from './lib/line-api'
-export * from './lib/line'
-export * from './lib/line.service'
 
 export * from './lib/parameter-api'
 export * from './lib/parameter'

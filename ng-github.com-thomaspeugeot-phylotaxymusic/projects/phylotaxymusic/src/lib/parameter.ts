@@ -9,6 +9,7 @@ import { Circle } from './circle'
 import { RhombusGrid } from './rhombusgrid'
 import { CircleGrid } from './circlegrid'
 import { Axis } from './axis'
+import { AxisGrid } from './axisgrid'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 
@@ -69,6 +70,10 @@ export class Parameter {
 	GrowingCircleGridLeft?: CircleGrid
 
 	ConstructionAxis?: Axis
+
+	ConstructionAxisGrid?: AxisGrid
+
+	ConstructionCircle?: Circle
 
 	HorizontalAxis?: HorizontalAxis
 
@@ -219,6 +224,20 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.ConstructionAxisID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.ConstructionAxisGridID.Valid = true
+	if (parameter.ConstructionAxisGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.ConstructionAxisGridID.Int64 = parameter.ConstructionAxisGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.ConstructionAxisGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.ConstructionCircleID.Valid = true
+	if (parameter.ConstructionCircle != undefined) {
+		parameterAPI.ParameterPointersEncoding.ConstructionCircleID.Int64 = parameter.ConstructionCircle.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.ConstructionCircleID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -276,6 +295,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.GrowingCircleGridLeftSeed = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftSeedID.Int64)
 	parameter.GrowingCircleGridLeft = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftID.Int64)
 	parameter.ConstructionAxis = frontRepo.map_ID_Axis.get(parameterAPI.ParameterPointersEncoding.ConstructionAxisID.Int64)
+	parameter.ConstructionAxisGrid = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.ConstructionAxisGridID.Int64)
+	parameter.ConstructionCircle = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.ConstructionCircleID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 
