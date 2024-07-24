@@ -69,6 +69,10 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(axis_.Angle), formDiv)
 		case "Length":
 			FormDivBasicFieldToField(&(axis_.Length), formDiv)
+		case "CenterX":
+			FormDivBasicFieldToField(&(axis_.CenterX), formDiv)
+		case "CenterY":
+			FormDivBasicFieldToField(&(axis_.CenterY), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(axis_.Color), formDiv)
 		case "FillOpacity":

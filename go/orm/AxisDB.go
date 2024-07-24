@@ -72,6 +72,12 @@ type AxisDB struct {
 	// Declation for basic field axisDB.Length
 	Length_Data sql.NullFloat64
 
+	// Declation for basic field axisDB.CenterX
+	CenterX_Data sql.NullFloat64
+
+	// Declation for basic field axisDB.CenterY
+	CenterY_Data sql.NullFloat64
+
 	// Declation for basic field axisDB.Color
 	Color_Data sql.NullString
 
@@ -126,21 +132,25 @@ type AxisWOP struct {
 
 	Length float64 `xlsx:"4"`
 
-	Color string `xlsx:"5"`
+	CenterX float64 `xlsx:"5"`
 
-	FillOpacity float64 `xlsx:"6"`
+	CenterY float64 `xlsx:"6"`
 
-	Stroke string `xlsx:"7"`
+	Color string `xlsx:"7"`
 
-	StrokeOpacity float64 `xlsx:"8"`
+	FillOpacity float64 `xlsx:"8"`
 
-	StrokeWidth float64 `xlsx:"9"`
+	Stroke string `xlsx:"9"`
 
-	StrokeDashArray string `xlsx:"10"`
+	StrokeOpacity float64 `xlsx:"10"`
 
-	StrokeDashArrayWhenSelected string `xlsx:"11"`
+	StrokeWidth float64 `xlsx:"11"`
 
-	Transform string `xlsx:"12"`
+	StrokeDashArray string `xlsx:"12"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"13"`
+
+	Transform string `xlsx:"14"`
 	// insertion for WOP pointer fields
 }
 
@@ -151,6 +161,8 @@ var Axis_Fields = []string{
 	"IsDisplayed",
 	"Angle",
 	"Length",
+	"CenterX",
+	"CenterY",
 	"Color",
 	"FillOpacity",
 	"Stroke",
@@ -437,6 +449,12 @@ func (axisDB *AxisDB) CopyBasicFieldsFromAxis(axis *models.Axis) {
 	axisDB.Length_Data.Float64 = axis.Length
 	axisDB.Length_Data.Valid = true
 
+	axisDB.CenterX_Data.Float64 = axis.CenterX
+	axisDB.CenterX_Data.Valid = true
+
+	axisDB.CenterY_Data.Float64 = axis.CenterY
+	axisDB.CenterY_Data.Valid = true
+
 	axisDB.Color_Data.String = axis.Color
 	axisDB.Color_Data.Valid = true
 
@@ -477,6 +495,12 @@ func (axisDB *AxisDB) CopyBasicFieldsFromAxis_WOP(axis *models.Axis_WOP) {
 
 	axisDB.Length_Data.Float64 = axis.Length
 	axisDB.Length_Data.Valid = true
+
+	axisDB.CenterX_Data.Float64 = axis.CenterX
+	axisDB.CenterX_Data.Valid = true
+
+	axisDB.CenterY_Data.Float64 = axis.CenterY
+	axisDB.CenterY_Data.Valid = true
 
 	axisDB.Color_Data.String = axis.Color
 	axisDB.Color_Data.Valid = true
@@ -519,6 +543,12 @@ func (axisDB *AxisDB) CopyBasicFieldsFromAxisWOP(axis *AxisWOP) {
 	axisDB.Length_Data.Float64 = axis.Length
 	axisDB.Length_Data.Valid = true
 
+	axisDB.CenterX_Data.Float64 = axis.CenterX
+	axisDB.CenterX_Data.Valid = true
+
+	axisDB.CenterY_Data.Float64 = axis.CenterY
+	axisDB.CenterY_Data.Valid = true
+
 	axisDB.Color_Data.String = axis.Color
 	axisDB.Color_Data.Valid = true
 
@@ -551,6 +581,8 @@ func (axisDB *AxisDB) CopyBasicFieldsToAxis(axis *models.Axis) {
 	axis.IsDisplayed = axisDB.IsDisplayed_Data.Bool
 	axis.Angle = axisDB.Angle_Data.Float64
 	axis.Length = axisDB.Length_Data.Float64
+	axis.CenterX = axisDB.CenterX_Data.Float64
+	axis.CenterY = axisDB.CenterY_Data.Float64
 	axis.Color = axisDB.Color_Data.String
 	axis.FillOpacity = axisDB.FillOpacity_Data.Float64
 	axis.Stroke = axisDB.Stroke_Data.String
@@ -568,6 +600,8 @@ func (axisDB *AxisDB) CopyBasicFieldsToAxis_WOP(axis *models.Axis_WOP) {
 	axis.IsDisplayed = axisDB.IsDisplayed_Data.Bool
 	axis.Angle = axisDB.Angle_Data.Float64
 	axis.Length = axisDB.Length_Data.Float64
+	axis.CenterX = axisDB.CenterX_Data.Float64
+	axis.CenterY = axisDB.CenterY_Data.Float64
 	axis.Color = axisDB.Color_Data.String
 	axis.FillOpacity = axisDB.FillOpacity_Data.Float64
 	axis.Stroke = axisDB.Stroke_Data.String
@@ -586,6 +620,8 @@ func (axisDB *AxisDB) CopyBasicFieldsToAxisWOP(axis *AxisWOP) {
 	axis.IsDisplayed = axisDB.IsDisplayed_Data.Bool
 	axis.Angle = axisDB.Angle_Data.Float64
 	axis.Length = axisDB.Length_Data.Float64
+	axis.CenterX = axisDB.CenterX_Data.Float64
+	axis.CenterY = axisDB.CenterY_Data.Float64
 	axis.Color = axisDB.Color_Data.String
 	axis.FillOpacity = axisDB.FillOpacity_Data.Float64
 	axis.Stroke = axisDB.Stroke_Data.String

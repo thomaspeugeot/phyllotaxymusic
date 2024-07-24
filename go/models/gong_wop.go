@@ -13,6 +13,8 @@ type Axis_WOP struct {
 	IsDisplayed bool
 	Angle float64
 	Length float64
+	CenterX float64
+	CenterY float64
 	Color string
 	FillOpacity float64
 	Stroke string
@@ -29,6 +31,8 @@ func (from *Axis) CopyBasicFields(to *Axis) {
 	to.IsDisplayed = from.IsDisplayed
 	to.Angle = from.Angle
 	to.Length = from.Length
+	to.CenterX = from.CenterX
+	to.CenterY = from.CenterY
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke

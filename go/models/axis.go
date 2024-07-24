@@ -13,6 +13,8 @@ type Axis struct {
 	Angle  float64
 	Length float64
 
+	CenterX, CenterY float64
+
 	Presentation
 }
 
@@ -27,11 +29,11 @@ func (axis *Axis) Draw(gongsvgStage *gongsvg_models.StageStruct,
 
 	angleRad := axis.Angle * math.Pi / 180
 
-	line.X1 = parameter.OriginX
-	line.Y1 = parameter.OriginY
+	line.X1 = parameter.OriginX + axis.CenterX
+	line.Y1 = parameter.OriginY - axis.CenterY
 
-	line.X2 = parameter.OriginX + axis.Length*math.Cos(angleRad)
-	line.Y2 = parameter.OriginY - axis.Length*math.Sin(angleRad)
+	line.X2 = line.X1 + axis.Length*math.Cos(angleRad)
+	line.Y2 = line.Y1 - axis.Length*math.Sin(angleRad)
 
 	axis.Presentation.CopyTo(&line.Presentation)
 
