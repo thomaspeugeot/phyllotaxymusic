@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
-	phylotaxymusic_svg "github.com/thomaspeugeot/phylotaxymusic/go/svg"
 	phylotaxymusic_tree "github.com/thomaspeugeot/phylotaxymusic/go/tree"
 
 	phylotaxymusic_stack "github.com/thomaspeugeot/phylotaxymusic/go/stack"
@@ -89,7 +88,6 @@ type ParameterImpl struct {
 // Generate implements models.GeneratorInterface.
 func (parameterImpl *ParameterImpl) Generate() {
 	parameterImpl.parameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
-	phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.parameter)
 	parameterImpl.parameter.GenerateSvg(parameterImpl.gongsvgStage)
 	parameterImpl.phylotaxymusicStage.Commit()
 }
@@ -100,6 +98,5 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	// phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 
 	updatedParameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
-	phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, updatedParameter)
 	parameterImpl.parameter.GenerateSvg(parameterImpl.gongsvgStage)
 }
