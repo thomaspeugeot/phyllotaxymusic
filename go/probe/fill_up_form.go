@@ -55,6 +55,10 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("CenterY", instanceWithInferedType.CenterY, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("HasBespokeRadius", instanceWithInferedType.HasBespokeRadius, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("BespopkeRadius", instanceWithInferedType.BespopkeRadius, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		BasicFieldtoForm("Color", instanceWithInferedType.Color, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("FillOpacity", instanceWithInferedType.FillOpacity, instanceWithInferedType, probe.formStage, formGroup,
@@ -175,6 +179,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("GrowingCircleGridLeftSeed", instanceWithInferedType.GrowingCircleGridLeftSeed, formGroup, probe)
 		AssociationFieldToForm("GrowingCircleGridLeft", instanceWithInferedType.GrowingCircleGridLeft, formGroup, probe)
 		AssociationFieldToForm("ConstructionAxis", instanceWithInferedType.ConstructionAxis, formGroup, probe)
+		AssociationFieldToForm("ConstructionCircle", instanceWithInferedType.ConstructionCircle, formGroup, probe)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,

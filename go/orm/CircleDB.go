@@ -72,6 +72,13 @@ type CircleDB struct {
 	// Declation for basic field circleDB.CenterY
 	CenterY_Data sql.NullFloat64
 
+	// Declation for basic field circleDB.HasBespokeRadius
+	// provide the sql storage for the boolan
+	HasBespokeRadius_Data sql.NullBool
+
+	// Declation for basic field circleDB.BespopkeRadius
+	BespopkeRadius_Data sql.NullFloat64
+
 	// Declation for basic field circleDB.Color
 	Color_Data sql.NullString
 
@@ -126,21 +133,25 @@ type CircleWOP struct {
 
 	CenterY float64 `xlsx:"4"`
 
-	Color string `xlsx:"5"`
+	HasBespokeRadius bool `xlsx:"5"`
 
-	FillOpacity float64 `xlsx:"6"`
+	BespopkeRadius float64 `xlsx:"6"`
 
-	Stroke string `xlsx:"7"`
+	Color string `xlsx:"7"`
 
-	StrokeOpacity float64 `xlsx:"8"`
+	FillOpacity float64 `xlsx:"8"`
 
-	StrokeWidth float64 `xlsx:"9"`
+	Stroke string `xlsx:"9"`
 
-	StrokeDashArray string `xlsx:"10"`
+	StrokeOpacity float64 `xlsx:"10"`
 
-	StrokeDashArrayWhenSelected string `xlsx:"11"`
+	StrokeWidth float64 `xlsx:"11"`
 
-	Transform string `xlsx:"12"`
+	StrokeDashArray string `xlsx:"12"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"13"`
+
+	Transform string `xlsx:"14"`
 	// insertion for WOP pointer fields
 }
 
@@ -151,6 +162,8 @@ var Circle_Fields = []string{
 	"IsDisplayed",
 	"CenterX",
 	"CenterY",
+	"HasBespokeRadius",
+	"BespopkeRadius",
 	"Color",
 	"FillOpacity",
 	"Stroke",
@@ -437,6 +450,12 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle(circle *models.Circle) {
 	circleDB.CenterY_Data.Float64 = circle.CenterY
 	circleDB.CenterY_Data.Valid = true
 
+	circleDB.HasBespokeRadius_Data.Bool = circle.HasBespokeRadius
+	circleDB.HasBespokeRadius_Data.Valid = true
+
+	circleDB.BespopkeRadius_Data.Float64 = circle.BespopkeRadius
+	circleDB.BespopkeRadius_Data.Valid = true
+
 	circleDB.Color_Data.String = circle.Color
 	circleDB.Color_Data.Valid = true
 
@@ -477,6 +496,12 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle_WOP(circle *models.Circle_WO
 
 	circleDB.CenterY_Data.Float64 = circle.CenterY
 	circleDB.CenterY_Data.Valid = true
+
+	circleDB.HasBespokeRadius_Data.Bool = circle.HasBespokeRadius
+	circleDB.HasBespokeRadius_Data.Valid = true
+
+	circleDB.BespopkeRadius_Data.Float64 = circle.BespopkeRadius
+	circleDB.BespopkeRadius_Data.Valid = true
 
 	circleDB.Color_Data.String = circle.Color
 	circleDB.Color_Data.Valid = true
@@ -519,6 +544,12 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircleWOP(circle *CircleWOP) {
 	circleDB.CenterY_Data.Float64 = circle.CenterY
 	circleDB.CenterY_Data.Valid = true
 
+	circleDB.HasBespokeRadius_Data.Bool = circle.HasBespokeRadius
+	circleDB.HasBespokeRadius_Data.Valid = true
+
+	circleDB.BespopkeRadius_Data.Float64 = circle.BespopkeRadius
+	circleDB.BespopkeRadius_Data.Valid = true
+
 	circleDB.Color_Data.String = circle.Color
 	circleDB.Color_Data.Valid = true
 
@@ -551,6 +582,8 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle(circle *models.Circle) {
 	circle.IsDisplayed = circleDB.IsDisplayed_Data.Bool
 	circle.CenterX = circleDB.CenterX_Data.Float64
 	circle.CenterY = circleDB.CenterY_Data.Float64
+	circle.HasBespokeRadius = circleDB.HasBespokeRadius_Data.Bool
+	circle.BespopkeRadius = circleDB.BespopkeRadius_Data.Float64
 	circle.Color = circleDB.Color_Data.String
 	circle.FillOpacity = circleDB.FillOpacity_Data.Float64
 	circle.Stroke = circleDB.Stroke_Data.String
@@ -568,6 +601,8 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle_WOP(circle *models.Circle_WOP)
 	circle.IsDisplayed = circleDB.IsDisplayed_Data.Bool
 	circle.CenterX = circleDB.CenterX_Data.Float64
 	circle.CenterY = circleDB.CenterY_Data.Float64
+	circle.HasBespokeRadius = circleDB.HasBespokeRadius_Data.Bool
+	circle.BespopkeRadius = circleDB.BespopkeRadius_Data.Float64
 	circle.Color = circleDB.Color_Data.String
 	circle.FillOpacity = circleDB.FillOpacity_Data.Float64
 	circle.Stroke = circleDB.Stroke_Data.String
@@ -586,6 +621,8 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircleWOP(circle *CircleWOP) {
 	circle.IsDisplayed = circleDB.IsDisplayed_Data.Bool
 	circle.CenterX = circleDB.CenterX_Data.Float64
 	circle.CenterY = circleDB.CenterY_Data.Float64
+	circle.HasBespokeRadius = circleDB.HasBespokeRadius_Data.Bool
+	circle.BespopkeRadius = circleDB.BespopkeRadius_Data.Float64
 	circle.Color = circleDB.Color_Data.String
 	circle.FillOpacity = circleDB.FillOpacity_Data.Float64
 	circle.Stroke = circleDB.Stroke_Data.String

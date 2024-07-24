@@ -168,6 +168,10 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circle_.CenterX), formDiv)
 		case "CenterY":
 			FormDivBasicFieldToField(&(circle_.CenterY), formDiv)
+		case "HasBespokeRadius":
+			FormDivBasicFieldToField(&(circle_.HasBespokeRadius), formDiv)
+		case "BespopkeRadius":
+			FormDivBasicFieldToField(&(circle_.BespopkeRadius), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(circle_.Color), formDiv)
 		case "FillOpacity":
@@ -614,6 +618,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.GrowingCircleGridLeft), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "ConstructionAxis":
 			FormDivSelectFieldToField(&(parameter_.ConstructionAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "ConstructionCircle":
+			FormDivSelectFieldToField(&(parameter_.ConstructionCircle), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

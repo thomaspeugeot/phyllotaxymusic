@@ -37,6 +37,7 @@ func (parameter *Parameter) GenerateSvg(gongsvgStage *gongsvg_models.StageStruct
 	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.GrowingCircleGrid)
 	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.GrowingCircleGridLeft)
 	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.ConstructionAxis)
+	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.ConstructionCircle)
 	gongsvgStage.Commit()
 
 }

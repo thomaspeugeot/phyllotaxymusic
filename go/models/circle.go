@@ -10,6 +10,9 @@ type Circle struct {
 	HideableShape
 	CenterX, CenterY float64
 
+	HasBespokeRadius bool
+	BespopkeRadius   float64
+
 	Presentation
 }
 
@@ -25,6 +28,10 @@ func (c *Circle) Draw(
 	circle.CX = p.OriginX + c.CenterX
 	circle.CY = p.OriginY - c.CenterY
 	circle.Radius = p.SideLength / 2.0
+
+	if c.HasBespokeRadius {
+		circle.Radius = c.BespopkeRadius
+	}
 
 	c.Presentation.CopyTo(&circle.Presentation)
 }

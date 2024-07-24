@@ -809,6 +809,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Circle[identifier].CenterY = exprSign * fielValue
+				case "BespopkeRadius":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Circle[identifier].BespopkeRadius = exprSign * fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1205,6 +1212,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Circle[identifier].IsDisplayed = fielValue
+				case "HasBespokeRadius":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Circle[identifier].HasBespokeRadius = fielValue
 				}
 			case "CircleGrid":
 				switch fieldName {
@@ -1292,6 +1306,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "ConstructionAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].ConstructionAxis = __gong__map_Axis[targetIdentifier]
+				case "ConstructionCircle":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].ConstructionCircle = __gong__map_Circle[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

@@ -45,6 +45,8 @@ type Circle_WOP struct {
 	IsDisplayed bool
 	CenterX float64
 	CenterY float64
+	HasBespokeRadius bool
+	BespopkeRadius float64
 	Color string
 	FillOpacity float64
 	Stroke string
@@ -61,6 +63,8 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 	to.IsDisplayed = from.IsDisplayed
 	to.CenterX = from.CenterX
 	to.CenterY = from.CenterY
+	to.HasBespokeRadius = from.HasBespokeRadius
+	to.BespopkeRadius = from.BespopkeRadius
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke

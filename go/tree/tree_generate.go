@@ -30,6 +30,7 @@ func (tree *Tree) Generate(parameter *phylotaxymusic_models.Parameter) {
 	AddShape(tree, parameter.GrowingCircleGrid)
 	AddShape(tree, parameter.GrowingCircleGridLeft)
 	AddShape(tree, parameter.ConstructionAxis)
+	AddShape(tree, parameter.ConstructionCircle)
 
 	tree.TreeStack.Stage.Commit()
 }

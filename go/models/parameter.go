@@ -48,7 +48,8 @@ type Parameter struct {
 	// for building the growth line. The growth line with
 	// interpolate the middle of the construction axis
 	// for the next circles.
-	ConstructionAxis *Axis
+	ConstructionAxis   *Axis
+	ConstructionCircle *Circle
 
 	// for drawing purpose
 	OriginX        float64
@@ -84,6 +85,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeGrowingCircleGrid()
 	p.ComputeGrowingCircleGridLeft()
 	p.computeConstructionAxis()
+	p.computeConstructionCircle()
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -362,4 +364,11 @@ func (p *Parameter) computeConstructionAxis() {
 
 	p.ConstructionAxis.Length = math.Sqrt(x*x + y*y)
 	p.ConstructionAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
+}
+
+func (p *Parameter) computeConstructionCircle() {
+
+	circleNPlusM := p.GrowingCircleGrid.Circles[p.M+p.N]
+	p.ConstructionCircle.CenterX = (circleNPlusM.CenterX - p.RotatedAxis.Length) / 2.0
+	p.ConstructionCircle.CenterY = circleNPlusM.CenterY / 2.0
 }
