@@ -40,6 +40,9 @@ type Parameter struct {
 	GrowingCircleGridSeed *Circle
 	GrowingCircleGrid     *CircleGrid
 
+	GrowingCircleGridLeftSeed *Circle
+	GrowingCircleGridLeft     *CircleGrid
+
 	// for drawing purpose
 	OriginX        float64
 	OriginY        float64
@@ -72,6 +75,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeNextCircle()
 	p.ComputeGrowingRhombusGrid()
 	p.ComputeGrowingCircleGrid()
+	p.ComputeGrowingCircleGridLeft()
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -320,6 +324,23 @@ func (p *Parameter) ComputeGrowingCircleGrid() {
 		r.CenterY = y
 
 		p.GrowingCircleGrid.Circles = append(p.GrowingCircleGrid.Circles, r)
+	}
+	log.Println("z", p.Z)
+}
+
+func (p *Parameter) ComputeGrowingCircleGridLeft() {
+
+	// configure seed circle
+
+	p.GrowingCircleGridLeft.Circles = p.GrowingCircleGridLeft.Circles[:0]
+	for i := range p.Z {
+		r := new(Circle) // .Stage(stage)
+		*r = *p.GrowingCircleGridLeftSeed
+
+		r.CenterX = p.GrowingCircleGrid.Circles[i].CenterX - p.RotatedAxis.Length
+		r.CenterY = p.GrowingCircleGrid.Circles[i].CenterY
+
+		p.GrowingCircleGridLeft.Circles = append(p.GrowingCircleGridLeft.Circles, r)
 	}
 	log.Println("z", p.Z)
 }

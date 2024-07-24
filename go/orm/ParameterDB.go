@@ -107,6 +107,14 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	GrowingCircleGridID sql.NullInt64
 
+	// field GrowingCircleGridLeftSeed is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	GrowingCircleGridLeftSeedID sql.NullInt64
+
+	// field GrowingCircleGridLeft is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	GrowingCircleGridLeftID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -501,6 +509,30 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.GrowingCircleGridID.Valid = true
 		}
 
+		// commit pointer value parameter.GrowingCircleGridLeftSeed translates to updating the parameter.GrowingCircleGridLeftSeedID
+		parameterDB.GrowingCircleGridLeftSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowingCircleGridLeftSeed != nil {
+			if GrowingCircleGridLeftSeedId, ok := backRepo.BackRepoCircle.Map_CirclePtr_CircleDBID[parameter.GrowingCircleGridLeftSeed]; ok {
+				parameterDB.GrowingCircleGridLeftSeedID.Int64 = int64(GrowingCircleGridLeftSeedId)
+				parameterDB.GrowingCircleGridLeftSeedID.Valid = true
+			}
+		} else {
+			parameterDB.GrowingCircleGridLeftSeedID.Int64 = 0
+			parameterDB.GrowingCircleGridLeftSeedID.Valid = true
+		}
+
+		// commit pointer value parameter.GrowingCircleGridLeft translates to updating the parameter.GrowingCircleGridLeftID
+		parameterDB.GrowingCircleGridLeftID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowingCircleGridLeft != nil {
+			if GrowingCircleGridLeftId, ok := backRepo.BackRepoCircleGrid.Map_CircleGridPtr_CircleGridDBID[parameter.GrowingCircleGridLeft]; ok {
+				parameterDB.GrowingCircleGridLeftID.Int64 = int64(GrowingCircleGridLeftId)
+				parameterDB.GrowingCircleGridLeftID.Valid = true
+			}
+		} else {
+			parameterDB.GrowingCircleGridLeftID.Int64 = 0
+			parameterDB.GrowingCircleGridLeftID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -712,6 +744,16 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.GrowingCircleGrid = nil
 	if parameterDB.GrowingCircleGridID.Int64 != 0 {
 		parameter.GrowingCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.GrowingCircleGridID.Int64)]
+	}
+	// GrowingCircleGridLeftSeed field
+	parameter.GrowingCircleGridLeftSeed = nil
+	if parameterDB.GrowingCircleGridLeftSeedID.Int64 != 0 {
+		parameter.GrowingCircleGridLeftSeed = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(parameterDB.GrowingCircleGridLeftSeedID.Int64)]
+	}
+	// GrowingCircleGridLeft field
+	parameter.GrowingCircleGridLeft = nil
+	if parameterDB.GrowingCircleGridLeftID.Int64 != 0 {
+		parameter.GrowingCircleGridLeft = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.GrowingCircleGridLeftID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -1123,6 +1165,18 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.GrowingCircleGridID.Int64 != 0 {
 			parameterDB.GrowingCircleGridID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.GrowingCircleGridID.Int64)])
 			parameterDB.GrowingCircleGridID.Valid = true
+		}
+
+		// reindexing GrowingCircleGridLeftSeed field
+		if parameterDB.GrowingCircleGridLeftSeedID.Int64 != 0 {
+			parameterDB.GrowingCircleGridLeftSeedID.Int64 = int64(BackRepoCircleid_atBckpTime_newID[uint(parameterDB.GrowingCircleGridLeftSeedID.Int64)])
+			parameterDB.GrowingCircleGridLeftSeedID.Valid = true
+		}
+
+		// reindexing GrowingCircleGridLeft field
+		if parameterDB.GrowingCircleGridLeftID.Int64 != 0 {
+			parameterDB.GrowingCircleGridLeftID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.GrowingCircleGridLeftID.Int64)])
+			parameterDB.GrowingCircleGridLeftID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

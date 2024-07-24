@@ -64,6 +64,10 @@ export class Parameter {
 
 	GrowingCircleGrid?: CircleGrid
 
+	GrowingCircleGridLeftSeed?: Circle
+
+	GrowingCircleGridLeft?: CircleGrid
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -192,6 +196,20 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.GrowingCircleGridID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftSeedID.Valid = true
+	if (parameter.GrowingCircleGridLeftSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftSeedID.Int64 = parameter.GrowingCircleGridLeftSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftID.Valid = true
+	if (parameter.GrowingCircleGridLeft != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftID.Int64 = parameter.GrowingCircleGridLeft.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -246,6 +264,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.GrowingRhombusGrid = frontRepo.map_ID_RhombusGrid.get(parameterAPI.ParameterPointersEncoding.GrowingRhombusGridID.Int64)
 	parameter.GrowingCircleGridSeed = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.GrowingCircleGridSeedID.Int64)
 	parameter.GrowingCircleGrid = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.GrowingCircleGridID.Int64)
+	parameter.GrowingCircleGridLeftSeed = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftSeedID.Int64)
+	parameter.GrowingCircleGridLeft = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.GrowingCircleGridLeftID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

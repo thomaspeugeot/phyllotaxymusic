@@ -172,6 +172,8 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("GrowingRhombusGrid", instanceWithInferedType.GrowingRhombusGrid, formGroup, probe)
 		AssociationFieldToForm("GrowingCircleGridSeed", instanceWithInferedType.GrowingCircleGridSeed, formGroup, probe)
 		AssociationFieldToForm("GrowingCircleGrid", instanceWithInferedType.GrowingCircleGrid, formGroup, probe)
+		AssociationFieldToForm("GrowingCircleGridLeftSeed", instanceWithInferedType.GrowingCircleGridLeftSeed, formGroup, probe)
+		AssociationFieldToForm("GrowingCircleGridLeft", instanceWithInferedType.GrowingCircleGridLeft, formGroup, probe)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,
