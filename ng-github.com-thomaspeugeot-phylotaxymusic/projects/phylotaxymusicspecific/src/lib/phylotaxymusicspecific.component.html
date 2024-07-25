@@ -18,6 +18,24 @@
                 >
             </mat-slider>
 
+            <h4>Origin X {{frontRepo.array_Parameters[0].OriginX}}</h4>
+
+            <mat-slider  min="-100.0" max="600.0" step="10" 
+            showTickMarks discrete [displayWith]="formatLabel" 
+            >
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].OriginX" (input)="input($event)" 
+                >
+            </mat-slider>
+
+            <h4>Origin Y {{frontRepo.array_Parameters[0].OriginY}}</h4>
+
+            <mat-slider  min="0.0" max="1200.0" step="10" 
+            showTickMarks discrete [displayWith]="formatLabel" 
+            >
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].OriginY" (input)="input($event)" 
+                >
+            </mat-slider>
+
             <h4>Inside Angle {{frontRepo.array_Parameters[0].InsideAngle}}</h4>
 
             <mat-slider  min="60.0" max="120.0" step="1" 
