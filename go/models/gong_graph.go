@@ -377,6 +377,12 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.GrowthCurveShiftedRight != nil {
 		StageBranch(stage, parameter.GrowthCurveShiftedRight)
 	}
+	if parameter.GrowthCurveNextSeed != nil {
+		StageBranch(stage, parameter.GrowthCurveNextSeed)
+	}
+	if parameter.GrowthCurveNext != nil {
+		StageBranch(stage, parameter.GrowthCurveNext)
+	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
 	}
@@ -740,6 +746,12 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.GrowthCurveShiftedRight != nil {
 		parameterTo.GrowthCurveShiftedRight = CopyBranchBezierGrid(mapOrigCopy, parameterFrom.GrowthCurveShiftedRight)
 	}
+	if parameterFrom.GrowthCurveNextSeed != nil {
+		parameterTo.GrowthCurveNextSeed = CopyBranchBezier(mapOrigCopy, parameterFrom.GrowthCurveNextSeed)
+	}
+	if parameterFrom.GrowthCurveNext != nil {
+		parameterTo.GrowthCurveNext = CopyBranchBezierGrid(mapOrigCopy, parameterFrom.GrowthCurveNext)
+	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
 	}
@@ -1069,6 +1081,12 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.GrowthCurveShiftedRight != nil {
 		UnstageBranch(stage, parameter.GrowthCurveShiftedRight)
+	}
+	if parameter.GrowthCurveNextSeed != nil {
+		UnstageBranch(stage, parameter.GrowthCurveNextSeed)
+	}
+	if parameter.GrowthCurveNext != nil {
+		UnstageBranch(stage, parameter.GrowthCurveNext)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

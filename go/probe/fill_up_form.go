@@ -278,6 +278,8 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("GrowthCurve", instanceWithInferedType.GrowthCurve, formGroup, probe)
 		AssociationFieldToForm("GrowthCurveShiftedRightSeed", instanceWithInferedType.GrowthCurveShiftedRightSeed, formGroup, probe)
 		AssociationFieldToForm("GrowthCurveShiftedRight", instanceWithInferedType.GrowthCurveShiftedRight, formGroup, probe)
+		AssociationFieldToForm("GrowthCurveNextSeed", instanceWithInferedType.GrowthCurveNextSeed, formGroup, probe)
+		AssociationFieldToForm("GrowthCurveNext", instanceWithInferedType.GrowthCurveNext, formGroup, probe)
 		BasicFieldtoForm("BezierControlLengthRatio", instanceWithInferedType.BezierControlLengthRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,

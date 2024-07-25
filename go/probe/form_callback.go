@@ -908,6 +908,10 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.GrowthCurveShiftedRightSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "GrowthCurveShiftedRight":
 			FormDivSelectFieldToField(&(parameter_.GrowthCurveShiftedRight), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowthCurveNextSeed":
+			FormDivSelectFieldToField(&(parameter_.GrowthCurveNextSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowthCurveNext":
+			FormDivSelectFieldToField(&(parameter_.GrowthCurveNext), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "BezierControlLengthRatio":
 			FormDivBasicFieldToField(&(parameter_.BezierControlLengthRatio), formDiv)
 		case "OriginX":

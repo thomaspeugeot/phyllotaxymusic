@@ -147,6 +147,14 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	GrowthCurveShiftedRightID sql.NullInt64
 
+	// field GrowthCurveNextSeed is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	GrowthCurveNextSeedID sql.NullInt64
+
+	// field GrowthCurveNext is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	GrowthCurveNextID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -667,6 +675,30 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.GrowthCurveShiftedRightID.Valid = true
 		}
 
+		// commit pointer value parameter.GrowthCurveNextSeed translates to updating the parameter.GrowthCurveNextSeedID
+		parameterDB.GrowthCurveNextSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowthCurveNextSeed != nil {
+			if GrowthCurveNextSeedId, ok := backRepo.BackRepoBezier.Map_BezierPtr_BezierDBID[parameter.GrowthCurveNextSeed]; ok {
+				parameterDB.GrowthCurveNextSeedID.Int64 = int64(GrowthCurveNextSeedId)
+				parameterDB.GrowthCurveNextSeedID.Valid = true
+			}
+		} else {
+			parameterDB.GrowthCurveNextSeedID.Int64 = 0
+			parameterDB.GrowthCurveNextSeedID.Valid = true
+		}
+
+		// commit pointer value parameter.GrowthCurveNext translates to updating the parameter.GrowthCurveNextID
+		parameterDB.GrowthCurveNextID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowthCurveNext != nil {
+			if GrowthCurveNextId, ok := backRepo.BackRepoBezierGrid.Map_BezierGridPtr_BezierGridDBID[parameter.GrowthCurveNext]; ok {
+				parameterDB.GrowthCurveNextID.Int64 = int64(GrowthCurveNextId)
+				parameterDB.GrowthCurveNextID.Valid = true
+			}
+		} else {
+			parameterDB.GrowthCurveNextID.Int64 = 0
+			parameterDB.GrowthCurveNextID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -928,6 +960,16 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.GrowthCurveShiftedRight = nil
 	if parameterDB.GrowthCurveShiftedRightID.Int64 != 0 {
 		parameter.GrowthCurveShiftedRight = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.GrowthCurveShiftedRightID.Int64)]
+	}
+	// GrowthCurveNextSeed field
+	parameter.GrowthCurveNextSeed = nil
+	if parameterDB.GrowthCurveNextSeedID.Int64 != 0 {
+		parameter.GrowthCurveNextSeed = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.GrowthCurveNextSeedID.Int64)]
+	}
+	// GrowthCurveNext field
+	parameter.GrowthCurveNext = nil
+	if parameterDB.GrowthCurveNextID.Int64 != 0 {
+		parameter.GrowthCurveNext = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.GrowthCurveNextID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -1411,6 +1453,18 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.GrowthCurveShiftedRightID.Int64 != 0 {
 			parameterDB.GrowthCurveShiftedRightID.Int64 = int64(BackRepoBezierGridid_atBckpTime_newID[uint(parameterDB.GrowthCurveShiftedRightID.Int64)])
 			parameterDB.GrowthCurveShiftedRightID.Valid = true
+		}
+
+		// reindexing GrowthCurveNextSeed field
+		if parameterDB.GrowthCurveNextSeedID.Int64 != 0 {
+			parameterDB.GrowthCurveNextSeedID.Int64 = int64(BackRepoBezierid_atBckpTime_newID[uint(parameterDB.GrowthCurveNextSeedID.Int64)])
+			parameterDB.GrowthCurveNextSeedID.Valid = true
+		}
+
+		// reindexing GrowthCurveNext field
+		if parameterDB.GrowthCurveNextID.Int64 != 0 {
+			parameterDB.GrowthCurveNextID.Int64 = int64(BackRepoBezierGridid_atBckpTime_newID[uint(parameterDB.GrowthCurveNextID.Int64)])
+			parameterDB.GrowthCurveNextID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field
