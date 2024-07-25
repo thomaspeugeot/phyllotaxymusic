@@ -163,13 +163,16 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeGrowthCurve()
 	p.Shapes = append(p.Shapes, p.GrowthCurve)
 
-	p.ComputeGrowthCurveShiftedRight()
+	p.GrowthCurveShiftedRight.Move(p.GrowthCurveShiftedRightSeed, p.GrowthCurve,
+		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.GrowthCurveShiftedRight)
 
-	p.ComputeGrowthCurveNext()
+	p.GrowthCurveNext.Move(p.GrowthCurveNextSeed, p.GrowthCurve,
+		p.NextCircle.CenterX, p.NextCircle.CenterY)
 	p.Shapes = append(p.Shapes, p.GrowthCurveNext)
 
-	p.ComputeGrowthCurveNextShiftedRight()
+	p.GrowthCurveNextShiftedRight.Move(p.GrowthCurveNextShiftedRightSeed, p.GrowthCurve,
+		p.NextCircle.CenterX+p.RotatedAxis.Length, p.NextCircle.CenterY)
 	p.Shapes = append(p.Shapes, p.GrowthCurveNextShiftedRight)
 }
 
@@ -559,49 +562,5 @@ func (p *Parameter) ComputeGrowthCurve() {
 		c := p.ConstructionCircleGrid
 
 		p.computeBezier(_b, c.Circles[i], c.Circles[i+1])
-	}
-}
-
-func (p *Parameter) ComputeGrowthCurveShiftedRight() {
-
-	g := p.GrowthCurveShiftedRight
-	g.Beziers = g.Beziers[:0]
-
-	for _, b := range p.GrowthCurve.Beziers {
-		_b := new(Bezier)
-		*_b = *p.GrowthCurveShiftedRightSeed
-		g.Beziers = append(g.Beziers, _b)
-
-		_b.move(b, p.RotatedAxis.Length, 0)
-	}
-}
-
-func (p *Parameter) ComputeGrowthCurveNext() {
-
-	g := p.GrowthCurveNext
-	g.Beziers = g.Beziers[:0]
-
-	for _, b := range p.GrowthCurve.Beziers {
-		_b := new(Bezier)
-		*_b = *p.GrowthCurveNextSeed
-		g.Beziers = append(g.Beziers, _b)
-
-		_b.move(b, p.NextCircle.CenterX, p.NextCircle.CenterY)
-
-	}
-}
-
-func (p *Parameter) ComputeGrowthCurveNextShiftedRight() {
-
-	g := p.GrowthCurveNextShiftedRight
-	g.Beziers = g.Beziers[:0]
-
-	for _, b := range p.GrowthCurve.Beziers {
-		_b := new(Bezier)
-		*_b = *p.GrowthCurveNextShiftedRightSeed
-		g.Beziers = append(g.Beziers, _b)
-
-		_b.move(b, p.NextCircle.CenterX+p.RotatedAxis.Length, p.NextCircle.CenterY)
-
 	}
 }

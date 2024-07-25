@@ -313,7 +313,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.M = 2
 	__Parameter__000000_Reference.Z = 9
 	__Parameter__000000_Reference.InsideAngle = 111.000000
-	__Parameter__000000_Reference.SideLength = 150.000000
+	__Parameter__000000_Reference.SideLength = 110.000000
 	__Parameter__000000_Reference.BezierControlLengthRatio = 0.450000
 	__Parameter__000000_Reference.OriginX = 100.000000
 	__Parameter__000000_Reference.OriginY = 740.000000
