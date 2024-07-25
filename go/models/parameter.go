@@ -448,6 +448,14 @@ func (p *Parameter) computeConstructionAxisGrid() {
 	*a = *p.ConstructionAxis
 	g.Axiss = append(g.Axiss, a)
 	a.CenterX += p.RotatedAxis.Length
+
+	slices.SortFunc(g.Axiss, func(c1, c2 *Axis) int {
+		if c1.CenterX < c2.CenterY {
+			return 1
+		} else {
+			return -1
+		}
+	})
 }
 
 func (p *Parameter) computeConstructionCircleGrid() {
@@ -471,4 +479,12 @@ func (p *Parameter) computeConstructionCircleGrid() {
 	*c = *p.ConstructionCircle
 	g.Circles = append(g.Circles, c)
 	c.CenterX += p.RotatedAxis.Length
+
+	slices.SortFunc(g.Circles, func(c1, c2 *Circle) int {
+		if c1.CenterX < c2.CenterY {
+			return 1
+		} else {
+			return -1
+		}
+	})
 }
