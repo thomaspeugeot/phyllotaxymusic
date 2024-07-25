@@ -12,6 +12,8 @@ type BackRepoData struct {
 
 	BezierGridAPIs []*BezierGridAPI
 
+	BezierGridStackAPIs []*BezierGridStackAPI
+
 	CircleAPIs []*CircleAPI
 
 	CircleGridAPIs []*CircleGridAPI
@@ -67,6 +69,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		beziergridDB.CopyBasicFieldsToBezierGrid_WOP(&beziergridAPI.BezierGrid_WOP)
 
 		backRepoData.BezierGridAPIs = append(backRepoData.BezierGridAPIs, &beziergridAPI)
+	}
+
+	for _, beziergridstackDB := range backRepo.BackRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackDB {
+
+		var beziergridstackAPI BezierGridStackAPI
+		beziergridstackAPI.ID = beziergridstackDB.ID
+		beziergridstackAPI.BezierGridStackPointersEncoding = beziergridstackDB.BezierGridStackPointersEncoding
+		beziergridstackDB.CopyBasicFieldsToBezierGridStack_WOP(&beziergridstackAPI.BezierGridStack_WOP)
+
+		backRepoData.BezierGridStackAPIs = append(backRepoData.BezierGridStackAPIs, &beziergridstackAPI)
 	}
 
 	for _, circleDB := range backRepo.BackRepoCircle.Map_CircleDBID_CircleDB {

@@ -30,6 +30,8 @@ type BackRepoStruct struct {
 
 	BackRepoBezierGrid BackRepoBezierGridStruct
 
+	BackRepoBezierGridStack BackRepoBezierGridStackStruct
+
 	BackRepoCircle BackRepoCircleStruct
 
 	BackRepoCircleGrid BackRepoCircleGridStruct
@@ -88,6 +90,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		&AxisGridDB{},
 		&BezierDB{},
 		&BezierGridDB{},
+		&BezierGridStackDB{},
 		&CircleDB{},
 		&CircleGridDB{},
 		&HorizontalAxisDB{},
@@ -133,6 +136,14 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		Map_BezierGridDBID_BezierGridPtr: make(map[uint]*models.BezierGrid, 0),
 		Map_BezierGridDBID_BezierGridDB:  make(map[uint]*BezierGridDB, 0),
 		Map_BezierGridPtr_BezierGridDBID: make(map[*models.BezierGrid]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoBezierGridStack = BackRepoBezierGridStackStruct{
+		Map_BezierGridStackDBID_BezierGridStackPtr: make(map[uint]*models.BezierGridStack, 0),
+		Map_BezierGridStackDBID_BezierGridStackDB:  make(map[uint]*BezierGridStackDB, 0),
+		Map_BezierGridStackPtr_BezierGridStackDBID: make(map[*models.BezierGridStack]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -245,6 +256,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoAxisGrid.CommitPhaseOne(stage)
 	backRepo.BackRepoBezier.CommitPhaseOne(stage)
 	backRepo.BackRepoBezierGrid.CommitPhaseOne(stage)
+	backRepo.BackRepoBezierGridStack.CommitPhaseOne(stage)
 	backRepo.BackRepoCircle.CommitPhaseOne(stage)
 	backRepo.BackRepoCircleGrid.CommitPhaseOne(stage)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseOne(stage)
@@ -258,6 +270,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoAxisGrid.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoBezier.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoBezierGrid.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoBezierGridStack.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoCircle.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoCircleGrid.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseTwo(backRepo)
@@ -276,6 +289,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoAxisGrid.CheckoutPhaseOne()
 	backRepo.BackRepoBezier.CheckoutPhaseOne()
 	backRepo.BackRepoBezierGrid.CheckoutPhaseOne()
+	backRepo.BackRepoBezierGridStack.CheckoutPhaseOne()
 	backRepo.BackRepoCircle.CheckoutPhaseOne()
 	backRepo.BackRepoCircleGrid.CheckoutPhaseOne()
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseOne()
@@ -289,6 +303,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoAxisGrid.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoBezier.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoBezierGrid.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoBezierGridStack.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoCircle.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoCircleGrid.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseTwo(backRepo)
@@ -307,6 +322,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	backRepo.BackRepoAxisGrid.Backup(dirPath)
 	backRepo.BackRepoBezier.Backup(dirPath)
 	backRepo.BackRepoBezierGrid.Backup(dirPath)
+	backRepo.BackRepoBezierGridStack.Backup(dirPath)
 	backRepo.BackRepoCircle.Backup(dirPath)
 	backRepo.BackRepoCircleGrid.Backup(dirPath)
 	backRepo.BackRepoHorizontalAxis.Backup(dirPath)
@@ -328,6 +344,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	backRepo.BackRepoAxisGrid.BackupXL(file)
 	backRepo.BackRepoBezier.BackupXL(file)
 	backRepo.BackRepoBezierGrid.BackupXL(file)
+	backRepo.BackRepoBezierGridStack.BackupXL(file)
 	backRepo.BackRepoCircle.BackupXL(file)
 	backRepo.BackRepoCircleGrid.BackupXL(file)
 	backRepo.BackRepoHorizontalAxis.BackupXL(file)
@@ -363,6 +380,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoAxisGrid.RestorePhaseOne(dirPath)
 	backRepo.BackRepoBezier.RestorePhaseOne(dirPath)
 	backRepo.BackRepoBezierGrid.RestorePhaseOne(dirPath)
+	backRepo.BackRepoBezierGridStack.RestorePhaseOne(dirPath)
 	backRepo.BackRepoCircle.RestorePhaseOne(dirPath)
 	backRepo.BackRepoCircleGrid.RestorePhaseOne(dirPath)
 	backRepo.BackRepoHorizontalAxis.RestorePhaseOne(dirPath)
@@ -380,6 +398,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoAxisGrid.RestorePhaseTwo()
 	backRepo.BackRepoBezier.RestorePhaseTwo()
 	backRepo.BackRepoBezierGrid.RestorePhaseTwo()
+	backRepo.BackRepoBezierGridStack.RestorePhaseTwo()
 	backRepo.BackRepoCircle.RestorePhaseTwo()
 	backRepo.BackRepoCircleGrid.RestorePhaseTwo()
 	backRepo.BackRepoHorizontalAxis.RestorePhaseTwo()
@@ -418,6 +437,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoAxisGrid.RestoreXLPhaseOne(file)
 	backRepo.BackRepoBezier.RestoreXLPhaseOne(file)
 	backRepo.BackRepoBezierGrid.RestoreXLPhaseOne(file)
+	backRepo.BackRepoBezierGridStack.RestoreXLPhaseOne(file)
 	backRepo.BackRepoCircle.RestoreXLPhaseOne(file)
 	backRepo.BackRepoCircleGrid.RestoreXLPhaseOne(file)
 	backRepo.BackRepoHorizontalAxis.RestoreXLPhaseOne(file)

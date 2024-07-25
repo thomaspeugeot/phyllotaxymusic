@@ -446,6 +446,48 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(beziergrid_.Reference), beziergridFormCallback.probe.stageOfInterest, formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(beziergrid_.IsDisplayed), formDiv)
+		case "BezierGridStack:BezierGrids":
+			// we need to retrieve the field owner before the change
+			var pastBezierGridStackOwner *models.BezierGridStack
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "BezierGridStack"
+			rf.Fieldname = "BezierGrids"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				beziergridFormCallback.probe.stageOfInterest,
+				beziergridFormCallback.probe.backRepoOfInterest,
+				beziergrid_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastBezierGridStackOwner = reverseFieldOwner.(*models.BezierGridStack)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastBezierGridStackOwner != nil {
+					idx := slices.Index(pastBezierGridStackOwner.BezierGrids, beziergrid_)
+					pastBezierGridStackOwner.BezierGrids = slices.Delete(pastBezierGridStackOwner.BezierGrids, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _beziergridstack := range *models.GetGongstructInstancesSet[models.BezierGridStack](beziergridFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _beziergridstack.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newBezierGridStackOwner := _beziergridstack // we have a match
+						if pastBezierGridStackOwner != nil {
+							if newBezierGridStackOwner != pastBezierGridStackOwner {
+								idx := slices.Index(pastBezierGridStackOwner.BezierGrids, beziergrid_)
+								pastBezierGridStackOwner.BezierGrids = slices.Delete(pastBezierGridStackOwner.BezierGrids, idx, idx+1)
+								newBezierGridStackOwner.BezierGrids = append(newBezierGridStackOwner.BezierGrids, beziergrid_)
+							}
+						} else {
+							newBezierGridStackOwner.BezierGrids = append(newBezierGridStackOwner.BezierGrids, beziergrid_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -477,6 +519,85 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 	}
 
 	fillUpTree(beziergridFormCallback.probe)
+}
+func __gong__New__BezierGridStackFormCallback(
+	beziergridstack *models.BezierGridStack,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (beziergridstackFormCallback *BezierGridStackFormCallback) {
+	beziergridstackFormCallback = new(BezierGridStackFormCallback)
+	beziergridstackFormCallback.probe = probe
+	beziergridstackFormCallback.beziergridstack = beziergridstack
+	beziergridstackFormCallback.formGroup = formGroup
+
+	beziergridstackFormCallback.CreationMode = (beziergridstack == nil)
+
+	return
+}
+
+type BezierGridStackFormCallback struct {
+	beziergridstack *models.BezierGridStack
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (beziergridstackFormCallback *BezierGridStackFormCallback) OnSave() {
+
+	log.Println("BezierGridStackFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	beziergridstackFormCallback.probe.formStage.Checkout()
+
+	if beziergridstackFormCallback.beziergridstack == nil {
+		beziergridstackFormCallback.beziergridstack = new(models.BezierGridStack).Stage(beziergridstackFormCallback.probe.stageOfInterest)
+	}
+	beziergridstack_ := beziergridstackFormCallback.beziergridstack
+	_ = beziergridstack_
+
+	for _, formDiv := range beziergridstackFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(beziergridstack_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(beziergridstack_.IsDisplayed), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if beziergridstackFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		beziergridstack_.Unstage(beziergridstackFormCallback.probe.stageOfInterest)
+	}
+
+	beziergridstackFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.BezierGridStack](
+		beziergridstackFormCallback.probe,
+	)
+	beziergridstackFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if beziergridstackFormCallback.CreationMode || beziergridstackFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		beziergridstackFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(beziergridstackFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__BezierGridStackFormCallback(
+			nil,
+			beziergridstackFormCallback.probe,
+			newFormGroup,
+		)
+		beziergridstack := new(models.BezierGridStack)
+		FillUpForm(beziergridstack, newFormGroup, beziergridstackFormCallback.probe)
+		beziergridstackFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(beziergridstackFormCallback.probe)
 }
 func __gong__New__CircleFormCallback(
 	circle *models.Circle,
@@ -916,6 +1037,14 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.GrowthCurveNextShiftedRightSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "GrowthCurveNextShiftedRight":
 			FormDivSelectFieldToField(&(parameter_.GrowthCurveNextShiftedRight), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowthCurveStack":
+			FormDivSelectFieldToField(&(parameter_.GrowthCurveStack), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "StackWidth":
+			FormDivBasicFieldToField(&(parameter_.StackWidth), formDiv)
+		case "NbShitRight":
+			FormDivBasicFieldToField(&(parameter_.NbShitRight), formDiv)
+		case "StackHeight":
+			FormDivBasicFieldToField(&(parameter_.StackHeight), formDiv)
 		case "BezierControlLengthRatio":
 			FormDivBasicFieldToField(&(parameter_.BezierControlLengthRatio), formDiv)
 		case "OriginX":

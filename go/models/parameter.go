@@ -71,6 +71,11 @@ type Parameter struct {
 	GrowthCurveNextShiftedRightSeed *Bezier
 	GrowthCurveNextShiftedRight     *BezierGrid
 
+	GrowthCurveStack *BezierGridStack
+	StackWidth       int
+	NbShitRight      int
+	StackHeight      int
+
 	// ratio of the length of the control vector to the side length
 	BezierControlLengthRatio float64
 
@@ -174,6 +179,25 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.GrowthCurveNextShiftedRight.Move(p.GrowthCurveNextShiftedRightSeed, p.GrowthCurve,
 		p.NextCircle.CenterX+p.RotatedAxis.Length, p.NextCircle.CenterY)
 	p.Shapes = append(p.Shapes, p.GrowthCurveNextShiftedRight)
+
+	p.GrowthCurveStack.BezierGrids = p.GrowthCurveStack.BezierGrids[:0]
+	for s := range p.StackHeight {
+
+		for i := range p.StackWidth {
+			g := new(BezierGrid)
+			p.GrowthCurveStack.BezierGrids = append(p.GrowthCurveStack.BezierGrids, g)
+
+			shift := float64(s) * p.NextCircle.CenterX
+			for shift > 0 {
+				shift -= p.RotatedAxis.Length
+			}
+			g.Move(p.GrowthCurveNextSeed, p.GrowthCurve,
+				shift+float64(i)*p.RotatedAxis.Length,
+				float64(s)*p.NextCircle.CenterY,
+			)
+		}
+	}
+	p.Shapes = append(p.Shapes, p.GrowthCurveStack)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {

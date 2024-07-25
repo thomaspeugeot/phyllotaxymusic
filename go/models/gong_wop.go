@@ -111,6 +111,18 @@ func (from *BezierGrid) CopyBasicFields(to *BezierGrid) {
 	to.IsDisplayed = from.IsDisplayed
 }
 
+type BezierGridStack_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+}
+
+func (from *BezierGridStack) CopyBasicFields(to *BezierGridStack) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+}
+
 type Circle_WOP struct {
 	// insertion point
 	Name string
@@ -199,6 +211,9 @@ type Parameter_WOP struct {
 	Z int
 	InsideAngle float64
 	SideLength float64
+	StackWidth int
+	NbShitRight int
+	StackHeight int
 	BezierControlLengthRatio float64
 	OriginX float64
 	OriginY float64
@@ -212,6 +227,9 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.Z = from.Z
 	to.InsideAngle = from.InsideAngle
 	to.SideLength = from.SideLength
+	to.StackWidth = from.StackWidth
+	to.NbShitRight = from.NbShitRight
+	to.StackHeight = from.StackHeight
 	to.BezierControlLengthRatio = from.BezierControlLengthRatio
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY

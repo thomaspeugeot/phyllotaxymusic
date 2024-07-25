@@ -29,6 +29,10 @@ export * from './lib/beziergrid-api'
 export * from './lib/beziergrid'
 export * from './lib/beziergrid.service'
 
+export * from './lib/beziergridstack-api'
+export * from './lib/beziergridstack'
+export * from './lib/beziergridstack.service'
+
 export * from './lib/circle-api'
 export * from './lib/circle'
 export * from './lib/circle.service'

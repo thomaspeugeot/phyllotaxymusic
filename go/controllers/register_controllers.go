@@ -75,6 +75,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/beziergrids/:id", GetController().UpdateBezierGrid)
 		v1.DELETE("/v1/beziergrids/:id", GetController().DeleteBezierGrid)
 
+		v1.GET("/v1/beziergridstacks", GetController().GetBezierGridStacks)
+		v1.GET("/v1/beziergridstacks/:id", GetController().GetBezierGridStack)
+		v1.POST("/v1/beziergridstacks", GetController().PostBezierGridStack)
+		v1.PATCH("/v1/beziergridstacks/:id", GetController().UpdateBezierGridStack)
+		v1.PUT("/v1/beziergridstacks/:id", GetController().UpdateBezierGridStack)
+		v1.DELETE("/v1/beziergridstacks/:id", GetController().DeleteBezierGridStack)
+
 		v1.GET("/v1/circles", GetController().GetCircles)
 		v1.GET("/v1/circles/:id", GetController().GetCircle)
 		v1.POST("/v1/circles", GetController().PostCircle)

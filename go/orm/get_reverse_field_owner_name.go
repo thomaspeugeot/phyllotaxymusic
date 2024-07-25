@@ -46,6 +46,18 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 	case *models.BezierGrid:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "BezierGridStack":
+			switch reverseField.Fieldname {
+			case "BezierGrids":
+				if _beziergridstack, ok := stage.BezierGridStack_BezierGrids_reverseMap[inst]; ok {
+					res = _beziergridstack.Name
+				}
+			}
+		}
+
+	case *models.BezierGridStack:
+		switch reverseField.GongstructName {
+		// insertion point
 		}
 
 	case *models.Circle:
@@ -138,6 +150,16 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		}
 
 	case *models.BezierGrid:
+		switch reverseField.GongstructName {
+		// insertion point
+		case "BezierGridStack":
+			switch reverseField.Fieldname {
+			case "BezierGrids":
+				res = stage.BezierGridStack_BezierGrids_reverseMap[inst]
+			}
+		}
+
+	case *models.BezierGridStack:
 		switch reverseField.GongstructName {
 		// insertion point
 		}

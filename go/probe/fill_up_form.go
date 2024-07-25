@@ -149,6 +149,36 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationSliceToForm("Beziers", instanceWithInferedType, &instanceWithInferedType.Beziers, formGroup, probe)
+		{
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "BezierGridStack"
+			rf.Fieldname = "BezierGrids"
+			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			if reverseFieldOwner != nil {
+				AssociationReverseFieldToForm(
+					reverseFieldOwner.(*models.BezierGridStack),
+					"BezierGrids",
+					instanceWithInferedType,
+					formGroup,
+					probe)
+			} else {
+				AssociationReverseFieldToForm[*models.BezierGridStack, *models.BezierGrid](
+					nil,
+					"BezierGrids",
+					instanceWithInferedType,
+					formGroup,
+					probe)
+			}
+		}
+
+	case *models.BezierGridStack:
+		// insertion point
+		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationSliceToForm("BezierGrids", instanceWithInferedType, &instanceWithInferedType.BezierGrids, formGroup, probe)
 
 	case *models.Circle:
 		// insertion point
@@ -282,6 +312,13 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("GrowthCurveNext", instanceWithInferedType.GrowthCurveNext, formGroup, probe)
 		AssociationFieldToForm("GrowthCurveNextShiftedRightSeed", instanceWithInferedType.GrowthCurveNextShiftedRightSeed, formGroup, probe)
 		AssociationFieldToForm("GrowthCurveNextShiftedRight", instanceWithInferedType.GrowthCurveNextShiftedRight, formGroup, probe)
+		AssociationFieldToForm("GrowthCurveStack", instanceWithInferedType.GrowthCurveStack, formGroup, probe)
+		BasicFieldtoForm("StackWidth", instanceWithInferedType.StackWidth, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("NbShitRight", instanceWithInferedType.NbShitRight, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("StackHeight", instanceWithInferedType.StackHeight, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		BasicFieldtoForm("BezierControlLengthRatio", instanceWithInferedType.BezierControlLengthRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,

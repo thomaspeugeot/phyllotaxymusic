@@ -83,6 +83,28 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 			}
 		}
 
+	case *BezierGridStack:
+		// insertion point per field
+		if fieldName == "BezierGrids" {
+
+			// walk all instances of the owning type
+			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
+				if any(_instance).(*BezierGridStack) != owningInstanceInfered {
+					_inferedTypeInstance := any(_instance).(*BezierGridStack)
+					reference := make([]FieldType, 0)
+					targetFieldSlice := any(_inferedTypeInstance.BezierGrids).([]FieldType)
+					copy(targetFieldSlice, reference)
+					_inferedTypeInstance.BezierGrids = _inferedTypeInstance.BezierGrids[0:]
+					for _, fieldInstance := range reference {
+						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
+							_inferedTypeInstance.BezierGrids =
+								append(_inferedTypeInstance.BezierGrids, any(fieldInstance).(*BezierGrid))
+						}
+					}
+				}
+			}
+		}
+
 	case *Circle:
 		// insertion point per field
 
@@ -176,6 +198,17 @@ func (stage *StageStruct) ComputeReverseMaps() {
 		_ = beziergrid
 		for _, _bezier := range beziergrid.Beziers {
 			stage.BezierGrid_Beziers_reverseMap[_bezier] = beziergrid
+		}
+	}
+
+	// Compute reverse map for named struct BezierGridStack
+	// insertion point per field
+	clear(stage.BezierGridStack_BezierGrids_reverseMap)
+	stage.BezierGridStack_BezierGrids_reverseMap = make(map[*BezierGrid]*BezierGridStack)
+	for beziergridstack := range stage.BezierGridStacks {
+		_ = beziergridstack
+		for _, _beziergrid := range beziergridstack.BezierGrids {
+			stage.BezierGridStack_BezierGrids_reverseMap[_beziergrid] = beziergridstack
 		}
 	}
 

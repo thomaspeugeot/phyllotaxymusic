@@ -12,6 +12,7 @@ import { Axis } from './axis'
 import { AxisGrid } from './axisgrid'
 import { Bezier } from './bezier'
 import { BezierGrid } from './beziergrid'
+import { BezierGridStack } from './beziergridstack'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 
@@ -33,6 +34,9 @@ export class Parameter {
 	Z: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
+	StackWidth: number = 0
+	NbShitRight: number = 0
+	StackHeight: number = 0
 	BezierControlLengthRatio: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
@@ -88,6 +92,16 @@ export class Parameter {
 
 	GrowthCurveShiftedRight?: BezierGrid
 
+	GrowthCurveNextSeed?: Bezier
+
+	GrowthCurveNext?: BezierGrid
+
+	GrowthCurveNextShiftedRightSeed?: Bezier
+
+	GrowthCurveNextShiftedRight?: BezierGrid
+
+	GrowthCurveStack?: BezierGridStack
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -107,6 +121,9 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.Z = parameter.Z
 	parameterAPI.InsideAngle = parameter.InsideAngle
 	parameterAPI.SideLength = parameter.SideLength
+	parameterAPI.StackWidth = parameter.StackWidth
+	parameterAPI.NbShitRight = parameter.NbShitRight
+	parameterAPI.StackHeight = parameter.StackHeight
 	parameterAPI.BezierControlLengthRatio = parameter.BezierControlLengthRatio
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
@@ -287,6 +304,41 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.GrowthCurveNextSeedID.Valid = true
+	if (parameter.GrowthCurveNextSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveNextSeedID.Int64 = parameter.GrowthCurveNextSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveNextSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.GrowthCurveNextID.Valid = true
+	if (parameter.GrowthCurveNext != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveNextID.Int64 = parameter.GrowthCurveNext.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveNextID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightSeedID.Valid = true
+	if (parameter.GrowthCurveNextShiftedRightSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightSeedID.Int64 = parameter.GrowthCurveNextShiftedRightSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightID.Valid = true
+	if (parameter.GrowthCurveNextShiftedRight != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightID.Int64 = parameter.GrowthCurveNextShiftedRight.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Valid = true
+	if (parameter.GrowthCurveStack != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64 = parameter.GrowthCurveStack.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -322,6 +374,9 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.Z = parameterAPI.Z
 	parameter.InsideAngle = parameterAPI.InsideAngle
 	parameter.SideLength = parameterAPI.SideLength
+	parameter.StackWidth = parameterAPI.StackWidth
+	parameter.NbShitRight = parameterAPI.NbShitRight
+	parameter.StackHeight = parameterAPI.StackHeight
 	parameter.BezierControlLengthRatio = parameterAPI.BezierControlLengthRatio
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
@@ -352,6 +407,11 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.GrowthCurve = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveID.Int64)
 	parameter.GrowthCurveShiftedRightSeed = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightSeedID.Int64)
 	parameter.GrowthCurveShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightID.Int64)
+	parameter.GrowthCurveNextSeed = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextSeedID.Int64)
+	parameter.GrowthCurveNext = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextID.Int64)
+	parameter.GrowthCurveNextShiftedRightSeed = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightSeedID.Int64)
+	parameter.GrowthCurveNextShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightID.Int64)
+	parameter.GrowthCurveStack = frontRepo.map_ID_BezierGridStack.get(parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

@@ -36,6 +36,24 @@
                 >
             </mat-slider>
 
+            <h4>Stack Width {{frontRepo.array_Parameters[0].StackWidth}}</h4>
+
+            <mat-slider  min="0" max="25" step="1" 
+            showTickMarks discrete [displayWith]="formatLabel" 
+            >
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].StackWidth" (input)="input($event)" 
+                >
+            </mat-slider>
+
+            <h4>Stack Height {{frontRepo.array_Parameters[0].StackHeight}}</h4>
+
+            <mat-slider  min="0" max="25" step="1" 
+            showTickMarks discrete [displayWith]="formatLabel" 
+            >
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].StackHeight" (input)="input($event)" 
+                >
+            </mat-slider>
+
             <h4>Inside Angle {{frontRepo.array_Parameters[0].InsideAngle}}</h4>
 
             <mat-slider  min="60.0" max="120.0" step="1" 

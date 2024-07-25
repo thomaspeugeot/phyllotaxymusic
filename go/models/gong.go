@@ -91,6 +91,17 @@ type StageStruct struct {
 	OnAfterBezierGridDeleteCallback OnAfterDeleteInterface[BezierGrid]
 	OnAfterBezierGridReadCallback   OnAfterReadInterface[BezierGrid]
 
+	BezierGridStacks           map[*BezierGridStack]any
+	BezierGridStacks_mapString map[string]*BezierGridStack
+
+	// insertion point for slice of pointers maps
+	BezierGridStack_BezierGrids_reverseMap map[*BezierGrid]*BezierGridStack
+
+	OnAfterBezierGridStackCreateCallback OnAfterCreateInterface[BezierGridStack]
+	OnAfterBezierGridStackUpdateCallback OnAfterUpdateInterface[BezierGridStack]
+	OnAfterBezierGridStackDeleteCallback OnAfterDeleteInterface[BezierGridStack]
+	OnAfterBezierGridStackReadCallback   OnAfterReadInterface[BezierGridStack]
+
 	Circles           map[*Circle]any
 	Circles_mapString map[string]*Circle
 
@@ -239,6 +250,8 @@ type BackRepoInterface interface {
 	CheckoutBezier(bezier *Bezier)
 	CommitBezierGrid(beziergrid *BezierGrid)
 	CheckoutBezierGrid(beziergrid *BezierGrid)
+	CommitBezierGridStack(beziergridstack *BezierGridStack)
+	CheckoutBezierGridStack(beziergridstack *BezierGridStack)
 	CommitCircle(circle *Circle)
 	CheckoutCircle(circle *Circle)
 	CommitCircleGrid(circlegrid *CircleGrid)
@@ -271,6 +284,9 @@ func NewStage(path string) (stage *StageStruct) {
 
 		BezierGrids:           make(map[*BezierGrid]any),
 		BezierGrids_mapString: make(map[string]*BezierGrid),
+
+		BezierGridStacks:           make(map[*BezierGridStack]any),
+		BezierGridStacks_mapString: make(map[string]*BezierGridStack),
 
 		Circles:           make(map[*Circle]any),
 		Circles_mapString: make(map[string]*Circle),
@@ -330,6 +346,7 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["AxisGrid"] = len(stage.AxisGrids)
 	stage.Map_GongStructName_InstancesNb["Bezier"] = len(stage.Beziers)
 	stage.Map_GongStructName_InstancesNb["BezierGrid"] = len(stage.BezierGrids)
+	stage.Map_GongStructName_InstancesNb["BezierGridStack"] = len(stage.BezierGridStacks)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
@@ -351,6 +368,7 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["AxisGrid"] = len(stage.AxisGrids)
 	stage.Map_GongStructName_InstancesNb["Bezier"] = len(stage.Beziers)
 	stage.Map_GongStructName_InstancesNb["BezierGrid"] = len(stage.BezierGrids)
+	stage.Map_GongStructName_InstancesNb["BezierGridStack"] = len(stage.BezierGridStacks)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
@@ -588,6 +606,56 @@ func (beziergrid *BezierGrid) Checkout(stage *StageStruct) *BezierGrid {
 // for satisfaction of GongStruct interface
 func (beziergrid *BezierGrid) GetName() (res string) {
 	return beziergrid.Name
+}
+
+// Stage puts beziergridstack to the model stage
+func (beziergridstack *BezierGridStack) Stage(stage *StageStruct) *BezierGridStack {
+	stage.BezierGridStacks[beziergridstack] = __member
+	stage.BezierGridStacks_mapString[beziergridstack.Name] = beziergridstack
+
+	return beziergridstack
+}
+
+// Unstage removes beziergridstack off the model stage
+func (beziergridstack *BezierGridStack) Unstage(stage *StageStruct) *BezierGridStack {
+	delete(stage.BezierGridStacks, beziergridstack)
+	delete(stage.BezierGridStacks_mapString, beziergridstack.Name)
+	return beziergridstack
+}
+
+// UnstageVoid removes beziergridstack off the model stage
+func (beziergridstack *BezierGridStack) UnstageVoid(stage *StageStruct) {
+	delete(stage.BezierGridStacks, beziergridstack)
+	delete(stage.BezierGridStacks_mapString, beziergridstack.Name)
+}
+
+// commit beziergridstack to the back repo (if it is already staged)
+func (beziergridstack *BezierGridStack) Commit(stage *StageStruct) *BezierGridStack {
+	if _, ok := stage.BezierGridStacks[beziergridstack]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitBezierGridStack(beziergridstack)
+		}
+	}
+	return beziergridstack
+}
+
+func (beziergridstack *BezierGridStack) CommitVoid(stage *StageStruct) {
+	beziergridstack.Commit(stage)
+}
+
+// Checkout beziergridstack to the back repo (if it is already staged)
+func (beziergridstack *BezierGridStack) Checkout(stage *StageStruct) *BezierGridStack {
+	if _, ok := stage.BezierGridStacks[beziergridstack]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutBezierGridStack(beziergridstack)
+		}
+	}
+	return beziergridstack
+}
+
+// for satisfaction of GongStruct interface
+func (beziergridstack *BezierGridStack) GetName() (res string) {
+	return beziergridstack.Name
 }
 
 // Stage puts circle to the model stage
@@ -946,6 +1014,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMAxisGrid(AxisGrid *AxisGrid)
 	CreateORMBezier(Bezier *Bezier)
 	CreateORMBezierGrid(BezierGrid *BezierGrid)
+	CreateORMBezierGridStack(BezierGridStack *BezierGridStack)
 	CreateORMCircle(Circle *Circle)
 	CreateORMCircleGrid(CircleGrid *CircleGrid)
 	CreateORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
@@ -960,6 +1029,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMAxisGrid(AxisGrid *AxisGrid)
 	DeleteORMBezier(Bezier *Bezier)
 	DeleteORMBezierGrid(BezierGrid *BezierGrid)
+	DeleteORMBezierGridStack(BezierGridStack *BezierGridStack)
 	DeleteORMCircle(Circle *Circle)
 	DeleteORMCircleGrid(CircleGrid *CircleGrid)
 	DeleteORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
@@ -981,6 +1051,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.BezierGrids = make(map[*BezierGrid]any)
 	stage.BezierGrids_mapString = make(map[string]*BezierGrid)
+
+	stage.BezierGridStacks = make(map[*BezierGridStack]any)
+	stage.BezierGridStacks_mapString = make(map[string]*BezierGridStack)
 
 	stage.Circles = make(map[*Circle]any)
 	stage.Circles_mapString = make(map[string]*Circle)
@@ -1017,6 +1090,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.BezierGrids = nil
 	stage.BezierGrids_mapString = nil
+
+	stage.BezierGridStacks = nil
+	stage.BezierGridStacks_mapString = nil
 
 	stage.Circles = nil
 	stage.Circles_mapString = nil
@@ -1058,6 +1134,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 		beziergrid.Unstage(stage)
 	}
 
+	for beziergridstack := range stage.BezierGridStacks {
+		beziergridstack.Unstage(stage)
+	}
+
 	for circle := range stage.Circles {
 		circle.Unstage(stage)
 	}
@@ -1094,7 +1174,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Axis | AxisGrid | Bezier | BezierGrid | Circle | CircleGrid | HorizontalAxis | Parameter | Rhombus | RhombusGrid | VerticalAxis
+	Axis | AxisGrid | Bezier | BezierGrid | BezierGridStack | Circle | CircleGrid | HorizontalAxis | Parameter | Rhombus | RhombusGrid | VerticalAxis
 }
 
 type GongtructBasicField interface {
@@ -1107,7 +1187,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Axis | *AxisGrid | *Bezier | *BezierGrid | *Circle | *CircleGrid | *HorizontalAxis | *Parameter | *Rhombus | *RhombusGrid | *VerticalAxis
+	*Axis | *AxisGrid | *Bezier | *BezierGrid | *BezierGridStack | *Circle | *CircleGrid | *HorizontalAxis | *Parameter | *Rhombus | *RhombusGrid | *VerticalAxis
 	GetName() string
 	CommitVoid(*StageStruct)
 	UnstageVoid(stage *StageStruct)
@@ -1140,6 +1220,7 @@ type GongstructSet interface {
 		map[*AxisGrid]any |
 		map[*Bezier]any |
 		map[*BezierGrid]any |
+		map[*BezierGridStack]any |
 		map[*Circle]any |
 		map[*CircleGrid]any |
 		map[*HorizontalAxis]any |
@@ -1157,6 +1238,7 @@ type GongstructMapString interface {
 		map[string]*AxisGrid |
 		map[string]*Bezier |
 		map[string]*BezierGrid |
+		map[string]*BezierGridStack |
 		map[string]*Circle |
 		map[string]*CircleGrid |
 		map[string]*HorizontalAxis |
@@ -1182,6 +1264,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Beziers).(*Type)
 	case map[*BezierGrid]any:
 		return any(&stage.BezierGrids).(*Type)
+	case map[*BezierGridStack]any:
+		return any(&stage.BezierGridStacks).(*Type)
 	case map[*Circle]any:
 		return any(&stage.Circles).(*Type)
 	case map[*CircleGrid]any:
@@ -1216,6 +1300,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Beziers_mapString).(*Type)
 	case map[string]*BezierGrid:
 		return any(&stage.BezierGrids_mapString).(*Type)
+	case map[string]*BezierGridStack:
+		return any(&stage.BezierGridStacks_mapString).(*Type)
 	case map[string]*Circle:
 		return any(&stage.Circles_mapString).(*Type)
 	case map[string]*CircleGrid:
@@ -1250,6 +1336,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Beziers).(*map[*Type]any)
 	case BezierGrid:
 		return any(&stage.BezierGrids).(*map[*Type]any)
+	case BezierGridStack:
+		return any(&stage.BezierGridStacks).(*map[*Type]any)
 	case Circle:
 		return any(&stage.Circles).(*map[*Type]any)
 	case CircleGrid:
@@ -1284,6 +1372,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.Beziers).(*map[Type]any)
 	case *BezierGrid:
 		return any(&stage.BezierGrids).(*map[Type]any)
+	case *BezierGridStack:
+		return any(&stage.BezierGridStacks).(*map[Type]any)
 	case *Circle:
 		return any(&stage.Circles).(*map[Type]any)
 	case *CircleGrid:
@@ -1318,6 +1408,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Beziers_mapString).(*map[string]*Type)
 	case BezierGrid:
 		return any(&stage.BezierGrids_mapString).(*map[string]*Type)
+	case BezierGridStack:
+		return any(&stage.BezierGridStacks_mapString).(*map[string]*Type)
 	case Circle:
 		return any(&stage.Circles_mapString).(*map[string]*Type)
 	case CircleGrid:
@@ -1369,6 +1461,12 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Bezier{Name: "Reference"},
 			// field is initialized with an instance of Bezier with the name of the field
 			Beziers: []*Bezier{{Name: "Beziers"}},
+		}).(*Type)
+	case BezierGridStack:
+		return any(&BezierGridStack{
+			// Initialisation of associations
+			// field is initialized with an instance of BezierGrid with the name of the field
+			BezierGrids: []*BezierGrid{{Name: "BezierGrids"}},
 		}).(*Type)
 	case Circle:
 		return any(&Circle{
@@ -1447,6 +1545,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			GrowthCurveNextShiftedRightSeed: &Bezier{Name: "GrowthCurveNextShiftedRightSeed"},
 			// field is initialized with an instance of BezierGrid with the name of the field
 			GrowthCurveNextShiftedRight: &BezierGrid{Name: "GrowthCurveNextShiftedRight"},
+			// field is initialized with an instance of BezierGridStack with the name of the field
+			GrowthCurveStack: &BezierGridStack{Name: "GrowthCurveStack"},
 			// field is initialized with an instance of HorizontalAxis with the name of the field
 			HorizontalAxis: &HorizontalAxis{Name: "HorizontalAxis"},
 			// field is initialized with an instance of VerticalAxis with the name of the field
@@ -1539,6 +1639,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		}
+	// reverse maps of direct associations of BezierGridStack
+	case BezierGridStack:
+		switch fieldname {
+		// insertion point for per direct association field
 		}
 	// reverse maps of direct associations of Circle
 	case Circle:
@@ -2069,6 +2174,23 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		case "GrowthCurveStack":
+			res := make(map[*BezierGridStack][]*Parameter)
+			for parameter := range stage.Parameters {
+				if parameter.GrowthCurveStack != nil {
+					beziergridstack_ := parameter.GrowthCurveStack
+					var parameters []*Parameter
+					_, ok := res[beziergridstack_]
+					if ok {
+						parameters = res[beziergridstack_]
+					} else {
+						parameters = make([]*Parameter, 0)
+					}
+					parameters = append(parameters, parameter)
+					res[beziergridstack_] = parameters
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		case "HorizontalAxis":
 			res := make(map[*HorizontalAxis][]*Parameter)
 			for parameter := range stage.Parameters {
@@ -2188,6 +2310,19 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			}
 			return any(res).(map[*End]*Start)
 		}
+	// reverse maps of direct associations of BezierGridStack
+	case BezierGridStack:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "BezierGrids":
+			res := make(map[*BezierGrid]*BezierGridStack)
+			for beziergridstack := range stage.BezierGridStacks {
+				for _, beziergrid_ := range beziergridstack.BezierGrids {
+					res[beziergrid_] = beziergridstack
+				}
+			}
+			return any(res).(map[*End]*Start)
+		}
 	// reverse maps of direct associations of Circle
 	case Circle:
 		switch fieldname {
@@ -2259,6 +2394,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Bezier"
 	case BezierGrid:
 		res = "BezierGrid"
+	case BezierGridStack:
+		res = "BezierGridStack"
 	case Circle:
 		res = "Circle"
 	case CircleGrid:
@@ -2293,6 +2430,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "Bezier"
 	case *BezierGrid:
 		res = "BezierGrid"
+	case *BezierGridStack:
+		res = "BezierGridStack"
 	case *Circle:
 		res = "Circle"
 	case *CircleGrid:
@@ -2326,6 +2465,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "StartX", "StartY", "ControlPointStartX", "ControlPointStartY", "EndX", "EndY", "ControlPointEndX", "ControlPointEndY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case BezierGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "Beziers"}
+	case BezierGridStack:
+		res = []string{"Name", "IsDisplayed", "BezierGrids"}
 	case Circle:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case CircleGrid:
@@ -2333,7 +2474,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
@@ -2374,6 +2515,12 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 		rf.Fieldname = "Beziers"
 		res = append(res, rf)
 	case BezierGrid:
+		var rf ReverseField
+		_ = rf
+		rf.GongstructName = "BezierGridStack"
+		rf.Fieldname = "BezierGrids"
+		res = append(res, rf)
+	case BezierGridStack:
 		var rf ReverseField
 		_ = rf
 	case Circle:
@@ -2422,6 +2569,8 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "StartX", "StartY", "ControlPointStartX", "ControlPointStartY", "EndX", "EndY", "ControlPointEndX", "ControlPointEndY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *BezierGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "Beziers"}
+	case *BezierGridStack:
+		res = []string{"Name", "IsDisplayed", "BezierGrids"}
 	case *Circle:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *CircleGrid:
@@ -2429,7 +2578,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
@@ -2548,6 +2697,21 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
 		case "Beziers":
 			for idx, __instance__ := range inferedInstance.Beziers {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		}
+	case *BezierGridStack:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "IsDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "BezierGrids":
+			for idx, __instance__ := range inferedInstance.BezierGrids {
 				if idx > 0 {
 					res += "\n"
 				}
@@ -2764,6 +2928,16 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.GrowthCurveNextShiftedRight != nil {
 				res = inferedInstance.GrowthCurveNextShiftedRight.Name
 			}
+		case "GrowthCurveStack":
+			if inferedInstance.GrowthCurveStack != nil {
+				res = inferedInstance.GrowthCurveStack.Name
+			}
+		case "StackWidth":
+			res = fmt.Sprintf("%d", inferedInstance.StackWidth)
+		case "NbShitRight":
+			res = fmt.Sprintf("%d", inferedInstance.NbShitRight)
+		case "StackHeight":
+			res = fmt.Sprintf("%d", inferedInstance.StackHeight)
 		case "BezierControlLengthRatio":
 			res = fmt.Sprintf("%f", inferedInstance.BezierControlLengthRatio)
 		case "OriginX":
@@ -2980,6 +3154,21 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				res += __instance__.Name
 			}
 		}
+	case BezierGridStack:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "IsDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "BezierGrids":
+			for idx, __instance__ := range inferedInstance.BezierGrids {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
+			}
+		}
 	case Circle:
 		switch fieldName {
 		// string value of fields
@@ -3190,6 +3379,16 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.GrowthCurveNextShiftedRight != nil {
 				res = inferedInstance.GrowthCurveNextShiftedRight.Name
 			}
+		case "GrowthCurveStack":
+			if inferedInstance.GrowthCurveStack != nil {
+				res = inferedInstance.GrowthCurveStack.Name
+			}
+		case "StackWidth":
+			res = fmt.Sprintf("%d", inferedInstance.StackWidth)
+		case "NbShitRight":
+			res = fmt.Sprintf("%d", inferedInstance.NbShitRight)
+		case "StackHeight":
+			res = fmt.Sprintf("%d", inferedInstance.StackHeight)
 		case "BezierControlLengthRatio":
 			res = fmt.Sprintf("%f", inferedInstance.BezierControlLengthRatio)
 		case "OriginX":

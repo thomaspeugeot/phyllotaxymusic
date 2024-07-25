@@ -422,6 +422,46 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_BezierGridStack_Identifiers := make(map[*BezierGridStack]string)
+	_ = map_BezierGridStack_Identifiers
+
+	beziergridstackOrdered := []*BezierGridStack{}
+	for beziergridstack := range stage.BezierGridStacks {
+		beziergridstackOrdered = append(beziergridstackOrdered, beziergridstack)
+	}
+	sort.Slice(beziergridstackOrdered[:], func(i, j int) bool {
+		return beziergridstackOrdered[i].Name < beziergridstackOrdered[j].Name
+	})
+	if len(beziergridstackOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, beziergridstack := range beziergridstackOrdered {
+
+		id = generatesIdentifier("BezierGridStack", idx, beziergridstack.Name)
+		map_BezierGridStack_Identifiers[beziergridstack] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "BezierGridStack")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", beziergridstack.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(beziergridstack.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", beziergridstack.IsDisplayed))
+		initializerStatements += setValueField
+
+	}
+
 	map_Circle_Identifiers := make(map[*Circle]string)
 	_ = map_Circle_Identifiers
 
@@ -734,6 +774,24 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SideLength")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SideLength))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StackWidth")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.StackWidth))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbShitRight")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbShitRight))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StackHeight")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.StackHeight))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
@@ -1087,6 +1145,24 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	for idx, beziergridstack := range beziergridstackOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("BezierGridStack", idx, beziergridstack.Name)
+		map_BezierGridStack_Identifiers[beziergridstack] = id
+
+		// Initialisation of values
+		for _, _beziergrid := range beziergridstack.BezierGrids {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "BezierGrids")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[_beziergrid])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
 	for idx, circle := range circleOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -1370,6 +1446,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveNextShiftedRight")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.GrowthCurveNextShiftedRight])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if parameter.GrowthCurveStack != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveStack")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGridStack_Identifiers[parameter.GrowthCurveStack])
 			pointersInitializesStatements += setPointerField
 		}
 

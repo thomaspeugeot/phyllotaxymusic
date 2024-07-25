@@ -40,6 +40,8 @@ func _(stage *models.StageStruct) {
 	__BezierGrid__000002_Growth_Curve_Next_Shift_Right := (&models.BezierGrid{Name: `Growth Curve Next Shift Right`}).Stage(stage)
 	__BezierGrid__000003_Growth_Curve_Shift_Right := (&models.BezierGrid{Name: `Growth Curve Shift Right`}).Stage(stage)
 
+	__BezierGridStack__000000_The_GrowthCurveStack := (&models.BezierGridStack{Name: `The GrowthCurveStack`}).Stage(stage)
+
 	__Circle__000000_Construction_Circle := (&models.Circle{Name: `Construction Circle`}).Stage(stage)
 	__Circle__000001_Growing := (&models.Circle{Name: `Growing`}).Stage(stage)
 	__Circle__000002_Growing_Seed_Left := (&models.Circle{Name: `Growing Seed Left`}).Stage(stage)
@@ -72,7 +74,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000000_Construction_Axis.Name = `Construction Axis`
 	__Axis__000000_Construction_Axis.IsDisplayed = false
 	__Axis__000000_Construction_Axis.Angle = 97.826613
-	__Axis__000000_Construction_Axis.Length = 169.921871
+	__Axis__000000_Construction_Axis.Length = 56.640624
 	__Axis__000000_Construction_Axis.CenterX = 0.000000
 	__Axis__000000_Construction_Axis.CenterY = 0.000000
 	__Axis__000000_Construction_Axis.Color = ``
@@ -87,7 +89,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000001_Reference_Axis.Name = `Reference Axis`
 	__Axis__000001_Reference_Axis.IsDisplayed = false
 	__Axis__000001_Reference_Axis.Angle = 82.173387
-	__Axis__000001_Reference_Axis.Length = 623.906521
+	__Axis__000001_Reference_Axis.Length = 207.968840
 	__Axis__000001_Reference_Axis.CenterX = 0.000000
 	__Axis__000001_Reference_Axis.CenterY = 0.000000
 	__Axis__000001_Reference_Axis.Color = ``
@@ -102,7 +104,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000002_Rotated_Axis.Name = `Rotated Axis`
 	__Axis__000002_Rotated_Axis.IsDisplayed = false
 	__Axis__000002_Rotated_Axis.Angle = 0.000000
-	__Axis__000002_Rotated_Axis.Length = 623.906521
+	__Axis__000002_Rotated_Axis.Length = 207.968840
 	__Axis__000002_Rotated_Axis.CenterX = 0.000000
 	__Axis__000002_Rotated_Axis.CenterY = 0.000000
 	__Axis__000002_Rotated_Axis.Color = ``
@@ -175,15 +177,15 @@ func _(stage *models.StageStruct) {
 	__Bezier__000002_Growth_Curve_Next_Shift_Right_Seed.Transform = ``
 
 	__Bezier__000003_Growth_Curve_Seed.Name = `Growth Curve Seed`
-	__Bezier__000003_Growth_Curve_Seed.IsDisplayed = true
-	__Bezier__000003_Growth_Curve_Seed.StartX = -11.569619
-	__Bezier__000003_Growth_Curve_Seed.StartY = 84.169499
-	__Bezier__000003_Growth_Curve_Seed.ControlPointStartX = 55.301598
-	__Bezier__000003_Growth_Curve_Seed.ControlPointStartY = 93.361361
-	__Bezier__000003_Growth_Curve_Seed.EndX = 99.328143
-	__Bezier__000003_Growth_Curve_Seed.EndY = 185.172897
-	__Bezier__000003_Growth_Curve_Seed.ControlPointEndX = 32.456926
-	__Bezier__000003_Growth_Curve_Seed.ControlPointEndY = 175.981034
+	__Bezier__000003_Growth_Curve_Seed.IsDisplayed = false
+	__Bezier__000003_Growth_Curve_Seed.StartX = -3.856540
+	__Bezier__000003_Growth_Curve_Seed.StartY = 28.056500
+	__Bezier__000003_Growth_Curve_Seed.ControlPointStartX = 18.433866
+	__Bezier__000003_Growth_Curve_Seed.ControlPointStartY = 31.120454
+	__Bezier__000003_Growth_Curve_Seed.EndX = 33.109381
+	__Bezier__000003_Growth_Curve_Seed.EndY = 61.724299
+	__Bezier__000003_Growth_Curve_Seed.ControlPointEndX = 10.818975
+	__Bezier__000003_Growth_Curve_Seed.ControlPointEndY = 58.660345
 	__Bezier__000003_Growth_Curve_Seed.Color = ``
 	__Bezier__000003_Growth_Curve_Seed.FillOpacity = 0.000000
 	__Bezier__000003_Growth_Curve_Seed.Stroke = `grey`
@@ -194,21 +196,24 @@ func _(stage *models.StageStruct) {
 	__Bezier__000003_Growth_Curve_Seed.Transform = ``
 
 	__BezierGrid__000000_Growth_Curve.Name = `Growth Curve`
-	__BezierGrid__000000_Growth_Curve.IsDisplayed = true
+	__BezierGrid__000000_Growth_Curve.IsDisplayed = false
 
 	__BezierGrid__000001_Growth_Curve_Next.Name = `Growth Curve Next`
-	__BezierGrid__000001_Growth_Curve_Next.IsDisplayed = true
+	__BezierGrid__000001_Growth_Curve_Next.IsDisplayed = false
 
 	__BezierGrid__000002_Growth_Curve_Next_Shift_Right.Name = `Growth Curve Next Shift Right`
-	__BezierGrid__000002_Growth_Curve_Next_Shift_Right.IsDisplayed = true
+	__BezierGrid__000002_Growth_Curve_Next_Shift_Right.IsDisplayed = false
 
 	__BezierGrid__000003_Growth_Curve_Shift_Right.Name = `Growth Curve Shift Right`
-	__BezierGrid__000003_Growth_Curve_Shift_Right.IsDisplayed = true
+	__BezierGrid__000003_Growth_Curve_Shift_Right.IsDisplayed = false
+
+	__BezierGridStack__000000_The_GrowthCurveStack.Name = `The GrowthCurveStack`
+	__BezierGridStack__000000_The_GrowthCurveStack.IsDisplayed = true
 
 	__Circle__000000_Construction_Circle.Name = `Construction Circle`
 	__Circle__000000_Construction_Circle.IsDisplayed = false
-	__Circle__000000_Construction_Circle.CenterX = -11.569619
-	__Circle__000000_Construction_Circle.CenterY = 84.169499
+	__Circle__000000_Construction_Circle.CenterX = -3.856540
+	__Circle__000000_Construction_Circle.CenterY = 28.056500
 	__Circle__000000_Construction_Circle.HasBespokeRadius = true
 	__Circle__000000_Construction_Circle.BespopkeRadius = 20.000000
 	__Circle__000000_Construction_Circle.Color = ``
@@ -267,8 +272,8 @@ func _(stage *models.StageStruct) {
 
 	__Circle__000004_Next_Circle.Name = `Next Circle`
 	__Circle__000004_Next_Circle.IsDisplayed = false
-	__Circle__000004_Next_Circle.CenterX = 244.934761
-	__Circle__000004_Next_Circle.CenterY = 33.667799
+	__Circle__000004_Next_Circle.CenterX = 81.644920
+	__Circle__000004_Next_Circle.CenterY = 11.222600
 	__Circle__000004_Next_Circle.HasBespokeRadius = false
 	__Circle__000004_Next_Circle.BespopkeRadius = 0.000000
 	__Circle__000004_Next_Circle.Color = ``
@@ -312,17 +317,20 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
 	__Parameter__000000_Reference.Z = 9
-	__Parameter__000000_Reference.InsideAngle = 111.000000
-	__Parameter__000000_Reference.SideLength = 110.000000
-	__Parameter__000000_Reference.BezierControlLengthRatio = 0.450000
-	__Parameter__000000_Reference.OriginX = 100.000000
-	__Parameter__000000_Reference.OriginY = 740.000000
+	__Parameter__000000_Reference.InsideAngle = 89.000000
+	__Parameter__000000_Reference.SideLength = 100.000000
+	__Parameter__000000_Reference.StackWidth = 3
+	__Parameter__000000_Reference.NbShitRight = 2
+	__Parameter__000000_Reference.StackHeight = 20
+	__Parameter__000000_Reference.BezierControlLengthRatio = 0.350000
+	__Parameter__000000_Reference.OriginX = 390.000000
+	__Parameter__000000_Reference.OriginY = 890.000000
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.CenterX = 0.000000
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.CenterY = 0.000000
-	__Rhombus__000000_Growing_Rhombus_Grid_Seed.SideLength = 150.000000
+	__Rhombus__000000_Growing_Rhombus_Grid_Seed.SideLength = 50.000000
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Angle = -82.173387
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.InsideAngle = 111.000000
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Color = ``
@@ -338,7 +346,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000001_Initial_Rhombus.IsDisplayed = false
 	__Rhombus__000001_Initial_Rhombus.CenterX = 0.000000
 	__Rhombus__000001_Initial_Rhombus.CenterY = 0.000000
-	__Rhombus__000001_Initial_Rhombus.SideLength = 150.000000
+	__Rhombus__000001_Initial_Rhombus.SideLength = 50.000000
 	__Rhombus__000001_Initial_Rhombus.Angle = 0.000000
 	__Rhombus__000001_Initial_Rhombus.InsideAngle = 111.000000
 	__Rhombus__000001_Initial_Rhombus.Color = ``
@@ -352,9 +360,9 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000002_Next_Rhombus.Name = `Next Rhombus`
 	__Rhombus__000002_Next_Rhombus.IsDisplayed = false
-	__Rhombus__000002_Next_Rhombus.CenterX = 244.934761
-	__Rhombus__000002_Next_Rhombus.CenterY = 33.667799
-	__Rhombus__000002_Next_Rhombus.SideLength = 150.000000
+	__Rhombus__000002_Next_Rhombus.CenterX = 81.644920
+	__Rhombus__000002_Next_Rhombus.CenterY = 11.222600
+	__Rhombus__000002_Next_Rhombus.SideLength = 50.000000
 	__Rhombus__000002_Next_Rhombus.Angle = -82.173387
 	__Rhombus__000002_Next_Rhombus.InsideAngle = 111.000000
 	__Rhombus__000002_Next_Rhombus.Color = ``
@@ -370,7 +378,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000003_Rotated_Rhombus.IsDisplayed = false
 	__Rhombus__000003_Rotated_Rhombus.CenterX = 0.000000
 	__Rhombus__000003_Rotated_Rhombus.CenterY = 0.000000
-	__Rhombus__000003_Rotated_Rhombus.SideLength = 150.000000
+	__Rhombus__000003_Rotated_Rhombus.SideLength = 50.000000
 	__Rhombus__000003_Rotated_Rhombus.Angle = -82.173387
 	__Rhombus__000003_Rotated_Rhombus.InsideAngle = 111.000000
 	__Rhombus__000003_Rotated_Rhombus.Color = ``
@@ -442,6 +450,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.GrowthCurveNext = __BezierGrid__000001_Growth_Curve_Next
 	__Parameter__000000_Reference.GrowthCurveNextShiftedRightSeed = __Bezier__000002_Growth_Curve_Next_Shift_Right_Seed
 	__Parameter__000000_Reference.GrowthCurveNextShiftedRight = __BezierGrid__000002_Growth_Curve_Next_Shift_Right
+	__Parameter__000000_Reference.GrowthCurveStack = __BezierGridStack__000000_The_GrowthCurveStack
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__RhombusGrid__000000_Growing_Rhombus_Grid.Reference = __Rhombus__000003_Rotated_Rhombus

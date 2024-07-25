@@ -163,6 +163,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	GrowthCurveNextShiftedRightID sql.NullInt64
 
+	// field GrowthCurveStack is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	GrowthCurveStackID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -200,6 +204,15 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.SideLength
 	SideLength_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.StackWidth
+	StackWidth_Data sql.NullInt64
+
+	// Declation for basic field parameterDB.NbShitRight
+	NbShitRight_Data sql.NullInt64
+
+	// Declation for basic field parameterDB.StackHeight
+	StackHeight_Data sql.NullInt64
 
 	// Declation for basic field parameterDB.BezierControlLengthRatio
 	BezierControlLengthRatio_Data sql.NullFloat64
@@ -244,11 +257,17 @@ type ParameterWOP struct {
 
 	SideLength float64 `xlsx:"6"`
 
-	BezierControlLengthRatio float64 `xlsx:"7"`
+	StackWidth int `xlsx:"7"`
 
-	OriginX float64 `xlsx:"8"`
+	NbShitRight int `xlsx:"8"`
 
-	OriginY float64 `xlsx:"9"`
+	StackHeight int `xlsx:"9"`
+
+	BezierControlLengthRatio float64 `xlsx:"10"`
+
+	OriginX float64 `xlsx:"11"`
+
+	OriginY float64 `xlsx:"12"`
 	// insertion for WOP pointer fields
 }
 
@@ -261,6 +280,9 @@ var Parameter_Fields = []string{
 	"Z",
 	"InsideAngle",
 	"SideLength",
+	"StackWidth",
+	"NbShitRight",
+	"StackHeight",
 	"BezierControlLengthRatio",
 	"OriginX",
 	"OriginY",
@@ -731,6 +753,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.GrowthCurveNextShiftedRightID.Valid = true
 		}
 
+		// commit pointer value parameter.GrowthCurveStack translates to updating the parameter.GrowthCurveStackID
+		parameterDB.GrowthCurveStackID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowthCurveStack != nil {
+			if GrowthCurveStackId, ok := backRepo.BackRepoBezierGridStack.Map_BezierGridStackPtr_BezierGridStackDBID[parameter.GrowthCurveStack]; ok {
+				parameterDB.GrowthCurveStackID.Int64 = int64(GrowthCurveStackId)
+				parameterDB.GrowthCurveStackID.Valid = true
+			}
+		} else {
+			parameterDB.GrowthCurveStackID.Int64 = 0
+			parameterDB.GrowthCurveStackID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -1013,6 +1047,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.GrowthCurveNextShiftedRightID.Int64 != 0 {
 		parameter.GrowthCurveNextShiftedRight = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.GrowthCurveNextShiftedRightID.Int64)]
 	}
+	// GrowthCurveStack field
+	parameter.GrowthCurveStack = nil
+	if parameterDB.GrowthCurveStackID.Int64 != 0 {
+		parameter.GrowthCurveStack = backRepo.BackRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackPtr[uint(parameterDB.GrowthCurveStackID.Int64)]
+	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
 	if parameterDB.HorizontalAxisID.Int64 != 0 {
@@ -1075,6 +1114,15 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
 
+	parameterDB.StackWidth_Data.Int64 = int64(parameter.StackWidth)
+	parameterDB.StackWidth_Data.Valid = true
+
+	parameterDB.NbShitRight_Data.Int64 = int64(parameter.NbShitRight)
+	parameterDB.NbShitRight_Data.Valid = true
+
+	parameterDB.StackHeight_Data.Int64 = int64(parameter.StackHeight)
+	parameterDB.StackHeight_Data.Valid = true
+
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
 
@@ -1106,6 +1154,15 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
+
+	parameterDB.StackWidth_Data.Int64 = int64(parameter.StackWidth)
+	parameterDB.StackWidth_Data.Valid = true
+
+	parameterDB.NbShitRight_Data.Int64 = int64(parameter.NbShitRight)
+	parameterDB.NbShitRight_Data.Valid = true
+
+	parameterDB.StackHeight_Data.Int64 = int64(parameter.StackHeight)
+	parameterDB.StackHeight_Data.Valid = true
 
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
@@ -1139,6 +1196,15 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
 
+	parameterDB.StackWidth_Data.Int64 = int64(parameter.StackWidth)
+	parameterDB.StackWidth_Data.Valid = true
+
+	parameterDB.NbShitRight_Data.Int64 = int64(parameter.NbShitRight)
+	parameterDB.NbShitRight_Data.Valid = true
+
+	parameterDB.StackHeight_Data.Int64 = int64(parameter.StackHeight)
+	parameterDB.StackHeight_Data.Valid = true
+
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
 
@@ -1158,6 +1224,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
+	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
+	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
+	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
@@ -1172,6 +1241,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
+	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
+	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
+	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
@@ -1187,6 +1259,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
+	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
+	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
+	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
@@ -1519,6 +1594,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.GrowthCurveNextShiftedRightID.Int64 != 0 {
 			parameterDB.GrowthCurveNextShiftedRightID.Int64 = int64(BackRepoBezierGridid_atBckpTime_newID[uint(parameterDB.GrowthCurveNextShiftedRightID.Int64)])
 			parameterDB.GrowthCurveNextShiftedRightID.Valid = true
+		}
+
+		// reindexing GrowthCurveStack field
+		if parameterDB.GrowthCurveStackID.Int64 != 0 {
+			parameterDB.GrowthCurveStackID.Int64 = int64(BackRepoBezierGridStackid_atBckpTime_newID[uint(parameterDB.GrowthCurveStackID.Int64)])
+			parameterDB.GrowthCurveStackID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

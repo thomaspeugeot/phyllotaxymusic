@@ -7,6 +7,7 @@ import { AxisAPI } from './axis-api'
 import { AxisGridAPI } from './axisgrid-api'
 import { BezierAPI } from './bezier-api'
 import { BezierGridAPI } from './beziergrid-api'
+import { BezierGridStackAPI } from './beziergridstack-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 
@@ -28,6 +29,9 @@ export class ParameterAPI {
 	Z: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
+	StackWidth: number = 0
+	NbShitRight: number = 0
+	StackHeight: number = 0
 	BezierControlLengthRatio: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
@@ -88,6 +92,16 @@ export class ParameterPointersEncoding {
 	GrowthCurveShiftedRightSeedID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveShiftedRightSeed.ID = 0
 
 	GrowthCurveShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveShiftedRight.ID = 0
+
+	GrowthCurveNextSeedID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveNextSeed.ID = 0
+
+	GrowthCurveNextID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveNext.ID = 0
+
+	GrowthCurveNextShiftedRightSeedID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveNextShiftedRightSeed.ID = 0
+
+	GrowthCurveNextShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveNextShiftedRight.ID = 0
+
+	GrowthCurveStackID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveStack.ID = 0
 
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 
