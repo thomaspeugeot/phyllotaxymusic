@@ -7,6 +7,8 @@ import { AxisGridAPI } from './axisgrid-api'
 
 import { BezierAPI } from './bezier-api'
 
+import { BezierGridAPI } from './beziergrid-api'
+
 import { CircleAPI } from './circle-api'
 
 import { CircleGridAPI } from './circlegrid-api'
@@ -29,6 +31,8 @@ export class BackRepoData {
 	AxisGridAPIs = new Array<AxisGridAPI>()
 
 	BezierAPIs = new Array<BezierAPI>()
+
+	BezierGridAPIs = new Array<BezierGridAPI>()
 
 	CircleAPIs = new Array<CircleAPI>()
 
@@ -53,6 +57,8 @@ export class BackRepoData {
 		this.AxisGridAPIs = data?.AxisGridAPIs || [];
 
 		this.BezierAPIs = data?.BezierAPIs || [];
+
+		this.BezierGridAPIs = data?.BezierGridAPIs || [];
 
 		this.CircleAPIs = data?.CircleAPIs || [];
 

@@ -6,6 +6,7 @@ import { CircleGridAPI } from './circlegrid-api'
 import { AxisAPI } from './axis-api'
 import { AxisGridAPI } from './axisgrid-api'
 import { BezierAPI } from './bezier-api'
+import { BezierGridAPI } from './beziergrid-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 
@@ -80,7 +81,13 @@ export class ParameterPointersEncoding {
 
 	ConstructionCircleGridID: NullInt64 = new NullInt64 // if pointer is null, ConstructionCircleGrid.ID = 0
 
-	InitialBezierID: NullInt64 = new NullInt64 // if pointer is null, InitialBezier.ID = 0
+	GrowthCurveSegmentID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveSegment.ID = 0
+
+	GrowthCurveID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurve.ID = 0
+
+	GrowthCurveShiftedRightSeedID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveShiftedRightSeed.ID = 0
+
+	GrowthCurveShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveShiftedRight.ID = 0
 
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 

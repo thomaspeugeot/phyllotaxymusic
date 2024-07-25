@@ -365,11 +365,17 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.ConstructionCircleGrid != nil {
 		StageBranch(stage, parameter.ConstructionCircleGrid)
 	}
-	if parameter.InitialBezier != nil {
-		StageBranch(stage, parameter.InitialBezier)
+	if parameter.GrowthCurveSegment != nil {
+		StageBranch(stage, parameter.GrowthCurveSegment)
 	}
-	if parameter.InitialBezierGrid != nil {
-		StageBranch(stage, parameter.InitialBezierGrid)
+	if parameter.GrowthCurve != nil {
+		StageBranch(stage, parameter.GrowthCurve)
+	}
+	if parameter.GrowthCurveShiftedRightSeed != nil {
+		StageBranch(stage, parameter.GrowthCurveShiftedRightSeed)
+	}
+	if parameter.GrowthCurveShiftedRight != nil {
+		StageBranch(stage, parameter.GrowthCurveShiftedRight)
 	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
@@ -722,11 +728,17 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.ConstructionCircleGrid != nil {
 		parameterTo.ConstructionCircleGrid = CopyBranchCircleGrid(mapOrigCopy, parameterFrom.ConstructionCircleGrid)
 	}
-	if parameterFrom.InitialBezier != nil {
-		parameterTo.InitialBezier = CopyBranchBezier(mapOrigCopy, parameterFrom.InitialBezier)
+	if parameterFrom.GrowthCurveSegment != nil {
+		parameterTo.GrowthCurveSegment = CopyBranchBezier(mapOrigCopy, parameterFrom.GrowthCurveSegment)
 	}
-	if parameterFrom.InitialBezierGrid != nil {
-		parameterTo.InitialBezierGrid = CopyBranchBezierGrid(mapOrigCopy, parameterFrom.InitialBezierGrid)
+	if parameterFrom.GrowthCurve != nil {
+		parameterTo.GrowthCurve = CopyBranchBezierGrid(mapOrigCopy, parameterFrom.GrowthCurve)
+	}
+	if parameterFrom.GrowthCurveShiftedRightSeed != nil {
+		parameterTo.GrowthCurveShiftedRightSeed = CopyBranchBezier(mapOrigCopy, parameterFrom.GrowthCurveShiftedRightSeed)
+	}
+	if parameterFrom.GrowthCurveShiftedRight != nil {
+		parameterTo.GrowthCurveShiftedRight = CopyBranchBezierGrid(mapOrigCopy, parameterFrom.GrowthCurveShiftedRight)
 	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
@@ -1046,11 +1058,17 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	if parameter.ConstructionCircleGrid != nil {
 		UnstageBranch(stage, parameter.ConstructionCircleGrid)
 	}
-	if parameter.InitialBezier != nil {
-		UnstageBranch(stage, parameter.InitialBezier)
+	if parameter.GrowthCurveSegment != nil {
+		UnstageBranch(stage, parameter.GrowthCurveSegment)
 	}
-	if parameter.InitialBezierGrid != nil {
-		UnstageBranch(stage, parameter.InitialBezierGrid)
+	if parameter.GrowthCurve != nil {
+		UnstageBranch(stage, parameter.GrowthCurve)
+	}
+	if parameter.GrowthCurveShiftedRightSeed != nil {
+		UnstageBranch(stage, parameter.GrowthCurveShiftedRightSeed)
+	}
+	if parameter.GrowthCurveShiftedRight != nil {
+		UnstageBranch(stage, parameter.GrowthCurveShiftedRight)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

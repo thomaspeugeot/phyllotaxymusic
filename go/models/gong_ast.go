@@ -1494,12 +1494,18 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "ConstructionCircleGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].ConstructionCircleGrid = __gong__map_CircleGrid[targetIdentifier]
-				case "InitialBezier":
+				case "GrowthCurveSegment":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].InitialBezier = __gong__map_Bezier[targetIdentifier]
-				case "InitialBezierGrid":
+					__gong__map_Parameter[identifier].GrowthCurveSegment = __gong__map_Bezier[targetIdentifier]
+				case "GrowthCurve":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].InitialBezierGrid = __gong__map_BezierGrid[targetIdentifier]
+					__gong__map_Parameter[identifier].GrowthCurve = __gong__map_BezierGrid[targetIdentifier]
+				case "GrowthCurveShiftedRightSeed":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].GrowthCurveShiftedRightSeed = __gong__map_Bezier[targetIdentifier]
+				case "GrowthCurveShiftedRight":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].GrowthCurveShiftedRight = __gong__map_BezierGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

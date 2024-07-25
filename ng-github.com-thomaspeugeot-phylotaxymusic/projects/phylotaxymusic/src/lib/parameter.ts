@@ -11,6 +11,7 @@ import { CircleGrid } from './circlegrid'
 import { Axis } from './axis'
 import { AxisGrid } from './axisgrid'
 import { Bezier } from './bezier'
+import { BezierGrid } from './beziergrid'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 
@@ -79,7 +80,13 @@ export class Parameter {
 
 	ConstructionCircleGrid?: CircleGrid
 
-	InitialBezier?: Bezier
+	GrowthCurveSegment?: Bezier
+
+	GrowthCurve?: BezierGrid
+
+	GrowthCurveShiftedRightSeed?: Bezier
+
+	GrowthCurveShiftedRight?: BezierGrid
 
 	HorizontalAxis?: HorizontalAxis
 
@@ -252,11 +259,32 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.ConstructionCircleGridID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.InitialBezierID.Valid = true
-	if (parameter.InitialBezier != undefined) {
-		parameterAPI.ParameterPointersEncoding.InitialBezierID.Int64 = parameter.InitialBezier.ID  
+	parameterAPI.ParameterPointersEncoding.GrowthCurveSegmentID.Valid = true
+	if (parameter.GrowthCurveSegment != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveSegmentID.Int64 = parameter.GrowthCurveSegment.ID  
 	} else {
-		parameterAPI.ParameterPointersEncoding.InitialBezierID.Int64 = 0 		
+		parameterAPI.ParameterPointersEncoding.GrowthCurveSegmentID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.GrowthCurveID.Valid = true
+	if (parameter.GrowthCurve != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveID.Int64 = parameter.GrowthCurve.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightSeedID.Valid = true
+	if (parameter.GrowthCurveShiftedRightSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightSeedID.Int64 = parameter.GrowthCurveShiftedRightSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightID.Valid = true
+	if (parameter.GrowthCurveShiftedRight != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightID.Int64 = parameter.GrowthCurveShiftedRight.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
@@ -320,7 +348,10 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.ConstructionAxisGrid = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.ConstructionAxisGridID.Int64)
 	parameter.ConstructionCircle = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.ConstructionCircleID.Int64)
 	parameter.ConstructionCircleGrid = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.ConstructionCircleGridID.Int64)
-	parameter.InitialBezier = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.InitialBezierID.Int64)
+	parameter.GrowthCurveSegment = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveSegmentID.Int64)
+	parameter.GrowthCurve = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveID.Int64)
+	parameter.GrowthCurveShiftedRightSeed = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightSeedID.Int64)
+	parameter.GrowthCurveShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

@@ -59,8 +59,11 @@ type Parameter struct {
 	ConstructionCircle     *Circle
 	ConstructionCircleGrid *CircleGrid
 
-	InitialBezier     *Bezier
-	InitialBezierGrid *BezierGrid
+	GrowthCurveSegment *Bezier
+	GrowthCurve        *BezierGrid
+
+	GrowthCurveShiftedRightSeed *Bezier
+	GrowthCurveShiftedRight     *BezierGrid
 
 	// ratio of the length of the control vector to the side length
 	BezierControlLengthRatio float64
@@ -148,11 +151,14 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.computeConstructionCircleGrid()
 	p.Shapes = append(p.Shapes, p.ConstructionCircleGrid)
 
-	p.ComputeInitialBezier()
-	p.Shapes = append(p.Shapes, p.InitialBezier)
+	p.ComputeGrowthCurveSegment()
+	p.Shapes = append(p.Shapes, p.GrowthCurveSegment)
 
-	p.ComputeInitialBezierGrid()
-	p.Shapes = append(p.Shapes, p.InitialBezierGrid)
+	p.ComputeGrowthCurve()
+	p.Shapes = append(p.Shapes, p.GrowthCurve)
+
+	p.ComputeGrowthCurveShiftedRight()
+	p.Shapes = append(p.Shapes, p.GrowthCurveShiftedRight)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -498,9 +504,9 @@ func (p *Parameter) computeConstructionCircleGrid() {
 	// }
 }
 
-func (p *Parameter) ComputeInitialBezier() {
+func (p *Parameter) ComputeGrowthCurveSegment() {
 
-	b := p.InitialBezier
+	b := p.GrowthCurveSegment
 	_ = b
 
 	p.computeBezier(b, p.ConstructionCircleGrid.Circles[0], p.ConstructionCircleGrid.Circles[1])
@@ -527,19 +533,44 @@ func (p *Parameter) computeBezier(b *Bezier, startCircle, endCircle *Circle) {
 		p.SideLength*p.BezierControlLengthRatio*math.Sin(angleRad+math.Pi)
 }
 
-func (p *Parameter) ComputeInitialBezierGrid() {
+func (p *Parameter) ComputeGrowthCurve() {
 
-	g := p.InitialBezierGrid
+	g := p.GrowthCurve
 	g.Beziers = g.Beziers[:0]
 
 	for i := range p.M + p.N {
 		_b := new(Bezier)
-		*_b = *p.InitialBezier
+		*_b = *p.GrowthCurveSegment
 		g.Beziers = append(g.Beziers, _b)
 
 		// apply growing bezier coordinates
 		c := p.ConstructionCircleGrid
 
 		p.computeBezier(_b, c.Circles[i], c.Circles[i+1])
+	}
+}
+
+func (p *Parameter) ComputeGrowthCurveShiftedRight() {
+
+	g := p.GrowthCurveShiftedRight
+	g.Beziers = g.Beziers[:0]
+
+	for i := range p.M + p.N {
+		_b := new(Bezier)
+		*_b = *p.GrowthCurveShiftedRightSeed
+		g.Beziers = append(g.Beziers, _b)
+
+		b := p.GrowthCurve.Beziers[i]
+
+		_b.StartX = b.StartX + p.RotatedAxis.Length
+		_b.StartY = b.StartY
+		_b.ControlPointStartX = b.ControlPointStartX + p.RotatedAxis.Length
+		_b.ControlPointStartY = b.ControlPointStartY
+
+		_b.EndX = b.EndX + p.RotatedAxis.Length
+		_b.EndY = b.EndY
+		_b.ControlPointEndX = b.ControlPointEndX + p.RotatedAxis.Length
+		_b.ControlPointEndY = b.ControlPointEndY
+
 	}
 }

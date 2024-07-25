@@ -274,8 +274,10 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("ConstructionAxisGrid", instanceWithInferedType.ConstructionAxisGrid, formGroup, probe)
 		AssociationFieldToForm("ConstructionCircle", instanceWithInferedType.ConstructionCircle, formGroup, probe)
 		AssociationFieldToForm("ConstructionCircleGrid", instanceWithInferedType.ConstructionCircleGrid, formGroup, probe)
-		AssociationFieldToForm("InitialBezier", instanceWithInferedType.InitialBezier, formGroup, probe)
-		AssociationFieldToForm("InitialBezierGrid", instanceWithInferedType.InitialBezierGrid, formGroup, probe)
+		AssociationFieldToForm("GrowthCurveSegment", instanceWithInferedType.GrowthCurveSegment, formGroup, probe)
+		AssociationFieldToForm("GrowthCurve", instanceWithInferedType.GrowthCurve, formGroup, probe)
+		AssociationFieldToForm("GrowthCurveShiftedRightSeed", instanceWithInferedType.GrowthCurveShiftedRightSeed, formGroup, probe)
+		AssociationFieldToForm("GrowthCurveShiftedRight", instanceWithInferedType.GrowthCurveShiftedRight, formGroup, probe)
 		BasicFieldtoForm("BezierControlLengthRatio", instanceWithInferedType.BezierControlLengthRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,

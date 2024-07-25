@@ -900,10 +900,14 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.ConstructionCircle), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "ConstructionCircleGrid":
 			FormDivSelectFieldToField(&(parameter_.ConstructionCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "InitialBezier":
-			FormDivSelectFieldToField(&(parameter_.InitialBezier), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "InitialBezierGrid":
-			FormDivSelectFieldToField(&(parameter_.InitialBezierGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowthCurveSegment":
+			FormDivSelectFieldToField(&(parameter_.GrowthCurveSegment), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowthCurve":
+			FormDivSelectFieldToField(&(parameter_.GrowthCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowthCurveShiftedRightSeed":
+			FormDivSelectFieldToField(&(parameter_.GrowthCurveShiftedRightSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowthCurveShiftedRight":
+			FormDivSelectFieldToField(&(parameter_.GrowthCurveShiftedRight), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "BezierControlLengthRatio":
 			FormDivBasicFieldToField(&(parameter_.BezierControlLengthRatio), formDiv)
 		case "OriginX":
