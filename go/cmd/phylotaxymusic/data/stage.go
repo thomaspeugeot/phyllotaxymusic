@@ -36,10 +36,11 @@ func _(stage *models.StageStruct) {
 	__Circle__000003_Initial_Circle := (&models.Circle{Name: `Initial Circle`}).Stage(stage)
 	__Circle__000004_Next_Circle := (&models.Circle{Name: `Next Circle`}).Stage(stage)
 
-	__CircleGrid__000000_Growing_Circle_Grid := (&models.CircleGrid{Name: `Growing Circle Grid`}).Stage(stage)
-	__CircleGrid__000001_Growing_Circle_Grid_Shifted_Left := (&models.CircleGrid{Name: `Growing Circle Grid Shifted Left`}).Stage(stage)
-	__CircleGrid__000002_Initial_Circle_Grid := (&models.CircleGrid{Name: `Initial Circle Grid`}).Stage(stage)
-	__CircleGrid__000003_Rotated_Circle_Grid := (&models.CircleGrid{Name: `Rotated Circle Grid`}).Stage(stage)
+	__CircleGrid__000000_Construction_Circle_Grid := (&models.CircleGrid{Name: `Construction Circle Grid`}).Stage(stage)
+	__CircleGrid__000001_Growing_Circle_Grid := (&models.CircleGrid{Name: `Growing Circle Grid`}).Stage(stage)
+	__CircleGrid__000002_Growing_Circle_Grid_Shifted_Left := (&models.CircleGrid{Name: `Growing Circle Grid Shifted Left`}).Stage(stage)
+	__CircleGrid__000003_Initial_Circle_Grid := (&models.CircleGrid{Name: `Initial Circle Grid`}).Stage(stage)
+	__CircleGrid__000004_Rotated_Circle_Grid := (&models.CircleGrid{Name: `Rotated Circle Grid`}).Stage(stage)
 
 	__HorizontalAxis__000000_Horizontal_Axis := (&models.HorizontalAxis{Name: `Horizontal Axis`}).Stage(stage)
 
@@ -107,7 +108,7 @@ func _(stage *models.StageStruct) {
 	__AxisGrid__000000_Construction_Axis_Grid.IsDisplayed = true
 
 	__Circle__000000_Construction_Circle.Name = `Construction Circle`
-	__Circle__000000_Construction_Circle.IsDisplayed = false
+	__Circle__000000_Construction_Circle.IsDisplayed = true
 	__Circle__000000_Construction_Circle.CenterX = -20.160307
 	__Circle__000000_Construction_Circle.CenterY = 111.951444
 	__Circle__000000_Construction_Circle.HasBespokeRadius = true
@@ -181,17 +182,20 @@ func _(stage *models.StageStruct) {
 	__Circle__000004_Next_Circle.StrokeDashArrayWhenSelected = ``
 	__Circle__000004_Next_Circle.Transform = ``
 
-	__CircleGrid__000000_Growing_Circle_Grid.Name = `Growing Circle Grid`
-	__CircleGrid__000000_Growing_Circle_Grid.IsDisplayed = false
+	__CircleGrid__000000_Construction_Circle_Grid.Name = `Construction Circle Grid`
+	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = true
 
-	__CircleGrid__000001_Growing_Circle_Grid_Shifted_Left.Name = `Growing Circle Grid Shifted Left`
-	__CircleGrid__000001_Growing_Circle_Grid_Shifted_Left.IsDisplayed = false
+	__CircleGrid__000001_Growing_Circle_Grid.Name = `Growing Circle Grid`
+	__CircleGrid__000001_Growing_Circle_Grid.IsDisplayed = false
 
-	__CircleGrid__000002_Initial_Circle_Grid.Name = `Initial Circle Grid`
-	__CircleGrid__000002_Initial_Circle_Grid.IsDisplayed = false
+	__CircleGrid__000002_Growing_Circle_Grid_Shifted_Left.Name = `Growing Circle Grid Shifted Left`
+	__CircleGrid__000002_Growing_Circle_Grid_Shifted_Left.IsDisplayed = false
 
-	__CircleGrid__000003_Rotated_Circle_Grid.Name = `Rotated Circle Grid`
-	__CircleGrid__000003_Rotated_Circle_Grid.IsDisplayed = false
+	__CircleGrid__000003_Initial_Circle_Grid.Name = `Initial Circle Grid`
+	__CircleGrid__000003_Initial_Circle_Grid.IsDisplayed = false
+
+	__CircleGrid__000004_Rotated_Circle_Grid.Name = `Rotated Circle Grid`
+	__CircleGrid__000004_Rotated_Circle_Grid.IsDisplayed = false
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
 	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
@@ -303,28 +307,30 @@ func _(stage *models.StageStruct) {
 
 	// Setup of pointers
 	__AxisGrid__000000_Construction_Axis_Grid.Reference = __Axis__000000_Construction_Axis
-	__CircleGrid__000000_Growing_Circle_Grid.Reference = __Circle__000001_Growing
-	__CircleGrid__000002_Initial_Circle_Grid.Reference = __Circle__000003_Initial_Circle
+	__CircleGrid__000000_Construction_Circle_Grid.Reference = __Circle__000000_Construction_Circle
+	__CircleGrid__000001_Growing_Circle_Grid.Reference = __Circle__000001_Growing
+	__CircleGrid__000003_Initial_Circle_Grid.Reference = __Circle__000003_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000001_Initial_Rhombus
 	__Parameter__000000_Reference.InitialCircle = __Circle__000003_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000001_Initial_Rhombus_Grid
-	__Parameter__000000_Reference.InitialCircleGrid = __CircleGrid__000002_Initial_Circle_Grid
+	__Parameter__000000_Reference.InitialCircleGrid = __CircleGrid__000003_Initial_Circle_Grid
 	__Parameter__000000_Reference.InitialAxis = __Axis__000001_Reference_Axis
 	__Parameter__000000_Reference.RotatedAxis = __Axis__000002_Rotated_Axis
 	__Parameter__000000_Reference.RotatedRhombus = __Rhombus__000003_Rotated_Rhombus
 	__Parameter__000000_Reference.RotatedRhombusGrid = __RhombusGrid__000002_Rotated_Rhombus_Grid
-	__Parameter__000000_Reference.RotatedCircleGrid = __CircleGrid__000003_Rotated_Circle_Grid
+	__Parameter__000000_Reference.RotatedCircleGrid = __CircleGrid__000004_Rotated_Circle_Grid
 	__Parameter__000000_Reference.NextRhombus = __Rhombus__000002_Next_Rhombus
 	__Parameter__000000_Reference.NextCircle = __Circle__000004_Next_Circle
 	__Parameter__000000_Reference.GrowingRhombusGridSeed = __Rhombus__000000_Growing_Rhombus_Grid_Seed
 	__Parameter__000000_Reference.GrowingRhombusGrid = __RhombusGrid__000000_Growing_Rhombus_Grid
 	__Parameter__000000_Reference.GrowingCircleGridSeed = __Circle__000001_Growing
-	__Parameter__000000_Reference.GrowingCircleGrid = __CircleGrid__000000_Growing_Circle_Grid
+	__Parameter__000000_Reference.GrowingCircleGrid = __CircleGrid__000001_Growing_Circle_Grid
 	__Parameter__000000_Reference.GrowingCircleGridLeftSeed = __Circle__000002_Growing_Seed_Left
-	__Parameter__000000_Reference.GrowingCircleGridLeft = __CircleGrid__000001_Growing_Circle_Grid_Shifted_Left
+	__Parameter__000000_Reference.GrowingCircleGridLeft = __CircleGrid__000002_Growing_Circle_Grid_Shifted_Left
 	__Parameter__000000_Reference.ConstructionAxis = __Axis__000000_Construction_Axis
 	__Parameter__000000_Reference.ConstructionAxisGrid = __AxisGrid__000000_Construction_Axis_Grid
 	__Parameter__000000_Reference.ConstructionCircle = __Circle__000000_Construction_Circle
+	__Parameter__000000_Reference.ConstructionCircleGrid = __CircleGrid__000000_Construction_Circle_Grid
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__RhombusGrid__000000_Growing_Rhombus_Grid.Reference = __Rhombus__000003_Rotated_Rhombus

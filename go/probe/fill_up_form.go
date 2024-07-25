@@ -203,6 +203,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("ConstructionAxis", instanceWithInferedType.ConstructionAxis, formGroup, probe)
 		AssociationFieldToForm("ConstructionAxisGrid", instanceWithInferedType.ConstructionAxisGrid, formGroup, probe)
 		AssociationFieldToForm("ConstructionCircle", instanceWithInferedType.ConstructionCircle, formGroup, probe)
+		AssociationFieldToForm("ConstructionCircleGrid", instanceWithInferedType.ConstructionCircleGrid, formGroup, probe)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,

@@ -1314,6 +1314,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "ConstructionCircle":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].ConstructionCircle = __gong__map_Circle[targetIdentifier]
+				case "ConstructionCircleGrid":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].ConstructionCircleGrid = __gong__map_CircleGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]
