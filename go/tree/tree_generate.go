@@ -13,24 +13,9 @@ func (tree *Tree) Generate(parameter *phylotaxymusic_models.Parameter) {
 	tree.NodeTree = new(gongtree_models.Tree).Stage(tree.TreeStack.Stage)
 	tree.NodeTree.Name = string(phylotaxymusic_models.Sidebar)
 
-	AddShape(tree, parameter.HorizontalAxis)
-	AddShape(tree, parameter.VerticalAxis)
-	AddShape(tree, parameter.InitialRhombus)
-	AddShape(tree, parameter.InitialCircle)
-	AddShape(tree, parameter.InitialRhombusGrid)
-	AddShape(tree, parameter.InitialCircleGrid)
-	AddShape(tree, parameter.InitialAxis)
-	AddShape(tree, parameter.RotatedAxis)
-	AddShape(tree, parameter.RotatedRhombus)
-	AddShape(tree, parameter.RotatedRhombusGrid)
-	AddShape(tree, parameter.RotatedCircleGrid)
-	AddShape(tree, parameter.NextRhombus)
-	AddShape(tree, parameter.NextCircle)
-	AddShape(tree, parameter.GrowingRhombusGrid)
-	AddShape(tree, parameter.GrowingCircleGrid)
-	AddShape(tree, parameter.GrowingCircleGridLeft)
-	AddShape(tree, parameter.ConstructionAxis)
-	AddShape(tree, parameter.ConstructionCircle)
+	for _, shape := range parameter.Shapes {
+		AddShape(tree, shape)
+	}
 
 	tree.TreeStack.Stage.Commit()
 }

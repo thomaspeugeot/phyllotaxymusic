@@ -59,10 +59,6 @@ func main() {
 
 	parameter := (*parameters)["Reference"]
 
-	tree := new(phylotaxymusic_tree.Tree)
-	tree.TreeStack = gongtree_stack
-	tree.Generate(parameter)
-
 	parameterImpl := new(ParameterImpl)
 	parameterImpl.parameter = parameter
 	parameterImpl.gongsvgStage = gongsvg_stack.Stage
@@ -71,6 +67,10 @@ func main() {
 
 	phylotaxymusic_models.GeneratorSingloton.Impl = parameterImpl
 	parameterImpl.Generate()
+
+	tree := new(phylotaxymusic_tree.Tree)
+	tree.TreeStack = gongtree_stack
+	tree.Generate(parameter)
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))

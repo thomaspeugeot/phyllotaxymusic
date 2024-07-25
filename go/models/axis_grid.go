@@ -20,9 +20,7 @@ func (g *AxisGrid) Draw(
 	p *Parameter,
 
 ) {
-
 	for _, c := range g.Axiss {
 		c.Draw(gongsvgStage, layer, p)
 	}
-
 }

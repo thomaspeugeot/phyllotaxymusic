@@ -20,6 +20,11 @@ type Parameter struct {
 
 	Impl ParameterImplInterface
 
+	//
+	// Shapes
+	//
+	Shapes []Shape
+
 	InitialRhombus     *Rhombus
 	InitialCircle      *Circle
 	InitialRhombusGrid *RhombusGrid
@@ -71,22 +76,66 @@ type ParameterImplInterface interface {
 }
 
 func (p *Parameter) ComputeShapes(stage *StageStruct) {
+
+	if p.Z < p.M+p.N+1 {
+		p.Z = p.M + p.N + 1
+	}
+
+	p.Shapes = p.Shapes[:0]
+
+	p.Shapes = append(p.Shapes, p.HorizontalAxis)
+	p.Shapes = append(p.Shapes, p.VerticalAxis)
+
 	p.ComputeInitialRhombus()
+	p.Shapes = append(p.Shapes, p.InitialRhombus)
+
 	p.ComputeInitialCircle()
+	p.Shapes = append(p.Shapes, p.InitialCircle)
+
 	p.ComputeInitialRhombusGrid(stage)
+	p.Shapes = append(p.Shapes, p.InitialRhombusGrid)
+
 	p.ComputeInitialCircleGrid(stage)
+	p.Shapes = append(p.Shapes, p.InitialCircleGrid)
+
 	p.ComputeInitialAxis()
+	p.Shapes = append(p.Shapes, p.InitialAxis)
+
 	p.computeRotatedAxis()
+	p.Shapes = append(p.Shapes, p.RotatedAxis)
+
 	p.computeRotatedRhombus()
+	p.Shapes = append(p.Shapes, p.RotatedRhombus)
+
 	p.computeRotatedRhombusGrid(stage)
+	p.Shapes = append(p.Shapes, p.RotatedRhombusGrid)
+
 	p.computeRotatedCircleGrid(stage)
+	p.Shapes = append(p.Shapes, p.RotatedCircleGrid)
+
 	p.ComputeNextRhombus()
+	p.Shapes = append(p.Shapes, p.NextRhombus)
+
 	p.ComputeNextCircle()
+	p.Shapes = append(p.Shapes, p.NextCircle)
+
 	p.ComputeGrowingRhombusGrid()
+	p.Shapes = append(p.Shapes, p.GrowingRhombusGrid)
+
 	p.ComputeGrowingCircleGrid()
+	p.Shapes = append(p.Shapes, p.GrowingCircleGrid)
+
 	p.ComputeGrowingCircleGridLeft()
+	p.Shapes = append(p.Shapes, p.GrowingCircleGridLeft)
+
 	p.computeConstructionAxis()
+	p.Shapes = append(p.Shapes, p.ConstructionAxis)
+
 	p.computeConstructionCircle()
+	p.Shapes = append(p.Shapes, p.ConstructionCircle)
+
+	p.computeConstructionAxisGrid()
+	p.Shapes = append(p.Shapes, p.ConstructionAxisGrid)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -372,4 +421,22 @@ func (p *Parameter) computeConstructionCircle() {
 	circleNPlusM := p.GrowingCircleGrid.Circles[p.M+p.N]
 	p.ConstructionCircle.CenterX = (circleNPlusM.CenterX - p.RotatedAxis.Length) / 2.0
 	p.ConstructionCircle.CenterY = circleNPlusM.CenterY / 2.0
+}
+
+func (p *Parameter) computeConstructionAxisGrid() {
+
+	g := p.ConstructionAxisGrid
+	g.Axiss = g.Axiss[:0]
+
+	for i := range p.M + p.N {
+
+		a := new(Axis)
+		*a = *p.ConstructionAxis
+		g.Axiss = append(g.Axiss, a)
+
+		// apply growing circle coordinates
+		c := p.GrowingCircleGrid.Circles[i]
+		a.CenterX += c.CenterX
+		a.CenterY += c.CenterY
+	}
 }

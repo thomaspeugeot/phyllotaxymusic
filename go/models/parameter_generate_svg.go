@@ -20,24 +20,10 @@ func (parameter *Parameter) GenerateSvg(gongsvgStage *gongsvg_models.StageStruct
 	layer.Display = true
 	svg.Layers = append(svg.Layers, layer)
 
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.HorizontalAxis)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.VerticalAxis)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.InitialRhombus)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.InitialCircle)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.InitialRhombusGrid)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.InitialCircleGrid)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.InitialAxis)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.RotatedAxis)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.RotatedRhombus)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.RotatedRhombusGrid)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.RotatedCircleGrid)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.NextRhombus)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.NextCircle)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.GrowingRhombusGrid)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.GrowingCircleGrid)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.GrowingCircleGridLeft)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.ConstructionAxis)
-	parameter.GenerateSvgShape(gongsvgStage, layer, parameter.ConstructionCircle)
+	for _, shape := range parameter.Shapes {
+		parameter.GenerateSvgShape(gongsvgStage, layer, shape)
+	}
+
 	gongsvgStage.Commit()
 
 }
