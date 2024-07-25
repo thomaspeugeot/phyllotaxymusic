@@ -36,3 +36,15 @@ func (b *Bezier) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_m
 		parameter.OriginX+b.EndX, parameter.OriginY-b.EndY,
 	)
 }
+
+func (_b *Bezier) move(b *Bezier, x, y float64) {
+	_b.StartX = b.StartX + x
+	_b.StartY = b.StartY + y
+	_b.ControlPointStartX = b.ControlPointStartX + x
+	_b.ControlPointStartY = b.ControlPointStartY + y
+
+	_b.EndX = b.EndX + x
+	_b.EndY = b.EndY + y
+	_b.ControlPointEndX = b.ControlPointEndX + x
+	_b.ControlPointEndY = b.ControlPointEndY + y
+}

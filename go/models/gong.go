@@ -1443,6 +1443,10 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			GrowthCurveNextSeed: &Bezier{Name: "GrowthCurveNextSeed"},
 			// field is initialized with an instance of BezierGrid with the name of the field
 			GrowthCurveNext: &BezierGrid{Name: "GrowthCurveNext"},
+			// field is initialized with an instance of Bezier with the name of the field
+			GrowthCurveNextShiftedRightSeed: &Bezier{Name: "GrowthCurveNextShiftedRightSeed"},
+			// field is initialized with an instance of BezierGrid with the name of the field
+			GrowthCurveNextShiftedRight: &BezierGrid{Name: "GrowthCurveNextShiftedRight"},
 			// field is initialized with an instance of HorizontalAxis with the name of the field
 			HorizontalAxis: &HorizontalAxis{Name: "HorizontalAxis"},
 			// field is initialized with an instance of VerticalAxis with the name of the field
@@ -2031,6 +2035,40 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		case "GrowthCurveNextShiftedRightSeed":
+			res := make(map[*Bezier][]*Parameter)
+			for parameter := range stage.Parameters {
+				if parameter.GrowthCurveNextShiftedRightSeed != nil {
+					bezier_ := parameter.GrowthCurveNextShiftedRightSeed
+					var parameters []*Parameter
+					_, ok := res[bezier_]
+					if ok {
+						parameters = res[bezier_]
+					} else {
+						parameters = make([]*Parameter, 0)
+					}
+					parameters = append(parameters, parameter)
+					res[bezier_] = parameters
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		case "GrowthCurveNextShiftedRight":
+			res := make(map[*BezierGrid][]*Parameter)
+			for parameter := range stage.Parameters {
+				if parameter.GrowthCurveNextShiftedRight != nil {
+					beziergrid_ := parameter.GrowthCurveNextShiftedRight
+					var parameters []*Parameter
+					_, ok := res[beziergrid_]
+					if ok {
+						parameters = res[beziergrid_]
+					} else {
+						parameters = make([]*Parameter, 0)
+					}
+					parameters = append(parameters, parameter)
+					res[beziergrid_] = parameters
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		case "HorizontalAxis":
 			res := make(map[*HorizontalAxis][]*Parameter)
 			for parameter := range stage.Parameters {
@@ -2295,7 +2333,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
@@ -2391,7 +2429,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *HorizontalAxis:
 		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
@@ -2717,6 +2755,14 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 		case "GrowthCurveNext":
 			if inferedInstance.GrowthCurveNext != nil {
 				res = inferedInstance.GrowthCurveNext.Name
+			}
+		case "GrowthCurveNextShiftedRightSeed":
+			if inferedInstance.GrowthCurveNextShiftedRightSeed != nil {
+				res = inferedInstance.GrowthCurveNextShiftedRightSeed.Name
+			}
+		case "GrowthCurveNextShiftedRight":
+			if inferedInstance.GrowthCurveNextShiftedRight != nil {
+				res = inferedInstance.GrowthCurveNextShiftedRight.Name
 			}
 		case "BezierControlLengthRatio":
 			res = fmt.Sprintf("%f", inferedInstance.BezierControlLengthRatio)
@@ -3135,6 +3181,14 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		case "GrowthCurveNext":
 			if inferedInstance.GrowthCurveNext != nil {
 				res = inferedInstance.GrowthCurveNext.Name
+			}
+		case "GrowthCurveNextShiftedRightSeed":
+			if inferedInstance.GrowthCurveNextShiftedRightSeed != nil {
+				res = inferedInstance.GrowthCurveNextShiftedRightSeed.Name
+			}
+		case "GrowthCurveNextShiftedRight":
+			if inferedInstance.GrowthCurveNextShiftedRight != nil {
+				res = inferedInstance.GrowthCurveNextShiftedRight.Name
 			}
 		case "BezierControlLengthRatio":
 			res = fmt.Sprintf("%f", inferedInstance.BezierControlLengthRatio)

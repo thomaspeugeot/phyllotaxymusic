@@ -68,6 +68,9 @@ type Parameter struct {
 	GrowthCurveNextSeed *Bezier
 	GrowthCurveNext     *BezierGrid
 
+	GrowthCurveNextShiftedRightSeed *Bezier
+	GrowthCurveNextShiftedRight     *BezierGrid
+
 	// ratio of the length of the control vector to the side length
 	BezierControlLengthRatio float64
 
@@ -165,6 +168,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.ComputeGrowthCurveNext()
 	p.Shapes = append(p.Shapes, p.GrowthCurveNext)
+
+	p.ComputeGrowthCurveNextShiftedRight()
+	p.Shapes = append(p.Shapes, p.GrowthCurveNextShiftedRight)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -561,12 +567,10 @@ func (p *Parameter) ComputeGrowthCurveShiftedRight() {
 	g := p.GrowthCurveShiftedRight
 	g.Beziers = g.Beziers[:0]
 
-	for i := range p.M + p.N {
+	for _, b := range p.GrowthCurve.Beziers {
 		_b := new(Bezier)
 		*_b = *p.GrowthCurveShiftedRightSeed
 		g.Beziers = append(g.Beziers, _b)
-
-		b := p.GrowthCurve.Beziers[i]
 
 		_b.move(b, p.RotatedAxis.Length, 0)
 	}
@@ -577,26 +581,27 @@ func (p *Parameter) ComputeGrowthCurveNext() {
 	g := p.GrowthCurveNext
 	g.Beziers = g.Beziers[:0]
 
-	for i := range p.M + p.N {
+	for _, b := range p.GrowthCurve.Beziers {
 		_b := new(Bezier)
 		*_b = *p.GrowthCurveNextSeed
 		g.Beziers = append(g.Beziers, _b)
-
-		b := p.GrowthCurve.Beziers[i]
 
 		_b.move(b, p.NextCircle.CenterX, p.NextCircle.CenterY)
 
 	}
 }
 
-func (_b *Bezier) move(b *Bezier, x, y float64) {
-	_b.StartX = b.StartX + x
-	_b.StartY = b.StartY + y
-	_b.ControlPointStartX = b.ControlPointStartX + x
-	_b.ControlPointStartY = b.ControlPointStartY + y
+func (p *Parameter) ComputeGrowthCurveNextShiftedRight() {
 
-	_b.EndX = b.EndX + x
-	_b.EndY = b.EndY + y
-	_b.ControlPointEndX = b.ControlPointEndX + x
-	_b.ControlPointEndY = b.ControlPointEndY + y
+	g := p.GrowthCurveNextShiftedRight
+	g.Beziers = g.Beziers[:0]
+
+	for _, b := range p.GrowthCurve.Beziers {
+		_b := new(Bezier)
+		*_b = *p.GrowthCurveNextShiftedRightSeed
+		g.Beziers = append(g.Beziers, _b)
+
+		_b.move(b, p.NextCircle.CenterX+p.RotatedAxis.Length, p.NextCircle.CenterY)
+
+	}
 }
