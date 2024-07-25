@@ -99,6 +99,18 @@ func (from *Bezier) CopyBasicFields(to *Bezier) {
 	to.Transform = from.Transform
 }
 
+type BezierGrid_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+}
+
+func (from *BezierGrid) CopyBasicFields(to *BezierGrid) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+}
+
 type Circle_WOP struct {
 	// insertion point
 	Name string

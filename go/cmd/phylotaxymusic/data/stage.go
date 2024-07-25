@@ -32,6 +32,8 @@ func _(stage *models.StageStruct) {
 
 	__Bezier__000000_Initial_Beizer := (&models.Bezier{Name: `Initial Beizer`}).Stage(stage)
 
+	__BezierGrid__000000_Initial_Bezier_Grid := (&models.BezierGrid{Name: `Initial Bezier Grid`}).Stage(stage)
+
 	__Circle__000000_Construction_Circle := (&models.Circle{Name: `Construction Circle`}).Stage(stage)
 	__Circle__000001_Growing := (&models.Circle{Name: `Growing`}).Stage(stage)
 	__Circle__000002_Growing_Seed_Left := (&models.Circle{Name: `Growing Seed Left`}).Stage(stage)
@@ -107,29 +109,32 @@ func _(stage *models.StageStruct) {
 	__Axis__000002_Rotated_Axis.Transform = ``
 
 	__AxisGrid__000000_Construction_Axis_Grid.Name = `Construction Axis Grid`
-	__AxisGrid__000000_Construction_Axis_Grid.IsDisplayed = true
+	__AxisGrid__000000_Construction_Axis_Grid.IsDisplayed = false
 
 	__Bezier__000000_Initial_Beizer.Name = `Initial Beizer`
-	__Bezier__000000_Initial_Beizer.IsDisplayed = true
-	__Bezier__000000_Initial_Beizer.StartX = 84.014061
-	__Bezier__000000_Initial_Beizer.StartY = 246.293176
-	__Bezier__000000_Initial_Beizer.ControlPointStartX = 0.359658
-	__Bezier__000000_Initial_Beizer.ControlPointStartY = 231.228623
-	__Bezier__000000_Initial_Beizer.EndX = -20.160307
-	__Bezier__000000_Initial_Beizer.EndY = 111.951444
-	__Bezier__000000_Initial_Beizer.ControlPointEndX = 63.494097
-	__Bezier__000000_Initial_Beizer.ControlPointEndY = 127.015996
+	__Bezier__000000_Initial_Beizer.IsDisplayed = false
+	__Bezier__000000_Initial_Beizer.StartX = -20.160307
+	__Bezier__000000_Initial_Beizer.StartY = 111.951444
+	__Bezier__000000_Initial_Beizer.ControlPointStartX = 63.494097
+	__Bezier__000000_Initial_Beizer.ControlPointStartY = 127.015996
+	__Bezier__000000_Initial_Beizer.EndX = 84.014061
+	__Bezier__000000_Initial_Beizer.EndY = 246.293176
+	__Bezier__000000_Initial_Beizer.ControlPointEndX = 0.359658
+	__Bezier__000000_Initial_Beizer.ControlPointEndY = 231.228623
 	__Bezier__000000_Initial_Beizer.Color = ``
 	__Bezier__000000_Initial_Beizer.FillOpacity = 0.000000
-	__Bezier__000000_Initial_Beizer.Stroke = `black`
-	__Bezier__000000_Initial_Beizer.StrokeOpacity = 0.600000
-	__Bezier__000000_Initial_Beizer.StrokeWidth = 2.000000
+	__Bezier__000000_Initial_Beizer.Stroke = `grey`
+	__Bezier__000000_Initial_Beizer.StrokeOpacity = 0.800000
+	__Bezier__000000_Initial_Beizer.StrokeWidth = 6.000000
 	__Bezier__000000_Initial_Beizer.StrokeDashArray = ``
 	__Bezier__000000_Initial_Beizer.StrokeDashArrayWhenSelected = ``
 	__Bezier__000000_Initial_Beizer.Transform = ``
 
+	__BezierGrid__000000_Initial_Bezier_Grid.Name = `Initial Bezier Grid`
+	__BezierGrid__000000_Initial_Bezier_Grid.IsDisplayed = true
+
 	__Circle__000000_Construction_Circle.Name = `Construction Circle`
-	__Circle__000000_Construction_Circle.IsDisplayed = true
+	__Circle__000000_Construction_Circle.IsDisplayed = false
 	__Circle__000000_Construction_Circle.CenterX = -20.160307
 	__Circle__000000_Construction_Circle.CenterY = 111.951444
 	__Circle__000000_Construction_Circle.HasBespokeRadius = true
@@ -204,7 +209,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000004_Next_Circle.Transform = ``
 
 	__CircleGrid__000000_Construction_Circle_Grid.Name = `Construction Circle Grid`
-	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = true
+	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_Growing_Circle_Grid.Name = `Growing Circle Grid`
 	__CircleGrid__000001_Growing_Circle_Grid.IsDisplayed = false
@@ -234,10 +239,10 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
-	__Parameter__000000_Reference.Z = 12
-	__Parameter__000000_Reference.InsideAngle = 96.000000
-	__Parameter__000000_Reference.SideLength = 170.000000
-	__Parameter__000000_Reference.BezierControlLengthRatio = 0.500000
+	__Parameter__000000_Reference.Z = 9
+	__Parameter__000000_Reference.InsideAngle = 109.000000
+	__Parameter__000000_Reference.SideLength = 210.000000
+	__Parameter__000000_Reference.BezierControlLengthRatio = 0.450000
 	__Parameter__000000_Reference.OriginX = 300.000000
 	__Parameter__000000_Reference.OriginY = 600.000000
 
@@ -329,6 +334,7 @@ func _(stage *models.StageStruct) {
 
 	// Setup of pointers
 	__AxisGrid__000000_Construction_Axis_Grid.Reference = __Axis__000000_Construction_Axis
+	__BezierGrid__000000_Initial_Bezier_Grid.Reference = __Bezier__000000_Initial_Beizer
 	__CircleGrid__000000_Construction_Circle_Grid.Reference = __Circle__000000_Construction_Circle
 	__CircleGrid__000001_Growing_Circle_Grid.Reference = __Circle__000001_Growing
 	__CircleGrid__000003_Initial_Circle_Grid.Reference = __Circle__000003_Initial_Circle
@@ -354,6 +360,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.ConstructionCircle = __Circle__000000_Construction_Circle
 	__Parameter__000000_Reference.ConstructionCircleGrid = __CircleGrid__000000_Construction_Circle_Grid
 	__Parameter__000000_Reference.InitialBezier = __Bezier__000000_Initial_Beizer
+	__Parameter__000000_Reference.InitialBezierGrid = __BezierGrid__000000_Initial_Bezier_Grid
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__RhombusGrid__000000_Growing_Rhombus_Grid.Reference = __Rhombus__000003_Rotated_Rhombus

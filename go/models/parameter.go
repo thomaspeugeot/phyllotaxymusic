@@ -59,7 +59,8 @@ type Parameter struct {
 	ConstructionCircle     *Circle
 	ConstructionCircleGrid *CircleGrid
 
-	InitialBezier *Bezier
+	InitialBezier     *Bezier
+	InitialBezierGrid *BezierGrid
 
 	// ratio of the length of the control vector to the side length
 	BezierControlLengthRatio float64
@@ -149,6 +150,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.ComputeInitialBezier()
 	p.Shapes = append(p.Shapes, p.InitialBezier)
+
+	p.ComputeInitialBezierGrid()
+	p.Shapes = append(p.Shapes, p.InitialBezierGrid)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -459,7 +463,7 @@ func (p *Parameter) computeConstructionAxisGrid() {
 	a.CenterX += p.RotatedAxis.Length
 
 	slices.SortFunc(g.Axiss, func(c1, c2 *Axis) int {
-		return cmp.Compare(c1.CenterX, c2.CenterY)
+		return cmp.Compare(c1.CenterX, c2.CenterX)
 	})
 }
 
@@ -486,8 +490,12 @@ func (p *Parameter) computeConstructionCircleGrid() {
 	c.CenterX += p.RotatedAxis.Length
 
 	slices.SortFunc(g.Circles, func(c1, c2 *Circle) int {
-		return cmp.Compare(c1.CenterX, c2.CenterY)
+		return cmp.Compare(c1.CenterX, c2.CenterX)
 	})
+
+	// for _, c := range g.Circles {
+	// 	log.Println(c.CenterX)
+	// }
 }
 
 func (p *Parameter) ComputeInitialBezier() {
@@ -495,13 +503,18 @@ func (p *Parameter) ComputeInitialBezier() {
 	b := p.InitialBezier
 	_ = b
 
-	b.StartX = p.ConstructionCircleGrid.Circles[0].CenterX
-	b.StartY = p.ConstructionCircleGrid.Circles[0].CenterY
+	p.computeBezier(b, p.ConstructionCircleGrid.Circles[0], p.ConstructionCircleGrid.Circles[1])
 
-	b.EndX = p.ConstructionCircleGrid.Circles[1].CenterX
-	b.EndY = p.ConstructionCircleGrid.Circles[1].CenterY
+}
 
-	angleRad := p.ConstructionAxis.Angle*math.Pi/180 + math.Pi/2.0
+func (p *Parameter) computeBezier(b *Bezier, startCircle, endCircle *Circle) {
+	b.StartX = startCircle.CenterX
+	b.StartY = startCircle.CenterY
+
+	b.EndX = endCircle.CenterX
+	b.EndY = endCircle.CenterY
+
+	angleRad := p.ConstructionAxis.Angle*math.Pi/180 - math.Pi/2.0
 
 	b.ControlPointStartX = b.StartX +
 		p.SideLength*p.BezierControlLengthRatio*math.Cos(angleRad)
@@ -512,5 +525,21 @@ func (p *Parameter) ComputeInitialBezier() {
 		p.SideLength*p.BezierControlLengthRatio*math.Cos(angleRad+math.Pi)
 	b.ControlPointEndY = b.EndY +
 		p.SideLength*p.BezierControlLengthRatio*math.Sin(angleRad+math.Pi)
+}
 
+func (p *Parameter) ComputeInitialBezierGrid() {
+
+	g := p.InitialBezierGrid
+	g.Beziers = g.Beziers[:0]
+
+	for i := range p.M + p.N {
+		_b := new(Bezier)
+		*_b = *p.InitialBezier
+		g.Beziers = append(g.Beziers, _b)
+
+		// apply growing bezier coordinates
+		c := p.ConstructionCircleGrid
+
+		p.computeBezier(_b, c.Circles[i], c.Circles[i+1])
+	}
 }

@@ -382,6 +382,46 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_BezierGrid_Identifiers := make(map[*BezierGrid]string)
+	_ = map_BezierGrid_Identifiers
+
+	beziergridOrdered := []*BezierGrid{}
+	for beziergrid := range stage.BezierGrids {
+		beziergridOrdered = append(beziergridOrdered, beziergrid)
+	}
+	sort.Slice(beziergridOrdered[:], func(i, j int) bool {
+		return beziergridOrdered[i].Name < beziergridOrdered[j].Name
+	})
+	if len(beziergridOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, beziergrid := range beziergridOrdered {
+
+		id = generatesIdentifier("BezierGrid", idx, beziergrid.Name)
+		map_BezierGrid_Identifiers[beziergrid] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "BezierGrid")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", beziergrid.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(beziergrid.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", beziergrid.IsDisplayed))
+		initializerStatements += setValueField
+
+	}
+
 	map_Circle_Identifiers := make(map[*Circle]string)
 	_ = map_Circle_Identifiers
 
@@ -1021,6 +1061,32 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		// Initialisation of values
 	}
 
+	for idx, beziergrid := range beziergridOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("BezierGrid", idx, beziergrid.Name)
+		map_BezierGrid_Identifiers[beziergrid] = id
+
+		// Initialisation of values
+		if beziergrid.Reference != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[beziergrid.Reference])
+			pointersInitializesStatements += setPointerField
+		}
+
+		for _, _bezier := range beziergrid.Beziers {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Beziers")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[_bezier])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
 	for idx, circle := range circleOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -1248,6 +1314,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialBezier")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[parameter.InitialBezier])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if parameter.InitialBezierGrid != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialBezierGrid")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.InitialBezierGrid])
 			pointersInitializesStatements += setPointerField
 		}
 

@@ -317,6 +317,7 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 var __gong__map_Axis = make(map[string]*Axis)
 var __gong__map_AxisGrid = make(map[string]*AxisGrid)
 var __gong__map_Bezier = make(map[string]*Bezier)
+var __gong__map_BezierGrid = make(map[string]*BezierGrid)
 var __gong__map_Circle = make(map[string]*Circle)
 var __gong__map_CircleGrid = make(map[string]*CircleGrid)
 var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
@@ -508,6 +509,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceBezier := (&Bezier{Name: instanceName}).Stage(stage)
 										instance = any(instanceBezier)
 										__gong__map_Bezier[identifier] = instanceBezier
+									case "BezierGrid":
+										instanceBezierGrid := (&BezierGrid{Name: instanceName}).Stage(stage)
+										instance = any(instanceBezierGrid)
+										__gong__map_BezierGrid[identifier] = instanceBezierGrid
 									case "Circle":
 										instanceCircle := (&Circle{Name: instanceName}).Stage(stage)
 										instance = any(instanceCircle)
@@ -584,6 +589,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "BezierGrid":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "Circle":
 							switch fieldName {
 							// insertion point for date assign code
@@ -654,6 +663,16 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					case "Bezier":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
+						}
+					case "BezierGrid":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "Beziers":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Bezier[targetIdentifier]
+							__gong__map_BezierGrid[identifier].Beziers =
+								append(__gong__map_BezierGrid[identifier].Beziers, target)
 						}
 					case "Circle":
 						switch fieldName {
@@ -933,6 +952,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Bezier[identifier].Transform = fielValue
+				}
+			case "BezierGrid":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_BezierGrid[identifier].Name = fielValue
 				}
 			case "Circle":
 				switch fieldName {
@@ -1344,6 +1371,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_Bezier[identifier].IsDisplayed = fielValue
 				}
+			case "BezierGrid":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Reference":
+					targetIdentifier := ident.Name
+					__gong__map_BezierGrid[identifier].Reference = __gong__map_Bezier[targetIdentifier]
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_BezierGrid[identifier].IsDisplayed = fielValue
+				}
 			case "Circle":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1456,6 +1497,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "InitialBezier":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].InitialBezier = __gong__map_Bezier[targetIdentifier]
+				case "InitialBezierGrid":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].InitialBezierGrid = __gong__map_BezierGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]
@@ -1536,6 +1580,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "Bezier":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "BezierGrid":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

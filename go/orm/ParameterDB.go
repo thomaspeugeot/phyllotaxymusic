@@ -135,6 +135,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	InitialBezierID sql.NullInt64
 
+	// field InitialBezierGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	InitialBezierGridID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -619,6 +623,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.InitialBezierID.Valid = true
 		}
 
+		// commit pointer value parameter.InitialBezierGrid translates to updating the parameter.InitialBezierGridID
+		parameterDB.InitialBezierGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.InitialBezierGrid != nil {
+			if InitialBezierGridId, ok := backRepo.BackRepoBezierGrid.Map_BezierGridPtr_BezierGridDBID[parameter.InitialBezierGrid]; ok {
+				parameterDB.InitialBezierGridID.Int64 = int64(InitialBezierGridId)
+				parameterDB.InitialBezierGridID.Valid = true
+			}
+		} else {
+			parameterDB.InitialBezierGridID.Int64 = 0
+			parameterDB.InitialBezierGridID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -865,6 +881,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.InitialBezier = nil
 	if parameterDB.InitialBezierID.Int64 != 0 {
 		parameter.InitialBezier = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.InitialBezierID.Int64)]
+	}
+	// InitialBezierGrid field
+	parameter.InitialBezierGrid = nil
+	if parameterDB.InitialBezierGridID.Int64 != 0 {
+		parameter.InitialBezierGrid = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.InitialBezierGridID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -1330,6 +1351,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.InitialBezierID.Int64 != 0 {
 			parameterDB.InitialBezierID.Int64 = int64(BackRepoBezierid_atBckpTime_newID[uint(parameterDB.InitialBezierID.Int64)])
 			parameterDB.InitialBezierID.Valid = true
+		}
+
+		// reindexing InitialBezierGrid field
+		if parameterDB.InitialBezierGridID.Int64 != 0 {
+			parameterDB.InitialBezierGridID.Int64 = int64(BackRepoBezierGridid_atBckpTime_newID[uint(parameterDB.InitialBezierGridID.Int64)])
+			parameterDB.InitialBezierGridID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field
