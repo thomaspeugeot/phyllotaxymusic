@@ -11,6 +11,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *AxisGrid:
 		ok = stage.IsStagedAxisGrid(target)
 
+	case *Bezier:
+		ok = stage.IsStagedBezier(target)
+
 	case *Circle:
 		ok = stage.IsStagedCircle(target)
 
@@ -49,6 +52,13 @@ func (stage *StageStruct) IsStagedAxis(axis *Axis) (ok bool) {
 func (stage *StageStruct) IsStagedAxisGrid(axisgrid *AxisGrid) (ok bool) {
 
 	_, ok = stage.AxisGrids[axisgrid]
+
+	return
+}
+
+func (stage *StageStruct) IsStagedBezier(bezier *Bezier) (ok bool) {
+
+	_, ok = stage.Beziers[bezier]
 
 	return
 }
@@ -116,6 +126,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *AxisGrid:
 		stage.StageBranchAxisGrid(target)
 
+	case *Bezier:
+		stage.StageBranchBezier(target)
+
 	case *Circle:
 		stage.StageBranchCircle(target)
 
@@ -176,6 +189,21 @@ func (stage *StageStruct) StageBranchAxisGrid(axisgrid *AxisGrid) {
 	for _, _axis := range axisgrid.Axiss {
 		StageBranch(stage, _axis)
 	}
+
+}
+
+func (stage *StageStruct) StageBranchBezier(bezier *Bezier) {
+
+	// check if instance is already staged
+	if IsStaged(stage, bezier) {
+		return
+	}
+
+	bezier.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -303,6 +331,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.ConstructionCircleGrid != nil {
 		StageBranch(stage, parameter.ConstructionCircleGrid)
 	}
+	if parameter.InitialBezier != nil {
+		StageBranch(stage, parameter.InitialBezier)
+	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
 	}
@@ -384,6 +415,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchAxisGrid(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
+	case *Bezier:
+		toT := CopyBranchBezier(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *Circle:
 		toT := CopyBranchCircle(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -459,6 +494,25 @@ func CopyBranchAxisGrid(mapOrigCopy map[any]any, axisgridFrom *AxisGrid) (axisgr
 	for _, _axis := range axisgridFrom.Axiss {
 		axisgridTo.Axiss = append(axisgridTo.Axiss, CopyBranchAxis(mapOrigCopy, _axis))
 	}
+
+	return
+}
+
+func CopyBranchBezier(mapOrigCopy map[any]any, bezierFrom *Bezier) (bezierTo *Bezier) {
+
+	// bezierFrom has already been copied
+	if _bezierTo, ok := mapOrigCopy[bezierFrom]; ok {
+		bezierTo = _bezierTo.(*Bezier)
+		return
+	}
+
+	bezierTo = new(Bezier)
+	mapOrigCopy[bezierFrom] = bezierTo
+	bezierFrom.CopyBasicFields(bezierTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 	return
 }
@@ -602,6 +656,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.ConstructionCircleGrid != nil {
 		parameterTo.ConstructionCircleGrid = CopyBranchCircleGrid(mapOrigCopy, parameterFrom.ConstructionCircleGrid)
 	}
+	if parameterFrom.InitialBezier != nil {
+		parameterTo.InitialBezier = CopyBranchBezier(mapOrigCopy, parameterFrom.InitialBezier)
+	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
 	}
@@ -691,6 +748,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *AxisGrid:
 		stage.UnstageBranchAxisGrid(target)
 
+	case *Bezier:
+		stage.UnstageBranchBezier(target)
+
 	case *Circle:
 		stage.UnstageBranchCircle(target)
 
@@ -751,6 +811,21 @@ func (stage *StageStruct) UnstageBranchAxisGrid(axisgrid *AxisGrid) {
 	for _, _axis := range axisgrid.Axiss {
 		UnstageBranch(stage, _axis)
 	}
+
+}
+
+func (stage *StageStruct) UnstageBranchBezier(bezier *Bezier) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, bezier) {
+		return
+	}
+
+	bezier.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -877,6 +952,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.ConstructionCircleGrid != nil {
 		UnstageBranch(stage, parameter.ConstructionCircleGrid)
+	}
+	if parameter.InitialBezier != nil {
+		UnstageBranch(stage, parameter.InitialBezier)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

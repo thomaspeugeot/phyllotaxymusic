@@ -1,6 +1,7 @@
 package models
 
 import (
+	"cmp"
 	"fmt"
 	"log"
 	"math"
@@ -57,6 +58,11 @@ type Parameter struct {
 	ConstructionAxisGrid   *AxisGrid
 	ConstructionCircle     *Circle
 	ConstructionCircleGrid *CircleGrid
+
+	InitialBezier *Bezier
+
+	// ratio of the length of the control vector to the side length
+	BezierControlLengthRatio float64
 
 	// for drawing purpose
 	OriginX        float64
@@ -140,6 +146,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.computeConstructionCircleGrid()
 	p.Shapes = append(p.Shapes, p.ConstructionCircleGrid)
+
+	p.ComputeInitialBezier()
+	p.Shapes = append(p.Shapes, p.InitialBezier)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -450,11 +459,7 @@ func (p *Parameter) computeConstructionAxisGrid() {
 	a.CenterX += p.RotatedAxis.Length
 
 	slices.SortFunc(g.Axiss, func(c1, c2 *Axis) int {
-		if c1.CenterX < c2.CenterY {
-			return 1
-		} else {
-			return -1
-		}
+		return cmp.Compare(c1.CenterX, c2.CenterY)
 	})
 }
 
@@ -481,10 +486,31 @@ func (p *Parameter) computeConstructionCircleGrid() {
 	c.CenterX += p.RotatedAxis.Length
 
 	slices.SortFunc(g.Circles, func(c1, c2 *Circle) int {
-		if c1.CenterX < c2.CenterY {
-			return 1
-		} else {
-			return -1
-		}
+		return cmp.Compare(c1.CenterX, c2.CenterY)
 	})
+}
+
+func (p *Parameter) ComputeInitialBezier() {
+
+	b := p.InitialBezier
+	_ = b
+
+	b.StartX = p.ConstructionCircleGrid.Circles[0].CenterX
+	b.StartY = p.ConstructionCircleGrid.Circles[0].CenterY
+
+	b.EndX = p.ConstructionCircleGrid.Circles[1].CenterX
+	b.EndY = p.ConstructionCircleGrid.Circles[1].CenterY
+
+	angleRad := p.ConstructionAxis.Angle*math.Pi/180 + math.Pi/2.0
+
+	b.ControlPointStartX = b.StartX +
+		p.SideLength*p.BezierControlLengthRatio*math.Cos(angleRad)
+	b.ControlPointStartY = b.StartY +
+		p.SideLength*p.BezierControlLengthRatio*math.Sin(angleRad)
+
+	b.ControlPointEndX = b.EndX +
+		p.SideLength*p.BezierControlLengthRatio*math.Cos(angleRad+math.Pi)
+	b.ControlPointEndY = b.EndY +
+		p.SideLength*p.BezierControlLengthRatio*math.Sin(angleRad+math.Pi)
+
 }

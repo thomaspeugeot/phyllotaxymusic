@@ -58,6 +58,9 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 			}
 		}
 
+	case *Bezier:
+		// insertion point per field
+
 	case *Circle:
 		// insertion point per field
 
@@ -139,6 +142,9 @@ func (stage *StageStruct) ComputeReverseMaps() {
 			stage.AxisGrid_Axiss_reverseMap[_axis] = axisgrid
 		}
 	}
+
+	// Compute reverse map for named struct Bezier
+	// insertion point per field
 
 	// Compute reverse map for named struct Circle
 	// insertion point per field

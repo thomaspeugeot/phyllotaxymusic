@@ -12,6 +12,10 @@ import { AxisGridAPI } from './axisgrid-api'
 import { AxisGrid, CopyAxisGridAPIToAxisGrid } from './axisgrid'
 import { AxisGridService } from './axisgrid.service'
 
+import { BezierAPI } from './bezier-api'
+import { Bezier, CopyBezierAPIToBezier } from './bezier'
+import { BezierService } from './bezier.service'
+
 import { CircleAPI } from './circle-api'
 import { Circle, CopyCircleAPIToCircle } from './circle'
 import { CircleService } from './circle.service'
@@ -53,6 +57,9 @@ export class FrontRepo { // insertion point sub template
 	array_AxisGrids = new Array<AxisGrid>() // array of front instances
 	map_ID_AxisGrid = new Map<number, AxisGrid>() // map of front instances
 
+	array_Beziers = new Array<Bezier>() // array of front instances
+	map_ID_Bezier = new Map<number, Bezier>() // map of front instances
+
 	array_Circles = new Array<Circle>() // array of front instances
 	map_ID_Circle = new Map<number, Circle>() // map of front instances
 
@@ -85,6 +92,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Axiss as unknown as Array<Type>
 			case 'AxisGrid':
 				return this.array_AxisGrids as unknown as Array<Type>
+			case 'Bezier':
+				return this.array_Beziers as unknown as Array<Type>
 			case 'Circle':
 				return this.array_Circles as unknown as Array<Type>
 			case 'CircleGrid':
@@ -111,6 +120,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Axis as unknown as Map<number, Type>
 			case 'AxisGrid':
 				return this.map_ID_AxisGrid as unknown as Map<number, Type>
+			case 'Bezier':
+				return this.map_ID_Bezier as unknown as Map<number, Type>
 			case 'Circle':
 				return this.map_ID_Circle as unknown as Map<number, Type>
 			case 'CircleGrid':
@@ -194,6 +205,7 @@ export class FrontRepoService {
 		private http: HttpClient, // insertion point sub template 
 		private axisService: AxisService,
 		private axisgridService: AxisGridService,
+		private bezierService: BezierService,
 		private circleService: CircleService,
 		private circlegridService: CircleGridService,
 		private horizontalaxisService: HorizontalAxisService,
@@ -235,6 +247,7 @@ export class FrontRepoService {
 		// insertion point sub template 
 		Observable<AxisAPI[]>,
 		Observable<AxisGridAPI[]>,
+		Observable<BezierAPI[]>,
 		Observable<CircleAPI[]>,
 		Observable<CircleGridAPI[]>,
 		Observable<HorizontalAxisAPI[]>,
@@ -254,6 +267,7 @@ export class FrontRepoService {
 			// insertion point sub template
 			this.axisService.getAxiss(this.GONG__StackPath, this.frontRepo),
 			this.axisgridService.getAxisGrids(this.GONG__StackPath, this.frontRepo),
+			this.bezierService.getBeziers(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
@@ -278,6 +292,7 @@ export class FrontRepoService {
 			// insertion point sub template
 			this.axisService.getAxiss(this.GONG__StackPath, this.frontRepo),
 			this.axisgridService.getAxisGrids(this.GONG__StackPath, this.frontRepo),
+			this.bezierService.getBeziers(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
@@ -297,6 +312,7 @@ export class FrontRepoService {
 						// insertion point sub template for declarations 
 						axiss_,
 						axisgrids_,
+						beziers_,
 						circles_,
 						circlegrids_,
 						horizontalaxiss_,
@@ -312,6 +328,8 @@ export class FrontRepoService {
 						axiss = axiss_ as AxisAPI[]
 						var axisgrids: AxisGridAPI[]
 						axisgrids = axisgrids_ as AxisGridAPI[]
+						var beziers: BezierAPI[]
+						beziers = beziers_ as BezierAPI[]
 						var circles: CircleAPI[]
 						circles = circles_ as CircleAPI[]
 						var circlegrids: CircleGridAPI[]
@@ -351,6 +369,18 @@ export class FrontRepoService {
 								let axisgrid = new AxisGrid
 								this.frontRepo.array_AxisGrids.push(axisgrid)
 								this.frontRepo.map_ID_AxisGrid.set(axisgridAPI.ID, axisgrid)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_Beziers = []
+						this.frontRepo.map_ID_Bezier.clear()
+
+						beziers.forEach(
+							bezierAPI => {
+								let bezier = new Bezier
+								this.frontRepo.array_Beziers.push(bezier)
+								this.frontRepo.map_ID_Bezier.set(bezierAPI.ID, bezier)
 							}
 						)
 
@@ -455,6 +485,14 @@ export class FrontRepoService {
 							axisgridAPI => {
 								let axisgrid = this.frontRepo.map_ID_AxisGrid.get(axisgridAPI.ID)
 								CopyAxisGridAPIToAxisGrid(axisgridAPI, axisgrid!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						beziers.forEach(
+							bezierAPI => {
+								let bezier = this.frontRepo.map_ID_Bezier.get(bezierAPI.ID)
+								CopyBezierAPIToBezier(bezierAPI, bezier!, this.frontRepo)
 							}
 						)
 
@@ -570,6 +608,18 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				this.frontRepo.array_Beziers = []
+				this.frontRepo.map_ID_Bezier.clear()
+
+				backRepoData.BezierAPIs.forEach(
+					bezierAPI => {
+						let bezier = new Bezier
+						this.frontRepo.array_Beziers.push(bezier)
+						this.frontRepo.map_ID_Bezier.set(bezierAPI.ID, bezier)
+					}
+				)
+
+				// init the arrays
 				this.frontRepo.array_Circles = []
 				this.frontRepo.map_ID_Circle.clear()
 
@@ -676,6 +726,14 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.BezierAPIs.forEach(
+					bezierAPI => {
+						let bezier = this.frontRepo.map_ID_Bezier.get(bezierAPI.ID)
+						CopyBezierAPIToBezier(bezierAPI, bezier!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.CircleAPIs.forEach(
 					circleAPI => {
 						let circle = this.frontRepo.map_ID_Circle.get(circleAPI.ID)
@@ -756,24 +814,27 @@ export function getAxisUniqueID(id: number): number {
 export function getAxisGridUniqueID(id: number): number {
 	return 37 * id
 }
-export function getCircleUniqueID(id: number): number {
+export function getBezierUniqueID(id: number): number {
 	return 41 * id
 }
-export function getCircleGridUniqueID(id: number): number {
+export function getCircleUniqueID(id: number): number {
 	return 43 * id
 }
-export function getHorizontalAxisUniqueID(id: number): number {
+export function getCircleGridUniqueID(id: number): number {
 	return 47 * id
 }
-export function getParameterUniqueID(id: number): number {
+export function getHorizontalAxisUniqueID(id: number): number {
 	return 53 * id
 }
-export function getRhombusUniqueID(id: number): number {
+export function getParameterUniqueID(id: number): number {
 	return 59 * id
 }
-export function getRhombusGridUniqueID(id: number): number {
+export function getRhombusUniqueID(id: number): number {
 	return 61 * id
 }
-export function getVerticalAxisUniqueID(id: number): number {
+export function getRhombusGridUniqueID(id: number): number {
 	return 67 * id
+}
+export function getVerticalAxisUniqueID(id: number): number {
+	return 71 * id
 }

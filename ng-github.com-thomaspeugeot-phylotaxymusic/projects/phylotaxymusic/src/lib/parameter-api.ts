@@ -5,6 +5,7 @@ import { RhombusGridAPI } from './rhombusgrid-api'
 import { CircleGridAPI } from './circlegrid-api'
 import { AxisAPI } from './axis-api'
 import { AxisGridAPI } from './axisgrid-api'
+import { BezierAPI } from './bezier-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 
@@ -26,6 +27,7 @@ export class ParameterAPI {
 	Z: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
+	BezierControlLengthRatio: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -75,6 +77,10 @@ export class ParameterPointersEncoding {
 	ConstructionAxisGridID: NullInt64 = new NullInt64 // if pointer is null, ConstructionAxisGrid.ID = 0
 
 	ConstructionCircleID: NullInt64 = new NullInt64 // if pointer is null, ConstructionCircle.ID = 0
+
+	ConstructionCircleGridID: NullInt64 = new NullInt64 // if pointer is null, ConstructionCircleGrid.ID = 0
+
+	InitialBezierID: NullInt64 = new NullInt64 // if pointer is null, InitialBezier.ID = 0
 
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 

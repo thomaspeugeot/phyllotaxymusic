@@ -244,6 +244,117 @@ func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
 
 	fillUpTree(axisgridFormCallback.probe)
 }
+func __gong__New__BezierFormCallback(
+	bezier *models.Bezier,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (bezierFormCallback *BezierFormCallback) {
+	bezierFormCallback = new(BezierFormCallback)
+	bezierFormCallback.probe = probe
+	bezierFormCallback.bezier = bezier
+	bezierFormCallback.formGroup = formGroup
+
+	bezierFormCallback.CreationMode = (bezier == nil)
+
+	return
+}
+
+type BezierFormCallback struct {
+	bezier *models.Bezier
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (bezierFormCallback *BezierFormCallback) OnSave() {
+
+	log.Println("BezierFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	bezierFormCallback.probe.formStage.Checkout()
+
+	if bezierFormCallback.bezier == nil {
+		bezierFormCallback.bezier = new(models.Bezier).Stage(bezierFormCallback.probe.stageOfInterest)
+	}
+	bezier_ := bezierFormCallback.bezier
+	_ = bezier_
+
+	for _, formDiv := range bezierFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(bezier_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(bezier_.IsDisplayed), formDiv)
+		case "StartX":
+			FormDivBasicFieldToField(&(bezier_.StartX), formDiv)
+		case "StartY":
+			FormDivBasicFieldToField(&(bezier_.StartY), formDiv)
+		case "ControlPointStartX":
+			FormDivBasicFieldToField(&(bezier_.ControlPointStartX), formDiv)
+		case "ControlPointStartY":
+			FormDivBasicFieldToField(&(bezier_.ControlPointStartY), formDiv)
+		case "EndX":
+			FormDivBasicFieldToField(&(bezier_.EndX), formDiv)
+		case "EndY":
+			FormDivBasicFieldToField(&(bezier_.EndY), formDiv)
+		case "ControlPointEndX":
+			FormDivBasicFieldToField(&(bezier_.ControlPointEndX), formDiv)
+		case "ControlPointEndY":
+			FormDivBasicFieldToField(&(bezier_.ControlPointEndY), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(bezier_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(bezier_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(bezier_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(bezier_.StrokeOpacity), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(bezier_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(bezier_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(bezier_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(bezier_.Transform), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if bezierFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		bezier_.Unstage(bezierFormCallback.probe.stageOfInterest)
+	}
+
+	bezierFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.Bezier](
+		bezierFormCallback.probe,
+	)
+	bezierFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if bezierFormCallback.CreationMode || bezierFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		bezierFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(bezierFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__BezierFormCallback(
+			nil,
+			bezierFormCallback.probe,
+			newFormGroup,
+		)
+		bezier := new(models.Bezier)
+		FillUpForm(bezier, newFormGroup, bezierFormCallback.probe)
+		bezierFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(bezierFormCallback.probe)
+}
 func __gong__New__CircleFormCallback(
 	circle *models.Circle,
 	probe *Probe,
@@ -666,6 +777,10 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.ConstructionCircle), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "ConstructionCircleGrid":
 			FormDivSelectFieldToField(&(parameter_.ConstructionCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "InitialBezier":
+			FormDivSelectFieldToField(&(parameter_.InitialBezier), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "BezierControlLengthRatio":
+			FormDivBasicFieldToField(&(parameter_.BezierControlLengthRatio), formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

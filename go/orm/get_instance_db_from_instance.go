@@ -8,7 +8,7 @@ import (
 type GongstructDB interface {
 	// insertion point for generic types
 	// "int" is present to handle the case when no struct is present
-	int | AxisDB | AxisGridDB | CircleDB | CircleGridDB | HorizontalAxisDB | ParameterDB | RhombusDB | RhombusGridDB | VerticalAxisDB
+	int | AxisDB | AxisGridDB | BezierDB | CircleDB | CircleGridDB | HorizontalAxisDB | ParameterDB | RhombusDB | RhombusGridDB | VerticalAxisDB
 }
 
 func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
@@ -25,6 +25,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 	case *models.AxisGrid:
 		axisgridInstance := any(concreteInstance).(*models.AxisGrid)
 		ret2 := backRepo.BackRepoAxisGrid.GetAxisGridDBFromAxisGridPtr(axisgridInstance)
+		ret = any(ret2).(*T2)
+	case *models.Bezier:
+		bezierInstance := any(concreteInstance).(*models.Bezier)
+		ret2 := backRepo.BackRepoBezier.GetBezierDBFromBezierPtr(bezierInstance)
 		ret = any(ret2).(*T2)
 	case *models.Circle:
 		circleInstance := any(concreteInstance).(*models.Circle)
@@ -74,6 +78,11 @@ func GetID[T models.Gongstruct](
 		id = int(tmp.ID)
 	case *models.AxisGrid:
 		tmp := GetInstanceDBFromInstance[models.AxisGrid, AxisGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Bezier:
+		tmp := GetInstanceDBFromInstance[models.Bezier, BezierDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -132,6 +141,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.AxisGrid:
 		tmp := GetInstanceDBFromInstance[models.AxisGrid, AxisGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Bezier:
+		tmp := GetInstanceDBFromInstance[models.Bezier, BezierDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

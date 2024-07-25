@@ -21,6 +21,10 @@ export * from './lib/axisgrid-api'
 export * from './lib/axisgrid'
 export * from './lib/axisgrid.service'
 
+export * from './lib/bezier-api'
+export * from './lib/bezier'
+export * from './lib/bezier.service'
+
 export * from './lib/circle-api'
 export * from './lib/circle'
 export * from './lib/circle.service'

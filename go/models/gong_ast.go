@@ -316,6 +316,7 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 // insertion point for identifiers maps
 var __gong__map_Axis = make(map[string]*Axis)
 var __gong__map_AxisGrid = make(map[string]*AxisGrid)
+var __gong__map_Bezier = make(map[string]*Bezier)
 var __gong__map_Circle = make(map[string]*Circle)
 var __gong__map_CircleGrid = make(map[string]*CircleGrid)
 var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
@@ -503,6 +504,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceAxisGrid := (&AxisGrid{Name: instanceName}).Stage(stage)
 										instance = any(instanceAxisGrid)
 										__gong__map_AxisGrid[identifier] = instanceAxisGrid
+									case "Bezier":
+										instanceBezier := (&Bezier{Name: instanceName}).Stage(stage)
+										instance = any(instanceBezier)
+										__gong__map_Bezier[identifier] = instanceBezier
 									case "Circle":
 										instanceCircle := (&Circle{Name: instanceName}).Stage(stage)
 										instance = any(instanceCircle)
@@ -575,6 +580,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "Bezier":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "Circle":
 							switch fieldName {
 							// insertion point for date assign code
@@ -641,6 +650,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Axis[targetIdentifier]
 							__gong__map_AxisGrid[identifier].Axiss =
 								append(__gong__map_AxisGrid[identifier].Axiss, target)
+						}
+					case "Bezier":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
 						}
 					case "Circle":
 						switch fieldName {
@@ -815,6 +828,111 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_AxisGrid[identifier].Name = fielValue
+				}
+			case "Bezier":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Bezier[identifier].Name = fielValue
+				case "StartX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].StartX = exprSign * fielValue
+				case "StartY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].StartY = exprSign * fielValue
+				case "ControlPointStartX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].ControlPointStartX = exprSign * fielValue
+				case "ControlPointStartY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].ControlPointStartY = exprSign * fielValue
+				case "EndX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].EndX = exprSign * fielValue
+				case "EndY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].EndY = exprSign * fielValue
+				case "ControlPointEndX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].ControlPointEndX = exprSign * fielValue
+				case "ControlPointEndY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].ControlPointEndY = exprSign * fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Bezier[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Bezier[identifier].Stroke = fielValue
+				case "StrokeOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].StrokeOpacity = exprSign * fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Bezier[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Bezier[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Bezier[identifier].Transform = fielValue
 				}
 			case "Circle":
 				switch fieldName {
@@ -999,6 +1117,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].SideLength = exprSign * fielValue
+				case "BezierControlLengthRatio":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].BezierControlLengthRatio = exprSign * fielValue
 				case "OriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1208,6 +1333,17 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_AxisGrid[identifier].IsDisplayed = fielValue
 				}
+			case "Bezier":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Bezier[identifier].IsDisplayed = fielValue
+				}
 			case "Circle":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1317,6 +1453,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "ConstructionCircleGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].ConstructionCircleGrid = __gong__map_CircleGrid[targetIdentifier]
+				case "InitialBezier":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].InitialBezier = __gong__map_Bezier[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]
@@ -1393,6 +1532,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "AxisGrid":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "Bezier":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

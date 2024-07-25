@@ -16,6 +16,7 @@ func SerializeStage(stage *StageStruct, filename string) {
 		// insertion point
 		SerializeExcelize[Axis](stage, f)
 		SerializeExcelize[AxisGrid](stage, f)
+		SerializeExcelize[Bezier](stage, f)
 		SerializeExcelize[Circle](stage, f)
 		SerializeExcelize[CircleGrid](stage, f)
 		SerializeExcelize[HorizontalAxis](stage, f)

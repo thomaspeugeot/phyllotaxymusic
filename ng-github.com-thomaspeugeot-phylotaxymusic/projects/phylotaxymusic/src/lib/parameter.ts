@@ -10,6 +10,7 @@ import { RhombusGrid } from './rhombusgrid'
 import { CircleGrid } from './circlegrid'
 import { Axis } from './axis'
 import { AxisGrid } from './axisgrid'
+import { Bezier } from './bezier'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 
@@ -31,6 +32,7 @@ export class Parameter {
 	Z: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
+	BezierControlLengthRatio: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -75,6 +77,10 @@ export class Parameter {
 
 	ConstructionCircle?: Circle
 
+	ConstructionCircleGrid?: CircleGrid
+
+	InitialBezier?: Bezier
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -94,6 +100,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.Z = parameter.Z
 	parameterAPI.InsideAngle = parameter.InsideAngle
 	parameterAPI.SideLength = parameter.SideLength
+	parameterAPI.BezierControlLengthRatio = parameter.BezierControlLengthRatio
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 
@@ -238,6 +245,20 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.ConstructionCircleID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.ConstructionCircleGridID.Valid = true
+	if (parameter.ConstructionCircleGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.ConstructionCircleGridID.Int64 = parameter.ConstructionCircleGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.ConstructionCircleGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.InitialBezierID.Valid = true
+	if (parameter.InitialBezier != undefined) {
+		parameterAPI.ParameterPointersEncoding.InitialBezierID.Int64 = parameter.InitialBezier.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.InitialBezierID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -273,6 +294,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.Z = parameterAPI.Z
 	parameter.InsideAngle = parameterAPI.InsideAngle
 	parameter.SideLength = parameterAPI.SideLength
+	parameter.BezierControlLengthRatio = parameterAPI.BezierControlLengthRatio
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 
@@ -297,6 +319,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.ConstructionAxis = frontRepo.map_ID_Axis.get(parameterAPI.ParameterPointersEncoding.ConstructionAxisID.Int64)
 	parameter.ConstructionAxisGrid = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.ConstructionAxisGridID.Int64)
 	parameter.ConstructionCircle = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.ConstructionCircleID.Int64)
+	parameter.ConstructionCircleGrid = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.ConstructionCircleGridID.Int64)
+	parameter.InitialBezier = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.InitialBezierID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

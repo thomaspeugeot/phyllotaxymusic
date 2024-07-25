@@ -58,6 +58,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "AxisGrid" {
 		fillUpTable[models.AxisGrid](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "Bezier" {
+		fillUpTable[models.Bezier](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Circle" {
 		fillUpTable[models.Circle](nodeImplGongstruct.probe)
 	}

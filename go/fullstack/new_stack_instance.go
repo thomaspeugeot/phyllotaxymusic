@@ -46,6 +46,7 @@ func NewStackInstance(
 	// insertion point
 	models.SetOrchestratorOnAfterUpdate[models.Axis](stage)
 	models.SetOrchestratorOnAfterUpdate[models.AxisGrid](stage)
+	models.SetOrchestratorOnAfterUpdate[models.Bezier](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Circle](stage)
 	models.SetOrchestratorOnAfterUpdate[models.CircleGrid](stage)
 	models.SetOrchestratorOnAfterUpdate[models.HorizontalAxis](stage)

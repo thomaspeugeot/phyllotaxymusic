@@ -131,6 +131,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	ConstructionCircleGridID sql.NullInt64
 
+	// field InitialBezier is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	InitialBezierID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -168,6 +172,9 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.SideLength
 	SideLength_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.BezierControlLengthRatio
+	BezierControlLengthRatio_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
@@ -209,9 +216,11 @@ type ParameterWOP struct {
 
 	SideLength float64 `xlsx:"6"`
 
-	OriginX float64 `xlsx:"7"`
+	BezierControlLengthRatio float64 `xlsx:"7"`
 
-	OriginY float64 `xlsx:"8"`
+	OriginX float64 `xlsx:"8"`
+
+	OriginY float64 `xlsx:"9"`
 	// insertion for WOP pointer fields
 }
 
@@ -224,6 +233,7 @@ var Parameter_Fields = []string{
 	"Z",
 	"InsideAngle",
 	"SideLength",
+	"BezierControlLengthRatio",
 	"OriginX",
 	"OriginY",
 }
@@ -597,6 +607,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.ConstructionCircleGridID.Valid = true
 		}
 
+		// commit pointer value parameter.InitialBezier translates to updating the parameter.InitialBezierID
+		parameterDB.InitialBezierID.Valid = true // allow for a 0 value (nil association)
+		if parameter.InitialBezier != nil {
+			if InitialBezierId, ok := backRepo.BackRepoBezier.Map_BezierPtr_BezierDBID[parameter.InitialBezier]; ok {
+				parameterDB.InitialBezierID.Int64 = int64(InitialBezierId)
+				parameterDB.InitialBezierID.Valid = true
+			}
+		} else {
+			parameterDB.InitialBezierID.Int64 = 0
+			parameterDB.InitialBezierID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -839,6 +861,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.ConstructionCircleGridID.Int64 != 0 {
 		parameter.ConstructionCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.ConstructionCircleGridID.Int64)]
 	}
+	// InitialBezier field
+	parameter.InitialBezier = nil
+	if parameterDB.InitialBezierID.Int64 != 0 {
+		parameter.InitialBezier = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.InitialBezierID.Int64)]
+	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
 	if parameterDB.HorizontalAxisID.Int64 != 0 {
@@ -901,6 +928,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
 
+	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
+	parameterDB.BezierControlLengthRatio_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -929,6 +959,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
+
+	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
+	parameterDB.BezierControlLengthRatio_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -959,6 +992,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
 
+	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
+	parameterDB.BezierControlLengthRatio_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -975,6 +1011,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
+	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -988,6 +1025,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
+	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1002,6 +1040,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.Z = int(parameterDB.Z_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
+	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1285,6 +1324,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.ConstructionCircleGridID.Int64 != 0 {
 			parameterDB.ConstructionCircleGridID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.ConstructionCircleGridID.Int64)])
 			parameterDB.ConstructionCircleGridID.Valid = true
+		}
+
+		// reindexing InitialBezier field
+		if parameterDB.InitialBezierID.Int64 != 0 {
+			parameterDB.InitialBezierID.Int64 = int64(BackRepoBezierid_atBckpTime_newID[uint(parameterDB.InitialBezierID.Int64)])
+			parameterDB.InitialBezierID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

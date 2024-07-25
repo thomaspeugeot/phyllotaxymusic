@@ -52,6 +52,19 @@ func FillUpFormFromGongstructName(
 		axisgrid := new(models.AxisGrid)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(axisgrid, formGroup, probe)
+	case "Bezier":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "Bezier Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__BezierFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		bezier := new(models.Bezier)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(bezier, formGroup, probe)
 	case "Circle":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),

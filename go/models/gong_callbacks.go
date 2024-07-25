@@ -14,6 +14,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterAxisGridCreateCallback != nil {
 			stage.OnAfterAxisGridCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *Bezier:
+		if stage.OnAfterBezierCreateCallback != nil {
+			stage.OnAfterBezierCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *Circle:
 		if stage.OnAfterCircleCreateCallback != nil {
 			stage.OnAfterCircleCreateCallback.OnAfterCreate(stage, target)
@@ -61,6 +65,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*AxisGrid)
 		if stage.OnAfterAxisGridUpdateCallback != nil {
 			stage.OnAfterAxisGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *Bezier:
+		newTarget := any(new).(*Bezier)
+		if stage.OnAfterBezierUpdateCallback != nil {
+			stage.OnAfterBezierUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *Circle:
 		newTarget := any(new).(*Circle)
@@ -117,6 +126,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*AxisGrid)
 			stage.OnAfterAxisGridDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *Bezier:
+		if stage.OnAfterBezierDeleteCallback != nil {
+			staged := any(staged).(*Bezier)
+			stage.OnAfterBezierDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *Circle:
 		if stage.OnAfterCircleDeleteCallback != nil {
 			staged := any(staged).(*Circle)
@@ -170,6 +184,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterAxisGridReadCallback != nil {
 			stage.OnAfterAxisGridReadCallback.OnAfterRead(stage, target)
 		}
+	case *Bezier:
+		if stage.OnAfterBezierReadCallback != nil {
+			stage.OnAfterBezierReadCallback.OnAfterRead(stage, target)
+		}
 	case *Circle:
 		if stage.OnAfterCircleReadCallback != nil {
 			stage.OnAfterCircleReadCallback.OnAfterRead(stage, target)
@@ -215,6 +233,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *AxisGrid:
 		stage.OnAfterAxisGridUpdateCallback = any(callback).(OnAfterUpdateInterface[AxisGrid])
 	
+	case *Bezier:
+		stage.OnAfterBezierUpdateCallback = any(callback).(OnAfterUpdateInterface[Bezier])
+	
 	case *Circle:
 		stage.OnAfterCircleUpdateCallback = any(callback).(OnAfterUpdateInterface[Circle])
 	
@@ -248,6 +269,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *AxisGrid:
 		stage.OnAfterAxisGridCreateCallback = any(callback).(OnAfterCreateInterface[AxisGrid])
+	
+	case *Bezier:
+		stage.OnAfterBezierCreateCallback = any(callback).(OnAfterCreateInterface[Bezier])
 	
 	case *Circle:
 		stage.OnAfterCircleCreateCallback = any(callback).(OnAfterCreateInterface[Circle])
@@ -283,6 +307,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *AxisGrid:
 		stage.OnAfterAxisGridDeleteCallback = any(callback).(OnAfterDeleteInterface[AxisGrid])
 	
+	case *Bezier:
+		stage.OnAfterBezierDeleteCallback = any(callback).(OnAfterDeleteInterface[Bezier])
+	
 	case *Circle:
 		stage.OnAfterCircleDeleteCallback = any(callback).(OnAfterDeleteInterface[Circle])
 	
@@ -316,6 +343,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *AxisGrid:
 		stage.OnAfterAxisGridReadCallback = any(callback).(OnAfterReadInterface[AxisGrid])
+	
+	case *Bezier:
+		stage.OnAfterBezierReadCallback = any(callback).(OnAfterReadInterface[Bezier])
 	
 	case *Circle:
 		stage.OnAfterCircleReadCallback = any(callback).(OnAfterReadInterface[Circle])

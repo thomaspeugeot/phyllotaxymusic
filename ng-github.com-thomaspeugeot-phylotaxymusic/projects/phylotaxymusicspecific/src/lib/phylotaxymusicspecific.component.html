@@ -26,6 +26,15 @@
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].InsideAngle" (input)="input($event)" 
                 >
             </mat-slider>
+
+            <h4>Bezier Strength {{frontRepo.array_Parameters[0].BezierControlLengthRatio}}</h4>
+
+            <mat-slider  min="0.0" max="4.0" step="0.05" 
+            showTickMarks discrete [displayWith]="formatLabel" 
+            >
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].BezierControlLengthRatio" (input)="input($event)" 
+                >
+            </mat-slider>
         
             <h4>Z {{frontRepo.array_Parameters[0].Z}}</h4>
 
