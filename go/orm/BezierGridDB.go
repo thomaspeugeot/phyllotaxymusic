@@ -51,6 +51,10 @@ type BezierGridPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	ReferenceID sql.NullInt64
 
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
+
 	// field Beziers is a slice of pointers to another Struct (optional or 0..1)
 	Beziers IntSlice `gorm:"type:TEXT"`
 }
@@ -237,6 +241,18 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) CommitPhaseTwoInstance(backR
 			beziergridDB.ReferenceID.Valid = true
 		}
 
+		// commit pointer value beziergrid.ShapeCategory translates to updating the beziergrid.ShapeCategoryID
+		beziergridDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if beziergrid.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[beziergrid.ShapeCategory]; ok {
+				beziergridDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				beziergridDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			beziergridDB.ShapeCategoryID.Int64 = 0
+			beziergridDB.ShapeCategoryID.Valid = true
+		}
+
 		// 1. reset
 		beziergridDB.BezierGridPointersEncoding.Beziers = make([]int, 0)
 		// 2. encode
@@ -372,6 +388,11 @@ func (beziergridDB *BezierGridDB) DecodePointers(backRepo *BackRepoStruct, bezie
 	beziergrid.Reference = nil
 	if beziergridDB.ReferenceID.Int64 != 0 {
 		beziergrid.Reference = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(beziergridDB.ReferenceID.Int64)]
+	}
+	// ShapeCategory field
+	beziergrid.ShapeCategory = nil
+	if beziergridDB.ShapeCategoryID.Int64 != 0 {
+		beziergrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(beziergridDB.ShapeCategoryID.Int64)]
 	}
 	// This loop redeem beziergrid.Beziers in the stage from the encode in the back repo
 	// It parses all BezierDB in the back repo and if the reverse pointer encoding matches the back repo ID
@@ -626,6 +647,12 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) RestorePhaseTwo() {
 		if beziergridDB.ReferenceID.Int64 != 0 {
 			beziergridDB.ReferenceID.Int64 = int64(BackRepoBezierid_atBckpTime_newID[uint(beziergridDB.ReferenceID.Int64)])
 			beziergridDB.ReferenceID.Valid = true
+		}
+
+		// reindexing ShapeCategory field
+		if beziergridDB.ShapeCategoryID.Int64 != 0 {
+			beziergridDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(beziergridDB.ShapeCategoryID.Int64)])
+			beziergridDB.ShapeCategoryID.Valid = true
 		}
 
 		// update databse with new index encoding

@@ -8,7 +8,7 @@ type RhombusGrid struct {
 	Name      string
 	Reference *Rhombus
 
-	HideableShape
+	AbstractShape
 
 	Rhombuses []*Rhombus
 }

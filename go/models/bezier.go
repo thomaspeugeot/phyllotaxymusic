@@ -8,7 +8,7 @@ import (
 
 type Bezier struct {
 	Name string
-	HideableShape
+	AbstractShape
 
 	StartX, StartY                         float64
 	ControlPointStartX, ControlPointStartY float64

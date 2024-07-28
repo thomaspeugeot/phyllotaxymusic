@@ -65,6 +65,8 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(axis_.Name), formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(axis_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(axis_.ShapeCategory), axisFormCallback.probe.stageOfInterest, formDiv)
 		case "Angle":
 			FormDivBasicFieldToField(&(axis_.Angle), formDiv)
 		case "Length":
@@ -212,6 +214,8 @@ func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(axisgrid_.Reference), axisgridFormCallback.probe.stageOfInterest, formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(axisgrid_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(axisgrid_.ShapeCategory), axisgridFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 
@@ -291,6 +295,8 @@ func (bezierFormCallback *BezierFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(bezier_.Name), formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(bezier_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(bezier_.ShapeCategory), bezierFormCallback.probe.stageOfInterest, formDiv)
 		case "StartX":
 			FormDivBasicFieldToField(&(bezier_.StartX), formDiv)
 		case "StartY":
@@ -446,6 +452,8 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(beziergrid_.Reference), beziergridFormCallback.probe.stageOfInterest, formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(beziergrid_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(beziergrid_.ShapeCategory), beziergridFormCallback.probe.stageOfInterest, formDiv)
 		case "BezierGridStack:BezierGrids":
 			// we need to retrieve the field owner before the change
 			var pastBezierGridStackOwner *models.BezierGridStack
@@ -567,6 +575,8 @@ func (beziergridstackFormCallback *BezierGridStackFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(beziergridstack_.Name), formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(beziergridstack_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(beziergridstack_.ShapeCategory), beziergridstackFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 
@@ -646,6 +656,8 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circle_.Name), formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(circle_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(circle_.ShapeCategory), circleFormCallback.probe.stageOfInterest, formDiv)
 		case "CenterX":
 			FormDivBasicFieldToField(&(circle_.CenterX), formDiv)
 		case "CenterY":
@@ -793,6 +805,8 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(circlegrid_.Reference), circlegridFormCallback.probe.stageOfInterest, formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(circlegrid_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(circlegrid_.ShapeCategory), circlegridFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 
@@ -872,6 +886,8 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(horizontalaxis_.Name), formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(horizontalaxis_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(horizontalaxis_.ShapeCategory), horizontalaxisFormCallback.probe.stageOfInterest, formDiv)
 		case "AxisHandleBorderLength":
 			FormDivBasicFieldToField(&(horizontalaxis_.AxisHandleBorderLength), formDiv)
 		case "Axis_Length":
@@ -1134,6 +1150,8 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rhombus_.Name), formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(rhombus_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(rhombus_.ShapeCategory), rhombusFormCallback.probe.stageOfInterest, formDiv)
 		case "CenterX":
 			FormDivBasicFieldToField(&(rhombus_.CenterX), formDiv)
 		case "CenterY":
@@ -1283,6 +1301,8 @@ func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(rhombusgrid_.Reference), rhombusgridFormCallback.probe.stageOfInterest, formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(rhombusgrid_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(rhombusgrid_.ShapeCategory), rhombusgridFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 
@@ -1314,6 +1334,83 @@ func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 	}
 
 	fillUpTree(rhombusgridFormCallback.probe)
+}
+func __gong__New__ShapeCategoryFormCallback(
+	shapecategory *models.ShapeCategory,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (shapecategoryFormCallback *ShapeCategoryFormCallback) {
+	shapecategoryFormCallback = new(ShapeCategoryFormCallback)
+	shapecategoryFormCallback.probe = probe
+	shapecategoryFormCallback.shapecategory = shapecategory
+	shapecategoryFormCallback.formGroup = formGroup
+
+	shapecategoryFormCallback.CreationMode = (shapecategory == nil)
+
+	return
+}
+
+type ShapeCategoryFormCallback struct {
+	shapecategory *models.ShapeCategory
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (shapecategoryFormCallback *ShapeCategoryFormCallback) OnSave() {
+
+	log.Println("ShapeCategoryFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	shapecategoryFormCallback.probe.formStage.Checkout()
+
+	if shapecategoryFormCallback.shapecategory == nil {
+		shapecategoryFormCallback.shapecategory = new(models.ShapeCategory).Stage(shapecategoryFormCallback.probe.stageOfInterest)
+	}
+	shapecategory_ := shapecategoryFormCallback.shapecategory
+	_ = shapecategory_
+
+	for _, formDiv := range shapecategoryFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(shapecategory_.Name), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if shapecategoryFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		shapecategory_.Unstage(shapecategoryFormCallback.probe.stageOfInterest)
+	}
+
+	shapecategoryFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.ShapeCategory](
+		shapecategoryFormCallback.probe,
+	)
+	shapecategoryFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if shapecategoryFormCallback.CreationMode || shapecategoryFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		shapecategoryFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(shapecategoryFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__ShapeCategoryFormCallback(
+			nil,
+			shapecategoryFormCallback.probe,
+			newFormGroup,
+		)
+		shapecategory := new(models.ShapeCategory)
+		FillUpForm(shapecategory, newFormGroup, shapecategoryFormCallback.probe)
+		shapecategoryFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(shapecategoryFormCallback.probe)
 }
 func __gong__New__VerticalAxisFormCallback(
 	verticalaxis *models.VerticalAxis,
@@ -1362,6 +1459,8 @@ func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(verticalaxis_.Name), formDiv)
 		case "IsDisplayed":
 			FormDivBasicFieldToField(&(verticalaxis_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(verticalaxis_.ShapeCategory), verticalaxisFormCallback.probe.stageOfInterest, formDiv)
 		case "AxisHandleBorderLength":
 			FormDivBasicFieldToField(&(verticalaxis_.AxisHandleBorderLength), formDiv)
 		case "Axis_Length":

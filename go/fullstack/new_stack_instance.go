@@ -55,6 +55,7 @@ func NewStackInstance(
 	models.SetOrchestratorOnAfterUpdate[models.Parameter](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Rhombus](stage)
 	models.SetOrchestratorOnAfterUpdate[models.RhombusGrid](stage)
+	models.SetOrchestratorOnAfterUpdate[models.ShapeCategory](stage)
 	models.SetOrchestratorOnAfterUpdate[models.VerticalAxis](stage)
 
 	return

@@ -46,6 +46,10 @@ type CircleAPI struct {
 // reverse pointers of slice of poitners to Struct
 type CirclePointersEncoding struct {
 	// insertion for pointer fields encoding declaration
+
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
 }
 
 // CircleDB describes a circle in the database
@@ -291,6 +295,18 @@ func (backRepoCircle *BackRepoCircleStruct) CommitPhaseTwoInstance(backRepo *Bac
 		circleDB.CopyBasicFieldsFromCircle(circle)
 
 		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value circle.ShapeCategory translates to updating the circle.ShapeCategoryID
+		circleDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if circle.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[circle.ShapeCategory]; ok {
+				circleDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				circleDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			circleDB.ShapeCategoryID.Int64 = 0
+			circleDB.ShapeCategoryID.Valid = true
+		}
+
 		query := backRepoCircle.db.Save(&circleDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -404,6 +420,11 @@ func (backRepoCircle *BackRepoCircleStruct) CheckoutPhaseTwoInstance(backRepo *B
 func (circleDB *CircleDB) DecodePointers(backRepo *BackRepoStruct, circle *models.Circle) {
 
 	// insertion point for checkout of pointer encoding
+	// ShapeCategory field
+	circle.ShapeCategory = nil
+	if circleDB.ShapeCategoryID.Int64 != 0 {
+		circle.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(circleDB.ShapeCategoryID.Int64)]
+	}
 	return
 }
 
@@ -788,6 +809,12 @@ func (backRepoCircle *BackRepoCircleStruct) RestorePhaseTwo() {
 		_ = circleDB
 
 		// insertion point for reindexing pointers encoding
+		// reindexing ShapeCategory field
+		if circleDB.ShapeCategoryID.Int64 != 0 {
+			circleDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(circleDB.ShapeCategoryID.Int64)])
+			circleDB.ShapeCategoryID.Valid = true
+		}
+
 		// update databse with new index encoding
 		query := backRepoCircle.db.Model(circleDB).Updates(*circleDB)
 		if query.Error != nil {

@@ -4,6 +4,7 @@ import { CircleAPI } from './circle-api'
 import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -33,6 +34,8 @@ export class Circle {
 	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+	ShapeCategory?: ShapeCategory
+
 }
 
 export function CopyCircleToCircleAPI(circle: Circle, circleAPI: CircleAPI) {
@@ -58,6 +61,13 @@ export function CopyCircleToCircleAPI(circle: Circle, circleAPI: CircleAPI) {
 	circleAPI.Transform = circle.Transform
 
 	// insertion point for pointer fields encoding
+	circleAPI.CirclePointersEncoding.ShapeCategoryID.Valid = true
+	if (circle.ShapeCategory != undefined) {
+		circleAPI.CirclePointersEncoding.ShapeCategoryID.Int64 = circle.ShapeCategory.ID  
+	} else {
+		circleAPI.CirclePointersEncoding.ShapeCategoryID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 }
@@ -89,6 +99,7 @@ export function CopyCircleAPIToCircle(circleAPI: CircleAPI, circle: Circle, fron
 	circle.Transform = circleAPI.Transform
 
 	// insertion point for pointer fields encoding
+	circle.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(circleAPI.CirclePointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

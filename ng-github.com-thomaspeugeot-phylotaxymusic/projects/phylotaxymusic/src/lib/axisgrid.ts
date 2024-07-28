@@ -5,6 +5,7 @@ import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
 import { Axis } from './axis'
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -23,6 +24,8 @@ export class AxisGrid {
 
 	// insertion point for pointers and slices of pointers declarations
 	Reference?: Axis
+
+	ShapeCategory?: ShapeCategory
 
 	Axiss: Array<Axis> = []
 }
@@ -43,6 +46,13 @@ export function CopyAxisGridToAxisGridAPI(axisgrid: AxisGrid, axisgridAPI: AxisG
 		axisgridAPI.AxisGridPointersEncoding.ReferenceID.Int64 = axisgrid.Reference.ID  
 	} else {
 		axisgridAPI.AxisGridPointersEncoding.ReferenceID.Int64 = 0 		
+	}
+
+	axisgridAPI.AxisGridPointersEncoding.ShapeCategoryID.Valid = true
+	if (axisgrid.ShapeCategory != undefined) {
+		axisgridAPI.AxisGridPointersEncoding.ShapeCategoryID.Int64 = axisgrid.ShapeCategory.ID  
+	} else {
+		axisgridAPI.AxisGridPointersEncoding.ShapeCategoryID.Int64 = 0 		
 	}
 
 
@@ -70,6 +80,7 @@ export function CopyAxisGridAPIToAxisGrid(axisgridAPI: AxisGridAPI, axisgrid: Ax
 
 	// insertion point for pointer fields encoding
 	axisgrid.Reference = frontRepo.map_ID_Axis.get(axisgridAPI.AxisGridPointersEncoding.ReferenceID.Int64)
+	axisgrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(axisgridAPI.AxisGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 	axisgrid.Axiss = new Array<Axis>()

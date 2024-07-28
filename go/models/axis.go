@@ -8,7 +8,7 @@ import (
 
 type Axis struct {
 	Name string
-	HideableShape
+	AbstractShape
 
 	Angle  float64
 	Length float64

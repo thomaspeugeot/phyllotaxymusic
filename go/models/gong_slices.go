@@ -161,6 +161,9 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 			}
 		}
 
+	case *ShapeCategory:
+		// insertion point per field
+
 	case *VerticalAxis:
 		// insertion point per field
 
@@ -245,6 +248,9 @@ func (stage *StageStruct) ComputeReverseMaps() {
 			stage.RhombusGrid_Rhombuses_reverseMap[_rhombus] = rhombusgrid
 		}
 	}
+
+	// Compute reverse map for named struct ShapeCategory
+	// insertion point per field
 
 	// Compute reverse map for named struct VerticalAxis
 	// insertion point per field

@@ -5,6 +5,7 @@ import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
 import { Rhombus } from './rhombus'
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -23,6 +24,8 @@ export class RhombusGrid {
 
 	// insertion point for pointers and slices of pointers declarations
 	Reference?: Rhombus
+
+	ShapeCategory?: ShapeCategory
 
 	Rhombuses: Array<Rhombus> = []
 }
@@ -43,6 +46,13 @@ export function CopyRhombusGridToRhombusGridAPI(rhombusgrid: RhombusGrid, rhombu
 		rhombusgridAPI.RhombusGridPointersEncoding.ReferenceID.Int64 = rhombusgrid.Reference.ID  
 	} else {
 		rhombusgridAPI.RhombusGridPointersEncoding.ReferenceID.Int64 = 0 		
+	}
+
+	rhombusgridAPI.RhombusGridPointersEncoding.ShapeCategoryID.Valid = true
+	if (rhombusgrid.ShapeCategory != undefined) {
+		rhombusgridAPI.RhombusGridPointersEncoding.ShapeCategoryID.Int64 = rhombusgrid.ShapeCategory.ID  
+	} else {
+		rhombusgridAPI.RhombusGridPointersEncoding.ShapeCategoryID.Int64 = 0 		
 	}
 
 
@@ -70,6 +80,7 @@ export function CopyRhombusGridAPIToRhombusGrid(rhombusgridAPI: RhombusGridAPI, 
 
 	// insertion point for pointer fields encoding
 	rhombusgrid.Reference = frontRepo.map_ID_Rhombus.get(rhombusgridAPI.RhombusGridPointersEncoding.ReferenceID.Int64)
+	rhombusgrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(rhombusgridAPI.RhombusGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 	rhombusgrid.Rhombuses = new Array<Rhombus>()

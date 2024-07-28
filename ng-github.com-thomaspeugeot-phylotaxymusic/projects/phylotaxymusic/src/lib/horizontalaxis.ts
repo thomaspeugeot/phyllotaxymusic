@@ -4,6 +4,7 @@ import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -31,6 +32,8 @@ export class HorizontalAxis {
 	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+	ShapeCategory?: ShapeCategory
+
 }
 
 export function CopyHorizontalAxisToHorizontalAxisAPI(horizontalaxis: HorizontalAxis, horizontalaxisAPI: HorizontalAxisAPI) {
@@ -54,6 +57,13 @@ export function CopyHorizontalAxisToHorizontalAxisAPI(horizontalaxis: Horizontal
 	horizontalaxisAPI.Transform = horizontalaxis.Transform
 
 	// insertion point for pointer fields encoding
+	horizontalaxisAPI.HorizontalAxisPointersEncoding.ShapeCategoryID.Valid = true
+	if (horizontalaxis.ShapeCategory != undefined) {
+		horizontalaxisAPI.HorizontalAxisPointersEncoding.ShapeCategoryID.Int64 = horizontalaxis.ShapeCategory.ID  
+	} else {
+		horizontalaxisAPI.HorizontalAxisPointersEncoding.ShapeCategoryID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 }
@@ -83,6 +93,7 @@ export function CopyHorizontalAxisAPIToHorizontalAxis(horizontalaxisAPI: Horizon
 	horizontalaxis.Transform = horizontalaxisAPI.Transform
 
 	// insertion point for pointer fields encoding
+	horizontalaxis.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(horizontalaxisAPI.HorizontalAxisPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

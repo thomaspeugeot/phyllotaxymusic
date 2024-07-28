@@ -46,6 +46,10 @@ type BezierAPI struct {
 // reverse pointers of slice of poitners to Struct
 type BezierPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
+
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
 }
 
 // BezierDB describes a bezier in the database
@@ -314,6 +318,18 @@ func (backRepoBezier *BackRepoBezierStruct) CommitPhaseTwoInstance(backRepo *Bac
 		bezierDB.CopyBasicFieldsFromBezier(bezier)
 
 		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value bezier.ShapeCategory translates to updating the bezier.ShapeCategoryID
+		bezierDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if bezier.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[bezier.ShapeCategory]; ok {
+				bezierDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				bezierDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			bezierDB.ShapeCategoryID.Int64 = 0
+			bezierDB.ShapeCategoryID.Valid = true
+		}
+
 		query := backRepoBezier.db.Save(&bezierDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -427,6 +443,11 @@ func (backRepoBezier *BackRepoBezierStruct) CheckoutPhaseTwoInstance(backRepo *B
 func (bezierDB *BezierDB) DecodePointers(backRepo *BackRepoStruct, bezier *models.Bezier) {
 
 	// insertion point for checkout of pointer encoding
+	// ShapeCategory field
+	bezier.ShapeCategory = nil
+	if bezierDB.ShapeCategoryID.Int64 != 0 {
+		bezier.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(bezierDB.ShapeCategoryID.Int64)]
+	}
 	return
 }
 
@@ -859,6 +880,12 @@ func (backRepoBezier *BackRepoBezierStruct) RestorePhaseTwo() {
 		_ = bezierDB
 
 		// insertion point for reindexing pointers encoding
+		// reindexing ShapeCategory field
+		if bezierDB.ShapeCategoryID.Int64 != 0 {
+			bezierDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(bezierDB.ShapeCategoryID.Int64)])
+			bezierDB.ShapeCategoryID.Valid = true
+		}
+
 		// update databse with new index encoding
 		query := backRepoBezier.db.Model(bezierDB).Updates(*bezierDB)
 		if query.Error != nil {

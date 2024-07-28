@@ -285,6 +285,16 @@ func (from *RhombusGrid) CopyBasicFields(to *RhombusGrid) {
 	to.IsDisplayed = from.IsDisplayed
 }
 
+type ShapeCategory_WOP struct {
+	// insertion point
+	Name string
+}
+
+func (from *ShapeCategory) CopyBasicFields(to *ShapeCategory) {
+	// insertion point
+	to.Name = from.Name
+}
+
 type VerticalAxis_WOP struct {
 	// insertion point
 	Name string

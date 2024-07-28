@@ -51,6 +51,10 @@ type RhombusGridPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	ReferenceID sql.NullInt64
 
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
+
 	// field Rhombuses is a slice of pointers to another Struct (optional or 0..1)
 	Rhombuses IntSlice `gorm:"type:TEXT"`
 }
@@ -237,6 +241,18 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseTwoInstance(bac
 			rhombusgridDB.ReferenceID.Valid = true
 		}
 
+		// commit pointer value rhombusgrid.ShapeCategory translates to updating the rhombusgrid.ShapeCategoryID
+		rhombusgridDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if rhombusgrid.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[rhombusgrid.ShapeCategory]; ok {
+				rhombusgridDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				rhombusgridDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			rhombusgridDB.ShapeCategoryID.Int64 = 0
+			rhombusgridDB.ShapeCategoryID.Valid = true
+		}
+
 		// 1. reset
 		rhombusgridDB.RhombusGridPointersEncoding.Rhombuses = make([]int, 0)
 		// 2. encode
@@ -372,6 +388,11 @@ func (rhombusgridDB *RhombusGridDB) DecodePointers(backRepo *BackRepoStruct, rho
 	rhombusgrid.Reference = nil
 	if rhombusgridDB.ReferenceID.Int64 != 0 {
 		rhombusgrid.Reference = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(rhombusgridDB.ReferenceID.Int64)]
+	}
+	// ShapeCategory field
+	rhombusgrid.ShapeCategory = nil
+	if rhombusgridDB.ShapeCategoryID.Int64 != 0 {
+		rhombusgrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(rhombusgridDB.ShapeCategoryID.Int64)]
 	}
 	// This loop redeem rhombusgrid.Rhombuses in the stage from the encode in the back repo
 	// It parses all RhombusDB in the back repo and if the reverse pointer encoding matches the back repo ID
@@ -626,6 +647,12 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) RestorePhaseTwo() {
 		if rhombusgridDB.ReferenceID.Int64 != 0 {
 			rhombusgridDB.ReferenceID.Int64 = int64(BackRepoRhombusid_atBckpTime_newID[uint(rhombusgridDB.ReferenceID.Int64)])
 			rhombusgridDB.ReferenceID.Valid = true
+		}
+
+		// reindexing ShapeCategory field
+		if rhombusgridDB.ShapeCategoryID.Int64 != 0 {
+			rhombusgridDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(rhombusgridDB.ShapeCategoryID.Int64)])
+			rhombusgridDB.ShapeCategoryID.Valid = true
 		}
 
 		// update databse with new index encoding

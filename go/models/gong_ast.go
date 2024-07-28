@@ -325,6 +325,7 @@ var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
 var __gong__map_Parameter = make(map[string]*Parameter)
 var __gong__map_Rhombus = make(map[string]*Rhombus)
 var __gong__map_RhombusGrid = make(map[string]*RhombusGrid)
+var __gong__map_ShapeCategory = make(map[string]*ShapeCategory)
 var __gong__map_VerticalAxis = make(map[string]*VerticalAxis)
 
 // Parser needs to be configured for having the [Name1.Name2] or [pkg.Name1] ...
@@ -542,6 +543,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceRhombusGrid := (&RhombusGrid{Name: instanceName}).Stage(stage)
 										instance = any(instanceRhombusGrid)
 										__gong__map_RhombusGrid[identifier] = instanceRhombusGrid
+									case "ShapeCategory":
+										instanceShapeCategory := (&ShapeCategory{Name: instanceName}).Stage(stage)
+										instance = any(instanceShapeCategory)
+										__gong__map_ShapeCategory[identifier] = instanceShapeCategory
 									case "VerticalAxis":
 										instanceVerticalAxis := (&VerticalAxis{Name: instanceName}).Stage(stage)
 										instance = any(instanceVerticalAxis)
@@ -623,6 +628,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							// insertion point for date assign code
 							}
 						case "RhombusGrid":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "ShapeCategory":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -728,6 +737,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Rhombus[targetIdentifier]
 							__gong__map_RhombusGrid[identifier].Rhombuses =
 								append(__gong__map_RhombusGrid[identifier].Rhombuses, target)
+						}
+					case "ShapeCategory":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
 						}
 					case "VerticalAxis":
 						switch fieldName {
@@ -1306,6 +1319,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_RhombusGrid[identifier].Name = fielValue
 				}
+			case "ShapeCategory":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_ShapeCategory[identifier].Name = fielValue
+				}
 			case "VerticalAxis":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1393,6 +1414,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Axis[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_Axis[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "AxisGrid":
 				switch fieldName {
@@ -1407,6 +1431,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_AxisGrid[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_AxisGrid[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "Bezier":
 				switch fieldName {
@@ -1418,6 +1445,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Bezier[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_Bezier[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "BezierGrid":
 				switch fieldName {
@@ -1432,6 +1462,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_BezierGrid[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_BezierGrid[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "BezierGridStack":
 				switch fieldName {
@@ -1443,6 +1476,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_BezierGridStack[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_BezierGridStack[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "Circle":
 				switch fieldName {
@@ -1454,6 +1490,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Circle[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_Circle[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				case "HasBespokeRadius":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)
@@ -1475,6 +1514,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_CircleGrid[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_CircleGrid[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "HorizontalAxis":
 				switch fieldName {
@@ -1486,6 +1528,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_HorizontalAxis[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_HorizontalAxis[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "Parameter":
 				switch fieldName {
@@ -1597,6 +1642,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Rhombus[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_Rhombus[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "RhombusGrid":
 				switch fieldName {
@@ -1611,6 +1659,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_RhombusGrid[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_RhombusGrid[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
+				}
+			case "ShapeCategory":
+				switch fieldName {
+				// insertion point for field dependant code
 				}
 			case "VerticalAxis":
 				switch fieldName {
@@ -1622,6 +1677,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_VerticalAxis[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_VerticalAxis[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			}
 		case *ast.SelectorExpr:
@@ -1692,6 +1750,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "RhombusGrid":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "ShapeCategory":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

@@ -18,6 +18,7 @@ import { FrontRepo, FrontRepoService } from './front-repo.service';
 
 // insertion point for imports
 import { CircleAPI } from './circle-api'
+import { ShapeCategoryAPI } from './shapecategory-api'
 
 @Injectable({
   providedIn: 'root'

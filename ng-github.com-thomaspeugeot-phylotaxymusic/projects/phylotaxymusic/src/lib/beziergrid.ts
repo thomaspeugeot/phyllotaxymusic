@@ -5,6 +5,7 @@ import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
 import { Bezier } from './bezier'
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -23,6 +24,8 @@ export class BezierGrid {
 
 	// insertion point for pointers and slices of pointers declarations
 	Reference?: Bezier
+
+	ShapeCategory?: ShapeCategory
 
 	Beziers: Array<Bezier> = []
 }
@@ -43,6 +46,13 @@ export function CopyBezierGridToBezierGridAPI(beziergrid: BezierGrid, beziergrid
 		beziergridAPI.BezierGridPointersEncoding.ReferenceID.Int64 = beziergrid.Reference.ID  
 	} else {
 		beziergridAPI.BezierGridPointersEncoding.ReferenceID.Int64 = 0 		
+	}
+
+	beziergridAPI.BezierGridPointersEncoding.ShapeCategoryID.Valid = true
+	if (beziergrid.ShapeCategory != undefined) {
+		beziergridAPI.BezierGridPointersEncoding.ShapeCategoryID.Int64 = beziergrid.ShapeCategory.ID  
+	} else {
+		beziergridAPI.BezierGridPointersEncoding.ShapeCategoryID.Int64 = 0 		
 	}
 
 
@@ -70,6 +80,7 @@ export function CopyBezierGridAPIToBezierGrid(beziergridAPI: BezierGridAPI, bezi
 
 	// insertion point for pointer fields encoding
 	beziergrid.Reference = frontRepo.map_ID_Bezier.get(beziergridAPI.BezierGridPointersEncoding.ReferenceID.Int64)
+	beziergrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(beziergridAPI.BezierGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 	beziergrid.Beziers = new Array<Bezier>()

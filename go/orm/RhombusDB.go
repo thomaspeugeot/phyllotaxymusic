@@ -46,6 +46,10 @@ type RhombusAPI struct {
 // reverse pointers of slice of poitners to Struct
 type RhombusPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
+
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
 }
 
 // RhombusDB describes a rhombus in the database
@@ -296,6 +300,18 @@ func (backRepoRhombus *BackRepoRhombusStruct) CommitPhaseTwoInstance(backRepo *B
 		rhombusDB.CopyBasicFieldsFromRhombus(rhombus)
 
 		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value rhombus.ShapeCategory translates to updating the rhombus.ShapeCategoryID
+		rhombusDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if rhombus.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[rhombus.ShapeCategory]; ok {
+				rhombusDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				rhombusDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			rhombusDB.ShapeCategoryID.Int64 = 0
+			rhombusDB.ShapeCategoryID.Valid = true
+		}
+
 		query := backRepoRhombus.db.Save(&rhombusDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -409,6 +425,11 @@ func (backRepoRhombus *BackRepoRhombusStruct) CheckoutPhaseTwoInstance(backRepo 
 func (rhombusDB *RhombusDB) DecodePointers(backRepo *BackRepoStruct, rhombus *models.Rhombus) {
 
 	// insertion point for checkout of pointer encoding
+	// ShapeCategory field
+	rhombus.ShapeCategory = nil
+	if rhombusDB.ShapeCategoryID.Int64 != 0 {
+		rhombus.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(rhombusDB.ShapeCategoryID.Int64)]
+	}
 	return
 }
 
@@ -805,6 +826,12 @@ func (backRepoRhombus *BackRepoRhombusStruct) RestorePhaseTwo() {
 		_ = rhombusDB
 
 		// insertion point for reindexing pointers encoding
+		// reindexing ShapeCategory field
+		if rhombusDB.ShapeCategoryID.Int64 != 0 {
+			rhombusDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(rhombusDB.ShapeCategoryID.Int64)])
+			rhombusDB.ShapeCategoryID.Valid = true
+		}
+
 		// update databse with new index encoding
 		query := backRepoRhombus.db.Model(rhombusDB).Updates(*rhombusDB)
 		if query.Error != nil {

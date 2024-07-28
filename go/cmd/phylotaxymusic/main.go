@@ -59,17 +59,20 @@ func main() {
 
 	parameter := (*parameters)["Reference"]
 
+	tree := new(phylotaxymusic_tree.Tree)
+	tree.TreeStack = gongtree_stack
+
 	parameterImpl := new(ParameterImpl)
 	parameterImpl.parameter = parameter
 	parameterImpl.gongsvgStage = gongsvg_stack.Stage
 	parameterImpl.phylotaxymusicStage = phylotaxymusicStack.Stage
+	parameterImpl.tree = tree
+
 	parameter.Impl = parameterImpl
 
 	phylotaxymusic_models.GeneratorSingloton.Impl = parameterImpl
 	parameterImpl.Generate()
 
-	tree := new(phylotaxymusic_tree.Tree)
-	tree.TreeStack = gongtree_stack
 	tree.Generate(parameter)
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
@@ -83,12 +86,14 @@ type ParameterImpl struct {
 	gongsvgStage        *gongsvg_models.StageStruct
 	phylotaxymusicStage *phylotaxymusic_models.StageStruct
 	parameter           *phylotaxymusic_models.Parameter
+	tree                *phylotaxymusic_tree.Tree
 }
 
 // Generate implements models.GeneratorInterface.
 func (parameterImpl *ParameterImpl) Generate() {
 	parameterImpl.parameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	parameterImpl.parameter.GenerateSvg(parameterImpl.gongsvgStage)
+	parameterImpl.tree.Generate(parameterImpl.parameter)
 	parameterImpl.phylotaxymusicStage.Commit()
 }
 
@@ -99,4 +104,5 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 
 	updatedParameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	parameterImpl.parameter.GenerateSvg(parameterImpl.gongsvgStage)
+	parameterImpl.tree.Generate(parameterImpl.parameter)
 }

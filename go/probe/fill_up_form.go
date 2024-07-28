@@ -24,6 +24,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		BasicFieldtoForm("Angle", instanceWithInferedType.Angle, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Length", instanceWithInferedType.Length, instanceWithInferedType, probe.formStage, formGroup,
@@ -78,6 +79,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("Reference", instanceWithInferedType.Reference, formGroup, probe)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		AssociationSliceToForm("Axiss", instanceWithInferedType, &instanceWithInferedType.Axiss, formGroup, probe)
 
 	case *models.Bezier:
@@ -86,6 +88,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		BasicFieldtoForm("StartX", instanceWithInferedType.StartX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("StartY", instanceWithInferedType.StartY, instanceWithInferedType, probe.formStage, formGroup,
@@ -148,6 +151,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("Reference", instanceWithInferedType.Reference, formGroup, probe)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		AssociationSliceToForm("Beziers", instanceWithInferedType, &instanceWithInferedType.Beziers, formGroup, probe)
 		{
 			var rf models.ReverseField
@@ -178,6 +182,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		AssociationSliceToForm("BezierGrids", instanceWithInferedType, &instanceWithInferedType.BezierGrids, formGroup, probe)
 
 	case *models.Circle:
@@ -186,6 +191,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		BasicFieldtoForm("CenterX", instanceWithInferedType.CenterX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("CenterY", instanceWithInferedType.CenterY, instanceWithInferedType, probe.formStage, formGroup,
@@ -240,6 +246,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("Reference", instanceWithInferedType.Reference, formGroup, probe)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		AssociationSliceToForm("Circles", instanceWithInferedType, &instanceWithInferedType.Circles, formGroup, probe)
 
 	case *models.HorizontalAxis:
@@ -248,6 +255,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		BasicFieldtoForm("AxisHandleBorderLength", instanceWithInferedType.AxisHandleBorderLength, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Axis_Length", instanceWithInferedType.Axis_Length, instanceWithInferedType, probe.formStage, formGroup,
@@ -334,6 +342,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		BasicFieldtoForm("CenterX", instanceWithInferedType.CenterX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("CenterY", instanceWithInferedType.CenterY, instanceWithInferedType, probe.formStage, formGroup,
@@ -390,7 +399,13 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("Reference", instanceWithInferedType.Reference, formGroup, probe)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		AssociationSliceToForm("Rhombuses", instanceWithInferedType, &instanceWithInferedType.Rhombuses, formGroup, probe)
+
+	case *models.ShapeCategory:
+		// insertion point
+		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 
 	case *models.VerticalAxis:
 		// insertion point
@@ -398,6 +413,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		BasicFieldtoForm("AxisHandleBorderLength", instanceWithInferedType.AxisHandleBorderLength, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Axis_Length", instanceWithInferedType.Axis_Length, instanceWithInferedType, probe.formStage, formGroup,

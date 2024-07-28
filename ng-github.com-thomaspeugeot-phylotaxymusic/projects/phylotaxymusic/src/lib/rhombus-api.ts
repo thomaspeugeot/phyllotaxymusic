@@ -1,4 +1,5 @@
 // insertion point for imports
+import { ShapeCategoryAPI } from './shapecategory-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -35,4 +36,6 @@ export class RhombusAPI {
 
 export class RhombusPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	ShapeCategoryID: NullInt64 = new NullInt64 // if pointer is null, ShapeCategory.ID = 0
+
 }

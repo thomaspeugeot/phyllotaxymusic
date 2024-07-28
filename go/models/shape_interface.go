@@ -10,6 +10,7 @@ type Shape interface {
 	gongtree_models.NodeImplInterface
 	GetName() string
 	GetIsDisplayed() bool
+	GetShapeCategory() *ShapeCategory
 	Draw(gongsvgStage *gongsvg_models.StageStruct,
 		layer *gongsvg_models.Layer,
 		parameter *Parameter)

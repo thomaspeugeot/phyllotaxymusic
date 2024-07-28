@@ -17,6 +17,7 @@ import { BezierGridStack, CopyBezierGridStackToBezierGridStackAPI } from './bezi
 import { FrontRepo, FrontRepoService } from './front-repo.service';
 
 // insertion point for imports
+import { ShapeCategoryAPI } from './shapecategory-api'
 import { BezierGridAPI } from './beziergrid-api'
 
 @Injectable({

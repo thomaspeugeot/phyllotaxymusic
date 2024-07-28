@@ -11,7 +11,7 @@ import (
 type Rhombus struct {
 	Name string
 
-	HideableShape
+	AbstractShape
 
 	CenterX, CenterY float64
 

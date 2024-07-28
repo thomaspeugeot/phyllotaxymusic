@@ -38,6 +38,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *RhombusGrid:
 		ok = stage.IsStagedRhombusGrid(target)
 
+	case *ShapeCategory:
+		ok = stage.IsStagedShapeCategory(target)
+
 	case *VerticalAxis:
 		ok = stage.IsStagedVerticalAxis(target)
 
@@ -125,6 +128,13 @@ func (stage *StageStruct) IsStagedRhombusGrid(rhombusgrid *RhombusGrid) (ok bool
 	return
 }
 
+func (stage *StageStruct) IsStagedShapeCategory(shapecategory *ShapeCategory) (ok bool) {
+
+	_, ok = stage.ShapeCategorys[shapecategory]
+
+	return
+}
+
 func (stage *StageStruct) IsStagedVerticalAxis(verticalaxis *VerticalAxis) (ok bool) {
 
 	_, ok = stage.VerticalAxiss[verticalaxis]
@@ -173,6 +183,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *RhombusGrid:
 		stage.StageBranchRhombusGrid(target)
 
+	case *ShapeCategory:
+		stage.StageBranchShapeCategory(target)
+
 	case *VerticalAxis:
 		stage.StageBranchVerticalAxis(target)
 
@@ -192,6 +205,9 @@ func (stage *StageStruct) StageBranchAxis(axis *Axis) {
 	axis.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if axis.ShapeCategory != nil {
+		StageBranch(stage, axis.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -209,6 +225,9 @@ func (stage *StageStruct) StageBranchAxisGrid(axisgrid *AxisGrid) {
 	//insertion point for the staging of instances referenced by pointers
 	if axisgrid.Reference != nil {
 		StageBranch(stage, axisgrid.Reference)
+	}
+	if axisgrid.ShapeCategory != nil {
+		StageBranch(stage, axisgrid.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -228,6 +247,9 @@ func (stage *StageStruct) StageBranchBezier(bezier *Bezier) {
 	bezier.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if bezier.ShapeCategory != nil {
+		StageBranch(stage, bezier.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -245,6 +267,9 @@ func (stage *StageStruct) StageBranchBezierGrid(beziergrid *BezierGrid) {
 	//insertion point for the staging of instances referenced by pointers
 	if beziergrid.Reference != nil {
 		StageBranch(stage, beziergrid.Reference)
+	}
+	if beziergrid.ShapeCategory != nil {
+		StageBranch(stage, beziergrid.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -264,6 +289,9 @@ func (stage *StageStruct) StageBranchBezierGridStack(beziergridstack *BezierGrid
 	beziergridstack.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if beziergridstack.ShapeCategory != nil {
+		StageBranch(stage, beziergridstack.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _beziergrid := range beziergridstack.BezierGrids {
@@ -282,6 +310,9 @@ func (stage *StageStruct) StageBranchCircle(circle *Circle) {
 	circle.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if circle.ShapeCategory != nil {
+		StageBranch(stage, circle.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -299,6 +330,9 @@ func (stage *StageStruct) StageBranchCircleGrid(circlegrid *CircleGrid) {
 	//insertion point for the staging of instances referenced by pointers
 	if circlegrid.Reference != nil {
 		StageBranch(stage, circlegrid.Reference)
+	}
+	if circlegrid.ShapeCategory != nil {
+		StageBranch(stage, circlegrid.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -318,6 +352,9 @@ func (stage *StageStruct) StageBranchHorizontalAxis(horizontalaxis *HorizontalAx
 	horizontalaxis.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if horizontalaxis.ShapeCategory != nil {
+		StageBranch(stage, horizontalaxis.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -444,6 +481,9 @@ func (stage *StageStruct) StageBranchRhombus(rhombus *Rhombus) {
 	rhombus.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if rhombus.ShapeCategory != nil {
+		StageBranch(stage, rhombus.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -462,11 +502,29 @@ func (stage *StageStruct) StageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
 	if rhombusgrid.Reference != nil {
 		StageBranch(stage, rhombusgrid.Reference)
 	}
+	if rhombusgrid.ShapeCategory != nil {
+		StageBranch(stage, rhombusgrid.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _rhombus := range rhombusgrid.Rhombuses {
 		StageBranch(stage, _rhombus)
 	}
+
+}
+
+func (stage *StageStruct) StageBranchShapeCategory(shapecategory *ShapeCategory) {
+
+	// check if instance is already staged
+	if IsStaged(stage, shapecategory) {
+		return
+	}
+
+	shapecategory.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -480,6 +538,9 @@ func (stage *StageStruct) StageBranchVerticalAxis(verticalaxis *VerticalAxis) {
 	verticalaxis.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if verticalaxis.ShapeCategory != nil {
+		StageBranch(stage, verticalaxis.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -540,6 +601,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchRhombusGrid(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
+	case *ShapeCategory:
+		toT := CopyBranchShapeCategory(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *VerticalAxis:
 		toT := CopyBranchVerticalAxis(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -564,6 +629,9 @@ func CopyBranchAxis(mapOrigCopy map[any]any, axisFrom *Axis) (axisTo *Axis) {
 	axisFrom.CopyBasicFields(axisTo)
 
 	//insertion point for the staging of instances referenced by pointers
+	if axisFrom.ShapeCategory != nil {
+		axisTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, axisFrom.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -585,6 +653,9 @@ func CopyBranchAxisGrid(mapOrigCopy map[any]any, axisgridFrom *AxisGrid) (axisgr
 	//insertion point for the staging of instances referenced by pointers
 	if axisgridFrom.Reference != nil {
 		axisgridTo.Reference = CopyBranchAxis(mapOrigCopy, axisgridFrom.Reference)
+	}
+	if axisgridFrom.ShapeCategory != nil {
+		axisgridTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, axisgridFrom.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -608,6 +679,9 @@ func CopyBranchBezier(mapOrigCopy map[any]any, bezierFrom *Bezier) (bezierTo *Be
 	bezierFrom.CopyBasicFields(bezierTo)
 
 	//insertion point for the staging of instances referenced by pointers
+	if bezierFrom.ShapeCategory != nil {
+		bezierTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, bezierFrom.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -629,6 +703,9 @@ func CopyBranchBezierGrid(mapOrigCopy map[any]any, beziergridFrom *BezierGrid) (
 	//insertion point for the staging of instances referenced by pointers
 	if beziergridFrom.Reference != nil {
 		beziergridTo.Reference = CopyBranchBezier(mapOrigCopy, beziergridFrom.Reference)
+	}
+	if beziergridFrom.ShapeCategory != nil {
+		beziergridTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, beziergridFrom.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -652,6 +729,9 @@ func CopyBranchBezierGridStack(mapOrigCopy map[any]any, beziergridstackFrom *Bez
 	beziergridstackFrom.CopyBasicFields(beziergridstackTo)
 
 	//insertion point for the staging of instances referenced by pointers
+	if beziergridstackFrom.ShapeCategory != nil {
+		beziergridstackTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, beziergridstackFrom.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _beziergrid := range beziergridstackFrom.BezierGrids {
@@ -674,6 +754,9 @@ func CopyBranchCircle(mapOrigCopy map[any]any, circleFrom *Circle) (circleTo *Ci
 	circleFrom.CopyBasicFields(circleTo)
 
 	//insertion point for the staging of instances referenced by pointers
+	if circleFrom.ShapeCategory != nil {
+		circleTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, circleFrom.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -695,6 +778,9 @@ func CopyBranchCircleGrid(mapOrigCopy map[any]any, circlegridFrom *CircleGrid) (
 	//insertion point for the staging of instances referenced by pointers
 	if circlegridFrom.Reference != nil {
 		circlegridTo.Reference = CopyBranchCircle(mapOrigCopy, circlegridFrom.Reference)
+	}
+	if circlegridFrom.ShapeCategory != nil {
+		circlegridTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, circlegridFrom.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -718,6 +804,9 @@ func CopyBranchHorizontalAxis(mapOrigCopy map[any]any, horizontalaxisFrom *Horiz
 	horizontalaxisFrom.CopyBasicFields(horizontalaxisTo)
 
 	//insertion point for the staging of instances referenced by pointers
+	if horizontalaxisFrom.ShapeCategory != nil {
+		horizontalaxisTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, horizontalaxisFrom.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -852,6 +941,9 @@ func CopyBranchRhombus(mapOrigCopy map[any]any, rhombusFrom *Rhombus) (rhombusTo
 	rhombusFrom.CopyBasicFields(rhombusTo)
 
 	//insertion point for the staging of instances referenced by pointers
+	if rhombusFrom.ShapeCategory != nil {
+		rhombusTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, rhombusFrom.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -874,11 +966,33 @@ func CopyBranchRhombusGrid(mapOrigCopy map[any]any, rhombusgridFrom *RhombusGrid
 	if rhombusgridFrom.Reference != nil {
 		rhombusgridTo.Reference = CopyBranchRhombus(mapOrigCopy, rhombusgridFrom.Reference)
 	}
+	if rhombusgridFrom.ShapeCategory != nil {
+		rhombusgridTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, rhombusgridFrom.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _rhombus := range rhombusgridFrom.Rhombuses {
 		rhombusgridTo.Rhombuses = append(rhombusgridTo.Rhombuses, CopyBranchRhombus(mapOrigCopy, _rhombus))
 	}
+
+	return
+}
+
+func CopyBranchShapeCategory(mapOrigCopy map[any]any, shapecategoryFrom *ShapeCategory) (shapecategoryTo *ShapeCategory) {
+
+	// shapecategoryFrom has already been copied
+	if _shapecategoryTo, ok := mapOrigCopy[shapecategoryFrom]; ok {
+		shapecategoryTo = _shapecategoryTo.(*ShapeCategory)
+		return
+	}
+
+	shapecategoryTo = new(ShapeCategory)
+	mapOrigCopy[shapecategoryFrom] = shapecategoryTo
+	shapecategoryFrom.CopyBasicFields(shapecategoryTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 	return
 }
@@ -896,6 +1010,9 @@ func CopyBranchVerticalAxis(mapOrigCopy map[any]any, verticalaxisFrom *VerticalA
 	verticalaxisFrom.CopyBasicFields(verticalaxisTo)
 
 	//insertion point for the staging of instances referenced by pointers
+	if verticalaxisFrom.ShapeCategory != nil {
+		verticalaxisTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, verticalaxisFrom.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -943,6 +1060,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *RhombusGrid:
 		stage.UnstageBranchRhombusGrid(target)
 
+	case *ShapeCategory:
+		stage.UnstageBranchShapeCategory(target)
+
 	case *VerticalAxis:
 		stage.UnstageBranchVerticalAxis(target)
 
@@ -962,6 +1082,9 @@ func (stage *StageStruct) UnstageBranchAxis(axis *Axis) {
 	axis.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if axis.ShapeCategory != nil {
+		UnstageBranch(stage, axis.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -979,6 +1102,9 @@ func (stage *StageStruct) UnstageBranchAxisGrid(axisgrid *AxisGrid) {
 	//insertion point for the staging of instances referenced by pointers
 	if axisgrid.Reference != nil {
 		UnstageBranch(stage, axisgrid.Reference)
+	}
+	if axisgrid.ShapeCategory != nil {
+		UnstageBranch(stage, axisgrid.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -998,6 +1124,9 @@ func (stage *StageStruct) UnstageBranchBezier(bezier *Bezier) {
 	bezier.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if bezier.ShapeCategory != nil {
+		UnstageBranch(stage, bezier.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -1015,6 +1144,9 @@ func (stage *StageStruct) UnstageBranchBezierGrid(beziergrid *BezierGrid) {
 	//insertion point for the staging of instances referenced by pointers
 	if beziergrid.Reference != nil {
 		UnstageBranch(stage, beziergrid.Reference)
+	}
+	if beziergrid.ShapeCategory != nil {
+		UnstageBranch(stage, beziergrid.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -1034,6 +1166,9 @@ func (stage *StageStruct) UnstageBranchBezierGridStack(beziergridstack *BezierGr
 	beziergridstack.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if beziergridstack.ShapeCategory != nil {
+		UnstageBranch(stage, beziergridstack.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _beziergrid := range beziergridstack.BezierGrids {
@@ -1052,6 +1187,9 @@ func (stage *StageStruct) UnstageBranchCircle(circle *Circle) {
 	circle.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if circle.ShapeCategory != nil {
+		UnstageBranch(stage, circle.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -1069,6 +1207,9 @@ func (stage *StageStruct) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
 	//insertion point for the staging of instances referenced by pointers
 	if circlegrid.Reference != nil {
 		UnstageBranch(stage, circlegrid.Reference)
+	}
+	if circlegrid.ShapeCategory != nil {
+		UnstageBranch(stage, circlegrid.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -1088,6 +1229,9 @@ func (stage *StageStruct) UnstageBranchHorizontalAxis(horizontalaxis *Horizontal
 	horizontalaxis.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if horizontalaxis.ShapeCategory != nil {
+		UnstageBranch(stage, horizontalaxis.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -1214,6 +1358,9 @@ func (stage *StageStruct) UnstageBranchRhombus(rhombus *Rhombus) {
 	rhombus.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if rhombus.ShapeCategory != nil {
+		UnstageBranch(stage, rhombus.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -1232,11 +1379,29 @@ func (stage *StageStruct) UnstageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
 	if rhombusgrid.Reference != nil {
 		UnstageBranch(stage, rhombusgrid.Reference)
 	}
+	if rhombusgrid.ShapeCategory != nil {
+		UnstageBranch(stage, rhombusgrid.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _rhombus := range rhombusgrid.Rhombuses {
 		UnstageBranch(stage, _rhombus)
 	}
+
+}
+
+func (stage *StageStruct) UnstageBranchShapeCategory(shapecategory *ShapeCategory) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, shapecategory) {
+		return
+	}
+
+	shapecategory.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -1250,6 +1415,9 @@ func (stage *StageStruct) UnstageBranchVerticalAxis(verticalaxis *VerticalAxis) 
 	verticalaxis.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if verticalaxis.ShapeCategory != nil {
+		UnstageBranch(stage, verticalaxis.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 

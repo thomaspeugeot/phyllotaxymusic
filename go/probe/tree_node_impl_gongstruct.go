@@ -85,6 +85,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "RhombusGrid" {
 		fillUpTable[models.RhombusGrid](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "ShapeCategory" {
+		fillUpTable[models.ShapeCategory](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "VerticalAxis" {
 		fillUpTable[models.VerticalAxis](nodeImplGongstruct.probe)
 	}

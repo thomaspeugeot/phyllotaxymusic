@@ -172,6 +172,16 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "ShapeCategory":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.ShapeCategory](probe.stageOfInterest)
+			for _shapecategory := range set {
+				nodeInstance := (&tree.Node{Name: _shapecategory.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_shapecategory, "ShapeCategory", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "VerticalAxis":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.VerticalAxis](probe.stageOfInterest)

@@ -7,7 +7,7 @@ import (
 type VerticalAxis struct {
 	Name string
 
-	HideableShape
+	AbstractShape
 	AxisHandleBorderLength float64
 	Axis_Length            float64
 

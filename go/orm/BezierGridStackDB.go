@@ -47,6 +47,10 @@ type BezierGridStackAPI struct {
 type BezierGridStackPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
 
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
+
 	// field BezierGrids is a slice of pointers to another Struct (optional or 0..1)
 	BezierGrids IntSlice `gorm:"type:TEXT"`
 }
@@ -221,6 +225,18 @@ func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) CommitPhaseTwoInst
 		beziergridstackDB.CopyBasicFieldsFromBezierGridStack(beziergridstack)
 
 		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value beziergridstack.ShapeCategory translates to updating the beziergridstack.ShapeCategoryID
+		beziergridstackDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if beziergridstack.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[beziergridstack.ShapeCategory]; ok {
+				beziergridstackDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				beziergridstackDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			beziergridstackDB.ShapeCategoryID.Int64 = 0
+			beziergridstackDB.ShapeCategoryID.Valid = true
+		}
+
 		// 1. reset
 		beziergridstackDB.BezierGridStackPointersEncoding.BezierGrids = make([]int, 0)
 		// 2. encode
@@ -352,6 +368,11 @@ func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) CheckoutPhaseTwoIn
 func (beziergridstackDB *BezierGridStackDB) DecodePointers(backRepo *BackRepoStruct, beziergridstack *models.BezierGridStack) {
 
 	// insertion point for checkout of pointer encoding
+	// ShapeCategory field
+	beziergridstack.ShapeCategory = nil
+	if beziergridstackDB.ShapeCategoryID.Int64 != 0 {
+		beziergridstack.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(beziergridstackDB.ShapeCategoryID.Int64)]
+	}
 	// This loop redeem beziergridstack.BezierGrids in the stage from the encode in the back repo
 	// It parses all BezierGridDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance
@@ -601,6 +622,12 @@ func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) RestorePhaseTwo() 
 		_ = beziergridstackDB
 
 		// insertion point for reindexing pointers encoding
+		// reindexing ShapeCategory field
+		if beziergridstackDB.ShapeCategoryID.Int64 != 0 {
+			beziergridstackDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(beziergridstackDB.ShapeCategoryID.Int64)])
+			beziergridstackDB.ShapeCategoryID.Valid = true
+		}
+
 		// update databse with new index encoding
 		query := backRepoBezierGridStack.db.Model(beziergridstackDB).Updates(*beziergridstackDB)
 		if query.Error != nil {

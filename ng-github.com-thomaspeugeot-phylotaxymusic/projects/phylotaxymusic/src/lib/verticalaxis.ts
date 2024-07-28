@@ -4,6 +4,7 @@ import { VerticalAxisAPI } from './verticalaxis-api'
 import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -31,6 +32,8 @@ export class VerticalAxis {
 	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+	ShapeCategory?: ShapeCategory
+
 }
 
 export function CopyVerticalAxisToVerticalAxisAPI(verticalaxis: VerticalAxis, verticalaxisAPI: VerticalAxisAPI) {
@@ -54,6 +57,13 @@ export function CopyVerticalAxisToVerticalAxisAPI(verticalaxis: VerticalAxis, ve
 	verticalaxisAPI.Transform = verticalaxis.Transform
 
 	// insertion point for pointer fields encoding
+	verticalaxisAPI.VerticalAxisPointersEncoding.ShapeCategoryID.Valid = true
+	if (verticalaxis.ShapeCategory != undefined) {
+		verticalaxisAPI.VerticalAxisPointersEncoding.ShapeCategoryID.Int64 = verticalaxis.ShapeCategory.ID  
+	} else {
+		verticalaxisAPI.VerticalAxisPointersEncoding.ShapeCategoryID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 }
@@ -83,6 +93,7 @@ export function CopyVerticalAxisAPIToVerticalAxis(verticalaxisAPI: VerticalAxisA
 	verticalaxis.Transform = verticalaxisAPI.Transform
 
 	// insertion point for pointer fields encoding
+	verticalaxis.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(verticalaxisAPI.VerticalAxisPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

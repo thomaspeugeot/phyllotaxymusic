@@ -46,6 +46,10 @@ type VerticalAxisAPI struct {
 // reverse pointers of slice of poitners to Struct
 type VerticalAxisPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
+
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
 }
 
 // VerticalAxisDB describes a verticalaxis in the database
@@ -278,6 +282,18 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitPhaseTwoInstance(b
 		verticalaxisDB.CopyBasicFieldsFromVerticalAxis(verticalaxis)
 
 		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value verticalaxis.ShapeCategory translates to updating the verticalaxis.ShapeCategoryID
+		verticalaxisDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if verticalaxis.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[verticalaxis.ShapeCategory]; ok {
+				verticalaxisDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				verticalaxisDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			verticalaxisDB.ShapeCategoryID.Int64 = 0
+			verticalaxisDB.ShapeCategoryID.Valid = true
+		}
+
 		query := backRepoVerticalAxis.db.Save(&verticalaxisDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -391,6 +407,11 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CheckoutPhaseTwoInstance
 func (verticalaxisDB *VerticalAxisDB) DecodePointers(backRepo *BackRepoStruct, verticalaxis *models.VerticalAxis) {
 
 	// insertion point for checkout of pointer encoding
+	// ShapeCategory field
+	verticalaxis.ShapeCategory = nil
+	if verticalaxisDB.ShapeCategoryID.Int64 != 0 {
+		verticalaxis.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(verticalaxisDB.ShapeCategoryID.Int64)]
+	}
 	return
 }
 
@@ -751,6 +772,12 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) RestorePhaseTwo() {
 		_ = verticalaxisDB
 
 		// insertion point for reindexing pointers encoding
+		// reindexing ShapeCategory field
+		if verticalaxisDB.ShapeCategoryID.Int64 != 0 {
+			verticalaxisDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(verticalaxisDB.ShapeCategoryID.Int64)])
+			verticalaxisDB.ShapeCategoryID.Valid = true
+		}
+
 		// update databse with new index encoding
 		query := backRepoVerticalAxis.db.Model(verticalaxisDB).Updates(*verticalaxisDB)
 		if query.Error != nil {

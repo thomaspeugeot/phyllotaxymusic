@@ -51,6 +51,10 @@ type AxisGridPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	ReferenceID sql.NullInt64
 
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
+
 	// field Axiss is a slice of pointers to another Struct (optional or 0..1)
 	Axiss IntSlice `gorm:"type:TEXT"`
 }
@@ -237,6 +241,18 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitPhaseTwoInstance(backRepo 
 			axisgridDB.ReferenceID.Valid = true
 		}
 
+		// commit pointer value axisgrid.ShapeCategory translates to updating the axisgrid.ShapeCategoryID
+		axisgridDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if axisgrid.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[axisgrid.ShapeCategory]; ok {
+				axisgridDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				axisgridDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			axisgridDB.ShapeCategoryID.Int64 = 0
+			axisgridDB.ShapeCategoryID.Valid = true
+		}
+
 		// 1. reset
 		axisgridDB.AxisGridPointersEncoding.Axiss = make([]int, 0)
 		// 2. encode
@@ -372,6 +388,11 @@ func (axisgridDB *AxisGridDB) DecodePointers(backRepo *BackRepoStruct, axisgrid 
 	axisgrid.Reference = nil
 	if axisgridDB.ReferenceID.Int64 != 0 {
 		axisgrid.Reference = backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(axisgridDB.ReferenceID.Int64)]
+	}
+	// ShapeCategory field
+	axisgrid.ShapeCategory = nil
+	if axisgridDB.ShapeCategoryID.Int64 != 0 {
+		axisgrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(axisgridDB.ShapeCategoryID.Int64)]
 	}
 	// This loop redeem axisgrid.Axiss in the stage from the encode in the back repo
 	// It parses all AxisDB in the back repo and if the reverse pointer encoding matches the back repo ID
@@ -626,6 +647,12 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) RestorePhaseTwo() {
 		if axisgridDB.ReferenceID.Int64 != 0 {
 			axisgridDB.ReferenceID.Int64 = int64(BackRepoAxisid_atBckpTime_newID[uint(axisgridDB.ReferenceID.Int64)])
 			axisgridDB.ReferenceID.Valid = true
+		}
+
+		// reindexing ShapeCategory field
+		if axisgridDB.ShapeCategoryID.Int64 != 0 {
+			axisgridDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(axisgridDB.ShapeCategoryID.Int64)])
+			axisgridDB.ShapeCategoryID.Valid = true
 		}
 
 		// update databse with new index encoding

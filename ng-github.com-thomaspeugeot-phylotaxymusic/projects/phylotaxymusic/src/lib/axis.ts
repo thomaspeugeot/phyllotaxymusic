@@ -4,6 +4,7 @@ import { AxisAPI } from './axis-api'
 import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -33,6 +34,8 @@ export class Axis {
 	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+	ShapeCategory?: ShapeCategory
+
 }
 
 export function CopyAxisToAxisAPI(axis: Axis, axisAPI: AxisAPI) {
@@ -58,6 +61,13 @@ export function CopyAxisToAxisAPI(axis: Axis, axisAPI: AxisAPI) {
 	axisAPI.Transform = axis.Transform
 
 	// insertion point for pointer fields encoding
+	axisAPI.AxisPointersEncoding.ShapeCategoryID.Valid = true
+	if (axis.ShapeCategory != undefined) {
+		axisAPI.AxisPointersEncoding.ShapeCategoryID.Int64 = axis.ShapeCategory.ID  
+	} else {
+		axisAPI.AxisPointersEncoding.ShapeCategoryID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 }
@@ -89,6 +99,7 @@ export function CopyAxisAPIToAxis(axisAPI: AxisAPI, axis: Axis, frontRepo: Front
 	axis.Transform = axisAPI.Transform
 
 	// insertion point for pointer fields encoding
+	axis.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(axisAPI.AxisPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

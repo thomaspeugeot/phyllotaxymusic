@@ -7,16 +7,21 @@ import (
 	"github.com/fullstack-lang/gongtree/go/models"
 )
 
-type HideableShape struct {
-	IsDisplayed bool
+type AbstractShape struct {
+	IsDisplayed   bool
+	ShapeCategory *ShapeCategory
 }
 
-func (hideableShape *HideableShape) GetIsDisplayed() bool {
-	return hideableShape.IsDisplayed
+func (abstractShape *AbstractShape) GetIsDisplayed() bool {
+	return abstractShape.IsDisplayed
+}
+
+func (abstractShape *AbstractShape) GetShapeCategory() *ShapeCategory {
+	return abstractShape.ShapeCategory
 }
 
 // OnAfterUpdate implements models.NodeImplInterface.
-func (hideableShape *HideableShape) OnAfterUpdate(stage *models.StageStruct, stagedNode *models.Node, frontNode *models.Node) {
+func (hideableShape *AbstractShape) OnAfterUpdate(stage *models.StageStruct, stagedNode *models.Node, frontNode *models.Node) {
 	log.Println("Node clicked", frontNode.GetName())
 
 	if frontNode.IsChecked && !stagedNode.IsChecked {
@@ -31,7 +36,7 @@ func (hideableShape *HideableShape) OnAfterUpdate(stage *models.StageStruct, sta
 	}
 }
 
-func (s *HideableShape) DrawIfDisplayed(
+func (s *AbstractShape) DrawIfDisplayed(
 	gongsvgStage *gongsvg_models.StageStruct,
 	p *Parameter,
 	layer *gongsvg_models.Layer) {

@@ -7,7 +7,7 @@ import (
 type Circle struct {
 	Name string
 
-	HideableShape
+	AbstractShape
 	CenterX, CenterY float64
 
 	HasBespokeRadius bool

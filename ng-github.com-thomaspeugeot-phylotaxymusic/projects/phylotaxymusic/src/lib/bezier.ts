@@ -4,6 +4,7 @@ import { BezierAPI } from './bezier-api'
 import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -37,6 +38,8 @@ export class Bezier {
 	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+	ShapeCategory?: ShapeCategory
+
 }
 
 export function CopyBezierToBezierAPI(bezier: Bezier, bezierAPI: BezierAPI) {
@@ -66,6 +69,13 @@ export function CopyBezierToBezierAPI(bezier: Bezier, bezierAPI: BezierAPI) {
 	bezierAPI.Transform = bezier.Transform
 
 	// insertion point for pointer fields encoding
+	bezierAPI.BezierPointersEncoding.ShapeCategoryID.Valid = true
+	if (bezier.ShapeCategory != undefined) {
+		bezierAPI.BezierPointersEncoding.ShapeCategoryID.Int64 = bezier.ShapeCategory.ID  
+	} else {
+		bezierAPI.BezierPointersEncoding.ShapeCategoryID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 }
@@ -101,6 +111,7 @@ export function CopyBezierAPIToBezier(bezierAPI: BezierAPI, bezier: Bezier, fron
 	bezier.Transform = bezierAPI.Transform
 
 	// insertion point for pointer fields encoding
+	bezier.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(bezierAPI.BezierPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

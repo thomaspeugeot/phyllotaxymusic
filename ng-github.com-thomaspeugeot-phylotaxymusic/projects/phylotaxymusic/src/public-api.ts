@@ -57,6 +57,10 @@ export * from './lib/rhombusgrid-api'
 export * from './lib/rhombusgrid'
 export * from './lib/rhombusgrid.service'
 
+export * from './lib/shapecategory-api'
+export * from './lib/shapecategory'
+export * from './lib/shapecategory.service'
+
 export * from './lib/verticalaxis-api'
 export * from './lib/verticalaxis'
 export * from './lib/verticalaxis.service'

@@ -164,6 +164,16 @@ type StageStruct struct {
 	OnAfterRhombusGridDeleteCallback OnAfterDeleteInterface[RhombusGrid]
 	OnAfterRhombusGridReadCallback   OnAfterReadInterface[RhombusGrid]
 
+	ShapeCategorys           map[*ShapeCategory]any
+	ShapeCategorys_mapString map[string]*ShapeCategory
+
+	// insertion point for slice of pointers maps
+
+	OnAfterShapeCategoryCreateCallback OnAfterCreateInterface[ShapeCategory]
+	OnAfterShapeCategoryUpdateCallback OnAfterUpdateInterface[ShapeCategory]
+	OnAfterShapeCategoryDeleteCallback OnAfterDeleteInterface[ShapeCategory]
+	OnAfterShapeCategoryReadCallback   OnAfterReadInterface[ShapeCategory]
+
 	VerticalAxiss           map[*VerticalAxis]any
 	VerticalAxiss_mapString map[string]*VerticalAxis
 
@@ -264,6 +274,8 @@ type BackRepoInterface interface {
 	CheckoutRhombus(rhombus *Rhombus)
 	CommitRhombusGrid(rhombusgrid *RhombusGrid)
 	CheckoutRhombusGrid(rhombusgrid *RhombusGrid)
+	CommitShapeCategory(shapecategory *ShapeCategory)
+	CheckoutShapeCategory(shapecategory *ShapeCategory)
 	CommitVerticalAxis(verticalaxis *VerticalAxis)
 	CheckoutVerticalAxis(verticalaxis *VerticalAxis)
 	GetLastCommitFromBackNb() uint
@@ -305,6 +317,9 @@ func NewStage(path string) (stage *StageStruct) {
 
 		RhombusGrids:           make(map[*RhombusGrid]any),
 		RhombusGrids_mapString: make(map[string]*RhombusGrid),
+
+		ShapeCategorys:           make(map[*ShapeCategory]any),
+		ShapeCategorys_mapString: make(map[string]*ShapeCategory),
 
 		VerticalAxiss:           make(map[*VerticalAxis]any),
 		VerticalAxiss_mapString: make(map[string]*VerticalAxis),
@@ -353,6 +368,7 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["Parameter"] = len(stage.Parameters)
 	stage.Map_GongStructName_InstancesNb["Rhombus"] = len(stage.Rhombuss)
 	stage.Map_GongStructName_InstancesNb["RhombusGrid"] = len(stage.RhombusGrids)
+	stage.Map_GongStructName_InstancesNb["ShapeCategory"] = len(stage.ShapeCategorys)
 	stage.Map_GongStructName_InstancesNb["VerticalAxis"] = len(stage.VerticalAxiss)
 
 }
@@ -375,6 +391,7 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["Parameter"] = len(stage.Parameters)
 	stage.Map_GongStructName_InstancesNb["Rhombus"] = len(stage.Rhombuss)
 	stage.Map_GongStructName_InstancesNb["RhombusGrid"] = len(stage.RhombusGrids)
+	stage.Map_GongStructName_InstancesNb["ShapeCategory"] = len(stage.ShapeCategorys)
 	stage.Map_GongStructName_InstancesNb["VerticalAxis"] = len(stage.VerticalAxiss)
 
 }
@@ -958,6 +975,56 @@ func (rhombusgrid *RhombusGrid) GetName() (res string) {
 	return rhombusgrid.Name
 }
 
+// Stage puts shapecategory to the model stage
+func (shapecategory *ShapeCategory) Stage(stage *StageStruct) *ShapeCategory {
+	stage.ShapeCategorys[shapecategory] = __member
+	stage.ShapeCategorys_mapString[shapecategory.Name] = shapecategory
+
+	return shapecategory
+}
+
+// Unstage removes shapecategory off the model stage
+func (shapecategory *ShapeCategory) Unstage(stage *StageStruct) *ShapeCategory {
+	delete(stage.ShapeCategorys, shapecategory)
+	delete(stage.ShapeCategorys_mapString, shapecategory.Name)
+	return shapecategory
+}
+
+// UnstageVoid removes shapecategory off the model stage
+func (shapecategory *ShapeCategory) UnstageVoid(stage *StageStruct) {
+	delete(stage.ShapeCategorys, shapecategory)
+	delete(stage.ShapeCategorys_mapString, shapecategory.Name)
+}
+
+// commit shapecategory to the back repo (if it is already staged)
+func (shapecategory *ShapeCategory) Commit(stage *StageStruct) *ShapeCategory {
+	if _, ok := stage.ShapeCategorys[shapecategory]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitShapeCategory(shapecategory)
+		}
+	}
+	return shapecategory
+}
+
+func (shapecategory *ShapeCategory) CommitVoid(stage *StageStruct) {
+	shapecategory.Commit(stage)
+}
+
+// Checkout shapecategory to the back repo (if it is already staged)
+func (shapecategory *ShapeCategory) Checkout(stage *StageStruct) *ShapeCategory {
+	if _, ok := stage.ShapeCategorys[shapecategory]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutShapeCategory(shapecategory)
+		}
+	}
+	return shapecategory
+}
+
+// for satisfaction of GongStruct interface
+func (shapecategory *ShapeCategory) GetName() (res string) {
+	return shapecategory.Name
+}
+
 // Stage puts verticalaxis to the model stage
 func (verticalaxis *VerticalAxis) Stage(stage *StageStruct) *VerticalAxis {
 	stage.VerticalAxiss[verticalaxis] = __member
@@ -1021,6 +1088,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMParameter(Parameter *Parameter)
 	CreateORMRhombus(Rhombus *Rhombus)
 	CreateORMRhombusGrid(RhombusGrid *RhombusGrid)
+	CreateORMShapeCategory(ShapeCategory *ShapeCategory)
 	CreateORMVerticalAxis(VerticalAxis *VerticalAxis)
 }
 
@@ -1036,6 +1104,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMParameter(Parameter *Parameter)
 	DeleteORMRhombus(Rhombus *Rhombus)
 	DeleteORMRhombusGrid(RhombusGrid *RhombusGrid)
+	DeleteORMShapeCategory(ShapeCategory *ShapeCategory)
 	DeleteORMVerticalAxis(VerticalAxis *VerticalAxis)
 }
 
@@ -1072,6 +1141,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.RhombusGrids = make(map[*RhombusGrid]any)
 	stage.RhombusGrids_mapString = make(map[string]*RhombusGrid)
+
+	stage.ShapeCategorys = make(map[*ShapeCategory]any)
+	stage.ShapeCategorys_mapString = make(map[string]*ShapeCategory)
 
 	stage.VerticalAxiss = make(map[*VerticalAxis]any)
 	stage.VerticalAxiss_mapString = make(map[string]*VerticalAxis)
@@ -1111,6 +1183,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.RhombusGrids = nil
 	stage.RhombusGrids_mapString = nil
+
+	stage.ShapeCategorys = nil
+	stage.ShapeCategorys_mapString = nil
 
 	stage.VerticalAxiss = nil
 	stage.VerticalAxiss_mapString = nil
@@ -1162,6 +1237,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 		rhombusgrid.Unstage(stage)
 	}
 
+	for shapecategory := range stage.ShapeCategorys {
+		shapecategory.Unstage(stage)
+	}
+
 	for verticalaxis := range stage.VerticalAxiss {
 		verticalaxis.Unstage(stage)
 	}
@@ -1174,7 +1253,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Axis | AxisGrid | Bezier | BezierGrid | BezierGridStack | Circle | CircleGrid | HorizontalAxis | Parameter | Rhombus | RhombusGrid | VerticalAxis
+	Axis | AxisGrid | Bezier | BezierGrid | BezierGridStack | Circle | CircleGrid | HorizontalAxis | Parameter | Rhombus | RhombusGrid | ShapeCategory | VerticalAxis
 }
 
 type GongtructBasicField interface {
@@ -1187,7 +1266,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Axis | *AxisGrid | *Bezier | *BezierGrid | *BezierGridStack | *Circle | *CircleGrid | *HorizontalAxis | *Parameter | *Rhombus | *RhombusGrid | *VerticalAxis
+	*Axis | *AxisGrid | *Bezier | *BezierGrid | *BezierGridStack | *Circle | *CircleGrid | *HorizontalAxis | *Parameter | *Rhombus | *RhombusGrid | *ShapeCategory | *VerticalAxis
 	GetName() string
 	CommitVoid(*StageStruct)
 	UnstageVoid(stage *StageStruct)
@@ -1227,6 +1306,7 @@ type GongstructSet interface {
 		map[*Parameter]any |
 		map[*Rhombus]any |
 		map[*RhombusGrid]any |
+		map[*ShapeCategory]any |
 		map[*VerticalAxis]any |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
@@ -1245,6 +1325,7 @@ type GongstructMapString interface {
 		map[string]*Parameter |
 		map[string]*Rhombus |
 		map[string]*RhombusGrid |
+		map[string]*ShapeCategory |
 		map[string]*VerticalAxis |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
@@ -1278,6 +1359,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Rhombuss).(*Type)
 	case map[*RhombusGrid]any:
 		return any(&stage.RhombusGrids).(*Type)
+	case map[*ShapeCategory]any:
+		return any(&stage.ShapeCategorys).(*Type)
 	case map[*VerticalAxis]any:
 		return any(&stage.VerticalAxiss).(*Type)
 	default:
@@ -1314,6 +1397,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Rhombuss_mapString).(*Type)
 	case map[string]*RhombusGrid:
 		return any(&stage.RhombusGrids_mapString).(*Type)
+	case map[string]*ShapeCategory:
+		return any(&stage.ShapeCategorys_mapString).(*Type)
 	case map[string]*VerticalAxis:
 		return any(&stage.VerticalAxiss_mapString).(*Type)
 	default:
@@ -1350,6 +1435,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Rhombuss).(*map[*Type]any)
 	case RhombusGrid:
 		return any(&stage.RhombusGrids).(*map[*Type]any)
+	case ShapeCategory:
+		return any(&stage.ShapeCategorys).(*map[*Type]any)
 	case VerticalAxis:
 		return any(&stage.VerticalAxiss).(*map[*Type]any)
 	default:
@@ -1386,6 +1473,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.Rhombuss).(*map[Type]any)
 	case *RhombusGrid:
 		return any(&stage.RhombusGrids).(*map[Type]any)
+	case *ShapeCategory:
+		return any(&stage.ShapeCategorys).(*map[Type]any)
 	case *VerticalAxis:
 		return any(&stage.VerticalAxiss).(*map[Type]any)
 	default:
@@ -1422,6 +1511,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Rhombuss_mapString).(*map[string]*Type)
 	case RhombusGrid:
 		return any(&stage.RhombusGrids_mapString).(*map[string]*Type)
+	case ShapeCategory:
+		return any(&stage.ShapeCategorys_mapString).(*map[string]*Type)
 	case VerticalAxis:
 		return any(&stage.VerticalAxiss_mapString).(*map[string]*Type)
 	default:
@@ -1441,6 +1532,12 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Axis:
 		return any(&Axis{
 			// Initialisation of associations
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	case AxisGrid:
 		return any(&AxisGrid{
@@ -1449,10 +1546,22 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Axis{Name: "Reference"},
 			// field is initialized with an instance of Axis with the name of the field
 			Axiss: []*Axis{{Name: "Axiss"}},
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	case Bezier:
 		return any(&Bezier{
 			// Initialisation of associations
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	case BezierGrid:
 		return any(&BezierGrid{
@@ -1461,16 +1570,34 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Bezier{Name: "Reference"},
 			// field is initialized with an instance of Bezier with the name of the field
 			Beziers: []*Bezier{{Name: "Beziers"}},
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	case BezierGridStack:
 		return any(&BezierGridStack{
 			// Initialisation of associations
 			// field is initialized with an instance of BezierGrid with the name of the field
 			BezierGrids: []*BezierGrid{{Name: "BezierGrids"}},
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	case Circle:
 		return any(&Circle{
 			// Initialisation of associations
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	case CircleGrid:
 		return any(&CircleGrid{
@@ -1479,10 +1606,22 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Circle{Name: "Reference"},
 			// field is initialized with an instance of Circle with the name of the field
 			Circles: []*Circle{{Name: "Circles"}},
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	case HorizontalAxis:
 		return any(&HorizontalAxis{
 			// Initialisation of associations
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	case Parameter:
 		return any(&Parameter{
@@ -1555,6 +1694,12 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Rhombus:
 		return any(&Rhombus{
 			// Initialisation of associations
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	case RhombusGrid:
 		return any(&RhombusGrid{
@@ -1563,10 +1708,26 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Rhombus{Name: "Reference"},
 			// field is initialized with an instance of Rhombus with the name of the field
 			Rhombuses: []*Rhombus{{Name: "Rhombuses"}},
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
+		}).(*Type)
+	case ShapeCategory:
+		return any(&ShapeCategory{
+			// Initialisation of associations
 		}).(*Type)
 	case VerticalAxis:
 		return any(&VerticalAxis{
 			// Initialisation of associations
+			// field is initialized with AbstractShape as it is a composite
+			AbstractShape: AbstractShape{
+				// per field init
+				//
+				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
+			},
 		}).(*Type)
 	default:
 		return nil
@@ -1590,6 +1751,23 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 	case Axis:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*Axis)
+			for axis := range stage.Axiss {
+				if axis.ShapeCategory != nil {
+					shapecategory_ := axis.ShapeCategory
+					var axiss []*Axis
+					_, ok := res[shapecategory_]
+					if ok {
+						axiss = res[shapecategory_]
+					} else {
+						axiss = make([]*Axis, 0)
+					}
+					axiss = append(axiss, axis)
+					res[shapecategory_] = axiss
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of AxisGrid
 	case AxisGrid:
@@ -1612,11 +1790,45 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*AxisGrid)
+			for axisgrid := range stage.AxisGrids {
+				if axisgrid.ShapeCategory != nil {
+					shapecategory_ := axisgrid.ShapeCategory
+					var axisgrids []*AxisGrid
+					_, ok := res[shapecategory_]
+					if ok {
+						axisgrids = res[shapecategory_]
+					} else {
+						axisgrids = make([]*AxisGrid, 0)
+					}
+					axisgrids = append(axisgrids, axisgrid)
+					res[shapecategory_] = axisgrids
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Bezier
 	case Bezier:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*Bezier)
+			for bezier := range stage.Beziers {
+				if bezier.ShapeCategory != nil {
+					shapecategory_ := bezier.ShapeCategory
+					var beziers []*Bezier
+					_, ok := res[shapecategory_]
+					if ok {
+						beziers = res[shapecategory_]
+					} else {
+						beziers = make([]*Bezier, 0)
+					}
+					beziers = append(beziers, bezier)
+					res[shapecategory_] = beziers
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of BezierGrid
 	case BezierGrid:
@@ -1639,16 +1851,67 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*BezierGrid)
+			for beziergrid := range stage.BezierGrids {
+				if beziergrid.ShapeCategory != nil {
+					shapecategory_ := beziergrid.ShapeCategory
+					var beziergrids []*BezierGrid
+					_, ok := res[shapecategory_]
+					if ok {
+						beziergrids = res[shapecategory_]
+					} else {
+						beziergrids = make([]*BezierGrid, 0)
+					}
+					beziergrids = append(beziergrids, beziergrid)
+					res[shapecategory_] = beziergrids
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of BezierGridStack
 	case BezierGridStack:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*BezierGridStack)
+			for beziergridstack := range stage.BezierGridStacks {
+				if beziergridstack.ShapeCategory != nil {
+					shapecategory_ := beziergridstack.ShapeCategory
+					var beziergridstacks []*BezierGridStack
+					_, ok := res[shapecategory_]
+					if ok {
+						beziergridstacks = res[shapecategory_]
+					} else {
+						beziergridstacks = make([]*BezierGridStack, 0)
+					}
+					beziergridstacks = append(beziergridstacks, beziergridstack)
+					res[shapecategory_] = beziergridstacks
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Circle
 	case Circle:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*Circle)
+			for circle := range stage.Circles {
+				if circle.ShapeCategory != nil {
+					shapecategory_ := circle.ShapeCategory
+					var circles []*Circle
+					_, ok := res[shapecategory_]
+					if ok {
+						circles = res[shapecategory_]
+					} else {
+						circles = make([]*Circle, 0)
+					}
+					circles = append(circles, circle)
+					res[shapecategory_] = circles
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of CircleGrid
 	case CircleGrid:
@@ -1671,11 +1934,45 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*CircleGrid)
+			for circlegrid := range stage.CircleGrids {
+				if circlegrid.ShapeCategory != nil {
+					shapecategory_ := circlegrid.ShapeCategory
+					var circlegrids []*CircleGrid
+					_, ok := res[shapecategory_]
+					if ok {
+						circlegrids = res[shapecategory_]
+					} else {
+						circlegrids = make([]*CircleGrid, 0)
+					}
+					circlegrids = append(circlegrids, circlegrid)
+					res[shapecategory_] = circlegrids
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of HorizontalAxis
 	case HorizontalAxis:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*HorizontalAxis)
+			for horizontalaxis := range stage.HorizontalAxiss {
+				if horizontalaxis.ShapeCategory != nil {
+					shapecategory_ := horizontalaxis.ShapeCategory
+					var horizontalaxiss []*HorizontalAxis
+					_, ok := res[shapecategory_]
+					if ok {
+						horizontalaxiss = res[shapecategory_]
+					} else {
+						horizontalaxiss = make([]*HorizontalAxis, 0)
+					}
+					horizontalaxiss = append(horizontalaxiss, horizontalaxis)
+					res[shapecategory_] = horizontalaxiss
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Parameter
 	case Parameter:
@@ -2230,6 +2527,23 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 	case Rhombus:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*Rhombus)
+			for rhombus := range stage.Rhombuss {
+				if rhombus.ShapeCategory != nil {
+					shapecategory_ := rhombus.ShapeCategory
+					var rhombuss []*Rhombus
+					_, ok := res[shapecategory_]
+					if ok {
+						rhombuss = res[shapecategory_]
+					} else {
+						rhombuss = make([]*Rhombus, 0)
+					}
+					rhombuss = append(rhombuss, rhombus)
+					res[shapecategory_] = rhombuss
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of RhombusGrid
 	case RhombusGrid:
@@ -2252,11 +2566,50 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*RhombusGrid)
+			for rhombusgrid := range stage.RhombusGrids {
+				if rhombusgrid.ShapeCategory != nil {
+					shapecategory_ := rhombusgrid.ShapeCategory
+					var rhombusgrids []*RhombusGrid
+					_, ok := res[shapecategory_]
+					if ok {
+						rhombusgrids = res[shapecategory_]
+					} else {
+						rhombusgrids = make([]*RhombusGrid, 0)
+					}
+					rhombusgrids = append(rhombusgrids, rhombusgrid)
+					res[shapecategory_] = rhombusgrids
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		}
+	// reverse maps of direct associations of ShapeCategory
+	case ShapeCategory:
+		switch fieldname {
+		// insertion point for per direct association field
 		}
 	// reverse maps of direct associations of VerticalAxis
 	case VerticalAxis:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*VerticalAxis)
+			for verticalaxis := range stage.VerticalAxiss {
+				if verticalaxis.ShapeCategory != nil {
+					shapecategory_ := verticalaxis.ShapeCategory
+					var verticalaxiss []*VerticalAxis
+					_, ok := res[shapecategory_]
+					if ok {
+						verticalaxiss = res[shapecategory_]
+					} else {
+						verticalaxiss = make([]*VerticalAxis, 0)
+					}
+					verticalaxiss = append(verticalaxiss, verticalaxis)
+					res[shapecategory_] = verticalaxiss
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	}
 	return nil
@@ -2369,6 +2722,11 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			}
 			return any(res).(map[*End]*Start)
 		}
+	// reverse maps of direct associations of ShapeCategory
+	case ShapeCategory:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	// reverse maps of direct associations of VerticalAxis
 	case VerticalAxis:
 		switch fieldname {
@@ -2408,6 +2766,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Rhombus"
 	case RhombusGrid:
 		res = "RhombusGrid"
+	case ShapeCategory:
+		res = "ShapeCategory"
 	case VerticalAxis:
 		res = "VerticalAxis"
 	}
@@ -2444,6 +2804,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "Rhombus"
 	case *RhombusGrid:
 		res = "RhombusGrid"
+	case *ShapeCategory:
+		res = "ShapeCategory"
 	case *VerticalAxis:
 		res = "VerticalAxis"
 	}
@@ -2458,29 +2820,31 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Axis:
-		res = []string{"Name", "IsDisplayed", "Angle", "Length", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Angle", "Length", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case AxisGrid:
-		res = []string{"Name", "Reference", "IsDisplayed", "Axiss"}
+		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Axiss"}
 	case Bezier:
-		res = []string{"Name", "IsDisplayed", "StartX", "StartY", "ControlPointStartX", "ControlPointStartY", "EndX", "EndY", "ControlPointEndX", "ControlPointEndY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "StartX", "StartY", "ControlPointStartX", "ControlPointStartY", "EndX", "EndY", "ControlPointEndX", "ControlPointEndY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case BezierGrid:
-		res = []string{"Name", "Reference", "IsDisplayed", "Beziers"}
+		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Beziers"}
 	case BezierGridStack:
-		res = []string{"Name", "IsDisplayed", "BezierGrids"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "BezierGrids"}
 	case Circle:
-		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case CircleGrid:
-		res = []string{"Name", "Reference", "IsDisplayed", "Circles"}
+		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
 	case HorizontalAxis:
-		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case Parameter:
 		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case Rhombus:
-		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
-		res = []string{"Name", "Reference", "IsDisplayed", "Rhombuses"}
+		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Rhombuses"}
+	case ShapeCategory:
+		res = []string{"Name"}
 	case VerticalAxis:
-		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	}
 	return
 }
@@ -2547,6 +2911,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case RhombusGrid:
 		var rf ReverseField
 		_ = rf
+	case ShapeCategory:
+		var rf ReverseField
+		_ = rf
 	case VerticalAxis:
 		var rf ReverseField
 		_ = rf
@@ -2562,29 +2929,31 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *Axis:
-		res = []string{"Name", "IsDisplayed", "Angle", "Length", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Angle", "Length", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *AxisGrid:
-		res = []string{"Name", "Reference", "IsDisplayed", "Axiss"}
+		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Axiss"}
 	case *Bezier:
-		res = []string{"Name", "IsDisplayed", "StartX", "StartY", "ControlPointStartX", "ControlPointStartY", "EndX", "EndY", "ControlPointEndX", "ControlPointEndY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "StartX", "StartY", "ControlPointStartX", "ControlPointStartY", "EndX", "EndY", "ControlPointEndX", "ControlPointEndY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *BezierGrid:
-		res = []string{"Name", "Reference", "IsDisplayed", "Beziers"}
+		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Beziers"}
 	case *BezierGridStack:
-		res = []string{"Name", "IsDisplayed", "BezierGrids"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "BezierGrids"}
 	case *Circle:
-		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *CircleGrid:
-		res = []string{"Name", "Reference", "IsDisplayed", "Circles"}
+		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
 	case *HorizontalAxis:
-		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *Parameter:
 		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case *Rhombus:
-		res = []string{"Name", "IsDisplayed", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
-		res = []string{"Name", "Reference", "IsDisplayed", "Rhombuses"}
+		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Rhombuses"}
+	case *ShapeCategory:
+		res = []string{"Name"}
 	case *VerticalAxis:
-		res = []string{"Name", "IsDisplayed", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	}
 	return
 }
@@ -2600,6 +2969,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Angle":
 			res = fmt.Sprintf("%f", inferedInstance.Angle)
 		case "Length":
@@ -2636,6 +3009,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			}
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Axiss":
 			for idx, __instance__ := range inferedInstance.Axiss {
 				if idx > 0 {
@@ -2651,6 +3028,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "StartX":
 			res = fmt.Sprintf("%f", inferedInstance.StartX)
 		case "StartY":
@@ -2695,6 +3076,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			}
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Beziers":
 			for idx, __instance__ := range inferedInstance.Beziers {
 				if idx > 0 {
@@ -2710,6 +3095,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "BezierGrids":
 			for idx, __instance__ := range inferedInstance.BezierGrids {
 				if idx > 0 {
@@ -2725,6 +3114,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "CenterX":
 			res = fmt.Sprintf("%f", inferedInstance.CenterX)
 		case "CenterY":
@@ -2761,6 +3154,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			}
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Circles":
 			for idx, __instance__ := range inferedInstance.Circles {
 				if idx > 0 {
@@ -2776,6 +3173,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "AxisHandleBorderLength":
 			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
 		case "Axis_Length":
@@ -2960,6 +3361,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "CenterX":
 			res = fmt.Sprintf("%f", inferedInstance.CenterX)
 		case "CenterY":
@@ -2998,6 +3403,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			}
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Rhombuses":
 			for idx, __instance__ := range inferedInstance.Rhombuses {
 				if idx > 0 {
@@ -3006,6 +3415,12 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 				res += __instance__.Name
 			}
 		}
+	case *ShapeCategory:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		}
 	case *VerticalAxis:
 		switch fieldName {
 		// string value of fields
@@ -3013,6 +3428,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "AxisHandleBorderLength":
 			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
 		case "Axis_Length":
@@ -3051,6 +3470,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Angle":
 			res = fmt.Sprintf("%f", inferedInstance.Angle)
 		case "Length":
@@ -3087,6 +3510,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			}
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Axiss":
 			for idx, __instance__ := range inferedInstance.Axiss {
 				if idx > 0 {
@@ -3102,6 +3529,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "StartX":
 			res = fmt.Sprintf("%f", inferedInstance.StartX)
 		case "StartY":
@@ -3146,6 +3577,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			}
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Beziers":
 			for idx, __instance__ := range inferedInstance.Beziers {
 				if idx > 0 {
@@ -3161,6 +3596,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "BezierGrids":
 			for idx, __instance__ := range inferedInstance.BezierGrids {
 				if idx > 0 {
@@ -3176,6 +3615,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "CenterX":
 			res = fmt.Sprintf("%f", inferedInstance.CenterX)
 		case "CenterY":
@@ -3212,6 +3655,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			}
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Circles":
 			for idx, __instance__ := range inferedInstance.Circles {
 				if idx > 0 {
@@ -3227,6 +3674,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "AxisHandleBorderLength":
 			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
 		case "Axis_Length":
@@ -3411,6 +3862,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "CenterX":
 			res = fmt.Sprintf("%f", inferedInstance.CenterX)
 		case "CenterY":
@@ -3449,6 +3904,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			}
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "Rhombuses":
 			for idx, __instance__ := range inferedInstance.Rhombuses {
 				if idx > 0 {
@@ -3457,6 +3916,12 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				res += __instance__.Name
 			}
 		}
+	case ShapeCategory:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		}
 	case VerticalAxis:
 		switch fieldName {
 		// string value of fields
@@ -3464,6 +3929,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = inferedInstance.Name
 		case "IsDisplayed":
 			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
 		case "AxisHandleBorderLength":
 			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
 		case "Axis_Length":

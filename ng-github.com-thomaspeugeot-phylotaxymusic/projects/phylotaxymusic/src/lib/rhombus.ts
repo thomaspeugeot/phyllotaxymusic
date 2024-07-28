@@ -4,6 +4,7 @@ import { RhombusAPI } from './rhombus-api'
 import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -34,6 +35,8 @@ export class Rhombus {
 	Transform: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+	ShapeCategory?: ShapeCategory
+
 }
 
 export function CopyRhombusToRhombusAPI(rhombus: Rhombus, rhombusAPI: RhombusAPI) {
@@ -60,6 +63,13 @@ export function CopyRhombusToRhombusAPI(rhombus: Rhombus, rhombusAPI: RhombusAPI
 	rhombusAPI.Transform = rhombus.Transform
 
 	// insertion point for pointer fields encoding
+	rhombusAPI.RhombusPointersEncoding.ShapeCategoryID.Valid = true
+	if (rhombus.ShapeCategory != undefined) {
+		rhombusAPI.RhombusPointersEncoding.ShapeCategoryID.Int64 = rhombus.ShapeCategory.ID  
+	} else {
+		rhombusAPI.RhombusPointersEncoding.ShapeCategoryID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 }
@@ -92,6 +102,7 @@ export function CopyRhombusAPIToRhombus(rhombusAPI: RhombusAPI, rhombus: Rhombus
 	rhombus.Transform = rhombusAPI.Transform
 
 	// insertion point for pointer fields encoding
+	rhombus.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(rhombusAPI.RhombusPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

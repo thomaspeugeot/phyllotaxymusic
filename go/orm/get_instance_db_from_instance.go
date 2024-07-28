@@ -8,7 +8,7 @@ import (
 type GongstructDB interface {
 	// insertion point for generic types
 	// "int" is present to handle the case when no struct is present
-	int | AxisDB | AxisGridDB | BezierDB | BezierGridDB | BezierGridStackDB | CircleDB | CircleGridDB | HorizontalAxisDB | ParameterDB | RhombusDB | RhombusGridDB | VerticalAxisDB
+	int | AxisDB | AxisGridDB | BezierDB | BezierGridDB | BezierGridStackDB | CircleDB | CircleGridDB | HorizontalAxisDB | ParameterDB | RhombusDB | RhombusGridDB | ShapeCategoryDB | VerticalAxisDB
 }
 
 func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
@@ -61,6 +61,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 	case *models.RhombusGrid:
 		rhombusgridInstance := any(concreteInstance).(*models.RhombusGrid)
 		ret2 := backRepo.BackRepoRhombusGrid.GetRhombusGridDBFromRhombusGridPtr(rhombusgridInstance)
+		ret = any(ret2).(*T2)
+	case *models.ShapeCategory:
+		shapecategoryInstance := any(concreteInstance).(*models.ShapeCategory)
+		ret2 := backRepo.BackRepoShapeCategory.GetShapeCategoryDBFromShapeCategoryPtr(shapecategoryInstance)
 		ret = any(ret2).(*T2)
 	case *models.VerticalAxis:
 		verticalaxisInstance := any(concreteInstance).(*models.VerticalAxis)
@@ -134,6 +138,11 @@ func GetID[T models.Gongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.ShapeCategory:
+		tmp := GetInstanceDBFromInstance[models.ShapeCategory, ShapeCategoryDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.VerticalAxis:
 		tmp := GetInstanceDBFromInstance[models.VerticalAxis, VerticalAxisDB](
 			stage, backRepo, inst,
@@ -204,6 +213,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.RhombusGrid:
 		tmp := GetInstanceDBFromInstance[models.RhombusGrid, RhombusGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.ShapeCategory:
+		tmp := GetInstanceDBFromInstance[models.ShapeCategory, ShapeCategoryDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

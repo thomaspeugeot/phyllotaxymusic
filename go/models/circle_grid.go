@@ -9,7 +9,7 @@ type CircleGrid struct {
 
 	Reference *Circle
 
-	HideableShape
+	AbstractShape
 
 	Circles []*Circle
 }

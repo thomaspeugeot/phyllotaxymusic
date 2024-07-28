@@ -51,6 +51,10 @@ type CircleGridPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	ReferenceID sql.NullInt64
 
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
+
 	// field Circles is a slice of pointers to another Struct (optional or 0..1)
 	Circles IntSlice `gorm:"type:TEXT"`
 }
@@ -237,6 +241,18 @@ func (backRepoCircleGrid *BackRepoCircleGridStruct) CommitPhaseTwoInstance(backR
 			circlegridDB.ReferenceID.Valid = true
 		}
 
+		// commit pointer value circlegrid.ShapeCategory translates to updating the circlegrid.ShapeCategoryID
+		circlegridDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if circlegrid.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[circlegrid.ShapeCategory]; ok {
+				circlegridDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				circlegridDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			circlegridDB.ShapeCategoryID.Int64 = 0
+			circlegridDB.ShapeCategoryID.Valid = true
+		}
+
 		// 1. reset
 		circlegridDB.CircleGridPointersEncoding.Circles = make([]int, 0)
 		// 2. encode
@@ -372,6 +388,11 @@ func (circlegridDB *CircleGridDB) DecodePointers(backRepo *BackRepoStruct, circl
 	circlegrid.Reference = nil
 	if circlegridDB.ReferenceID.Int64 != 0 {
 		circlegrid.Reference = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(circlegridDB.ReferenceID.Int64)]
+	}
+	// ShapeCategory field
+	circlegrid.ShapeCategory = nil
+	if circlegridDB.ShapeCategoryID.Int64 != 0 {
+		circlegrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(circlegridDB.ShapeCategoryID.Int64)]
 	}
 	// This loop redeem circlegrid.Circles in the stage from the encode in the back repo
 	// It parses all CircleDB in the back repo and if the reverse pointer encoding matches the back repo ID
@@ -626,6 +647,12 @@ func (backRepoCircleGrid *BackRepoCircleGridStruct) RestorePhaseTwo() {
 		if circlegridDB.ReferenceID.Int64 != 0 {
 			circlegridDB.ReferenceID.Int64 = int64(BackRepoCircleid_atBckpTime_newID[uint(circlegridDB.ReferenceID.Int64)])
 			circlegridDB.ReferenceID.Valid = true
+		}
+
+		// reindexing ShapeCategory field
+		if circlegridDB.ShapeCategoryID.Int64 != 0 {
+			circlegridDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(circlegridDB.ShapeCategoryID.Int64)])
+			circlegridDB.ShapeCategoryID.Valid = true
 		}
 
 		// update databse with new index encoding

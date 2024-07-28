@@ -972,6 +972,40 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_ShapeCategory_Identifiers := make(map[*ShapeCategory]string)
+	_ = map_ShapeCategory_Identifiers
+
+	shapecategoryOrdered := []*ShapeCategory{}
+	for shapecategory := range stage.ShapeCategorys {
+		shapecategoryOrdered = append(shapecategoryOrdered, shapecategory)
+	}
+	sort.Slice(shapecategoryOrdered[:], func(i, j int) bool {
+		return shapecategoryOrdered[i].Name < shapecategoryOrdered[j].Name
+	})
+	if len(shapecategoryOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, shapecategory := range shapecategoryOrdered {
+
+		id = generatesIdentifier("ShapeCategory", idx, shapecategory.Name)
+		map_ShapeCategory_Identifiers[shapecategory] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "ShapeCategory")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", shapecategory.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(shapecategory.Name))
+		initializerStatements += setValueField
+
+	}
+
 	map_VerticalAxis_Identifiers := make(map[*VerticalAxis]string)
 	_ = map_VerticalAxis_Identifiers
 
@@ -1081,6 +1115,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Axis_Identifiers[axis] = id
 
 		// Initialisation of values
+		if axis.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[axis.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, axisgrid := range axisgridOrdered {
@@ -1096,6 +1138,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Axis_Identifiers[axisgrid.Reference])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if axisgrid.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[axisgrid.ShapeCategory])
 			pointersInitializesStatements += setPointerField
 		}
 
@@ -1117,6 +1167,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Bezier_Identifiers[bezier] = id
 
 		// Initialisation of values
+		if bezier.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[bezier.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, beziergrid := range beziergridOrdered {
@@ -1132,6 +1190,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[beziergrid.Reference])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if beziergrid.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[beziergrid.ShapeCategory])
 			pointersInitializesStatements += setPointerField
 		}
 
@@ -1153,6 +1219,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_BezierGridStack_Identifiers[beziergridstack] = id
 
 		// Initialisation of values
+		if beziergridstack.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[beziergridstack.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
 		for _, _beziergrid := range beziergridstack.BezierGrids {
 			setPointerField = SliceOfPointersFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -1171,6 +1245,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Circle_Identifiers[circle] = id
 
 		// Initialisation of values
+		if circle.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[circle.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, circlegrid := range circlegridOrdered {
@@ -1186,6 +1268,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[circlegrid.Reference])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if circlegrid.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[circlegrid.ShapeCategory])
 			pointersInitializesStatements += setPointerField
 		}
 
@@ -1207,6 +1297,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_HorizontalAxis_Identifiers[horizontalaxis] = id
 
 		// Initialisation of values
+		if horizontalaxis.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[horizontalaxis.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, parameter := range parameterOrdered {
@@ -1483,6 +1581,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_Rhombus_Identifiers[rhombus] = id
 
 		// Initialisation of values
+		if rhombus.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[rhombus.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, rhombusgrid := range rhombusgridOrdered {
@@ -1501,6 +1607,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
+		if rhombusgrid.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[rhombusgrid.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
 		for _, _rhombus := range rhombusgrid.Rhombuses {
 			setPointerField = SliceOfPointersFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -1511,6 +1625,16 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	for idx, shapecategory := range shapecategoryOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("ShapeCategory", idx, shapecategory.Name)
+		map_ShapeCategory_Identifiers[shapecategory] = id
+
+		// Initialisation of values
+	}
+
 	for idx, verticalaxis := range verticalaxisOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -1519,6 +1643,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_VerticalAxis_Identifiers[verticalaxis] = id
 
 		// Initialisation of values
+		if verticalaxis.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[verticalaxis.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	res = strings.ReplaceAll(res, "{{Identifiers}}", identifiersDecl)

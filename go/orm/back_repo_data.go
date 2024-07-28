@@ -26,6 +26,8 @@ type BackRepoData struct {
 
 	RhombusGridAPIs []*RhombusGridAPI
 
+	ShapeCategoryAPIs []*ShapeCategoryAPI
+
 	VerticalAxisAPIs []*VerticalAxisAPI
 }
 
@@ -139,6 +141,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		rhombusgridDB.CopyBasicFieldsToRhombusGrid_WOP(&rhombusgridAPI.RhombusGrid_WOP)
 
 		backRepoData.RhombusGridAPIs = append(backRepoData.RhombusGridAPIs, &rhombusgridAPI)
+	}
+
+	for _, shapecategoryDB := range backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryDB {
+
+		var shapecategoryAPI ShapeCategoryAPI
+		shapecategoryAPI.ID = shapecategoryDB.ID
+		shapecategoryAPI.ShapeCategoryPointersEncoding = shapecategoryDB.ShapeCategoryPointersEncoding
+		shapecategoryDB.CopyBasicFieldsToShapeCategory_WOP(&shapecategoryAPI.ShapeCategory_WOP)
+
+		backRepoData.ShapeCategoryAPIs = append(backRepoData.ShapeCategoryAPIs, &shapecategoryAPI)
 	}
 
 	for _, verticalaxisDB := range backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisDB {

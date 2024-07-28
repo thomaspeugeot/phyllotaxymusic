@@ -46,6 +46,10 @@ type AxisAPI struct {
 // reverse pointers of slice of poitners to Struct
 type AxisPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
+
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
 }
 
 // AxisDB describes a axis in the database
@@ -290,6 +294,18 @@ func (backRepoAxis *BackRepoAxisStruct) CommitPhaseTwoInstance(backRepo *BackRep
 		axisDB.CopyBasicFieldsFromAxis(axis)
 
 		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value axis.ShapeCategory translates to updating the axis.ShapeCategoryID
+		axisDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if axis.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[axis.ShapeCategory]; ok {
+				axisDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				axisDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			axisDB.ShapeCategoryID.Int64 = 0
+			axisDB.ShapeCategoryID.Valid = true
+		}
+
 		query := backRepoAxis.db.Save(&axisDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -403,6 +419,11 @@ func (backRepoAxis *BackRepoAxisStruct) CheckoutPhaseTwoInstance(backRepo *BackR
 func (axisDB *AxisDB) DecodePointers(backRepo *BackRepoStruct, axis *models.Axis) {
 
 	// insertion point for checkout of pointer encoding
+	// ShapeCategory field
+	axis.ShapeCategory = nil
+	if axisDB.ShapeCategoryID.Int64 != 0 {
+		axis.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(axisDB.ShapeCategoryID.Int64)]
+	}
 	return
 }
 
@@ -787,6 +808,12 @@ func (backRepoAxis *BackRepoAxisStruct) RestorePhaseTwo() {
 		_ = axisDB
 
 		// insertion point for reindexing pointers encoding
+		// reindexing ShapeCategory field
+		if axisDB.ShapeCategoryID.Int64 != 0 {
+			axisDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(axisDB.ShapeCategoryID.Int64)])
+			axisDB.ShapeCategoryID.Valid = true
+		}
+
 		// update databse with new index encoding
 		query := backRepoAxis.db.Model(axisDB).Updates(*axisDB)
 		if query.Error != nil {

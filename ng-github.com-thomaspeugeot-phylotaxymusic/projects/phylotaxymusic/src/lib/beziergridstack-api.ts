@@ -1,4 +1,5 @@
 // insertion point for imports
+import { ShapeCategoryAPI } from './shapecategory-api'
 import { BezierGridAPI } from './beziergrid-api'
 
 // usefull for managing pointer ID values that can be nullable
@@ -23,5 +24,7 @@ export class BezierGridStackAPI {
 
 export class BezierGridStackPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	ShapeCategoryID: NullInt64 = new NullInt64 // if pointer is null, ShapeCategory.ID = 0
+
 	BezierGrids: number[] = []
 }

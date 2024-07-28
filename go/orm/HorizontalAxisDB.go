@@ -46,6 +46,10 @@ type HorizontalAxisAPI struct {
 // reverse pointers of slice of poitners to Struct
 type HorizontalAxisPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
+
+	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ShapeCategoryID sql.NullInt64
 }
 
 // HorizontalAxisDB describes a horizontalaxis in the database
@@ -278,6 +282,18 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitPhaseTwoInstan
 		horizontalaxisDB.CopyBasicFieldsFromHorizontalAxis(horizontalaxis)
 
 		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value horizontalaxis.ShapeCategory translates to updating the horizontalaxis.ShapeCategoryID
+		horizontalaxisDB.ShapeCategoryID.Valid = true // allow for a 0 value (nil association)
+		if horizontalaxis.ShapeCategory != nil {
+			if ShapeCategoryId, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryPtr_ShapeCategoryDBID[horizontalaxis.ShapeCategory]; ok {
+				horizontalaxisDB.ShapeCategoryID.Int64 = int64(ShapeCategoryId)
+				horizontalaxisDB.ShapeCategoryID.Valid = true
+			}
+		} else {
+			horizontalaxisDB.ShapeCategoryID.Int64 = 0
+			horizontalaxisDB.ShapeCategoryID.Valid = true
+		}
+
 		query := backRepoHorizontalAxis.db.Save(&horizontalaxisDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -391,6 +407,11 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CheckoutPhaseTwoInst
 func (horizontalaxisDB *HorizontalAxisDB) DecodePointers(backRepo *BackRepoStruct, horizontalaxis *models.HorizontalAxis) {
 
 	// insertion point for checkout of pointer encoding
+	// ShapeCategory field
+	horizontalaxis.ShapeCategory = nil
+	if horizontalaxisDB.ShapeCategoryID.Int64 != 0 {
+		horizontalaxis.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(horizontalaxisDB.ShapeCategoryID.Int64)]
+	}
 	return
 }
 
@@ -751,6 +772,12 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) RestorePhaseTwo() {
 		_ = horizontalaxisDB
 
 		// insertion point for reindexing pointers encoding
+		// reindexing ShapeCategory field
+		if horizontalaxisDB.ShapeCategoryID.Int64 != 0 {
+			horizontalaxisDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(horizontalaxisDB.ShapeCategoryID.Int64)])
+			horizontalaxisDB.ShapeCategoryID.Valid = true
+		}
+
 		// update databse with new index encoding
 		query := backRepoHorizontalAxis.db.Model(horizontalaxisDB).Updates(*horizontalaxisDB)
 		if query.Error != nil {

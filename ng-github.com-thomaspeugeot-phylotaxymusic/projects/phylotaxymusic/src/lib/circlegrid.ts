@@ -5,6 +5,7 @@ import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
 import { Circle } from './circle'
+import { ShapeCategory } from './shapecategory'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -23,6 +24,8 @@ export class CircleGrid {
 
 	// insertion point for pointers and slices of pointers declarations
 	Reference?: Circle
+
+	ShapeCategory?: ShapeCategory
 
 	Circles: Array<Circle> = []
 }
@@ -43,6 +46,13 @@ export function CopyCircleGridToCircleGridAPI(circlegrid: CircleGrid, circlegrid
 		circlegridAPI.CircleGridPointersEncoding.ReferenceID.Int64 = circlegrid.Reference.ID  
 	} else {
 		circlegridAPI.CircleGridPointersEncoding.ReferenceID.Int64 = 0 		
+	}
+
+	circlegridAPI.CircleGridPointersEncoding.ShapeCategoryID.Valid = true
+	if (circlegrid.ShapeCategory != undefined) {
+		circlegridAPI.CircleGridPointersEncoding.ShapeCategoryID.Int64 = circlegrid.ShapeCategory.ID  
+	} else {
+		circlegridAPI.CircleGridPointersEncoding.ShapeCategoryID.Int64 = 0 		
 	}
 
 
@@ -70,6 +80,7 @@ export function CopyCircleGridAPIToCircleGrid(circlegridAPI: CircleGridAPI, circ
 
 	// insertion point for pointer fields encoding
 	circlegrid.Reference = frontRepo.map_ID_Circle.get(circlegridAPI.CircleGridPointersEncoding.ReferenceID.Int64)
+	circlegrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(circlegridAPI.CircleGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 	circlegrid.Circles = new Array<Circle>()
