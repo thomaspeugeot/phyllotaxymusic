@@ -1666,6 +1666,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			case "ShapeCategory":
 				switch fieldName {
 				// insertion point for field dependant code
+				case "IsExpanded":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_ShapeCategory[identifier].IsExpanded = fielValue
 				}
 			case "VerticalAxis":
 				switch fieldName {

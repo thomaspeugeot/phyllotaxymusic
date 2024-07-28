@@ -13,6 +13,7 @@ export class ShapeCategoryAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	IsExpanded: boolean = false
 
 	// insertion point for other decls
 

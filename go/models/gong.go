@@ -2842,7 +2842,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case RhombusGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Rhombuses"}
 	case ShapeCategory:
-		res = []string{"Name"}
+		res = []string{"Name", "IsExpanded"}
 	case VerticalAxis:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	}
@@ -2951,7 +2951,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *RhombusGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Rhombuses"}
 	case *ShapeCategory:
-		res = []string{"Name"}
+		res = []string{"Name", "IsExpanded"}
 	case *VerticalAxis:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	}
@@ -3420,6 +3420,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 		// string value of fields
 		case "Name":
 			res = inferedInstance.Name
+		case "IsExpanded":
+			res = fmt.Sprintf("%t", inferedInstance.IsExpanded)
 		}
 	case *VerticalAxis:
 		switch fieldName {
@@ -3921,6 +3923,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = inferedInstance.Name
+		case "IsExpanded":
+			res = fmt.Sprintf("%t", inferedInstance.IsExpanded)
 		}
 	case VerticalAxis:
 		switch fieldName {

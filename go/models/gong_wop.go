@@ -288,11 +288,13 @@ func (from *RhombusGrid) CopyBasicFields(to *RhombusGrid) {
 type ShapeCategory_WOP struct {
 	// insertion point
 	Name string
+	IsExpanded bool
 }
 
 func (from *ShapeCategory) CopyBasicFields(to *ShapeCategory) {
 	// insertion point
 	to.Name = from.Name
+	to.IsExpanded = from.IsExpanded
 }
 
 type VerticalAxis_WOP struct {

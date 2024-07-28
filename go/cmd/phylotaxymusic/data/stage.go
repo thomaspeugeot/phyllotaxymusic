@@ -106,7 +106,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000001_Initial_Axis.Transform = ``
 
 	__Axis__000002_Rotated_Axis.Name = `Rotated Axis`
-	__Axis__000002_Rotated_Axis.IsDisplayed = true
+	__Axis__000002_Rotated_Axis.IsDisplayed = false
 	__Axis__000002_Rotated_Axis.Angle = 0.000000
 	__Axis__000002_Rotated_Axis.Length = 383.015368
 	__Axis__000002_Rotated_Axis.CenterX = 0.000000
@@ -293,7 +293,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_Growing_Circle_Grid.Name = `Growing Circle Grid`
-	__CircleGrid__000001_Growing_Circle_Grid.IsDisplayed = true
+	__CircleGrid__000001_Growing_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000002_Growing_Circle_Grid_Shifted_Left.Name = `Growing Circle Grid Shifted Left`
 	__CircleGrid__000002_Growing_Circle_Grid_Shifted_Left.IsDisplayed = false
@@ -302,7 +302,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000003_Initial_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000004_Rotated_Circle_Grid.Name = `Rotated Circle Grid`
-	__CircleGrid__000004_Rotated_Circle_Grid.IsDisplayed = true
+	__CircleGrid__000004_Rotated_Circle_Grid.IsDisplayed = false
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
 	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = false
@@ -363,7 +363,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000001_Initial_Rhombus.Transform = ``
 
 	__Rhombus__000002_Rotated_Next_Rhombus.Name = `Rotated Next Rhombus`
-	__Rhombus__000002_Rotated_Next_Rhombus.IsDisplayed = true
+	__Rhombus__000002_Rotated_Next_Rhombus.IsDisplayed = false
 	__Rhombus__000002_Rotated_Next_Rhombus.CenterX = 148.711148
 	__Rhombus__000002_Rotated_Next_Rhombus.CenterY = 25.854526
 	__Rhombus__000002_Rotated_Next_Rhombus.SideLength = 100.000000
@@ -379,7 +379,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000002_Rotated_Next_Rhombus.Transform = ``
 
 	__Rhombus__000003_Rotated_Rhombus.Name = `Rotated Rhombus`
-	__Rhombus__000003_Rotated_Rhombus.IsDisplayed = true
+	__Rhombus__000003_Rotated_Rhombus.IsDisplayed = false
 	__Rhombus__000003_Rotated_Rhombus.CenterX = 0.000000
 	__Rhombus__000003_Rotated_Rhombus.CenterY = 0.000000
 	__Rhombus__000003_Rotated_Rhombus.SideLength = 100.000000
@@ -395,19 +395,22 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000003_Rotated_Rhombus.Transform = ``
 
 	__RhombusGrid__000000_Growing_Rhombus_Grid.Name = `Growing Rhombus Grid`
-	__RhombusGrid__000000_Growing_Rhombus_Grid.IsDisplayed = true
+	__RhombusGrid__000000_Growing_Rhombus_Grid.IsDisplayed = false
 
 	__RhombusGrid__000001_Initial_Rhombus_Grid.Name = `Initial Rhombus Grid`
 	__RhombusGrid__000001_Initial_Rhombus_Grid.IsDisplayed = false
 
 	__RhombusGrid__000002_Rotated_Rhombus_Grid.Name = `Rotated Rhombus Grid`
-	__RhombusGrid__000002_Rotated_Rhombus_Grid.IsDisplayed = true
+	__RhombusGrid__000002_Rotated_Rhombus_Grid.IsDisplayed = false
 
 	__ShapeCategory__000000_0_Axes.Name = `0. Axes`
+	__ShapeCategory__000000_0_Axes.IsExpanded = false
 
 	__ShapeCategory__000001_1_Initial.Name = `1. Initial`
+	__ShapeCategory__000001_1_Initial.IsExpanded = false
 
 	__ShapeCategory__000002_2_Rotated.Name = `2. Rotated`
+	__ShapeCategory__000002_2_Rotated.IsExpanded = false
 
 	__VerticalAxis__000000_Vertical_Axis.Name = `Vertical Axis`
 	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = false

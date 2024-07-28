@@ -18,6 +18,7 @@ export class ShapeCategory {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	IsExpanded: boolean = false
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -30,6 +31,7 @@ export function CopyShapeCategoryToShapeCategoryAPI(shapecategory: ShapeCategory
 
 	// insertion point for basic fields copy operations
 	shapecategoryAPI.Name = shapecategory.Name
+	shapecategoryAPI.IsExpanded = shapecategory.IsExpanded
 
 	// insertion point for pointer fields encoding
 
@@ -48,6 +50,7 @@ export function CopyShapeCategoryAPIToShapeCategory(shapecategoryAPI: ShapeCateg
 
 	// insertion point for basic fields copy operations
 	shapecategory.Name = shapecategoryAPI.Name
+	shapecategory.IsExpanded = shapecategoryAPI.IsExpanded
 
 	// insertion point for pointer fields encoding
 

@@ -61,6 +61,7 @@ func main() {
 
 	tree := new(phylotaxymusic_tree.Tree)
 	tree.TreeStack = gongtree_stack
+	tree.Stack = phylotaxymusicStack
 
 	parameterImpl := new(ParameterImpl)
 	parameterImpl.parameter = parameter

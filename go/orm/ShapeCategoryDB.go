@@ -61,6 +61,10 @@ type ShapeCategoryDB struct {
 
 	// Declation for basic field shapecategoryDB.Name
 	Name_Data sql.NullString
+
+	// Declation for basic field shapecategoryDB.IsExpanded
+	// provide the sql storage for the boolan
+	IsExpanded_Data sql.NullBool
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -85,6 +89,8 @@ type ShapeCategoryWOP struct {
 	// insertion for WOP basic fields
 
 	Name string `xlsx:"1"`
+
+	IsExpanded bool `xlsx:"2"`
 	// insertion for WOP pointer fields
 }
 
@@ -92,6 +98,7 @@ var ShapeCategory_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
+	"IsExpanded",
 }
 
 type BackRepoShapeCategoryStruct struct {
@@ -360,6 +367,9 @@ func (shapecategoryDB *ShapeCategoryDB) CopyBasicFieldsFromShapeCategory(shapeca
 
 	shapecategoryDB.Name_Data.String = shapecategory.Name
 	shapecategoryDB.Name_Data.Valid = true
+
+	shapecategoryDB.IsExpanded_Data.Bool = shapecategory.IsExpanded
+	shapecategoryDB.IsExpanded_Data.Valid = true
 }
 
 // CopyBasicFieldsFromShapeCategory_WOP
@@ -368,6 +378,9 @@ func (shapecategoryDB *ShapeCategoryDB) CopyBasicFieldsFromShapeCategory_WOP(sha
 
 	shapecategoryDB.Name_Data.String = shapecategory.Name
 	shapecategoryDB.Name_Data.Valid = true
+
+	shapecategoryDB.IsExpanded_Data.Bool = shapecategory.IsExpanded
+	shapecategoryDB.IsExpanded_Data.Valid = true
 }
 
 // CopyBasicFieldsFromShapeCategoryWOP
@@ -376,18 +389,23 @@ func (shapecategoryDB *ShapeCategoryDB) CopyBasicFieldsFromShapeCategoryWOP(shap
 
 	shapecategoryDB.Name_Data.String = shapecategory.Name
 	shapecategoryDB.Name_Data.Valid = true
+
+	shapecategoryDB.IsExpanded_Data.Bool = shapecategory.IsExpanded
+	shapecategoryDB.IsExpanded_Data.Valid = true
 }
 
 // CopyBasicFieldsToShapeCategory
 func (shapecategoryDB *ShapeCategoryDB) CopyBasicFieldsToShapeCategory(shapecategory *models.ShapeCategory) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	shapecategory.Name = shapecategoryDB.Name_Data.String
+	shapecategory.IsExpanded = shapecategoryDB.IsExpanded_Data.Bool
 }
 
 // CopyBasicFieldsToShapeCategory_WOP
 func (shapecategoryDB *ShapeCategoryDB) CopyBasicFieldsToShapeCategory_WOP(shapecategory *models.ShapeCategory_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	shapecategory.Name = shapecategoryDB.Name_Data.String
+	shapecategory.IsExpanded = shapecategoryDB.IsExpanded_Data.Bool
 }
 
 // CopyBasicFieldsToShapeCategoryWOP
@@ -395,6 +413,7 @@ func (shapecategoryDB *ShapeCategoryDB) CopyBasicFieldsToShapeCategoryWOP(shapec
 	shapecategory.ID = int(shapecategoryDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	shapecategory.Name = shapecategoryDB.Name_Data.String
+	shapecategory.IsExpanded = shapecategoryDB.IsExpanded_Data.Bool
 }
 
 // Backup generates a json file from a slice of all ShapeCategoryDB instances in the backrepo

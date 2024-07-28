@@ -1380,6 +1380,8 @@ func (shapecategoryFormCallback *ShapeCategoryFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(shapecategory_.Name), formDiv)
+		case "IsExpanded":
+			FormDivBasicFieldToField(&(shapecategory_.IsExpanded), formDiv)
 		}
 	}
 
