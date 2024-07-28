@@ -1,16 +1,13 @@
-package tree
+package models
 
 import (
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
-
-	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
-	phylotaxymusic_stack "github.com/thomaspeugeot/phylotaxymusic/go/stack"
 )
 
 // Tree, for tree workspace holds the supporting data for performing operation on the weber tree
 type Tree struct {
-	Stack *phylotaxymusic_stack.Stack
+	Stage *StageStruct
 
 	TreeStack *gongtree_stack.Stack
 
@@ -22,6 +19,6 @@ type Tree struct {
 
 	// SVGGenerator is the callback for generating the SVG
 	SVGGenerator interface {
-		GenerateSVG(parameter *phylotaxymusic_models.Parameter)
+		GenerateSVG(parameter *Parameter)
 	}
 }

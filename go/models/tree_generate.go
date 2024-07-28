@@ -1,25 +1,23 @@
-package tree
+package models
 
 import (
 	"cmp"
 	"slices"
 
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
-
-	models "github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
-func (tree *Tree) Generate(parameter *models.Parameter) {
+func (tree *Tree) Generate(parameter *Parameter) {
 
 	tree.TreeStack.Stage.Reset()
 
 	tree.NodeTree = new(gongtree_models.Tree).Stage(tree.TreeStack.Stage)
-	tree.NodeTree.Name = string(models.Sidebar)
+	tree.NodeTree.Name = string(Sidebar)
 
 	//
 	// collect all shape categories
 	//
-	map_ShapeCategory_Shapes := make(map[*models.ShapeCategory][]models.Shape, 0)
+	map_ShapeCategory_Shapes := make(map[*ShapeCategory][]Shape, 0)
 	for _, shape := range parameter.Shapes {
 		sc := shape.GetShapeCategory()
 		if sc == nil {
@@ -27,16 +25,16 @@ func (tree *Tree) Generate(parameter *models.Parameter) {
 		}
 
 		if map_ShapeCategory_Shapes[sc] == nil {
-			map_ShapeCategory_Shapes[sc] = make([]models.Shape, 0)
+			map_ShapeCategory_Shapes[sc] = make([]Shape, 0)
 		}
 		map_ShapeCategory_Shapes[sc] = append(map_ShapeCategory_Shapes[sc], shape)
 	}
 
-	var shapeCategories []*models.ShapeCategory
+	var shapeCategories []*ShapeCategory
 	for k, _ := range map_ShapeCategory_Shapes {
 		shapeCategories = append(shapeCategories, k)
 	}
-	slices.SortFunc(shapeCategories, func(sc1, sc2 *models.ShapeCategory) int {
+	slices.SortFunc(shapeCategories, func(sc1, sc2 *ShapeCategory) int {
 		return cmp.Compare(sc1.Name, sc2.Name)
 	})
 
@@ -53,7 +51,7 @@ func (tree *Tree) Generate(parameter *models.Parameter) {
 
 		node.Impl = &shapeCategoryNodeImpl{
 			sc:    sc,
-			stage: tree.Stack.Stage,
+			stage: tree.Stage,
 		}
 
 		tree.NodeTree.RootNodes = append(tree.NodeTree.RootNodes, node)
@@ -72,8 +70,8 @@ func (tree *Tree) Generate(parameter *models.Parameter) {
 }
 
 type shapeCategoryNodeImpl struct {
-	sc    *models.ShapeCategory
-	stage *models.StageStruct
+	sc    *ShapeCategory
+	stage *StageStruct
 }
 
 func (shapeCategoryNodeImpl *shapeCategoryNodeImpl) OnAfterUpdate(
@@ -88,7 +86,7 @@ func (shapeCategoryNodeImpl *shapeCategoryNodeImpl) OnAfterUpdate(
 	shapeCategoryNodeImpl.stage.Commit()
 }
 
-func AddShape[T models.Shape](tree *Tree, s T, shapeCategoryNode *gongtree_models.Node) {
+func AddShape[T Shape](tree *Tree, s T, shapeCategoryNode *gongtree_models.Node) {
 	tree.addNode(s.GetName(), s, shapeCategoryNode, s.GetIsDisplayed())
 }
 

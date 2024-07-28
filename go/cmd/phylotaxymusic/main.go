@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
-	phylotaxymusic_tree "github.com/thomaspeugeot/phylotaxymusic/go/tree"
 
 	phylotaxymusic_stack "github.com/thomaspeugeot/phylotaxymusic/go/stack"
 	phylotaxymusic_static "github.com/thomaspeugeot/phylotaxymusic/go/static"
@@ -59,9 +58,9 @@ func main() {
 
 	parameter := (*parameters)["Reference"]
 
-	tree := new(phylotaxymusic_tree.Tree)
+	tree := new(phylotaxymusic_models.Tree)
 	tree.TreeStack = gongtree_stack
-	tree.Stack = phylotaxymusicStack
+	tree.Stage = phylotaxymusicStack.Stage
 
 	parameterImpl := new(ParameterImpl)
 	parameterImpl.parameter = parameter
@@ -87,7 +86,7 @@ type ParameterImpl struct {
 	gongsvgStage        *gongsvg_models.StageStruct
 	phylotaxymusicStage *phylotaxymusic_models.StageStruct
 	parameter           *phylotaxymusic_models.Parameter
-	tree                *phylotaxymusic_tree.Tree
+	tree                *phylotaxymusic_models.Tree
 }
 
 // Generate implements models.GeneratorInterface.
