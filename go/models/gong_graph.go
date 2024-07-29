@@ -29,6 +29,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *HorizontalAxis:
 		ok = stage.IsStagedHorizontalAxis(target)
 
+	case *Key:
+		ok = stage.IsStagedKey(target)
+
 	case *Parameter:
 		ok = stage.IsStagedParameter(target)
 
@@ -107,6 +110,13 @@ func (stage *StageStruct) IsStagedHorizontalAxis(horizontalaxis *HorizontalAxis)
 	return
 }
 
+func (stage *StageStruct) IsStagedKey(key *Key) (ok bool) {
+
+	_, ok = stage.Keys[key]
+
+	return
+}
+
 func (stage *StageStruct) IsStagedParameter(parameter *Parameter) (ok bool) {
 
 	_, ok = stage.Parameters[parameter]
@@ -173,6 +183,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *HorizontalAxis:
 		stage.StageBranchHorizontalAxis(target)
+
+	case *Key:
+		stage.StageBranchKey(target)
 
 	case *Parameter:
 		stage.StageBranchParameter(target)
@@ -360,6 +373,24 @@ func (stage *StageStruct) StageBranchHorizontalAxis(horizontalaxis *HorizontalAx
 
 }
 
+func (stage *StageStruct) StageBranchKey(key *Key) {
+
+	// check if instance is already staged
+	if IsStaged(stage, key) {
+		return
+	}
+
+	key.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if key.ShapeCategory != nil {
+		StageBranch(stage, key.ShapeCategory)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 
 	// check if instance is already staged
@@ -459,6 +490,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.GrowthCurveStack != nil {
 		StageBranch(stage, parameter.GrowthCurveStack)
+	}
+	if parameter.Fkey != nil {
+		StageBranch(stage, parameter.Fkey)
 	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
@@ -587,6 +621,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *HorizontalAxis:
 		toT := CopyBranchHorizontalAxis(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *Key:
+		toT := CopyBranchKey(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *Parameter:
@@ -813,6 +851,28 @@ func CopyBranchHorizontalAxis(mapOrigCopy map[any]any, horizontalaxisFrom *Horiz
 	return
 }
 
+func CopyBranchKey(mapOrigCopy map[any]any, keyFrom *Key) (keyTo *Key) {
+
+	// keyFrom has already been copied
+	if _keyTo, ok := mapOrigCopy[keyFrom]; ok {
+		keyTo = _keyTo.(*Key)
+		return
+	}
+
+	keyTo = new(Key)
+	mapOrigCopy[keyFrom] = keyTo
+	keyFrom.CopyBasicFields(keyTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if keyFrom.ShapeCategory != nil {
+		keyTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, keyFrom.ShapeCategory)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (parameterTo *Parameter) {
 
 	// parameterFrom has already been copied
@@ -915,6 +975,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	}
 	if parameterFrom.GrowthCurveStack != nil {
 		parameterTo.GrowthCurveStack = CopyBranchBezierGridStack(mapOrigCopy, parameterFrom.GrowthCurveStack)
+	}
+	if parameterFrom.Fkey != nil {
+		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
 	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
@@ -1050,6 +1113,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *HorizontalAxis:
 		stage.UnstageBranchHorizontalAxis(target)
+
+	case *Key:
+		stage.UnstageBranchKey(target)
 
 	case *Parameter:
 		stage.UnstageBranchParameter(target)
@@ -1237,6 +1303,24 @@ func (stage *StageStruct) UnstageBranchHorizontalAxis(horizontalaxis *Horizontal
 
 }
 
+func (stage *StageStruct) UnstageBranchKey(key *Key) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, key) {
+		return
+	}
+
+	key.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if key.ShapeCategory != nil {
+		UnstageBranch(stage, key.ShapeCategory)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 
 	// check if instance is already staged
@@ -1336,6 +1420,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.GrowthCurveStack != nil {
 		UnstageBranch(stage, parameter.GrowthCurveStack)
+	}
+	if parameter.Fkey != nil {
+		UnstageBranch(stage, parameter.Fkey)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

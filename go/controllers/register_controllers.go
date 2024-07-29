@@ -103,6 +103,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/horizontalaxiss/:id", GetController().UpdateHorizontalAxis)
 		v1.DELETE("/v1/horizontalaxiss/:id", GetController().DeleteHorizontalAxis)
 
+		v1.GET("/v1/keys", GetController().GetKeys)
+		v1.GET("/v1/keys/:id", GetController().GetKey)
+		v1.POST("/v1/keys", GetController().PostKey)
+		v1.PATCH("/v1/keys/:id", GetController().UpdateKey)
+		v1.PUT("/v1/keys/:id", GetController().UpdateKey)
+		v1.DELETE("/v1/keys/:id", GetController().DeleteKey)
+
 		v1.GET("/v1/parameters", GetController().GetParameters)
 		v1.GET("/v1/parameters/:id", GetController().GetParameter)
 		v1.POST("/v1/parameters", GetController().PostParameter)

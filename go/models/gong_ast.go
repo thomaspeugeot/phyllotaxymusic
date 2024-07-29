@@ -322,6 +322,7 @@ var __gong__map_BezierGridStack = make(map[string]*BezierGridStack)
 var __gong__map_Circle = make(map[string]*Circle)
 var __gong__map_CircleGrid = make(map[string]*CircleGrid)
 var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
+var __gong__map_Key = make(map[string]*Key)
 var __gong__map_Parameter = make(map[string]*Parameter)
 var __gong__map_Rhombus = make(map[string]*Rhombus)
 var __gong__map_RhombusGrid = make(map[string]*RhombusGrid)
@@ -531,6 +532,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceHorizontalAxis := (&HorizontalAxis{Name: instanceName}).Stage(stage)
 										instance = any(instanceHorizontalAxis)
 										__gong__map_HorizontalAxis[identifier] = instanceHorizontalAxis
+									case "Key":
+										instanceKey := (&Key{Name: instanceName}).Stage(stage)
+										instance = any(instanceKey)
+										__gong__map_Key[identifier] = instanceKey
 									case "Parameter":
 										instanceParameter := (&Parameter{Name: instanceName}).Stage(stage)
 										instance = any(instanceParameter)
@@ -616,6 +621,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							// insertion point for date assign code
 							}
 						case "HorizontalAxis":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "Key":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -717,6 +726,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 								append(__gong__map_CircleGrid[identifier].Circles, target)
 						}
 					case "HorizontalAxis":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "Key":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -1142,6 +1155,59 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_HorizontalAxis[identifier].Transform = fielValue
 				}
+			case "Key":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Key[identifier].Name = fielValue
+				case "Path":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Key[identifier].Path = fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Key[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Key[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Key[identifier].Stroke = fielValue
+				case "StrokeOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Key[identifier].StrokeOpacity = exprSign * fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Key[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Key[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Key[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Key[identifier].Transform = fielValue
+				}
 			case "Parameter":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1532,6 +1598,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					targetIdentifier := ident.Name
 					__gong__map_HorizontalAxis[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
+			case "Key":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Key[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_Key[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
+				}
 			case "Parameter":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1625,6 +1705,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "GrowthCurveStack":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].GrowthCurveStack = __gong__map_BezierGridStack[targetIdentifier]
+				case "Fkey":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].Fkey = __gong__map_Key[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]
@@ -1745,6 +1828,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "HorizontalAxis":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "Key":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

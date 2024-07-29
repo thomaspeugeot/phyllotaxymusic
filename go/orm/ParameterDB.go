@@ -167,6 +167,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	GrowthCurveStackID sql.NullInt64
 
+	// field Fkey is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	FkeyID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -765,6 +769,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.GrowthCurveStackID.Valid = true
 		}
 
+		// commit pointer value parameter.Fkey translates to updating the parameter.FkeyID
+		parameterDB.FkeyID.Valid = true // allow for a 0 value (nil association)
+		if parameter.Fkey != nil {
+			if FkeyId, ok := backRepo.BackRepoKey.Map_KeyPtr_KeyDBID[parameter.Fkey]; ok {
+				parameterDB.FkeyID.Int64 = int64(FkeyId)
+				parameterDB.FkeyID.Valid = true
+			}
+		} else {
+			parameterDB.FkeyID.Int64 = 0
+			parameterDB.FkeyID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -1051,6 +1067,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.GrowthCurveStack = nil
 	if parameterDB.GrowthCurveStackID.Int64 != 0 {
 		parameter.GrowthCurveStack = backRepo.BackRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackPtr[uint(parameterDB.GrowthCurveStackID.Int64)]
+	}
+	// Fkey field
+	parameter.Fkey = nil
+	if parameterDB.FkeyID.Int64 != 0 {
+		parameter.Fkey = backRepo.BackRepoKey.Map_KeyDBID_KeyPtr[uint(parameterDB.FkeyID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -1600,6 +1621,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.GrowthCurveStackID.Int64 != 0 {
 			parameterDB.GrowthCurveStackID.Int64 = int64(BackRepoBezierGridStackid_atBckpTime_newID[uint(parameterDB.GrowthCurveStackID.Int64)])
 			parameterDB.GrowthCurveStackID.Valid = true
+		}
+
+		// reindexing Fkey field
+		if parameterDB.FkeyID.Int64 != 0 {
+			parameterDB.FkeyID.Int64 = int64(BackRepoKeyid_atBckpTime_newID[uint(parameterDB.FkeyID.Int64)])
+			parameterDB.FkeyID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

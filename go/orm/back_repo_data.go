@@ -20,6 +20,8 @@ type BackRepoData struct {
 
 	HorizontalAxisAPIs []*HorizontalAxisAPI
 
+	KeyAPIs []*KeyAPI
+
 	ParameterAPIs []*ParameterAPI
 
 	RhombusAPIs []*RhombusAPI
@@ -111,6 +113,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		horizontalaxisDB.CopyBasicFieldsToHorizontalAxis_WOP(&horizontalaxisAPI.HorizontalAxis_WOP)
 
 		backRepoData.HorizontalAxisAPIs = append(backRepoData.HorizontalAxisAPIs, &horizontalaxisAPI)
+	}
+
+	for _, keyDB := range backRepo.BackRepoKey.Map_KeyDBID_KeyDB {
+
+		var keyAPI KeyAPI
+		keyAPI.ID = keyDB.ID
+		keyAPI.KeyPointersEncoding = keyDB.KeyPointersEncoding
+		keyDB.CopyBasicFieldsToKey_WOP(&keyAPI.Key_WOP)
+
+		backRepoData.KeyAPIs = append(backRepoData.KeyAPIs, &keyAPI)
 	}
 
 	for _, parameterDB := range backRepo.BackRepoParameter.Map_ParameterDBID_ParameterDB {

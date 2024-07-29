@@ -940,6 +940,105 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 
 	fillUpTree(horizontalaxisFormCallback.probe)
 }
+func __gong__New__KeyFormCallback(
+	key *models.Key,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (keyFormCallback *KeyFormCallback) {
+	keyFormCallback = new(KeyFormCallback)
+	keyFormCallback.probe = probe
+	keyFormCallback.key = key
+	keyFormCallback.formGroup = formGroup
+
+	keyFormCallback.CreationMode = (key == nil)
+
+	return
+}
+
+type KeyFormCallback struct {
+	key *models.Key
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (keyFormCallback *KeyFormCallback) OnSave() {
+
+	log.Println("KeyFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	keyFormCallback.probe.formStage.Checkout()
+
+	if keyFormCallback.key == nil {
+		keyFormCallback.key = new(models.Key).Stage(keyFormCallback.probe.stageOfInterest)
+	}
+	key_ := keyFormCallback.key
+	_ = key_
+
+	for _, formDiv := range keyFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(key_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(key_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(key_.ShapeCategory), keyFormCallback.probe.stageOfInterest, formDiv)
+		case "Path":
+			FormDivBasicFieldToField(&(key_.Path), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(key_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(key_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(key_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(key_.StrokeOpacity), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(key_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(key_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(key_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(key_.Transform), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if keyFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		key_.Unstage(keyFormCallback.probe.stageOfInterest)
+	}
+
+	keyFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.Key](
+		keyFormCallback.probe,
+	)
+	keyFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if keyFormCallback.CreationMode || keyFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		keyFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(keyFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__KeyFormCallback(
+			nil,
+			keyFormCallback.probe,
+			newFormGroup,
+		)
+		key := new(models.Key)
+		FillUpForm(key, newFormGroup, keyFormCallback.probe)
+		keyFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(keyFormCallback.probe)
+}
 func __gong__New__ParameterFormCallback(
 	parameter *models.Parameter,
 	probe *Probe,
@@ -1063,6 +1162,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.StackHeight), formDiv)
 		case "BezierControlLengthRatio":
 			FormDivBasicFieldToField(&(parameter_.BezierControlLengthRatio), formDiv)
+		case "Fkey":
+			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

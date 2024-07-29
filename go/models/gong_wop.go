@@ -203,6 +203,36 @@ func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
 	to.Transform = from.Transform
 }
 
+type Key_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+	Path string
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
+	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
+}
+
+func (from *Key) CopyBasicFields(to *Key) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+	to.Path = from.Path
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
+	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
+}
+
 type Parameter_WOP struct {
 	// insertion point
 	Name string

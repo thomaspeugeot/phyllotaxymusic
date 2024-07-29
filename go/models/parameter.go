@@ -79,6 +79,9 @@ type Parameter struct {
 	// ratio of the length of the control vector to the side length
 	BezierControlLengthRatio float64
 
+	// the score
+	Fkey *Key
+
 	// for drawing purpose
 	OriginX        float64
 	OriginY        float64
@@ -198,6 +201,10 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 		}
 	}
 	p.Shapes = append(p.Shapes, p.GrowthCurveStack)
+
+	p.ComputeFKey()
+	p.Shapes = append(p.Shapes, p.Fkey)
+
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -587,4 +594,8 @@ func (p *Parameter) ComputeGrowthCurve() {
 
 		p.computeBezier(_b, c.Circles[i], c.Circles[i+1])
 	}
+}
+
+func (p *Parameter) ComputeFKey() {
+
 }

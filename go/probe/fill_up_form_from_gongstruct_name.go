@@ -130,6 +130,19 @@ func FillUpFormFromGongstructName(
 		horizontalaxis := new(models.HorizontalAxis)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(horizontalaxis, formGroup, probe)
+	case "Key":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "Key Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__KeyFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		key := new(models.Key)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(key, formGroup, probe)
 	case "Parameter":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
