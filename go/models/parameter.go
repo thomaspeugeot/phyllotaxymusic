@@ -80,7 +80,15 @@ type Parameter struct {
 	BezierControlLengthRatio float64
 
 	// the score
-	Fkey *Key
+	Fkey                *Key
+	FkeySizeRatio       float64
+	FkeyOriginRelativeX float64
+	FkeyOriginRelativeY float64
+
+	PitchLines              *AxisGrid
+	PitchLinesHeightRatio   float64
+	MeasureLines            *AxisGrid
+	MeasureLinesHeightRatio float64
 
 	// for drawing purpose
 	OriginX        float64

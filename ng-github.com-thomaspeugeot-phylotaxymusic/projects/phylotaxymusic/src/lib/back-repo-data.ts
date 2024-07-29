@@ -17,6 +17,8 @@ import { CircleGridAPI } from './circlegrid-api'
 
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 
+import { KeyAPI } from './key-api'
+
 import { ParameterAPI } from './parameter-api'
 
 import { RhombusAPI } from './rhombus-api'
@@ -45,6 +47,8 @@ export class BackRepoData {
 	CircleGridAPIs = new Array<CircleGridAPI>()
 
 	HorizontalAxisAPIs = new Array<HorizontalAxisAPI>()
+
+	KeyAPIs = new Array<KeyAPI>()
 
 	ParameterAPIs = new Array<ParameterAPI>()
 
@@ -75,6 +79,8 @@ export class BackRepoData {
 		this.CircleGridAPIs = data?.CircleGridAPIs || [];
 
 		this.HorizontalAxisAPIs = data?.HorizontalAxisAPIs || [];
+
+		this.KeyAPIs = data?.KeyAPIs || [];
 
 		this.ParameterAPIs = data?.ParameterAPIs || [];
 

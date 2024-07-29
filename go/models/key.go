@@ -27,5 +27,10 @@ func (key *Key) Draw(gongsvgStage *svg.StageStruct, layer *svg.Layer, p *Paramet
 
 	key.Presentation.CopyTo(&path.Presentation)
 
-	path.Transform = fmt.Sprintf(" translate(%0.1f, %0.1f)", p.OriginX, p.OriginY) + path.Transform
+	path.Transform = fmt.Sprintf("scale(%f, %f) translate(%0.1f, %0.1f) ",
+		p.FkeySizeRatio*p.SideLength,
+		p.FkeySizeRatio*p.SideLength,
+		p.OriginX+p.FkeyOriginRelativeX*p.SideLength,
+		p.OriginY-p.FkeyOriginRelativeY*p.SideLength,
+	) + path.Transform
 }

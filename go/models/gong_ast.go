@@ -1278,6 +1278,41 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].BezierControlLengthRatio = exprSign * fielValue
+				case "FkeySizeRatio":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].FkeySizeRatio = exprSign * fielValue
+				case "FkeyOriginRelativeX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].FkeyOriginRelativeX = exprSign * fielValue
+				case "FkeyOriginRelativeY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].FkeyOriginRelativeY = exprSign * fielValue
+				case "PitchLinesHeightRatio":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].PitchLinesHeightRatio = exprSign * fielValue
+				case "MeasureLinesHeightRatio":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].MeasureLinesHeightRatio = exprSign * fielValue
 				case "OriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1708,6 +1743,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "Fkey":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].Fkey = __gong__map_Key[targetIdentifier]
+				case "PitchLines":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].PitchLines = __gong__map_AxisGrid[targetIdentifier]
+				case "MeasureLines":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].MeasureLines = __gong__map_AxisGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

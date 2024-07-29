@@ -494,6 +494,12 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.Fkey != nil {
 		StageBranch(stage, parameter.Fkey)
 	}
+	if parameter.PitchLines != nil {
+		StageBranch(stage, parameter.PitchLines)
+	}
+	if parameter.MeasureLines != nil {
+		StageBranch(stage, parameter.MeasureLines)
+	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
 	}
@@ -979,6 +985,12 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.Fkey != nil {
 		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
 	}
+	if parameterFrom.PitchLines != nil {
+		parameterTo.PitchLines = CopyBranchAxisGrid(mapOrigCopy, parameterFrom.PitchLines)
+	}
+	if parameterFrom.MeasureLines != nil {
+		parameterTo.MeasureLines = CopyBranchAxisGrid(mapOrigCopy, parameterFrom.MeasureLines)
+	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
 	}
@@ -1423,6 +1435,12 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.Fkey != nil {
 		UnstageBranch(stage, parameter.Fkey)
+	}
+	if parameter.PitchLines != nil {
+		UnstageBranch(stage, parameter.PitchLines)
+	}
+	if parameter.MeasureLines != nil {
+		UnstageBranch(stage, parameter.MeasureLines)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

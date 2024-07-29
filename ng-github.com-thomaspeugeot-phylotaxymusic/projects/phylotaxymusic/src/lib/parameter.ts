@@ -13,6 +13,7 @@ import { AxisGrid } from './axisgrid'
 import { Bezier } from './bezier'
 import { BezierGrid } from './beziergrid'
 import { BezierGridStack } from './beziergridstack'
+import { Key } from './key'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 
@@ -38,6 +39,11 @@ export class Parameter {
 	NbShitRight: number = 0
 	StackHeight: number = 0
 	BezierControlLengthRatio: number = 0
+	FkeySizeRatio: number = 0
+	FkeyOriginRelativeX: number = 0
+	FkeyOriginRelativeY: number = 0
+	PitchLinesHeightRatio: number = 0
+	MeasureLinesHeightRatio: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -102,6 +108,12 @@ export class Parameter {
 
 	GrowthCurveStack?: BezierGridStack
 
+	Fkey?: Key
+
+	PitchLines?: AxisGrid
+
+	MeasureLines?: AxisGrid
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -125,6 +137,11 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.NbShitRight = parameter.NbShitRight
 	parameterAPI.StackHeight = parameter.StackHeight
 	parameterAPI.BezierControlLengthRatio = parameter.BezierControlLengthRatio
+	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
+	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
+	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
+	parameterAPI.PitchLinesHeightRatio = parameter.PitchLinesHeightRatio
+	parameterAPI.MeasureLinesHeightRatio = parameter.MeasureLinesHeightRatio
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 
@@ -339,6 +356,27 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.FkeyID.Valid = true
+	if (parameter.Fkey != undefined) {
+		parameterAPI.ParameterPointersEncoding.FkeyID.Int64 = parameter.Fkey.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.FkeyID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.PitchLinesID.Valid = true
+	if (parameter.PitchLines != undefined) {
+		parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64 = parameter.PitchLines.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.MeasureLinesID.Valid = true
+	if (parameter.MeasureLines != undefined) {
+		parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64 = parameter.MeasureLines.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -378,6 +416,11 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.NbShitRight = parameterAPI.NbShitRight
 	parameter.StackHeight = parameterAPI.StackHeight
 	parameter.BezierControlLengthRatio = parameterAPI.BezierControlLengthRatio
+	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
+	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX
+	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY
+	parameter.PitchLinesHeightRatio = parameterAPI.PitchLinesHeightRatio
+	parameter.MeasureLinesHeightRatio = parameterAPI.MeasureLinesHeightRatio
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 
@@ -412,6 +455,9 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.GrowthCurveNextShiftedRightSeed = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightSeedID.Int64)
 	parameter.GrowthCurveNextShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightID.Int64)
 	parameter.GrowthCurveStack = frontRepo.map_ID_BezierGridStack.get(parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64)
+	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
+	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
+	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

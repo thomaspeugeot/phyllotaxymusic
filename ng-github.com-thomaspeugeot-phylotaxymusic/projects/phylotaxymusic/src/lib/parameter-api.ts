@@ -8,6 +8,7 @@ import { AxisGridAPI } from './axisgrid-api'
 import { BezierAPI } from './bezier-api'
 import { BezierGridAPI } from './beziergrid-api'
 import { BezierGridStackAPI } from './beziergridstack-api'
+import { KeyAPI } from './key-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 
@@ -33,6 +34,11 @@ export class ParameterAPI {
 	NbShitRight: number = 0
 	StackHeight: number = 0
 	BezierControlLengthRatio: number = 0
+	FkeySizeRatio: number = 0
+	FkeyOriginRelativeX: number = 0
+	FkeyOriginRelativeY: number = 0
+	PitchLinesHeightRatio: number = 0
+	MeasureLinesHeightRatio: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -102,6 +108,12 @@ export class ParameterPointersEncoding {
 	GrowthCurveNextShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveNextShiftedRight.ID = 0
 
 	GrowthCurveStackID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveStack.ID = 0
+
+	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
+
+	PitchLinesID: NullInt64 = new NullInt64 // if pointer is null, PitchLines.ID = 0
+
+	MeasureLinesID: NullInt64 = new NullInt64 // if pointer is null, MeasureLines.ID = 0
 
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 

@@ -4,6 +4,7 @@ import * as phylotaxymusic from '../../../phylotaxymusic/src/public-api'
 
 import { MatSliderModule } from '@angular/material/slider'
 import { FormsModule } from '@angular/forms';  // Import FormsModule
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { AngularSplitModule } from 'angular-split';
 
@@ -20,6 +21,7 @@ import { CommonModule } from '@angular/common';
     MatSliderModule,
     FormsModule,
     AngularSplitModule,
+    MatGridListModule,
 
     GongsvgDiagrammingComponent,
     TreeComponent,
@@ -48,6 +50,7 @@ export class PhylotaxymusicspecificComponent implements OnInit {
 
 
   toto: number = 40.0
+  rowHeight: string = "50px"
 
   public frontRepo?: phylotaxymusic.FrontRepo
 

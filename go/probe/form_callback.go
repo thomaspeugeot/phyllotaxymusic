@@ -1164,6 +1164,20 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.BezierControlLengthRatio), formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "FkeySizeRatio":
+			FormDivBasicFieldToField(&(parameter_.FkeySizeRatio), formDiv)
+		case "FkeyOriginRelativeX":
+			FormDivBasicFieldToField(&(parameter_.FkeyOriginRelativeX), formDiv)
+		case "FkeyOriginRelativeY":
+			FormDivBasicFieldToField(&(parameter_.FkeyOriginRelativeY), formDiv)
+		case "PitchLines":
+			FormDivSelectFieldToField(&(parameter_.PitchLines), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "PitchLinesHeightRatio":
+			FormDivBasicFieldToField(&(parameter_.PitchLinesHeightRatio), formDiv)
+		case "MeasureLines":
+			FormDivSelectFieldToField(&(parameter_.MeasureLines), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "MeasureLinesHeightRatio":
+			FormDivBasicFieldToField(&(parameter_.MeasureLinesHeightRatio), formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

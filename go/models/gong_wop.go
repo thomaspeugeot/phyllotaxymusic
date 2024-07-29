@@ -245,6 +245,11 @@ type Parameter_WOP struct {
 	NbShitRight int
 	StackHeight int
 	BezierControlLengthRatio float64
+	FkeySizeRatio float64
+	FkeyOriginRelativeX float64
+	FkeyOriginRelativeY float64
+	PitchLinesHeightRatio float64
+	MeasureLinesHeightRatio float64
 	OriginX float64
 	OriginY float64
 }
@@ -261,6 +266,11 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.NbShitRight = from.NbShitRight
 	to.StackHeight = from.StackHeight
 	to.BezierControlLengthRatio = from.BezierControlLengthRatio
+	to.FkeySizeRatio = from.FkeySizeRatio
+	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX
+	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY
+	to.PitchLinesHeightRatio = from.PitchLinesHeightRatio
+	to.MeasureLinesHeightRatio = from.MeasureLinesHeightRatio
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
 }

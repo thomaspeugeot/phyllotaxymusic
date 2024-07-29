@@ -171,6 +171,14 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	FkeyID sql.NullInt64
 
+	// field PitchLines is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	PitchLinesID sql.NullInt64
+
+	// field MeasureLines is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	MeasureLinesID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -221,6 +229,21 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.BezierControlLengthRatio
 	BezierControlLengthRatio_Data sql.NullFloat64
 
+	// Declation for basic field parameterDB.FkeySizeRatio
+	FkeySizeRatio_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.FkeyOriginRelativeX
+	FkeyOriginRelativeX_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.FkeyOriginRelativeY
+	FkeyOriginRelativeY_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.PitchLinesHeightRatio
+	PitchLinesHeightRatio_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.MeasureLinesHeightRatio
+	MeasureLinesHeightRatio_Data sql.NullFloat64
+
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
 
@@ -269,9 +292,19 @@ type ParameterWOP struct {
 
 	BezierControlLengthRatio float64 `xlsx:"10"`
 
-	OriginX float64 `xlsx:"11"`
+	FkeySizeRatio float64 `xlsx:"11"`
 
-	OriginY float64 `xlsx:"12"`
+	FkeyOriginRelativeX float64 `xlsx:"12"`
+
+	FkeyOriginRelativeY float64 `xlsx:"13"`
+
+	PitchLinesHeightRatio float64 `xlsx:"14"`
+
+	MeasureLinesHeightRatio float64 `xlsx:"15"`
+
+	OriginX float64 `xlsx:"16"`
+
+	OriginY float64 `xlsx:"17"`
 	// insertion for WOP pointer fields
 }
 
@@ -288,6 +321,11 @@ var Parameter_Fields = []string{
 	"NbShitRight",
 	"StackHeight",
 	"BezierControlLengthRatio",
+	"FkeySizeRatio",
+	"FkeyOriginRelativeX",
+	"FkeyOriginRelativeY",
+	"PitchLinesHeightRatio",
+	"MeasureLinesHeightRatio",
 	"OriginX",
 	"OriginY",
 }
@@ -781,6 +819,30 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.FkeyID.Valid = true
 		}
 
+		// commit pointer value parameter.PitchLines translates to updating the parameter.PitchLinesID
+		parameterDB.PitchLinesID.Valid = true // allow for a 0 value (nil association)
+		if parameter.PitchLines != nil {
+			if PitchLinesId, ok := backRepo.BackRepoAxisGrid.Map_AxisGridPtr_AxisGridDBID[parameter.PitchLines]; ok {
+				parameterDB.PitchLinesID.Int64 = int64(PitchLinesId)
+				parameterDB.PitchLinesID.Valid = true
+			}
+		} else {
+			parameterDB.PitchLinesID.Int64 = 0
+			parameterDB.PitchLinesID.Valid = true
+		}
+
+		// commit pointer value parameter.MeasureLines translates to updating the parameter.MeasureLinesID
+		parameterDB.MeasureLinesID.Valid = true // allow for a 0 value (nil association)
+		if parameter.MeasureLines != nil {
+			if MeasureLinesId, ok := backRepo.BackRepoAxisGrid.Map_AxisGridPtr_AxisGridDBID[parameter.MeasureLines]; ok {
+				parameterDB.MeasureLinesID.Int64 = int64(MeasureLinesId)
+				parameterDB.MeasureLinesID.Valid = true
+			}
+		} else {
+			parameterDB.MeasureLinesID.Int64 = 0
+			parameterDB.MeasureLinesID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -1073,6 +1135,16 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.FkeyID.Int64 != 0 {
 		parameter.Fkey = backRepo.BackRepoKey.Map_KeyDBID_KeyPtr[uint(parameterDB.FkeyID.Int64)]
 	}
+	// PitchLines field
+	parameter.PitchLines = nil
+	if parameterDB.PitchLinesID.Int64 != 0 {
+		parameter.PitchLines = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.PitchLinesID.Int64)]
+	}
+	// MeasureLines field
+	parameter.MeasureLines = nil
+	if parameterDB.MeasureLinesID.Int64 != 0 {
+		parameter.MeasureLines = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.MeasureLinesID.Int64)]
+	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
 	if parameterDB.HorizontalAxisID.Int64 != 0 {
@@ -1147,6 +1219,21 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
 
+	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
+	parameterDB.FkeySizeRatio_Data.Valid = true
+
+	parameterDB.FkeyOriginRelativeX_Data.Float64 = parameter.FkeyOriginRelativeX
+	parameterDB.FkeyOriginRelativeX_Data.Valid = true
+
+	parameterDB.FkeyOriginRelativeY_Data.Float64 = parameter.FkeyOriginRelativeY
+	parameterDB.FkeyOriginRelativeY_Data.Valid = true
+
+	parameterDB.PitchLinesHeightRatio_Data.Float64 = parameter.PitchLinesHeightRatio
+	parameterDB.PitchLinesHeightRatio_Data.Valid = true
+
+	parameterDB.MeasureLinesHeightRatio_Data.Float64 = parameter.MeasureLinesHeightRatio
+	parameterDB.MeasureLinesHeightRatio_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -1187,6 +1274,21 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
+
+	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
+	parameterDB.FkeySizeRatio_Data.Valid = true
+
+	parameterDB.FkeyOriginRelativeX_Data.Float64 = parameter.FkeyOriginRelativeX
+	parameterDB.FkeyOriginRelativeX_Data.Valid = true
+
+	parameterDB.FkeyOriginRelativeY_Data.Float64 = parameter.FkeyOriginRelativeY
+	parameterDB.FkeyOriginRelativeY_Data.Valid = true
+
+	parameterDB.PitchLinesHeightRatio_Data.Float64 = parameter.PitchLinesHeightRatio
+	parameterDB.PitchLinesHeightRatio_Data.Valid = true
+
+	parameterDB.MeasureLinesHeightRatio_Data.Float64 = parameter.MeasureLinesHeightRatio
+	parameterDB.MeasureLinesHeightRatio_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -1229,6 +1331,21 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
 
+	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
+	parameterDB.FkeySizeRatio_Data.Valid = true
+
+	parameterDB.FkeyOriginRelativeX_Data.Float64 = parameter.FkeyOriginRelativeX
+	parameterDB.FkeyOriginRelativeX_Data.Valid = true
+
+	parameterDB.FkeyOriginRelativeY_Data.Float64 = parameter.FkeyOriginRelativeY
+	parameterDB.FkeyOriginRelativeY_Data.Valid = true
+
+	parameterDB.PitchLinesHeightRatio_Data.Float64 = parameter.PitchLinesHeightRatio
+	parameterDB.PitchLinesHeightRatio_Data.Valid = true
+
+	parameterDB.MeasureLinesHeightRatio_Data.Float64 = parameter.MeasureLinesHeightRatio
+	parameterDB.MeasureLinesHeightRatio_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -1249,6 +1366,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
+	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
+	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
+	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
+	parameter.PitchLinesHeightRatio = parameterDB.PitchLinesHeightRatio_Data.Float64
+	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1266,6 +1388,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
+	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
+	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
+	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
+	parameter.PitchLinesHeightRatio = parameterDB.PitchLinesHeightRatio_Data.Float64
+	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1284,6 +1411,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
+	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
+	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
+	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
+	parameter.PitchLinesHeightRatio = parameterDB.PitchLinesHeightRatio_Data.Float64
+	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1627,6 +1759,18 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.FkeyID.Int64 != 0 {
 			parameterDB.FkeyID.Int64 = int64(BackRepoKeyid_atBckpTime_newID[uint(parameterDB.FkeyID.Int64)])
 			parameterDB.FkeyID.Valid = true
+		}
+
+		// reindexing PitchLines field
+		if parameterDB.PitchLinesID.Int64 != 0 {
+			parameterDB.PitchLinesID.Int64 = int64(BackRepoAxisGridid_atBckpTime_newID[uint(parameterDB.PitchLinesID.Int64)])
+			parameterDB.PitchLinesID.Valid = true
+		}
+
+		// reindexing MeasureLines field
+		if parameterDB.MeasureLinesID.Int64 != 0 {
+			parameterDB.MeasureLinesID.Int64 = int64(BackRepoAxisGridid_atBckpTime_newID[uint(parameterDB.MeasureLinesID.Int64)])
+			parameterDB.MeasureLinesID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

@@ -45,6 +45,10 @@ export * from './lib/horizontalaxis-api'
 export * from './lib/horizontalaxis'
 export * from './lib/horizontalaxis.service'
 
+export * from './lib/key-api'
+export * from './lib/key'
+export * from './lib/key.service'
+
 export * from './lib/parameter-api'
 export * from './lib/parameter'
 export * from './lib/parameter.service'

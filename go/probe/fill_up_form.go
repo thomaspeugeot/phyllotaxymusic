@@ -356,6 +356,18 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("BezierControlLengthRatio", instanceWithInferedType.BezierControlLengthRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("Fkey", instanceWithInferedType.Fkey, formGroup, probe)
+		BasicFieldtoForm("FkeySizeRatio", instanceWithInferedType.FkeySizeRatio, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("FkeyOriginRelativeX", instanceWithInferedType.FkeyOriginRelativeX, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("FkeyOriginRelativeY", instanceWithInferedType.FkeyOriginRelativeY, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationFieldToForm("PitchLines", instanceWithInferedType.PitchLines, formGroup, probe)
+		BasicFieldtoForm("PitchLinesHeightRatio", instanceWithInferedType.PitchLinesHeightRatio, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationFieldToForm("MeasureLines", instanceWithInferedType.MeasureLines, formGroup, probe)
+		BasicFieldtoForm("MeasureLinesHeightRatio", instanceWithInferedType.MeasureLinesHeightRatio, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,

@@ -26,6 +26,7 @@ import { AxisGridAPI } from './axisgrid-api'
 import { BezierAPI } from './bezier-api'
 import { BezierGridAPI } from './beziergrid-api'
 import { BezierGridStackAPI } from './beziergridstack-api'
+import { KeyAPI } from './key-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 
