@@ -5,3 +5,17 @@ mat-slider {
 .left-align {
     width: 100%;
 }
+
+.tile-content {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+}
+
+.bottom-left-content {
+    margin-bottom: 0;
+    margin-left: 0;
+}
