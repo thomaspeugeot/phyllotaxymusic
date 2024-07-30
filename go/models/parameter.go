@@ -715,5 +715,8 @@ func (p *Parameter) compteFirstVoiceNotes() {
 			}
 		}
 
+		// interpolate to the nearest pitch
+		pitchHeight := p.PitchLinesHeightRatio * p.SideLength
+		c.CenterY = float64(int((c.CenterY+0.5)/pitchHeight)) * pitchHeight
 	}
 }
