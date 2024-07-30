@@ -16,6 +16,8 @@ func (stacksnames StacksNames) ToString() (res string) {
 		res = "gongsvg"
 	case SidebarTree:
 		res = "sidebar tree"
+	case GongtoneStackName:
+		res = "gongtone"
 	case GongtreeStackName:
 		res = "gongtree"
 	case GongtableStackName:
@@ -36,6 +38,8 @@ func (stacksnames *StacksNames) FromString(input string) (err error) {
 		*stacksnames = GongsvgStackName
 	case "sidebar tree":
 		*stacksnames = SidebarTree
+	case "gongtone":
+		*stacksnames = GongtoneStackName
 	case "gongtree":
 		*stacksnames = GongtreeStackName
 	case "gongtable":
@@ -58,6 +62,8 @@ func (stacksnames *StacksNames) FromCodeString(input string) (err error) {
 		*stacksnames = GongsvgStackName
 	case "SidebarTree":
 		*stacksnames = SidebarTree
+	case "GongtoneStackName":
+		*stacksnames = GongtoneStackName
 	case "GongtreeStackName":
 		*stacksnames = GongtreeStackName
 	case "GongtableStackName":
@@ -80,6 +86,8 @@ func (stacksnames *StacksNames) ToCodeString() (res string) {
 		res = "GongsvgStackName"
 	case SidebarTree:
 		res = "SidebarTree"
+	case GongtoneStackName:
+		res = "GongtoneStackName"
 	case GongtreeStackName:
 		res = "GongtreeStackName"
 	case GongtableStackName:
@@ -98,6 +106,7 @@ func (stacksnames StacksNames) Codes() (res []string) {
 	res = append(res, "Phylotaxy")
 	res = append(res, "GongsvgStackName")
 	res = append(res, "SidebarTree")
+	res = append(res, "GongtoneStackName")
 	res = append(res, "GongtreeStackName")
 	res = append(res, "GongtableStackName")
 	res = append(res, "GongsimStackName")
@@ -113,6 +122,7 @@ func (stacksnames StacksNames) CodeValues() (res []string) {
 	res = append(res, "phylotaxymusic")
 	res = append(res, "gongsvg")
 	res = append(res, "sidebar tree")
+	res = append(res, "gongtone")
 	res = append(res, "gongtree")
 	res = append(res, "gongtable")
 	res = append(res, "gongsim")

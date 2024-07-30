@@ -10,6 +10,8 @@ import { AngularSplitModule } from 'angular-split';
 
 import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
 import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
+import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtonespecific/src/lib/gongtone/gongtone.component'
+
 
 import { CommonModule } from '@angular/common';
 
@@ -25,6 +27,8 @@ import { CommonModule } from '@angular/common';
 
     GongsvgDiagrammingComponent,
     TreeComponent,
+    GongtoneComponent,
+
   ],
   templateUrl: './phylotaxymusicspecific.component.html',
   styleUrls: ['./phylotaxymusicspecific.component.css'],

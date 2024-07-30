@@ -474,7 +474,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceShiftY = -0.060000
 	__Parameter__000000_Reference.PitchDifference = 3
 	__Parameter__000000_Reference.OriginX = 80.000000
-	__Parameter__000000_Reference.OriginY = 900.000000
+	__Parameter__000000_Reference.OriginY = 1000.000000
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false

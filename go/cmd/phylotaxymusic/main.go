@@ -13,6 +13,9 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongsvg_stack "github.com/fullstack-lang/gongsvg/go/stack"
 
+	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
+	gongtone_stack "github.com/fullstack-lang/gongtone/go/stack"
+
 	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
 )
 
@@ -47,6 +50,7 @@ func main() {
 
 	gongsvg_stack := gongsvg_stack.NewStack(r, phylotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
 	gongtree_stack := gongtree_stack.NewStack(r, phylotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
+	gongtone_stack := gongtone_stack.NewStack(r, phylotaxymusic_models.GongtoneStackName.ToString(), "", "", "", true, true)
 
 	// get the only diagram
 	parameters := phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.Parameter](phylotaxymusicStack.Stage)
@@ -55,6 +59,17 @@ func main() {
 		log.Println("")
 		// log.Fatalln("")
 	}
+
+	f4 := new(gongtone_models.Freqency).Stage(gongtone_stack.Stage)
+	f4.Name = "F4"
+
+	notef4 := new(gongtone_models.Note).Stage(gongtone_stack.Stage)
+	notef4.Frequencies = append(notef4.Frequencies, f4)
+	notef4.Start = 0
+	notef4.Duration = 1
+	notef4.Velocity = 1
+
+	gongtone_stack.Stage.Commit()
 
 	parameter := (*parameters)["Reference"]
 
@@ -65,6 +80,7 @@ func main() {
 	parameterImpl := new(ParameterImpl)
 	parameterImpl.parameter = parameter
 	parameterImpl.gongsvgStage = gongsvg_stack.Stage
+	parameterImpl.gongtoneStage = gongtone_stack.Stage
 	parameterImpl.phylotaxymusicStage = phylotaxymusicStack.Stage
 	parameterImpl.tree = tree
 
@@ -84,6 +100,7 @@ func main() {
 
 type ParameterImpl struct {
 	gongsvgStage        *gongsvg_models.StageStruct
+	gongtoneStage       *gongtone_models.StageStruct
 	phylotaxymusicStage *phylotaxymusic_models.StageStruct
 	parameter           *phylotaxymusic_models.Parameter
 	tree                *phylotaxymusic_models.Tree
