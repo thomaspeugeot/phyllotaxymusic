@@ -1184,6 +1184,12 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.NbMeasureLines), formDiv)
 		case "NbMeasureLinesPerCurve":
 			FormDivBasicFieldToField(&(parameter_.NbMeasureLinesPerCurve), formDiv)
+		case "FirstVoice":
+			FormDivSelectFieldToField(&(parameter_.FirstVoice), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "FirstVoiceShiftX":
+			FormDivBasicFieldToField(&(parameter_.FirstVoiceShiftX), formDiv)
+		case "FirstVoiceShiftY":
+			FormDivBasicFieldToField(&(parameter_.FirstVoiceShiftY), formDiv)
 		case "SecondVoice":
 			FormDivSelectFieldToField(&(parameter_.SecondVoice), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "PitchDifference":

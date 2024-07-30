@@ -95,8 +95,11 @@ type Parameter struct {
 	NbMeasureLinesPerCurve  int
 
 	// Composing
-	SecondVoice     *BezierGrid
-	PitchDifference int
+	FirstVoice       *BezierGrid
+	FirstVoiceShiftX float64
+	FirstVoiceShiftY float64
+	SecondVoice      *BezierGrid
+	PitchDifference  int
 
 	// for drawing purpose
 	OriginX        float64
@@ -227,7 +230,12 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeMeasureLines()
 	p.Shapes = append(p.Shapes, p.MeasureLines)
 
-	p.SecondVoice.Move(p.SecondVoice.Reference, p.GrowthCurve,
+	p.FirstVoice.Move(p.FirstVoice.Reference, p.GrowthCurve,
+		float64(p.FirstVoiceShiftX)*p.SideLength,
+		float64(p.FirstVoiceShiftY)*p.SideLength)
+	p.Shapes = append(p.Shapes, p.FirstVoice)
+
+	p.SecondVoice.Move(p.SecondVoice.Reference, p.FirstVoice,
 		p.NextCircle.CenterX,
 		p.NextCircle.CenterY+float64(p.PitchDifference)*p.PitchLinesHeightRatio*p.SideLength)
 	p.Shapes = append(p.Shapes, p.SecondVoice)

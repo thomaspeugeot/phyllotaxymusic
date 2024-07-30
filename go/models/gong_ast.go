@@ -1334,6 +1334,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].NbMeasureLinesPerCurve = int(exprSign) * int(fielValue)
+				case "FirstVoiceShiftX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].FirstVoiceShiftX = exprSign * fielValue
+				case "FirstVoiceShiftY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].FirstVoiceShiftY = exprSign * fielValue
 				case "PitchDifference":
 					// convert string to int
 					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
@@ -1777,6 +1791,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "MeasureLines":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].MeasureLines = __gong__map_AxisGrid[targetIdentifier]
+				case "FirstVoice":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].FirstVoice = __gong__map_BezierGrid[targetIdentifier]
 				case "SecondVoice":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SecondVoice = __gong__map_BezierGrid[targetIdentifier]

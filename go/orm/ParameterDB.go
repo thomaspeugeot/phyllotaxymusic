@@ -179,6 +179,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	MeasureLinesID sql.NullInt64
 
+	// field FirstVoice is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	FirstVoiceID sql.NullInt64
+
 	// field SecondVoice is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	SecondVoiceID sql.NullInt64
@@ -257,6 +261,12 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.NbMeasureLinesPerCurve
 	NbMeasureLinesPerCurve_Data sql.NullInt64
 
+	// Declation for basic field parameterDB.FirstVoiceShiftX
+	FirstVoiceShiftX_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.FirstVoiceShiftY
+	FirstVoiceShiftY_Data sql.NullFloat64
+
 	// Declation for basic field parameterDB.PitchDifference
 	PitchDifference_Data sql.NullInt64
 
@@ -324,11 +334,15 @@ type ParameterWOP struct {
 
 	NbMeasureLinesPerCurve int `xlsx:"18"`
 
-	PitchDifference int `xlsx:"19"`
+	FirstVoiceShiftX float64 `xlsx:"19"`
 
-	OriginX float64 `xlsx:"20"`
+	FirstVoiceShiftY float64 `xlsx:"20"`
 
-	OriginY float64 `xlsx:"21"`
+	PitchDifference int `xlsx:"21"`
+
+	OriginX float64 `xlsx:"22"`
+
+	OriginY float64 `xlsx:"23"`
 	// insertion for WOP pointer fields
 }
 
@@ -353,6 +367,8 @@ var Parameter_Fields = []string{
 	"MeasureLinesHeightRatio",
 	"NbMeasureLines",
 	"NbMeasureLinesPerCurve",
+	"FirstVoiceShiftX",
+	"FirstVoiceShiftY",
 	"PitchDifference",
 	"OriginX",
 	"OriginY",
@@ -871,6 +887,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.MeasureLinesID.Valid = true
 		}
 
+		// commit pointer value parameter.FirstVoice translates to updating the parameter.FirstVoiceID
+		parameterDB.FirstVoiceID.Valid = true // allow for a 0 value (nil association)
+		if parameter.FirstVoice != nil {
+			if FirstVoiceId, ok := backRepo.BackRepoBezierGrid.Map_BezierGridPtr_BezierGridDBID[parameter.FirstVoice]; ok {
+				parameterDB.FirstVoiceID.Int64 = int64(FirstVoiceId)
+				parameterDB.FirstVoiceID.Valid = true
+			}
+		} else {
+			parameterDB.FirstVoiceID.Int64 = 0
+			parameterDB.FirstVoiceID.Valid = true
+		}
+
 		// commit pointer value parameter.SecondVoice translates to updating the parameter.SecondVoiceID
 		parameterDB.SecondVoiceID.Valid = true // allow for a 0 value (nil association)
 		if parameter.SecondVoice != nil {
@@ -1185,6 +1213,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.MeasureLinesID.Int64 != 0 {
 		parameter.MeasureLines = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.MeasureLinesID.Int64)]
 	}
+	// FirstVoice field
+	parameter.FirstVoice = nil
+	if parameterDB.FirstVoiceID.Int64 != 0 {
+		parameter.FirstVoice = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.FirstVoiceID.Int64)]
+	}
 	// SecondVoice field
 	parameter.SecondVoice = nil
 	if parameterDB.SecondVoiceID.Int64 != 0 {
@@ -1288,6 +1321,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.NbMeasureLinesPerCurve_Data.Int64 = int64(parameter.NbMeasureLinesPerCurve)
 	parameterDB.NbMeasureLinesPerCurve_Data.Valid = true
 
+	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
+	parameterDB.FirstVoiceShiftX_Data.Valid = true
+
+	parameterDB.FirstVoiceShiftY_Data.Float64 = parameter.FirstVoiceShiftY
+	parameterDB.FirstVoiceShiftY_Data.Valid = true
+
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
@@ -1355,6 +1394,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.NbMeasureLinesPerCurve_Data.Int64 = int64(parameter.NbMeasureLinesPerCurve)
 	parameterDB.NbMeasureLinesPerCurve_Data.Valid = true
+
+	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
+	parameterDB.FirstVoiceShiftX_Data.Valid = true
+
+	parameterDB.FirstVoiceShiftY_Data.Float64 = parameter.FirstVoiceShiftY
+	parameterDB.FirstVoiceShiftY_Data.Valid = true
 
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
@@ -1424,6 +1469,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.NbMeasureLinesPerCurve_Data.Int64 = int64(parameter.NbMeasureLinesPerCurve)
 	parameterDB.NbMeasureLinesPerCurve_Data.Valid = true
 
+	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
+	parameterDB.FirstVoiceShiftX_Data.Valid = true
+
+	parameterDB.FirstVoiceShiftY_Data.Float64 = parameter.FirstVoiceShiftY
+	parameterDB.FirstVoiceShiftY_Data.Valid = true
+
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
@@ -1455,6 +1506,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
 	parameter.NbMeasureLinesPerCurve = int(parameterDB.NbMeasureLinesPerCurve_Data.Int64)
+	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
+	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
@@ -1481,6 +1534,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
 	parameter.NbMeasureLinesPerCurve = int(parameterDB.NbMeasureLinesPerCurve_Data.Int64)
+	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
+	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
@@ -1508,6 +1563,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
 	parameter.NbMeasureLinesPerCurve = int(parameterDB.NbMeasureLinesPerCurve_Data.Int64)
+	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
+	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
@@ -1864,6 +1921,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.MeasureLinesID.Int64 != 0 {
 			parameterDB.MeasureLinesID.Int64 = int64(BackRepoAxisGridid_atBckpTime_newID[uint(parameterDB.MeasureLinesID.Int64)])
 			parameterDB.MeasureLinesID.Valid = true
+		}
+
+		// reindexing FirstVoice field
+		if parameterDB.FirstVoiceID.Int64 != 0 {
+			parameterDB.FirstVoiceID.Int64 = int64(BackRepoBezierGridid_atBckpTime_newID[uint(parameterDB.FirstVoiceID.Int64)])
+			parameterDB.FirstVoiceID.Valid = true
 		}
 
 		// reindexing SecondVoice field

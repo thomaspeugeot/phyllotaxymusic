@@ -47,6 +47,8 @@ export class Parameter {
 	MeasureLinesHeightRatio: number = 0
 	NbMeasureLines: number = 0
 	NbMeasureLinesPerCurve: number = 0
+	FirstVoiceShiftX: number = 0
+	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
@@ -118,6 +120,8 @@ export class Parameter {
 
 	MeasureLines?: AxisGrid
 
+	FirstVoice?: BezierGrid
+
 	SecondVoice?: BezierGrid
 
 	HorizontalAxis?: HorizontalAxis
@@ -151,6 +155,8 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.MeasureLinesHeightRatio = parameter.MeasureLinesHeightRatio
 	parameterAPI.NbMeasureLines = parameter.NbMeasureLines
 	parameterAPI.NbMeasureLinesPerCurve = parameter.NbMeasureLinesPerCurve
+	parameterAPI.FirstVoiceShiftX = parameter.FirstVoiceShiftX
+	parameterAPI.FirstVoiceShiftY = parameter.FirstVoiceShiftY
 	parameterAPI.PitchDifference = parameter.PitchDifference
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
@@ -387,6 +393,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.FirstVoiceID.Valid = true
+	if (parameter.FirstVoice != undefined) {
+		parameterAPI.ParameterPointersEncoding.FirstVoiceID.Int64 = parameter.FirstVoice.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.FirstVoiceID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.SecondVoiceID.Valid = true
 	if (parameter.SecondVoice != undefined) {
 		parameterAPI.ParameterPointersEncoding.SecondVoiceID.Int64 = parameter.SecondVoice.ID  
@@ -441,6 +454,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.MeasureLinesHeightRatio = parameterAPI.MeasureLinesHeightRatio
 	parameter.NbMeasureLines = parameterAPI.NbMeasureLines
 	parameter.NbMeasureLinesPerCurve = parameterAPI.NbMeasureLinesPerCurve
+	parameter.FirstVoiceShiftX = parameterAPI.FirstVoiceShiftX
+	parameter.FirstVoiceShiftY = parameterAPI.FirstVoiceShiftY
 	parameter.PitchDifference = parameterAPI.PitchDifference
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
@@ -479,6 +494,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
 	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)
+	parameter.FirstVoice = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceID.Int64)
 	parameter.SecondVoice = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)

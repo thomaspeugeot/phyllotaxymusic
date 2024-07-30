@@ -253,6 +253,8 @@ type Parameter_WOP struct {
 	MeasureLinesHeightRatio float64
 	NbMeasureLines int
 	NbMeasureLinesPerCurve int
+	FirstVoiceShiftX float64
+	FirstVoiceShiftY float64
 	PitchDifference int
 	OriginX float64
 	OriginY float64
@@ -278,6 +280,8 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.MeasureLinesHeightRatio = from.MeasureLinesHeightRatio
 	to.NbMeasureLines = from.NbMeasureLines
 	to.NbMeasureLinesPerCurve = from.NbMeasureLinesPerCurve
+	to.FirstVoiceShiftX = from.FirstVoiceShiftX
+	to.FirstVoiceShiftY = from.FirstVoiceShiftY
 	to.PitchDifference = from.PitchDifference
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY

@@ -42,6 +42,8 @@ export class ParameterAPI {
 	MeasureLinesHeightRatio: number = 0
 	NbMeasureLines: number = 0
 	NbMeasureLinesPerCurve: number = 0
+	FirstVoiceShiftX: number = 0
+	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
@@ -118,6 +120,8 @@ export class ParameterPointersEncoding {
 	PitchLinesID: NullInt64 = new NullInt64 // if pointer is null, PitchLines.ID = 0
 
 	MeasureLinesID: NullInt64 = new NullInt64 // if pointer is null, MeasureLines.ID = 0
+
+	FirstVoiceID: NullInt64 = new NullInt64 // if pointer is null, FirstVoice.ID = 0
 
 	SecondVoiceID: NullInt64 = new NullInt64 // if pointer is null, SecondVoice.ID = 0
 
