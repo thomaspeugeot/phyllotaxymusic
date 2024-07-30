@@ -195,6 +195,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	SecondVoiceShiftedRightID sql.NullInt64
 
+	// field FirstVoiceNotes is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	FirstVoiceNotesID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -943,6 +947,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.SecondVoiceShiftedRightID.Valid = true
 		}
 
+		// commit pointer value parameter.FirstVoiceNotes translates to updating the parameter.FirstVoiceNotesID
+		parameterDB.FirstVoiceNotesID.Valid = true // allow for a 0 value (nil association)
+		if parameter.FirstVoiceNotes != nil {
+			if FirstVoiceNotesId, ok := backRepo.BackRepoCircleGrid.Map_CircleGridPtr_CircleGridDBID[parameter.FirstVoiceNotes]; ok {
+				parameterDB.FirstVoiceNotesID.Int64 = int64(FirstVoiceNotesId)
+				parameterDB.FirstVoiceNotesID.Valid = true
+			}
+		} else {
+			parameterDB.FirstVoiceNotesID.Int64 = 0
+			parameterDB.FirstVoiceNotesID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -1264,6 +1280,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.SecondVoiceShiftedRight = nil
 	if parameterDB.SecondVoiceShiftedRightID.Int64 != 0 {
 		parameter.SecondVoiceShiftedRight = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.SecondVoiceShiftedRightID.Int64)]
+	}
+	// FirstVoiceNotes field
+	parameter.FirstVoiceNotes = nil
+	if parameterDB.FirstVoiceNotesID.Int64 != 0 {
+		parameter.FirstVoiceNotes = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.FirstVoiceNotesID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -1987,6 +2008,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.SecondVoiceShiftedRightID.Int64 != 0 {
 			parameterDB.SecondVoiceShiftedRightID.Int64 = int64(BackRepoBezierGridid_atBckpTime_newID[uint(parameterDB.SecondVoiceShiftedRightID.Int64)])
 			parameterDB.SecondVoiceShiftedRightID.Valid = true
+		}
+
+		// reindexing FirstVoiceNotes field
+		if parameterDB.FirstVoiceNotesID.Int64 != 0 {
+			parameterDB.FirstVoiceNotesID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.FirstVoiceNotesID.Int64)])
+			parameterDB.FirstVoiceNotesID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

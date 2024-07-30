@@ -129,6 +129,8 @@ export class ParameterPointersEncoding {
 
 	SecondVoiceShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, SecondVoiceShiftedRight.ID = 0
 
+	FirstVoiceNotesID: NullInt64 = new NullInt64 // if pointer is null, FirstVoiceNotes.ID = 0
+
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 
 	VerticalAxisID: NullInt64 = new NullInt64 // if pointer is null, VerticalAxis.ID = 0

@@ -103,6 +103,9 @@ type Parameter struct {
 	SecondVoiceShiftedRight *BezierGrid
 	PitchDifference         int
 
+	// interpolating notes
+	FirstVoiceNotes *CircleGrid
+
 	// for drawing purpose
 	OriginX        float64
 	OriginY        float64
@@ -249,6 +252,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.SecondVoiceShiftedRight.Move(p.SecondVoiceShiftedRight.Reference, p.SecondVoice,
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.SecondVoiceShiftedRight)
+
+	p.compteFirstVoiceNotes()
+	p.Shapes = append(p.Shapes, p.FirstVoiceNotes)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -679,5 +685,35 @@ func (p *Parameter) ComputeMeasureLines() {
 		if i%p.NbMeasureLinesPerCurve == 0 {
 			a.StrokeWidth *= 2
 		}
+	}
+}
+
+func (p *Parameter) compteFirstVoiceNotes() {
+
+	g := p.FirstVoiceNotes
+	g.Circles = g.Circles[:0]
+
+	for i := range p.NbMeasureLinesPerCurve {
+		c := new(Circle)
+		*c = *p.FirstVoiceNotes.Reference
+
+		g.Circles = append(g.Circles, c)
+
+		c.CenterX = float64(i) * p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
+
+		//
+		// compute which bezier is concerned
+		//
+		for _, b := range p.FirstVoice.Beziers {
+			if b.EndX > c.CenterX {
+				var err error
+				c.CenterY, err = b.ComputeYFromX(c.CenterX)
+				if err != nil {
+					log.Panicf("Problem with bezier y from x")
+				}
+				break
+			}
+		}
+
 	}
 }

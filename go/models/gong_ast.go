@@ -1803,6 +1803,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SecondVoiceShiftedRight":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SecondVoiceShiftedRight = __gong__map_BezierGrid[targetIdentifier]
+				case "FirstVoiceNotes":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].FirstVoiceNotes = __gong__map_CircleGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

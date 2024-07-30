@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"math"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
@@ -47,4 +48,55 @@ func (_b *Bezier) move(b *Bezier, x, y float64) {
 	_b.EndY = b.EndY + y
 	_b.ControlPointEndX = b.ControlPointEndX + x
 	_b.ControlPointEndY = b.ControlPointEndY + y
+}
+
+func (b *Bezier) ComputeYFromX(x float64) (float64, error) {
+	const tolerance = 1e-6
+	const maxIterations = 100
+
+	// Function to compute the X value at a given t
+	bezierX := func(t float64) float64 {
+		return math.Pow(1-t, 3)*b.StartX +
+			3*math.Pow(1-t, 2)*t*b.ControlPointStartX +
+			3*(1-t)*math.Pow(t, 2)*b.ControlPointEndX +
+			math.Pow(t, 3)*b.EndX
+	}
+
+	// Derivative of the Bezier X function with respect to t
+	bezierXPrime := func(t float64) float64 {
+		return -3*math.Pow(1-t, 2)*b.StartX +
+			3*(math.Pow(1-t, 2)-2*(1-t)*t)*b.ControlPointStartX +
+			3*((1-t)*2*t-math.Pow(t, 2))*b.ControlPointEndX +
+			3*math.Pow(t, 2)*b.EndX
+	}
+
+	// Newton-Raphson method to find the t for the given x
+	t := 0.5 // Initial guess
+	for i := 0; i < maxIterations; i++ {
+		xAtT := bezierX(t)
+		xPrimeAtT := bezierXPrime(t)
+		deltaT := (xAtT - x) / xPrimeAtT
+		t -= deltaT
+		if math.Abs(deltaT) < tolerance {
+			break
+		}
+	}
+
+	// Clamp t to the range [0, 1]
+	if t < 0 {
+		t = 0
+	} else if t > 1 {
+		t = 1
+	}
+
+	// Function to compute the Y value at a given t
+	bezierY := func(t float64) float64 {
+		return math.Pow(1-t, 3)*b.StartY +
+			3*math.Pow(1-t, 2)*t*b.ControlPointStartY +
+			3*(1-t)*math.Pow(t, 2)*b.ControlPointEndY +
+			math.Pow(t, 3)*b.EndY
+	}
+
+	y := bezierY(t)
+	return y, nil
 }

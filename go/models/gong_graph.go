@@ -512,6 +512,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.SecondVoiceShiftedRight != nil {
 		StageBranch(stage, parameter.SecondVoiceShiftedRight)
 	}
+	if parameter.FirstVoiceNotes != nil {
+		StageBranch(stage, parameter.FirstVoiceNotes)
+	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
 	}
@@ -1015,6 +1018,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.SecondVoiceShiftedRight != nil {
 		parameterTo.SecondVoiceShiftedRight = CopyBranchBezierGrid(mapOrigCopy, parameterFrom.SecondVoiceShiftedRight)
 	}
+	if parameterFrom.FirstVoiceNotes != nil {
+		parameterTo.FirstVoiceNotes = CopyBranchCircleGrid(mapOrigCopy, parameterFrom.FirstVoiceNotes)
+	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
 	}
@@ -1477,6 +1483,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.SecondVoiceShiftedRight != nil {
 		UnstageBranch(stage, parameter.SecondVoiceShiftedRight)
+	}
+	if parameter.FirstVoiceNotes != nil {
+		UnstageBranch(stage, parameter.FirstVoiceNotes)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

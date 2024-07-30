@@ -128,6 +128,8 @@ export class Parameter {
 
 	SecondVoiceShiftedRight?: BezierGrid
 
+	FirstVoiceNotes?: CircleGrid
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -425,6 +427,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.SecondVoiceShiftedRightID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.FirstVoiceNotesID.Valid = true
+	if (parameter.FirstVoiceNotes != undefined) {
+		parameterAPI.ParameterPointersEncoding.FirstVoiceNotesID.Int64 = parameter.FirstVoiceNotes.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.FirstVoiceNotesID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -516,6 +525,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.FirstVoiceShiftRigth = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceShiftRigthID.Int64)
 	parameter.SecondVoice = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceID.Int64)
 	parameter.SecondVoiceShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceShiftedRightID.Int64)
+	parameter.FirstVoiceNotes = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceNotesID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 
