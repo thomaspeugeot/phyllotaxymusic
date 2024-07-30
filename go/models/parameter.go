@@ -85,10 +85,13 @@ type Parameter struct {
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
 
-	PitchLines              *AxisGrid
-	PitchLinesHeightRatio   float64
+	PitchLines            *AxisGrid
+	PitchLinesHeightRatio float64
+	NbPitchLines          int
+
 	MeasureLines            *AxisGrid
 	MeasureLinesHeightRatio float64
+	NbMeasureLines          int
 
 	// for drawing purpose
 	OriginX        float64
@@ -212,6 +215,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.ComputeFKey()
 	p.Shapes = append(p.Shapes, p.Fkey)
+
+	p.ComputePitchLines()
+	p.Shapes = append(p.Shapes, p.PitchLines)
 
 }
 
@@ -606,4 +612,19 @@ func (p *Parameter) ComputeGrowthCurve() {
 
 func (p *Parameter) ComputeFKey() {
 
+}
+
+func (p *Parameter) ComputePitchLines() {
+
+	g := p.PitchLines
+	g.Axiss = g.Axiss[0:]
+
+	for i := range p.NbPitchLines {
+		a := new(Axis)
+		*a = *p.PitchLines.Reference
+
+		g.Axiss = append(g.Axiss, a)
+
+		a.CenterY = float64(i) * p.PitchLinesHeightRatio
+	}
 }

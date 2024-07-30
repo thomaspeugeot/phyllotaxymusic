@@ -24,7 +24,7 @@ func (axis *Axis) Draw(gongsvgStage *gongsvg_models.StageStruct,
 ) {
 
 	line := new(gongsvg_models.Line).Stage(gongsvgStage)
-	line.Name = "Initial Axis Line"
+	line.Name = axis.Name
 	layer.Lines = append(layer.Lines, line)
 
 	angleRad := axis.Angle * math.Pi / 180
@@ -36,6 +36,4 @@ func (axis *Axis) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	line.Y2 = line.Y1 - axis.Length*math.Sin(angleRad)
 
 	axis.Presentation.CopyTo(&line.Presentation)
-
-	line.Name = "Vertical Axis"
 }

@@ -249,7 +249,9 @@ type Parameter_WOP struct {
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
 	PitchLinesHeightRatio float64
+	NbPitchLines int
 	MeasureLinesHeightRatio float64
+	NbMeasureLines int
 	OriginX float64
 	OriginY float64
 }
@@ -270,7 +272,9 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX
 	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY
 	to.PitchLinesHeightRatio = from.PitchLinesHeightRatio
+	to.NbPitchLines = from.NbPitchLines
 	to.MeasureLinesHeightRatio = from.MeasureLinesHeightRatio
+	to.NbMeasureLines = from.NbMeasureLines
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
 }

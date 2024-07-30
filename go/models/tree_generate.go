@@ -31,7 +31,7 @@ func (tree *Tree) Generate(parameter *Parameter) {
 	}
 
 	var shapeCategories []*ShapeCategory
-	for k, _ := range map_ShapeCategory_Shapes {
+	for k := range map_ShapeCategory_Shapes {
 		shapeCategories = append(shapeCategories, k)
 	}
 	slices.SortFunc(shapeCategories, func(sc1, sc2 *ShapeCategory) int {

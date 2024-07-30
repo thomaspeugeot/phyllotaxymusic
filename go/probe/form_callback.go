@@ -1174,10 +1174,14 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.PitchLines), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "PitchLinesHeightRatio":
 			FormDivBasicFieldToField(&(parameter_.PitchLinesHeightRatio), formDiv)
+		case "NbPitchLines":
+			FormDivBasicFieldToField(&(parameter_.NbPitchLines), formDiv)
 		case "MeasureLines":
 			FormDivSelectFieldToField(&(parameter_.MeasureLines), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "MeasureLinesHeightRatio":
 			FormDivBasicFieldToField(&(parameter_.MeasureLinesHeightRatio), formDiv)
+		case "NbMeasureLines":
+			FormDivBasicFieldToField(&(parameter_.NbMeasureLines), formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

@@ -365,8 +365,12 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("PitchLines", instanceWithInferedType.PitchLines, formGroup, probe)
 		BasicFieldtoForm("PitchLinesHeightRatio", instanceWithInferedType.PitchLinesHeightRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("NbPitchLines", instanceWithInferedType.NbPitchLines, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		AssociationFieldToForm("MeasureLines", instanceWithInferedType.MeasureLines, formGroup, probe)
 		BasicFieldtoForm("MeasureLinesHeightRatio", instanceWithInferedType.MeasureLinesHeightRatio, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("NbMeasureLines", instanceWithInferedType.NbMeasureLines, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)

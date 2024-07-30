@@ -38,7 +38,9 @@ export class ParameterAPI {
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
 	PitchLinesHeightRatio: number = 0
+	NbPitchLines: number = 0
 	MeasureLinesHeightRatio: number = 0
+	NbMeasureLines: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 

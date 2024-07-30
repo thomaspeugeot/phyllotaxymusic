@@ -26,9 +26,11 @@ func _(stage *models.StageStruct) {
 
 	__Axis__000000_Construction_Axis := (&models.Axis{Name: `Construction Axis`}).Stage(stage)
 	__Axis__000001_Initial_Axis := (&models.Axis{Name: `Initial Axis`}).Stage(stage)
-	__Axis__000002_Rotated_Axis := (&models.Axis{Name: `Rotated Axis`}).Stage(stage)
+	__Axis__000002_Pitch_Line := (&models.Axis{Name: `Pitch Line`}).Stage(stage)
+	__Axis__000003_Rotated_Axis := (&models.Axis{Name: `Rotated Axis`}).Stage(stage)
 
 	__AxisGrid__000000_Construction_Axis_Grid := (&models.AxisGrid{Name: `Construction Axis Grid`}).Stage(stage)
+	__AxisGrid__000001_Pitch_Lines := (&models.AxisGrid{Name: `Pitch Lines`}).Stage(stage)
 
 	__Bezier__000000_Growth_Bezier_Right_Seed := (&models.Bezier{Name: `Growth Bezier Right Seed`}).Stage(stage)
 	__Bezier__000001_Growth_Curve_Next_Seed := (&models.Bezier{Name: `Growth Curve Next Seed`}).Stage(stage)
@@ -111,23 +113,41 @@ func _(stage *models.StageStruct) {
 	__Axis__000001_Initial_Axis.StrokeDashArrayWhenSelected = ``
 	__Axis__000001_Initial_Axis.Transform = ``
 
-	__Axis__000002_Rotated_Axis.Name = `Rotated Axis`
-	__Axis__000002_Rotated_Axis.IsDisplayed = false
-	__Axis__000002_Rotated_Axis.Angle = 0.000000
-	__Axis__000002_Rotated_Axis.Length = 995.839957
-	__Axis__000002_Rotated_Axis.CenterX = 0.000000
-	__Axis__000002_Rotated_Axis.CenterY = 0.000000
-	__Axis__000002_Rotated_Axis.Color = ``
-	__Axis__000002_Rotated_Axis.FillOpacity = 0.000000
-	__Axis__000002_Rotated_Axis.Stroke = `black`
-	__Axis__000002_Rotated_Axis.StrokeOpacity = 1.000000
-	__Axis__000002_Rotated_Axis.StrokeWidth = 2.000000
-	__Axis__000002_Rotated_Axis.StrokeDashArray = ``
-	__Axis__000002_Rotated_Axis.StrokeDashArrayWhenSelected = ``
-	__Axis__000002_Rotated_Axis.Transform = ``
+	__Axis__000002_Pitch_Line.Name = `Pitch Line`
+	__Axis__000002_Pitch_Line.IsDisplayed = false
+	__Axis__000002_Pitch_Line.Angle = 0.000000
+	__Axis__000002_Pitch_Line.Length = 1200.000000
+	__Axis__000002_Pitch_Line.CenterX = 0.000000
+	__Axis__000002_Pitch_Line.CenterY = 0.000000
+	__Axis__000002_Pitch_Line.Color = ``
+	__Axis__000002_Pitch_Line.FillOpacity = 0.000000
+	__Axis__000002_Pitch_Line.Stroke = `grey`
+	__Axis__000002_Pitch_Line.StrokeOpacity = 0.800000
+	__Axis__000002_Pitch_Line.StrokeWidth = 1.000000
+	__Axis__000002_Pitch_Line.StrokeDashArray = ``
+	__Axis__000002_Pitch_Line.StrokeDashArrayWhenSelected = ``
+	__Axis__000002_Pitch_Line.Transform = ``
+
+	__Axis__000003_Rotated_Axis.Name = `Rotated Axis`
+	__Axis__000003_Rotated_Axis.IsDisplayed = false
+	__Axis__000003_Rotated_Axis.Angle = 0.000000
+	__Axis__000003_Rotated_Axis.Length = 995.839957
+	__Axis__000003_Rotated_Axis.CenterX = 0.000000
+	__Axis__000003_Rotated_Axis.CenterY = 0.000000
+	__Axis__000003_Rotated_Axis.Color = ``
+	__Axis__000003_Rotated_Axis.FillOpacity = 0.000000
+	__Axis__000003_Rotated_Axis.Stroke = `black`
+	__Axis__000003_Rotated_Axis.StrokeOpacity = 1.000000
+	__Axis__000003_Rotated_Axis.StrokeWidth = 2.000000
+	__Axis__000003_Rotated_Axis.StrokeDashArray = ``
+	__Axis__000003_Rotated_Axis.StrokeDashArrayWhenSelected = ``
+	__Axis__000003_Rotated_Axis.Transform = ``
 
 	__AxisGrid__000000_Construction_Axis_Grid.Name = `Construction Axis Grid`
 	__AxisGrid__000000_Construction_Axis_Grid.IsDisplayed = false
+
+	__AxisGrid__000001_Pitch_Lines.Name = `Pitch Lines`
+	__AxisGrid__000001_Pitch_Lines.IsDisplayed = true
 
 	__Bezier__000000_Growth_Bezier_Right_Seed.Name = `Growth Bezier Right Seed`
 	__Bezier__000000_Growth_Bezier_Right_Seed.IsDisplayed = false
@@ -190,12 +210,12 @@ func _(stage *models.StageStruct) {
 	__Bezier__000003_Growth_Curve_Seed.IsDisplayed = false
 	__Bezier__000003_Growth_Curve_Seed.StartX = -29.217495
 	__Bezier__000003_Growth_Curve_Seed.StartY = 168.054417
-	__Bezier__000003_Growth_Curve_Seed.ControlPointStartX = 60.437617
-	__Bezier__000003_Growth_Curve_Seed.ControlPointStartY = 183.641617
+	__Bezier__000003_Growth_Curve_Seed.ControlPointStartX = 86.053364
+	__Bezier__000003_Growth_Curve_Seed.ControlPointStartY = 188.095103
 	__Bezier__000003_Growth_Curve_Seed.EndX = 134.889502
 	__Bezier__000003_Growth_Curve_Seed.EndY = 369.719718
-	__Bezier__000003_Growth_Curve_Seed.ControlPointEndX = 45.234389
-	__Bezier__000003_Growth_Curve_Seed.ControlPointEndY = 354.132518
+	__Bezier__000003_Growth_Curve_Seed.ControlPointEndX = 19.618643
+	__Bezier__000003_Growth_Curve_Seed.ControlPointEndY = 349.679032
 	__Bezier__000003_Growth_Curve_Seed.Color = ``
 	__Bezier__000003_Growth_Curve_Seed.FillOpacity = 0.000000
 	__Bezier__000003_Growth_Curve_Seed.Stroke = `grey`
@@ -348,8 +368,10 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
-	__Parameter__000000_Reference.PitchLinesHeightRatio = 0.000000
+	__Parameter__000000_Reference.PitchLinesHeightRatio = 31.520000
+	__Parameter__000000_Reference.NbPitchLines = 20
 	__Parameter__000000_Reference.MeasureLinesHeightRatio = 0.000000
+	__Parameter__000000_Reference.NbMeasureLines = 0
 	__Parameter__000000_Reference.OriginX = 200.000000
 	__Parameter__000000_Reference.OriginY = 760.000000
 
@@ -439,7 +461,7 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000003_3_Growing.IsExpanded = false
 
 	__ShapeCategory__000004_4_Construction.Name = `4. Construction`
-	__ShapeCategory__000004_4_Construction.IsExpanded = false
+	__ShapeCategory__000004_4_Construction.IsExpanded = true
 
 	__ShapeCategory__000005_5_Growth.Name = `5. Growth`
 	__ShapeCategory__000005_5_Growth.IsExpanded = true
@@ -463,9 +485,11 @@ func _(stage *models.StageStruct) {
 	// Setup of pointers
 	__Axis__000000_Construction_Axis.ShapeCategory = __ShapeCategory__000004_4_Construction
 	__Axis__000001_Initial_Axis.ShapeCategory = __ShapeCategory__000001_1_Initial
-	__Axis__000002_Rotated_Axis.ShapeCategory = __ShapeCategory__000002_2_Rotated
+	__Axis__000003_Rotated_Axis.ShapeCategory = __ShapeCategory__000002_2_Rotated
 	__AxisGrid__000000_Construction_Axis_Grid.Reference = __Axis__000000_Construction_Axis
 	__AxisGrid__000000_Construction_Axis_Grid.ShapeCategory = __ShapeCategory__000004_4_Construction
+	__AxisGrid__000001_Pitch_Lines.Reference = __Axis__000002_Pitch_Line
+	__AxisGrid__000001_Pitch_Lines.ShapeCategory = __ShapeCategory__000006_6_Score_notation
 	__Bezier__000000_Growth_Bezier_Right_Seed.ShapeCategory = __ShapeCategory__000005_5_Growth
 	__Bezier__000001_Growth_Curve_Next_Seed.ShapeCategory = __ShapeCategory__000005_5_Growth
 	__Bezier__000002_Growth_Curve_Next_Shift_Right_Seed.ShapeCategory = __ShapeCategory__000005_5_Growth
@@ -497,7 +521,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000001_Initial_Rhombus_Grid
 	__Parameter__000000_Reference.InitialCircleGrid = __CircleGrid__000003_Initial_Circle_Grid
 	__Parameter__000000_Reference.InitialAxis = __Axis__000001_Initial_Axis
-	__Parameter__000000_Reference.RotatedAxis = __Axis__000002_Rotated_Axis
+	__Parameter__000000_Reference.RotatedAxis = __Axis__000003_Rotated_Axis
 	__Parameter__000000_Reference.RotatedRhombus = __Rhombus__000003_Rotated_Rhombus
 	__Parameter__000000_Reference.RotatedRhombusGrid = __RhombusGrid__000002_Rotated_Rhombus_Grid
 	__Parameter__000000_Reference.RotatedCircleGrid = __CircleGrid__000004_Rotated_Circle_Grid
@@ -523,6 +547,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.GrowthCurveNextShiftedRight = __BezierGrid__000002_Growth_Curve_Next_Shift_Right
 	__Parameter__000000_Reference.GrowthCurveStack = __BezierGridStack__000000_The_GrowthCurveStack
 	__Parameter__000000_Reference.Fkey = __Key__000000_F_key
+	__Parameter__000000_Reference.PitchLines = __AxisGrid__000001_Pitch_Lines
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Rhombus__000001_Initial_Rhombus.ShapeCategory = __ShapeCategory__000001_1_Initial
