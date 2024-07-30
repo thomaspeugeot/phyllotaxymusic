@@ -46,6 +46,7 @@ export class Parameter {
 	NbPitchLines: number = 0
 	MeasureLinesHeightRatio: number = 0
 	NbMeasureLines: number = 0
+	NbMeasureLinesPerCurve: number = 0
 	PitchDifference: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
@@ -149,6 +150,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.NbPitchLines = parameter.NbPitchLines
 	parameterAPI.MeasureLinesHeightRatio = parameter.MeasureLinesHeightRatio
 	parameterAPI.NbMeasureLines = parameter.NbMeasureLines
+	parameterAPI.NbMeasureLinesPerCurve = parameter.NbMeasureLinesPerCurve
 	parameterAPI.PitchDifference = parameter.PitchDifference
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
@@ -438,6 +440,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.NbPitchLines = parameterAPI.NbPitchLines
 	parameter.MeasureLinesHeightRatio = parameterAPI.MeasureLinesHeightRatio
 	parameter.NbMeasureLines = parameterAPI.NbMeasureLines
+	parameter.NbMeasureLinesPerCurve = parameterAPI.NbMeasureLinesPerCurve
 	parameter.PitchDifference = parameterAPI.PitchDifference
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY

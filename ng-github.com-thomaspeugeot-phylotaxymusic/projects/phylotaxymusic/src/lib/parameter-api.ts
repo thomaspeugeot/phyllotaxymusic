@@ -41,6 +41,7 @@ export class ParameterAPI {
 	NbPitchLines: number = 0
 	MeasureLinesHeightRatio: number = 0
 	NbMeasureLines: number = 0
+	NbMeasureLinesPerCurve: number = 0
 	PitchDifference: number = 0
 	OriginX: number = 0
 	OriginY: number = 0

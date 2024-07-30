@@ -180,6 +180,18 @@
               </mat-grid-tile>
 
               <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">Nb Measures / Curve</h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="2" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbMeasureLinesPerCurve}}</h4>
+              </mat-grid-tile>              
+              <mat-grid-tile colspan="7" rowspan="1">
+                <mat-slider min="0" max="128" step="1" showTickMarks discrete [displayWith]="formatLabel">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbMeasureLinesPerCurve" (input)="input($event)">
+                </mat-slider>
+              </mat-grid-tile>
+
+              <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">2nd voice pitch diff</h4>
               </mat-grid-tile>
               <mat-grid-tile colspan="2" rowspan="1">

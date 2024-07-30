@@ -92,6 +92,7 @@ type Parameter struct {
 	MeasureLines            *AxisGrid
 	MeasureLinesHeightRatio float64
 	NbMeasureLines          int
+	NbMeasureLinesPerCurve  int
 
 	// Composing
 	SecondVoice     *BezierGrid
@@ -637,6 +638,10 @@ func (p *Parameter) ComputePitchLines() {
 		g.Axiss = append(g.Axiss, a)
 
 		a.CenterY = float64(i) * p.PitchLinesHeightRatio * p.SideLength
+
+		if i%12 == 0 {
+			a.StrokeWidth *= 2
+		}
 	}
 }
 
@@ -651,6 +656,10 @@ func (p *Parameter) ComputeMeasureLines() {
 
 		g.Axiss = append(g.Axiss, a)
 
-		a.CenterX = float64(i) * p.MeasureLinesHeightRatio * p.SideLength
+		a.CenterX = float64(i) * p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
+
+		if i%p.NbMeasureLinesPerCurve == 0 {
+			a.StrokeWidth *= 2
+		}
 	}
 }

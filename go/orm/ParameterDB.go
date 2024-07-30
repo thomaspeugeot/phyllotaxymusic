@@ -254,6 +254,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.NbMeasureLines
 	NbMeasureLines_Data sql.NullInt64
 
+	// Declation for basic field parameterDB.NbMeasureLinesPerCurve
+	NbMeasureLinesPerCurve_Data sql.NullInt64
+
 	// Declation for basic field parameterDB.PitchDifference
 	PitchDifference_Data sql.NullInt64
 
@@ -319,11 +322,13 @@ type ParameterWOP struct {
 
 	NbMeasureLines int `xlsx:"17"`
 
-	PitchDifference int `xlsx:"18"`
+	NbMeasureLinesPerCurve int `xlsx:"18"`
 
-	OriginX float64 `xlsx:"19"`
+	PitchDifference int `xlsx:"19"`
 
-	OriginY float64 `xlsx:"20"`
+	OriginX float64 `xlsx:"20"`
+
+	OriginY float64 `xlsx:"21"`
 	// insertion for WOP pointer fields
 }
 
@@ -347,6 +352,7 @@ var Parameter_Fields = []string{
 	"NbPitchLines",
 	"MeasureLinesHeightRatio",
 	"NbMeasureLines",
+	"NbMeasureLinesPerCurve",
 	"PitchDifference",
 	"OriginX",
 	"OriginY",
@@ -1279,6 +1285,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.NbMeasureLines_Data.Int64 = int64(parameter.NbMeasureLines)
 	parameterDB.NbMeasureLines_Data.Valid = true
 
+	parameterDB.NbMeasureLinesPerCurve_Data.Int64 = int64(parameter.NbMeasureLinesPerCurve)
+	parameterDB.NbMeasureLinesPerCurve_Data.Valid = true
+
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
@@ -1343,6 +1352,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.NbMeasureLines_Data.Int64 = int64(parameter.NbMeasureLines)
 	parameterDB.NbMeasureLines_Data.Valid = true
+
+	parameterDB.NbMeasureLinesPerCurve_Data.Int64 = int64(parameter.NbMeasureLinesPerCurve)
+	parameterDB.NbMeasureLinesPerCurve_Data.Valid = true
 
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
@@ -1409,6 +1421,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.NbMeasureLines_Data.Int64 = int64(parameter.NbMeasureLines)
 	parameterDB.NbMeasureLines_Data.Valid = true
 
+	parameterDB.NbMeasureLinesPerCurve_Data.Int64 = int64(parameter.NbMeasureLinesPerCurve)
+	parameterDB.NbMeasureLinesPerCurve_Data.Valid = true
+
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
@@ -1439,6 +1454,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
+	parameter.NbMeasureLinesPerCurve = int(parameterDB.NbMeasureLinesPerCurve_Data.Int64)
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
@@ -1464,6 +1480,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
+	parameter.NbMeasureLinesPerCurve = int(parameterDB.NbMeasureLinesPerCurve_Data.Int64)
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
@@ -1490,6 +1507,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
+	parameter.NbMeasureLinesPerCurve = int(parameterDB.NbMeasureLinesPerCurve_Data.Int64)
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
