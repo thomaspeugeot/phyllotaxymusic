@@ -219,6 +219,8 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputePitchLines()
 	p.Shapes = append(p.Shapes, p.PitchLines)
 
+	p.ComputeMeasureLines()
+	p.Shapes = append(p.Shapes, p.MeasureLines)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -625,6 +627,21 @@ func (p *Parameter) ComputePitchLines() {
 
 		g.Axiss = append(g.Axiss, a)
 
-		a.CenterY = float64(i) * p.PitchLinesHeightRatio
+		a.CenterY = float64(i) * p.PitchLinesHeightRatio * p.SideLength
+	}
+}
+
+func (p *Parameter) ComputeMeasureLines() {
+
+	g := p.MeasureLines
+	g.Axiss = g.Axiss[0:]
+
+	for i := range p.NbMeasureLines {
+		a := new(Axis)
+		*a = *p.MeasureLines.Reference
+
+		g.Axiss = append(g.Axiss, a)
+
+		a.CenterX = float64(i) * p.MeasureLinesHeightRatio * p.SideLength
 	}
 }
