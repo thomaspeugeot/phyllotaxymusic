@@ -42,12 +42,13 @@ func _(stage *models.StageStruct) {
 	__Bezier__000005_Growth_Curve_Seed := (&models.Bezier{Name: `Growth Curve Seed`}).Stage(stage)
 
 	__BezierGrid__000000_2nb_Voice := (&models.BezierGrid{Name: `2nb Voice`}).Stage(stage)
-	__BezierGrid__000001_First_Voice := (&models.BezierGrid{Name: `First Voice`}).Stage(stage)
-	__BezierGrid__000002_First_Voice_Shift_Right := (&models.BezierGrid{Name: `First Voice Shift Right`}).Stage(stage)
-	__BezierGrid__000003_Growth_Curve := (&models.BezierGrid{Name: `Growth Curve`}).Stage(stage)
-	__BezierGrid__000004_Growth_Curve_Next := (&models.BezierGrid{Name: `Growth Curve Next`}).Stage(stage)
-	__BezierGrid__000005_Growth_Curve_Next_Shift_Right := (&models.BezierGrid{Name: `Growth Curve Next Shift Right`}).Stage(stage)
-	__BezierGrid__000006_Growth_Curve_Shift_Right := (&models.BezierGrid{Name: `Growth Curve Shift Right`}).Stage(stage)
+	__BezierGrid__000001_2nd_voice_shifted_right := (&models.BezierGrid{Name: `2nd voice shifted right`}).Stage(stage)
+	__BezierGrid__000002_First_Voice := (&models.BezierGrid{Name: `First Voice`}).Stage(stage)
+	__BezierGrid__000003_First_Voice_Shift_Right := (&models.BezierGrid{Name: `First Voice Shift Right`}).Stage(stage)
+	__BezierGrid__000004_Growth_Curve := (&models.BezierGrid{Name: `Growth Curve`}).Stage(stage)
+	__BezierGrid__000005_Growth_Curve_Next := (&models.BezierGrid{Name: `Growth Curve Next`}).Stage(stage)
+	__BezierGrid__000006_Growth_Curve_Next_Shift_Right := (&models.BezierGrid{Name: `Growth Curve Next Shift Right`}).Stage(stage)
+	__BezierGrid__000007_Growth_Curve_Shift_Right := (&models.BezierGrid{Name: `Growth Curve Shift Right`}).Stage(stage)
 
 	__BezierGridStack__000000_The_GrowthCurveStack := (&models.BezierGridStack{Name: `The GrowthCurveStack`}).Stage(stage)
 
@@ -292,23 +293,26 @@ func _(stage *models.StageStruct) {
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
 	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
 
-	__BezierGrid__000001_First_Voice.Name = `First Voice`
-	__BezierGrid__000001_First_Voice.IsDisplayed = true
+	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
+	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = true
 
-	__BezierGrid__000002_First_Voice_Shift_Right.Name = `First Voice Shift Right`
-	__BezierGrid__000002_First_Voice_Shift_Right.IsDisplayed = true
+	__BezierGrid__000002_First_Voice.Name = `First Voice`
+	__BezierGrid__000002_First_Voice.IsDisplayed = true
 
-	__BezierGrid__000003_Growth_Curve.Name = `Growth Curve`
-	__BezierGrid__000003_Growth_Curve.IsDisplayed = false
+	__BezierGrid__000003_First_Voice_Shift_Right.Name = `First Voice Shift Right`
+	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = true
 
-	__BezierGrid__000004_Growth_Curve_Next.Name = `Growth Curve Next`
-	__BezierGrid__000004_Growth_Curve_Next.IsDisplayed = false
+	__BezierGrid__000004_Growth_Curve.Name = `Growth Curve`
+	__BezierGrid__000004_Growth_Curve.IsDisplayed = false
 
-	__BezierGrid__000005_Growth_Curve_Next_Shift_Right.Name = `Growth Curve Next Shift Right`
-	__BezierGrid__000005_Growth_Curve_Next_Shift_Right.IsDisplayed = false
+	__BezierGrid__000005_Growth_Curve_Next.Name = `Growth Curve Next`
+	__BezierGrid__000005_Growth_Curve_Next.IsDisplayed = false
 
-	__BezierGrid__000006_Growth_Curve_Shift_Right.Name = `Growth Curve Shift Right`
-	__BezierGrid__000006_Growth_Curve_Shift_Right.IsDisplayed = false
+	__BezierGrid__000006_Growth_Curve_Next_Shift_Right.Name = `Growth Curve Next Shift Right`
+	__BezierGrid__000006_Growth_Curve_Next_Shift_Right.IsDisplayed = false
+
+	__BezierGrid__000007_Growth_Curve_Shift_Right.Name = `Growth Curve Shift Right`
+	__BezierGrid__000007_Growth_Curve_Shift_Right.IsDisplayed = false
 
 	__BezierGridStack__000000_The_GrowthCurveStack.Name = `The GrowthCurveStack`
 	__BezierGridStack__000000_The_GrowthCurveStack.IsDisplayed = false
@@ -578,18 +582,20 @@ func _(stage *models.StageStruct) {
 	__Bezier__000005_Growth_Curve_Seed.ShapeCategory = __ShapeCategory__000005_5_Growth
 	__BezierGrid__000000_2nb_Voice.Reference = __Bezier__000000_2nd_voice_seed
 	__BezierGrid__000000_2nb_Voice.ShapeCategory = __ShapeCategory__000007_7_Composer
-	__BezierGrid__000001_First_Voice.Reference = __Bezier__000001_First_Voice_seed
-	__BezierGrid__000001_First_Voice.ShapeCategory = __ShapeCategory__000007_7_Composer
-	__BezierGrid__000002_First_Voice_Shift_Right.Reference = __Bezier__000001_First_Voice_seed
-	__BezierGrid__000002_First_Voice_Shift_Right.ShapeCategory = __ShapeCategory__000007_7_Composer
-	__BezierGrid__000003_Growth_Curve.Reference = __Bezier__000005_Growth_Curve_Seed
-	__BezierGrid__000003_Growth_Curve.ShapeCategory = __ShapeCategory__000005_5_Growth
-	__BezierGrid__000004_Growth_Curve_Next.Reference = __Bezier__000003_Growth_Curve_Next_Seed
-	__BezierGrid__000004_Growth_Curve_Next.ShapeCategory = __ShapeCategory__000005_5_Growth
-	__BezierGrid__000005_Growth_Curve_Next_Shift_Right.Reference = __Bezier__000004_Growth_Curve_Next_Shift_Right_Seed
-	__BezierGrid__000005_Growth_Curve_Next_Shift_Right.ShapeCategory = __ShapeCategory__000005_5_Growth
-	__BezierGrid__000006_Growth_Curve_Shift_Right.Reference = __Bezier__000002_Growth_Bezier_Right_Seed
-	__BezierGrid__000006_Growth_Curve_Shift_Right.ShapeCategory = __ShapeCategory__000005_5_Growth
+	__BezierGrid__000001_2nd_voice_shifted_right.Reference = __Bezier__000000_2nd_voice_seed
+	__BezierGrid__000001_2nd_voice_shifted_right.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__BezierGrid__000002_First_Voice.Reference = __Bezier__000001_First_Voice_seed
+	__BezierGrid__000002_First_Voice.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__BezierGrid__000003_First_Voice_Shift_Right.Reference = __Bezier__000001_First_Voice_seed
+	__BezierGrid__000003_First_Voice_Shift_Right.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__BezierGrid__000004_Growth_Curve.Reference = __Bezier__000005_Growth_Curve_Seed
+	__BezierGrid__000004_Growth_Curve.ShapeCategory = __ShapeCategory__000005_5_Growth
+	__BezierGrid__000005_Growth_Curve_Next.Reference = __Bezier__000003_Growth_Curve_Next_Seed
+	__BezierGrid__000005_Growth_Curve_Next.ShapeCategory = __ShapeCategory__000005_5_Growth
+	__BezierGrid__000006_Growth_Curve_Next_Shift_Right.Reference = __Bezier__000004_Growth_Curve_Next_Shift_Right_Seed
+	__BezierGrid__000006_Growth_Curve_Next_Shift_Right.ShapeCategory = __ShapeCategory__000005_5_Growth
+	__BezierGrid__000007_Growth_Curve_Shift_Right.Reference = __Bezier__000002_Growth_Bezier_Right_Seed
+	__BezierGrid__000007_Growth_Curve_Shift_Right.ShapeCategory = __ShapeCategory__000005_5_Growth
 	__BezierGridStack__000000_The_GrowthCurveStack.ShapeCategory = __ShapeCategory__000005_5_Growth
 	__Circle__000000_Construction_Circle.ShapeCategory = __ShapeCategory__000004_4_Construction
 	__Circle__000003_Initial_Circle.ShapeCategory = __ShapeCategory__000001_1_Initial
@@ -626,20 +632,21 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.ConstructionCircle = __Circle__000000_Construction_Circle
 	__Parameter__000000_Reference.ConstructionCircleGrid = __CircleGrid__000000_Construction_Circle_Grid
 	__Parameter__000000_Reference.GrowthCurveSegment = __Bezier__000005_Growth_Curve_Seed
-	__Parameter__000000_Reference.GrowthCurve = __BezierGrid__000003_Growth_Curve
+	__Parameter__000000_Reference.GrowthCurve = __BezierGrid__000004_Growth_Curve
 	__Parameter__000000_Reference.GrowthCurveShiftedRightSeed = __Bezier__000002_Growth_Bezier_Right_Seed
-	__Parameter__000000_Reference.GrowthCurveShiftedRight = __BezierGrid__000006_Growth_Curve_Shift_Right
+	__Parameter__000000_Reference.GrowthCurveShiftedRight = __BezierGrid__000007_Growth_Curve_Shift_Right
 	__Parameter__000000_Reference.GrowthCurveNextSeed = __Bezier__000003_Growth_Curve_Next_Seed
-	__Parameter__000000_Reference.GrowthCurveNext = __BezierGrid__000004_Growth_Curve_Next
+	__Parameter__000000_Reference.GrowthCurveNext = __BezierGrid__000005_Growth_Curve_Next
 	__Parameter__000000_Reference.GrowthCurveNextShiftedRightSeed = __Bezier__000004_Growth_Curve_Next_Shift_Right_Seed
-	__Parameter__000000_Reference.GrowthCurveNextShiftedRight = __BezierGrid__000005_Growth_Curve_Next_Shift_Right
+	__Parameter__000000_Reference.GrowthCurveNextShiftedRight = __BezierGrid__000006_Growth_Curve_Next_Shift_Right
 	__Parameter__000000_Reference.GrowthCurveStack = __BezierGridStack__000000_The_GrowthCurveStack
 	__Parameter__000000_Reference.Fkey = __Key__000000_F_key
 	__Parameter__000000_Reference.PitchLines = __AxisGrid__000002_Pitch_Lines
 	__Parameter__000000_Reference.MeasureLines = __AxisGrid__000001_Measure_Lines
-	__Parameter__000000_Reference.FirstVoice = __BezierGrid__000001_First_Voice
-	__Parameter__000000_Reference.FirstVoiceShiftRigth = __BezierGrid__000002_First_Voice_Shift_Right
+	__Parameter__000000_Reference.FirstVoice = __BezierGrid__000002_First_Voice
+	__Parameter__000000_Reference.FirstVoiceShiftRigth = __BezierGrid__000003_First_Voice_Shift_Right
 	__Parameter__000000_Reference.SecondVoice = __BezierGrid__000000_2nb_Voice
+	__Parameter__000000_Reference.SecondVoiceShiftedRight = __BezierGrid__000001_2nd_voice_shifted_right
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Rhombus__000001_Initial_Rhombus.ShapeCategory = __ShapeCategory__000001_1_Initial
