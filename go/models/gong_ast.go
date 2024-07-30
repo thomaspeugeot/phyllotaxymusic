@@ -1794,6 +1794,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "FirstVoice":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].FirstVoice = __gong__map_BezierGrid[targetIdentifier]
+				case "FirstVoiceShiftRigth":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].FirstVoiceShiftRigth = __gong__map_BezierGrid[targetIdentifier]
 				case "SecondVoice":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SecondVoice = __gong__map_BezierGrid[targetIdentifier]

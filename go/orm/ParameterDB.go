@@ -183,6 +183,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	FirstVoiceID sql.NullInt64
 
+	// field FirstVoiceShiftRigth is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	FirstVoiceShiftRigthID sql.NullInt64
+
 	// field SecondVoice is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	SecondVoiceID sql.NullInt64
@@ -899,6 +903,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.FirstVoiceID.Valid = true
 		}
 
+		// commit pointer value parameter.FirstVoiceShiftRigth translates to updating the parameter.FirstVoiceShiftRigthID
+		parameterDB.FirstVoiceShiftRigthID.Valid = true // allow for a 0 value (nil association)
+		if parameter.FirstVoiceShiftRigth != nil {
+			if FirstVoiceShiftRigthId, ok := backRepo.BackRepoBezierGrid.Map_BezierGridPtr_BezierGridDBID[parameter.FirstVoiceShiftRigth]; ok {
+				parameterDB.FirstVoiceShiftRigthID.Int64 = int64(FirstVoiceShiftRigthId)
+				parameterDB.FirstVoiceShiftRigthID.Valid = true
+			}
+		} else {
+			parameterDB.FirstVoiceShiftRigthID.Int64 = 0
+			parameterDB.FirstVoiceShiftRigthID.Valid = true
+		}
+
 		// commit pointer value parameter.SecondVoice translates to updating the parameter.SecondVoiceID
 		parameterDB.SecondVoiceID.Valid = true // allow for a 0 value (nil association)
 		if parameter.SecondVoice != nil {
@@ -1217,6 +1233,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.FirstVoice = nil
 	if parameterDB.FirstVoiceID.Int64 != 0 {
 		parameter.FirstVoice = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.FirstVoiceID.Int64)]
+	}
+	// FirstVoiceShiftRigth field
+	parameter.FirstVoiceShiftRigth = nil
+	if parameterDB.FirstVoiceShiftRigthID.Int64 != 0 {
+		parameter.FirstVoiceShiftRigth = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.FirstVoiceShiftRigthID.Int64)]
 	}
 	// SecondVoice field
 	parameter.SecondVoice = nil
@@ -1927,6 +1948,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.FirstVoiceID.Int64 != 0 {
 			parameterDB.FirstVoiceID.Int64 = int64(BackRepoBezierGridid_atBckpTime_newID[uint(parameterDB.FirstVoiceID.Int64)])
 			parameterDB.FirstVoiceID.Valid = true
+		}
+
+		// reindexing FirstVoiceShiftRigth field
+		if parameterDB.FirstVoiceShiftRigthID.Int64 != 0 {
+			parameterDB.FirstVoiceShiftRigthID.Int64 = int64(BackRepoBezierGridid_atBckpTime_newID[uint(parameterDB.FirstVoiceShiftRigthID.Int64)])
+			parameterDB.FirstVoiceShiftRigthID.Valid = true
 		}
 
 		// reindexing SecondVoice field

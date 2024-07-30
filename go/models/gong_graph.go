@@ -503,6 +503,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.FirstVoice != nil {
 		StageBranch(stage, parameter.FirstVoice)
 	}
+	if parameter.FirstVoiceShiftRigth != nil {
+		StageBranch(stage, parameter.FirstVoiceShiftRigth)
+	}
 	if parameter.SecondVoice != nil {
 		StageBranch(stage, parameter.SecondVoice)
 	}
@@ -1000,6 +1003,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.FirstVoice != nil {
 		parameterTo.FirstVoice = CopyBranchBezierGrid(mapOrigCopy, parameterFrom.FirstVoice)
 	}
+	if parameterFrom.FirstVoiceShiftRigth != nil {
+		parameterTo.FirstVoiceShiftRigth = CopyBranchBezierGrid(mapOrigCopy, parameterFrom.FirstVoiceShiftRigth)
+	}
 	if parameterFrom.SecondVoice != nil {
 		parameterTo.SecondVoice = CopyBranchBezierGrid(mapOrigCopy, parameterFrom.SecondVoice)
 	}
@@ -1456,6 +1462,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.FirstVoice != nil {
 		UnstageBranch(stage, parameter.FirstVoice)
+	}
+	if parameter.FirstVoiceShiftRigth != nil {
+		UnstageBranch(stage, parameter.FirstVoiceShiftRigth)
 	}
 	if parameter.SecondVoice != nil {
 		UnstageBranch(stage, parameter.SecondVoice)

@@ -375,6 +375,7 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("NbMeasureLinesPerCurve", instanceWithInferedType.NbMeasureLinesPerCurve, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("FirstVoice", instanceWithInferedType.FirstVoice, formGroup, probe)
+		AssociationFieldToForm("FirstVoiceShiftRigth", instanceWithInferedType.FirstVoiceShiftRigth, formGroup, probe)
 		BasicFieldtoForm("FirstVoiceShiftX", instanceWithInferedType.FirstVoiceShiftX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("FirstVoiceShiftY", instanceWithInferedType.FirstVoiceShiftY, instanceWithInferedType, probe.formStage, formGroup,
