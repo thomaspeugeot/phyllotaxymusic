@@ -93,6 +93,10 @@ type Parameter struct {
 	MeasureLinesHeightRatio float64
 	NbMeasureLines          int
 
+	// Composing
+	SecondVoice     *BezierGrid
+	PitchDifference int
+
 	// for drawing purpose
 	OriginX        float64
 	OriginY        float64
@@ -221,6 +225,11 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.ComputeMeasureLines()
 	p.Shapes = append(p.Shapes, p.MeasureLines)
+
+	p.SecondVoice.Move(p.SecondVoice.Reference, p.GrowthCurve,
+		p.NextCircle.CenterX,
+		p.NextCircle.CenterY+float64(p.PitchDifference)*p.PitchLinesHeightRatio*p.SideLength)
+	p.Shapes = append(p.Shapes, p.SecondVoice)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {

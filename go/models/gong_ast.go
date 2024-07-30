@@ -1327,6 +1327,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].NbMeasureLines = int(exprSign) * int(fielValue)
+				case "PitchDifference":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].PitchDifference = int(exprSign) * int(fielValue)
 				case "OriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1763,6 +1770,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "MeasureLines":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].MeasureLines = __gong__map_AxisGrid[targetIdentifier]
+				case "SecondVoice":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].SecondVoice = __gong__map_BezierGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]
