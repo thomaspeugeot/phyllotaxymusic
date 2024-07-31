@@ -3114,7 +3114,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case BezierGridStack:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "BezierGrids"}
 	case Circle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
 	case HorizontalAxis:
@@ -3228,7 +3228,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *BezierGridStack:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "BezierGrids"}
 	case *Circle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
 	case *HorizontalAxis:
@@ -3417,6 +3417,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
 		case "BespopkeRadius":
 			res = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+		case "Pitch":
+			res = fmt.Sprintf("%d", inferedInstance.Pitch)
 		case "Color":
 			res = inferedInstance.Color
 		case "FillOpacity":
@@ -4004,6 +4006,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
 		case "BespopkeRadius":
 			res = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+		case "Pitch":
+			res = fmt.Sprintf("%d", inferedInstance.Pitch)
 		case "Color":
 			res = inferedInstance.Color
 		case "FillOpacity":

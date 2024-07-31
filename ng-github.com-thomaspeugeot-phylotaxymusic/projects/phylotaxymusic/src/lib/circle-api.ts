@@ -19,6 +19,7 @@ export class CircleAPI {
 	CenterY: number = 0
 	HasBespokeRadius: boolean = false
 	BespopkeRadius: number = 0
+	Pitch: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""

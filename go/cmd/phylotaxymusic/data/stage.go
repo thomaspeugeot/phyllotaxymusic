@@ -325,6 +325,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000000_Construction_Circle.CenterY = 349.036097
 	__Circle__000000_Construction_Circle.HasBespokeRadius = true
 	__Circle__000000_Construction_Circle.BespopkeRadius = 20.000000
+	__Circle__000000_Construction_Circle.Pitch = 0
 	__Circle__000000_Construction_Circle.Color = ``
 	__Circle__000000_Construction_Circle.FillOpacity = 0.000000
 	__Circle__000000_Construction_Circle.Stroke = `blue`
@@ -340,6 +341,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000001_First_voice_notes_seed.CenterY = 0.000000
 	__Circle__000001_First_voice_notes_seed.HasBespokeRadius = true
 	__Circle__000001_First_voice_notes_seed.BespopkeRadius = 10.000000
+	__Circle__000001_First_voice_notes_seed.Pitch = 0
 	__Circle__000001_First_voice_notes_seed.Color = ``
 	__Circle__000001_First_voice_notes_seed.FillOpacity = 0.000000
 	__Circle__000001_First_voice_notes_seed.Stroke = `grey`
@@ -355,6 +357,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000002_Growing.CenterY = 0.000000
 	__Circle__000002_Growing.HasBespokeRadius = false
 	__Circle__000002_Growing.BespopkeRadius = 0.000000
+	__Circle__000002_Growing.Pitch = 0
 	__Circle__000002_Growing.Color = ``
 	__Circle__000002_Growing.FillOpacity = 0.000000
 	__Circle__000002_Growing.Stroke = `blue`
@@ -370,6 +373,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000003_Growing_Seed_Left.CenterY = 0.000000
 	__Circle__000003_Growing_Seed_Left.HasBespokeRadius = false
 	__Circle__000003_Growing_Seed_Left.BespopkeRadius = 0.000000
+	__Circle__000003_Growing_Seed_Left.Pitch = 0
 	__Circle__000003_Growing_Seed_Left.Color = ``
 	__Circle__000003_Growing_Seed_Left.FillOpacity = 0.000000
 	__Circle__000003_Growing_Seed_Left.Stroke = `green`
@@ -385,6 +389,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000004_Initial_Circle.CenterY = 0.000000
 	__Circle__000004_Initial_Circle.HasBespokeRadius = false
 	__Circle__000004_Initial_Circle.BespopkeRadius = 0.000000
+	__Circle__000004_Initial_Circle.Pitch = 0
 	__Circle__000004_Initial_Circle.Color = ``
 	__Circle__000004_Initial_Circle.FillOpacity = 0.000000
 	__Circle__000004_Initial_Circle.Stroke = `lightblue`
@@ -400,6 +405,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000005_Rotated_Next_Circle.CenterY = 139.614439
 	__Circle__000005_Rotated_Next_Circle.HasBespokeRadius = false
 	__Circle__000005_Rotated_Next_Circle.BespopkeRadius = 0.000000
+	__Circle__000005_Rotated_Next_Circle.Pitch = 0
 	__Circle__000005_Rotated_Next_Circle.Color = ``
 	__Circle__000005_Rotated_Next_Circle.FillOpacity = 0.000000
 	__Circle__000005_Rotated_Next_Circle.Stroke = `yellow`
@@ -465,13 +471,13 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
-	__Parameter__000000_Reference.PitchLinesHeightRatio = 0.017800
+	__Parameter__000000_Reference.PitchLinesHeightRatio = 0.050200
 	__Parameter__000000_Reference.NbPitchLines = 169
 	__Parameter__000000_Reference.MeasureLinesHeightRatio = 0.170000
 	__Parameter__000000_Reference.NbMeasureLines = 31
 	__Parameter__000000_Reference.NbMeasureLinesPerCurve = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.110000
-	__Parameter__000000_Reference.FirstVoiceShiftY = -0.060000
+	__Parameter__000000_Reference.FirstVoiceShiftY = -0.350000
 	__Parameter__000000_Reference.PitchDifference = 3
 	__Parameter__000000_Reference.OriginX = 80.000000
 	__Parameter__000000_Reference.OriginY = 1000.000000

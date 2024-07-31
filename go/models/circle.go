@@ -13,6 +13,8 @@ type Circle struct {
 	HasBespokeRadius bool
 	BespopkeRadius   float64
 
+	Pitch int
+
 	Presentation
 }
 
