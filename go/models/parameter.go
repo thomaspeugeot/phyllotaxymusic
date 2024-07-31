@@ -85,9 +85,9 @@ type Parameter struct {
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
 
-	PitchLines            *AxisGrid
-	PitchLinesHeightRatio float64
-	NbPitchLines          int
+	PitchLines   *AxisGrid
+	PitchHeight  float64
+	NbPitchLines int
 
 	MeasureLines            *AxisGrid
 	MeasureLinesHeightRatio float64
@@ -247,7 +247,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.SecondVoice.Move(p.SecondVoice.Reference, p.FirstVoice,
 		p.NextCircle.CenterX,
-		p.NextCircle.CenterY+float64(p.PitchDifference)*p.PitchLinesHeightRatio*p.SideLength)
+		p.NextCircle.CenterY+float64(p.PitchDifference)*p.PitchHeight*p.SideLength)
 	p.Shapes = append(p.Shapes, p.SecondVoice)
 
 	p.SecondVoiceShiftedRight.Move(p.SecondVoiceShiftedRight.Reference, p.SecondVoice,
@@ -659,7 +659,7 @@ func (p *Parameter) ComputePitchLines() {
 
 		g.Axiss = append(g.Axiss, a)
 
-		a.CenterY = float64(i) * p.PitchLinesHeightRatio * p.SideLength
+		a.CenterY = float64(i) * p.PitchHeight * p.SideLength
 
 		if i%12 == 0 {
 			a.StrokeWidth *= 2
@@ -714,7 +714,7 @@ func (p *Parameter) compteFirstVoiceNotes() {
 		}
 
 		// interpolate to the nearest pitch
-		pitchHeight := p.PitchLinesHeightRatio * p.SideLength
+		pitchHeight := p.PitchHeight * p.SideLength
 		c.Pitch = int((c.CenterY + 0.5) / pitchHeight)
 		c.CenterY = float64(c.Pitch) * pitchHeight
 	}

@@ -1306,13 +1306,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].FkeyOriginRelativeY = exprSign * fielValue
-				case "PitchLinesHeightRatio":
+				case "PitchHeight":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].PitchLinesHeightRatio = exprSign * fielValue
+					__gong__map_Parameter[identifier].PitchHeight = exprSign * fielValue
 				case "NbPitchLines":
 					// convert string to int
 					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)

@@ -250,7 +250,7 @@ type Parameter_WOP struct {
 	FkeySizeRatio float64
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
-	PitchLinesHeightRatio float64
+	PitchHeight float64
 	NbPitchLines int
 	MeasureLinesHeightRatio float64
 	NbMeasureLines int
@@ -278,7 +278,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.FkeySizeRatio = from.FkeySizeRatio
 	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX
 	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY
-	to.PitchLinesHeightRatio = from.PitchLinesHeightRatio
+	to.PitchHeight = from.PitchHeight
 	to.NbPitchLines = from.NbPitchLines
 	to.MeasureLinesHeightRatio = from.MeasureLinesHeightRatio
 	to.NbMeasureLines = from.NbMeasureLines

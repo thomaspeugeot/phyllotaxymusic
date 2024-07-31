@@ -42,7 +42,7 @@ export class Parameter {
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
-	PitchLinesHeightRatio: number = 0
+	PitchHeight: number = 0
 	NbPitchLines: number = 0
 	MeasureLinesHeightRatio: number = 0
 	NbMeasureLines: number = 0
@@ -157,7 +157,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
 	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
 	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
-	parameterAPI.PitchLinesHeightRatio = parameter.PitchLinesHeightRatio
+	parameterAPI.PitchHeight = parameter.PitchHeight
 	parameterAPI.NbPitchLines = parameter.NbPitchLines
 	parameterAPI.MeasureLinesHeightRatio = parameter.MeasureLinesHeightRatio
 	parameterAPI.NbMeasureLines = parameter.NbMeasureLines
@@ -478,7 +478,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
 	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX
 	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY
-	parameter.PitchLinesHeightRatio = parameterAPI.PitchLinesHeightRatio
+	parameter.PitchHeight = parameterAPI.PitchHeight
 	parameter.NbPitchLines = parameterAPI.NbPitchLines
 	parameter.MeasureLinesHeightRatio = parameterAPI.MeasureLinesHeightRatio
 	parameter.NbMeasureLines = parameterAPI.NbMeasureLines

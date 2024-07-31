@@ -258,8 +258,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.FkeyOriginRelativeY
 	FkeyOriginRelativeY_Data sql.NullFloat64
 
-	// Declation for basic field parameterDB.PitchLinesHeightRatio
-	PitchLinesHeightRatio_Data sql.NullFloat64
+	// Declation for basic field parameterDB.PitchHeight
+	PitchHeight_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.NbPitchLines
 	NbPitchLines_Data sql.NullInt64
@@ -339,7 +339,7 @@ type ParameterWOP struct {
 
 	FkeyOriginRelativeY float64 `xlsx:"13"`
 
-	PitchLinesHeightRatio float64 `xlsx:"14"`
+	PitchHeight float64 `xlsx:"14"`
 
 	NbPitchLines int `xlsx:"15"`
 
@@ -379,7 +379,7 @@ var Parameter_Fields = []string{
 	"FkeySizeRatio",
 	"FkeyOriginRelativeX",
 	"FkeyOriginRelativeY",
-	"PitchLinesHeightRatio",
+	"PitchHeight",
 	"NbPitchLines",
 	"MeasureLinesHeightRatio",
 	"NbMeasureLines",
@@ -1375,8 +1375,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.FkeyOriginRelativeY_Data.Float64 = parameter.FkeyOriginRelativeY
 	parameterDB.FkeyOriginRelativeY_Data.Valid = true
 
-	parameterDB.PitchLinesHeightRatio_Data.Float64 = parameter.PitchLinesHeightRatio
-	parameterDB.PitchLinesHeightRatio_Data.Valid = true
+	parameterDB.PitchHeight_Data.Float64 = parameter.PitchHeight
+	parameterDB.PitchHeight_Data.Valid = true
 
 	parameterDB.NbPitchLines_Data.Int64 = int64(parameter.NbPitchLines)
 	parameterDB.NbPitchLines_Data.Valid = true
@@ -1452,8 +1452,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.FkeyOriginRelativeY_Data.Float64 = parameter.FkeyOriginRelativeY
 	parameterDB.FkeyOriginRelativeY_Data.Valid = true
 
-	parameterDB.PitchLinesHeightRatio_Data.Float64 = parameter.PitchLinesHeightRatio
-	parameterDB.PitchLinesHeightRatio_Data.Valid = true
+	parameterDB.PitchHeight_Data.Float64 = parameter.PitchHeight
+	parameterDB.PitchHeight_Data.Valid = true
 
 	parameterDB.NbPitchLines_Data.Int64 = int64(parameter.NbPitchLines)
 	parameterDB.NbPitchLines_Data.Valid = true
@@ -1529,8 +1529,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.FkeyOriginRelativeY_Data.Float64 = parameter.FkeyOriginRelativeY
 	parameterDB.FkeyOriginRelativeY_Data.Valid = true
 
-	parameterDB.PitchLinesHeightRatio_Data.Float64 = parameter.PitchLinesHeightRatio
-	parameterDB.PitchLinesHeightRatio_Data.Valid = true
+	parameterDB.PitchHeight_Data.Float64 = parameter.PitchHeight
+	parameterDB.PitchHeight_Data.Valid = true
 
 	parameterDB.NbPitchLines_Data.Int64 = int64(parameter.NbPitchLines)
 	parameterDB.NbPitchLines_Data.Valid = true
@@ -1579,7 +1579,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
-	parameter.PitchLinesHeightRatio = parameterDB.PitchLinesHeightRatio_Data.Float64
+	parameter.PitchHeight = parameterDB.PitchHeight_Data.Float64
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
@@ -1608,7 +1608,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
-	parameter.PitchLinesHeightRatio = parameterDB.PitchLinesHeightRatio_Data.Float64
+	parameter.PitchHeight = parameterDB.PitchHeight_Data.Float64
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
@@ -1638,7 +1638,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
-	parameter.PitchLinesHeightRatio = parameterDB.PitchLinesHeightRatio_Data.Float64
+	parameter.PitchHeight = parameterDB.PitchHeight_Data.Float64
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
 	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)

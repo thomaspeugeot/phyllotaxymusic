@@ -1,9 +1,6 @@
 <as-split direction="horizontal">
     <as-split-area [size]="15">
         <lib-tree [GONG__StackPath]="StacksNames.SidebarTree" [name]="TreeNames.Sidebar"></lib-tree>
-        <lib-gongtone style="margin-left: 8px; width: 100%;" GONG__StackPath="gongtone">
-
-        </lib-gongtone>
     </as-split-area>
     <as-split-area [size]="65">
         <lib-gongsvg-diagramming [GONG__StackPath]="StacksNames.GongsvgStackName">
@@ -137,6 +134,18 @@
               </mat-grid-tile>
       
               <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">Pitch Height</h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="2" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].PitchHeight}}</h4>
+              </mat-grid-tile>              
+              <mat-grid-tile colspan="7" rowspan="1">
+                <mat-slider min="0" max="0.1" step="0.001" showTickMarks discrete [displayWith]="formatLabel">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].PitchHeight" (input)="input($event)">
+                </mat-slider>
+              </mat-grid-tile>
+
+              <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Nb Measures / Curve</h4>
               </mat-grid-tile>
               <mat-grid-tile colspan="2" rowspan="1">
@@ -147,7 +156,6 @@
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbMeasureLinesPerCurve" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
-
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Speed</h4>
               </mat-grid-tile>
@@ -198,7 +206,9 @@
 
           </mat-grid-list>
           
+          <lib-gongtone style="margin-left: 8px; width: 100%;" GONG__StackPath="gongtone">
 
+          </lib-gongtone>
             
             }
     </as-split-area>
