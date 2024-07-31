@@ -102,6 +102,7 @@ type Parameter struct {
 	SecondVoice             *BezierGrid
 	SecondVoiceShiftedRight *BezierGrid
 	PitchDifference         int
+	Speed                   float64
 
 	// interpolating notes
 	FirstVoiceNotes *CircleGrid
@@ -482,7 +483,6 @@ func (p *Parameter) ComputeGrowingRhombusGrid() {
 
 		p.GrowingRhombusGrid.Rhombuses = append(p.GrowingRhombusGrid.Rhombuses, r)
 	}
-	log.Println("z", p.Z)
 }
 
 func (p *Parameter) ComputeGrowingCircleGrid() {
@@ -504,7 +504,6 @@ func (p *Parameter) ComputeGrowingCircleGrid() {
 
 		p.GrowingCircleGrid.Circles = append(p.GrowingCircleGrid.Circles, r)
 	}
-	log.Println("z", p.Z)
 }
 
 func (p *Parameter) ComputeGrowingCircleGridLeft() {
@@ -521,7 +520,6 @@ func (p *Parameter) ComputeGrowingCircleGridLeft() {
 
 		p.GrowingCircleGridLeft.Circles = append(p.GrowingCircleGridLeft.Circles, r)
 	}
-	log.Println("z", p.Z)
 }
 
 func (p *Parameter) computeConstructionAxis() {

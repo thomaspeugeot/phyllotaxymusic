@@ -45,6 +45,7 @@ export class ParameterAPI {
 	FirstVoiceShiftX: number = 0
 	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
+	Speed: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 

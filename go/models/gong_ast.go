@@ -1362,6 +1362,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].PitchDifference = int(exprSign) * int(fielValue)
+				case "Speed":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].Speed = exprSign * fielValue
 				case "OriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)

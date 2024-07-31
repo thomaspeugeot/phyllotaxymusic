@@ -28,8 +28,8 @@ func (parameter *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStr
 		}
 		note := new(gongtone_models.Note).Stage(gongtoneStage)
 		note.Frequencies = append(note.Frequencies, freq)
-		note.Start = float64(i)
-		note.Duration = 1
+		note.Start = float64(i) / parameter.Speed
+		note.Duration = 1 / parameter.Speed
 		note.Velocity = 1
 
 		note.Info = fmt.Sprintf("%40d", i)

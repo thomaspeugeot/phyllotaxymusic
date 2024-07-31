@@ -258,6 +258,7 @@ type Parameter_WOP struct {
 	FirstVoiceShiftX float64
 	FirstVoiceShiftY float64
 	PitchDifference int
+	Speed float64
 	OriginX float64
 	OriginY float64
 }
@@ -285,6 +286,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.FirstVoiceShiftX = from.FirstVoiceShiftX
 	to.FirstVoiceShiftY = from.FirstVoiceShiftY
 	to.PitchDifference = from.PitchDifference
+	to.Speed = from.Speed
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
 }

@@ -3122,7 +3122,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Key:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Path", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchLinesHeightRatio", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "FirstVoiceNotes", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchLinesHeightRatio", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "FirstVoiceNotes", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
@@ -3236,7 +3236,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Key:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Path", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchLinesHeightRatio", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "FirstVoiceNotes", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchLinesHeightRatio", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "FirstVoiceNotes", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
@@ -3714,6 +3714,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			}
 		case "PitchDifference":
 			res = fmt.Sprintf("%d", inferedInstance.PitchDifference)
+		case "Speed":
+			res = fmt.Sprintf("%f", inferedInstance.Speed)
 		case "FirstVoiceNotes":
 			if inferedInstance.FirstVoiceNotes != nil {
 				res = inferedInstance.FirstVoiceNotes.Name
@@ -4303,6 +4305,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			}
 		case "PitchDifference":
 			res = fmt.Sprintf("%d", inferedInstance.PitchDifference)
+		case "Speed":
+			res = fmt.Sprintf("%f", inferedInstance.Speed)
 		case "FirstVoiceNotes":
 			if inferedInstance.FirstVoiceNotes != nil {
 				res = inferedInstance.FirstVoiceNotes.Name

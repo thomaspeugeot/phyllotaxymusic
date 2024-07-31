@@ -282,6 +282,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.PitchDifference
 	PitchDifference_Data sql.NullInt64
 
+	// Declation for basic field parameterDB.Speed
+	Speed_Data sql.NullFloat64
+
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
 
@@ -352,9 +355,11 @@ type ParameterWOP struct {
 
 	PitchDifference int `xlsx:"21"`
 
-	OriginX float64 `xlsx:"22"`
+	Speed float64 `xlsx:"22"`
 
-	OriginY float64 `xlsx:"23"`
+	OriginX float64 `xlsx:"23"`
+
+	OriginY float64 `xlsx:"24"`
 	// insertion for WOP pointer fields
 }
 
@@ -382,6 +387,7 @@ var Parameter_Fields = []string{
 	"FirstVoiceShiftX",
 	"FirstVoiceShiftY",
 	"PitchDifference",
+	"Speed",
 	"OriginX",
 	"OriginY",
 }
@@ -1393,6 +1399,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
+	parameterDB.Speed_Data.Float64 = parameter.Speed
+	parameterDB.Speed_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -1466,6 +1475,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
+
+	parameterDB.Speed_Data.Float64 = parameter.Speed
+	parameterDB.Speed_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -1541,6 +1553,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
+	parameterDB.Speed_Data.Float64 = parameter.Speed
+	parameterDB.Speed_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -1572,6 +1587,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
+	parameter.Speed = parameterDB.Speed_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1600,6 +1616,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
+	parameter.Speed = parameterDB.Speed_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1629,6 +1646,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
+	parameter.Speed = parameterDB.Speed_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }

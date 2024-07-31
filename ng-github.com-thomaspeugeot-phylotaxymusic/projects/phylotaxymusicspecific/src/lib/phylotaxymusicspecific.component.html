@@ -1,6 +1,9 @@
 <as-split direction="horizontal">
     <as-split-area [size]="15">
         <lib-tree [GONG__StackPath]="StacksNames.SidebarTree" [name]="TreeNames.Sidebar"></lib-tree>
+        <lib-gongtone style="margin-left: 8px; width: 100%;" GONG__StackPath="gongtone">
+
+        </lib-gongtone>
     </as-split-area>
     <as-split-area [size]="65">
         <lib-gongsvg-diagramming [GONG__StackPath]="StacksNames.GongsvgStackName">
@@ -10,12 +13,7 @@
         @if (frontRepo && frontRepo.array_Parameters[0]) {
 
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
-                <mat-grid-tile colspan="12" rowspan="1">
-                  <lib-gongtone style="margin-left: 8px; width: 100%;" GONG__StackPath="gongtone">
-
-                  </lib-gongtone>
-                </mat-grid-tile>
-              
+           
                 <mat-grid-tile colspan="3" rowspan="1">
                   <h4 style="margin-left: 8px; width: 100%;">Side Length</h4>
                 </mat-grid-tile>
@@ -137,54 +135,7 @@
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].N" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
-              <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Pitch Lines Heigth </h4>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].PitchLinesHeightRatio}}</h4>
-              </mat-grid-tile>              
-              <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0" max="0.5" step="0.0001" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].PitchLinesHeightRatio" (input)="input($event)">
-                </mat-slider>
-              </mat-grid-tile>
-            
-              <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Nb Pitch Lines</h4>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbPitchLines}}</h4>
-              </mat-grid-tile>              
-              <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0" max="200" step="1" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbPitchLines" (input)="input($event)">
-                </mat-slider>
-              </mat-grid-tile>
-
-              <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Measure Lines Heigth </h4>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MeasureLinesHeightRatio}}</h4>
-              </mat-grid-tile>              
-              <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0" max="0.5" step="0.001" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MeasureLinesHeightRatio" (input)="input($event)">
-                </mat-slider>
-              </mat-grid-tile>
-            
-              <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Nb Measure Lines</h4>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbMeasureLines}}</h4>
-              </mat-grid-tile>              
-              <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0" max="200" step="1" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbMeasureLines" (input)="input($event)">
-                </mat-slider>
-              </mat-grid-tile>
-
+      
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Nb Measures / Curve</h4>
               </mat-grid-tile>
@@ -194,6 +145,18 @@
               <mat-grid-tile colspan="7" rowspan="1">
                 <mat-slider min="0" max="128" step="1" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbMeasureLinesPerCurve" (input)="input($event)">
+                </mat-slider>
+              </mat-grid-tile>
+
+              <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">Speed</h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="2" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].Speed}}</h4>
+              </mat-grid-tile>              
+              <mat-grid-tile colspan="7" rowspan="1">
+                <mat-slider min="0" max="20" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Speed" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
 
