@@ -73,6 +73,9 @@ type NoteDB struct {
 
 	// Declation for basic field noteDB.Velocity
 	Velocity_Data sql.NullFloat64
+
+	// Declation for basic field noteDB.Info
+	Info_Data sql.NullString
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -103,6 +106,8 @@ type NoteWOP struct {
 	Duration float64 `xlsx:"3"`
 
 	Velocity float64 `xlsx:"4"`
+
+	Info string `xlsx:"5"`
 	// insertion for WOP pointer fields
 }
 
@@ -113,6 +118,7 @@ var Note_Fields = []string{
 	"Start",
 	"Duration",
 	"Velocity",
+	"Info",
 }
 
 type BackRepoNoteStruct struct {
@@ -417,6 +423,9 @@ func (noteDB *NoteDB) CopyBasicFieldsFromNote(note *models.Note) {
 
 	noteDB.Velocity_Data.Float64 = note.Velocity
 	noteDB.Velocity_Data.Valid = true
+
+	noteDB.Info_Data.String = note.Info
+	noteDB.Info_Data.Valid = true
 }
 
 // CopyBasicFieldsFromNote_WOP
@@ -434,6 +443,9 @@ func (noteDB *NoteDB) CopyBasicFieldsFromNote_WOP(note *models.Note_WOP) {
 
 	noteDB.Velocity_Data.Float64 = note.Velocity
 	noteDB.Velocity_Data.Valid = true
+
+	noteDB.Info_Data.String = note.Info
+	noteDB.Info_Data.Valid = true
 }
 
 // CopyBasicFieldsFromNoteWOP
@@ -451,6 +463,9 @@ func (noteDB *NoteDB) CopyBasicFieldsFromNoteWOP(note *NoteWOP) {
 
 	noteDB.Velocity_Data.Float64 = note.Velocity
 	noteDB.Velocity_Data.Valid = true
+
+	noteDB.Info_Data.String = note.Info
+	noteDB.Info_Data.Valid = true
 }
 
 // CopyBasicFieldsToNote
@@ -460,6 +475,7 @@ func (noteDB *NoteDB) CopyBasicFieldsToNote(note *models.Note) {
 	note.Start = noteDB.Start_Data.Float64
 	note.Duration = noteDB.Duration_Data.Float64
 	note.Velocity = noteDB.Velocity_Data.Float64
+	note.Info = noteDB.Info_Data.String
 }
 
 // CopyBasicFieldsToNote_WOP
@@ -469,6 +485,7 @@ func (noteDB *NoteDB) CopyBasicFieldsToNote_WOP(note *models.Note_WOP) {
 	note.Start = noteDB.Start_Data.Float64
 	note.Duration = noteDB.Duration_Data.Float64
 	note.Velocity = noteDB.Velocity_Data.Float64
+	note.Info = noteDB.Info_Data.String
 }
 
 // CopyBasicFieldsToNoteWOP
@@ -479,6 +496,7 @@ func (noteDB *NoteDB) CopyBasicFieldsToNoteWOP(note *NoteWOP) {
 	note.Start = noteDB.Start_Data.Float64
 	note.Duration = noteDB.Duration_Data.Float64
 	note.Velocity = noteDB.Velocity_Data.Float64
+	note.Info = noteDB.Info_Data.String
 }
 
 // Backup generates a json file from a slice of all NoteDB instances in the backrepo

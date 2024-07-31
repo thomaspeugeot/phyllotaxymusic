@@ -664,6 +664,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Note[identifier].Velocity = exprSign * fielValue
+				case "Info":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Note[identifier].Info = fielValue
 				}
 			}
 		case *ast.Ident:

@@ -188,6 +188,8 @@ func (noteFormCallback *NoteFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(note_.Duration), formDiv)
 		case "Velocity":
 			FormDivBasicFieldToField(&(note_.Velocity), formDiv)
+		case "Info":
+			FormDivBasicFieldToField(&(note_.Info), formDiv)
 		}
 	}
 

@@ -24,6 +24,7 @@ import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/ful
 
 import * as gongsvg from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvg/src/public-api';
 import * as gongtree from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtree/src/public-api';
+import * as gongtone from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtone/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -56,9 +57,10 @@ export class AppComponent implements OnInit {
   probe = 'Phylotaxymusic Data/Model'
   svg_probe = 'svg probe'
   tree_probe = "tree probe"
+  tone_probe = "tone probe"
   view = this.phylotaxymusic
 
-  views: string[] = [this.phylotaxymusic, this.probe, this.svg_probe, this.tree_probe];
+  views: string[] = [this.phylotaxymusic, this.probe, this.svg_probe, this.tree_probe, this.tone_probe];
 
   scrollStyle = {
     'overflow- x': 'auto',
@@ -73,6 +75,7 @@ export class AppComponent implements OnInit {
   StacksNames = phylotaxymusic.StacksNames
   SVGStackType = gongsvg.StackType
   TreeStackType = gongtree.StackType
+  ToneStackType = gongtone.StackType
 
 
   constructor(

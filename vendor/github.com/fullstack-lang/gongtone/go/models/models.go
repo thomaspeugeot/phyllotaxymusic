@@ -12,6 +12,9 @@ type Note struct {
 	Duration float64
 
 	Velocity float64
+
+	// to help to decode
+	Info string
 }
 
 type Freqency struct {

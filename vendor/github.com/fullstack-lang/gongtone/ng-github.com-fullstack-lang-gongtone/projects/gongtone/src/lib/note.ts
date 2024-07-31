@@ -22,6 +22,7 @@ export class Note {
 	Start: number = 0
 	Duration: number = 0
 	Velocity: number = 0
+	Info: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
 	Frequencies: Array<Freqency> = []
@@ -38,6 +39,7 @@ export function CopyNoteToNoteAPI(note: Note, noteAPI: NoteAPI) {
 	noteAPI.Start = note.Start
 	noteAPI.Duration = note.Duration
 	noteAPI.Velocity = note.Velocity
+	noteAPI.Info = note.Info
 
 	// insertion point for pointer fields encoding
 
@@ -64,6 +66,7 @@ export function CopyNoteAPIToNote(noteAPI: NoteAPI, note: Note, frontRepo: Front
 	note.Start = noteAPI.Start
 	note.Duration = noteAPI.Duration
 	note.Velocity = noteAPI.Velocity
+	note.Info = noteAPI.Info
 
 	// insertion point for pointer fields encoding
 

@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
@@ -29,6 +31,8 @@ func (parameter *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStr
 		note.Start = float64(i)
 		note.Duration = 1
 		note.Velocity = 1
+
+		note.Info = fmt.Sprintf("%40d", i)
 	}
 
 	gongtoneStage.Commit()

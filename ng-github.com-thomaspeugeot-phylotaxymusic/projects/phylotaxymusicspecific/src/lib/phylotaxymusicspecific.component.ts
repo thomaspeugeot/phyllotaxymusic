@@ -35,15 +35,6 @@ import { CommonModule } from '@angular/common';
 })
 export class PhylotaxymusicspecificComponent implements OnInit {
 
-  tiles = [
-    { text: 'Tile 1' },
-    { text: 'Tile 2' },
-    { text: 'Tile 3' },
-    { text: 'Tile 4' },
-    { text: 'Tile 5' },
-    { text: 'Tile 6' }
-  ];
-
   input($event: Event) {
     console.log(this.frontRepo!.array_Parameters[0].InsideAngle)
 

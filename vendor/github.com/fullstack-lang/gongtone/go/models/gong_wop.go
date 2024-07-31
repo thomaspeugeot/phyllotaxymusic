@@ -23,6 +23,7 @@ type Note_WOP struct {
 	Start float64
 	Duration float64
 	Velocity float64
+	Info string
 }
 
 func (from *Note) CopyBasicFields(to *Note) {
@@ -31,5 +32,6 @@ func (from *Note) CopyBasicFields(to *Note) {
 	to.Start = from.Start
 	to.Duration = from.Duration
 	to.Velocity = from.Velocity
+	to.Info = from.Info
 }
 

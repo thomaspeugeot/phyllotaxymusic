@@ -17,6 +17,7 @@ export class NoteAPI {
 	Start: number = 0
 	Duration: number = 0
 	Velocity: number = 0
+	Info: string = ""
 
 	// insertion point for other decls
 
