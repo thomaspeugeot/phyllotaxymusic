@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"log"
 
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
@@ -16,6 +17,8 @@ func (parameter *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStr
 	keyboard = keyboard[12:]
 
 	map_Freqs := make(map[string]*gongtone_models.Freqency)
+
+	log.Println("speed", parameter.Speed)
 
 	for i, c := range parameter.FirstVoiceNotes.Circles {
 		freqNotation := keyboard[c.Pitch]
