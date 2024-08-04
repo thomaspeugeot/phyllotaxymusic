@@ -31,7 +31,8 @@ func (p *Parameter) computeFirstVoiceNotes() {
 
 		// interpolate to the nearest pitch
 		pitchHeight := p.PitchHeight * p.SideLength
-		c.Pitch = int((c.CenterY - 0.5) / pitchHeight)
+		ratio := c.CenterY / pitchHeight
+		c.Pitch = int(ratio + 0.5)
 		c.CenterY = float64(c.Pitch) * pitchHeight
 	}
 }
