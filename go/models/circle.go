@@ -37,3 +37,11 @@ func (c *Circle) Draw(
 
 	c.Presentation.CopyTo(&circle.Presentation)
 }
+
+func (_c *Circle) move(c *Circle, x, y float64) {
+	_c.BespopkeRadius = c.BespopkeRadius
+	_c.HasBespokeRadius = c.HasBespokeRadius
+	_c.Pitch = c.Pitch
+	_c.CenterX += c.CenterX + x
+	_c.CenterY += c.CenterY + y
+}

@@ -46,6 +46,7 @@ export class ParameterAPI {
 	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
 	Speed: number = 0
+	Level: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -131,6 +132,8 @@ export class ParameterPointersEncoding {
 	SecondVoiceShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, SecondVoiceShiftedRight.ID = 0
 
 	FirstVoiceNotesID: NullInt64 = new NullInt64 // if pointer is null, FirstVoiceNotes.ID = 0
+
+	FirstVoiceNotesShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, FirstVoiceNotesShiftedRight.ID = 0
 
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 

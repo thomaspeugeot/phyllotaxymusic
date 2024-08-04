@@ -26,3 +26,17 @@ func (g *CircleGrid) Draw(
 	}
 
 }
+
+func (g *CircleGrid) Move(seed *Circle, source *CircleGrid, x, y float64) {
+
+	g.Circles = g.Circles[:0]
+
+	for _, b := range source.Circles {
+		_b := new(Circle)
+		*_b = *seed
+
+		g.Circles = append(g.Circles, _b)
+
+		_b.move(b, x, y)
+	}
+}

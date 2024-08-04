@@ -103,9 +103,11 @@ type Parameter struct {
 	SecondVoiceShiftedRight *BezierGrid
 	PitchDifference         int
 	Speed                   float64
+	Level                   float64
 
 	// interpolating notes
-	FirstVoiceNotes *CircleGrid
+	FirstVoiceNotes             *CircleGrid
+	FirstVoiceNotesShiftedRight *CircleGrid
 
 	// for drawing purpose
 	OriginX        float64
@@ -256,6 +258,10 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.compteFirstVoiceNotes()
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotes)
+
+	p.FirstVoiceNotesShiftedRight.Move(p.FirstVoiceNotes.Reference, p.FirstVoiceNotes,
+		p.RotatedAxis.Length, 0)
+	p.Shapes = append(p.Shapes, p.FirstVoiceNotesShiftedRight)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {

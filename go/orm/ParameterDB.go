@@ -199,6 +199,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	FirstVoiceNotesID sql.NullInt64
 
+	// field FirstVoiceNotesShiftedRight is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	FirstVoiceNotesShiftedRightID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -285,6 +289,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.Speed
 	Speed_Data sql.NullFloat64
 
+	// Declation for basic field parameterDB.Level
+	Level_Data sql.NullFloat64
+
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
 
@@ -357,9 +364,11 @@ type ParameterWOP struct {
 
 	Speed float64 `xlsx:"22"`
 
-	OriginX float64 `xlsx:"23"`
+	Level float64 `xlsx:"23"`
 
-	OriginY float64 `xlsx:"24"`
+	OriginX float64 `xlsx:"24"`
+
+	OriginY float64 `xlsx:"25"`
 	// insertion for WOP pointer fields
 }
 
@@ -388,6 +397,7 @@ var Parameter_Fields = []string{
 	"FirstVoiceShiftY",
 	"PitchDifference",
 	"Speed",
+	"Level",
 	"OriginX",
 	"OriginY",
 }
@@ -965,6 +975,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.FirstVoiceNotesID.Valid = true
 		}
 
+		// commit pointer value parameter.FirstVoiceNotesShiftedRight translates to updating the parameter.FirstVoiceNotesShiftedRightID
+		parameterDB.FirstVoiceNotesShiftedRightID.Valid = true // allow for a 0 value (nil association)
+		if parameter.FirstVoiceNotesShiftedRight != nil {
+			if FirstVoiceNotesShiftedRightId, ok := backRepo.BackRepoCircleGrid.Map_CircleGridPtr_CircleGridDBID[parameter.FirstVoiceNotesShiftedRight]; ok {
+				parameterDB.FirstVoiceNotesShiftedRightID.Int64 = int64(FirstVoiceNotesShiftedRightId)
+				parameterDB.FirstVoiceNotesShiftedRightID.Valid = true
+			}
+		} else {
+			parameterDB.FirstVoiceNotesShiftedRightID.Int64 = 0
+			parameterDB.FirstVoiceNotesShiftedRightID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -1292,6 +1314,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.FirstVoiceNotesID.Int64 != 0 {
 		parameter.FirstVoiceNotes = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.FirstVoiceNotesID.Int64)]
 	}
+	// FirstVoiceNotesShiftedRight field
+	parameter.FirstVoiceNotesShiftedRight = nil
+	if parameterDB.FirstVoiceNotesShiftedRightID.Int64 != 0 {
+		parameter.FirstVoiceNotesShiftedRight = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.FirstVoiceNotesShiftedRightID.Int64)]
+	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
 	if parameterDB.HorizontalAxisID.Int64 != 0 {
@@ -1402,6 +1429,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.Speed_Data.Float64 = parameter.Speed
 	parameterDB.Speed_Data.Valid = true
 
+	parameterDB.Level_Data.Float64 = parameter.Level
+	parameterDB.Level_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -1478,6 +1508,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.Speed_Data.Float64 = parameter.Speed
 	parameterDB.Speed_Data.Valid = true
+
+	parameterDB.Level_Data.Float64 = parameter.Level
+	parameterDB.Level_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -1556,6 +1589,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.Speed_Data.Float64 = parameter.Speed
 	parameterDB.Speed_Data.Valid = true
 
+	parameterDB.Level_Data.Float64 = parameter.Level
+	parameterDB.Level_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -1588,6 +1624,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.Speed = parameterDB.Speed_Data.Float64
+	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1617,6 +1654,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.Speed = parameterDB.Speed_Data.Float64
+	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1647,6 +1685,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.Speed = parameterDB.Speed_Data.Float64
+	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -2032,6 +2071,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.FirstVoiceNotesID.Int64 != 0 {
 			parameterDB.FirstVoiceNotesID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.FirstVoiceNotesID.Int64)])
 			parameterDB.FirstVoiceNotesID.Valid = true
+		}
+
+		// reindexing FirstVoiceNotesShiftedRight field
+		if parameterDB.FirstVoiceNotesShiftedRightID.Int64 != 0 {
+			parameterDB.FirstVoiceNotesShiftedRightID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.FirstVoiceNotesShiftedRightID.Int64)])
+			parameterDB.FirstVoiceNotesShiftedRightID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

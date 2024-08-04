@@ -51,6 +51,7 @@ export class Parameter {
 	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
 	Speed: number = 0
+	Level: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -131,6 +132,8 @@ export class Parameter {
 
 	FirstVoiceNotes?: CircleGrid
 
+	FirstVoiceNotesShiftedRight?: CircleGrid
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -166,6 +169,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.FirstVoiceShiftY = parameter.FirstVoiceShiftY
 	parameterAPI.PitchDifference = parameter.PitchDifference
 	parameterAPI.Speed = parameter.Speed
+	parameterAPI.Level = parameter.Level
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 
@@ -436,6 +440,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.FirstVoiceNotesID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.FirstVoiceNotesShiftedRightID.Valid = true
+	if (parameter.FirstVoiceNotesShiftedRight != undefined) {
+		parameterAPI.ParameterPointersEncoding.FirstVoiceNotesShiftedRightID.Int64 = parameter.FirstVoiceNotesShiftedRight.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.FirstVoiceNotesShiftedRightID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -487,6 +498,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.FirstVoiceShiftY = parameterAPI.FirstVoiceShiftY
 	parameter.PitchDifference = parameterAPI.PitchDifference
 	parameter.Speed = parameterAPI.Speed
+	parameter.Level = parameterAPI.Level
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 
@@ -529,6 +541,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SecondVoice = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceID.Int64)
 	parameter.SecondVoiceShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceShiftedRightID.Int64)
 	parameter.FirstVoiceNotes = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceNotesID.Int64)
+	parameter.FirstVoiceNotesShiftedRight = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceNotesShiftedRightID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 

@@ -1202,8 +1202,12 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.PitchDifference), formDiv)
 		case "Speed":
 			FormDivBasicFieldToField(&(parameter_.Speed), formDiv)
+		case "Level":
+			FormDivBasicFieldToField(&(parameter_.Level), formDiv)
 		case "FirstVoiceNotes":
 			FormDivSelectFieldToField(&(parameter_.FirstVoiceNotes), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "FirstVoiceNotesShiftedRight":
+			FormDivSelectFieldToField(&(parameter_.FirstVoiceNotesShiftedRight), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

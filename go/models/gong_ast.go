@@ -1369,6 +1369,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].Speed = exprSign * fielValue
+				case "Level":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].Level = exprSign * fielValue
 				case "OriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1820,6 +1827,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "FirstVoiceNotes":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].FirstVoiceNotes = __gong__map_CircleGrid[targetIdentifier]
+				case "FirstVoiceNotesShiftedRight":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].FirstVoiceNotesShiftedRight = __gong__map_CircleGrid[targetIdentifier]
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

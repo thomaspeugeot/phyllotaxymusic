@@ -1,9 +1,6 @@
 package models
 
 import (
-	"fmt"
-	"log"
-
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
@@ -18,9 +15,22 @@ func (parameter *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStr
 
 	map_Freqs := make(map[string]*gongtone_models.Freqency)
 
-	log.Println("speed", parameter.Speed)
+	// log.Println("speed", parameter.Speed)
 
-	for i, c := range parameter.FirstVoiceNotes.Circles {
+	// note.Info = fmt.Sprintf("%40d", i)
+	parameter.generateNotesFromCircleGrid(keyboard, map_Freqs, parameter.FirstVoiceNotes, gongtoneStage)
+	parameter.generateNotesFromCircleGrid(keyboard, map_Freqs, parameter.FirstVoiceNotesShiftedRight, gongtoneStage)
+
+	gongtoneStage.Commit()
+
+}
+
+func (p *Parameter) generateNotesFromCircleGrid(
+	keyboard []string,
+	map_Freqs map[string]*gongtone_models.Freqency,
+	circleGrid *CircleGrid,
+	gongtoneStage *gongtone_models.StageStruct) {
+	for _, c := range circleGrid.Circles {
 		freqNotation := keyboard[c.Pitch]
 
 		freq, ok := map_Freqs[freqNotation]
@@ -29,15 +39,12 @@ func (parameter *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStr
 			freq = new(gongtone_models.Freqency).Stage(gongtoneStage)
 			freq.Name = freqNotation
 		}
+		unitMeasureLength := p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
 		note := new(gongtone_models.Note).Stage(gongtoneStage)
 		note.Frequencies = append(note.Frequencies, freq)
-		note.Start = float64(i) / parameter.Speed
-		note.Duration = 1 / parameter.Speed
-		note.Velocity = 1
+		note.Start = c.CenterX / unitMeasureLength / p.Speed
+		note.Duration = 1 / p.Speed
+		note.Velocity = p.Level
 
-		note.Info = fmt.Sprintf("%40d", i)
 	}
-
-	gongtoneStage.Commit()
-
 }

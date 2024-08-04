@@ -7,7 +7,9 @@
         </lib-gongsvg-diagramming>
     </as-split-area>
     <as-split-area [size]="20">
-        @if (frontRepo && frontRepo.array_Parameters[0]) {
+      <as-split unit="pixel" direction="vertical">
+        <as-split-area [size]="$any('*')">
+          @if (frontRepo && frontRepo.array_Parameters[0]) {
 
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
            
@@ -187,7 +189,7 @@
                 <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].FirstVoiceShiftY}}</h4>
               </mat-grid-tile>              
               <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="-1" max="1" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+                <mat-slider min="-1" max="4" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].FirstVoiceShiftY" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
@@ -204,13 +206,29 @@
                 </mat-slider>
               </mat-grid-tile>
 
-          </mat-grid-list>
-          
+              <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">Level</h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="2" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].Level}}</h4>
+              </mat-grid-tile>              
+              <mat-grid-tile colspan="7" rowspan="1">
+                <mat-slider min="0" max="20" step="0.1" showTickMarks discrete [displayWith]="formatLabel">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Level" (input)="input($event)">
+                </mat-slider>
+              </mat-grid-tile>
+
+            </mat-grid-list>
+        
+          }
+        </as-split-area>
+        <as-split-area [size]="100">
           <lib-gongtone style="margin-left: 8px; width: 100%;" GONG__StackPath="gongtone">
 
           </lib-gongtone>
-            
-            }
+        </as-split-area>
+      </as-split>
+
     </as-split-area>
 </as-split>
 
