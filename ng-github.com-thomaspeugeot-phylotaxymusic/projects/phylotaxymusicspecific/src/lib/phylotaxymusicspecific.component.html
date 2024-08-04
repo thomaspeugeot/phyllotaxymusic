@@ -46,7 +46,7 @@
                 <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].OriginY}}</h4>
               </mat-grid-tile>              
               <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0.0" max="1200.0" step="10" showTickMarks discrete [displayWith]="formatLabel">
+                <mat-slider min="0.0" max="3000.0" step="50" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].OriginY" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>

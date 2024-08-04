@@ -18,10 +18,18 @@ func (p *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStruct) {
 	// log.Println("speed", parameter.Speed)
 
 	// note.Info = fmt.Sprintf("%40d", i)
-	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotes, gongtoneStage)
-	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotesShiftedRight, gongtoneStage)
-	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotes, gongtoneStage)
-	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, gongtoneStage)
+	if p.FirstVoiceNotes.IsDisplayed {
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotes, gongtoneStage)
+	}
+	if p.FirstVoiceNotesShiftedRight.IsDisplayed {
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotesShiftedRight, gongtoneStage)
+	}
+	if p.SecondVoiceNotes.IsDisplayed {
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotes, gongtoneStage)
+	}
+	if p.SecondVoiceNotesShiftedRight.IsDisplayed {
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, gongtoneStage)
+	}
 
 	gongtoneStage.Commit()
 
