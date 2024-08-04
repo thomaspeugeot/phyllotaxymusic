@@ -44,25 +44,49 @@ export class GongtoneComponent implements OnInit {
     )
   }
 
+  stop() {
 
-  onButtonClick() {
+    // transport must be started before it starts invoking events
+    Tone.getTransport().stop();
+  }
+
+  play() {
 
     if (this.synth) {
 
       const now = Tone.now();
 
-      for (let note of this.frontRepo!.getFrontArray<gongtone.Note>(gongtone.Note.GONGSTRUCT_NAME)) {
+      const sampler = new Tone.Sampler({
+        urls: {
+          C3: "C3.mp3",
+          "D#3": "Ds3.mp3",
+          "F#3": "Fs3.mp3",
+          A3: "A3.mp3",
+          C4: "C4.mp3",
+          "D#4": "Ds4.mp3",
+          "F#4": "Fs4.mp3",
+          A4: "A4.mp3",
+        },
+        release: 1,
+        baseUrl: "https://tonejs.github.io/audio/salamander/",
+      }).toDestination();
 
-        var frequencies = new Array<string>()
-        for (let freq of note.Frequencies) {
-          frequencies.push(freq.Name)
+      Tone.loaded().then(() => {
+        for (let note of this.frontRepo!.getFrontArray<gongtone.Note>(gongtone.Note.GONGSTRUCT_NAME)) {
+
+          var frequencies = new Array<string>()
+          for (let freq of note.Frequencies) {
+            frequencies.push(freq.Name)
+          }
+
+          // console.log(now, now + note.Start, now + note.Start + note.Duration)
+          sampler.triggerAttackRelease(frequencies, note.Duration, now + note.Start)
+          // sampler.triggerAttackRelease(["Eb4", "G4", "Bb4"], 4, 4);
+
         }
+      });
 
-        // console.log(now, now + note.Start, now + note.Start + note.Duration)
-        this.synth.triggerAttack(frequencies, now + note.Start, note.Velocity)
-        this.synth.triggerRelease(frequencies, now + note.Start + note.Duration)
 
-      }
 
 
       // this.synth.triggerAttack(["D4", "A5"], now, 0.5);
@@ -79,5 +103,7 @@ export class GongtoneComponent implements OnInit {
 
     }
   }
+
+
 
 }
