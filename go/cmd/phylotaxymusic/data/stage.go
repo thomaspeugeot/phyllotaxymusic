@@ -440,7 +440,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000006_Rotated_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Name = `Second Voice Notes Shift Right`
-	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = true
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
 	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
@@ -491,8 +491,8 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.110000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 2.760000
 	__Parameter__000000_Reference.PitchDifference = 3
-	__Parameter__000000_Reference.Speed = 5.620000
-	__Parameter__000000_Reference.Level = 5.400000
+	__Parameter__000000_Reference.Speed = 2.050000
+	__Parameter__000000_Reference.Level = 5.700000
 	__Parameter__000000_Reference.OriginX = 60.000000
 	__Parameter__000000_Reference.OriginY = 980.000000
 
@@ -698,7 +698,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceNotes = __CircleGrid__000002_First_Voice_notes
 	__Parameter__000000_Reference.FirstVoiceNotesShiftedRight = __CircleGrid__000001_First_Voice_note_shifted_right
 	__Parameter__000000_Reference.SecondVoiceNotes = __CircleGrid__000008_Second_Voice_notes
-	__Parameter__000000_Reference.SecondVoiceNotesShiftedRight = __CircleGrid__000001_First_Voice_note_shifted_right
+	__Parameter__000000_Reference.SecondVoiceNotesShiftedRight = __CircleGrid__000007_Second_Voice_Notes_Shift_Right
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Rhombus__000001_Initial_Rhombus.ShapeCategory = __ShapeCategory__000001_1_Initial

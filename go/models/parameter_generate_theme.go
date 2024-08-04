@@ -20,6 +20,8 @@ func (p *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStruct) {
 	// note.Info = fmt.Sprintf("%40d", i)
 	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotes, gongtoneStage)
 	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotesShiftedRight, gongtoneStage)
+	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotes, gongtoneStage)
+	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, gongtoneStage)
 
 	gongtoneStage.Commit()
 

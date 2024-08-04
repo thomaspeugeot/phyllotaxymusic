@@ -271,9 +271,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 		p.NextCircle.CenterY+float64(p.PitchDifference)*p.PitchHeight*p.SideLength)
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotes)
 
-	// p.SecondVoiceNotesShiftedRight.Move(p.SecondVoiceNotesShiftedRight.Reference, p.SecondVoiceNotes,
-	// 	p.RotatedAxis.Length, 0)
-	// p.Shapes = append(p.Shapes, p.SecondVoiceNotesShiftedRight)
+	p.SecondVoiceNotesShiftedRight.Move(p.SecondVoiceNotesShiftedRight.Reference, p.SecondVoiceNotes,
+		p.RotatedAxis.Length, 0)
+	p.Shapes = append(p.Shapes, p.SecondVoiceNotesShiftedRight)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
