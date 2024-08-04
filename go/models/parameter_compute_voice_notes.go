@@ -2,10 +2,16 @@ package models
 
 import "log"
 
-func (p *Parameter) computeFirstVoiceNotes() {
+func (p *Parameter) computeVoiceNotes(bezierGrid *BezierGrid, g *CircleGrid) {
 
-	g := p.FirstVoiceNotes
 	g.Circles = g.Circles[:0]
+
+	measureLength := p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
+
+	//
+	// nb of measures to jump before the first bezier
+	//
+	nbMeasureToJump := int(bezierGrid.Beziers[0].StartX/measureLength + 0.5)
 
 	for i := range p.NbMeasureLinesPerCurve {
 		c := new(Circle)
@@ -13,12 +19,12 @@ func (p *Parameter) computeFirstVoiceNotes() {
 
 		g.Circles = append(g.Circles, c)
 
-		c.CenterX = float64(i) * p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
+		c.CenterX = float64(i+nbMeasureToJump) * measureLength
 
 		//
 		// compute which bezier is concerned
 		//
-		for _, b := range p.FirstVoice.Beziers {
+		for _, b := range bezierGrid.Beziers {
 			if b.EndX > c.CenterX {
 				var err error
 				c.CenterY, err = b.ComputeYFromX(c.CenterX)

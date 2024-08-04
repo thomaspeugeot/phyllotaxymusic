@@ -129,16 +129,14 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.SecondVoiceShiftedRight)
 
-	p.computeFirstVoiceNotes()
+	p.computeVoiceNotes(p.FirstVoice, p.FirstVoiceNotes)
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotes)
 
 	p.FirstVoiceNotesShiftedRight.Move(p.FirstVoiceNotes.Reference, p.FirstVoiceNotes,
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotesShiftedRight)
 
-	p.SecondVoiceNotes.Move(p.SecondVoiceNotes.Reference, p.FirstVoiceNotes,
-		p.NextCircle.CenterX,
-		p.NextCircle.CenterY+float64(p.PitchDifference)*p.PitchHeight*p.SideLength)
+	p.computeVoiceNotes(p.SecondVoice, p.SecondVoiceNotes)
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotes)
 
 	p.SecondVoiceNotesShiftedRight.Move(p.SecondVoiceNotesShiftedRight.Reference, p.SecondVoiceNotes,
