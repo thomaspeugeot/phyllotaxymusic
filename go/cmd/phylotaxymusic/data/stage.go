@@ -479,12 +479,12 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbPitchLines = 169
 	__Parameter__000000_Reference.MeasureLinesHeightRatio = 0.170000
 	__Parameter__000000_Reference.NbMeasureLines = 300
-	__Parameter__000000_Reference.NbMeasureLinesPerCurve = 3
+	__Parameter__000000_Reference.NbMeasureLinesPerCurve = 7
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.110000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 2.760000
 	__Parameter__000000_Reference.PitchDifference = 3
 	__Parameter__000000_Reference.Speed = 5.620000
-	__Parameter__000000_Reference.Level = 4.900000
+	__Parameter__000000_Reference.Level = 5.400000
 	__Parameter__000000_Reference.OriginX = 60.000000
 	__Parameter__000000_Reference.OriginY = 980.000000
 

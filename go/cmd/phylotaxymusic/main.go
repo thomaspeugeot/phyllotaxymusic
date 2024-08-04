@@ -121,8 +121,8 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	// phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 
 	updatedParameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
-	parameterImpl.parameter.GenerateSvg(parameterImpl.gongsvgStage)
-	parameterImpl.tree.Generate(parameterImpl.parameter)
-	parameterImpl.parameter.GenerateTone(parameterImpl.gongtoneStage)
+	updatedParameter.GenerateSvg(parameterImpl.gongsvgStage)
+	parameterImpl.tree.Generate(updatedParameter)
+	updatedParameter.GenerateTone(parameterImpl.gongtoneStage)
 
 }

@@ -116,10 +116,10 @@ type Parameter struct {
 	VerticalAxis   *VerticalAxis
 }
 
-func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, _, frontDiagram *Parameter) {
+func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
 
 	log.Println("Diagram, OnAfterUpdate", parameter.Name)
-	parameter.Impl.OnUpdated(parameter)
+	parameter.Impl.OnUpdated(backRepoParameter)
 
 }
 

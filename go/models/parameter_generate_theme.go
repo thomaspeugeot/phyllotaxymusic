@@ -4,7 +4,7 @@ import (
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
-func (parameter *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStruct) {
+func (p *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStruct) {
 
 	gongtoneStage.Reset()
 
@@ -18,8 +18,8 @@ func (parameter *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStr
 	// log.Println("speed", parameter.Speed)
 
 	// note.Info = fmt.Sprintf("%40d", i)
-	parameter.generateNotesFromCircleGrid(keyboard, map_Freqs, parameter.FirstVoiceNotes, gongtoneStage)
-	parameter.generateNotesFromCircleGrid(keyboard, map_Freqs, parameter.FirstVoiceNotesShiftedRight, gongtoneStage)
+	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotes, gongtoneStage)
+	p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotesShiftedRight, gongtoneStage)
 
 	gongtoneStage.Commit()
 
