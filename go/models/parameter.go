@@ -95,10 +95,11 @@ type Parameter struct {
 	NbMeasureLinesPerCurve  int
 
 	// Composing
-	FirstVoice              *BezierGrid
-	FirstVoiceShiftRigth    *BezierGrid
-	FirstVoiceShiftX        float64
-	FirstVoiceShiftY        float64
+	FirstVoice           *BezierGrid
+	FirstVoiceShiftRigth *BezierGrid
+	FirstVoiceShiftX     float64
+	FirstVoiceShiftY     float64
+
 	SecondVoice             *BezierGrid
 	SecondVoiceShiftedRight *BezierGrid
 	PitchDifference         int
@@ -106,8 +107,10 @@ type Parameter struct {
 	Level                   float64
 
 	// interpolating notes
-	FirstVoiceNotes             *CircleGrid
-	FirstVoiceNotesShiftedRight *CircleGrid
+	FirstVoiceNotes              *CircleGrid
+	FirstVoiceNotesShiftedRight  *CircleGrid
+	SecondVoiceNotes             *CircleGrid
+	SecondVoiceNotesShiftedRight *CircleGrid
 
 	// for drawing purpose
 	OriginX        float64
@@ -262,6 +265,15 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.FirstVoiceNotesShiftedRight.Move(p.FirstVoiceNotes.Reference, p.FirstVoiceNotes,
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotesShiftedRight)
+
+	p.SecondVoiceNotes.Move(p.SecondVoiceNotes.Reference, p.FirstVoiceNotes,
+		p.NextCircle.CenterX,
+		p.NextCircle.CenterY+float64(p.PitchDifference)*p.PitchHeight*p.SideLength)
+	p.Shapes = append(p.Shapes, p.SecondVoiceNotes)
+
+	// p.SecondVoiceNotesShiftedRight.Move(p.SecondVoiceNotesShiftedRight.Reference, p.SecondVoiceNotes,
+	// 	p.RotatedAxis.Length, 0)
+	// p.Shapes = append(p.Shapes, p.SecondVoiceNotesShiftedRight)
 }
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -699,7 +711,7 @@ func (p *Parameter) compteFirstVoiceNotes() {
 
 	for i := range p.NbMeasureLinesPerCurve {
 		c := new(Circle)
-		*c = *p.FirstVoiceNotes.Reference
+		*c = *g.Reference
 
 		g.Circles = append(g.Circles, c)
 

@@ -66,6 +66,8 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000004_Growing_Circle_Grid_Shifted_Left := (&models.CircleGrid{Name: `Growing Circle Grid Shifted Left`}).Stage(stage)
 	__CircleGrid__000005_Initial_Circle_Grid := (&models.CircleGrid{Name: `Initial Circle Grid`}).Stage(stage)
 	__CircleGrid__000006_Rotated_Circle_Grid := (&models.CircleGrid{Name: `Rotated Circle Grid`}).Stage(stage)
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right := (&models.CircleGrid{Name: `Second Voice Notes Shift Right`}).Stage(stage)
+	__CircleGrid__000008_Second_Voice_notes := (&models.CircleGrid{Name: `Second Voice notes`}).Stage(stage)
 
 	__HorizontalAxis__000000_Horizontal_Axis := (&models.HorizontalAxis{Name: `Horizontal Axis`}).Stage(stage)
 
@@ -437,6 +439,12 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000006_Rotated_Circle_Grid.Name = `Rotated Circle Grid`
 	__CircleGrid__000006_Rotated_Circle_Grid.IsDisplayed = false
 
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Name = `Second Voice Notes Shift Right`
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
+
+	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
+	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
+
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
 	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
 	__HorizontalAxis__000000_Horizontal_Axis.AxisHandleBorderLength = 0.000000
@@ -644,6 +652,10 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000005_Initial_Circle_Grid.Reference = __Circle__000004_Initial_Circle
 	__CircleGrid__000005_Initial_Circle_Grid.ShapeCategory = __ShapeCategory__000001_1_Initial
 	__CircleGrid__000006_Rotated_Circle_Grid.ShapeCategory = __ShapeCategory__000002_2_Rotated
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Reference = __Circle__000001_First_voice_notes_seed
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__CircleGrid__000008_Second_Voice_notes.Reference = __Circle__000001_First_voice_notes_seed
+	__CircleGrid__000008_Second_Voice_notes.ShapeCategory = __ShapeCategory__000007_7_Composer
 	__HorizontalAxis__000000_Horizontal_Axis.ShapeCategory = __ShapeCategory__000000_0_Axes
 	__Key__000000_F_key.ShapeCategory = __ShapeCategory__000006_6_Score_notation
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000001_Initial_Rhombus
@@ -685,6 +697,8 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SecondVoiceShiftedRight = __BezierGrid__000001_2nd_voice_shifted_right
 	__Parameter__000000_Reference.FirstVoiceNotes = __CircleGrid__000002_First_Voice_notes
 	__Parameter__000000_Reference.FirstVoiceNotesShiftedRight = __CircleGrid__000001_First_Voice_note_shifted_right
+	__Parameter__000000_Reference.SecondVoiceNotes = __CircleGrid__000008_Second_Voice_notes
+	__Parameter__000000_Reference.SecondVoiceNotesShiftedRight = __CircleGrid__000001_First_Voice_note_shifted_right
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Rhombus__000001_Initial_Rhombus.ShapeCategory = __ShapeCategory__000001_1_Initial

@@ -203,6 +203,14 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	FirstVoiceNotesShiftedRightID sql.NullInt64
 
+	// field SecondVoiceNotes is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SecondVoiceNotesID sql.NullInt64
+
+	// field SecondVoiceNotesShiftedRight is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SecondVoiceNotesShiftedRightID sql.NullInt64
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -987,6 +995,30 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.FirstVoiceNotesShiftedRightID.Valid = true
 		}
 
+		// commit pointer value parameter.SecondVoiceNotes translates to updating the parameter.SecondVoiceNotesID
+		parameterDB.SecondVoiceNotesID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SecondVoiceNotes != nil {
+			if SecondVoiceNotesId, ok := backRepo.BackRepoCircleGrid.Map_CircleGridPtr_CircleGridDBID[parameter.SecondVoiceNotes]; ok {
+				parameterDB.SecondVoiceNotesID.Int64 = int64(SecondVoiceNotesId)
+				parameterDB.SecondVoiceNotesID.Valid = true
+			}
+		} else {
+			parameterDB.SecondVoiceNotesID.Int64 = 0
+			parameterDB.SecondVoiceNotesID.Valid = true
+		}
+
+		// commit pointer value parameter.SecondVoiceNotesShiftedRight translates to updating the parameter.SecondVoiceNotesShiftedRightID
+		parameterDB.SecondVoiceNotesShiftedRightID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SecondVoiceNotesShiftedRight != nil {
+			if SecondVoiceNotesShiftedRightId, ok := backRepo.BackRepoCircleGrid.Map_CircleGridPtr_CircleGridDBID[parameter.SecondVoiceNotesShiftedRight]; ok {
+				parameterDB.SecondVoiceNotesShiftedRightID.Int64 = int64(SecondVoiceNotesShiftedRightId)
+				parameterDB.SecondVoiceNotesShiftedRightID.Valid = true
+			}
+		} else {
+			parameterDB.SecondVoiceNotesShiftedRightID.Int64 = 0
+			parameterDB.SecondVoiceNotesShiftedRightID.Valid = true
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -1318,6 +1350,16 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.FirstVoiceNotesShiftedRight = nil
 	if parameterDB.FirstVoiceNotesShiftedRightID.Int64 != 0 {
 		parameter.FirstVoiceNotesShiftedRight = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.FirstVoiceNotesShiftedRightID.Int64)]
+	}
+	// SecondVoiceNotes field
+	parameter.SecondVoiceNotes = nil
+	if parameterDB.SecondVoiceNotesID.Int64 != 0 {
+		parameter.SecondVoiceNotes = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.SecondVoiceNotesID.Int64)]
+	}
+	// SecondVoiceNotesShiftedRight field
+	parameter.SecondVoiceNotesShiftedRight = nil
+	if parameterDB.SecondVoiceNotesShiftedRightID.Int64 != 0 {
+		parameter.SecondVoiceNotesShiftedRight = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.SecondVoiceNotesShiftedRightID.Int64)]
 	}
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
@@ -2077,6 +2119,18 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.FirstVoiceNotesShiftedRightID.Int64 != 0 {
 			parameterDB.FirstVoiceNotesShiftedRightID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.FirstVoiceNotesShiftedRightID.Int64)])
 			parameterDB.FirstVoiceNotesShiftedRightID.Valid = true
+		}
+
+		// reindexing SecondVoiceNotes field
+		if parameterDB.SecondVoiceNotesID.Int64 != 0 {
+			parameterDB.SecondVoiceNotesID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.SecondVoiceNotesID.Int64)])
+			parameterDB.SecondVoiceNotesID.Valid = true
+		}
+
+		// reindexing SecondVoiceNotesShiftedRight field
+		if parameterDB.SecondVoiceNotesShiftedRightID.Int64 != 0 {
+			parameterDB.SecondVoiceNotesShiftedRightID.Int64 = int64(BackRepoCircleGridid_atBckpTime_newID[uint(parameterDB.SecondVoiceNotesShiftedRightID.Int64)])
+			parameterDB.SecondVoiceNotesShiftedRightID.Valid = true
 		}
 
 		// reindexing HorizontalAxis field

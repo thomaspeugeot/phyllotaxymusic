@@ -518,6 +518,12 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.FirstVoiceNotesShiftedRight != nil {
 		StageBranch(stage, parameter.FirstVoiceNotesShiftedRight)
 	}
+	if parameter.SecondVoiceNotes != nil {
+		StageBranch(stage, parameter.SecondVoiceNotes)
+	}
+	if parameter.SecondVoiceNotesShiftedRight != nil {
+		StageBranch(stage, parameter.SecondVoiceNotesShiftedRight)
+	}
 	if parameter.HorizontalAxis != nil {
 		StageBranch(stage, parameter.HorizontalAxis)
 	}
@@ -1027,6 +1033,12 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.FirstVoiceNotesShiftedRight != nil {
 		parameterTo.FirstVoiceNotesShiftedRight = CopyBranchCircleGrid(mapOrigCopy, parameterFrom.FirstVoiceNotesShiftedRight)
 	}
+	if parameterFrom.SecondVoiceNotes != nil {
+		parameterTo.SecondVoiceNotes = CopyBranchCircleGrid(mapOrigCopy, parameterFrom.SecondVoiceNotes)
+	}
+	if parameterFrom.SecondVoiceNotesShiftedRight != nil {
+		parameterTo.SecondVoiceNotesShiftedRight = CopyBranchCircleGrid(mapOrigCopy, parameterFrom.SecondVoiceNotesShiftedRight)
+	}
 	if parameterFrom.HorizontalAxis != nil {
 		parameterTo.HorizontalAxis = CopyBranchHorizontalAxis(mapOrigCopy, parameterFrom.HorizontalAxis)
 	}
@@ -1495,6 +1507,12 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.FirstVoiceNotesShiftedRight != nil {
 		UnstageBranch(stage, parameter.FirstVoiceNotesShiftedRight)
+	}
+	if parameter.SecondVoiceNotes != nil {
+		UnstageBranch(stage, parameter.SecondVoiceNotes)
+	}
+	if parameter.SecondVoiceNotesShiftedRight != nil {
+		UnstageBranch(stage, parameter.SecondVoiceNotesShiftedRight)
 	}
 	if parameter.HorizontalAxis != nil {
 		UnstageBranch(stage, parameter.HorizontalAxis)

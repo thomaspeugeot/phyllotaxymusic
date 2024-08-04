@@ -134,6 +134,10 @@ export class Parameter {
 
 	FirstVoiceNotesShiftedRight?: CircleGrid
 
+	SecondVoiceNotes?: CircleGrid
+
+	SecondVoiceNotesShiftedRight?: CircleGrid
+
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -447,6 +451,20 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.FirstVoiceNotesShiftedRightID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.SecondVoiceNotesID.Valid = true
+	if (parameter.SecondVoiceNotes != undefined) {
+		parameterAPI.ParameterPointersEncoding.SecondVoiceNotesID.Int64 = parameter.SecondVoiceNotes.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SecondVoiceNotesID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SecondVoiceNotesShiftedRightID.Valid = true
+	if (parameter.SecondVoiceNotesShiftedRight != undefined) {
+		parameterAPI.ParameterPointersEncoding.SecondVoiceNotesShiftedRightID.Int64 = parameter.SecondVoiceNotesShiftedRight.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SecondVoiceNotesShiftedRightID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Valid = true
 	if (parameter.HorizontalAxis != undefined) {
 		parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64 = parameter.HorizontalAxis.ID  
@@ -542,6 +560,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SecondVoiceShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceShiftedRightID.Int64)
 	parameter.FirstVoiceNotes = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceNotesID.Int64)
 	parameter.FirstVoiceNotesShiftedRight = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceNotesShiftedRightID.Int64)
+	parameter.SecondVoiceNotes = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceNotesID.Int64)
+	parameter.SecondVoiceNotesShiftedRight = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceNotesShiftedRightID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 
