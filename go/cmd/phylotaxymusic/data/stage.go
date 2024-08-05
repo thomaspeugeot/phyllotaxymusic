@@ -313,16 +313,16 @@ func _(stage *models.StageStruct) {
 	__Bezier__000005_Growth_Curve_Seed.Transform = ``
 
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
-	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
+	__BezierGrid__000000_2nb_Voice.IsDisplayed = false
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
-	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = true
+	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
 	__BezierGrid__000002_First_Voice.IsDisplayed = true
 
 	__BezierGrid__000003_First_Voice_Shift_Right.Name = `First Voice Shift Right`
-	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = true
+	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = false
 
 	__BezierGrid__000004_Growth_Curve.Name = `Growth Curve`
 	__BezierGrid__000004_Growth_Curve.IsDisplayed = false
@@ -439,7 +439,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_First_Voice_note_shifted_right.Name = `First Voice note shifted right`
-	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = true
+	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = false
 
 	__CircleGrid__000002_First_Voice_notes.Name = `First Voice notes`
 	__CircleGrid__000002_First_Voice_notes.IsDisplayed = true
@@ -457,10 +457,10 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000006_Rotated_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Name = `Second Voice Notes Shift Right`
-	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = true
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
-	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
+	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
 	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
@@ -488,52 +488,52 @@ func _(stage *models.StageStruct) {
 	__Key__000000_F_key.Transform = `scale(0.2,-0.2)`
 
 	__NoteInfo__000000_1.Name = `1`
-	__NoteInfo__000000_1.IsSkipped = false
+	__NoteInfo__000000_1.IsKept = true
 
 	__NoteInfo__000001_10.Name = `10`
-	__NoteInfo__000001_10.IsSkipped = true
+	__NoteInfo__000001_10.IsKept = true
 
 	__NoteInfo__000002_11.Name = `11`
-	__NoteInfo__000002_11.IsSkipped = false
+	__NoteInfo__000002_11.IsKept = true
 
 	__NoteInfo__000003_12.Name = `12`
-	__NoteInfo__000003_12.IsSkipped = true
+	__NoteInfo__000003_12.IsKept = true
 
 	__NoteInfo__000004_13.Name = `13`
-	__NoteInfo__000004_13.IsSkipped = false
+	__NoteInfo__000004_13.IsKept = true
 
 	__NoteInfo__000005_14.Name = `14`
-	__NoteInfo__000005_14.IsSkipped = true
+	__NoteInfo__000005_14.IsKept = true
 
 	__NoteInfo__000006_15.Name = `15`
-	__NoteInfo__000006_15.IsSkipped = false
+	__NoteInfo__000006_15.IsKept = true
 
 	__NoteInfo__000007_16.Name = `16`
-	__NoteInfo__000007_16.IsSkipped = false
+	__NoteInfo__000007_16.IsKept = true
 
 	__NoteInfo__000008_2.Name = `2`
-	__NoteInfo__000008_2.IsSkipped = false
+	__NoteInfo__000008_2.IsKept = false
 
 	__NoteInfo__000009_3.Name = `3`
-	__NoteInfo__000009_3.IsSkipped = false
+	__NoteInfo__000009_3.IsKept = true
 
 	__NoteInfo__000010_4.Name = `4`
-	__NoteInfo__000010_4.IsSkipped = true
+	__NoteInfo__000010_4.IsKept = false
 
 	__NoteInfo__000011_5.Name = `5`
-	__NoteInfo__000011_5.IsSkipped = false
+	__NoteInfo__000011_5.IsKept = true
 
 	__NoteInfo__000012_6.Name = `6`
-	__NoteInfo__000012_6.IsSkipped = true
+	__NoteInfo__000012_6.IsKept = true
 
 	__NoteInfo__000013_7.Name = `7`
-	__NoteInfo__000013_7.IsSkipped = false
+	__NoteInfo__000013_7.IsKept = true
 
 	__NoteInfo__000014_8.Name = `8`
-	__NoteInfo__000014_8.IsSkipped = false
+	__NoteInfo__000014_8.IsKept = true
 
 	__NoteInfo__000015_9.Name = `9`
-	__NoteInfo__000015_9.IsSkipped = false
+	__NoteInfo__000015_9.IsKept = true
 
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3

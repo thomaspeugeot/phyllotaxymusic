@@ -4,9 +4,9 @@ package models
 type NoteInfo struct {
 	Name string
 
-	// IsSkipped is true is the preceeding note is continuted during
+	// IsKept is true is the preceeding note is note continuted during
 	// the current note
 	// For instance, if there are 4 4th in a measure, and is the second
-	// node is skipped, the first note will have a duration of 2
-	IsSkipped bool
+	// node is not kept, the first note will have a duration of 2
+	IsKept bool
 }

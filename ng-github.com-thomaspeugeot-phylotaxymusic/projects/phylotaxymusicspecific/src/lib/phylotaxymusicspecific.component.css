@@ -21,7 +21,5 @@ mat-slider {
 }
 
 .example-section {
-    display: flex;
-    align-content: center;
-    align-items: center;
+    margin: 12px 0;
 }

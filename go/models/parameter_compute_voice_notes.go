@@ -17,7 +17,7 @@ func (p *Parameter) computeVoiceNotes(bezierGrid *BezierGrid, g *CircleGrid) {
 
 		if i < len(p.NoteInfos) {
 			noteInfo := p.NoteInfos[i]
-			if noteInfo.IsSkipped {
+			if !noteInfo.IsKept {
 				continue
 			}
 		}

@@ -1086,8 +1086,8 @@ func (noteinfoFormCallback *NoteInfoFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(noteinfo_.Name), formDiv)
-		case "IsSkipped":
-			FormDivBasicFieldToField(&(noteinfo_.IsSkipped), formDiv)
+		case "IsKept":
+			FormDivBasicFieldToField(&(noteinfo_.IsKept), formDiv)
 		case "Parameter:NoteInfos":
 			// we need to retrieve the field owner before the change
 			var pastParameterOwner *models.Parameter

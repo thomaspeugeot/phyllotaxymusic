@@ -62,9 +62,9 @@ type NoteInfoDB struct {
 	// Declation for basic field noteinfoDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field noteinfoDB.IsSkipped
+	// Declation for basic field noteinfoDB.IsKept
 	// provide the sql storage for the boolan
-	IsSkipped_Data sql.NullBool
+	IsKept_Data sql.NullBool
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -90,7 +90,7 @@ type NoteInfoWOP struct {
 
 	Name string `xlsx:"1"`
 
-	IsSkipped bool `xlsx:"2"`
+	IsKept bool `xlsx:"2"`
 	// insertion for WOP pointer fields
 }
 
@@ -98,7 +98,7 @@ var NoteInfo_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"IsSkipped",
+	"IsKept",
 }
 
 type BackRepoNoteInfoStruct struct {
@@ -368,8 +368,8 @@ func (noteinfoDB *NoteInfoDB) CopyBasicFieldsFromNoteInfo(noteinfo *models.NoteI
 	noteinfoDB.Name_Data.String = noteinfo.Name
 	noteinfoDB.Name_Data.Valid = true
 
-	noteinfoDB.IsSkipped_Data.Bool = noteinfo.IsSkipped
-	noteinfoDB.IsSkipped_Data.Valid = true
+	noteinfoDB.IsKept_Data.Bool = noteinfo.IsKept
+	noteinfoDB.IsKept_Data.Valid = true
 }
 
 // CopyBasicFieldsFromNoteInfo_WOP
@@ -379,8 +379,8 @@ func (noteinfoDB *NoteInfoDB) CopyBasicFieldsFromNoteInfo_WOP(noteinfo *models.N
 	noteinfoDB.Name_Data.String = noteinfo.Name
 	noteinfoDB.Name_Data.Valid = true
 
-	noteinfoDB.IsSkipped_Data.Bool = noteinfo.IsSkipped
-	noteinfoDB.IsSkipped_Data.Valid = true
+	noteinfoDB.IsKept_Data.Bool = noteinfo.IsKept
+	noteinfoDB.IsKept_Data.Valid = true
 }
 
 // CopyBasicFieldsFromNoteInfoWOP
@@ -390,22 +390,22 @@ func (noteinfoDB *NoteInfoDB) CopyBasicFieldsFromNoteInfoWOP(noteinfo *NoteInfoW
 	noteinfoDB.Name_Data.String = noteinfo.Name
 	noteinfoDB.Name_Data.Valid = true
 
-	noteinfoDB.IsSkipped_Data.Bool = noteinfo.IsSkipped
-	noteinfoDB.IsSkipped_Data.Valid = true
+	noteinfoDB.IsKept_Data.Bool = noteinfo.IsKept
+	noteinfoDB.IsKept_Data.Valid = true
 }
 
 // CopyBasicFieldsToNoteInfo
 func (noteinfoDB *NoteInfoDB) CopyBasicFieldsToNoteInfo(noteinfo *models.NoteInfo) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	noteinfo.Name = noteinfoDB.Name_Data.String
-	noteinfo.IsSkipped = noteinfoDB.IsSkipped_Data.Bool
+	noteinfo.IsKept = noteinfoDB.IsKept_Data.Bool
 }
 
 // CopyBasicFieldsToNoteInfo_WOP
 func (noteinfoDB *NoteInfoDB) CopyBasicFieldsToNoteInfo_WOP(noteinfo *models.NoteInfo_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	noteinfo.Name = noteinfoDB.Name_Data.String
-	noteinfo.IsSkipped = noteinfoDB.IsSkipped_Data.Bool
+	noteinfo.IsKept = noteinfoDB.IsKept_Data.Bool
 }
 
 // CopyBasicFieldsToNoteInfoWOP
@@ -413,7 +413,7 @@ func (noteinfoDB *NoteInfoDB) CopyBasicFieldsToNoteInfoWOP(noteinfo *NoteInfoWOP
 	noteinfo.ID = int(noteinfoDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	noteinfo.Name = noteinfoDB.Name_Data.String
-	noteinfo.IsSkipped = noteinfoDB.IsSkipped_Data.Bool
+	noteinfo.IsKept = noteinfoDB.IsKept_Data.Bool
 }
 
 // Backup generates a json file from a slice of all NoteInfoDB instances in the backrepo

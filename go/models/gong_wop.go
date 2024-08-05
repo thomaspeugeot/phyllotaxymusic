@@ -238,13 +238,13 @@ func (from *Key) CopyBasicFields(to *Key) {
 type NoteInfo_WOP struct {
 	// insertion point
 	Name string
-	IsSkipped bool
+	IsKept bool
 }
 
 func (from *NoteInfo) CopyBasicFields(to *NoteInfo) {
 	// insertion point
 	to.Name = from.Name
-	to.IsSkipped = from.IsSkipped
+	to.IsKept = from.IsKept
 }
 
 type Parameter_WOP struct {

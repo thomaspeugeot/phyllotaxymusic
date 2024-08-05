@@ -309,7 +309,7 @@ func FillUpForm[T models.Gongstruct](
 		// insertion point
 		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("IsSkipped", instanceWithInferedType.IsSkipped, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("IsKept", instanceWithInferedType.IsKept, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		{
 			var rf models.ReverseField

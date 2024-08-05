@@ -13,7 +13,7 @@ export class NoteInfoAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	IsSkipped: boolean = false
+	IsKept: boolean = false
 
 	// insertion point for other decls
 

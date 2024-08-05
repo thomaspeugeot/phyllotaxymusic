@@ -1740,13 +1740,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			case "NoteInfo":
 				switch fieldName {
 				// insertion point for field dependant code
-				case "IsSkipped":
+				case "IsKept":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_NoteInfo[identifier].IsSkipped = fielValue
+					__gong__map_NoteInfo[identifier].IsKept = fielValue
 				}
 			case "Parameter":
 				switch fieldName {

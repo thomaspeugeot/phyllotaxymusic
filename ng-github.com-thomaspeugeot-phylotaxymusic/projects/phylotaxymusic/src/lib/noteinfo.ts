@@ -18,7 +18,7 @@ export class NoteInfo {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	IsSkipped: boolean = false
+	IsKept: boolean = false
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -31,7 +31,7 @@ export function CopyNoteInfoToNoteInfoAPI(noteinfo: NoteInfo, noteinfoAPI: NoteI
 
 	// insertion point for basic fields copy operations
 	noteinfoAPI.Name = noteinfo.Name
-	noteinfoAPI.IsSkipped = noteinfo.IsSkipped
+	noteinfoAPI.IsKept = noteinfo.IsKept
 
 	// insertion point for pointer fields encoding
 
@@ -50,7 +50,7 @@ export function CopyNoteInfoAPIToNoteInfo(noteinfoAPI: NoteInfoAPI, noteinfo: No
 
 	// insertion point for basic fields copy operations
 	noteinfo.Name = noteinfoAPI.Name
-	noteinfo.IsSkipped = noteinfoAPI.IsSkipped
+	noteinfo.IsKept = noteinfoAPI.IsKept
 
 	// insertion point for pointer fields encoding
 
