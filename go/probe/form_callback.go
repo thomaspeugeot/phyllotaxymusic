@@ -1212,6 +1212,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SecondVoiceNotes), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SecondVoiceNotesShiftedRight":
 			FormDivSelectFieldToField(&(parameter_.SecondVoiceNotesShiftedRight), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "IsMinor":
+			FormDivBasicFieldToField(&(parameter_.IsMinor), formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":

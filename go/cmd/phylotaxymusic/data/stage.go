@@ -493,6 +493,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.PitchDifference = 7
 	__Parameter__000000_Reference.Speed = 2.050000
 	__Parameter__000000_Reference.Level = 5.700000
+	__Parameter__000000_Reference.IsMinor = false
 	__Parameter__000000_Reference.OriginX = 190.000000
 	__Parameter__000000_Reference.OriginY = 900.000000
 

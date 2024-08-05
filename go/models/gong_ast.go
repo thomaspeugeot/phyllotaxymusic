@@ -1836,6 +1836,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SecondVoiceNotesShiftedRight":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SecondVoiceNotesShiftedRight = __gong__map_CircleGrid[targetIdentifier]
+				case "IsMinor":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].IsMinor = fielValue
 				case "HorizontalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HorizontalAxis = __gong__map_HorizontalAxis[targetIdentifier]

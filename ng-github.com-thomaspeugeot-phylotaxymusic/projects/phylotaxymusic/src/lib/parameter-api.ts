@@ -47,6 +47,7 @@ export class ParameterAPI {
 	PitchDifference: number = 0
 	Speed: number = 0
 	Level: number = 0
+	IsMinor: boolean = false
 	OriginX: number = 0
 	OriginY: number = 0
 

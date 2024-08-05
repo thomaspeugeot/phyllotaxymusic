@@ -12,8 +12,8 @@
 				"run",
 				"main.go",
 				"-diagrams",
-				"-unmarshallFromCode=stage.go",
-				"-marshallOnCommit=stage"
+				"-unmarshallFromCode=data/stage.go",
+				"-marshallOnCommit=data/stage"
 			],
 			"group": "build"
 		},

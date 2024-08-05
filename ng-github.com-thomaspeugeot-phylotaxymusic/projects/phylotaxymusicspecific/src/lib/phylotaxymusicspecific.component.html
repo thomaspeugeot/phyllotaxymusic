@@ -190,6 +190,25 @@
                 </mat-slider>
               </mat-grid-tile>
 
+              <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">Minor / Major</h4>
+              </mat-grid-tile>          
+              <mat-grid-tile colspan="9" rowspan="1">
+                <!-- <mat-form-field appearance="fill">
+                  <mat-label>Age Group</mat-label>
+                  <mat-radio-group [(ngModel)]="frontRepo.array_Parameters[0].IsMinor">
+                    <mat-radio-button [value]="true">Minor</mat-radio-button>
+                    <mat-radio-button [value]="false">Major</mat-radio-button>
+                  </mat-radio-group>
+                </mat-form-field> -->
+
+                <mat-radio-group [(ngModel)]="frontRepo.array_Parameters[0].IsMinor" (change)="inputMatRadio($event)">
+                  <mat-radio-button [value]="false">Major</mat-radio-button>
+                  <mat-radio-button [value]="true">Minor</mat-radio-button>
+                </mat-radio-group>
+                
+              </mat-grid-tile>
+
             </mat-grid-list>
         
           }

@@ -6,6 +6,10 @@ import { MatSliderModule } from '@angular/material/slider'
 import { FormsModule } from '@angular/forms';  // Import FormsModule
 import { MatGridListModule } from '@angular/material/grid-list';
 
+import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AngularSplitModule } from 'angular-split';
 
 import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
@@ -21,7 +25,11 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     MatSliderModule,
+    MatRadioModule,
+
     FormsModule,
+    MatFormFieldModule,
+
     AngularSplitModule,
     MatGridListModule,
 
@@ -35,9 +43,13 @@ import { CommonModule } from '@angular/common';
 })
 export class PhylotaxymusicspecificComponent implements OnInit {
 
-  input($event: Event) {
-    console.log(this.frontRepo!.array_Parameters[0].InsideAngle)
 
+  inputMatRadio($event: MatRadioChange) {
+    let event2: Event = new Event('input');
+    this.input(event2)
+  }
+
+  input($event: Event) {
     let parameter = this.frontRepo!.array_Parameters[0]
 
     this.parameterService.updateFront(parameter, this.StacksNames.Phylotaxy).subscribe(

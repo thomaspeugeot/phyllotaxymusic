@@ -394,6 +394,8 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("FirstVoiceNotesShiftedRight", instanceWithInferedType.FirstVoiceNotesShiftedRight, formGroup, probe)
 		AssociationFieldToForm("SecondVoiceNotes", instanceWithInferedType.SecondVoiceNotes, formGroup, probe)
 		AssociationFieldToForm("SecondVoiceNotesShiftedRight", instanceWithInferedType.SecondVoiceNotesShiftedRight, formGroup, probe)
+		BasicFieldtoForm("IsMinor", instanceWithInferedType.IsMinor, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,

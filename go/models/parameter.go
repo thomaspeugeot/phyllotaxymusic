@@ -112,6 +112,11 @@ type Parameter struct {
 	SecondVoiceNotes             *CircleGrid
 	SecondVoiceNotesShiftedRight *CircleGrid
 
+	//
+	// scale of preference
+	//
+	IsMinor bool
+
 	// for drawing purpose
 	OriginX        float64
 	OriginY        float64

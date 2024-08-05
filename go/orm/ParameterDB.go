@@ -300,6 +300,10 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.Level
 	Level_Data sql.NullFloat64
 
+	// Declation for basic field parameterDB.IsMinor
+	// provide the sql storage for the boolan
+	IsMinor_Data sql.NullBool
+
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
 
@@ -374,9 +378,11 @@ type ParameterWOP struct {
 
 	Level float64 `xlsx:"23"`
 
-	OriginX float64 `xlsx:"24"`
+	IsMinor bool `xlsx:"24"`
 
-	OriginY float64 `xlsx:"25"`
+	OriginX float64 `xlsx:"25"`
+
+	OriginY float64 `xlsx:"26"`
 	// insertion for WOP pointer fields
 }
 
@@ -406,6 +412,7 @@ var Parameter_Fields = []string{
 	"PitchDifference",
 	"Speed",
 	"Level",
+	"IsMinor",
 	"OriginX",
 	"OriginY",
 }
@@ -1474,6 +1481,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.Level_Data.Float64 = parameter.Level
 	parameterDB.Level_Data.Valid = true
 
+	parameterDB.IsMinor_Data.Bool = parameter.IsMinor
+	parameterDB.IsMinor_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -1553,6 +1563,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.Level_Data.Float64 = parameter.Level
 	parameterDB.Level_Data.Valid = true
+
+	parameterDB.IsMinor_Data.Bool = parameter.IsMinor
+	parameterDB.IsMinor_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -1634,6 +1647,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.Level_Data.Float64 = parameter.Level
 	parameterDB.Level_Data.Valid = true
 
+	parameterDB.IsMinor_Data.Bool = parameter.IsMinor
+	parameterDB.IsMinor_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -1667,6 +1683,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.Speed = parameterDB.Speed_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
+	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1697,6 +1714,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.Speed = parameterDB.Speed_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
+	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }
@@ -1728,6 +1746,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
 	parameter.Speed = parameterDB.Speed_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
+	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 }

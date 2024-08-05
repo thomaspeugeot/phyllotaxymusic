@@ -260,6 +260,7 @@ type Parameter_WOP struct {
 	PitchDifference int
 	Speed float64
 	Level float64
+	IsMinor bool
 	OriginX float64
 	OriginY float64
 }
@@ -289,6 +290,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.PitchDifference = from.PitchDifference
 	to.Speed = from.Speed
 	to.Level = from.Level
+	to.IsMinor = from.IsMinor
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
 }

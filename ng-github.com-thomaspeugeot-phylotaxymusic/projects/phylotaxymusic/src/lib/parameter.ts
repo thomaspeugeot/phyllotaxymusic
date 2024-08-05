@@ -52,6 +52,7 @@ export class Parameter {
 	PitchDifference: number = 0
 	Speed: number = 0
 	Level: number = 0
+	IsMinor: boolean = false
 	OriginX: number = 0
 	OriginY: number = 0
 
@@ -174,6 +175,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.PitchDifference = parameter.PitchDifference
 	parameterAPI.Speed = parameter.Speed
 	parameterAPI.Level = parameter.Level
+	parameterAPI.IsMinor = parameter.IsMinor
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 
@@ -517,6 +519,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.PitchDifference = parameterAPI.PitchDifference
 	parameter.Speed = parameterAPI.Speed
 	parameter.Level = parameterAPI.Level
+	parameter.IsMinor = parameterAPI.IsMinor
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 
