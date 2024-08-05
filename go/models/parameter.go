@@ -531,6 +531,21 @@ func (p *Parameter) ComputePitchLines() {
 	g.Axiss = g.Axiss[0:]
 
 	for i := range p.NbPitchLines {
+
+		if p.IsMinor {
+			// remove minor notes
+			switch i % 12 {
+			case 1, 4, 6, 9, 10:
+				continue
+			}
+		} else {
+			// remove minor notes
+			switch i % 12 {
+			case 1, 3, 6, 8, 10:
+				continue
+			}
+		}
+
 		a := new(Axis)
 		*a = *p.PitchLines.Reference
 

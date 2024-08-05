@@ -38,7 +38,37 @@ func (p *Parameter) computeVoiceNotes(bezierGrid *BezierGrid, g *CircleGrid) {
 		// interpolate to the nearest pitch
 		pitchHeight := p.PitchHeight * p.SideLength
 		ratio := c.CenterY / pitchHeight
+
 		c.Pitch = int(ratio + 0.5)
+
+		pitchAdjusment := 0
+
+		delta := ratio - float64(c.Pitch)
+		if delta > 0 {
+			pitchAdjusment = 1
+		} else {
+			pitchAdjusment = -1
+		}
+		//
+		// set pitch on minor or major
+		//
+		relativePitch := c.Pitch % 12
+		if p.IsMinor {
+			switch relativePitch {
+			case 1, 4, 6:
+				c.Pitch += pitchAdjusment
+			case 9:
+				c.Pitch -= 1
+			case 10:
+				c.Pitch += 1
+			}
+		} else {
+			switch relativePitch {
+			case 1, 3, 6, 8, 10:
+				c.Pitch += pitchAdjusment
+			}
+		}
+
 		c.CenterY = float64(c.Pitch) * pitchHeight
 	}
 }
