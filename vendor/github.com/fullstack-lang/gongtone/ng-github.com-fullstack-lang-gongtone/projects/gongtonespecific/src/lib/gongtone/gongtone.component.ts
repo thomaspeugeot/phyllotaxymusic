@@ -21,6 +21,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class GongtoneComponent implements OnInit {
 
   synth: Tone.PolySynth<Tone.Synth<Tone.SynthOptions>> | undefined
+  sampler: Tone.Sampler | undefined
+
 
   StacksNames = gongtone.StacksNames
 
@@ -46,8 +48,13 @@ export class GongtoneComponent implements OnInit {
 
   stop() {
 
-    // transport must be started before it starts invoking events
-    Tone.getTransport().stop();
+    Tone.getTransport().stop()
+
+    // const now = Tone.now()
+    // if (this.sampler != undefined) {
+    //   this.sampler.releaseAll(now)
+    //   console.log("releassed", this.sampler)
+    // }
   }
 
   play() {
@@ -56,7 +63,7 @@ export class GongtoneComponent implements OnInit {
 
       const now = Tone.now();
 
-      const sampler = new Tone.Sampler({
+      this.sampler = new Tone.Sampler({
         urls: {
           C3: "C3.mp3",
           "D#3": "Ds3.mp3",
@@ -66,12 +73,29 @@ export class GongtoneComponent implements OnInit {
           "D#4": "Ds4.mp3",
           "F#4": "Fs4.mp3",
           A4: "A4.mp3",
+          C5: "C5.mp3",
+          "D#5": "Ds5.mp3",
         },
         release: 1,
         baseUrl: "https://tonejs.github.io/audio/salamander/",
+        onload: () => {
+
+          Tone.getTransport().start()
+        }
       }).toDestination();
 
-      Tone.loaded().then(() => {
+      //
+      // compute full duration of theme
+      //
+      var duration: number = 0
+      for (let note of this.frontRepo!.getFrontArray<gongtone.Note>(gongtone.Note.GONGSTRUCT_NAME)) {
+        if (note.Start + note.Duration > duration) {
+          duration = note.Start + note.Duration
+        }
+      }
+      console.log("duration", duration)
+
+      const loop = new Tone.Loop((time) => {
         for (let note of this.frontRepo!.getFrontArray<gongtone.Note>(gongtone.Note.GONGSTRUCT_NAME)) {
 
           var frequencies = new Array<string>()
@@ -79,27 +103,14 @@ export class GongtoneComponent implements OnInit {
             frequencies.push(freq.Name)
           }
 
-          // console.log(now, now + note.Start, now + note.Start + note.Duration)
-          sampler.triggerAttackRelease(frequencies, note.Duration, now + note.Start)
-          // sampler.triggerAttackRelease(["Eb4", "G4", "Bb4"], 4, 4);
-
+          if (this.sampler != undefined) {
+            // console.log(now, now + note.Start, now + note.Start + note.Duration)
+            this.sampler.triggerAttackRelease(frequencies, note.Duration, time + note.Start)
+            // sampler.triggerAttackRelease(["Eb4", "G4", "Bb4"], 4, 4);
+          }
         }
-      });
+      }, duration).start(0);
 
-
-
-
-      // this.synth.triggerAttack(["D4", "A5"], now, 0.5);
-      // this.synth.triggerAttack("F4", now + 0.5);
-      // this.synth.triggerAttack("A4", now + 1);
-      // this.synth.triggerAttack("C5", now + 1.5);
-      // this.synth.triggerAttack("E5", now + 2);
-      // this.synth.triggerRelease(["D4", "F4"], now + 8);
-      // this.synth.triggerRelease(["A4", "C5", "E5"], now + 4);
-
-      // this.synth.triggerRelease(["D4", "A5"], now + 2);
-
-      Tone.start()
 
     }
   }

@@ -100,7 +100,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000000_Construction_Axis.Name = `Construction Axis`
 	__Axis__000000_Construction_Axis.IsDisplayed = false
 	__Axis__000000_Construction_Axis.Angle = 98.570592
-	__Axis__000000_Construction_Axis.Length = 192.580807
+	__Axis__000000_Construction_Axis.Length = 132.399305
 	__Axis__000000_Construction_Axis.CenterX = 0.000000
 	__Axis__000000_Construction_Axis.CenterY = 0.000000
 	__Axis__000000_Construction_Axis.Color = ``
@@ -115,7 +115,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000001_Initial_Axis.Name = `Initial Axis`
 	__Axis__000001_Initial_Axis.IsDisplayed = false
 	__Axis__000001_Initial_Axis.Angle = 81.429408
-	__Axis__000001_Initial_Axis.Length = 646.123669
+	__Axis__000001_Initial_Axis.Length = 444.210022
 	__Axis__000001_Initial_Axis.CenterX = 0.000000
 	__Axis__000001_Initial_Axis.CenterY = 0.000000
 	__Axis__000001_Initial_Axis.Color = ``
@@ -160,7 +160,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000004_Rotated_Axis.Name = `Rotated Axis`
 	__Axis__000004_Rotated_Axis.IsDisplayed = false
 	__Axis__000004_Rotated_Axis.Angle = 0.000000
-	__Axis__000004_Rotated_Axis.Length = 646.123669
+	__Axis__000004_Rotated_Axis.Length = 444.210022
 	__Axis__000004_Rotated_Axis.CenterX = 0.000000
 	__Axis__000004_Rotated_Axis.CenterY = 0.000000
 	__Axis__000004_Rotated_Axis.Color = ``
@@ -278,14 +278,14 @@ func _(stage *models.StageStruct) {
 
 	__Bezier__000005_Growth_Curve_Seed.Name = `Growth Curve Seed`
 	__Bezier__000005_Growth_Curve_Seed.IsDisplayed = false
-	__Bezier__000005_Growth_Curve_Seed.StartX = -14.349949
-	__Bezier__000005_Growth_Curve_Seed.StartY = 95.215129
-	__Bezier__000005_Growth_Curve_Seed.ControlPointStartX = 56.846027
-	__Bezier__000005_Growth_Curve_Seed.ControlPointStartY = 105.945132
-	__Bezier__000005_Growth_Curve_Seed.EndX = 97.654846
-	__Bezier__000005_Growth_Curve_Seed.EndY = 209.473284
-	__Bezier__000005_Growth_Curve_Seed.ControlPointEndX = 26.458869
-	__Bezier__000005_Growth_Curve_Seed.ControlPointEndY = 198.743281
+	__Bezier__000005_Growth_Curve_Seed.StartX = -9.865590
+	__Bezier__000005_Growth_Curve_Seed.StartY = 65.460401
+	__Bezier__000005_Growth_Curve_Seed.ControlPointStartX = 39.081644
+	__Bezier__000005_Growth_Curve_Seed.ControlPointStartY = 72.837278
+	__Bezier__000005_Growth_Curve_Seed.EndX = 67.137706
+	__Bezier__000005_Growth_Curve_Seed.EndY = 144.012883
+	__Bezier__000005_Growth_Curve_Seed.ControlPointEndX = 18.190473
+	__Bezier__000005_Growth_Curve_Seed.ControlPointEndY = 136.636005
 	__Bezier__000005_Growth_Curve_Seed.Color = ``
 	__Bezier__000005_Growth_Curve_Seed.FillOpacity = 0.000000
 	__Bezier__000005_Growth_Curve_Seed.Stroke = `grey`
@@ -299,13 +299,13 @@ func _(stage *models.StageStruct) {
 	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
-	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = true
+	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
 	__BezierGrid__000002_First_Voice.IsDisplayed = true
 
 	__BezierGrid__000003_First_Voice_Shift_Right.Name = `First Voice Shift Right`
-	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = true
+	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = false
 
 	__BezierGrid__000004_Growth_Curve.Name = `Growth Curve`
 	__BezierGrid__000004_Growth_Curve.IsDisplayed = false
@@ -324,8 +324,8 @@ func _(stage *models.StageStruct) {
 
 	__Circle__000000_Construction_Circle.Name = `Construction Circle`
 	__Circle__000000_Construction_Circle.IsDisplayed = false
-	__Circle__000000_Construction_Circle.CenterX = -14.349949
-	__Circle__000000_Construction_Circle.CenterY = 95.215129
+	__Circle__000000_Construction_Circle.CenterX = -9.865590
+	__Circle__000000_Construction_Circle.CenterY = 65.460401
 	__Circle__000000_Construction_Circle.HasBespokeRadius = true
 	__Circle__000000_Construction_Circle.BespopkeRadius = 20.000000
 	__Circle__000000_Construction_Circle.Pitch = 0
@@ -404,8 +404,8 @@ func _(stage *models.StageStruct) {
 
 	__Circle__000005_Rotated_Next_Circle.Name = `Rotated Next Circle`
 	__Circle__000005_Rotated_Next_Circle.IsDisplayed = false
-	__Circle__000005_Rotated_Next_Circle.CenterX = 252.709488
-	__Circle__000005_Rotated_Next_Circle.CenterY = 38.086052
+	__Circle__000005_Rotated_Next_Circle.CenterX = 173.737773
+	__Circle__000005_Rotated_Next_Circle.CenterY = 26.184160
 	__Circle__000005_Rotated_Next_Circle.HasBespokeRadius = false
 	__Circle__000005_Rotated_Next_Circle.BespopkeRadius = 0.000000
 	__Circle__000005_Rotated_Next_Circle.Pitch = 0
@@ -422,7 +422,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_First_Voice_note_shifted_right.Name = `First Voice note shifted right`
-	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = true
+	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = false
 
 	__CircleGrid__000002_First_Voice_notes.Name = `First Voice notes`
 	__CircleGrid__000002_First_Voice_notes.IsDisplayed = true
@@ -440,7 +440,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000006_Rotated_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Name = `Second Voice Notes Shift Right`
-	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = true
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
 	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
@@ -500,7 +500,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.CenterX = 0.000000
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.CenterY = 0.000000
-	__Rhombus__000000_Growing_Rhombus_Grid_Seed.SideLength = 160.000000
+	__Rhombus__000000_Growing_Rhombus_Grid_Seed.SideLength = 110.000000
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Angle = -81.429408
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.InsideAngle = 106.000000
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Color = ``
@@ -516,7 +516,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000001_Initial_Rhombus.IsDisplayed = false
 	__Rhombus__000001_Initial_Rhombus.CenterX = 0.000000
 	__Rhombus__000001_Initial_Rhombus.CenterY = 0.000000
-	__Rhombus__000001_Initial_Rhombus.SideLength = 160.000000
+	__Rhombus__000001_Initial_Rhombus.SideLength = 110.000000
 	__Rhombus__000001_Initial_Rhombus.Angle = 0.000000
 	__Rhombus__000001_Initial_Rhombus.InsideAngle = 106.000000
 	__Rhombus__000001_Initial_Rhombus.Color = ``
@@ -530,9 +530,9 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000002_Rotated_Next_Rhombus.Name = `Rotated Next Rhombus`
 	__Rhombus__000002_Rotated_Next_Rhombus.IsDisplayed = false
-	__Rhombus__000002_Rotated_Next_Rhombus.CenterX = 252.709488
-	__Rhombus__000002_Rotated_Next_Rhombus.CenterY = 38.086052
-	__Rhombus__000002_Rotated_Next_Rhombus.SideLength = 160.000000
+	__Rhombus__000002_Rotated_Next_Rhombus.CenterX = 173.737773
+	__Rhombus__000002_Rotated_Next_Rhombus.CenterY = 26.184160
+	__Rhombus__000002_Rotated_Next_Rhombus.SideLength = 110.000000
 	__Rhombus__000002_Rotated_Next_Rhombus.Angle = -81.429408
 	__Rhombus__000002_Rotated_Next_Rhombus.InsideAngle = 106.000000
 	__Rhombus__000002_Rotated_Next_Rhombus.Color = ``
@@ -548,7 +548,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000003_Rotated_Rhombus.IsDisplayed = false
 	__Rhombus__000003_Rotated_Rhombus.CenterX = 0.000000
 	__Rhombus__000003_Rotated_Rhombus.CenterY = 0.000000
-	__Rhombus__000003_Rotated_Rhombus.SideLength = 160.000000
+	__Rhombus__000003_Rotated_Rhombus.SideLength = 110.000000
 	__Rhombus__000003_Rotated_Rhombus.Angle = -81.429408
 	__Rhombus__000003_Rotated_Rhombus.InsideAngle = 106.000000
 	__Rhombus__000003_Rotated_Rhombus.Color = ``
@@ -588,7 +588,7 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000005_5_Growth.IsExpanded = false
 
 	__ShapeCategory__000006_6_Score_notation.Name = `6. Score notation`
-	__ShapeCategory__000006_6_Score_notation.IsExpanded = true
+	__ShapeCategory__000006_6_Score_notation.IsExpanded = false
 
 	__ShapeCategory__000007_7_Composer.Name = `7. Composer`
 	__ShapeCategory__000007_7_Composer.IsExpanded = true
