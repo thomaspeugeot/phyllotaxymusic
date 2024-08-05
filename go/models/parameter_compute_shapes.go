@@ -143,5 +143,5 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotesShiftedRight)
 
-	p.ComputeNoteInfos()
+	p.ComputeNoteInfos(stage)
 }

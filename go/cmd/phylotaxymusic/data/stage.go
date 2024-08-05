@@ -80,15 +80,14 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000004_13 := (&models.NoteInfo{Name: `13`}).Stage(stage)
 	__NoteInfo__000005_14 := (&models.NoteInfo{Name: `14`}).Stage(stage)
 	__NoteInfo__000006_15 := (&models.NoteInfo{Name: `15`}).Stage(stage)
-	__NoteInfo__000007_16 := (&models.NoteInfo{Name: `16`}).Stage(stage)
-	__NoteInfo__000008_2 := (&models.NoteInfo{Name: `2`}).Stage(stage)
-	__NoteInfo__000009_3 := (&models.NoteInfo{Name: `3`}).Stage(stage)
-	__NoteInfo__000010_4 := (&models.NoteInfo{Name: `4`}).Stage(stage)
-	__NoteInfo__000011_5 := (&models.NoteInfo{Name: `5`}).Stage(stage)
-	__NoteInfo__000012_6 := (&models.NoteInfo{Name: `6`}).Stage(stage)
-	__NoteInfo__000013_7 := (&models.NoteInfo{Name: `7`}).Stage(stage)
-	__NoteInfo__000014_8 := (&models.NoteInfo{Name: `8`}).Stage(stage)
-	__NoteInfo__000015_9 := (&models.NoteInfo{Name: `9`}).Stage(stage)
+	__NoteInfo__000007_2 := (&models.NoteInfo{Name: `2`}).Stage(stage)
+	__NoteInfo__000008_3 := (&models.NoteInfo{Name: `3`}).Stage(stage)
+	__NoteInfo__000009_4 := (&models.NoteInfo{Name: `4`}).Stage(stage)
+	__NoteInfo__000010_5 := (&models.NoteInfo{Name: `5`}).Stage(stage)
+	__NoteInfo__000011_6 := (&models.NoteInfo{Name: `6`}).Stage(stage)
+	__NoteInfo__000012_7 := (&models.NoteInfo{Name: `7`}).Stage(stage)
+	__NoteInfo__000013_8 := (&models.NoteInfo{Name: `8`}).Stage(stage)
+	__NoteInfo__000014_9 := (&models.NoteInfo{Name: `9`}).Stage(stage)
 
 	__Parameter__000000_Reference := (&models.Parameter{Name: `Reference`}).Stage(stage)
 
@@ -508,32 +507,29 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000006_15.Name = `15`
 	__NoteInfo__000006_15.IsKept = false
 
-	__NoteInfo__000007_16.Name = `16`
-	__NoteInfo__000007_16.IsKept = true
+	__NoteInfo__000007_2.Name = `2`
+	__NoteInfo__000007_2.IsKept = false
 
-	__NoteInfo__000008_2.Name = `2`
-	__NoteInfo__000008_2.IsKept = false
+	__NoteInfo__000008_3.Name = `3`
+	__NoteInfo__000008_3.IsKept = true
 
-	__NoteInfo__000009_3.Name = `3`
-	__NoteInfo__000009_3.IsKept = true
+	__NoteInfo__000009_4.Name = `4`
+	__NoteInfo__000009_4.IsKept = false
 
-	__NoteInfo__000010_4.Name = `4`
-	__NoteInfo__000010_4.IsKept = false
+	__NoteInfo__000010_5.Name = `5`
+	__NoteInfo__000010_5.IsKept = true
 
-	__NoteInfo__000011_5.Name = `5`
-	__NoteInfo__000011_5.IsKept = true
+	__NoteInfo__000011_6.Name = `6`
+	__NoteInfo__000011_6.IsKept = true
 
-	__NoteInfo__000012_6.Name = `6`
-	__NoteInfo__000012_6.IsKept = true
+	__NoteInfo__000012_7.Name = `7`
+	__NoteInfo__000012_7.IsKept = true
 
-	__NoteInfo__000013_7.Name = `7`
-	__NoteInfo__000013_7.IsKept = true
+	__NoteInfo__000013_8.Name = `8`
+	__NoteInfo__000013_8.IsKept = true
 
-	__NoteInfo__000014_8.Name = `8`
-	__NoteInfo__000014_8.IsKept = true
-
-	__NoteInfo__000015_9.Name = `9`
-	__NoteInfo__000015_9.IsKept = true
+	__NoteInfo__000014_9.Name = `9`
+	__NoteInfo__000014_9.IsKept = true
 
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3
@@ -552,7 +548,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbPitchLines = 169
 	__Parameter__000000_Reference.MeasureLinesHeightRatio = 0.170000
 	__Parameter__000000_Reference.NbMeasureLines = 300
-	__Parameter__000000_Reference.NbMeasureLinesPerCurve = 16
+	__Parameter__000000_Reference.NbMeasureLinesPerCurve = 15
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 0.670000
 	__Parameter__000000_Reference.PitchDifference = 7
@@ -766,21 +762,20 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SecondVoiceNotes = __CircleGrid__000008_Second_Voice_notes
 	__Parameter__000000_Reference.SecondVoiceNotesShiftedRight = __CircleGrid__000007_Second_Voice_Notes_Shift_Right
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000000_1)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000008_2)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000009_3)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000010_4)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000011_5)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000012_6)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000013_7)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000014_8)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000015_9)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000007_2)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000008_3)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000009_4)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000010_5)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000011_6)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000012_7)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000013_8)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000014_9)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000001_10)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000002_11)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000003_12)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000004_13)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000005_14)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000006_15)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000007_16)
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Rhombus__000001_Initial_Rhombus.ShapeCategory = __ShapeCategory__000001_1_Initial
