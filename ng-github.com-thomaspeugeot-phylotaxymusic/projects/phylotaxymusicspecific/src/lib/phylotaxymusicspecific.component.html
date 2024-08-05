@@ -8,72 +8,56 @@
     </as-split-area>
     <as-split-area [size]="20">
       <as-split unit="pixel" direction="vertical">
+        <as-split-area [size]="180">
+          @if (frontRepo && frontRepo.array_Parameters[0]) {
+            <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
+              <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">Side Length</h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="2" rowspan="1">
+                  <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].SideLength}}</h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="7" rowspan="1">
+                <mat-slider style="width: 100%;" 
+                min="50.0" max="600.0" step="10" showTickMarks discrete [displayWith]="formatLabel">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SideLength" (input)="input($event)">
+                </mat-slider>
+              </mat-grid-tile>
+              
+              <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">Origin X </h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="2" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].OriginX}}</h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="7" rowspan="1">
+                  <mat-slider  min="-100.0" max="600.0" step="10" 
+                  showTickMarks discrete [displayWith]="formatLabel">
+                      <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].OriginX" (input)="input($event)">
+                </mat-slider>
+              </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Origin Y </h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].OriginY}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="3000.0" step="50" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].OriginY" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            </mat-grid-list>
+          }
+        </as-split-area>
         <as-split-area [size]="$any('*')">
           @if (frontRepo && frontRepo.array_Parameters[0]) {
 
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
            
-                <mat-grid-tile colspan="3" rowspan="1">
-                  <h4 style="margin-left: 8px; width: 100%;">Side Length</h4>
-                </mat-grid-tile>
-                <mat-grid-tile colspan="2" rowspan="1">
-                    <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].SideLength}}</h4>
-                  </mat-grid-tile>
-                  <mat-grid-tile colspan="7" rowspan="1">
-                  <mat-slider style="width: 100%;" 
-                  min="50.0" max="600.0" step="10" showTickMarks discrete [displayWith]="formatLabel">
-                    <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SideLength" (input)="input($event)">
-                  </mat-slider>
-                </mat-grid-tile>
-                <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Origin X </h4>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].OriginX}}</h4>
-              </mat-grid-tile>                  <mat-grid-tile colspan="7" rowspan="1">
-                    <mat-slider  min="-100.0" max="600.0" step="10" 
-                    showTickMarks discrete [displayWith]="formatLabel" 
-                    >
-                        <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].OriginX" (input)="input($event)" 
-                        >
-                    </mat-slider>
-                  </mat-grid-tile>
 
-              <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Origin Y </h4>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].OriginY}}</h4>
-              </mat-grid-tile>              
-              <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0.0" max="3000.0" step="50" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].OriginY" (input)="input($event)">
-                </mat-slider>
-              </mat-grid-tile>
-            
-              <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Stack Width </h4>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].StackWidth}}</h4>
-              </mat-grid-tile>              
-              <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0" max="25" step="1" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].StackWidth" (input)="input($event)">
-                </mat-slider>
-              </mat-grid-tile>
-            
-              <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Stack Height </h4>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].StackHeight}}</h4>
-              </mat-grid-tile>              
-              <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0" max="25" step="1" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].StackHeight" (input)="input($event)">
-                </mat-slider>
-              </mat-grid-tile>
             
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Inside Angle </h4>
@@ -96,18 +80,6 @@
               <mat-grid-tile colspan="7" rowspan="1">
                 <mat-slider min="0.0" max="4.0" step="0.05" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].BezierControlLengthRatio" (input)="input($event)">
-                </mat-slider>
-              </mat-grid-tile>
-            
-              <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Z </h4>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].Z}}</h4>
-              </mat-grid-tile>              
-              <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="1" max="20" step="1" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Z" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
             
