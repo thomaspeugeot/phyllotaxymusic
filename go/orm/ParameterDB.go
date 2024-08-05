@@ -211,6 +211,9 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	SecondVoiceNotesShiftedRightID sql.NullInt64
 
+	// field NoteInfos is a slice of pointers to another Struct (optional or 0..1)
+	NoteInfos IntSlice `gorm:"type:TEXT"`
+
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -1026,6 +1029,24 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.SecondVoiceNotesShiftedRightID.Valid = true
 		}
 
+		// 1. reset
+		parameterDB.ParameterPointersEncoding.NoteInfos = make([]int, 0)
+		// 2. encode
+		for _, noteinfoAssocEnd := range parameter.NoteInfos {
+			noteinfoAssocEnd_DB :=
+				backRepo.BackRepoNoteInfo.GetNoteInfoDBFromNoteInfoPtr(noteinfoAssocEnd)
+			
+			// the stage might be inconsistant, meaning that the noteinfoAssocEnd_DB might
+			// be missing from the stage. In this case, the commit operation is robust
+			// An alternative would be to crash here to reveal the missing element.
+			if noteinfoAssocEnd_DB == nil {
+				continue
+			}
+			
+			parameterDB.ParameterPointersEncoding.NoteInfos =
+				append(parameterDB.ParameterPointersEncoding.NoteInfos, int(noteinfoAssocEnd_DB.ID))
+		}
+
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -1368,6 +1389,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.SecondVoiceNotesShiftedRightID.Int64 != 0 {
 		parameter.SecondVoiceNotesShiftedRight = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.SecondVoiceNotesShiftedRightID.Int64)]
 	}
+	// This loop redeem parameter.NoteInfos in the stage from the encode in the back repo
+	// It parses all NoteInfoDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	parameter.NoteInfos = parameter.NoteInfos[:0]
+	for _, _NoteInfoid := range parameterDB.ParameterPointersEncoding.NoteInfos {
+		parameter.NoteInfos = append(parameter.NoteInfos, backRepo.BackRepoNoteInfo.Map_NoteInfoDBID_NoteInfoPtr[uint(_NoteInfoid)])
+	}
+
 	// HorizontalAxis field
 	parameter.HorizontalAxis = nil
 	if parameterDB.HorizontalAxisID.Int64 != 0 {

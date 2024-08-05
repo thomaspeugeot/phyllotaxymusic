@@ -19,6 +19,8 @@ import { HorizontalAxisAPI } from './horizontalaxis-api'
 
 import { KeyAPI } from './key-api'
 
+import { NoteInfoAPI } from './noteinfo-api'
+
 import { ParameterAPI } from './parameter-api'
 
 import { RhombusAPI } from './rhombus-api'
@@ -49,6 +51,8 @@ export class BackRepoData {
 	HorizontalAxisAPIs = new Array<HorizontalAxisAPI>()
 
 	KeyAPIs = new Array<KeyAPI>()
+
+	NoteInfoAPIs = new Array<NoteInfoAPI>()
 
 	ParameterAPIs = new Array<ParameterAPI>()
 
@@ -81,6 +85,8 @@ export class BackRepoData {
 		this.HorizontalAxisAPIs = data?.HorizontalAxisAPIs || [];
 
 		this.KeyAPIs = data?.KeyAPIs || [];
+
+		this.NoteInfoAPIs = data?.NoteInfoAPIs || [];
 
 		this.ParameterAPIs = data?.ParameterAPIs || [];
 

@@ -40,6 +40,10 @@ import { KeyAPI } from './key-api'
 import { Key, CopyKeyAPIToKey } from './key'
 import { KeyService } from './key.service'
 
+import { NoteInfoAPI } from './noteinfo-api'
+import { NoteInfo, CopyNoteInfoAPIToNoteInfo } from './noteinfo'
+import { NoteInfoService } from './noteinfo.service'
+
 import { ParameterAPI } from './parameter-api'
 import { Parameter, CopyParameterAPIToParameter } from './parameter'
 import { ParameterService } from './parameter.service'
@@ -94,6 +98,9 @@ export class FrontRepo { // insertion point sub template
 	array_Keys = new Array<Key>() // array of front instances
 	map_ID_Key = new Map<number, Key>() // map of front instances
 
+	array_NoteInfos = new Array<NoteInfo>() // array of front instances
+	map_ID_NoteInfo = new Map<number, NoteInfo>() // map of front instances
+
 	array_Parameters = new Array<Parameter>() // array of front instances
 	map_ID_Parameter = new Map<number, Parameter>() // map of front instances
 
@@ -134,6 +141,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_HorizontalAxiss as unknown as Array<Type>
 			case 'Key':
 				return this.array_Keys as unknown as Array<Type>
+			case 'NoteInfo':
+				return this.array_NoteInfos as unknown as Array<Type>
 			case 'Parameter':
 				return this.array_Parameters as unknown as Array<Type>
 			case 'Rhombus':
@@ -170,6 +179,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_HorizontalAxis as unknown as Map<number, Type>
 			case 'Key':
 				return this.map_ID_Key as unknown as Map<number, Type>
+			case 'NoteInfo':
+				return this.map_ID_NoteInfo as unknown as Map<number, Type>
 			case 'Parameter':
 				return this.map_ID_Parameter as unknown as Map<number, Type>
 			case 'Rhombus':
@@ -256,6 +267,7 @@ export class FrontRepoService {
 		private circlegridService: CircleGridService,
 		private horizontalaxisService: HorizontalAxisService,
 		private keyService: KeyService,
+		private noteinfoService: NoteInfoService,
 		private parameterService: ParameterService,
 		private rhombusService: RhombusService,
 		private rhombusgridService: RhombusGridService,
@@ -302,6 +314,7 @@ export class FrontRepoService {
 		Observable<CircleGridAPI[]>,
 		Observable<HorizontalAxisAPI[]>,
 		Observable<KeyAPI[]>,
+		Observable<NoteInfoAPI[]>,
 		Observable<ParameterAPI[]>,
 		Observable<RhombusAPI[]>,
 		Observable<RhombusGridAPI[]>,
@@ -326,6 +339,7 @@ export class FrontRepoService {
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
+			this.noteinfoService.getNoteInfos(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
@@ -355,6 +369,7 @@ export class FrontRepoService {
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
+			this.noteinfoService.getNoteInfos(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
@@ -379,6 +394,7 @@ export class FrontRepoService {
 						circlegrids_,
 						horizontalaxiss_,
 						keys_,
+						noteinfos_,
 						parameters_,
 						rhombuss_,
 						rhombusgrids_,
@@ -406,6 +422,8 @@ export class FrontRepoService {
 						horizontalaxiss = horizontalaxiss_ as HorizontalAxisAPI[]
 						var keys: KeyAPI[]
 						keys = keys_ as KeyAPI[]
+						var noteinfos: NoteInfoAPI[]
+						noteinfos = noteinfos_ as NoteInfoAPI[]
 						var parameters: ParameterAPI[]
 						parameters = parameters_ as ParameterAPI[]
 						var rhombuss: RhombusAPI[]
@@ -525,6 +543,18 @@ export class FrontRepoService {
 								let key = new Key
 								this.frontRepo.array_Keys.push(key)
 								this.frontRepo.map_ID_Key.set(keyAPI.ID, key)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_NoteInfos = []
+						this.frontRepo.map_ID_NoteInfo.clear()
+
+						noteinfos.forEach(
+							noteinfoAPI => {
+								let noteinfo = new NoteInfo
+								this.frontRepo.array_NoteInfos.push(noteinfo)
+								this.frontRepo.map_ID_NoteInfo.set(noteinfoAPI.ID, noteinfo)
 							}
 						)
 
@@ -661,6 +691,14 @@ export class FrontRepoService {
 							keyAPI => {
 								let key = this.frontRepo.map_ID_Key.get(keyAPI.ID)
 								CopyKeyAPIToKey(keyAPI, key!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						noteinfos.forEach(
+							noteinfoAPI => {
+								let noteinfo = this.frontRepo.map_ID_NoteInfo.get(noteinfoAPI.ID)
+								CopyNoteInfoAPIToNoteInfo(noteinfoAPI, noteinfo!, this.frontRepo)
 							}
 						)
 
@@ -844,6 +882,18 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				this.frontRepo.array_NoteInfos = []
+				this.frontRepo.map_ID_NoteInfo.clear()
+
+				backRepoData.NoteInfoAPIs.forEach(
+					noteinfoAPI => {
+						let noteinfo = new NoteInfo
+						this.frontRepo.array_NoteInfos.push(noteinfo)
+						this.frontRepo.map_ID_NoteInfo.set(noteinfoAPI.ID, noteinfo)
+					}
+				)
+
+				// init the arrays
 				this.frontRepo.array_Parameters = []
 				this.frontRepo.map_ID_Parameter.clear()
 
@@ -982,6 +1032,14 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.NoteInfoAPIs.forEach(
+					noteinfoAPI => {
+						let noteinfo = this.frontRepo.map_ID_NoteInfo.get(noteinfoAPI.ID)
+						CopyNoteInfoAPIToNoteInfo(noteinfoAPI, noteinfo!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.ParameterAPIs.forEach(
 					parameterAPI => {
 						let parameter = this.frontRepo.map_ID_Parameter.get(parameterAPI.ID)
@@ -1067,18 +1125,21 @@ export function getHorizontalAxisUniqueID(id: number): number {
 export function getKeyUniqueID(id: number): number {
 	return 67 * id
 }
-export function getParameterUniqueID(id: number): number {
+export function getNoteInfoUniqueID(id: number): number {
 	return 71 * id
 }
-export function getRhombusUniqueID(id: number): number {
+export function getParameterUniqueID(id: number): number {
 	return 73 * id
 }
-export function getRhombusGridUniqueID(id: number): number {
+export function getRhombusUniqueID(id: number): number {
 	return 79 * id
 }
-export function getShapeCategoryUniqueID(id: number): number {
+export function getRhombusGridUniqueID(id: number): number {
 	return 83 * id
 }
-export function getVerticalAxisUniqueID(id: number): number {
+export function getShapeCategoryUniqueID(id: number): number {
 	return 89 * id
+}
+export function getVerticalAxisUniqueID(id: number): number {
+	return 97 * id
 }

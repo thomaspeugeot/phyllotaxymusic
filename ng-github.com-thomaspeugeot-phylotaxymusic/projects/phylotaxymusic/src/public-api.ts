@@ -49,6 +49,10 @@ export * from './lib/key-api'
 export * from './lib/key'
 export * from './lib/key.service'
 
+export * from './lib/noteinfo-api'
+export * from './lib/noteinfo'
+export * from './lib/noteinfo.service'
+
 export * from './lib/parameter-api'
 export * from './lib/parameter'
 export * from './lib/parameter.service'

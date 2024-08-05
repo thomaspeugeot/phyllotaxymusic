@@ -14,6 +14,7 @@ import { Bezier } from './bezier'
 import { BezierGrid } from './beziergrid'
 import { BezierGridStack } from './beziergridstack'
 import { Key } from './key'
+import { NoteInfo } from './noteinfo'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 
@@ -139,6 +140,7 @@ export class Parameter {
 
 	SecondVoiceNotesShiftedRight?: CircleGrid
 
+	NoteInfos: Array<NoteInfo> = []
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -483,6 +485,11 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 
 
 	// insertion point for slice of pointers fields encoding
+	parameterAPI.ParameterPointersEncoding.NoteInfos = []
+	for (let _noteinfo of parameter.NoteInfos) {
+		parameterAPI.ParameterPointersEncoding.NoteInfos.push(_noteinfo.ID)
+	}
+
 }
 
 // CopyParameterAPIToParameter update basic, pointers and slice of pointers fields of parameter
@@ -569,4 +576,11 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	parameter.NoteInfos = new Array<NoteInfo>()
+	for (let _id of parameterAPI.ParameterPointersEncoding.NoteInfos) {
+		let _noteinfo = frontRepo.map_ID_NoteInfo.get(_id)
+		if (_noteinfo != undefined) {
+			parameter.NoteInfos.push(_noteinfo!)
+		}
+	}
 }

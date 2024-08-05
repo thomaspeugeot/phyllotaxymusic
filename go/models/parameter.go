@@ -117,6 +117,11 @@ type Parameter struct {
 	//
 	IsMinor bool
 
+	//
+	// Information per note
+	//
+	NoteInfos []*NoteInfo
+
 	// for drawing purpose
 	OriginX        float64
 	OriginY        float64

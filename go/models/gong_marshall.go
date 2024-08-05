@@ -814,6 +814,46 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_NoteInfo_Identifiers := make(map[*NoteInfo]string)
+	_ = map_NoteInfo_Identifiers
+
+	noteinfoOrdered := []*NoteInfo{}
+	for noteinfo := range stage.NoteInfos {
+		noteinfoOrdered = append(noteinfoOrdered, noteinfo)
+	}
+	sort.Slice(noteinfoOrdered[:], func(i, j int) bool {
+		return noteinfoOrdered[i].Name < noteinfoOrdered[j].Name
+	})
+	if len(noteinfoOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, noteinfo := range noteinfoOrdered {
+
+		id = generatesIdentifier("NoteInfo", idx, noteinfo.Name)
+		map_NoteInfo_Identifiers[noteinfo] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "NoteInfo")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", noteinfo.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(noteinfo.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsSkipped")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", noteinfo.IsSkipped))
+		initializerStatements += setValueField
+
+	}
+
 	map_Parameter_Identifiers := make(map[*Parameter]string)
 	_ = map_Parameter_Identifiers
 
@@ -1515,6 +1555,16 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	for idx, noteinfo := range noteinfoOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("NoteInfo", idx, noteinfo.Name)
+		map_NoteInfo_Identifiers[noteinfo] = id
+
+		// Initialisation of values
+	}
+
 	for idx, parameter := range parameterOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -1848,6 +1898,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SecondVoiceNotesShiftedRight")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.SecondVoiceNotesShiftedRight])
+			pointersInitializesStatements += setPointerField
+		}
+
+		for _, _noteinfo := range parameter.NoteInfos {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "NoteInfos")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_NoteInfo_Identifiers[_noteinfo])
 			pointersInitializesStatements += setPointerField
 		}
 

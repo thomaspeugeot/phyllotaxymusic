@@ -235,6 +235,18 @@ func (from *Key) CopyBasicFields(to *Key) {
 	to.Transform = from.Transform
 }
 
+type NoteInfo_WOP struct {
+	// insertion point
+	Name string
+	IsSkipped bool
+}
+
+func (from *NoteInfo) CopyBasicFields(to *NoteInfo) {
+	// insertion point
+	to.Name = from.Name
+	to.IsSkipped = from.IsSkipped
+}
+
 type Parameter_WOP struct {
 	// insertion point
 	Name string

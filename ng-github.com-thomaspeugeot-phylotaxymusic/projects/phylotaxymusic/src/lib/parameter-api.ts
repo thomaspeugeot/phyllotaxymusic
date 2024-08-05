@@ -9,6 +9,7 @@ import { BezierAPI } from './bezier-api'
 import { BezierGridAPI } from './beziergrid-api'
 import { BezierGridStackAPI } from './beziergridstack-api'
 import { KeyAPI } from './key-api'
+import { NoteInfoAPI } from './noteinfo-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 
@@ -140,6 +141,7 @@ export class ParameterPointersEncoding {
 
 	SecondVoiceNotesShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, SecondVoiceNotesShiftedRight.ID = 0
 
+	NoteInfos: number[] = []
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 
 	VerticalAxisID: NullInt64 = new NullInt64 // if pointer is null, VerticalAxis.ID = 0
