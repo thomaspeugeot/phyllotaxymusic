@@ -14,6 +14,14 @@ func (p *Parameter) computeVoiceNotes(bezierGrid *BezierGrid, g *CircleGrid) {
 	nbMeasureToJump := int(bezierGrid.Beziers[0].StartX/measureLength + 0.5)
 
 	for i := range p.NbMeasureLinesPerCurve {
+
+		if i < len(p.NoteInfos) {
+			noteInfo := p.NoteInfos[i]
+			if noteInfo.IsSkipped {
+				continue
+			}
+		}
+
 		c := new(Circle)
 		*c = *g.Reference
 

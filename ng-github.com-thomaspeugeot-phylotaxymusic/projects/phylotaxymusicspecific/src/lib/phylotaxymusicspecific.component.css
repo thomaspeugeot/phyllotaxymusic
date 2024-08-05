@@ -19,3 +19,9 @@ mat-slider {
     margin-bottom: 0;
     margin-left: 0;
 }
+
+.example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}

@@ -366,7 +366,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000001_First_voice_notes_seed.FillOpacity = 0.000000
 	__Circle__000001_First_voice_notes_seed.Stroke = `grey`
 	__Circle__000001_First_voice_notes_seed.StrokeOpacity = 0.800000
-	__Circle__000001_First_voice_notes_seed.StrokeWidth = 1.000000
+	__Circle__000001_First_voice_notes_seed.StrokeWidth = 2.000000
 	__Circle__000001_First_voice_notes_seed.StrokeDashArray = ``
 	__Circle__000001_First_voice_notes_seed.StrokeDashArrayWhenSelected = ``
 	__Circle__000001_First_voice_notes_seed.Transform = ``
@@ -439,7 +439,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_First_Voice_note_shifted_right.Name = `First Voice note shifted right`
-	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = false
+	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = true
 
 	__CircleGrid__000002_First_Voice_notes.Name = `First Voice notes`
 	__CircleGrid__000002_First_Voice_notes.IsDisplayed = true
@@ -457,10 +457,10 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000006_Rotated_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Name = `Second Voice Notes Shift Right`
-	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = true
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
-	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
+	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
 	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
@@ -491,19 +491,19 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000000_1.IsSkipped = false
 
 	__NoteInfo__000001_10.Name = `10`
-	__NoteInfo__000001_10.IsSkipped = false
+	__NoteInfo__000001_10.IsSkipped = true
 
 	__NoteInfo__000002_11.Name = `11`
 	__NoteInfo__000002_11.IsSkipped = false
 
 	__NoteInfo__000003_12.Name = `12`
-	__NoteInfo__000003_12.IsSkipped = false
+	__NoteInfo__000003_12.IsSkipped = true
 
 	__NoteInfo__000004_13.Name = `13`
 	__NoteInfo__000004_13.IsSkipped = false
 
 	__NoteInfo__000005_14.Name = `14`
-	__NoteInfo__000005_14.IsSkipped = false
+	__NoteInfo__000005_14.IsSkipped = true
 
 	__NoteInfo__000006_15.Name = `15`
 	__NoteInfo__000006_15.IsSkipped = false
@@ -518,13 +518,13 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000009_3.IsSkipped = false
 
 	__NoteInfo__000010_4.Name = `4`
-	__NoteInfo__000010_4.IsSkipped = false
+	__NoteInfo__000010_4.IsSkipped = true
 
 	__NoteInfo__000011_5.Name = `5`
 	__NoteInfo__000011_5.IsSkipped = false
 
 	__NoteInfo__000012_6.Name = `6`
-	__NoteInfo__000012_6.IsSkipped = false
+	__NoteInfo__000012_6.IsSkipped = true
 
 	__NoteInfo__000013_7.Name = `7`
 	__NoteInfo__000013_7.IsSkipped = false
@@ -555,11 +555,11 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbMeasureLinesPerCurve = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 0.670000
-	__Parameter__000000_Reference.PitchDifference = 7
+	__Parameter__000000_Reference.PitchDifference = 12
 	__Parameter__000000_Reference.Speed = 2.850000
-	__Parameter__000000_Reference.Level = 5.700000
+	__Parameter__000000_Reference.Level = 5.600000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.OriginX = 190.000000
+	__Parameter__000000_Reference.OriginX = 20.000000
 	__Parameter__000000_Reference.OriginY = 800.000000
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`

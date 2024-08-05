@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, model, OnInit } from '@angular/core';
 
 import * as phylotaxymusic from '../../../phylotaxymusic/src/public-api'
 
@@ -8,7 +8,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 
 import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { AngularSplitModule } from 'angular-split';
 
@@ -27,6 +28,9 @@ import { CommonModule } from '@angular/common';
     MatSliderModule,
     MatRadioModule,
 
+    MatCardModule,
+    MatCheckboxModule,
+
     FormsModule,
     MatFormFieldModule,
 
@@ -42,7 +46,23 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./phylotaxymusicspecific.component.css'],
 })
 export class PhylotaxymusicspecificComponent implements OnInit {
+  onChange(i: number) {
 
+    let parameter = this.frontRepo!.array_Parameters[0]
+    let noteInfo = parameter.NoteInfos[i]
+
+    this.noteInfoService.updateFront(noteInfo, this.StacksNames.Phylotaxy).subscribe(
+      () => {
+
+        // in order to provoke backend rework
+        let event2: Event = new Event('input');
+        this.input(event2)
+      }
+    )
+  }
+
+  readonly checked = model(false);
+  readonly indeterminate = model(false);
 
   inputMatRadio($event: MatRadioChange) {
     let event2: Event = new Event('input');
@@ -73,6 +93,7 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     private frontRepoService: phylotaxymusic.FrontRepoService,
 
     private parameterService: phylotaxymusic.ParameterService,
+    private noteInfoService: phylotaxymusic.NoteInfoService,
   ) {
 
   }
