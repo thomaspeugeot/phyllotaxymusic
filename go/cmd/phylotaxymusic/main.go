@@ -110,7 +110,7 @@ type ParameterImpl struct {
 func (parameterImpl *ParameterImpl) Generate() {
 	parameterImpl.parameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	parameterImpl.parameter.GenerateSvg(parameterImpl.gongsvgStage)
-	parameterImpl.parameter.GenerateTone(parameterImpl.gongtoneStage)
+	parameterImpl.parameter.GenerateNotes(parameterImpl.gongtoneStage)
 	parameterImpl.tree.Generate(parameterImpl.parameter)
 	parameterImpl.phylotaxymusicStage.Commit()
 }
@@ -123,6 +123,6 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	updatedParameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	updatedParameter.GenerateSvg(parameterImpl.gongsvgStage)
 	parameterImpl.tree.Generate(updatedParameter)
-	updatedParameter.GenerateTone(parameterImpl.gongtoneStage)
+	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage)
 
 }

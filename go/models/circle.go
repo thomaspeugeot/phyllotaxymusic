@@ -2,6 +2,8 @@ package models
 
 import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+
+	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
 type Circle struct {
@@ -16,6 +18,8 @@ type Circle struct {
 	Pitch int
 
 	Presentation
+
+	note *gongtone_models.Note
 }
 
 func (c *Circle) Draw(

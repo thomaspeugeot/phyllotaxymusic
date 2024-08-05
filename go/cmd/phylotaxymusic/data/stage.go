@@ -316,7 +316,7 @@ func _(stage *models.StageStruct) {
 	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
-	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
+	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = true
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
 	__BezierGrid__000002_First_Voice.IsDisplayed = true
@@ -555,7 +555,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbMeasureLinesPerCurve = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 0.670000
-	__Parameter__000000_Reference.PitchDifference = 12
+	__Parameter__000000_Reference.PitchDifference = 7
 	__Parameter__000000_Reference.Speed = 2.850000
 	__Parameter__000000_Reference.Level = 5.600000
 	__Parameter__000000_Reference.IsMinor = true

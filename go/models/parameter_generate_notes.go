@@ -4,7 +4,7 @@ import (
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
-func (p *Parameter) GenerateTone(gongtoneStage *gongtone_models.StageStruct) {
+func (p *Parameter) GenerateNotes(gongtoneStage *gongtone_models.StageStruct) {
 
 	gongtoneStage.Reset()
 
@@ -50,11 +50,26 @@ func (p *Parameter) generateNotesFromCircleGrid(
 			freq.Name = freqNotation
 		}
 		unitMeasureLength := p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
+
 		note := new(gongtone_models.Note).Stage(gongtoneStage)
+		c.note = note
 		note.Frequencies = append(note.Frequencies, freq)
+
 		note.Start = c.CenterX / unitMeasureLength / p.Speed
 		note.Duration = 1 / p.Speed
-		note.Velocity = p.Level
 
+		note.Velocity = p.Level
+	}
+
+	// compute duration according to skipped notes
+	for i, c := range circleGrid.Circles {
+
+		if i == len(circleGrid.Circles)-1 {
+			c.note.Duration = p.RotatedAxis.Length/p.Speed - c.note.Start
+			continue
+		}
+
+		nextC := circleGrid.Circles[i+1]
+		c.note.Duration = nextC.note.Start - c.note.Start
 	}
 }
