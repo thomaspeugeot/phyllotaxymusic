@@ -40,7 +40,15 @@ func (p *Parameter) generateNotesFromCircleGrid(
 	map_Freqs map[string]*gongtone_models.Freqency,
 	circleGrid *CircleGrid,
 	gongtoneStage *gongtone_models.StageStruct) {
+
+	unitMeasureLength := p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
+
 	for _, c := range circleGrid.Circles {
+
+		if !c.isKept {
+			continue
+		}
+
 		freqNotation := keyboard[c.Pitch]
 
 		freq, ok := map_Freqs[freqNotation]
@@ -49,14 +57,12 @@ func (p *Parameter) generateNotesFromCircleGrid(
 			freq = new(gongtone_models.Freqency).Stage(gongtoneStage)
 			freq.Name = freqNotation
 		}
-		unitMeasureLength := p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
 
 		note := new(gongtone_models.Note).Stage(gongtoneStage)
 		c.note = note
 		note.Frequencies = append(note.Frequencies, freq)
 
-		note.Start = c.CenterX / unitMeasureLength / p.Speed
-		note.Duration = 1 / p.Speed
+		note.Start = (c.CenterX / unitMeasureLength) / p.Speed
 
 		note.Velocity = p.Level
 	}
@@ -64,12 +70,16 @@ func (p *Parameter) generateNotesFromCircleGrid(
 	// compute duration according to skipped notes
 	for i, c := range circleGrid.Circles {
 
-		if i == len(circleGrid.Circles)-1 {
-			c.note.Duration = p.RotatedAxis.Length/p.Speed - c.note.Start
+		if c.note == nil {
 			continue
 		}
 
-		nextC := circleGrid.Circles[i+1]
-		c.note.Duration = nextC.note.Start - c.note.Start
+		c.note.Duration = 1 / p.Speed
+
+		for _, _c := range circleGrid.Circles[i:] {
+			if !_c.isKept {
+				c.note.Duration += 1 / p.Speed
+			}
+		}
 	}
 }

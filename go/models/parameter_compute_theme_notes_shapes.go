@@ -2,7 +2,7 @@ package models
 
 import "log"
 
-func (p *Parameter) computeVoiceNotes(bezierGrid *BezierGrid, g *CircleGrid) {
+func (p *Parameter) computeThemeNotesShapes(bezierGrid *BezierGrid, g *CircleGrid) {
 
 	g.Circles = g.Circles[:0]
 
@@ -15,15 +15,13 @@ func (p *Parameter) computeVoiceNotes(bezierGrid *BezierGrid, g *CircleGrid) {
 
 	for i := range p.NbMeasureLinesPerCurve {
 
-		if i < len(p.NoteInfos) {
-			noteInfo := p.NoteInfos[i]
-			if !noteInfo.IsKept {
-				continue
-			}
-		}
-
 		c := new(Circle)
 		*c = *g.Reference
+
+		if i < len(p.NoteInfos) {
+			noteInfo := p.NoteInfos[i]
+			c.isKept = noteInfo.IsKept
+		}
 
 		g.Circles = append(g.Circles, c)
 

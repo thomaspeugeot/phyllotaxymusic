@@ -17,29 +17,38 @@ type Circle struct {
 
 	Pitch int
 
+	// effect of the note info on the circle
+	// will influence how it is drawn and played
+	isKept bool
+
 	Presentation
 
 	note *gongtone_models.Note
 }
 
-func (c *Circle) Draw(
+func (circle *Circle) Draw(
 	gongsvgStage *gongsvg_models.StageStruct,
 	layer *gongsvg_models.Layer,
 	p *Parameter,
 ) {
 
-	circle := new(gongsvg_models.Circle).Stage(gongsvgStage)
-	layer.Circles = append(layer.Circles, circle)
+	svgCircle := new(gongsvg_models.Circle).Stage(gongsvgStage)
+	layer.Circles = append(layer.Circles, svgCircle)
 
-	circle.CX = p.OriginX + c.CenterX
-	circle.CY = p.OriginY - c.CenterY
-	circle.Radius = p.SideLength / 2.0
+	svgCircle.CX = p.OriginX + circle.CenterX
+	svgCircle.CY = p.OriginY - circle.CenterY
+	svgCircle.Radius = p.SideLength / 2.0
 
-	if c.HasBespokeRadius {
-		circle.Radius = c.BespopkeRadius
+	if circle.HasBespokeRadius {
+		svgCircle.Radius = circle.BespopkeRadius
 	}
 
-	c.Presentation.CopyTo(&circle.Presentation)
+	circle.Presentation.CopyTo(&svgCircle.Presentation)
+
+	if !circle.isKept {
+		svgCircle.StrokeWidth /= 2.0
+	}
+
 }
 
 func (_c *Circle) move(c *Circle, x, y float64) {

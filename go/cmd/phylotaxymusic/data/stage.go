@@ -366,7 +366,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000001_First_voice_notes_seed.FillOpacity = 0.000000
 	__Circle__000001_First_voice_notes_seed.Stroke = `grey`
 	__Circle__000001_First_voice_notes_seed.StrokeOpacity = 0.800000
-	__Circle__000001_First_voice_notes_seed.StrokeWidth = 2.000000
+	__Circle__000001_First_voice_notes_seed.StrokeWidth = 3.000000
 	__Circle__000001_First_voice_notes_seed.StrokeDashArray = ``
 	__Circle__000001_First_voice_notes_seed.StrokeDashArrayWhenSelected = ``
 	__Circle__000001_First_voice_notes_seed.Transform = ``
@@ -494,10 +494,10 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000001_10.IsKept = true
 
 	__NoteInfo__000002_11.Name = `11`
-	__NoteInfo__000002_11.IsKept = true
+	__NoteInfo__000002_11.IsKept = false
 
 	__NoteInfo__000003_12.Name = `12`
-	__NoteInfo__000003_12.IsKept = true
+	__NoteInfo__000003_12.IsKept = false
 
 	__NoteInfo__000004_13.Name = `13`
 	__NoteInfo__000004_13.IsKept = true
@@ -506,7 +506,7 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000005_14.IsKept = true
 
 	__NoteInfo__000006_15.Name = `15`
-	__NoteInfo__000006_15.IsKept = true
+	__NoteInfo__000006_15.IsKept = false
 
 	__NoteInfo__000007_16.Name = `16`
 	__NoteInfo__000007_16.IsKept = true
@@ -556,7 +556,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 0.670000
 	__Parameter__000000_Reference.PitchDifference = 7
-	__Parameter__000000_Reference.Speed = 2.850000
+	__Parameter__000000_Reference.Speed = 2.900000
 	__Parameter__000000_Reference.Level = 5.600000
 	__Parameter__000000_Reference.IsMinor = true
 	__Parameter__000000_Reference.OriginX = 20.000000
