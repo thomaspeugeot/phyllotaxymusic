@@ -34,22 +34,28 @@ func (stacksnames *StacksNames) FromString(input string) (err error) {
 	// insertion code per enum code
 	case "phylotaxymusic":
 		*stacksnames = Phylotaxy
+		return
 	case "gongsvg":
 		*stacksnames = GongsvgStackName
+		return
 	case "sidebar tree":
 		*stacksnames = SidebarTree
+		return
 	case "gongtone":
 		*stacksnames = GongtoneStackName
+		return
 	case "gongtree":
 		*stacksnames = GongtreeStackName
+		return
 	case "gongtable":
 		*stacksnames = GongtableStackName
+		return
 	case "gongsim":
 		*stacksnames = GongsimStackName
+		return
 	default:
 		return errUnkownEnum
 	}
-	return
 }
 
 func (stacksnames *StacksNames) FromCodeString(input string) (err error) {
@@ -150,10 +156,10 @@ func (treenames *TreeNames) FromString(input string) (err error) {
 	// insertion code per enum code
 	case "sidebar":
 		*treenames = Sidebar
+		return
 	default:
 		return errUnkownEnum
 	}
-	return
 }
 
 func (treenames *TreeNames) FromCodeString(input string) (err error) {
@@ -201,13 +207,12 @@ func (treenames TreeNames) CodeValues() (res []string) {
 // end of insertion point for enum utility functions
 
 type GongstructEnumStringField interface {
-	string | StacksNames | TreeNames
 	Codes() []string
 	CodeValues() []string
+	ToString() string
 }
 
 type PointerToGongstructEnumStringField interface {
-	*StacksNames | *TreeNames
 	FromCodeString(input string) (err error)
 }
 

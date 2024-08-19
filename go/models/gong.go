@@ -53,7 +53,6 @@ type StageStruct struct {
 	Axiss_mapString map[string]*Axis
 
 	// insertion point for slice of pointers maps
-
 	OnAfterAxisCreateCallback OnAfterCreateInterface[Axis]
 	OnAfterAxisUpdateCallback OnAfterUpdateInterface[Axis]
 	OnAfterAxisDeleteCallback OnAfterDeleteInterface[Axis]
@@ -74,7 +73,6 @@ type StageStruct struct {
 	Beziers_mapString map[string]*Bezier
 
 	// insertion point for slice of pointers maps
-
 	OnAfterBezierCreateCallback OnAfterCreateInterface[Bezier]
 	OnAfterBezierUpdateCallback OnAfterUpdateInterface[Bezier]
 	OnAfterBezierDeleteCallback OnAfterDeleteInterface[Bezier]
@@ -106,7 +104,6 @@ type StageStruct struct {
 	Circles_mapString map[string]*Circle
 
 	// insertion point for slice of pointers maps
-
 	OnAfterCircleCreateCallback OnAfterCreateInterface[Circle]
 	OnAfterCircleUpdateCallback OnAfterUpdateInterface[Circle]
 	OnAfterCircleDeleteCallback OnAfterDeleteInterface[Circle]
@@ -127,7 +124,6 @@ type StageStruct struct {
 	HorizontalAxiss_mapString map[string]*HorizontalAxis
 
 	// insertion point for slice of pointers maps
-
 	OnAfterHorizontalAxisCreateCallback OnAfterCreateInterface[HorizontalAxis]
 	OnAfterHorizontalAxisUpdateCallback OnAfterUpdateInterface[HorizontalAxis]
 	OnAfterHorizontalAxisDeleteCallback OnAfterDeleteInterface[HorizontalAxis]
@@ -137,7 +133,6 @@ type StageStruct struct {
 	Keys_mapString map[string]*Key
 
 	// insertion point for slice of pointers maps
-
 	OnAfterKeyCreateCallback OnAfterCreateInterface[Key]
 	OnAfterKeyUpdateCallback OnAfterUpdateInterface[Key]
 	OnAfterKeyDeleteCallback OnAfterDeleteInterface[Key]
@@ -147,7 +142,6 @@ type StageStruct struct {
 	NoteInfos_mapString map[string]*NoteInfo
 
 	// insertion point for slice of pointers maps
-
 	OnAfterNoteInfoCreateCallback OnAfterCreateInterface[NoteInfo]
 	OnAfterNoteInfoUpdateCallback OnAfterUpdateInterface[NoteInfo]
 	OnAfterNoteInfoDeleteCallback OnAfterDeleteInterface[NoteInfo]
@@ -168,7 +162,6 @@ type StageStruct struct {
 	Rhombuss_mapString map[string]*Rhombus
 
 	// insertion point for slice of pointers maps
-
 	OnAfterRhombusCreateCallback OnAfterCreateInterface[Rhombus]
 	OnAfterRhombusUpdateCallback OnAfterUpdateInterface[Rhombus]
 	OnAfterRhombusDeleteCallback OnAfterDeleteInterface[Rhombus]
@@ -189,7 +182,6 @@ type StageStruct struct {
 	ShapeCategorys_mapString map[string]*ShapeCategory
 
 	// insertion point for slice of pointers maps
-
 	OnAfterShapeCategoryCreateCallback OnAfterCreateInterface[ShapeCategory]
 	OnAfterShapeCategoryUpdateCallback OnAfterUpdateInterface[ShapeCategory]
 	OnAfterShapeCategoryDeleteCallback OnAfterDeleteInterface[ShapeCategory]
@@ -199,7 +191,6 @@ type StageStruct struct {
 	VerticalAxiss_mapString map[string]*VerticalAxis
 
 	// insertion point for slice of pointers maps
-
 	OnAfterVerticalAxisCreateCallback OnAfterCreateInterface[VerticalAxis]
 	OnAfterVerticalAxisUpdateCallback OnAfterUpdateInterface[VerticalAxis]
 	OnAfterVerticalAxisDeleteCallback OnAfterDeleteInterface[VerticalAxis]
@@ -1411,8 +1402,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
-	// insertion point for generic types
-	Axis | AxisGrid | Bezier | BezierGrid | BezierGridStack | Circle | CircleGrid | HorizontalAxis | Key | NoteInfo | Parameter | Rhombus | RhombusGrid | ShapeCategory | VerticalAxis
+
 }
 
 type GongtructBasicField interface {
@@ -1424,11 +1414,10 @@ type GongtructBasicField interface {
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
-	// insertion point for generic types
-	*Axis | *AxisGrid | *Bezier | *BezierGrid | *BezierGridStack | *Circle | *CircleGrid | *HorizontalAxis | *Key | *NoteInfo | *Parameter | *Rhombus | *RhombusGrid | *ShapeCategory | *VerticalAxis
 	GetName() string
 	CommitVoid(*StageStruct)
 	UnstageVoid(stage *StageStruct)
+	comparable
 }
 
 func CompareGongstructByName[T PointerToGongstruct](a, b T) int {
@@ -1452,45 +1441,11 @@ func GetGongstrucsSorted[T PointerToGongstruct](stage *StageStruct) (sortedSlice
 }
 
 type GongstructSet interface {
-	map[any]any |
-		// insertion point for generic types
-		map[*Axis]any |
-		map[*AxisGrid]any |
-		map[*Bezier]any |
-		map[*BezierGrid]any |
-		map[*BezierGridStack]any |
-		map[*Circle]any |
-		map[*CircleGrid]any |
-		map[*HorizontalAxis]any |
-		map[*Key]any |
-		map[*NoteInfo]any |
-		map[*Parameter]any |
-		map[*Rhombus]any |
-		map[*RhombusGrid]any |
-		map[*ShapeCategory]any |
-		map[*VerticalAxis]any |
-		map[*any]any // because go does not support an extra "|" at the end of type specifications
+	map[any]any
 }
 
 type GongstructMapString interface {
-	map[any]any |
-		// insertion point for generic types
-		map[string]*Axis |
-		map[string]*AxisGrid |
-		map[string]*Bezier |
-		map[string]*BezierGrid |
-		map[string]*BezierGridStack |
-		map[string]*Circle |
-		map[string]*CircleGrid |
-		map[string]*HorizontalAxis |
-		map[string]*Key |
-		map[string]*NoteInfo |
-		map[string]*Parameter |
-		map[string]*Rhombus |
-		map[string]*RhombusGrid |
-		map[string]*ShapeCategory |
-		map[string]*VerticalAxis |
-		map[*any]any // because go does not support an extra "|" at the end of type specifications
+	map[any]any
 }
 
 // GongGetSet returns the set staged GongstructType instances
