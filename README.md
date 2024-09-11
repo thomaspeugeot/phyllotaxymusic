@@ -47,7 +47,7 @@ newer leave cells, you end up drawing the "front line"
 of the plant growth.
 
 Stephane then compared a new leave cell to the last one.
-Because the appear regularly, ta new cell is 
+Because the appear regularly, a new cell is 
 always located with the same distance above and the
 same angle sideway, a rotation near 168 degrees, 
 related to the golden ratio. 
