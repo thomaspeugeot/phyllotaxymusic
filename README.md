@@ -29,7 +29,7 @@ have the shape they have.
 Those guys have fun jobs. In the office of Stephane D.,  
 a "spiral plants" specialist I 
 visited, the shelves are full of beautiful 
-dried spécimen that people send
+dried spécimen that people send him
 from all over the world. Each plant has spectacular
 spiral arragenement of leaves. They form
 spirals that run upward the trunks.
