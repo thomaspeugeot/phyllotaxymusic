@@ -11,48 +11,70 @@ of music notes. Think of it as something you
  can whistle.
 
 By turning 
-knobs in the application, you generates a musical theme . You can hear it in the app by way of a simple 
-webaudio synthesizer. 
+knobs in the application, you generates 
+a musical theme . 
+You can hear it in the app 
+(by way of a simple 
+webaudio synthesizer). 
 If you want to compose something 
-more elaborate, you can export it
-to a musicxlm file and import it 
-in
-a score editing 
-software like musescore.
+more elaborate, you can export
+your theme
+to a musicxlm file. 
+musicxml is a standard 
+format recognized by
+lot of score editing 
+software (including musescore).
 
 Phylotaxy means "shape of leaves". 
 It is the 
-science botanist, mathematicians and physicists 
-have developed to understand why plants
+science developped by botanist, 
+mathematicians and physicists 
+to understand why plants
 have the shape they have.
 
-Those guys have fun jobs. In the office of Stephane D.,
+Those guys have fun jobs. 
+In the office of Stephane D.,
 a "spiral plants" specialist I 
-visited, the shelves are full of beautiful 
-dried spécimen that people sent to him
-from all over the world. Each plant has spectacular
-spiral arragenement of leaves
+visited, the shelves are full of 
+beautiful 
+dried specimen that people 
+sent to him
+from all over the world. 
+Each plant has spectacular
+spiral arragenements of leaves
 that run upward the trunks.
 
-Stephane taught me that when the trunk grows, 
+Stephane taught me that when 
+the trunk grows, 
 the cells
 at the stem divide themselves. New cells
  end up building
-the trunk but regularly, one of them differentiates and
+the trunk but regularly, 
+one of them differentiates and
 becomes a leave. 
-Because this happens on a regular tempo, the leaves arrange themselves along the trunk
-in spiral patterns. Stephane pointed out that if you draw
-a line around the trunk to isolate one leave cell from
-newer leave cells, you end up drawing the "front line"
+Because this happens on a regular tempo, 
+the leaves arrange themselves along 
+the trunk
+in spiral patterns. 
+Stephane pointed out that if you draw
+a line around the trunk to isolate 
+one leave cell from
+newer leave cells, you end up drawing 
+the "front line"
 of the plant growth.
 
-Stephane then compared a new leave cell to the last one.
-Because the appear regularly, a new cell is 
-always located with the same distance above and the
-same angle sideway, a rotation near 168 degrees, 
+Stephane then compared a new leave cell 
+to the last one.
+Because leave cells appear regularly, 
+a new cell is 
+always located with the same distance
+ above and the
+same angle sideway, 
+a rotation near 168 degrees, 
 related to the golden ratio. 
 Therefore, the "front line" has 
 this interesting geometric feature : 
+but on the new leave cell,
 it overlaps itself
 after an upward translation 
 and a rotation.
@@ -61,10 +83,9 @@ and a rotation.
 Now, unfolds the front line on a piece 
 of paper. 
 If you draw it again
-on a tracing paper, you can check by 
-moving the tracing paper that 
-the front line overlaps itself
-if you shift it a bit to the right and 
+on a tracing paper. Put the tracing 
+paper above and
+shift it a bit to the right and 
 a bit to the top. The overlapping 
 is perfect 
 except for one space that have
