@@ -4,16 +4,20 @@
 
 ## what is it ?
 
-Phykotaxy music is a web application for 
+You use phylotaxy music, a web application, for 
 generating a music
 theme. A music theme is a small suite 
 of music notes. Think of it as something you
  can whistle.
 
+You edit your musical theme by turning 
+knobs 
+in the application. you can hear the result in 
+the application by way of a simple 
+websudio synthesizer.
 If you want to compose something 
-more elaborate 
-from the theme, you can export it
-to a musicxlm file. You can then import it 
+more elaborate, you can export it
+to a musicxlm file and import it 
 in
 a score editing 
 software like musescore.
