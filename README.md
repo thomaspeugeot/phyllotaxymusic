@@ -28,9 +28,19 @@ science botanist, mathematicians and physicists
 have developed to understand why plants
 have the shape they have.
 
+Those guys have fun jobs. In the office 
+of one "spiral plants" specialist i 
+visited, the shelves are full of beautiful 
+dried 
+spécimen that people send
+from all over the world with questions 
+about the shape of the arrangements
+of the leaves.
+
+For spital plants, 
 Phylotaxy science has produced a concept, 
 the "front line", that is interesting 
-for music.  If you draw a "front line"
+for music. If you draw a "front line"
 on a paper and youndraw it again
 on a tracing paper, you can check by 
 moving the tracing paper that 
