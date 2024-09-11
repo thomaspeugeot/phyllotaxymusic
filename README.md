@@ -26,7 +26,7 @@ science botanist, mathematicians and physicists
 have developed to understand why plants
 have the shape they have.
 
-Those guys have fun jobs. In the office of Stephane D.,  
+Those guys have fun jobs. In the office of Stephane D.,
 a "spiral plants" specialist I 
 visited, the shelves are full of beautiful 
 dried spécimen that people sent to him
