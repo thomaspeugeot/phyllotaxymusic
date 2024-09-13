@@ -647,13 +647,13 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000004_4_Construction.IsExpanded = false
 
 	__ShapeCategory__000005_5_Growth.Name = `5. Growth`
-	__ShapeCategory__000005_5_Growth.IsExpanded = true
+	__ShapeCategory__000005_5_Growth.IsExpanded = false
 
 	__ShapeCategory__000006_6_Score_notation.Name = `6. Score notation`
 	__ShapeCategory__000006_6_Score_notation.IsExpanded = false
 
 	__ShapeCategory__000007_7_Composer.Name = `7. Composer`
-	__ShapeCategory__000007_7_Composer.IsExpanded = true
+	__ShapeCategory__000007_7_Composer.IsExpanded = false
 
 	__VerticalAxis__000000_Vertical_Axis.Name = `Vertical Axis`
 	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = true

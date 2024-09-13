@@ -2,20 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Edge",
-            "request": "launch",
-            "type": "msedge",
-            "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}/ng-github.com-thomaspeugeot-phylotaxymusic"
-        },
-        {
-            "name": "Launch Chrome",
-            "request": "launch",
-            "type": "chrome",
-            "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}/ng-github.com-thomaspeugeot-phylotaxymusic"
-        },
-        {
             "name": "go server -unmarshallFromCode=data/stage.go -marshallOnCommit=data/stage",
             "type": "go",
             "request": "launch",
