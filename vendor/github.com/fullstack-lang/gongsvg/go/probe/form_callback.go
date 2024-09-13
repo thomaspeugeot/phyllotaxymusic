@@ -2493,6 +2493,8 @@ func (rectanchoredtextFormCallback *RectAnchoredTextFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rectanchoredtext_.FontWeight), formDiv)
 		case "FontSize":
 			FormDivBasicFieldToField(&(rectanchoredtext_.FontSize), formDiv)
+		case "FontStyle":
+			FormDivBasicFieldToField(&(rectanchoredtext_.FontStyle), formDiv)
 		case "X_Offset":
 			FormDivBasicFieldToField(&(rectanchoredtext_.X_Offset), formDiv)
 		case "Y_Offset":

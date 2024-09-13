@@ -32,20 +32,25 @@ func (stacksnames *StacksNames) FromString(input string) (err error) {
 	// insertion code per enum code
 	case "gongtone":
 		*stacksnames = Gongtone
+		return
 	case "gongsvg":
 		*stacksnames = GongsvgStackName
+		return
 	case "sidebar tree":
 		*stacksnames = SidebarTree
+		return
 	case "gongtree":
 		*stacksnames = GongtreeStackName
+		return
 	case "gongtable":
 		*stacksnames = GongtableStackName
+		return
 	case "gongsim":
 		*stacksnames = GongsimStackName
+		return
 	default:
 		return errUnkownEnum
 	}
-	return
 }
 
 func (stacksnames *StacksNames) FromCodeString(input string) (err error) {
@@ -123,13 +128,12 @@ func (stacksnames StacksNames) CodeValues() (res []string) {
 // end of insertion point for enum utility functions
 
 type GongstructEnumStringField interface {
-	string | StacksNames
 	Codes() []string
 	CodeValues() []string
+	ToString() string
 }
 
 type PointerToGongstructEnumStringField interface {
-	*StacksNames
 	FromCodeString(input string) (err error)
 }
 

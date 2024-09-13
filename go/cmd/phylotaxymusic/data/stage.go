@@ -312,16 +312,16 @@ func _(stage *models.StageStruct) {
 	__Bezier__000005_Growth_Curve_Seed.Transform = ``
 
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
-	__BezierGrid__000000_2nb_Voice.IsDisplayed = false
+	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
 	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
-	__BezierGrid__000002_First_Voice.IsDisplayed = false
+	__BezierGrid__000002_First_Voice.IsDisplayed = true
 
 	__BezierGrid__000003_First_Voice_Shift_Right.Name = `First Voice Shift Right`
-	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = false
+	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = true
 
 	__BezierGrid__000004_Growth_Curve.Name = `Growth Curve`
 	__BezierGrid__000004_Growth_Curve.IsDisplayed = false

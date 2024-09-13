@@ -198,6 +198,14 @@ func (nodeFormCallback *NodeFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(node_.IsChecked), formDiv)
 		case "IsCheckboxDisabled":
 			FormDivBasicFieldToField(&(node_.IsCheckboxDisabled), formDiv)
+		case "HasSecondCheckboxButton":
+			FormDivBasicFieldToField(&(node_.HasSecondCheckboxButton), formDiv)
+		case "IsSecondCheckboxChecked":
+			FormDivBasicFieldToField(&(node_.IsSecondCheckboxChecked), formDiv)
+		case "IsSecondCheckboxDisabled":
+			FormDivBasicFieldToField(&(node_.IsSecondCheckboxDisabled), formDiv)
+		case "TextAfterSecondCheckbox":
+			FormDivBasicFieldToField(&(node_.TextAfterSecondCheckbox), formDiv)
 		case "IsInEditMode":
 			FormDivBasicFieldToField(&(node_.IsInEditMode), formDiv)
 		case "IsNodeClickable":

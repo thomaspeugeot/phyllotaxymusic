@@ -8,8 +8,6 @@ import (
 	"math"
 	"slices"
 	"time"
-
-	"golang.org/x/exp/maps"
 )
 
 func __Gong__Abs(x int) int {
@@ -1402,7 +1400,6 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
-
 }
 
 type GongtructBasicField interface {
@@ -1426,7 +1423,9 @@ func CompareGongstructByName[T PointerToGongstruct](a, b T) int {
 
 func SortGongstructSetByName[T PointerToGongstruct](set map[T]any) (sortedSlice []T) {
 
-	sortedSlice = maps.Keys(set)
+	for key := range set {
+		sortedSlice = append(sortedSlice, key)
+	}
 	slices.SortFunc(sortedSlice, CompareGongstructByName)
 
 	return
@@ -1670,12 +1669,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Axis:
 		return any(&Axis{
 			// Initialisation of associations
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case AxisGrid:
 		return any(&AxisGrid{
@@ -1684,22 +1679,14 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Axis{Name: "Reference"},
 			// field is initialized with an instance of Axis with the name of the field
 			Axiss: []*Axis{{Name: "Axiss"}},
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case Bezier:
 		return any(&Bezier{
 			// Initialisation of associations
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case BezierGrid:
 		return any(&BezierGrid{
@@ -1708,34 +1695,22 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Bezier{Name: "Reference"},
 			// field is initialized with an instance of Bezier with the name of the field
 			Beziers: []*Bezier{{Name: "Beziers"}},
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case BezierGridStack:
 		return any(&BezierGridStack{
 			// Initialisation of associations
 			// field is initialized with an instance of BezierGrid with the name of the field
 			BezierGrids: []*BezierGrid{{Name: "BezierGrids"}},
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case Circle:
 		return any(&Circle{
 			// Initialisation of associations
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case CircleGrid:
 		return any(&CircleGrid{
@@ -1744,32 +1719,20 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Circle{Name: "Reference"},
 			// field is initialized with an instance of Circle with the name of the field
 			Circles: []*Circle{{Name: "Circles"}},
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case HorizontalAxis:
 		return any(&HorizontalAxis{
 			// Initialisation of associations
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case Key:
 		return any(&Key{
 			// Initialisation of associations
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case NoteInfo:
 		return any(&NoteInfo{
@@ -1870,12 +1833,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Rhombus:
 		return any(&Rhombus{
 			// Initialisation of associations
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case RhombusGrid:
 		return any(&RhombusGrid{
@@ -1884,12 +1843,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Rhombus{Name: "Reference"},
 			// field is initialized with an instance of Rhombus with the name of the field
 			Rhombuses: []*Rhombus{{Name: "Rhombuses"}},
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	case ShapeCategory:
 		return any(&ShapeCategory{
@@ -1898,12 +1853,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case VerticalAxis:
 		return any(&VerticalAxis{
 			// Initialisation of associations
-			// field is initialized with AbstractShape as it is a composite
-			AbstractShape: AbstractShape{
-				// per field init
-				//
-				ShapeCategory: &ShapeCategory{Name: "ShapeCategory"},
-			},
+			// field is initialized with AbstractShape problem with composites
+			
 		}).(*Type)
 	default:
 		return nil
