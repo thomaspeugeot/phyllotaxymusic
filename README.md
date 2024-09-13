@@ -157,7 +157,7 @@ The whole is harmonious.
 
 TBC
 
-![alt text](image-6.png)
+![alt text](image-11.png)
 
 The idea of phylotaxy music is to 
 generate a front curve from botanical 
