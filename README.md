@@ -2,6 +2,24 @@
 
 ![Phylotaxy music](image.png)
 
+## Compiling & running the application
+
+git, go version => 1.23 and npm version >= 18 are needed
+
+```
+git clone https://github.com/thomaspeugeot/phylotaxymusic.git
+cd phylotaxymusic/ng-github.com-thomaspeugeot-phylotaxymusic
+npm i
+ng build
+cd ../go/cmd/phylotaxymusic
+go build
+./phylotaxymusic -unmarshallFromCode=data/stage.go -marshallOnCommit=data/stage
+```
+
+launch your browser to http://localhost:8080/
+
+should compile on mac, pc and linux.
+
 ## What is it ?
 
 ### Generating musical theme
