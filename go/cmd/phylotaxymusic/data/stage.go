@@ -105,9 +105,10 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000002_2_Rotated := (&models.ShapeCategory{Name: `2. Rotated`}).Stage(stage)
 	__ShapeCategory__000003_3_Growing := (&models.ShapeCategory{Name: `3. Growing`}).Stage(stage)
 	__ShapeCategory__000004_4_Construction := (&models.ShapeCategory{Name: `4. Construction`}).Stage(stage)
-	__ShapeCategory__000005_5_Growth := (&models.ShapeCategory{Name: `5. Growth`}).Stage(stage)
-	__ShapeCategory__000006_6_Score_notation := (&models.ShapeCategory{Name: `6. Score notation`}).Stage(stage)
-	__ShapeCategory__000007_7_Composer := (&models.ShapeCategory{Name: `7. Composer`}).Stage(stage)
+	__ShapeCategory__000005_5_Vertical_growth := (&models.ShapeCategory{Name: `5. Vertical growth`}).Stage(stage)
+	__ShapeCategory__000006_6_Circular_growth := (&models.ShapeCategory{Name: `6. Circular growth`}).Stage(stage)
+	__ShapeCategory__000007_7_Score_notation := (&models.ShapeCategory{Name: `7. Score notation`}).Stage(stage)
+	__ShapeCategory__000008_8_Composer := (&models.ShapeCategory{Name: `8. Composer`}).Stage(stage)
 
 	__VerticalAxis__000000_Vertical_Axis := (&models.VerticalAxis{Name: `Vertical Axis`}).Stage(stage)
 
@@ -192,10 +193,10 @@ func _(stage *models.StageStruct) {
 	__AxisGrid__000000_Construction_Axis_Grid.IsDisplayed = false
 
 	__AxisGrid__000001_Measure_Lines.Name = `Measure Lines`
-	__AxisGrid__000001_Measure_Lines.IsDisplayed = true
+	__AxisGrid__000001_Measure_Lines.IsDisplayed = false
 
 	__AxisGrid__000002_Pitch_Lines.Name = `Pitch Lines`
-	__AxisGrid__000002_Pitch_Lines.IsDisplayed = true
+	__AxisGrid__000002_Pitch_Lines.IsDisplayed = false
 
 	__Bezier__000000_2nd_voice_seed.Name = `2nd voice seed`
 	__Bezier__000000_2nd_voice_seed.IsDisplayed = false
@@ -312,16 +313,16 @@ func _(stage *models.StageStruct) {
 	__Bezier__000005_Growth_Curve_Seed.Transform = ``
 
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
-	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
+	__BezierGrid__000000_2nb_Voice.IsDisplayed = false
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
 	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
-	__BezierGrid__000002_First_Voice.IsDisplayed = true
+	__BezierGrid__000002_First_Voice.IsDisplayed = false
 
 	__BezierGrid__000003_First_Voice_Shift_Right.Name = `First Voice Shift Right`
-	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = true
+	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = false
 
 	__BezierGrid__000004_Growth_Curve.Name = `Growth Curve`
 	__BezierGrid__000004_Growth_Curve.IsDisplayed = false
@@ -339,7 +340,7 @@ func _(stage *models.StageStruct) {
 	__BezierGridStack__000000_The_GrowthCurveStack.IsDisplayed = false
 
 	__Circle__000000_Construction_Circle.Name = `Construction Circle`
-	__Circle__000000_Construction_Circle.IsDisplayed = false
+	__Circle__000000_Construction_Circle.IsDisplayed = true
 	__Circle__000000_Construction_Circle.CenterX = -15.246821
 	__Circle__000000_Construction_Circle.CenterY = 101.166075
 	__Circle__000000_Construction_Circle.HasBespokeRadius = true
@@ -438,10 +439,10 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_First_Voice_note_shifted_right.Name = `First Voice note shifted right`
-	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = true
+	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = false
 
 	__CircleGrid__000002_First_Voice_notes.Name = `First Voice notes`
-	__CircleGrid__000002_First_Voice_notes.IsDisplayed = true
+	__CircleGrid__000002_First_Voice_notes.IsDisplayed = false
 
 	__CircleGrid__000003_Growing_Circle_Grid.Name = `Growing Circle Grid`
 	__CircleGrid__000003_Growing_Circle_Grid.IsDisplayed = false
@@ -459,7 +460,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
-	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
+	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
 	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
@@ -646,14 +647,17 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000004_4_Construction.Name = `4. Construction`
 	__ShapeCategory__000004_4_Construction.IsExpanded = false
 
-	__ShapeCategory__000005_5_Growth.Name = `5. Growth`
-	__ShapeCategory__000005_5_Growth.IsExpanded = false
+	__ShapeCategory__000005_5_Vertical_growth.Name = `5. Vertical growth`
+	__ShapeCategory__000005_5_Vertical_growth.IsExpanded = false
 
-	__ShapeCategory__000006_6_Score_notation.Name = `6. Score notation`
-	__ShapeCategory__000006_6_Score_notation.IsExpanded = false
+	__ShapeCategory__000006_6_Circular_growth.Name = `6. Circular growth`
+	__ShapeCategory__000006_6_Circular_growth.IsExpanded = false
 
-	__ShapeCategory__000007_7_Composer.Name = `7. Composer`
-	__ShapeCategory__000007_7_Composer.IsExpanded = false
+	__ShapeCategory__000007_7_Score_notation.Name = `7. Score notation`
+	__ShapeCategory__000007_7_Score_notation.IsExpanded = false
+
+	__ShapeCategory__000008_8_Composer.Name = `8. Composer`
+	__ShapeCategory__000008_8_Composer.IsExpanded = false
 
 	__VerticalAxis__000000_Vertical_Axis.Name = `Vertical Axis`
 	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = true
@@ -675,39 +679,39 @@ func _(stage *models.StageStruct) {
 	__AxisGrid__000000_Construction_Axis_Grid.Reference = __Axis__000000_Construction_Axis
 	__AxisGrid__000000_Construction_Axis_Grid.ShapeCategory = __ShapeCategory__000004_4_Construction
 	__AxisGrid__000001_Measure_Lines.Reference = __Axis__000002_Measure
-	__AxisGrid__000001_Measure_Lines.ShapeCategory = __ShapeCategory__000006_6_Score_notation
+	__AxisGrid__000001_Measure_Lines.ShapeCategory = __ShapeCategory__000007_7_Score_notation
 	__AxisGrid__000002_Pitch_Lines.Reference = __Axis__000003_Pitch_Line
-	__AxisGrid__000002_Pitch_Lines.ShapeCategory = __ShapeCategory__000006_6_Score_notation
-	__Bezier__000002_Growth_Bezier_Right_Seed.ShapeCategory = __ShapeCategory__000005_5_Growth
-	__Bezier__000003_Growth_Curve_Next_Seed.ShapeCategory = __ShapeCategory__000005_5_Growth
-	__Bezier__000004_Growth_Curve_Next_Shift_Right_Seed.ShapeCategory = __ShapeCategory__000005_5_Growth
-	__Bezier__000005_Growth_Curve_Seed.ShapeCategory = __ShapeCategory__000005_5_Growth
+	__AxisGrid__000002_Pitch_Lines.ShapeCategory = __ShapeCategory__000007_7_Score_notation
+	__Bezier__000002_Growth_Bezier_Right_Seed.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
+	__Bezier__000003_Growth_Curve_Next_Seed.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
+	__Bezier__000004_Growth_Curve_Next_Shift_Right_Seed.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
+	__Bezier__000005_Growth_Curve_Seed.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
 	__BezierGrid__000000_2nb_Voice.Reference = __Bezier__000000_2nd_voice_seed
-	__BezierGrid__000000_2nb_Voice.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__BezierGrid__000000_2nb_Voice.ShapeCategory = __ShapeCategory__000008_8_Composer
 	__BezierGrid__000001_2nd_voice_shifted_right.Reference = __Bezier__000000_2nd_voice_seed
-	__BezierGrid__000001_2nd_voice_shifted_right.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__BezierGrid__000001_2nd_voice_shifted_right.ShapeCategory = __ShapeCategory__000008_8_Composer
 	__BezierGrid__000002_First_Voice.Reference = __Bezier__000001_First_Voice_seed
-	__BezierGrid__000002_First_Voice.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__BezierGrid__000002_First_Voice.ShapeCategory = __ShapeCategory__000008_8_Composer
 	__BezierGrid__000003_First_Voice_Shift_Right.Reference = __Bezier__000001_First_Voice_seed
-	__BezierGrid__000003_First_Voice_Shift_Right.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__BezierGrid__000003_First_Voice_Shift_Right.ShapeCategory = __ShapeCategory__000008_8_Composer
 	__BezierGrid__000004_Growth_Curve.Reference = __Bezier__000005_Growth_Curve_Seed
-	__BezierGrid__000004_Growth_Curve.ShapeCategory = __ShapeCategory__000005_5_Growth
+	__BezierGrid__000004_Growth_Curve.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
 	__BezierGrid__000005_Growth_Curve_Next.Reference = __Bezier__000003_Growth_Curve_Next_Seed
-	__BezierGrid__000005_Growth_Curve_Next.ShapeCategory = __ShapeCategory__000005_5_Growth
+	__BezierGrid__000005_Growth_Curve_Next.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
 	__BezierGrid__000006_Growth_Curve_Next_Shift_Right.Reference = __Bezier__000004_Growth_Curve_Next_Shift_Right_Seed
-	__BezierGrid__000006_Growth_Curve_Next_Shift_Right.ShapeCategory = __ShapeCategory__000005_5_Growth
+	__BezierGrid__000006_Growth_Curve_Next_Shift_Right.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
 	__BezierGrid__000007_Growth_Curve_Shift_Right.Reference = __Bezier__000002_Growth_Bezier_Right_Seed
-	__BezierGrid__000007_Growth_Curve_Shift_Right.ShapeCategory = __ShapeCategory__000005_5_Growth
-	__BezierGridStack__000000_The_GrowthCurveStack.ShapeCategory = __ShapeCategory__000005_5_Growth
+	__BezierGrid__000007_Growth_Curve_Shift_Right.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
+	__BezierGridStack__000000_The_GrowthCurveStack.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
 	__Circle__000000_Construction_Circle.ShapeCategory = __ShapeCategory__000004_4_Construction
 	__Circle__000004_Initial_Circle.ShapeCategory = __ShapeCategory__000001_1_Initial
 	__Circle__000005_Rotated_Next_Circle.ShapeCategory = __ShapeCategory__000002_2_Rotated
 	__CircleGrid__000000_Construction_Circle_Grid.Reference = __Circle__000000_Construction_Circle
 	__CircleGrid__000000_Construction_Circle_Grid.ShapeCategory = __ShapeCategory__000004_4_Construction
 	__CircleGrid__000001_First_Voice_note_shifted_right.Reference = __Circle__000001_First_voice_notes_seed
-	__CircleGrid__000001_First_Voice_note_shifted_right.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__CircleGrid__000001_First_Voice_note_shifted_right.ShapeCategory = __ShapeCategory__000008_8_Composer
 	__CircleGrid__000002_First_Voice_notes.Reference = __Circle__000001_First_voice_notes_seed
-	__CircleGrid__000002_First_Voice_notes.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__CircleGrid__000002_First_Voice_notes.ShapeCategory = __ShapeCategory__000008_8_Composer
 	__CircleGrid__000003_Growing_Circle_Grid.Reference = __Circle__000002_Growing
 	__CircleGrid__000003_Growing_Circle_Grid.ShapeCategory = __ShapeCategory__000003_3_Growing
 	__CircleGrid__000004_Growing_Circle_Grid_Shifted_Left.ShapeCategory = __ShapeCategory__000003_3_Growing
@@ -715,11 +719,11 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000005_Initial_Circle_Grid.ShapeCategory = __ShapeCategory__000001_1_Initial
 	__CircleGrid__000006_Rotated_Circle_Grid.ShapeCategory = __ShapeCategory__000002_2_Rotated
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Reference = __Circle__000001_First_voice_notes_seed
-	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.ShapeCategory = __ShapeCategory__000008_8_Composer
 	__CircleGrid__000008_Second_Voice_notes.Reference = __Circle__000001_First_voice_notes_seed
-	__CircleGrid__000008_Second_Voice_notes.ShapeCategory = __ShapeCategory__000007_7_Composer
+	__CircleGrid__000008_Second_Voice_notes.ShapeCategory = __ShapeCategory__000008_8_Composer
 	__HorizontalAxis__000000_Horizontal_Axis.ShapeCategory = __ShapeCategory__000000_0_Axes
-	__Key__000000_F_key.ShapeCategory = __ShapeCategory__000006_6_Score_notation
+	__Key__000000_F_key.ShapeCategory = __ShapeCategory__000007_7_Score_notation
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000001_Initial_Rhombus
 	__Parameter__000000_Reference.InitialCircle = __Circle__000004_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000001_Initial_Rhombus_Grid
