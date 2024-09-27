@@ -57,6 +57,8 @@ export class Parameter {
 	IsMinor: boolean = false
 	OriginX: number = 0
 	OriginY: number = 0
+	SpiralCenterX: number = 0
+	SpiralCenterY: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 	InitialRhombus?: Rhombus
@@ -183,6 +185,8 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.IsMinor = parameter.IsMinor
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
+	parameterAPI.SpiralCenterX = parameter.SpiralCenterX
+	parameterAPI.SpiralCenterY = parameter.SpiralCenterY
 
 	// insertion point for pointer fields encoding
 	parameterAPI.ParameterPointersEncoding.InitialRhombusID.Valid = true
@@ -539,6 +543,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.IsMinor = parameterAPI.IsMinor
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
+	parameter.SpiralCenterX = parameterAPI.SpiralCenterX
+	parameter.SpiralCenterY = parameterAPI.SpiralCenterY
 
 	// insertion point for pointer fields encoding
 	parameter.InitialRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64)

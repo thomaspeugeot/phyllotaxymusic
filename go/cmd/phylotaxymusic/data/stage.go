@@ -558,8 +558,10 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Speed = 2.900000
 	__Parameter__000000_Reference.Level = 5.600000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.OriginX = 20.000000
+	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 800.000000
+	__Parameter__000000_Reference.SpiralCenterX = 450.000000
+	__Parameter__000000_Reference.SpiralCenterY = 300.000000
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
@@ -662,7 +664,7 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000008_8_Composer.IsExpanded = false
 
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Name = `Reference Spiral Rhombus`
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = false
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = true
 
 	__VerticalAxis__000000_Vertical_Axis.Name = `Vertical Axis`
 	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = true
