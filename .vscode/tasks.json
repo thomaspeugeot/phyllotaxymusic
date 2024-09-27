@@ -64,6 +64,18 @@
 			"args": []
 		},
 		{
+			"label": "01 - gongc phylotaxymusic -clean",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/go/models"
+			},
+			"command": "gongc",
+			"group": "build",
+			"args": [
+				"-clean"
+			]
+		},
+		{
 			"label": "01 - gongc phylotaxymusic -skipNg",
 			"type": "shell",
 			"options": {

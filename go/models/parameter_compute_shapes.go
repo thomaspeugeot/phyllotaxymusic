@@ -71,6 +71,8 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeGrowthCurve()
 	p.Shapes = append(p.Shapes, p.GrowthCurve)
 
+	p.Shapes = append(p.Shapes, p.SpiralRhombus)
+
 	p.GrowthCurveShiftedRight.Move(p.GrowthCurveShiftedRightSeed, p.GrowthCurve,
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.GrowthCurveShiftedRight)

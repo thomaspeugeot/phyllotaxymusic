@@ -1285,6 +1285,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.StackHeight), formDiv)
 		case "BezierControlLengthRatio":
 			FormDivBasicFieldToField(&(parameter_.BezierControlLengthRatio), formDiv)
+		case "SpiralRhombus":
+			FormDivSelectFieldToField(&(parameter_.SpiralRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":
@@ -1685,6 +1687,89 @@ func (shapecategoryFormCallback *ShapeCategoryFormCallback) OnSave() {
 	}
 
 	fillUpTree(shapecategoryFormCallback.probe)
+}
+func __gong__New__SpiralRhombusFormCallback(
+	spiralrhombus *models.SpiralRhombus,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (spiralrhombusFormCallback *SpiralRhombusFormCallback) {
+	spiralrhombusFormCallback = new(SpiralRhombusFormCallback)
+	spiralrhombusFormCallback.probe = probe
+	spiralrhombusFormCallback.spiralrhombus = spiralrhombus
+	spiralrhombusFormCallback.formGroup = formGroup
+
+	spiralrhombusFormCallback.CreationMode = (spiralrhombus == nil)
+
+	return
+}
+
+type SpiralRhombusFormCallback struct {
+	spiralrhombus *models.SpiralRhombus
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
+
+	log.Println("SpiralRhombusFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	spiralrhombusFormCallback.probe.formStage.Checkout()
+
+	if spiralrhombusFormCallback.spiralrhombus == nil {
+		spiralrhombusFormCallback.spiralrhombus = new(models.SpiralRhombus).Stage(spiralrhombusFormCallback.probe.stageOfInterest)
+	}
+	spiralrhombus_ := spiralrhombusFormCallback.spiralrhombus
+	_ = spiralrhombus_
+
+	for _, formDiv := range spiralrhombusFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(spiralrhombus_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(spiralrhombus_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(spiralrhombus_.ShapeCategory), spiralrhombusFormCallback.probe.stageOfInterest, formDiv)
+		case "Rhombus":
+			FormDivSelectFieldToField(&(spiralrhombus_.Rhombus), spiralrhombusFormCallback.probe.stageOfInterest, formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if spiralrhombusFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralrhombus_.Unstage(spiralrhombusFormCallback.probe.stageOfInterest)
+	}
+
+	spiralrhombusFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.SpiralRhombus](
+		spiralrhombusFormCallback.probe,
+	)
+	spiralrhombusFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if spiralrhombusFormCallback.CreationMode || spiralrhombusFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralrhombusFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(spiralrhombusFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__SpiralRhombusFormCallback(
+			nil,
+			spiralrhombusFormCallback.probe,
+			newFormGroup,
+		)
+		spiralrhombus := new(models.SpiralRhombus)
+		FillUpForm(spiralrhombus, newFormGroup, spiralrhombusFormCallback.probe)
+		spiralrhombusFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(spiralrhombusFormCallback.probe)
 }
 func __gong__New__VerticalAxisFormCallback(
 	verticalaxis *models.VerticalAxis,

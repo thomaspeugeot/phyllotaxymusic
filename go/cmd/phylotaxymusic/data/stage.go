@@ -110,6 +110,8 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000007_7_Score_notation := (&models.ShapeCategory{Name: `7. Score notation`}).Stage(stage)
 	__ShapeCategory__000008_8_Composer := (&models.ShapeCategory{Name: `8. Composer`}).Stage(stage)
 
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus := (&models.SpiralRhombus{Name: `Reference Spiral Rhombus`}).Stage(stage)
+
 	__VerticalAxis__000000_Vertical_Axis := (&models.VerticalAxis{Name: `Vertical Axis`}).Stage(stage)
 
 	// Setup of values
@@ -340,7 +342,7 @@ func _(stage *models.StageStruct) {
 	__BezierGridStack__000000_The_GrowthCurveStack.IsDisplayed = false
 
 	__Circle__000000_Construction_Circle.Name = `Construction Circle`
-	__Circle__000000_Construction_Circle.IsDisplayed = true
+	__Circle__000000_Construction_Circle.IsDisplayed = false
 	__Circle__000000_Construction_Circle.CenterX = -15.246821
 	__Circle__000000_Construction_Circle.CenterY = 101.166075
 	__Circle__000000_Construction_Circle.HasBespokeRadius = true
@@ -651,13 +653,16 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000005_5_Vertical_growth.IsExpanded = false
 
 	__ShapeCategory__000006_6_Circular_growth.Name = `6. Circular growth`
-	__ShapeCategory__000006_6_Circular_growth.IsExpanded = false
+	__ShapeCategory__000006_6_Circular_growth.IsExpanded = true
 
 	__ShapeCategory__000007_7_Score_notation.Name = `7. Score notation`
 	__ShapeCategory__000007_7_Score_notation.IsExpanded = false
 
 	__ShapeCategory__000008_8_Composer.Name = `8. Composer`
 	__ShapeCategory__000008_8_Composer.IsExpanded = false
+
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Name = `Reference Spiral Rhombus`
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = false
 
 	__VerticalAxis__000000_Vertical_Axis.Name = `Vertical Axis`
 	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = true
@@ -754,6 +759,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.GrowthCurveNextShiftedRightSeed = __Bezier__000004_Growth_Curve_Next_Shift_Right_Seed
 	__Parameter__000000_Reference.GrowthCurveNextShiftedRight = __BezierGrid__000006_Growth_Curve_Next_Shift_Right
 	__Parameter__000000_Reference.GrowthCurveStack = __BezierGridStack__000000_The_GrowthCurveStack
+	__Parameter__000000_Reference.SpiralRhombus = __SpiralRhombus__000000_Reference_Spiral_Rhombus
 	__Parameter__000000_Reference.Fkey = __Key__000000_F_key
 	__Parameter__000000_Reference.PitchLines = __AxisGrid__000002_Pitch_Lines
 	__Parameter__000000_Reference.MeasureLines = __AxisGrid__000001_Measure_Lines
@@ -790,5 +796,7 @@ func _(stage *models.StageStruct) {
 	__RhombusGrid__000001_Initial_Rhombus_Grid.Reference = __Rhombus__000001_Initial_Rhombus
 	__RhombusGrid__000001_Initial_Rhombus_Grid.ShapeCategory = __ShapeCategory__000001_1_Initial
 	__RhombusGrid__000002_Rotated_Rhombus_Grid.ShapeCategory = __ShapeCategory__000002_2_Rotated
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.ShapeCategory = __ShapeCategory__000006_6_Circular_growth
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Rhombus = __Rhombus__000001_Initial_Rhombus
 	__VerticalAxis__000000_Vertical_Axis.ShapeCategory = __ShapeCategory__000000_0_Axes
 }

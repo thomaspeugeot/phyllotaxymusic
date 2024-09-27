@@ -3,9 +3,9 @@ module github.com/thomaspeugeot/phylotaxymusic
 go 1.23.1
 
 require (
-	github.com/fullstack-lang/gong v0.0.0-20240913012808-b115f5189beb
-	github.com/fullstack-lang/gongdoc v0.0.0-20240913012812-8679a1c476ca
-	github.com/fullstack-lang/gongsvg v0.0.0-20240913012829-cd738e5ff2fb
+	github.com/fullstack-lang/gong v0.0.0-20240916011352-0d7672bd6ac7
+	github.com/fullstack-lang/gongdoc v0.0.0-20240914153136-da0bcb103ac9
+	github.com/fullstack-lang/gongsvg v0.0.0-20240914153025-ac72275899a7
 	github.com/fullstack-lang/gongtable v0.0.0-20240913012831-5e98041bf57f
 	github.com/fullstack-lang/gongtone v0.0.0-20240913012834-55853ff2628b
 	github.com/fullstack-lang/gongtree v0.0.0-20240913012836-5f3a07c79d01

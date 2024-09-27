@@ -8,6 +8,7 @@ import { AxisGridAPI } from './axisgrid-api'
 import { BezierAPI } from './bezier-api'
 import { BezierGridAPI } from './beziergrid-api'
 import { BezierGridStackAPI } from './beziergridstack-api'
+import { SpiralRhombusAPI } from './spiralrhombus-api'
 import { KeyAPI } from './key-api'
 import { NoteInfoAPI } from './noteinfo-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
@@ -118,6 +119,8 @@ export class ParameterPointersEncoding {
 	GrowthCurveNextShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveNextShiftedRight.ID = 0
 
 	GrowthCurveStackID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveStack.ID = 0
+
+	SpiralRhombusID: NullInt64 = new NullInt64 // if pointer is null, SpiralRhombus.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 

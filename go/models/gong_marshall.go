@@ -1236,6 +1236,46 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_SpiralRhombus_Identifiers := make(map[*SpiralRhombus]string)
+	_ = map_SpiralRhombus_Identifiers
+
+	spiralrhombusOrdered := []*SpiralRhombus{}
+	for spiralrhombus := range stage.SpiralRhombuss {
+		spiralrhombusOrdered = append(spiralrhombusOrdered, spiralrhombus)
+	}
+	sort.Slice(spiralrhombusOrdered[:], func(i, j int) bool {
+		return spiralrhombusOrdered[i].Name < spiralrhombusOrdered[j].Name
+	})
+	if len(spiralrhombusOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, spiralrhombus := range spiralrhombusOrdered {
+
+		id = generatesIdentifier("SpiralRhombus", idx, spiralrhombus.Name)
+		map_SpiralRhombus_Identifiers[spiralrhombus] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralRhombus")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralrhombus.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralrhombus.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralrhombus.IsDisplayed))
+		initializerStatements += setValueField
+
+	}
+
 	map_VerticalAxis_Identifiers := make(map[*VerticalAxis]string)
 	_ = map_VerticalAxis_Identifiers
 
@@ -1813,6 +1853,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
+		if parameter.SpiralRhombus != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralRhombus")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralRhombus_Identifiers[parameter.SpiralRhombus])
+			pointersInitializesStatements += setPointerField
+		}
+
 		if parameter.Fkey != nil {
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -1987,6 +2035,32 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_ShapeCategory_Identifiers[shapecategory] = id
 
 		// Initialisation of values
+	}
+
+	for idx, spiralrhombus := range spiralrhombusOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("SpiralRhombus", idx, spiralrhombus.Name)
+		map_SpiralRhombus_Identifiers[spiralrhombus] = id
+
+		// Initialisation of values
+		if spiralrhombus.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralrhombus.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if spiralrhombus.Rhombus != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Rhombus")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[spiralrhombus.Rhombus])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, verticalaxis := range verticalaxisOrdered {

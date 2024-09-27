@@ -47,6 +47,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *ShapeCategory:
 		ok = stage.IsStagedShapeCategory(target)
 
+	case *SpiralRhombus:
+		ok = stage.IsStagedSpiralRhombus(target)
+
 	case *VerticalAxis:
 		ok = stage.IsStagedVerticalAxis(target)
 
@@ -155,6 +158,13 @@ func (stage *StageStruct) IsStagedShapeCategory(shapecategory *ShapeCategory) (o
 	return
 }
 
+func (stage *StageStruct) IsStagedSpiralRhombus(spiralrhombus *SpiralRhombus) (ok bool) {
+
+	_, ok = stage.SpiralRhombuss[spiralrhombus]
+
+	return
+}
+
 func (stage *StageStruct) IsStagedVerticalAxis(verticalaxis *VerticalAxis) (ok bool) {
 
 	_, ok = stage.VerticalAxiss[verticalaxis]
@@ -211,6 +221,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *ShapeCategory:
 		stage.StageBranchShapeCategory(target)
+
+	case *SpiralRhombus:
+		stage.StageBranchSpiralRhombus(target)
 
 	case *VerticalAxis:
 		stage.StageBranchVerticalAxis(target)
@@ -519,6 +532,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.GrowthCurveStack != nil {
 		StageBranch(stage, parameter.GrowthCurveStack)
 	}
+	if parameter.SpiralRhombus != nil {
+		StageBranch(stage, parameter.SpiralRhombus)
+	}
 	if parameter.Fkey != nil {
 		StageBranch(stage, parameter.Fkey)
 	}
@@ -623,6 +639,27 @@ func (stage *StageStruct) StageBranchShapeCategory(shapecategory *ShapeCategory)
 
 }
 
+func (stage *StageStruct) StageBranchSpiralRhombus(spiralrhombus *SpiralRhombus) {
+
+	// check if instance is already staged
+	if IsStaged(stage, spiralrhombus) {
+		return
+	}
+
+	spiralrhombus.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if spiralrhombus.ShapeCategory != nil {
+		StageBranch(stage, spiralrhombus.ShapeCategory)
+	}
+	if spiralrhombus.Rhombus != nil {
+		StageBranch(stage, spiralrhombus.Rhombus)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *StageStruct) StageBranchVerticalAxis(verticalaxis *VerticalAxis) {
 
 	// check if instance is already staged
@@ -706,6 +743,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *ShapeCategory:
 		toT := CopyBranchShapeCategory(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *SpiralRhombus:
+		toT := CopyBranchSpiralRhombus(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *VerticalAxis:
@@ -1060,6 +1101,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.GrowthCurveStack != nil {
 		parameterTo.GrowthCurveStack = CopyBranchBezierGridStack(mapOrigCopy, parameterFrom.GrowthCurveStack)
 	}
+	if parameterFrom.SpiralRhombus != nil {
+		parameterTo.SpiralRhombus = CopyBranchSpiralRhombus(mapOrigCopy, parameterFrom.SpiralRhombus)
+	}
 	if parameterFrom.Fkey != nil {
 		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
 	}
@@ -1177,6 +1221,31 @@ func CopyBranchShapeCategory(mapOrigCopy map[any]any, shapecategoryFrom *ShapeCa
 	return
 }
 
+func CopyBranchSpiralRhombus(mapOrigCopy map[any]any, spiralrhombusFrom *SpiralRhombus) (spiralrhombusTo *SpiralRhombus) {
+
+	// spiralrhombusFrom has already been copied
+	if _spiralrhombusTo, ok := mapOrigCopy[spiralrhombusFrom]; ok {
+		spiralrhombusTo = _spiralrhombusTo.(*SpiralRhombus)
+		return
+	}
+
+	spiralrhombusTo = new(SpiralRhombus)
+	mapOrigCopy[spiralrhombusFrom] = spiralrhombusTo
+	spiralrhombusFrom.CopyBasicFields(spiralrhombusTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if spiralrhombusFrom.ShapeCategory != nil {
+		spiralrhombusTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, spiralrhombusFrom.ShapeCategory)
+	}
+	if spiralrhombusFrom.Rhombus != nil {
+		spiralrhombusTo.Rhombus = CopyBranchRhombus(mapOrigCopy, spiralrhombusFrom.Rhombus)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 func CopyBranchVerticalAxis(mapOrigCopy map[any]any, verticalaxisFrom *VerticalAxis) (verticalaxisTo *VerticalAxis) {
 
 	// verticalaxisFrom has already been copied
@@ -1248,6 +1317,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *ShapeCategory:
 		stage.UnstageBranchShapeCategory(target)
+
+	case *SpiralRhombus:
+		stage.UnstageBranchSpiralRhombus(target)
 
 	case *VerticalAxis:
 		stage.UnstageBranchVerticalAxis(target)
@@ -1556,6 +1628,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	if parameter.GrowthCurveStack != nil {
 		UnstageBranch(stage, parameter.GrowthCurveStack)
 	}
+	if parameter.SpiralRhombus != nil {
+		UnstageBranch(stage, parameter.SpiralRhombus)
+	}
 	if parameter.Fkey != nil {
 		UnstageBranch(stage, parameter.Fkey)
 	}
@@ -1655,6 +1730,27 @@ func (stage *StageStruct) UnstageBranchShapeCategory(shapecategory *ShapeCategor
 	shapecategory.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchSpiralRhombus(spiralrhombus *SpiralRhombus) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, spiralrhombus) {
+		return
+	}
+
+	spiralrhombus.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if spiralrhombus.ShapeCategory != nil {
+		UnstageBranch(stage, spiralrhombus.ShapeCategory)
+	}
+	if spiralrhombus.Rhombus != nil {
+		UnstageBranch(stage, spiralrhombus.Rhombus)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 

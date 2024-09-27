@@ -167,6 +167,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	GrowthCurveStackID sql.NullInt64
 
+	// field SpiralRhombus is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralRhombusID sql.NullInt64
+
 	// field Fkey is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	FkeyID sql.NullInt64
@@ -897,6 +901,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.GrowthCurveStackID.Valid = true
 		}
 
+		// commit pointer value parameter.SpiralRhombus translates to updating the parameter.SpiralRhombusID
+		parameterDB.SpiralRhombusID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralRhombus != nil {
+			if SpiralRhombusId, ok := backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusPtr_SpiralRhombusDBID[parameter.SpiralRhombus]; ok {
+				parameterDB.SpiralRhombusID.Int64 = int64(SpiralRhombusId)
+				parameterDB.SpiralRhombusID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralRhombusID.Int64 = 0
+			parameterDB.SpiralRhombusID.Valid = true
+		}
+
 		// commit pointer value parameter.Fkey translates to updating the parameter.FkeyID
 		parameterDB.FkeyID.Valid = true // allow for a 0 value (nil association)
 		if parameter.Fkey != nil {
@@ -1333,6 +1349,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.GrowthCurveStack = nil
 	if parameterDB.GrowthCurveStackID.Int64 != 0 {
 		parameter.GrowthCurveStack = backRepo.BackRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackPtr[uint(parameterDB.GrowthCurveStackID.Int64)]
+	}
+	// SpiralRhombus field
+	parameter.SpiralRhombus = nil
+	if parameterDB.SpiralRhombusID.Int64 != 0 {
+		parameter.SpiralRhombus = backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusPtr[uint(parameterDB.SpiralRhombusID.Int64)]
 	}
 	// Fkey field
 	parameter.Fkey = nil
@@ -2114,6 +2135,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.GrowthCurveStackID.Int64 != 0 {
 			parameterDB.GrowthCurveStackID.Int64 = int64(BackRepoBezierGridStackid_atBckpTime_newID[uint(parameterDB.GrowthCurveStackID.Int64)])
 			parameterDB.GrowthCurveStackID.Valid = true
+		}
+
+		// reindexing SpiralRhombus field
+		if parameterDB.SpiralRhombusID.Int64 != 0 {
+			parameterDB.SpiralRhombusID.Int64 = int64(BackRepoSpiralRhombusid_atBckpTime_newID[uint(parameterDB.SpiralRhombusID.Int64)])
+			parameterDB.SpiralRhombusID.Valid = true
 		}
 
 		// reindexing Fkey field

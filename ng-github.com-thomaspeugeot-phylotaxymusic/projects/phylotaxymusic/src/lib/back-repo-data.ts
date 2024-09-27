@@ -29,6 +29,8 @@ import { RhombusGridAPI } from './rhombusgrid-api'
 
 import { ShapeCategoryAPI } from './shapecategory-api'
 
+import { SpiralRhombusAPI } from './spiralrhombus-api'
+
 import { VerticalAxisAPI } from './verticalaxis-api'
 
 
@@ -61,6 +63,8 @@ export class BackRepoData {
 	RhombusGridAPIs = new Array<RhombusGridAPI>()
 
 	ShapeCategoryAPIs = new Array<ShapeCategoryAPI>()
+
+	SpiralRhombusAPIs = new Array<SpiralRhombusAPI>()
 
 	VerticalAxisAPIs = new Array<VerticalAxisAPI>()
 
@@ -95,6 +99,8 @@ export class BackRepoData {
 		this.RhombusGridAPIs = data?.RhombusGridAPIs || [];
 
 		this.ShapeCategoryAPIs = data?.ShapeCategoryAPIs || [];
+
+		this.SpiralRhombusAPIs = data?.SpiralRhombusAPIs || [];
 
 		this.VerticalAxisAPIs = data?.VerticalAxisAPIs || [];
 

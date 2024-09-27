@@ -48,6 +48,8 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.RhombusGrid](probe)
 	case *models.ShapeCategory:
 		fillUpTable[models.ShapeCategory](probe)
+	case *models.SpiralRhombus:
+		fillUpTable[models.SpiralRhombus](probe)
 	case *models.VerticalAxis:
 		fillUpTable[models.VerticalAxis](probe)
 	default:

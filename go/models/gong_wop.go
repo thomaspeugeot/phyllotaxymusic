@@ -369,6 +369,18 @@ func (from *ShapeCategory) CopyBasicFields(to *ShapeCategory) {
 	to.IsExpanded = from.IsExpanded
 }
 
+type SpiralRhombus_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+}
+
+func (from *SpiralRhombus) CopyBasicFields(to *SpiralRhombus) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+}
+
 type VerticalAxis_WOP struct {
 	// insertion point
 	Name string

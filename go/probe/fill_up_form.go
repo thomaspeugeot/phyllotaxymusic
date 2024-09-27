@@ -386,6 +386,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("BezierControlLengthRatio", instanceWithInferedType.BezierControlLengthRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("SpiralRhombus", instanceWithInferedType.SpiralRhombus, formGroup, probe)
 		AssociationFieldToForm("Fkey", instanceWithInferedType.Fkey, formGroup, probe)
 		BasicFieldtoForm("FkeySizeRatio", instanceWithInferedType.FkeySizeRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -505,6 +506,15 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("IsExpanded", instanceWithInferedType.IsExpanded, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+
+	case *models.SpiralRhombus:
+		// insertion point
+		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
+		AssociationFieldToForm("Rhombus", instanceWithInferedType.Rhombus, formGroup, probe)
 
 	case *models.VerticalAxis:
 		// insertion point

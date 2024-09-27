@@ -60,6 +60,10 @@ import { ShapeCategoryAPI } from './shapecategory-api'
 import { ShapeCategory, CopyShapeCategoryAPIToShapeCategory } from './shapecategory'
 import { ShapeCategoryService } from './shapecategory.service'
 
+import { SpiralRhombusAPI } from './spiralrhombus-api'
+import { SpiralRhombus, CopySpiralRhombusAPIToSpiralRhombus } from './spiralrhombus'
+import { SpiralRhombusService } from './spiralrhombus.service'
+
 import { VerticalAxisAPI } from './verticalaxis-api'
 import { VerticalAxis, CopyVerticalAxisAPIToVerticalAxis } from './verticalaxis'
 import { VerticalAxisService } from './verticalaxis.service'
@@ -113,6 +117,9 @@ export class FrontRepo { // insertion point sub template
 	array_ShapeCategorys = new Array<ShapeCategory>() // array of front instances
 	map_ID_ShapeCategory = new Map<number, ShapeCategory>() // map of front instances
 
+	array_SpiralRhombuss = new Array<SpiralRhombus>() // array of front instances
+	map_ID_SpiralRhombus = new Map<number, SpiralRhombus>() // map of front instances
+
 	array_VerticalAxiss = new Array<VerticalAxis>() // array of front instances
 	map_ID_VerticalAxis = new Map<number, VerticalAxis>() // map of front instances
 
@@ -151,6 +158,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_RhombusGrids as unknown as Array<Type>
 			case 'ShapeCategory':
 				return this.array_ShapeCategorys as unknown as Array<Type>
+			case 'SpiralRhombus':
+				return this.array_SpiralRhombuss as unknown as Array<Type>
 			case 'VerticalAxis':
 				return this.array_VerticalAxiss as unknown as Array<Type>
 			default:
@@ -189,6 +198,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_RhombusGrid as unknown as Map<number, Type>
 			case 'ShapeCategory':
 				return this.map_ID_ShapeCategory as unknown as Map<number, Type>
+			case 'SpiralRhombus':
+				return this.map_ID_SpiralRhombus as unknown as Map<number, Type>
 			case 'VerticalAxis':
 				return this.map_ID_VerticalAxis as unknown as Map<number, Type>
 			default:
@@ -272,6 +283,7 @@ export class FrontRepoService {
 		private rhombusService: RhombusService,
 		private rhombusgridService: RhombusGridService,
 		private shapecategoryService: ShapeCategoryService,
+		private spiralrhombusService: SpiralRhombusService,
 		private verticalaxisService: VerticalAxisService,
 	) { }
 
@@ -319,6 +331,7 @@ export class FrontRepoService {
 		Observable<RhombusAPI[]>,
 		Observable<RhombusGridAPI[]>,
 		Observable<ShapeCategoryAPI[]>,
+		Observable<SpiralRhombusAPI[]>,
 		Observable<VerticalAxisAPI[]>,
 	] = [
 			// Using "combineLatest" with a placeholder observable.
@@ -344,6 +357,7 @@ export class FrontRepoService {
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.shapecategoryService.getShapeCategorys(this.GONG__StackPath, this.frontRepo),
+			this.spiralrhombusService.getSpiralRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.verticalaxisService.getVerticalAxiss(this.GONG__StackPath, this.frontRepo),
 		];
 
@@ -374,6 +388,7 @@ export class FrontRepoService {
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.shapecategoryService.getShapeCategorys(this.GONG__StackPath, this.frontRepo),
+			this.spiralrhombusService.getSpiralRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.verticalaxisService.getVerticalAxiss(this.GONG__StackPath, this.frontRepo),
 		]
 
@@ -399,6 +414,7 @@ export class FrontRepoService {
 						rhombuss_,
 						rhombusgrids_,
 						shapecategorys_,
+						spiralrhombuss_,
 						verticalaxiss_,
 					]) => {
 						let _this = this
@@ -432,6 +448,8 @@ export class FrontRepoService {
 						rhombusgrids = rhombusgrids_ as RhombusGridAPI[]
 						var shapecategorys: ShapeCategoryAPI[]
 						shapecategorys = shapecategorys_ as ShapeCategoryAPI[]
+						var spiralrhombuss: SpiralRhombusAPI[]
+						spiralrhombuss = spiralrhombuss_ as SpiralRhombusAPI[]
 						var verticalaxiss: VerticalAxisAPI[]
 						verticalaxiss = verticalaxiss_ as VerticalAxisAPI[]
 
@@ -607,6 +625,18 @@ export class FrontRepoService {
 						)
 
 						// init the arrays
+						this.frontRepo.array_SpiralRhombuss = []
+						this.frontRepo.map_ID_SpiralRhombus.clear()
+
+						spiralrhombuss.forEach(
+							spiralrhombusAPI => {
+								let spiralrhombus = new SpiralRhombus
+								this.frontRepo.array_SpiralRhombuss.push(spiralrhombus)
+								this.frontRepo.map_ID_SpiralRhombus.set(spiralrhombusAPI.ID, spiralrhombus)
+							}
+						)
+
+						// init the arrays
 						this.frontRepo.array_VerticalAxiss = []
 						this.frontRepo.map_ID_VerticalAxis.clear()
 
@@ -731,6 +761,14 @@ export class FrontRepoService {
 							shapecategoryAPI => {
 								let shapecategory = this.frontRepo.map_ID_ShapeCategory.get(shapecategoryAPI.ID)
 								CopyShapeCategoryAPIToShapeCategory(shapecategoryAPI, shapecategory!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spiralrhombuss.forEach(
+							spiralrhombusAPI => {
+								let spiralrhombus = this.frontRepo.map_ID_SpiralRhombus.get(spiralrhombusAPI.ID)
+								CopySpiralRhombusAPIToSpiralRhombus(spiralrhombusAPI, spiralrhombus!, this.frontRepo)
 							}
 						)
 
@@ -942,6 +980,18 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				this.frontRepo.array_SpiralRhombuss = []
+				this.frontRepo.map_ID_SpiralRhombus.clear()
+
+				backRepoData.SpiralRhombusAPIs.forEach(
+					spiralrhombusAPI => {
+						let spiralrhombus = new SpiralRhombus
+						this.frontRepo.array_SpiralRhombuss.push(spiralrhombus)
+						this.frontRepo.map_ID_SpiralRhombus.set(spiralrhombusAPI.ID, spiralrhombus)
+					}
+				)
+
+				// init the arrays
 				this.frontRepo.array_VerticalAxiss = []
 				this.frontRepo.map_ID_VerticalAxis.clear()
 
@@ -1072,6 +1122,14 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.SpiralRhombusAPIs.forEach(
+					spiralrhombusAPI => {
+						let spiralrhombus = this.frontRepo.map_ID_SpiralRhombus.get(spiralrhombusAPI.ID)
+						CopySpiralRhombusAPIToSpiralRhombus(spiralrhombusAPI, spiralrhombus!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.VerticalAxisAPIs.forEach(
 					verticalaxisAPI => {
 						let verticalaxis = this.frontRepo.map_ID_VerticalAxis.get(verticalaxisAPI.ID)
@@ -1140,6 +1198,9 @@ export function getRhombusGridUniqueID(id: number): number {
 export function getShapeCategoryUniqueID(id: number): number {
 	return 89 * id
 }
-export function getVerticalAxisUniqueID(id: number): number {
+export function getSpiralRhombusUniqueID(id: number): number {
 	return 97 * id
+}
+export function getVerticalAxisUniqueID(id: number): number {
+	return 101 * id
 }

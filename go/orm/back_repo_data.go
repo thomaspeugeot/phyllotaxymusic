@@ -32,6 +32,8 @@ type BackRepoData struct {
 
 	ShapeCategoryAPIs []*ShapeCategoryAPI
 
+	SpiralRhombusAPIs []*SpiralRhombusAPI
+
 	VerticalAxisAPIs []*VerticalAxisAPI
 }
 
@@ -175,6 +177,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		shapecategoryDB.CopyBasicFieldsToShapeCategory_WOP(&shapecategoryAPI.ShapeCategory_WOP)
 
 		backRepoData.ShapeCategoryAPIs = append(backRepoData.ShapeCategoryAPIs, &shapecategoryAPI)
+	}
+
+	for _, spiralrhombusDB := range backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusDB {
+
+		var spiralrhombusAPI SpiralRhombusAPI
+		spiralrhombusAPI.ID = spiralrhombusDB.ID
+		spiralrhombusAPI.SpiralRhombusPointersEncoding = spiralrhombusDB.SpiralRhombusPointersEncoding
+		spiralrhombusDB.CopyBasicFieldsToSpiralRhombus_WOP(&spiralrhombusAPI.SpiralRhombus_WOP)
+
+		backRepoData.SpiralRhombusAPIs = append(backRepoData.SpiralRhombusAPIs, &spiralrhombusAPI)
 	}
 
 	for _, verticalaxisDB := range backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisDB {

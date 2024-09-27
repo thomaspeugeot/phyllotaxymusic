@@ -79,6 +79,8 @@ type Parameter struct {
 	// ratio of the length of the control vector to the side length
 	BezierControlLengthRatio float64
 
+	SpiralRhombus *SpiralRhombus
+
 	// the score
 	Fkey                *Key
 	FkeySizeRatio       float64
