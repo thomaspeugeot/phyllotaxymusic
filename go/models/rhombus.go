@@ -86,3 +86,16 @@ func (r *Rhombus) getCoordinates() ([4]float64, [4]float64) {
 	y_s[3] = r.CenterY + halfVerticalDiagonal*math.Sin(angleRad+math.Pi*1.5)
 	return x_s, y_s
 }
+
+func (r Rhombus) Copy() Rhombus {
+	return Rhombus{
+		Name:          r.Name,
+		AbstractShape: r.AbstractShape, // Assuming AbstractShape is a copyable struct
+		CenterX:       r.CenterX,
+		CenterY:       r.CenterY,
+		SideLength:    r.SideLength,
+		Angle:         r.Angle,
+		InsideAngle:   r.InsideAngle,
+		Presentation:  r.Presentation, // Assuming Presentation is a copyable struct
+	}
+}

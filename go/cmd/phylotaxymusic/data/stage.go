@@ -539,9 +539,9 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
-	__Parameter__000000_Reference.Z = 15
+	__Parameter__000000_Reference.Z = 6
 	__Parameter__000000_Reference.InsideAngle = 106.000000
-	__Parameter__000000_Reference.SideLength = 50.000000
+	__Parameter__000000_Reference.SideLength = 70.000000
 	__Parameter__000000_Reference.StackWidth = 3
 	__Parameter__000000_Reference.NbShitRight = 2
 	__Parameter__000000_Reference.StackHeight = 4
@@ -564,7 +564,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.OriginY = 800.000000
 	__Parameter__000000_Reference.SpiralOriginX = 450.000000
 	__Parameter__000000_Reference.SpiralOriginY = 300.000000
-	__Parameter__000000_Reference.SpiralInitialRadius = 110.000000
+	__Parameter__000000_Reference.SpiralInitialRadius = 275.000000
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
