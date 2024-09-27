@@ -1430,20 +1430,27 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].OriginY = exprSign * fielValue
-				case "SpiralCenterX":
+				case "SpiralOriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].SpiralCenterX = exprSign * fielValue
-				case "SpiralCenterY":
+					__gong__map_Parameter[identifier].SpiralOriginX = exprSign * fielValue
+				case "SpiralOriginY":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].SpiralCenterY = exprSign * fielValue
+					__gong__map_Parameter[identifier].SpiralOriginY = exprSign * fielValue
+				case "SpiralInitialRadius":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].SpiralInitialRadius = exprSign * fielValue
 				}
 			case "Rhombus":
 				switch fieldName {

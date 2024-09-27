@@ -317,11 +317,14 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.OriginY
 	OriginY_Data sql.NullFloat64
 
-	// Declation for basic field parameterDB.SpiralCenterX
-	SpiralCenterX_Data sql.NullFloat64
+	// Declation for basic field parameterDB.SpiralOriginX
+	SpiralOriginX_Data sql.NullFloat64
 
-	// Declation for basic field parameterDB.SpiralCenterY
-	SpiralCenterY_Data sql.NullFloat64
+	// Declation for basic field parameterDB.SpiralOriginY
+	SpiralOriginY_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.SpiralInitialRadius
+	SpiralInitialRadius_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -397,9 +400,11 @@ type ParameterWOP struct {
 
 	OriginY float64 `xlsx:"26"`
 
-	SpiralCenterX float64 `xlsx:"27"`
+	SpiralOriginX float64 `xlsx:"27"`
 
-	SpiralCenterY float64 `xlsx:"28"`
+	SpiralOriginY float64 `xlsx:"28"`
+
+	SpiralInitialRadius float64 `xlsx:"29"`
 	// insertion for WOP pointer fields
 }
 
@@ -432,8 +437,9 @@ var Parameter_Fields = []string{
 	"IsMinor",
 	"OriginX",
 	"OriginY",
-	"SpiralCenterX",
-	"SpiralCenterY",
+	"SpiralOriginX",
+	"SpiralOriginY",
+	"SpiralInitialRadius",
 }
 
 type BackRepoParameterStruct struct {
@@ -1553,11 +1559,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.OriginY_Data.Float64 = parameter.OriginY
 	parameterDB.OriginY_Data.Valid = true
 
-	parameterDB.SpiralCenterX_Data.Float64 = parameter.SpiralCenterX
-	parameterDB.SpiralCenterX_Data.Valid = true
+	parameterDB.SpiralOriginX_Data.Float64 = parameter.SpiralOriginX
+	parameterDB.SpiralOriginX_Data.Valid = true
 
-	parameterDB.SpiralCenterY_Data.Float64 = parameter.SpiralCenterY
-	parameterDB.SpiralCenterY_Data.Valid = true
+	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
+	parameterDB.SpiralOriginY_Data.Valid = true
+
+	parameterDB.SpiralInitialRadius_Data.Float64 = parameter.SpiralInitialRadius
+	parameterDB.SpiralInitialRadius_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -1642,11 +1651,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.OriginY_Data.Float64 = parameter.OriginY
 	parameterDB.OriginY_Data.Valid = true
 
-	parameterDB.SpiralCenterX_Data.Float64 = parameter.SpiralCenterX
-	parameterDB.SpiralCenterX_Data.Valid = true
+	parameterDB.SpiralOriginX_Data.Float64 = parameter.SpiralOriginX
+	parameterDB.SpiralOriginX_Data.Valid = true
 
-	parameterDB.SpiralCenterY_Data.Float64 = parameter.SpiralCenterY
-	parameterDB.SpiralCenterY_Data.Valid = true
+	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
+	parameterDB.SpiralOriginY_Data.Valid = true
+
+	parameterDB.SpiralInitialRadius_Data.Float64 = parameter.SpiralInitialRadius
+	parameterDB.SpiralInitialRadius_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -1731,11 +1743,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.OriginY_Data.Float64 = parameter.OriginY
 	parameterDB.OriginY_Data.Valid = true
 
-	parameterDB.SpiralCenterX_Data.Float64 = parameter.SpiralCenterX
-	parameterDB.SpiralCenterX_Data.Valid = true
+	parameterDB.SpiralOriginX_Data.Float64 = parameter.SpiralOriginX
+	parameterDB.SpiralOriginX_Data.Valid = true
 
-	parameterDB.SpiralCenterY_Data.Float64 = parameter.SpiralCenterY
-	parameterDB.SpiralCenterY_Data.Valid = true
+	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
+	parameterDB.SpiralOriginY_Data.Valid = true
+
+	parameterDB.SpiralInitialRadius_Data.Float64 = parameter.SpiralInitialRadius
+	parameterDB.SpiralInitialRadius_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -1767,8 +1782,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
-	parameter.SpiralCenterX = parameterDB.SpiralCenterX_Data.Float64
-	parameter.SpiralCenterY = parameterDB.SpiralCenterY_Data.Float64
+	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
+	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
+	parameter.SpiralInitialRadius = parameterDB.SpiralInitialRadius_Data.Float64
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -1800,8 +1816,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
-	parameter.SpiralCenterX = parameterDB.SpiralCenterX_Data.Float64
-	parameter.SpiralCenterY = parameterDB.SpiralCenterY_Data.Float64
+	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
+	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
+	parameter.SpiralInitialRadius = parameterDB.SpiralInitialRadius_Data.Float64
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -1834,8 +1851,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
-	parameter.SpiralCenterX = parameterDB.SpiralCenterX_Data.Float64
-	parameter.SpiralCenterY = parameterDB.SpiralCenterY_Data.Float64
+	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
+	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
+	parameter.SpiralInitialRadius = parameterDB.SpiralInitialRadius_Data.Float64
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo

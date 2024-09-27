@@ -275,8 +275,9 @@ type Parameter_WOP struct {
 	IsMinor bool
 	OriginX float64
 	OriginY float64
-	SpiralCenterX float64
-	SpiralCenterY float64
+	SpiralOriginX float64
+	SpiralOriginY float64
+	SpiralInitialRadius float64
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -307,8 +308,9 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.IsMinor = from.IsMinor
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
-	to.SpiralCenterX = from.SpiralCenterX
-	to.SpiralCenterY = from.SpiralCenterY
+	to.SpiralOriginX = from.SpiralOriginX
+	to.SpiralOriginY = from.SpiralOriginY
+	to.SpiralInitialRadius = from.SpiralInitialRadius
 }
 
 type Rhombus_WOP struct {

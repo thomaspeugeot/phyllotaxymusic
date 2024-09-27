@@ -131,8 +131,9 @@ type Parameter struct {
 	VerticalAxis   *VerticalAxis
 
 	// drawing the spiral
-	SpiralCenterX float64
-	SpiralCenterY float64
+	SpiralOriginX       float64
+	SpiralOriginY       float64
+	SpiralInitialRadius float64
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {

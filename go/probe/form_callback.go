@@ -1345,10 +1345,12 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.HorizontalAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "VerticalAxis":
 			FormDivSelectFieldToField(&(parameter_.VerticalAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "SpiralCenterX":
-			FormDivBasicFieldToField(&(parameter_.SpiralCenterX), formDiv)
-		case "SpiralCenterY":
-			FormDivBasicFieldToField(&(parameter_.SpiralCenterY), formDiv)
+		case "SpiralOriginX":
+			FormDivBasicFieldToField(&(parameter_.SpiralOriginX), formDiv)
+		case "SpiralOriginY":
+			FormDivBasicFieldToField(&(parameter_.SpiralOriginY), formDiv)
+		case "SpiralInitialRadius":
+			FormDivBasicFieldToField(&(parameter_.SpiralInitialRadius), formDiv)
 		}
 	}
 

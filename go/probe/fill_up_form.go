@@ -433,9 +433,11 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		AssociationFieldToForm("HorizontalAxis", instanceWithInferedType.HorizontalAxis, formGroup, probe)
 		AssociationFieldToForm("VerticalAxis", instanceWithInferedType.VerticalAxis, formGroup, probe)
-		BasicFieldtoForm("SpiralCenterX", instanceWithInferedType.SpiralCenterX, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("SpiralOriginX", instanceWithInferedType.SpiralOriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("SpiralCenterY", instanceWithInferedType.SpiralCenterY, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("SpiralOriginY", instanceWithInferedType.SpiralOriginY, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("SpiralInitialRadius", instanceWithInferedType.SpiralInitialRadius, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 
 	case *models.Rhombus:

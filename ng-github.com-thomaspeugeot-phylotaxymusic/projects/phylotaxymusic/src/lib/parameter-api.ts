@@ -52,8 +52,9 @@ export class ParameterAPI {
 	IsMinor: boolean = false
 	OriginX: number = 0
 	OriginY: number = 0
-	SpiralCenterX: number = 0
-	SpiralCenterY: number = 0
+	SpiralOriginX: number = 0
+	SpiralOriginY: number = 0
+	SpiralInitialRadius: number = 0
 
 	// insertion point for other decls
 

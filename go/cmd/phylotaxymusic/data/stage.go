@@ -450,7 +450,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000003_Growing_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000004_Growing_Circle_Grid_Shifted_Left.Name = `Growing Circle Grid Shifted Left`
-	__CircleGrid__000004_Growing_Circle_Grid_Shifted_Left.IsDisplayed = false
+	__CircleGrid__000004_Growing_Circle_Grid_Shifted_Left.IsDisplayed = true
 
 	__CircleGrid__000005_Initial_Circle_Grid.Name = `Initial Circle Grid`
 	__CircleGrid__000005_Initial_Circle_Grid.IsDisplayed = false
@@ -539,7 +539,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.M = 2
 	__Parameter__000000_Reference.Z = 15
 	__Parameter__000000_Reference.InsideAngle = 106.000000
-	__Parameter__000000_Reference.SideLength = 170.000000
+	__Parameter__000000_Reference.SideLength = 70.000000
 	__Parameter__000000_Reference.StackWidth = 3
 	__Parameter__000000_Reference.NbShitRight = 2
 	__Parameter__000000_Reference.StackHeight = 15
@@ -560,8 +560,9 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.IsMinor = true
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 800.000000
-	__Parameter__000000_Reference.SpiralCenterX = 450.000000
-	__Parameter__000000_Reference.SpiralCenterY = 300.000000
+	__Parameter__000000_Reference.SpiralOriginX = 450.000000
+	__Parameter__000000_Reference.SpiralOriginY = 300.000000
+	__Parameter__000000_Reference.SpiralInitialRadius = 455.000000
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
@@ -628,7 +629,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000003_Rotated_Rhombus.Transform = ``
 
 	__RhombusGrid__000000_Growing_Rhombus_Grid.Name = `Growing Rhombus Grid`
-	__RhombusGrid__000000_Growing_Rhombus_Grid.IsDisplayed = false
+	__RhombusGrid__000000_Growing_Rhombus_Grid.IsDisplayed = true
 
 	__RhombusGrid__000001_Initial_Rhombus_Grid.Name = `Initial Rhombus Grid`
 	__RhombusGrid__000001_Initial_Rhombus_Grid.IsDisplayed = false
@@ -646,13 +647,13 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000002_2_Rotated.IsExpanded = false
 
 	__ShapeCategory__000003_3_Growing.Name = `3. Growing`
-	__ShapeCategory__000003_3_Growing.IsExpanded = false
+	__ShapeCategory__000003_3_Growing.IsExpanded = true
 
 	__ShapeCategory__000004_4_Construction.Name = `4. Construction`
-	__ShapeCategory__000004_4_Construction.IsExpanded = false
+	__ShapeCategory__000004_4_Construction.IsExpanded = true
 
 	__ShapeCategory__000005_5_Vertical_growth.Name = `5. Vertical growth`
-	__ShapeCategory__000005_5_Vertical_growth.IsExpanded = false
+	__ShapeCategory__000005_5_Vertical_growth.IsExpanded = true
 
 	__ShapeCategory__000006_6_Circular_growth.Name = `6. Circular growth`
 	__ShapeCategory__000006_6_Circular_growth.IsExpanded = true
