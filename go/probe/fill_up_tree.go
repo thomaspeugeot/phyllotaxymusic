@@ -212,6 +212,16 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "SpiralRhombusGrid":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralRhombusGrid](probe.stageOfInterest)
+			for _spiralrhombusgrid := range set {
+				nodeInstance := (&tree.Node{Name: _spiralrhombusgrid.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spiralrhombusgrid, "SpiralRhombusGrid", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "VerticalAxis":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.VerticalAxis](probe.stageOfInterest)

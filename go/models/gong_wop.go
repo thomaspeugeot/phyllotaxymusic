@@ -387,6 +387,18 @@ func (from *SpiralRhombus) CopyBasicFields(to *SpiralRhombus) {
 	to.IsDisplayed = from.IsDisplayed
 }
 
+type SpiralRhombusGrid_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+}
+
+func (from *SpiralRhombusGrid) CopyBasicFields(to *SpiralRhombusGrid) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+}
+
 type VerticalAxis_WOP struct {
 	// insertion point
 	Name string

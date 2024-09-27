@@ -73,6 +73,10 @@ export * from './lib/spiralrhombus-api'
 export * from './lib/spiralrhombus'
 export * from './lib/spiralrhombus.service'
 
+export * from './lib/spiralrhombusgrid-api'
+export * from './lib/spiralrhombusgrid'
+export * from './lib/spiralrhombusgrid.service'
+
 export * from './lib/verticalaxis-api'
 export * from './lib/verticalaxis'
 export * from './lib/verticalaxis.service'

@@ -66,6 +66,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterSpiralRhombusCreateCallback != nil {
 			stage.OnAfterSpiralRhombusCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *SpiralRhombusGrid:
+		if stage.OnAfterSpiralRhombusGridCreateCallback != nil {
+			stage.OnAfterSpiralRhombusGridCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *VerticalAxis:
 		if stage.OnAfterVerticalAxisCreateCallback != nil {
 			stage.OnAfterVerticalAxisCreateCallback.OnAfterCreate(stage, target)
@@ -154,6 +158,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*SpiralRhombus)
 		if stage.OnAfterSpiralRhombusUpdateCallback != nil {
 			stage.OnAfterSpiralRhombusUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralRhombusGrid:
+		newTarget := any(new).(*SpiralRhombusGrid)
+		if stage.OnAfterSpiralRhombusGridUpdateCallback != nil {
+			stage.OnAfterSpiralRhombusGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *VerticalAxis:
 		newTarget := any(new).(*VerticalAxis)
@@ -245,6 +254,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*SpiralRhombus)
 			stage.OnAfterSpiralRhombusDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *SpiralRhombusGrid:
+		if stage.OnAfterSpiralRhombusGridDeleteCallback != nil {
+			staged := any(staged).(*SpiralRhombusGrid)
+			stage.OnAfterSpiralRhombusGridDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *VerticalAxis:
 		if stage.OnAfterVerticalAxisDeleteCallback != nil {
 			staged := any(staged).(*VerticalAxis)
@@ -320,6 +334,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterSpiralRhombusReadCallback != nil {
 			stage.OnAfterSpiralRhombusReadCallback.OnAfterRead(stage, target)
 		}
+	case *SpiralRhombusGrid:
+		if stage.OnAfterSpiralRhombusGridReadCallback != nil {
+			stage.OnAfterSpiralRhombusGridReadCallback.OnAfterRead(stage, target)
+		}
 	case *VerticalAxis:
 		if stage.OnAfterVerticalAxisReadCallback != nil {
 			stage.OnAfterVerticalAxisReadCallback.OnAfterRead(stage, target)
@@ -380,6 +398,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralRhombus])
 	
+	case *SpiralRhombusGrid:
+		stage.OnAfterSpiralRhombusGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralRhombusGrid])
+	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[VerticalAxis])
 	
@@ -434,6 +455,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusCreateCallback = any(callback).(OnAfterCreateInterface[SpiralRhombus])
+	
+	case *SpiralRhombusGrid:
+		stage.OnAfterSpiralRhombusGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralRhombusGrid])
 	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisCreateCallback = any(callback).(OnAfterCreateInterface[VerticalAxis])
@@ -490,6 +514,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralRhombus])
 	
+	case *SpiralRhombusGrid:
+		stage.OnAfterSpiralRhombusGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralRhombusGrid])
+	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[VerticalAxis])
 	
@@ -544,6 +571,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusReadCallback = any(callback).(OnAfterReadInterface[SpiralRhombus])
+	
+	case *SpiralRhombusGrid:
+		stage.OnAfterSpiralRhombusGridReadCallback = any(callback).(OnAfterReadInterface[SpiralRhombusGrid])
 	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisReadCallback = any(callback).(OnAfterReadInterface[VerticalAxis])

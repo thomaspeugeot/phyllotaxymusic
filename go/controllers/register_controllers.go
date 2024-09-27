@@ -152,6 +152,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/spiralrhombuss/:id", GetController().UpdateSpiralRhombus)
 		v1.DELETE("/v1/spiralrhombuss/:id", GetController().DeleteSpiralRhombus)
 
+		v1.GET("/v1/spiralrhombusgrids", GetController().GetSpiralRhombusGrids)
+		v1.GET("/v1/spiralrhombusgrids/:id", GetController().GetSpiralRhombusGrid)
+		v1.POST("/v1/spiralrhombusgrids", GetController().PostSpiralRhombusGrid)
+		v1.PATCH("/v1/spiralrhombusgrids/:id", GetController().UpdateSpiralRhombusGrid)
+		v1.PUT("/v1/spiralrhombusgrids/:id", GetController().UpdateSpiralRhombusGrid)
+		v1.DELETE("/v1/spiralrhombusgrids/:id", GetController().DeleteSpiralRhombusGrid)
+
 		v1.GET("/v1/verticalaxiss", GetController().GetVerticalAxiss)
 		v1.GET("/v1/verticalaxiss/:id", GetController().GetVerticalAxis)
 		v1.POST("/v1/verticalaxiss", GetController().PostVerticalAxis)

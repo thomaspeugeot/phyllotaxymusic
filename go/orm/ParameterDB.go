@@ -171,6 +171,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	SpiralRhombusID sql.NullInt64
 
+	// field SpiralRhombusGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralRhombusGridID sql.NullInt64
+
 	// field Fkey is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	FkeyID sql.NullInt64
@@ -931,6 +935,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.SpiralRhombusID.Valid = true
 		}
 
+		// commit pointer value parameter.SpiralRhombusGrid translates to updating the parameter.SpiralRhombusGridID
+		parameterDB.SpiralRhombusGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralRhombusGrid != nil {
+			if SpiralRhombusGridId, ok := backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridPtr_SpiralRhombusGridDBID[parameter.SpiralRhombusGrid]; ok {
+				parameterDB.SpiralRhombusGridID.Int64 = int64(SpiralRhombusGridId)
+				parameterDB.SpiralRhombusGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralRhombusGridID.Int64 = 0
+			parameterDB.SpiralRhombusGridID.Valid = true
+		}
+
 		// commit pointer value parameter.Fkey translates to updating the parameter.FkeyID
 		parameterDB.FkeyID.Valid = true // allow for a 0 value (nil association)
 		if parameter.Fkey != nil {
@@ -1372,6 +1388,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.SpiralRhombus = nil
 	if parameterDB.SpiralRhombusID.Int64 != 0 {
 		parameter.SpiralRhombus = backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusPtr[uint(parameterDB.SpiralRhombusID.Int64)]
+	}
+	// SpiralRhombusGrid field
+	parameter.SpiralRhombusGrid = nil
+	if parameterDB.SpiralRhombusGridID.Int64 != 0 {
+		parameter.SpiralRhombusGrid = backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr[uint(parameterDB.SpiralRhombusGridID.Int64)]
 	}
 	// Fkey field
 	parameter.Fkey = nil
@@ -2195,6 +2216,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.SpiralRhombusID.Int64 != 0 {
 			parameterDB.SpiralRhombusID.Int64 = int64(BackRepoSpiralRhombusid_atBckpTime_newID[uint(parameterDB.SpiralRhombusID.Int64)])
 			parameterDB.SpiralRhombusID.Valid = true
+		}
+
+		// reindexing SpiralRhombusGrid field
+		if parameterDB.SpiralRhombusGridID.Int64 != 0 {
+			parameterDB.SpiralRhombusGridID.Int64 = int64(BackRepoSpiralRhombusGridid_atBckpTime_newID[uint(parameterDB.SpiralRhombusGridID.Int64)])
+			parameterDB.SpiralRhombusGridID.Valid = true
 		}
 
 		// reindexing Fkey field
