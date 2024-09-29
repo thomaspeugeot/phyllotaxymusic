@@ -69,6 +69,10 @@ export * from './lib/shapecategory-api'
 export * from './lib/shapecategory'
 export * from './lib/shapecategory.service'
 
+export * from './lib/spiralcircle-api'
+export * from './lib/spiralcircle'
+export * from './lib/spiralcircle.service'
+
 export * from './lib/spiralrhombus-api'
 export * from './lib/spiralrhombus'
 export * from './lib/spiralrhombus.service'

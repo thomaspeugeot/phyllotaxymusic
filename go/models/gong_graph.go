@@ -47,6 +47,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *ShapeCategory:
 		ok = stage.IsStagedShapeCategory(target)
 
+	case *SpiralCircle:
+		ok = stage.IsStagedSpiralCircle(target)
+
 	case *SpiralRhombus:
 		ok = stage.IsStagedSpiralRhombus(target)
 
@@ -161,6 +164,13 @@ func (stage *StageStruct) IsStagedShapeCategory(shapecategory *ShapeCategory) (o
 	return
 }
 
+func (stage *StageStruct) IsStagedSpiralCircle(spiralcircle *SpiralCircle) (ok bool) {
+
+	_, ok = stage.SpiralCircles[spiralcircle]
+
+	return
+}
+
 func (stage *StageStruct) IsStagedSpiralRhombus(spiralrhombus *SpiralRhombus) (ok bool) {
 
 	_, ok = stage.SpiralRhombuss[spiralrhombus]
@@ -231,6 +241,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *ShapeCategory:
 		stage.StageBranchShapeCategory(target)
+
+	case *SpiralCircle:
+		stage.StageBranchSpiralCircle(target)
 
 	case *SpiralRhombus:
 		stage.StageBranchSpiralRhombus(target)
@@ -551,6 +564,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralRhombusGrid != nil {
 		StageBranch(stage, parameter.SpiralRhombusGrid)
 	}
+	if parameter.SpiralCircleSeed != nil {
+		StageBranch(stage, parameter.SpiralCircleSeed)
+	}
 	if parameter.Fkey != nil {
 		StageBranch(stage, parameter.Fkey)
 	}
@@ -650,6 +666,24 @@ func (stage *StageStruct) StageBranchShapeCategory(shapecategory *ShapeCategory)
 	shapecategory.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) StageBranchSpiralCircle(spiralcircle *SpiralCircle) {
+
+	// check if instance is already staged
+	if IsStaged(stage, spiralcircle) {
+		return
+	}
+
+	spiralcircle.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if spiralcircle.ShapeCategory != nil {
+		StageBranch(stage, spiralcircle.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -780,6 +814,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *ShapeCategory:
 		toT := CopyBranchShapeCategory(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *SpiralCircle:
+		toT := CopyBranchSpiralCircle(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *SpiralRhombus:
@@ -1148,6 +1186,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.SpiralRhombusGrid != nil {
 		parameterTo.SpiralRhombusGrid = CopyBranchSpiralRhombusGrid(mapOrigCopy, parameterFrom.SpiralRhombusGrid)
 	}
+	if parameterFrom.SpiralCircleSeed != nil {
+		parameterTo.SpiralCircleSeed = CopyBranchSpiralCircle(mapOrigCopy, parameterFrom.SpiralCircleSeed)
+	}
 	if parameterFrom.Fkey != nil {
 		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
 	}
@@ -1259,6 +1300,28 @@ func CopyBranchShapeCategory(mapOrigCopy map[any]any, shapecategoryFrom *ShapeCa
 	shapecategoryFrom.CopyBasicFields(shapecategoryTo)
 
 	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchSpiralCircle(mapOrigCopy map[any]any, spiralcircleFrom *SpiralCircle) (spiralcircleTo *SpiralCircle) {
+
+	// spiralcircleFrom has already been copied
+	if _spiralcircleTo, ok := mapOrigCopy[spiralcircleFrom]; ok {
+		spiralcircleTo = _spiralcircleTo.(*SpiralCircle)
+		return
+	}
+
+	spiralcircleTo = new(SpiralCircle)
+	mapOrigCopy[spiralcircleFrom] = spiralcircleTo
+	spiralcircleFrom.CopyBasicFields(spiralcircleTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if spiralcircleFrom.ShapeCategory != nil {
+		spiralcircleTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, spiralcircleFrom.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -1386,6 +1449,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *ShapeCategory:
 		stage.UnstageBranchShapeCategory(target)
+
+	case *SpiralCircle:
+		stage.UnstageBranchSpiralCircle(target)
 
 	case *SpiralRhombus:
 		stage.UnstageBranchSpiralRhombus(target)
@@ -1706,6 +1772,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralRhombusGrid != nil {
 		UnstageBranch(stage, parameter.SpiralRhombusGrid)
 	}
+	if parameter.SpiralCircleSeed != nil {
+		UnstageBranch(stage, parameter.SpiralCircleSeed)
+	}
 	if parameter.Fkey != nil {
 		UnstageBranch(stage, parameter.Fkey)
 	}
@@ -1805,6 +1874,24 @@ func (stage *StageStruct) UnstageBranchShapeCategory(shapecategory *ShapeCategor
 	shapecategory.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchSpiralCircle(spiralcircle *SpiralCircle) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, spiralcircle) {
+		return
+	}
+
+	spiralcircle.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if spiralcircle.ShapeCategory != nil {
+		UnstageBranch(stage, spiralcircle.ShapeCategory)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 

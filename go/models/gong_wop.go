@@ -375,6 +375,42 @@ func (from *ShapeCategory) CopyBasicFields(to *ShapeCategory) {
 	to.IsExpanded = from.IsExpanded
 }
 
+type SpiralCircle_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+	CenterX float64
+	CenterY float64
+	HasBespokeRadius bool
+	BespopkeRadius float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
+	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
+}
+
+func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+	to.CenterX = from.CenterX
+	to.CenterY = from.CenterY
+	to.HasBespokeRadius = from.HasBespokeRadius
+	to.BespopkeRadius = from.BespopkeRadius
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
+	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
+}
+
 type SpiralRhombus_WOP struct {
 	// insertion point
 	Name string

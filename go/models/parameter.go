@@ -81,6 +81,7 @@ type Parameter struct {
 
 	SpiralRhombus     *SpiralRhombus
 	SpiralRhombusGrid *SpiralRhombusGrid
+	SpiralCircleSeed  *SpiralCircle
 
 	// the score
 	Fkey                *Key
@@ -589,4 +590,14 @@ func (p *Parameter) ComputeMeasureLines() {
 			a.StrokeWidth *= 2
 		}
 	}
+}
+
+func (p *Parameter) ComputeSpiralCircleSeed() {
+
+	r := p.SpiralRhombus.Rhombus
+	x_s, y_s := r.getCoordinates()
+	x_r, y_r := p.convertToCircleSpaceCoords(x_s, y_s)
+
+	p.SpiralCircleSeed.CenterX = (x_r[0] + x_r[2]) / 2.0
+	p.SpiralCircleSeed.CenterY = (y_r[0] + y_r[2]) / 2.0
 }

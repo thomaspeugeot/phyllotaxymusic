@@ -29,6 +29,8 @@ import { RhombusGridAPI } from './rhombusgrid-api'
 
 import { ShapeCategoryAPI } from './shapecategory-api'
 
+import { SpiralCircleAPI } from './spiralcircle-api'
+
 import { SpiralRhombusAPI } from './spiralrhombus-api'
 
 import { SpiralRhombusGridAPI } from './spiralrhombusgrid-api'
@@ -65,6 +67,8 @@ export class BackRepoData {
 	RhombusGridAPIs = new Array<RhombusGridAPI>()
 
 	ShapeCategoryAPIs = new Array<ShapeCategoryAPI>()
+
+	SpiralCircleAPIs = new Array<SpiralCircleAPI>()
 
 	SpiralRhombusAPIs = new Array<SpiralRhombusAPI>()
 
@@ -103,6 +107,8 @@ export class BackRepoData {
 		this.RhombusGridAPIs = data?.RhombusGridAPIs || [];
 
 		this.ShapeCategoryAPIs = data?.ShapeCategoryAPIs || [];
+
+		this.SpiralCircleAPIs = data?.SpiralCircleAPIs || [];
 
 		this.SpiralRhombusAPIs = data?.SpiralRhombusAPIs || [];
 

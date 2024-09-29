@@ -189,6 +189,9 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 	case *ShapeCategory:
 		// insertion point per field
 
+	case *SpiralCircle:
+		// insertion point per field
+
 	case *SpiralRhombus:
 		// insertion point per field
 
@@ -295,6 +298,9 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	}
 
 	// Compute reverse map for named struct ShapeCategory
+	// insertion point per field
+
+	// Compute reverse map for named struct SpiralCircle
 	// insertion point per field
 
 	// Compute reverse map for named struct SpiralRhombus

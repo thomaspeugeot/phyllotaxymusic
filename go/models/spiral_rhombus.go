@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"log"
 	"math"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
@@ -22,15 +21,7 @@ func (spiralrhombus *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.StageStruc
 
 	x_s, y_s := r.getCoordinates()
 
-	var x_r [4]float64
-	var y_r [4]float64
-	for i := range 4 {
-		ratio := x_s[i] / p.RotatedAxis.Length
-		log.Println("ratio", ratio)
-		angle := math.Pi * 2.0 * ratio
-		x_r[i] = (p.SpiralInitialRadius + y_s[i]) * math.Cos(angle)
-		y_r[i] = (p.SpiralInitialRadius + y_s[i]) * math.Sin(angle)
-	}
+	x_r, y_r := p.convertToCircleSpaceCoords(x_s, y_s)
 	for i := range 4 {
 		line := (&gongsvg_models.Line{
 			Name: fmt.Sprintf("%d", i),
@@ -46,4 +37,16 @@ func (spiralrhombus *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.StageStruc
 		}).Stage(gongsvgStage)
 		layer.Lines = append(layer.Lines, line)
 	}
+}
+
+func (p *Parameter) convertToCircleSpaceCoords(x_s [4]float64, y_s [4]float64) ([4]float64, [4]float64) {
+	var x_r [4]float64
+	var y_r [4]float64
+	for i := range 4 {
+		ratio := x_s[i] / p.RotatedAxis.Length
+		angle := math.Pi * 2.0 * ratio
+		x_r[i] = (p.SpiralInitialRadius + y_s[i]) * math.Cos(angle)
+		y_r[i] = (p.SpiralInitialRadius + y_s[i]) * math.Sin(angle)
+	}
+	return x_r, y_r
 }
