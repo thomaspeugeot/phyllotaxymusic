@@ -411,6 +411,18 @@ func (from *SpiralAxis) CopyBasicFields(to *SpiralAxis) {
 	to.Transform = from.Transform
 }
 
+type SpiralAxisGrid_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+}
+
+func (from *SpiralAxisGrid) CopyBasicFields(to *SpiralAxisGrid) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+}
+
 type SpiralCircle_WOP struct {
 	// insertion point
 	Name string

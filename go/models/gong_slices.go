@@ -192,11 +192,52 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 	case *SpiralAxis:
 		// insertion point per field
 
+	case *SpiralAxisGrid:
+		// insertion point per field
+		if fieldName == "SpiralAxises" {
+
+			// walk all instances of the owning type
+			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
+				if any(_instance).(*SpiralAxisGrid) != owningInstanceInfered {
+					_inferedTypeInstance := any(_instance).(*SpiralAxisGrid)
+					reference := make([]FieldType, 0)
+					targetFieldSlice := any(_inferedTypeInstance.SpiralAxises).([]FieldType)
+					copy(targetFieldSlice, reference)
+					_inferedTypeInstance.SpiralAxises = _inferedTypeInstance.SpiralAxises[0:]
+					for _, fieldInstance := range reference {
+						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
+							_inferedTypeInstance.SpiralAxises =
+								append(_inferedTypeInstance.SpiralAxises, any(fieldInstance).(*SpiralAxis))
+						}
+					}
+				}
+			}
+		}
+
 	case *SpiralCircle:
 		// insertion point per field
 
 	case *SpiralCircleGrid:
 		// insertion point per field
+		if fieldName == "SpiralCircles" {
+
+			// walk all instances of the owning type
+			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
+				if any(_instance).(*SpiralCircleGrid) != owningInstanceInfered {
+					_inferedTypeInstance := any(_instance).(*SpiralCircleGrid)
+					reference := make([]FieldType, 0)
+					targetFieldSlice := any(_inferedTypeInstance.SpiralCircles).([]FieldType)
+					copy(targetFieldSlice, reference)
+					_inferedTypeInstance.SpiralCircles = _inferedTypeInstance.SpiralCircles[0:]
+					for _, fieldInstance := range reference {
+						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
+							_inferedTypeInstance.SpiralCircles =
+								append(_inferedTypeInstance.SpiralCircles, any(fieldInstance).(*SpiralCircle))
+						}
+					}
+				}
+			}
+		}
 
 	case *SpiralRhombus:
 		// insertion point per field
@@ -309,11 +350,30 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	// Compute reverse map for named struct SpiralAxis
 	// insertion point per field
 
+	// Compute reverse map for named struct SpiralAxisGrid
+	// insertion point per field
+	clear(stage.SpiralAxisGrid_SpiralAxises_reverseMap)
+	stage.SpiralAxisGrid_SpiralAxises_reverseMap = make(map[*SpiralAxis]*SpiralAxisGrid)
+	for spiralaxisgrid := range stage.SpiralAxisGrids {
+		_ = spiralaxisgrid
+		for _, _spiralaxis := range spiralaxisgrid.SpiralAxises {
+			stage.SpiralAxisGrid_SpiralAxises_reverseMap[_spiralaxis] = spiralaxisgrid
+		}
+	}
+
 	// Compute reverse map for named struct SpiralCircle
 	// insertion point per field
 
 	// Compute reverse map for named struct SpiralCircleGrid
 	// insertion point per field
+	clear(stage.SpiralCircleGrid_SpiralCircles_reverseMap)
+	stage.SpiralCircleGrid_SpiralCircles_reverseMap = make(map[*SpiralCircle]*SpiralCircleGrid)
+	for spiralcirclegrid := range stage.SpiralCircleGrids {
+		_ = spiralcirclegrid
+		for _, _spiralcircle := range spiralcirclegrid.SpiralCircles {
+			stage.SpiralCircleGrid_SpiralCircles_reverseMap[_spiralcircle] = spiralcirclegrid
+		}
+	}
 
 	// Compute reverse map for named struct SpiralRhombus
 	// insertion point per field

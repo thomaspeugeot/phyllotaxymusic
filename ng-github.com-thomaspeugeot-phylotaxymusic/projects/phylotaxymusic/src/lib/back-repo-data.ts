@@ -31,6 +31,8 @@ import { ShapeCategoryAPI } from './shapecategory-api'
 
 import { SpiralAxisAPI } from './spiralaxis-api'
 
+import { SpiralAxisGridAPI } from './spiralaxisgrid-api'
+
 import { SpiralCircleAPI } from './spiralcircle-api'
 
 import { SpiralCircleGridAPI } from './spiralcirclegrid-api'
@@ -73,6 +75,8 @@ export class BackRepoData {
 	ShapeCategoryAPIs = new Array<ShapeCategoryAPI>()
 
 	SpiralAxisAPIs = new Array<SpiralAxisAPI>()
+
+	SpiralAxisGridAPIs = new Array<SpiralAxisGridAPI>()
 
 	SpiralCircleAPIs = new Array<SpiralCircleAPI>()
 
@@ -117,6 +121,8 @@ export class BackRepoData {
 		this.ShapeCategoryAPIs = data?.ShapeCategoryAPIs || [];
 
 		this.SpiralAxisAPIs = data?.SpiralAxisAPIs || [];
+
+		this.SpiralAxisGridAPIs = data?.SpiralAxisGridAPIs || [];
 
 		this.SpiralCircleAPIs = data?.SpiralCircleAPIs || [];
 

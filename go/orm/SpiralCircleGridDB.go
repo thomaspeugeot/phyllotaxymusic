@@ -54,6 +54,9 @@ type SpiralCircleGridPointersEncoding struct {
 	// field SpiralRhombusGrid is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	SpiralRhombusGridID sql.NullInt64
+
+	// field SpiralCircles is a slice of pointers to another Struct (optional or 0..1)
+	SpiralCircles IntSlice `gorm:"type:TEXT"`
 }
 
 // SpiralCircleGridDB describes a spiralcirclegrid in the database
@@ -250,6 +253,24 @@ func (backRepoSpiralCircleGrid *BackRepoSpiralCircleGridStruct) CommitPhaseTwoIn
 			spiralcirclegridDB.SpiralRhombusGridID.Valid = true
 		}
 
+		// 1. reset
+		spiralcirclegridDB.SpiralCircleGridPointersEncoding.SpiralCircles = make([]int, 0)
+		// 2. encode
+		for _, spiralcircleAssocEnd := range spiralcirclegrid.SpiralCircles {
+			spiralcircleAssocEnd_DB :=
+				backRepo.BackRepoSpiralCircle.GetSpiralCircleDBFromSpiralCirclePtr(spiralcircleAssocEnd)
+			
+			// the stage might be inconsistant, meaning that the spiralcircleAssocEnd_DB might
+			// be missing from the stage. In this case, the commit operation is robust
+			// An alternative would be to crash here to reveal the missing element.
+			if spiralcircleAssocEnd_DB == nil {
+				continue
+			}
+			
+			spiralcirclegridDB.SpiralCircleGridPointersEncoding.SpiralCircles =
+				append(spiralcirclegridDB.SpiralCircleGridPointersEncoding.SpiralCircles, int(spiralcircleAssocEnd_DB.ID))
+		}
+
 		query := backRepoSpiralCircleGrid.db.Save(&spiralcirclegridDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -373,6 +394,15 @@ func (spiralcirclegridDB *SpiralCircleGridDB) DecodePointers(backRepo *BackRepoS
 	if spiralcirclegridDB.SpiralRhombusGridID.Int64 != 0 {
 		spiralcirclegrid.SpiralRhombusGrid = backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr[uint(spiralcirclegridDB.SpiralRhombusGridID.Int64)]
 	}
+	// This loop redeem spiralcirclegrid.SpiralCircles in the stage from the encode in the back repo
+	// It parses all SpiralCircleDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	spiralcirclegrid.SpiralCircles = spiralcirclegrid.SpiralCircles[:0]
+	for _, _SpiralCircleid := range spiralcirclegridDB.SpiralCircleGridPointersEncoding.SpiralCircles {
+		spiralcirclegrid.SpiralCircles = append(spiralcirclegrid.SpiralCircles, backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(_SpiralCircleid)])
+	}
+
 	return
 }
 

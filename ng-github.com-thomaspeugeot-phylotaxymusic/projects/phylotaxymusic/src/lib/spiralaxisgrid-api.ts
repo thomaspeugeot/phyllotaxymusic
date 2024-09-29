@@ -1,14 +1,13 @@
 // insertion point for imports
 import { ShapeCategoryAPI } from './shapecategory-api'
-import { SpiralRhombusGridAPI } from './spiralrhombusgrid-api'
-import { SpiralCircleAPI } from './spiralcircle-api'
+import { SpiralAxisAPI } from './spiralaxis-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class SpiralCircleGridAPI {
+export class SpiralAxisGridAPI {
 
-	static GONGSTRUCT_NAME = "SpiralCircleGrid"
+	static GONGSTRUCT_NAME = "SpiralAxisGrid"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -20,14 +19,12 @@ export class SpiralCircleGridAPI {
 
 	// insertion point for other decls
 
-	SpiralCircleGridPointersEncoding: SpiralCircleGridPointersEncoding = new SpiralCircleGridPointersEncoding
+	SpiralAxisGridPointersEncoding: SpiralAxisGridPointersEncoding = new SpiralAxisGridPointersEncoding
 }
 
-export class SpiralCircleGridPointersEncoding {
+export class SpiralAxisGridPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 	ShapeCategoryID: NullInt64 = new NullInt64 // if pointer is null, ShapeCategory.ID = 0
 
-	SpiralRhombusGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralRhombusGrid.ID = 0
-
-	SpiralCircles: number[] = []
+	SpiralAxises: number[] = []
 }

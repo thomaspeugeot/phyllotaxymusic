@@ -391,6 +391,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("SpiralCircleSeed", instanceWithInferedType.SpiralCircleSeed, formGroup, probe)
 		AssociationFieldToForm("SpiralCircleGrid", instanceWithInferedType.SpiralCircleGrid, formGroup, probe)
 		AssociationFieldToForm("SpiralConstructionAxis", instanceWithInferedType.SpiralConstructionAxis, formGroup, probe)
+		AssociationFieldToForm("SpiralAxisGrid", instanceWithInferedType.SpiralAxisGrid, formGroup, probe)
 		AssociationFieldToForm("Fkey", instanceWithInferedType.Fkey, formGroup, probe)
 		BasicFieldtoForm("FkeySizeRatio", instanceWithInferedType.FkeySizeRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -548,6 +549,37 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
 			true, true, 600, true, 400)
+		{
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "SpiralAxisGrid"
+			rf.Fieldname = "SpiralAxises"
+			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			if reverseFieldOwner != nil {
+				AssociationReverseFieldToForm(
+					reverseFieldOwner.(*models.SpiralAxisGrid),
+					"SpiralAxises",
+					instanceWithInferedType,
+					formGroup,
+					probe)
+			} else {
+				AssociationReverseFieldToForm[*models.SpiralAxisGrid, *models.SpiralAxis](
+					nil,
+					"SpiralAxises",
+					instanceWithInferedType,
+					formGroup,
+					probe)
+			}
+		}
+
+	case *models.SpiralAxisGrid:
+		// insertion point
+		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
+		AssociationSliceToForm("SpiralAxises", instanceWithInferedType, &instanceWithInferedType.SpiralAxises, formGroup, probe)
 
 	case *models.SpiralCircle:
 		// insertion point
@@ -580,6 +612,28 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
 			true, true, 600, true, 400)
+		{
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "SpiralCircleGrid"
+			rf.Fieldname = "SpiralCircles"
+			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			if reverseFieldOwner != nil {
+				AssociationReverseFieldToForm(
+					reverseFieldOwner.(*models.SpiralCircleGrid),
+					"SpiralCircles",
+					instanceWithInferedType,
+					formGroup,
+					probe)
+			} else {
+				AssociationReverseFieldToForm[*models.SpiralCircleGrid, *models.SpiralCircle](
+					nil,
+					"SpiralCircles",
+					instanceWithInferedType,
+					formGroup,
+					probe)
+			}
+		}
 
 	case *models.SpiralCircleGrid:
 		// insertion point
@@ -589,6 +643,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		AssociationFieldToForm("SpiralRhombusGrid", instanceWithInferedType.SpiralRhombusGrid, formGroup, probe)
+		AssociationSliceToForm("SpiralCircles", instanceWithInferedType, &instanceWithInferedType.SpiralCircles, formGroup, probe)
 
 	case *models.SpiralRhombus:
 		// insertion point

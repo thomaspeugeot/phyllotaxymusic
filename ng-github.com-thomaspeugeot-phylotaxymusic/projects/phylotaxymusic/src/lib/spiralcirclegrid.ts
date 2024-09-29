@@ -6,6 +6,7 @@ import { FrontRepo } from './front-repo.service';
 // insertion point for imports
 import { ShapeCategory } from './shapecategory'
 import { SpiralRhombusGrid } from './spiralrhombusgrid'
+import { SpiralCircle } from './spiralcircle'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -27,6 +28,7 @@ export class SpiralCircleGrid {
 
 	SpiralRhombusGrid?: SpiralRhombusGrid
 
+	SpiralCircles: Array<SpiralCircle> = []
 }
 
 export function CopySpiralCircleGridToSpiralCircleGridAPI(spiralcirclegrid: SpiralCircleGrid, spiralcirclegridAPI: SpiralCircleGridAPI) {
@@ -56,6 +58,11 @@ export function CopySpiralCircleGridToSpiralCircleGridAPI(spiralcirclegrid: Spir
 
 
 	// insertion point for slice of pointers fields encoding
+	spiralcirclegridAPI.SpiralCircleGridPointersEncoding.SpiralCircles = []
+	for (let _spiralcircle of spiralcirclegrid.SpiralCircles) {
+		spiralcirclegridAPI.SpiralCircleGridPointersEncoding.SpiralCircles.push(_spiralcircle.ID)
+	}
+
 }
 
 // CopySpiralCircleGridAPIToSpiralCircleGrid update basic, pointers and slice of pointers fields of spiralcirclegrid
@@ -77,4 +84,11 @@ export function CopySpiralCircleGridAPIToSpiralCircleGrid(spiralcirclegridAPI: S
 	spiralcirclegrid.SpiralRhombusGrid = frontRepo.map_ID_SpiralRhombusGrid.get(spiralcirclegridAPI.SpiralCircleGridPointersEncoding.SpiralRhombusGridID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	spiralcirclegrid.SpiralCircles = new Array<SpiralCircle>()
+	for (let _id of spiralcirclegridAPI.SpiralCircleGridPointersEncoding.SpiralCircles) {
+		let _spiralcircle = frontRepo.map_ID_SpiralCircle.get(_id)
+		if (_spiralcircle != undefined) {
+			spiralcirclegrid.SpiralCircles.push(_spiralcircle!)
+		}
+	}
 }

@@ -1295,6 +1295,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralConstructionAxis":
 			FormDivSelectFieldToField(&(parameter_.SpiralConstructionAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralAxisGrid":
+			FormDivSelectFieldToField(&(parameter_.SpiralAxisGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":
@@ -1775,6 +1777,48 @@ func (spiralaxisFormCallback *SpiralAxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralaxis_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(spiralaxis_.Transform), formDiv)
+		case "SpiralAxisGrid:SpiralAxises":
+			// we need to retrieve the field owner before the change
+			var pastSpiralAxisGridOwner *models.SpiralAxisGrid
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "SpiralAxisGrid"
+			rf.Fieldname = "SpiralAxises"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				spiralaxisFormCallback.probe.stageOfInterest,
+				spiralaxisFormCallback.probe.backRepoOfInterest,
+				spiralaxis_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastSpiralAxisGridOwner = reverseFieldOwner.(*models.SpiralAxisGrid)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastSpiralAxisGridOwner != nil {
+					idx := slices.Index(pastSpiralAxisGridOwner.SpiralAxises, spiralaxis_)
+					pastSpiralAxisGridOwner.SpiralAxises = slices.Delete(pastSpiralAxisGridOwner.SpiralAxises, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _spiralaxisgrid := range *models.GetGongstructInstancesSet[models.SpiralAxisGrid](spiralaxisFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _spiralaxisgrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newSpiralAxisGridOwner := _spiralaxisgrid // we have a match
+						if pastSpiralAxisGridOwner != nil {
+							if newSpiralAxisGridOwner != pastSpiralAxisGridOwner {
+								idx := slices.Index(pastSpiralAxisGridOwner.SpiralAxises, spiralaxis_)
+								pastSpiralAxisGridOwner.SpiralAxises = slices.Delete(pastSpiralAxisGridOwner.SpiralAxises, idx, idx+1)
+								newSpiralAxisGridOwner.SpiralAxises = append(newSpiralAxisGridOwner.SpiralAxises, spiralaxis_)
+							}
+						} else {
+							newSpiralAxisGridOwner.SpiralAxises = append(newSpiralAxisGridOwner.SpiralAxises, spiralaxis_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -1806,6 +1850,87 @@ func (spiralaxisFormCallback *SpiralAxisFormCallback) OnSave() {
 	}
 
 	fillUpTree(spiralaxisFormCallback.probe)
+}
+func __gong__New__SpiralAxisGridFormCallback(
+	spiralaxisgrid *models.SpiralAxisGrid,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (spiralaxisgridFormCallback *SpiralAxisGridFormCallback) {
+	spiralaxisgridFormCallback = new(SpiralAxisGridFormCallback)
+	spiralaxisgridFormCallback.probe = probe
+	spiralaxisgridFormCallback.spiralaxisgrid = spiralaxisgrid
+	spiralaxisgridFormCallback.formGroup = formGroup
+
+	spiralaxisgridFormCallback.CreationMode = (spiralaxisgrid == nil)
+
+	return
+}
+
+type SpiralAxisGridFormCallback struct {
+	spiralaxisgrid *models.SpiralAxisGrid
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (spiralaxisgridFormCallback *SpiralAxisGridFormCallback) OnSave() {
+
+	log.Println("SpiralAxisGridFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	spiralaxisgridFormCallback.probe.formStage.Checkout()
+
+	if spiralaxisgridFormCallback.spiralaxisgrid == nil {
+		spiralaxisgridFormCallback.spiralaxisgrid = new(models.SpiralAxisGrid).Stage(spiralaxisgridFormCallback.probe.stageOfInterest)
+	}
+	spiralaxisgrid_ := spiralaxisgridFormCallback.spiralaxisgrid
+	_ = spiralaxisgrid_
+
+	for _, formDiv := range spiralaxisgridFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(spiralaxisgrid_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(spiralaxisgrid_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(spiralaxisgrid_.ShapeCategory), spiralaxisgridFormCallback.probe.stageOfInterest, formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if spiralaxisgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralaxisgrid_.Unstage(spiralaxisgridFormCallback.probe.stageOfInterest)
+	}
+
+	spiralaxisgridFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.SpiralAxisGrid](
+		spiralaxisgridFormCallback.probe,
+	)
+	spiralaxisgridFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if spiralaxisgridFormCallback.CreationMode || spiralaxisgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralaxisgridFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(spiralaxisgridFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__SpiralAxisGridFormCallback(
+			nil,
+			spiralaxisgridFormCallback.probe,
+			newFormGroup,
+		)
+		spiralaxisgrid := new(models.SpiralAxisGrid)
+		FillUpForm(spiralaxisgrid, newFormGroup, spiralaxisgridFormCallback.probe)
+		spiralaxisgridFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(spiralaxisgridFormCallback.probe)
 }
 func __gong__New__SpiralCircleFormCallback(
 	spiralcircle *models.SpiralCircle,
@@ -1880,6 +2005,48 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralcircle_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(spiralcircle_.Transform), formDiv)
+		case "SpiralCircleGrid:SpiralCircles":
+			// we need to retrieve the field owner before the change
+			var pastSpiralCircleGridOwner *models.SpiralCircleGrid
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "SpiralCircleGrid"
+			rf.Fieldname = "SpiralCircles"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				spiralcircleFormCallback.probe.stageOfInterest,
+				spiralcircleFormCallback.probe.backRepoOfInterest,
+				spiralcircle_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastSpiralCircleGridOwner = reverseFieldOwner.(*models.SpiralCircleGrid)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastSpiralCircleGridOwner != nil {
+					idx := slices.Index(pastSpiralCircleGridOwner.SpiralCircles, spiralcircle_)
+					pastSpiralCircleGridOwner.SpiralCircles = slices.Delete(pastSpiralCircleGridOwner.SpiralCircles, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _spiralcirclegrid := range *models.GetGongstructInstancesSet[models.SpiralCircleGrid](spiralcircleFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _spiralcirclegrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newSpiralCircleGridOwner := _spiralcirclegrid // we have a match
+						if pastSpiralCircleGridOwner != nil {
+							if newSpiralCircleGridOwner != pastSpiralCircleGridOwner {
+								idx := slices.Index(pastSpiralCircleGridOwner.SpiralCircles, spiralcircle_)
+								pastSpiralCircleGridOwner.SpiralCircles = slices.Delete(pastSpiralCircleGridOwner.SpiralCircles, idx, idx+1)
+								newSpiralCircleGridOwner.SpiralCircles = append(newSpiralCircleGridOwner.SpiralCircles, spiralcircle_)
+							}
+						} else {
+							newSpiralCircleGridOwner.SpiralCircles = append(newSpiralCircleGridOwner.SpiralCircles, spiralcircle_)
+						}
+					}
+				}
+			}
 		}
 	}
 

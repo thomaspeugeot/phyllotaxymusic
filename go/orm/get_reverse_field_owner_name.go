@@ -129,11 +129,30 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 	case *models.SpiralAxis:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "SpiralAxisGrid":
+			switch reverseField.Fieldname {
+			case "SpiralAxises":
+				if _spiralaxisgrid, ok := stage.SpiralAxisGrid_SpiralAxises_reverseMap[inst]; ok {
+					res = _spiralaxisgrid.Name
+				}
+			}
+		}
+
+	case *models.SpiralAxisGrid:
+		switch reverseField.GongstructName {
+		// insertion point
 		}
 
 	case *models.SpiralCircle:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "SpiralCircleGrid":
+			switch reverseField.Fieldname {
+			case "SpiralCircles":
+				if _spiralcirclegrid, ok := stage.SpiralCircleGrid_SpiralCircles_reverseMap[inst]; ok {
+					res = _spiralcirclegrid.Name
+				}
+			}
 		}
 
 	case *models.SpiralCircleGrid:
@@ -274,11 +293,26 @@ func GetReverseFieldOwner[T models.Gongstruct](
 	case *models.SpiralAxis:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "SpiralAxisGrid":
+			switch reverseField.Fieldname {
+			case "SpiralAxises":
+				res = stage.SpiralAxisGrid_SpiralAxises_reverseMap[inst]
+			}
+		}
+
+	case *models.SpiralAxisGrid:
+		switch reverseField.GongstructName {
+		// insertion point
 		}
 
 	case *models.SpiralCircle:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "SpiralCircleGrid":
+			switch reverseField.Fieldname {
+			case "SpiralCircles":
+				res = stage.SpiralCircleGrid_SpiralCircles_reverseMap[inst]
+			}
 		}
 
 	case *models.SpiralCircleGrid:
