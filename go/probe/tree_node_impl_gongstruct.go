@@ -94,6 +94,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "ShapeCategory" {
 		fillUpTable[models.ShapeCategory](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "SpiralAxis" {
+		fillUpTable[models.SpiralAxis](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralCircle" {
 		fillUpTable[models.SpiralCircle](nodeImplGongstruct.probe)
 	}

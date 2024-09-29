@@ -79,10 +79,11 @@ type Parameter struct {
 	// ratio of the length of the control vector to the side length
 	BezierControlLengthRatio float64
 
-	SpiralRhombus     *SpiralRhombus
-	SpiralRhombusGrid *SpiralRhombusGrid
-	SpiralCircleSeed  *SpiralCircle
-	SpiralCircleGrid  *SpiralCircleGrid
+	SpiralRhombus          *SpiralRhombus
+	SpiralRhombusGrid      *SpiralRhombusGrid
+	SpiralCircleSeed       *SpiralCircle
+	SpiralCircleGrid       *SpiralCircleGrid
+	SpiralConstructionAxis *SpiralAxis
 
 	// the score
 	Fkey                *Key
@@ -603,5 +604,21 @@ func (p *Parameter) ComputeSpiralCircleSeed() {
 	p.SpiralCircleSeed.CenterY = (y_r[0] + y_r[2]) / 2.0
 
 	p.SpiralCircleSeed.CenterX = x_r[2]
-	p.SpiralCircleSeed.CenterY = y_r[2]
+	p.SpiralCircleSeed.CenterY = x_r[2]
+}
+
+func (p *Parameter) computeSpiralConstructionAxis() {
+
+	r := p.SpiralRhombus.Rhombus
+	x_s, y_s := r.getCoordinates()
+	x_r, y_r := p.convertToCircleSpaceCoords(x_s, y_s)
+
+	p.SpiralConstructionAxis.CenterX = x_r[2]
+	p.SpiralConstructionAxis.CenterY = y_r[2]
+
+	x := x_r[0] - x_r[2]
+	y := y_r[0] - y_r[2]
+
+	p.SpiralConstructionAxis.Length = math.Sqrt(x*x + y*y)
+	p.SpiralConstructionAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
 }

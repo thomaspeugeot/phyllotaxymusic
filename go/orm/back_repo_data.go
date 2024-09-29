@@ -32,6 +32,8 @@ type BackRepoData struct {
 
 	ShapeCategoryAPIs []*ShapeCategoryAPI
 
+	SpiralAxisAPIs []*SpiralAxisAPI
+
 	SpiralCircleAPIs []*SpiralCircleAPI
 
 	SpiralCircleGridAPIs []*SpiralCircleGridAPI
@@ -183,6 +185,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		shapecategoryDB.CopyBasicFieldsToShapeCategory_WOP(&shapecategoryAPI.ShapeCategory_WOP)
 
 		backRepoData.ShapeCategoryAPIs = append(backRepoData.ShapeCategoryAPIs, &shapecategoryAPI)
+	}
+
+	for _, spiralaxisDB := range backRepo.BackRepoSpiralAxis.Map_SpiralAxisDBID_SpiralAxisDB {
+
+		var spiralaxisAPI SpiralAxisAPI
+		spiralaxisAPI.ID = spiralaxisDB.ID
+		spiralaxisAPI.SpiralAxisPointersEncoding = spiralaxisDB.SpiralAxisPointersEncoding
+		spiralaxisDB.CopyBasicFieldsToSpiralAxis_WOP(&spiralaxisAPI.SpiralAxis_WOP)
+
+		backRepoData.SpiralAxisAPIs = append(backRepoData.SpiralAxisAPIs, &spiralaxisAPI)
 	}
 
 	for _, spiralcircleDB := range backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCircleDB {

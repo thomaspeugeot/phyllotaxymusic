@@ -50,6 +50,8 @@ type BackRepoStruct struct {
 
 	BackRepoShapeCategory BackRepoShapeCategoryStruct
 
+	BackRepoSpiralAxis BackRepoSpiralAxisStruct
+
 	BackRepoSpiralCircle BackRepoSpiralCircleStruct
 
 	BackRepoSpiralCircleGrid BackRepoSpiralCircleGridStruct
@@ -114,6 +116,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		&RhombusDB{},
 		&RhombusGridDB{},
 		&ShapeCategoryDB{},
+		&SpiralAxisDB{},
 		&SpiralCircleDB{},
 		&SpiralCircleGridDB{},
 		&SpiralRhombusDB{},
@@ -241,6 +244,14 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		db:    db,
 		stage: stage,
 	}
+	backRepo.BackRepoSpiralAxis = BackRepoSpiralAxisStruct{
+		Map_SpiralAxisDBID_SpiralAxisPtr: make(map[uint]*models.SpiralAxis, 0),
+		Map_SpiralAxisDBID_SpiralAxisDB:  make(map[uint]*SpiralAxisDB, 0),
+		Map_SpiralAxisPtr_SpiralAxisDBID: make(map[*models.SpiralAxis]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
 	backRepo.BackRepoSpiralCircle = BackRepoSpiralCircleStruct{
 		Map_SpiralCircleDBID_SpiralCirclePtr: make(map[uint]*models.SpiralCircle, 0),
 		Map_SpiralCircleDBID_SpiralCircleDB:  make(map[uint]*SpiralCircleDB, 0),
@@ -343,6 +354,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoRhombus.CommitPhaseOne(stage)
 	backRepo.BackRepoRhombusGrid.CommitPhaseOne(stage)
 	backRepo.BackRepoShapeCategory.CommitPhaseOne(stage)
+	backRepo.BackRepoSpiralAxis.CommitPhaseOne(stage)
 	backRepo.BackRepoSpiralCircle.CommitPhaseOne(stage)
 	backRepo.BackRepoSpiralCircleGrid.CommitPhaseOne(stage)
 	backRepo.BackRepoSpiralRhombus.CommitPhaseOne(stage)
@@ -364,6 +376,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoRhombus.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoRhombusGrid.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoShapeCategory.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoSpiralAxis.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoSpiralCircle.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoSpiralCircleGrid.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoSpiralRhombus.CommitPhaseTwo(backRepo)
@@ -390,6 +403,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoRhombus.CheckoutPhaseOne()
 	backRepo.BackRepoRhombusGrid.CheckoutPhaseOne()
 	backRepo.BackRepoShapeCategory.CheckoutPhaseOne()
+	backRepo.BackRepoSpiralAxis.CheckoutPhaseOne()
 	backRepo.BackRepoSpiralCircle.CheckoutPhaseOne()
 	backRepo.BackRepoSpiralCircleGrid.CheckoutPhaseOne()
 	backRepo.BackRepoSpiralRhombus.CheckoutPhaseOne()
@@ -411,6 +425,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoRhombus.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoRhombusGrid.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoShapeCategory.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoSpiralAxis.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoSpiralCircle.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoSpiralCircleGrid.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoSpiralRhombus.CheckoutPhaseTwo(backRepo)
@@ -437,6 +452,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	backRepo.BackRepoRhombus.Backup(dirPath)
 	backRepo.BackRepoRhombusGrid.Backup(dirPath)
 	backRepo.BackRepoShapeCategory.Backup(dirPath)
+	backRepo.BackRepoSpiralAxis.Backup(dirPath)
 	backRepo.BackRepoSpiralCircle.Backup(dirPath)
 	backRepo.BackRepoSpiralCircleGrid.Backup(dirPath)
 	backRepo.BackRepoSpiralRhombus.Backup(dirPath)
@@ -466,6 +482,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	backRepo.BackRepoRhombus.BackupXL(file)
 	backRepo.BackRepoRhombusGrid.BackupXL(file)
 	backRepo.BackRepoShapeCategory.BackupXL(file)
+	backRepo.BackRepoSpiralAxis.BackupXL(file)
 	backRepo.BackRepoSpiralCircle.BackupXL(file)
 	backRepo.BackRepoSpiralCircleGrid.BackupXL(file)
 	backRepo.BackRepoSpiralRhombus.BackupXL(file)
@@ -509,6 +526,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoRhombus.RestorePhaseOne(dirPath)
 	backRepo.BackRepoRhombusGrid.RestorePhaseOne(dirPath)
 	backRepo.BackRepoShapeCategory.RestorePhaseOne(dirPath)
+	backRepo.BackRepoSpiralAxis.RestorePhaseOne(dirPath)
 	backRepo.BackRepoSpiralCircle.RestorePhaseOne(dirPath)
 	backRepo.BackRepoSpiralCircleGrid.RestorePhaseOne(dirPath)
 	backRepo.BackRepoSpiralRhombus.RestorePhaseOne(dirPath)
@@ -534,6 +552,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoRhombus.RestorePhaseTwo()
 	backRepo.BackRepoRhombusGrid.RestorePhaseTwo()
 	backRepo.BackRepoShapeCategory.RestorePhaseTwo()
+	backRepo.BackRepoSpiralAxis.RestorePhaseTwo()
 	backRepo.BackRepoSpiralCircle.RestorePhaseTwo()
 	backRepo.BackRepoSpiralCircleGrid.RestorePhaseTwo()
 	backRepo.BackRepoSpiralRhombus.RestorePhaseTwo()
@@ -580,6 +599,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoRhombus.RestoreXLPhaseOne(file)
 	backRepo.BackRepoRhombusGrid.RestoreXLPhaseOne(file)
 	backRepo.BackRepoShapeCategory.RestoreXLPhaseOne(file)
+	backRepo.BackRepoSpiralAxis.RestoreXLPhaseOne(file)
 	backRepo.BackRepoSpiralCircle.RestoreXLPhaseOne(file)
 	backRepo.BackRepoSpiralCircleGrid.RestoreXLPhaseOne(file)
 	backRepo.BackRepoSpiralRhombus.RestoreXLPhaseOne(file)
