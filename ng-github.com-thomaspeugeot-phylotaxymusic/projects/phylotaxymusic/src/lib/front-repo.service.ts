@@ -64,6 +64,10 @@ import { SpiralCircleAPI } from './spiralcircle-api'
 import { SpiralCircle, CopySpiralCircleAPIToSpiralCircle } from './spiralcircle'
 import { SpiralCircleService } from './spiralcircle.service'
 
+import { SpiralCircleGridAPI } from './spiralcirclegrid-api'
+import { SpiralCircleGrid, CopySpiralCircleGridAPIToSpiralCircleGrid } from './spiralcirclegrid'
+import { SpiralCircleGridService } from './spiralcirclegrid.service'
+
 import { SpiralRhombusAPI } from './spiralrhombus-api'
 import { SpiralRhombus, CopySpiralRhombusAPIToSpiralRhombus } from './spiralrhombus'
 import { SpiralRhombusService } from './spiralrhombus.service'
@@ -128,6 +132,9 @@ export class FrontRepo { // insertion point sub template
 	array_SpiralCircles = new Array<SpiralCircle>() // array of front instances
 	map_ID_SpiralCircle = new Map<number, SpiralCircle>() // map of front instances
 
+	array_SpiralCircleGrids = new Array<SpiralCircleGrid>() // array of front instances
+	map_ID_SpiralCircleGrid = new Map<number, SpiralCircleGrid>() // map of front instances
+
 	array_SpiralRhombuss = new Array<SpiralRhombus>() // array of front instances
 	map_ID_SpiralRhombus = new Map<number, SpiralRhombus>() // map of front instances
 
@@ -174,6 +181,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_ShapeCategorys as unknown as Array<Type>
 			case 'SpiralCircle':
 				return this.array_SpiralCircles as unknown as Array<Type>
+			case 'SpiralCircleGrid':
+				return this.array_SpiralCircleGrids as unknown as Array<Type>
 			case 'SpiralRhombus':
 				return this.array_SpiralRhombuss as unknown as Array<Type>
 			case 'SpiralRhombusGrid':
@@ -218,6 +227,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_ShapeCategory as unknown as Map<number, Type>
 			case 'SpiralCircle':
 				return this.map_ID_SpiralCircle as unknown as Map<number, Type>
+			case 'SpiralCircleGrid':
+				return this.map_ID_SpiralCircleGrid as unknown as Map<number, Type>
 			case 'SpiralRhombus':
 				return this.map_ID_SpiralRhombus as unknown as Map<number, Type>
 			case 'SpiralRhombusGrid':
@@ -306,6 +317,7 @@ export class FrontRepoService {
 		private rhombusgridService: RhombusGridService,
 		private shapecategoryService: ShapeCategoryService,
 		private spiralcircleService: SpiralCircleService,
+		private spiralcirclegridService: SpiralCircleGridService,
 		private spiralrhombusService: SpiralRhombusService,
 		private spiralrhombusgridService: SpiralRhombusGridService,
 		private verticalaxisService: VerticalAxisService,
@@ -356,6 +368,7 @@ export class FrontRepoService {
 		Observable<RhombusGridAPI[]>,
 		Observable<ShapeCategoryAPI[]>,
 		Observable<SpiralCircleAPI[]>,
+		Observable<SpiralCircleGridAPI[]>,
 		Observable<SpiralRhombusAPI[]>,
 		Observable<SpiralRhombusGridAPI[]>,
 		Observable<VerticalAxisAPI[]>,
@@ -384,6 +397,7 @@ export class FrontRepoService {
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.shapecategoryService.getShapeCategorys(this.GONG__StackPath, this.frontRepo),
 			this.spiralcircleService.getSpiralCircles(this.GONG__StackPath, this.frontRepo),
+			this.spiralcirclegridService.getSpiralCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.spiralrhombusService.getSpiralRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.spiralrhombusgridService.getSpiralRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.verticalaxisService.getVerticalAxiss(this.GONG__StackPath, this.frontRepo),
@@ -417,6 +431,7 @@ export class FrontRepoService {
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.shapecategoryService.getShapeCategorys(this.GONG__StackPath, this.frontRepo),
 			this.spiralcircleService.getSpiralCircles(this.GONG__StackPath, this.frontRepo),
+			this.spiralcirclegridService.getSpiralCircleGrids(this.GONG__StackPath, this.frontRepo),
 			this.spiralrhombusService.getSpiralRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.spiralrhombusgridService.getSpiralRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.verticalaxisService.getVerticalAxiss(this.GONG__StackPath, this.frontRepo),
@@ -445,6 +460,7 @@ export class FrontRepoService {
 						rhombusgrids_,
 						shapecategorys_,
 						spiralcircles_,
+						spiralcirclegrids_,
 						spiralrhombuss_,
 						spiralrhombusgrids_,
 						verticalaxiss_,
@@ -482,6 +498,8 @@ export class FrontRepoService {
 						shapecategorys = shapecategorys_ as ShapeCategoryAPI[]
 						var spiralcircles: SpiralCircleAPI[]
 						spiralcircles = spiralcircles_ as SpiralCircleAPI[]
+						var spiralcirclegrids: SpiralCircleGridAPI[]
+						spiralcirclegrids = spiralcirclegrids_ as SpiralCircleGridAPI[]
 						var spiralrhombuss: SpiralRhombusAPI[]
 						spiralrhombuss = spiralrhombuss_ as SpiralRhombusAPI[]
 						var spiralrhombusgrids: SpiralRhombusGridAPI[]
@@ -673,6 +691,18 @@ export class FrontRepoService {
 						)
 
 						// init the arrays
+						this.frontRepo.array_SpiralCircleGrids = []
+						this.frontRepo.map_ID_SpiralCircleGrid.clear()
+
+						spiralcirclegrids.forEach(
+							spiralcirclegridAPI => {
+								let spiralcirclegrid = new SpiralCircleGrid
+								this.frontRepo.array_SpiralCircleGrids.push(spiralcirclegrid)
+								this.frontRepo.map_ID_SpiralCircleGrid.set(spiralcirclegridAPI.ID, spiralcirclegrid)
+							}
+						)
+
+						// init the arrays
 						this.frontRepo.array_SpiralRhombuss = []
 						this.frontRepo.map_ID_SpiralRhombus.clear()
 
@@ -829,6 +859,14 @@ export class FrontRepoService {
 							spiralcircleAPI => {
 								let spiralcircle = this.frontRepo.map_ID_SpiralCircle.get(spiralcircleAPI.ID)
 								CopySpiralCircleAPIToSpiralCircle(spiralcircleAPI, spiralcircle!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spiralcirclegrids.forEach(
+							spiralcirclegridAPI => {
+								let spiralcirclegrid = this.frontRepo.map_ID_SpiralCircleGrid.get(spiralcirclegridAPI.ID)
+								CopySpiralCircleGridAPIToSpiralCircleGrid(spiralcirclegridAPI, spiralcirclegrid!, this.frontRepo)
 							}
 						)
 
@@ -1068,6 +1106,18 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				this.frontRepo.array_SpiralCircleGrids = []
+				this.frontRepo.map_ID_SpiralCircleGrid.clear()
+
+				backRepoData.SpiralCircleGridAPIs.forEach(
+					spiralcirclegridAPI => {
+						let spiralcirclegrid = new SpiralCircleGrid
+						this.frontRepo.array_SpiralCircleGrids.push(spiralcirclegrid)
+						this.frontRepo.map_ID_SpiralCircleGrid.set(spiralcirclegridAPI.ID, spiralcirclegrid)
+					}
+				)
+
+				// init the arrays
 				this.frontRepo.array_SpiralRhombuss = []
 				this.frontRepo.map_ID_SpiralRhombus.clear()
 
@@ -1230,6 +1280,14 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.SpiralCircleGridAPIs.forEach(
+					spiralcirclegridAPI => {
+						let spiralcirclegrid = this.frontRepo.map_ID_SpiralCircleGrid.get(spiralcirclegridAPI.ID)
+						CopySpiralCircleGridAPIToSpiralCircleGrid(spiralcirclegridAPI, spiralcirclegrid!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.SpiralRhombusAPIs.forEach(
 					spiralrhombusAPI => {
 						let spiralrhombus = this.frontRepo.map_ID_SpiralRhombus.get(spiralrhombusAPI.ID)
@@ -1317,12 +1375,15 @@ export function getShapeCategoryUniqueID(id: number): number {
 export function getSpiralCircleUniqueID(id: number): number {
 	return 97 * id
 }
-export function getSpiralRhombusUniqueID(id: number): number {
+export function getSpiralCircleGridUniqueID(id: number): number {
 	return 101 * id
 }
-export function getSpiralRhombusGridUniqueID(id: number): number {
+export function getSpiralRhombusUniqueID(id: number): number {
 	return 103 * id
 }
-export function getVerticalAxisUniqueID(id: number): number {
+export function getSpiralRhombusGridUniqueID(id: number): number {
 	return 107 * id
+}
+export function getVerticalAxisUniqueID(id: number): number {
+	return 109 * id
 }

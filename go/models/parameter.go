@@ -82,6 +82,7 @@ type Parameter struct {
 	SpiralRhombus     *SpiralRhombus
 	SpiralRhombusGrid *SpiralRhombusGrid
 	SpiralCircleSeed  *SpiralCircle
+	SpiralCircleGrid  *SpiralCircleGrid
 
 	// the score
 	Fkey                *Key

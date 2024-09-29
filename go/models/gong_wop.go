@@ -411,6 +411,18 @@ func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
 	to.Transform = from.Transform
 }
 
+type SpiralCircleGrid_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+}
+
+func (from *SpiralCircleGrid) CopyBasicFields(to *SpiralCircleGrid) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+}
+
 type SpiralRhombus_WOP struct {
 	// insertion point
 	Name string

@@ -1291,6 +1291,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralRhombusGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralCircleSeed":
 			FormDivSelectFieldToField(&(parameter_.SpiralCircleSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralCircleGrid":
+			FormDivSelectFieldToField(&(parameter_.SpiralCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":
@@ -1802,6 +1804,89 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 	}
 
 	fillUpTree(spiralcircleFormCallback.probe)
+}
+func __gong__New__SpiralCircleGridFormCallback(
+	spiralcirclegrid *models.SpiralCircleGrid,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) {
+	spiralcirclegridFormCallback = new(SpiralCircleGridFormCallback)
+	spiralcirclegridFormCallback.probe = probe
+	spiralcirclegridFormCallback.spiralcirclegrid = spiralcirclegrid
+	spiralcirclegridFormCallback.formGroup = formGroup
+
+	spiralcirclegridFormCallback.CreationMode = (spiralcirclegrid == nil)
+
+	return
+}
+
+type SpiralCircleGridFormCallback struct {
+	spiralcirclegrid *models.SpiralCircleGrid
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) OnSave() {
+
+	log.Println("SpiralCircleGridFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	spiralcirclegridFormCallback.probe.formStage.Checkout()
+
+	if spiralcirclegridFormCallback.spiralcirclegrid == nil {
+		spiralcirclegridFormCallback.spiralcirclegrid = new(models.SpiralCircleGrid).Stage(spiralcirclegridFormCallback.probe.stageOfInterest)
+	}
+	spiralcirclegrid_ := spiralcirclegridFormCallback.spiralcirclegrid
+	_ = spiralcirclegrid_
+
+	for _, formDiv := range spiralcirclegridFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(spiralcirclegrid_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(spiralcirclegrid_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(spiralcirclegrid_.ShapeCategory), spiralcirclegridFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralRhombusGrid":
+			FormDivSelectFieldToField(&(spiralcirclegrid_.SpiralRhombusGrid), spiralcirclegridFormCallback.probe.stageOfInterest, formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if spiralcirclegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralcirclegrid_.Unstage(spiralcirclegridFormCallback.probe.stageOfInterest)
+	}
+
+	spiralcirclegridFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.SpiralCircleGrid](
+		spiralcirclegridFormCallback.probe,
+	)
+	spiralcirclegridFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if spiralcirclegridFormCallback.CreationMode || spiralcirclegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralcirclegridFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(spiralcirclegridFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__SpiralCircleGridFormCallback(
+			nil,
+			spiralcirclegridFormCallback.probe,
+			newFormGroup,
+		)
+		spiralcirclegrid := new(models.SpiralCircleGrid)
+		FillUpForm(spiralcirclegrid, newFormGroup, spiralcirclegridFormCallback.probe)
+		spiralcirclegridFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(spiralcirclegridFormCallback.probe)
 }
 func __gong__New__SpiralRhombusFormCallback(
 	spiralrhombus *models.SpiralRhombus,

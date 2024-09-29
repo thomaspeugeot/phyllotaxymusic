@@ -1366,6 +1366,46 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_SpiralCircleGrid_Identifiers := make(map[*SpiralCircleGrid]string)
+	_ = map_SpiralCircleGrid_Identifiers
+
+	spiralcirclegridOrdered := []*SpiralCircleGrid{}
+	for spiralcirclegrid := range stage.SpiralCircleGrids {
+		spiralcirclegridOrdered = append(spiralcirclegridOrdered, spiralcirclegrid)
+	}
+	sort.Slice(spiralcirclegridOrdered[:], func(i, j int) bool {
+		return spiralcirclegridOrdered[i].Name < spiralcirclegridOrdered[j].Name
+	})
+	if len(spiralcirclegridOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, spiralcirclegrid := range spiralcirclegridOrdered {
+
+		id = generatesIdentifier("SpiralCircleGrid", idx, spiralcirclegrid.Name)
+		map_SpiralCircleGrid_Identifiers[spiralcirclegrid] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralCircleGrid")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralcirclegrid.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralcirclegrid.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralcirclegrid.IsDisplayed))
+		initializerStatements += setValueField
+
+	}
+
 	map_SpiralRhombus_Identifiers := make(map[*SpiralRhombus]string)
 	_ = map_SpiralRhombus_Identifiers
 
@@ -2047,6 +2087,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
+		if parameter.SpiralCircleGrid != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralCircleGrid")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralCircleGrid_Identifiers[parameter.SpiralCircleGrid])
+			pointersInitializesStatements += setPointerField
+		}
+
 		if parameter.Fkey != nil {
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -2236,6 +2284,32 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralcircle.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
+	for idx, spiralcirclegrid := range spiralcirclegridOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("SpiralCircleGrid", idx, spiralcirclegrid.Name)
+		map_SpiralCircleGrid_Identifiers[spiralcirclegrid] = id
+
+		// Initialisation of values
+		if spiralcirclegrid.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralcirclegrid.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
+		if spiralcirclegrid.SpiralRhombusGrid != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralRhombusGrid")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralRhombusGrid_Identifiers[spiralcirclegrid.SpiralRhombusGrid])
 			pointersInitializesStatements += setPointerField
 		}
 

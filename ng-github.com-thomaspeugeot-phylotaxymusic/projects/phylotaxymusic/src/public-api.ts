@@ -73,6 +73,10 @@ export * from './lib/spiralcircle-api'
 export * from './lib/spiralcircle'
 export * from './lib/spiralcircle.service'
 
+export * from './lib/spiralcirclegrid-api'
+export * from './lib/spiralcirclegrid'
+export * from './lib/spiralcirclegrid.service'
+
 export * from './lib/spiralrhombus-api'
 export * from './lib/spiralrhombus'
 export * from './lib/spiralrhombus.service'

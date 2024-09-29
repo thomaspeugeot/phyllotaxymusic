@@ -152,6 +152,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/spiralcircles/:id", GetController().UpdateSpiralCircle)
 		v1.DELETE("/v1/spiralcircles/:id", GetController().DeleteSpiralCircle)
 
+		v1.GET("/v1/spiralcirclegrids", GetController().GetSpiralCircleGrids)
+		v1.GET("/v1/spiralcirclegrids/:id", GetController().GetSpiralCircleGrid)
+		v1.POST("/v1/spiralcirclegrids", GetController().PostSpiralCircleGrid)
+		v1.PATCH("/v1/spiralcirclegrids/:id", GetController().UpdateSpiralCircleGrid)
+		v1.PUT("/v1/spiralcirclegrids/:id", GetController().UpdateSpiralCircleGrid)
+		v1.DELETE("/v1/spiralcirclegrids/:id", GetController().DeleteSpiralCircleGrid)
+
 		v1.GET("/v1/spiralrhombuss", GetController().GetSpiralRhombuss)
 		v1.GET("/v1/spiralrhombuss/:id", GetController().GetSpiralRhombus)
 		v1.POST("/v1/spiralrhombuss", GetController().PostSpiralRhombus)

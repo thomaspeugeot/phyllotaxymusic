@@ -97,6 +97,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralCircle" {
 		fillUpTable[models.SpiralCircle](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "SpiralCircleGrid" {
+		fillUpTable[models.SpiralCircleGrid](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralRhombus" {
 		fillUpTable[models.SpiralRhombus](nodeImplGongstruct.probe)
 	}

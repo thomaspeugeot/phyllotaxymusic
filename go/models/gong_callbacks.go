@@ -66,6 +66,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterSpiralCircleCreateCallback != nil {
 			stage.OnAfterSpiralCircleCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *SpiralCircleGrid:
+		if stage.OnAfterSpiralCircleGridCreateCallback != nil {
+			stage.OnAfterSpiralCircleGridCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *SpiralRhombus:
 		if stage.OnAfterSpiralRhombusCreateCallback != nil {
 			stage.OnAfterSpiralRhombusCreateCallback.OnAfterCreate(stage, target)
@@ -162,6 +166,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*SpiralCircle)
 		if stage.OnAfterSpiralCircleUpdateCallback != nil {
 			stage.OnAfterSpiralCircleUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralCircleGrid:
+		newTarget := any(new).(*SpiralCircleGrid)
+		if stage.OnAfterSpiralCircleGridUpdateCallback != nil {
+			stage.OnAfterSpiralCircleGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *SpiralRhombus:
 		newTarget := any(new).(*SpiralRhombus)
@@ -263,6 +272,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*SpiralCircle)
 			stage.OnAfterSpiralCircleDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *SpiralCircleGrid:
+		if stage.OnAfterSpiralCircleGridDeleteCallback != nil {
+			staged := any(staged).(*SpiralCircleGrid)
+			stage.OnAfterSpiralCircleGridDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *SpiralRhombus:
 		if stage.OnAfterSpiralRhombusDeleteCallback != nil {
 			staged := any(staged).(*SpiralRhombus)
@@ -348,6 +362,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterSpiralCircleReadCallback != nil {
 			stage.OnAfterSpiralCircleReadCallback.OnAfterRead(stage, target)
 		}
+	case *SpiralCircleGrid:
+		if stage.OnAfterSpiralCircleGridReadCallback != nil {
+			stage.OnAfterSpiralCircleGridReadCallback.OnAfterRead(stage, target)
+		}
 	case *SpiralRhombus:
 		if stage.OnAfterSpiralRhombusReadCallback != nil {
 			stage.OnAfterSpiralRhombusReadCallback.OnAfterRead(stage, target)
@@ -416,6 +434,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralCircle])
 	
+	case *SpiralCircleGrid:
+		stage.OnAfterSpiralCircleGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralCircleGrid])
+	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralRhombus])
 	
@@ -476,6 +497,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleCreateCallback = any(callback).(OnAfterCreateInterface[SpiralCircle])
+	
+	case *SpiralCircleGrid:
+		stage.OnAfterSpiralCircleGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralCircleGrid])
 	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusCreateCallback = any(callback).(OnAfterCreateInterface[SpiralRhombus])
@@ -538,6 +562,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralCircle])
 	
+	case *SpiralCircleGrid:
+		stage.OnAfterSpiralCircleGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralCircleGrid])
+	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralRhombus])
 	
@@ -598,6 +625,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleReadCallback = any(callback).(OnAfterReadInterface[SpiralCircle])
+	
+	case *SpiralCircleGrid:
+		stage.OnAfterSpiralCircleGridReadCallback = any(callback).(OnAfterReadInterface[SpiralCircleGrid])
 	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusReadCallback = any(callback).(OnAfterReadInterface[SpiralRhombus])

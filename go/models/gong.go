@@ -194,6 +194,15 @@ type StageStruct struct {
 	OnAfterSpiralCircleDeleteCallback OnAfterDeleteInterface[SpiralCircle]
 	OnAfterSpiralCircleReadCallback   OnAfterReadInterface[SpiralCircle]
 
+	SpiralCircleGrids           map[*SpiralCircleGrid]any
+	SpiralCircleGrids_mapString map[string]*SpiralCircleGrid
+
+	// insertion point for slice of pointers maps
+	OnAfterSpiralCircleGridCreateCallback OnAfterCreateInterface[SpiralCircleGrid]
+	OnAfterSpiralCircleGridUpdateCallback OnAfterUpdateInterface[SpiralCircleGrid]
+	OnAfterSpiralCircleGridDeleteCallback OnAfterDeleteInterface[SpiralCircleGrid]
+	OnAfterSpiralCircleGridReadCallback   OnAfterReadInterface[SpiralCircleGrid]
+
 	SpiralRhombuss           map[*SpiralRhombus]any
 	SpiralRhombuss_mapString map[string]*SpiralRhombus
 
@@ -319,6 +328,8 @@ type BackRepoInterface interface {
 	CheckoutShapeCategory(shapecategory *ShapeCategory)
 	CommitSpiralCircle(spiralcircle *SpiralCircle)
 	CheckoutSpiralCircle(spiralcircle *SpiralCircle)
+	CommitSpiralCircleGrid(spiralcirclegrid *SpiralCircleGrid)
+	CheckoutSpiralCircleGrid(spiralcirclegrid *SpiralCircleGrid)
 	CommitSpiralRhombus(spiralrhombus *SpiralRhombus)
 	CheckoutSpiralRhombus(spiralrhombus *SpiralRhombus)
 	CommitSpiralRhombusGrid(spiralrhombusgrid *SpiralRhombusGrid)
@@ -377,6 +388,9 @@ func NewStage(path string) (stage *StageStruct) {
 		SpiralCircles:           make(map[*SpiralCircle]any),
 		SpiralCircles_mapString: make(map[string]*SpiralCircle),
 
+		SpiralCircleGrids:           make(map[*SpiralCircleGrid]any),
+		SpiralCircleGrids_mapString: make(map[string]*SpiralCircleGrid),
+
 		SpiralRhombuss:           make(map[*SpiralRhombus]any),
 		SpiralRhombuss_mapString: make(map[string]*SpiralRhombus),
 
@@ -434,6 +448,7 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["RhombusGrid"] = len(stage.RhombusGrids)
 	stage.Map_GongStructName_InstancesNb["ShapeCategory"] = len(stage.ShapeCategorys)
 	stage.Map_GongStructName_InstancesNb["SpiralCircle"] = len(stage.SpiralCircles)
+	stage.Map_GongStructName_InstancesNb["SpiralCircleGrid"] = len(stage.SpiralCircleGrids)
 	stage.Map_GongStructName_InstancesNb["SpiralRhombus"] = len(stage.SpiralRhombuss)
 	stage.Map_GongStructName_InstancesNb["SpiralRhombusGrid"] = len(stage.SpiralRhombusGrids)
 	stage.Map_GongStructName_InstancesNb["VerticalAxis"] = len(stage.VerticalAxiss)
@@ -462,6 +477,7 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["RhombusGrid"] = len(stage.RhombusGrids)
 	stage.Map_GongStructName_InstancesNb["ShapeCategory"] = len(stage.ShapeCategorys)
 	stage.Map_GongStructName_InstancesNb["SpiralCircle"] = len(stage.SpiralCircles)
+	stage.Map_GongStructName_InstancesNb["SpiralCircleGrid"] = len(stage.SpiralCircleGrids)
 	stage.Map_GongStructName_InstancesNb["SpiralRhombus"] = len(stage.SpiralRhombuss)
 	stage.Map_GongStructName_InstancesNb["SpiralRhombusGrid"] = len(stage.SpiralRhombusGrids)
 	stage.Map_GongStructName_InstancesNb["VerticalAxis"] = len(stage.VerticalAxiss)
@@ -1247,6 +1263,56 @@ func (spiralcircle *SpiralCircle) GetName() (res string) {
 	return spiralcircle.Name
 }
 
+// Stage puts spiralcirclegrid to the model stage
+func (spiralcirclegrid *SpiralCircleGrid) Stage(stage *StageStruct) *SpiralCircleGrid {
+	stage.SpiralCircleGrids[spiralcirclegrid] = __member
+	stage.SpiralCircleGrids_mapString[spiralcirclegrid.Name] = spiralcirclegrid
+
+	return spiralcirclegrid
+}
+
+// Unstage removes spiralcirclegrid off the model stage
+func (spiralcirclegrid *SpiralCircleGrid) Unstage(stage *StageStruct) *SpiralCircleGrid {
+	delete(stage.SpiralCircleGrids, spiralcirclegrid)
+	delete(stage.SpiralCircleGrids_mapString, spiralcirclegrid.Name)
+	return spiralcirclegrid
+}
+
+// UnstageVoid removes spiralcirclegrid off the model stage
+func (spiralcirclegrid *SpiralCircleGrid) UnstageVoid(stage *StageStruct) {
+	delete(stage.SpiralCircleGrids, spiralcirclegrid)
+	delete(stage.SpiralCircleGrids_mapString, spiralcirclegrid.Name)
+}
+
+// commit spiralcirclegrid to the back repo (if it is already staged)
+func (spiralcirclegrid *SpiralCircleGrid) Commit(stage *StageStruct) *SpiralCircleGrid {
+	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitSpiralCircleGrid(spiralcirclegrid)
+		}
+	}
+	return spiralcirclegrid
+}
+
+func (spiralcirclegrid *SpiralCircleGrid) CommitVoid(stage *StageStruct) {
+	spiralcirclegrid.Commit(stage)
+}
+
+// Checkout spiralcirclegrid to the back repo (if it is already staged)
+func (spiralcirclegrid *SpiralCircleGrid) Checkout(stage *StageStruct) *SpiralCircleGrid {
+	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutSpiralCircleGrid(spiralcirclegrid)
+		}
+	}
+	return spiralcirclegrid
+}
+
+// for satisfaction of GongStruct interface
+func (spiralcirclegrid *SpiralCircleGrid) GetName() (res string) {
+	return spiralcirclegrid.Name
+}
+
 // Stage puts spiralrhombus to the model stage
 func (spiralrhombus *SpiralRhombus) Stage(stage *StageStruct) *SpiralRhombus {
 	stage.SpiralRhombuss[spiralrhombus] = __member
@@ -1414,6 +1480,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMRhombusGrid(RhombusGrid *RhombusGrid)
 	CreateORMShapeCategory(ShapeCategory *ShapeCategory)
 	CreateORMSpiralCircle(SpiralCircle *SpiralCircle)
+	CreateORMSpiralCircleGrid(SpiralCircleGrid *SpiralCircleGrid)
 	CreateORMSpiralRhombus(SpiralRhombus *SpiralRhombus)
 	CreateORMSpiralRhombusGrid(SpiralRhombusGrid *SpiralRhombusGrid)
 	CreateORMVerticalAxis(VerticalAxis *VerticalAxis)
@@ -1435,6 +1502,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMRhombusGrid(RhombusGrid *RhombusGrid)
 	DeleteORMShapeCategory(ShapeCategory *ShapeCategory)
 	DeleteORMSpiralCircle(SpiralCircle *SpiralCircle)
+	DeleteORMSpiralCircleGrid(SpiralCircleGrid *SpiralCircleGrid)
 	DeleteORMSpiralRhombus(SpiralRhombus *SpiralRhombus)
 	DeleteORMSpiralRhombusGrid(SpiralRhombusGrid *SpiralRhombusGrid)
 	DeleteORMVerticalAxis(VerticalAxis *VerticalAxis)
@@ -1485,6 +1553,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.SpiralCircles = make(map[*SpiralCircle]any)
 	stage.SpiralCircles_mapString = make(map[string]*SpiralCircle)
+
+	stage.SpiralCircleGrids = make(map[*SpiralCircleGrid]any)
+	stage.SpiralCircleGrids_mapString = make(map[string]*SpiralCircleGrid)
 
 	stage.SpiralRhombuss = make(map[*SpiralRhombus]any)
 	stage.SpiralRhombuss_mapString = make(map[string]*SpiralRhombus)
@@ -1542,6 +1613,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.SpiralCircles = nil
 	stage.SpiralCircles_mapString = nil
+
+	stage.SpiralCircleGrids = nil
+	stage.SpiralCircleGrids_mapString = nil
 
 	stage.SpiralRhombuss = nil
 	stage.SpiralRhombuss_mapString = nil
@@ -1613,6 +1687,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 
 	for spiralcircle := range stage.SpiralCircles {
 		spiralcircle.Unstage(stage)
+	}
+
+	for spiralcirclegrid := range stage.SpiralCircleGrids {
+		spiralcirclegrid.Unstage(stage)
 	}
 
 	for spiralrhombus := range stage.SpiralRhombuss {
@@ -1718,6 +1796,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.ShapeCategorys).(*Type)
 	case map[*SpiralCircle]any:
 		return any(&stage.SpiralCircles).(*Type)
+	case map[*SpiralCircleGrid]any:
+		return any(&stage.SpiralCircleGrids).(*Type)
 	case map[*SpiralRhombus]any:
 		return any(&stage.SpiralRhombuss).(*Type)
 	case map[*SpiralRhombusGrid]any:
@@ -1766,6 +1846,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.ShapeCategorys_mapString).(*Type)
 	case map[string]*SpiralCircle:
 		return any(&stage.SpiralCircles_mapString).(*Type)
+	case map[string]*SpiralCircleGrid:
+		return any(&stage.SpiralCircleGrids_mapString).(*Type)
 	case map[string]*SpiralRhombus:
 		return any(&stage.SpiralRhombuss_mapString).(*Type)
 	case map[string]*SpiralRhombusGrid:
@@ -1814,6 +1896,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.ShapeCategorys).(*map[*Type]any)
 	case SpiralCircle:
 		return any(&stage.SpiralCircles).(*map[*Type]any)
+	case SpiralCircleGrid:
+		return any(&stage.SpiralCircleGrids).(*map[*Type]any)
 	case SpiralRhombus:
 		return any(&stage.SpiralRhombuss).(*map[*Type]any)
 	case SpiralRhombusGrid:
@@ -1862,6 +1946,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.ShapeCategorys).(*map[Type]any)
 	case *SpiralCircle:
 		return any(&stage.SpiralCircles).(*map[Type]any)
+	case *SpiralCircleGrid:
+		return any(&stage.SpiralCircleGrids).(*map[Type]any)
 	case *SpiralRhombus:
 		return any(&stage.SpiralRhombuss).(*map[Type]any)
 	case *SpiralRhombusGrid:
@@ -1910,6 +1996,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.ShapeCategorys_mapString).(*map[string]*Type)
 	case SpiralCircle:
 		return any(&stage.SpiralCircles_mapString).(*map[string]*Type)
+	case SpiralCircleGrid:
+		return any(&stage.SpiralCircleGrids_mapString).(*map[string]*Type)
 	case SpiralRhombus:
 		return any(&stage.SpiralRhombuss_mapString).(*map[string]*Type)
 	case SpiralRhombusGrid:
@@ -2071,6 +2159,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			SpiralRhombusGrid: &SpiralRhombusGrid{Name: "SpiralRhombusGrid"},
 			// field is initialized with an instance of SpiralCircle with the name of the field
 			SpiralCircleSeed: &SpiralCircle{Name: "SpiralCircleSeed"},
+			// field is initialized with an instance of SpiralCircleGrid with the name of the field
+			SpiralCircleGrid: &SpiralCircleGrid{Name: "SpiralCircleGrid"},
 			// field is initialized with an instance of Key with the name of the field
 			Fkey: &Key{Name: "Fkey"},
 			// field is initialized with an instance of AxisGrid with the name of the field
@@ -2123,6 +2213,14 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case SpiralCircle:
 		return any(&SpiralCircle{
 			// Initialisation of associations
+			// field is initialized with AbstractShape problem with composites
+			
+		}).(*Type)
+	case SpiralCircleGrid:
+		return any(&SpiralCircleGrid{
+			// Initialisation of associations
+			// field is initialized with an instance of SpiralRhombusGrid with the name of the field
+			SpiralRhombusGrid: &SpiralRhombusGrid{Name: "SpiralRhombusGrid"},
 			// field is initialized with AbstractShape problem with composites
 			
 		}).(*Type)
@@ -2985,6 +3083,23 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		case "SpiralCircleGrid":
+			res := make(map[*SpiralCircleGrid][]*Parameter)
+			for parameter := range stage.Parameters {
+				if parameter.SpiralCircleGrid != nil {
+					spiralcirclegrid_ := parameter.SpiralCircleGrid
+					var parameters []*Parameter
+					_, ok := res[spiralcirclegrid_]
+					if ok {
+						parameters = res[spiralcirclegrid_]
+					} else {
+						parameters = make([]*Parameter, 0)
+					}
+					parameters = append(parameters, parameter)
+					res[spiralcirclegrid_] = parameters
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		case "Fkey":
 			res := make(map[*Key][]*Parameter)
 			for parameter := range stage.Parameters {
@@ -3295,6 +3410,45 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 			}
 			return any(res).(map[*End][]*Start)
 		}
+	// reverse maps of direct associations of SpiralCircleGrid
+	case SpiralCircleGrid:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "ShapeCategory":
+			res := make(map[*ShapeCategory][]*SpiralCircleGrid)
+			for spiralcirclegrid := range stage.SpiralCircleGrids {
+				if spiralcirclegrid.ShapeCategory != nil {
+					shapecategory_ := spiralcirclegrid.ShapeCategory
+					var spiralcirclegrids []*SpiralCircleGrid
+					_, ok := res[shapecategory_]
+					if ok {
+						spiralcirclegrids = res[shapecategory_]
+					} else {
+						spiralcirclegrids = make([]*SpiralCircleGrid, 0)
+					}
+					spiralcirclegrids = append(spiralcirclegrids, spiralcirclegrid)
+					res[shapecategory_] = spiralcirclegrids
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		case "SpiralRhombusGrid":
+			res := make(map[*SpiralRhombusGrid][]*SpiralCircleGrid)
+			for spiralcirclegrid := range stage.SpiralCircleGrids {
+				if spiralcirclegrid.SpiralRhombusGrid != nil {
+					spiralrhombusgrid_ := spiralcirclegrid.SpiralRhombusGrid
+					var spiralcirclegrids []*SpiralCircleGrid
+					_, ok := res[spiralrhombusgrid_]
+					if ok {
+						spiralcirclegrids = res[spiralrhombusgrid_]
+					} else {
+						spiralcirclegrids = make([]*SpiralCircleGrid, 0)
+					}
+					spiralcirclegrids = append(spiralcirclegrids, spiralcirclegrid)
+					res[spiralrhombusgrid_] = spiralcirclegrids
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		}
 	// reverse maps of direct associations of SpiralRhombus
 	case SpiralRhombus:
 		switch fieldname {
@@ -3534,6 +3688,11 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		}
+	// reverse maps of direct associations of SpiralCircleGrid
+	case SpiralCircleGrid:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	// reverse maps of direct associations of SpiralRhombus
 	case SpiralRhombus:
 		switch fieldname {
@@ -3591,6 +3750,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "ShapeCategory"
 	case SpiralCircle:
 		res = "SpiralCircle"
+	case SpiralCircleGrid:
+		res = "SpiralCircleGrid"
 	case SpiralRhombus:
 		res = "SpiralRhombus"
 	case SpiralRhombusGrid:
@@ -3639,6 +3800,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "ShapeCategory"
 	case *SpiralCircle:
 		res = "SpiralCircle"
+	case *SpiralCircleGrid:
+		res = "SpiralCircleGrid"
 	case *SpiralRhombus:
 		res = "SpiralRhombus"
 	case *SpiralRhombusGrid:
@@ -3677,7 +3840,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case NoteInfo:
 		res = []string{"Name", "IsKept"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombus", "SpiralRhombusGrid", "SpiralCircleSeed", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOriginX", "SpiralOriginY", "SpiralInitialRadius"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombus", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOriginX", "SpiralOriginY", "SpiralInitialRadius"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
@@ -3686,6 +3849,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "IsExpanded"}
 	case SpiralCircle:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+	case SpiralCircleGrid:
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid"}
 	case SpiralRhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Rhombus"}
 	case SpiralRhombusGrid:
@@ -3773,6 +3938,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case SpiralCircle:
 		var rf ReverseField
 		_ = rf
+	case SpiralCircleGrid:
+		var rf ReverseField
+		_ = rf
 	case SpiralRhombus:
 		var rf ReverseField
 		_ = rf
@@ -3814,7 +3982,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *NoteInfo:
 		res = []string{"Name", "IsKept"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombus", "SpiralRhombusGrid", "SpiralCircleSeed", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOriginX", "SpiralOriginY", "SpiralInitialRadius"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombus", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOriginX", "SpiralOriginY", "SpiralInitialRadius"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "Angle", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
@@ -3823,6 +3991,8 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 		res = []string{"Name", "IsExpanded"}
 	case *SpiralCircle:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+	case *SpiralCircleGrid:
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid"}
 	case *SpiralRhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Rhombus"}
 	case *SpiralRhombusGrid:
@@ -4268,6 +4438,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.SpiralCircleSeed != nil {
 				res = inferedInstance.SpiralCircleSeed.Name
 			}
+		case "SpiralCircleGrid":
+			if inferedInstance.SpiralCircleGrid != nil {
+				res = inferedInstance.SpiralCircleGrid.Name
+			}
 		case "Fkey":
 			if inferedInstance.Fkey != nil {
 				res = inferedInstance.Fkey.Name
@@ -4470,6 +4644,22 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
 			res = inferedInstance.Transform
+		}
+	case *SpiralCircleGrid:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "IsDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
+		case "SpiralRhombusGrid":
+			if inferedInstance.SpiralRhombusGrid != nil {
+				res = inferedInstance.SpiralRhombusGrid.Name
+			}
 		}
 	case *SpiralRhombus:
 		switch fieldName {
@@ -4976,6 +5166,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.SpiralCircleSeed != nil {
 				res = inferedInstance.SpiralCircleSeed.Name
 			}
+		case "SpiralCircleGrid":
+			if inferedInstance.SpiralCircleGrid != nil {
+				res = inferedInstance.SpiralCircleGrid.Name
+			}
 		case "Fkey":
 			if inferedInstance.Fkey != nil {
 				res = inferedInstance.Fkey.Name
@@ -5178,6 +5372,22 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
 			res = inferedInstance.Transform
+		}
+	case SpiralCircleGrid:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "IsDisplayed":
+			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+		case "ShapeCategory":
+			if inferedInstance.ShapeCategory != nil {
+				res = inferedInstance.ShapeCategory.Name
+			}
+		case "SpiralRhombusGrid":
+			if inferedInstance.SpiralRhombusGrid != nil {
+				res = inferedInstance.SpiralRhombusGrid.Name
+			}
 		}
 	case SpiralRhombus:
 		switch fieldName {
