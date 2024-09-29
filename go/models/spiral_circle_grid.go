@@ -29,6 +29,9 @@ func (spiralCircleGrid *SpiralCircleGrid) Draw(
 
 		sc.CenterX = (x_r[0] + x_r[2]) / 2.0
 		sc.CenterY = (y_r[0] + y_r[2]) / 2.0
+
+		sc.CenterX = x_r[2]
+		sc.CenterY = y_r[2]
 		sc.Draw(gongsvgStage, layer, p)
 	}
 }

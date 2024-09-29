@@ -601,4 +601,7 @@ func (p *Parameter) ComputeSpiralCircleSeed() {
 
 	p.SpiralCircleSeed.CenterX = (x_r[0] + x_r[2]) / 2.0
 	p.SpiralCircleSeed.CenterY = (y_r[0] + y_r[2]) / 2.0
+
+	p.SpiralCircleSeed.CenterX = x_r[2]
+	p.SpiralCircleSeed.CenterY = y_r[2]
 }
