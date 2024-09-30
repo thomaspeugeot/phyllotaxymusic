@@ -50,6 +50,9 @@ func (_b *Bezier) move(b *Bezier, x, y float64) {
 	_b.ControlPointEndY = b.ControlPointEndY + y
 }
 
+// This function, ComputeYFromX, is designed to compute the Y-coordinate corresponding to
+// a given X-coordinate on a cubic Bezier curve. The Bezier curve is defined by a starting point,
+// an ending point, and two control points.
 func (b *Bezier) ComputeYFromX(x float64) (float64, error) {
 	const tolerance = 1e-6
 	const maxIterations = 100

@@ -711,7 +711,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircleGrid__000000_Spiral_Circle_Grid.IsDisplayed = true
 
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Name = `Reference Spiral Rhombus`
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = true
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = false
 
 	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.Name = `Spiral Rhombus Grid`
 	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.IsDisplayed = true

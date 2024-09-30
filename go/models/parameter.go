@@ -503,11 +503,18 @@ func (p *Parameter) ComputeGrowthCurveSegment() {
 
 }
 
+// The function computeBezier calculates and sets the control points and endpoints
+// for a cubic Bezier curve (b) based on two circles (startCircle and endCircle)
+// and parameters (p).
+// This function essentially constructs a cubic Bezier curve, where the starting and ending
+// points are located at the centers of the two given circles, and the control points are computed
+// based on the angle and side length provided by the Parameter struct (p).
 func (p *Parameter) computeBezier(b *Bezier, startCircle, endCircle *Circle) {
 	b.StartX = startCircle.CenterX
 	b.StartY = startCircle.CenterY
 
 	b.EndX = endCircle.CenterX
+	
 	b.EndY = endCircle.CenterY
 
 	angleRad := p.ConstructionAxis.Angle*math.Pi/180 - math.Pi/2.0
