@@ -1989,6 +1989,8 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralcircle_.HasBespokeRadius), formDiv)
 		case "BespopkeRadius":
 			FormDivBasicFieldToField(&(spiralcircle_.BespopkeRadius), formDiv)
+		case "Pitch":
+			FormDivBasicFieldToField(&(spiralcircle_.Pitch), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(spiralcircle_.Color), formDiv)
 		case "FillOpacity":

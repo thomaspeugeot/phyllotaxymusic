@@ -666,7 +666,7 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000005_5_Vertical_growth.IsExpanded = false
 
 	__ShapeCategory__000006_6_Circular_growth.Name = `6. Circular growth`
-	__ShapeCategory__000006_6_Circular_growth.IsExpanded = true
+	__ShapeCategory__000006_6_Circular_growth.IsExpanded = false
 
 	__ShapeCategory__000007_7_Score_notation.Name = `7. Score notation`
 	__ShapeCategory__000007_7_Score_notation.IsExpanded = false
@@ -698,6 +698,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.CenterY = -26.653325
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.HasBespokeRadius = false
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.BespopkeRadius = 0.000000
+	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.Pitch = 0
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.Color = ``
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.FillOpacity = 0.000000
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.Stroke = `green`

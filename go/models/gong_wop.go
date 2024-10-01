@@ -431,6 +431,7 @@ type SpiralCircle_WOP struct {
 	CenterY float64
 	HasBespokeRadius bool
 	BespopkeRadius float64
+	Pitch int
 	Color string
 	FillOpacity float64
 	Stroke string
@@ -449,6 +450,7 @@ func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
 	to.CenterY = from.CenterY
 	to.HasBespokeRadius = from.HasBespokeRadius
 	to.BespopkeRadius = from.BespopkeRadius
+	to.Pitch = from.Pitch
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke

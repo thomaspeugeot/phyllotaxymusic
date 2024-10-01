@@ -24,6 +24,7 @@ export class SpiralCircle {
 	CenterY: number = 0
 	HasBespokeRadius: boolean = false
 	BespopkeRadius: number = 0
+	Pitch: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -51,6 +52,7 @@ export function CopySpiralCircleToSpiralCircleAPI(spiralcircle: SpiralCircle, sp
 	spiralcircleAPI.CenterY = spiralcircle.CenterY
 	spiralcircleAPI.HasBespokeRadius = spiralcircle.HasBespokeRadius
 	spiralcircleAPI.BespopkeRadius = spiralcircle.BespopkeRadius
+	spiralcircleAPI.Pitch = spiralcircle.Pitch
 	spiralcircleAPI.Color = spiralcircle.Color
 	spiralcircleAPI.FillOpacity = spiralcircle.FillOpacity
 	spiralcircleAPI.Stroke = spiralcircle.Stroke
@@ -89,6 +91,7 @@ export function CopySpiralCircleAPIToSpiralCircle(spiralcircleAPI: SpiralCircleA
 	spiralcircle.CenterY = spiralcircleAPI.CenterY
 	spiralcircle.HasBespokeRadius = spiralcircleAPI.HasBespokeRadius
 	spiralcircle.BespopkeRadius = spiralcircleAPI.BespopkeRadius
+	spiralcircle.Pitch = spiralcircleAPI.Pitch
 	spiralcircle.Color = spiralcircleAPI.Color
 	spiralcircle.FillOpacity = spiralcircleAPI.FillOpacity
 	spiralcircle.Stroke = spiralcircleAPI.Stroke

@@ -3,15 +3,7 @@ package models
 import gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 
 type SpiralCircle struct {
-	Name string
-
-	AbstractShape
-	CenterX, CenterY float64
-
-	HasBespokeRadius bool
-	BespopkeRadius   float64
-
-	Presentation
+	Circle
 }
 
 func (spiralCircle *SpiralCircle) Draw(

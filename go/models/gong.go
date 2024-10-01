@@ -2338,7 +2338,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralRhombusGrid with the name of the field
 			SpiralRhombusGrid: &SpiralRhombusGrid{Name: "SpiralRhombusGrid"},
 			// field is initialized with an instance of SpiralCircle with the name of the field
-			SpiralCircleSeed: &SpiralCircle{Name: "SpiralCircleSeed"},
+			SpiralCircleSeed: &SpiralCircle{Circle: Circle {Name: "SpiralCircleSeed"}},
 			// field is initialized with an instance of SpiralCircleGrid with the name of the field
 			SpiralCircleGrid: &SpiralCircleGrid{Name: "SpiralCircleGrid"},
 			// field is initialized with an instance of SpiralAxis with the name of the field
@@ -2420,7 +2420,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralRhombusGrid with the name of the field
 			SpiralRhombusGrid: &SpiralRhombusGrid{Name: "SpiralRhombusGrid"},
 			// field is initialized with an instance of SpiralCircle with the name of the field
-			SpiralCircles: []*SpiralCircle{{Name: "SpiralCircles"}},
+			SpiralCircles: []*SpiralCircle{{Circle: Circle {Name: "SpiralCircles"}}},
 			// field is initialized with AbstractShape problem with composites
 			
 		}).(*Type)
@@ -4164,7 +4164,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case SpiralAxisGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralAxises"}
 	case SpiralCircle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case SpiralRhombus:
@@ -4322,7 +4322,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *SpiralAxisGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralAxises"}
 	case *SpiralCircle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case *SpiralRhombus:
@@ -5023,6 +5023,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
 		case "BespopkeRadius":
 			res = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+		case "Pitch":
+			res = fmt.Sprintf("%d", inferedInstance.Pitch)
 		case "Color":
 			res = inferedInstance.Color
 		case "FillOpacity":
@@ -5821,6 +5823,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
 		case "BespopkeRadius":
 			res = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+		case "Pitch":
+			res = fmt.Sprintf("%d", inferedInstance.Pitch)
 		case "Color":
 			res = inferedInstance.Color
 		case "FillOpacity":
