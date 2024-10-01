@@ -508,87 +508,129 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 									switch gongstructName {
 									// insertion point for identifiers
 									case "Axis":
-										instanceAxis := (&Axis{Name: instanceName}).Stage(stage)
+										instanceAxis := new(Axis)
+										instanceAxis.Name = instanceName
+										instanceAxis.Stage(stage)
 										instance = any(instanceAxis)
 										__gong__map_Axis[identifier] = instanceAxis
 									case "AxisGrid":
-										instanceAxisGrid := (&AxisGrid{Name: instanceName}).Stage(stage)
+										instanceAxisGrid := new(AxisGrid)
+										instanceAxisGrid.Name = instanceName
+										instanceAxisGrid.Stage(stage)
 										instance = any(instanceAxisGrid)
 										__gong__map_AxisGrid[identifier] = instanceAxisGrid
 									case "Bezier":
-										instanceBezier := (&Bezier{Name: instanceName}).Stage(stage)
+										instanceBezier := new(Bezier)
+										instanceBezier.Name = instanceName
+										instanceBezier.Stage(stage)
 										instance = any(instanceBezier)
 										__gong__map_Bezier[identifier] = instanceBezier
 									case "BezierGrid":
-										instanceBezierGrid := (&BezierGrid{Name: instanceName}).Stage(stage)
+										instanceBezierGrid := new(BezierGrid)
+										instanceBezierGrid.Name = instanceName
+										instanceBezierGrid.Stage(stage)
 										instance = any(instanceBezierGrid)
 										__gong__map_BezierGrid[identifier] = instanceBezierGrid
 									case "BezierGridStack":
-										instanceBezierGridStack := (&BezierGridStack{Name: instanceName}).Stage(stage)
+										instanceBezierGridStack := new(BezierGridStack)
+										instanceBezierGridStack.Name = instanceName
+										instanceBezierGridStack.Stage(stage)
 										instance = any(instanceBezierGridStack)
 										__gong__map_BezierGridStack[identifier] = instanceBezierGridStack
 									case "Circle":
-										instanceCircle := (&Circle{Name: instanceName}).Stage(stage)
+										instanceCircle := new(Circle)
+										instanceCircle.Name = instanceName
+										instanceCircle.Stage(stage)
 										instance = any(instanceCircle)
 										__gong__map_Circle[identifier] = instanceCircle
 									case "CircleGrid":
-										instanceCircleGrid := (&CircleGrid{Name: instanceName}).Stage(stage)
+										instanceCircleGrid := new(CircleGrid)
+										instanceCircleGrid.Name = instanceName
+										instanceCircleGrid.Stage(stage)
 										instance = any(instanceCircleGrid)
 										__gong__map_CircleGrid[identifier] = instanceCircleGrid
 									case "HorizontalAxis":
-										instanceHorizontalAxis := (&HorizontalAxis{Name: instanceName}).Stage(stage)
+										instanceHorizontalAxis := new(HorizontalAxis)
+										instanceHorizontalAxis.Name = instanceName
+										instanceHorizontalAxis.Stage(stage)
 										instance = any(instanceHorizontalAxis)
 										__gong__map_HorizontalAxis[identifier] = instanceHorizontalAxis
 									case "Key":
-										instanceKey := (&Key{Name: instanceName}).Stage(stage)
+										instanceKey := new(Key)
+										instanceKey.Name = instanceName
+										instanceKey.Stage(stage)
 										instance = any(instanceKey)
 										__gong__map_Key[identifier] = instanceKey
 									case "NoteInfo":
-										instanceNoteInfo := (&NoteInfo{Name: instanceName}).Stage(stage)
+										instanceNoteInfo := new(NoteInfo)
+										instanceNoteInfo.Name = instanceName
+										instanceNoteInfo.Stage(stage)
 										instance = any(instanceNoteInfo)
 										__gong__map_NoteInfo[identifier] = instanceNoteInfo
 									case "Parameter":
-										instanceParameter := (&Parameter{Name: instanceName}).Stage(stage)
+										instanceParameter := new(Parameter)
+										instanceParameter.Name = instanceName
+										instanceParameter.Stage(stage)
 										instance = any(instanceParameter)
 										__gong__map_Parameter[identifier] = instanceParameter
 									case "Rhombus":
-										instanceRhombus := (&Rhombus{Name: instanceName}).Stage(stage)
+										instanceRhombus := new(Rhombus)
+										instanceRhombus.Name = instanceName
+										instanceRhombus.Stage(stage)
 										instance = any(instanceRhombus)
 										__gong__map_Rhombus[identifier] = instanceRhombus
 									case "RhombusGrid":
-										instanceRhombusGrid := (&RhombusGrid{Name: instanceName}).Stage(stage)
+										instanceRhombusGrid := new(RhombusGrid)
+										instanceRhombusGrid.Name = instanceName
+										instanceRhombusGrid.Stage(stage)
 										instance = any(instanceRhombusGrid)
 										__gong__map_RhombusGrid[identifier] = instanceRhombusGrid
 									case "ShapeCategory":
-										instanceShapeCategory := (&ShapeCategory{Name: instanceName}).Stage(stage)
+										instanceShapeCategory := new(ShapeCategory)
+										instanceShapeCategory.Name = instanceName
+										instanceShapeCategory.Stage(stage)
 										instance = any(instanceShapeCategory)
 										__gong__map_ShapeCategory[identifier] = instanceShapeCategory
 									case "SpiralAxis":
-										instanceSpiralAxis := (&SpiralAxis{Name: instanceName}).Stage(stage)
+										instanceSpiralAxis := new(SpiralAxis)
+										instanceSpiralAxis.Name = instanceName
+										instanceSpiralAxis.Stage(stage)
 										instance = any(instanceSpiralAxis)
 										__gong__map_SpiralAxis[identifier] = instanceSpiralAxis
 									case "SpiralAxisGrid":
-										instanceSpiralAxisGrid := (&SpiralAxisGrid{Name: instanceName}).Stage(stage)
+										instanceSpiralAxisGrid := new(SpiralAxisGrid)
+										instanceSpiralAxisGrid.Name = instanceName
+										instanceSpiralAxisGrid.Stage(stage)
 										instance = any(instanceSpiralAxisGrid)
 										__gong__map_SpiralAxisGrid[identifier] = instanceSpiralAxisGrid
 									case "SpiralCircle":
-										instanceSpiralCircle := (&SpiralCircle{Name: instanceName}).Stage(stage)
+										instanceSpiralCircle := new(SpiralCircle)
+										instanceSpiralCircle.Name = instanceName
+										instanceSpiralCircle.Stage(stage)
 										instance = any(instanceSpiralCircle)
 										__gong__map_SpiralCircle[identifier] = instanceSpiralCircle
 									case "SpiralCircleGrid":
-										instanceSpiralCircleGrid := (&SpiralCircleGrid{Name: instanceName}).Stage(stage)
+										instanceSpiralCircleGrid := new(SpiralCircleGrid)
+										instanceSpiralCircleGrid.Name = instanceName
+										instanceSpiralCircleGrid.Stage(stage)
 										instance = any(instanceSpiralCircleGrid)
 										__gong__map_SpiralCircleGrid[identifier] = instanceSpiralCircleGrid
 									case "SpiralRhombus":
-										instanceSpiralRhombus := (&SpiralRhombus{Name: instanceName}).Stage(stage)
+										instanceSpiralRhombus := new(SpiralRhombus)
+										instanceSpiralRhombus.Name = instanceName
+										instanceSpiralRhombus.Stage(stage)
 										instance = any(instanceSpiralRhombus)
 										__gong__map_SpiralRhombus[identifier] = instanceSpiralRhombus
 									case "SpiralRhombusGrid":
-										instanceSpiralRhombusGrid := (&SpiralRhombusGrid{Name: instanceName}).Stage(stage)
+										instanceSpiralRhombusGrid := new(SpiralRhombusGrid)
+										instanceSpiralRhombusGrid.Name = instanceName
+										instanceSpiralRhombusGrid.Stage(stage)
 										instance = any(instanceSpiralRhombusGrid)
 										__gong__map_SpiralRhombusGrid[identifier] = instanceSpiralRhombusGrid
 									case "VerticalAxis":
-										instanceVerticalAxis := (&VerticalAxis{Name: instanceName}).Stage(stage)
+										instanceVerticalAxis := new(VerticalAxis)
+										instanceVerticalAxis.Name = instanceName
+										instanceVerticalAxis.Stage(stage)
 										instance = any(instanceVerticalAxis)
 										__gong__map_VerticalAxis[identifier] = instanceVerticalAxis
 									}
