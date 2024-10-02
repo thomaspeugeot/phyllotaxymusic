@@ -459,7 +459,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000002_First_Voice_notes.IsDisplayed = false
 
 	__CircleGrid__000003_Growing_Circle_Grid.Name = `Growing Circle Grid`
-	__CircleGrid__000003_Growing_Circle_Grid.IsDisplayed = false
+	__CircleGrid__000003_Growing_Circle_Grid.IsDisplayed = true
 
 	__CircleGrid__000004_Growing_Circle_Grid_Shifted_Left.Name = `Growing Circle Grid Shifted Left`
 	__CircleGrid__000004_Growing_Circle_Grid_Shifted_Left.IsDisplayed = false
@@ -549,7 +549,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
-	__Parameter__000000_Reference.Z = 6
+	__Parameter__000000_Reference.Z = 16
 	__Parameter__000000_Reference.InsideAngle = 109.000000
 	__Parameter__000000_Reference.SideLength = 110.000000
 	__Parameter__000000_Reference.StackWidth = 3
@@ -696,14 +696,14 @@ func _(stage *models.StageStruct) {
 
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Name = `Spiral Bezier Seed`
 	__SpiralBezier__000000_Spiral_Bezier_Seed.IsDisplayed = false
-	__SpiralBezier__000000_Spiral_Bezier_Seed.StartX = 211.564774
-	__SpiralBezier__000000_Spiral_Bezier_Seed.StartY = -26.653325
-	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointStartX = 260.568635
-	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointStartY = -19.662502
-	__SpiralBezier__000000_Spiral_Bezier_Seed.EndX = -165.540714
-	__SpiralBezier__000000_Spiral_Bezier_Seed.EndY = 171.737434
-	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointEndX = -214.544575
-	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointEndY = 164.746612
+	__SpiralBezier__000000_Spiral_Bezier_Seed.StartX = 150.000000
+	__SpiralBezier__000000_Spiral_Bezier_Seed.StartY = 0.000000
+	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointStartX = 199.003861
+	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointStartY = 6.990823
+	__SpiralBezier__000000_Spiral_Bezier_Seed.EndX = -136.475473
+	__SpiralBezier__000000_Spiral_Bezier_Seed.EndY = 110.012380
+	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointEndX = -185.479334
+	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointEndY = 103.021557
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Color = ``
 	__SpiralBezier__000000_Spiral_Bezier_Seed.FillOpacity = 0.000000
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Stroke = `green`
@@ -730,7 +730,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.Transform = ``
 
 	__SpiralCircleGrid__000000_Spiral_Circle_Grid.Name = `Spiral Circle Grid`
-	__SpiralCircleGrid__000000_Spiral_Circle_Grid.IsDisplayed = false
+	__SpiralCircleGrid__000000_Spiral_Circle_Grid.IsDisplayed = true
 
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Name = `Reference Spiral Rhombus`
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = true
