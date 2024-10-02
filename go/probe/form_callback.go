@@ -2330,6 +2330,22 @@ func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(spiralrhombus_.ShapeCategory), spiralrhombusFormCallback.probe.stageOfInterest, formDiv)
 		case "Rhombus":
 			FormDivSelectFieldToField(&(spiralrhombus_.Rhombus), spiralrhombusFormCallback.probe.stageOfInterest, formDiv)
+		case "X_r0":
+			FormDivBasicFieldToField(&(spiralrhombus_.X_r0), formDiv)
+		case "Y_r0":
+			FormDivBasicFieldToField(&(spiralrhombus_.Y_r0), formDiv)
+		case "X_r1":
+			FormDivBasicFieldToField(&(spiralrhombus_.X_r1), formDiv)
+		case "Y_r1":
+			FormDivBasicFieldToField(&(spiralrhombus_.Y_r1), formDiv)
+		case "X_r2":
+			FormDivBasicFieldToField(&(spiralrhombus_.X_r2), formDiv)
+		case "Y_r2":
+			FormDivBasicFieldToField(&(spiralrhombus_.Y_r2), formDiv)
+		case "X_r3":
+			FormDivBasicFieldToField(&(spiralrhombus_.X_r3), formDiv)
+		case "Y_r3":
+			FormDivBasicFieldToField(&(spiralrhombus_.Y_r3), formDiv)
 		}
 	}
 

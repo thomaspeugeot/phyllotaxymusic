@@ -129,7 +129,7 @@ export class ParameterPointersEncoding {
 
 	GrowthCurveStackID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveStack.ID = 0
 
-	SpiralRhombusID: NullInt64 = new NullInt64 // if pointer is null, SpiralRhombus.ID = 0
+	SpiralRhombusGridSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralRhombusGridSeed.ID = 0
 
 	SpiralRhombusGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralRhombusGrid.ID = 0
 

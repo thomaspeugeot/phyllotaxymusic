@@ -4314,7 +4314,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case SpiralRhombus:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Rhombus"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Rhombus", "X_r0", "Y_r0", "X_r1", "Y_r1", "X_r2", "Y_r2", "X_r3", "Y_r3"}
 	case SpiralRhombusGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "RhombusGrid"}
 	case VerticalAxis:
@@ -4477,7 +4477,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case *SpiralRhombus:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Rhombus"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Rhombus", "X_r0", "Y_r0", "X_r1", "Y_r1", "X_r2", "Y_r2", "X_r3", "Y_r3"}
 	case *SpiralRhombusGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "RhombusGrid"}
 	case *VerticalAxis:
@@ -5279,6 +5279,22 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.Rhombus != nil {
 				res = inferedInstance.Rhombus.Name
 			}
+		case "X_r0":
+			res = fmt.Sprintf("%f", inferedInstance.X_r0)
+		case "Y_r0":
+			res = fmt.Sprintf("%f", inferedInstance.Y_r0)
+		case "X_r1":
+			res = fmt.Sprintf("%f", inferedInstance.X_r1)
+		case "Y_r1":
+			res = fmt.Sprintf("%f", inferedInstance.Y_r1)
+		case "X_r2":
+			res = fmt.Sprintf("%f", inferedInstance.X_r2)
+		case "Y_r2":
+			res = fmt.Sprintf("%f", inferedInstance.Y_r2)
+		case "X_r3":
+			res = fmt.Sprintf("%f", inferedInstance.X_r3)
+		case "Y_r3":
+			res = fmt.Sprintf("%f", inferedInstance.Y_r3)
 		}
 	case *SpiralRhombusGrid:
 		switch fieldName {
@@ -6127,6 +6143,22 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.Rhombus != nil {
 				res = inferedInstance.Rhombus.Name
 			}
+		case "X_r0":
+			res = fmt.Sprintf("%f", inferedInstance.X_r0)
+		case "Y_r0":
+			res = fmt.Sprintf("%f", inferedInstance.Y_r0)
+		case "X_r1":
+			res = fmt.Sprintf("%f", inferedInstance.X_r1)
+		case "Y_r1":
+			res = fmt.Sprintf("%f", inferedInstance.Y_r1)
+		case "X_r2":
+			res = fmt.Sprintf("%f", inferedInstance.X_r2)
+		case "Y_r2":
+			res = fmt.Sprintf("%f", inferedInstance.Y_r2)
+		case "X_r3":
+			res = fmt.Sprintf("%f", inferedInstance.X_r3)
+		case "Y_r3":
+			res = fmt.Sprintf("%f", inferedInstance.Y_r3)
 		}
 	case SpiralRhombusGrid:
 		switch fieldName {

@@ -73,6 +73,30 @@ type SpiralRhombusDB struct {
 	// Declation for basic field spiralrhombusDB.IsDisplayed
 	// provide the sql storage for the boolan
 	IsDisplayed_Data sql.NullBool
+
+	// Declation for basic field spiralrhombusDB.X_r0
+	X_r0_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.Y_r0
+	Y_r0_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.X_r1
+	X_r1_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.Y_r1
+	Y_r1_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.X_r2
+	X_r2_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.Y_r2
+	Y_r2_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.X_r3
+	X_r3_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.Y_r3
+	Y_r3_Data sql.NullFloat64
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -99,6 +123,22 @@ type SpiralRhombusWOP struct {
 	Name string `xlsx:"1"`
 
 	IsDisplayed bool `xlsx:"2"`
+
+	X_r0 float64 `xlsx:"3"`
+
+	Y_r0 float64 `xlsx:"4"`
+
+	X_r1 float64 `xlsx:"5"`
+
+	Y_r1 float64 `xlsx:"6"`
+
+	X_r2 float64 `xlsx:"7"`
+
+	Y_r2 float64 `xlsx:"8"`
+
+	X_r3 float64 `xlsx:"9"`
+
+	Y_r3 float64 `xlsx:"10"`
 	// insertion for WOP pointer fields
 }
 
@@ -107,6 +147,14 @@ var SpiralRhombus_Fields = []string{
 	"ID",
 	"Name",
 	"IsDisplayed",
+	"X_r0",
+	"Y_r0",
+	"X_r1",
+	"Y_r1",
+	"X_r2",
+	"Y_r2",
+	"X_r3",
+	"Y_r3",
 }
 
 type BackRepoSpiralRhombusStruct struct {
@@ -412,6 +460,30 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsFromSpiralRhombus(spiralr
 
 	spiralrhombusDB.IsDisplayed_Data.Bool = spiralrhombus.IsDisplayed
 	spiralrhombusDB.IsDisplayed_Data.Valid = true
+
+	spiralrhombusDB.X_r0_Data.Float64 = spiralrhombus.X_r0
+	spiralrhombusDB.X_r0_Data.Valid = true
+
+	spiralrhombusDB.Y_r0_Data.Float64 = spiralrhombus.Y_r0
+	spiralrhombusDB.Y_r0_Data.Valid = true
+
+	spiralrhombusDB.X_r1_Data.Float64 = spiralrhombus.X_r1
+	spiralrhombusDB.X_r1_Data.Valid = true
+
+	spiralrhombusDB.Y_r1_Data.Float64 = spiralrhombus.Y_r1
+	spiralrhombusDB.Y_r1_Data.Valid = true
+
+	spiralrhombusDB.X_r2_Data.Float64 = spiralrhombus.X_r2
+	spiralrhombusDB.X_r2_Data.Valid = true
+
+	spiralrhombusDB.Y_r2_Data.Float64 = spiralrhombus.Y_r2
+	spiralrhombusDB.Y_r2_Data.Valid = true
+
+	spiralrhombusDB.X_r3_Data.Float64 = spiralrhombus.X_r3
+	spiralrhombusDB.X_r3_Data.Valid = true
+
+	spiralrhombusDB.Y_r3_Data.Float64 = spiralrhombus.Y_r3
+	spiralrhombusDB.Y_r3_Data.Valid = true
 }
 
 // CopyBasicFieldsFromSpiralRhombus_WOP
@@ -423,6 +495,30 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsFromSpiralRhombus_WOP(spi
 
 	spiralrhombusDB.IsDisplayed_Data.Bool = spiralrhombus.IsDisplayed
 	spiralrhombusDB.IsDisplayed_Data.Valid = true
+
+	spiralrhombusDB.X_r0_Data.Float64 = spiralrhombus.X_r0
+	spiralrhombusDB.X_r0_Data.Valid = true
+
+	spiralrhombusDB.Y_r0_Data.Float64 = spiralrhombus.Y_r0
+	spiralrhombusDB.Y_r0_Data.Valid = true
+
+	spiralrhombusDB.X_r1_Data.Float64 = spiralrhombus.X_r1
+	spiralrhombusDB.X_r1_Data.Valid = true
+
+	spiralrhombusDB.Y_r1_Data.Float64 = spiralrhombus.Y_r1
+	spiralrhombusDB.Y_r1_Data.Valid = true
+
+	spiralrhombusDB.X_r2_Data.Float64 = spiralrhombus.X_r2
+	spiralrhombusDB.X_r2_Data.Valid = true
+
+	spiralrhombusDB.Y_r2_Data.Float64 = spiralrhombus.Y_r2
+	spiralrhombusDB.Y_r2_Data.Valid = true
+
+	spiralrhombusDB.X_r3_Data.Float64 = spiralrhombus.X_r3
+	spiralrhombusDB.X_r3_Data.Valid = true
+
+	spiralrhombusDB.Y_r3_Data.Float64 = spiralrhombus.Y_r3
+	spiralrhombusDB.Y_r3_Data.Valid = true
 }
 
 // CopyBasicFieldsFromSpiralRhombusWOP
@@ -434,6 +530,30 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsFromSpiralRhombusWOP(spir
 
 	spiralrhombusDB.IsDisplayed_Data.Bool = spiralrhombus.IsDisplayed
 	spiralrhombusDB.IsDisplayed_Data.Valid = true
+
+	spiralrhombusDB.X_r0_Data.Float64 = spiralrhombus.X_r0
+	spiralrhombusDB.X_r0_Data.Valid = true
+
+	spiralrhombusDB.Y_r0_Data.Float64 = spiralrhombus.Y_r0
+	spiralrhombusDB.Y_r0_Data.Valid = true
+
+	spiralrhombusDB.X_r1_Data.Float64 = spiralrhombus.X_r1
+	spiralrhombusDB.X_r1_Data.Valid = true
+
+	spiralrhombusDB.Y_r1_Data.Float64 = spiralrhombus.Y_r1
+	spiralrhombusDB.Y_r1_Data.Valid = true
+
+	spiralrhombusDB.X_r2_Data.Float64 = spiralrhombus.X_r2
+	spiralrhombusDB.X_r2_Data.Valid = true
+
+	spiralrhombusDB.Y_r2_Data.Float64 = spiralrhombus.Y_r2
+	spiralrhombusDB.Y_r2_Data.Valid = true
+
+	spiralrhombusDB.X_r3_Data.Float64 = spiralrhombus.X_r3
+	spiralrhombusDB.X_r3_Data.Valid = true
+
+	spiralrhombusDB.Y_r3_Data.Float64 = spiralrhombus.Y_r3
+	spiralrhombusDB.Y_r3_Data.Valid = true
 }
 
 // CopyBasicFieldsToSpiralRhombus
@@ -441,6 +561,14 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsToSpiralRhombus(spiralrho
 	// insertion point for checkout of basic fields (back repo to stage)
 	spiralrhombus.Name = spiralrhombusDB.Name_Data.String
 	spiralrhombus.IsDisplayed = spiralrhombusDB.IsDisplayed_Data.Bool
+	spiralrhombus.X_r0 = spiralrhombusDB.X_r0_Data.Float64
+	spiralrhombus.Y_r0 = spiralrhombusDB.Y_r0_Data.Float64
+	spiralrhombus.X_r1 = spiralrhombusDB.X_r1_Data.Float64
+	spiralrhombus.Y_r1 = spiralrhombusDB.Y_r1_Data.Float64
+	spiralrhombus.X_r2 = spiralrhombusDB.X_r2_Data.Float64
+	spiralrhombus.Y_r2 = spiralrhombusDB.Y_r2_Data.Float64
+	spiralrhombus.X_r3 = spiralrhombusDB.X_r3_Data.Float64
+	spiralrhombus.Y_r3 = spiralrhombusDB.Y_r3_Data.Float64
 }
 
 // CopyBasicFieldsToSpiralRhombus_WOP
@@ -448,6 +576,14 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsToSpiralRhombus_WOP(spira
 	// insertion point for checkout of basic fields (back repo to stage)
 	spiralrhombus.Name = spiralrhombusDB.Name_Data.String
 	spiralrhombus.IsDisplayed = spiralrhombusDB.IsDisplayed_Data.Bool
+	spiralrhombus.X_r0 = spiralrhombusDB.X_r0_Data.Float64
+	spiralrhombus.Y_r0 = spiralrhombusDB.Y_r0_Data.Float64
+	spiralrhombus.X_r1 = spiralrhombusDB.X_r1_Data.Float64
+	spiralrhombus.Y_r1 = spiralrhombusDB.Y_r1_Data.Float64
+	spiralrhombus.X_r2 = spiralrhombusDB.X_r2_Data.Float64
+	spiralrhombus.Y_r2 = spiralrhombusDB.Y_r2_Data.Float64
+	spiralrhombus.X_r3 = spiralrhombusDB.X_r3_Data.Float64
+	spiralrhombus.Y_r3 = spiralrhombusDB.Y_r3_Data.Float64
 }
 
 // CopyBasicFieldsToSpiralRhombusWOP
@@ -456,6 +592,14 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsToSpiralRhombusWOP(spiral
 	// insertion point for checkout of basic fields (back repo to stage)
 	spiralrhombus.Name = spiralrhombusDB.Name_Data.String
 	spiralrhombus.IsDisplayed = spiralrhombusDB.IsDisplayed_Data.Bool
+	spiralrhombus.X_r0 = spiralrhombusDB.X_r0_Data.Float64
+	spiralrhombus.Y_r0 = spiralrhombusDB.Y_r0_Data.Float64
+	spiralrhombus.X_r1 = spiralrhombusDB.X_r1_Data.Float64
+	spiralrhombus.Y_r1 = spiralrhombusDB.Y_r1_Data.Float64
+	spiralrhombus.X_r2 = spiralrhombusDB.X_r2_Data.Float64
+	spiralrhombus.Y_r2 = spiralrhombusDB.Y_r2_Data.Float64
+	spiralrhombus.X_r3 = spiralrhombusDB.X_r3_Data.Float64
+	spiralrhombus.Y_r3 = spiralrhombusDB.Y_r3_Data.Float64
 }
 
 // Backup generates a json file from a slice of all SpiralRhombusDB instances in the backrepo

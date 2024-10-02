@@ -696,6 +696,22 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		AssociationFieldToForm("Rhombus", instanceWithInferedType.Rhombus, formGroup, probe)
+		BasicFieldtoForm("X_r0", instanceWithInferedType.X_r0, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("Y_r0", instanceWithInferedType.Y_r0, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("X_r1", instanceWithInferedType.X_r1, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("Y_r1", instanceWithInferedType.Y_r1, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("X_r2", instanceWithInferedType.X_r2, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("Y_r2", instanceWithInferedType.Y_r2, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("X_r3", instanceWithInferedType.X_r3, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("Y_r3", instanceWithInferedType.Y_r3, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 
 	case *models.SpiralRhombusGrid:
 		// insertion point

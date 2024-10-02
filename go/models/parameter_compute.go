@@ -409,7 +409,10 @@ func (p *Parameter) ComputeSpiralRhombusSeed() {
 
 	x_s, y_s := r.getCoordinates()
 
-	p.SpiralRhombusGridSeed.x_r, p.SpiralRhombusGridSeed.y_r = p.convertToCircleSpaceCoordsArray(x_s, y_s)
+	x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
+
+	p.SpiralRhombusGridSeed.GenerateCoordinates(x_r, y_r)
+
 }
 
 func (p *Parameter) ComputeFKey() {

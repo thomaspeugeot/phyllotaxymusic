@@ -521,12 +521,28 @@ type SpiralRhombus_WOP struct {
 	// insertion point
 	Name string
 	IsDisplayed bool
+	X_r0 float64
+	Y_r0 float64
+	X_r1 float64
+	Y_r1 float64
+	X_r2 float64
+	Y_r2 float64
+	X_r3 float64
+	Y_r3 float64
 }
 
 func (from *SpiralRhombus) CopyBasicFields(to *SpiralRhombus) {
 	// insertion point
 	to.Name = from.Name
 	to.IsDisplayed = from.IsDisplayed
+	to.X_r0 = from.X_r0
+	to.Y_r0 = from.Y_r0
+	to.X_r1 = from.X_r1
+	to.Y_r1 = from.Y_r1
+	to.X_r2 = from.X_r2
+	to.Y_r2 = from.Y_r2
+	to.X_r3 = from.X_r3
+	to.Y_r3 = from.Y_r3
 }
 
 type SpiralRhombusGrid_WOP struct {

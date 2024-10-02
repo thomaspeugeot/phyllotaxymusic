@@ -21,6 +21,14 @@ export class SpiralRhombus {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	IsDisplayed: boolean = false
+	X_r0: number = 0
+	Y_r0: number = 0
+	X_r1: number = 0
+	Y_r1: number = 0
+	X_r2: number = 0
+	Y_r2: number = 0
+	X_r3: number = 0
+	Y_r3: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 	ShapeCategory?: ShapeCategory
@@ -38,6 +46,14 @@ export function CopySpiralRhombusToSpiralRhombusAPI(spiralrhombus: SpiralRhombus
 	// insertion point for basic fields copy operations
 	spiralrhombusAPI.Name = spiralrhombus.Name
 	spiralrhombusAPI.IsDisplayed = spiralrhombus.IsDisplayed
+	spiralrhombusAPI.X_r0 = spiralrhombus.X_r0
+	spiralrhombusAPI.Y_r0 = spiralrhombus.Y_r0
+	spiralrhombusAPI.X_r1 = spiralrhombus.X_r1
+	spiralrhombusAPI.Y_r1 = spiralrhombus.Y_r1
+	spiralrhombusAPI.X_r2 = spiralrhombus.X_r2
+	spiralrhombusAPI.Y_r2 = spiralrhombus.Y_r2
+	spiralrhombusAPI.X_r3 = spiralrhombus.X_r3
+	spiralrhombusAPI.Y_r3 = spiralrhombus.Y_r3
 
 	// insertion point for pointer fields encoding
 	spiralrhombusAPI.SpiralRhombusPointersEncoding.ShapeCategoryID.Valid = true
@@ -71,6 +87,14 @@ export function CopySpiralRhombusAPIToSpiralRhombus(spiralrhombusAPI: SpiralRhom
 	// insertion point for basic fields copy operations
 	spiralrhombus.Name = spiralrhombusAPI.Name
 	spiralrhombus.IsDisplayed = spiralrhombusAPI.IsDisplayed
+	spiralrhombus.X_r0 = spiralrhombusAPI.X_r0
+	spiralrhombus.Y_r0 = spiralrhombusAPI.Y_r0
+	spiralrhombus.X_r1 = spiralrhombusAPI.X_r1
+	spiralrhombus.Y_r1 = spiralrhombusAPI.Y_r1
+	spiralrhombus.X_r2 = spiralrhombusAPI.X_r2
+	spiralrhombus.Y_r2 = spiralrhombusAPI.Y_r2
+	spiralrhombus.X_r3 = spiralrhombusAPI.X_r3
+	spiralrhombus.Y_r3 = spiralrhombusAPI.Y_r3
 
 	// insertion point for pointer fields encoding
 	spiralrhombus.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(spiralrhombusAPI.SpiralRhombusPointersEncoding.ShapeCategoryID.Int64)

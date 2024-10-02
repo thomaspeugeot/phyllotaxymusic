@@ -477,7 +477,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
-	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
+	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = false
 	__HorizontalAxis__000000_Horizontal_Axis.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Color = ``
@@ -550,7 +550,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
 	__Parameter__000000_Reference.Z = 16
-	__Parameter__000000_Reference.InsideAngle = 109.000000
+	__Parameter__000000_Reference.InsideAngle = 94.000000
 	__Parameter__000000_Reference.SideLength = 110.000000
 	__Parameter__000000_Reference.StackWidth = 3
 	__Parameter__000000_Reference.NbShitRight = 2
@@ -641,7 +641,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000003_Rotated_Rhombus.Transform = ``
 
 	__RhombusGrid__000000_Growing_Rhombus_Grid.Name = `Growing Rhombus Grid`
-	__RhombusGrid__000000_Growing_Rhombus_Grid.IsDisplayed = false
+	__RhombusGrid__000000_Growing_Rhombus_Grid.IsDisplayed = true
 
 	__RhombusGrid__000001_Initial_Rhombus_Grid.Name = `Initial Rhombus Grid`
 	__RhombusGrid__000001_Initial_Rhombus_Grid.IsDisplayed = false
@@ -653,7 +653,7 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000000_0_Axes.IsExpanded = true
 
 	__ShapeCategory__000001_1_Initial.Name = `1. Initial`
-	__ShapeCategory__000001_1_Initial.IsExpanded = false
+	__ShapeCategory__000001_1_Initial.IsExpanded = true
 
 	__ShapeCategory__000002_2_Rotated.Name = `2. Rotated`
 	__ShapeCategory__000002_2_Rotated.IsExpanded = false
@@ -734,12 +734,20 @@ func _(stage *models.StageStruct) {
 
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Name = `Reference Spiral Rhombus`
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = false
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r0 = 86.082481
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r0 = 10.844832
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r1 = 54.121746
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r1 = 153.378677
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r2 = 211.564774
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r2 = -26.653325
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r3 = 45.704763
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r3 = -129.525314
 
 	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.Name = `Spiral Rhombus Grid`
 	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.IsDisplayed = false
 
 	__VerticalAxis__000000_Vertical_Axis.Name = `Vertical Axis`
-	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = true
+	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = false
 	__VerticalAxis__000000_Vertical_Axis.AxisHandleBorderLength = 0.000000
 	__VerticalAxis__000000_Vertical_Axis.Axis_Length = 600.000000
 	__VerticalAxis__000000_Vertical_Axis.Color = ``

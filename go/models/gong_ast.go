@@ -1968,6 +1968,62 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_SpiralRhombus[identifier].Name = fielValue
+				case "X_r0":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralRhombus[identifier].X_r0 = exprSign * fielValue
+				case "Y_r0":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralRhombus[identifier].Y_r0 = exprSign * fielValue
+				case "X_r1":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralRhombus[identifier].X_r1 = exprSign * fielValue
+				case "Y_r1":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralRhombus[identifier].Y_r1 = exprSign * fielValue
+				case "X_r2":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralRhombus[identifier].X_r2 = exprSign * fielValue
+				case "Y_r2":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralRhombus[identifier].Y_r2 = exprSign * fielValue
+				case "X_r3":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralRhombus[identifier].X_r3 = exprSign * fielValue
+				case "Y_r3":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralRhombus[identifier].Y_r3 = exprSign * fielValue
 				}
 			case "SpiralRhombusGrid":
 				switch fieldName {

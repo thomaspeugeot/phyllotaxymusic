@@ -128,7 +128,7 @@ export class Parameter {
 
 	GrowthCurveStack?: BezierGridStack
 
-	SpiralRhombus?: SpiralRhombus
+	SpiralRhombusGridSeed?: SpiralRhombus
 
 	SpiralRhombusGrid?: SpiralRhombusGrid
 
@@ -419,11 +419,11 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.SpiralRhombusID.Valid = true
-	if (parameter.SpiralRhombus != undefined) {
-		parameterAPI.ParameterPointersEncoding.SpiralRhombusID.Int64 = parameter.SpiralRhombus.ID  
+	parameterAPI.ParameterPointersEncoding.SpiralRhombusGridSeedID.Valid = true
+	if (parameter.SpiralRhombusGridSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralRhombusGridSeedID.Int64 = parameter.SpiralRhombusGridSeed.ID  
 	} else {
-		parameterAPI.ParameterPointersEncoding.SpiralRhombusID.Int64 = 0 		
+		parameterAPI.ParameterPointersEncoding.SpiralRhombusGridSeedID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.SpiralRhombusGridID.Valid = true
@@ -640,7 +640,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.GrowthCurveNextShiftedRightSeed = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightSeedID.Int64)
 	parameter.GrowthCurveNextShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightID.Int64)
 	parameter.GrowthCurveStack = frontRepo.map_ID_BezierGridStack.get(parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64)
-	parameter.SpiralRhombus = frontRepo.map_ID_SpiralRhombus.get(parameterAPI.ParameterPointersEncoding.SpiralRhombusID.Int64)
+	parameter.SpiralRhombusGridSeed = frontRepo.map_ID_SpiralRhombus.get(parameterAPI.ParameterPointersEncoding.SpiralRhombusGridSeedID.Int64)
 	parameter.SpiralRhombusGrid = frontRepo.map_ID_SpiralRhombusGrid.get(parameterAPI.ParameterPointersEncoding.SpiralRhombusGridID.Int64)
 	parameter.SpiralCircleSeed = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.SpiralCircleSeedID.Int64)
 	parameter.SpiralCircleGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64)

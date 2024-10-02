@@ -16,6 +16,14 @@ export class SpiralRhombusAPI {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	IsDisplayed: boolean = false
+	X_r0: number = 0
+	Y_r0: number = 0
+	X_r1: number = 0
+	Y_r1: number = 0
+	X_r2: number = 0
+	Y_r2: number = 0
+	X_r3: number = 0
+	Y_r3: number = 0
 
 	// insertion point for other decls
 
