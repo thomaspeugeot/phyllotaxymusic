@@ -401,6 +401,7 @@ func (p *Parameter) ComputeGrowingCircleGrid() {
 
 		p.GrowingCircleGrid.Circles = append(p.GrowingCircleGrid.Circles, r)
 	}
+	*p.GrowingCircleGridSeed = *p.GrowingCircleGrid.Circles[0]
 }
 
 func (p *Parameter) ComputeGrowingCircleGridLeft() {
@@ -607,12 +608,12 @@ func (p *Parameter) ComputeMeasureLines() {
 
 func (p *Parameter) ComputeSpiralCircleSeed() {
 
-	r := p.SpiralRhombus.Rhombus
-	x_s, y_s := r.getCoordinates()
-	x_r, y_r := p.convertToCircleSpaceCoords(x_s, y_s)
+	c := p.GrowingCircleGridSeed
 
-	p.SpiralCircleSeed.CenterX = x_r[2]
-	p.SpiralCircleSeed.CenterY = y_r[2]
+	x_r, y_r := p.convertToCircleSpaceCoords(c.CenterX, c.CenterY)
+
+	p.SpiralCircleSeed.CenterX = x_r
+	p.SpiralCircleSeed.CenterY = y_r
 }
 
 func (p *Parameter) ComputeSpiralCircleGrid() {
@@ -622,7 +623,7 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 	for idx, r := range p.SpiralRhombusGrid.RhombusGrid.Rhombuses {
 
 		x_s, y_s := r.getCoordinates()
-		x_r, y_r := p.convertToCircleSpaceCoords(x_s, y_s)
+		x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
 
 		sc := new(SpiralCircle)
 		sc.Stroke = GenerateColor(idx % len(colors))
@@ -645,7 +646,7 @@ func (p *Parameter) computeSpiralConstructionAxis() {
 	r := p.SpiralRhombus.Rhombus
 
 	x_s, y_s := r.getCoordinates()
-	x_r, y_r := p.convertToCircleSpaceCoords(x_s, y_s)
+	x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
 
 	p.SpiralConstructionAxis.CenterX = x_r[2]
 	p.SpiralConstructionAxis.CenterY = y_r[2]
@@ -669,7 +670,7 @@ func (p *Parameter) computeSpiralConstructionAxisGrid() {
 		r := p.SpiralRhombusGrid.RhombusGrid.Rhombuses[i]
 
 		x_s, y_s := r.getCoordinates()
-		x_r, y_r := p.convertToCircleSpaceCoords(x_s, y_s)
+		x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
 
 		spiralAxis.CenterX = x_r[2]
 		spiralAxis.CenterY = y_r[2]

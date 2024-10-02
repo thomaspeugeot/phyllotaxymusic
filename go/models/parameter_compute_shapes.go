@@ -49,6 +49,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.GrowingRhombusGrid)
 
 	p.ComputeGrowingCircleGrid()
+	p.Shapes = append(p.Shapes, p.GrowingCircleGridSeed)
 	p.Shapes = append(p.Shapes, p.GrowingCircleGrid)
 
 	p.ComputeGrowingCircleGridLeft()

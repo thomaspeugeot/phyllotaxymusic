@@ -21,7 +21,7 @@ func (spiralrhombus *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.StageStruc
 
 	x_s, y_s := r.getCoordinates()
 
-	x_r, y_r := p.convertToCircleSpaceCoords(x_s, y_s)
+	x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
 	for i := range 4 {
 		line := (&gongsvg_models.Line{
 			Name: fmt.Sprintf("%d", i),
@@ -39,7 +39,7 @@ func (spiralrhombus *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.StageStruc
 	}
 }
 
-func (p *Parameter) convertToCircleSpaceCoords(x_s [4]float64, y_s [4]float64) ([4]float64, [4]float64) {
+func (p *Parameter) convertToCircleSpaceCoordsArray(x_s [4]float64, y_s [4]float64) ([4]float64, [4]float64) {
 	var x_r [4]float64
 	var y_r [4]float64
 	for i := range 4 {
@@ -48,5 +48,17 @@ func (p *Parameter) convertToCircleSpaceCoords(x_s [4]float64, y_s [4]float64) (
 		x_r[i] = (p.SpiralInitialRadius + y_s[i]) * math.Cos(angle)
 		y_r[i] = (p.SpiralInitialRadius + y_s[i]) * math.Sin(angle)
 	}
+	return x_r, y_r
+}
+
+func (p *Parameter) convertToCircleSpaceCoords(x_s float64, y_s float64) (float64, float64) {
+	var x_r float64
+	var y_r float64
+
+	ratio := x_s / p.RotatedAxis.Length
+	angle := math.Pi * 2.0 * ratio
+	x_r = (p.SpiralInitialRadius + y_s) * math.Cos(angle)
+	y_r = (p.SpiralInitialRadius + y_s) * math.Sin(angle)
+
 	return x_r, y_r
 }
