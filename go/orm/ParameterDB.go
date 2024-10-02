@@ -167,9 +167,9 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	GrowthCurveStackID sql.NullInt64
 
-	// field SpiralRhombus is a pointer to another Struct (optional or 0..1)
+	// field SpiralRhombusGridSeed is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	SpiralRhombusID sql.NullInt64
+	SpiralRhombusGridSeedID sql.NullInt64
 
 	// field SpiralRhombusGrid is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -943,16 +943,16 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.GrowthCurveStackID.Valid = true
 		}
 
-		// commit pointer value parameter.SpiralRhombus translates to updating the parameter.SpiralRhombusID
-		parameterDB.SpiralRhombusID.Valid = true // allow for a 0 value (nil association)
-		if parameter.SpiralRhombus != nil {
-			if SpiralRhombusId, ok := backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusPtr_SpiralRhombusDBID[parameter.SpiralRhombus]; ok {
-				parameterDB.SpiralRhombusID.Int64 = int64(SpiralRhombusId)
-				parameterDB.SpiralRhombusID.Valid = true
+		// commit pointer value parameter.SpiralRhombusGridSeed translates to updating the parameter.SpiralRhombusGridSeedID
+		parameterDB.SpiralRhombusGridSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralRhombusGridSeed != nil {
+			if SpiralRhombusGridSeedId, ok := backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusPtr_SpiralRhombusDBID[parameter.SpiralRhombusGridSeed]; ok {
+				parameterDB.SpiralRhombusGridSeedID.Int64 = int64(SpiralRhombusGridSeedId)
+				parameterDB.SpiralRhombusGridSeedID.Valid = true
 			}
 		} else {
-			parameterDB.SpiralRhombusID.Int64 = 0
-			parameterDB.SpiralRhombusID.Valid = true
+			parameterDB.SpiralRhombusGridSeedID.Int64 = 0
+			parameterDB.SpiralRhombusGridSeedID.Valid = true
 		}
 
 		// commit pointer value parameter.SpiralRhombusGrid translates to updating the parameter.SpiralRhombusGridID
@@ -1464,10 +1464,10 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.GrowthCurveStackID.Int64 != 0 {
 		parameter.GrowthCurveStack = backRepo.BackRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackPtr[uint(parameterDB.GrowthCurveStackID.Int64)]
 	}
-	// SpiralRhombus field
-	parameter.SpiralRhombus = nil
-	if parameterDB.SpiralRhombusID.Int64 != 0 {
-		parameter.SpiralRhombus = backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusPtr[uint(parameterDB.SpiralRhombusID.Int64)]
+	// SpiralRhombusGridSeed field
+	parameter.SpiralRhombusGridSeed = nil
+	if parameterDB.SpiralRhombusGridSeedID.Int64 != 0 {
+		parameter.SpiralRhombusGridSeed = backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusPtr[uint(parameterDB.SpiralRhombusGridSeedID.Int64)]
 	}
 	// SpiralRhombusGrid field
 	parameter.SpiralRhombusGrid = nil
@@ -2317,10 +2317,10 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 			parameterDB.GrowthCurveStackID.Valid = true
 		}
 
-		// reindexing SpiralRhombus field
-		if parameterDB.SpiralRhombusID.Int64 != 0 {
-			parameterDB.SpiralRhombusID.Int64 = int64(BackRepoSpiralRhombusid_atBckpTime_newID[uint(parameterDB.SpiralRhombusID.Int64)])
-			parameterDB.SpiralRhombusID.Valid = true
+		// reindexing SpiralRhombusGridSeed field
+		if parameterDB.SpiralRhombusGridSeedID.Int64 != 0 {
+			parameterDB.SpiralRhombusGridSeedID.Int64 = int64(BackRepoSpiralRhombusid_atBckpTime_newID[uint(parameterDB.SpiralRhombusGridSeedID.Int64)])
+			parameterDB.SpiralRhombusGridSeedID.Valid = true
 		}
 
 		// reindexing SpiralRhombusGrid field

@@ -610,8 +610,8 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.GrowthCurveStack != nil {
 		StageBranch(stage, parameter.GrowthCurveStack)
 	}
-	if parameter.SpiralRhombus != nil {
-		StageBranch(stage, parameter.SpiralRhombus)
+	if parameter.SpiralRhombusGridSeed != nil {
+		StageBranch(stage, parameter.SpiralRhombusGridSeed)
 	}
 	if parameter.SpiralRhombusGrid != nil {
 		StageBranch(stage, parameter.SpiralRhombusGrid)
@@ -1341,8 +1341,8 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.GrowthCurveStack != nil {
 		parameterTo.GrowthCurveStack = CopyBranchBezierGridStack(mapOrigCopy, parameterFrom.GrowthCurveStack)
 	}
-	if parameterFrom.SpiralRhombus != nil {
-		parameterTo.SpiralRhombus = CopyBranchSpiralRhombus(mapOrigCopy, parameterFrom.SpiralRhombus)
+	if parameterFrom.SpiralRhombusGridSeed != nil {
+		parameterTo.SpiralRhombusGridSeed = CopyBranchSpiralRhombus(mapOrigCopy, parameterFrom.SpiralRhombusGridSeed)
 	}
 	if parameterFrom.SpiralRhombusGrid != nil {
 		parameterTo.SpiralRhombusGrid = CopyBranchSpiralRhombusGrid(mapOrigCopy, parameterFrom.SpiralRhombusGrid)
@@ -2048,8 +2048,8 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	if parameter.GrowthCurveStack != nil {
 		UnstageBranch(stage, parameter.GrowthCurveStack)
 	}
-	if parameter.SpiralRhombus != nil {
-		UnstageBranch(stage, parameter.SpiralRhombus)
+	if parameter.SpiralRhombusGridSeed != nil {
+		UnstageBranch(stage, parameter.SpiralRhombusGridSeed)
 	}
 	if parameter.SpiralRhombusGrid != nil {
 		UnstageBranch(stage, parameter.SpiralRhombusGrid)

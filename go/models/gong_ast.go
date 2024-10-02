@@ -2300,9 +2300,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "GrowthCurveStack":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].GrowthCurveStack = __gong__map_BezierGridStack[targetIdentifier]
-				case "SpiralRhombus":
+				case "SpiralRhombusGridSeed":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].SpiralRhombus = __gong__map_SpiralRhombus[targetIdentifier]
+					__gong__map_Parameter[identifier].SpiralRhombusGridSeed = __gong__map_SpiralRhombus[targetIdentifier]
 				case "SpiralRhombusGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralRhombusGrid = __gong__map_SpiralRhombusGrid[targetIdentifier]

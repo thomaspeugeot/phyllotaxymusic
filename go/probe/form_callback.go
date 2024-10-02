@@ -1285,8 +1285,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.StackHeight), formDiv)
 		case "BezierControlLengthRatio":
 			FormDivBasicFieldToField(&(parameter_.BezierControlLengthRatio), formDiv)
-		case "SpiralRhombus":
-			FormDivSelectFieldToField(&(parameter_.SpiralRhombus), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralRhombusGridSeed":
+			FormDivSelectFieldToField(&(parameter_.SpiralRhombusGridSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralRhombusGrid":
 			FormDivSelectFieldToField(&(parameter_.SpiralRhombusGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralCircleSeed":

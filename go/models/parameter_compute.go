@@ -403,6 +403,15 @@ func (p *Parameter) ComputeGrowthCurve() {
 	}
 }
 
+func (p *Parameter) ComputeSpiralRhombusSeed() {
+
+	r := p.GrowingRhombusGridSeed
+
+	x_s, y_s := r.getCoordinates()
+
+	p.SpiralRhombusGridSeed.x_r, p.SpiralRhombusGridSeed.y_r = p.convertToCircleSpaceCoordsArray(x_s, y_s)
+}
+
 func (p *Parameter) ComputeFKey() {
 
 }
@@ -493,7 +502,7 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 
 func (p *Parameter) computeSpiralConstructionAxis() {
 
-	r := p.SpiralRhombus.Rhombus
+	r := p.SpiralRhombusGridSeed.Rhombus
 
 	x_s, y_s := r.getCoordinates()
 	x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)

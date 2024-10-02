@@ -13,22 +13,22 @@ type SpiralRhombus struct {
 	AbstractShape
 
 	Rhombus *Rhombus
+
+	// not persisted by gong
+	x_r, y_r [4]float64
 }
 
 // Draw implements Shape.
 func (spiralrhombus *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_models.Layer, p *Parameter) {
 	r := spiralrhombus.Rhombus
 
-	x_s, y_s := r.getCoordinates()
-
-	x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
 	for i := range 4 {
 		line := (&gongsvg_models.Line{
 			Name: fmt.Sprintf("%d", i),
-			X1:   x_r[i%4] + p.SpiralOriginX,
-			Y1:   p.SpiralOriginY - y_r[i%4],
-			X2:   x_r[(i+1)%4] + p.SpiralOriginX,
-			Y2:   p.SpiralOriginY - y_r[(i+1)%4],
+			X1:   spiralrhombus.x_r[i%4] + p.SpiralOriginX,
+			Y1:   p.SpiralOriginY - spiralrhombus.y_r[i%4],
+			X2:   spiralrhombus.x_r[(i+1)%4] + p.SpiralOriginX,
+			Y2:   p.SpiralOriginY - spiralrhombus.y_r[(i+1)%4],
 			Presentation: gongsvg_models.Presentation{
 				Stroke:        r.Stroke,
 				StrokeWidth:   r.StrokeWidth,
