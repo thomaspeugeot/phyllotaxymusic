@@ -476,7 +476,7 @@ func (p *Parameter) ComputeSpiralCircleSeed() {
 
 	c := p.GrowingCircleGridSeed
 
-	x_r, y_r := p.convertToCircleSpaceCoords(c.CenterX, c.CenterY)
+	x_r, y_r := p.convertToSpiralCoords(c.CenterX, c.CenterY)
 
 	p.SpiralCircleSeed.CenterX = x_r
 	p.SpiralCircleSeed.CenterY = y_r
@@ -488,7 +488,7 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 
 	for idx, c := range p.GrowingCircleGrid.Circles {
 
-		x_r, y_r := p.convertToCircleSpaceCoords(c.CenterX, c.CenterY)
+		x_r, y_r := p.convertToSpiralCoords(c.CenterX, c.CenterY)
 
 		sc := new(SpiralCircle)
 		sc.Stroke = GenerateColor(idx % len(colors))

@@ -52,7 +52,7 @@ func (p *Parameter) convertToCircleSpaceCoordsArray(x_s [4]float64, y_s [4]float
 	return x_r, y_r
 }
 
-func (p *Parameter) convertToCircleSpaceCoords(x_s float64, y_s float64) (float64, float64) {
+func (p *Parameter) convertToSpiralCoords(x_s float64, y_s float64) (float64, float64) {
 	var x_r float64
 	var y_r float64
 
