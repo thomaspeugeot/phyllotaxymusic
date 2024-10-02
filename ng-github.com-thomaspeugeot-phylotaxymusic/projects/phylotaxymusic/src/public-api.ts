@@ -77,6 +77,10 @@ export * from './lib/spiralaxisgrid-api'
 export * from './lib/spiralaxisgrid'
 export * from './lib/spiralaxisgrid.service'
 
+export * from './lib/spiralbezier-api'
+export * from './lib/spiralbezier'
+export * from './lib/spiralbezier.service'
+
 export * from './lib/spiralcircle-api'
 export * from './lib/spiralcircle'
 export * from './lib/spiralcircle.service'

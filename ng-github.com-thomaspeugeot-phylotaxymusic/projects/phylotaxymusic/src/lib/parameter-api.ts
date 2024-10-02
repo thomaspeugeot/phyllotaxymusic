@@ -14,6 +14,7 @@ import { SpiralCircleAPI } from './spiralcircle-api'
 import { SpiralCircleGridAPI } from './spiralcirclegrid-api'
 import { SpiralAxisAPI } from './spiralaxis-api'
 import { SpiralAxisGridAPI } from './spiralaxisgrid-api'
+import { SpiralBezierAPI } from './spiralbezier-api'
 import { KeyAPI } from './key-api'
 import { NoteInfoAPI } from './noteinfo-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
@@ -139,6 +140,8 @@ export class ParameterPointersEncoding {
 	SpiralConstructionAxisID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionAxis.ID = 0
 
 	SpiralAxisGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralAxisGrid.ID = 0
+
+	SpiralBezierSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierSeed.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 

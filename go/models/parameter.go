@@ -87,6 +87,7 @@ type Parameter struct {
 	SpiralCircleGrid       *SpiralCircleGrid
 	SpiralConstructionAxis *SpiralAxis
 	SpiralAxisGrid         *SpiralAxisGrid
+	SpiralBezierSeed       *SpiralBezier
 
 	// the score
 	Fkey                *Key
@@ -514,7 +515,7 @@ func (p *Parameter) computeBezier(b *Bezier, startCircle, endCircle *Circle) {
 	b.StartY = startCircle.CenterY
 
 	b.EndX = endCircle.CenterX
-	
+
 	b.EndY = endCircle.CenterY
 
 	angleRad := p.ConstructionAxis.Angle*math.Pi/180 - math.Pi/2.0
@@ -681,4 +682,31 @@ func (p *Parameter) computeSpiralConstructionAxisGrid() {
 
 		p.SpiralAxisGrid.SpiralAxises = append(p.SpiralAxisGrid.SpiralAxises, spiralAxis)
 	}
+}
+
+func (p *Parameter) ComputeSpiralBezier() {
+
+	p.computeSpiralBezier(p.SpiralBezierSeed,
+		p.SpiralCircleGrid.SpiralCircles[0],
+		p.SpiralCircleGrid.SpiralCircles[1])
+}
+
+func (p *Parameter) computeSpiralBezier(b *SpiralBezier, startCircle, endCircle *SpiralCircle) {
+	b.StartX = startCircle.CenterX
+	b.StartY = startCircle.CenterY
+
+	b.EndX = endCircle.CenterX
+	b.EndY = endCircle.CenterY
+
+	angleRad := p.ConstructionAxis.Angle*math.Pi/180 - math.Pi/2.0
+
+	b.ControlPointStartX = b.StartX +
+		p.SideLength*p.BezierControlLengthRatio*math.Cos(angleRad)
+	b.ControlPointStartY = b.StartY +
+		p.SideLength*p.BezierControlLengthRatio*math.Sin(angleRad)
+
+	b.ControlPointEndX = b.EndX +
+		p.SideLength*p.BezierControlLengthRatio*math.Cos(angleRad+math.Pi)
+	b.ControlPointEndY = b.EndY +
+		p.SideLength*p.BezierControlLengthRatio*math.Sin(angleRad+math.Pi)
 }

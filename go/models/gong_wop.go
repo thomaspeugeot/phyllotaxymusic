@@ -423,6 +423,50 @@ func (from *SpiralAxisGrid) CopyBasicFields(to *SpiralAxisGrid) {
 	to.IsDisplayed = from.IsDisplayed
 }
 
+type SpiralBezier_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+	StartX float64
+	StartY float64
+	ControlPointStartX float64
+	ControlPointStartY float64
+	EndX float64
+	EndY float64
+	ControlPointEndX float64
+	ControlPointEndY float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
+	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
+}
+
+func (from *SpiralBezier) CopyBasicFields(to *SpiralBezier) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+	to.StartX = from.StartX
+	to.StartY = from.StartY
+	to.ControlPointStartX = from.ControlPointStartX
+	to.ControlPointStartY = from.ControlPointStartY
+	to.EndX = from.EndX
+	to.EndY = from.EndY
+	to.ControlPointEndX = from.ControlPointEndX
+	to.ControlPointEndY = from.ControlPointEndY
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
+	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
+}
+
 type SpiralCircle_WOP struct {
 	// insertion point
 	Name string

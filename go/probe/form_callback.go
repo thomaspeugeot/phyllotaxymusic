@@ -1297,6 +1297,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralConstructionAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralAxisGrid":
 			FormDivSelectFieldToField(&(parameter_.SpiralAxisGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralBezierSeed":
+			FormDivSelectFieldToField(&(parameter_.SpiralBezierSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":
@@ -1931,6 +1933,119 @@ func (spiralaxisgridFormCallback *SpiralAxisGridFormCallback) OnSave() {
 	}
 
 	fillUpTree(spiralaxisgridFormCallback.probe)
+}
+func __gong__New__SpiralBezierFormCallback(
+	spiralbezier *models.SpiralBezier,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (spiralbezierFormCallback *SpiralBezierFormCallback) {
+	spiralbezierFormCallback = new(SpiralBezierFormCallback)
+	spiralbezierFormCallback.probe = probe
+	spiralbezierFormCallback.spiralbezier = spiralbezier
+	spiralbezierFormCallback.formGroup = formGroup
+
+	spiralbezierFormCallback.CreationMode = (spiralbezier == nil)
+
+	return
+}
+
+type SpiralBezierFormCallback struct {
+	spiralbezier *models.SpiralBezier
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
+
+	log.Println("SpiralBezierFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	spiralbezierFormCallback.probe.formStage.Checkout()
+
+	if spiralbezierFormCallback.spiralbezier == nil {
+		spiralbezierFormCallback.spiralbezier = new(models.SpiralBezier).Stage(spiralbezierFormCallback.probe.stageOfInterest)
+	}
+	spiralbezier_ := spiralbezierFormCallback.spiralbezier
+	_ = spiralbezier_
+
+	for _, formDiv := range spiralbezierFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(spiralbezier_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(spiralbezier_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(spiralbezier_.ShapeCategory), spiralbezierFormCallback.probe.stageOfInterest, formDiv)
+		case "StartX":
+			FormDivBasicFieldToField(&(spiralbezier_.StartX), formDiv)
+		case "StartY":
+			FormDivBasicFieldToField(&(spiralbezier_.StartY), formDiv)
+		case "ControlPointStartX":
+			FormDivBasicFieldToField(&(spiralbezier_.ControlPointStartX), formDiv)
+		case "ControlPointStartY":
+			FormDivBasicFieldToField(&(spiralbezier_.ControlPointStartY), formDiv)
+		case "EndX":
+			FormDivBasicFieldToField(&(spiralbezier_.EndX), formDiv)
+		case "EndY":
+			FormDivBasicFieldToField(&(spiralbezier_.EndY), formDiv)
+		case "ControlPointEndX":
+			FormDivBasicFieldToField(&(spiralbezier_.ControlPointEndX), formDiv)
+		case "ControlPointEndY":
+			FormDivBasicFieldToField(&(spiralbezier_.ControlPointEndY), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(spiralbezier_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(spiralbezier_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(spiralbezier_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(spiralbezier_.StrokeOpacity), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(spiralbezier_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(spiralbezier_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(spiralbezier_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(spiralbezier_.Transform), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if spiralbezierFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralbezier_.Unstage(spiralbezierFormCallback.probe.stageOfInterest)
+	}
+
+	spiralbezierFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.SpiralBezier](
+		spiralbezierFormCallback.probe,
+	)
+	spiralbezierFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if spiralbezierFormCallback.CreationMode || spiralbezierFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralbezierFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(spiralbezierFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__SpiralBezierFormCallback(
+			nil,
+			spiralbezierFormCallback.probe,
+			newFormGroup,
+		)
+		spiralbezier := new(models.SpiralBezier)
+		FillUpForm(spiralbezier, newFormGroup, spiralbezierFormCallback.probe)
+		spiralbezierFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(spiralbezierFormCallback.probe)
 }
 func __gong__New__SpiralCircleFormCallback(
 	spiralcircle *models.SpiralCircle,

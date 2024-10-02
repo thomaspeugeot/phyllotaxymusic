@@ -45,6 +45,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.NextCircle)
 
 	p.ComputeGrowingRhombusGrid()
+	p.Shapes = append(p.Shapes, p.GrowingRhombusGridSeed)
 	p.Shapes = append(p.Shapes, p.GrowingRhombusGrid)
 
 	p.ComputeGrowingCircleGrid()
@@ -82,6 +83,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.SpiralConstructionAxis)
 	p.computeSpiralConstructionAxisGrid()
 	p.Shapes = append(p.Shapes, p.SpiralAxisGrid)
+
+	p.ComputeSpiralBezier()
+	p.Shapes = append(p.Shapes, p.SpiralBezierSeed)
 
 	p.GrowthCurveShiftedRight.Move(p.GrowthCurveShiftedRightSeed, p.GrowthCurve,
 		p.RotatedAxis.Length, 0)

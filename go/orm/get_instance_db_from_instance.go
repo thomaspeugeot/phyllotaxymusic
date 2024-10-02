@@ -79,6 +79,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 		spiralaxisgridInstance := any(concreteInstance).(*models.SpiralAxisGrid)
 		ret2 := backRepo.BackRepoSpiralAxisGrid.GetSpiralAxisGridDBFromSpiralAxisGridPtr(spiralaxisgridInstance)
 		ret = any(ret2).(*T2)
+	case *models.SpiralBezier:
+		spiralbezierInstance := any(concreteInstance).(*models.SpiralBezier)
+		ret2 := backRepo.BackRepoSpiralBezier.GetSpiralBezierDBFromSpiralBezierPtr(spiralbezierInstance)
+		ret = any(ret2).(*T2)
 	case *models.SpiralCircle:
 		spiralcircleInstance := any(concreteInstance).(*models.SpiralCircle)
 		ret2 := backRepo.BackRepoSpiralCircle.GetSpiralCircleDBFromSpiralCirclePtr(spiralcircleInstance)
@@ -189,6 +193,11 @@ func GetID[T models.Gongstruct](
 		id = int(tmp.ID)
 	case *models.SpiralAxisGrid:
 		tmp := GetInstanceDBFromInstance[models.SpiralAxisGrid, SpiralAxisGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.SpiralBezier:
+		tmp := GetInstanceDBFromInstance[models.SpiralBezier, SpiralBezierDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -307,6 +316,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.SpiralAxisGrid:
 		tmp := GetInstanceDBFromInstance[models.SpiralAxisGrid, SpiralAxisGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.SpiralBezier:
+		tmp := GetInstanceDBFromInstance[models.SpiralBezier, SpiralBezierDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

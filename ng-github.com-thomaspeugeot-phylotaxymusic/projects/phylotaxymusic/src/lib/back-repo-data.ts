@@ -33,6 +33,8 @@ import { SpiralAxisAPI } from './spiralaxis-api'
 
 import { SpiralAxisGridAPI } from './spiralaxisgrid-api'
 
+import { SpiralBezierAPI } from './spiralbezier-api'
+
 import { SpiralCircleAPI } from './spiralcircle-api'
 
 import { SpiralCircleGridAPI } from './spiralcirclegrid-api'
@@ -77,6 +79,8 @@ export class BackRepoData {
 	SpiralAxisAPIs = new Array<SpiralAxisAPI>()
 
 	SpiralAxisGridAPIs = new Array<SpiralAxisGridAPI>()
+
+	SpiralBezierAPIs = new Array<SpiralBezierAPI>()
 
 	SpiralCircleAPIs = new Array<SpiralCircleAPI>()
 
@@ -123,6 +127,8 @@ export class BackRepoData {
 		this.SpiralAxisAPIs = data?.SpiralAxisAPIs || [];
 
 		this.SpiralAxisGridAPIs = data?.SpiralAxisGridAPIs || [];
+
+		this.SpiralBezierAPIs = data?.SpiralBezierAPIs || [];
 
 		this.SpiralCircleAPIs = data?.SpiralCircleAPIs || [];
 

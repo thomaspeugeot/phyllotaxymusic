@@ -52,6 +52,8 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.SpiralAxis](probe)
 	case *models.SpiralAxisGrid:
 		fillUpTable[models.SpiralAxisGrid](probe)
+	case *models.SpiralBezier:
+		fillUpTable[models.SpiralBezier](probe)
 	case *models.SpiralCircle:
 		fillUpTable[models.SpiralCircle](probe)
 	case *models.SpiralCircleGrid:
