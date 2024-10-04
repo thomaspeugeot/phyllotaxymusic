@@ -129,7 +129,7 @@ func _(stage *models.StageStruct) {
 	// Setup of values
 
 	__Axis__000000_Construction_Axis.Name = `Construction Axis`
-	__Axis__000000_Construction_Axis.IsDisplayed = false
+	__Axis__000000_Construction_Axis.IsDisplayed = true
 	__Axis__000000_Construction_Axis.Angle = 98.118955
 	__Axis__000000_Construction_Axis.Length = 127.754650
 	__Axis__000000_Construction_Axis.CenterX = 0.000000
@@ -354,7 +354,7 @@ func _(stage *models.StageStruct) {
 	__BezierGridStack__000000_The_GrowthCurveStack.IsDisplayed = false
 
 	__Circle__000000_Construction_Circle.Name = `Construction Circle`
-	__Circle__000000_Construction_Circle.IsDisplayed = false
+	__Circle__000000_Construction_Circle.IsDisplayed = true
 	__Circle__000000_Construction_Circle.CenterX = -9.021314
 	__Circle__000000_Construction_Circle.CenterY = 63.237082
 	__Circle__000000_Construction_Circle.HasBespokeRadius = true
@@ -477,7 +477,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
-	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = false
+	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
 	__HorizontalAxis__000000_Horizontal_Axis.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Color = ``
@@ -678,10 +678,10 @@ func _(stage *models.StageStruct) {
 
 	__SpiralAxis__000000_Spiral_Construction_Axis.Name = `Spiral Construction Axis`
 	__SpiralAxis__000000_Spiral_Construction_Axis.IsDisplayed = false
-	__SpiralAxis__000000_Spiral_Construction_Axis.Angle = 163.362158
+	__SpiralAxis__000000_Spiral_Construction_Axis.Angle = 98.118955
 	__SpiralAxis__000000_Spiral_Construction_Axis.Length = 130.965329
-	__SpiralAxis__000000_Spiral_Construction_Axis.CenterX = 211.564774
-	__SpiralAxis__000000_Spiral_Construction_Axis.CenterY = -26.653325
+	__SpiralAxis__000000_Spiral_Construction_Axis.CenterX = 150.000000
+	__SpiralAxis__000000_Spiral_Construction_Axis.CenterY = 0.000000
 	__SpiralAxis__000000_Spiral_Construction_Axis.Color = ``
 	__SpiralAxis__000000_Spiral_Construction_Axis.FillOpacity = 0.000000
 	__SpiralAxis__000000_Spiral_Construction_Axis.Stroke = `green`
@@ -714,7 +714,7 @@ func _(stage *models.StageStruct) {
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Transform = ``
 
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.Name = `Spiral Circle Grid Seed`
-	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.IsDisplayed = false
+	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.IsDisplayed = true
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.CenterX = 150.000000
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.CenterY = 0.000000
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.HasBespokeRadius = false
@@ -722,7 +722,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.Pitch = 0
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.Color = ``
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.FillOpacity = 0.000000
-	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.Stroke = `green`
+	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.Stroke = `blue`
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.StrokeOpacity = 0.800000
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.StrokeWidth = 1.000000
 	__SpiralCircle__000000_Spiral_Circle_Grid_Seed.StrokeDashArray = ``
@@ -742,20 +742,20 @@ func _(stage *models.StageStruct) {
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r2 = -26.653325
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r3 = 45.704763
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r3 = -129.525314
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Color = ``
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.FillOpacity = 0.000000
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Stroke = ``
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.StrokeOpacity = 0.000000
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.StrokeWidth = 0.000000
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Color = `green`
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.FillOpacity = 1.000000
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Stroke = `blue`
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.StrokeOpacity = 1.000000
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.StrokeWidth = 1.000000
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.StrokeDashArray = ``
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.StrokeDashArrayWhenSelected = ``
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Transform = ``
 
 	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.Name = `Spiral Rhombus Grid`
-	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.IsDisplayed = true
+	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.IsDisplayed = false
 
 	__VerticalAxis__000000_Vertical_Axis.Name = `Vertical Axis`
-	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = false
+	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = true
 	__VerticalAxis__000000_Vertical_Axis.AxisHandleBorderLength = 0.000000
 	__VerticalAxis__000000_Vertical_Axis.Axis_Length = 600.000000
 	__VerticalAxis__000000_Vertical_Axis.Color = ``

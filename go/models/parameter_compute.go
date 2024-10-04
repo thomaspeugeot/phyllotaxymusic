@@ -521,13 +521,14 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 
 func (p *Parameter) computeSpiralConstructionAxis() {
 
-	// r := p.SpiralRhombusGridSeed
+	ca := p.ConstructionAxis
 
-	// x_s, y_s := r.getCoordinates()
-	// x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
+	x_r, y_r := p.convertToSpiralCoords(ca.CenterX, ca.CenterY)
+	a := math.Atan2(y_r, x_r)
 
-	// p.SpiralConstructionAxis.CenterX = x_r[2]
-	// p.SpiralConstructionAxis.CenterY = y_r[2]
+	p.SpiralConstructionAxis.CenterX = x_r
+	p.SpiralConstructionAxis.CenterY = y_r
+	p.SpiralConstructionAxis.Angle = ca.Angle + math.Pi*a
 
 	// x := x_r[0] - x_r[2]
 	// y := y_r[0] - y_r[2]

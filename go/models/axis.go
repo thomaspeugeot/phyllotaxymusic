@@ -10,6 +10,7 @@ type Axis struct {
 	Name string
 	AbstractShape
 
+	// in degrees
 	Angle  float64
 	Length float64
 
