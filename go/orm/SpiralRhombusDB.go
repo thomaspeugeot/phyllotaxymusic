@@ -50,10 +50,6 @@ type SpiralRhombusPointersEncoding struct {
 	// field ShapeCategory is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	ShapeCategoryID sql.NullInt64
-
-	// field Rhombus is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	RhombusID sql.NullInt64
 }
 
 // SpiralRhombusDB describes a spiralrhombus in the database
@@ -97,6 +93,30 @@ type SpiralRhombusDB struct {
 
 	// Declation for basic field spiralrhombusDB.Y_r3
 	Y_r3_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.Color
+	Color_Data sql.NullString
+
+	// Declation for basic field spiralrhombusDB.FillOpacity
+	FillOpacity_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.Stroke
+	Stroke_Data sql.NullString
+
+	// Declation for basic field spiralrhombusDB.StrokeOpacity
+	StrokeOpacity_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.StrokeWidth
+	StrokeWidth_Data sql.NullFloat64
+
+	// Declation for basic field spiralrhombusDB.StrokeDashArray
+	StrokeDashArray_Data sql.NullString
+
+	// Declation for basic field spiralrhombusDB.StrokeDashArrayWhenSelected
+	StrokeDashArrayWhenSelected_Data sql.NullString
+
+	// Declation for basic field spiralrhombusDB.Transform
+	Transform_Data sql.NullString
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -139,6 +159,22 @@ type SpiralRhombusWOP struct {
 	X_r3 float64 `xlsx:"9"`
 
 	Y_r3 float64 `xlsx:"10"`
+
+	Color string `xlsx:"11"`
+
+	FillOpacity float64 `xlsx:"12"`
+
+	Stroke string `xlsx:"13"`
+
+	StrokeOpacity float64 `xlsx:"14"`
+
+	StrokeWidth float64 `xlsx:"15"`
+
+	StrokeDashArray string `xlsx:"16"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"17"`
+
+	Transform string `xlsx:"18"`
 	// insertion for WOP pointer fields
 }
 
@@ -155,6 +191,14 @@ var SpiralRhombus_Fields = []string{
 	"Y_r2",
 	"X_r3",
 	"Y_r3",
+	"Color",
+	"FillOpacity",
+	"Stroke",
+	"StrokeOpacity",
+	"StrokeWidth",
+	"StrokeDashArray",
+	"StrokeDashArrayWhenSelected",
+	"Transform",
 }
 
 type BackRepoSpiralRhombusStruct struct {
@@ -286,18 +330,6 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CommitPhaseTwoInstance
 			spiralrhombusDB.ShapeCategoryID.Valid = true
 		}
 
-		// commit pointer value spiralrhombus.Rhombus translates to updating the spiralrhombus.RhombusID
-		spiralrhombusDB.RhombusID.Valid = true // allow for a 0 value (nil association)
-		if spiralrhombus.Rhombus != nil {
-			if RhombusId, ok := backRepo.BackRepoRhombus.Map_RhombusPtr_RhombusDBID[spiralrhombus.Rhombus]; ok {
-				spiralrhombusDB.RhombusID.Int64 = int64(RhombusId)
-				spiralrhombusDB.RhombusID.Valid = true
-			}
-		} else {
-			spiralrhombusDB.RhombusID.Int64 = 0
-			spiralrhombusDB.RhombusID.Valid = true
-		}
-
 		query := backRepoSpiralRhombus.db.Save(&spiralrhombusDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -416,11 +448,6 @@ func (spiralrhombusDB *SpiralRhombusDB) DecodePointers(backRepo *BackRepoStruct,
 	if spiralrhombusDB.ShapeCategoryID.Int64 != 0 {
 		spiralrhombus.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(spiralrhombusDB.ShapeCategoryID.Int64)]
 	}
-	// Rhombus field
-	spiralrhombus.Rhombus = nil
-	if spiralrhombusDB.RhombusID.Int64 != 0 {
-		spiralrhombus.Rhombus = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(spiralrhombusDB.RhombusID.Int64)]
-	}
 	return
 }
 
@@ -484,6 +511,30 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsFromSpiralRhombus(spiralr
 
 	spiralrhombusDB.Y_r3_Data.Float64 = spiralrhombus.Y_r3
 	spiralrhombusDB.Y_r3_Data.Valid = true
+
+	spiralrhombusDB.Color_Data.String = spiralrhombus.Color
+	spiralrhombusDB.Color_Data.Valid = true
+
+	spiralrhombusDB.FillOpacity_Data.Float64 = spiralrhombus.FillOpacity
+	spiralrhombusDB.FillOpacity_Data.Valid = true
+
+	spiralrhombusDB.Stroke_Data.String = spiralrhombus.Stroke
+	spiralrhombusDB.Stroke_Data.Valid = true
+
+	spiralrhombusDB.StrokeOpacity_Data.Float64 = spiralrhombus.StrokeOpacity
+	spiralrhombusDB.StrokeOpacity_Data.Valid = true
+
+	spiralrhombusDB.StrokeWidth_Data.Float64 = spiralrhombus.StrokeWidth
+	spiralrhombusDB.StrokeWidth_Data.Valid = true
+
+	spiralrhombusDB.StrokeDashArray_Data.String = spiralrhombus.StrokeDashArray
+	spiralrhombusDB.StrokeDashArray_Data.Valid = true
+
+	spiralrhombusDB.StrokeDashArrayWhenSelected_Data.String = spiralrhombus.StrokeDashArrayWhenSelected
+	spiralrhombusDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	spiralrhombusDB.Transform_Data.String = spiralrhombus.Transform
+	spiralrhombusDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromSpiralRhombus_WOP
@@ -519,6 +570,30 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsFromSpiralRhombus_WOP(spi
 
 	spiralrhombusDB.Y_r3_Data.Float64 = spiralrhombus.Y_r3
 	spiralrhombusDB.Y_r3_Data.Valid = true
+
+	spiralrhombusDB.Color_Data.String = spiralrhombus.Color
+	spiralrhombusDB.Color_Data.Valid = true
+
+	spiralrhombusDB.FillOpacity_Data.Float64 = spiralrhombus.FillOpacity
+	spiralrhombusDB.FillOpacity_Data.Valid = true
+
+	spiralrhombusDB.Stroke_Data.String = spiralrhombus.Stroke
+	spiralrhombusDB.Stroke_Data.Valid = true
+
+	spiralrhombusDB.StrokeOpacity_Data.Float64 = spiralrhombus.StrokeOpacity
+	spiralrhombusDB.StrokeOpacity_Data.Valid = true
+
+	spiralrhombusDB.StrokeWidth_Data.Float64 = spiralrhombus.StrokeWidth
+	spiralrhombusDB.StrokeWidth_Data.Valid = true
+
+	spiralrhombusDB.StrokeDashArray_Data.String = spiralrhombus.StrokeDashArray
+	spiralrhombusDB.StrokeDashArray_Data.Valid = true
+
+	spiralrhombusDB.StrokeDashArrayWhenSelected_Data.String = spiralrhombus.StrokeDashArrayWhenSelected
+	spiralrhombusDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	spiralrhombusDB.Transform_Data.String = spiralrhombus.Transform
+	spiralrhombusDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsFromSpiralRhombusWOP
@@ -554,6 +629,30 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsFromSpiralRhombusWOP(spir
 
 	spiralrhombusDB.Y_r3_Data.Float64 = spiralrhombus.Y_r3
 	spiralrhombusDB.Y_r3_Data.Valid = true
+
+	spiralrhombusDB.Color_Data.String = spiralrhombus.Color
+	spiralrhombusDB.Color_Data.Valid = true
+
+	spiralrhombusDB.FillOpacity_Data.Float64 = spiralrhombus.FillOpacity
+	spiralrhombusDB.FillOpacity_Data.Valid = true
+
+	spiralrhombusDB.Stroke_Data.String = spiralrhombus.Stroke
+	spiralrhombusDB.Stroke_Data.Valid = true
+
+	spiralrhombusDB.StrokeOpacity_Data.Float64 = spiralrhombus.StrokeOpacity
+	spiralrhombusDB.StrokeOpacity_Data.Valid = true
+
+	spiralrhombusDB.StrokeWidth_Data.Float64 = spiralrhombus.StrokeWidth
+	spiralrhombusDB.StrokeWidth_Data.Valid = true
+
+	spiralrhombusDB.StrokeDashArray_Data.String = spiralrhombus.StrokeDashArray
+	spiralrhombusDB.StrokeDashArray_Data.Valid = true
+
+	spiralrhombusDB.StrokeDashArrayWhenSelected_Data.String = spiralrhombus.StrokeDashArrayWhenSelected
+	spiralrhombusDB.StrokeDashArrayWhenSelected_Data.Valid = true
+
+	spiralrhombusDB.Transform_Data.String = spiralrhombus.Transform
+	spiralrhombusDB.Transform_Data.Valid = true
 }
 
 // CopyBasicFieldsToSpiralRhombus
@@ -569,6 +668,14 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsToSpiralRhombus(spiralrho
 	spiralrhombus.Y_r2 = spiralrhombusDB.Y_r2_Data.Float64
 	spiralrhombus.X_r3 = spiralrhombusDB.X_r3_Data.Float64
 	spiralrhombus.Y_r3 = spiralrhombusDB.Y_r3_Data.Float64
+	spiralrhombus.Color = spiralrhombusDB.Color_Data.String
+	spiralrhombus.FillOpacity = spiralrhombusDB.FillOpacity_Data.Float64
+	spiralrhombus.Stroke = spiralrhombusDB.Stroke_Data.String
+	spiralrhombus.StrokeOpacity = spiralrhombusDB.StrokeOpacity_Data.Float64
+	spiralrhombus.StrokeWidth = spiralrhombusDB.StrokeWidth_Data.Float64
+	spiralrhombus.StrokeDashArray = spiralrhombusDB.StrokeDashArray_Data.String
+	spiralrhombus.StrokeDashArrayWhenSelected = spiralrhombusDB.StrokeDashArrayWhenSelected_Data.String
+	spiralrhombus.Transform = spiralrhombusDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToSpiralRhombus_WOP
@@ -584,6 +691,14 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsToSpiralRhombus_WOP(spira
 	spiralrhombus.Y_r2 = spiralrhombusDB.Y_r2_Data.Float64
 	spiralrhombus.X_r3 = spiralrhombusDB.X_r3_Data.Float64
 	spiralrhombus.Y_r3 = spiralrhombusDB.Y_r3_Data.Float64
+	spiralrhombus.Color = spiralrhombusDB.Color_Data.String
+	spiralrhombus.FillOpacity = spiralrhombusDB.FillOpacity_Data.Float64
+	spiralrhombus.Stroke = spiralrhombusDB.Stroke_Data.String
+	spiralrhombus.StrokeOpacity = spiralrhombusDB.StrokeOpacity_Data.Float64
+	spiralrhombus.StrokeWidth = spiralrhombusDB.StrokeWidth_Data.Float64
+	spiralrhombus.StrokeDashArray = spiralrhombusDB.StrokeDashArray_Data.String
+	spiralrhombus.StrokeDashArrayWhenSelected = spiralrhombusDB.StrokeDashArrayWhenSelected_Data.String
+	spiralrhombus.Transform = spiralrhombusDB.Transform_Data.String
 }
 
 // CopyBasicFieldsToSpiralRhombusWOP
@@ -600,6 +715,14 @@ func (spiralrhombusDB *SpiralRhombusDB) CopyBasicFieldsToSpiralRhombusWOP(spiral
 	spiralrhombus.Y_r2 = spiralrhombusDB.Y_r2_Data.Float64
 	spiralrhombus.X_r3 = spiralrhombusDB.X_r3_Data.Float64
 	spiralrhombus.Y_r3 = spiralrhombusDB.Y_r3_Data.Float64
+	spiralrhombus.Color = spiralrhombusDB.Color_Data.String
+	spiralrhombus.FillOpacity = spiralrhombusDB.FillOpacity_Data.Float64
+	spiralrhombus.Stroke = spiralrhombusDB.Stroke_Data.String
+	spiralrhombus.StrokeOpacity = spiralrhombusDB.StrokeOpacity_Data.Float64
+	spiralrhombus.StrokeWidth = spiralrhombusDB.StrokeWidth_Data.Float64
+	spiralrhombus.StrokeDashArray = spiralrhombusDB.StrokeDashArray_Data.String
+	spiralrhombus.StrokeDashArrayWhenSelected = spiralrhombusDB.StrokeDashArrayWhenSelected_Data.String
+	spiralrhombus.Transform = spiralrhombusDB.Transform_Data.String
 }
 
 // Backup generates a json file from a slice of all SpiralRhombusDB instances in the backrepo
@@ -761,12 +884,6 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) RestorePhaseTwo() {
 		if spiralrhombusDB.ShapeCategoryID.Int64 != 0 {
 			spiralrhombusDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(spiralrhombusDB.ShapeCategoryID.Int64)])
 			spiralrhombusDB.ShapeCategoryID.Valid = true
-		}
-
-		// reindexing Rhombus field
-		if spiralrhombusDB.RhombusID.Int64 != 0 {
-			spiralrhombusDB.RhombusID.Int64 = int64(BackRepoRhombusid_atBckpTime_newID[uint(spiralrhombusDB.RhombusID.Int64)])
-			spiralrhombusDB.RhombusID.Valid = true
 		}
 
 		// update databse with new index encoding

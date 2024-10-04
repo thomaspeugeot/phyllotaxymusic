@@ -5,7 +5,7 @@ import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
 import { ShapeCategory } from './shapecategory'
-import { RhombusGrid } from './rhombusgrid'
+import { SpiralRhombus } from './spiralrhombus'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -25,8 +25,7 @@ export class SpiralRhombusGrid {
 	// insertion point for pointers and slices of pointers declarations
 	ShapeCategory?: ShapeCategory
 
-	RhombusGrid?: RhombusGrid
-
+	SpiralRhombuses: Array<SpiralRhombus> = []
 }
 
 export function CopySpiralRhombusGridToSpiralRhombusGridAPI(spiralrhombusgrid: SpiralRhombusGrid, spiralrhombusgridAPI: SpiralRhombusGridAPI) {
@@ -47,15 +46,13 @@ export function CopySpiralRhombusGridToSpiralRhombusGridAPI(spiralrhombusgrid: S
 		spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.ShapeCategoryID.Int64 = 0 		
 	}
 
-	spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.RhombusGridID.Valid = true
-	if (spiralrhombusgrid.RhombusGrid != undefined) {
-		spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.RhombusGridID.Int64 = spiralrhombusgrid.RhombusGrid.ID  
-	} else {
-		spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.RhombusGridID.Int64 = 0 		
-	}
-
 
 	// insertion point for slice of pointers fields encoding
+	spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.SpiralRhombuses = []
+	for (let _spiralrhombus of spiralrhombusgrid.SpiralRhombuses) {
+		spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.SpiralRhombuses.push(_spiralrhombus.ID)
+	}
+
 }
 
 // CopySpiralRhombusGridAPIToSpiralRhombusGrid update basic, pointers and slice of pointers fields of spiralrhombusgrid
@@ -74,7 +71,13 @@ export function CopySpiralRhombusGridAPIToSpiralRhombusGrid(spiralrhombusgridAPI
 
 	// insertion point for pointer fields encoding
 	spiralrhombusgrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.ShapeCategoryID.Int64)
-	spiralrhombusgrid.RhombusGrid = frontRepo.map_ID_RhombusGrid.get(spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.RhombusGridID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	spiralrhombusgrid.SpiralRhombuses = new Array<SpiralRhombus>()
+	for (let _id of spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.SpiralRhombuses) {
+		let _spiralrhombus = frontRepo.map_ID_SpiralRhombus.get(_id)
+		if (_spiralrhombus != undefined) {
+			spiralrhombusgrid.SpiralRhombuses.push(_spiralrhombus!)
+		}
+	}
 }

@@ -1,6 +1,6 @@
 // insertion point for imports
 import { ShapeCategoryAPI } from './shapecategory-api'
-import { RhombusGridAPI } from './rhombusgrid-api'
+import { SpiralRhombusAPI } from './spiralrhombus-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -26,6 +26,5 @@ export class SpiralRhombusGridPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 	ShapeCategoryID: NullInt64 = new NullInt64 // if pointer is null, ShapeCategory.ID = 0
 
-	RhombusGridID: NullInt64 = new NullInt64 // if pointer is null, RhombusGrid.ID = 0
-
+	SpiralRhombuses: number[] = []
 }

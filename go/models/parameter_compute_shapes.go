@@ -75,6 +75,8 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.ComputeSpiralRhombusSeed()
 	p.Shapes = append(p.Shapes, p.SpiralRhombusGridSeed)
+
+	p.ComputeSpiralRhombusGrid()
 	p.Shapes = append(p.Shapes, p.SpiralRhombusGrid)
 
 	p.ComputeSpiralCircleSeed()

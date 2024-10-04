@@ -529,6 +529,14 @@ type SpiralRhombus_WOP struct {
 	Y_r2 float64
 	X_r3 float64
 	Y_r3 float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
+	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
 }
 
 func (from *SpiralRhombus) CopyBasicFields(to *SpiralRhombus) {
@@ -543,6 +551,14 @@ func (from *SpiralRhombus) CopyBasicFields(to *SpiralRhombus) {
 	to.Y_r2 = from.Y_r2
 	to.X_r3 = from.X_r3
 	to.Y_r3 = from.Y_r3
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
+	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
 }
 
 type SpiralRhombusGrid_WOP struct {

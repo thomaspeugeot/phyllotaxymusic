@@ -247,6 +247,25 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 
 	case *SpiralRhombusGrid:
 		// insertion point per field
+		if fieldName == "SpiralRhombuses" {
+
+			// walk all instances of the owning type
+			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
+				if any(_instance).(*SpiralRhombusGrid) != owningInstanceInfered {
+					_inferedTypeInstance := any(_instance).(*SpiralRhombusGrid)
+					reference := make([]FieldType, 0)
+					targetFieldSlice := any(_inferedTypeInstance.SpiralRhombuses).([]FieldType)
+					copy(targetFieldSlice, reference)
+					_inferedTypeInstance.SpiralRhombuses = _inferedTypeInstance.SpiralRhombuses[0:]
+					for _, fieldInstance := range reference {
+						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
+							_inferedTypeInstance.SpiralRhombuses =
+								append(_inferedTypeInstance.SpiralRhombuses, any(fieldInstance).(*SpiralRhombus))
+						}
+					}
+				}
+			}
+		}
 
 	case *VerticalAxis:
 		// insertion point per field
@@ -386,6 +405,14 @@ func (stage *StageStruct) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct SpiralRhombusGrid
 	// insertion point per field
+	clear(stage.SpiralRhombusGrid_SpiralRhombuses_reverseMap)
+	stage.SpiralRhombusGrid_SpiralRhombuses_reverseMap = make(map[*SpiralRhombus]*SpiralRhombusGrid)
+	for spiralrhombusgrid := range stage.SpiralRhombusGrids {
+		_ = spiralrhombusgrid
+		for _, _spiralrhombus := range spiralrhombusgrid.SpiralRhombuses {
+			stage.SpiralRhombusGrid_SpiralRhombuses_reverseMap[_spiralrhombus] = spiralrhombusgrid
+		}
+	}
 
 	// Compute reverse map for named struct VerticalAxis
 	// insertion point per field

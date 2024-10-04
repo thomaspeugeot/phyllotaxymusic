@@ -51,9 +51,8 @@ type SpiralRhombusGridPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	ShapeCategoryID sql.NullInt64
 
-	// field RhombusGrid is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	RhombusGridID sql.NullInt64
+	// field SpiralRhombuses is a slice of pointers to another Struct (optional or 0..1)
+	SpiralRhombuses IntSlice `gorm:"type:TEXT"`
 }
 
 // SpiralRhombusGridDB describes a spiralrhombusgrid in the database
@@ -238,16 +237,22 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitPhaseTwo
 			spiralrhombusgridDB.ShapeCategoryID.Valid = true
 		}
 
-		// commit pointer value spiralrhombusgrid.RhombusGrid translates to updating the spiralrhombusgrid.RhombusGridID
-		spiralrhombusgridDB.RhombusGridID.Valid = true // allow for a 0 value (nil association)
-		if spiralrhombusgrid.RhombusGrid != nil {
-			if RhombusGridId, ok := backRepo.BackRepoRhombusGrid.Map_RhombusGridPtr_RhombusGridDBID[spiralrhombusgrid.RhombusGrid]; ok {
-				spiralrhombusgridDB.RhombusGridID.Int64 = int64(RhombusGridId)
-				spiralrhombusgridDB.RhombusGridID.Valid = true
+		// 1. reset
+		spiralrhombusgridDB.SpiralRhombusGridPointersEncoding.SpiralRhombuses = make([]int, 0)
+		// 2. encode
+		for _, spiralrhombusAssocEnd := range spiralrhombusgrid.SpiralRhombuses {
+			spiralrhombusAssocEnd_DB :=
+				backRepo.BackRepoSpiralRhombus.GetSpiralRhombusDBFromSpiralRhombusPtr(spiralrhombusAssocEnd)
+			
+			// the stage might be inconsistant, meaning that the spiralrhombusAssocEnd_DB might
+			// be missing from the stage. In this case, the commit operation is robust
+			// An alternative would be to crash here to reveal the missing element.
+			if spiralrhombusAssocEnd_DB == nil {
+				continue
 			}
-		} else {
-			spiralrhombusgridDB.RhombusGridID.Int64 = 0
-			spiralrhombusgridDB.RhombusGridID.Valid = true
+			
+			spiralrhombusgridDB.SpiralRhombusGridPointersEncoding.SpiralRhombuses =
+				append(spiralrhombusgridDB.SpiralRhombusGridPointersEncoding.SpiralRhombuses, int(spiralrhombusAssocEnd_DB.ID))
 		}
 
 		query := backRepoSpiralRhombusGrid.db.Save(&spiralrhombusgridDB)
@@ -368,11 +373,15 @@ func (spiralrhombusgridDB *SpiralRhombusGridDB) DecodePointers(backRepo *BackRep
 	if spiralrhombusgridDB.ShapeCategoryID.Int64 != 0 {
 		spiralrhombusgrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(spiralrhombusgridDB.ShapeCategoryID.Int64)]
 	}
-	// RhombusGrid field
-	spiralrhombusgrid.RhombusGrid = nil
-	if spiralrhombusgridDB.RhombusGridID.Int64 != 0 {
-		spiralrhombusgrid.RhombusGrid = backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(spiralrhombusgridDB.RhombusGridID.Int64)]
+	// This loop redeem spiralrhombusgrid.SpiralRhombuses in the stage from the encode in the back repo
+	// It parses all SpiralRhombusDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	spiralrhombusgrid.SpiralRhombuses = spiralrhombusgrid.SpiralRhombuses[:0]
+	for _, _SpiralRhombusid := range spiralrhombusgridDB.SpiralRhombusGridPointersEncoding.SpiralRhombuses {
+		spiralrhombusgrid.SpiralRhombuses = append(spiralrhombusgrid.SpiralRhombuses, backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusPtr[uint(_SpiralRhombusid)])
 	}
+
 	return
 }
 
@@ -617,12 +626,6 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) RestorePhaseTw
 		if spiralrhombusgridDB.ShapeCategoryID.Int64 != 0 {
 			spiralrhombusgridDB.ShapeCategoryID.Int64 = int64(BackRepoShapeCategoryid_atBckpTime_newID[uint(spiralrhombusgridDB.ShapeCategoryID.Int64)])
 			spiralrhombusgridDB.ShapeCategoryID.Valid = true
-		}
-
-		// reindexing RhombusGrid field
-		if spiralrhombusgridDB.RhombusGridID.Int64 != 0 {
-			spiralrhombusgridDB.RhombusGridID.Int64 = int64(BackRepoRhombusGridid_atBckpTime_newID[uint(spiralrhombusgridDB.RhombusGridID.Int64)])
-			spiralrhombusgridDB.RhombusGridID.Valid = true
 		}
 
 		// update databse with new index encoding

@@ -847,9 +847,6 @@ func (stage *StageStruct) StageBranchSpiralRhombus(spiralrhombus *SpiralRhombus)
 	if spiralrhombus.ShapeCategory != nil {
 		StageBranch(stage, spiralrhombus.ShapeCategory)
 	}
-	if spiralrhombus.Rhombus != nil {
-		StageBranch(stage, spiralrhombus.Rhombus)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -868,11 +865,11 @@ func (stage *StageStruct) StageBranchSpiralRhombusGrid(spiralrhombusgrid *Spiral
 	if spiralrhombusgrid.ShapeCategory != nil {
 		StageBranch(stage, spiralrhombusgrid.ShapeCategory)
 	}
-	if spiralrhombusgrid.RhombusGrid != nil {
-		StageBranch(stage, spiralrhombusgrid.RhombusGrid)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _spiralrhombus := range spiralrhombusgrid.SpiralRhombuses {
+		StageBranch(stage, _spiralrhombus)
+	}
 
 }
 
@@ -1614,9 +1611,6 @@ func CopyBranchSpiralRhombus(mapOrigCopy map[any]any, spiralrhombusFrom *SpiralR
 	if spiralrhombusFrom.ShapeCategory != nil {
 		spiralrhombusTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, spiralrhombusFrom.ShapeCategory)
 	}
-	if spiralrhombusFrom.Rhombus != nil {
-		spiralrhombusTo.Rhombus = CopyBranchRhombus(mapOrigCopy, spiralrhombusFrom.Rhombus)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -1639,11 +1633,11 @@ func CopyBranchSpiralRhombusGrid(mapOrigCopy map[any]any, spiralrhombusgridFrom 
 	if spiralrhombusgridFrom.ShapeCategory != nil {
 		spiralrhombusgridTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, spiralrhombusgridFrom.ShapeCategory)
 	}
-	if spiralrhombusgridFrom.RhombusGrid != nil {
-		spiralrhombusgridTo.RhombusGrid = CopyBranchRhombusGrid(mapOrigCopy, spiralrhombusgridFrom.RhombusGrid)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _spiralrhombus := range spiralrhombusgridFrom.SpiralRhombuses {
+		spiralrhombusgridTo.SpiralRhombuses = append(spiralrhombusgridTo.SpiralRhombuses, CopyBranchSpiralRhombus(mapOrigCopy, _spiralrhombus))
+	}
 
 	return
 }
@@ -2285,9 +2279,6 @@ func (stage *StageStruct) UnstageBranchSpiralRhombus(spiralrhombus *SpiralRhombu
 	if spiralrhombus.ShapeCategory != nil {
 		UnstageBranch(stage, spiralrhombus.ShapeCategory)
 	}
-	if spiralrhombus.Rhombus != nil {
-		UnstageBranch(stage, spiralrhombus.Rhombus)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -2306,11 +2297,11 @@ func (stage *StageStruct) UnstageBranchSpiralRhombusGrid(spiralrhombusgrid *Spir
 	if spiralrhombusgrid.ShapeCategory != nil {
 		UnstageBranch(stage, spiralrhombusgrid.ShapeCategory)
 	}
-	if spiralrhombusgrid.RhombusGrid != nil {
-		UnstageBranch(stage, spiralrhombusgrid.RhombusGrid)
-	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _spiralrhombus := range spiralrhombusgrid.SpiralRhombuses {
+		UnstageBranch(stage, _spiralrhombus)
+	}
 
 }
 

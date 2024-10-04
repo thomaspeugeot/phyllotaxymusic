@@ -168,6 +168,13 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 	case *models.SpiralRhombus:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "SpiralRhombusGrid":
+			switch reverseField.Fieldname {
+			case "SpiralRhombuses":
+				if _spiralrhombusgrid, ok := stage.SpiralRhombusGrid_SpiralRhombuses_reverseMap[inst]; ok {
+					res = _spiralrhombusgrid.Name
+				}
+			}
 		}
 
 	case *models.SpiralRhombusGrid:
@@ -333,6 +340,11 @@ func GetReverseFieldOwner[T models.Gongstruct](
 	case *models.SpiralRhombus:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "SpiralRhombusGrid":
+			switch reverseField.Fieldname {
+			case "SpiralRhombuses":
+				res = stage.SpiralRhombusGrid_SpiralRhombuses_reverseMap[inst]
+			}
 		}
 
 	case *models.SpiralRhombusGrid:

@@ -18,7 +18,7 @@ import { FrontRepo, FrontRepoService } from './front-repo.service';
 
 // insertion point for imports
 import { ShapeCategoryAPI } from './shapecategory-api'
-import { RhombusGridAPI } from './rhombusgrid-api'
+import { SpiralRhombusAPI } from './spiralrhombus-api'
 
 @Injectable({
   providedIn: 'root'

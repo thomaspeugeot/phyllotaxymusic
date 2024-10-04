@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"math"
 	"slices"
-
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
 func (p *Parameter) ComputeInitialRhombus() {
@@ -408,10 +406,29 @@ func (p *Parameter) ComputeSpiralRhombusSeed() {
 	r := p.GrowingRhombusGridSeed
 
 	x_s, y_s := r.getCoordinates()
-
 	x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
-
 	p.SpiralRhombusGridSeed.GenerateCoordinates(x_r, y_r)
+
+}
+
+// transform all rhombus into spiral rhombus
+func (p *Parameter) ComputeSpiralRhombusGrid() {
+
+	p.SpiralRhombusGrid.SpiralRhombuses = p.SpiralRhombusGrid.SpiralRhombuses[:0]
+
+	for idx, r := range p.GrowingRhombusGrid.Rhombuses {
+
+		sr := new(SpiralRhombus)
+		x_s, y_s := r.getCoordinates()
+		x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
+		sr.GenerateCoordinates(x_r, y_r)
+
+		sr.Stroke = GenerateColor(idx % len(colors))
+		sr.StrokeWidth = 1
+		sr.StrokeOpacity = 1
+
+		p.SpiralRhombusGrid.SpiralRhombuses = append(p.SpiralRhombusGrid.SpiralRhombuses, sr)
+	}
 
 }
 
@@ -492,7 +509,6 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 
 		sc := new(SpiralCircle)
 		sc.Stroke = GenerateColor(idx % len(colors))
-		sc.Stroke = gongsvg_models.Black.ToString()
 		sc.StrokeOpacity = 0.5
 		sc.StrokeWidth = 2
 
@@ -505,46 +521,46 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 
 func (p *Parameter) computeSpiralConstructionAxis() {
 
-	r := p.SpiralRhombusGridSeed.Rhombus
+	// r := p.SpiralRhombusGridSeed
 
-	x_s, y_s := r.getCoordinates()
-	x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
+	// x_s, y_s := r.getCoordinates()
+	// x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
 
-	p.SpiralConstructionAxis.CenterX = x_r[2]
-	p.SpiralConstructionAxis.CenterY = y_r[2]
+	// p.SpiralConstructionAxis.CenterX = x_r[2]
+	// p.SpiralConstructionAxis.CenterY = y_r[2]
 
-	x := x_r[0] - x_r[2]
-	y := y_r[0] - y_r[2]
+	// x := x_r[0] - x_r[2]
+	// y := y_r[0] - y_r[2]
 
-	p.SpiralConstructionAxis.Length = math.Sqrt(x*x + y*y)
-	p.SpiralConstructionAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
+	// p.SpiralConstructionAxis.Length = math.Sqrt(x*x + y*y)
+	// p.SpiralConstructionAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
 }
 
 func (p *Parameter) computeSpiralConstructionAxisGrid() {
 
-	for i := range p.Z {
-		spiralAxis := new(SpiralAxis)
-		spiralAxis.Name = fmt.Sprintf("Spiral Axis %d", i)
-		spiralAxis.Stroke = GenerateColor(i)
-		spiralAxis.StrokeWidth = 1
-		spiralAxis.StrokeOpacity = 1
+	// 	for i := range p.Z {
+	// 		spiralAxis := new(SpiralAxis)
+	// 		spiralAxis.Name = fmt.Sprintf("Spiral Axis %d", i)
+	// 		spiralAxis.Stroke = GenerateColor(i)
+	// 		spiralAxis.StrokeWidth = 1
+	// 		spiralAxis.StrokeOpacity = 1
 
-		r := p.SpiralRhombusGrid.RhombusGrid.Rhombuses[i]
+	// 		r := p.SpiralRhombusGrid.RhombusGrid.Rhombuses[i]
 
-		x_s, y_s := r.getCoordinates()
-		x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
+	// 		x_s, y_s := r.getCoordinates()
+	// 		x_r, y_r := p.convertToCircleSpaceCoordsArray(x_s, y_s)
 
-		spiralAxis.CenterX = x_r[2]
-		spiralAxis.CenterY = y_r[2]
+	// 		spiralAxis.CenterX = x_r[2]
+	// 		spiralAxis.CenterY = y_r[2]
 
-		x := x_r[0] - x_r[2]
-		y := y_r[0] - y_r[2]
+	// 		x := x_r[0] - x_r[2]
+	// 		y := y_r[0] - y_r[2]
 
-		spiralAxis.Length = math.Sqrt(x*x + y*y)
-		spiralAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
+	// 		spiralAxis.Length = math.Sqrt(x*x + y*y)
+	// 		spiralAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
 
-		p.SpiralAxisGrid.SpiralAxises = append(p.SpiralAxisGrid.SpiralAxises, spiralAxis)
-	}
+	// 		p.SpiralAxisGrid.SpiralAxises = append(p.SpiralAxisGrid.SpiralAxises, spiralAxis)
+	// 	}
 }
 
 func (p *Parameter) ComputeSpiralBezier() {

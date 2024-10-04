@@ -2328,8 +2328,6 @@ func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralrhombus_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(spiralrhombus_.ShapeCategory), spiralrhombusFormCallback.probe.stageOfInterest, formDiv)
-		case "Rhombus":
-			FormDivSelectFieldToField(&(spiralrhombus_.Rhombus), spiralrhombusFormCallback.probe.stageOfInterest, formDiv)
 		case "X_r0":
 			FormDivBasicFieldToField(&(spiralrhombus_.X_r0), formDiv)
 		case "Y_r0":
@@ -2346,6 +2344,64 @@ func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralrhombus_.X_r3), formDiv)
 		case "Y_r3":
 			FormDivBasicFieldToField(&(spiralrhombus_.Y_r3), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(spiralrhombus_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(spiralrhombus_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(spiralrhombus_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(spiralrhombus_.StrokeOpacity), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(spiralrhombus_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(spiralrhombus_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(spiralrhombus_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(spiralrhombus_.Transform), formDiv)
+		case "SpiralRhombusGrid:SpiralRhombuses":
+			// we need to retrieve the field owner before the change
+			var pastSpiralRhombusGridOwner *models.SpiralRhombusGrid
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "SpiralRhombusGrid"
+			rf.Fieldname = "SpiralRhombuses"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				spiralrhombusFormCallback.probe.stageOfInterest,
+				spiralrhombusFormCallback.probe.backRepoOfInterest,
+				spiralrhombus_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastSpiralRhombusGridOwner = reverseFieldOwner.(*models.SpiralRhombusGrid)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastSpiralRhombusGridOwner != nil {
+					idx := slices.Index(pastSpiralRhombusGridOwner.SpiralRhombuses, spiralrhombus_)
+					pastSpiralRhombusGridOwner.SpiralRhombuses = slices.Delete(pastSpiralRhombusGridOwner.SpiralRhombuses, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _spiralrhombusgrid := range *models.GetGongstructInstancesSet[models.SpiralRhombusGrid](spiralrhombusFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _spiralrhombusgrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newSpiralRhombusGridOwner := _spiralrhombusgrid // we have a match
+						if pastSpiralRhombusGridOwner != nil {
+							if newSpiralRhombusGridOwner != pastSpiralRhombusGridOwner {
+								idx := slices.Index(pastSpiralRhombusGridOwner.SpiralRhombuses, spiralrhombus_)
+								pastSpiralRhombusGridOwner.SpiralRhombuses = slices.Delete(pastSpiralRhombusGridOwner.SpiralRhombuses, idx, idx+1)
+								newSpiralRhombusGridOwner.SpiralRhombuses = append(newSpiralRhombusGridOwner.SpiralRhombuses, spiralrhombus_)
+							}
+						} else {
+							newSpiralRhombusGridOwner.SpiralRhombuses = append(newSpiralRhombusGridOwner.SpiralRhombuses, spiralrhombus_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -2427,8 +2483,6 @@ func (spiralrhombusgridFormCallback *SpiralRhombusGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralrhombusgrid_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(spiralrhombusgrid_.ShapeCategory), spiralrhombusgridFormCallback.probe.stageOfInterest, formDiv)
-		case "RhombusGrid":
-			FormDivSelectFieldToField(&(spiralrhombusgrid_.RhombusGrid), spiralrhombusgridFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 

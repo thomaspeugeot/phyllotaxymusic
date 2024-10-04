@@ -247,6 +247,8 @@ type StageStruct struct {
 	SpiralRhombusGrids_mapString map[string]*SpiralRhombusGrid
 
 	// insertion point for slice of pointers maps
+	SpiralRhombusGrid_SpiralRhombuses_reverseMap map[*SpiralRhombus]*SpiralRhombusGrid
+
 	OnAfterSpiralRhombusGridCreateCallback OnAfterCreateInterface[SpiralRhombusGrid]
 	OnAfterSpiralRhombusGridUpdateCallback OnAfterUpdateInterface[SpiralRhombusGrid]
 	OnAfterSpiralRhombusGridDeleteCallback OnAfterDeleteInterface[SpiralRhombusGrid]
@@ -2523,16 +2525,14 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case SpiralRhombus:
 		return any(&SpiralRhombus{
 			// Initialisation of associations
-			// field is initialized with an instance of Rhombus with the name of the field
-			Rhombus: &Rhombus{Name: "Rhombus"},
 			// field is initialized with AbstractShape problem with composites
 			
 		}).(*Type)
 	case SpiralRhombusGrid:
 		return any(&SpiralRhombusGrid{
 			// Initialisation of associations
-			// field is initialized with an instance of RhombusGrid with the name of the field
-			RhombusGrid: &RhombusGrid{Name: "RhombusGrid"},
+			// field is initialized with an instance of SpiralRhombus with the name of the field
+			SpiralRhombuses: []*SpiralRhombus{{Name: "SpiralRhombuses"}},
 			// field is initialized with AbstractShape problem with composites
 			
 		}).(*Type)
@@ -3883,23 +3883,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
-		case "Rhombus":
-			res := make(map[*Rhombus][]*SpiralRhombus)
-			for spiralrhombus := range stage.SpiralRhombuss {
-				if spiralrhombus.Rhombus != nil {
-					rhombus_ := spiralrhombus.Rhombus
-					var spiralrhombuss []*SpiralRhombus
-					_, ok := res[rhombus_]
-					if ok {
-						spiralrhombuss = res[rhombus_]
-					} else {
-						spiralrhombuss = make([]*SpiralRhombus, 0)
-					}
-					spiralrhombuss = append(spiralrhombuss, spiralrhombus)
-					res[rhombus_] = spiralrhombuss
-				}
-			}
-			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of SpiralRhombusGrid
 	case SpiralRhombusGrid:
@@ -3919,23 +3902,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 					}
 					spiralrhombusgrids = append(spiralrhombusgrids, spiralrhombusgrid)
 					res[shapecategory_] = spiralrhombusgrids
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		case "RhombusGrid":
-			res := make(map[*RhombusGrid][]*SpiralRhombusGrid)
-			for spiralrhombusgrid := range stage.SpiralRhombusGrids {
-				if spiralrhombusgrid.RhombusGrid != nil {
-					rhombusgrid_ := spiralrhombusgrid.RhombusGrid
-					var spiralrhombusgrids []*SpiralRhombusGrid
-					_, ok := res[rhombusgrid_]
-					if ok {
-						spiralrhombusgrids = res[rhombusgrid_]
-					} else {
-						spiralrhombusgrids = make([]*SpiralRhombusGrid, 0)
-					}
-					spiralrhombusgrids = append(spiralrhombusgrids, spiralrhombusgrid)
-					res[rhombusgrid_] = spiralrhombusgrids
 				}
 			}
 			return any(res).(map[*End][]*Start)
@@ -4146,6 +4112,14 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	case SpiralRhombusGrid:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "SpiralRhombuses":
+			res := make(map[*SpiralRhombus]*SpiralRhombusGrid)
+			for spiralrhombusgrid := range stage.SpiralRhombusGrids {
+				for _, spiralrhombus_ := range spiralrhombusgrid.SpiralRhombuses {
+					res[spiralrhombus_] = spiralrhombusgrid
+				}
+			}
+			return any(res).(map[*End]*Start)
 		}
 	// reverse maps of direct associations of VerticalAxis
 	case VerticalAxis:
@@ -4314,9 +4288,9 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case SpiralRhombus:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Rhombus", "X_r0", "Y_r0", "X_r1", "Y_r1", "X_r2", "Y_r2", "X_r3", "Y_r3"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "X_r0", "Y_r0", "X_r1", "Y_r1", "X_r2", "Y_r2", "X_r3", "Y_r3", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case SpiralRhombusGrid:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "RhombusGrid"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombuses"}
 	case VerticalAxis:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	}
@@ -4421,6 +4395,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case SpiralRhombus:
 		var rf ReverseField
 		_ = rf
+		rf.GongstructName = "SpiralRhombusGrid"
+		rf.Fieldname = "SpiralRhombuses"
+		res = append(res, rf)
 	case SpiralRhombusGrid:
 		var rf ReverseField
 		_ = rf
@@ -4477,9 +4454,9 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case *SpiralRhombus:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Rhombus", "X_r0", "Y_r0", "X_r1", "Y_r1", "X_r2", "Y_r2", "X_r3", "Y_r3"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "X_r0", "Y_r0", "X_r1", "Y_r1", "X_r2", "Y_r2", "X_r3", "Y_r3", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *SpiralRhombusGrid:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "RhombusGrid"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombuses"}
 	case *VerticalAxis:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	}
@@ -5275,10 +5252,6 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.ShapeCategory != nil {
 				res = inferedInstance.ShapeCategory.Name
 			}
-		case "Rhombus":
-			if inferedInstance.Rhombus != nil {
-				res = inferedInstance.Rhombus.Name
-			}
 		case "X_r0":
 			res = fmt.Sprintf("%f", inferedInstance.X_r0)
 		case "Y_r0":
@@ -5295,6 +5268,22 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.X_r3)
 		case "Y_r3":
 			res = fmt.Sprintf("%f", inferedInstance.Y_r3)
+		case "Color":
+			res = inferedInstance.Color
+		case "FillOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+		case "Stroke":
+			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+		case "StrokeWidth":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+		case "StrokeDashArray":
+			res = inferedInstance.StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res = inferedInstance.StrokeDashArrayWhenSelected
+		case "Transform":
+			res = inferedInstance.Transform
 		}
 	case *SpiralRhombusGrid:
 		switch fieldName {
@@ -5307,9 +5296,12 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.ShapeCategory != nil {
 				res = inferedInstance.ShapeCategory.Name
 			}
-		case "RhombusGrid":
-			if inferedInstance.RhombusGrid != nil {
-				res = inferedInstance.RhombusGrid.Name
+		case "SpiralRhombuses":
+			for idx, __instance__ := range inferedInstance.SpiralRhombuses {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
 			}
 		}
 	case *VerticalAxis:
@@ -6139,10 +6131,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.ShapeCategory != nil {
 				res = inferedInstance.ShapeCategory.Name
 			}
-		case "Rhombus":
-			if inferedInstance.Rhombus != nil {
-				res = inferedInstance.Rhombus.Name
-			}
 		case "X_r0":
 			res = fmt.Sprintf("%f", inferedInstance.X_r0)
 		case "Y_r0":
@@ -6159,6 +6147,22 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.X_r3)
 		case "Y_r3":
 			res = fmt.Sprintf("%f", inferedInstance.Y_r3)
+		case "Color":
+			res = inferedInstance.Color
+		case "FillOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+		case "Stroke":
+			res = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+		case "StrokeWidth":
+			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+		case "StrokeDashArray":
+			res = inferedInstance.StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res = inferedInstance.StrokeDashArrayWhenSelected
+		case "Transform":
+			res = inferedInstance.Transform
 		}
 	case SpiralRhombusGrid:
 		switch fieldName {
@@ -6171,9 +6175,12 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.ShapeCategory != nil {
 				res = inferedInstance.ShapeCategory.Name
 			}
-		case "RhombusGrid":
-			if inferedInstance.RhombusGrid != nil {
-				res = inferedInstance.RhombusGrid.Name
+		case "SpiralRhombuses":
+			for idx, __instance__ := range inferedInstance.SpiralRhombuses {
+				if idx > 0 {
+					res += "\n"
+				}
+				res += __instance__.Name
 			}
 		}
 	case VerticalAxis:

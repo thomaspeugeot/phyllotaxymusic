@@ -12,17 +12,16 @@ type SpiralRhombus struct {
 
 	AbstractShape
 
-	Rhombus *Rhombus
-
 	// not persisted by gong
 	X_r0, Y_r0, X_r1, Y_r1, X_r2, Y_r2, X_r3, Y_r3 float64
+
+	Presentation
 }
 
 // Draw implements Shape.
-func (spiralrhombus *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_models.Layer, p *Parameter) {
-	r := spiralrhombus.Rhombus
+func (sr *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_models.Layer, p *Parameter) {
 
-	x_r, y_r := spiralrhombus.GenerateCoordinatesFromStruct()
+	x_r, y_r := sr.GenerateCoordinatesFromStruct()
 	for i := range 4 {
 		line := (&gongsvg_models.Line{
 			Name: fmt.Sprintf("%d", i),
@@ -31,9 +30,9 @@ func (spiralrhombus *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.StageStruc
 			X2:   x_r[(i+1)%4] + p.SpiralOriginX,
 			Y2:   p.SpiralOriginY - y_r[(i+1)%4],
 			Presentation: gongsvg_models.Presentation{
-				Stroke:        r.Stroke,
-				StrokeWidth:   r.StrokeWidth,
-				StrokeOpacity: r.StrokeOpacity,
+				Stroke:        sr.Stroke,
+				StrokeWidth:   sr.StrokeWidth,
+				StrokeOpacity: sr.StrokeOpacity,
 			},
 		}).Stage(gongsvgStage)
 		layer.Lines = append(layer.Lines, line)

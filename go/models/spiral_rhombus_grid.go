@@ -7,22 +7,13 @@ type SpiralRhombusGrid struct {
 
 	AbstractShape
 
-	RhombusGrid *RhombusGrid
+	SpiralRhombuses []*SpiralRhombus
 }
 
 func (spiralRhombusGrid *SpiralRhombusGrid) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_models.Layer, p *Parameter) {
 
-	for idx, r := range spiralRhombusGrid.RhombusGrid.Rhombuses {
-		spiralRhombus := new(SpiralRhombus)
-
-		r2 := r.Copy()
-
-		r2.Stroke = GenerateColor(idx % len(colors))
-		r2.StrokeOpacity = 0.5
-
-		spiralRhombus.Rhombus = &r2
-
-		spiralRhombus.Draw(gongsvgStage, layer, p)
+	for _, sr := range spiralRhombusGrid.SpiralRhombuses {
+		sr.Draw(gongsvgStage, layer, p)
 	}
 
 }
