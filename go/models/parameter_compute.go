@@ -529,6 +529,7 @@ func (p *Parameter) computeSpiralConstructionAxis() {
 	p.SpiralConstructionAxis.CenterX = x_r
 	p.SpiralConstructionAxis.CenterY = y_r
 	p.SpiralConstructionAxis.Angle = ca.Angle + math.Pi*a
+	p.SpiralConstructionAxis.Length = ca.Length
 
 	// x := x_r[0] - x_r[2]
 	// y := y_r[0] - y_r[2]
