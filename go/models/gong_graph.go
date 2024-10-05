@@ -625,8 +625,8 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralConstructionAxis != nil {
 		StageBranch(stage, parameter.SpiralConstructionAxis)
 	}
-	if parameter.SpiralAxisGrid != nil {
-		StageBranch(stage, parameter.SpiralAxisGrid)
+	if parameter.SpiralConstructionAxisGrid != nil {
+		StageBranch(stage, parameter.SpiralConstructionAxisGrid)
 	}
 	if parameter.SpiralBezierSeed != nil {
 		StageBranch(stage, parameter.SpiralBezierSeed)
@@ -1353,8 +1353,8 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.SpiralConstructionAxis != nil {
 		parameterTo.SpiralConstructionAxis = CopyBranchSpiralAxis(mapOrigCopy, parameterFrom.SpiralConstructionAxis)
 	}
-	if parameterFrom.SpiralAxisGrid != nil {
-		parameterTo.SpiralAxisGrid = CopyBranchSpiralAxisGrid(mapOrigCopy, parameterFrom.SpiralAxisGrid)
+	if parameterFrom.SpiralConstructionAxisGrid != nil {
+		parameterTo.SpiralConstructionAxisGrid = CopyBranchSpiralAxisGrid(mapOrigCopy, parameterFrom.SpiralConstructionAxisGrid)
 	}
 	if parameterFrom.SpiralBezierSeed != nil {
 		parameterTo.SpiralBezierSeed = CopyBranchSpiralBezier(mapOrigCopy, parameterFrom.SpiralBezierSeed)
@@ -2057,8 +2057,8 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralConstructionAxis != nil {
 		UnstageBranch(stage, parameter.SpiralConstructionAxis)
 	}
-	if parameter.SpiralAxisGrid != nil {
-		UnstageBranch(stage, parameter.SpiralAxisGrid)
+	if parameter.SpiralConstructionAxisGrid != nil {
+		UnstageBranch(stage, parameter.SpiralConstructionAxisGrid)
 	}
 	if parameter.SpiralBezierSeed != nil {
 		UnstageBranch(stage, parameter.SpiralBezierSeed)

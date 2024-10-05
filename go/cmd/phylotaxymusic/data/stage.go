@@ -678,7 +678,7 @@ func _(stage *models.StageStruct) {
 
 	__SpiralAxis__000000_Construction_Axis_Spiral.Name = `Construction Axis Spiral`
 	__SpiralAxis__000000_Construction_Axis_Spiral.IsDisplayed = true
-	__SpiralAxis__000000_Construction_Axis_Spiral.Angle = 98.118955
+	__SpiralAxis__000000_Construction_Axis_Spiral.Angle = 188.118955
 	__SpiralAxis__000000_Construction_Axis_Spiral.Length = 127.754650
 	__SpiralAxis__000000_Construction_Axis_Spiral.CenterX = 150.000000
 	__SpiralAxis__000000_Construction_Axis_Spiral.CenterY = 0.000000
@@ -692,7 +692,7 @@ func _(stage *models.StageStruct) {
 	__SpiralAxis__000000_Construction_Axis_Spiral.Transform = ``
 
 	__SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral.Name = `Construction Axis Grid Spiral`
-	__SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral.IsDisplayed = false
+	__SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral.IsDisplayed = true
 
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Name = `Spiral Bezier Seed`
 	__SpiralBezier__000000_Spiral_Bezier_Seed.IsDisplayed = false
@@ -714,7 +714,7 @@ func _(stage *models.StageStruct) {
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Transform = ``
 
 	__SpiralCircle__000000_Construction_Circle_Spiral.Name = `Construction Circle Spiral`
-	__SpiralCircle__000000_Construction_Circle_Spiral.IsDisplayed = true
+	__SpiralCircle__000000_Construction_Circle_Spiral.IsDisplayed = false
 	__SpiralCircle__000000_Construction_Circle_Spiral.CenterX = 150.000000
 	__SpiralCircle__000000_Construction_Circle_Spiral.CenterY = 0.000000
 	__SpiralCircle__000000_Construction_Circle_Spiral.HasBespokeRadius = false
@@ -733,7 +733,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircleGrid__000000_Spiral_Circle_Grid.IsDisplayed = true
 
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Name = `Reference Spiral Rhombus`
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = true
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = false
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r0 = 86.082481
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r0 = 10.844832
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r1 = 54.121746
@@ -752,7 +752,7 @@ func _(stage *models.StageStruct) {
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Transform = ``
 
 	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.Name = `Spiral Rhombus Grid`
-	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.IsDisplayed = true
+	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.IsDisplayed = false
 
 	__VerticalAxis__000000_Vertical_Axis.Name = `Vertical Axis`
 	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = false
@@ -855,7 +855,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralCircleSeed = __SpiralCircle__000000_Construction_Circle_Spiral
 	__Parameter__000000_Reference.SpiralCircleGrid = __SpiralCircleGrid__000000_Spiral_Circle_Grid
 	__Parameter__000000_Reference.SpiralConstructionAxis = __SpiralAxis__000000_Construction_Axis_Spiral
-	__Parameter__000000_Reference.SpiralAxisGrid = __SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral
+	__Parameter__000000_Reference.SpiralConstructionAxisGrid = __SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral
 	__Parameter__000000_Reference.SpiralBezierSeed = __SpiralBezier__000000_Spiral_Bezier_Seed
 	__Parameter__000000_Reference.Fkey = __Key__000000_F_key
 	__Parameter__000000_Reference.PitchLines = __AxisGrid__000002_Pitch_Lines

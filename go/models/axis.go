@@ -28,7 +28,7 @@ func (axis *Axis) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	line.Name = axis.Name
 	layer.Lines = append(layer.Lines, line)
 
-	angleRad := axis.Angle * math.Pi / 180
+	angleRad := DegreesToRadians(axis.Angle)
 
 	line.X1 = parameter.OriginX + axis.CenterX
 	line.Y1 = parameter.OriginY - axis.CenterY

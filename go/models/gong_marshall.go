@@ -2493,11 +2493,11 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
-		if parameter.SpiralAxisGrid != nil {
+		if parameter.SpiralConstructionAxisGrid != nil {
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralAxisGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralAxisGrid_Identifiers[parameter.SpiralAxisGrid])
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionAxisGrid")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralAxisGrid_Identifiers[parameter.SpiralConstructionAxisGrid])
 			pointersInitializesStatements += setPointerField
 		}
 

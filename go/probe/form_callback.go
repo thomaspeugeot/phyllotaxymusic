@@ -1295,8 +1295,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralConstructionAxis":
 			FormDivSelectFieldToField(&(parameter_.SpiralConstructionAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "SpiralAxisGrid":
-			FormDivSelectFieldToField(&(parameter_.SpiralAxisGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralConstructionAxisGrid":
+			FormDivSelectFieldToField(&(parameter_.SpiralConstructionAxisGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralBezierSeed":
 			FormDivSelectFieldToField(&(parameter_.SpiralBezierSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "Fkey":
