@@ -141,6 +141,8 @@ export class ParameterPointersEncoding {
 
 	SpiralConstructionAxisGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionAxisGrid.ID = 0
 
+	SpiralConstructionCircleGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionCircleGrid.ID = 0
+
 	SpiralBezierSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierSeed.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0

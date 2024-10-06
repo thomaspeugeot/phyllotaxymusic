@@ -2421,6 +2421,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SpiralConstructionAxisGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralConstructionAxisGrid = __gong__map_SpiralAxisGrid[targetIdentifier]
+				case "SpiralConstructionCircleGrid":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].SpiralConstructionCircleGrid = __gong__map_SpiralCircleGrid[targetIdentifier]
 				case "SpiralBezierSeed":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralBezierSeed = __gong__map_SpiralBezier[targetIdentifier]

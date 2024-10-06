@@ -562,29 +562,47 @@ func (p *Parameter) computeSpiralConstructionAxisGrid() {
 	}
 }
 
-func (p *Parameter) ComputeSpiralBezier() {
+func (p *Parameter) ComputeSpiralConstructionCircleGrid() {
+	p.SpiralConstructionCircleGrid.SpiralCircles =
+		p.SpiralConstructionCircleGrid.SpiralCircles[:0]
 
-	p.computeSpiralBezier(p.SpiralBezierSeed,
-		p.SpiralCircleGrid.SpiralCircles[0],
-		p.SpiralCircleGrid.SpiralCircles[1])
+	for idx, c := range p.ConstructionCircleGrid.Circles {
+
+		x_r, y_r := p.convertToSpiralCoords(c.CenterX, c.CenterY)
+
+		sc := new(SpiralCircle)
+		sc.Stroke = GenerateColor(idx % len(colors))
+		sc.Stroke = gongsvg_models.Black.ToString()
+		sc.Stroke = c.Stroke
+		sc.BespopkeRadius = c.BespopkeRadius
+		sc.HasBespokeRadius = c.HasBespokeRadius
+		sc.StrokeOpacity = 0.5
+		sc.StrokeWidth = 2
+
+		sc.CenterX = x_r
+		sc.CenterY = y_r
+
+		p.SpiralConstructionCircleGrid.SpiralCircles = append(p.SpiralConstructionCircleGrid.SpiralCircles, sc)
+	}
 }
 
-func (p *Parameter) computeSpiralBezier(b *SpiralBezier, startCircle, endCircle *SpiralCircle) {
-	b.StartX = startCircle.CenterX
-	b.StartY = startCircle.CenterY
+// fetch the control points of the the first bezier curve and
+// convert them to spiral coordinates
+func (p *Parameter) ComputeSpiralBezier() {
 
-	b.EndX = endCircle.CenterX
-	b.EndY = endCircle.CenterY
+	b := p.GrowthCurveSegment
+	sb := p.SpiralBezierSeed
 
-	angleRad := p.ConstructionAxis.Angle*math.Pi/180 - math.Pi/2.0
+	sb.StartX, sb.StartY =
+		p.convertToSpiralCoords(b.StartX, b.StartY)
 
-	b.ControlPointStartX = b.StartX +
-		p.SideLength*p.BezierControlLengthRatio*math.Cos(angleRad)
-	b.ControlPointStartY = b.StartY +
-		p.SideLength*p.BezierControlLengthRatio*math.Sin(angleRad)
+	sb.ControlPointStartX, sb.ControlPointStartY =
+		p.convertToSpiralCoords(b.ControlPointStartX, b.ControlPointStartY)
 
-	b.ControlPointEndX = b.EndX +
-		p.SideLength*p.BezierControlLengthRatio*math.Cos(angleRad+math.Pi)
-	b.ControlPointEndY = b.EndY +
-		p.SideLength*p.BezierControlLengthRatio*math.Sin(angleRad+math.Pi)
+	sb.EndX, sb.EndY =
+		p.convertToSpiralCoords(b.EndX, b.EndY)
+
+	sb.ControlPointEndX, sb.ControlPointEndY =
+		p.convertToSpiralCoords(b.ControlPointEndX, b.ControlPointEndY)
+
 }

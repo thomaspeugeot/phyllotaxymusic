@@ -392,6 +392,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("SpiralCircleGrid", instanceWithInferedType.SpiralCircleGrid, formGroup, probe)
 		AssociationFieldToForm("SpiralConstructionAxis", instanceWithInferedType.SpiralConstructionAxis, formGroup, probe)
 		AssociationFieldToForm("SpiralConstructionAxisGrid", instanceWithInferedType.SpiralConstructionAxisGrid, formGroup, probe)
+		AssociationFieldToForm("SpiralConstructionCircleGrid", instanceWithInferedType.SpiralConstructionCircleGrid, formGroup, probe)
 		AssociationFieldToForm("SpiralBezierSeed", instanceWithInferedType.SpiralBezierSeed, formGroup, probe)
 		AssociationFieldToForm("Fkey", instanceWithInferedType.Fkey, formGroup, probe)
 		BasicFieldtoForm("FkeySizeRatio", instanceWithInferedType.FkeySizeRatio, instanceWithInferedType, probe.formStage, formGroup,
