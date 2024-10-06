@@ -593,6 +593,11 @@ func (p *Parameter) ComputeSpiralBezier() {
 	b := p.GrowthCurveSegment
 	sb := p.SpiralBezierSeed
 
+	p.ConvertBeizerToSpiralBezier(b, sb)
+
+}
+
+func (p *Parameter) ConvertBeizerToSpiralBezier(b *Bezier, sb *SpiralBezier) {
 	sb.StartX, sb.StartY =
 		p.convertToSpiralCoords(b.StartX, b.StartY)
 
@@ -604,5 +609,18 @@ func (p *Parameter) ComputeSpiralBezier() {
 
 	sb.ControlPointEndX, sb.ControlPointEndY =
 		p.convertToSpiralCoords(b.ControlPointEndX, b.ControlPointEndY)
+}
 
+func (p *Parameter) ComputeSpiralBezierGrid() {
+
+	p.SpiralBezierGrid.SpiralBeziers = p.SpiralBezierGrid.SpiralBeziers[:0]
+	for _, b := range p.GrowthCurve.Beziers {
+		sb := new(SpiralBezier)
+
+		p.ConvertBeizerToSpiralBezier(b, sb)
+		sb.Stroke = b.Stroke
+		sb.StrokeWidth = b.StrokeWidth
+		sb.StrokeOpacity = b.StrokeOpacity
+		p.SpiralBezierGrid.SpiralBeziers = append(p.SpiralBezierGrid.SpiralBeziers, sb)
+	}
 }

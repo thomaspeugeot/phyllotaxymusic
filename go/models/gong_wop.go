@@ -467,6 +467,18 @@ func (from *SpiralBezier) CopyBasicFields(to *SpiralBezier) {
 	to.Transform = from.Transform
 }
 
+type SpiralBezierGrid_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+}
+
+func (from *SpiralBezierGrid) CopyBasicFields(to *SpiralBezierGrid) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+}
+
 type SpiralCircle_WOP struct {
 	// insertion point
 	Name string

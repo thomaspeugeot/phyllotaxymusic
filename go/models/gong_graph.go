@@ -56,6 +56,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *SpiralBezier:
 		ok = stage.IsStagedSpiralBezier(target)
 
+	case *SpiralBezierGrid:
+		ok = stage.IsStagedSpiralBezierGrid(target)
+
 	case *SpiralCircle:
 		ok = stage.IsStagedSpiralCircle(target)
 
@@ -197,6 +200,13 @@ func (stage *StageStruct) IsStagedSpiralBezier(spiralbezier *SpiralBezier) (ok b
 	return
 }
 
+func (stage *StageStruct) IsStagedSpiralBezierGrid(spiralbeziergrid *SpiralBezierGrid) (ok bool) {
+
+	_, ok = stage.SpiralBezierGrids[spiralbeziergrid]
+
+	return
+}
+
 func (stage *StageStruct) IsStagedSpiralCircle(spiralcircle *SpiralCircle) (ok bool) {
 
 	_, ok = stage.SpiralCircles[spiralcircle]
@@ -290,6 +300,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *SpiralBezier:
 		stage.StageBranchSpiralBezier(target)
+
+	case *SpiralBezierGrid:
+		stage.StageBranchSpiralBezierGrid(target)
 
 	case *SpiralCircle:
 		stage.StageBranchSpiralCircle(target)
@@ -634,6 +647,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralBezierSeed != nil {
 		StageBranch(stage, parameter.SpiralBezierSeed)
 	}
+	if parameter.SpiralBezierGrid != nil {
+		StageBranch(stage, parameter.SpiralBezierGrid)
+	}
 	if parameter.Fkey != nil {
 		StageBranch(stage, parameter.Fkey)
 	}
@@ -792,6 +808,27 @@ func (stage *StageStruct) StageBranchSpiralBezier(spiralbezier *SpiralBezier) {
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) StageBranchSpiralBezierGrid(spiralbeziergrid *SpiralBezierGrid) {
+
+	// check if instance is already staged
+	if IsStaged(stage, spiralbeziergrid) {
+		return
+	}
+
+	spiralbeziergrid.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if spiralbeziergrid.ShapeCategory != nil {
+		StageBranch(stage, spiralbeziergrid.ShapeCategory)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _spiralbezier := range spiralbeziergrid.SpiralBeziers {
+		StageBranch(stage, _spiralbezier)
+	}
 
 }
 
@@ -971,6 +1008,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *SpiralBezier:
 		toT := CopyBranchSpiralBezier(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *SpiralBezierGrid:
+		toT := CopyBranchSpiralBezierGrid(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *SpiralCircle:
@@ -1365,6 +1406,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.SpiralBezierSeed != nil {
 		parameterTo.SpiralBezierSeed = CopyBranchSpiralBezier(mapOrigCopy, parameterFrom.SpiralBezierSeed)
 	}
+	if parameterFrom.SpiralBezierGrid != nil {
+		parameterTo.SpiralBezierGrid = CopyBranchSpiralBezierGrid(mapOrigCopy, parameterFrom.SpiralBezierGrid)
+	}
 	if parameterFrom.Fkey != nil {
 		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
 	}
@@ -1551,6 +1595,31 @@ func CopyBranchSpiralBezier(mapOrigCopy map[any]any, spiralbezierFrom *SpiralBez
 	return
 }
 
+func CopyBranchSpiralBezierGrid(mapOrigCopy map[any]any, spiralbeziergridFrom *SpiralBezierGrid) (spiralbeziergridTo *SpiralBezierGrid) {
+
+	// spiralbeziergridFrom has already been copied
+	if _spiralbeziergridTo, ok := mapOrigCopy[spiralbeziergridFrom]; ok {
+		spiralbeziergridTo = _spiralbeziergridTo.(*SpiralBezierGrid)
+		return
+	}
+
+	spiralbeziergridTo = new(SpiralBezierGrid)
+	mapOrigCopy[spiralbeziergridFrom] = spiralbeziergridTo
+	spiralbeziergridFrom.CopyBasicFields(spiralbeziergridTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if spiralbeziergridFrom.ShapeCategory != nil {
+		spiralbeziergridTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, spiralbeziergridFrom.ShapeCategory)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _spiralbezier := range spiralbeziergridFrom.SpiralBeziers {
+		spiralbeziergridTo.SpiralBeziers = append(spiralbeziergridTo.SpiralBeziers, CopyBranchSpiralBezier(mapOrigCopy, _spiralbezier))
+	}
+
+	return
+}
+
 func CopyBranchSpiralCircle(mapOrigCopy map[any]any, spiralcircleFrom *SpiralCircle) (spiralcircleTo *SpiralCircle) {
 
 	// spiralcircleFrom has already been copied
@@ -1728,6 +1797,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *SpiralBezier:
 		stage.UnstageBranchSpiralBezier(target)
+
+	case *SpiralBezierGrid:
+		stage.UnstageBranchSpiralBezierGrid(target)
 
 	case *SpiralCircle:
 		stage.UnstageBranchSpiralCircle(target)
@@ -2072,6 +2144,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralBezierSeed != nil {
 		UnstageBranch(stage, parameter.SpiralBezierSeed)
 	}
+	if parameter.SpiralBezierGrid != nil {
+		UnstageBranch(stage, parameter.SpiralBezierGrid)
+	}
 	if parameter.Fkey != nil {
 		UnstageBranch(stage, parameter.Fkey)
 	}
@@ -2230,6 +2305,27 @@ func (stage *StageStruct) UnstageBranchSpiralBezier(spiralbezier *SpiralBezier) 
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchSpiralBezierGrid(spiralbeziergrid *SpiralBezierGrid) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, spiralbeziergrid) {
+		return
+	}
+
+	spiralbeziergrid.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if spiralbeziergrid.ShapeCategory != nil {
+		UnstageBranch(stage, spiralbeziergrid.ShapeCategory)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _spiralbezier := range spiralbeziergrid.SpiralBeziers {
+		UnstageBranch(stage, _spiralbezier)
+	}
 
 }
 

@@ -92,6 +92,8 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.SpiralConstructionCircleGrid)
 	p.ComputeSpiralBezier()
 	p.Shapes = append(p.Shapes, p.SpiralBezierSeed)
+	p.ComputeSpiralBezierGrid()
+	p.Shapes = append(p.Shapes, p.SpiralBezierGrid)
 
 	p.GrowthCurveShiftedRight.Move(p.GrowthCurveShiftedRightSeed, p.GrowthCurve,
 		p.RotatedAxis.Length, 0)

@@ -103,6 +103,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralBezier" {
 		fillUpTable[models.SpiralBezier](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "SpiralBezierGrid" {
+		fillUpTable[models.SpiralBezierGrid](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralCircle" {
 		fillUpTable[models.SpiralCircle](nodeImplGongstruct.probe)
 	}

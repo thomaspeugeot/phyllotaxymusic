@@ -31,6 +31,7 @@ func SerializeStage(stage *StageStruct, filename string) {
 		SerializeExcelize[SpiralAxis](stage, f)
 		SerializeExcelize[SpiralAxisGrid](stage, f)
 		SerializeExcelize[SpiralBezier](stage, f)
+		SerializeExcelize[SpiralBezierGrid](stage, f)
 		SerializeExcelize[SpiralCircle](stage, f)
 		SerializeExcelize[SpiralCircleGrid](stage, f)
 		SerializeExcelize[SpiralRhombus](stage, f)

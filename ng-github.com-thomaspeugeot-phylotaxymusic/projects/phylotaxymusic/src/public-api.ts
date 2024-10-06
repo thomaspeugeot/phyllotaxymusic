@@ -81,6 +81,10 @@ export * from './lib/spiralbezier-api'
 export * from './lib/spiralbezier'
 export * from './lib/spiralbezier.service'
 
+export * from './lib/spiralbeziergrid-api'
+export * from './lib/spiralbeziergrid'
+export * from './lib/spiralbeziergrid.service'
+
 export * from './lib/spiralcircle-api'
 export * from './lib/spiralcircle'
 export * from './lib/spiralcircle.service'

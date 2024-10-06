@@ -74,6 +74,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterSpiralBezierCreateCallback != nil {
 			stage.OnAfterSpiralBezierCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *SpiralBezierGrid:
+		if stage.OnAfterSpiralBezierGridCreateCallback != nil {
+			stage.OnAfterSpiralBezierGridCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *SpiralCircle:
 		if stage.OnAfterSpiralCircleCreateCallback != nil {
 			stage.OnAfterSpiralCircleCreateCallback.OnAfterCreate(stage, target)
@@ -188,6 +192,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*SpiralBezier)
 		if stage.OnAfterSpiralBezierUpdateCallback != nil {
 			stage.OnAfterSpiralBezierUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralBezierGrid:
+		newTarget := any(new).(*SpiralBezierGrid)
+		if stage.OnAfterSpiralBezierGridUpdateCallback != nil {
+			stage.OnAfterSpiralBezierGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *SpiralCircle:
 		newTarget := any(new).(*SpiralCircle)
@@ -309,6 +318,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*SpiralBezier)
 			stage.OnAfterSpiralBezierDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *SpiralBezierGrid:
+		if stage.OnAfterSpiralBezierGridDeleteCallback != nil {
+			staged := any(staged).(*SpiralBezierGrid)
+			stage.OnAfterSpiralBezierGridDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *SpiralCircle:
 		if stage.OnAfterSpiralCircleDeleteCallback != nil {
 			staged := any(staged).(*SpiralCircle)
@@ -412,6 +426,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterSpiralBezierReadCallback != nil {
 			stage.OnAfterSpiralBezierReadCallback.OnAfterRead(stage, target)
 		}
+	case *SpiralBezierGrid:
+		if stage.OnAfterSpiralBezierGridReadCallback != nil {
+			stage.OnAfterSpiralBezierGridReadCallback.OnAfterRead(stage, target)
+		}
 	case *SpiralCircle:
 		if stage.OnAfterSpiralCircleReadCallback != nil {
 			stage.OnAfterSpiralCircleReadCallback.OnAfterRead(stage, target)
@@ -494,6 +512,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *SpiralBezier:
 		stage.OnAfterSpiralBezierUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralBezier])
 	
+	case *SpiralBezierGrid:
+		stage.OnAfterSpiralBezierGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralBezierGrid])
+	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralCircle])
 	
@@ -566,6 +587,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *SpiralBezier:
 		stage.OnAfterSpiralBezierCreateCallback = any(callback).(OnAfterCreateInterface[SpiralBezier])
+	
+	case *SpiralBezierGrid:
+		stage.OnAfterSpiralBezierGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralBezierGrid])
 	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleCreateCallback = any(callback).(OnAfterCreateInterface[SpiralCircle])
@@ -640,6 +664,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *SpiralBezier:
 		stage.OnAfterSpiralBezierDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralBezier])
 	
+	case *SpiralBezierGrid:
+		stage.OnAfterSpiralBezierGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralBezierGrid])
+	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralCircle])
 	
@@ -712,6 +739,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *SpiralBezier:
 		stage.OnAfterSpiralBezierReadCallback = any(callback).(OnAfterReadInterface[SpiralBezier])
+	
+	case *SpiralBezierGrid:
+		stage.OnAfterSpiralBezierGridReadCallback = any(callback).(OnAfterReadInterface[SpiralBezierGrid])
 	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleReadCallback = any(callback).(OnAfterReadInterface[SpiralCircle])

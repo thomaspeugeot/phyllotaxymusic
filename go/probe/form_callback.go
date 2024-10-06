@@ -1301,6 +1301,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralConstructionCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralBezierSeed":
 			FormDivSelectFieldToField(&(parameter_.SpiralBezierSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralBezierGrid":
+			FormDivSelectFieldToField(&(parameter_.SpiralBezierGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":
@@ -2017,6 +2019,48 @@ func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralbezier_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(spiralbezier_.Transform), formDiv)
+		case "SpiralBezierGrid:SpiralBeziers":
+			// we need to retrieve the field owner before the change
+			var pastSpiralBezierGridOwner *models.SpiralBezierGrid
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "SpiralBezierGrid"
+			rf.Fieldname = "SpiralBeziers"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				spiralbezierFormCallback.probe.stageOfInterest,
+				spiralbezierFormCallback.probe.backRepoOfInterest,
+				spiralbezier_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastSpiralBezierGridOwner = reverseFieldOwner.(*models.SpiralBezierGrid)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastSpiralBezierGridOwner != nil {
+					idx := slices.Index(pastSpiralBezierGridOwner.SpiralBeziers, spiralbezier_)
+					pastSpiralBezierGridOwner.SpiralBeziers = slices.Delete(pastSpiralBezierGridOwner.SpiralBeziers, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _spiralbeziergrid := range *models.GetGongstructInstancesSet[models.SpiralBezierGrid](spiralbezierFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _spiralbeziergrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newSpiralBezierGridOwner := _spiralbeziergrid // we have a match
+						if pastSpiralBezierGridOwner != nil {
+							if newSpiralBezierGridOwner != pastSpiralBezierGridOwner {
+								idx := slices.Index(pastSpiralBezierGridOwner.SpiralBeziers, spiralbezier_)
+								pastSpiralBezierGridOwner.SpiralBeziers = slices.Delete(pastSpiralBezierGridOwner.SpiralBeziers, idx, idx+1)
+								newSpiralBezierGridOwner.SpiralBeziers = append(newSpiralBezierGridOwner.SpiralBeziers, spiralbezier_)
+							}
+						} else {
+							newSpiralBezierGridOwner.SpiralBeziers = append(newSpiralBezierGridOwner.SpiralBeziers, spiralbezier_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -2048,6 +2092,87 @@ func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
 	}
 
 	fillUpTree(spiralbezierFormCallback.probe)
+}
+func __gong__New__SpiralBezierGridFormCallback(
+	spiralbeziergrid *models.SpiralBezierGrid,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (spiralbeziergridFormCallback *SpiralBezierGridFormCallback) {
+	spiralbeziergridFormCallback = new(SpiralBezierGridFormCallback)
+	spiralbeziergridFormCallback.probe = probe
+	spiralbeziergridFormCallback.spiralbeziergrid = spiralbeziergrid
+	spiralbeziergridFormCallback.formGroup = formGroup
+
+	spiralbeziergridFormCallback.CreationMode = (spiralbeziergrid == nil)
+
+	return
+}
+
+type SpiralBezierGridFormCallback struct {
+	spiralbeziergrid *models.SpiralBezierGrid
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (spiralbeziergridFormCallback *SpiralBezierGridFormCallback) OnSave() {
+
+	log.Println("SpiralBezierGridFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	spiralbeziergridFormCallback.probe.formStage.Checkout()
+
+	if spiralbeziergridFormCallback.spiralbeziergrid == nil {
+		spiralbeziergridFormCallback.spiralbeziergrid = new(models.SpiralBezierGrid).Stage(spiralbeziergridFormCallback.probe.stageOfInterest)
+	}
+	spiralbeziergrid_ := spiralbeziergridFormCallback.spiralbeziergrid
+	_ = spiralbeziergrid_
+
+	for _, formDiv := range spiralbeziergridFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(spiralbeziergrid_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(spiralbeziergrid_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(spiralbeziergrid_.ShapeCategory), spiralbeziergridFormCallback.probe.stageOfInterest, formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if spiralbeziergridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralbeziergrid_.Unstage(spiralbeziergridFormCallback.probe.stageOfInterest)
+	}
+
+	spiralbeziergridFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.SpiralBezierGrid](
+		spiralbeziergridFormCallback.probe,
+	)
+	spiralbeziergridFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if spiralbeziergridFormCallback.CreationMode || spiralbeziergridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralbeziergridFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(spiralbeziergridFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__SpiralBezierGridFormCallback(
+			nil,
+			spiralbeziergridFormCallback.probe,
+			newFormGroup,
+		)
+		spiralbeziergrid := new(models.SpiralBezierGrid)
+		FillUpForm(spiralbeziergrid, newFormGroup, spiralbeziergridFormCallback.probe)
+		spiralbeziergridFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(spiralbeziergridFormCallback.probe)
 }
 func __gong__New__SpiralCircleFormCallback(
 	spiralcircle *models.SpiralCircle,

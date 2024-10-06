@@ -20,6 +20,7 @@ import { SpiralCircleGrid } from './spiralcirclegrid'
 import { SpiralAxis } from './spiralaxis'
 import { SpiralAxisGrid } from './spiralaxisgrid'
 import { SpiralBezier } from './spiralbezier'
+import { SpiralBezierGrid } from './spiralbeziergrid'
 import { Key } from './key'
 import { NoteInfo } from './noteinfo'
 import { HorizontalAxis } from './horizontalaxis'
@@ -143,6 +144,8 @@ export class Parameter {
 	SpiralConstructionCircleGrid?: SpiralCircleGrid
 
 	SpiralBezierSeed?: SpiralBezier
+
+	SpiralBezierGrid?: SpiralBezierGrid
 
 	Fkey?: Key
 
@@ -477,6 +480,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.SpiralBezierSeedID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Valid = true
+	if (parameter.SpiralBezierGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64 = parameter.SpiralBezierGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.FkeyID.Valid = true
 	if (parameter.Fkey != undefined) {
 		parameterAPI.ParameterPointersEncoding.FkeyID.Int64 = parameter.Fkey.ID  
@@ -657,6 +667,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralConstructionAxisGrid = frontRepo.map_ID_SpiralAxisGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionAxisGridID.Int64)
 	parameter.SpiralConstructionCircleGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionCircleGridID.Int64)
 	parameter.SpiralBezierSeed = frontRepo.map_ID_SpiralBezier.get(parameterAPI.ParameterPointersEncoding.SpiralBezierSeedID.Int64)
+	parameter.SpiralBezierGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64)
 	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
 	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)

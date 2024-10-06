@@ -1542,6 +1542,46 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_SpiralBezierGrid_Identifiers := make(map[*SpiralBezierGrid]string)
+	_ = map_SpiralBezierGrid_Identifiers
+
+	spiralbeziergridOrdered := []*SpiralBezierGrid{}
+	for spiralbeziergrid := range stage.SpiralBezierGrids {
+		spiralbeziergridOrdered = append(spiralbeziergridOrdered, spiralbeziergrid)
+	}
+	sort.Slice(spiralbeziergridOrdered[:], func(i, j int) bool {
+		return spiralbeziergridOrdered[i].Name < spiralbeziergridOrdered[j].Name
+	})
+	if len(spiralbeziergridOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, spiralbeziergrid := range spiralbeziergridOrdered {
+
+		id = generatesIdentifier("SpiralBezierGrid", idx, spiralbeziergrid.Name)
+		map_SpiralBezierGrid_Identifiers[spiralbeziergrid] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralBezierGrid")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralbeziergrid.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralbeziergrid.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralbeziergrid.IsDisplayed))
+		initializerStatements += setValueField
+
+	}
+
 	map_SpiralCircle_Identifiers := make(map[*SpiralCircle]string)
 	_ = map_SpiralCircle_Identifiers
 
@@ -2517,6 +2557,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
+		if parameter.SpiralBezierGrid != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralBezierGrid")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralBezierGrid_Identifiers[parameter.SpiralBezierGrid])
+			pointersInitializesStatements += setPointerField
+		}
+
 		if parameter.Fkey != nil {
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -2750,6 +2798,32 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralbezier.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
+	for idx, spiralbeziergrid := range spiralbeziergridOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("SpiralBezierGrid", idx, spiralbeziergrid.Name)
+		map_SpiralBezierGrid_Identifiers[spiralbeziergrid] = id
+
+		// Initialisation of values
+		if spiralbeziergrid.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralbeziergrid.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
+		for _, _spiralbezier := range spiralbeziergrid.SpiralBeziers {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralBeziers")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralBezier_Identifiers[_spiralbezier])
 			pointersInitializesStatements += setPointerField
 		}
 

@@ -84,6 +84,7 @@ type Parameter struct {
 
 	SpiralConstructionCircleGrid *SpiralCircleGrid
 	SpiralBezierSeed             *SpiralBezier
+	SpiralBezierGrid             *SpiralBezierGrid
 
 	// the score
 	Fkey                *Key

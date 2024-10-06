@@ -224,6 +224,18 @@ func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Prob
 		)
 		formGroup.HasSuppressButton = true
 		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralBezierGrid:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralBezierGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralBezierGridFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
 	case *models.SpiralCircle:
 		formGroup := (&gongtable.FormGroup{
 			Name:  formName,

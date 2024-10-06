@@ -117,6 +117,8 @@ func _(stage *models.StageStruct) {
 
 	__SpiralBezier__000000_Spiral_Bezier_Seed := (&models.SpiralBezier{}).Stage(stage)
 
+	__SpiralBezierGrid__000000_Spiral_Bezier_Grid := (&models.SpiralBezierGrid{}).Stage(stage)
+
 	__SpiralCircle__000000_Construction_Circle_Spiral := (&models.SpiralCircle{}).Stage(stage)
 
 	__SpiralCircleGrid__000000_Construction_Spiral_Grid := (&models.SpiralCircleGrid{}).Stage(stage)
@@ -131,7 +133,7 @@ func _(stage *models.StageStruct) {
 	// Setup of values
 
 	__Axis__000000_Construction_Axis.Name = `Construction Axis`
-	__Axis__000000_Construction_Axis.IsDisplayed = true
+	__Axis__000000_Construction_Axis.IsDisplayed = false
 	__Axis__000000_Construction_Axis.Angle = 98.118955
 	__Axis__000000_Construction_Axis.Length = 127.754650
 	__Axis__000000_Construction_Axis.CenterX = 0.000000
@@ -206,7 +208,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000004_Rotated_Axis.Transform = ``
 
 	__AxisGrid__000000_Construction_Axis_Grid.Name = `Construction Axis Grid`
-	__AxisGrid__000000_Construction_Axis_Grid.IsDisplayed = true
+	__AxisGrid__000000_Construction_Axis_Grid.IsDisplayed = false
 
 	__AxisGrid__000001_Measure_Lines.Name = `Measure Lines`
 	__AxisGrid__000001_Measure_Lines.IsDisplayed = false
@@ -356,7 +358,7 @@ func _(stage *models.StageStruct) {
 	__BezierGridStack__000000_The_GrowthCurveStack.IsDisplayed = false
 
 	__Circle__000000_Construction_Circle.Name = `Construction Circle`
-	__Circle__000000_Construction_Circle.IsDisplayed = true
+	__Circle__000000_Construction_Circle.IsDisplayed = false
 	__Circle__000000_Construction_Circle.CenterX = -9.021314
 	__Circle__000000_Construction_Circle.CenterY = 63.237082
 	__Circle__000000_Construction_Circle.HasBespokeRadius = true
@@ -388,7 +390,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000001_First_voice_notes_seed.Transform = ``
 
 	__Circle__000002_Growing_Circle_Seed.Name = `Growing Circle Seed`
-	__Circle__000002_Growing_Circle_Seed.IsDisplayed = true
+	__Circle__000002_Growing_Circle_Seed.IsDisplayed = false
 	__Circle__000002_Growing_Circle_Seed.CenterX = 0.000000
 	__Circle__000002_Growing_Circle_Seed.CenterY = 0.000000
 	__Circle__000002_Growing_Circle_Seed.HasBespokeRadius = false
@@ -452,7 +454,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000005_Rotated_Next_Circle.Transform = ``
 
 	__CircleGrid__000000_Construction_Circle_Grid.Name = `Construction Circle Grid`
-	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = true
+	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_First_Voice_note_shifted_right.Name = `First Voice note shifted right`
 	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = false
@@ -661,13 +663,13 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000002_2_Rotated.IsExpanded = false
 
 	__ShapeCategory__000003_3_Growing.Name = `3. Growing`
-	__ShapeCategory__000003_3_Growing.IsExpanded = true
+	__ShapeCategory__000003_3_Growing.IsExpanded = false
 
 	__ShapeCategory__000004_4_Construction.Name = `4. Construction`
-	__ShapeCategory__000004_4_Construction.IsExpanded = true
+	__ShapeCategory__000004_4_Construction.IsExpanded = false
 
 	__ShapeCategory__000005_5_Vertical_growth.Name = `5. Vertical growth`
-	__ShapeCategory__000005_5_Vertical_growth.IsExpanded = true
+	__ShapeCategory__000005_5_Vertical_growth.IsExpanded = false
 
 	__ShapeCategory__000006_6_Spiral_growth.Name = `6.Spiral growth`
 	__ShapeCategory__000006_6_Spiral_growth.IsExpanded = true
@@ -697,7 +699,7 @@ func _(stage *models.StageStruct) {
 	__SpiralAxis__000000_Construction_Axis_Spiral.Transform = ``
 
 	__SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral.Name = `Construction Axis Grid Spiral`
-	__SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral.IsDisplayed = false
+	__SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral.IsDisplayed = true
 
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Name = `Spiral Bezier Seed`
 	__SpiralBezier__000000_Spiral_Bezier_Seed.IsDisplayed = true
@@ -718,8 +720,11 @@ func _(stage *models.StageStruct) {
 	__SpiralBezier__000000_Spiral_Bezier_Seed.StrokeDashArrayWhenSelected = ``
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Transform = ``
 
+	__SpiralBezierGrid__000000_Spiral_Bezier_Grid.Name = `Spiral Bezier Grid`
+	__SpiralBezierGrid__000000_Spiral_Bezier_Grid.IsDisplayed = true
+
 	__SpiralCircle__000000_Construction_Circle_Spiral.Name = `Construction Circle Spiral`
-	__SpiralCircle__000000_Construction_Circle_Spiral.IsDisplayed = false
+	__SpiralCircle__000000_Construction_Circle_Spiral.IsDisplayed = true
 	__SpiralCircle__000000_Construction_Circle_Spiral.CenterX = 150.000000
 	__SpiralCircle__000000_Construction_Circle_Spiral.CenterY = 0.000000
 	__SpiralCircle__000000_Construction_Circle_Spiral.HasBespokeRadius = false
@@ -866,6 +871,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralConstructionAxisGrid = __SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral
 	__Parameter__000000_Reference.SpiralConstructionCircleGrid = __SpiralCircleGrid__000000_Construction_Spiral_Grid
 	__Parameter__000000_Reference.SpiralBezierSeed = __SpiralBezier__000000_Spiral_Bezier_Seed
+	__Parameter__000000_Reference.SpiralBezierGrid = __SpiralBezierGrid__000000_Spiral_Bezier_Grid
 	__Parameter__000000_Reference.Fkey = __Key__000000_F_key
 	__Parameter__000000_Reference.PitchLines = __AxisGrid__000002_Pitch_Lines
 	__Parameter__000000_Reference.MeasureLines = __AxisGrid__000001_Measure_Lines
@@ -906,6 +912,7 @@ func _(stage *models.StageStruct) {
 	__SpiralAxis__000000_Construction_Axis_Spiral.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
 	__SpiralAxisGrid__000000_Construction_Axis_Grid_Spiral.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
 	__SpiralBezier__000000_Spiral_Bezier_Seed.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier
+	__SpiralBezierGrid__000000_Spiral_Bezier_Grid.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier
 	__SpiralCircle__000000_Construction_Circle_Spiral.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
 	__SpiralCircleGrid__000000_Construction_Spiral_Grid.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier
 	__SpiralCircleGrid__000001_Spiral_Circle_Grid.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth

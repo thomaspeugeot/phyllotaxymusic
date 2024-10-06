@@ -38,6 +38,8 @@ type BackRepoData struct {
 
 	SpiralBezierAPIs []*SpiralBezierAPI
 
+	SpiralBezierGridAPIs []*SpiralBezierGridAPI
+
 	SpiralCircleAPIs []*SpiralCircleAPI
 
 	SpiralCircleGridAPIs []*SpiralCircleGridAPI
@@ -219,6 +221,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		spiralbezierDB.CopyBasicFieldsToSpiralBezier_WOP(&spiralbezierAPI.SpiralBezier_WOP)
 
 		backRepoData.SpiralBezierAPIs = append(backRepoData.SpiralBezierAPIs, &spiralbezierAPI)
+	}
+
+	for _, spiralbeziergridDB := range backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridDB {
+
+		var spiralbeziergridAPI SpiralBezierGridAPI
+		spiralbeziergridAPI.ID = spiralbeziergridDB.ID
+		spiralbeziergridAPI.SpiralBezierGridPointersEncoding = spiralbeziergridDB.SpiralBezierGridPointersEncoding
+		spiralbeziergridDB.CopyBasicFieldsToSpiralBezierGrid_WOP(&spiralbeziergridAPI.SpiralBezierGrid_WOP)
+
+		backRepoData.SpiralBezierGridAPIs = append(backRepoData.SpiralBezierGridAPIs, &spiralbeziergridAPI)
 	}
 
 	for _, spiralcircleDB := range backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCircleDB {
