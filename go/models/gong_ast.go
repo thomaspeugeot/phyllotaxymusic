@@ -328,12 +328,12 @@ var __gong__map_Parameter = make(map[string]*Parameter)
 var __gong__map_Rhombus = make(map[string]*Rhombus)
 var __gong__map_RhombusGrid = make(map[string]*RhombusGrid)
 var __gong__map_ShapeCategory = make(map[string]*ShapeCategory)
-var __gong__map_SpiralAxis = make(map[string]*SpiralAxis)
-var __gong__map_SpiralAxisGrid = make(map[string]*SpiralAxisGrid)
 var __gong__map_SpiralBezier = make(map[string]*SpiralBezier)
 var __gong__map_SpiralBezierGrid = make(map[string]*SpiralBezierGrid)
 var __gong__map_SpiralCircle = make(map[string]*SpiralCircle)
 var __gong__map_SpiralCircleGrid = make(map[string]*SpiralCircleGrid)
+var __gong__map_SpiralLine = make(map[string]*SpiralLine)
+var __gong__map_SpiralLineGrid = make(map[string]*SpiralLineGrid)
 var __gong__map_SpiralRhombus = make(map[string]*SpiralRhombus)
 var __gong__map_SpiralRhombusGrid = make(map[string]*SpiralRhombusGrid)
 var __gong__map_VerticalAxis = make(map[string]*VerticalAxis)
@@ -593,18 +593,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceShapeCategory.Stage(stage)
 										instance = any(instanceShapeCategory)
 										__gong__map_ShapeCategory[identifier] = instanceShapeCategory
-									case "SpiralAxis":
-										instanceSpiralAxis := new(SpiralAxis)
-										instanceSpiralAxis.Name = instanceName
-										instanceSpiralAxis.Stage(stage)
-										instance = any(instanceSpiralAxis)
-										__gong__map_SpiralAxis[identifier] = instanceSpiralAxis
-									case "SpiralAxisGrid":
-										instanceSpiralAxisGrid := new(SpiralAxisGrid)
-										instanceSpiralAxisGrid.Name = instanceName
-										instanceSpiralAxisGrid.Stage(stage)
-										instance = any(instanceSpiralAxisGrid)
-										__gong__map_SpiralAxisGrid[identifier] = instanceSpiralAxisGrid
 									case "SpiralBezier":
 										instanceSpiralBezier := new(SpiralBezier)
 										instanceSpiralBezier.Name = instanceName
@@ -629,6 +617,18 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceSpiralCircleGrid.Stage(stage)
 										instance = any(instanceSpiralCircleGrid)
 										__gong__map_SpiralCircleGrid[identifier] = instanceSpiralCircleGrid
+									case "SpiralLine":
+										instanceSpiralLine := new(SpiralLine)
+										instanceSpiralLine.Name = instanceName
+										instanceSpiralLine.Stage(stage)
+										instance = any(instanceSpiralLine)
+										__gong__map_SpiralLine[identifier] = instanceSpiralLine
+									case "SpiralLineGrid":
+										instanceSpiralLineGrid := new(SpiralLineGrid)
+										instanceSpiralLineGrid.Name = instanceName
+										instanceSpiralLineGrid.Stage(stage)
+										instance = any(instanceSpiralLineGrid)
+										__gong__map_SpiralLineGrid[identifier] = instanceSpiralLineGrid
 									case "SpiralRhombus":
 										instanceSpiralRhombus := new(SpiralRhombus)
 										instanceSpiralRhombus.Name = instanceName
@@ -739,14 +739,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
-						case "SpiralAxis":
-							switch fieldName {
-							// insertion point for date assign code
-							}
-						case "SpiralAxisGrid":
-							switch fieldName {
-							// insertion point for date assign code
-							}
 						case "SpiralBezier":
 							switch fieldName {
 							// insertion point for date assign code
@@ -760,6 +752,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							// insertion point for date assign code
 							}
 						case "SpiralCircleGrid":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "SpiralLine":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "SpiralLineGrid":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -892,20 +892,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
-					case "SpiralAxis":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						}
-					case "SpiralAxisGrid":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						case "SpiralAxises":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							target := __gong__map_SpiralAxis[targetIdentifier]
-							__gong__map_SpiralAxisGrid[identifier].SpiralAxises =
-								append(__gong__map_SpiralAxisGrid[identifier].SpiralAxises, target)
-						}
 					case "SpiralBezier":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
@@ -933,6 +919,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_SpiralCircle[targetIdentifier]
 							__gong__map_SpiralCircleGrid[identifier].SpiralCircles =
 								append(__gong__map_SpiralCircleGrid[identifier].SpiralCircles, target)
+						}
+					case "SpiralLine":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "SpiralLineGrid":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "SpiralLines":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_SpiralLine[targetIdentifier]
+							__gong__map_SpiralLineGrid[identifier].SpiralLines =
+								append(__gong__map_SpiralLineGrid[identifier].SpiralLines, target)
 						}
 					case "SpiralRhombus":
 						switch fieldName {
@@ -1008,13 +1008,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Axis[identifier].Name = fielValue
-				case "Angle":
+				case "AngleDegree":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Axis[identifier].Angle = exprSign * fielValue
+					__gong__map_Axis[identifier].AngleDegree = exprSign * fielValue
 				case "Length":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1036,6 +1036,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Axis[identifier].CenterY = exprSign * fielValue
+				case "EndX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Axis[identifier].EndX = exprSign * fielValue
+				case "EndY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Axis[identifier].EndY = exprSign * fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1641,13 +1655,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Rhombus[identifier].SideLength = exprSign * fielValue
-				case "Angle":
+				case "AngleDegree":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Rhombus[identifier].Angle = exprSign * fielValue
+					__gong__map_Rhombus[identifier].AngleDegree = exprSign * fielValue
 				case "InsideAngle":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1712,91 +1726,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_ShapeCategory[identifier].Name = fielValue
-				}
-			case "SpiralAxis":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_SpiralAxis[identifier].Name = fielValue
-				case "Angle":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralAxis[identifier].Angle = exprSign * fielValue
-				case "Length":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralAxis[identifier].Length = exprSign * fielValue
-				case "CenterX":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralAxis[identifier].CenterX = exprSign * fielValue
-				case "CenterY":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralAxis[identifier].CenterY = exprSign * fielValue
-				case "Color":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_SpiralAxis[identifier].Color = fielValue
-				case "FillOpacity":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralAxis[identifier].FillOpacity = exprSign * fielValue
-				case "Stroke":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_SpiralAxis[identifier].Stroke = fielValue
-				case "StrokeOpacity":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralAxis[identifier].StrokeOpacity = exprSign * fielValue
-				case "StrokeWidth":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralAxis[identifier].StrokeWidth = exprSign * fielValue
-				case "StrokeDashArray":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_SpiralAxis[identifier].StrokeDashArray = fielValue
-				case "StrokeDashArrayWhenSelected":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_SpiralAxis[identifier].StrokeDashArrayWhenSelected = fielValue
-				case "Transform":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_SpiralAxis[identifier].Transform = fielValue
-				}
-			case "SpiralAxisGrid":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_SpiralAxisGrid[identifier].Name = fielValue
 				}
 			case "SpiralBezier":
 				switch fieldName {
@@ -1995,6 +1924,91 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_SpiralCircleGrid[identifier].Name = fielValue
+				}
+			case "SpiralLine":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralLine[identifier].Name = fielValue
+				case "StartX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralLine[identifier].StartX = exprSign * fielValue
+				case "EndX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralLine[identifier].EndX = exprSign * fielValue
+				case "StartY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralLine[identifier].StartY = exprSign * fielValue
+				case "EndY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralLine[identifier].EndY = exprSign * fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralLine[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralLine[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralLine[identifier].Stroke = fielValue
+				case "StrokeOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralLine[identifier].StrokeOpacity = exprSign * fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralLine[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralLine[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralLine[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralLine[identifier].Transform = fielValue
+				}
+			case "SpiralLineGrid":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralLineGrid[identifier].Name = fielValue
 				}
 			case "SpiralRhombus":
 				switch fieldName {
@@ -2444,12 +2458,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SpiralCircleGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralCircleGrid = __gong__map_SpiralCircleGrid[targetIdentifier]
-				case "SpiralConstructionAxis":
+				case "SpiralConstructionLine":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].SpiralConstructionAxis = __gong__map_SpiralAxis[targetIdentifier]
-				case "SpiralConstructionAxisGrid":
+					__gong__map_Parameter[identifier].SpiralConstructionLine = __gong__map_SpiralLine[targetIdentifier]
+				case "SpiralConstructionLineGrid":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].SpiralConstructionAxisGrid = __gong__map_SpiralAxisGrid[targetIdentifier]
+					__gong__map_Parameter[identifier].SpiralConstructionLineGrid = __gong__map_SpiralLineGrid[targetIdentifier]
 				case "SpiralConstructionCircleGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralConstructionCircleGrid = __gong__map_SpiralCircleGrid[targetIdentifier]
@@ -2548,34 +2562,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_ShapeCategory[identifier].IsExpanded = fielValue
 				}
-			case "SpiralAxis":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "IsDisplayed":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralAxis[identifier].IsDisplayed = fielValue
-				case "ShapeCategory":
-					targetIdentifier := ident.Name
-					__gong__map_SpiralAxis[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
-				}
-			case "SpiralAxisGrid":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "IsDisplayed":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralAxisGrid[identifier].IsDisplayed = fielValue
-				case "ShapeCategory":
-					targetIdentifier := ident.Name
-					__gong__map_SpiralAxisGrid[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
-				}
 			case "SpiralBezier":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -2641,6 +2627,34 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SpiralRhombusGrid":
 					targetIdentifier := ident.Name
 					__gong__map_SpiralCircleGrid[identifier].SpiralRhombusGrid = __gong__map_SpiralRhombusGrid[targetIdentifier]
+				}
+			case "SpiralLine":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralLine[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_SpiralLine[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
+				}
+			case "SpiralLineGrid":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralLineGrid[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_SpiralLineGrid[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "SpiralRhombus":
 				switch fieldName {
@@ -2768,14 +2782,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					switch fieldName {
 					// insertion point for enum assign code
 					}
-				case "SpiralAxis":
-					switch fieldName {
-					// insertion point for enum assign code
-					}
-				case "SpiralAxisGrid":
-					switch fieldName {
-					// insertion point for enum assign code
-					}
 				case "SpiralBezier":
 					switch fieldName {
 					// insertion point for enum assign code
@@ -2789,6 +2795,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "SpiralCircleGrid":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "SpiralLine":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "SpiralLineGrid":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

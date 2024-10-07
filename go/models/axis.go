@@ -11,10 +11,12 @@ type Axis struct {
 	AbstractShape
 
 	// in degrees
-	Angle  float64
-	Length float64
+	AngleDegree float64
+	Length      float64
 
 	CenterX, CenterY float64
+
+	EndX, EndY float64
 
 	Presentation
 }
@@ -28,7 +30,7 @@ func (axis *Axis) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	line.Name = axis.Name
 	layer.Lines = append(layer.Lines, line)
 
-	angleRad := DegreesToRadians(axis.Angle)
+	angleRad := DegreesToRadians(axis.AngleDegree)
 
 	line.X1 = parameter.OriginX + axis.CenterX
 	line.Y1 = parameter.OriginY - axis.CenterY

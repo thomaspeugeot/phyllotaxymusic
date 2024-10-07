@@ -3,7 +3,6 @@ package models
 import (
 	"cmp"
 	"fmt"
-	"log"
 	"math"
 	"slices"
 
@@ -32,7 +31,7 @@ func (p *Parameter) ComputeInitialRhombusGrid(stage *StageStruct) {
 
 	g := p.InitialRhombusGrid
 
-	angleRad := g.Reference.Angle * math.Pi / 180
+	angleRad := g.Reference.AngleDegree * math.Pi / 180
 	_ = angleRad
 	insideAngleRad := g.Reference.InsideAngle * math.Pi / 180
 	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
@@ -95,19 +94,19 @@ func (p *Parameter) ComputeInitialAxis() {
 	x := float64(p.N)*sideLength*cosHalfInsideAngle -
 		float64(p.M)*sideLength*cosHalfInsideAngle
 
-	p.InitialAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
+	p.InitialAxis.AngleDegree = math.Atan2(y, x) * 180 / math.Pi
 	p.InitialAxis.Length = math.Sqrt(x*x + y*y)
 }
 
 func (p *Parameter) computeRotatedAxis() {
 	p.RotatedAxis.Length = p.InitialAxis.Length
-	p.RotatedAxis.Angle = 0
+	p.RotatedAxis.AngleDegree = 0
 }
 
 func (p *Parameter) computeRotatedRhombus() {
 	p.RotatedRhombus.SideLength = p.InitialRhombus.SideLength
 	p.RotatedRhombus.InsideAngle = p.InitialRhombus.InsideAngle
-	p.RotatedRhombus.Angle = -p.InitialAxis.Angle
+	p.RotatedRhombus.AngleDegree = -p.InitialAxis.AngleDegree
 }
 
 func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
@@ -119,7 +118,7 @@ func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
 	}
 	g.Rhombuses = g.Rhombuses[:0]
 
-	angleRad := -p.InitialAxis.Angle * math.Pi / 180
+	angleRad := -DegreesToRadians(p.InitialAxis.AngleDegree)
 	cosAngle := math.Cos(angleRad)
 	sinAngle := math.Sin(angleRad)
 
@@ -128,7 +127,7 @@ func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
 		*r = *_r
 		r.SideLength = _r.SideLength
 		r.InsideAngle = _r.InsideAngle
-		r.Angle = -p.InitialAxis.Angle
+		r.AngleDegree = -p.InitialAxis.AngleDegree
 
 		r.Name += " Rotated"
 
@@ -154,7 +153,7 @@ func (p *Parameter) computeRotatedCircleGrid(stage *StageStruct) {
 	}
 	g.Circles = g.Circles[:0]
 
-	angleRad := -p.InitialAxis.Angle * math.Pi / 180
+	angleRad := -DegreesToRadians(p.InitialAxis.AngleDegree)
 	cosAngle := math.Cos(angleRad)
 	sinAngle := math.Sin(angleRad)
 
@@ -192,7 +191,7 @@ func (p *Parameter) ComputeNextRhombus() {
 	p.NextRhombus.CenterX = p.RotatedRhombusGrid.Rhombuses[2].CenterX
 	p.NextRhombus.CenterY = p.RotatedRhombusGrid.Rhombuses[2].CenterY
 	p.NextRhombus.SideLength = p.SideLength
-	p.NextRhombus.Angle = p.RotatedRhombus.Angle
+	p.NextRhombus.AngleDegree = p.RotatedRhombus.AngleDegree
 	p.NextRhombus.InsideAngle = p.InsideAngle
 }
 
@@ -217,7 +216,7 @@ func (p *Parameter) ComputeGrowingRhombusGrid() {
 
 	// configure seed rhombus
 	p.GrowingRhombusGridSeed.SideLength = p.RotatedRhombus.SideLength
-	p.GrowingRhombusGridSeed.Angle = p.RotatedRhombus.Angle
+	p.GrowingRhombusGridSeed.AngleDegree = p.RotatedRhombus.AngleDegree
 	p.GrowingRhombusGridSeed.InsideAngle = p.RotatedRhombus.InsideAngle
 
 	p.GrowingRhombusGrid.Rhombuses = p.GrowingRhombusGrid.Rhombuses[:0]
@@ -283,7 +282,10 @@ func (p *Parameter) computeConstructionAxis() {
 	y := circleNPlusM.CenterY
 
 	p.ConstructionAxis.Length = math.Sqrt(x*x + y*y)
-	p.ConstructionAxis.Angle = math.Atan2(y, x) * 180 / math.Pi
+	p.ConstructionAxis.AngleDegree = math.Atan2(y, x) * 180 / math.Pi
+
+	p.ConstructionAxis.EndX = x
+	p.ConstructionAxis.EndY = y
 }
 
 func (p *Parameter) computeConstructionCircle() {
@@ -374,7 +376,7 @@ func (p *Parameter) computeBezier(b *Bezier, startCircle, endCircle *Circle) {
 
 	b.EndY = endCircle.CenterY
 
-	angleRad := p.ConstructionAxis.Angle*math.Pi/180 - math.Pi/2.0
+	angleRad := p.ConstructionAxis.AngleDegree*math.Pi/180 - math.Pi/2.0
 
 	b.ControlPointStartX = b.StartX +
 		p.SideLength*p.BezierControlLengthRatio*math.Cos(angleRad)
@@ -524,41 +526,46 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 
 func (p *Parameter) computeSpiralConstructionAxis() {
 
+	cc := p.ConstructionCircle
 	ca := p.ConstructionAxis
+	sl := p.SpiralConstructionLine
 
-	x_r, y_r := p.convertToSpiralCoords(ca.CenterX, ca.CenterY)
-	a := RadiansToDegrees(math.Atan2(y_r, x_r))
+	p.verticalAxisToSpiralLine(cc, ca, sl)
+}
 
-	p.SpiralConstructionAxis.CenterX = x_r
-	p.SpiralConstructionAxis.CenterY = y_r
-	p.SpiralConstructionAxis.Angle = ca.Angle + a + 90.0
-	p.SpiralConstructionAxis.Length = ca.Length
+func (p *Parameter) verticalAxisToSpiralLine(cc *Circle, ca *Axis, sl *SpiralLine) {
+	sl.StartX,
+		sl.StartY =
+		p.convertToSpiralCoords(cc.CenterX, cc.CenterY)
+
+	ca_endX, ca_endY :=
+		cc.CenterX+ca.Length/2.0*math.Cos(DegreesToRadians(ca.AngleDegree)),
+		cc.CenterY+ca.Length/2.0*math.Sin(DegreesToRadians(ca.AngleDegree))
+
+	sl.EndX,
+		sl.EndY =
+		p.convertToSpiralCoords(ca_endX, ca_endY)
 }
 
 func (p *Parameter) computeSpiralConstructionAxisGrid() {
 
-	p.SpiralConstructionAxisGrid.SpiralAxises =
-		p.SpiralConstructionAxisGrid.SpiralAxises[:0]
+	p.SpiralConstructionLineGrid.SpiralLines =
+		p.SpiralConstructionLineGrid.SpiralLines[:0]
 	for i, ca := range p.ConstructionAxisGrid.Axiss {
 
-		x_r, y_r := p.convertToSpiralCoords(ca.CenterX, ca.CenterY)
-		a := RadiansToDegrees(math.Atan2(y_r, x_r))
-		log.Println(a)
+		sl := new(SpiralLine)
+		sl.Name = fmt.Sprintf("Spiral Axis %d", i)
+		sl.Stroke = GenerateColor(i)
+		sl.Stroke = gongsvg_models.Black.ToString()
+		sl.StrokeWidth = 1
+		sl.StrokeOpacity = 1
 
-		spiralAxis := new(SpiralAxis)
-		spiralAxis.Name = fmt.Sprintf("Spiral Axis %d", i)
-		spiralAxis.Stroke = GenerateColor(i)
-		spiralAxis.Stroke = gongsvg_models.Black.ToString()
-		spiralAxis.StrokeWidth = 1
-		spiralAxis.StrokeOpacity = 1
+		cc := p.ConstructionCircleGrid.Circles[i]
 
-		spiralAxis.CenterX = x_r
-		spiralAxis.CenterY = y_r
-		spiralAxis.Angle = ca.Angle + a + 90
-		spiralAxis.Length = ca.Length
+		p.verticalAxisToSpiralLine(cc, ca, sl)
 
-		p.SpiralConstructionAxisGrid.SpiralAxises =
-			append(p.SpiralConstructionAxisGrid.SpiralAxises, spiralAxis)
+		p.SpiralConstructionLineGrid.SpiralLines =
+			append(p.SpiralConstructionLineGrid.SpiralLines, sl)
 	}
 }
 
@@ -588,24 +595,26 @@ func (p *Parameter) ComputeSpiralConstructionCircleGrid() {
 
 // fetch the control points of the the first bezier curve and
 // convert them to spiral coordinates
-func (p *Parameter) ComputeSpiralBezier() {
+func (p *Parameter) ComputeSpiralBezierSeed() {
 
 	b := p.GrowthCurveSegment
+	sca := p.SpiralConstructionLine
 	sb := p.SpiralBezierSeed
 
-	p.ConvertBeizerToSpiralBezier(b, sb)
-
-}
-
-func (p *Parameter) ConvertBeizerToSpiralBezier(b *Bezier, sb *SpiralBezier) {
 	sb.StartX, sb.StartY =
 		p.convertToSpiralCoords(b.StartX, b.StartY)
 
-	sb.ControlPointStartX, sb.ControlPointStartY =
-		p.convertToSpiralCoords(b.ControlPointStartX, b.ControlPointStartY)
-
 	sb.EndX, sb.EndY =
 		p.convertToSpiralCoords(b.EndX, b.EndY)
+
+	// Calculate the relative position of the end point
+	dx := sca.EndX - sca.StartX
+	dy := sca.EndY - sca.StartY
+
+	// Apply the rotation transformation (90 degrees counterclockwise)
+	newEndX := -dy + sca.StartX
+	newEndY := dx + sca.StartY
+	sb.ControlPointStartX, sb.ControlPointStartY = newEndX, newEndY
 
 	sb.ControlPointEndX, sb.ControlPointEndY =
 		p.convertToSpiralCoords(b.ControlPointEndX, b.ControlPointEndY)
@@ -614,13 +623,13 @@ func (p *Parameter) ConvertBeizerToSpiralBezier(b *Bezier, sb *SpiralBezier) {
 func (p *Parameter) ComputeSpiralBezierGrid() {
 
 	p.SpiralBezierGrid.SpiralBeziers = p.SpiralBezierGrid.SpiralBeziers[:0]
-	for _, b := range p.GrowthCurve.Beziers {
-		sb := new(SpiralBezier)
+	// for _, b := range p.GrowthCurve.Beziers {
+	// 	sb := new(SpiralBezier)
 
-		p.ConvertBeizerToSpiralBezier(b, sb)
-		sb.Stroke = b.Stroke
-		sb.StrokeWidth = b.StrokeWidth
-		sb.StrokeOpacity = b.StrokeOpacity
-		p.SpiralBezierGrid.SpiralBeziers = append(p.SpiralBezierGrid.SpiralBeziers, sb)
-	}
+	// 	p.ConvertBeizerToSpiralBezier(b, sb)
+	// 	sb.Stroke = b.Stroke
+	// 	sb.StrokeWidth = b.StrokeWidth
+	// 	sb.StrokeOpacity = b.StrokeOpacity
+	// 	p.SpiralBezierGrid.SpiralBeziers = append(p.SpiralBezierGrid.SpiralBeziers, sb)
+	// }
 }

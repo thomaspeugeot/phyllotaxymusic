@@ -94,12 +94,6 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "ShapeCategory" {
 		fillUpTable[models.ShapeCategory](nodeImplGongstruct.probe)
 	}
-	if nodeImplGongstruct.gongStruct.GetName() == "SpiralAxis" {
-		fillUpTable[models.SpiralAxis](nodeImplGongstruct.probe)
-	}
-	if nodeImplGongstruct.gongStruct.GetName() == "SpiralAxisGrid" {
-		fillUpTable[models.SpiralAxisGrid](nodeImplGongstruct.probe)
-	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralBezier" {
 		fillUpTable[models.SpiralBezier](nodeImplGongstruct.probe)
 	}
@@ -111,6 +105,12 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralCircleGrid" {
 		fillUpTable[models.SpiralCircleGrid](nodeImplGongstruct.probe)
+	}
+	if nodeImplGongstruct.gongStruct.GetName() == "SpiralLine" {
+		fillUpTable[models.SpiralLine](nodeImplGongstruct.probe)
+	}
+	if nodeImplGongstruct.gongStruct.GetName() == "SpiralLineGrid" {
+		fillUpTable[models.SpiralLineGrid](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralRhombus" {
 		fillUpTable[models.SpiralRhombus](nodeImplGongstruct.probe)

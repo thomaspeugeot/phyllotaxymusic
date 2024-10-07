@@ -4,20 +4,20 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
-type SpiralAxisGrid struct {
+type SpiralLineGrid struct {
 	Name string
 
 	AbstractShape
 
-	SpiralAxises []*SpiralAxis
+	SpiralLines []*SpiralLine
 }
 
-func (spiralAxisGrid *SpiralAxisGrid) Draw(gongsvgStage *gongsvg_models.StageStruct,
+func (spiralLineGrid *SpiralLineGrid) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	layer *gongsvg_models.Layer,
 	parameter *Parameter,
 ) {
 
-	for _, sa := range spiralAxisGrid.SpiralAxises {
+	for _, sa := range spiralLineGrid.SpiralLines {
 		sa.Draw(gongsvgStage, layer, parameter)
 	}
 }

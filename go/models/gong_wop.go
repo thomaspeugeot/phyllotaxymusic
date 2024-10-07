@@ -11,10 +11,12 @@ type Axis_WOP struct {
 	// insertion point
 	Name string
 	IsDisplayed bool
-	Angle float64
+	AngleDegree float64
 	Length float64
 	CenterX float64
 	CenterY float64
+	EndX float64
+	EndY float64
 	Color string
 	FillOpacity float64
 	Stroke string
@@ -29,10 +31,12 @@ func (from *Axis) CopyBasicFields(to *Axis) {
 	// insertion point
 	to.Name = from.Name
 	to.IsDisplayed = from.IsDisplayed
-	to.Angle = from.Angle
+	to.AngleDegree = from.AngleDegree
 	to.Length = from.Length
 	to.CenterX = from.CenterX
 	to.CenterY = from.CenterY
+	to.EndX = from.EndX
+	to.EndY = from.EndY
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
@@ -320,7 +324,7 @@ type Rhombus_WOP struct {
 	CenterX float64
 	CenterY float64
 	SideLength float64
-	Angle float64
+	AngleDegree float64
 	InsideAngle float64
 	Color string
 	FillOpacity float64
@@ -339,7 +343,7 @@ func (from *Rhombus) CopyBasicFields(to *Rhombus) {
 	to.CenterX = from.CenterX
 	to.CenterY = from.CenterY
 	to.SideLength = from.SideLength
-	to.Angle = from.Angle
+	to.AngleDegree = from.AngleDegree
 	to.InsideAngle = from.InsideAngle
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
@@ -373,54 +377,6 @@ func (from *ShapeCategory) CopyBasicFields(to *ShapeCategory) {
 	// insertion point
 	to.Name = from.Name
 	to.IsExpanded = from.IsExpanded
-}
-
-type SpiralAxis_WOP struct {
-	// insertion point
-	Name string
-	IsDisplayed bool
-	Angle float64
-	Length float64
-	CenterX float64
-	CenterY float64
-	Color string
-	FillOpacity float64
-	Stroke string
-	StrokeOpacity float64
-	StrokeWidth float64
-	StrokeDashArray string
-	StrokeDashArrayWhenSelected string
-	Transform string
-}
-
-func (from *SpiralAxis) CopyBasicFields(to *SpiralAxis) {
-	// insertion point
-	to.Name = from.Name
-	to.IsDisplayed = from.IsDisplayed
-	to.Angle = from.Angle
-	to.Length = from.Length
-	to.CenterX = from.CenterX
-	to.CenterY = from.CenterY
-	to.Color = from.Color
-	to.FillOpacity = from.FillOpacity
-	to.Stroke = from.Stroke
-	to.StrokeOpacity = from.StrokeOpacity
-	to.StrokeWidth = from.StrokeWidth
-	to.StrokeDashArray = from.StrokeDashArray
-	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
-	to.Transform = from.Transform
-}
-
-type SpiralAxisGrid_WOP struct {
-	// insertion point
-	Name string
-	IsDisplayed bool
-}
-
-func (from *SpiralAxisGrid) CopyBasicFields(to *SpiralAxisGrid) {
-	// insertion point
-	to.Name = from.Name
-	to.IsDisplayed = from.IsDisplayed
 }
 
 type SpiralBezier_WOP struct {
@@ -524,6 +480,54 @@ type SpiralCircleGrid_WOP struct {
 }
 
 func (from *SpiralCircleGrid) CopyBasicFields(to *SpiralCircleGrid) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+}
+
+type SpiralLine_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+	StartX float64
+	EndX float64
+	StartY float64
+	EndY float64
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
+	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
+}
+
+func (from *SpiralLine) CopyBasicFields(to *SpiralLine) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+	to.StartX = from.StartX
+	to.EndX = from.EndX
+	to.StartY = from.StartY
+	to.EndY = from.EndY
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
+	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
+}
+
+type SpiralLineGrid_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+}
+
+func (from *SpiralLineGrid) CopyBasicFields(to *SpiralLineGrid) {
 	// insertion point
 	to.Name = from.Name
 	to.IsDisplayed = from.IsDisplayed

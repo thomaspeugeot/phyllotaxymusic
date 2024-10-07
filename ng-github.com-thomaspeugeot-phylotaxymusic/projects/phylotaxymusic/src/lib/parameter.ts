@@ -17,8 +17,8 @@ import { SpiralRhombus } from './spiralrhombus'
 import { SpiralRhombusGrid } from './spiralrhombusgrid'
 import { SpiralCircle } from './spiralcircle'
 import { SpiralCircleGrid } from './spiralcirclegrid'
-import { SpiralAxis } from './spiralaxis'
-import { SpiralAxisGrid } from './spiralaxisgrid'
+import { SpiralLine } from './spiralline'
+import { SpiralLineGrid } from './spirallinegrid'
 import { SpiralBezier } from './spiralbezier'
 import { SpiralBezierGrid } from './spiralbeziergrid'
 import { Key } from './key'
@@ -137,9 +137,9 @@ export class Parameter {
 
 	SpiralCircleGrid?: SpiralCircleGrid
 
-	SpiralConstructionAxis?: SpiralAxis
+	SpiralConstructionLine?: SpiralLine
 
-	SpiralConstructionAxisGrid?: SpiralAxisGrid
+	SpiralConstructionLineGrid?: SpiralLineGrid
 
 	SpiralConstructionCircleGrid?: SpiralCircleGrid
 
@@ -452,18 +452,18 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.SpiralConstructionAxisID.Valid = true
-	if (parameter.SpiralConstructionAxis != undefined) {
-		parameterAPI.ParameterPointersEncoding.SpiralConstructionAxisID.Int64 = parameter.SpiralConstructionAxis.ID  
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionLineID.Valid = true
+	if (parameter.SpiralConstructionLine != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionLineID.Int64 = parameter.SpiralConstructionLine.ID  
 	} else {
-		parameterAPI.ParameterPointersEncoding.SpiralConstructionAxisID.Int64 = 0 		
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionLineID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.SpiralConstructionAxisGridID.Valid = true
-	if (parameter.SpiralConstructionAxisGrid != undefined) {
-		parameterAPI.ParameterPointersEncoding.SpiralConstructionAxisGridID.Int64 = parameter.SpiralConstructionAxisGrid.ID  
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionLineGridID.Valid = true
+	if (parameter.SpiralConstructionLineGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionLineGridID.Int64 = parameter.SpiralConstructionLineGrid.ID  
 	} else {
-		parameterAPI.ParameterPointersEncoding.SpiralConstructionAxisGridID.Int64 = 0 		
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionLineGridID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.SpiralConstructionCircleGridID.Valid = true
@@ -663,8 +663,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralRhombusGrid = frontRepo.map_ID_SpiralRhombusGrid.get(parameterAPI.ParameterPointersEncoding.SpiralRhombusGridID.Int64)
 	parameter.SpiralCircleSeed = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.SpiralCircleSeedID.Int64)
 	parameter.SpiralCircleGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64)
-	parameter.SpiralConstructionAxis = frontRepo.map_ID_SpiralAxis.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionAxisID.Int64)
-	parameter.SpiralConstructionAxisGrid = frontRepo.map_ID_SpiralAxisGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionAxisGridID.Int64)
+	parameter.SpiralConstructionLine = frontRepo.map_ID_SpiralLine.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionLineID.Int64)
+	parameter.SpiralConstructionLineGrid = frontRepo.map_ID_SpiralLineGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionLineGridID.Int64)
 	parameter.SpiralConstructionCircleGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionCircleGridID.Int64)
 	parameter.SpiralBezierSeed = frontRepo.map_ID_SpiralBezier.get(parameterAPI.ParameterPointersEncoding.SpiralBezierSeedID.Int64)
 	parameter.SpiralBezierGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64)

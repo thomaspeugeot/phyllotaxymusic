@@ -4,9 +4,9 @@ import { ShapeCategoryAPI } from './shapecategory-api'
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class SpiralAxisAPI {
+export class SpiralLineAPI {
 
-	static GONGSTRUCT_NAME = "SpiralAxis"
+	static GONGSTRUCT_NAME = "SpiralLine"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -15,10 +15,10 @@ export class SpiralAxisAPI {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	IsDisplayed: boolean = false
-	Angle: number = 0
-	Length: number = 0
-	CenterX: number = 0
-	CenterY: number = 0
+	StartX: number = 0
+	EndX: number = 0
+	StartY: number = 0
+	EndY: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -30,10 +30,10 @@ export class SpiralAxisAPI {
 
 	// insertion point for other decls
 
-	SpiralAxisPointersEncoding: SpiralAxisPointersEncoding = new SpiralAxisPointersEncoding
+	SpiralLinePointersEncoding: SpiralLinePointersEncoding = new SpiralLinePointersEncoding
 }
 
-export class SpiralAxisPointersEncoding {
+export class SpiralLinePointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
 	ShapeCategoryID: NullInt64 = new NullInt64 // if pointer is null, ShapeCategory.ID = 0
 

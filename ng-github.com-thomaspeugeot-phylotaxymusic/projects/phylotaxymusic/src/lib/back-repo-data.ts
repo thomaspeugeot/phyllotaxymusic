@@ -29,10 +29,6 @@ import { RhombusGridAPI } from './rhombusgrid-api'
 
 import { ShapeCategoryAPI } from './shapecategory-api'
 
-import { SpiralAxisAPI } from './spiralaxis-api'
-
-import { SpiralAxisGridAPI } from './spiralaxisgrid-api'
-
 import { SpiralBezierAPI } from './spiralbezier-api'
 
 import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
@@ -40,6 +36,10 @@ import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
 import { SpiralCircleAPI } from './spiralcircle-api'
 
 import { SpiralCircleGridAPI } from './spiralcirclegrid-api'
+
+import { SpiralLineAPI } from './spiralline-api'
+
+import { SpiralLineGridAPI } from './spirallinegrid-api'
 
 import { SpiralRhombusAPI } from './spiralrhombus-api'
 
@@ -78,10 +78,6 @@ export class BackRepoData {
 
 	ShapeCategoryAPIs = new Array<ShapeCategoryAPI>()
 
-	SpiralAxisAPIs = new Array<SpiralAxisAPI>()
-
-	SpiralAxisGridAPIs = new Array<SpiralAxisGridAPI>()
-
 	SpiralBezierAPIs = new Array<SpiralBezierAPI>()
 
 	SpiralBezierGridAPIs = new Array<SpiralBezierGridAPI>()
@@ -89,6 +85,10 @@ export class BackRepoData {
 	SpiralCircleAPIs = new Array<SpiralCircleAPI>()
 
 	SpiralCircleGridAPIs = new Array<SpiralCircleGridAPI>()
+
+	SpiralLineAPIs = new Array<SpiralLineAPI>()
+
+	SpiralLineGridAPIs = new Array<SpiralLineGridAPI>()
 
 	SpiralRhombusAPIs = new Array<SpiralRhombusAPI>()
 
@@ -128,10 +128,6 @@ export class BackRepoData {
 
 		this.ShapeCategoryAPIs = data?.ShapeCategoryAPIs || [];
 
-		this.SpiralAxisAPIs = data?.SpiralAxisAPIs || [];
-
-		this.SpiralAxisGridAPIs = data?.SpiralAxisGridAPIs || [];
-
 		this.SpiralBezierAPIs = data?.SpiralBezierAPIs || [];
 
 		this.SpiralBezierGridAPIs = data?.SpiralBezierGridAPIs || [];
@@ -139,6 +135,10 @@ export class BackRepoData {
 		this.SpiralCircleAPIs = data?.SpiralCircleAPIs || [];
 
 		this.SpiralCircleGridAPIs = data?.SpiralCircleGridAPIs || [];
+
+		this.SpiralLineAPIs = data?.SpiralLineAPIs || [];
+
+		this.SpiralLineGridAPIs = data?.SpiralLineGridAPIs || [];
 
 		this.SpiralRhombusAPIs = data?.SpiralRhombusAPIs || [];
 

@@ -48,10 +48,6 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.RhombusGrid](probe)
 	case *models.ShapeCategory:
 		fillUpTable[models.ShapeCategory](probe)
-	case *models.SpiralAxis:
-		fillUpTable[models.SpiralAxis](probe)
-	case *models.SpiralAxisGrid:
-		fillUpTable[models.SpiralAxisGrid](probe)
 	case *models.SpiralBezier:
 		fillUpTable[models.SpiralBezier](probe)
 	case *models.SpiralBezierGrid:
@@ -60,6 +56,10 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.SpiralCircle](probe)
 	case *models.SpiralCircleGrid:
 		fillUpTable[models.SpiralCircleGrid](probe)
+	case *models.SpiralLine:
+		fillUpTable[models.SpiralLine](probe)
+	case *models.SpiralLineGrid:
+		fillUpTable[models.SpiralLineGrid](probe)
 	case *models.SpiralRhombus:
 		fillUpTable[models.SpiralRhombus](probe)
 	case *models.SpiralRhombusGrid:

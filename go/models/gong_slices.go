@@ -189,31 +189,6 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 	case *ShapeCategory:
 		// insertion point per field
 
-	case *SpiralAxis:
-		// insertion point per field
-
-	case *SpiralAxisGrid:
-		// insertion point per field
-		if fieldName == "SpiralAxises" {
-
-			// walk all instances of the owning type
-			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
-				if any(_instance).(*SpiralAxisGrid) != owningInstanceInfered {
-					_inferedTypeInstance := any(_instance).(*SpiralAxisGrid)
-					reference := make([]FieldType, 0)
-					targetFieldSlice := any(_inferedTypeInstance.SpiralAxises).([]FieldType)
-					copy(targetFieldSlice, reference)
-					_inferedTypeInstance.SpiralAxises = _inferedTypeInstance.SpiralAxises[0:]
-					for _, fieldInstance := range reference {
-						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
-							_inferedTypeInstance.SpiralAxises =
-								append(_inferedTypeInstance.SpiralAxises, any(fieldInstance).(*SpiralAxis))
-						}
-					}
-				}
-			}
-		}
-
 	case *SpiralBezier:
 		// insertion point per field
 
@@ -258,6 +233,31 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
 							_inferedTypeInstance.SpiralCircles =
 								append(_inferedTypeInstance.SpiralCircles, any(fieldInstance).(*SpiralCircle))
+						}
+					}
+				}
+			}
+		}
+
+	case *SpiralLine:
+		// insertion point per field
+
+	case *SpiralLineGrid:
+		// insertion point per field
+		if fieldName == "SpiralLines" {
+
+			// walk all instances of the owning type
+			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
+				if any(_instance).(*SpiralLineGrid) != owningInstanceInfered {
+					_inferedTypeInstance := any(_instance).(*SpiralLineGrid)
+					reference := make([]FieldType, 0)
+					targetFieldSlice := any(_inferedTypeInstance.SpiralLines).([]FieldType)
+					copy(targetFieldSlice, reference)
+					_inferedTypeInstance.SpiralLines = _inferedTypeInstance.SpiralLines[0:]
+					for _, fieldInstance := range reference {
+						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
+							_inferedTypeInstance.SpiralLines =
+								append(_inferedTypeInstance.SpiralLines, any(fieldInstance).(*SpiralLine))
 						}
 					}
 				}
@@ -391,20 +391,6 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	// Compute reverse map for named struct ShapeCategory
 	// insertion point per field
 
-	// Compute reverse map for named struct SpiralAxis
-	// insertion point per field
-
-	// Compute reverse map for named struct SpiralAxisGrid
-	// insertion point per field
-	clear(stage.SpiralAxisGrid_SpiralAxises_reverseMap)
-	stage.SpiralAxisGrid_SpiralAxises_reverseMap = make(map[*SpiralAxis]*SpiralAxisGrid)
-	for spiralaxisgrid := range stage.SpiralAxisGrids {
-		_ = spiralaxisgrid
-		for _, _spiralaxis := range spiralaxisgrid.SpiralAxises {
-			stage.SpiralAxisGrid_SpiralAxises_reverseMap[_spiralaxis] = spiralaxisgrid
-		}
-	}
-
 	// Compute reverse map for named struct SpiralBezier
 	// insertion point per field
 
@@ -430,6 +416,20 @@ func (stage *StageStruct) ComputeReverseMaps() {
 		_ = spiralcirclegrid
 		for _, _spiralcircle := range spiralcirclegrid.SpiralCircles {
 			stage.SpiralCircleGrid_SpiralCircles_reverseMap[_spiralcircle] = spiralcirclegrid
+		}
+	}
+
+	// Compute reverse map for named struct SpiralLine
+	// insertion point per field
+
+	// Compute reverse map for named struct SpiralLineGrid
+	// insertion point per field
+	clear(stage.SpiralLineGrid_SpiralLines_reverseMap)
+	stage.SpiralLineGrid_SpiralLines_reverseMap = make(map[*SpiralLine]*SpiralLineGrid)
+	for spirallinegrid := range stage.SpiralLineGrids {
+		_ = spirallinegrid
+		for _, _spiralline := range spirallinegrid.SpiralLines {
+			stage.SpiralLineGrid_SpiralLines_reverseMap[_spiralline] = spirallinegrid
 		}
 	}
 

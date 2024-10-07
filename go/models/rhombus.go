@@ -17,9 +17,9 @@ type Rhombus struct {
 
 	SideLength float64
 
-	// Angle of one arbitrary Axis of the Rhombus to the horizontal plan
+	// AngleDegree of one arbitrary Axis of the Rhombus to the horizontal plan
 	// in degress.
-	Angle float64
+	AngleDegree float64
 
 	// InsideAngle is the angle inside the rhombus in the edge that
 	// crosses the axis of the rhombus
@@ -61,7 +61,7 @@ func (r *Rhombus) Draw(
 }
 
 func (r *Rhombus) getCoordinates() ([4]float64, [4]float64) {
-	angleRad := r.Angle * math.Pi / 180
+	angleRad := r.AngleDegree * math.Pi / 180
 	insideAngleRad := r.InsideAngle * math.Pi / 180
 
 	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
@@ -94,7 +94,7 @@ func (r Rhombus) Copy() Rhombus {
 		CenterX:       r.CenterX,
 		CenterY:       r.CenterY,
 		SideLength:    r.SideLength,
-		Angle:         r.Angle,
+		AngleDegree:   r.AngleDegree,
 		InsideAngle:   r.InsideAngle,
 		Presentation:  r.Presentation, // Assuming Presentation is a copyable struct
 	}

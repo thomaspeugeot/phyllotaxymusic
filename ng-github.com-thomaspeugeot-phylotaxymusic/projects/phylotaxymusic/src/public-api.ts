@@ -69,14 +69,6 @@ export * from './lib/shapecategory-api'
 export * from './lib/shapecategory'
 export * from './lib/shapecategory.service'
 
-export * from './lib/spiralaxis-api'
-export * from './lib/spiralaxis'
-export * from './lib/spiralaxis.service'
-
-export * from './lib/spiralaxisgrid-api'
-export * from './lib/spiralaxisgrid'
-export * from './lib/spiralaxisgrid.service'
-
 export * from './lib/spiralbezier-api'
 export * from './lib/spiralbezier'
 export * from './lib/spiralbezier.service'
@@ -92,6 +84,14 @@ export * from './lib/spiralcircle.service'
 export * from './lib/spiralcirclegrid-api'
 export * from './lib/spiralcirclegrid'
 export * from './lib/spiralcirclegrid.service'
+
+export * from './lib/spiralline-api'
+export * from './lib/spiralline'
+export * from './lib/spiralline.service'
+
+export * from './lib/spirallinegrid-api'
+export * from './lib/spirallinegrid'
+export * from './lib/spirallinegrid.service'
 
 export * from './lib/spiralrhombus-api'
 export * from './lib/spiralrhombus'

@@ -67,14 +67,18 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(axis_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(axis_.ShapeCategory), axisFormCallback.probe.stageOfInterest, formDiv)
-		case "Angle":
-			FormDivBasicFieldToField(&(axis_.Angle), formDiv)
+		case "AngleDegree":
+			FormDivBasicFieldToField(&(axis_.AngleDegree), formDiv)
 		case "Length":
 			FormDivBasicFieldToField(&(axis_.Length), formDiv)
 		case "CenterX":
 			FormDivBasicFieldToField(&(axis_.CenterX), formDiv)
 		case "CenterY":
 			FormDivBasicFieldToField(&(axis_.CenterY), formDiv)
+		case "EndX":
+			FormDivBasicFieldToField(&(axis_.EndX), formDiv)
+		case "EndY":
+			FormDivBasicFieldToField(&(axis_.EndY), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(axis_.Color), formDiv)
 		case "FillOpacity":
@@ -1293,10 +1297,10 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralCircleSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralCircleGrid":
 			FormDivSelectFieldToField(&(parameter_.SpiralCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "SpiralConstructionAxis":
-			FormDivSelectFieldToField(&(parameter_.SpiralConstructionAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "SpiralConstructionAxisGrid":
-			FormDivSelectFieldToField(&(parameter_.SpiralConstructionAxisGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralConstructionLine":
+			FormDivSelectFieldToField(&(parameter_.SpiralConstructionLine), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralConstructionLineGrid":
+			FormDivSelectFieldToField(&(parameter_.SpiralConstructionLineGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralConstructionCircleGrid":
 			FormDivSelectFieldToField(&(parameter_.SpiralConstructionCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralBezierSeed":
@@ -1454,8 +1458,8 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rhombus_.CenterY), formDiv)
 		case "SideLength":
 			FormDivBasicFieldToField(&(rhombus_.SideLength), formDiv)
-		case "Angle":
-			FormDivBasicFieldToField(&(rhombus_.Angle), formDiv)
+		case "AngleDegree":
+			FormDivBasicFieldToField(&(rhombus_.AngleDegree), formDiv)
 		case "InsideAngle":
 			FormDivBasicFieldToField(&(rhombus_.InsideAngle), formDiv)
 		case "Color":
@@ -1709,234 +1713,6 @@ func (shapecategoryFormCallback *ShapeCategoryFormCallback) OnSave() {
 	}
 
 	fillUpTree(shapecategoryFormCallback.probe)
-}
-func __gong__New__SpiralAxisFormCallback(
-	spiralaxis *models.SpiralAxis,
-	probe *Probe,
-	formGroup *table.FormGroup,
-) (spiralaxisFormCallback *SpiralAxisFormCallback) {
-	spiralaxisFormCallback = new(SpiralAxisFormCallback)
-	spiralaxisFormCallback.probe = probe
-	spiralaxisFormCallback.spiralaxis = spiralaxis
-	spiralaxisFormCallback.formGroup = formGroup
-
-	spiralaxisFormCallback.CreationMode = (spiralaxis == nil)
-
-	return
-}
-
-type SpiralAxisFormCallback struct {
-	spiralaxis *models.SpiralAxis
-
-	// If the form call is called on the creation of a new instnace
-	CreationMode bool
-
-	probe *Probe
-
-	formGroup *table.FormGroup
-}
-
-func (spiralaxisFormCallback *SpiralAxisFormCallback) OnSave() {
-
-	log.Println("SpiralAxisFormCallback, OnSave")
-
-	// checkout formStage to have the form group on the stage synchronized with the
-	// back repo (and front repo)
-	spiralaxisFormCallback.probe.formStage.Checkout()
-
-	if spiralaxisFormCallback.spiralaxis == nil {
-		spiralaxisFormCallback.spiralaxis = new(models.SpiralAxis).Stage(spiralaxisFormCallback.probe.stageOfInterest)
-	}
-	spiralaxis_ := spiralaxisFormCallback.spiralaxis
-	_ = spiralaxis_
-
-	for _, formDiv := range spiralaxisFormCallback.formGroup.FormDivs {
-		switch formDiv.Name {
-		// insertion point per field
-		case "Name":
-			FormDivBasicFieldToField(&(spiralaxis_.Name), formDiv)
-		case "IsDisplayed":
-			FormDivBasicFieldToField(&(spiralaxis_.IsDisplayed), formDiv)
-		case "ShapeCategory":
-			FormDivSelectFieldToField(&(spiralaxis_.ShapeCategory), spiralaxisFormCallback.probe.stageOfInterest, formDiv)
-		case "Angle":
-			FormDivBasicFieldToField(&(spiralaxis_.Angle), formDiv)
-		case "Length":
-			FormDivBasicFieldToField(&(spiralaxis_.Length), formDiv)
-		case "CenterX":
-			FormDivBasicFieldToField(&(spiralaxis_.CenterX), formDiv)
-		case "CenterY":
-			FormDivBasicFieldToField(&(spiralaxis_.CenterY), formDiv)
-		case "Color":
-			FormDivBasicFieldToField(&(spiralaxis_.Color), formDiv)
-		case "FillOpacity":
-			FormDivBasicFieldToField(&(spiralaxis_.FillOpacity), formDiv)
-		case "Stroke":
-			FormDivBasicFieldToField(&(spiralaxis_.Stroke), formDiv)
-		case "StrokeOpacity":
-			FormDivBasicFieldToField(&(spiralaxis_.StrokeOpacity), formDiv)
-		case "StrokeWidth":
-			FormDivBasicFieldToField(&(spiralaxis_.StrokeWidth), formDiv)
-		case "StrokeDashArray":
-			FormDivBasicFieldToField(&(spiralaxis_.StrokeDashArray), formDiv)
-		case "StrokeDashArrayWhenSelected":
-			FormDivBasicFieldToField(&(spiralaxis_.StrokeDashArrayWhenSelected), formDiv)
-		case "Transform":
-			FormDivBasicFieldToField(&(spiralaxis_.Transform), formDiv)
-		case "SpiralAxisGrid:SpiralAxises":
-			// we need to retrieve the field owner before the change
-			var pastSpiralAxisGridOwner *models.SpiralAxisGrid
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "SpiralAxisGrid"
-			rf.Fieldname = "SpiralAxises"
-			reverseFieldOwner := orm.GetReverseFieldOwner(
-				spiralaxisFormCallback.probe.stageOfInterest,
-				spiralaxisFormCallback.probe.backRepoOfInterest,
-				spiralaxis_,
-				&rf)
-
-			if reverseFieldOwner != nil {
-				pastSpiralAxisGridOwner = reverseFieldOwner.(*models.SpiralAxisGrid)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastSpiralAxisGridOwner != nil {
-					idx := slices.Index(pastSpiralAxisGridOwner.SpiralAxises, spiralaxis_)
-					pastSpiralAxisGridOwner.SpiralAxises = slices.Delete(pastSpiralAxisGridOwner.SpiralAxises, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _spiralaxisgrid := range *models.GetGongstructInstancesSet[models.SpiralAxisGrid](spiralaxisFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _spiralaxisgrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newSpiralAxisGridOwner := _spiralaxisgrid // we have a match
-						if pastSpiralAxisGridOwner != nil {
-							if newSpiralAxisGridOwner != pastSpiralAxisGridOwner {
-								idx := slices.Index(pastSpiralAxisGridOwner.SpiralAxises, spiralaxis_)
-								pastSpiralAxisGridOwner.SpiralAxises = slices.Delete(pastSpiralAxisGridOwner.SpiralAxises, idx, idx+1)
-								newSpiralAxisGridOwner.SpiralAxises = append(newSpiralAxisGridOwner.SpiralAxises, spiralaxis_)
-							}
-						} else {
-							newSpiralAxisGridOwner.SpiralAxises = append(newSpiralAxisGridOwner.SpiralAxises, spiralaxis_)
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// manage the suppress operation
-	if spiralaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		spiralaxis_.Unstage(spiralaxisFormCallback.probe.stageOfInterest)
-	}
-
-	spiralaxisFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralAxis](
-		spiralaxisFormCallback.probe,
-	)
-	spiralaxisFormCallback.probe.tableStage.Commit()
-
-	// display a new form by reset the form stage
-	if spiralaxisFormCallback.CreationMode || spiralaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		spiralaxisFormCallback.probe.formStage.Reset()
-		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
-		}).Stage(spiralaxisFormCallback.probe.formStage)
-		newFormGroup.OnSave = __gong__New__SpiralAxisFormCallback(
-			nil,
-			spiralaxisFormCallback.probe,
-			newFormGroup,
-		)
-		spiralaxis := new(models.SpiralAxis)
-		FillUpForm(spiralaxis, newFormGroup, spiralaxisFormCallback.probe)
-		spiralaxisFormCallback.probe.formStage.Commit()
-	}
-
-	fillUpTree(spiralaxisFormCallback.probe)
-}
-func __gong__New__SpiralAxisGridFormCallback(
-	spiralaxisgrid *models.SpiralAxisGrid,
-	probe *Probe,
-	formGroup *table.FormGroup,
-) (spiralaxisgridFormCallback *SpiralAxisGridFormCallback) {
-	spiralaxisgridFormCallback = new(SpiralAxisGridFormCallback)
-	spiralaxisgridFormCallback.probe = probe
-	spiralaxisgridFormCallback.spiralaxisgrid = spiralaxisgrid
-	spiralaxisgridFormCallback.formGroup = formGroup
-
-	spiralaxisgridFormCallback.CreationMode = (spiralaxisgrid == nil)
-
-	return
-}
-
-type SpiralAxisGridFormCallback struct {
-	spiralaxisgrid *models.SpiralAxisGrid
-
-	// If the form call is called on the creation of a new instnace
-	CreationMode bool
-
-	probe *Probe
-
-	formGroup *table.FormGroup
-}
-
-func (spiralaxisgridFormCallback *SpiralAxisGridFormCallback) OnSave() {
-
-	log.Println("SpiralAxisGridFormCallback, OnSave")
-
-	// checkout formStage to have the form group on the stage synchronized with the
-	// back repo (and front repo)
-	spiralaxisgridFormCallback.probe.formStage.Checkout()
-
-	if spiralaxisgridFormCallback.spiralaxisgrid == nil {
-		spiralaxisgridFormCallback.spiralaxisgrid = new(models.SpiralAxisGrid).Stage(spiralaxisgridFormCallback.probe.stageOfInterest)
-	}
-	spiralaxisgrid_ := spiralaxisgridFormCallback.spiralaxisgrid
-	_ = spiralaxisgrid_
-
-	for _, formDiv := range spiralaxisgridFormCallback.formGroup.FormDivs {
-		switch formDiv.Name {
-		// insertion point per field
-		case "Name":
-			FormDivBasicFieldToField(&(spiralaxisgrid_.Name), formDiv)
-		case "IsDisplayed":
-			FormDivBasicFieldToField(&(spiralaxisgrid_.IsDisplayed), formDiv)
-		case "ShapeCategory":
-			FormDivSelectFieldToField(&(spiralaxisgrid_.ShapeCategory), spiralaxisgridFormCallback.probe.stageOfInterest, formDiv)
-		}
-	}
-
-	// manage the suppress operation
-	if spiralaxisgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		spiralaxisgrid_.Unstage(spiralaxisgridFormCallback.probe.stageOfInterest)
-	}
-
-	spiralaxisgridFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralAxisGrid](
-		spiralaxisgridFormCallback.probe,
-	)
-	spiralaxisgridFormCallback.probe.tableStage.Commit()
-
-	// display a new form by reset the form stage
-	if spiralaxisgridFormCallback.CreationMode || spiralaxisgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		spiralaxisgridFormCallback.probe.formStage.Reset()
-		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
-		}).Stage(spiralaxisgridFormCallback.probe.formStage)
-		newFormGroup.OnSave = __gong__New__SpiralAxisGridFormCallback(
-			nil,
-			spiralaxisgridFormCallback.probe,
-			newFormGroup,
-		)
-		spiralaxisgrid := new(models.SpiralAxisGrid)
-		FillUpForm(spiralaxisgrid, newFormGroup, spiralaxisgridFormCallback.probe)
-		spiralaxisgridFormCallback.probe.formStage.Commit()
-	}
-
-	fillUpTree(spiralaxisgridFormCallback.probe)
 }
 func __gong__New__SpiralBezierFormCallback(
 	spiralbezier *models.SpiralBezier,
@@ -2405,6 +2181,234 @@ func (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) OnSave() {
 	}
 
 	fillUpTree(spiralcirclegridFormCallback.probe)
+}
+func __gong__New__SpiralLineFormCallback(
+	spiralline *models.SpiralLine,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (spirallineFormCallback *SpiralLineFormCallback) {
+	spirallineFormCallback = new(SpiralLineFormCallback)
+	spirallineFormCallback.probe = probe
+	spirallineFormCallback.spiralline = spiralline
+	spirallineFormCallback.formGroup = formGroup
+
+	spirallineFormCallback.CreationMode = (spiralline == nil)
+
+	return
+}
+
+type SpiralLineFormCallback struct {
+	spiralline *models.SpiralLine
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (spirallineFormCallback *SpiralLineFormCallback) OnSave() {
+
+	log.Println("SpiralLineFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	spirallineFormCallback.probe.formStage.Checkout()
+
+	if spirallineFormCallback.spiralline == nil {
+		spirallineFormCallback.spiralline = new(models.SpiralLine).Stage(spirallineFormCallback.probe.stageOfInterest)
+	}
+	spiralline_ := spirallineFormCallback.spiralline
+	_ = spiralline_
+
+	for _, formDiv := range spirallineFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(spiralline_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(spiralline_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(spiralline_.ShapeCategory), spirallineFormCallback.probe.stageOfInterest, formDiv)
+		case "StartX":
+			FormDivBasicFieldToField(&(spiralline_.StartX), formDiv)
+		case "EndX":
+			FormDivBasicFieldToField(&(spiralline_.EndX), formDiv)
+		case "StartY":
+			FormDivBasicFieldToField(&(spiralline_.StartY), formDiv)
+		case "EndY":
+			FormDivBasicFieldToField(&(spiralline_.EndY), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(spiralline_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(spiralline_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(spiralline_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(spiralline_.StrokeOpacity), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(spiralline_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(spiralline_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(spiralline_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(spiralline_.Transform), formDiv)
+		case "SpiralLineGrid:SpiralLines":
+			// we need to retrieve the field owner before the change
+			var pastSpiralLineGridOwner *models.SpiralLineGrid
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "SpiralLineGrid"
+			rf.Fieldname = "SpiralLines"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				spirallineFormCallback.probe.stageOfInterest,
+				spirallineFormCallback.probe.backRepoOfInterest,
+				spiralline_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastSpiralLineGridOwner = reverseFieldOwner.(*models.SpiralLineGrid)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastSpiralLineGridOwner != nil {
+					idx := slices.Index(pastSpiralLineGridOwner.SpiralLines, spiralline_)
+					pastSpiralLineGridOwner.SpiralLines = slices.Delete(pastSpiralLineGridOwner.SpiralLines, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _spirallinegrid := range *models.GetGongstructInstancesSet[models.SpiralLineGrid](spirallineFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _spirallinegrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newSpiralLineGridOwner := _spirallinegrid // we have a match
+						if pastSpiralLineGridOwner != nil {
+							if newSpiralLineGridOwner != pastSpiralLineGridOwner {
+								idx := slices.Index(pastSpiralLineGridOwner.SpiralLines, spiralline_)
+								pastSpiralLineGridOwner.SpiralLines = slices.Delete(pastSpiralLineGridOwner.SpiralLines, idx, idx+1)
+								newSpiralLineGridOwner.SpiralLines = append(newSpiralLineGridOwner.SpiralLines, spiralline_)
+							}
+						} else {
+							newSpiralLineGridOwner.SpiralLines = append(newSpiralLineGridOwner.SpiralLines, spiralline_)
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// manage the suppress operation
+	if spirallineFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralline_.Unstage(spirallineFormCallback.probe.stageOfInterest)
+	}
+
+	spirallineFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.SpiralLine](
+		spirallineFormCallback.probe,
+	)
+	spirallineFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if spirallineFormCallback.CreationMode || spirallineFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spirallineFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(spirallineFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__SpiralLineFormCallback(
+			nil,
+			spirallineFormCallback.probe,
+			newFormGroup,
+		)
+		spiralline := new(models.SpiralLine)
+		FillUpForm(spiralline, newFormGroup, spirallineFormCallback.probe)
+		spirallineFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(spirallineFormCallback.probe)
+}
+func __gong__New__SpiralLineGridFormCallback(
+	spirallinegrid *models.SpiralLineGrid,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (spirallinegridFormCallback *SpiralLineGridFormCallback) {
+	spirallinegridFormCallback = new(SpiralLineGridFormCallback)
+	spirallinegridFormCallback.probe = probe
+	spirallinegridFormCallback.spirallinegrid = spirallinegrid
+	spirallinegridFormCallback.formGroup = formGroup
+
+	spirallinegridFormCallback.CreationMode = (spirallinegrid == nil)
+
+	return
+}
+
+type SpiralLineGridFormCallback struct {
+	spirallinegrid *models.SpiralLineGrid
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (spirallinegridFormCallback *SpiralLineGridFormCallback) OnSave() {
+
+	log.Println("SpiralLineGridFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	spirallinegridFormCallback.probe.formStage.Checkout()
+
+	if spirallinegridFormCallback.spirallinegrid == nil {
+		spirallinegridFormCallback.spirallinegrid = new(models.SpiralLineGrid).Stage(spirallinegridFormCallback.probe.stageOfInterest)
+	}
+	spirallinegrid_ := spirallinegridFormCallback.spirallinegrid
+	_ = spirallinegrid_
+
+	for _, formDiv := range spirallinegridFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(spirallinegrid_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(spirallinegrid_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(spirallinegrid_.ShapeCategory), spirallinegridFormCallback.probe.stageOfInterest, formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if spirallinegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spirallinegrid_.Unstage(spirallinegridFormCallback.probe.stageOfInterest)
+	}
+
+	spirallinegridFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.SpiralLineGrid](
+		spirallinegridFormCallback.probe,
+	)
+	spirallinegridFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if spirallinegridFormCallback.CreationMode || spirallinegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spirallinegridFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(spirallinegridFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__SpiralLineGridFormCallback(
+			nil,
+			spirallinegridFormCallback.probe,
+			newFormGroup,
+		)
+		spirallinegrid := new(models.SpiralLineGrid)
+		FillUpForm(spirallinegrid, newFormGroup, spirallinegridFormCallback.probe)
+		spirallinegridFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(spirallinegridFormCallback.probe)
 }
 func __gong__New__SpiralRhombusFormCallback(
 	spiralrhombus *models.SpiralRhombus,

@@ -183,13 +183,13 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	SpiralCircleGridID sql.NullInt64
 
-	// field SpiralConstructionAxis is a pointer to another Struct (optional or 0..1)
+	// field SpiralConstructionLine is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	SpiralConstructionAxisID sql.NullInt64
+	SpiralConstructionLineID sql.NullInt64
 
-	// field SpiralConstructionAxisGrid is a pointer to another Struct (optional or 0..1)
+	// field SpiralConstructionLineGrid is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	SpiralConstructionAxisGridID sql.NullInt64
+	SpiralConstructionLineGridID sql.NullInt64
 
 	// field SpiralConstructionCircleGrid is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -999,28 +999,28 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.SpiralCircleGridID.Valid = true
 		}
 
-		// commit pointer value parameter.SpiralConstructionAxis translates to updating the parameter.SpiralConstructionAxisID
-		parameterDB.SpiralConstructionAxisID.Valid = true // allow for a 0 value (nil association)
-		if parameter.SpiralConstructionAxis != nil {
-			if SpiralConstructionAxisId, ok := backRepo.BackRepoSpiralAxis.Map_SpiralAxisPtr_SpiralAxisDBID[parameter.SpiralConstructionAxis]; ok {
-				parameterDB.SpiralConstructionAxisID.Int64 = int64(SpiralConstructionAxisId)
-				parameterDB.SpiralConstructionAxisID.Valid = true
+		// commit pointer value parameter.SpiralConstructionLine translates to updating the parameter.SpiralConstructionLineID
+		parameterDB.SpiralConstructionLineID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionLine != nil {
+			if SpiralConstructionLineId, ok := backRepo.BackRepoSpiralLine.Map_SpiralLinePtr_SpiralLineDBID[parameter.SpiralConstructionLine]; ok {
+				parameterDB.SpiralConstructionLineID.Int64 = int64(SpiralConstructionLineId)
+				parameterDB.SpiralConstructionLineID.Valid = true
 			}
 		} else {
-			parameterDB.SpiralConstructionAxisID.Int64 = 0
-			parameterDB.SpiralConstructionAxisID.Valid = true
+			parameterDB.SpiralConstructionLineID.Int64 = 0
+			parameterDB.SpiralConstructionLineID.Valid = true
 		}
 
-		// commit pointer value parameter.SpiralConstructionAxisGrid translates to updating the parameter.SpiralConstructionAxisGridID
-		parameterDB.SpiralConstructionAxisGridID.Valid = true // allow for a 0 value (nil association)
-		if parameter.SpiralConstructionAxisGrid != nil {
-			if SpiralConstructionAxisGridId, ok := backRepo.BackRepoSpiralAxisGrid.Map_SpiralAxisGridPtr_SpiralAxisGridDBID[parameter.SpiralConstructionAxisGrid]; ok {
-				parameterDB.SpiralConstructionAxisGridID.Int64 = int64(SpiralConstructionAxisGridId)
-				parameterDB.SpiralConstructionAxisGridID.Valid = true
+		// commit pointer value parameter.SpiralConstructionLineGrid translates to updating the parameter.SpiralConstructionLineGridID
+		parameterDB.SpiralConstructionLineGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionLineGrid != nil {
+			if SpiralConstructionLineGridId, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridPtr_SpiralLineGridDBID[parameter.SpiralConstructionLineGrid]; ok {
+				parameterDB.SpiralConstructionLineGridID.Int64 = int64(SpiralConstructionLineGridId)
+				parameterDB.SpiralConstructionLineGridID.Valid = true
 			}
 		} else {
-			parameterDB.SpiralConstructionAxisGridID.Int64 = 0
-			parameterDB.SpiralConstructionAxisGridID.Valid = true
+			parameterDB.SpiralConstructionLineGridID.Int64 = 0
+			parameterDB.SpiralConstructionLineGridID.Valid = true
 		}
 
 		// commit pointer value parameter.SpiralConstructionCircleGrid translates to updating the parameter.SpiralConstructionCircleGridID
@@ -1516,15 +1516,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.SpiralCircleGridID.Int64 != 0 {
 		parameter.SpiralCircleGrid = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralCircleGridID.Int64)]
 	}
-	// SpiralConstructionAxis field
-	parameter.SpiralConstructionAxis = nil
-	if parameterDB.SpiralConstructionAxisID.Int64 != 0 {
-		parameter.SpiralConstructionAxis = backRepo.BackRepoSpiralAxis.Map_SpiralAxisDBID_SpiralAxisPtr[uint(parameterDB.SpiralConstructionAxisID.Int64)]
+	// SpiralConstructionLine field
+	parameter.SpiralConstructionLine = nil
+	if parameterDB.SpiralConstructionLineID.Int64 != 0 {
+		parameter.SpiralConstructionLine = backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(parameterDB.SpiralConstructionLineID.Int64)]
 	}
-	// SpiralConstructionAxisGrid field
-	parameter.SpiralConstructionAxisGrid = nil
-	if parameterDB.SpiralConstructionAxisGridID.Int64 != 0 {
-		parameter.SpiralConstructionAxisGrid = backRepo.BackRepoSpiralAxisGrid.Map_SpiralAxisGridDBID_SpiralAxisGridPtr[uint(parameterDB.SpiralConstructionAxisGridID.Int64)]
+	// SpiralConstructionLineGrid field
+	parameter.SpiralConstructionLineGrid = nil
+	if parameterDB.SpiralConstructionLineGridID.Int64 != 0 {
+		parameter.SpiralConstructionLineGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionLineGridID.Int64)]
 	}
 	// SpiralConstructionCircleGrid field
 	parameter.SpiralConstructionCircleGrid = nil
@@ -2383,16 +2383,16 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 			parameterDB.SpiralCircleGridID.Valid = true
 		}
 
-		// reindexing SpiralConstructionAxis field
-		if parameterDB.SpiralConstructionAxisID.Int64 != 0 {
-			parameterDB.SpiralConstructionAxisID.Int64 = int64(BackRepoSpiralAxisid_atBckpTime_newID[uint(parameterDB.SpiralConstructionAxisID.Int64)])
-			parameterDB.SpiralConstructionAxisID.Valid = true
+		// reindexing SpiralConstructionLine field
+		if parameterDB.SpiralConstructionLineID.Int64 != 0 {
+			parameterDB.SpiralConstructionLineID.Int64 = int64(BackRepoSpiralLineid_atBckpTime_newID[uint(parameterDB.SpiralConstructionLineID.Int64)])
+			parameterDB.SpiralConstructionLineID.Valid = true
 		}
 
-		// reindexing SpiralConstructionAxisGrid field
-		if parameterDB.SpiralConstructionAxisGridID.Int64 != 0 {
-			parameterDB.SpiralConstructionAxisGridID.Int64 = int64(BackRepoSpiralAxisGridid_atBckpTime_newID[uint(parameterDB.SpiralConstructionAxisGridID.Int64)])
-			parameterDB.SpiralConstructionAxisGridID.Valid = true
+		// reindexing SpiralConstructionLineGrid field
+		if parameterDB.SpiralConstructionLineGridID.Int64 != 0 {
+			parameterDB.SpiralConstructionLineGridID.Int64 = int64(BackRepoSpiralLineGridid_atBckpTime_newID[uint(parameterDB.SpiralConstructionLineGridID.Int64)])
+			parameterDB.SpiralConstructionLineGridID.Valid = true
 		}
 
 		// reindexing SpiralConstructionCircleGrid field

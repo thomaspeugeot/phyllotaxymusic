@@ -14,16 +14,16 @@ import (
 )
 
 // declaration in order to justify use of the models import
-var __SpiralAxis__dummysDeclaration__ models.SpiralAxis
-var __SpiralAxis_time__dummyDeclaration time.Duration
+var __SpiralLine__dummysDeclaration__ models.SpiralLine
+var __SpiralLine_time__dummyDeclaration time.Duration
 
-var mutexSpiralAxis sync.Mutex
+var mutexSpiralLine sync.Mutex
 
-// An SpiralAxisID parameter model.
+// An SpiralLineID parameter model.
 //
 // This is used for operations that want the ID of an order in the path
-// swagger:parameters getSpiralAxis updateSpiralAxis deleteSpiralAxis
-type SpiralAxisID struct {
+// swagger:parameters getSpiralLine updateSpiralLine deleteSpiralLine
+type SpiralLineID struct {
 	// The ID of the order
 	//
 	// in: path
@@ -31,29 +31,29 @@ type SpiralAxisID struct {
 	ID int64
 }
 
-// SpiralAxisInput is a schema that can validate the user’s
+// SpiralLineInput is a schema that can validate the user’s
 // input to prevent us from getting invalid data
-// swagger:parameters postSpiralAxis updateSpiralAxis
-type SpiralAxisInput struct {
-	// The SpiralAxis to submit or modify
+// swagger:parameters postSpiralLine updateSpiralLine
+type SpiralLineInput struct {
+	// The SpiralLine to submit or modify
 	// in: body
-	SpiralAxis *orm.SpiralAxisAPI
+	SpiralLine *orm.SpiralLineAPI
 }
 
-// GetSpiralAxiss
+// GetSpiralLines
 //
-// swagger:route GET /spiralaxiss spiralaxiss getSpiralAxiss
+// swagger:route GET /spirallines spirallines getSpiralLines
 //
-// # Get all spiralaxiss
+// # Get all spirallines
 //
 // Responses:
 // default: genericError
 //
-//	200: spiralaxisDBResponse
-func (controller *Controller) GetSpiralAxiss(c *gin.Context) {
+//	200: spirallineDBResponse
+func (controller *Controller) GetSpiralLines(c *gin.Context) {
 
 	// source slice
-	var spiralaxisDBs []orm.SpiralAxisDB
+	var spirallineDBs []orm.SpiralLineDB
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -61,16 +61,16 @@ func (controller *Controller) GetSpiralAxiss(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetSpiralAxiss", "GONG__StackPath", stackPath)
+			// log.Println("GetSpiralLines", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoSpiralAxis.GetDB()
+	db := backRepo.BackRepoSpiralLine.GetDB()
 
-	query := db.Find(&spiralaxisDBs)
+	query := db.Find(&spirallineDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -81,29 +81,29 @@ func (controller *Controller) GetSpiralAxiss(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	spiralaxisAPIs := make([]orm.SpiralAxisAPI, 0)
+	spirallineAPIs := make([]orm.SpiralLineAPI, 0)
 
-	// for each spiralaxis, update fields from the database nullable fields
-	for idx := range spiralaxisDBs {
-		spiralaxisDB := &spiralaxisDBs[idx]
-		_ = spiralaxisDB
-		var spiralaxisAPI orm.SpiralAxisAPI
+	// for each spiralline, update fields from the database nullable fields
+	for idx := range spirallineDBs {
+		spirallineDB := &spirallineDBs[idx]
+		_ = spirallineDB
+		var spirallineAPI orm.SpiralLineAPI
 
 		// insertion point for updating fields
-		spiralaxisAPI.ID = spiralaxisDB.ID
-		spiralaxisDB.CopyBasicFieldsToSpiralAxis_WOP(&spiralaxisAPI.SpiralAxis_WOP)
-		spiralaxisAPI.SpiralAxisPointersEncoding = spiralaxisDB.SpiralAxisPointersEncoding
-		spiralaxisAPIs = append(spiralaxisAPIs, spiralaxisAPI)
+		spirallineAPI.ID = spirallineDB.ID
+		spirallineDB.CopyBasicFieldsToSpiralLine_WOP(&spirallineAPI.SpiralLine_WOP)
+		spirallineAPI.SpiralLinePointersEncoding = spirallineDB.SpiralLinePointersEncoding
+		spirallineAPIs = append(spirallineAPIs, spirallineAPI)
 	}
 
-	c.JSON(http.StatusOK, spiralaxisAPIs)
+	c.JSON(http.StatusOK, spirallineAPIs)
 }
 
-// PostSpiralAxis
+// PostSpiralLine
 //
-// swagger:route POST /spiralaxiss spiralaxiss postSpiralAxis
+// swagger:route POST /spirallines spirallines postSpiralLine
 //
-// Creates a spiralaxis
+// Creates a spiralline
 //
 //	Consumes:
 //	- application/json
@@ -113,10 +113,10 @@ func (controller *Controller) GetSpiralAxiss(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func (controller *Controller) PostSpiralAxis(c *gin.Context) {
+func (controller *Controller) PostSpiralLine(c *gin.Context) {
 
-	mutexSpiralAxis.Lock()
-	defer mutexSpiralAxis.Unlock()
+	mutexSpiralLine.Lock()
+	defer mutexSpiralLine.Unlock()
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -124,17 +124,17 @@ func (controller *Controller) PostSpiralAxis(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("PostSpiralAxiss", "GONG__StackPath", stackPath)
+			// log.Println("PostSpiralLines", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoSpiralAxis.GetDB()
+	db := backRepo.BackRepoSpiralLine.GetDB()
 
 	// Validate input
-	var input orm.SpiralAxisAPI
+	var input orm.SpiralLineAPI
 
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
@@ -146,12 +146,12 @@ func (controller *Controller) PostSpiralAxis(c *gin.Context) {
 		return
 	}
 
-	// Create spiralaxis
-	spiralaxisDB := orm.SpiralAxisDB{}
-	spiralaxisDB.SpiralAxisPointersEncoding = input.SpiralAxisPointersEncoding
-	spiralaxisDB.CopyBasicFieldsFromSpiralAxis_WOP(&input.SpiralAxis_WOP)
+	// Create spiralline
+	spirallineDB := orm.SpiralLineDB{}
+	spirallineDB.SpiralLinePointersEncoding = input.SpiralLinePointersEncoding
+	spirallineDB.CopyBasicFieldsFromSpiralLine_WOP(&input.SpiralLine_WOP)
 
-	query := db.Create(&spiralaxisDB)
+	query := db.Create(&spirallineDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -162,31 +162,31 @@ func (controller *Controller) PostSpiralAxis(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	backRepo.BackRepoSpiralAxis.CheckoutPhaseOneInstance(&spiralaxisDB)
-	spiralaxis := backRepo.BackRepoSpiralAxis.Map_SpiralAxisDBID_SpiralAxisPtr[spiralaxisDB.ID]
+	backRepo.BackRepoSpiralLine.CheckoutPhaseOneInstance(&spirallineDB)
+	spiralline := backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[spirallineDB.ID]
 
-	if spiralaxis != nil {
-		models.AfterCreateFromFront(backRepo.GetStage(), spiralaxis)
+	if spiralline != nil {
+		models.AfterCreateFromFront(backRepo.GetStage(), spiralline)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	backRepo.IncrementPushFromFrontNb()
 
-	c.JSON(http.StatusOK, spiralaxisDB)
+	c.JSON(http.StatusOK, spirallineDB)
 }
 
-// GetSpiralAxis
+// GetSpiralLine
 //
-// swagger:route GET /spiralaxiss/{ID} spiralaxiss getSpiralAxis
+// swagger:route GET /spirallines/{ID} spirallines getSpiralLine
 //
-// Gets the details for a spiralaxis.
+// Gets the details for a spiralline.
 //
 // Responses:
 // default: genericError
 //
-//	200: spiralaxisDBResponse
-func (controller *Controller) GetSpiralAxis(c *gin.Context) {
+//	200: spirallineDBResponse
+func (controller *Controller) GetSpiralLine(c *gin.Context) {
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -194,18 +194,18 @@ func (controller *Controller) GetSpiralAxis(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetSpiralAxis", "GONG__StackPath", stackPath)
+			// log.Println("GetSpiralLine", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoSpiralAxis.GetDB()
+	db := backRepo.BackRepoSpiralLine.GetDB()
 
-	// Get spiralaxisDB in DB
-	var spiralaxisDB orm.SpiralAxisDB
-	if err := db.First(&spiralaxisDB, c.Param("id")).Error; err != nil {
+	// Get spirallineDB in DB
+	var spirallineDB orm.SpiralLineDB
+	if err := db.First(&spirallineDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -214,28 +214,28 @@ func (controller *Controller) GetSpiralAxis(c *gin.Context) {
 		return
 	}
 
-	var spiralaxisAPI orm.SpiralAxisAPI
-	spiralaxisAPI.ID = spiralaxisDB.ID
-	spiralaxisAPI.SpiralAxisPointersEncoding = spiralaxisDB.SpiralAxisPointersEncoding
-	spiralaxisDB.CopyBasicFieldsToSpiralAxis_WOP(&spiralaxisAPI.SpiralAxis_WOP)
+	var spirallineAPI orm.SpiralLineAPI
+	spirallineAPI.ID = spirallineDB.ID
+	spirallineAPI.SpiralLinePointersEncoding = spirallineDB.SpiralLinePointersEncoding
+	spirallineDB.CopyBasicFieldsToSpiralLine_WOP(&spirallineAPI.SpiralLine_WOP)
 
-	c.JSON(http.StatusOK, spiralaxisAPI)
+	c.JSON(http.StatusOK, spirallineAPI)
 }
 
-// UpdateSpiralAxis
+// UpdateSpiralLine
 //
-// swagger:route PATCH /spiralaxiss/{ID} spiralaxiss updateSpiralAxis
+// swagger:route PATCH /spirallines/{ID} spirallines updateSpiralLine
 //
-// # Update a spiralaxis
+// # Update a spiralline
 //
 // Responses:
 // default: genericError
 //
-//	200: spiralaxisDBResponse
-func (controller *Controller) UpdateSpiralAxis(c *gin.Context) {
+//	200: spirallineDBResponse
+func (controller *Controller) UpdateSpiralLine(c *gin.Context) {
 
-	mutexSpiralAxis.Lock()
-	defer mutexSpiralAxis.Unlock()
+	mutexSpiralLine.Lock()
+	defer mutexSpiralLine.Unlock()
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -243,17 +243,17 @@ func (controller *Controller) UpdateSpiralAxis(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("UpdateSpiralAxis", "GONG__StackPath", stackPath)
+			// log.Println("UpdateSpiralLine", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoSpiralAxis.GetDB()
+	db := backRepo.BackRepoSpiralLine.GetDB()
 
 	// Validate input
-	var input orm.SpiralAxisAPI
+	var input orm.SpiralLineAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -261,10 +261,10 @@ func (controller *Controller) UpdateSpiralAxis(c *gin.Context) {
 	}
 
 	// Get model if exist
-	var spiralaxisDB orm.SpiralAxisDB
+	var spirallineDB orm.SpiralLineDB
 
-	// fetch the spiralaxis
-	query := db.First(&spiralaxisDB, c.Param("id"))
+	// fetch the spiralline
+	query := db.First(&spirallineDB, c.Param("id"))
 
 	if query.Error != nil {
 		var returnError GenericError
@@ -276,10 +276,10 @@ func (controller *Controller) UpdateSpiralAxis(c *gin.Context) {
 	}
 
 	// update
-	spiralaxisDB.CopyBasicFieldsFromSpiralAxis_WOP(&input.SpiralAxis_WOP)
-	spiralaxisDB.SpiralAxisPointersEncoding = input.SpiralAxisPointersEncoding
+	spirallineDB.CopyBasicFieldsFromSpiralLine_WOP(&input.SpiralLine_WOP)
+	spirallineDB.SpiralLinePointersEncoding = input.SpiralLinePointersEncoding
 
-	query = db.Model(&spiralaxisDB).Updates(spiralaxisDB)
+	query = db.Model(&spirallineDB).Updates(spirallineDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -290,16 +290,16 @@ func (controller *Controller) UpdateSpiralAxis(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	spiralaxisNew := new(models.SpiralAxis)
-	spiralaxisDB.CopyBasicFieldsToSpiralAxis(spiralaxisNew)
+	spirallineNew := new(models.SpiralLine)
+	spirallineDB.CopyBasicFieldsToSpiralLine(spirallineNew)
 
 	// redeem pointers
-	spiralaxisDB.DecodePointers(backRepo, spiralaxisNew)
+	spirallineDB.DecodePointers(backRepo, spirallineNew)
 
 	// get stage instance from DB instance, and call callback function
-	spiralaxisOld := backRepo.BackRepoSpiralAxis.Map_SpiralAxisDBID_SpiralAxisPtr[spiralaxisDB.ID]
-	if spiralaxisOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), spiralaxisOld, spiralaxisNew)
+	spirallineOld := backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[spirallineDB.ID]
+	if spirallineOld != nil {
+		models.AfterUpdateFromFront(backRepo.GetStage(), spirallineOld, spirallineNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -308,23 +308,23 @@ func (controller *Controller) UpdateSpiralAxis(c *gin.Context) {
 	// generates a checkout
 	backRepo.IncrementPushFromFrontNb()
 
-	// return status OK with the marshalling of the the spiralaxisDB
-	c.JSON(http.StatusOK, spiralaxisDB)
+	// return status OK with the marshalling of the the spirallineDB
+	c.JSON(http.StatusOK, spirallineDB)
 }
 
-// DeleteSpiralAxis
+// DeleteSpiralLine
 //
-// swagger:route DELETE /spiralaxiss/{ID} spiralaxiss deleteSpiralAxis
+// swagger:route DELETE /spirallines/{ID} spirallines deleteSpiralLine
 //
-// # Delete a spiralaxis
+// # Delete a spiralline
 //
 // default: genericError
 //
-//	200: spiralaxisDBResponse
-func (controller *Controller) DeleteSpiralAxis(c *gin.Context) {
+//	200: spirallineDBResponse
+func (controller *Controller) DeleteSpiralLine(c *gin.Context) {
 
-	mutexSpiralAxis.Lock()
-	defer mutexSpiralAxis.Unlock()
+	mutexSpiralLine.Lock()
+	defer mutexSpiralLine.Unlock()
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -332,18 +332,18 @@ func (controller *Controller) DeleteSpiralAxis(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("DeleteSpiralAxis", "GONG__StackPath", stackPath)
+			// log.Println("DeleteSpiralLine", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoSpiralAxis.GetDB()
+	db := backRepo.BackRepoSpiralLine.GetDB()
 
 	// Get model if exist
-	var spiralaxisDB orm.SpiralAxisDB
-	if err := db.First(&spiralaxisDB, c.Param("id")).Error; err != nil {
+	var spirallineDB orm.SpiralLineDB
+	if err := db.First(&spirallineDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,16 +353,16 @@ func (controller *Controller) DeleteSpiralAxis(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&spiralaxisDB)
+	db.Unscoped().Delete(&spirallineDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
-	spiralaxisDeleted := new(models.SpiralAxis)
-	spiralaxisDB.CopyBasicFieldsToSpiralAxis(spiralaxisDeleted)
+	spirallineDeleted := new(models.SpiralLine)
+	spirallineDB.CopyBasicFieldsToSpiralLine(spirallineDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	spiralaxisStaged := backRepo.BackRepoSpiralAxis.Map_SpiralAxisDBID_SpiralAxisPtr[spiralaxisDB.ID]
-	if spiralaxisStaged != nil {
-		models.AfterDeleteFromFront(backRepo.GetStage(), spiralaxisStaged, spiralaxisDeleted)
+	spirallineStaged := backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[spirallineDB.ID]
+	if spirallineStaged != nil {
+		models.AfterDeleteFromFront(backRepo.GetStage(), spirallineStaged, spirallineDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

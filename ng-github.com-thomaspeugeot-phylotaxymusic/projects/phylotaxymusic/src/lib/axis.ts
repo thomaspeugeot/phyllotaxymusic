@@ -20,10 +20,12 @@ export class Axis {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	IsDisplayed: boolean = false
-	Angle: number = 0
+	AngleDegree: number = 0
 	Length: number = 0
 	CenterX: number = 0
 	CenterY: number = 0
+	EndX: number = 0
+	EndY: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -47,10 +49,12 @@ export function CopyAxisToAxisAPI(axis: Axis, axisAPI: AxisAPI) {
 	// insertion point for basic fields copy operations
 	axisAPI.Name = axis.Name
 	axisAPI.IsDisplayed = axis.IsDisplayed
-	axisAPI.Angle = axis.Angle
+	axisAPI.AngleDegree = axis.AngleDegree
 	axisAPI.Length = axis.Length
 	axisAPI.CenterX = axis.CenterX
 	axisAPI.CenterY = axis.CenterY
+	axisAPI.EndX = axis.EndX
+	axisAPI.EndY = axis.EndY
 	axisAPI.Color = axis.Color
 	axisAPI.FillOpacity = axis.FillOpacity
 	axisAPI.Stroke = axis.Stroke
@@ -85,10 +89,12 @@ export function CopyAxisAPIToAxis(axisAPI: AxisAPI, axis: Axis, frontRepo: Front
 	// insertion point for basic fields copy operations
 	axis.Name = axisAPI.Name
 	axis.IsDisplayed = axisAPI.IsDisplayed
-	axis.Angle = axisAPI.Angle
+	axis.AngleDegree = axisAPI.AngleDegree
 	axis.Length = axisAPI.Length
 	axis.CenterX = axisAPI.CenterX
 	axis.CenterY = axisAPI.CenterY
+	axis.EndX = axisAPI.EndX
+	axis.EndY = axisAPI.EndY
 	axis.Color = axisAPI.Color
 	axis.FillOpacity = axisAPI.FillOpacity
 	axis.Stroke = axisAPI.Stroke

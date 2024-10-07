@@ -18,7 +18,7 @@ export class RhombusAPI {
 	CenterX: number = 0
 	CenterY: number = 0
 	SideLength: number = 0
-	Angle: number = 0
+	AngleDegree: number = 0
 	InsideAngle: number = 0
 	Color: string = ""
 	FillOpacity: number = 0

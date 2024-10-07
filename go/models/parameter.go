@@ -75,13 +75,13 @@ type Parameter struct {
 	// ratio of the length of the control vector to the side length
 	BezierControlLengthRatio float64
 
-	SpiralRhombusGridSeed      *SpiralRhombus
-	SpiralRhombusGrid          *SpiralRhombusGrid
-	SpiralCircleSeed           *SpiralCircle
-	SpiralCircleGrid           *SpiralCircleGrid
-	SpiralConstructionAxis     *SpiralAxis
-	SpiralConstructionAxisGrid *SpiralAxisGrid
+	SpiralRhombusGridSeed *SpiralRhombus
+	SpiralRhombusGrid     *SpiralRhombusGrid
+	SpiralCircleSeed      *SpiralCircle
+	SpiralCircleGrid      *SpiralCircleGrid
 
+	SpiralConstructionLine       *SpiralLine
+	SpiralConstructionLineGrid   *SpiralLineGrid
 	SpiralConstructionCircleGrid *SpiralCircleGrid
 	SpiralBezierSeed             *SpiralBezier
 	SpiralBezierGrid             *SpiralBezierGrid

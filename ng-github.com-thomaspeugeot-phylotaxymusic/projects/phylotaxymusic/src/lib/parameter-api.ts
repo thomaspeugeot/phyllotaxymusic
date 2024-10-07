@@ -12,8 +12,8 @@ import { SpiralRhombusAPI } from './spiralrhombus-api'
 import { SpiralRhombusGridAPI } from './spiralrhombusgrid-api'
 import { SpiralCircleAPI } from './spiralcircle-api'
 import { SpiralCircleGridAPI } from './spiralcirclegrid-api'
-import { SpiralAxisAPI } from './spiralaxis-api'
-import { SpiralAxisGridAPI } from './spiralaxisgrid-api'
+import { SpiralLineAPI } from './spiralline-api'
+import { SpiralLineGridAPI } from './spirallinegrid-api'
 import { SpiralBezierAPI } from './spiralbezier-api'
 import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
 import { KeyAPI } from './key-api'
@@ -138,9 +138,9 @@ export class ParameterPointersEncoding {
 
 	SpiralCircleGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralCircleGrid.ID = 0
 
-	SpiralConstructionAxisID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionAxis.ID = 0
+	SpiralConstructionLineID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionLine.ID = 0
 
-	SpiralConstructionAxisGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionAxisGrid.ID = 0
+	SpiralConstructionLineGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionLineGrid.ID = 0
 
 	SpiralConstructionCircleGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionCircleGrid.ID = 0
 
