@@ -597,27 +597,36 @@ func (p *Parameter) ComputeSpiralConstructionCircleGrid() {
 // convert them to spiral coordinates
 func (p *Parameter) ComputeSpiralBezierSeed() {
 
-	b := p.GrowthCurveSegment
-	sca := p.SpiralConstructionLine
+	c0 := p.ConstructionCircleGrid.Circles[0]
+	sl0 := p.SpiralConstructionLineGrid.SpiralLines[0]
 	sb := p.SpiralBezierSeed
 
 	sb.StartX, sb.StartY =
-		p.convertToSpiralCoords(b.StartX, b.StartY)
-
-	sb.EndX, sb.EndY =
-		p.convertToSpiralCoords(b.EndX, b.EndY)
+		p.convertToSpiralCoords(c0.CenterX, c0.CenterY)
 
 	// Calculate the relative position of the end point
-	dx := sca.EndX - sca.StartX
-	dy := sca.EndY - sca.StartY
+	dx0 := sl0.EndX - sl0.StartX
+	dy0 := sl0.EndY - sl0.StartY
 
 	// Apply the rotation transformation (90 degrees counterclockwise)
-	newEndX := -dy + sca.StartX
-	newEndY := dx + sca.StartY
-	sb.ControlPointStartX, sb.ControlPointStartY = newEndX, newEndY
+	newEndX0 := -dy0 + sl0.StartX
+	newEndY0 := dx0 + sl0.StartY
+	sb.ControlPointStartX, sb.ControlPointStartY = newEndX0, newEndY0
 
-	sb.ControlPointEndX, sb.ControlPointEndY =
-		p.convertToSpiralCoords(b.ControlPointEndX, b.ControlPointEndY)
+	c1 := p.ConstructionCircleGrid.Circles[1]
+	sl1 := p.SpiralConstructionLineGrid.SpiralLines[1]
+
+	sb.EndX, sb.EndY =
+		p.convertToSpiralCoords(c1.CenterX, c1.CenterY)
+
+	// Calculate the relative position of the end point
+	dx1 := sl1.EndX - sl1.StartX
+	dy1 := sl1.EndY - sl1.StartY
+
+	// Apply the rotation transformation (90 degrees counterclockwise)
+	newEndX1 := dy1 + sl1.StartX
+	newEndY1 := -dx1 + sl1.StartY
+	sb.ControlPointEndX, sb.ControlPointEndY = newEndX1, newEndY1
 }
 
 func (p *Parameter) ComputeSpiralBezierGrid() {
