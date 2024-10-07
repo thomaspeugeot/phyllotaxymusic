@@ -49,6 +49,16 @@ func (circle *Circle) Draw(
 		svgCircle.StrokeWidth /= 2.0
 	}
 
+	svgText := new(gongsvg_models.Text).Stage(gongsvgStage)
+	layer.Texts = append(layer.Texts, svgText)
+
+	svgText.X = p.OriginX + circle.CenterX
+	svgText.Y = p.OriginY - circle.CenterY
+
+	svgText.Name = circle.Name
+	svgText.Content = circle.Name
+	circle.Presentation.CopyTo(&svgText.Presentation)
+
 }
 
 func (_c *Circle) move(c *Circle, x, y float64) {

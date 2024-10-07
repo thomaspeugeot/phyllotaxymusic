@@ -1,6 +1,8 @@
 package models
 
-import gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+import (
+	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+)
 
 type SpiralCircle struct {
 	Circle
@@ -25,4 +27,13 @@ func (spiralCircle *SpiralCircle) Draw(
 
 	spiralCircle.Presentation.CopyTo(&svgCircle.Presentation)
 
+	svgText := new(gongsvg_models.Text).Stage(gongsvgStage)
+	layer.Texts = append(layer.Texts, svgText)
+
+	svgText.X = p.SpiralOriginX + spiralCircle.CenterX
+	svgText.Y = p.SpiralOriginY - spiralCircle.CenterY
+
+	svgText.Name = spiralCircle.Name
+	svgText.Content = spiralCircle.Name
+	spiralCircle.Presentation.CopyTo(&svgText.Presentation)
 }

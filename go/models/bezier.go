@@ -36,56 +36,57 @@ func (b *Bezier) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_m
 		p.OriginX+b.ControlPointEndX, p.OriginY-b.ControlPointEndY,
 		p.OriginX+b.EndX, p.OriginY-b.EndY,
 	)
+	/*
+	   line := new(gongsvg_models.Line).Stage(gongsvgStage)
+	   line.Name = b.Name
+	   layer.Lines = append(layer.Lines, line)
 
-	line := new(gongsvg_models.Line).Stage(gongsvgStage)
-	line.Name = b.Name
-	layer.Lines = append(layer.Lines, line)
+	   b.Presentation.CopyTo(&line.Presentation)
 
-	b.Presentation.CopyTo(&line.Presentation)
+	   line.StrokeOpacity = 0.2
 
-	line.StrokeOpacity = 0.2
+	   line.X1 = p.OriginX + b.StartX
+	   line.Y1 = p.OriginY - b.StartY
 
-	line.X1 = p.OriginX + b.StartX
-	line.Y1 = p.OriginY - b.StartY
+	   line.X2 = p.OriginX + b.EndX
+	   line.Y2 = p.OriginY - b.EndY
 
-	line.X2 = p.OriginX + b.EndX
-	line.Y2 = p.OriginY - b.EndY
+	   layer.Lines = append(layer.Lines, line)
 
-	layer.Lines = append(layer.Lines, line)
+	   lineControl1 := new(gongsvg_models.Line).Stage(gongsvgStage)
+	   lineControl1.Name = b.Name
+	   layer.Lines = append(layer.Lines, lineControl1)
 
-	lineControl1 := new(gongsvg_models.Line).Stage(gongsvgStage)
-	lineControl1.Name = b.Name
-	layer.Lines = append(layer.Lines, lineControl1)
+	   b.Presentation.CopyTo(&lineControl1.Presentation)
 
-	b.Presentation.CopyTo(&lineControl1.Presentation)
+	   lineControl1.StrokeOpacity = 0.2
+	   lineControl1.Stroke = gongsvg_models.Green.ToString()
 
-	lineControl1.StrokeOpacity = 0.2
-	lineControl1.Stroke = gongsvg_models.Green.ToString()
+	   lineControl1.X1 = p.OriginX + b.StartX
+	   lineControl1.Y1 = p.OriginY - b.StartY
 
-	lineControl1.X1 = p.OriginX + b.StartX
-	lineControl1.Y1 = p.OriginY - b.StartY
+	   lineControl1.X2 = p.OriginX + b.ControlPointStartX
+	   lineControl1.Y2 = p.OriginY - b.ControlPointStartY
 
-	lineControl1.X2 = p.OriginX + b.ControlPointStartX
-	lineControl1.Y2 = p.OriginY - b.ControlPointStartY
+	   layer.Lines = append(layer.Lines, lineControl1)
 
-	layer.Lines = append(layer.Lines, lineControl1)
+	   lineControl2 := new(gongsvg_models.Line).Stage(gongsvgStage)
+	   lineControl2.Name = b.Name
+	   layer.Lines = append(layer.Lines, lineControl2)
 
-	lineControl2 := new(gongsvg_models.Line).Stage(gongsvgStage)
-	lineControl2.Name = b.Name
-	layer.Lines = append(layer.Lines, lineControl2)
+	   b.Presentation.CopyTo(&lineControl2.Presentation)
 
-	b.Presentation.CopyTo(&lineControl2.Presentation)
+	   lineControl2.StrokeOpacity = 0.2
+	   lineControl2.Stroke = gongsvg_models.Blue.ToString()
 
-	lineControl2.StrokeOpacity = 0.2
-	lineControl2.Stroke = gongsvg_models.Blue.ToString()
+	   lineControl2.X1 = p.OriginX + b.EndX
+	   lineControl2.Y1 = p.OriginY - b.EndY
 
-	lineControl2.X1 = p.OriginX + b.EndX
-	lineControl2.Y1 = p.OriginY - b.EndY
+	   lineControl2.X2 = p.OriginX + b.ControlPointEndX
+	   lineControl2.Y2 = p.OriginY - b.ControlPointEndY
 
-	lineControl2.X2 = p.OriginX + b.ControlPointEndX
-	lineControl2.Y2 = p.OriginY - b.ControlPointEndY
-
-	layer.Lines = append(layer.Lines, lineControl2)
+	   layer.Lines = append(layer.Lines, lineControl2)
+	*/
 }
 
 func (_b *Bezier) move(b *Bezier, x, y float64) {

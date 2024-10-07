@@ -245,6 +245,8 @@ func (p *Parameter) ComputeGrowingCircleGrid() {
 		r := new(Circle) // .Stage(stage)
 		*r = *p.GrowingCircleGridSeed
 
+		r.Name = fmt.Sprintf("%d", i)
+
 		// compute
 		x := float64(i) * p.NextCircle.CenterX
 		y := float64(i) * p.NextCircle.CenterY
@@ -266,6 +268,8 @@ func (p *Parameter) ComputeGrowingCircleGridLeft() {
 	for i := range p.Z {
 		r := new(Circle) // .Stage(stage)
 		*r = *p.GrowingCircleGridLeftSeed
+
+		r.Name = fmt.Sprintf("%d", i)
 
 		r.CenterX = p.GrowingCircleGrid.Circles[i].CenterX - p.RotatedAxis.Length
 		r.CenterY = p.GrowingCircleGrid.Circles[i].CenterY
@@ -514,17 +518,20 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 
 		sc := new(SpiralCircle)
 		sc.Stroke = GenerateColor(idx % len(colors))
+		sc.Stroke = gongsvg_models.Violet.ToString()
 		sc.StrokeOpacity = 0.5
 		sc.StrokeWidth = 2
 
 		sc.CenterX = x_r
 		sc.CenterY = y_r
 
+		sc.Name = fmt.Sprintf("%d", idx)
+
 		p.SpiralCircleGrid.SpiralCircles = append(p.SpiralCircleGrid.SpiralCircles, sc)
 	}
 }
 
-func (p *Parameter) computeSpiralConstructionAxis() {
+func (p *Parameter) computeSpiralConstructionLine() {
 
 	cc := p.ConstructionCircle
 	ca := p.ConstructionAxis
@@ -547,7 +554,7 @@ func (p *Parameter) verticalAxisToSpiralLine(cc *Circle, ca *Axis, sl *SpiralLin
 		p.convertToSpiralCoords(ca_endX, ca_endY)
 }
 
-func (p *Parameter) computeSpiralConstructionAxisGrid() {
+func (p *Parameter) computeSpiralConstructionLineGrid() {
 
 	p.SpiralConstructionLineGrid.SpiralLines =
 		p.SpiralConstructionLineGrid.SpiralLines[:0]
