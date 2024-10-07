@@ -52,37 +52,42 @@ func (b *SpiralBezier) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gon
 
 	layer.Lines = append(layer.Lines, line)
 
-	lineControl1 := new(gongsvg_models.Line).Stage(gongsvgStage)
-	lineControl1.Name = b.Name
-	layer.Lines = append(layer.Lines, lineControl1)
+	/*
 
-	b.Presentation.CopyTo(&lineControl1.Presentation)
+		lineControl1 := new(gongsvg_models.Line).Stage(gongsvgStage)
+		lineControl1.Name = b.Name
+		layer.Lines = append(layer.Lines, lineControl1)
 
-	lineControl1.StrokeOpacity = 0.2
-	lineControl1.Stroke = gongsvg_models.Green.ToString()
+		b.Presentation.CopyTo(&lineControl1.Presentation)
 
-	lineControl1.X1 = p.SpiralOriginX + b.StartX
-	lineControl1.Y1 = p.SpiralOriginY - b.StartY
+		lineControl1.StrokeOpacity = 0.2
+		lineControl1.Stroke = gongsvg_models.Green.ToString()
 
-	lineControl1.X2 = p.SpiralOriginX + b.ControlPointStartX
-	lineControl1.Y2 = p.SpiralOriginY - b.ControlPointStartY
+		lineControl1.X1 = p.SpiralOriginX + b.StartX
+		lineControl1.Y1 = p.SpiralOriginY - b.StartY
 
-	layer.Lines = append(layer.Lines, lineControl1)
+		lineControl1.X2 = p.SpiralOriginX + b.ControlPointStartX
+		lineControl1.Y2 = p.SpiralOriginY - b.ControlPointStartY
 
-	lineControl2 := new(gongsvg_models.Line).Stage(gongsvgStage)
-	lineControl2.Name = b.Name
-	layer.Lines = append(layer.Lines, lineControl2)
+		layer.Lines = append(layer.Lines, lineControl1)
 
-	b.Presentation.CopyTo(&lineControl2.Presentation)
+		lineControl2 := new(gongsvg_models.Line).Stage(gongsvgStage)
+		lineControl2.Name = b.Name
+		layer.Lines = append(layer.Lines, lineControl2)
 
-	lineControl2.StrokeOpacity = 0.2
-	lineControl2.Stroke = gongsvg_models.Blue.ToString()
+		b.Presentation.CopyTo(&lineControl2.Presentation)
 
-	lineControl2.X1 = p.SpiralOriginX + b.EndX
-	lineControl2.Y1 = p.SpiralOriginY - b.EndY
+		lineControl2.StrokeOpacity = 0.2
+		lineControl2.Stroke = gongsvg_models.Blue.ToString()
 
-	lineControl2.X2 = p.SpiralOriginX + b.ControlPointEndX
-	lineControl2.Y2 = p.SpiralOriginY - b.ControlPointEndY
+		lineControl2.X1 = p.SpiralOriginX + b.EndX
+		lineControl2.Y1 = p.SpiralOriginY - b.EndY
 
-	layer.Lines = append(layer.Lines, lineControl2)
+		lineControl2.X2 = p.SpiralOriginX + b.ControlPointEndX
+		lineControl2.Y2 = p.SpiralOriginY - b.ControlPointEndY
+
+		layer.Lines = append(layer.Lines, lineControl2)
+
+	*/
+
 }

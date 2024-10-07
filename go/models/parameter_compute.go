@@ -597,33 +597,35 @@ func (p *Parameter) ComputeSpiralConstructionCircleGrid() {
 // convert them to spiral coordinates
 func (p *Parameter) ComputeSpiralBezierSeed() {
 
-	c0 := p.ConstructionCircleGrid.Circles[0]
+	sc0 := p.SpiralConstructionCircleGrid.SpiralCircles[0]
 	sl0 := p.SpiralConstructionLineGrid.SpiralLines[0]
+
+	sc1 := p.SpiralConstructionCircleGrid.SpiralCircles[1]
+	sl1 := p.SpiralConstructionLineGrid.SpiralLines[1]
+
 	sb := p.SpiralBezierSeed
 
-	sb.StartX, sb.StartY =
-		p.convertToSpiralCoords(c0.CenterX, c0.CenterY)
+	p.spiralCircleLinesToSpiralBezier(sb, sc0, sl0, sc1, sl1)
+}
 
-	// Calculate the relative position of the end point
+func (p *Parameter) spiralCircleLinesToSpiralBezier(
+	sb *SpiralBezier,
+	sc0 *SpiralCircle, sl0 *SpiralLine,
+	sc1 *SpiralCircle, sl1 *SpiralLine) {
+	sb.StartX, sb.StartY = sc0.CenterX, sc0.CenterY
+
 	dx0 := sl0.EndX - sl0.StartX
 	dy0 := sl0.EndY - sl0.StartY
 
-	// Apply the rotation transformation (90 degrees counterclockwise)
 	newEndX0 := -dy0 + sl0.StartX
 	newEndY0 := dx0 + sl0.StartY
 	sb.ControlPointStartX, sb.ControlPointStartY = newEndX0, newEndY0
 
-	c1 := p.ConstructionCircleGrid.Circles[1]
-	sl1 := p.SpiralConstructionLineGrid.SpiralLines[1]
+	sb.EndX, sb.EndY = sc1.CenterX, sc1.CenterY
 
-	sb.EndX, sb.EndY =
-		p.convertToSpiralCoords(c1.CenterX, c1.CenterY)
-
-	// Calculate the relative position of the end point
 	dx1 := sl1.EndX - sl1.StartX
 	dy1 := sl1.EndY - sl1.StartY
 
-	// Apply the rotation transformation (90 degrees counterclockwise)
 	newEndX1 := dy1 + sl1.StartX
 	newEndY1 := -dx1 + sl1.StartY
 	sb.ControlPointEndX, sb.ControlPointEndY = newEndX1, newEndY1
@@ -632,13 +634,24 @@ func (p *Parameter) ComputeSpiralBezierSeed() {
 func (p *Parameter) ComputeSpiralBezierGrid() {
 
 	p.SpiralBezierGrid.SpiralBeziers = p.SpiralBezierGrid.SpiralBeziers[:0]
-	// for _, b := range p.GrowthCurve.Beziers {
-	// 	sb := new(SpiralBezier)
 
-	// 	p.ConvertBeizerToSpiralBezier(b, sb)
-	// 	sb.Stroke = b.Stroke
-	// 	sb.StrokeWidth = b.StrokeWidth
-	// 	sb.StrokeOpacity = b.StrokeOpacity
-	// 	p.SpiralBezierGrid.SpiralBeziers = append(p.SpiralBezierGrid.SpiralBeziers, sb)
-	// }
+	nm1 := len(p.SpiralConstructionCircleGrid.SpiralCircles) - 1
+	for i := range nm1 {
+		sc0 := p.SpiralConstructionCircleGrid.SpiralCircles[i]
+		sl0 := p.SpiralConstructionLineGrid.SpiralLines[i]
+
+		sc1 := p.SpiralConstructionCircleGrid.SpiralCircles[(i+1)%nm1]
+		sl1 := p.SpiralConstructionLineGrid.SpiralLines[(i+1)%nm1]
+
+		sb := new(SpiralBezier)
+
+		sb.Stroke = gongsvg_models.Grey.ToString()
+		sb.StrokeWidth = 2.0
+		sb.StrokeOpacity = 0.8
+
+		p.spiralCircleLinesToSpiralBezier(sb, sc0, sl0, sc1, sl1)
+
+		p.SpiralBezierGrid.SpiralBeziers = append(p.SpiralBezierGrid.SpiralBeziers, sb)
+	}
+
 }
