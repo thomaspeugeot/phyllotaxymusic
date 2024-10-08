@@ -2537,19 +2537,19 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
-		if parameter.SpiralConstructionOuterLine != nil {
+		if parameter.SpiralConstructionOuterLineSeed != nil {
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionOuterLine")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLine_Identifiers[parameter.SpiralConstructionOuterLine])
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineSeed")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLine_Identifiers[parameter.SpiralConstructionOuterLineSeed])
 			pointersInitializesStatements += setPointerField
 		}
 
-		if parameter.SpiralConstructionInnerLine != nil {
+		if parameter.SpiralConstructionInnerLineSeed != nil {
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionInnerLine")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLine_Identifiers[parameter.SpiralConstructionInnerLine])
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionInnerLineSeed")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLine_Identifiers[parameter.SpiralConstructionInnerLineSeed])
 			pointersInitializesStatements += setPointerField
 		}
 

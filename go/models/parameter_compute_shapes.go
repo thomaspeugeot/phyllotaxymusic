@@ -83,8 +83,11 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.SpiralCircleSeed)
 	p.ComputeSpiralCircleGrid()
 	p.Shapes = append(p.Shapes, p.SpiralCircleGrid)
-	p.computeSpiralConstructionOuterLine()
-	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLine)
+	p.computeSpiralConstructionOuterLineSeed()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineSeed)
+	p.computeSpiralConstructionInnerLineSeed()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionInnerLineSeed)
+
 	p.computeSpiralConstructionLineGrid()
 	p.Shapes = append(p.Shapes, p.SpiralConstructionLineGrid)
 

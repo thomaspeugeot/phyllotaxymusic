@@ -2522,9 +2522,9 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralCircleGrid with the name of the field
 			SpiralCircleGrid: &SpiralCircleGrid{Name: "SpiralCircleGrid"},
 			// field is initialized with an instance of SpiralLine with the name of the field
-			SpiralConstructionOuterLine: &SpiralLine{Name: "SpiralConstructionOuterLine"},
+			SpiralConstructionOuterLineSeed: &SpiralLine{Name: "SpiralConstructionOuterLineSeed"},
 			// field is initialized with an instance of SpiralLine with the name of the field
-			SpiralConstructionInnerLine: &SpiralLine{Name: "SpiralConstructionInnerLine"},
+			SpiralConstructionInnerLineSeed: &SpiralLine{Name: "SpiralConstructionInnerLineSeed"},
 			// field is initialized with an instance of SpiralLineGrid with the name of the field
 			SpiralConstructionLineGrid: &SpiralLineGrid{Name: "SpiralConstructionLineGrid"},
 			// field is initialized with an instance of SpiralCircleGrid with the name of the field
@@ -3500,11 +3500,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
-		case "SpiralConstructionOuterLine":
+		case "SpiralConstructionOuterLineSeed":
 			res := make(map[*SpiralLine][]*Parameter)
 			for parameter := range stage.Parameters {
-				if parameter.SpiralConstructionOuterLine != nil {
-					spiralline_ := parameter.SpiralConstructionOuterLine
+				if parameter.SpiralConstructionOuterLineSeed != nil {
+					spiralline_ := parameter.SpiralConstructionOuterLineSeed
 					var parameters []*Parameter
 					_, ok := res[spiralline_]
 					if ok {
@@ -3517,11 +3517,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
-		case "SpiralConstructionInnerLine":
+		case "SpiralConstructionInnerLineSeed":
 			res := make(map[*SpiralLine][]*Parameter)
 			for parameter := range stage.Parameters {
-				if parameter.SpiralConstructionInnerLine != nil {
-					spiralline_ := parameter.SpiralConstructionInnerLine
+				if parameter.SpiralConstructionInnerLineSeed != nil {
+					spiralline_ := parameter.SpiralConstructionInnerLineSeed
 					var parameters []*Parameter
 					_, ok := res[spiralline_]
 					if ok {
@@ -4464,7 +4464,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case NoteInfo:
 		res = []string{"Name", "IsKept"}
 	case Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralConstructionOuterLine", "SpiralConstructionInnerLine", "SpiralConstructionLineGrid", "SpiralConstructionCircleGrid", "SpiralBezierSeed", "SpiralBezierGrid", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOriginX", "SpiralOriginY", "SpiralInitialRadius"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionLineGrid", "SpiralConstructionCircleGrid", "SpiralBezierSeed", "SpiralBezierGrid", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOriginX", "SpiralOriginY", "SpiralInitialRadius"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "AngleDegree", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
@@ -4638,7 +4638,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *NoteInfo:
 		res = []string{"Name", "IsKept"}
 	case *Parameter:
-		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralConstructionOuterLine", "SpiralConstructionInnerLine", "SpiralConstructionLineGrid", "SpiralConstructionCircleGrid", "SpiralBezierSeed", "SpiralBezierGrid", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOriginX", "SpiralOriginY", "SpiralInitialRadius"}
+		res = []string{"Name", "N", "M", "Z", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSegment", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionLineGrid", "SpiralConstructionCircleGrid", "SpiralBezierSeed", "SpiralBezierGrid", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOriginX", "SpiralOriginY", "SpiralInitialRadius"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "AngleDegree", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
@@ -5110,13 +5110,13 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			if inferedInstance.SpiralCircleGrid != nil {
 				res = inferedInstance.SpiralCircleGrid.Name
 			}
-		case "SpiralConstructionOuterLine":
-			if inferedInstance.SpiralConstructionOuterLine != nil {
-				res = inferedInstance.SpiralConstructionOuterLine.Name
+		case "SpiralConstructionOuterLineSeed":
+			if inferedInstance.SpiralConstructionOuterLineSeed != nil {
+				res = inferedInstance.SpiralConstructionOuterLineSeed.Name
 			}
-		case "SpiralConstructionInnerLine":
-			if inferedInstance.SpiralConstructionInnerLine != nil {
-				res = inferedInstance.SpiralConstructionInnerLine.Name
+		case "SpiralConstructionInnerLineSeed":
+			if inferedInstance.SpiralConstructionInnerLineSeed != nil {
+				res = inferedInstance.SpiralConstructionInnerLineSeed.Name
 			}
 		case "SpiralConstructionLineGrid":
 			if inferedInstance.SpiralConstructionLineGrid != nil {
@@ -6024,13 +6024,13 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			if inferedInstance.SpiralCircleGrid != nil {
 				res = inferedInstance.SpiralCircleGrid.Name
 			}
-		case "SpiralConstructionOuterLine":
-			if inferedInstance.SpiralConstructionOuterLine != nil {
-				res = inferedInstance.SpiralConstructionOuterLine.Name
+		case "SpiralConstructionOuterLineSeed":
+			if inferedInstance.SpiralConstructionOuterLineSeed != nil {
+				res = inferedInstance.SpiralConstructionOuterLineSeed.Name
 			}
-		case "SpiralConstructionInnerLine":
-			if inferedInstance.SpiralConstructionInnerLine != nil {
-				res = inferedInstance.SpiralConstructionInnerLine.Name
+		case "SpiralConstructionInnerLineSeed":
+			if inferedInstance.SpiralConstructionInnerLineSeed != nil {
+				res = inferedInstance.SpiralConstructionInnerLineSeed.Name
 			}
 		case "SpiralConstructionLineGrid":
 			if inferedInstance.SpiralConstructionLineGrid != nil {

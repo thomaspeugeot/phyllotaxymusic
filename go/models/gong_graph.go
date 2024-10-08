@@ -635,11 +635,11 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralCircleGrid != nil {
 		StageBranch(stage, parameter.SpiralCircleGrid)
 	}
-	if parameter.SpiralConstructionOuterLine != nil {
-		StageBranch(stage, parameter.SpiralConstructionOuterLine)
+	if parameter.SpiralConstructionOuterLineSeed != nil {
+		StageBranch(stage, parameter.SpiralConstructionOuterLineSeed)
 	}
-	if parameter.SpiralConstructionInnerLine != nil {
-		StageBranch(stage, parameter.SpiralConstructionInnerLine)
+	if parameter.SpiralConstructionInnerLineSeed != nil {
+		StageBranch(stage, parameter.SpiralConstructionInnerLineSeed)
 	}
 	if parameter.SpiralConstructionLineGrid != nil {
 		StageBranch(stage, parameter.SpiralConstructionLineGrid)
@@ -1397,11 +1397,11 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.SpiralCircleGrid != nil {
 		parameterTo.SpiralCircleGrid = CopyBranchSpiralCircleGrid(mapOrigCopy, parameterFrom.SpiralCircleGrid)
 	}
-	if parameterFrom.SpiralConstructionOuterLine != nil {
-		parameterTo.SpiralConstructionOuterLine = CopyBranchSpiralLine(mapOrigCopy, parameterFrom.SpiralConstructionOuterLine)
+	if parameterFrom.SpiralConstructionOuterLineSeed != nil {
+		parameterTo.SpiralConstructionOuterLineSeed = CopyBranchSpiralLine(mapOrigCopy, parameterFrom.SpiralConstructionOuterLineSeed)
 	}
-	if parameterFrom.SpiralConstructionInnerLine != nil {
-		parameterTo.SpiralConstructionInnerLine = CopyBranchSpiralLine(mapOrigCopy, parameterFrom.SpiralConstructionInnerLine)
+	if parameterFrom.SpiralConstructionInnerLineSeed != nil {
+		parameterTo.SpiralConstructionInnerLineSeed = CopyBranchSpiralLine(mapOrigCopy, parameterFrom.SpiralConstructionInnerLineSeed)
 	}
 	if parameterFrom.SpiralConstructionLineGrid != nil {
 		parameterTo.SpiralConstructionLineGrid = CopyBranchSpiralLineGrid(mapOrigCopy, parameterFrom.SpiralConstructionLineGrid)
@@ -2138,11 +2138,11 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralCircleGrid != nil {
 		UnstageBranch(stage, parameter.SpiralCircleGrid)
 	}
-	if parameter.SpiralConstructionOuterLine != nil {
-		UnstageBranch(stage, parameter.SpiralConstructionOuterLine)
+	if parameter.SpiralConstructionOuterLineSeed != nil {
+		UnstageBranch(stage, parameter.SpiralConstructionOuterLineSeed)
 	}
-	if parameter.SpiralConstructionInnerLine != nil {
-		UnstageBranch(stage, parameter.SpiralConstructionInnerLine)
+	if parameter.SpiralConstructionInnerLineSeed != nil {
+		UnstageBranch(stage, parameter.SpiralConstructionInnerLineSeed)
 	}
 	if parameter.SpiralConstructionLineGrid != nil {
 		UnstageBranch(stage, parameter.SpiralConstructionLineGrid)

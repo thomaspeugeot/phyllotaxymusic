@@ -531,16 +531,16 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 	}
 }
 
-func (p *Parameter) computeSpiralConstructionOuterLine() {
+func (p *Parameter) computeSpiralConstructionOuterLineSeed() {
 
 	cc := p.ConstructionCircle
 	ca := p.ConstructionAxis
-	sl := p.SpiralConstructionOuterLine
+	sl := p.SpiralConstructionOuterLineSeed
 
-	p.verticalAxisToSpiralLine(cc, ca, sl)
+	p.verticalAxisToSpiralOuterLine(cc, ca, sl)
 }
 
-func (p *Parameter) verticalAxisToSpiralLine(cc *Circle, ca *Axis, sl *SpiralLine) {
+func (p *Parameter) verticalAxisToSpiralOuterLine(cc *Circle, ca *Axis, sl *SpiralLine) {
 	sl.StartX,
 		sl.StartY =
 		p.convertToSpiralCoords(cc.CenterX, cc.CenterY)
@@ -548,6 +548,29 @@ func (p *Parameter) verticalAxisToSpiralLine(cc *Circle, ca *Axis, sl *SpiralLin
 	ca_endX, ca_endY :=
 		cc.CenterX+ca.Length/2.0*math.Cos(DegreesToRadians(ca.AngleDegree)),
 		cc.CenterY+ca.Length/2.0*math.Sin(DegreesToRadians(ca.AngleDegree))
+
+	sl.EndX,
+		sl.EndY =
+		p.convertToSpiralCoords(ca_endX, ca_endY)
+}
+
+func (p *Parameter) computeSpiralConstructionInnerLineSeed() {
+
+	cc := p.ConstructionCircle
+	ca := p.ConstructionAxis
+	sl := p.SpiralConstructionInnerLineSeed
+
+	p.verticalAxisToSpiralInnerLine(cc, ca, sl)
+}
+
+func (p *Parameter) verticalAxisToSpiralInnerLine(cc *Circle, ca *Axis, sl *SpiralLine) {
+	sl.StartX,
+		sl.StartY =
+		p.convertToSpiralCoords(cc.CenterX, cc.CenterY)
+
+	ca_endX, ca_endY :=
+		cc.CenterX-ca.Length/2.0*math.Cos(DegreesToRadians(ca.AngleDegree)),
+		cc.CenterY-ca.Length/2.0*math.Sin(DegreesToRadians(ca.AngleDegree))
 
 	sl.EndX,
 		sl.EndY =
@@ -569,7 +592,7 @@ func (p *Parameter) computeSpiralConstructionLineGrid() {
 
 		cc := p.ConstructionCircleGrid.Circles[i]
 
-		p.verticalAxisToSpiralLine(cc, ca, sl)
+		p.verticalAxisToSpiralOuterLine(cc, ca, sl)
 
 		p.SpiralConstructionLineGrid.SpiralLines =
 			append(p.SpiralConstructionLineGrid.SpiralLines, sl)

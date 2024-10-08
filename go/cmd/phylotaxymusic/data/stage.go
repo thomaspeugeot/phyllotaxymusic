@@ -739,11 +739,11 @@ func _(stage *models.StageStruct) {
 	__SpiralCircleGrid__000001_Spiral_Circle_Grid.IsDisplayed = true
 
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Name = `Spiral Contruction Inner Line`
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.IsDisplayed = false
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartX = 0.000000
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndX = 0.000000
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartY = 0.000000
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndY = 0.000000
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.IsDisplayed = true
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartX = 199.373250
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndX = 135.000000
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartY = -118.475319
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndY = -0.000000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Color = ``
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.FillOpacity = 0.000000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Stroke = `blue`
@@ -893,8 +893,8 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralRhombusGrid = __SpiralRhombusGrid__000000_Spiral_Rhombus_Grid
 	__Parameter__000000_Reference.SpiralCircleSeed = __SpiralCircle__000000_Construction_Circle_Spiral
 	__Parameter__000000_Reference.SpiralCircleGrid = __SpiralCircleGrid__000001_Spiral_Circle_Grid
-	__Parameter__000000_Reference.SpiralConstructionOuterLine = __SpiralLine__000001_Spiral_Contruction_Outer_Line
-	__Parameter__000000_Reference.SpiralConstructionInnerLine = __SpiralLine__000000_Spiral_Contruction_Inner_Line
+	__Parameter__000000_Reference.SpiralConstructionOuterLineSeed = __SpiralLine__000001_Spiral_Contruction_Outer_Line
+	__Parameter__000000_Reference.SpiralConstructionInnerLineSeed = __SpiralLine__000000_Spiral_Contruction_Inner_Line
 	__Parameter__000000_Reference.SpiralConstructionLineGrid = __SpiralLineGrid__000000_Spiral_Construction_Line_Grid_Spiral
 	__Parameter__000000_Reference.SpiralConstructionCircleGrid = __SpiralCircleGrid__000000_Construction_Circle_Spiral_Grid
 	__Parameter__000000_Reference.SpiralBezierSeed = __SpiralBezier__000000_Spiral_Bezier_Seed
