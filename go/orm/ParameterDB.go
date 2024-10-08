@@ -261,6 +261,10 @@ type ParameterPointersEncoding struct {
 	// field VerticalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	VerticalAxisID sql.NullInt64
+
+	// field SpiralOrigin is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralOriginID sql.NullInt64
 }
 
 // ParameterDB describes a parameter in the database
@@ -1249,6 +1253,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.VerticalAxisID.Valid = true
 		}
 
+		// commit pointer value parameter.SpiralOrigin translates to updating the parameter.SpiralOriginID
+		parameterDB.SpiralOriginID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralOrigin != nil {
+			if SpiralOriginId, ok := backRepo.BackRepoSpiralOrigin.Map_SpiralOriginPtr_SpiralOriginDBID[parameter.SpiralOrigin]; ok {
+				parameterDB.SpiralOriginID.Int64 = int64(SpiralOriginId)
+				parameterDB.SpiralOriginID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralOriginID.Int64 = 0
+			parameterDB.SpiralOriginID.Valid = true
+		}
+
 		query := backRepoParameter.db.Save(&parameterDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -1635,6 +1651,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.VerticalAxis = nil
 	if parameterDB.VerticalAxisID.Int64 != 0 {
 		parameter.VerticalAxis = backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisPtr[uint(parameterDB.VerticalAxisID.Int64)]
+	}
+	// SpiralOrigin field
+	parameter.SpiralOrigin = nil
+	if parameterDB.SpiralOriginID.Int64 != 0 {
+		parameter.SpiralOrigin = backRepo.BackRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginPtr[uint(parameterDB.SpiralOriginID.Int64)]
 	}
 	return
 }
@@ -2516,6 +2537,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.VerticalAxisID.Int64 != 0 {
 			parameterDB.VerticalAxisID.Int64 = int64(BackRepoVerticalAxisid_atBckpTime_newID[uint(parameterDB.VerticalAxisID.Int64)])
 			parameterDB.VerticalAxisID.Valid = true
+		}
+
+		// reindexing SpiralOrigin field
+		if parameterDB.SpiralOriginID.Int64 != 0 {
+			parameterDB.SpiralOriginID.Int64 = int64(BackRepoSpiralOriginid_atBckpTime_newID[uint(parameterDB.SpiralOriginID.Int64)])
+			parameterDB.SpiralOriginID.Valid = true
 		}
 
 		// update databse with new index encoding

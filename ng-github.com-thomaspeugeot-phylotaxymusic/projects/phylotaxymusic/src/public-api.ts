@@ -93,6 +93,10 @@ export * from './lib/spirallinegrid-api'
 export * from './lib/spirallinegrid'
 export * from './lib/spirallinegrid.service'
 
+export * from './lib/spiralorigin-api'
+export * from './lib/spiralorigin'
+export * from './lib/spiralorigin.service'
+
 export * from './lib/spiralrhombus-api'
 export * from './lib/spiralrhombus'
 export * from './lib/spiralrhombus.service'

@@ -135,6 +135,7 @@ type Parameter struct {
 	OriginY        float64
 	HorizontalAxis *HorizontalAxis
 	VerticalAxis   *VerticalAxis
+	SpiralOrigin   *SpiralOrigin
 
 	// drawing the spiral
 	SpiralOriginX       float64

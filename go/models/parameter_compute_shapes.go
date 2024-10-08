@@ -10,6 +10,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.Shapes = append(p.Shapes, p.HorizontalAxis)
 	p.Shapes = append(p.Shapes, p.VerticalAxis)
+	p.Shapes = append(p.Shapes, p.SpiralOrigin)
 
 	p.ComputeInitialRhombus()
 	p.Shapes = append(p.Shapes, p.InitialRhombus)

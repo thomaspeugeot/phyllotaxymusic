@@ -25,6 +25,7 @@ import { Key } from './key'
 import { NoteInfo } from './noteinfo'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
+import { SpiralOrigin } from './spiralorigin'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -175,6 +176,8 @@ export class Parameter {
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
+
+	SpiralOrigin?: SpiralOrigin
 
 }
 
@@ -587,6 +590,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.SpiralOriginID.Valid = true
+	if (parameter.SpiralOrigin != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64 = parameter.SpiralOrigin.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 	parameterAPI.ParameterPointersEncoding.NoteInfos = []
@@ -691,6 +701,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SecondVoiceNotesShiftedRight = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceNotesShiftedRightID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
+	parameter.SpiralOrigin = frontRepo.map_ID_SpiralOrigin.get(parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 	parameter.NoteInfos = new Array<NoteInfo>()

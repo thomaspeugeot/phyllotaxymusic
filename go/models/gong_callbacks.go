@@ -86,6 +86,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterSpiralLineGridCreateCallback != nil {
 			stage.OnAfterSpiralLineGridCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *SpiralOrigin:
+		if stage.OnAfterSpiralOriginCreateCallback != nil {
+			stage.OnAfterSpiralOriginCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *SpiralRhombus:
 		if stage.OnAfterSpiralRhombusCreateCallback != nil {
 			stage.OnAfterSpiralRhombusCreateCallback.OnAfterCreate(stage, target)
@@ -207,6 +211,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*SpiralLineGrid)
 		if stage.OnAfterSpiralLineGridUpdateCallback != nil {
 			stage.OnAfterSpiralLineGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralOrigin:
+		newTarget := any(new).(*SpiralOrigin)
+		if stage.OnAfterSpiralOriginUpdateCallback != nil {
+			stage.OnAfterSpiralOriginUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *SpiralRhombus:
 		newTarget := any(new).(*SpiralRhombus)
@@ -333,6 +342,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*SpiralLineGrid)
 			stage.OnAfterSpiralLineGridDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *SpiralOrigin:
+		if stage.OnAfterSpiralOriginDeleteCallback != nil {
+			staged := any(staged).(*SpiralOrigin)
+			stage.OnAfterSpiralOriginDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *SpiralRhombus:
 		if stage.OnAfterSpiralRhombusDeleteCallback != nil {
 			staged := any(staged).(*SpiralRhombus)
@@ -438,6 +452,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterSpiralLineGridReadCallback != nil {
 			stage.OnAfterSpiralLineGridReadCallback.OnAfterRead(stage, target)
 		}
+	case *SpiralOrigin:
+		if stage.OnAfterSpiralOriginReadCallback != nil {
+			stage.OnAfterSpiralOriginReadCallback.OnAfterRead(stage, target)
+		}
 	case *SpiralRhombus:
 		if stage.OnAfterSpiralRhombusReadCallback != nil {
 			stage.OnAfterSpiralRhombusReadCallback.OnAfterRead(stage, target)
@@ -521,6 +539,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *SpiralLineGrid:
 		stage.OnAfterSpiralLineGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralLineGrid])
 	
+	case *SpiralOrigin:
+		stage.OnAfterSpiralOriginUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralOrigin])
+	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralRhombus])
 	
@@ -596,6 +617,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *SpiralLineGrid:
 		stage.OnAfterSpiralLineGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralLineGrid])
+	
+	case *SpiralOrigin:
+		stage.OnAfterSpiralOriginCreateCallback = any(callback).(OnAfterCreateInterface[SpiralOrigin])
 	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusCreateCallback = any(callback).(OnAfterCreateInterface[SpiralRhombus])
@@ -673,6 +697,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *SpiralLineGrid:
 		stage.OnAfterSpiralLineGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralLineGrid])
 	
+	case *SpiralOrigin:
+		stage.OnAfterSpiralOriginDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralOrigin])
+	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralRhombus])
 	
@@ -748,6 +775,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *SpiralLineGrid:
 		stage.OnAfterSpiralLineGridReadCallback = any(callback).(OnAfterReadInterface[SpiralLineGrid])
+	
+	case *SpiralOrigin:
+		stage.OnAfterSpiralOriginReadCallback = any(callback).(OnAfterReadInterface[SpiralOrigin])
 	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusReadCallback = any(callback).(OnAfterReadInterface[SpiralRhombus])

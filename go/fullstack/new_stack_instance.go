@@ -64,6 +64,7 @@ func NewStackInstance(
 	models.SetOrchestratorOnAfterUpdate[models.SpiralCircleGrid](stage)
 	models.SetOrchestratorOnAfterUpdate[models.SpiralLine](stage)
 	models.SetOrchestratorOnAfterUpdate[models.SpiralLineGrid](stage)
+	models.SetOrchestratorOnAfterUpdate[models.SpiralOrigin](stage)
 	models.SetOrchestratorOnAfterUpdate[models.SpiralRhombus](stage)
 	models.SetOrchestratorOnAfterUpdate[models.SpiralRhombusGrid](stage)
 	models.SetOrchestratorOnAfterUpdate[models.VerticalAxis](stage)

@@ -38,6 +38,7 @@ import { KeyAPI } from './key-api'
 import { NoteInfoAPI } from './noteinfo-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
+import { SpiralOriginAPI } from './spiralorigin-api'
 
 @Injectable({
   providedIn: 'root'

@@ -1367,6 +1367,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.HorizontalAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "VerticalAxis":
 			FormDivSelectFieldToField(&(parameter_.VerticalAxis), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralOrigin":
+			FormDivSelectFieldToField(&(parameter_.SpiralOrigin), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralOriginX":
 			FormDivBasicFieldToField(&(parameter_.SpiralOriginX), formDiv)
 		case "SpiralOriginY":
@@ -2411,6 +2413,103 @@ func (spirallinegridFormCallback *SpiralLineGridFormCallback) OnSave() {
 	}
 
 	fillUpTree(spirallinegridFormCallback.probe)
+}
+func __gong__New__SpiralOriginFormCallback(
+	spiralorigin *models.SpiralOrigin,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (spiraloriginFormCallback *SpiralOriginFormCallback) {
+	spiraloriginFormCallback = new(SpiralOriginFormCallback)
+	spiraloriginFormCallback.probe = probe
+	spiraloriginFormCallback.spiralorigin = spiralorigin
+	spiraloriginFormCallback.formGroup = formGroup
+
+	spiraloriginFormCallback.CreationMode = (spiralorigin == nil)
+
+	return
+}
+
+type SpiralOriginFormCallback struct {
+	spiralorigin *models.SpiralOrigin
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (spiraloriginFormCallback *SpiralOriginFormCallback) OnSave() {
+
+	log.Println("SpiralOriginFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	spiraloriginFormCallback.probe.formStage.Checkout()
+
+	if spiraloriginFormCallback.spiralorigin == nil {
+		spiraloriginFormCallback.spiralorigin = new(models.SpiralOrigin).Stage(spiraloriginFormCallback.probe.stageOfInterest)
+	}
+	spiralorigin_ := spiraloriginFormCallback.spiralorigin
+	_ = spiralorigin_
+
+	for _, formDiv := range spiraloriginFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(spiralorigin_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(spiralorigin_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(spiralorigin_.ShapeCategory), spiraloriginFormCallback.probe.stageOfInterest, formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(spiralorigin_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(spiralorigin_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(spiralorigin_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(spiralorigin_.StrokeOpacity), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(spiralorigin_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(spiralorigin_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(spiralorigin_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(spiralorigin_.Transform), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if spiraloriginFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiralorigin_.Unstage(spiraloriginFormCallback.probe.stageOfInterest)
+	}
+
+	spiraloriginFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.SpiralOrigin](
+		spiraloriginFormCallback.probe,
+	)
+	spiraloriginFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if spiraloriginFormCallback.CreationMode || spiraloriginFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		spiraloriginFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(spiraloriginFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__SpiralOriginFormCallback(
+			nil,
+			spiraloriginFormCallback.probe,
+			newFormGroup,
+		)
+		spiralorigin := new(models.SpiralOrigin)
+		FillUpForm(spiralorigin, newFormGroup, spiraloriginFormCallback.probe)
+		spiraloriginFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(spiraloriginFormCallback.probe)
 }
 func __gong__New__SpiralRhombusFormCallback(
 	spiralrhombus *models.SpiralRhombus,

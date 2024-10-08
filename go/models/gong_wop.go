@@ -533,6 +533,34 @@ func (from *SpiralLineGrid) CopyBasicFields(to *SpiralLineGrid) {
 	to.IsDisplayed = from.IsDisplayed
 }
 
+type SpiralOrigin_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
+	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
+}
+
+func (from *SpiralOrigin) CopyBasicFields(to *SpiralOrigin) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
+	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
+}
+
 type SpiralRhombus_WOP struct {
 	// insertion point
 	Name string

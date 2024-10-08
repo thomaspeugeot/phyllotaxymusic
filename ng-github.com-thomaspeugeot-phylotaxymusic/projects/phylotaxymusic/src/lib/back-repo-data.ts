@@ -41,6 +41,8 @@ import { SpiralLineAPI } from './spiralline-api'
 
 import { SpiralLineGridAPI } from './spirallinegrid-api'
 
+import { SpiralOriginAPI } from './spiralorigin-api'
+
 import { SpiralRhombusAPI } from './spiralrhombus-api'
 
 import { SpiralRhombusGridAPI } from './spiralrhombusgrid-api'
@@ -89,6 +91,8 @@ export class BackRepoData {
 	SpiralLineAPIs = new Array<SpiralLineAPI>()
 
 	SpiralLineGridAPIs = new Array<SpiralLineGridAPI>()
+
+	SpiralOriginAPIs = new Array<SpiralOriginAPI>()
 
 	SpiralRhombusAPIs = new Array<SpiralRhombusAPI>()
 
@@ -139,6 +143,8 @@ export class BackRepoData {
 		this.SpiralLineAPIs = data?.SpiralLineAPIs || [];
 
 		this.SpiralLineGridAPIs = data?.SpiralLineGridAPIs || [];
+
+		this.SpiralOriginAPIs = data?.SpiralOriginAPIs || [];
 
 		this.SpiralRhombusAPIs = data?.SpiralRhombusAPIs || [];
 

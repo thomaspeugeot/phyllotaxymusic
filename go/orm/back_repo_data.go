@@ -44,6 +44,8 @@ type BackRepoData struct {
 
 	SpiralLineGridAPIs []*SpiralLineGridAPI
 
+	SpiralOriginAPIs []*SpiralOriginAPI
+
 	SpiralRhombusAPIs []*SpiralRhombusAPI
 
 	SpiralRhombusGridAPIs []*SpiralRhombusGridAPI
@@ -251,6 +253,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		spirallinegridDB.CopyBasicFieldsToSpiralLineGrid_WOP(&spirallinegridAPI.SpiralLineGrid_WOP)
 
 		backRepoData.SpiralLineGridAPIs = append(backRepoData.SpiralLineGridAPIs, &spirallinegridAPI)
+	}
+
+	for _, spiraloriginDB := range backRepo.BackRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginDB {
+
+		var spiraloriginAPI SpiralOriginAPI
+		spiraloriginAPI.ID = spiraloriginDB.ID
+		spiraloriginAPI.SpiralOriginPointersEncoding = spiraloriginDB.SpiralOriginPointersEncoding
+		spiraloriginDB.CopyBasicFieldsToSpiralOrigin_WOP(&spiraloriginAPI.SpiralOrigin_WOP)
+
+		backRepoData.SpiralOriginAPIs = append(backRepoData.SpiralOriginAPIs, &spiraloriginAPI)
 	}
 
 	for _, spiralrhombusDB := range backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusDB {

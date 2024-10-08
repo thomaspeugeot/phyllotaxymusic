@@ -334,6 +334,7 @@ var __gong__map_SpiralCircle = make(map[string]*SpiralCircle)
 var __gong__map_SpiralCircleGrid = make(map[string]*SpiralCircleGrid)
 var __gong__map_SpiralLine = make(map[string]*SpiralLine)
 var __gong__map_SpiralLineGrid = make(map[string]*SpiralLineGrid)
+var __gong__map_SpiralOrigin = make(map[string]*SpiralOrigin)
 var __gong__map_SpiralRhombus = make(map[string]*SpiralRhombus)
 var __gong__map_SpiralRhombusGrid = make(map[string]*SpiralRhombusGrid)
 var __gong__map_VerticalAxis = make(map[string]*VerticalAxis)
@@ -629,6 +630,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceSpiralLineGrid.Stage(stage)
 										instance = any(instanceSpiralLineGrid)
 										__gong__map_SpiralLineGrid[identifier] = instanceSpiralLineGrid
+									case "SpiralOrigin":
+										instanceSpiralOrigin := new(SpiralOrigin)
+										instanceSpiralOrigin.Name = instanceName
+										instanceSpiralOrigin.Stage(stage)
+										instance = any(instanceSpiralOrigin)
+										__gong__map_SpiralOrigin[identifier] = instanceSpiralOrigin
 									case "SpiralRhombus":
 										instanceSpiralRhombus := new(SpiralRhombus)
 										instanceSpiralRhombus.Name = instanceName
@@ -760,6 +767,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							// insertion point for date assign code
 							}
 						case "SpiralLineGrid":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "SpiralOrigin":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -933,6 +944,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_SpiralLine[targetIdentifier]
 							__gong__map_SpiralLineGrid[identifier].SpiralLines =
 								append(__gong__map_SpiralLineGrid[identifier].SpiralLines, target)
+						}
+					case "SpiralOrigin":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
 						}
 					case "SpiralRhombus":
 						switch fieldName {
@@ -2010,6 +2025,55 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_SpiralLineGrid[identifier].Name = fielValue
 				}
+			case "SpiralOrigin":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralOrigin[identifier].Name = fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralOrigin[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralOrigin[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralOrigin[identifier].Stroke = fielValue
+				case "StrokeOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralOrigin[identifier].StrokeOpacity = exprSign * fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralOrigin[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralOrigin[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralOrigin[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_SpiralOrigin[identifier].Transform = fielValue
+				}
 			case "SpiralRhombus":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -2522,6 +2586,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "VerticalAxis":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].VerticalAxis = __gong__map_VerticalAxis[targetIdentifier]
+				case "SpiralOrigin":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].SpiralOrigin = __gong__map_SpiralOrigin[targetIdentifier]
 				}
 			case "Rhombus":
 				switch fieldName {
@@ -2658,6 +2725,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "ShapeCategory":
 					targetIdentifier := ident.Name
 					__gong__map_SpiralLineGrid[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
+				}
+			case "SpiralOrigin":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralOrigin[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_SpiralOrigin[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
 			case "SpiralRhombus":
 				switch fieldName {
@@ -2806,6 +2887,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "SpiralLineGrid":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "SpiralOrigin":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

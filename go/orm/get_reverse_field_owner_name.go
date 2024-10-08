@@ -177,6 +177,11 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		// insertion point
 		}
 
+	case *models.SpiralOrigin:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
 	case *models.SpiralRhombus:
 		switch reverseField.GongstructName {
 		// insertion point
@@ -355,6 +360,11 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		}
 
 	case *models.SpiralLineGrid:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
+	case *models.SpiralOrigin:
 		switch reverseField.GongstructName {
 		// insertion point
 		}

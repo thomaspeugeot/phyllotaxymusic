@@ -286,6 +286,19 @@ func FillUpFormFromGongstructName(
 		spirallinegrid := new(models.SpiralLineGrid)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(spirallinegrid, formGroup, probe)
+	case "SpiralOrigin":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralOrigin Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralOriginFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spiralorigin := new(models.SpiralOrigin)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spiralorigin, formGroup, probe)
 	case "SpiralRhombus":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
