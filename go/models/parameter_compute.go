@@ -577,10 +577,10 @@ func (p *Parameter) verticalAxisToSpiralInnerLine(cc *Circle, ca *Axis, sl *Spir
 		p.convertToSpiralCoords(ca_endX, ca_endY)
 }
 
-func (p *Parameter) computeSpiralConstructionLineGrid() {
+func (p *Parameter) computeSpiralConstructionOuterLineGrid() {
 
-	p.SpiralConstructionLineGrid.SpiralLines =
-		p.SpiralConstructionLineGrid.SpiralLines[:0]
+	p.SpiralConstructionOuterLineGrid.SpiralLines =
+		p.SpiralConstructionOuterLineGrid.SpiralLines[:0]
 	for i, ca := range p.ConstructionAxisGrid.Axiss {
 
 		sl := new(SpiralLine)
@@ -594,8 +594,30 @@ func (p *Parameter) computeSpiralConstructionLineGrid() {
 
 		p.verticalAxisToSpiralOuterLine(cc, ca, sl)
 
-		p.SpiralConstructionLineGrid.SpiralLines =
-			append(p.SpiralConstructionLineGrid.SpiralLines, sl)
+		p.SpiralConstructionOuterLineGrid.SpiralLines =
+			append(p.SpiralConstructionOuterLineGrid.SpiralLines, sl)
+	}
+}
+
+func (p *Parameter) computeSpiralConstructionInnerLineGrid() {
+
+	p.SpiralConstructionInnerLineGrid.SpiralLines =
+		p.SpiralConstructionInnerLineGrid.SpiralLines[:0]
+	for i, ca := range p.ConstructionAxisGrid.Axiss {
+
+		sl := new(SpiralLine)
+		sl.Name = fmt.Sprintf("Spiral Axis %d", i)
+		sl.Stroke = GenerateColor(i)
+		sl.Stroke = gongsvg_models.Black.ToString()
+		sl.StrokeWidth = 1
+		sl.StrokeOpacity = 1
+
+		cc := p.ConstructionCircleGrid.Circles[i]
+
+		p.verticalAxisToSpiralInnerLine(cc, ca, sl)
+
+		p.SpiralConstructionInnerLineGrid.SpiralLines =
+			append(p.SpiralConstructionInnerLineGrid.SpiralLines, sl)
 	}
 }
 
@@ -628,10 +650,10 @@ func (p *Parameter) ComputeSpiralConstructionCircleGrid() {
 func (p *Parameter) ComputeSpiralBezierSeed() {
 
 	sc0 := p.SpiralConstructionCircleGrid.SpiralCircles[0]
-	sl0 := p.SpiralConstructionLineGrid.SpiralLines[0]
+	sl0 := p.SpiralConstructionOuterLineGrid.SpiralLines[0]
 
 	sc1 := p.SpiralConstructionCircleGrid.SpiralCircles[1]
-	sl1 := p.SpiralConstructionLineGrid.SpiralLines[1]
+	sl1 := p.SpiralConstructionOuterLineGrid.SpiralLines[1]
 
 	sb := p.SpiralBezierSeed
 
@@ -668,10 +690,10 @@ func (p *Parameter) ComputeSpiralBezierGrid() {
 	nm1 := len(p.SpiralConstructionCircleGrid.SpiralCircles) - 1
 	for i := range nm1 {
 		sc0 := p.SpiralConstructionCircleGrid.SpiralCircles[i]
-		sl0 := p.SpiralConstructionLineGrid.SpiralLines[i]
+		sl0 := p.SpiralConstructionOuterLineGrid.SpiralLines[i]
 
 		sc1 := p.SpiralConstructionCircleGrid.SpiralCircles[(i+1)%nm1]
-		sl1 := p.SpiralConstructionLineGrid.SpiralLines[(i+1)%nm1]
+		sl1 := p.SpiralConstructionOuterLineGrid.SpiralLines[(i+1)%nm1]
 
 		sb := new(SpiralBezier)
 

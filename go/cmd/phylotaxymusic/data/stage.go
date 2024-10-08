@@ -123,7 +123,8 @@ func _(stage *models.StageStruct) {
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line := (&models.SpiralLine{}).Stage(stage)
 	__SpiralLine__000001_Spiral_Contruction_Outer_Line := (&models.SpiralLine{}).Stage(stage)
 
-	__SpiralLineGrid__000000_Spiral_Construction_Line_Grid_Spiral := (&models.SpiralLineGrid{}).Stage(stage)
+	__SpiralLineGrid__000000_Spiral_Construction_Inner_Line_Grid_Spiral := (&models.SpiralLineGrid{}).Stage(stage)
+	__SpiralLineGrid__000001_Spiral_Construction_Outer_Line_Grid_Spiral := (&models.SpiralLineGrid{}).Stage(stage)
 
 	__SpiralOrigin__000000_Spiral_Origin := (&models.SpiralOrigin{}).Stage(stage)
 
@@ -567,7 +568,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.N = 2
 	__Parameter__000000_Reference.M = 1
 	__Parameter__000000_Reference.Z = 16
-	__Parameter__000000_Reference.InsideAngle = 95.000000
+	__Parameter__000000_Reference.InsideAngle = 120.000000
 	__Parameter__000000_Reference.SideLength = 150.000000
 	__Parameter__000000_Reference.StackWidth = 3
 	__Parameter__000000_Reference.NbShitRight = 2
@@ -591,7 +592,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.OriginY = 350.000000
 	__Parameter__000000_Reference.SpiralOriginX = 600.000000
 	__Parameter__000000_Reference.SpiralOriginY = 900.000000
-	__Parameter__000000_Reference.SpiralInitialRadius = 135.000000
+	__Parameter__000000_Reference.SpiralInitialRadius = 140.000000
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
@@ -685,7 +686,7 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000005_5_Vertical_growth.IsExpanded = false
 
 	__ShapeCategory__000006_6_Spiral_growth.Name = `6.Spiral growth`
-	__ShapeCategory__000006_6_Spiral_growth.IsExpanded = false
+	__ShapeCategory__000006_6_Spiral_growth.IsExpanded = true
 
 	__ShapeCategory__000007_7_Spiral_Growth_Bezier.Name = `7. Spiral Growth Bezier`
 	__ShapeCategory__000007_7_Spiral_Growth_Bezier.IsExpanded = true
@@ -770,8 +771,11 @@ func _(stage *models.StageStruct) {
 	__SpiralLine__000001_Spiral_Contruction_Outer_Line.StrokeDashArrayWhenSelected = ``
 	__SpiralLine__000001_Spiral_Contruction_Outer_Line.Transform = ``
 
-	__SpiralLineGrid__000000_Spiral_Construction_Line_Grid_Spiral.Name = `Spiral Construction Line Grid Spiral`
-	__SpiralLineGrid__000000_Spiral_Construction_Line_Grid_Spiral.IsDisplayed = true
+	__SpiralLineGrid__000000_Spiral_Construction_Inner_Line_Grid_Spiral.Name = `Spiral Construction Inner Line Grid Spiral`
+	__SpiralLineGrid__000000_Spiral_Construction_Inner_Line_Grid_Spiral.IsDisplayed = true
+
+	__SpiralLineGrid__000001_Spiral_Construction_Outer_Line_Grid_Spiral.Name = `Spiral Construction Outer Line Grid Spiral`
+	__SpiralLineGrid__000001_Spiral_Construction_Outer_Line_Grid_Spiral.IsDisplayed = true
 
 	__SpiralOrigin__000000_Spiral_Origin.Name = `Spiral Origin`
 	__SpiralOrigin__000000_Spiral_Origin.IsDisplayed = true
@@ -908,7 +912,8 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralCircleGrid = __SpiralCircleGrid__000001_Spiral_Circle_Grid
 	__Parameter__000000_Reference.SpiralConstructionOuterLineSeed = __SpiralLine__000001_Spiral_Contruction_Outer_Line
 	__Parameter__000000_Reference.SpiralConstructionInnerLineSeed = __SpiralLine__000000_Spiral_Contruction_Inner_Line
-	__Parameter__000000_Reference.SpiralConstructionLineGrid = __SpiralLineGrid__000000_Spiral_Construction_Line_Grid_Spiral
+	__Parameter__000000_Reference.SpiralConstructionOuterLineGrid = __SpiralLineGrid__000001_Spiral_Construction_Outer_Line_Grid_Spiral
+	__Parameter__000000_Reference.SpiralConstructionInnerLineGrid = __SpiralLineGrid__000000_Spiral_Construction_Inner_Line_Grid_Spiral
 	__Parameter__000000_Reference.SpiralConstructionCircleGrid = __SpiralCircleGrid__000000_Construction_Circle_Spiral_Grid
 	__Parameter__000000_Reference.SpiralBezierSeed = __SpiralBezier__000000_Spiral_Bezier_Seed
 	__Parameter__000000_Reference.SpiralBezierGrid = __SpiralBezierGrid__000000_Spiral_Bezier_Grid
@@ -958,7 +963,8 @@ func _(stage *models.StageStruct) {
 	__SpiralCircleGrid__000001_Spiral_Circle_Grid.SpiralRhombusGrid = __SpiralRhombusGrid__000000_Spiral_Rhombus_Grid
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
 	__SpiralLine__000001_Spiral_Contruction_Outer_Line.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
-	__SpiralLineGrid__000000_Spiral_Construction_Line_Grid_Spiral.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
+	__SpiralLineGrid__000000_Spiral_Construction_Inner_Line_Grid_Spiral.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
+	__SpiralLineGrid__000001_Spiral_Construction_Outer_Line_Grid_Spiral.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
 	__SpiralOrigin__000000_Spiral_Origin.ShapeCategory = __ShapeCategory__000000_0_Axes
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
 	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth

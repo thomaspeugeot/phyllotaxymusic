@@ -191,9 +191,13 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	SpiralConstructionInnerLineSeedID sql.NullInt64
 
-	// field SpiralConstructionLineGrid is a pointer to another Struct (optional or 0..1)
+	// field SpiralConstructionOuterLineGrid is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	SpiralConstructionLineGridID sql.NullInt64
+	SpiralConstructionOuterLineGridID sql.NullInt64
+
+	// field SpiralConstructionInnerLineGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralConstructionInnerLineGridID sql.NullInt64
 
 	// field SpiralConstructionCircleGrid is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -1031,16 +1035,28 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.SpiralConstructionInnerLineSeedID.Valid = true
 		}
 
-		// commit pointer value parameter.SpiralConstructionLineGrid translates to updating the parameter.SpiralConstructionLineGridID
-		parameterDB.SpiralConstructionLineGridID.Valid = true // allow for a 0 value (nil association)
-		if parameter.SpiralConstructionLineGrid != nil {
-			if SpiralConstructionLineGridId, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridPtr_SpiralLineGridDBID[parameter.SpiralConstructionLineGrid]; ok {
-				parameterDB.SpiralConstructionLineGridID.Int64 = int64(SpiralConstructionLineGridId)
-				parameterDB.SpiralConstructionLineGridID.Valid = true
+		// commit pointer value parameter.SpiralConstructionOuterLineGrid translates to updating the parameter.SpiralConstructionOuterLineGridID
+		parameterDB.SpiralConstructionOuterLineGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionOuterLineGrid != nil {
+			if SpiralConstructionOuterLineGridId, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridPtr_SpiralLineGridDBID[parameter.SpiralConstructionOuterLineGrid]; ok {
+				parameterDB.SpiralConstructionOuterLineGridID.Int64 = int64(SpiralConstructionOuterLineGridId)
+				parameterDB.SpiralConstructionOuterLineGridID.Valid = true
 			}
 		} else {
-			parameterDB.SpiralConstructionLineGridID.Int64 = 0
-			parameterDB.SpiralConstructionLineGridID.Valid = true
+			parameterDB.SpiralConstructionOuterLineGridID.Int64 = 0
+			parameterDB.SpiralConstructionOuterLineGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralConstructionInnerLineGrid translates to updating the parameter.SpiralConstructionInnerLineGridID
+		parameterDB.SpiralConstructionInnerLineGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionInnerLineGrid != nil {
+			if SpiralConstructionInnerLineGridId, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridPtr_SpiralLineGridDBID[parameter.SpiralConstructionInnerLineGrid]; ok {
+				parameterDB.SpiralConstructionInnerLineGridID.Int64 = int64(SpiralConstructionInnerLineGridId)
+				parameterDB.SpiralConstructionInnerLineGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralConstructionInnerLineGridID.Int64 = 0
+			parameterDB.SpiralConstructionInnerLineGridID.Valid = true
 		}
 
 		// commit pointer value parameter.SpiralConstructionCircleGrid translates to updating the parameter.SpiralConstructionCircleGridID
@@ -1558,10 +1574,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.SpiralConstructionInnerLineSeedID.Int64 != 0 {
 		parameter.SpiralConstructionInnerLineSeed = backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(parameterDB.SpiralConstructionInnerLineSeedID.Int64)]
 	}
-	// SpiralConstructionLineGrid field
-	parameter.SpiralConstructionLineGrid = nil
-	if parameterDB.SpiralConstructionLineGridID.Int64 != 0 {
-		parameter.SpiralConstructionLineGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionLineGridID.Int64)]
+	// SpiralConstructionOuterLineGrid field
+	parameter.SpiralConstructionOuterLineGrid = nil
+	if parameterDB.SpiralConstructionOuterLineGridID.Int64 != 0 {
+		parameter.SpiralConstructionOuterLineGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionOuterLineGridID.Int64)]
+	}
+	// SpiralConstructionInnerLineGrid field
+	parameter.SpiralConstructionInnerLineGrid = nil
+	if parameterDB.SpiralConstructionInnerLineGridID.Int64 != 0 {
+		parameter.SpiralConstructionInnerLineGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionInnerLineGridID.Int64)]
 	}
 	// SpiralConstructionCircleGrid field
 	parameter.SpiralConstructionCircleGrid = nil
@@ -2437,10 +2458,16 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 			parameterDB.SpiralConstructionInnerLineSeedID.Valid = true
 		}
 
-		// reindexing SpiralConstructionLineGrid field
-		if parameterDB.SpiralConstructionLineGridID.Int64 != 0 {
-			parameterDB.SpiralConstructionLineGridID.Int64 = int64(BackRepoSpiralLineGridid_atBckpTime_newID[uint(parameterDB.SpiralConstructionLineGridID.Int64)])
-			parameterDB.SpiralConstructionLineGridID.Valid = true
+		// reindexing SpiralConstructionOuterLineGrid field
+		if parameterDB.SpiralConstructionOuterLineGridID.Int64 != 0 {
+			parameterDB.SpiralConstructionOuterLineGridID.Int64 = int64(BackRepoSpiralLineGridid_atBckpTime_newID[uint(parameterDB.SpiralConstructionOuterLineGridID.Int64)])
+			parameterDB.SpiralConstructionOuterLineGridID.Valid = true
+		}
+
+		// reindexing SpiralConstructionInnerLineGrid field
+		if parameterDB.SpiralConstructionInnerLineGridID.Int64 != 0 {
+			parameterDB.SpiralConstructionInnerLineGridID.Int64 = int64(BackRepoSpiralLineGridid_atBckpTime_newID[uint(parameterDB.SpiralConstructionInnerLineGridID.Int64)])
+			parameterDB.SpiralConstructionInnerLineGridID.Valid = true
 		}
 
 		// reindexing SpiralConstructionCircleGrid field
