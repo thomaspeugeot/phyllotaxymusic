@@ -80,7 +80,8 @@ type Parameter struct {
 	SpiralCircleSeed      *SpiralCircle
 	SpiralCircleGrid      *SpiralCircleGrid
 
-	SpiralConstructionLine       *SpiralLine
+	SpiralConstructionOuterLine  *SpiralLine
+	SpiralConstructionInnerLine  *SpiralLine
 	SpiralConstructionLineGrid   *SpiralLineGrid
 	SpiralConstructionCircleGrid *SpiralCircleGrid
 	SpiralBezierSeed             *SpiralBezier

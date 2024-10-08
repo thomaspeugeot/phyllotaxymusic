@@ -137,7 +137,9 @@ export class Parameter {
 
 	SpiralCircleGrid?: SpiralCircleGrid
 
-	SpiralConstructionLine?: SpiralLine
+	SpiralConstructionOuterLine?: SpiralLine
+
+	SpiralConstructionInnerLine?: SpiralLine
 
 	SpiralConstructionLineGrid?: SpiralLineGrid
 
@@ -452,11 +454,18 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.SpiralConstructionLineID.Valid = true
-	if (parameter.SpiralConstructionLine != undefined) {
-		parameterAPI.ParameterPointersEncoding.SpiralConstructionLineID.Int64 = parameter.SpiralConstructionLine.ID  
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineID.Valid = true
+	if (parameter.SpiralConstructionOuterLine != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineID.Int64 = parameter.SpiralConstructionOuterLine.ID  
 	} else {
-		parameterAPI.ParameterPointersEncoding.SpiralConstructionLineID.Int64 = 0 		
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineID.Valid = true
+	if (parameter.SpiralConstructionInnerLine != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineID.Int64 = parameter.SpiralConstructionInnerLine.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.SpiralConstructionLineGridID.Valid = true
@@ -663,7 +672,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralRhombusGrid = frontRepo.map_ID_SpiralRhombusGrid.get(parameterAPI.ParameterPointersEncoding.SpiralRhombusGridID.Int64)
 	parameter.SpiralCircleSeed = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.SpiralCircleSeedID.Int64)
 	parameter.SpiralCircleGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64)
-	parameter.SpiralConstructionLine = frontRepo.map_ID_SpiralLine.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionLineID.Int64)
+	parameter.SpiralConstructionOuterLine = frontRepo.map_ID_SpiralLine.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineID.Int64)
+	parameter.SpiralConstructionInnerLine = frontRepo.map_ID_SpiralLine.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineID.Int64)
 	parameter.SpiralConstructionLineGrid = frontRepo.map_ID_SpiralLineGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionLineGridID.Int64)
 	parameter.SpiralConstructionCircleGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionCircleGridID.Int64)
 	parameter.SpiralBezierSeed = frontRepo.map_ID_SpiralBezier.get(parameterAPI.ParameterPointersEncoding.SpiralBezierSeedID.Int64)

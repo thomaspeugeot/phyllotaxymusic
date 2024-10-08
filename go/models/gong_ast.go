@@ -2458,9 +2458,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SpiralCircleGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralCircleGrid = __gong__map_SpiralCircleGrid[targetIdentifier]
-				case "SpiralConstructionLine":
+				case "SpiralConstructionOuterLine":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].SpiralConstructionLine = __gong__map_SpiralLine[targetIdentifier]
+					__gong__map_Parameter[identifier].SpiralConstructionOuterLine = __gong__map_SpiralLine[targetIdentifier]
+				case "SpiralConstructionInnerLine":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].SpiralConstructionInnerLine = __gong__map_SpiralLine[targetIdentifier]
 				case "SpiralConstructionLineGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralConstructionLineGrid = __gong__map_SpiralLineGrid[targetIdentifier]

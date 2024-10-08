@@ -531,11 +531,11 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 	}
 }
 
-func (p *Parameter) computeSpiralConstructionLine() {
+func (p *Parameter) computeSpiralConstructionOuterLine() {
 
 	cc := p.ConstructionCircle
 	ca := p.ConstructionAxis
-	sl := p.SpiralConstructionLine
+	sl := p.SpiralConstructionOuterLine
 
 	p.verticalAxisToSpiralLine(cc, ca, sl)
 }
