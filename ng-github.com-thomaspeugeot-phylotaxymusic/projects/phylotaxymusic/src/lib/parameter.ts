@@ -70,6 +70,7 @@ export class Parameter {
 	SpiralOriginX: number = 0
 	SpiralOriginY: number = 0
 	SpiralInitialRadius: number = 0
+	ShowSpiralBezierConstruct: boolean = false
 
 	// insertion point for pointers and slices of pointers declarations
 	InitialRhombus?: Rhombus
@@ -229,6 +230,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.SpiralOriginX = parameter.SpiralOriginX
 	parameterAPI.SpiralOriginY = parameter.SpiralOriginY
 	parameterAPI.SpiralInitialRadius = parameter.SpiralInitialRadius
+	parameterAPI.ShowSpiralBezierConstruct = parameter.ShowSpiralBezierConstruct
 
 	// insertion point for pointer fields encoding
 	parameterAPI.ParameterPointersEncoding.InitialRhombusID.Valid = true
@@ -688,6 +690,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralOriginX = parameterAPI.SpiralOriginX
 	parameter.SpiralOriginY = parameterAPI.SpiralOriginY
 	parameter.SpiralInitialRadius = parameterAPI.SpiralInitialRadius
+	parameter.ShowSpiralBezierConstruct = parameterAPI.ShowSpiralBezierConstruct
 
 	// insertion point for pointer fields encoding
 	parameter.InitialRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64)

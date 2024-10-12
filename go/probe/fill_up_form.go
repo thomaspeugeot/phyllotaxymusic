@@ -461,6 +461,8 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("SpiralInitialRadius", instanceWithInferedType.SpiralInitialRadius, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("ShowSpiralBezierConstruct", instanceWithInferedType.ShowSpiralBezierConstruct, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 
 	case *models.Rhombus:
 		// insertion point

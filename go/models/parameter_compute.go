@@ -781,22 +781,29 @@ func (p *Parameter) ComputeSpiralBezierFullGrid() {
 
 	p.SpiralBezierFullGrid.SpiralBeziers = p.SpiralBezierFullGrid.SpiralBeziers[:0]
 
+	nm1 := len(p.SpiralConstructionCircleGrid.SpiralCircles) - 1
+
 	for i := range p.Z - p.ShiftToNearestCircle - 1 {
-		// pick the ith circle
-		sc0 := p.SpiralCircleGrid.SpiralCircles[i]
-		sl0 := p.SpiralConstructionOuterLineFullGrid.SpiralLines[i]
 
-		sc1 := p.SpiralCircleGrid.SpiralCircles[i+p.ShiftToNearestCircle]
-		sl1 := p.SpiralConstructionOuterLineFullGrid.SpiralLines[i+p.ShiftToNearestCircle]
+		// construct the front curve
+		for k := range p.M + p.N - 1 {
 
-		sb := new(SpiralBezier)
+			// pick the ith circle
+			sc0 := p.SpiralCircleFullGrid.SpiralCircles[i+k]
+			sl0 := p.SpiralConstructionOuterLineFullGrid.SpiralLines[i+k]
 
-		sb.Stroke = gongsvg_models.Grey.ToString()
-		sb.StrokeWidth = 2.0
-		sb.StrokeOpacity = 0.8
+			sc1 := p.SpiralCircleFullGrid.SpiralCircles[i+(k+p.ShiftToNearestCircle)%nm1]
+			sl1 := p.SpiralConstructionOuterLineFullGrid.SpiralLines[i+(k+p.ShiftToNearestCircle)%nm1]
 
-		p.spiralCircleLinesToSpiralBezier(sb, sc0, sl0, sc1, sl1)
+			sb := new(SpiralBezier)
 
-		p.SpiralBezierFullGrid.SpiralBeziers = append(p.SpiralBezierFullGrid.SpiralBeziers, sb)
+			sb.Stroke = gongsvg_models.Grey.ToString()
+			sb.StrokeWidth = 2.0
+			sb.StrokeOpacity = 0.5
+
+			p.spiralCircleLinesToSpiralBezier(sb, sc0, sl0, sc1, sl1)
+
+			p.SpiralBezierFullGrid.SpiralBeziers = append(p.SpiralBezierFullGrid.SpiralBeziers, sb)
+		}
 	}
 }

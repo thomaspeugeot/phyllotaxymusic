@@ -36,7 +36,7 @@ func (b *SpiralBezier) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gon
 		p.SpiralOriginX+b.EndX, p.SpiralOriginY-b.EndY,
 	)
 
-	/*
+	if p.ShowSpiralBezierConstruct {
 
 		line := new(gongsvg_models.Line).Stage(gongsvgStage)
 		line.Name = b.Name
@@ -53,9 +53,6 @@ func (b *SpiralBezier) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gon
 		line.Y2 = p.SpiralOriginY - b.EndY
 
 		layer.Lines = append(layer.Lines, line)
-
-	*/
-	/*
 
 		lineControl1 := new(gongsvg_models.Line).Stage(gongsvgStage)
 		lineControl1.Name = b.Name
@@ -90,7 +87,6 @@ func (b *SpiralBezier) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gon
 		lineControl2.Y2 = p.SpiralOriginY - b.ControlPointEndY
 
 		layer.Lines = append(layer.Lines, lineControl2)
-
-	*/
+	}
 
 }

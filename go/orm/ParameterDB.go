@@ -387,6 +387,10 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.SpiralInitialRadius
 	SpiralInitialRadius_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.ShowSpiralBezierConstruct
+	// provide the sql storage for the boolan
+	ShowSpiralBezierConstruct_Data sql.NullBool
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -471,6 +475,8 @@ type ParameterWOP struct {
 	SpiralOriginY float64 `xlsx:"30"`
 
 	SpiralInitialRadius float64 `xlsx:"31"`
+
+	ShowSpiralBezierConstruct bool `xlsx:"32"`
 	// insertion for WOP pointer fields
 }
 
@@ -508,6 +514,7 @@ var Parameter_Fields = []string{
 	"SpiralOriginX",
 	"SpiralOriginY",
 	"SpiralInitialRadius",
+	"ShowSpiralBezierConstruct",
 }
 
 type BackRepoParameterStruct struct {
@@ -1879,6 +1886,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.SpiralInitialRadius_Data.Float64 = parameter.SpiralInitialRadius
 	parameterDB.SpiralInitialRadius_Data.Valid = true
+
+	parameterDB.ShowSpiralBezierConstruct_Data.Bool = parameter.ShowSpiralBezierConstruct
+	parameterDB.ShowSpiralBezierConstruct_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -1977,6 +1987,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.SpiralInitialRadius_Data.Float64 = parameter.SpiralInitialRadius
 	parameterDB.SpiralInitialRadius_Data.Valid = true
+
+	parameterDB.ShowSpiralBezierConstruct_Data.Bool = parameter.ShowSpiralBezierConstruct
+	parameterDB.ShowSpiralBezierConstruct_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -2075,6 +2088,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.SpiralInitialRadius_Data.Float64 = parameter.SpiralInitialRadius
 	parameterDB.SpiralInitialRadius_Data.Valid = true
+
+	parameterDB.ShowSpiralBezierConstruct_Data.Bool = parameter.ShowSpiralBezierConstruct
+	parameterDB.ShowSpiralBezierConstruct_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -2111,6 +2127,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
 	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
 	parameter.SpiralInitialRadius = parameterDB.SpiralInitialRadius_Data.Float64
+	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -2147,6 +2164,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
 	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
 	parameter.SpiralInitialRadius = parameterDB.SpiralInitialRadius_Data.Float64
+	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -2184,6 +2202,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
 	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
 	parameter.SpiralInitialRadius = parameterDB.SpiralInitialRadius_Data.Float64
+	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo

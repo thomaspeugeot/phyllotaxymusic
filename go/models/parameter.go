@@ -83,7 +83,7 @@ type Parameter struct {
 	SpiralRhombusGrid     *SpiralRhombusGrid
 	SpiralCircleSeed      *SpiralCircle
 	SpiralCircleGrid      *SpiralCircleGrid // only n+m circles
-	SpiralCircleFullGrid  *SpiralCircleGrid
+	SpiralCircleFullGrid  *SpiralCircleGrid // all, with construction
 
 	SpiralConstructionOuterLineSeed *SpiralLine
 	SpiralConstructionInnerLineSeed *SpiralLine
@@ -158,6 +158,8 @@ type Parameter struct {
 	SpiralOriginX       float64
 	SpiralOriginY       float64
 	SpiralInitialRadius float64
+
+	ShowSpiralBezierConstruct bool
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {

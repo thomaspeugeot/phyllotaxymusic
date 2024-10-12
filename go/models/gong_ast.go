@@ -2615,6 +2615,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SpiralOrigin":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralOrigin = __gong__map_SpiralOrigin[targetIdentifier]
+				case "ShowSpiralBezierConstruct":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].ShowSpiralBezierConstruct = fielValue
 				}
 			case "Rhombus":
 				switch fieldName {

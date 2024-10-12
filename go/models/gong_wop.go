@@ -284,6 +284,7 @@ type Parameter_WOP struct {
 	SpiralOriginX float64
 	SpiralOriginY float64
 	SpiralInitialRadius float64
+	ShowSpiralBezierConstruct bool
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -319,6 +320,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.SpiralOriginX = from.SpiralOriginX
 	to.SpiralOriginY = from.SpiralOriginY
 	to.SpiralInitialRadius = from.SpiralInitialRadius
+	to.ShowSpiralBezierConstruct = from.ShowSpiralBezierConstruct
 }
 
 type Rhombus_WOP struct {

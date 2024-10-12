@@ -1387,6 +1387,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.SpiralOriginY), formDiv)
 		case "SpiralInitialRadius":
 			FormDivBasicFieldToField(&(parameter_.SpiralInitialRadius), formDiv)
+		case "ShowSpiralBezierConstruct":
+			FormDivBasicFieldToField(&(parameter_.ShowSpiralBezierConstruct), formDiv)
 		}
 	}
 
