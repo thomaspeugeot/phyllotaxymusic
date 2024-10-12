@@ -621,6 +621,7 @@ func (p *Parameter) computeSpiralConstructionOuterLineGrid() {
 
 	p.SpiralConstructionOuterLineGrid.SpiralLines =
 		p.SpiralConstructionOuterLineGrid.SpiralLines[:0]
+
 	for i, ca := range p.ConstructionAxisGrid.Axiss {
 
 		sl := new(SpiralLine)
@@ -657,10 +658,15 @@ func (p *Parameter) computeSpiralConstructionOuterLineFullGrid() {
 
 		constructionAxis := new(Axis)
 		*constructionAxis = *constructionAxisSeed
-		constructionAxis.CenterX = circle.CenterX - p.ConstructionCircle.CenterX
-		constructionAxis.CenterY = circle.CenterY - p.ConstructionCircle.CenterY
+		constructionAxis.CenterX = circle.CenterX + p.ConstructionCircle.CenterX
+		constructionAxis.CenterY = circle.CenterY + p.ConstructionCircle.CenterY
 
-		p.verticalAxisToSpiralOuterLine(circle, constructionAxis, sl)
+		constructionCircle := new(Circle)
+		*constructionCircle = *circle
+		constructionCircle.CenterX += p.ConstructionCircle.CenterX
+		constructionCircle.CenterY += p.ConstructionCircle.CenterY
+
+		p.verticalAxisToSpiralOuterLine(constructionCircle, constructionAxis, sl)
 
 		p.SpiralConstructionOuterLineFullGrid.SpiralLines =
 			append(p.SpiralConstructionOuterLineFullGrid.SpiralLines, sl)

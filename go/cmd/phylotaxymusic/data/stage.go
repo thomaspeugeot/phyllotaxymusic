@@ -570,7 +570,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.N = 2
 	__Parameter__000000_Reference.M = 1
-	__Parameter__000000_Reference.Z = 4
+	__Parameter__000000_Reference.Z = 16
 	__Parameter__000000_Reference.ShiftToNearestCircle = 2
 	__Parameter__000000_Reference.InsideAngle = 120.000000
 	__Parameter__000000_Reference.SideLength = 160.000000
@@ -578,7 +578,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbShitRight = 2
 	__Parameter__000000_Reference.StackHeight = 4
 	__Parameter__000000_Reference.BezierControlLengthRatio = 0.450000
-	__Parameter__000000_Reference.SpiralBezierStrength = 1.200000
+	__Parameter__000000_Reference.SpiralBezierStrength = 3.100000
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
@@ -598,7 +598,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralOriginX = 750.000000
 	__Parameter__000000_Reference.SpiralOriginY = 600.000000
 	__Parameter__000000_Reference.SpiralInitialRadius = 140.000000
-	__Parameter__000000_Reference.ShowSpiralBezierConstruct = true
+	__Parameter__000000_Reference.ShowSpiralBezierConstruct = false
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
@@ -723,10 +723,10 @@ func _(stage *models.StageStruct) {
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Transform = ``
 
 	__SpiralBezierGrid__000000_Spiral_Bezier_Full_Grid.Name = `Spiral Bezier Full Grid`
-	__SpiralBezierGrid__000000_Spiral_Bezier_Full_Grid.IsDisplayed = false
+	__SpiralBezierGrid__000000_Spiral_Bezier_Full_Grid.IsDisplayed = true
 
 	__SpiralBezierGrid__000001_Spiral_Bezier_Grid.Name = `Spiral Bezier Grid`
-	__SpiralBezierGrid__000001_Spiral_Bezier_Grid.IsDisplayed = false
+	__SpiralBezierGrid__000001_Spiral_Bezier_Grid.IsDisplayed = true
 
 	__SpiralCircle__000000_Construction_Circle_Spiral.Name = `Construction Circle Spiral`
 	__SpiralCircle__000000_Construction_Circle_Spiral.IsDisplayed = false
@@ -748,7 +748,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircleGrid__000000_Construction_Circle_Spiral_Full_Grid.IsDisplayed = true
 
 	__SpiralCircleGrid__000001_Construction_Circle_Spiral_Grid.Name = `Construction Circle Spiral Grid`
-	__SpiralCircleGrid__000001_Construction_Circle_Spiral_Grid.IsDisplayed = true
+	__SpiralCircleGrid__000001_Construction_Circle_Spiral_Grid.IsDisplayed = false
 
 	__SpiralCircleGrid__000002_Spiral_Circle_Grid.Name = `Spiral Circle Grid`
 	__SpiralCircleGrid__000002_Spiral_Circle_Grid.IsDisplayed = true
@@ -790,7 +790,7 @@ func _(stage *models.StageStruct) {
 	__SpiralLineGrid__000001_Spiral_Construction_Outer_Line_Full_Grid_Spiral.IsDisplayed = false
 
 	__SpiralLineGrid__000002_Spiral_Construction_Outer_Line_Grid_Spiral.Name = `Spiral Construction Outer Line Grid Spiral`
-	__SpiralLineGrid__000002_Spiral_Construction_Outer_Line_Grid_Spiral.IsDisplayed = true
+	__SpiralLineGrid__000002_Spiral_Construction_Outer_Line_Grid_Spiral.IsDisplayed = false
 
 	__SpiralOrigin__000000_Spiral_Origin.Name = `Spiral Origin`
 	__SpiralOrigin__000000_Spiral_Origin.IsDisplayed = true

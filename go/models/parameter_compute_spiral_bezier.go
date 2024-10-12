@@ -73,12 +73,12 @@ func (p *Parameter) ComputeSpiralBezierFullGrid() {
 
 	nm1 := len(p.SpiralConstructionCircleGrid.SpiralCircles) - 1
 
-	for i := range 1 {
-		// for i := range p.Z - p.ShiftToNearestCircle - 1 {
+	// for i := range 1 {
+	for i := range p.Z - p.ShiftToNearestCircle - 1 {
 
 		// construct the front curve
-		for k := range 1 {
-			// for k := range p.M + p.N - 1 {
+		// for k := range 1 {
+		for k := range p.M + p.N - 1 {
 
 			// pick the ith circle
 			sc0 := p.SpiralCircleFullGrid.SpiralCircles[i+k]
