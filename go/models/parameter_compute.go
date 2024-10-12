@@ -542,6 +542,36 @@ func (p *Parameter) ComputeSpiralCircleGrid() {
 	}
 }
 
+func (p *Parameter) ComputeSpiralCircleFullGrid() {
+
+	p.SpiralCircleFullGrid.SpiralCircles = p.SpiralCircleFullGrid.SpiralCircles[:0]
+
+	for idx, c := range p.GrowingCircleGrid.Circles {
+
+		x, y := c.CenterX, c.CenterY
+		x += p.ConstructionCircle.CenterX
+		y += p.ConstructionCircle.CenterY
+
+		x_r, y_r := p.convertToSpiralCoords(x, y)
+
+		sc := new(SpiralCircle)
+		sc.Stroke = GenerateColor(idx % len(colors))
+		sc.Stroke = gongsvg_models.Black.ToString()
+		sc.StrokeOpacity = 0.5
+		sc.StrokeWidth = 2
+
+		sc.CenterX = x_r
+		sc.CenterY = y_r
+
+		sc.HasBespokeRadius = true
+		sc.BespopkeRadius = 20
+
+		sc.Name = fmt.Sprintf("%d", idx)
+
+		p.SpiralCircleFullGrid.SpiralCircles = append(p.SpiralCircleFullGrid.SpiralCircles, sc)
+	}
+}
+
 func (p *Parameter) computeSpiralConstructionOuterLineSeed() {
 
 	cc := p.ConstructionCircle

@@ -82,7 +82,8 @@ type Parameter struct {
 	SpiralRhombusGridSeed *SpiralRhombus
 	SpiralRhombusGrid     *SpiralRhombusGrid
 	SpiralCircleSeed      *SpiralCircle
-	SpiralCircleGrid      *SpiralCircleGrid
+	SpiralCircleGrid      *SpiralCircleGrid // only n+m circles
+	SpiralCircleFullGrid  *SpiralCircleGrid
 
 	SpiralConstructionOuterLineSeed *SpiralLine
 	SpiralConstructionInnerLineSeed *SpiralLine

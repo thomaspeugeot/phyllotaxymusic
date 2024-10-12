@@ -348,6 +348,8 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Z", instanceWithInferedType.Z, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("ShiftToNearestCircle", instanceWithInferedType.ShiftToNearestCircle, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		BasicFieldtoForm("InsideAngle", instanceWithInferedType.InsideAngle, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("SideLength", instanceWithInferedType.SideLength, instanceWithInferedType, probe.formStage, formGroup,
@@ -394,6 +396,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("SpiralRhombusGrid", instanceWithInferedType.SpiralRhombusGrid, formGroup, probe)
 		AssociationFieldToForm("SpiralCircleSeed", instanceWithInferedType.SpiralCircleSeed, formGroup, probe)
 		AssociationFieldToForm("SpiralCircleGrid", instanceWithInferedType.SpiralCircleGrid, formGroup, probe)
+		AssociationFieldToForm("SpiralCircleFullGrid", instanceWithInferedType.SpiralCircleFullGrid, formGroup, probe)
 		AssociationFieldToForm("SpiralConstructionOuterLineSeed", instanceWithInferedType.SpiralConstructionOuterLineSeed, formGroup, probe)
 		AssociationFieldToForm("SpiralConstructionInnerLineSeed", instanceWithInferedType.SpiralConstructionInnerLineSeed, formGroup, probe)
 		AssociationFieldToForm("SpiralConstructionOuterLineGrid", instanceWithInferedType.SpiralConstructionOuterLineGrid, formGroup, probe)

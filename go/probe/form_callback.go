@@ -1217,6 +1217,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.M), formDiv)
 		case "Z":
 			FormDivBasicFieldToField(&(parameter_.Z), formDiv)
+		case "ShiftToNearestCircle":
+			FormDivBasicFieldToField(&(parameter_.ShiftToNearestCircle), formDiv)
 		case "InsideAngle":
 			FormDivBasicFieldToField(&(parameter_.InsideAngle), formDiv)
 		case "SideLength":
@@ -1297,6 +1299,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralCircleSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralCircleGrid":
 			FormDivSelectFieldToField(&(parameter_.SpiralCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralCircleFullGrid":
+			FormDivSelectFieldToField(&(parameter_.SpiralCircleFullGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralConstructionOuterLineSeed":
 			FormDivSelectFieldToField(&(parameter_.SpiralConstructionOuterLineSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralConstructionInnerLineSeed":

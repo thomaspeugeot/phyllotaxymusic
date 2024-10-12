@@ -43,6 +43,7 @@ export class Parameter {
 	N: number = 0
 	M: number = 0
 	Z: number = 0
+	ShiftToNearestCircle: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
 	StackWidth: number = 0
@@ -139,6 +140,8 @@ export class Parameter {
 
 	SpiralCircleGrid?: SpiralCircleGrid
 
+	SpiralCircleFullGrid?: SpiralCircleGrid
+
 	SpiralConstructionOuterLineSeed?: SpiralLine
 
 	SpiralConstructionInnerLineSeed?: SpiralLine
@@ -199,6 +202,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.N = parameter.N
 	parameterAPI.M = parameter.M
 	parameterAPI.Z = parameter.Z
+	parameterAPI.ShiftToNearestCircle = parameter.ShiftToNearestCircle
 	parameterAPI.InsideAngle = parameter.InsideAngle
 	parameterAPI.SideLength = parameter.SideLength
 	parameterAPI.StackWidth = parameter.StackWidth
@@ -465,6 +469,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.SpiralCircleFullGridID.Valid = true
+	if (parameter.SpiralCircleFullGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralCircleFullGridID.Int64 = parameter.SpiralCircleFullGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralCircleFullGridID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineSeedID.Valid = true
 	if (parameter.SpiralConstructionOuterLineSeed != undefined) {
 		parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineSeedID.Int64 = parameter.SpiralConstructionOuterLineSeed.ID  
@@ -650,6 +661,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.N = parameterAPI.N
 	parameter.M = parameterAPI.M
 	parameter.Z = parameterAPI.Z
+	parameter.ShiftToNearestCircle = parameterAPI.ShiftToNearestCircle
 	parameter.InsideAngle = parameterAPI.InsideAngle
 	parameter.SideLength = parameterAPI.SideLength
 	parameter.StackWidth = parameterAPI.StackWidth
@@ -712,6 +724,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralRhombusGrid = frontRepo.map_ID_SpiralRhombusGrid.get(parameterAPI.ParameterPointersEncoding.SpiralRhombusGridID.Int64)
 	parameter.SpiralCircleSeed = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.SpiralCircleSeedID.Int64)
 	parameter.SpiralCircleGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64)
+	parameter.SpiralCircleFullGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralCircleFullGridID.Int64)
 	parameter.SpiralConstructionOuterLineSeed = frontRepo.map_ID_SpiralLine.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineSeedID.Int64)
 	parameter.SpiralConstructionInnerLineSeed = frontRepo.map_ID_SpiralLine.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineSeedID.Int64)
 	parameter.SpiralConstructionOuterLineGrid = frontRepo.map_ID_SpiralLineGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineGridID.Int64)

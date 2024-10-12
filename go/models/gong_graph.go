@@ -648,6 +648,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralCircleGrid != nil {
 		StageBranch(stage, parameter.SpiralCircleGrid)
 	}
+	if parameter.SpiralCircleFullGrid != nil {
+		StageBranch(stage, parameter.SpiralCircleFullGrid)
+	}
 	if parameter.SpiralConstructionOuterLineSeed != nil {
 		StageBranch(stage, parameter.SpiralConstructionOuterLineSeed)
 	}
@@ -1444,6 +1447,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.SpiralCircleGrid != nil {
 		parameterTo.SpiralCircleGrid = CopyBranchSpiralCircleGrid(mapOrigCopy, parameterFrom.SpiralCircleGrid)
 	}
+	if parameterFrom.SpiralCircleFullGrid != nil {
+		parameterTo.SpiralCircleFullGrid = CopyBranchSpiralCircleGrid(mapOrigCopy, parameterFrom.SpiralCircleFullGrid)
+	}
 	if parameterFrom.SpiralConstructionOuterLineSeed != nil {
 		parameterTo.SpiralConstructionOuterLineSeed = CopyBranchSpiralLine(mapOrigCopy, parameterFrom.SpiralConstructionOuterLineSeed)
 	}
@@ -2221,6 +2227,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.SpiralCircleGrid != nil {
 		UnstageBranch(stage, parameter.SpiralCircleGrid)
+	}
+	if parameter.SpiralCircleFullGrid != nil {
+		UnstageBranch(stage, parameter.SpiralCircleFullGrid)
 	}
 	if parameter.SpiralConstructionOuterLineSeed != nil {
 		UnstageBranch(stage, parameter.SpiralConstructionOuterLineSeed)

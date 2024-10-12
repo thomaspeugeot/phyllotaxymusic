@@ -257,6 +257,7 @@ type Parameter_WOP struct {
 	N int
 	M int
 	Z int
+	ShiftToNearestCircle int
 	InsideAngle float64
 	SideLength float64
 	StackWidth int
@@ -291,6 +292,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.N = from.N
 	to.M = from.M
 	to.Z = from.Z
+	to.ShiftToNearestCircle = from.ShiftToNearestCircle
 	to.InsideAngle = from.InsideAngle
 	to.SideLength = from.SideLength
 	to.StackWidth = from.StackWidth

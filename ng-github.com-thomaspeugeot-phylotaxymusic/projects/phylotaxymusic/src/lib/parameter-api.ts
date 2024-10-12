@@ -38,6 +38,7 @@ export class ParameterAPI {
 	N: number = 0
 	M: number = 0
 	Z: number = 0
+	ShiftToNearestCircle: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
 	StackWidth: number = 0
@@ -139,6 +140,8 @@ export class ParameterPointersEncoding {
 	SpiralCircleSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralCircleSeed.ID = 0
 
 	SpiralCircleGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralCircleGrid.ID = 0
+
+	SpiralCircleFullGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralCircleFullGrid.ID = 0
 
 	SpiralConstructionOuterLineSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionOuterLineSeed.ID = 0
 

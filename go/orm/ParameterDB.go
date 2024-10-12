@@ -183,6 +183,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	SpiralCircleGridID sql.NullInt64
 
+	// field SpiralCircleFullGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralCircleFullGridID sql.NullInt64
+
 	// field SpiralConstructionOuterLineSeed is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	SpiralConstructionOuterLineSeedID sql.NullInt64
@@ -302,6 +306,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.Z
 	Z_Data sql.NullInt64
 
+	// Declation for basic field parameterDB.ShiftToNearestCircle
+	ShiftToNearestCircle_Data sql.NullInt64
+
 	// Declation for basic field parameterDB.InsideAngle
 	InsideAngle_Data sql.NullFloat64
 
@@ -411,57 +418,59 @@ type ParameterWOP struct {
 
 	Z int `xlsx:"4"`
 
-	InsideAngle float64 `xlsx:"5"`
+	ShiftToNearestCircle int `xlsx:"5"`
 
-	SideLength float64 `xlsx:"6"`
+	InsideAngle float64 `xlsx:"6"`
 
-	StackWidth int `xlsx:"7"`
+	SideLength float64 `xlsx:"7"`
 
-	NbShitRight int `xlsx:"8"`
+	StackWidth int `xlsx:"8"`
 
-	StackHeight int `xlsx:"9"`
+	NbShitRight int `xlsx:"9"`
 
-	BezierControlLengthRatio float64 `xlsx:"10"`
+	StackHeight int `xlsx:"10"`
 
-	SpiralBezierStrength float64 `xlsx:"11"`
+	BezierControlLengthRatio float64 `xlsx:"11"`
 
-	FkeySizeRatio float64 `xlsx:"12"`
+	SpiralBezierStrength float64 `xlsx:"12"`
 
-	FkeyOriginRelativeX float64 `xlsx:"13"`
+	FkeySizeRatio float64 `xlsx:"13"`
 
-	FkeyOriginRelativeY float64 `xlsx:"14"`
+	FkeyOriginRelativeX float64 `xlsx:"14"`
 
-	PitchHeight float64 `xlsx:"15"`
+	FkeyOriginRelativeY float64 `xlsx:"15"`
 
-	NbPitchLines int `xlsx:"16"`
+	PitchHeight float64 `xlsx:"16"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"17"`
+	NbPitchLines int `xlsx:"17"`
 
-	NbMeasureLines int `xlsx:"18"`
+	MeasureLinesHeightRatio float64 `xlsx:"18"`
 
-	NbMeasureLinesPerCurve int `xlsx:"19"`
+	NbMeasureLines int `xlsx:"19"`
 
-	FirstVoiceShiftX float64 `xlsx:"20"`
+	NbMeasureLinesPerCurve int `xlsx:"20"`
 
-	FirstVoiceShiftY float64 `xlsx:"21"`
+	FirstVoiceShiftX float64 `xlsx:"21"`
 
-	PitchDifference int `xlsx:"22"`
+	FirstVoiceShiftY float64 `xlsx:"22"`
 
-	Speed float64 `xlsx:"23"`
+	PitchDifference int `xlsx:"23"`
 
-	Level float64 `xlsx:"24"`
+	Speed float64 `xlsx:"24"`
 
-	IsMinor bool `xlsx:"25"`
+	Level float64 `xlsx:"25"`
 
-	OriginX float64 `xlsx:"26"`
+	IsMinor bool `xlsx:"26"`
 
-	OriginY float64 `xlsx:"27"`
+	OriginX float64 `xlsx:"27"`
 
-	SpiralOriginX float64 `xlsx:"28"`
+	OriginY float64 `xlsx:"28"`
 
-	SpiralOriginY float64 `xlsx:"29"`
+	SpiralOriginX float64 `xlsx:"29"`
 
-	SpiralInitialRadius float64 `xlsx:"30"`
+	SpiralOriginY float64 `xlsx:"30"`
+
+	SpiralInitialRadius float64 `xlsx:"31"`
 	// insertion for WOP pointer fields
 }
 
@@ -472,6 +481,7 @@ var Parameter_Fields = []string{
 	"N",
 	"M",
 	"Z",
+	"ShiftToNearestCircle",
 	"InsideAngle",
 	"SideLength",
 	"StackWidth",
@@ -1023,6 +1033,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		} else {
 			parameterDB.SpiralCircleGridID.Int64 = 0
 			parameterDB.SpiralCircleGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralCircleFullGrid translates to updating the parameter.SpiralCircleFullGridID
+		parameterDB.SpiralCircleFullGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralCircleFullGrid != nil {
+			if SpiralCircleFullGridId, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridPtr_SpiralCircleGridDBID[parameter.SpiralCircleFullGrid]; ok {
+				parameterDB.SpiralCircleFullGridID.Int64 = int64(SpiralCircleFullGridId)
+				parameterDB.SpiralCircleFullGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralCircleFullGridID.Int64 = 0
+			parameterDB.SpiralCircleFullGridID.Valid = true
 		}
 
 		// commit pointer value parameter.SpiralConstructionOuterLineSeed translates to updating the parameter.SpiralConstructionOuterLineSeedID
@@ -1602,6 +1624,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.SpiralCircleGridID.Int64 != 0 {
 		parameter.SpiralCircleGrid = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralCircleGridID.Int64)]
 	}
+	// SpiralCircleFullGrid field
+	parameter.SpiralCircleFullGrid = nil
+	if parameterDB.SpiralCircleFullGridID.Int64 != 0 {
+		parameter.SpiralCircleFullGrid = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralCircleFullGridID.Int64)]
+	}
 	// SpiralConstructionOuterLineSeed field
 	parameter.SpiralConstructionOuterLineSeed = nil
 	if parameterDB.SpiralConstructionOuterLineSeedID.Int64 != 0 {
@@ -1772,6 +1799,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.Z_Data.Int64 = int64(parameter.Z)
 	parameterDB.Z_Data.Valid = true
 
+	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
+	parameterDB.ShiftToNearestCircle_Data.Valid = true
+
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
@@ -1866,6 +1896,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.Z_Data.Int64 = int64(parameter.Z)
 	parameterDB.Z_Data.Valid = true
+
+	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
+	parameterDB.ShiftToNearestCircle_Data.Valid = true
 
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
@@ -1962,6 +1995,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.Z_Data.Int64 = int64(parameter.Z)
 	parameterDB.Z_Data.Valid = true
 
+	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
+	parameterDB.ShiftToNearestCircle_Data.Valid = true
+
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
@@ -2048,6 +2084,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Z = int(parameterDB.Z_Data.Int64)
+	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
@@ -2083,6 +2120,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Z = int(parameterDB.Z_Data.Int64)
+	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
@@ -2119,6 +2157,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Z = int(parameterDB.Z_Data.Int64)
+	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
@@ -2504,6 +2543,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.SpiralCircleGridID.Int64 != 0 {
 			parameterDB.SpiralCircleGridID.Int64 = int64(BackRepoSpiralCircleGridid_atBckpTime_newID[uint(parameterDB.SpiralCircleGridID.Int64)])
 			parameterDB.SpiralCircleGridID.Valid = true
+		}
+
+		// reindexing SpiralCircleFullGrid field
+		if parameterDB.SpiralCircleFullGridID.Int64 != 0 {
+			parameterDB.SpiralCircleFullGridID.Int64 = int64(BackRepoSpiralCircleGridid_atBckpTime_newID[uint(parameterDB.SpiralCircleFullGridID.Int64)])
+			parameterDB.SpiralCircleFullGridID.Valid = true
 		}
 
 		// reindexing SpiralConstructionOuterLineSeed field

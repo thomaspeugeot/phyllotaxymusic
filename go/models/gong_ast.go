@@ -1473,6 +1473,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].Z = int(exprSign) * int(fielValue)
+				case "ShiftToNearestCircle":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].ShiftToNearestCircle = int(exprSign) * int(fielValue)
 				case "InsideAngle":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -2529,6 +2536,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SpiralCircleGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralCircleGrid = __gong__map_SpiralCircleGrid[targetIdentifier]
+				case "SpiralCircleFullGrid":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].SpiralCircleFullGrid = __gong__map_SpiralCircleGrid[targetIdentifier]
 				case "SpiralConstructionOuterLineSeed":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralConstructionOuterLineSeed = __gong__map_SpiralLine[targetIdentifier]
