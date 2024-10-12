@@ -330,7 +330,7 @@ func _(stage *models.StageStruct) {
 	__Bezier__000004_Growth_Curve_Next_Shift_Right_Seed.Transform = ``
 
 	__Bezier__000005_Growth_Curve_Seed.Name = `Growth Curve Seed`
-	__Bezier__000005_Growth_Curve_Seed.IsDisplayed = true
+	__Bezier__000005_Growth_Curve_Seed.IsDisplayed = false
 	__Bezier__000005_Growth_Curve_Seed.StartX = -15.118579
 	__Bezier__000005_Growth_Curve_Seed.StartY = 78.558440
 	__Bezier__000005_Growth_Curve_Seed.ControlPointStartX = 55.584018
@@ -499,7 +499,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
-	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
+	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = false
 	__HorizontalAxis__000000_Horizontal_Axis.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Color = ``
@@ -580,7 +580,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.StackHeight = 4
 	__Parameter__000000_Reference.BezierControlLengthRatio = 0.450000
 	__Parameter__000000_Reference.SpiralBezierStrength = 2.200000
-	__Parameter__000000_Reference.NbInterpolationPoints = 37
+	__Parameter__000000_Reference.NbInterpolationPoints = 38
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
@@ -597,7 +597,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.IsMinor = true
 	__Parameter__000000_Reference.OriginX = 90.000000
 	__Parameter__000000_Reference.OriginY = 350.000000
-	__Parameter__000000_Reference.SpiralOriginX = 750.000000
+	__Parameter__000000_Reference.SpiralOriginX = 600.000000
 	__Parameter__000000_Reference.SpiralOriginY = 600.000000
 	__Parameter__000000_Reference.SpiralInitialRadius = 140.000000
 	__Parameter__000000_Reference.ShowSpiralBezierConstruct = false
@@ -706,7 +706,7 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000009_9_Composer.IsExpanded = false
 
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Name = `Spiral Bezier Seed`
-	__SpiralBezier__000000_Spiral_Bezier_Seed.IsDisplayed = true
+	__SpiralBezier__000000_Spiral_Bezier_Seed.IsDisplayed = false
 	__SpiralBezier__000000_Spiral_Bezier_Seed.StartX = 213.078724
 	__SpiralBezier__000000_Spiral_Bezier_Seed.StartY = -48.633828
 	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointStartX = 389.695505
@@ -750,7 +750,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.IsDisplayed = true
 
 	__SpiralCircleGrid__000001_Construction_Circle_Spiral_Full_Grid.Name = `Construction Circle Spiral Full Grid`
-	__SpiralCircleGrid__000001_Construction_Circle_Spiral_Full_Grid.IsDisplayed = true
+	__SpiralCircleGrid__000001_Construction_Circle_Spiral_Full_Grid.IsDisplayed = false
 
 	__SpiralCircleGrid__000002_Construction_Circle_Spiral_Grid.Name = `Construction Circle Spiral Grid`
 	__SpiralCircleGrid__000002_Construction_Circle_Spiral_Grid.IsDisplayed = false
@@ -831,7 +831,7 @@ func _(stage *models.StageStruct) {
 	__SpiralRhombusGrid__000000_Spiral_Rhombus_Grid.IsDisplayed = false
 
 	__VerticalAxis__000000_Vertical_Axis.Name = `Vertical Axis`
-	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = true
+	__VerticalAxis__000000_Vertical_Axis.IsDisplayed = false
 	__VerticalAxis__000000_Vertical_Axis.AxisHandleBorderLength = 0.000000
 	__VerticalAxis__000000_Vertical_Axis.Axis_Length = 600.000000
 	__VerticalAxis__000000_Vertical_Axis.Color = ``

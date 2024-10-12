@@ -106,27 +106,30 @@ func (p *Parameter) ComputeSpiralBezierBruteCircle() {
 
 	p.SpiralBezierBruteCircle.SpiralCircles = p.SpiralBezierBruteCircle.SpiralCircles[:0]
 
-	for _, bezier := range p.GrowthCurve.Beziers {
+	for _, bezierGrid := range p.GrowthCurveStack.BezierGrids {
 
-		for i := range p.NbInterpolationPoints {
-			length := bezier.EndX - bezier.StartX
+		for _, bezier := range bezierGrid.Beziers {
 
-			x := bezier.StartX + length*float64(i)/float64(p.NbInterpolationPoints)
-			y, _ := bezier.ComputeYFromX(x)
+			for i := range p.NbInterpolationPoints {
+				length := bezier.EndX - bezier.StartX
 
-			spiralCircle := new(SpiralCircle)
-			spiralCircle.Stroke = gongsvg_models.Green.ToString()
-			spiralCircle.StrokeWidth = 1
-			spiralCircle.StrokeOpacity = 1
+				x := bezier.StartX + length*float64(i)/float64(p.NbInterpolationPoints)
+				y, _ := bezier.ComputeYFromX(x)
 
-			x_r, y_r := p.convertToSpiralCoords(x, y)
+				spiralCircle := new(SpiralCircle)
+				spiralCircle.Stroke = gongsvg_models.Green.ToString()
+				spiralCircle.StrokeWidth = 1
+				spiralCircle.StrokeOpacity = 1
 
-			spiralCircle.CenterX = x_r
-			spiralCircle.CenterY = y_r
-			spiralCircle.HasBespokeRadius = true
-			spiralCircle.BespopkeRadius = 3
+				x_r, y_r := p.convertToSpiralCoords(x, y)
 
-			p.SpiralBezierBruteCircle.SpiralCircles = append(p.SpiralBezierBruteCircle.SpiralCircles, spiralCircle)
+				spiralCircle.CenterX = x_r
+				spiralCircle.CenterY = y_r
+				spiralCircle.HasBespokeRadius = true
+				spiralCircle.BespopkeRadius = 3
+
+				p.SpiralBezierBruteCircle.SpiralCircles = append(p.SpiralBezierBruteCircle.SpiralCircles, spiralCircle)
+			}
 		}
 	}
 }

@@ -80,37 +80,6 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeSpiralRhombusGrid()
 	p.Shapes = append(p.Shapes, p.SpiralRhombusGrid)
 
-	p.ComputeSpiralCircleSeed()
-	p.Shapes = append(p.Shapes, p.SpiralCircleSeed)
-	p.ComputeSpiralCircleGrid()
-	p.Shapes = append(p.Shapes, p.SpiralCircleGrid)
-	p.ComputeSpiralCircleFullGrid()
-	p.Shapes = append(p.Shapes, p.SpiralCircleFullGrid)
-	p.computeSpiralConstructionOuterLineSeed()
-	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineSeed)
-	p.computeSpiralConstructionInnerLineSeed()
-	p.Shapes = append(p.Shapes, p.SpiralConstructionInnerLineSeed)
-
-	p.computeSpiralConstructionOuterLineGrid()
-	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineGrid)
-	p.computeSpiralConstructionInnerLineGrid()
-	p.Shapes = append(p.Shapes, p.SpiralConstructionInnerLineGrid)
-
-	p.computeSpiralConstructionOuterLineFullGrid()
-	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineFullGrid)
-
-	p.ComputeSpiralConstructionCircleGrid()
-	p.Shapes = append(p.Shapes, p.SpiralConstructionCircleGrid)
-	p.ComputeSpiralBezierSeed()
-	p.Shapes = append(p.Shapes, p.SpiralBezierSeed)
-	p.ComputeSpiralBezierGrid()
-	p.Shapes = append(p.Shapes, p.SpiralBezierGrid)
-	p.ComputeSpiralBezierFullGrid()
-	p.Shapes = append(p.Shapes, p.SpiralBezierFullGrid)
-
-	p.ComputeSpiralBezierBruteCircle()
-	p.Shapes = append(p.Shapes, p.SpiralBezierBruteCircle)
-
 	p.GrowthCurveShiftedRight.Move(p.GrowthCurveShiftedRightSeed, p.GrowthCurve,
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.GrowthCurveShiftedRight)
@@ -141,6 +110,37 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 		}
 	}
 	p.Shapes = append(p.Shapes, p.GrowthCurveStack)
+
+	p.ComputeSpiralCircleSeed()
+	p.Shapes = append(p.Shapes, p.SpiralCircleSeed)
+	p.ComputeSpiralCircleGrid()
+	p.Shapes = append(p.Shapes, p.SpiralCircleGrid)
+	p.ComputeSpiralCircleFullGrid()
+	p.Shapes = append(p.Shapes, p.SpiralCircleFullGrid)
+	p.computeSpiralConstructionOuterLineSeed()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineSeed)
+	p.computeSpiralConstructionInnerLineSeed()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionInnerLineSeed)
+
+	p.computeSpiralConstructionOuterLineGrid()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineGrid)
+	p.computeSpiralConstructionInnerLineGrid()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionInnerLineGrid)
+
+	p.computeSpiralConstructionOuterLineFullGrid()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineFullGrid)
+
+	p.ComputeSpiralConstructionCircleGrid()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionCircleGrid)
+	p.ComputeSpiralBezierSeed()
+	p.Shapes = append(p.Shapes, p.SpiralBezierSeed)
+	p.ComputeSpiralBezierGrid()
+	p.Shapes = append(p.Shapes, p.SpiralBezierGrid)
+	p.ComputeSpiralBezierFullGrid()
+	p.Shapes = append(p.Shapes, p.SpiralBezierFullGrid)
+
+	p.ComputeSpiralBezierBruteCircle()
+	p.Shapes = append(p.Shapes, p.SpiralBezierBruteCircle)
 
 	p.ComputeFKey()
 	p.Shapes = append(p.Shapes, p.Fkey)
