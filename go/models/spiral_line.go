@@ -30,4 +30,18 @@ func (sl *SpiralLine) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	line.Y2 = parameter.SpiralOriginY - sl.EndY
 
 	sl.Presentation.CopyTo(&line.Presentation)
+
+	if parameter.ShowSpiralBezierConstruct {
+		circle := new(gongsvg_models.Circle).Stage(gongsvgStage)
+		circle.Name = sl.Name
+
+		circle.CX = line.X1
+		circle.CY = line.Y1
+
+		sl.Presentation.CopyTo(&circle.Presentation)
+
+		circle.Radius = 15
+
+		layer.Circles = append(layer.Circles, circle)
+	}
 }
