@@ -10,6 +10,10 @@ type Parameter struct {
 	M    int
 	Z    int // number of rhombus
 
+	// how many circle to go around for the front curve
+	// the front curve goes from one circle to the nearest
+	ShiftToNearestCircle int
+
 	// InsideAngle is the angle in degree of the diamond at the origin 0,0
 	InsideAngle float64
 
@@ -86,8 +90,17 @@ type Parameter struct {
 	SpiralConstructionInnerLineGrid *SpiralLineGrid
 	SpiralConstructionCircleGrid    *SpiralCircleGrid
 
-	SpiralBezierSeed     *SpiralBezier
-	SpiralBezierGrid     *SpiralBezierGrid
+	SpiralConstructionOuterLineFullGrid *SpiralLineGrid
+
+	SpiralBezierSeed *SpiralBezier
+
+	// the set of bezier for the first front curve
+	SpiralBezierGrid *SpiralBezierGrid
+
+	// the set of bezier for the first front curve
+	SpiralBezierFullGrid *SpiralBezierGrid
+
+	// adjusting the strength of the bezier control points
 	SpiralBezierStrength float64
 
 	// the score

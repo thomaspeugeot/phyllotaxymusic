@@ -3,6 +3,7 @@ package models
 import (
 	"cmp"
 	"fmt"
+	"log"
 	"math"
 	"slices"
 
@@ -181,12 +182,7 @@ func (p *Parameter) ComputeNextRhombus() {
 	// and get the first that is not with a non nil ordinate
 	slices.SortFunc(p.RotatedRhombusGrid.Rhombuses,
 		func(r1, r2 *Rhombus) int {
-			if r1.CenterY > r2.CenterY {
-				return 1
-			} else {
-				return -1
-			}
-
+			return cmp.Compare(r1.CenterY, r2.CenterY)
 		})
 	p.NextRhombus.CenterX = p.RotatedRhombusGrid.Rhombuses[2].CenterX
 	p.NextRhombus.CenterY = p.RotatedRhombusGrid.Rhombuses[2].CenterY
@@ -201,12 +197,7 @@ func (p *Parameter) ComputeNextCircle() {
 	// and get the first that is not with a non nil ordinate
 	slices.SortFunc(p.RotatedCircleGrid.Circles,
 		func(r1, r2 *Circle) int {
-			if r1.CenterY > r2.CenterY {
-				return 1
-			} else {
-				return -1
-			}
-
+			return cmp.Compare(r1.CenterY, r2.CenterY)
 		})
 	p.NextCircle.CenterX = p.RotatedCircleGrid.Circles[2].CenterX
 	p.NextCircle.CenterY = p.RotatedCircleGrid.Circles[2].CenterY
@@ -304,6 +295,13 @@ func (p *Parameter) computeConstructionAxisGrid() {
 	g := p.ConstructionAxisGrid
 	g.Axiss = g.Axiss[:0]
 
+	// used to compute the increment between the first and second axis
+	type YardStick struct {
+		x    float64
+		rank int
+	}
+	var yardSticks []*YardStick
+
 	for i := range p.M + p.N {
 
 		a := new(Axis)
@@ -314,6 +312,11 @@ func (p *Parameter) computeConstructionAxisGrid() {
 		c := p.GrowingCircleGrid.Circles[i]
 		a.CenterX += c.CenterX
 		a.CenterY += c.CenterY
+
+		yardStick := new(YardStick)
+		yardStick.x = c.CenterX
+		yardStick.rank = i
+		yardSticks = append(yardSticks, yardStick)
 	}
 
 	a := new(Axis)
@@ -324,6 +327,14 @@ func (p *Parameter) computeConstructionAxisGrid() {
 	slices.SortFunc(g.Axiss, func(c1, c2 *Axis) int {
 		return cmp.Compare(c1.CenterX, c2.CenterX)
 	})
+
+	// compute the increment between the fist axis and the second axis
+	slices.SortFunc(yardSticks, func(y1, y2 *YardStick) int {
+		return cmp.Compare(y1.x, y2.x)
+	})
+	p.ShiftToNearestCircle = yardSticks[1].rank
+
+	log.Println("shift to nearest circle", p.ShiftToNearestCircle)
 }
 
 func (p *Parameter) computeConstructionCircleGrid() {
@@ -599,6 +610,34 @@ func (p *Parameter) computeSpiralConstructionOuterLineGrid() {
 	}
 }
 
+func (p *Parameter) computeSpiralConstructionOuterLineFullGrid() {
+
+	p.SpiralConstructionOuterLineFullGrid.SpiralLines =
+		p.SpiralConstructionOuterLineFullGrid.SpiralLines[:0]
+
+	constructionAxisSeed := p.ConstructionAxis
+
+	for i, circle := range p.GrowingCircleGrid.Circles {
+
+		sl := new(SpiralLine)
+		sl.Name = fmt.Sprintf("Spiral Axis %d", i)
+		sl.Stroke = GenerateColor(i)
+		sl.Stroke = gongsvg_models.Black.ToString()
+		sl.StrokeWidth = 1
+		sl.StrokeOpacity = 1
+
+		constructionAxis := new(Axis)
+		*constructionAxis = *constructionAxisSeed
+		constructionAxis.CenterX = circle.CenterX + p.ConstructionCircle.CenterX
+		constructionAxis.CenterY = circle.CenterY + p.ConstructionCircle.CenterY
+
+		p.verticalAxisToSpiralOuterLine(circle, constructionAxis, sl)
+
+		p.SpiralConstructionOuterLineFullGrid.SpiralLines =
+			append(p.SpiralConstructionOuterLineFullGrid.SpiralLines, sl)
+	}
+}
+
 func (p *Parameter) computeSpiralConstructionInnerLineGrid() {
 
 	p.SpiralConstructionInnerLineGrid.SpiralLines =
@@ -706,4 +745,28 @@ func (p *Parameter) ComputeSpiralBezierGrid() {
 		p.SpiralBezierGrid.SpiralBeziers = append(p.SpiralBezierGrid.SpiralBeziers, sb)
 	}
 
+}
+
+func (p *Parameter) ComputeSpiralBezierFullGrid() {
+
+	p.SpiralBezierFullGrid.SpiralBeziers = p.SpiralBezierFullGrid.SpiralBeziers[:0]
+
+	for i := range p.Z - p.ShiftToNearestCircle - 1 {
+		// pick the ith circle
+		sc0 := p.SpiralCircleGrid.SpiralCircles[i]
+		sl0 := p.SpiralConstructionOuterLineFullGrid.SpiralLines[i]
+
+		sc1 := p.SpiralCircleGrid.SpiralCircles[i+p.ShiftToNearestCircle]
+		sl1 := p.SpiralConstructionOuterLineFullGrid.SpiralLines[i+p.ShiftToNearestCircle]
+
+		sb := new(SpiralBezier)
+
+		sb.Stroke = gongsvg_models.Grey.ToString()
+		sb.StrokeWidth = 2.0
+		sb.StrokeOpacity = 0.8
+
+		p.spiralCircleLinesToSpiralBezier(sb, sc0, sl0, sc1, sl1)
+
+		p.SpiralBezierFullGrid.SpiralBeziers = append(p.SpiralBezierFullGrid.SpiralBeziers, sb)
+	}
 }

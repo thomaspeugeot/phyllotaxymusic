@@ -663,11 +663,17 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralConstructionCircleGrid != nil {
 		StageBranch(stage, parameter.SpiralConstructionCircleGrid)
 	}
+	if parameter.SpiralConstructionOuterLineFullGrid != nil {
+		StageBranch(stage, parameter.SpiralConstructionOuterLineFullGrid)
+	}
 	if parameter.SpiralBezierSeed != nil {
 		StageBranch(stage, parameter.SpiralBezierSeed)
 	}
 	if parameter.SpiralBezierGrid != nil {
 		StageBranch(stage, parameter.SpiralBezierGrid)
+	}
+	if parameter.SpiralBezierFullGrid != nil {
+		StageBranch(stage, parameter.SpiralBezierFullGrid)
 	}
 	if parameter.Fkey != nil {
 		StageBranch(stage, parameter.Fkey)
@@ -1453,11 +1459,17 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.SpiralConstructionCircleGrid != nil {
 		parameterTo.SpiralConstructionCircleGrid = CopyBranchSpiralCircleGrid(mapOrigCopy, parameterFrom.SpiralConstructionCircleGrid)
 	}
+	if parameterFrom.SpiralConstructionOuterLineFullGrid != nil {
+		parameterTo.SpiralConstructionOuterLineFullGrid = CopyBranchSpiralLineGrid(mapOrigCopy, parameterFrom.SpiralConstructionOuterLineFullGrid)
+	}
 	if parameterFrom.SpiralBezierSeed != nil {
 		parameterTo.SpiralBezierSeed = CopyBranchSpiralBezier(mapOrigCopy, parameterFrom.SpiralBezierSeed)
 	}
 	if parameterFrom.SpiralBezierGrid != nil {
 		parameterTo.SpiralBezierGrid = CopyBranchSpiralBezierGrid(mapOrigCopy, parameterFrom.SpiralBezierGrid)
+	}
+	if parameterFrom.SpiralBezierFullGrid != nil {
+		parameterTo.SpiralBezierFullGrid = CopyBranchSpiralBezierGrid(mapOrigCopy, parameterFrom.SpiralBezierFullGrid)
 	}
 	if parameterFrom.Fkey != nil {
 		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
@@ -2225,11 +2237,17 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralConstructionCircleGrid != nil {
 		UnstageBranch(stage, parameter.SpiralConstructionCircleGrid)
 	}
+	if parameter.SpiralConstructionOuterLineFullGrid != nil {
+		UnstageBranch(stage, parameter.SpiralConstructionOuterLineFullGrid)
+	}
 	if parameter.SpiralBezierSeed != nil {
 		UnstageBranch(stage, parameter.SpiralBezierSeed)
 	}
 	if parameter.SpiralBezierGrid != nil {
 		UnstageBranch(stage, parameter.SpiralBezierGrid)
+	}
+	if parameter.SpiralBezierFullGrid != nil {
+		UnstageBranch(stage, parameter.SpiralBezierFullGrid)
 	}
 	if parameter.Fkey != nil {
 		UnstageBranch(stage, parameter.Fkey)

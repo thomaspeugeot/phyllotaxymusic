@@ -36,22 +36,25 @@ func (b *SpiralBezier) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gon
 		p.SpiralOriginX+b.EndX, p.SpiralOriginY-b.EndY,
 	)
 
-	line := new(gongsvg_models.Line).Stage(gongsvgStage)
-	line.Name = b.Name
-	layer.Lines = append(layer.Lines, line)
+	/*
 
-	b.Presentation.CopyTo(&line.Presentation)
+		line := new(gongsvg_models.Line).Stage(gongsvgStage)
+		line.Name = b.Name
+		layer.Lines = append(layer.Lines, line)
 
-	line.StrokeOpacity = 0.2
+		b.Presentation.CopyTo(&line.Presentation)
 
-	line.X1 = p.SpiralOriginX + b.StartX
-	line.Y1 = p.SpiralOriginY - b.StartY
+		line.StrokeOpacity = 0.2
 
-	line.X2 = p.SpiralOriginX + b.EndX
-	line.Y2 = p.SpiralOriginY - b.EndY
+		line.X1 = p.SpiralOriginX + b.StartX
+		line.Y1 = p.SpiralOriginY - b.StartY
 
-	layer.Lines = append(layer.Lines, line)
+		line.X2 = p.SpiralOriginX + b.EndX
+		line.Y2 = p.SpiralOriginY - b.EndY
 
+		layer.Lines = append(layer.Lines, line)
+
+	*/
 	/*
 
 		lineControl1 := new(gongsvg_models.Line).Stage(gongsvgStage)
