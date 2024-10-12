@@ -369,7 +369,7 @@ func (p *Parameter) computeConstructionCircleGrid() {
 
 func (p *Parameter) ComputeGrowthCurveSegment() {
 
-	b := p.GrowthCurveSegment
+	b := p.GrowthCurveSeed
 	_ = b
 
 	p.computeBezier(b, p.ConstructionCircleGrid.Circles[0], p.ConstructionCircleGrid.Circles[1])
@@ -410,7 +410,7 @@ func (p *Parameter) ComputeGrowthCurve() {
 
 	for i := range p.M + p.N {
 		_b := new(Bezier)
-		*_b = *p.GrowthCurveSegment
+		*_b = *p.GrowthCurveSeed
 		g.Beziers = append(g.Beziers, _b)
 
 		// apply growing bezier coordinates

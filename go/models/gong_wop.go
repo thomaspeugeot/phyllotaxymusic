@@ -265,6 +265,7 @@ type Parameter_WOP struct {
 	StackHeight int
 	BezierControlLengthRatio float64
 	SpiralBezierStrength float64
+	NbInterpolationPoints int
 	FkeySizeRatio float64
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
@@ -301,6 +302,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.StackHeight = from.StackHeight
 	to.BezierControlLengthRatio = from.BezierControlLengthRatio
 	to.SpiralBezierStrength = from.SpiralBezierStrength
+	to.NbInterpolationPoints = from.NbInterpolationPoints
 	to.FkeySizeRatio = from.FkeySizeRatio
 	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX
 	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY

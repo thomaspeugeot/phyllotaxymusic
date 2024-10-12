@@ -1265,8 +1265,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.ConstructionCircle), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "ConstructionCircleGrid":
 			FormDivSelectFieldToField(&(parameter_.ConstructionCircleGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "GrowthCurveSegment":
-			FormDivSelectFieldToField(&(parameter_.GrowthCurveSegment), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "GrowthCurveSeed":
+			FormDivSelectFieldToField(&(parameter_.GrowthCurveSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "GrowthCurve":
 			FormDivSelectFieldToField(&(parameter_.GrowthCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "GrowthCurveShiftedRightSeed":
@@ -1321,6 +1321,10 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralBezierFullGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralBezierStrength":
 			FormDivBasicFieldToField(&(parameter_.SpiralBezierStrength), formDiv)
+		case "SpiralBezierBruteCircle":
+			FormDivSelectFieldToField(&(parameter_.SpiralBezierBruteCircle), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "NbInterpolationPoints":
+			FormDivBasicFieldToField(&(parameter_.NbInterpolationPoints), formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":

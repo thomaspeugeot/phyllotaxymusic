@@ -131,9 +131,9 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	ConstructionCircleGridID sql.NullInt64
 
-	// field GrowthCurveSegment is a pointer to another Struct (optional or 0..1)
+	// field GrowthCurveSeed is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	GrowthCurveSegmentID sql.NullInt64
+	GrowthCurveSeedID sql.NullInt64
 
 	// field GrowthCurve is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -222,6 +222,10 @@ type ParameterPointersEncoding struct {
 	// field SpiralBezierFullGrid is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	SpiralBezierFullGridID sql.NullInt64
+
+	// field SpiralBezierBruteCircle is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralBezierBruteCircleID sql.NullInt64
 
 	// field Fkey is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -329,6 +333,9 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.SpiralBezierStrength
 	SpiralBezierStrength_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.NbInterpolationPoints
+	NbInterpolationPoints_Data sql.NullInt64
 
 	// Declation for basic field parameterDB.FkeySizeRatio
 	FkeySizeRatio_Data sql.NullFloat64
@@ -438,45 +445,47 @@ type ParameterWOP struct {
 
 	SpiralBezierStrength float64 `xlsx:"12"`
 
-	FkeySizeRatio float64 `xlsx:"13"`
+	NbInterpolationPoints int `xlsx:"13"`
 
-	FkeyOriginRelativeX float64 `xlsx:"14"`
+	FkeySizeRatio float64 `xlsx:"14"`
 
-	FkeyOriginRelativeY float64 `xlsx:"15"`
+	FkeyOriginRelativeX float64 `xlsx:"15"`
 
-	PitchHeight float64 `xlsx:"16"`
+	FkeyOriginRelativeY float64 `xlsx:"16"`
 
-	NbPitchLines int `xlsx:"17"`
+	PitchHeight float64 `xlsx:"17"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"18"`
+	NbPitchLines int `xlsx:"18"`
 
-	NbMeasureLines int `xlsx:"19"`
+	MeasureLinesHeightRatio float64 `xlsx:"19"`
 
-	NbMeasureLinesPerCurve int `xlsx:"20"`
+	NbMeasureLines int `xlsx:"20"`
 
-	FirstVoiceShiftX float64 `xlsx:"21"`
+	NbMeasureLinesPerCurve int `xlsx:"21"`
 
-	FirstVoiceShiftY float64 `xlsx:"22"`
+	FirstVoiceShiftX float64 `xlsx:"22"`
 
-	PitchDifference int `xlsx:"23"`
+	FirstVoiceShiftY float64 `xlsx:"23"`
 
-	Speed float64 `xlsx:"24"`
+	PitchDifference int `xlsx:"24"`
 
-	Level float64 `xlsx:"25"`
+	Speed float64 `xlsx:"25"`
 
-	IsMinor bool `xlsx:"26"`
+	Level float64 `xlsx:"26"`
 
-	OriginX float64 `xlsx:"27"`
+	IsMinor bool `xlsx:"27"`
 
-	OriginY float64 `xlsx:"28"`
+	OriginX float64 `xlsx:"28"`
 
-	SpiralOriginX float64 `xlsx:"29"`
+	OriginY float64 `xlsx:"29"`
 
-	SpiralOriginY float64 `xlsx:"30"`
+	SpiralOriginX float64 `xlsx:"30"`
 
-	SpiralInitialRadius float64 `xlsx:"31"`
+	SpiralOriginY float64 `xlsx:"31"`
 
-	ShowSpiralBezierConstruct bool `xlsx:"32"`
+	SpiralInitialRadius float64 `xlsx:"32"`
+
+	ShowSpiralBezierConstruct bool `xlsx:"33"`
 	// insertion for WOP pointer fields
 }
 
@@ -495,6 +504,7 @@ var Parameter_Fields = []string{
 	"StackHeight",
 	"BezierControlLengthRatio",
 	"SpiralBezierStrength",
+	"NbInterpolationPoints",
 	"FkeySizeRatio",
 	"FkeyOriginRelativeX",
 	"FkeyOriginRelativeY",
@@ -886,16 +896,16 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.ConstructionCircleGridID.Valid = true
 		}
 
-		// commit pointer value parameter.GrowthCurveSegment translates to updating the parameter.GrowthCurveSegmentID
-		parameterDB.GrowthCurveSegmentID.Valid = true // allow for a 0 value (nil association)
-		if parameter.GrowthCurveSegment != nil {
-			if GrowthCurveSegmentId, ok := backRepo.BackRepoBezier.Map_BezierPtr_BezierDBID[parameter.GrowthCurveSegment]; ok {
-				parameterDB.GrowthCurveSegmentID.Int64 = int64(GrowthCurveSegmentId)
-				parameterDB.GrowthCurveSegmentID.Valid = true
+		// commit pointer value parameter.GrowthCurveSeed translates to updating the parameter.GrowthCurveSeedID
+		parameterDB.GrowthCurveSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowthCurveSeed != nil {
+			if GrowthCurveSeedId, ok := backRepo.BackRepoBezier.Map_BezierPtr_BezierDBID[parameter.GrowthCurveSeed]; ok {
+				parameterDB.GrowthCurveSeedID.Int64 = int64(GrowthCurveSeedId)
+				parameterDB.GrowthCurveSeedID.Valid = true
 			}
 		} else {
-			parameterDB.GrowthCurveSegmentID.Int64 = 0
-			parameterDB.GrowthCurveSegmentID.Valid = true
+			parameterDB.GrowthCurveSeedID.Int64 = 0
+			parameterDB.GrowthCurveSeedID.Valid = true
 		}
 
 		// commit pointer value parameter.GrowthCurve translates to updating the parameter.GrowthCurveID
@@ -1160,6 +1170,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		} else {
 			parameterDB.SpiralBezierFullGridID.Int64 = 0
 			parameterDB.SpiralBezierFullGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralBezierBruteCircle translates to updating the parameter.SpiralBezierBruteCircleID
+		parameterDB.SpiralBezierBruteCircleID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralBezierBruteCircle != nil {
+			if SpiralBezierBruteCircleId, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridPtr_SpiralCircleGridDBID[parameter.SpiralBezierBruteCircle]; ok {
+				parameterDB.SpiralBezierBruteCircleID.Int64 = int64(SpiralBezierBruteCircleId)
+				parameterDB.SpiralBezierBruteCircleID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralBezierBruteCircleID.Int64 = 0
+			parameterDB.SpiralBezierBruteCircleID.Valid = true
 		}
 
 		// commit pointer value parameter.Fkey translates to updating the parameter.FkeyID
@@ -1566,10 +1588,10 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.ConstructionCircleGridID.Int64 != 0 {
 		parameter.ConstructionCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.ConstructionCircleGridID.Int64)]
 	}
-	// GrowthCurveSegment field
-	parameter.GrowthCurveSegment = nil
-	if parameterDB.GrowthCurveSegmentID.Int64 != 0 {
-		parameter.GrowthCurveSegment = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.GrowthCurveSegmentID.Int64)]
+	// GrowthCurveSeed field
+	parameter.GrowthCurveSeed = nil
+	if parameterDB.GrowthCurveSeedID.Int64 != 0 {
+		parameter.GrowthCurveSeed = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.GrowthCurveSeedID.Int64)]
 	}
 	// GrowthCurve field
 	parameter.GrowthCurve = nil
@@ -1680,6 +1702,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.SpiralBezierFullGrid = nil
 	if parameterDB.SpiralBezierFullGridID.Int64 != 0 {
 		parameter.SpiralBezierFullGrid = backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(parameterDB.SpiralBezierFullGridID.Int64)]
+	}
+	// SpiralBezierBruteCircle field
+	parameter.SpiralBezierBruteCircle = nil
+	if parameterDB.SpiralBezierBruteCircleID.Int64 != 0 {
+		parameter.SpiralBezierBruteCircle = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralBezierBruteCircleID.Int64)]
 	}
 	// Fkey field
 	parameter.Fkey = nil
@@ -1830,6 +1857,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.SpiralBezierStrength_Data.Float64 = parameter.SpiralBezierStrength
 	parameterDB.SpiralBezierStrength_Data.Valid = true
 
+	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
+	parameterDB.NbInterpolationPoints_Data.Valid = true
+
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -1930,6 +1960,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.SpiralBezierStrength_Data.Float64 = parameter.SpiralBezierStrength
 	parameterDB.SpiralBezierStrength_Data.Valid = true
+
+	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
+	parameterDB.NbInterpolationPoints_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -2032,6 +2065,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.SpiralBezierStrength_Data.Float64 = parameter.SpiralBezierStrength
 	parameterDB.SpiralBezierStrength_Data.Valid = true
 
+	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
+	parameterDB.NbInterpolationPoints_Data.Valid = true
+
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -2108,6 +2144,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
+	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2145,6 +2182,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
+	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2183,6 +2221,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
+	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2486,10 +2525,10 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 			parameterDB.ConstructionCircleGridID.Valid = true
 		}
 
-		// reindexing GrowthCurveSegment field
-		if parameterDB.GrowthCurveSegmentID.Int64 != 0 {
-			parameterDB.GrowthCurveSegmentID.Int64 = int64(BackRepoBezierid_atBckpTime_newID[uint(parameterDB.GrowthCurveSegmentID.Int64)])
-			parameterDB.GrowthCurveSegmentID.Valid = true
+		// reindexing GrowthCurveSeed field
+		if parameterDB.GrowthCurveSeedID.Int64 != 0 {
+			parameterDB.GrowthCurveSeedID.Int64 = int64(BackRepoBezierid_atBckpTime_newID[uint(parameterDB.GrowthCurveSeedID.Int64)])
+			parameterDB.GrowthCurveSeedID.Valid = true
 		}
 
 		// reindexing GrowthCurve field
@@ -2622,6 +2661,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.SpiralBezierFullGridID.Int64 != 0 {
 			parameterDB.SpiralBezierFullGridID.Int64 = int64(BackRepoSpiralBezierGridid_atBckpTime_newID[uint(parameterDB.SpiralBezierFullGridID.Int64)])
 			parameterDB.SpiralBezierFullGridID.Valid = true
+		}
+
+		// reindexing SpiralBezierBruteCircle field
+		if parameterDB.SpiralBezierBruteCircleID.Int64 != 0 {
+			parameterDB.SpiralBezierBruteCircleID.Int64 = int64(BackRepoSpiralCircleGridid_atBckpTime_newID[uint(parameterDB.SpiralBezierBruteCircleID.Int64)])
+			parameterDB.SpiralBezierBruteCircleID.Valid = true
 		}
 
 		// reindexing Fkey field

@@ -59,8 +59,8 @@ type Parameter struct {
 	ConstructionCircle     *Circle
 	ConstructionCircleGrid *CircleGrid
 
-	GrowthCurveSegment *Bezier
-	GrowthCurve        *BezierGrid
+	GrowthCurveSeed *Bezier
+	GrowthCurve     *BezierGrid
 
 	GrowthCurveShiftedRightSeed *Bezier
 	GrowthCurveShiftedRight     *BezierGrid
@@ -103,6 +103,11 @@ type Parameter struct {
 
 	// adjusting the strength of the bezier control points
 	SpiralBezierStrength float64
+
+	// the result of the transformation of a vertical
+	// bezier into a suite of spiral circle
+	SpiralBezierBruteCircle *SpiralCircleGrid
+	NbInterpolationPoints   int
 
 	// the score
 	Fkey                *Key

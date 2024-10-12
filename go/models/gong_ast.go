@@ -1529,6 +1529,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].SpiralBezierStrength = exprSign * fielValue
+				case "NbInterpolationPoints":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].NbInterpolationPoints = int(exprSign) * int(fielValue)
 				case "FkeySizeRatio":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -2497,9 +2504,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "ConstructionCircleGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].ConstructionCircleGrid = __gong__map_CircleGrid[targetIdentifier]
-				case "GrowthCurveSegment":
+				case "GrowthCurveSeed":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].GrowthCurveSegment = __gong__map_Bezier[targetIdentifier]
+					__gong__map_Parameter[identifier].GrowthCurveSeed = __gong__map_Bezier[targetIdentifier]
 				case "GrowthCurve":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].GrowthCurve = __gong__map_BezierGrid[targetIdentifier]
@@ -2566,6 +2573,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SpiralBezierFullGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralBezierFullGrid = __gong__map_SpiralBezierGrid[targetIdentifier]
+				case "SpiralBezierBruteCircle":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].SpiralBezierBruteCircle = __gong__map_SpiralCircleGrid[targetIdentifier]
 				case "Fkey":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].Fkey = __gong__map_Key[targetIdentifier]

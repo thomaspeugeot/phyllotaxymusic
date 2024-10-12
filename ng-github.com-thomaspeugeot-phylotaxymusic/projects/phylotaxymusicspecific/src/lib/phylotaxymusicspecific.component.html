@@ -165,7 +165,20 @@
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SpiralBezierStrength" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
-            </mat-grid-list>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Nb Interpol Points</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbInterpolationPoints}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="1" max="50" step="1" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbInterpolationPoints" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+            
+          </mat-grid-list>
           }
         </as-split-area>
         <as-split-area [size]="$any('*')">

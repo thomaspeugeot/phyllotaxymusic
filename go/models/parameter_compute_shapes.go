@@ -69,7 +69,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.ConstructionCircleGrid)
 
 	p.ComputeGrowthCurveSegment()
-	p.Shapes = append(p.Shapes, p.GrowthCurveSegment)
+	p.Shapes = append(p.Shapes, p.GrowthCurveSeed)
 
 	p.ComputeGrowthCurve()
 	p.Shapes = append(p.Shapes, p.GrowthCurve)
@@ -107,6 +107,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.SpiralBezierGrid)
 	p.ComputeSpiralBezierFullGrid()
 	p.Shapes = append(p.Shapes, p.SpiralBezierFullGrid)
+
+	p.ComputeSpiralBezierBruteCircle()
+	p.Shapes = append(p.Shapes, p.SpiralBezierBruteCircle)
 
 	p.GrowthCurveShiftedRight.Move(p.GrowthCurveShiftedRightSeed, p.GrowthCurve,
 		p.RotatedAxis.Length, 0)

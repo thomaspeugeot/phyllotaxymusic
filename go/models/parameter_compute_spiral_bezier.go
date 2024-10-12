@@ -101,3 +101,32 @@ func (p *Parameter) ComputeSpiralBezierFullGrid() {
 		}
 	}
 }
+
+func (p *Parameter) ComputeSpiralBezierBruteCircle() {
+
+	p.SpiralBezierBruteCircle.SpiralCircles = p.SpiralBezierBruteCircle.SpiralCircles[:0]
+
+	for _, bezier := range p.GrowthCurve.Beziers {
+
+		for i := range p.NbInterpolationPoints {
+			length := bezier.EndX - bezier.StartX
+
+			x := bezier.StartX + length*float64(i)/float64(p.NbInterpolationPoints)
+			y, _ := bezier.ComputeYFromX(x)
+
+			spiralCircle := new(SpiralCircle)
+			spiralCircle.Stroke = gongsvg_models.Green.ToString()
+			spiralCircle.StrokeWidth = 1
+			spiralCircle.StrokeOpacity = 1
+
+			x_r, y_r := p.convertToSpiralCoords(x, y)
+
+			spiralCircle.CenterX = x_r
+			spiralCircle.CenterY = y_r
+			spiralCircle.HasBespokeRadius = true
+			spiralCircle.BespopkeRadius = 3
+
+			p.SpiralBezierBruteCircle.SpiralCircles = append(p.SpiralBezierBruteCircle.SpiralCircles, spiralCircle)
+		}
+	}
+}

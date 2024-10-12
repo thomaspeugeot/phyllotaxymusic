@@ -46,6 +46,7 @@ export class ParameterAPI {
 	StackHeight: number = 0
 	BezierControlLengthRatio: number = 0
 	SpiralBezierStrength: number = 0
+	NbInterpolationPoints: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -116,7 +117,7 @@ export class ParameterPointersEncoding {
 
 	ConstructionCircleGridID: NullInt64 = new NullInt64 // if pointer is null, ConstructionCircleGrid.ID = 0
 
-	GrowthCurveSegmentID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveSegment.ID = 0
+	GrowthCurveSeedID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveSeed.ID = 0
 
 	GrowthCurveID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurve.ID = 0
 
@@ -161,6 +162,8 @@ export class ParameterPointersEncoding {
 	SpiralBezierGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierGrid.ID = 0
 
 	SpiralBezierFullGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierFullGrid.ID = 0
+
+	SpiralBezierBruteCircleID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierBruteCircle.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 

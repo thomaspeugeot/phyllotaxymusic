@@ -375,7 +375,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("ConstructionAxisGrid", instanceWithInferedType.ConstructionAxisGrid, formGroup, probe)
 		AssociationFieldToForm("ConstructionCircle", instanceWithInferedType.ConstructionCircle, formGroup, probe)
 		AssociationFieldToForm("ConstructionCircleGrid", instanceWithInferedType.ConstructionCircleGrid, formGroup, probe)
-		AssociationFieldToForm("GrowthCurveSegment", instanceWithInferedType.GrowthCurveSegment, formGroup, probe)
+		AssociationFieldToForm("GrowthCurveSeed", instanceWithInferedType.GrowthCurveSeed, formGroup, probe)
 		AssociationFieldToForm("GrowthCurve", instanceWithInferedType.GrowthCurve, formGroup, probe)
 		AssociationFieldToForm("GrowthCurveShiftedRightSeed", instanceWithInferedType.GrowthCurveShiftedRightSeed, formGroup, probe)
 		AssociationFieldToForm("GrowthCurveShiftedRight", instanceWithInferedType.GrowthCurveShiftedRight, formGroup, probe)
@@ -407,6 +407,9 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("SpiralBezierGrid", instanceWithInferedType.SpiralBezierGrid, formGroup, probe)
 		AssociationFieldToForm("SpiralBezierFullGrid", instanceWithInferedType.SpiralBezierFullGrid, formGroup, probe)
 		BasicFieldtoForm("SpiralBezierStrength", instanceWithInferedType.SpiralBezierStrength, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationFieldToForm("SpiralBezierBruteCircle", instanceWithInferedType.SpiralBezierBruteCircle, formGroup, probe)
+		BasicFieldtoForm("NbInterpolationPoints", instanceWithInferedType.NbInterpolationPoints, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("Fkey", instanceWithInferedType.Fkey, formGroup, probe)
 		BasicFieldtoForm("FkeySizeRatio", instanceWithInferedType.FkeySizeRatio, instanceWithInferedType, probe.formStage, formGroup,
