@@ -89,13 +89,11 @@
             </mat-grid-list>
           }
         </as-split-area>
-        <as-split-area [size]="$any('*')">
+        <as-split-area [size]="400">
           @if (frontRepo && frontRepo.array_Parameters[0]) {
 
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
            
-
-            
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Inside Angle </h4>
               </mat-grid-tile>
@@ -144,7 +142,6 @@
                 </mat-slider>
               </mat-grid-tile>
       
-            
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Z </h4>
               </mat-grid-tile>
@@ -156,6 +153,27 @@
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Z" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
+      
+              <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">Bezier Strength</h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="2" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].SpiralBezierStrength}}</h4>
+              </mat-grid-tile>              
+              <mat-grid-tile colspan="7" rowspan="1">
+                <mat-slider min="0.0" max="10.0" step="0.1" showTickMarks discrete [displayWith]="formatLabel">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SpiralBezierStrength" (input)="input($event)">
+                </mat-slider>
+              </mat-grid-tile>
+            </mat-grid-list>
+          }
+        </as-split-area>
+        <as-split-area [size]="$any('*')">
+          @if (frontRepo && frontRepo.array_Parameters[0]) {
+
+            <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
+           
+
 
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Pitch Height</h4>

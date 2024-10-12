@@ -666,8 +666,8 @@ func (p *Parameter) spiralCircleLinesToSpiralBezier(
 	sc1 *SpiralCircle, sl1 *SpiralLine) {
 	sb.StartX, sb.StartY = sc0.CenterX, sc0.CenterY
 
-	dx0 := sl0.EndX - sl0.StartX
-	dy0 := sl0.EndY - sl0.StartY
+	dx0 := p.SpiralBezierStrength*sl0.EndX - sl0.StartX
+	dy0 := p.SpiralBezierStrength*sl0.EndY - sl0.StartY
 
 	newEndX0 := -dy0 + sl0.StartX
 	newEndY0 := dx0 + sl0.StartY
@@ -675,8 +675,8 @@ func (p *Parameter) spiralCircleLinesToSpiralBezier(
 
 	sb.EndX, sb.EndY = sc1.CenterX, sc1.CenterY
 
-	dx1 := sl1.EndX - sl1.StartX
-	dy1 := sl1.EndY - sl1.StartY
+	dx1 := p.SpiralBezierStrength*sl1.EndX - sl1.StartX
+	dy1 := p.SpiralBezierStrength*sl1.EndY - sl1.StartY
 
 	newEndX1 := dy1 + sl1.StartX
 	newEndY1 := -dx1 + sl1.StartY

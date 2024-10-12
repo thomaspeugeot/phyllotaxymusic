@@ -49,6 +49,7 @@ export class Parameter {
 	NbShitRight: number = 0
 	StackHeight: number = 0
 	BezierControlLengthRatio: number = 0
+	SpiralBezierStrength: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -200,6 +201,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.NbShitRight = parameter.NbShitRight
 	parameterAPI.StackHeight = parameter.StackHeight
 	parameterAPI.BezierControlLengthRatio = parameter.BezierControlLengthRatio
+	parameterAPI.SpiralBezierStrength = parameter.SpiralBezierStrength
 	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
 	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
 	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
@@ -636,6 +638,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.NbShitRight = parameterAPI.NbShitRight
 	parameter.StackHeight = parameterAPI.StackHeight
 	parameter.BezierControlLengthRatio = parameterAPI.BezierControlLengthRatio
+	parameter.SpiralBezierStrength = parameterAPI.SpiralBezierStrength
 	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
 	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX
 	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY

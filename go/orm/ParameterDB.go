@@ -312,6 +312,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.BezierControlLengthRatio
 	BezierControlLengthRatio_Data sql.NullFloat64
 
+	// Declation for basic field parameterDB.SpiralBezierStrength
+	SpiralBezierStrength_Data sql.NullFloat64
+
 	// Declation for basic field parameterDB.FkeySizeRatio
 	FkeySizeRatio_Data sql.NullFloat64
 
@@ -412,43 +415,45 @@ type ParameterWOP struct {
 
 	BezierControlLengthRatio float64 `xlsx:"10"`
 
-	FkeySizeRatio float64 `xlsx:"11"`
+	SpiralBezierStrength float64 `xlsx:"11"`
 
-	FkeyOriginRelativeX float64 `xlsx:"12"`
+	FkeySizeRatio float64 `xlsx:"12"`
 
-	FkeyOriginRelativeY float64 `xlsx:"13"`
+	FkeyOriginRelativeX float64 `xlsx:"13"`
 
-	PitchHeight float64 `xlsx:"14"`
+	FkeyOriginRelativeY float64 `xlsx:"14"`
 
-	NbPitchLines int `xlsx:"15"`
+	PitchHeight float64 `xlsx:"15"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"16"`
+	NbPitchLines int `xlsx:"16"`
 
-	NbMeasureLines int `xlsx:"17"`
+	MeasureLinesHeightRatio float64 `xlsx:"17"`
 
-	NbMeasureLinesPerCurve int `xlsx:"18"`
+	NbMeasureLines int `xlsx:"18"`
 
-	FirstVoiceShiftX float64 `xlsx:"19"`
+	NbMeasureLinesPerCurve int `xlsx:"19"`
 
-	FirstVoiceShiftY float64 `xlsx:"20"`
+	FirstVoiceShiftX float64 `xlsx:"20"`
 
-	PitchDifference int `xlsx:"21"`
+	FirstVoiceShiftY float64 `xlsx:"21"`
 
-	Speed float64 `xlsx:"22"`
+	PitchDifference int `xlsx:"22"`
 
-	Level float64 `xlsx:"23"`
+	Speed float64 `xlsx:"23"`
 
-	IsMinor bool `xlsx:"24"`
+	Level float64 `xlsx:"24"`
 
-	OriginX float64 `xlsx:"25"`
+	IsMinor bool `xlsx:"25"`
 
-	OriginY float64 `xlsx:"26"`
+	OriginX float64 `xlsx:"26"`
 
-	SpiralOriginX float64 `xlsx:"27"`
+	OriginY float64 `xlsx:"27"`
 
-	SpiralOriginY float64 `xlsx:"28"`
+	SpiralOriginX float64 `xlsx:"28"`
 
-	SpiralInitialRadius float64 `xlsx:"29"`
+	SpiralOriginY float64 `xlsx:"29"`
+
+	SpiralInitialRadius float64 `xlsx:"30"`
 	// insertion for WOP pointer fields
 }
 
@@ -465,6 +470,7 @@ var Parameter_Fields = []string{
 	"NbShitRight",
 	"StackHeight",
 	"BezierControlLengthRatio",
+	"SpiralBezierStrength",
 	"FkeySizeRatio",
 	"FkeyOriginRelativeX",
 	"FkeyOriginRelativeY",
@@ -1742,6 +1748,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
 
+	parameterDB.SpiralBezierStrength_Data.Float64 = parameter.SpiralBezierStrength
+	parameterDB.SpiralBezierStrength_Data.Valid = true
+
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -1833,6 +1842,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
+
+	parameterDB.SpiralBezierStrength_Data.Float64 = parameter.SpiralBezierStrength
+	parameterDB.SpiralBezierStrength_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -1926,6 +1938,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
 
+	parameterDB.SpiralBezierStrength_Data.Float64 = parameter.SpiralBezierStrength
+	parameterDB.SpiralBezierStrength_Data.Valid = true
+
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -1997,6 +2012,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
+	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2031,6 +2047,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
+	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2066,6 +2083,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
+	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64

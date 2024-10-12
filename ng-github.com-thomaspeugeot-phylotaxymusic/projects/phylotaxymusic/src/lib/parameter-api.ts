@@ -44,6 +44,7 @@ export class ParameterAPI {
 	NbShitRight: number = 0
 	StackHeight: number = 0
 	BezierControlLengthRatio: number = 0
+	SpiralBezierStrength: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0

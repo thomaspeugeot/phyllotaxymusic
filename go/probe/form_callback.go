@@ -1311,6 +1311,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralBezierSeed), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralBezierGrid":
 			FormDivSelectFieldToField(&(parameter_.SpiralBezierGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralBezierStrength":
+			FormDivBasicFieldToField(&(parameter_.SpiralBezierStrength), formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":
