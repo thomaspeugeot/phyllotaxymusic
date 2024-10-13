@@ -54,7 +54,11 @@ export class Parameter {
 	SpiralBezierStrength: number = 0
 	NbInterpolationPoints: number = 0
 	HourHandleRotationAngle: number = 0
+	HourHandleDiskDistance: number = 0
+	HourHandleRadius: number = 0
 	MinuteHandleRotationAngle: number = 0
+	MinuteHandleDiskDistance: number = 0
+	MinuteHandleRadius: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -171,7 +175,11 @@ export class Parameter {
 
 	HourCurve?: FrontCurveStack
 
+	HourMarker?: SpiralCircle
+
 	MinuteCurve?: FrontCurveStack
+
+	MinuteMarker?: SpiralCircle
 
 	Fkey?: Key
 
@@ -225,7 +233,11 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.SpiralBezierStrength = parameter.SpiralBezierStrength
 	parameterAPI.NbInterpolationPoints = parameter.NbInterpolationPoints
 	parameterAPI.HourHandleRotationAngle = parameter.HourHandleRotationAngle
+	parameterAPI.HourHandleDiskDistance = parameter.HourHandleDiskDistance
+	parameterAPI.HourHandleRadius = parameter.HourHandleRadius
 	parameterAPI.MinuteHandleRotationAngle = parameter.MinuteHandleRotationAngle
+	parameterAPI.MinuteHandleDiskDistance = parameter.MinuteHandleDiskDistance
+	parameterAPI.MinuteHandleRadius = parameter.MinuteHandleRadius
 	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
 	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
 	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
@@ -572,11 +584,25 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.HourCurveID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.HourMarkerID.Valid = true
+	if (parameter.HourMarker != undefined) {
+		parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64 = parameter.HourMarker.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.MinuteCurveID.Valid = true
 	if (parameter.MinuteCurve != undefined) {
 		parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64 = parameter.MinuteCurve.ID  
 	} else {
 		parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Valid = true
+	if (parameter.MinuteMarker != undefined) {
+		parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64 = parameter.MinuteMarker.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.FkeyID.Valid = true
@@ -711,7 +737,11 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralBezierStrength = parameterAPI.SpiralBezierStrength
 	parameter.NbInterpolationPoints = parameterAPI.NbInterpolationPoints
 	parameter.HourHandleRotationAngle = parameterAPI.HourHandleRotationAngle
+	parameter.HourHandleDiskDistance = parameterAPI.HourHandleDiskDistance
+	parameter.HourHandleRadius = parameterAPI.HourHandleRadius
 	parameter.MinuteHandleRotationAngle = parameterAPI.MinuteHandleRotationAngle
+	parameter.MinuteHandleDiskDistance = parameterAPI.MinuteHandleDiskDistance
+	parameter.MinuteHandleRadius = parameterAPI.MinuteHandleRadius
 	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
 	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX
 	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY
@@ -782,7 +812,9 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralBezierFullGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierFullGridID.Int64)
 	parameter.FrontCurveStack = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64)
 	parameter.HourCurve = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.HourCurveID.Int64)
+	parameter.HourMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64)
 	parameter.MinuteCurve = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64)
+	parameter.MinuteMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64)
 	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
 	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)

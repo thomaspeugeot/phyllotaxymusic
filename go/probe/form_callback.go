@@ -688,6 +688,8 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circle_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(circle_.Transform), formDiv)
+		case "ShowName":
+			FormDivBasicFieldToField(&(circle_.ShowName), formDiv)
 		case "CircleGrid:Circles":
 			// we need to retrieve the field owner before the change
 			var pastCircleGridOwner *models.CircleGrid
@@ -1545,12 +1547,24 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.NbInterpolationPoints), formDiv)
 		case "HourCurve":
 			FormDivSelectFieldToField(&(parameter_.HourCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "MinuteCurve":
-			FormDivSelectFieldToField(&(parameter_.MinuteCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "HourHandleRotationAngle":
 			FormDivBasicFieldToField(&(parameter_.HourHandleRotationAngle), formDiv)
+		case "HourMarker":
+			FormDivSelectFieldToField(&(parameter_.HourMarker), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "HourHandleDiskDistance":
+			FormDivBasicFieldToField(&(parameter_.HourHandleDiskDistance), formDiv)
+		case "HourHandleRadius":
+			FormDivBasicFieldToField(&(parameter_.HourHandleRadius), formDiv)
+		case "MinuteCurve":
+			FormDivSelectFieldToField(&(parameter_.MinuteCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "MinuteHandleRotationAngle":
 			FormDivBasicFieldToField(&(parameter_.MinuteHandleRotationAngle), formDiv)
+		case "MinuteMarker":
+			FormDivSelectFieldToField(&(parameter_.MinuteMarker), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "MinuteHandleDiskDistance":
+			FormDivBasicFieldToField(&(parameter_.MinuteHandleDiskDistance), formDiv)
+		case "MinuteHandleRadius":
+			FormDivBasicFieldToField(&(parameter_.MinuteHandleRadius), formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":
@@ -2277,6 +2291,8 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralcircle_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(spiralcircle_.Transform), formDiv)
+		case "ShowName":
+			FormDivBasicFieldToField(&(spiralcircle_.ShowName), formDiv)
 		case "FrontCurveStack:SpiralCircles":
 			// we need to retrieve the field owner before the change
 			var pastFrontCurveStackOwner *models.FrontCurveStack

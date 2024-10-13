@@ -222,6 +222,8 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
 			true, true, 600, true, 400)
+		BasicFieldtoForm("ShowName", instanceWithInferedType.ShowName, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		{
 			var rf models.ReverseField
 			_ = rf
@@ -467,10 +469,20 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("NbInterpolationPoints", instanceWithInferedType.NbInterpolationPoints, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("HourCurve", instanceWithInferedType.HourCurve, formGroup, probe)
-		AssociationFieldToForm("MinuteCurve", instanceWithInferedType.MinuteCurve, formGroup, probe)
 		BasicFieldtoForm("HourHandleRotationAngle", instanceWithInferedType.HourHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("HourMarker", instanceWithInferedType.HourMarker, formGroup, probe)
+		BasicFieldtoForm("HourHandleDiskDistance", instanceWithInferedType.HourHandleDiskDistance, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("HourHandleRadius", instanceWithInferedType.HourHandleRadius, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationFieldToForm("MinuteCurve", instanceWithInferedType.MinuteCurve, formGroup, probe)
 		BasicFieldtoForm("MinuteHandleRotationAngle", instanceWithInferedType.MinuteHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationFieldToForm("MinuteMarker", instanceWithInferedType.MinuteMarker, formGroup, probe)
+		BasicFieldtoForm("MinuteHandleDiskDistance", instanceWithInferedType.MinuteHandleDiskDistance, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("MinuteHandleRadius", instanceWithInferedType.MinuteHandleRadius, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("Fkey", instanceWithInferedType.Fkey, formGroup, probe)
 		BasicFieldtoForm("FkeySizeRatio", instanceWithInferedType.FkeySizeRatio, instanceWithInferedType, probe.formStage, formGroup,
@@ -709,6 +721,8 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
 			true, true, 600, true, 400)
+		BasicFieldtoForm("ShowName", instanceWithInferedType.ShowName, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		{
 			var rf models.ReverseField
 			_ = rf

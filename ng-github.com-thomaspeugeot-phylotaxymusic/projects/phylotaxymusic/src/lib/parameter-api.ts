@@ -49,7 +49,11 @@ export class ParameterAPI {
 	SpiralBezierStrength: number = 0
 	NbInterpolationPoints: number = 0
 	HourHandleRotationAngle: number = 0
+	HourHandleDiskDistance: number = 0
+	HourHandleRadius: number = 0
 	MinuteHandleRotationAngle: number = 0
+	MinuteHandleDiskDistance: number = 0
+	MinuteHandleRadius: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -172,7 +176,11 @@ export class ParameterPointersEncoding {
 
 	HourCurveID: NullInt64 = new NullInt64 // if pointer is null, HourCurve.ID = 0
 
+	HourMarkerID: NullInt64 = new NullInt64 // if pointer is null, HourMarker.ID = 0
+
 	MinuteCurveID: NullInt64 = new NullInt64 // if pointer is null, MinuteCurve.ID = 0
+
+	MinuteMarkerID: NullInt64 = new NullInt64 // if pointer is null, MinuteMarker.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 

@@ -33,6 +33,7 @@ export class SpiralCircle {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
+	ShowName: boolean = false
 
 	// insertion point for pointers and slices of pointers declarations
 	ShapeCategory?: ShapeCategory
@@ -61,6 +62,7 @@ export function CopySpiralCircleToSpiralCircleAPI(spiralcircle: SpiralCircle, sp
 	spiralcircleAPI.StrokeDashArray = spiralcircle.StrokeDashArray
 	spiralcircleAPI.StrokeDashArrayWhenSelected = spiralcircle.StrokeDashArrayWhenSelected
 	spiralcircleAPI.Transform = spiralcircle.Transform
+	spiralcircleAPI.ShowName = spiralcircle.ShowName
 
 	// insertion point for pointer fields encoding
 	spiralcircleAPI.SpiralCirclePointersEncoding.ShapeCategoryID.Valid = true
@@ -100,6 +102,7 @@ export function CopySpiralCircleAPIToSpiralCircle(spiralcircleAPI: SpiralCircleA
 	spiralcircle.StrokeDashArray = spiralcircleAPI.StrokeDashArray
 	spiralcircle.StrokeDashArrayWhenSelected = spiralcircleAPI.StrokeDashArrayWhenSelected
 	spiralcircle.Transform = spiralcircleAPI.Transform
+	spiralcircle.ShowName = spiralcircleAPI.ShowName
 
 	// insertion point for pointer fields encoding
 	spiralcircle.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(spiralcircleAPI.SpiralCirclePointersEncoding.ShapeCategoryID.Int64)

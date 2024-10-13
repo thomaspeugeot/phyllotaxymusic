@@ -180,6 +180,14 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 			p.MinuteCurve.FrontCurves = append(p.MinuteCurve.FrontCurves, frontCurve)
 		}
-
 	}
+
+	// draw the markers
+	p.HourMarker.CenterY = p.HourHandleDiskDistance * p.SideLength
+	p.HourMarker.HasBespokeRadius = true
+	p.HourMarker.BespopkeRadius = p.HourHandleRadius
+
+	p.MinuteMarker.CenterY = p.MinuteHandleDiskDistance * p.SideLength
+	p.MinuteMarker.HasBespokeRadius = true
+	p.MinuteMarker.BespopkeRadius = p.MinuteHandleRadius
 }

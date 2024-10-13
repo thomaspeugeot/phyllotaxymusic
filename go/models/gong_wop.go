@@ -144,6 +144,7 @@ type Circle_WOP struct {
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
 	Transform string
+	ShowName bool
 }
 
 func (from *Circle) CopyBasicFields(to *Circle) {
@@ -163,6 +164,7 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
 	to.Transform = from.Transform
+	to.ShowName = from.ShowName
 }
 
 type CircleGrid_WOP struct {
@@ -307,7 +309,11 @@ type Parameter_WOP struct {
 	SpiralBezierStrength float64
 	NbInterpolationPoints int
 	HourHandleRotationAngle float64
+	HourHandleDiskDistance float64
+	HourHandleRadius float64
 	MinuteHandleRotationAngle float64
+	MinuteHandleDiskDistance float64
+	MinuteHandleRadius float64
 	FkeySizeRatio float64
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
@@ -348,7 +354,11 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.SpiralBezierStrength = from.SpiralBezierStrength
 	to.NbInterpolationPoints = from.NbInterpolationPoints
 	to.HourHandleRotationAngle = from.HourHandleRotationAngle
+	to.HourHandleDiskDistance = from.HourHandleDiskDistance
+	to.HourHandleRadius = from.HourHandleRadius
 	to.MinuteHandleRotationAngle = from.MinuteHandleRotationAngle
+	to.MinuteHandleDiskDistance = from.MinuteHandleDiskDistance
+	to.MinuteHandleRadius = from.MinuteHandleRadius
 	to.FkeySizeRatio = from.FkeySizeRatio
 	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX
 	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY
@@ -508,6 +518,7 @@ type SpiralCircle_WOP struct {
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
 	Transform string
+	ShowName bool
 }
 
 func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
@@ -527,6 +538,7 @@ func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
 	to.Transform = from.Transform
+	to.ShowName = from.ShowName
 }
 
 type SpiralCircleGrid_WOP struct {

@@ -143,6 +143,8 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.FrontCurveStack)
 	p.Shapes = append(p.Shapes, p.HourCurve)
 	p.Shapes = append(p.Shapes, p.MinuteCurve)
+	p.Shapes = append(p.Shapes, p.HourMarker)
+	p.Shapes = append(p.Shapes, p.MinuteMarker)
 
 	//
 	// MUSIC MAESTRO

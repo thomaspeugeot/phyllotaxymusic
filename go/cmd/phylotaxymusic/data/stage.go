@@ -126,6 +126,8 @@ func _(stage *models.StageStruct) {
 	__SpiralBezierGrid__000001_Spiral_Bezier_Grid := (&models.SpiralBezierGrid{}).Stage(stage)
 
 	__SpiralCircle__000000_Construction_Circle_Spiral := (&models.SpiralCircle{}).Stage(stage)
+	__SpiralCircle__000001_Hour_Marker := (&models.SpiralCircle{}).Stage(stage)
+	__SpiralCircle__000002_Minute_Marker := (&models.SpiralCircle{}).Stage(stage)
 
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid := (&models.SpiralCircleGrid{}).Stage(stage)
 	__SpiralCircleGrid__000001_Construction_Circle_Spiral_Full_Grid := (&models.SpiralCircleGrid{}).Stage(stage)
@@ -399,6 +401,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000000_0.StrokeDashArray = ``
 	__Circle__000000_0.StrokeDashArrayWhenSelected = ``
 	__Circle__000000_0.Transform = ``
+	__Circle__000000_0.ShowName = false
 
 	__Circle__000001_Construction_Circle.Name = `Construction Circle`
 	__Circle__000001_Construction_Circle.IsDisplayed = false
@@ -415,6 +418,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000001_Construction_Circle.StrokeDashArray = ``
 	__Circle__000001_Construction_Circle.StrokeDashArrayWhenSelected = ``
 	__Circle__000001_Construction_Circle.Transform = ``
+	__Circle__000001_Construction_Circle.ShowName = false
 
 	__Circle__000002_First_voice_notes_seed.Name = `First voice notes seed`
 	__Circle__000002_First_voice_notes_seed.IsDisplayed = false
@@ -431,6 +435,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000002_First_voice_notes_seed.StrokeDashArray = ``
 	__Circle__000002_First_voice_notes_seed.StrokeDashArrayWhenSelected = ``
 	__Circle__000002_First_voice_notes_seed.Transform = ``
+	__Circle__000002_First_voice_notes_seed.ShowName = false
 
 	__Circle__000003_Growing_Seed_Left.Name = `Growing Seed Left`
 	__Circle__000003_Growing_Seed_Left.IsDisplayed = false
@@ -447,6 +452,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000003_Growing_Seed_Left.StrokeDashArray = ``
 	__Circle__000003_Growing_Seed_Left.StrokeDashArrayWhenSelected = ``
 	__Circle__000003_Growing_Seed_Left.Transform = ``
+	__Circle__000003_Growing_Seed_Left.ShowName = false
 
 	__Circle__000004_Initial_Circle.Name = `Initial Circle`
 	__Circle__000004_Initial_Circle.IsDisplayed = false
@@ -463,6 +469,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000004_Initial_Circle.StrokeDashArray = ``
 	__Circle__000004_Initial_Circle.StrokeDashArrayWhenSelected = ``
 	__Circle__000004_Initial_Circle.Transform = ``
+	__Circle__000004_Initial_Circle.ShowName = false
 
 	__Circle__000005_Rotated_Next_Circle.Name = `Rotated Next Circle`
 	__Circle__000005_Rotated_Next_Circle.IsDisplayed = false
@@ -479,6 +486,7 @@ func _(stage *models.StageStruct) {
 	__Circle__000005_Rotated_Next_Circle.StrokeDashArray = ``
 	__Circle__000005_Rotated_Next_Circle.StrokeDashArrayWhenSelected = ``
 	__Circle__000005_Rotated_Next_Circle.Transform = ``
+	__Circle__000005_Rotated_Next_Circle.ShowName = false
 
 	__CircleGrid__000000_Construction_Circle_Grid.Name = `Construction Circle Grid`
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
@@ -517,7 +525,7 @@ func _(stage *models.StageStruct) {
 	__FrontCurve__000002_Rotated_0_.Path = `M641.04 532.19 C643.66 524.45 645.47 518.33 647.51 511.05 C649.56 503.77 651.53 496.37 653.29 488.51 C655.05 480.66 656.77 472.54 658.08 463.92 C659.39 455.29 660.62 446.26 661.13 436.76 C661.65 427.26 661.94 417.22 661.18 406.94 C660.43 396.67 659.16 385.80 656.61 375.11 C654.07 364.41 650.64 353.27 645.90 342.75 C641.16 332.24 635.24 321.61 628.17 312.01 C621.10 302.40 612.71 293.13 603.47 285.13 C594.24 277.14 583.75 269.89 572.78 264.06 C561.81 258.22 549.79 253.46 537.66 250.12 C525.53 246.79 514.24 244.45 500.00 244.04 C485.76 243.63 467.76 244.50 452.25 247.65 C436.75 250.80 421.18 256.16 406.95 262.92 C392.73 269.68 379.05 278.47 366.92 288.20 C354.79 297.93 343.67 309.36 334.17 321.28 C324.67 333.20 316.52 346.41 309.90 359.70 C303.28 372.99 298.19 387.12 294.46 401.02 C290.72 414.91 288.55 429.21 287.49 443.06 C286.44 456.91 286.84 470.79 288.12 484.12 C289.40 497.46 291.96 510.53 295.16 523.08 C298.37 535.63 302.62 547.73 307.37 559.42 C312.12 571.11 317.66 582.28 323.67 593.20 C329.67 604.11 335.87 615.01 343.39 624.89 C350.91 634.78 359.26 644.58 368.77 652.49 C378.29 660.40 389.32 667.19 400.48 672.37 C411.65 677.55 423.85 681.30 435.76 683.58 C447.67 685.86 460.12 686.57 471.96 686.06 C483.79 685.54 495.68 683.48 506.75 680.50 C517.82 677.51 528.55 673.14 538.38 668.17 C548.21 663.19 557.40 657.08 565.73 650.65 C574.05 644.21 581.56 636.95 588.34 629.57 C595.12 622.20 601.04 614.30 606.41 606.41 C611.78 598.52 616.35 590.36 620.58 582.21 C624.82 574.06 628.39 565.84 631.80 557.50 C635.21 549.17 638.42 539.93 641.04 532.19 Z`
 
 	__FrontCurve__000003_Rotated_1_.Name = `Rotated 1 `
-	__FrontCurve__000003_Rotated_1_.Path = `M652.48 629.90 C660.45 621.93 666.27 615.30 672.91 607.45 C679.55 599.59 686.02 591.45 692.31 582.76 C698.60 574.08 704.79 565.03 710.65 555.32 C716.50 545.60 722.28 535.40 727.43 524.48 C732.58 513.55 737.57 501.98 741.54 489.76 C745.52 477.54 749.09 464.54 751.26 451.16 C753.42 437.79 754.81 423.62 754.55 409.50 C754.29 395.38 752.82 380.66 749.70 366.44 C746.57 352.21 741.92 337.74 735.78 324.16 C729.64 310.59 721.86 297.19 712.87 285.00 C703.88 272.80 693.30 261.20 681.86 251.00 C670.42 240.79 659.44 232.12 644.23 223.78 C629.02 215.44 609.12 206.34 590.61 200.95 C572.11 195.57 552.37 192.41 533.21 191.45 C514.04 190.49 494.32 191.90 475.63 195.19 C456.94 198.47 438.32 204.07 421.06 211.15 C403.79 218.22 387.15 227.40 372.03 237.63 C356.92 247.86 342.85 259.86 330.35 272.51 C317.84 285.16 306.68 299.19 297.00 313.52 C287.32 327.85 279.13 343.14 272.27 358.49 C265.41 373.83 260.05 389.75 255.84 405.58 C251.64 421.40 248.84 437.49 247.01 453.44 C245.19 469.39 244.62 485.37 244.91 501.27 C245.20 517.17 246.00 533.21 248.74 548.84 C251.49 564.46 255.35 580.40 261.40 595.02 C267.45 609.64 275.68 623.90 285.03 636.57 C294.38 649.25 305.62 661.00 317.48 671.05 C329.35 681.10 342.69 689.83 356.20 696.88 C369.72 703.94 384.24 709.42 398.55 713.38 C412.86 717.34 427.70 719.64 442.05 720.65 C456.40 721.67 470.86 721.08 484.65 719.47 C498.45 717.86 511.99 714.81 524.84 711.01 C537.69 707.21 550.03 702.21 561.74 696.67 C573.45 691.13 584.52 684.65 595.08 677.76 C605.65 670.86 615.56 663.29 625.13 655.31 C634.70 647.34 644.52 637.88 652.48 629.90 Z`
+	__FrontCurve__000003_Rotated_1_.Path = `M686.47 573.18 C691.40 563.05 694.75 554.89 698.47 545.30 C702.19 535.71 705.66 525.91 708.78 515.65 C711.90 505.38 714.81 494.82 717.18 483.72 C719.55 472.63 721.70 461.11 723.01 449.10 C724.32 437.09 725.27 424.52 725.05 411.67 C724.83 398.83 723.97 385.37 721.67 372.02 C719.36 358.67 716.06 344.83 711.22 331.56 C706.37 318.29 700.20 304.85 692.61 292.42 C685.02 279.99 675.91 267.82 665.69 256.98 C655.47 246.14 643.74 236.01 631.27 227.41 C618.81 218.80 605.03 211.28 590.89 205.35 C576.75 199.43 563.54 194.81 546.44 191.88 C529.35 188.94 507.57 186.82 488.32 187.75 C469.07 188.68 449.38 192.12 430.95 197.45 C412.51 202.78 394.32 210.54 377.72 219.73 C361.11 228.92 345.34 240.27 331.31 252.58 C317.29 264.89 304.55 278.99 293.59 293.59 C282.62 308.18 273.23 324.11 265.53 340.14 C257.82 356.17 251.84 373.07 247.35 389.77 C242.86 406.47 240.10 423.60 238.61 440.34 C237.12 457.08 237.23 473.88 238.41 490.21 C239.58 506.55 242.17 522.67 245.64 538.34 C249.11 554.01 253.77 569.31 259.22 584.25 C264.67 599.19 270.65 614.10 278.33 627.98 C286.02 641.86 294.85 655.67 305.33 667.52 C315.81 679.38 328.24 690.18 341.21 699.12 C354.17 708.06 368.63 715.51 383.12 721.15 C397.61 726.80 413.07 730.70 428.14 732.97 C443.21 735.24 458.73 735.69 473.55 734.78 C488.36 733.87 503.15 731.21 517.05 727.50 C530.95 723.79 544.42 718.52 556.94 712.51 C569.46 706.50 581.28 699.21 592.19 691.43 C603.10 683.65 613.14 674.91 622.41 665.85 C631.67 656.80 640.03 647.07 647.78 637.12 C655.52 627.16 662.43 616.77 668.88 606.11 C675.33 595.46 681.53 583.32 686.47 573.18 Z`
 
 	__FrontCurveStack__000000_Front_Curve_Stack.Name = `Front Curve Stack`
 	__FrontCurveStack__000000_Front_Curve_Stack.IsDisplayed = false
@@ -636,7 +644,11 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralBezierStrength = 0.800000
 	__Parameter__000000_Reference.NbInterpolationPoints = 12
 	__Parameter__000000_Reference.HourHandleRotationAngle = 0.000000
-	__Parameter__000000_Reference.MinuteHandleRotationAngle = -101.000000
+	__Parameter__000000_Reference.HourHandleDiskDistance = 1.311000
+	__Parameter__000000_Reference.HourHandleRadius = 24.770000
+	__Parameter__000000_Reference.MinuteHandleRotationAngle = -120.000000
+	__Parameter__000000_Reference.MinuteHandleDiskDistance = 1.671000
+	__Parameter__000000_Reference.MinuteHandleRadius = 19.660000
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
@@ -803,6 +815,41 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Construction_Circle_Spiral.StrokeDashArray = ``
 	__SpiralCircle__000000_Construction_Circle_Spiral.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000000_Construction_Circle_Spiral.Transform = ``
+	__SpiralCircle__000000_Construction_Circle_Spiral.ShowName = false
+
+	__SpiralCircle__000001_Hour_Marker.Name = `Hour Marker`
+	__SpiralCircle__000001_Hour_Marker.IsDisplayed = true
+	__SpiralCircle__000001_Hour_Marker.CenterX = 0.000000
+	__SpiralCircle__000001_Hour_Marker.CenterY = 222.870000
+	__SpiralCircle__000001_Hour_Marker.HasBespokeRadius = true
+	__SpiralCircle__000001_Hour_Marker.BespopkeRadius = 24.770000
+	__SpiralCircle__000001_Hour_Marker.Pitch = 0
+	__SpiralCircle__000001_Hour_Marker.Color = ``
+	__SpiralCircle__000001_Hour_Marker.FillOpacity = 0.000000
+	__SpiralCircle__000001_Hour_Marker.Stroke = `green`
+	__SpiralCircle__000001_Hour_Marker.StrokeOpacity = 1.000000
+	__SpiralCircle__000001_Hour_Marker.StrokeWidth = 1.000000
+	__SpiralCircle__000001_Hour_Marker.StrokeDashArray = ``
+	__SpiralCircle__000001_Hour_Marker.StrokeDashArrayWhenSelected = ``
+	__SpiralCircle__000001_Hour_Marker.Transform = ``
+	__SpiralCircle__000001_Hour_Marker.ShowName = false
+
+	__SpiralCircle__000002_Minute_Marker.Name = `Minute Marker`
+	__SpiralCircle__000002_Minute_Marker.IsDisplayed = true
+	__SpiralCircle__000002_Minute_Marker.CenterX = 0.000000
+	__SpiralCircle__000002_Minute_Marker.CenterY = 288.830000
+	__SpiralCircle__000002_Minute_Marker.HasBespokeRadius = true
+	__SpiralCircle__000002_Minute_Marker.BespopkeRadius = 19.660000
+	__SpiralCircle__000002_Minute_Marker.Pitch = 0
+	__SpiralCircle__000002_Minute_Marker.Color = ``
+	__SpiralCircle__000002_Minute_Marker.FillOpacity = 0.000000
+	__SpiralCircle__000002_Minute_Marker.Stroke = `green`
+	__SpiralCircle__000002_Minute_Marker.StrokeOpacity = 1.000000
+	__SpiralCircle__000002_Minute_Marker.StrokeWidth = 1.000000
+	__SpiralCircle__000002_Minute_Marker.StrokeDashArray = ``
+	__SpiralCircle__000002_Minute_Marker.StrokeDashArrayWhenSelected = ``
+	__SpiralCircle__000002_Minute_Marker.Transform = ``
+	__SpiralCircle__000002_Minute_Marker.ShowName = false
 
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.Name = `Brute Spiral Bezier Circle Grid`
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.IsDisplayed = true
@@ -1007,7 +1054,9 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralBezierFullGrid = __SpiralBezierGrid__000000_Spiral_Bezier_Full_Grid
 	__Parameter__000000_Reference.FrontCurveStack = __FrontCurveStack__000000_Front_Curve_Stack
 	__Parameter__000000_Reference.HourCurve = __FrontCurveStack__000001_Hour_Handle
+	__Parameter__000000_Reference.HourMarker = __SpiralCircle__000001_Hour_Marker
 	__Parameter__000000_Reference.MinuteCurve = __FrontCurveStack__000002_Minute_Handle
+	__Parameter__000000_Reference.MinuteMarker = __SpiralCircle__000002_Minute_Marker
 	__Parameter__000000_Reference.Fkey = __Key__000000_F_key
 	__Parameter__000000_Reference.PitchLines = __AxisGrid__000002_Pitch_Lines
 	__Parameter__000000_Reference.MeasureLines = __AxisGrid__000001_Measure_Lines
@@ -1050,6 +1099,8 @@ func _(stage *models.StageStruct) {
 	__SpiralBezierGrid__000000_Spiral_Bezier_Full_Grid.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier
 	__SpiralBezierGrid__000001_Spiral_Bezier_Grid.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier
 	__SpiralCircle__000000_Construction_Circle_Spiral.ShapeCategory = __ShapeCategory__000006_6_Spiral_growth
+	__SpiralCircle__000001_Hour_Marker.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier
+	__SpiralCircle__000002_Minute_Marker.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier
 	__SpiralCircleGrid__000001_Construction_Circle_Spiral_Full_Grid.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier
 	__SpiralCircleGrid__000002_Construction_Circle_Spiral_Grid.ShapeCategory = __ShapeCategory__000007_7_Spiral_Growth_Bezier

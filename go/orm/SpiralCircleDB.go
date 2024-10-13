@@ -109,6 +109,10 @@ type SpiralCircleDB struct {
 
 	// Declation for basic field spiralcircleDB.Transform
 	Transform_Data sql.NullString
+
+	// Declation for basic field spiralcircleDB.ShowName
+	// provide the sql storage for the boolan
+	ShowName_Data sql.NullBool
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -161,6 +165,8 @@ type SpiralCircleWOP struct {
 	StrokeDashArrayWhenSelected string `xlsx:"14"`
 
 	Transform string `xlsx:"15"`
+
+	ShowName bool `xlsx:"16"`
 	// insertion for WOP pointer fields
 }
 
@@ -182,6 +188,7 @@ var SpiralCircle_Fields = []string{
 	"StrokeDashArray",
 	"StrokeDashArrayWhenSelected",
 	"Transform",
+	"ShowName",
 }
 
 type BackRepoSpiralCircleStruct struct {
@@ -509,6 +516,9 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsFromSpiralCircle(spiralcirc
 
 	spiralcircleDB.Transform_Data.String = spiralcircle.Transform
 	spiralcircleDB.Transform_Data.Valid = true
+
+	spiralcircleDB.ShowName_Data.Bool = spiralcircle.ShowName
+	spiralcircleDB.ShowName_Data.Valid = true
 }
 
 // CopyBasicFieldsFromSpiralCircle_WOP
@@ -559,6 +569,9 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsFromSpiralCircle_WOP(spiral
 
 	spiralcircleDB.Transform_Data.String = spiralcircle.Transform
 	spiralcircleDB.Transform_Data.Valid = true
+
+	spiralcircleDB.ShowName_Data.Bool = spiralcircle.ShowName
+	spiralcircleDB.ShowName_Data.Valid = true
 }
 
 // CopyBasicFieldsFromSpiralCircleWOP
@@ -609,6 +622,9 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsFromSpiralCircleWOP(spiralc
 
 	spiralcircleDB.Transform_Data.String = spiralcircle.Transform
 	spiralcircleDB.Transform_Data.Valid = true
+
+	spiralcircleDB.ShowName_Data.Bool = spiralcircle.ShowName
+	spiralcircleDB.ShowName_Data.Valid = true
 }
 
 // CopyBasicFieldsToSpiralCircle
@@ -629,6 +645,7 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsToSpiralCircle(spiralcircle
 	spiralcircle.StrokeDashArray = spiralcircleDB.StrokeDashArray_Data.String
 	spiralcircle.StrokeDashArrayWhenSelected = spiralcircleDB.StrokeDashArrayWhenSelected_Data.String
 	spiralcircle.Transform = spiralcircleDB.Transform_Data.String
+	spiralcircle.ShowName = spiralcircleDB.ShowName_Data.Bool
 }
 
 // CopyBasicFieldsToSpiralCircle_WOP
@@ -649,6 +666,7 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsToSpiralCircle_WOP(spiralci
 	spiralcircle.StrokeDashArray = spiralcircleDB.StrokeDashArray_Data.String
 	spiralcircle.StrokeDashArrayWhenSelected = spiralcircleDB.StrokeDashArrayWhenSelected_Data.String
 	spiralcircle.Transform = spiralcircleDB.Transform_Data.String
+	spiralcircle.ShowName = spiralcircleDB.ShowName_Data.Bool
 }
 
 // CopyBasicFieldsToSpiralCircleWOP
@@ -670,6 +688,7 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsToSpiralCircleWOP(spiralcir
 	spiralcircle.StrokeDashArray = spiralcircleDB.StrokeDashArray_Data.String
 	spiralcircle.StrokeDashArrayWhenSelected = spiralcircleDB.StrokeDashArrayWhenSelected_Data.String
 	spiralcircle.Transform = spiralcircleDB.Transform_Data.String
+	spiralcircle.ShowName = spiralcircleDB.ShowName_Data.Bool
 }
 
 // Backup generates a json file from a slice of all SpiralCircleDB instances in the backrepo

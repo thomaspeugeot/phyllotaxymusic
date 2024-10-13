@@ -33,6 +33,7 @@ export class Circle {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
+	ShowName: boolean = false
 
 	// insertion point for pointers and slices of pointers declarations
 	ShapeCategory?: ShapeCategory
@@ -61,6 +62,7 @@ export function CopyCircleToCircleAPI(circle: Circle, circleAPI: CircleAPI) {
 	circleAPI.StrokeDashArray = circle.StrokeDashArray
 	circleAPI.StrokeDashArrayWhenSelected = circle.StrokeDashArrayWhenSelected
 	circleAPI.Transform = circle.Transform
+	circleAPI.ShowName = circle.ShowName
 
 	// insertion point for pointer fields encoding
 	circleAPI.CirclePointersEncoding.ShapeCategoryID.Valid = true
@@ -100,6 +102,7 @@ export function CopyCircleAPIToCircle(circleAPI: CircleAPI, circle: Circle, fron
 	circle.StrokeDashArray = circleAPI.StrokeDashArray
 	circle.StrokeDashArrayWhenSelected = circleAPI.StrokeDashArrayWhenSelected
 	circle.Transform = circleAPI.Transform
+	circle.ShowName = circleAPI.ShowName
 
 	// insertion point for pointer fields encoding
 	circle.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(circleAPI.CirclePointersEncoding.ShapeCategoryID.Int64)

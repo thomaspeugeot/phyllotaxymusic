@@ -1646,6 +1646,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].HourHandleRotationAngle = exprSign * fielValue
+				case "HourHandleDiskDistance":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].HourHandleDiskDistance = exprSign * fielValue
+				case "HourHandleRadius":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].HourHandleRadius = exprSign * fielValue
 				case "MinuteHandleRotationAngle":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1653,6 +1667,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].MinuteHandleRotationAngle = exprSign * fielValue
+				case "MinuteHandleDiskDistance":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].MinuteHandleDiskDistance = exprSign * fielValue
+				case "MinuteHandleRadius":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].MinuteHandleRadius = exprSign * fielValue
 				case "FkeySizeRatio":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -2505,6 +2533,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Circle[identifier].HasBespokeRadius = fielValue
+				case "ShowName":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Circle[identifier].ShowName = fielValue
 				}
 			case "CircleGrid":
 				switch fieldName {
@@ -2721,9 +2756,15 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "HourCurve":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].HourCurve = __gong__map_FrontCurveStack[targetIdentifier]
+				case "HourMarker":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].HourMarker = __gong__map_SpiralCircle[targetIdentifier]
 				case "MinuteCurve":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].MinuteCurve = __gong__map_FrontCurveStack[targetIdentifier]
+				case "MinuteMarker":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].MinuteMarker = __gong__map_SpiralCircle[targetIdentifier]
 				case "Fkey":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].Fkey = __gong__map_Key[targetIdentifier]
@@ -2878,6 +2919,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_SpiralCircle[identifier].HasBespokeRadius = fielValue
+				case "ShowName":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralCircle[identifier].ShowName = fielValue
 				}
 			case "SpiralCircleGrid":
 				switch fieldName {

@@ -87,7 +87,7 @@
 
 
             <mat-grid-tile colspan="3" rowspan="1">
-              <h4 style="margin-left: 8px; width: 100%;">Hour Hangle</h4>
+              <h4 style="margin-left: 8px; width: 100%;">Hour Handle</h4>
             </mat-grid-tile>
             <mat-grid-tile colspan="2" rowspan="1">
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleRotationAngle}}</h4>
@@ -99,7 +99,56 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan="3" rowspan="1">
-              <h4 style="margin-left: 8px; width: 100%;">Minute Hangle</h4>
+              <h4 style="margin-left: 8px; width: 100%;">Hour disk distance</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleDiskDistance}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="10.0" step="0.001" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].HourHandleDiskDistance" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Hour disk radius</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleRadius}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="100.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].HourHandleRadius" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Minute disk distance</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteHandleDiskDistance}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="10.0" step="0.001" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteHandleDiskDistance" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Minute disk radius</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteHandleRadius}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="100.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteHandleRadius" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Minute Handle</h4>
             </mat-grid-tile>
             <mat-grid-tile colspan="2" rowspan="1">
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteHandleRotationAngle}}</h4>

@@ -111,10 +111,19 @@ type Parameter struct {
 
 	// taking into accound the rotation to align the
 	// curve on the 12 th hour
-	HourCurve                 *FrontCurveStack
-	MinuteCurve               *FrontCurveStack
-	HourHandleRotationAngle   float64
+	HourCurve *FrontCurveStack
+
+	HourHandleRotationAngle float64
+	HourMarker              *SpiralCircle
+	HourHandleDiskDistance  float64
+	HourHandleRadius        float64
+
+	MinuteCurve *FrontCurveStack
+
 	MinuteHandleRotationAngle float64
+	MinuteMarker              *SpiralCircle
+	MinuteHandleDiskDistance  float64
+	MinuteHandleRadius        float64
 
 	// the score
 	Fkey                *Key
