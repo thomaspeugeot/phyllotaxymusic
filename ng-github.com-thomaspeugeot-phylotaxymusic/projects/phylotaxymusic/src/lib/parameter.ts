@@ -71,7 +71,7 @@ export class Parameter {
 	OriginY: number = 0
 	SpiralOriginX: number = 0
 	SpiralOriginY: number = 0
-	SpiralInitialRadius: number = 0
+	SpiralRadiusRatio: number = 0
 	ShowSpiralBezierConstruct: boolean = false
 	ShowInterpolationPoints: boolean = false
 
@@ -235,7 +235,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.OriginY = parameter.OriginY
 	parameterAPI.SpiralOriginX = parameter.SpiralOriginX
 	parameterAPI.SpiralOriginY = parameter.SpiralOriginY
-	parameterAPI.SpiralInitialRadius = parameter.SpiralInitialRadius
+	parameterAPI.SpiralRadiusRatio = parameter.SpiralRadiusRatio
 	parameterAPI.ShowSpiralBezierConstruct = parameter.ShowSpiralBezierConstruct
 	parameterAPI.ShowInterpolationPoints = parameter.ShowInterpolationPoints
 
@@ -704,7 +704,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.OriginY = parameterAPI.OriginY
 	parameter.SpiralOriginX = parameterAPI.SpiralOriginX
 	parameter.SpiralOriginY = parameterAPI.SpiralOriginY
-	parameter.SpiralInitialRadius = parameterAPI.SpiralInitialRadius
+	parameter.SpiralRadiusRatio = parameterAPI.SpiralRadiusRatio
 	parameter.ShowSpiralBezierConstruct = parameterAPI.ShowSpiralBezierConstruct
 	parameter.ShowInterpolationPoints = parameterAPI.ShowInterpolationPoints
 

@@ -324,7 +324,7 @@ type Parameter_WOP struct {
 	OriginY float64
 	SpiralOriginX float64
 	SpiralOriginY float64
-	SpiralInitialRadius float64
+	SpiralRadiusRatio float64
 	ShowSpiralBezierConstruct bool
 	ShowInterpolationPoints bool
 }
@@ -362,7 +362,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.OriginY = from.OriginY
 	to.SpiralOriginX = from.SpiralOriginX
 	to.SpiralOriginY = from.SpiralOriginY
-	to.SpiralInitialRadius = from.SpiralInitialRadius
+	to.SpiralRadiusRatio = from.SpiralRadiusRatio
 	to.ShowSpiralBezierConstruct = from.ShowSpiralBezierConstruct
 	to.ShowInterpolationPoints = from.ShowInterpolationPoints
 }

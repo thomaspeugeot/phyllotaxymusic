@@ -392,8 +392,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.SpiralOriginY
 	SpiralOriginY_Data sql.NullFloat64
 
-	// Declation for basic field parameterDB.SpiralInitialRadius
-	SpiralInitialRadius_Data sql.NullFloat64
+	// Declation for basic field parameterDB.SpiralRadiusRatio
+	SpiralRadiusRatio_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.ShowSpiralBezierConstruct
 	// provide the sql storage for the boolan
@@ -487,7 +487,7 @@ type ParameterWOP struct {
 
 	SpiralOriginY float64 `xlsx:"31"`
 
-	SpiralInitialRadius float64 `xlsx:"32"`
+	SpiralRadiusRatio float64 `xlsx:"32"`
 
 	ShowSpiralBezierConstruct bool `xlsx:"33"`
 
@@ -529,7 +529,7 @@ var Parameter_Fields = []string{
 	"OriginY",
 	"SpiralOriginX",
 	"SpiralOriginY",
-	"SpiralInitialRadius",
+	"SpiralRadiusRatio",
 	"ShowSpiralBezierConstruct",
 	"ShowInterpolationPoints",
 }
@@ -1921,8 +1921,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
 	parameterDB.SpiralOriginY_Data.Valid = true
 
-	parameterDB.SpiralInitialRadius_Data.Float64 = parameter.SpiralInitialRadius
-	parameterDB.SpiralInitialRadius_Data.Valid = true
+	parameterDB.SpiralRadiusRatio_Data.Float64 = parameter.SpiralRadiusRatio
+	parameterDB.SpiralRadiusRatio_Data.Valid = true
 
 	parameterDB.ShowSpiralBezierConstruct_Data.Bool = parameter.ShowSpiralBezierConstruct
 	parameterDB.ShowSpiralBezierConstruct_Data.Valid = true
@@ -2028,8 +2028,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
 	parameterDB.SpiralOriginY_Data.Valid = true
 
-	parameterDB.SpiralInitialRadius_Data.Float64 = parameter.SpiralInitialRadius
-	parameterDB.SpiralInitialRadius_Data.Valid = true
+	parameterDB.SpiralRadiusRatio_Data.Float64 = parameter.SpiralRadiusRatio
+	parameterDB.SpiralRadiusRatio_Data.Valid = true
 
 	parameterDB.ShowSpiralBezierConstruct_Data.Bool = parameter.ShowSpiralBezierConstruct
 	parameterDB.ShowSpiralBezierConstruct_Data.Valid = true
@@ -2135,8 +2135,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
 	parameterDB.SpiralOriginY_Data.Valid = true
 
-	parameterDB.SpiralInitialRadius_Data.Float64 = parameter.SpiralInitialRadius
-	parameterDB.SpiralInitialRadius_Data.Valid = true
+	parameterDB.SpiralRadiusRatio_Data.Float64 = parameter.SpiralRadiusRatio
+	parameterDB.SpiralRadiusRatio_Data.Valid = true
 
 	parameterDB.ShowSpiralBezierConstruct_Data.Bool = parameter.ShowSpiralBezierConstruct
 	parameterDB.ShowSpiralBezierConstruct_Data.Valid = true
@@ -2179,7 +2179,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
 	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
-	parameter.SpiralInitialRadius = parameterDB.SpiralInitialRadius_Data.Float64
+	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
 }
@@ -2218,7 +2218,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
 	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
-	parameter.SpiralInitialRadius = parameterDB.SpiralInitialRadius_Data.Float64
+	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
 }
@@ -2258,7 +2258,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
 	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
-	parameter.SpiralInitialRadius = parameterDB.SpiralInitialRadius_Data.Float64
+	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
 }

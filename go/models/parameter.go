@@ -160,9 +160,9 @@ type Parameter struct {
 	SpiralOrigin   *SpiralOrigin
 
 	// drawing the spiral
-	SpiralOriginX       float64
-	SpiralOriginY       float64
-	SpiralInitialRadius float64
+	SpiralOriginX     float64
+	SpiralOriginY     float64
+	SpiralRadiusRatio float64
 
 	ShowSpiralBezierConstruct bool
 	ShowInterpolationPoints   bool

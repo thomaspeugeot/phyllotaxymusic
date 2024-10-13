@@ -45,8 +45,8 @@ func (p *Parameter) convertToCircleSpaceCoordsArray(x_s [4]float64, y_s [4]float
 	for i := range 4 {
 		ratio := x_s[i] / p.RotatedAxis.Length
 		angle := math.Pi * 2.0 * ratio
-		x_r[i] = (p.SpiralInitialRadius + y_s[i]) * math.Cos(angle)
-		y_r[i] = (p.SpiralInitialRadius + y_s[i]) * math.Sin(angle)
+		x_r[i] = (p.SpiralRadiusRatio*p.SideLength + y_s[i]) * math.Cos(angle)
+		y_r[i] = (p.SpiralRadiusRatio*p.SideLength + y_s[i]) * math.Sin(angle)
 	}
 	return x_r, y_r
 }
@@ -57,8 +57,8 @@ func (p *Parameter) convertToSpiralCoords(x_s float64, y_s float64) (float64, fl
 
 	ratio := x_s / p.RotatedAxis.Length
 	angle := math.Pi * 2.0 * ratio
-	x_r = (p.SpiralInitialRadius + y_s) * math.Cos(angle)
-	y_r = (p.SpiralInitialRadius + y_s) * math.Sin(angle)
+	x_r = (p.SpiralRadiusRatio*p.SideLength + y_s) * math.Cos(angle)
+	y_r = (p.SpiralRadiusRatio*p.SideLength + y_s) * math.Sin(angle)
 
 	return x_r, y_r
 }
