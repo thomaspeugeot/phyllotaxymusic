@@ -53,6 +53,8 @@ export class Parameter {
 	BezierControlLengthRatio: number = 0
 	SpiralBezierStrength: number = 0
 	NbInterpolationPoints: number = 0
+	HourHandleRotationAngle: number = 0
+	MinuteHandleRotationAngle: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -71,6 +73,7 @@ export class Parameter {
 	OriginY: number = 0
 	SpiralOriginX: number = 0
 	SpiralOriginY: number = 0
+	OriginCrossWidth: number = 0
 	SpiralRadiusRatio: number = 0
 	ShowSpiralBezierConstruct: boolean = false
 	ShowInterpolationPoints: boolean = false
@@ -166,6 +169,8 @@ export class Parameter {
 
 	FrontCurveStack?: FrontCurveStack
 
+	RotatedFrontCurveStack?: FrontCurveStack
+
 	Fkey?: Key
 
 	PitchLines?: AxisGrid
@@ -217,6 +222,8 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.BezierControlLengthRatio = parameter.BezierControlLengthRatio
 	parameterAPI.SpiralBezierStrength = parameter.SpiralBezierStrength
 	parameterAPI.NbInterpolationPoints = parameter.NbInterpolationPoints
+	parameterAPI.HourHandleRotationAngle = parameter.HourHandleRotationAngle
+	parameterAPI.MinuteHandleRotationAngle = parameter.MinuteHandleRotationAngle
 	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
 	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
 	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
@@ -235,6 +242,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.OriginY = parameter.OriginY
 	parameterAPI.SpiralOriginX = parameter.SpiralOriginX
 	parameterAPI.SpiralOriginY = parameter.SpiralOriginY
+	parameterAPI.OriginCrossWidth = parameter.OriginCrossWidth
 	parameterAPI.SpiralRadiusRatio = parameter.SpiralRadiusRatio
 	parameterAPI.ShowSpiralBezierConstruct = parameter.ShowSpiralBezierConstruct
 	parameterAPI.ShowInterpolationPoints = parameter.ShowInterpolationPoints
@@ -555,6 +563,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.RotatedFrontCurveStackID.Valid = true
+	if (parameter.RotatedFrontCurveStack != undefined) {
+		parameterAPI.ParameterPointersEncoding.RotatedFrontCurveStackID.Int64 = parameter.RotatedFrontCurveStack.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.RotatedFrontCurveStackID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.FkeyID.Valid = true
 	if (parameter.Fkey != undefined) {
 		parameterAPI.ParameterPointersEncoding.FkeyID.Int64 = parameter.Fkey.ID  
@@ -686,6 +701,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.BezierControlLengthRatio = parameterAPI.BezierControlLengthRatio
 	parameter.SpiralBezierStrength = parameterAPI.SpiralBezierStrength
 	parameter.NbInterpolationPoints = parameterAPI.NbInterpolationPoints
+	parameter.HourHandleRotationAngle = parameterAPI.HourHandleRotationAngle
+	parameter.MinuteHandleRotationAngle = parameterAPI.MinuteHandleRotationAngle
 	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
 	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX
 	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY
@@ -704,6 +721,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.OriginY = parameterAPI.OriginY
 	parameter.SpiralOriginX = parameterAPI.SpiralOriginX
 	parameter.SpiralOriginY = parameterAPI.SpiralOriginY
+	parameter.OriginCrossWidth = parameterAPI.OriginCrossWidth
 	parameter.SpiralRadiusRatio = parameterAPI.SpiralRadiusRatio
 	parameter.ShowSpiralBezierConstruct = parameterAPI.ShowSpiralBezierConstruct
 	parameter.ShowInterpolationPoints = parameterAPI.ShowInterpolationPoints
@@ -754,6 +772,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralBezierGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64)
 	parameter.SpiralBezierFullGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierFullGridID.Int64)
 	parameter.FrontCurveStack = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64)
+	parameter.RotatedFrontCurveStack = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.RotatedFrontCurveStackID.Int64)
 	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
 	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)

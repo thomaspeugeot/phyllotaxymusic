@@ -1543,6 +1543,12 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.FrontCurveStack), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "NbInterpolationPoints":
 			FormDivBasicFieldToField(&(parameter_.NbInterpolationPoints), formDiv)
+		case "RotatedFrontCurveStack":
+			FormDivSelectFieldToField(&(parameter_.RotatedFrontCurveStack), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "HourHandleRotationAngle":
+			FormDivBasicFieldToField(&(parameter_.HourHandleRotationAngle), formDiv)
+		case "MinuteHandleRotationAngle":
+			FormDivBasicFieldToField(&(parameter_.MinuteHandleRotationAngle), formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":
@@ -1607,6 +1613,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.SpiralOriginX), formDiv)
 		case "SpiralOriginY":
 			FormDivBasicFieldToField(&(parameter_.SpiralOriginY), formDiv)
+		case "OriginCrossWidth":
+			FormDivBasicFieldToField(&(parameter_.OriginCrossWidth), formDiv)
 		case "SpiralRadiusRatio":
 			FormDivBasicFieldToField(&(parameter_.SpiralRadiusRatio), formDiv)
 		case "ShowSpiralBezierConstruct":

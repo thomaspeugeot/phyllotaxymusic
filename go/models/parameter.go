@@ -109,6 +109,12 @@ type Parameter struct {
 	FrontCurveStack       *FrontCurveStack
 	NbInterpolationPoints int
 
+	// taking into accound the rotation to align the
+	// curve on the 12 th hour
+	RotatedFrontCurveStack    *FrontCurveStack
+	HourHandleRotationAngle   float64
+	MinuteHandleRotationAngle float64
+
 	// the score
 	Fkey                *Key
 	FkeySizeRatio       float64
@@ -162,6 +168,7 @@ type Parameter struct {
 	// drawing the spiral
 	SpiralOriginX     float64
 	SpiralOriginY     float64
+	OriginCrossWidth  float64
 	SpiralRadiusRatio float64
 
 	ShowSpiralBezierConstruct bool

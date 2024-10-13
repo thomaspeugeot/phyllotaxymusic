@@ -227,6 +227,10 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	FrontCurveStackID sql.NullInt64
 
+	// field RotatedFrontCurveStack is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	RotatedFrontCurveStackID sql.NullInt64
+
 	// field Fkey is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	FkeyID sql.NullInt64
@@ -337,6 +341,12 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.NbInterpolationPoints
 	NbInterpolationPoints_Data sql.NullInt64
 
+	// Declation for basic field parameterDB.HourHandleRotationAngle
+	HourHandleRotationAngle_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.MinuteHandleRotationAngle
+	MinuteHandleRotationAngle_Data sql.NullFloat64
+
 	// Declation for basic field parameterDB.FkeySizeRatio
 	FkeySizeRatio_Data sql.NullFloat64
 
@@ -391,6 +401,9 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.SpiralOriginY
 	SpiralOriginY_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.OriginCrossWidth
+	OriginCrossWidth_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.SpiralRadiusRatio
 	SpiralRadiusRatio_Data sql.NullFloat64
@@ -451,47 +464,53 @@ type ParameterWOP struct {
 
 	NbInterpolationPoints int `xlsx:"13"`
 
-	FkeySizeRatio float64 `xlsx:"14"`
+	HourHandleRotationAngle float64 `xlsx:"14"`
 
-	FkeyOriginRelativeX float64 `xlsx:"15"`
+	MinuteHandleRotationAngle float64 `xlsx:"15"`
 
-	FkeyOriginRelativeY float64 `xlsx:"16"`
+	FkeySizeRatio float64 `xlsx:"16"`
 
-	PitchHeight float64 `xlsx:"17"`
+	FkeyOriginRelativeX float64 `xlsx:"17"`
 
-	NbPitchLines int `xlsx:"18"`
+	FkeyOriginRelativeY float64 `xlsx:"18"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"19"`
+	PitchHeight float64 `xlsx:"19"`
 
-	NbMeasureLines int `xlsx:"20"`
+	NbPitchLines int `xlsx:"20"`
 
-	NbMeasureLinesPerCurve int `xlsx:"21"`
+	MeasureLinesHeightRatio float64 `xlsx:"21"`
 
-	FirstVoiceShiftX float64 `xlsx:"22"`
+	NbMeasureLines int `xlsx:"22"`
 
-	FirstVoiceShiftY float64 `xlsx:"23"`
+	NbMeasureLinesPerCurve int `xlsx:"23"`
 
-	PitchDifference int `xlsx:"24"`
+	FirstVoiceShiftX float64 `xlsx:"24"`
 
-	Speed float64 `xlsx:"25"`
+	FirstVoiceShiftY float64 `xlsx:"25"`
 
-	Level float64 `xlsx:"26"`
+	PitchDifference int `xlsx:"26"`
 
-	IsMinor bool `xlsx:"27"`
+	Speed float64 `xlsx:"27"`
 
-	OriginX float64 `xlsx:"28"`
+	Level float64 `xlsx:"28"`
 
-	OriginY float64 `xlsx:"29"`
+	IsMinor bool `xlsx:"29"`
 
-	SpiralOriginX float64 `xlsx:"30"`
+	OriginX float64 `xlsx:"30"`
 
-	SpiralOriginY float64 `xlsx:"31"`
+	OriginY float64 `xlsx:"31"`
 
-	SpiralRadiusRatio float64 `xlsx:"32"`
+	SpiralOriginX float64 `xlsx:"32"`
 
-	ShowSpiralBezierConstruct bool `xlsx:"33"`
+	SpiralOriginY float64 `xlsx:"33"`
 
-	ShowInterpolationPoints bool `xlsx:"34"`
+	OriginCrossWidth float64 `xlsx:"34"`
+
+	SpiralRadiusRatio float64 `xlsx:"35"`
+
+	ShowSpiralBezierConstruct bool `xlsx:"36"`
+
+	ShowInterpolationPoints bool `xlsx:"37"`
 	// insertion for WOP pointer fields
 }
 
@@ -511,6 +530,8 @@ var Parameter_Fields = []string{
 	"BezierControlLengthRatio",
 	"SpiralBezierStrength",
 	"NbInterpolationPoints",
+	"HourHandleRotationAngle",
+	"MinuteHandleRotationAngle",
 	"FkeySizeRatio",
 	"FkeyOriginRelativeX",
 	"FkeyOriginRelativeY",
@@ -529,6 +550,7 @@ var Parameter_Fields = []string{
 	"OriginY",
 	"SpiralOriginX",
 	"SpiralOriginY",
+	"OriginCrossWidth",
 	"SpiralRadiusRatio",
 	"ShowSpiralBezierConstruct",
 	"ShowInterpolationPoints",
@@ -1191,6 +1213,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.FrontCurveStackID.Valid = true
 		}
 
+		// commit pointer value parameter.RotatedFrontCurveStack translates to updating the parameter.RotatedFrontCurveStackID
+		parameterDB.RotatedFrontCurveStackID.Valid = true // allow for a 0 value (nil association)
+		if parameter.RotatedFrontCurveStack != nil {
+			if RotatedFrontCurveStackId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.RotatedFrontCurveStack]; ok {
+				parameterDB.RotatedFrontCurveStackID.Int64 = int64(RotatedFrontCurveStackId)
+				parameterDB.RotatedFrontCurveStackID.Valid = true
+			}
+		} else {
+			parameterDB.RotatedFrontCurveStackID.Int64 = 0
+			parameterDB.RotatedFrontCurveStackID.Valid = true
+		}
+
 		// commit pointer value parameter.Fkey translates to updating the parameter.FkeyID
 		parameterDB.FkeyID.Valid = true // allow for a 0 value (nil association)
 		if parameter.Fkey != nil {
@@ -1715,6 +1749,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.FrontCurveStackID.Int64 != 0 {
 		parameter.FrontCurveStack = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.FrontCurveStackID.Int64)]
 	}
+	// RotatedFrontCurveStack field
+	parameter.RotatedFrontCurveStack = nil
+	if parameterDB.RotatedFrontCurveStackID.Int64 != 0 {
+		parameter.RotatedFrontCurveStack = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.RotatedFrontCurveStackID.Int64)]
+	}
 	// Fkey field
 	parameter.Fkey = nil
 	if parameterDB.FkeyID.Int64 != 0 {
@@ -1867,6 +1906,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
 	parameterDB.NbInterpolationPoints_Data.Valid = true
 
+	parameterDB.HourHandleRotationAngle_Data.Float64 = parameter.HourHandleRotationAngle
+	parameterDB.HourHandleRotationAngle_Data.Valid = true
+
+	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
+	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
+
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -1920,6 +1965,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
 	parameterDB.SpiralOriginY_Data.Valid = true
+
+	parameterDB.OriginCrossWidth_Data.Float64 = parameter.OriginCrossWidth
+	parameterDB.OriginCrossWidth_Data.Valid = true
 
 	parameterDB.SpiralRadiusRatio_Data.Float64 = parameter.SpiralRadiusRatio
 	parameterDB.SpiralRadiusRatio_Data.Valid = true
@@ -1974,6 +2022,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
 	parameterDB.NbInterpolationPoints_Data.Valid = true
 
+	parameterDB.HourHandleRotationAngle_Data.Float64 = parameter.HourHandleRotationAngle
+	parameterDB.HourHandleRotationAngle_Data.Valid = true
+
+	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
+	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
+
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -2027,6 +2081,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
 	parameterDB.SpiralOriginY_Data.Valid = true
+
+	parameterDB.OriginCrossWidth_Data.Float64 = parameter.OriginCrossWidth
+	parameterDB.OriginCrossWidth_Data.Valid = true
 
 	parameterDB.SpiralRadiusRatio_Data.Float64 = parameter.SpiralRadiusRatio
 	parameterDB.SpiralRadiusRatio_Data.Valid = true
@@ -2081,6 +2138,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
 	parameterDB.NbInterpolationPoints_Data.Valid = true
 
+	parameterDB.HourHandleRotationAngle_Data.Float64 = parameter.HourHandleRotationAngle
+	parameterDB.HourHandleRotationAngle_Data.Valid = true
+
+	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
+	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
+
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -2135,6 +2198,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
 	parameterDB.SpiralOriginY_Data.Valid = true
 
+	parameterDB.OriginCrossWidth_Data.Float64 = parameter.OriginCrossWidth
+	parameterDB.OriginCrossWidth_Data.Valid = true
+
 	parameterDB.SpiralRadiusRatio_Data.Float64 = parameter.SpiralRadiusRatio
 	parameterDB.SpiralRadiusRatio_Data.Valid = true
 
@@ -2161,6 +2227,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
 	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
+	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
+	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2179,6 +2247,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
 	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
+	parameter.OriginCrossWidth = parameterDB.OriginCrossWidth_Data.Float64
 	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
@@ -2200,6 +2269,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
 	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
+	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
+	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2218,6 +2289,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
 	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
+	parameter.OriginCrossWidth = parameterDB.OriginCrossWidth_Data.Float64
 	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
@@ -2240,6 +2312,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
 	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
+	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
+	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2258,6 +2332,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
 	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
+	parameter.OriginCrossWidth = parameterDB.OriginCrossWidth_Data.Float64
 	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
@@ -2686,6 +2761,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.FrontCurveStackID.Int64 != 0 {
 			parameterDB.FrontCurveStackID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.FrontCurveStackID.Int64)])
 			parameterDB.FrontCurveStackID.Valid = true
+		}
+
+		// reindexing RotatedFrontCurveStack field
+		if parameterDB.RotatedFrontCurveStackID.Int64 != 0 {
+			parameterDB.RotatedFrontCurveStackID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.RotatedFrontCurveStackID.Int64)])
+			parameterDB.RotatedFrontCurveStackID.Valid = true
 		}
 
 		// reindexing Fkey field

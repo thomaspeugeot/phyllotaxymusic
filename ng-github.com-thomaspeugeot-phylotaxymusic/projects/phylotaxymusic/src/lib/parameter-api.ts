@@ -48,6 +48,8 @@ export class ParameterAPI {
 	BezierControlLengthRatio: number = 0
 	SpiralBezierStrength: number = 0
 	NbInterpolationPoints: number = 0
+	HourHandleRotationAngle: number = 0
+	MinuteHandleRotationAngle: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -66,6 +68,7 @@ export class ParameterAPI {
 	OriginY: number = 0
 	SpiralOriginX: number = 0
 	SpiralOriginY: number = 0
+	OriginCrossWidth: number = 0
 	SpiralRadiusRatio: number = 0
 	ShowSpiralBezierConstruct: boolean = false
 	ShowInterpolationPoints: boolean = false
@@ -166,6 +169,8 @@ export class ParameterPointersEncoding {
 	SpiralBezierFullGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierFullGrid.ID = 0
 
 	FrontCurveStackID: NullInt64 = new NullInt64 // if pointer is null, FrontCurveStack.ID = 0
+
+	RotatedFrontCurveStackID: NullInt64 = new NullInt64 // if pointer is null, RotatedFrontCurveStack.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 

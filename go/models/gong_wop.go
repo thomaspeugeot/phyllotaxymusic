@@ -306,6 +306,8 @@ type Parameter_WOP struct {
 	BezierControlLengthRatio float64
 	SpiralBezierStrength float64
 	NbInterpolationPoints int
+	HourHandleRotationAngle float64
+	MinuteHandleRotationAngle float64
 	FkeySizeRatio float64
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
@@ -324,6 +326,7 @@ type Parameter_WOP struct {
 	OriginY float64
 	SpiralOriginX float64
 	SpiralOriginY float64
+	OriginCrossWidth float64
 	SpiralRadiusRatio float64
 	ShowSpiralBezierConstruct bool
 	ShowInterpolationPoints bool
@@ -344,6 +347,8 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.BezierControlLengthRatio = from.BezierControlLengthRatio
 	to.SpiralBezierStrength = from.SpiralBezierStrength
 	to.NbInterpolationPoints = from.NbInterpolationPoints
+	to.HourHandleRotationAngle = from.HourHandleRotationAngle
+	to.MinuteHandleRotationAngle = from.MinuteHandleRotationAngle
 	to.FkeySizeRatio = from.FkeySizeRatio
 	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX
 	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY
@@ -362,6 +367,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.OriginY = from.OriginY
 	to.SpiralOriginX = from.SpiralOriginX
 	to.SpiralOriginY = from.SpiralOriginY
+	to.OriginCrossWidth = from.OriginCrossWidth
 	to.SpiralRadiusRatio = from.SpiralRadiusRatio
 	to.ShowSpiralBezierConstruct = from.ShowSpiralBezierConstruct
 	to.ShowInterpolationPoints = from.ShowInterpolationPoints

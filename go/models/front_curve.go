@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
@@ -24,10 +26,10 @@ type FrontCurveStack struct {
 // Draw implements Shape.
 func (frontCurveStack *FrontCurveStack) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_models.Layer, p *Parameter) {
 
-	for _, frontCurve := range frontCurveStack.FrontCurves {
+	for idx, frontCurve := range frontCurveStack.FrontCurves {
 
 		path := new(gongsvg_models.Path).Stage(gongsvgStage)
-		path.Name = "Front Curve Stack"
+		path.Name = "Front Curve Stack " + fmt.Sprintf("%d", idx)
 		layer.Paths = append(layer.Paths, path)
 
 		frontCurveStack.Presentation.CopyTo(&path.Presentation)

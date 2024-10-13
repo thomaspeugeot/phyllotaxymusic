@@ -466,6 +466,11 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("FrontCurveStack", instanceWithInferedType.FrontCurveStack, formGroup, probe)
 		BasicFieldtoForm("NbInterpolationPoints", instanceWithInferedType.NbInterpolationPoints, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("RotatedFrontCurveStack", instanceWithInferedType.RotatedFrontCurveStack, formGroup, probe)
+		BasicFieldtoForm("HourHandleRotationAngle", instanceWithInferedType.HourHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("MinuteHandleRotationAngle", instanceWithInferedType.MinuteHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		AssociationFieldToForm("Fkey", instanceWithInferedType.Fkey, formGroup, probe)
 		BasicFieldtoForm("FkeySizeRatio", instanceWithInferedType.FkeySizeRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -516,6 +521,8 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("SpiralOriginX", instanceWithInferedType.SpiralOriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("SpiralOriginY", instanceWithInferedType.SpiralOriginY, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("OriginCrossWidth", instanceWithInferedType.OriginCrossWidth, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("SpiralRadiusRatio", instanceWithInferedType.SpiralRadiusRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)

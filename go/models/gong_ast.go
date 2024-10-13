@@ -1639,6 +1639,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].NbInterpolationPoints = int(exprSign) * int(fielValue)
+				case "HourHandleRotationAngle":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].HourHandleRotationAngle = exprSign * fielValue
+				case "MinuteHandleRotationAngle":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].MinuteHandleRotationAngle = exprSign * fielValue
 				case "FkeySizeRatio":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1758,6 +1772,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].SpiralOriginY = exprSign * fielValue
+				case "OriginCrossWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].OriginCrossWidth = exprSign * fielValue
 				case "SpiralRadiusRatio":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -2697,6 +2718,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "FrontCurveStack":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].FrontCurveStack = __gong__map_FrontCurveStack[targetIdentifier]
+				case "RotatedFrontCurveStack":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].RotatedFrontCurveStack = __gong__map_FrontCurveStack[targetIdentifier]
 				case "Fkey":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].Fkey = __gong__map_Key[targetIdentifier]

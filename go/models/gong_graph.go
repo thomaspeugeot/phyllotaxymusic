@@ -746,6 +746,9 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.FrontCurveStack != nil {
 		StageBranch(stage, parameter.FrontCurveStack)
 	}
+	if parameter.RotatedFrontCurveStack != nil {
+		StageBranch(stage, parameter.RotatedFrontCurveStack)
+	}
 	if parameter.Fkey != nil {
 		StageBranch(stage, parameter.Fkey)
 	}
@@ -1603,6 +1606,9 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.FrontCurveStack != nil {
 		parameterTo.FrontCurveStack = CopyBranchFrontCurveStack(mapOrigCopy, parameterFrom.FrontCurveStack)
 	}
+	if parameterFrom.RotatedFrontCurveStack != nil {
+		parameterTo.RotatedFrontCurveStack = CopyBranchFrontCurveStack(mapOrigCopy, parameterFrom.RotatedFrontCurveStack)
+	}
 	if parameterFrom.Fkey != nil {
 		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
 	}
@@ -2431,6 +2437,9 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.FrontCurveStack != nil {
 		UnstageBranch(stage, parameter.FrontCurveStack)
+	}
+	if parameter.RotatedFrontCurveStack != nil {
+		UnstageBranch(stage, parameter.RotatedFrontCurveStack)
 	}
 	if parameter.Fkey != nil {
 		UnstageBranch(stage, parameter.Fkey)
