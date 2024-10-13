@@ -102,7 +102,15 @@ func (p *Parameter) ComputeSpiralBezierFullGrid() {
 	}
 }
 
-func (p *Parameter) ComputeFrontCurveStack() {
+func (p *Parameter) ComputeFrontCurveStack(stage *StageStruct) {
+
+	for frontCurve := range *GetGongstructInstancesSet[FrontCurve](stage) {
+		frontCurve.Unstage(stage)
+	}
+
+	for _, frontCurve := range p.FrontCurveStack.FrontCurves {
+		frontCurve.Unstage(stage)
+	}
 
 	p.FrontCurveStack.FrontCurves = p.FrontCurveStack.FrontCurves[:0]
 	p.FrontCurveStack.SpiralCircles = p.FrontCurveStack.SpiralCircles[:0]
@@ -142,6 +150,7 @@ func (p *Parameter) ComputeFrontCurveStack() {
 		}
 		str := GenerateSmoothSVGPath(xs, ys, 0, 0)
 		frontCurve.Path = str
+		frontCurve.Stage(stage)
 
 		p.FrontCurveStack.FrontCurves = append(p.FrontCurveStack.FrontCurves, frontCurve)
 

@@ -139,7 +139,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeSpiralBezierFullGrid()
 	p.Shapes = append(p.Shapes, p.SpiralBezierFullGrid)
 
-	p.ComputeFrontCurveStack()
+	p.ComputeFrontCurveStack(stage)
 	p.Shapes = append(p.Shapes, p.FrontCurveStack)
 
 	//
