@@ -8,7 +8,7 @@
     </as-split-area>
     <as-split-area [size]="20">
       <as-split unit="pixel" direction="vertical">
-        <as-split-area [size]="460">
+        <as-split-area [size]="520">
           @if (frontRepo && frontRepo.array_Parameters[0]) {
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
               <mat-grid-tile colspan="3" rowspan="1">
@@ -98,6 +98,17 @@
               </mat-slider>
             </mat-grid-tile>
 
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Minute Hangle</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteHandleRotationAngle}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="-180.0" max="180.0" step="0.5" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteHandleRotationAngle" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
 
             </mat-grid-list>
           }
