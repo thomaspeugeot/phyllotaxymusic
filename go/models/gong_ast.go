@@ -2718,9 +2718,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "FrontCurveStack":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].FrontCurveStack = __gong__map_FrontCurveStack[targetIdentifier]
-				case "RotatedFrontCurveStack":
+				case "HourCurve":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].RotatedFrontCurveStack = __gong__map_FrontCurveStack[targetIdentifier]
+					__gong__map_Parameter[identifier].HourCurve = __gong__map_FrontCurveStack[targetIdentifier]
+				case "MinuteCurve":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].MinuteCurve = __gong__map_FrontCurveStack[targetIdentifier]
 				case "Fkey":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].Fkey = __gong__map_Key[targetIdentifier]

@@ -170,7 +170,9 @@ export class ParameterPointersEncoding {
 
 	FrontCurveStackID: NullInt64 = new NullInt64 // if pointer is null, FrontCurveStack.ID = 0
 
-	RotatedFrontCurveStackID: NullInt64 = new NullInt64 // if pointer is null, RotatedFrontCurveStack.ID = 0
+	HourCurveID: NullInt64 = new NullInt64 // if pointer is null, HourCurve.ID = 0
+
+	MinuteCurveID: NullInt64 = new NullInt64 // if pointer is null, MinuteCurve.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 

@@ -111,8 +111,10 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 	}
 
 	p.FrontCurveStack.FrontCurves = p.FrontCurveStack.FrontCurves[:0]
-	p.RotatedFrontCurveStack.FrontCurves = p.RotatedFrontCurveStack.FrontCurves[:0]
 	p.FrontCurveStack.SpiralCircles = p.FrontCurveStack.SpiralCircles[:0]
+
+	p.HourCurve.FrontCurves = p.HourCurve.FrontCurves[:0]
+	p.MinuteCurve.FrontCurves = p.MinuteCurve.FrontCurves[:0]
 
 	for idx, bezierGrid := range p.GrowthCurveStack.BezierGrids {
 
@@ -165,7 +167,7 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 			frontCurve.Stage(stage)
 
-			p.RotatedFrontCurveStack.FrontCurves = append(p.RotatedFrontCurveStack.FrontCurves, frontCurve)
+			p.HourCurve.FrontCurves = append(p.HourCurve.FrontCurves, frontCurve)
 		}
 
 		if idx == 1 {
@@ -176,7 +178,7 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 			frontCurve.Stage(stage)
 
-			p.RotatedFrontCurveStack.FrontCurves = append(p.RotatedFrontCurveStack.FrontCurves, frontCurve)
+			p.MinuteCurve.FrontCurves = append(p.MinuteCurve.FrontCurves, frontCurve)
 		}
 
 	}

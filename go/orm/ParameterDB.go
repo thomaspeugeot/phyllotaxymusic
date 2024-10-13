@@ -227,9 +227,13 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	FrontCurveStackID sql.NullInt64
 
-	// field RotatedFrontCurveStack is a pointer to another Struct (optional or 0..1)
+	// field HourCurve is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	RotatedFrontCurveStackID sql.NullInt64
+	HourCurveID sql.NullInt64
+
+	// field MinuteCurve is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	MinuteCurveID sql.NullInt64
 
 	// field Fkey is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -1213,16 +1217,28 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.FrontCurveStackID.Valid = true
 		}
 
-		// commit pointer value parameter.RotatedFrontCurveStack translates to updating the parameter.RotatedFrontCurveStackID
-		parameterDB.RotatedFrontCurveStackID.Valid = true // allow for a 0 value (nil association)
-		if parameter.RotatedFrontCurveStack != nil {
-			if RotatedFrontCurveStackId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.RotatedFrontCurveStack]; ok {
-				parameterDB.RotatedFrontCurveStackID.Int64 = int64(RotatedFrontCurveStackId)
-				parameterDB.RotatedFrontCurveStackID.Valid = true
+		// commit pointer value parameter.HourCurve translates to updating the parameter.HourCurveID
+		parameterDB.HourCurveID.Valid = true // allow for a 0 value (nil association)
+		if parameter.HourCurve != nil {
+			if HourCurveId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.HourCurve]; ok {
+				parameterDB.HourCurveID.Int64 = int64(HourCurveId)
+				parameterDB.HourCurveID.Valid = true
 			}
 		} else {
-			parameterDB.RotatedFrontCurveStackID.Int64 = 0
-			parameterDB.RotatedFrontCurveStackID.Valid = true
+			parameterDB.HourCurveID.Int64 = 0
+			parameterDB.HourCurveID.Valid = true
+		}
+
+		// commit pointer value parameter.MinuteCurve translates to updating the parameter.MinuteCurveID
+		parameterDB.MinuteCurveID.Valid = true // allow for a 0 value (nil association)
+		if parameter.MinuteCurve != nil {
+			if MinuteCurveId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.MinuteCurve]; ok {
+				parameterDB.MinuteCurveID.Int64 = int64(MinuteCurveId)
+				parameterDB.MinuteCurveID.Valid = true
+			}
+		} else {
+			parameterDB.MinuteCurveID.Int64 = 0
+			parameterDB.MinuteCurveID.Valid = true
 		}
 
 		// commit pointer value parameter.Fkey translates to updating the parameter.FkeyID
@@ -1749,10 +1765,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.FrontCurveStackID.Int64 != 0 {
 		parameter.FrontCurveStack = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.FrontCurveStackID.Int64)]
 	}
-	// RotatedFrontCurveStack field
-	parameter.RotatedFrontCurveStack = nil
-	if parameterDB.RotatedFrontCurveStackID.Int64 != 0 {
-		parameter.RotatedFrontCurveStack = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.RotatedFrontCurveStackID.Int64)]
+	// HourCurve field
+	parameter.HourCurve = nil
+	if parameterDB.HourCurveID.Int64 != 0 {
+		parameter.HourCurve = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.HourCurveID.Int64)]
+	}
+	// MinuteCurve field
+	parameter.MinuteCurve = nil
+	if parameterDB.MinuteCurveID.Int64 != 0 {
+		parameter.MinuteCurve = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.MinuteCurveID.Int64)]
 	}
 	// Fkey field
 	parameter.Fkey = nil
@@ -2763,10 +2784,16 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 			parameterDB.FrontCurveStackID.Valid = true
 		}
 
-		// reindexing RotatedFrontCurveStack field
-		if parameterDB.RotatedFrontCurveStackID.Int64 != 0 {
-			parameterDB.RotatedFrontCurveStackID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.RotatedFrontCurveStackID.Int64)])
-			parameterDB.RotatedFrontCurveStackID.Valid = true
+		// reindexing HourCurve field
+		if parameterDB.HourCurveID.Int64 != 0 {
+			parameterDB.HourCurveID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.HourCurveID.Int64)])
+			parameterDB.HourCurveID.Valid = true
+		}
+
+		// reindexing MinuteCurve field
+		if parameterDB.MinuteCurveID.Int64 != 0 {
+			parameterDB.MinuteCurveID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.MinuteCurveID.Int64)])
+			parameterDB.MinuteCurveID.Valid = true
 		}
 
 		// reindexing Fkey field

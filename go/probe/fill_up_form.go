@@ -466,7 +466,8 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("FrontCurveStack", instanceWithInferedType.FrontCurveStack, formGroup, probe)
 		BasicFieldtoForm("NbInterpolationPoints", instanceWithInferedType.NbInterpolationPoints, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		AssociationFieldToForm("RotatedFrontCurveStack", instanceWithInferedType.RotatedFrontCurveStack, formGroup, probe)
+		AssociationFieldToForm("HourCurve", instanceWithInferedType.HourCurve, formGroup, probe)
+		AssociationFieldToForm("MinuteCurve", instanceWithInferedType.MinuteCurve, formGroup, probe)
 		BasicFieldtoForm("HourHandleRotationAngle", instanceWithInferedType.HourHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("MinuteHandleRotationAngle", instanceWithInferedType.MinuteHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,

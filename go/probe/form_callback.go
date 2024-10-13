@@ -1543,8 +1543,10 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.FrontCurveStack), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "NbInterpolationPoints":
 			FormDivBasicFieldToField(&(parameter_.NbInterpolationPoints), formDiv)
-		case "RotatedFrontCurveStack":
-			FormDivSelectFieldToField(&(parameter_.RotatedFrontCurveStack), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "HourCurve":
+			FormDivSelectFieldToField(&(parameter_.HourCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "MinuteCurve":
+			FormDivSelectFieldToField(&(parameter_.MinuteCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "HourHandleRotationAngle":
 			FormDivBasicFieldToField(&(parameter_.HourHandleRotationAngle), formDiv)
 		case "MinuteHandleRotationAngle":

@@ -111,7 +111,8 @@ type Parameter struct {
 
 	// taking into accound the rotation to align the
 	// curve on the 12 th hour
-	RotatedFrontCurveStack    *FrontCurveStack
+	HourCurve                 *FrontCurveStack
+	MinuteCurve               *FrontCurveStack
 	HourHandleRotationAngle   float64
 	MinuteHandleRotationAngle float64
 
