@@ -1611,6 +1611,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.SpiralInitialRadius), formDiv)
 		case "ShowSpiralBezierConstruct":
 			FormDivBasicFieldToField(&(parameter_.ShowSpiralBezierConstruct), formDiv)
+		case "ShowInterpolationPoints":
+			FormDivBasicFieldToField(&(parameter_.ShowInterpolationPoints), formDiv)
 		}
 	}
 
@@ -2265,6 +2267,48 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralcircle_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(spiralcircle_.Transform), formDiv)
+		case "FrontCurveStack:SpiralCircles":
+			// we need to retrieve the field owner before the change
+			var pastFrontCurveStackOwner *models.FrontCurveStack
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "FrontCurveStack"
+			rf.Fieldname = "SpiralCircles"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				spiralcircleFormCallback.probe.stageOfInterest,
+				spiralcircleFormCallback.probe.backRepoOfInterest,
+				spiralcircle_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastFrontCurveStackOwner = reverseFieldOwner.(*models.FrontCurveStack)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastFrontCurveStackOwner != nil {
+					idx := slices.Index(pastFrontCurveStackOwner.SpiralCircles, spiralcircle_)
+					pastFrontCurveStackOwner.SpiralCircles = slices.Delete(pastFrontCurveStackOwner.SpiralCircles, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _frontcurvestack := range *models.GetGongstructInstancesSet[models.FrontCurveStack](spiralcircleFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _frontcurvestack.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newFrontCurveStackOwner := _frontcurvestack // we have a match
+						if pastFrontCurveStackOwner != nil {
+							if newFrontCurveStackOwner != pastFrontCurveStackOwner {
+								idx := slices.Index(pastFrontCurveStackOwner.SpiralCircles, spiralcircle_)
+								pastFrontCurveStackOwner.SpiralCircles = slices.Delete(pastFrontCurveStackOwner.SpiralCircles, idx, idx+1)
+								newFrontCurveStackOwner.SpiralCircles = append(newFrontCurveStackOwner.SpiralCircles, spiralcircle_)
+							}
+						} else {
+							newFrontCurveStackOwner.SpiralCircles = append(newFrontCurveStackOwner.SpiralCircles, spiralcircle_)
+						}
+					}
+				}
+			}
 		case "SpiralCircleGrid:SpiralCircles":
 			// we need to retrieve the field owner before the change
 			var pastSpiralCircleGridOwner *models.SpiralCircleGrid

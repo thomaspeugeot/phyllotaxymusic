@@ -163,6 +163,13 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 	case *models.SpiralCircle:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "FrontCurveStack":
+			switch reverseField.Fieldname {
+			case "SpiralCircles":
+				if _frontcurvestack, ok := stage.FrontCurveStack_SpiralCircles_reverseMap[inst]; ok {
+					res = _frontcurvestack.Name
+				}
+			}
 		case "SpiralCircleGrid":
 			switch reverseField.Fieldname {
 			case "SpiralCircles":
@@ -369,6 +376,11 @@ func GetReverseFieldOwner[T models.Gongstruct](
 	case *models.SpiralCircle:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "FrontCurveStack":
+			switch reverseField.Fieldname {
+			case "SpiralCircles":
+				res = stage.FrontCurveStack_SpiralCircles_reverseMap[inst]
+			}
 		case "SpiralCircleGrid":
 			switch reverseField.Fieldname {
 			case "SpiralCircles":

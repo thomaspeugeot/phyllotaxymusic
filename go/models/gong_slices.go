@@ -154,6 +154,25 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 				}
 			}
 		}
+		if fieldName == "SpiralCircles" {
+
+			// walk all instances of the owning type
+			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
+				if any(_instance).(*FrontCurveStack) != owningInstanceInfered {
+					_inferedTypeInstance := any(_instance).(*FrontCurveStack)
+					reference := make([]FieldType, 0)
+					targetFieldSlice := any(_inferedTypeInstance.SpiralCircles).([]FieldType)
+					copy(targetFieldSlice, reference)
+					_inferedTypeInstance.SpiralCircles = _inferedTypeInstance.SpiralCircles[0:]
+					for _, fieldInstance := range reference {
+						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
+							_inferedTypeInstance.SpiralCircles =
+								append(_inferedTypeInstance.SpiralCircles, any(fieldInstance).(*SpiralCircle))
+						}
+					}
+				}
+			}
+		}
 
 	case *HorizontalAxis:
 		// insertion point per field
@@ -393,6 +412,14 @@ func (stage *StageStruct) ComputeReverseMaps() {
 		_ = frontcurvestack
 		for _, _frontcurve := range frontcurvestack.FrontCurves {
 			stage.FrontCurveStack_FrontCurves_reverseMap[_frontcurve] = frontcurvestack
+		}
+	}
+	clear(stage.FrontCurveStack_SpiralCircles_reverseMap)
+	stage.FrontCurveStack_SpiralCircles_reverseMap = make(map[*SpiralCircle]*FrontCurveStack)
+	for frontcurvestack := range stage.FrontCurveStacks {
+		_ = frontcurvestack
+		for _, _spiralcircle := range frontcurvestack.SpiralCircles {
+			stage.FrontCurveStack_SpiralCircles_reverseMap[_spiralcircle] = frontcurvestack
 		}
 	}
 

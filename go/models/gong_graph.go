@@ -544,6 +544,9 @@ func (stage *StageStruct) StageBranchFrontCurveStack(frontcurvestack *FrontCurve
 	for _, _frontcurve := range frontcurvestack.FrontCurves {
 		StageBranch(stage, _frontcurve)
 	}
+	for _, _spiralcircle := range frontcurvestack.SpiralCircles {
+		StageBranch(stage, _spiralcircle)
+	}
 
 }
 
@@ -1381,6 +1384,9 @@ func CopyBranchFrontCurveStack(mapOrigCopy map[any]any, frontcurvestackFrom *Fro
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _frontcurve := range frontcurvestackFrom.FrontCurves {
 		frontcurvestackTo.FrontCurves = append(frontcurvestackTo.FrontCurves, CopyBranchFrontCurve(mapOrigCopy, _frontcurve))
+	}
+	for _, _spiralcircle := range frontcurvestackFrom.SpiralCircles {
+		frontcurvestackTo.SpiralCircles = append(frontcurvestackTo.SpiralCircles, CopyBranchSpiralCircle(mapOrigCopy, _spiralcircle))
 	}
 
 	return
@@ -2223,6 +2229,9 @@ func (stage *StageStruct) UnstageBranchFrontCurveStack(frontcurvestack *FrontCur
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _frontcurve := range frontcurvestack.FrontCurves {
 		UnstageBranch(stage, _frontcurve)
+	}
+	for _, _spiralcircle := range frontcurvestack.SpiralCircles {
+		UnstageBranch(stage, _spiralcircle)
 	}
 
 }

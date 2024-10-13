@@ -1,6 +1,7 @@
 // insertion point for imports
 import { ShapeCategoryAPI } from './shapecategory-api'
 import { FrontCurveAPI } from './frontcurve-api'
+import { SpiralCircleAPI } from './spiralcircle-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -35,4 +36,5 @@ export class FrontCurveStackPointersEncoding {
 	ShapeCategoryID: NullInt64 = new NullInt64 // if pointer is null, ShapeCategory.ID = 0
 
 	FrontCurves: number[] = []
+	SpiralCircles: number[] = []
 }

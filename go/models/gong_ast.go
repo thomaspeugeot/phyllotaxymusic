@@ -898,6 +898,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_FrontCurve[targetIdentifier]
 							__gong__map_FrontCurveStack[identifier].FrontCurves =
 								append(__gong__map_FrontCurveStack[identifier].FrontCurves, target)
+						case "SpiralCircles":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_SpiralCircle[targetIdentifier]
+							__gong__map_FrontCurveStack[identifier].SpiralCircles =
+								append(__gong__map_FrontCurveStack[identifier].SpiralCircles, target)
 						}
 					case "HorizontalAxis":
 						switch fieldName {
@@ -2747,6 +2753,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].ShowSpiralBezierConstruct = fielValue
+				case "ShowInterpolationPoints":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].ShowInterpolationPoints = fielValue
 				}
 			case "Rhombus":
 				switch fieldName {

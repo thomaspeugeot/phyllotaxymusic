@@ -16,6 +16,8 @@ type FrontCurveStack struct {
 
 	FrontCurves []*FrontCurve
 
+	SpiralCircles []*SpiralCircle
+
 	Presentation
 }
 
@@ -32,5 +34,9 @@ func (frontCurveStack *FrontCurveStack) Draw(gongsvgStage *gongsvg_models.StageS
 
 		// https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
 		path.Definition = frontCurve.Path
+	}
+
+	for _, sc := range frontCurveStack.SpiralCircles {
+		sc.Draw(gongsvgStage, layer, p)
 	}
 }

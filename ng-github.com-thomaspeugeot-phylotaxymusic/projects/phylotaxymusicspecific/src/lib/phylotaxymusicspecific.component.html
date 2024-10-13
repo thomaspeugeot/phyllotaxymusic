@@ -19,7 +19,7 @@
               </mat-grid-tile>
               <mat-grid-tile colspan="7" rowspan="1">
                 <mat-slider style="width: 100%;" 
-                min="50.0" max="600.0" step="10" showTickMarks discrete [displayWith]="formatLabel">
+                min="50.0" max="600.0" step="1" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SideLength" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>

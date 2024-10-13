@@ -53,6 +53,9 @@ type FrontCurveStackPointersEncoding struct {
 
 	// field FrontCurves is a slice of pointers to another Struct (optional or 0..1)
 	FrontCurves IntSlice `gorm:"type:TEXT"`
+
+	// field SpiralCircles is a slice of pointers to another Struct (optional or 0..1)
+	SpiralCircles IntSlice `gorm:"type:TEXT"`
 }
 
 // FrontCurveStackDB describes a frontcurvestack in the database
@@ -303,6 +306,24 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CommitPhaseTwoInst
 				append(frontcurvestackDB.FrontCurveStackPointersEncoding.FrontCurves, int(frontcurveAssocEnd_DB.ID))
 		}
 
+		// 1. reset
+		frontcurvestackDB.FrontCurveStackPointersEncoding.SpiralCircles = make([]int, 0)
+		// 2. encode
+		for _, spiralcircleAssocEnd := range frontcurvestack.SpiralCircles {
+			spiralcircleAssocEnd_DB :=
+				backRepo.BackRepoSpiralCircle.GetSpiralCircleDBFromSpiralCirclePtr(spiralcircleAssocEnd)
+			
+			// the stage might be inconsistant, meaning that the spiralcircleAssocEnd_DB might
+			// be missing from the stage. In this case, the commit operation is robust
+			// An alternative would be to crash here to reveal the missing element.
+			if spiralcircleAssocEnd_DB == nil {
+				continue
+			}
+			
+			frontcurvestackDB.FrontCurveStackPointersEncoding.SpiralCircles =
+				append(frontcurvestackDB.FrontCurveStackPointersEncoding.SpiralCircles, int(spiralcircleAssocEnd_DB.ID))
+		}
+
 		query := backRepoFrontCurveStack.db.Save(&frontcurvestackDB)
 		if query.Error != nil {
 			log.Fatalln(query.Error)
@@ -428,6 +449,15 @@ func (frontcurvestackDB *FrontCurveStackDB) DecodePointers(backRepo *BackRepoStr
 	frontcurvestack.FrontCurves = frontcurvestack.FrontCurves[:0]
 	for _, _FrontCurveid := range frontcurvestackDB.FrontCurveStackPointersEncoding.FrontCurves {
 		frontcurvestack.FrontCurves = append(frontcurvestack.FrontCurves, backRepo.BackRepoFrontCurve.Map_FrontCurveDBID_FrontCurvePtr[uint(_FrontCurveid)])
+	}
+
+	// This loop redeem frontcurvestack.SpiralCircles in the stage from the encode in the back repo
+	// It parses all SpiralCircleDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// it appends the stage instance
+	// 1. reset the slice
+	frontcurvestack.SpiralCircles = frontcurvestack.SpiralCircles[:0]
+	for _, _SpiralCircleid := range frontcurvestackDB.FrontCurveStackPointersEncoding.SpiralCircles {
+		frontcurvestack.SpiralCircles = append(frontcurvestack.SpiralCircles, backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(_SpiralCircleid)])
 	}
 
 	return

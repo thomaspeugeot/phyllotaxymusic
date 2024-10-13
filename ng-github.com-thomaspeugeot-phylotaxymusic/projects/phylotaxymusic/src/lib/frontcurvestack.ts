@@ -6,6 +6,7 @@ import { FrontRepo } from './front-repo.service';
 // insertion point for imports
 import { ShapeCategory } from './shapecategory'
 import { FrontCurve } from './frontcurve'
+import { SpiralCircle } from './spiralcircle'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -34,6 +35,7 @@ export class FrontCurveStack {
 	ShapeCategory?: ShapeCategory
 
 	FrontCurves: Array<FrontCurve> = []
+	SpiralCircles: Array<SpiralCircle> = []
 }
 
 export function CopyFrontCurveStackToFrontCurveStackAPI(frontcurvestack: FrontCurveStack, frontcurvestackAPI: FrontCurveStackAPI) {
@@ -69,6 +71,11 @@ export function CopyFrontCurveStackToFrontCurveStackAPI(frontcurvestack: FrontCu
 		frontcurvestackAPI.FrontCurveStackPointersEncoding.FrontCurves.push(_frontcurve.ID)
 	}
 
+	frontcurvestackAPI.FrontCurveStackPointersEncoding.SpiralCircles = []
+	for (let _spiralcircle of frontcurvestack.SpiralCircles) {
+		frontcurvestackAPI.FrontCurveStackPointersEncoding.SpiralCircles.push(_spiralcircle.ID)
+	}
+
 }
 
 // CopyFrontCurveStackAPIToFrontCurveStack update basic, pointers and slice of pointers fields of frontcurvestack
@@ -102,6 +109,13 @@ export function CopyFrontCurveStackAPIToFrontCurveStack(frontcurvestackAPI: Fron
 		let _frontcurve = frontRepo.map_ID_FrontCurve.get(_id)
 		if (_frontcurve != undefined) {
 			frontcurvestack.FrontCurves.push(_frontcurve!)
+		}
+	}
+	frontcurvestack.SpiralCircles = new Array<SpiralCircle>()
+	for (let _id of frontcurvestackAPI.FrontCurveStackPointersEncoding.SpiralCircles) {
+		let _spiralcircle = frontRepo.map_ID_SpiralCircle.get(_id)
+		if (_spiralcircle != undefined) {
+			frontcurvestack.SpiralCircles.push(_spiralcircle!)
 		}
 	}
 }

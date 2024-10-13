@@ -68,6 +68,7 @@ export class ParameterAPI {
 	SpiralOriginY: number = 0
 	SpiralInitialRadius: number = 0
 	ShowSpiralBezierConstruct: boolean = false
+	ShowInterpolationPoints: boolean = false
 
 	// insertion point for other decls
 

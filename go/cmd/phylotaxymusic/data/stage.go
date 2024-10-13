@@ -593,7 +593,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.StackHeight = 2
 	__Parameter__000000_Reference.BezierControlLengthRatio = 0.400000
 	__Parameter__000000_Reference.SpiralBezierStrength = 0.800000
-	__Parameter__000000_Reference.NbInterpolationPoints = 50
+	__Parameter__000000_Reference.NbInterpolationPoints = 6
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
@@ -608,12 +608,13 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Speed = 2.900000
 	__Parameter__000000_Reference.Level = 5.600000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.OriginX = 90.000000
+	__Parameter__000000_Reference.OriginX = 100.000000
 	__Parameter__000000_Reference.OriginY = 350.000000
 	__Parameter__000000_Reference.SpiralOriginX = 600.000000
-	__Parameter__000000_Reference.SpiralOriginY = 600.000000
+	__Parameter__000000_Reference.SpiralOriginY = 550.000000
 	__Parameter__000000_Reference.SpiralInitialRadius = 140.000000
 	__Parameter__000000_Reference.ShowSpiralBezierConstruct = false
+	__Parameter__000000_Reference.ShowInterpolationPoints = false
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false

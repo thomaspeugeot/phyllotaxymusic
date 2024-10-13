@@ -19,6 +19,7 @@ import { FrontRepo, FrontRepoService } from './front-repo.service';
 // insertion point for imports
 import { ShapeCategoryAPI } from './shapecategory-api'
 import { FrontCurveAPI } from './frontcurve-api'
+import { SpiralCircleAPI } from './spiralcircle-api'
 
 @Injectable({
   providedIn: 'root'

@@ -105,6 +105,7 @@ func (p *Parameter) ComputeSpiralBezierFullGrid() {
 func (p *Parameter) ComputeFrontCurveStack() {
 
 	p.FrontCurveStack.FrontCurves = p.FrontCurveStack.FrontCurves[:0]
+	p.FrontCurveStack.SpiralCircles = p.FrontCurveStack.SpiralCircles[:0]
 
 	for _, bezierGrid := range p.GrowthCurveStack.BezierGrids {
 
@@ -131,11 +132,15 @@ func (p *Parameter) ComputeFrontCurveStack() {
 				spiralCircle.HasBespokeRadius = true
 				spiralCircle.BespopkeRadius = 3
 
-				xs = append(xs, x_r)
-				ys = append(ys, y_r)
+				xs = append(xs, p.SpiralOriginX+x_r)
+				ys = append(ys, p.SpiralOriginY-y_r)
+
+				if p.ShowInterpolationPoints {
+					p.FrontCurveStack.SpiralCircles = append(p.FrontCurveStack.SpiralCircles, spiralCircle)
+				}
 			}
 		}
-		str := GenerateSmoothSVGPath(xs, ys, p.SpiralOriginX, p.SpiralOriginY)
+		str := GenerateSmoothSVGPath(xs, ys, 0, 0)
 		frontCurve.Path = str
 
 		p.FrontCurveStack.FrontCurves = append(p.FrontCurveStack.FrontCurves, frontCurve)

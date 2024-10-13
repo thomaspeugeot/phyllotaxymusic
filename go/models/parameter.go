@@ -165,6 +165,7 @@ type Parameter struct {
 	SpiralInitialRadius float64
 
 	ShowSpiralBezierConstruct bool
+	ShowInterpolationPoints   bool
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
