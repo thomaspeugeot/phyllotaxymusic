@@ -21,6 +21,8 @@ func SerializeStage(stage *StageStruct, filename string) {
 		SerializeExcelize[BezierGridStack](stage, f)
 		SerializeExcelize[Circle](stage, f)
 		SerializeExcelize[CircleGrid](stage, f)
+		SerializeExcelize[FrontCurve](stage, f)
+		SerializeExcelize[FrontCurveStack](stage, f)
 		SerializeExcelize[HorizontalAxis](stage, f)
 		SerializeExcelize[Key](stage, f)
 		SerializeExcelize[NoteInfo](stage, f)

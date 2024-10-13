@@ -223,9 +223,9 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	SpiralBezierFullGridID sql.NullInt64
 
-	// field SpiralBezierBruteCircle is a pointer to another Struct (optional or 0..1)
+	// field FrontCurveStack is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	SpiralBezierBruteCircleID sql.NullInt64
+	FrontCurveStackID sql.NullInt64
 
 	// field Fkey is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -1172,16 +1172,16 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.SpiralBezierFullGridID.Valid = true
 		}
 
-		// commit pointer value parameter.SpiralBezierBruteCircle translates to updating the parameter.SpiralBezierBruteCircleID
-		parameterDB.SpiralBezierBruteCircleID.Valid = true // allow for a 0 value (nil association)
-		if parameter.SpiralBezierBruteCircle != nil {
-			if SpiralBezierBruteCircleId, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridPtr_SpiralCircleGridDBID[parameter.SpiralBezierBruteCircle]; ok {
-				parameterDB.SpiralBezierBruteCircleID.Int64 = int64(SpiralBezierBruteCircleId)
-				parameterDB.SpiralBezierBruteCircleID.Valid = true
+		// commit pointer value parameter.FrontCurveStack translates to updating the parameter.FrontCurveStackID
+		parameterDB.FrontCurveStackID.Valid = true // allow for a 0 value (nil association)
+		if parameter.FrontCurveStack != nil {
+			if FrontCurveStackId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.FrontCurveStack]; ok {
+				parameterDB.FrontCurveStackID.Int64 = int64(FrontCurveStackId)
+				parameterDB.FrontCurveStackID.Valid = true
 			}
 		} else {
-			parameterDB.SpiralBezierBruteCircleID.Int64 = 0
-			parameterDB.SpiralBezierBruteCircleID.Valid = true
+			parameterDB.FrontCurveStackID.Int64 = 0
+			parameterDB.FrontCurveStackID.Valid = true
 		}
 
 		// commit pointer value parameter.Fkey translates to updating the parameter.FkeyID
@@ -1703,10 +1703,10 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.SpiralBezierFullGridID.Int64 != 0 {
 		parameter.SpiralBezierFullGrid = backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(parameterDB.SpiralBezierFullGridID.Int64)]
 	}
-	// SpiralBezierBruteCircle field
-	parameter.SpiralBezierBruteCircle = nil
-	if parameterDB.SpiralBezierBruteCircleID.Int64 != 0 {
-		parameter.SpiralBezierBruteCircle = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralBezierBruteCircleID.Int64)]
+	// FrontCurveStack field
+	parameter.FrontCurveStack = nil
+	if parameterDB.FrontCurveStackID.Int64 != 0 {
+		parameter.FrontCurveStack = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.FrontCurveStackID.Int64)]
 	}
 	// Fkey field
 	parameter.Fkey = nil
@@ -2663,10 +2663,10 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 			parameterDB.SpiralBezierFullGridID.Valid = true
 		}
 
-		// reindexing SpiralBezierBruteCircle field
-		if parameterDB.SpiralBezierBruteCircleID.Int64 != 0 {
-			parameterDB.SpiralBezierBruteCircleID.Int64 = int64(BackRepoSpiralCircleGridid_atBckpTime_newID[uint(parameterDB.SpiralBezierBruteCircleID.Int64)])
-			parameterDB.SpiralBezierBruteCircleID.Valid = true
+		// reindexing FrontCurveStack field
+		if parameterDB.FrontCurveStackID.Int64 != 0 {
+			parameterDB.FrontCurveStackID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.FrontCurveStackID.Int64)])
+			parameterDB.FrontCurveStackID.Valid = true
 		}
 
 		// reindexing Fkey field

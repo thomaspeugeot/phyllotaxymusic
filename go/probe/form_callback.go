@@ -845,6 +845,224 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 
 	fillUpTree(circlegridFormCallback.probe)
 }
+func __gong__New__FrontCurveFormCallback(
+	frontcurve *models.FrontCurve,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (frontcurveFormCallback *FrontCurveFormCallback) {
+	frontcurveFormCallback = new(FrontCurveFormCallback)
+	frontcurveFormCallback.probe = probe
+	frontcurveFormCallback.frontcurve = frontcurve
+	frontcurveFormCallback.formGroup = formGroup
+
+	frontcurveFormCallback.CreationMode = (frontcurve == nil)
+
+	return
+}
+
+type FrontCurveFormCallback struct {
+	frontcurve *models.FrontCurve
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (frontcurveFormCallback *FrontCurveFormCallback) OnSave() {
+
+	log.Println("FrontCurveFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	frontcurveFormCallback.probe.formStage.Checkout()
+
+	if frontcurveFormCallback.frontcurve == nil {
+		frontcurveFormCallback.frontcurve = new(models.FrontCurve).Stage(frontcurveFormCallback.probe.stageOfInterest)
+	}
+	frontcurve_ := frontcurveFormCallback.frontcurve
+	_ = frontcurve_
+
+	for _, formDiv := range frontcurveFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(frontcurve_.Name), formDiv)
+		case "Path":
+			FormDivBasicFieldToField(&(frontcurve_.Path), formDiv)
+		case "FrontCurveStack:FrontCurves":
+			// we need to retrieve the field owner before the change
+			var pastFrontCurveStackOwner *models.FrontCurveStack
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "FrontCurveStack"
+			rf.Fieldname = "FrontCurves"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				frontcurveFormCallback.probe.stageOfInterest,
+				frontcurveFormCallback.probe.backRepoOfInterest,
+				frontcurve_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastFrontCurveStackOwner = reverseFieldOwner.(*models.FrontCurveStack)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastFrontCurveStackOwner != nil {
+					idx := slices.Index(pastFrontCurveStackOwner.FrontCurves, frontcurve_)
+					pastFrontCurveStackOwner.FrontCurves = slices.Delete(pastFrontCurveStackOwner.FrontCurves, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _frontcurvestack := range *models.GetGongstructInstancesSet[models.FrontCurveStack](frontcurveFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _frontcurvestack.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newFrontCurveStackOwner := _frontcurvestack // we have a match
+						if pastFrontCurveStackOwner != nil {
+							if newFrontCurveStackOwner != pastFrontCurveStackOwner {
+								idx := slices.Index(pastFrontCurveStackOwner.FrontCurves, frontcurve_)
+								pastFrontCurveStackOwner.FrontCurves = slices.Delete(pastFrontCurveStackOwner.FrontCurves, idx, idx+1)
+								newFrontCurveStackOwner.FrontCurves = append(newFrontCurveStackOwner.FrontCurves, frontcurve_)
+							}
+						} else {
+							newFrontCurveStackOwner.FrontCurves = append(newFrontCurveStackOwner.FrontCurves, frontcurve_)
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// manage the suppress operation
+	if frontcurveFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		frontcurve_.Unstage(frontcurveFormCallback.probe.stageOfInterest)
+	}
+
+	frontcurveFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.FrontCurve](
+		frontcurveFormCallback.probe,
+	)
+	frontcurveFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if frontcurveFormCallback.CreationMode || frontcurveFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		frontcurveFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(frontcurveFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__FrontCurveFormCallback(
+			nil,
+			frontcurveFormCallback.probe,
+			newFormGroup,
+		)
+		frontcurve := new(models.FrontCurve)
+		FillUpForm(frontcurve, newFormGroup, frontcurveFormCallback.probe)
+		frontcurveFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(frontcurveFormCallback.probe)
+}
+func __gong__New__FrontCurveStackFormCallback(
+	frontcurvestack *models.FrontCurveStack,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (frontcurvestackFormCallback *FrontCurveStackFormCallback) {
+	frontcurvestackFormCallback = new(FrontCurveStackFormCallback)
+	frontcurvestackFormCallback.probe = probe
+	frontcurvestackFormCallback.frontcurvestack = frontcurvestack
+	frontcurvestackFormCallback.formGroup = formGroup
+
+	frontcurvestackFormCallback.CreationMode = (frontcurvestack == nil)
+
+	return
+}
+
+type FrontCurveStackFormCallback struct {
+	frontcurvestack *models.FrontCurveStack
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (frontcurvestackFormCallback *FrontCurveStackFormCallback) OnSave() {
+
+	log.Println("FrontCurveStackFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	frontcurvestackFormCallback.probe.formStage.Checkout()
+
+	if frontcurvestackFormCallback.frontcurvestack == nil {
+		frontcurvestackFormCallback.frontcurvestack = new(models.FrontCurveStack).Stage(frontcurvestackFormCallback.probe.stageOfInterest)
+	}
+	frontcurvestack_ := frontcurvestackFormCallback.frontcurvestack
+	_ = frontcurvestack_
+
+	for _, formDiv := range frontcurvestackFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(frontcurvestack_.Name), formDiv)
+		case "IsDisplayed":
+			FormDivBasicFieldToField(&(frontcurvestack_.IsDisplayed), formDiv)
+		case "ShapeCategory":
+			FormDivSelectFieldToField(&(frontcurvestack_.ShapeCategory), frontcurvestackFormCallback.probe.stageOfInterest, formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(frontcurvestack_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(frontcurvestack_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(frontcurvestack_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(frontcurvestack_.StrokeOpacity), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(frontcurvestack_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(frontcurvestack_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(frontcurvestack_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(frontcurvestack_.Transform), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if frontcurvestackFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		frontcurvestack_.Unstage(frontcurvestackFormCallback.probe.stageOfInterest)
+	}
+
+	frontcurvestackFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.FrontCurveStack](
+		frontcurvestackFormCallback.probe,
+	)
+	frontcurvestackFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if frontcurvestackFormCallback.CreationMode || frontcurvestackFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		frontcurvestackFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(frontcurvestackFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__FrontCurveStackFormCallback(
+			nil,
+			frontcurvestackFormCallback.probe,
+			newFormGroup,
+		)
+		frontcurvestack := new(models.FrontCurveStack)
+		FillUpForm(frontcurvestack, newFormGroup, frontcurvestackFormCallback.probe)
+		frontcurvestackFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(frontcurvestackFormCallback.probe)
+}
 func __gong__New__HorizontalAxisFormCallback(
 	horizontalaxis *models.HorizontalAxis,
 	probe *Probe,
@@ -1321,8 +1539,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SpiralBezierFullGrid), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralBezierStrength":
 			FormDivBasicFieldToField(&(parameter_.SpiralBezierStrength), formDiv)
-		case "SpiralBezierBruteCircle":
-			FormDivSelectFieldToField(&(parameter_.SpiralBezierBruteCircle), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "FrontCurveStack":
+			FormDivSelectFieldToField(&(parameter_.FrontCurveStack), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "NbInterpolationPoints":
 			FormDivBasicFieldToField(&(parameter_.NbInterpolationPoints), formDiv)
 		case "Fkey":

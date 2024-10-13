@@ -32,6 +32,14 @@ import { CircleGridAPI } from './circlegrid-api'
 import { CircleGrid, CopyCircleGridAPIToCircleGrid } from './circlegrid'
 import { CircleGridService } from './circlegrid.service'
 
+import { FrontCurveAPI } from './frontcurve-api'
+import { FrontCurve, CopyFrontCurveAPIToFrontCurve } from './frontcurve'
+import { FrontCurveService } from './frontcurve.service'
+
+import { FrontCurveStackAPI } from './frontcurvestack-api'
+import { FrontCurveStack, CopyFrontCurveStackAPIToFrontCurveStack } from './frontcurvestack'
+import { FrontCurveStackService } from './frontcurvestack.service'
+
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { HorizontalAxis, CopyHorizontalAxisAPIToHorizontalAxis } from './horizontalaxis'
 import { HorizontalAxisService } from './horizontalaxis.service'
@@ -128,6 +136,12 @@ export class FrontRepo { // insertion point sub template
 	array_CircleGrids = new Array<CircleGrid>() // array of front instances
 	map_ID_CircleGrid = new Map<number, CircleGrid>() // map of front instances
 
+	array_FrontCurves = new Array<FrontCurve>() // array of front instances
+	map_ID_FrontCurve = new Map<number, FrontCurve>() // map of front instances
+
+	array_FrontCurveStacks = new Array<FrontCurveStack>() // array of front instances
+	map_ID_FrontCurveStack = new Map<number, FrontCurveStack>() // map of front instances
+
 	array_HorizontalAxiss = new Array<HorizontalAxis>() // array of front instances
 	map_ID_HorizontalAxis = new Map<number, HorizontalAxis>() // map of front instances
 
@@ -200,6 +214,10 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Circles as unknown as Array<Type>
 			case 'CircleGrid':
 				return this.array_CircleGrids as unknown as Array<Type>
+			case 'FrontCurve':
+				return this.array_FrontCurves as unknown as Array<Type>
+			case 'FrontCurveStack':
+				return this.array_FrontCurveStacks as unknown as Array<Type>
 			case 'HorizontalAxis':
 				return this.array_HorizontalAxiss as unknown as Array<Type>
 			case 'Key':
@@ -256,6 +274,10 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Circle as unknown as Map<number, Type>
 			case 'CircleGrid':
 				return this.map_ID_CircleGrid as unknown as Map<number, Type>
+			case 'FrontCurve':
+				return this.map_ID_FrontCurve as unknown as Map<number, Type>
+			case 'FrontCurveStack':
+				return this.map_ID_FrontCurveStack as unknown as Map<number, Type>
 			case 'HorizontalAxis':
 				return this.map_ID_HorizontalAxis as unknown as Map<number, Type>
 			case 'Key':
@@ -364,6 +386,8 @@ export class FrontRepoService {
 		private beziergridstackService: BezierGridStackService,
 		private circleService: CircleService,
 		private circlegridService: CircleGridService,
+		private frontcurveService: FrontCurveService,
+		private frontcurvestackService: FrontCurveStackService,
 		private horizontalaxisService: HorizontalAxisService,
 		private keyService: KeyService,
 		private noteinfoService: NoteInfoService,
@@ -420,6 +444,8 @@ export class FrontRepoService {
 		Observable<BezierGridStackAPI[]>,
 		Observable<CircleAPI[]>,
 		Observable<CircleGridAPI[]>,
+		Observable<FrontCurveAPI[]>,
+		Observable<FrontCurveStackAPI[]>,
 		Observable<HorizontalAxisAPI[]>,
 		Observable<KeyAPI[]>,
 		Observable<NoteInfoAPI[]>,
@@ -454,6 +480,8 @@ export class FrontRepoService {
 			this.beziergridstackService.getBezierGridStacks(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.frontcurveService.getFrontCurves(this.GONG__StackPath, this.frontRepo),
+			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
 			this.noteinfoService.getNoteInfos(this.GONG__StackPath, this.frontRepo),
@@ -493,6 +521,8 @@ export class FrontRepoService {
 			this.beziergridstackService.getBezierGridStacks(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.frontcurveService.getFrontCurves(this.GONG__StackPath, this.frontRepo),
+			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
 			this.noteinfoService.getNoteInfos(this.GONG__StackPath, this.frontRepo),
@@ -527,6 +557,8 @@ export class FrontRepoService {
 						beziergridstacks_,
 						circles_,
 						circlegrids_,
+						frontcurves_,
+						frontcurvestacks_,
 						horizontalaxiss_,
 						keys_,
 						noteinfos_,
@@ -562,6 +594,10 @@ export class FrontRepoService {
 						circles = circles_ as CircleAPI[]
 						var circlegrids: CircleGridAPI[]
 						circlegrids = circlegrids_ as CircleGridAPI[]
+						var frontcurves: FrontCurveAPI[]
+						frontcurves = frontcurves_ as FrontCurveAPI[]
+						var frontcurvestacks: FrontCurveStackAPI[]
+						frontcurvestacks = frontcurvestacks_ as FrontCurveStackAPI[]
 						var horizontalaxiss: HorizontalAxisAPI[]
 						horizontalaxiss = horizontalaxiss_ as HorizontalAxisAPI[]
 						var keys: KeyAPI[]
@@ -681,6 +717,30 @@ export class FrontRepoService {
 								let circlegrid = new CircleGrid
 								this.frontRepo.array_CircleGrids.push(circlegrid)
 								this.frontRepo.map_ID_CircleGrid.set(circlegridAPI.ID, circlegrid)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_FrontCurves = []
+						this.frontRepo.map_ID_FrontCurve.clear()
+
+						frontcurves.forEach(
+							frontcurveAPI => {
+								let frontcurve = new FrontCurve
+								this.frontRepo.array_FrontCurves.push(frontcurve)
+								this.frontRepo.map_ID_FrontCurve.set(frontcurveAPI.ID, frontcurve)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_FrontCurveStacks = []
+						this.frontRepo.map_ID_FrontCurveStack.clear()
+
+						frontcurvestacks.forEach(
+							frontcurvestackAPI => {
+								let frontcurvestack = new FrontCurveStack
+								this.frontRepo.array_FrontCurveStacks.push(frontcurvestack)
+								this.frontRepo.map_ID_FrontCurveStack.set(frontcurvestackAPI.ID, frontcurvestack)
 							}
 						)
 
@@ -949,6 +1009,22 @@ export class FrontRepoService {
 						)
 
 						// fill up front objects
+						frontcurves.forEach(
+							frontcurveAPI => {
+								let frontcurve = this.frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
+								CopyFrontCurveAPIToFrontCurve(frontcurveAPI, frontcurve!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						frontcurvestacks.forEach(
+							frontcurvestackAPI => {
+								let frontcurvestack = this.frontRepo.map_ID_FrontCurveStack.get(frontcurvestackAPI.ID)
+								CopyFrontCurveStackAPIToFrontCurveStack(frontcurvestackAPI, frontcurvestack!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
 						horizontalaxiss.forEach(
 							horizontalaxisAPI => {
 								let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
@@ -1196,6 +1272,30 @@ export class FrontRepoService {
 						let circlegrid = new CircleGrid
 						this.frontRepo.array_CircleGrids.push(circlegrid)
 						this.frontRepo.map_ID_CircleGrid.set(circlegridAPI.ID, circlegrid)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_FrontCurves = []
+				this.frontRepo.map_ID_FrontCurve.clear()
+
+				backRepoData.FrontCurveAPIs.forEach(
+					frontcurveAPI => {
+						let frontcurve = new FrontCurve
+						this.frontRepo.array_FrontCurves.push(frontcurve)
+						this.frontRepo.map_ID_FrontCurve.set(frontcurveAPI.ID, frontcurve)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_FrontCurveStacks = []
+				this.frontRepo.map_ID_FrontCurveStack.clear()
+
+				backRepoData.FrontCurveStackAPIs.forEach(
+					frontcurvestackAPI => {
+						let frontcurvestack = new FrontCurveStack
+						this.frontRepo.array_FrontCurveStacks.push(frontcurvestack)
+						this.frontRepo.map_ID_FrontCurveStack.set(frontcurvestackAPI.ID, frontcurvestack)
 					}
 				)
 
@@ -1466,6 +1566,22 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.FrontCurveAPIs.forEach(
+					frontcurveAPI => {
+						let frontcurve = this.frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
+						CopyFrontCurveAPIToFrontCurve(frontcurveAPI, frontcurve!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.FrontCurveStackAPIs.forEach(
+					frontcurvestackAPI => {
+						let frontcurvestack = this.frontRepo.map_ID_FrontCurveStack.get(frontcurvestackAPI.ID)
+						CopyFrontCurveStackAPIToFrontCurveStack(frontcurvestackAPI, frontcurvestack!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.HorizontalAxisAPIs.forEach(
 					horizontalaxisAPI => {
 						let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
@@ -1641,54 +1757,60 @@ export function getCircleUniqueID(id: number): number {
 export function getCircleGridUniqueID(id: number): number {
 	return 59 * id
 }
-export function getHorizontalAxisUniqueID(id: number): number {
+export function getFrontCurveUniqueID(id: number): number {
 	return 61 * id
 }
-export function getKeyUniqueID(id: number): number {
+export function getFrontCurveStackUniqueID(id: number): number {
 	return 67 * id
 }
-export function getNoteInfoUniqueID(id: number): number {
+export function getHorizontalAxisUniqueID(id: number): number {
 	return 71 * id
 }
-export function getParameterUniqueID(id: number): number {
+export function getKeyUniqueID(id: number): number {
 	return 73 * id
 }
-export function getRhombusUniqueID(id: number): number {
+export function getNoteInfoUniqueID(id: number): number {
 	return 79 * id
 }
-export function getRhombusGridUniqueID(id: number): number {
+export function getParameterUniqueID(id: number): number {
 	return 83 * id
 }
-export function getShapeCategoryUniqueID(id: number): number {
+export function getRhombusUniqueID(id: number): number {
 	return 89 * id
 }
-export function getSpiralBezierUniqueID(id: number): number {
+export function getRhombusGridUniqueID(id: number): number {
 	return 97 * id
 }
-export function getSpiralBezierGridUniqueID(id: number): number {
+export function getShapeCategoryUniqueID(id: number): number {
 	return 101 * id
 }
-export function getSpiralCircleUniqueID(id: number): number {
+export function getSpiralBezierUniqueID(id: number): number {
 	return 103 * id
 }
-export function getSpiralCircleGridUniqueID(id: number): number {
+export function getSpiralBezierGridUniqueID(id: number): number {
 	return 107 * id
 }
-export function getSpiralLineUniqueID(id: number): number {
+export function getSpiralCircleUniqueID(id: number): number {
 	return 109 * id
 }
-export function getSpiralLineGridUniqueID(id: number): number {
+export function getSpiralCircleGridUniqueID(id: number): number {
 	return 113 * id
 }
-export function getSpiralOriginUniqueID(id: number): number {
+export function getSpiralLineUniqueID(id: number): number {
 	return 127 * id
 }
-export function getSpiralRhombusUniqueID(id: number): number {
+export function getSpiralLineGridUniqueID(id: number): number {
 	return 131 * id
 }
-export function getSpiralRhombusGridUniqueID(id: number): number {
+export function getSpiralOriginUniqueID(id: number): number {
 	return 137 * id
 }
-export function getVerticalAxisUniqueID(id: number): number {
+export function getSpiralRhombusUniqueID(id: number): number {
 	return 139 * id
+}
+export function getSpiralRhombusGridUniqueID(id: number): number {
+	return 149 * id
+}
+export function getVerticalAxisUniqueID(id: number): number {
+	return 151 * id
 }

@@ -36,6 +36,10 @@ type BackRepoStruct struct {
 
 	BackRepoCircleGrid BackRepoCircleGridStruct
 
+	BackRepoFrontCurve BackRepoFrontCurveStruct
+
+	BackRepoFrontCurveStack BackRepoFrontCurveStackStruct
+
 	BackRepoHorizontalAxis BackRepoHorizontalAxisStruct
 
 	BackRepoKey BackRepoKeyStruct
@@ -117,6 +121,8 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		&BezierGridStackDB{},
 		&CircleDB{},
 		&CircleGridDB{},
+		&FrontCurveDB{},
+		&FrontCurveStackDB{},
 		&HorizontalAxisDB{},
 		&KeyDB{},
 		&NoteInfoDB{},
@@ -196,6 +202,22 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		Map_CircleGridDBID_CircleGridPtr: make(map[uint]*models.CircleGrid, 0),
 		Map_CircleGridDBID_CircleGridDB:  make(map[uint]*CircleGridDB, 0),
 		Map_CircleGridPtr_CircleGridDBID: make(map[*models.CircleGrid]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoFrontCurve = BackRepoFrontCurveStruct{
+		Map_FrontCurveDBID_FrontCurvePtr: make(map[uint]*models.FrontCurve, 0),
+		Map_FrontCurveDBID_FrontCurveDB:  make(map[uint]*FrontCurveDB, 0),
+		Map_FrontCurvePtr_FrontCurveDBID: make(map[*models.FrontCurve]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoFrontCurveStack = BackRepoFrontCurveStackStruct{
+		Map_FrontCurveStackDBID_FrontCurveStackPtr: make(map[uint]*models.FrontCurveStack, 0),
+		Map_FrontCurveStackDBID_FrontCurveStackDB:  make(map[uint]*FrontCurveStackDB, 0),
+		Map_FrontCurveStackPtr_FrontCurveStackDBID: make(map[*models.FrontCurveStack]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -391,6 +413,8 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoBezierGridStack.CommitPhaseOne(stage)
 	backRepo.BackRepoCircle.CommitPhaseOne(stage)
 	backRepo.BackRepoCircleGrid.CommitPhaseOne(stage)
+	backRepo.BackRepoFrontCurve.CommitPhaseOne(stage)
+	backRepo.BackRepoFrontCurveStack.CommitPhaseOne(stage)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseOne(stage)
 	backRepo.BackRepoKey.CommitPhaseOne(stage)
 	backRepo.BackRepoNoteInfo.CommitPhaseOne(stage)
@@ -417,6 +441,8 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoBezierGridStack.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoCircle.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoCircleGrid.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoFrontCurve.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoFrontCurveStack.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoKey.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoNoteInfo.CommitPhaseTwo(backRepo)
@@ -448,6 +474,8 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoBezierGridStack.CheckoutPhaseOne()
 	backRepo.BackRepoCircle.CheckoutPhaseOne()
 	backRepo.BackRepoCircleGrid.CheckoutPhaseOne()
+	backRepo.BackRepoFrontCurve.CheckoutPhaseOne()
+	backRepo.BackRepoFrontCurveStack.CheckoutPhaseOne()
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseOne()
 	backRepo.BackRepoKey.CheckoutPhaseOne()
 	backRepo.BackRepoNoteInfo.CheckoutPhaseOne()
@@ -474,6 +502,8 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoBezierGridStack.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoCircle.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoCircleGrid.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoFrontCurve.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoFrontCurveStack.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoKey.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoNoteInfo.CheckoutPhaseTwo(backRepo)
@@ -505,6 +535,8 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	backRepo.BackRepoBezierGridStack.Backup(dirPath)
 	backRepo.BackRepoCircle.Backup(dirPath)
 	backRepo.BackRepoCircleGrid.Backup(dirPath)
+	backRepo.BackRepoFrontCurve.Backup(dirPath)
+	backRepo.BackRepoFrontCurveStack.Backup(dirPath)
 	backRepo.BackRepoHorizontalAxis.Backup(dirPath)
 	backRepo.BackRepoKey.Backup(dirPath)
 	backRepo.BackRepoNoteInfo.Backup(dirPath)
@@ -539,6 +571,8 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	backRepo.BackRepoBezierGridStack.BackupXL(file)
 	backRepo.BackRepoCircle.BackupXL(file)
 	backRepo.BackRepoCircleGrid.BackupXL(file)
+	backRepo.BackRepoFrontCurve.BackupXL(file)
+	backRepo.BackRepoFrontCurveStack.BackupXL(file)
 	backRepo.BackRepoHorizontalAxis.BackupXL(file)
 	backRepo.BackRepoKey.BackupXL(file)
 	backRepo.BackRepoNoteInfo.BackupXL(file)
@@ -587,6 +621,8 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoBezierGridStack.RestorePhaseOne(dirPath)
 	backRepo.BackRepoCircle.RestorePhaseOne(dirPath)
 	backRepo.BackRepoCircleGrid.RestorePhaseOne(dirPath)
+	backRepo.BackRepoFrontCurve.RestorePhaseOne(dirPath)
+	backRepo.BackRepoFrontCurveStack.RestorePhaseOne(dirPath)
 	backRepo.BackRepoHorizontalAxis.RestorePhaseOne(dirPath)
 	backRepo.BackRepoKey.RestorePhaseOne(dirPath)
 	backRepo.BackRepoNoteInfo.RestorePhaseOne(dirPath)
@@ -617,6 +653,8 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoBezierGridStack.RestorePhaseTwo()
 	backRepo.BackRepoCircle.RestorePhaseTwo()
 	backRepo.BackRepoCircleGrid.RestorePhaseTwo()
+	backRepo.BackRepoFrontCurve.RestorePhaseTwo()
+	backRepo.BackRepoFrontCurveStack.RestorePhaseTwo()
 	backRepo.BackRepoHorizontalAxis.RestorePhaseTwo()
 	backRepo.BackRepoKey.RestorePhaseTwo()
 	backRepo.BackRepoNoteInfo.RestorePhaseTwo()
@@ -668,6 +706,8 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoBezierGridStack.RestoreXLPhaseOne(file)
 	backRepo.BackRepoCircle.RestoreXLPhaseOne(file)
 	backRepo.BackRepoCircleGrid.RestoreXLPhaseOne(file)
+	backRepo.BackRepoFrontCurve.RestoreXLPhaseOne(file)
+	backRepo.BackRepoFrontCurveStack.RestoreXLPhaseOne(file)
 	backRepo.BackRepoHorizontalAxis.RestoreXLPhaseOne(file)
 	backRepo.BackRepoKey.RestoreXLPhaseOne(file)
 	backRepo.BackRepoNoteInfo.RestoreXLPhaseOne(file)

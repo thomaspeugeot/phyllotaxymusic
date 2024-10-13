@@ -321,6 +321,8 @@ var __gong__map_BezierGrid = make(map[string]*BezierGrid)
 var __gong__map_BezierGridStack = make(map[string]*BezierGridStack)
 var __gong__map_Circle = make(map[string]*Circle)
 var __gong__map_CircleGrid = make(map[string]*CircleGrid)
+var __gong__map_FrontCurve = make(map[string]*FrontCurve)
+var __gong__map_FrontCurveStack = make(map[string]*FrontCurveStack)
 var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
 var __gong__map_Key = make(map[string]*Key)
 var __gong__map_NoteInfo = make(map[string]*NoteInfo)
@@ -552,6 +554,18 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceCircleGrid.Stage(stage)
 										instance = any(instanceCircleGrid)
 										__gong__map_CircleGrid[identifier] = instanceCircleGrid
+									case "FrontCurve":
+										instanceFrontCurve := new(FrontCurve)
+										instanceFrontCurve.Name = instanceName
+										instanceFrontCurve.Stage(stage)
+										instance = any(instanceFrontCurve)
+										__gong__map_FrontCurve[identifier] = instanceFrontCurve
+									case "FrontCurveStack":
+										instanceFrontCurveStack := new(FrontCurveStack)
+										instanceFrontCurveStack.Name = instanceName
+										instanceFrontCurveStack.Stage(stage)
+										instance = any(instanceFrontCurveStack)
+										__gong__map_FrontCurveStack[identifier] = instanceFrontCurveStack
 									case "HorizontalAxis":
 										instanceHorizontalAxis := new(HorizontalAxis)
 										instanceHorizontalAxis.Name = instanceName
@@ -718,6 +732,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "FrontCurve":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "FrontCurveStack":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "HorizontalAxis":
 							switch fieldName {
 							// insertion point for date assign code
@@ -862,6 +884,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Circle[targetIdentifier]
 							__gong__map_CircleGrid[identifier].Circles =
 								append(__gong__map_CircleGrid[identifier].Circles, target)
+						}
+					case "FrontCurve":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "FrontCurveStack":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "FrontCurves":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_FrontCurve[targetIdentifier]
+							__gong__map_FrontCurveStack[identifier].FrontCurves =
+								append(__gong__map_FrontCurveStack[identifier].FrontCurves, target)
 						}
 					case "HorizontalAxis":
 						switch fieldName {
@@ -1320,6 +1356,67 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_CircleGrid[identifier].Name = fielValue
+				}
+			case "FrontCurve":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FrontCurve[identifier].Name = fielValue
+				case "Path":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FrontCurve[identifier].Path = fielValue
+				}
+			case "FrontCurveStack":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FrontCurveStack[identifier].Name = fielValue
+				case "Color":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FrontCurveStack[identifier].Color = fielValue
+				case "FillOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_FrontCurveStack[identifier].FillOpacity = exprSign * fielValue
+				case "Stroke":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FrontCurveStack[identifier].Stroke = fielValue
+				case "StrokeOpacity":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_FrontCurveStack[identifier].StrokeOpacity = exprSign * fielValue
+				case "StrokeWidth":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_FrontCurveStack[identifier].StrokeWidth = exprSign * fielValue
+				case "StrokeDashArray":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FrontCurveStack[identifier].StrokeDashArray = fielValue
+				case "StrokeDashArrayWhenSelected":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FrontCurveStack[identifier].StrokeDashArrayWhenSelected = fielValue
+				case "Transform":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FrontCurveStack[identifier].Transform = fielValue
 				}
 			case "HorizontalAxis":
 				switch fieldName {
@@ -2399,6 +2496,24 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					targetIdentifier := ident.Name
 					__gong__map_CircleGrid[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
+			case "FrontCurve":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
+			case "FrontCurveStack":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsDisplayed":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_FrontCurveStack[identifier].IsDisplayed = fielValue
+				case "ShapeCategory":
+					targetIdentifier := ident.Name
+					__gong__map_FrontCurveStack[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
+				}
 			case "HorizontalAxis":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -2573,9 +2688,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "SpiralBezierFullGrid":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SpiralBezierFullGrid = __gong__map_SpiralBezierGrid[targetIdentifier]
-				case "SpiralBezierBruteCircle":
+				case "FrontCurveStack":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].SpiralBezierBruteCircle = __gong__map_SpiralCircleGrid[targetIdentifier]
+					__gong__map_Parameter[identifier].FrontCurveStack = __gong__map_FrontCurveStack[targetIdentifier]
 				case "Fkey":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].Fkey = __gong__map_Key[targetIdentifier]
@@ -2878,6 +2993,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "CircleGrid":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "FrontCurve":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "FrontCurveStack":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

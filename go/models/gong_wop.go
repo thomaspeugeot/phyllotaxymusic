@@ -177,6 +177,46 @@ func (from *CircleGrid) CopyBasicFields(to *CircleGrid) {
 	to.IsDisplayed = from.IsDisplayed
 }
 
+type FrontCurve_WOP struct {
+	// insertion point
+	Name string
+	Path string
+}
+
+func (from *FrontCurve) CopyBasicFields(to *FrontCurve) {
+	// insertion point
+	to.Name = from.Name
+	to.Path = from.Path
+}
+
+type FrontCurveStack_WOP struct {
+	// insertion point
+	Name string
+	IsDisplayed bool
+	Color string
+	FillOpacity float64
+	Stroke string
+	StrokeOpacity float64
+	StrokeWidth float64
+	StrokeDashArray string
+	StrokeDashArrayWhenSelected string
+	Transform string
+}
+
+func (from *FrontCurveStack) CopyBasicFields(to *FrontCurveStack) {
+	// insertion point
+	to.Name = from.Name
+	to.IsDisplayed = from.IsDisplayed
+	to.Color = from.Color
+	to.FillOpacity = from.FillOpacity
+	to.Stroke = from.Stroke
+	to.StrokeOpacity = from.StrokeOpacity
+	to.StrokeWidth = from.StrokeWidth
+	to.StrokeDashArray = from.StrokeDashArray
+	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
+	to.Transform = from.Transform
+}
+
 type HorizontalAxis_WOP struct {
 	// insertion point
 	Name string

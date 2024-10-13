@@ -132,6 +132,26 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "FrontCurve":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.FrontCurve](probe.stageOfInterest)
+			for _frontcurve := range set {
+				nodeInstance := (&tree.Node{Name: _frontcurve.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_frontcurve, "FrontCurve", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "FrontCurveStack":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.FrontCurveStack](probe.stageOfInterest)
+			for _frontcurvestack := range set {
+				nodeInstance := (&tree.Node{Name: _frontcurvestack.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_frontcurvestack, "FrontCurveStack", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "HorizontalAxis":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.HorizontalAxis](probe.stageOfInterest)

@@ -21,6 +21,7 @@ import { SpiralLine } from './spiralline'
 import { SpiralLineGrid } from './spirallinegrid'
 import { SpiralBezier } from './spiralbezier'
 import { SpiralBezierGrid } from './spiralbeziergrid'
+import { FrontCurveStack } from './frontcurvestack'
 import { Key } from './key'
 import { NoteInfo } from './noteinfo'
 import { HorizontalAxis } from './horizontalaxis'
@@ -162,7 +163,7 @@ export class Parameter {
 
 	SpiralBezierFullGrid?: SpiralBezierGrid
 
-	SpiralBezierBruteCircle?: SpiralCircleGrid
+	FrontCurveStack?: FrontCurveStack
 
 	Fkey?: Key
 
@@ -545,11 +546,11 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.SpiralBezierFullGridID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.SpiralBezierBruteCircleID.Valid = true
-	if (parameter.SpiralBezierBruteCircle != undefined) {
-		parameterAPI.ParameterPointersEncoding.SpiralBezierBruteCircleID.Int64 = parameter.SpiralBezierBruteCircle.ID  
+	parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Valid = true
+	if (parameter.FrontCurveStack != undefined) {
+		parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64 = parameter.FrontCurveStack.ID  
 	} else {
-		parameterAPI.ParameterPointersEncoding.SpiralBezierBruteCircleID.Int64 = 0 		
+		parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.FkeyID.Valid = true
@@ -749,7 +750,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralBezierSeed = frontRepo.map_ID_SpiralBezier.get(parameterAPI.ParameterPointersEncoding.SpiralBezierSeedID.Int64)
 	parameter.SpiralBezierGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64)
 	parameter.SpiralBezierFullGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierFullGridID.Int64)
-	parameter.SpiralBezierBruteCircle = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierBruteCircleID.Int64)
+	parameter.FrontCurveStack = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64)
 	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
 	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)

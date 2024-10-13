@@ -34,6 +34,10 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.Circle](probe)
 	case *models.CircleGrid:
 		fillUpTable[models.CircleGrid](probe)
+	case *models.FrontCurve:
+		fillUpTable[models.FrontCurve](probe)
+	case *models.FrontCurveStack:
+		fillUpTable[models.FrontCurveStack](probe)
 	case *models.HorizontalAxis:
 		fillUpTable[models.HorizontalAxis](probe)
 	case *models.Key:

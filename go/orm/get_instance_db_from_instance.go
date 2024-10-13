@@ -43,6 +43,14 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 		circlegridInstance := any(concreteInstance).(*models.CircleGrid)
 		ret2 := backRepo.BackRepoCircleGrid.GetCircleGridDBFromCircleGridPtr(circlegridInstance)
 		ret = any(ret2).(*T2)
+	case *models.FrontCurve:
+		frontcurveInstance := any(concreteInstance).(*models.FrontCurve)
+		ret2 := backRepo.BackRepoFrontCurve.GetFrontCurveDBFromFrontCurvePtr(frontcurveInstance)
+		ret = any(ret2).(*T2)
+	case *models.FrontCurveStack:
+		frontcurvestackInstance := any(concreteInstance).(*models.FrontCurveStack)
+		ret2 := backRepo.BackRepoFrontCurveStack.GetFrontCurveStackDBFromFrontCurveStackPtr(frontcurvestackInstance)
+		ret = any(ret2).(*T2)
 	case *models.HorizontalAxis:
 		horizontalaxisInstance := any(concreteInstance).(*models.HorizontalAxis)
 		ret2 := backRepo.BackRepoHorizontalAxis.GetHorizontalAxisDBFromHorizontalAxisPtr(horizontalaxisInstance)
@@ -156,6 +164,16 @@ func GetID[T models.Gongstruct](
 		id = int(tmp.ID)
 	case *models.CircleGrid:
 		tmp := GetInstanceDBFromInstance[models.CircleGrid, CircleGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.FrontCurve:
+		tmp := GetInstanceDBFromInstance[models.FrontCurve, FrontCurveDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.FrontCurveStack:
+		tmp := GetInstanceDBFromInstance[models.FrontCurveStack, FrontCurveStackDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -289,6 +307,16 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.CircleGrid:
 		tmp := GetInstanceDBFromInstance[models.CircleGrid, CircleGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.FrontCurve:
+		tmp := GetInstanceDBFromInstance[models.FrontCurve, FrontCurveDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.FrontCurveStack:
+		tmp := GetInstanceDBFromInstance[models.FrontCurveStack, FrontCurveStackDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

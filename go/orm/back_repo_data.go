@@ -18,6 +18,10 @@ type BackRepoData struct {
 
 	CircleGridAPIs []*CircleGridAPI
 
+	FrontCurveAPIs []*FrontCurveAPI
+
+	FrontCurveStackAPIs []*FrontCurveStackAPI
+
 	HorizontalAxisAPIs []*HorizontalAxisAPI
 
 	KeyAPIs []*KeyAPI
@@ -123,6 +127,26 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		circlegridDB.CopyBasicFieldsToCircleGrid_WOP(&circlegridAPI.CircleGrid_WOP)
 
 		backRepoData.CircleGridAPIs = append(backRepoData.CircleGridAPIs, &circlegridAPI)
+	}
+
+	for _, frontcurveDB := range backRepo.BackRepoFrontCurve.Map_FrontCurveDBID_FrontCurveDB {
+
+		var frontcurveAPI FrontCurveAPI
+		frontcurveAPI.ID = frontcurveDB.ID
+		frontcurveAPI.FrontCurvePointersEncoding = frontcurveDB.FrontCurvePointersEncoding
+		frontcurveDB.CopyBasicFieldsToFrontCurve_WOP(&frontcurveAPI.FrontCurve_WOP)
+
+		backRepoData.FrontCurveAPIs = append(backRepoData.FrontCurveAPIs, &frontcurveAPI)
+	}
+
+	for _, frontcurvestackDB := range backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackDB {
+
+		var frontcurvestackAPI FrontCurveStackAPI
+		frontcurvestackAPI.ID = frontcurvestackDB.ID
+		frontcurvestackAPI.FrontCurveStackPointersEncoding = frontcurvestackDB.FrontCurveStackPointersEncoding
+		frontcurvestackDB.CopyBasicFieldsToFrontCurveStack_WOP(&frontcurvestackAPI.FrontCurveStack_WOP)
+
+		backRepoData.FrontCurveStackAPIs = append(backRepoData.FrontCurveStackAPIs, &frontcurvestackAPI)
 	}
 
 	for _, horizontalaxisDB := range backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisDB {

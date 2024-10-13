@@ -16,6 +16,7 @@ import { SpiralLineAPI } from './spiralline-api'
 import { SpiralLineGridAPI } from './spirallinegrid-api'
 import { SpiralBezierAPI } from './spiralbezier-api'
 import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
+import { FrontCurveStackAPI } from './frontcurvestack-api'
 import { KeyAPI } from './key-api'
 import { NoteInfoAPI } from './noteinfo-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
@@ -163,7 +164,7 @@ export class ParameterPointersEncoding {
 
 	SpiralBezierFullGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierFullGrid.ID = 0
 
-	SpiralBezierBruteCircleID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierBruteCircle.ID = 0
+	FrontCurveStackID: NullInt64 = new NullInt64 // if pointer is null, FrontCurveStack.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 

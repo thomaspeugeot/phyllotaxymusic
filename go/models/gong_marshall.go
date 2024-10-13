@@ -632,6 +632,134 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_FrontCurve_Identifiers := make(map[*FrontCurve]string)
+	_ = map_FrontCurve_Identifiers
+
+	frontcurveOrdered := []*FrontCurve{}
+	for frontcurve := range stage.FrontCurves {
+		frontcurveOrdered = append(frontcurveOrdered, frontcurve)
+	}
+	sort.Slice(frontcurveOrdered[:], func(i, j int) bool {
+		return frontcurveOrdered[i].Name < frontcurveOrdered[j].Name
+	})
+	if len(frontcurveOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, frontcurve := range frontcurveOrdered {
+
+		id = generatesIdentifier("FrontCurve", idx, frontcurve.Name)
+		map_FrontCurve_Identifiers[frontcurve] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "FrontCurve")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", frontcurve.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurve.Name))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Path")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurve.Path))
+		initializerStatements += setValueField
+
+	}
+
+	map_FrontCurveStack_Identifiers := make(map[*FrontCurveStack]string)
+	_ = map_FrontCurveStack_Identifiers
+
+	frontcurvestackOrdered := []*FrontCurveStack{}
+	for frontcurvestack := range stage.FrontCurveStacks {
+		frontcurvestackOrdered = append(frontcurvestackOrdered, frontcurvestack)
+	}
+	sort.Slice(frontcurvestackOrdered[:], func(i, j int) bool {
+		return frontcurvestackOrdered[i].Name < frontcurvestackOrdered[j].Name
+	})
+	if len(frontcurvestackOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, frontcurvestack := range frontcurvestackOrdered {
+
+		id = generatesIdentifier("FrontCurveStack", idx, frontcurvestack.Name)
+		map_FrontCurveStack_Identifiers[frontcurvestack] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "FrontCurveStack")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", frontcurvestack.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", frontcurvestack.IsDisplayed))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Color))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", frontcurvestack.FillOpacity))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Stroke))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", frontcurvestack.StrokeOpacity))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", frontcurvestack.StrokeWidth))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.StrokeDashArray))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.StrokeDashArrayWhenSelected))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Transform))
+		initializerStatements += setValueField
+
+	}
+
 	map_HorizontalAxis_Identifiers := make(map[*HorizontalAxis]string)
 	_ = map_HorizontalAxis_Identifiers
 
@@ -2323,6 +2451,42 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	for idx, frontcurve := range frontcurveOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("FrontCurve", idx, frontcurve.Name)
+		map_FrontCurve_Identifiers[frontcurve] = id
+
+		// Initialisation of values
+	}
+
+	for idx, frontcurvestack := range frontcurvestackOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("FrontCurveStack", idx, frontcurvestack.Name)
+		map_FrontCurveStack_Identifiers[frontcurvestack] = id
+
+		// Initialisation of values
+		if frontcurvestack.ShapeCategory != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[frontcurvestack.ShapeCategory])
+			pointersInitializesStatements += setPointerField
+		}
+
+		for _, _frontcurve := range frontcurvestack.FrontCurves {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "FrontCurves")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_FrontCurve_Identifiers[_frontcurve])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
 	for idx, horizontalaxis := range horizontalaxisOrdered {
 		var setPointerField string
 		_ = setPointerField
@@ -2729,11 +2893,11 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
-		if parameter.SpiralBezierBruteCircle != nil {
+		if parameter.FrontCurveStack != nil {
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralBezierBruteCircle")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralCircleGrid_Identifiers[parameter.SpiralBezierBruteCircle])
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "FrontCurveStack")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_FrontCurveStack_Identifiers[parameter.FrontCurveStack])
 			pointersInitializesStatements += setPointerField
 		}
 

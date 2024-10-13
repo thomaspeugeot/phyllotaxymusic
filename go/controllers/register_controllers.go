@@ -96,6 +96,20 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/circlegrids/:id", GetController().UpdateCircleGrid)
 		v1.DELETE("/v1/circlegrids/:id", GetController().DeleteCircleGrid)
 
+		v1.GET("/v1/frontcurves", GetController().GetFrontCurves)
+		v1.GET("/v1/frontcurves/:id", GetController().GetFrontCurve)
+		v1.POST("/v1/frontcurves", GetController().PostFrontCurve)
+		v1.PATCH("/v1/frontcurves/:id", GetController().UpdateFrontCurve)
+		v1.PUT("/v1/frontcurves/:id", GetController().UpdateFrontCurve)
+		v1.DELETE("/v1/frontcurves/:id", GetController().DeleteFrontCurve)
+
+		v1.GET("/v1/frontcurvestacks", GetController().GetFrontCurveStacks)
+		v1.GET("/v1/frontcurvestacks/:id", GetController().GetFrontCurveStack)
+		v1.POST("/v1/frontcurvestacks", GetController().PostFrontCurveStack)
+		v1.PATCH("/v1/frontcurvestacks/:id", GetController().UpdateFrontCurveStack)
+		v1.PUT("/v1/frontcurvestacks/:id", GetController().UpdateFrontCurveStack)
+		v1.DELETE("/v1/frontcurvestacks/:id", GetController().DeleteFrontCurveStack)
+
 		v1.GET("/v1/horizontalaxiss", GetController().GetHorizontalAxiss)
 		v1.GET("/v1/horizontalaxiss/:id", GetController().GetHorizontalAxis)
 		v1.POST("/v1/horizontalaxiss", GetController().PostHorizontalAxis)

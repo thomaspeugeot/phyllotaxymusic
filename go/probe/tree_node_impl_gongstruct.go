@@ -73,6 +73,12 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "CircleGrid" {
 		fillUpTable[models.CircleGrid](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "FrontCurve" {
+		fillUpTable[models.FrontCurve](nodeImplGongstruct.probe)
+	}
+	if nodeImplGongstruct.gongStruct.GetName() == "FrontCurveStack" {
+		fillUpTable[models.FrontCurveStack](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "HorizontalAxis" {
 		fillUpTable[models.HorizontalAxis](nodeImplGongstruct.probe)
 	}

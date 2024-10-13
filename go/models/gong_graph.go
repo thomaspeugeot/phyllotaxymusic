@@ -26,6 +26,12 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *CircleGrid:
 		ok = stage.IsStagedCircleGrid(target)
 
+	case *FrontCurve:
+		ok = stage.IsStagedFrontCurve(target)
+
+	case *FrontCurveStack:
+		ok = stage.IsStagedFrontCurveStack(target)
+
 	case *HorizontalAxis:
 		ok = stage.IsStagedHorizontalAxis(target)
 
@@ -129,6 +135,20 @@ func (stage *StageStruct) IsStagedCircle(circle *Circle) (ok bool) {
 func (stage *StageStruct) IsStagedCircleGrid(circlegrid *CircleGrid) (ok bool) {
 
 	_, ok = stage.CircleGrids[circlegrid]
+
+	return
+}
+
+func (stage *StageStruct) IsStagedFrontCurve(frontcurve *FrontCurve) (ok bool) {
+
+	_, ok = stage.FrontCurves[frontcurve]
+
+	return
+}
+
+func (stage *StageStruct) IsStagedFrontCurveStack(frontcurvestack *FrontCurveStack) (ok bool) {
+
+	_, ok = stage.FrontCurveStacks[frontcurvestack]
 
 	return
 }
@@ -280,6 +300,12 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *CircleGrid:
 		stage.StageBranchCircleGrid(target)
+
+	case *FrontCurve:
+		stage.StageBranchFrontCurve(target)
+
+	case *FrontCurveStack:
+		stage.StageBranchFrontCurveStack(target)
 
 	case *HorizontalAxis:
 		stage.StageBranchHorizontalAxis(target)
@@ -485,6 +511,42 @@ func (stage *StageStruct) StageBranchCircleGrid(circlegrid *CircleGrid) {
 
 }
 
+func (stage *StageStruct) StageBranchFrontCurve(frontcurve *FrontCurve) {
+
+	// check if instance is already staged
+	if IsStaged(stage, frontcurve) {
+		return
+	}
+
+	frontcurve.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) StageBranchFrontCurveStack(frontcurvestack *FrontCurveStack) {
+
+	// check if instance is already staged
+	if IsStaged(stage, frontcurvestack) {
+		return
+	}
+
+	frontcurvestack.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if frontcurvestack.ShapeCategory != nil {
+		StageBranch(stage, frontcurvestack.ShapeCategory)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _frontcurve := range frontcurvestack.FrontCurves {
+		StageBranch(stage, _frontcurve)
+	}
+
+}
+
 func (stage *StageStruct) StageBranchHorizontalAxis(horizontalaxis *HorizontalAxis) {
 
 	// check if instance is already staged
@@ -678,8 +740,8 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralBezierFullGrid != nil {
 		StageBranch(stage, parameter.SpiralBezierFullGrid)
 	}
-	if parameter.SpiralBezierBruteCircle != nil {
-		StageBranch(stage, parameter.SpiralBezierBruteCircle)
+	if parameter.FrontCurveStack != nil {
+		StageBranch(stage, parameter.FrontCurveStack)
 	}
 	if parameter.Fkey != nil {
 		StageBranch(stage, parameter.Fkey)
@@ -1022,6 +1084,14 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchCircleGrid(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
+	case *FrontCurve:
+		toT := CopyBranchFrontCurve(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *FrontCurveStack:
+		toT := CopyBranchFrontCurveStack(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *HorizontalAxis:
 		toT := CopyBranchHorizontalAxis(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -1272,6 +1342,50 @@ func CopyBranchCircleGrid(mapOrigCopy map[any]any, circlegridFrom *CircleGrid) (
 	return
 }
 
+func CopyBranchFrontCurve(mapOrigCopy map[any]any, frontcurveFrom *FrontCurve) (frontcurveTo *FrontCurve) {
+
+	// frontcurveFrom has already been copied
+	if _frontcurveTo, ok := mapOrigCopy[frontcurveFrom]; ok {
+		frontcurveTo = _frontcurveTo.(*FrontCurve)
+		return
+	}
+
+	frontcurveTo = new(FrontCurve)
+	mapOrigCopy[frontcurveFrom] = frontcurveTo
+	frontcurveFrom.CopyBasicFields(frontcurveTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchFrontCurveStack(mapOrigCopy map[any]any, frontcurvestackFrom *FrontCurveStack) (frontcurvestackTo *FrontCurveStack) {
+
+	// frontcurvestackFrom has already been copied
+	if _frontcurvestackTo, ok := mapOrigCopy[frontcurvestackFrom]; ok {
+		frontcurvestackTo = _frontcurvestackTo.(*FrontCurveStack)
+		return
+	}
+
+	frontcurvestackTo = new(FrontCurveStack)
+	mapOrigCopy[frontcurvestackFrom] = frontcurvestackTo
+	frontcurvestackFrom.CopyBasicFields(frontcurvestackTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if frontcurvestackFrom.ShapeCategory != nil {
+		frontcurvestackTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, frontcurvestackFrom.ShapeCategory)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _frontcurve := range frontcurvestackFrom.FrontCurves {
+		frontcurvestackTo.FrontCurves = append(frontcurvestackTo.FrontCurves, CopyBranchFrontCurve(mapOrigCopy, _frontcurve))
+	}
+
+	return
+}
+
 func CopyBranchHorizontalAxis(mapOrigCopy map[any]any, horizontalaxisFrom *HorizontalAxis) (horizontalaxisTo *HorizontalAxis) {
 
 	// horizontalaxisFrom has already been copied
@@ -1480,8 +1594,8 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.SpiralBezierFullGrid != nil {
 		parameterTo.SpiralBezierFullGrid = CopyBranchSpiralBezierGrid(mapOrigCopy, parameterFrom.SpiralBezierFullGrid)
 	}
-	if parameterFrom.SpiralBezierBruteCircle != nil {
-		parameterTo.SpiralBezierBruteCircle = CopyBranchSpiralCircleGrid(mapOrigCopy, parameterFrom.SpiralBezierBruteCircle)
+	if parameterFrom.FrontCurveStack != nil {
+		parameterTo.FrontCurveStack = CopyBranchFrontCurveStack(mapOrigCopy, parameterFrom.FrontCurveStack)
 	}
 	if parameterFrom.Fkey != nil {
 		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
@@ -1867,6 +1981,12 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *CircleGrid:
 		stage.UnstageBranchCircleGrid(target)
 
+	case *FrontCurve:
+		stage.UnstageBranchFrontCurve(target)
+
+	case *FrontCurveStack:
+		stage.UnstageBranchFrontCurveStack(target)
+
 	case *HorizontalAxis:
 		stage.UnstageBranchHorizontalAxis(target)
 
@@ -2071,6 +2191,42 @@ func (stage *StageStruct) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
 
 }
 
+func (stage *StageStruct) UnstageBranchFrontCurve(frontcurve *FrontCurve) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, frontcurve) {
+		return
+	}
+
+	frontcurve.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *StageStruct) UnstageBranchFrontCurveStack(frontcurvestack *FrontCurveStack) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, frontcurvestack) {
+		return
+	}
+
+	frontcurvestack.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if frontcurvestack.ShapeCategory != nil {
+		UnstageBranch(stage, frontcurvestack.ShapeCategory)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _frontcurve := range frontcurvestack.FrontCurves {
+		UnstageBranch(stage, _frontcurve)
+	}
+
+}
+
 func (stage *StageStruct) UnstageBranchHorizontalAxis(horizontalaxis *HorizontalAxis) {
 
 	// check if instance is already staged
@@ -2264,8 +2420,8 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	if parameter.SpiralBezierFullGrid != nil {
 		UnstageBranch(stage, parameter.SpiralBezierFullGrid)
 	}
-	if parameter.SpiralBezierBruteCircle != nil {
-		UnstageBranch(stage, parameter.SpiralBezierBruteCircle)
+	if parameter.FrontCurveStack != nil {
+		UnstageBranch(stage, parameter.FrontCurveStack)
 	}
 	if parameter.Fkey != nil {
 		UnstageBranch(stage, parameter.Fkey)

@@ -102,11 +102,14 @@ func (p *Parameter) ComputeSpiralBezierFullGrid() {
 	}
 }
 
-func (p *Parameter) ComputeSpiralBezierBruteCircle() {
+func (p *Parameter) ComputeFrontCurveStack() {
 
-	p.SpiralBezierBruteCircle.SpiralCircles = p.SpiralBezierBruteCircle.SpiralCircles[:0]
+	p.FrontCurveStack.FrontCurves = p.FrontCurveStack.FrontCurves[:0]
 
 	for _, bezierGrid := range p.GrowthCurveStack.BezierGrids {
+
+		var xs, ys []float64
+		frontCurve := new(FrontCurve)
 
 		for _, bezier := range bezierGrid.Beziers {
 
@@ -128,8 +131,14 @@ func (p *Parameter) ComputeSpiralBezierBruteCircle() {
 				spiralCircle.HasBespokeRadius = true
 				spiralCircle.BespopkeRadius = 3
 
-				p.SpiralBezierBruteCircle.SpiralCircles = append(p.SpiralBezierBruteCircle.SpiralCircles, spiralCircle)
+				xs = append(xs, x_r)
+				ys = append(ys, y_r)
 			}
 		}
+		str := GenerateSmoothSVGPath(xs, ys, p.SpiralOriginX, p.SpiralOriginY)
+		frontCurve.Path = str
+
+		p.FrontCurveStack.FrontCurves = append(p.FrontCurveStack.FrontCurves, frontCurve)
+
 	}
 }

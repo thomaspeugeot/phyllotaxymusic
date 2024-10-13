@@ -41,6 +41,14 @@ export * from './lib/circlegrid-api'
 export * from './lib/circlegrid'
 export * from './lib/circlegrid.service'
 
+export * from './lib/frontcurve-api'
+export * from './lib/frontcurve'
+export * from './lib/frontcurve.service'
+
+export * from './lib/frontcurvestack-api'
+export * from './lib/frontcurvestack'
+export * from './lib/frontcurvestack.service'
+
 export * from './lib/horizontalaxis-api'
 export * from './lib/horizontalaxis'
 export * from './lib/horizontalaxis.service'

@@ -106,8 +106,8 @@ type Parameter struct {
 
 	// the result of the transformation of a vertical
 	// bezier into a suite of spiral circle
-	SpiralBezierBruteCircle *SpiralCircleGrid
-	NbInterpolationPoints   int
+	FrontCurveStack       *FrontCurveStack
+	NbInterpolationPoints int
 
 	// the score
 	Fkey                *Key
