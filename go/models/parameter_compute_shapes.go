@@ -139,8 +139,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeSpiralBezierFullGrid()
 	p.Shapes = append(p.Shapes, p.SpiralBezierFullGrid)
 
-	p.ComputeFrontCurveStack(stage)
+	p.ComputeFrontCurveStacks(stage)
 	p.Shapes = append(p.Shapes, p.FrontCurveStack)
+	p.Shapes = append(p.Shapes, p.RotatedFrontCurveStack)
 
 	//
 	// MUSIC MAESTRO

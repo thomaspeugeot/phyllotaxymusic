@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
@@ -102,23 +104,19 @@ func (p *Parameter) ComputeSpiralBezierFullGrid() {
 	}
 }
 
-func (p *Parameter) ComputeFrontCurveStack(stage *StageStruct) {
+func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 	for frontCurve := range *GetGongstructInstancesSet[FrontCurve](stage) {
 		frontCurve.Unstage(stage)
 	}
 
-	for _, frontCurve := range p.FrontCurveStack.FrontCurves {
-		frontCurve.Unstage(stage)
-	}
-
 	p.FrontCurveStack.FrontCurves = p.FrontCurveStack.FrontCurves[:0]
+	p.RotatedFrontCurveStack.FrontCurves = p.RotatedFrontCurveStack.FrontCurves[:0]
 	p.FrontCurveStack.SpiralCircles = p.FrontCurveStack.SpiralCircles[:0]
 
-	for _, bezierGrid := range p.GrowthCurveStack.BezierGrids {
+	for idx, bezierGrid := range p.GrowthCurveStack.BezierGrids {
 
 		var xs, ys []float64
-		frontCurve := new(FrontCurve)
 
 		for _, bezier := range bezierGrid.Beziers {
 
@@ -148,11 +146,27 @@ func (p *Parameter) ComputeFrontCurveStack(stage *StageStruct) {
 				}
 			}
 		}
-		str := GenerateSmoothSVGPath(xs, ys, 0, 0)
-		frontCurve.Path = str
-		frontCurve.Stage(stage)
 
-		p.FrontCurveStack.FrontCurves = append(p.FrontCurveStack.FrontCurves, frontCurve)
+		if p.FrontCurveStack.IsDisplayed {
+			frontCurve := new(FrontCurve)
+			str := GenerateSmoothSVGPath(xs, ys, 0, 0, 0, 0, 0)
+			frontCurve.Path = str
+			frontCurve.Name = fmt.Sprintf("Non Rotated %d ", idx)
+			frontCurve.Stage(stage)
+
+			p.FrontCurveStack.FrontCurves = append(p.FrontCurveStack.FrontCurves, frontCurve)
+		}
+
+		if idx == 0 {
+			frontCurve := new(FrontCurve)
+			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.HourHandleRotationAngle)
+			frontCurve.Path = str
+			frontCurve.Name = fmt.Sprintf("Rotated %d ", idx)
+
+			frontCurve.Stage(stage)
+
+			p.RotatedFrontCurveStack.FrontCurves = append(p.FrontCurveStack.FrontCurves, frontCurve)
+		}
 
 	}
 }
