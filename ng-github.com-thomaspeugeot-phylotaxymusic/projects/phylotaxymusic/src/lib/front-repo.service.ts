@@ -32,6 +32,14 @@ import { CircleGridAPI } from './circlegrid-api'
 import { CircleGrid, CopyCircleGridAPIToCircleGrid } from './circlegrid'
 import { CircleGridService } from './circlegrid.service'
 
+import { FrontCurveAPI } from './frontcurve-api'
+import { FrontCurve, CopyFrontCurveAPIToFrontCurve } from './frontcurve'
+import { FrontCurveService } from './frontcurve.service'
+
+import { FrontCurveStackAPI } from './frontcurvestack-api'
+import { FrontCurveStack, CopyFrontCurveStackAPIToFrontCurveStack } from './frontcurvestack'
+import { FrontCurveStackService } from './frontcurvestack.service'
+
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { HorizontalAxis, CopyHorizontalAxisAPIToHorizontalAxis } from './horizontalaxis'
 import { HorizontalAxisService } from './horizontalaxis.service'
@@ -59,6 +67,42 @@ import { RhombusGridService } from './rhombusgrid.service'
 import { ShapeCategoryAPI } from './shapecategory-api'
 import { ShapeCategory, CopyShapeCategoryAPIToShapeCategory } from './shapecategory'
 import { ShapeCategoryService } from './shapecategory.service'
+
+import { SpiralBezierAPI } from './spiralbezier-api'
+import { SpiralBezier, CopySpiralBezierAPIToSpiralBezier } from './spiralbezier'
+import { SpiralBezierService } from './spiralbezier.service'
+
+import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
+import { SpiralBezierGrid, CopySpiralBezierGridAPIToSpiralBezierGrid } from './spiralbeziergrid'
+import { SpiralBezierGridService } from './spiralbeziergrid.service'
+
+import { SpiralCircleAPI } from './spiralcircle-api'
+import { SpiralCircle, CopySpiralCircleAPIToSpiralCircle } from './spiralcircle'
+import { SpiralCircleService } from './spiralcircle.service'
+
+import { SpiralCircleGridAPI } from './spiralcirclegrid-api'
+import { SpiralCircleGrid, CopySpiralCircleGridAPIToSpiralCircleGrid } from './spiralcirclegrid'
+import { SpiralCircleGridService } from './spiralcirclegrid.service'
+
+import { SpiralLineAPI } from './spiralline-api'
+import { SpiralLine, CopySpiralLineAPIToSpiralLine } from './spiralline'
+import { SpiralLineService } from './spiralline.service'
+
+import { SpiralLineGridAPI } from './spirallinegrid-api'
+import { SpiralLineGrid, CopySpiralLineGridAPIToSpiralLineGrid } from './spirallinegrid'
+import { SpiralLineGridService } from './spirallinegrid.service'
+
+import { SpiralOriginAPI } from './spiralorigin-api'
+import { SpiralOrigin, CopySpiralOriginAPIToSpiralOrigin } from './spiralorigin'
+import { SpiralOriginService } from './spiralorigin.service'
+
+import { SpiralRhombusAPI } from './spiralrhombus-api'
+import { SpiralRhombus, CopySpiralRhombusAPIToSpiralRhombus } from './spiralrhombus'
+import { SpiralRhombusService } from './spiralrhombus.service'
+
+import { SpiralRhombusGridAPI } from './spiralrhombusgrid-api'
+import { SpiralRhombusGrid, CopySpiralRhombusGridAPIToSpiralRhombusGrid } from './spiralrhombusgrid'
+import { SpiralRhombusGridService } from './spiralrhombusgrid.service'
 
 import { VerticalAxisAPI } from './verticalaxis-api'
 import { VerticalAxis, CopyVerticalAxisAPIToVerticalAxis } from './verticalaxis'
@@ -92,6 +136,12 @@ export class FrontRepo { // insertion point sub template
 	array_CircleGrids = new Array<CircleGrid>() // array of front instances
 	map_ID_CircleGrid = new Map<number, CircleGrid>() // map of front instances
 
+	array_FrontCurves = new Array<FrontCurve>() // array of front instances
+	map_ID_FrontCurve = new Map<number, FrontCurve>() // map of front instances
+
+	array_FrontCurveStacks = new Array<FrontCurveStack>() // array of front instances
+	map_ID_FrontCurveStack = new Map<number, FrontCurveStack>() // map of front instances
+
 	array_HorizontalAxiss = new Array<HorizontalAxis>() // array of front instances
 	map_ID_HorizontalAxis = new Map<number, HorizontalAxis>() // map of front instances
 
@@ -112,6 +162,33 @@ export class FrontRepo { // insertion point sub template
 
 	array_ShapeCategorys = new Array<ShapeCategory>() // array of front instances
 	map_ID_ShapeCategory = new Map<number, ShapeCategory>() // map of front instances
+
+	array_SpiralBeziers = new Array<SpiralBezier>() // array of front instances
+	map_ID_SpiralBezier = new Map<number, SpiralBezier>() // map of front instances
+
+	array_SpiralBezierGrids = new Array<SpiralBezierGrid>() // array of front instances
+	map_ID_SpiralBezierGrid = new Map<number, SpiralBezierGrid>() // map of front instances
+
+	array_SpiralCircles = new Array<SpiralCircle>() // array of front instances
+	map_ID_SpiralCircle = new Map<number, SpiralCircle>() // map of front instances
+
+	array_SpiralCircleGrids = new Array<SpiralCircleGrid>() // array of front instances
+	map_ID_SpiralCircleGrid = new Map<number, SpiralCircleGrid>() // map of front instances
+
+	array_SpiralLines = new Array<SpiralLine>() // array of front instances
+	map_ID_SpiralLine = new Map<number, SpiralLine>() // map of front instances
+
+	array_SpiralLineGrids = new Array<SpiralLineGrid>() // array of front instances
+	map_ID_SpiralLineGrid = new Map<number, SpiralLineGrid>() // map of front instances
+
+	array_SpiralOrigins = new Array<SpiralOrigin>() // array of front instances
+	map_ID_SpiralOrigin = new Map<number, SpiralOrigin>() // map of front instances
+
+	array_SpiralRhombuss = new Array<SpiralRhombus>() // array of front instances
+	map_ID_SpiralRhombus = new Map<number, SpiralRhombus>() // map of front instances
+
+	array_SpiralRhombusGrids = new Array<SpiralRhombusGrid>() // array of front instances
+	map_ID_SpiralRhombusGrid = new Map<number, SpiralRhombusGrid>() // map of front instances
 
 	array_VerticalAxiss = new Array<VerticalAxis>() // array of front instances
 	map_ID_VerticalAxis = new Map<number, VerticalAxis>() // map of front instances
@@ -137,6 +214,10 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Circles as unknown as Array<Type>
 			case 'CircleGrid':
 				return this.array_CircleGrids as unknown as Array<Type>
+			case 'FrontCurve':
+				return this.array_FrontCurves as unknown as Array<Type>
+			case 'FrontCurveStack':
+				return this.array_FrontCurveStacks as unknown as Array<Type>
 			case 'HorizontalAxis':
 				return this.array_HorizontalAxiss as unknown as Array<Type>
 			case 'Key':
@@ -151,6 +232,24 @@ export class FrontRepo { // insertion point sub template
 				return this.array_RhombusGrids as unknown as Array<Type>
 			case 'ShapeCategory':
 				return this.array_ShapeCategorys as unknown as Array<Type>
+			case 'SpiralBezier':
+				return this.array_SpiralBeziers as unknown as Array<Type>
+			case 'SpiralBezierGrid':
+				return this.array_SpiralBezierGrids as unknown as Array<Type>
+			case 'SpiralCircle':
+				return this.array_SpiralCircles as unknown as Array<Type>
+			case 'SpiralCircleGrid':
+				return this.array_SpiralCircleGrids as unknown as Array<Type>
+			case 'SpiralLine':
+				return this.array_SpiralLines as unknown as Array<Type>
+			case 'SpiralLineGrid':
+				return this.array_SpiralLineGrids as unknown as Array<Type>
+			case 'SpiralOrigin':
+				return this.array_SpiralOrigins as unknown as Array<Type>
+			case 'SpiralRhombus':
+				return this.array_SpiralRhombuss as unknown as Array<Type>
+			case 'SpiralRhombusGrid':
+				return this.array_SpiralRhombusGrids as unknown as Array<Type>
 			case 'VerticalAxis':
 				return this.array_VerticalAxiss as unknown as Array<Type>
 			default:
@@ -175,6 +274,10 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Circle as unknown as Map<number, Type>
 			case 'CircleGrid':
 				return this.map_ID_CircleGrid as unknown as Map<number, Type>
+			case 'FrontCurve':
+				return this.map_ID_FrontCurve as unknown as Map<number, Type>
+			case 'FrontCurveStack':
+				return this.map_ID_FrontCurveStack as unknown as Map<number, Type>
 			case 'HorizontalAxis':
 				return this.map_ID_HorizontalAxis as unknown as Map<number, Type>
 			case 'Key':
@@ -189,6 +292,24 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_RhombusGrid as unknown as Map<number, Type>
 			case 'ShapeCategory':
 				return this.map_ID_ShapeCategory as unknown as Map<number, Type>
+			case 'SpiralBezier':
+				return this.map_ID_SpiralBezier as unknown as Map<number, Type>
+			case 'SpiralBezierGrid':
+				return this.map_ID_SpiralBezierGrid as unknown as Map<number, Type>
+			case 'SpiralCircle':
+				return this.map_ID_SpiralCircle as unknown as Map<number, Type>
+			case 'SpiralCircleGrid':
+				return this.map_ID_SpiralCircleGrid as unknown as Map<number, Type>
+			case 'SpiralLine':
+				return this.map_ID_SpiralLine as unknown as Map<number, Type>
+			case 'SpiralLineGrid':
+				return this.map_ID_SpiralLineGrid as unknown as Map<number, Type>
+			case 'SpiralOrigin':
+				return this.map_ID_SpiralOrigin as unknown as Map<number, Type>
+			case 'SpiralRhombus':
+				return this.map_ID_SpiralRhombus as unknown as Map<number, Type>
+			case 'SpiralRhombusGrid':
+				return this.map_ID_SpiralRhombusGrid as unknown as Map<number, Type>
 			case 'VerticalAxis':
 				return this.map_ID_VerticalAxis as unknown as Map<number, Type>
 			default:
@@ -265,6 +386,8 @@ export class FrontRepoService {
 		private beziergridstackService: BezierGridStackService,
 		private circleService: CircleService,
 		private circlegridService: CircleGridService,
+		private frontcurveService: FrontCurveService,
+		private frontcurvestackService: FrontCurveStackService,
 		private horizontalaxisService: HorizontalAxisService,
 		private keyService: KeyService,
 		private noteinfoService: NoteInfoService,
@@ -272,6 +395,15 @@ export class FrontRepoService {
 		private rhombusService: RhombusService,
 		private rhombusgridService: RhombusGridService,
 		private shapecategoryService: ShapeCategoryService,
+		private spiralbezierService: SpiralBezierService,
+		private spiralbeziergridService: SpiralBezierGridService,
+		private spiralcircleService: SpiralCircleService,
+		private spiralcirclegridService: SpiralCircleGridService,
+		private spirallineService: SpiralLineService,
+		private spirallinegridService: SpiralLineGridService,
+		private spiraloriginService: SpiralOriginService,
+		private spiralrhombusService: SpiralRhombusService,
+		private spiralrhombusgridService: SpiralRhombusGridService,
 		private verticalaxisService: VerticalAxisService,
 	) { }
 
@@ -312,6 +444,8 @@ export class FrontRepoService {
 		Observable<BezierGridStackAPI[]>,
 		Observable<CircleAPI[]>,
 		Observable<CircleGridAPI[]>,
+		Observable<FrontCurveAPI[]>,
+		Observable<FrontCurveStackAPI[]>,
 		Observable<HorizontalAxisAPI[]>,
 		Observable<KeyAPI[]>,
 		Observable<NoteInfoAPI[]>,
@@ -319,6 +453,15 @@ export class FrontRepoService {
 		Observable<RhombusAPI[]>,
 		Observable<RhombusGridAPI[]>,
 		Observable<ShapeCategoryAPI[]>,
+		Observable<SpiralBezierAPI[]>,
+		Observable<SpiralBezierGridAPI[]>,
+		Observable<SpiralCircleAPI[]>,
+		Observable<SpiralCircleGridAPI[]>,
+		Observable<SpiralLineAPI[]>,
+		Observable<SpiralLineGridAPI[]>,
+		Observable<SpiralOriginAPI[]>,
+		Observable<SpiralRhombusAPI[]>,
+		Observable<SpiralRhombusGridAPI[]>,
 		Observable<VerticalAxisAPI[]>,
 	] = [
 			// Using "combineLatest" with a placeholder observable.
@@ -337,6 +480,8 @@ export class FrontRepoService {
 			this.beziergridstackService.getBezierGridStacks(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.frontcurveService.getFrontCurves(this.GONG__StackPath, this.frontRepo),
+			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
 			this.noteinfoService.getNoteInfos(this.GONG__StackPath, this.frontRepo),
@@ -344,6 +489,15 @@ export class FrontRepoService {
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.shapecategoryService.getShapeCategorys(this.GONG__StackPath, this.frontRepo),
+			this.spiralbezierService.getSpiralBeziers(this.GONG__StackPath, this.frontRepo),
+			this.spiralbeziergridService.getSpiralBezierGrids(this.GONG__StackPath, this.frontRepo),
+			this.spiralcircleService.getSpiralCircles(this.GONG__StackPath, this.frontRepo),
+			this.spiralcirclegridService.getSpiralCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.spirallineService.getSpiralLines(this.GONG__StackPath, this.frontRepo),
+			this.spirallinegridService.getSpiralLineGrids(this.GONG__StackPath, this.frontRepo),
+			this.spiraloriginService.getSpiralOrigins(this.GONG__StackPath, this.frontRepo),
+			this.spiralrhombusService.getSpiralRhombuss(this.GONG__StackPath, this.frontRepo),
+			this.spiralrhombusgridService.getSpiralRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.verticalaxisService.getVerticalAxiss(this.GONG__StackPath, this.frontRepo),
 		];
 
@@ -367,6 +521,8 @@ export class FrontRepoService {
 			this.beziergridstackService.getBezierGridStacks(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.frontcurveService.getFrontCurves(this.GONG__StackPath, this.frontRepo),
+			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
 			this.noteinfoService.getNoteInfos(this.GONG__StackPath, this.frontRepo),
@@ -374,6 +530,15 @@ export class FrontRepoService {
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.shapecategoryService.getShapeCategorys(this.GONG__StackPath, this.frontRepo),
+			this.spiralbezierService.getSpiralBeziers(this.GONG__StackPath, this.frontRepo),
+			this.spiralbeziergridService.getSpiralBezierGrids(this.GONG__StackPath, this.frontRepo),
+			this.spiralcircleService.getSpiralCircles(this.GONG__StackPath, this.frontRepo),
+			this.spiralcirclegridService.getSpiralCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.spirallineService.getSpiralLines(this.GONG__StackPath, this.frontRepo),
+			this.spirallinegridService.getSpiralLineGrids(this.GONG__StackPath, this.frontRepo),
+			this.spiraloriginService.getSpiralOrigins(this.GONG__StackPath, this.frontRepo),
+			this.spiralrhombusService.getSpiralRhombuss(this.GONG__StackPath, this.frontRepo),
+			this.spiralrhombusgridService.getSpiralRhombusGrids(this.GONG__StackPath, this.frontRepo),
 			this.verticalaxisService.getVerticalAxiss(this.GONG__StackPath, this.frontRepo),
 		]
 
@@ -392,6 +557,8 @@ export class FrontRepoService {
 						beziergridstacks_,
 						circles_,
 						circlegrids_,
+						frontcurves_,
+						frontcurvestacks_,
 						horizontalaxiss_,
 						keys_,
 						noteinfos_,
@@ -399,6 +566,15 @@ export class FrontRepoService {
 						rhombuss_,
 						rhombusgrids_,
 						shapecategorys_,
+						spiralbeziers_,
+						spiralbeziergrids_,
+						spiralcircles_,
+						spiralcirclegrids_,
+						spirallines_,
+						spirallinegrids_,
+						spiralorigins_,
+						spiralrhombuss_,
+						spiralrhombusgrids_,
 						verticalaxiss_,
 					]) => {
 						let _this = this
@@ -418,6 +594,10 @@ export class FrontRepoService {
 						circles = circles_ as CircleAPI[]
 						var circlegrids: CircleGridAPI[]
 						circlegrids = circlegrids_ as CircleGridAPI[]
+						var frontcurves: FrontCurveAPI[]
+						frontcurves = frontcurves_ as FrontCurveAPI[]
+						var frontcurvestacks: FrontCurveStackAPI[]
+						frontcurvestacks = frontcurvestacks_ as FrontCurveStackAPI[]
 						var horizontalaxiss: HorizontalAxisAPI[]
 						horizontalaxiss = horizontalaxiss_ as HorizontalAxisAPI[]
 						var keys: KeyAPI[]
@@ -432,6 +612,24 @@ export class FrontRepoService {
 						rhombusgrids = rhombusgrids_ as RhombusGridAPI[]
 						var shapecategorys: ShapeCategoryAPI[]
 						shapecategorys = shapecategorys_ as ShapeCategoryAPI[]
+						var spiralbeziers: SpiralBezierAPI[]
+						spiralbeziers = spiralbeziers_ as SpiralBezierAPI[]
+						var spiralbeziergrids: SpiralBezierGridAPI[]
+						spiralbeziergrids = spiralbeziergrids_ as SpiralBezierGridAPI[]
+						var spiralcircles: SpiralCircleAPI[]
+						spiralcircles = spiralcircles_ as SpiralCircleAPI[]
+						var spiralcirclegrids: SpiralCircleGridAPI[]
+						spiralcirclegrids = spiralcirclegrids_ as SpiralCircleGridAPI[]
+						var spirallines: SpiralLineAPI[]
+						spirallines = spirallines_ as SpiralLineAPI[]
+						var spirallinegrids: SpiralLineGridAPI[]
+						spirallinegrids = spirallinegrids_ as SpiralLineGridAPI[]
+						var spiralorigins: SpiralOriginAPI[]
+						spiralorigins = spiralorigins_ as SpiralOriginAPI[]
+						var spiralrhombuss: SpiralRhombusAPI[]
+						spiralrhombuss = spiralrhombuss_ as SpiralRhombusAPI[]
+						var spiralrhombusgrids: SpiralRhombusGridAPI[]
+						spiralrhombusgrids = spiralrhombusgrids_ as SpiralRhombusGridAPI[]
 						var verticalaxiss: VerticalAxisAPI[]
 						verticalaxiss = verticalaxiss_ as VerticalAxisAPI[]
 
@@ -523,6 +721,30 @@ export class FrontRepoService {
 						)
 
 						// init the arrays
+						this.frontRepo.array_FrontCurves = []
+						this.frontRepo.map_ID_FrontCurve.clear()
+
+						frontcurves.forEach(
+							frontcurveAPI => {
+								let frontcurve = new FrontCurve
+								this.frontRepo.array_FrontCurves.push(frontcurve)
+								this.frontRepo.map_ID_FrontCurve.set(frontcurveAPI.ID, frontcurve)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_FrontCurveStacks = []
+						this.frontRepo.map_ID_FrontCurveStack.clear()
+
+						frontcurvestacks.forEach(
+							frontcurvestackAPI => {
+								let frontcurvestack = new FrontCurveStack
+								this.frontRepo.array_FrontCurveStacks.push(frontcurvestack)
+								this.frontRepo.map_ID_FrontCurveStack.set(frontcurvestackAPI.ID, frontcurvestack)
+							}
+						)
+
+						// init the arrays
 						this.frontRepo.array_HorizontalAxiss = []
 						this.frontRepo.map_ID_HorizontalAxis.clear()
 
@@ -607,6 +829,114 @@ export class FrontRepoService {
 						)
 
 						// init the arrays
+						this.frontRepo.array_SpiralBeziers = []
+						this.frontRepo.map_ID_SpiralBezier.clear()
+
+						spiralbeziers.forEach(
+							spiralbezierAPI => {
+								let spiralbezier = new SpiralBezier
+								this.frontRepo.array_SpiralBeziers.push(spiralbezier)
+								this.frontRepo.map_ID_SpiralBezier.set(spiralbezierAPI.ID, spiralbezier)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_SpiralBezierGrids = []
+						this.frontRepo.map_ID_SpiralBezierGrid.clear()
+
+						spiralbeziergrids.forEach(
+							spiralbeziergridAPI => {
+								let spiralbeziergrid = new SpiralBezierGrid
+								this.frontRepo.array_SpiralBezierGrids.push(spiralbeziergrid)
+								this.frontRepo.map_ID_SpiralBezierGrid.set(spiralbeziergridAPI.ID, spiralbeziergrid)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_SpiralCircles = []
+						this.frontRepo.map_ID_SpiralCircle.clear()
+
+						spiralcircles.forEach(
+							spiralcircleAPI => {
+								let spiralcircle = new SpiralCircle
+								this.frontRepo.array_SpiralCircles.push(spiralcircle)
+								this.frontRepo.map_ID_SpiralCircle.set(spiralcircleAPI.ID, spiralcircle)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_SpiralCircleGrids = []
+						this.frontRepo.map_ID_SpiralCircleGrid.clear()
+
+						spiralcirclegrids.forEach(
+							spiralcirclegridAPI => {
+								let spiralcirclegrid = new SpiralCircleGrid
+								this.frontRepo.array_SpiralCircleGrids.push(spiralcirclegrid)
+								this.frontRepo.map_ID_SpiralCircleGrid.set(spiralcirclegridAPI.ID, spiralcirclegrid)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_SpiralLines = []
+						this.frontRepo.map_ID_SpiralLine.clear()
+
+						spirallines.forEach(
+							spirallineAPI => {
+								let spiralline = new SpiralLine
+								this.frontRepo.array_SpiralLines.push(spiralline)
+								this.frontRepo.map_ID_SpiralLine.set(spirallineAPI.ID, spiralline)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_SpiralLineGrids = []
+						this.frontRepo.map_ID_SpiralLineGrid.clear()
+
+						spirallinegrids.forEach(
+							spirallinegridAPI => {
+								let spirallinegrid = new SpiralLineGrid
+								this.frontRepo.array_SpiralLineGrids.push(spirallinegrid)
+								this.frontRepo.map_ID_SpiralLineGrid.set(spirallinegridAPI.ID, spirallinegrid)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_SpiralOrigins = []
+						this.frontRepo.map_ID_SpiralOrigin.clear()
+
+						spiralorigins.forEach(
+							spiraloriginAPI => {
+								let spiralorigin = new SpiralOrigin
+								this.frontRepo.array_SpiralOrigins.push(spiralorigin)
+								this.frontRepo.map_ID_SpiralOrigin.set(spiraloriginAPI.ID, spiralorigin)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_SpiralRhombuss = []
+						this.frontRepo.map_ID_SpiralRhombus.clear()
+
+						spiralrhombuss.forEach(
+							spiralrhombusAPI => {
+								let spiralrhombus = new SpiralRhombus
+								this.frontRepo.array_SpiralRhombuss.push(spiralrhombus)
+								this.frontRepo.map_ID_SpiralRhombus.set(spiralrhombusAPI.ID, spiralrhombus)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_SpiralRhombusGrids = []
+						this.frontRepo.map_ID_SpiralRhombusGrid.clear()
+
+						spiralrhombusgrids.forEach(
+							spiralrhombusgridAPI => {
+								let spiralrhombusgrid = new SpiralRhombusGrid
+								this.frontRepo.array_SpiralRhombusGrids.push(spiralrhombusgrid)
+								this.frontRepo.map_ID_SpiralRhombusGrid.set(spiralrhombusgridAPI.ID, spiralrhombusgrid)
+							}
+						)
+
+						// init the arrays
 						this.frontRepo.array_VerticalAxiss = []
 						this.frontRepo.map_ID_VerticalAxis.clear()
 
@@ -679,6 +1009,22 @@ export class FrontRepoService {
 						)
 
 						// fill up front objects
+						frontcurves.forEach(
+							frontcurveAPI => {
+								let frontcurve = this.frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
+								CopyFrontCurveAPIToFrontCurve(frontcurveAPI, frontcurve!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						frontcurvestacks.forEach(
+							frontcurvestackAPI => {
+								let frontcurvestack = this.frontRepo.map_ID_FrontCurveStack.get(frontcurvestackAPI.ID)
+								CopyFrontCurveStackAPIToFrontCurveStack(frontcurvestackAPI, frontcurvestack!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
 						horizontalaxiss.forEach(
 							horizontalaxisAPI => {
 								let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
@@ -731,6 +1077,78 @@ export class FrontRepoService {
 							shapecategoryAPI => {
 								let shapecategory = this.frontRepo.map_ID_ShapeCategory.get(shapecategoryAPI.ID)
 								CopyShapeCategoryAPIToShapeCategory(shapecategoryAPI, shapecategory!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spiralbeziers.forEach(
+							spiralbezierAPI => {
+								let spiralbezier = this.frontRepo.map_ID_SpiralBezier.get(spiralbezierAPI.ID)
+								CopySpiralBezierAPIToSpiralBezier(spiralbezierAPI, spiralbezier!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spiralbeziergrids.forEach(
+							spiralbeziergridAPI => {
+								let spiralbeziergrid = this.frontRepo.map_ID_SpiralBezierGrid.get(spiralbeziergridAPI.ID)
+								CopySpiralBezierGridAPIToSpiralBezierGrid(spiralbeziergridAPI, spiralbeziergrid!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spiralcircles.forEach(
+							spiralcircleAPI => {
+								let spiralcircle = this.frontRepo.map_ID_SpiralCircle.get(spiralcircleAPI.ID)
+								CopySpiralCircleAPIToSpiralCircle(spiralcircleAPI, spiralcircle!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spiralcirclegrids.forEach(
+							spiralcirclegridAPI => {
+								let spiralcirclegrid = this.frontRepo.map_ID_SpiralCircleGrid.get(spiralcirclegridAPI.ID)
+								CopySpiralCircleGridAPIToSpiralCircleGrid(spiralcirclegridAPI, spiralcirclegrid!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spirallines.forEach(
+							spirallineAPI => {
+								let spiralline = this.frontRepo.map_ID_SpiralLine.get(spirallineAPI.ID)
+								CopySpiralLineAPIToSpiralLine(spirallineAPI, spiralline!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spirallinegrids.forEach(
+							spirallinegridAPI => {
+								let spirallinegrid = this.frontRepo.map_ID_SpiralLineGrid.get(spirallinegridAPI.ID)
+								CopySpiralLineGridAPIToSpiralLineGrid(spirallinegridAPI, spirallinegrid!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spiralorigins.forEach(
+							spiraloriginAPI => {
+								let spiralorigin = this.frontRepo.map_ID_SpiralOrigin.get(spiraloriginAPI.ID)
+								CopySpiralOriginAPIToSpiralOrigin(spiraloriginAPI, spiralorigin!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spiralrhombuss.forEach(
+							spiralrhombusAPI => {
+								let spiralrhombus = this.frontRepo.map_ID_SpiralRhombus.get(spiralrhombusAPI.ID)
+								CopySpiralRhombusAPIToSpiralRhombus(spiralrhombusAPI, spiralrhombus!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						spiralrhombusgrids.forEach(
+							spiralrhombusgridAPI => {
+								let spiralrhombusgrid = this.frontRepo.map_ID_SpiralRhombusGrid.get(spiralrhombusgridAPI.ID)
+								CopySpiralRhombusGridAPIToSpiralRhombusGrid(spiralrhombusgridAPI, spiralrhombusgrid!, this.frontRepo)
 							}
 						)
 
@@ -858,6 +1276,30 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				this.frontRepo.array_FrontCurves = []
+				this.frontRepo.map_ID_FrontCurve.clear()
+
+				backRepoData.FrontCurveAPIs.forEach(
+					frontcurveAPI => {
+						let frontcurve = new FrontCurve
+						this.frontRepo.array_FrontCurves.push(frontcurve)
+						this.frontRepo.map_ID_FrontCurve.set(frontcurveAPI.ID, frontcurve)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_FrontCurveStacks = []
+				this.frontRepo.map_ID_FrontCurveStack.clear()
+
+				backRepoData.FrontCurveStackAPIs.forEach(
+					frontcurvestackAPI => {
+						let frontcurvestack = new FrontCurveStack
+						this.frontRepo.array_FrontCurveStacks.push(frontcurvestack)
+						this.frontRepo.map_ID_FrontCurveStack.set(frontcurvestackAPI.ID, frontcurvestack)
+					}
+				)
+
+				// init the arrays
 				this.frontRepo.array_HorizontalAxiss = []
 				this.frontRepo.map_ID_HorizontalAxis.clear()
 
@@ -942,6 +1384,114 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				this.frontRepo.array_SpiralBeziers = []
+				this.frontRepo.map_ID_SpiralBezier.clear()
+
+				backRepoData.SpiralBezierAPIs.forEach(
+					spiralbezierAPI => {
+						let spiralbezier = new SpiralBezier
+						this.frontRepo.array_SpiralBeziers.push(spiralbezier)
+						this.frontRepo.map_ID_SpiralBezier.set(spiralbezierAPI.ID, spiralbezier)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_SpiralBezierGrids = []
+				this.frontRepo.map_ID_SpiralBezierGrid.clear()
+
+				backRepoData.SpiralBezierGridAPIs.forEach(
+					spiralbeziergridAPI => {
+						let spiralbeziergrid = new SpiralBezierGrid
+						this.frontRepo.array_SpiralBezierGrids.push(spiralbeziergrid)
+						this.frontRepo.map_ID_SpiralBezierGrid.set(spiralbeziergridAPI.ID, spiralbeziergrid)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_SpiralCircles = []
+				this.frontRepo.map_ID_SpiralCircle.clear()
+
+				backRepoData.SpiralCircleAPIs.forEach(
+					spiralcircleAPI => {
+						let spiralcircle = new SpiralCircle
+						this.frontRepo.array_SpiralCircles.push(spiralcircle)
+						this.frontRepo.map_ID_SpiralCircle.set(spiralcircleAPI.ID, spiralcircle)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_SpiralCircleGrids = []
+				this.frontRepo.map_ID_SpiralCircleGrid.clear()
+
+				backRepoData.SpiralCircleGridAPIs.forEach(
+					spiralcirclegridAPI => {
+						let spiralcirclegrid = new SpiralCircleGrid
+						this.frontRepo.array_SpiralCircleGrids.push(spiralcirclegrid)
+						this.frontRepo.map_ID_SpiralCircleGrid.set(spiralcirclegridAPI.ID, spiralcirclegrid)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_SpiralLines = []
+				this.frontRepo.map_ID_SpiralLine.clear()
+
+				backRepoData.SpiralLineAPIs.forEach(
+					spirallineAPI => {
+						let spiralline = new SpiralLine
+						this.frontRepo.array_SpiralLines.push(spiralline)
+						this.frontRepo.map_ID_SpiralLine.set(spirallineAPI.ID, spiralline)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_SpiralLineGrids = []
+				this.frontRepo.map_ID_SpiralLineGrid.clear()
+
+				backRepoData.SpiralLineGridAPIs.forEach(
+					spirallinegridAPI => {
+						let spirallinegrid = new SpiralLineGrid
+						this.frontRepo.array_SpiralLineGrids.push(spirallinegrid)
+						this.frontRepo.map_ID_SpiralLineGrid.set(spirallinegridAPI.ID, spirallinegrid)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_SpiralOrigins = []
+				this.frontRepo.map_ID_SpiralOrigin.clear()
+
+				backRepoData.SpiralOriginAPIs.forEach(
+					spiraloriginAPI => {
+						let spiralorigin = new SpiralOrigin
+						this.frontRepo.array_SpiralOrigins.push(spiralorigin)
+						this.frontRepo.map_ID_SpiralOrigin.set(spiraloriginAPI.ID, spiralorigin)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_SpiralRhombuss = []
+				this.frontRepo.map_ID_SpiralRhombus.clear()
+
+				backRepoData.SpiralRhombusAPIs.forEach(
+					spiralrhombusAPI => {
+						let spiralrhombus = new SpiralRhombus
+						this.frontRepo.array_SpiralRhombuss.push(spiralrhombus)
+						this.frontRepo.map_ID_SpiralRhombus.set(spiralrhombusAPI.ID, spiralrhombus)
+					}
+				)
+
+				// init the arrays
+				this.frontRepo.array_SpiralRhombusGrids = []
+				this.frontRepo.map_ID_SpiralRhombusGrid.clear()
+
+				backRepoData.SpiralRhombusGridAPIs.forEach(
+					spiralrhombusgridAPI => {
+						let spiralrhombusgrid = new SpiralRhombusGrid
+						this.frontRepo.array_SpiralRhombusGrids.push(spiralrhombusgrid)
+						this.frontRepo.map_ID_SpiralRhombusGrid.set(spiralrhombusgridAPI.ID, spiralrhombusgrid)
+					}
+				)
+
+				// init the arrays
 				this.frontRepo.array_VerticalAxiss = []
 				this.frontRepo.map_ID_VerticalAxis.clear()
 
@@ -1016,6 +1566,22 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.FrontCurveAPIs.forEach(
+					frontcurveAPI => {
+						let frontcurve = this.frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
+						CopyFrontCurveAPIToFrontCurve(frontcurveAPI, frontcurve!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.FrontCurveStackAPIs.forEach(
+					frontcurvestackAPI => {
+						let frontcurvestack = this.frontRepo.map_ID_FrontCurveStack.get(frontcurvestackAPI.ID)
+						CopyFrontCurveStackAPIToFrontCurveStack(frontcurvestackAPI, frontcurvestack!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.HorizontalAxisAPIs.forEach(
 					horizontalaxisAPI => {
 						let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
@@ -1072,6 +1638,78 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.SpiralBezierAPIs.forEach(
+					spiralbezierAPI => {
+						let spiralbezier = this.frontRepo.map_ID_SpiralBezier.get(spiralbezierAPI.ID)
+						CopySpiralBezierAPIToSpiralBezier(spiralbezierAPI, spiralbezier!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.SpiralBezierGridAPIs.forEach(
+					spiralbeziergridAPI => {
+						let spiralbeziergrid = this.frontRepo.map_ID_SpiralBezierGrid.get(spiralbeziergridAPI.ID)
+						CopySpiralBezierGridAPIToSpiralBezierGrid(spiralbeziergridAPI, spiralbeziergrid!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.SpiralCircleAPIs.forEach(
+					spiralcircleAPI => {
+						let spiralcircle = this.frontRepo.map_ID_SpiralCircle.get(spiralcircleAPI.ID)
+						CopySpiralCircleAPIToSpiralCircle(spiralcircleAPI, spiralcircle!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.SpiralCircleGridAPIs.forEach(
+					spiralcirclegridAPI => {
+						let spiralcirclegrid = this.frontRepo.map_ID_SpiralCircleGrid.get(spiralcirclegridAPI.ID)
+						CopySpiralCircleGridAPIToSpiralCircleGrid(spiralcirclegridAPI, spiralcirclegrid!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.SpiralLineAPIs.forEach(
+					spirallineAPI => {
+						let spiralline = this.frontRepo.map_ID_SpiralLine.get(spirallineAPI.ID)
+						CopySpiralLineAPIToSpiralLine(spirallineAPI, spiralline!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.SpiralLineGridAPIs.forEach(
+					spirallinegridAPI => {
+						let spirallinegrid = this.frontRepo.map_ID_SpiralLineGrid.get(spirallinegridAPI.ID)
+						CopySpiralLineGridAPIToSpiralLineGrid(spirallinegridAPI, spirallinegrid!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.SpiralOriginAPIs.forEach(
+					spiraloriginAPI => {
+						let spiralorigin = this.frontRepo.map_ID_SpiralOrigin.get(spiraloriginAPI.ID)
+						CopySpiralOriginAPIToSpiralOrigin(spiraloriginAPI, spiralorigin!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.SpiralRhombusAPIs.forEach(
+					spiralrhombusAPI => {
+						let spiralrhombus = this.frontRepo.map_ID_SpiralRhombus.get(spiralrhombusAPI.ID)
+						CopySpiralRhombusAPIToSpiralRhombus(spiralrhombusAPI, spiralrhombus!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.SpiralRhombusGridAPIs.forEach(
+					spiralrhombusgridAPI => {
+						let spiralrhombusgrid = this.frontRepo.map_ID_SpiralRhombusGrid.get(spiralrhombusgridAPI.ID)
+						CopySpiralRhombusGridAPIToSpiralRhombusGrid(spiralrhombusgridAPI, spiralrhombusgrid!, this.frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.VerticalAxisAPIs.forEach(
 					verticalaxisAPI => {
 						let verticalaxis = this.frontRepo.map_ID_VerticalAxis.get(verticalaxisAPI.ID)
@@ -1119,27 +1757,60 @@ export function getCircleUniqueID(id: number): number {
 export function getCircleGridUniqueID(id: number): number {
 	return 59 * id
 }
-export function getHorizontalAxisUniqueID(id: number): number {
+export function getFrontCurveUniqueID(id: number): number {
 	return 61 * id
 }
-export function getKeyUniqueID(id: number): number {
+export function getFrontCurveStackUniqueID(id: number): number {
 	return 67 * id
 }
-export function getNoteInfoUniqueID(id: number): number {
+export function getHorizontalAxisUniqueID(id: number): number {
 	return 71 * id
 }
-export function getParameterUniqueID(id: number): number {
+export function getKeyUniqueID(id: number): number {
 	return 73 * id
 }
-export function getRhombusUniqueID(id: number): number {
+export function getNoteInfoUniqueID(id: number): number {
 	return 79 * id
 }
-export function getRhombusGridUniqueID(id: number): number {
+export function getParameterUniqueID(id: number): number {
 	return 83 * id
 }
-export function getShapeCategoryUniqueID(id: number): number {
+export function getRhombusUniqueID(id: number): number {
 	return 89 * id
 }
-export function getVerticalAxisUniqueID(id: number): number {
+export function getRhombusGridUniqueID(id: number): number {
 	return 97 * id
+}
+export function getShapeCategoryUniqueID(id: number): number {
+	return 101 * id
+}
+export function getSpiralBezierUniqueID(id: number): number {
+	return 103 * id
+}
+export function getSpiralBezierGridUniqueID(id: number): number {
+	return 107 * id
+}
+export function getSpiralCircleUniqueID(id: number): number {
+	return 109 * id
+}
+export function getSpiralCircleGridUniqueID(id: number): number {
+	return 113 * id
+}
+export function getSpiralLineUniqueID(id: number): number {
+	return 127 * id
+}
+export function getSpiralLineGridUniqueID(id: number): number {
+	return 131 * id
+}
+export function getSpiralOriginUniqueID(id: number): number {
+	return 137 * id
+}
+export function getSpiralRhombusUniqueID(id: number): number {
+	return 139 * id
+}
+export function getSpiralRhombusGridUniqueID(id: number): number {
+	return 149 * id
+}
+export function getVerticalAxisUniqueID(id: number): number {
+	return 151 * id
 }

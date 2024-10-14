@@ -104,6 +104,30 @@ func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Prob
 		)
 		formGroup.HasSuppressButton = true
 		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.FrontCurve:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "FrontCurve Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__FrontCurveFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.FrontCurveStack:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "FrontCurveStack Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__FrontCurveStackFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
 	case *models.HorizontalAxis:
 		formGroup := (&gongtable.FormGroup{
 			Name:  formName,
@@ -182,6 +206,114 @@ func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Prob
 			Label: "ShapeCategory Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__ShapeCategoryFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralBezier:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralBezier Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralBezierFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralBezierGrid:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralBezierGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralBezierGridFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralCircle:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralCircle Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralCircleFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralCircleGrid:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralCircleGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralCircleGridFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralLine:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralLine Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralLineFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralLineGrid:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralLineGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralLineGridFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralOrigin:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralOrigin Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralOriginFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralRhombus:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralRhombus Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralRhombusFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.SpiralRhombusGrid:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "SpiralRhombusGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralRhombusGridFormCallback(
 			instancesTyped,
 			probe,
 			formGroup,

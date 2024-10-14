@@ -13,10 +13,20 @@ import { AxisGrid } from './axisgrid'
 import { Bezier } from './bezier'
 import { BezierGrid } from './beziergrid'
 import { BezierGridStack } from './beziergridstack'
+import { SpiralRhombus } from './spiralrhombus'
+import { SpiralRhombusGrid } from './spiralrhombusgrid'
+import { SpiralCircle } from './spiralcircle'
+import { SpiralCircleGrid } from './spiralcirclegrid'
+import { SpiralLine } from './spiralline'
+import { SpiralLineGrid } from './spirallinegrid'
+import { SpiralBezier } from './spiralbezier'
+import { SpiralBezierGrid } from './spiralbeziergrid'
+import { FrontCurveStack } from './frontcurvestack'
 import { Key } from './key'
 import { NoteInfo } from './noteinfo'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
+import { SpiralOrigin } from './spiralorigin'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -34,12 +44,21 @@ export class Parameter {
 	N: number = 0
 	M: number = 0
 	Z: number = 0
+	ShiftToNearestCircle: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
 	StackWidth: number = 0
 	NbShitRight: number = 0
 	StackHeight: number = 0
 	BezierControlLengthRatio: number = 0
+	SpiralBezierStrength: number = 0
+	NbInterpolationPoints: number = 0
+	HourHandleRotationAngle: number = 0
+	HourHandleDiskDistance: number = 0
+	HourHandleRadius: number = 0
+	MinuteHandleRotationAngle: number = 0
+	MinuteHandleDiskDistance: number = 0
+	MinuteHandleRadius: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -56,6 +75,12 @@ export class Parameter {
 	IsMinor: boolean = false
 	OriginX: number = 0
 	OriginY: number = 0
+	SpiralOriginX: number = 0
+	SpiralOriginY: number = 0
+	OriginCrossWidth: number = 0
+	SpiralRadiusRatio: number = 0
+	ShowSpiralBezierConstruct: boolean = false
+	ShowInterpolationPoints: boolean = false
 
 	// insertion point for pointers and slices of pointers declarations
 	InitialRhombus?: Rhombus
@@ -100,7 +125,7 @@ export class Parameter {
 
 	ConstructionCircleGrid?: CircleGrid
 
-	GrowthCurveSegment?: Bezier
+	GrowthCurveSeed?: Bezier
 
 	GrowthCurve?: BezierGrid
 
@@ -117,6 +142,44 @@ export class Parameter {
 	GrowthCurveNextShiftedRight?: BezierGrid
 
 	GrowthCurveStack?: BezierGridStack
+
+	SpiralRhombusGridSeed?: SpiralRhombus
+
+	SpiralRhombusGrid?: SpiralRhombusGrid
+
+	SpiralCircleSeed?: SpiralCircle
+
+	SpiralCircleGrid?: SpiralCircleGrid
+
+	SpiralCircleFullGrid?: SpiralCircleGrid
+
+	SpiralConstructionOuterLineSeed?: SpiralLine
+
+	SpiralConstructionInnerLineSeed?: SpiralLine
+
+	SpiralConstructionOuterLineGrid?: SpiralLineGrid
+
+	SpiralConstructionInnerLineGrid?: SpiralLineGrid
+
+	SpiralConstructionCircleGrid?: SpiralCircleGrid
+
+	SpiralConstructionOuterLineFullGrid?: SpiralLineGrid
+
+	SpiralBezierSeed?: SpiralBezier
+
+	SpiralBezierGrid?: SpiralBezierGrid
+
+	SpiralBezierFullGrid?: SpiralBezierGrid
+
+	FrontCurveStack?: FrontCurveStack
+
+	HourCurve?: FrontCurveStack
+
+	HourMarker?: SpiralCircle
+
+	MinuteCurve?: FrontCurveStack
+
+	MinuteMarker?: SpiralCircle
 
 	Fkey?: Key
 
@@ -145,6 +208,8 @@ export class Parameter {
 
 	VerticalAxis?: VerticalAxis
 
+	SpiralOrigin?: SpiralOrigin
+
 }
 
 export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: ParameterAPI) {
@@ -158,12 +223,21 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.N = parameter.N
 	parameterAPI.M = parameter.M
 	parameterAPI.Z = parameter.Z
+	parameterAPI.ShiftToNearestCircle = parameter.ShiftToNearestCircle
 	parameterAPI.InsideAngle = parameter.InsideAngle
 	parameterAPI.SideLength = parameter.SideLength
 	parameterAPI.StackWidth = parameter.StackWidth
 	parameterAPI.NbShitRight = parameter.NbShitRight
 	parameterAPI.StackHeight = parameter.StackHeight
 	parameterAPI.BezierControlLengthRatio = parameter.BezierControlLengthRatio
+	parameterAPI.SpiralBezierStrength = parameter.SpiralBezierStrength
+	parameterAPI.NbInterpolationPoints = parameter.NbInterpolationPoints
+	parameterAPI.HourHandleRotationAngle = parameter.HourHandleRotationAngle
+	parameterAPI.HourHandleDiskDistance = parameter.HourHandleDiskDistance
+	parameterAPI.HourHandleRadius = parameter.HourHandleRadius
+	parameterAPI.MinuteHandleRotationAngle = parameter.MinuteHandleRotationAngle
+	parameterAPI.MinuteHandleDiskDistance = parameter.MinuteHandleDiskDistance
+	parameterAPI.MinuteHandleRadius = parameter.MinuteHandleRadius
 	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
 	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
 	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
@@ -180,6 +254,12 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.IsMinor = parameter.IsMinor
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
+	parameterAPI.SpiralOriginX = parameter.SpiralOriginX
+	parameterAPI.SpiralOriginY = parameter.SpiralOriginY
+	parameterAPI.OriginCrossWidth = parameter.OriginCrossWidth
+	parameterAPI.SpiralRadiusRatio = parameter.SpiralRadiusRatio
+	parameterAPI.ShowSpiralBezierConstruct = parameter.ShowSpiralBezierConstruct
+	parameterAPI.ShowInterpolationPoints = parameter.ShowInterpolationPoints
 
 	// insertion point for pointer fields encoding
 	parameterAPI.ParameterPointersEncoding.InitialRhombusID.Valid = true
@@ -329,11 +409,11 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.ConstructionCircleGridID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.GrowthCurveSegmentID.Valid = true
-	if (parameter.GrowthCurveSegment != undefined) {
-		parameterAPI.ParameterPointersEncoding.GrowthCurveSegmentID.Int64 = parameter.GrowthCurveSegment.ID  
+	parameterAPI.ParameterPointersEncoding.GrowthCurveSeedID.Valid = true
+	if (parameter.GrowthCurveSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.GrowthCurveSeedID.Int64 = parameter.GrowthCurveSeed.ID  
 	} else {
-		parameterAPI.ParameterPointersEncoding.GrowthCurveSegmentID.Int64 = 0 		
+		parameterAPI.ParameterPointersEncoding.GrowthCurveSeedID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.GrowthCurveID.Valid = true
@@ -390,6 +470,139 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64 = parameter.GrowthCurveStack.ID  
 	} else {
 		parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralRhombusGridSeedID.Valid = true
+	if (parameter.SpiralRhombusGridSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralRhombusGridSeedID.Int64 = parameter.SpiralRhombusGridSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralRhombusGridSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralRhombusGridID.Valid = true
+	if (parameter.SpiralRhombusGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralRhombusGridID.Int64 = parameter.SpiralRhombusGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralRhombusGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralCircleSeedID.Valid = true
+	if (parameter.SpiralCircleSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralCircleSeedID.Int64 = parameter.SpiralCircleSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralCircleSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Valid = true
+	if (parameter.SpiralCircleGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64 = parameter.SpiralCircleGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralCircleFullGridID.Valid = true
+	if (parameter.SpiralCircleFullGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralCircleFullGridID.Int64 = parameter.SpiralCircleFullGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralCircleFullGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineSeedID.Valid = true
+	if (parameter.SpiralConstructionOuterLineSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineSeedID.Int64 = parameter.SpiralConstructionOuterLineSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineSeedID.Valid = true
+	if (parameter.SpiralConstructionInnerLineSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineSeedID.Int64 = parameter.SpiralConstructionInnerLineSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineGridID.Valid = true
+	if (parameter.SpiralConstructionOuterLineGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineGridID.Int64 = parameter.SpiralConstructionOuterLineGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineGridID.Valid = true
+	if (parameter.SpiralConstructionInnerLineGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineGridID.Int64 = parameter.SpiralConstructionInnerLineGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionCircleGridID.Valid = true
+	if (parameter.SpiralConstructionCircleGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionCircleGridID.Int64 = parameter.SpiralConstructionCircleGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionCircleGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineFullGridID.Valid = true
+	if (parameter.SpiralConstructionOuterLineFullGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineFullGridID.Int64 = parameter.SpiralConstructionOuterLineFullGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineFullGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralBezierSeedID.Valid = true
+	if (parameter.SpiralBezierSeed != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralBezierSeedID.Int64 = parameter.SpiralBezierSeed.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralBezierSeedID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Valid = true
+	if (parameter.SpiralBezierGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64 = parameter.SpiralBezierGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.SpiralBezierFullGridID.Valid = true
+	if (parameter.SpiralBezierFullGrid != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralBezierFullGridID.Int64 = parameter.SpiralBezierFullGrid.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralBezierFullGridID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Valid = true
+	if (parameter.FrontCurveStack != undefined) {
+		parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64 = parameter.FrontCurveStack.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.HourCurveID.Valid = true
+	if (parameter.HourCurve != undefined) {
+		parameterAPI.ParameterPointersEncoding.HourCurveID.Int64 = parameter.HourCurve.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.HourCurveID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.HourMarkerID.Valid = true
+	if (parameter.HourMarker != undefined) {
+		parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64 = parameter.HourMarker.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.MinuteCurveID.Valid = true
+	if (parameter.MinuteCurve != undefined) {
+		parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64 = parameter.MinuteCurve.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Valid = true
+	if (parameter.MinuteMarker != undefined) {
+		parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64 = parameter.MinuteMarker.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.FkeyID.Valid = true
@@ -483,6 +696,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.SpiralOriginID.Valid = true
+	if (parameter.SpiralOrigin != undefined) {
+		parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64 = parameter.SpiralOrigin.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 	parameterAPI.ParameterPointersEncoding.NoteInfos = []
@@ -507,12 +727,21 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.N = parameterAPI.N
 	parameter.M = parameterAPI.M
 	parameter.Z = parameterAPI.Z
+	parameter.ShiftToNearestCircle = parameterAPI.ShiftToNearestCircle
 	parameter.InsideAngle = parameterAPI.InsideAngle
 	parameter.SideLength = parameterAPI.SideLength
 	parameter.StackWidth = parameterAPI.StackWidth
 	parameter.NbShitRight = parameterAPI.NbShitRight
 	parameter.StackHeight = parameterAPI.StackHeight
 	parameter.BezierControlLengthRatio = parameterAPI.BezierControlLengthRatio
+	parameter.SpiralBezierStrength = parameterAPI.SpiralBezierStrength
+	parameter.NbInterpolationPoints = parameterAPI.NbInterpolationPoints
+	parameter.HourHandleRotationAngle = parameterAPI.HourHandleRotationAngle
+	parameter.HourHandleDiskDistance = parameterAPI.HourHandleDiskDistance
+	parameter.HourHandleRadius = parameterAPI.HourHandleRadius
+	parameter.MinuteHandleRotationAngle = parameterAPI.MinuteHandleRotationAngle
+	parameter.MinuteHandleDiskDistance = parameterAPI.MinuteHandleDiskDistance
+	parameter.MinuteHandleRadius = parameterAPI.MinuteHandleRadius
 	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
 	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX
 	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY
@@ -529,6 +758,12 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.IsMinor = parameterAPI.IsMinor
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
+	parameter.SpiralOriginX = parameterAPI.SpiralOriginX
+	parameter.SpiralOriginY = parameterAPI.SpiralOriginY
+	parameter.OriginCrossWidth = parameterAPI.OriginCrossWidth
+	parameter.SpiralRadiusRatio = parameterAPI.SpiralRadiusRatio
+	parameter.ShowSpiralBezierConstruct = parameterAPI.ShowSpiralBezierConstruct
+	parameter.ShowInterpolationPoints = parameterAPI.ShowInterpolationPoints
 
 	// insertion point for pointer fields encoding
 	parameter.InitialRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64)
@@ -552,7 +787,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.ConstructionAxisGrid = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.ConstructionAxisGridID.Int64)
 	parameter.ConstructionCircle = frontRepo.map_ID_Circle.get(parameterAPI.ParameterPointersEncoding.ConstructionCircleID.Int64)
 	parameter.ConstructionCircleGrid = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.ConstructionCircleGridID.Int64)
-	parameter.GrowthCurveSegment = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveSegmentID.Int64)
+	parameter.GrowthCurveSeed = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveSeedID.Int64)
 	parameter.GrowthCurve = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveID.Int64)
 	parameter.GrowthCurveShiftedRightSeed = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightSeedID.Int64)
 	parameter.GrowthCurveShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveShiftedRightID.Int64)
@@ -561,6 +796,25 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.GrowthCurveNextShiftedRightSeed = frontRepo.map_ID_Bezier.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightSeedID.Int64)
 	parameter.GrowthCurveNextShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.GrowthCurveNextShiftedRightID.Int64)
 	parameter.GrowthCurveStack = frontRepo.map_ID_BezierGridStack.get(parameterAPI.ParameterPointersEncoding.GrowthCurveStackID.Int64)
+	parameter.SpiralRhombusGridSeed = frontRepo.map_ID_SpiralRhombus.get(parameterAPI.ParameterPointersEncoding.SpiralRhombusGridSeedID.Int64)
+	parameter.SpiralRhombusGrid = frontRepo.map_ID_SpiralRhombusGrid.get(parameterAPI.ParameterPointersEncoding.SpiralRhombusGridID.Int64)
+	parameter.SpiralCircleSeed = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.SpiralCircleSeedID.Int64)
+	parameter.SpiralCircleGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralCircleGridID.Int64)
+	parameter.SpiralCircleFullGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralCircleFullGridID.Int64)
+	parameter.SpiralConstructionOuterLineSeed = frontRepo.map_ID_SpiralLine.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineSeedID.Int64)
+	parameter.SpiralConstructionInnerLineSeed = frontRepo.map_ID_SpiralLine.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineSeedID.Int64)
+	parameter.SpiralConstructionOuterLineGrid = frontRepo.map_ID_SpiralLineGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineGridID.Int64)
+	parameter.SpiralConstructionInnerLineGrid = frontRepo.map_ID_SpiralLineGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionInnerLineGridID.Int64)
+	parameter.SpiralConstructionCircleGrid = frontRepo.map_ID_SpiralCircleGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionCircleGridID.Int64)
+	parameter.SpiralConstructionOuterLineFullGrid = frontRepo.map_ID_SpiralLineGrid.get(parameterAPI.ParameterPointersEncoding.SpiralConstructionOuterLineFullGridID.Int64)
+	parameter.SpiralBezierSeed = frontRepo.map_ID_SpiralBezier.get(parameterAPI.ParameterPointersEncoding.SpiralBezierSeedID.Int64)
+	parameter.SpiralBezierGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64)
+	parameter.SpiralBezierFullGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierFullGridID.Int64)
+	parameter.FrontCurveStack = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64)
+	parameter.HourCurve = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.HourCurveID.Int64)
+	parameter.HourMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64)
+	parameter.MinuteCurve = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64)
+	parameter.MinuteMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64)
 	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
 	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)
@@ -574,6 +828,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SecondVoiceNotesShiftedRight = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceNotesShiftedRightID.Int64)
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
+	parameter.SpiralOrigin = frontRepo.map_ID_SpiralOrigin.get(parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 	parameter.NoteInfos = new Array<NoteInfo>()

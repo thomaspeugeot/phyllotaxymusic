@@ -117,6 +117,32 @@ func FillUpFormFromGongstructName(
 		circlegrid := new(models.CircleGrid)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(circlegrid, formGroup, probe)
+	case "FrontCurve":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "FrontCurve Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__FrontCurveFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		frontcurve := new(models.FrontCurve)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(frontcurve, formGroup, probe)
+	case "FrontCurveStack":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "FrontCurveStack Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__FrontCurveStackFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		frontcurvestack := new(models.FrontCurveStack)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(frontcurvestack, formGroup, probe)
 	case "HorizontalAxis":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
@@ -208,6 +234,123 @@ func FillUpFormFromGongstructName(
 		shapecategory := new(models.ShapeCategory)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(shapecategory, formGroup, probe)
+	case "SpiralBezier":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralBezier Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralBezierFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spiralbezier := new(models.SpiralBezier)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spiralbezier, formGroup, probe)
+	case "SpiralBezierGrid":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralBezierGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralBezierGridFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spiralbeziergrid := new(models.SpiralBezierGrid)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spiralbeziergrid, formGroup, probe)
+	case "SpiralCircle":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralCircle Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralCircleFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spiralcircle := new(models.SpiralCircle)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spiralcircle, formGroup, probe)
+	case "SpiralCircleGrid":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralCircleGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralCircleGridFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spiralcirclegrid := new(models.SpiralCircleGrid)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spiralcirclegrid, formGroup, probe)
+	case "SpiralLine":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralLine Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralLineFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spiralline := new(models.SpiralLine)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spiralline, formGroup, probe)
+	case "SpiralLineGrid":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralLineGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralLineGridFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spirallinegrid := new(models.SpiralLineGrid)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spirallinegrid, formGroup, probe)
+	case "SpiralOrigin":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralOrigin Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralOriginFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spiralorigin := new(models.SpiralOrigin)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spiralorigin, formGroup, probe)
+	case "SpiralRhombus":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralRhombus Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralRhombusFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spiralrhombus := new(models.SpiralRhombus)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spiralrhombus, formGroup, probe)
+	case "SpiralRhombusGrid":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "SpiralRhombusGrid Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__SpiralRhombusGridFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		spiralrhombusgrid := new(models.SpiralRhombusGrid)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(spiralrhombusgrid, formGroup, probe)
 	case "VerticalAxis":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),

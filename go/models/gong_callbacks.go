@@ -34,6 +34,14 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterCircleGridCreateCallback != nil {
 			stage.OnAfterCircleGridCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *FrontCurve:
+		if stage.OnAfterFrontCurveCreateCallback != nil {
+			stage.OnAfterFrontCurveCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *FrontCurveStack:
+		if stage.OnAfterFrontCurveStackCreateCallback != nil {
+			stage.OnAfterFrontCurveStackCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *HorizontalAxis:
 		if stage.OnAfterHorizontalAxisCreateCallback != nil {
 			stage.OnAfterHorizontalAxisCreateCallback.OnAfterCreate(stage, target)
@@ -61,6 +69,42 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *ShapeCategory:
 		if stage.OnAfterShapeCategoryCreateCallback != nil {
 			stage.OnAfterShapeCategoryCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *SpiralBezier:
+		if stage.OnAfterSpiralBezierCreateCallback != nil {
+			stage.OnAfterSpiralBezierCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *SpiralBezierGrid:
+		if stage.OnAfterSpiralBezierGridCreateCallback != nil {
+			stage.OnAfterSpiralBezierGridCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *SpiralCircle:
+		if stage.OnAfterSpiralCircleCreateCallback != nil {
+			stage.OnAfterSpiralCircleCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *SpiralCircleGrid:
+		if stage.OnAfterSpiralCircleGridCreateCallback != nil {
+			stage.OnAfterSpiralCircleGridCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *SpiralLine:
+		if stage.OnAfterSpiralLineCreateCallback != nil {
+			stage.OnAfterSpiralLineCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *SpiralLineGrid:
+		if stage.OnAfterSpiralLineGridCreateCallback != nil {
+			stage.OnAfterSpiralLineGridCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *SpiralOrigin:
+		if stage.OnAfterSpiralOriginCreateCallback != nil {
+			stage.OnAfterSpiralOriginCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *SpiralRhombus:
+		if stage.OnAfterSpiralRhombusCreateCallback != nil {
+			stage.OnAfterSpiralRhombusCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *SpiralRhombusGrid:
+		if stage.OnAfterSpiralRhombusGridCreateCallback != nil {
+			stage.OnAfterSpiralRhombusGridCreateCallback.OnAfterCreate(stage, target)
 		}
 	case *VerticalAxis:
 		if stage.OnAfterVerticalAxisCreateCallback != nil {
@@ -111,6 +155,16 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		if stage.OnAfterCircleGridUpdateCallback != nil {
 			stage.OnAfterCircleGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
+	case *FrontCurve:
+		newTarget := any(new).(*FrontCurve)
+		if stage.OnAfterFrontCurveUpdateCallback != nil {
+			stage.OnAfterFrontCurveUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *FrontCurveStack:
+		newTarget := any(new).(*FrontCurveStack)
+		if stage.OnAfterFrontCurveStackUpdateCallback != nil {
+			stage.OnAfterFrontCurveStackUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
 	case *HorizontalAxis:
 		newTarget := any(new).(*HorizontalAxis)
 		if stage.OnAfterHorizontalAxisUpdateCallback != nil {
@@ -145,6 +199,51 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*ShapeCategory)
 		if stage.OnAfterShapeCategoryUpdateCallback != nil {
 			stage.OnAfterShapeCategoryUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralBezier:
+		newTarget := any(new).(*SpiralBezier)
+		if stage.OnAfterSpiralBezierUpdateCallback != nil {
+			stage.OnAfterSpiralBezierUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralBezierGrid:
+		newTarget := any(new).(*SpiralBezierGrid)
+		if stage.OnAfterSpiralBezierGridUpdateCallback != nil {
+			stage.OnAfterSpiralBezierGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralCircle:
+		newTarget := any(new).(*SpiralCircle)
+		if stage.OnAfterSpiralCircleUpdateCallback != nil {
+			stage.OnAfterSpiralCircleUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralCircleGrid:
+		newTarget := any(new).(*SpiralCircleGrid)
+		if stage.OnAfterSpiralCircleGridUpdateCallback != nil {
+			stage.OnAfterSpiralCircleGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralLine:
+		newTarget := any(new).(*SpiralLine)
+		if stage.OnAfterSpiralLineUpdateCallback != nil {
+			stage.OnAfterSpiralLineUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralLineGrid:
+		newTarget := any(new).(*SpiralLineGrid)
+		if stage.OnAfterSpiralLineGridUpdateCallback != nil {
+			stage.OnAfterSpiralLineGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralOrigin:
+		newTarget := any(new).(*SpiralOrigin)
+		if stage.OnAfterSpiralOriginUpdateCallback != nil {
+			stage.OnAfterSpiralOriginUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralRhombus:
+		newTarget := any(new).(*SpiralRhombus)
+		if stage.OnAfterSpiralRhombusUpdateCallback != nil {
+			stage.OnAfterSpiralRhombusUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *SpiralRhombusGrid:
+		newTarget := any(new).(*SpiralRhombusGrid)
+		if stage.OnAfterSpiralRhombusGridUpdateCallback != nil {
+			stage.OnAfterSpiralRhombusGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *VerticalAxis:
 		newTarget := any(new).(*VerticalAxis)
@@ -196,6 +295,16 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*CircleGrid)
 			stage.OnAfterCircleGridDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *FrontCurve:
+		if stage.OnAfterFrontCurveDeleteCallback != nil {
+			staged := any(staged).(*FrontCurve)
+			stage.OnAfterFrontCurveDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *FrontCurveStack:
+		if stage.OnAfterFrontCurveStackDeleteCallback != nil {
+			staged := any(staged).(*FrontCurveStack)
+			stage.OnAfterFrontCurveStackDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *HorizontalAxis:
 		if stage.OnAfterHorizontalAxisDeleteCallback != nil {
 			staged := any(staged).(*HorizontalAxis)
@@ -230,6 +339,51 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 		if stage.OnAfterShapeCategoryDeleteCallback != nil {
 			staged := any(staged).(*ShapeCategory)
 			stage.OnAfterShapeCategoryDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *SpiralBezier:
+		if stage.OnAfterSpiralBezierDeleteCallback != nil {
+			staged := any(staged).(*SpiralBezier)
+			stage.OnAfterSpiralBezierDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *SpiralBezierGrid:
+		if stage.OnAfterSpiralBezierGridDeleteCallback != nil {
+			staged := any(staged).(*SpiralBezierGrid)
+			stage.OnAfterSpiralBezierGridDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *SpiralCircle:
+		if stage.OnAfterSpiralCircleDeleteCallback != nil {
+			staged := any(staged).(*SpiralCircle)
+			stage.OnAfterSpiralCircleDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *SpiralCircleGrid:
+		if stage.OnAfterSpiralCircleGridDeleteCallback != nil {
+			staged := any(staged).(*SpiralCircleGrid)
+			stage.OnAfterSpiralCircleGridDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *SpiralLine:
+		if stage.OnAfterSpiralLineDeleteCallback != nil {
+			staged := any(staged).(*SpiralLine)
+			stage.OnAfterSpiralLineDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *SpiralLineGrid:
+		if stage.OnAfterSpiralLineGridDeleteCallback != nil {
+			staged := any(staged).(*SpiralLineGrid)
+			stage.OnAfterSpiralLineGridDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *SpiralOrigin:
+		if stage.OnAfterSpiralOriginDeleteCallback != nil {
+			staged := any(staged).(*SpiralOrigin)
+			stage.OnAfterSpiralOriginDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *SpiralRhombus:
+		if stage.OnAfterSpiralRhombusDeleteCallback != nil {
+			staged := any(staged).(*SpiralRhombus)
+			stage.OnAfterSpiralRhombusDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *SpiralRhombusGrid:
+		if stage.OnAfterSpiralRhombusGridDeleteCallback != nil {
+			staged := any(staged).(*SpiralRhombusGrid)
+			stage.OnAfterSpiralRhombusGridDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *VerticalAxis:
 		if stage.OnAfterVerticalAxisDeleteCallback != nil {
@@ -274,6 +428,14 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterCircleGridReadCallback != nil {
 			stage.OnAfterCircleGridReadCallback.OnAfterRead(stage, target)
 		}
+	case *FrontCurve:
+		if stage.OnAfterFrontCurveReadCallback != nil {
+			stage.OnAfterFrontCurveReadCallback.OnAfterRead(stage, target)
+		}
+	case *FrontCurveStack:
+		if stage.OnAfterFrontCurveStackReadCallback != nil {
+			stage.OnAfterFrontCurveStackReadCallback.OnAfterRead(stage, target)
+		}
 	case *HorizontalAxis:
 		if stage.OnAfterHorizontalAxisReadCallback != nil {
 			stage.OnAfterHorizontalAxisReadCallback.OnAfterRead(stage, target)
@@ -301,6 +463,42 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *ShapeCategory:
 		if stage.OnAfterShapeCategoryReadCallback != nil {
 			stage.OnAfterShapeCategoryReadCallback.OnAfterRead(stage, target)
+		}
+	case *SpiralBezier:
+		if stage.OnAfterSpiralBezierReadCallback != nil {
+			stage.OnAfterSpiralBezierReadCallback.OnAfterRead(stage, target)
+		}
+	case *SpiralBezierGrid:
+		if stage.OnAfterSpiralBezierGridReadCallback != nil {
+			stage.OnAfterSpiralBezierGridReadCallback.OnAfterRead(stage, target)
+		}
+	case *SpiralCircle:
+		if stage.OnAfterSpiralCircleReadCallback != nil {
+			stage.OnAfterSpiralCircleReadCallback.OnAfterRead(stage, target)
+		}
+	case *SpiralCircleGrid:
+		if stage.OnAfterSpiralCircleGridReadCallback != nil {
+			stage.OnAfterSpiralCircleGridReadCallback.OnAfterRead(stage, target)
+		}
+	case *SpiralLine:
+		if stage.OnAfterSpiralLineReadCallback != nil {
+			stage.OnAfterSpiralLineReadCallback.OnAfterRead(stage, target)
+		}
+	case *SpiralLineGrid:
+		if stage.OnAfterSpiralLineGridReadCallback != nil {
+			stage.OnAfterSpiralLineGridReadCallback.OnAfterRead(stage, target)
+		}
+	case *SpiralOrigin:
+		if stage.OnAfterSpiralOriginReadCallback != nil {
+			stage.OnAfterSpiralOriginReadCallback.OnAfterRead(stage, target)
+		}
+	case *SpiralRhombus:
+		if stage.OnAfterSpiralRhombusReadCallback != nil {
+			stage.OnAfterSpiralRhombusReadCallback.OnAfterRead(stage, target)
+		}
+	case *SpiralRhombusGrid:
+		if stage.OnAfterSpiralRhombusGridReadCallback != nil {
+			stage.OnAfterSpiralRhombusGridReadCallback.OnAfterRead(stage, target)
 		}
 	case *VerticalAxis:
 		if stage.OnAfterVerticalAxisReadCallback != nil {
@@ -338,6 +536,12 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *CircleGrid:
 		stage.OnAfterCircleGridUpdateCallback = any(callback).(OnAfterUpdateInterface[CircleGrid])
 	
+	case *FrontCurve:
+		stage.OnAfterFrontCurveUpdateCallback = any(callback).(OnAfterUpdateInterface[FrontCurve])
+	
+	case *FrontCurveStack:
+		stage.OnAfterFrontCurveStackUpdateCallback = any(callback).(OnAfterUpdateInterface[FrontCurveStack])
+	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[HorizontalAxis])
 	
@@ -358,6 +562,33 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *ShapeCategory:
 		stage.OnAfterShapeCategoryUpdateCallback = any(callback).(OnAfterUpdateInterface[ShapeCategory])
+	
+	case *SpiralBezier:
+		stage.OnAfterSpiralBezierUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralBezier])
+	
+	case *SpiralBezierGrid:
+		stage.OnAfterSpiralBezierGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralBezierGrid])
+	
+	case *SpiralCircle:
+		stage.OnAfterSpiralCircleUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralCircle])
+	
+	case *SpiralCircleGrid:
+		stage.OnAfterSpiralCircleGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralCircleGrid])
+	
+	case *SpiralLine:
+		stage.OnAfterSpiralLineUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralLine])
+	
+	case *SpiralLineGrid:
+		stage.OnAfterSpiralLineGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralLineGrid])
+	
+	case *SpiralOrigin:
+		stage.OnAfterSpiralOriginUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralOrigin])
+	
+	case *SpiralRhombus:
+		stage.OnAfterSpiralRhombusUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralRhombus])
+	
+	case *SpiralRhombusGrid:
+		stage.OnAfterSpiralRhombusGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralRhombusGrid])
 	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[VerticalAxis])
@@ -390,6 +621,12 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *CircleGrid:
 		stage.OnAfterCircleGridCreateCallback = any(callback).(OnAfterCreateInterface[CircleGrid])
 	
+	case *FrontCurve:
+		stage.OnAfterFrontCurveCreateCallback = any(callback).(OnAfterCreateInterface[FrontCurve])
+	
+	case *FrontCurveStack:
+		stage.OnAfterFrontCurveStackCreateCallback = any(callback).(OnAfterCreateInterface[FrontCurveStack])
+	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisCreateCallback = any(callback).(OnAfterCreateInterface[HorizontalAxis])
 	
@@ -410,6 +647,33 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *ShapeCategory:
 		stage.OnAfterShapeCategoryCreateCallback = any(callback).(OnAfterCreateInterface[ShapeCategory])
+	
+	case *SpiralBezier:
+		stage.OnAfterSpiralBezierCreateCallback = any(callback).(OnAfterCreateInterface[SpiralBezier])
+	
+	case *SpiralBezierGrid:
+		stage.OnAfterSpiralBezierGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralBezierGrid])
+	
+	case *SpiralCircle:
+		stage.OnAfterSpiralCircleCreateCallback = any(callback).(OnAfterCreateInterface[SpiralCircle])
+	
+	case *SpiralCircleGrid:
+		stage.OnAfterSpiralCircleGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralCircleGrid])
+	
+	case *SpiralLine:
+		stage.OnAfterSpiralLineCreateCallback = any(callback).(OnAfterCreateInterface[SpiralLine])
+	
+	case *SpiralLineGrid:
+		stage.OnAfterSpiralLineGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralLineGrid])
+	
+	case *SpiralOrigin:
+		stage.OnAfterSpiralOriginCreateCallback = any(callback).(OnAfterCreateInterface[SpiralOrigin])
+	
+	case *SpiralRhombus:
+		stage.OnAfterSpiralRhombusCreateCallback = any(callback).(OnAfterCreateInterface[SpiralRhombus])
+	
+	case *SpiralRhombusGrid:
+		stage.OnAfterSpiralRhombusGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralRhombusGrid])
 	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisCreateCallback = any(callback).(OnAfterCreateInterface[VerticalAxis])
@@ -442,6 +706,12 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *CircleGrid:
 		stage.OnAfterCircleGridDeleteCallback = any(callback).(OnAfterDeleteInterface[CircleGrid])
 	
+	case *FrontCurve:
+		stage.OnAfterFrontCurveDeleteCallback = any(callback).(OnAfterDeleteInterface[FrontCurve])
+	
+	case *FrontCurveStack:
+		stage.OnAfterFrontCurveStackDeleteCallback = any(callback).(OnAfterDeleteInterface[FrontCurveStack])
+	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[HorizontalAxis])
 	
@@ -462,6 +732,33 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *ShapeCategory:
 		stage.OnAfterShapeCategoryDeleteCallback = any(callback).(OnAfterDeleteInterface[ShapeCategory])
+	
+	case *SpiralBezier:
+		stage.OnAfterSpiralBezierDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralBezier])
+	
+	case *SpiralBezierGrid:
+		stage.OnAfterSpiralBezierGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralBezierGrid])
+	
+	case *SpiralCircle:
+		stage.OnAfterSpiralCircleDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralCircle])
+	
+	case *SpiralCircleGrid:
+		stage.OnAfterSpiralCircleGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralCircleGrid])
+	
+	case *SpiralLine:
+		stage.OnAfterSpiralLineDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralLine])
+	
+	case *SpiralLineGrid:
+		stage.OnAfterSpiralLineGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralLineGrid])
+	
+	case *SpiralOrigin:
+		stage.OnAfterSpiralOriginDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralOrigin])
+	
+	case *SpiralRhombus:
+		stage.OnAfterSpiralRhombusDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralRhombus])
+	
+	case *SpiralRhombusGrid:
+		stage.OnAfterSpiralRhombusGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralRhombusGrid])
 	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[VerticalAxis])
@@ -494,6 +791,12 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	case *CircleGrid:
 		stage.OnAfterCircleGridReadCallback = any(callback).(OnAfterReadInterface[CircleGrid])
 	
+	case *FrontCurve:
+		stage.OnAfterFrontCurveReadCallback = any(callback).(OnAfterReadInterface[FrontCurve])
+	
+	case *FrontCurveStack:
+		stage.OnAfterFrontCurveStackReadCallback = any(callback).(OnAfterReadInterface[FrontCurveStack])
+	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisReadCallback = any(callback).(OnAfterReadInterface[HorizontalAxis])
 	
@@ -514,6 +817,33 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *ShapeCategory:
 		stage.OnAfterShapeCategoryReadCallback = any(callback).(OnAfterReadInterface[ShapeCategory])
+	
+	case *SpiralBezier:
+		stage.OnAfterSpiralBezierReadCallback = any(callback).(OnAfterReadInterface[SpiralBezier])
+	
+	case *SpiralBezierGrid:
+		stage.OnAfterSpiralBezierGridReadCallback = any(callback).(OnAfterReadInterface[SpiralBezierGrid])
+	
+	case *SpiralCircle:
+		stage.OnAfterSpiralCircleReadCallback = any(callback).(OnAfterReadInterface[SpiralCircle])
+	
+	case *SpiralCircleGrid:
+		stage.OnAfterSpiralCircleGridReadCallback = any(callback).(OnAfterReadInterface[SpiralCircleGrid])
+	
+	case *SpiralLine:
+		stage.OnAfterSpiralLineReadCallback = any(callback).(OnAfterReadInterface[SpiralLine])
+	
+	case *SpiralLineGrid:
+		stage.OnAfterSpiralLineGridReadCallback = any(callback).(OnAfterReadInterface[SpiralLineGrid])
+	
+	case *SpiralOrigin:
+		stage.OnAfterSpiralOriginReadCallback = any(callback).(OnAfterReadInterface[SpiralOrigin])
+	
+	case *SpiralRhombus:
+		stage.OnAfterSpiralRhombusReadCallback = any(callback).(OnAfterReadInterface[SpiralRhombus])
+	
+	case *SpiralRhombusGrid:
+		stage.OnAfterSpiralRhombusGridReadCallback = any(callback).(OnAfterReadInterface[SpiralRhombusGrid])
 	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisReadCallback = any(callback).(OnAfterReadInterface[VerticalAxis])

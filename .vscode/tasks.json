@@ -64,6 +64,18 @@
 			"args": []
 		},
 		{
+			"label": "01 - gongc phylotaxymusic -clean",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/go/models"
+			},
+			"command": "gongc",
+			"group": "build",
+			"args": [
+				"-clean"
+			]
+		},
+		{
 			"label": "01 - gongc phylotaxymusic -skipNg",
 			"type": "shell",
 			"options": {
@@ -97,7 +109,8 @@
 			"group": "build",
 			"args": [
 				"-skipNg",
-				"-skipGoModCommands"
+				"-skipGoModCommands",
+				"-compileForDebug"
 			]
 		},
 		{
@@ -110,7 +123,8 @@
 			"group": "build",
 			"args": [
 				"-skipNpmInstall",
-				"-skipGoModCommands"
+				"-skipGoModCommands",
+				"-compileForDebug"
 			]
 		},
 		{

@@ -17,9 +17,9 @@ type Rhombus struct {
 
 	SideLength float64
 
-	// Angle of one arbitrary Axis of the Rhombus to the horizontal plan
+	// AngleDegree of one arbitrary Axis of the Rhombus to the horizontal plan
 	// in degress.
-	Angle float64
+	AngleDegree float64
 
 	// InsideAngle is the angle inside the rhombus in the edge that
 	// crosses the axis of the rhombus
@@ -35,34 +35,12 @@ func (r *Rhombus) Draw(
 ) {
 
 	// Convert angle from degrees to radians for computation
-	angleRad := r.Angle * math.Pi / 180
-	insideAngleRad := r.InsideAngle * math.Pi / 180
-
-	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
-	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
-
 	// Calculate half of the inside angles to position the vertices
-	halfVerticalDiagonal := r.SideLength * sinHalfInsideAngle
-	halfHorizontalDiagonal := r.SideLength * cosHalfInsideAngle
-
-	var x_s [4]float64
-	var y_s [4]float64
-
 	// Coordinates of the first vertex (using the angle + half of the inside angle)
-	x_s[0] = r.CenterX + halfHorizontalDiagonal*math.Cos(angleRad)
-	y_s[0] = r.CenterY + halfHorizontalDiagonal*math.Sin(angleRad)
-
 	// Coordinates of the second vertex (using the angle - half of the inside angle)
-	x_s[1] = r.CenterX + halfVerticalDiagonal*math.Cos(angleRad+math.Pi/2.0)
-	y_s[1] = r.CenterY + halfVerticalDiagonal*math.Sin(angleRad+math.Pi/2.0)
-
 	// Coordinates of the third vertex (opposite of the first vertex)
-	x_s[2] = r.CenterX + halfHorizontalDiagonal*math.Cos(angleRad+math.Pi)
-	y_s[2] = r.CenterY + halfHorizontalDiagonal*math.Sin(angleRad+math.Pi)
-
 	// Coordinates of the fourth vertex (opposite of the second vertex)
-	x_s[3] = r.CenterX + halfVerticalDiagonal*math.Cos(angleRad+math.Pi*1.5)
-	y_s[3] = r.CenterY + halfVerticalDiagonal*math.Sin(angleRad+math.Pi*1.5)
+	x_s, y_s := r.getCoordinates()
 
 	for i := range 4 {
 		line := (&gongsvg_models.Line{
@@ -80,4 +58,44 @@ func (r *Rhombus) Draw(
 		layer.Lines = append(layer.Lines, line)
 	}
 
+}
+
+func (r *Rhombus) getCoordinates() ([4]float64, [4]float64) {
+	angleRad := r.AngleDegree * math.Pi / 180
+	insideAngleRad := r.InsideAngle * math.Pi / 180
+
+	sinHalfInsideAngle := math.Sin(insideAngleRad / 2)
+	cosHalfInsideAngle := math.Cos(insideAngleRad / 2)
+
+	halfVerticalDiagonal := r.SideLength * sinHalfInsideAngle
+	halfHorizontalDiagonal := r.SideLength * cosHalfInsideAngle
+
+	var x_s [4]float64
+	var y_s [4]float64
+
+	x_s[0] = r.CenterX + halfHorizontalDiagonal*math.Cos(angleRad)
+	y_s[0] = r.CenterY + halfHorizontalDiagonal*math.Sin(angleRad)
+
+	x_s[1] = r.CenterX + halfVerticalDiagonal*math.Cos(angleRad+math.Pi/2.0)
+	y_s[1] = r.CenterY + halfVerticalDiagonal*math.Sin(angleRad+math.Pi/2.0)
+
+	x_s[2] = r.CenterX + halfHorizontalDiagonal*math.Cos(angleRad+math.Pi)
+	y_s[2] = r.CenterY + halfHorizontalDiagonal*math.Sin(angleRad+math.Pi)
+
+	x_s[3] = r.CenterX + halfVerticalDiagonal*math.Cos(angleRad+math.Pi*1.5)
+	y_s[3] = r.CenterY + halfVerticalDiagonal*math.Sin(angleRad+math.Pi*1.5)
+	return x_s, y_s
+}
+
+func (r Rhombus) Copy() Rhombus {
+	return Rhombus{
+		Name:          r.Name,
+		AbstractShape: r.AbstractShape, // Assuming AbstractShape is a copyable struct
+		CenterX:       r.CenterX,
+		CenterY:       r.CenterY,
+		SideLength:    r.SideLength,
+		AngleDegree:   r.AngleDegree,
+		InsideAngle:   r.InsideAngle,
+		Presentation:  r.Presentation, // Assuming Presentation is a copyable struct
+	}
 }

@@ -3,7 +3,9 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
 	"strconv"
+	"text/template"
 
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
 
@@ -113,6 +115,32 @@ func (parameterImpl *ParameterImpl) Generate() {
 	parameterImpl.parameter.GenerateNotes(parameterImpl.gongtoneStage)
 	parameterImpl.tree.Generate(parameterImpl.parameter)
 	parameterImpl.phylotaxymusicStage.Commit()
+
+	// get path of the hour handle
+	mapFrontCurveStack := *phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.FrontCurveStack](
+		parameterImpl.phylotaxymusicStage)
+
+	hourHandleStack := mapFrontCurveStack["Hour Handle"]
+	hourHandlePath := hourHandleStack.FrontCurves[0]
+
+	minuteHandleStack := mapFrontCurveStack["Minute Handle"]
+	minuteHandlePath := minuteHandleStack.FrontCurves[0]
+
+	mapSpiralCircle := *phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.SpiralCircle](
+		parameterImpl.phylotaxymusicStage)
+
+	hourHandleMarker := mapSpiralCircle["Hour Marker"]
+	minuteHandleMarker := mapSpiralCircle["Minute Marker"]
+
+	err := generateIndexHTML(
+		minuteHandlePath.Path,
+		minuteHandleMarker.Path,
+		hourHandlePath.Path,
+		hourHandleMarker.Path,
+	)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {
@@ -125,4 +153,120 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	parameterImpl.tree.Generate(updatedParameter)
 	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage)
 
+}
+
+// Function to generate index.html
+func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
+	const htmlTemplate = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Responsive Interactive Clock SVG</title>
+    <meta http-equiv="refresh" content="30">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Responsive SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
+      <path id="background" d="
+        M 200,400
+        C 80,400 0,280 0,180
+        C 0,80 80,0 200,0
+        C 320,0 400,80 400,180
+        C 400,280 320,400 200,400
+        Z
+      " 
+      fill="none" 
+      fill-rule="evenodd"/>
+
+      <path id="minute-handle" d="
+      {{.String1a}}
+      {{.String1b}}
+      " 
+      fill="lightblue" 
+      fill-rule="evenodd"/>
+
+      <path id="hour-handle" d="
+      {{.String2a}}
+      {{.String2b}}
+      " fill="lightgreen" fill-rule="evenodd" />
+    </svg>
+
+    <!-- JavaScript code for rotation -->
+    <script>
+        (function() {
+            var now = new Date();
+            var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            var elapsedSeconds = (now - midnight) / 1000; // Seconds since midnight
+
+            var durationHour = 43200; // 12 hours in seconds (360 degrees)
+            var durationMinute = 3600; // 1 hour in seconds (360 degrees)
+
+            // Degrees per second
+            var anglePerSecondHour = 360 / durationHour; 
+            var anglePerSecondMinute = 360 / durationMinute; 
+
+            // Calculate the current angle based on elapsed time
+            var currentAngleHour = (elapsedSeconds % durationHour) * anglePerSecondHour;
+            var currentAngleMinute = (elapsedSeconds % durationMinute) * anglePerSecondMinute;
+
+            // Apply rotation using SVG transforms
+            var hourHandle = document.getElementById('hour-handle');
+            var minuteHandle = document.getElementById('minute-handle');
+
+            // currentAngleHour = 0
+            // currentAngleMinute = 0
+
+            hourHandle.setAttribute('transform', 'rotate(' + currentAngleHour + ' 500 500)');
+            minuteHandle.setAttribute('transform', 'rotate(' + currentAngleMinute + ' 500 500)');
+        })();
+    </script>
+</body>
+</html>
+`
+
+	// Create or open the index.html file
+	file, err := os.Create("index.html")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Data to be injected into the template
+	data := struct {
+		String1a string
+		String1b string
+		String2a string
+		String2b string
+	}{
+		String1a: string1a,
+		String1b: string1b,
+		String2a: string2a,
+		String2b: string2b,
+	}
+
+	// Parse and execute the template with the provided data
+	tmpl, err := template.New("index").Parse(htmlTemplate)
+	if err != nil {
+		return err
+	}
+
+	err = tmpl.Execute(file, data)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

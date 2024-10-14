@@ -8,7 +8,7 @@
     </as-split-area>
     <as-split-area [size]="20">
       <as-split unit="pixel" direction="vertical">
-        <as-split-area [size]="180">
+        <as-split-area [size]="640">
           @if (frontRepo && frontRepo.array_Parameters[0]) {
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
               <mat-grid-tile colspan="3" rowspan="1">
@@ -19,7 +19,7 @@
               </mat-grid-tile>
               <mat-grid-tile colspan="7" rowspan="1">
                 <mat-slider style="width: 100%;" 
-                min="50.0" max="600.0" step="10" showTickMarks discrete [displayWith]="formatLabel">
+                min="1.0" max="600.0" step="1" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SideLength" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
@@ -49,16 +49,124 @@
               </mat-slider>
             </mat-grid-tile>
 
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Spiral Origin X </h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].SpiralOriginX}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="3000.0" step="50" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SpiralOriginX" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Spiral Origin Y </h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].SpiralOriginY}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="3000.0" step="50" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SpiralOriginY" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Spiral Initial Radius </h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].SpiralRadiusRatio}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="20.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SpiralRadiusRatio" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Hour Handle</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleRotationAngle}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="-180.0" max="180.0" step="0.5" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].HourHandleRotationAngle" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Hour disk distance</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleDiskDistance}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="10.0" step="0.005" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].HourHandleDiskDistance" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Hour handle radius</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleRadius}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="100.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].HourHandleRadius" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Minute disk distance</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteHandleDiskDistance}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="10.0" step="0.001" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteHandleDiskDistance" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Minute disk radius</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteHandleRadius}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="0.0" max="100.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteHandleRadius" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Minute Handle</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteHandleRotationAngle}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="-180.0" max="180.0" step="0.5" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteHandleRotationAngle" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+
             </mat-grid-list>
           }
         </as-split-area>
-        <as-split-area [size]="$any('*')">
+        <as-split-area [size]="400">
           @if (frontRepo && frontRepo.array_Parameters[0]) {
 
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
            
-
-            
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Inside Angle </h4>
               </mat-grid-tile>
@@ -78,7 +186,7 @@
                 <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].BezierControlLengthRatio}}</h4>
               </mat-grid-tile>              
               <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0.0" max="4.0" step="0.05" showTickMarks discrete [displayWith]="formatLabel">
+                <mat-slider min="0.0" max="4.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].BezierControlLengthRatio" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
@@ -107,6 +215,65 @@
                 </mat-slider>
               </mat-grid-tile>
       
+              <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">Z </h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="2" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].Z}}</h4>
+              </mat-grid-tile>              
+              <mat-grid-tile colspan="7" rowspan="1">
+                <mat-slider min="1" max="120" step="1" showTickMarks discrete [displayWith]="formatLabel">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Z" (input)="input($event)">
+                </mat-slider>
+              </mat-grid-tile>
+      
+              <mat-grid-tile colspan="3" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">S Bezier Strength</h4>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="2" rowspan="1">
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].SpiralBezierStrength}}</h4>
+              </mat-grid-tile>              
+              <mat-grid-tile colspan="7" rowspan="1">
+                <mat-slider min="0.0" max="10.0" step="0.1" showTickMarks discrete [displayWith]="formatLabel">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SpiralBezierStrength" (input)="input($event)">
+                </mat-slider>
+              </mat-grid-tile>
+
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Nb Interpol Points</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbInterpolationPoints}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="1" max="50" step="1" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbInterpolationPoints" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+            
+            <mat-grid-tile colspan="3" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">Stack Height</h4>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2" rowspan="1">
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].StackHeight}}</h4>
+            </mat-grid-tile>              
+            <mat-grid-tile colspan="7" rowspan="1">
+              <mat-slider min="1" max="8" step="1" showTickMarks discrete [displayWith]="formatLabel">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].StackHeight" (input)="input($event)">
+              </mat-slider>
+            </mat-grid-tile>
+            
+
+          </mat-grid-list>
+          }
+        </as-split-area>
+        <as-split-area [size]="$any('*')">
+          @if (frontRepo && frontRepo.array_Parameters[0]) {
+
+            <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
+           
+
+
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Pitch Height</h4>
               </mat-grid-tile>

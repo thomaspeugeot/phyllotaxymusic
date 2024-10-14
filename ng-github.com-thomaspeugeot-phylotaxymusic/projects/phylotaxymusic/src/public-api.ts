@@ -41,6 +41,14 @@ export * from './lib/circlegrid-api'
 export * from './lib/circlegrid'
 export * from './lib/circlegrid.service'
 
+export * from './lib/frontcurve-api'
+export * from './lib/frontcurve'
+export * from './lib/frontcurve.service'
+
+export * from './lib/frontcurvestack-api'
+export * from './lib/frontcurvestack'
+export * from './lib/frontcurvestack.service'
+
 export * from './lib/horizontalaxis-api'
 export * from './lib/horizontalaxis'
 export * from './lib/horizontalaxis.service'
@@ -68,6 +76,42 @@ export * from './lib/rhombusgrid.service'
 export * from './lib/shapecategory-api'
 export * from './lib/shapecategory'
 export * from './lib/shapecategory.service'
+
+export * from './lib/spiralbezier-api'
+export * from './lib/spiralbezier'
+export * from './lib/spiralbezier.service'
+
+export * from './lib/spiralbeziergrid-api'
+export * from './lib/spiralbeziergrid'
+export * from './lib/spiralbeziergrid.service'
+
+export * from './lib/spiralcircle-api'
+export * from './lib/spiralcircle'
+export * from './lib/spiralcircle.service'
+
+export * from './lib/spiralcirclegrid-api'
+export * from './lib/spiralcirclegrid'
+export * from './lib/spiralcirclegrid.service'
+
+export * from './lib/spiralline-api'
+export * from './lib/spiralline'
+export * from './lib/spiralline.service'
+
+export * from './lib/spirallinegrid-api'
+export * from './lib/spirallinegrid'
+export * from './lib/spirallinegrid.service'
+
+export * from './lib/spiralorigin-api'
+export * from './lib/spiralorigin'
+export * from './lib/spiralorigin.service'
+
+export * from './lib/spiralrhombus-api'
+export * from './lib/spiralrhombus'
+export * from './lib/spiralrhombus.service'
+
+export * from './lib/spiralrhombusgrid-api'
+export * from './lib/spiralrhombusgrid'
+export * from './lib/spiralrhombusgrid.service'
 
 export * from './lib/verticalaxis-api'
 export * from './lib/verticalaxis'

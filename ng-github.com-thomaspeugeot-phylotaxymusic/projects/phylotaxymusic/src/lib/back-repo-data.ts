@@ -15,6 +15,10 @@ import { CircleAPI } from './circle-api'
 
 import { CircleGridAPI } from './circlegrid-api'
 
+import { FrontCurveAPI } from './frontcurve-api'
+
+import { FrontCurveStackAPI } from './frontcurvestack-api'
+
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 
 import { KeyAPI } from './key-api'
@@ -28,6 +32,24 @@ import { RhombusAPI } from './rhombus-api'
 import { RhombusGridAPI } from './rhombusgrid-api'
 
 import { ShapeCategoryAPI } from './shapecategory-api'
+
+import { SpiralBezierAPI } from './spiralbezier-api'
+
+import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
+
+import { SpiralCircleAPI } from './spiralcircle-api'
+
+import { SpiralCircleGridAPI } from './spiralcirclegrid-api'
+
+import { SpiralLineAPI } from './spiralline-api'
+
+import { SpiralLineGridAPI } from './spirallinegrid-api'
+
+import { SpiralOriginAPI } from './spiralorigin-api'
+
+import { SpiralRhombusAPI } from './spiralrhombus-api'
+
+import { SpiralRhombusGridAPI } from './spiralrhombusgrid-api'
 
 import { VerticalAxisAPI } from './verticalaxis-api'
 
@@ -48,6 +70,10 @@ export class BackRepoData {
 
 	CircleGridAPIs = new Array<CircleGridAPI>()
 
+	FrontCurveAPIs = new Array<FrontCurveAPI>()
+
+	FrontCurveStackAPIs = new Array<FrontCurveStackAPI>()
+
 	HorizontalAxisAPIs = new Array<HorizontalAxisAPI>()
 
 	KeyAPIs = new Array<KeyAPI>()
@@ -61,6 +87,24 @@ export class BackRepoData {
 	RhombusGridAPIs = new Array<RhombusGridAPI>()
 
 	ShapeCategoryAPIs = new Array<ShapeCategoryAPI>()
+
+	SpiralBezierAPIs = new Array<SpiralBezierAPI>()
+
+	SpiralBezierGridAPIs = new Array<SpiralBezierGridAPI>()
+
+	SpiralCircleAPIs = new Array<SpiralCircleAPI>()
+
+	SpiralCircleGridAPIs = new Array<SpiralCircleGridAPI>()
+
+	SpiralLineAPIs = new Array<SpiralLineAPI>()
+
+	SpiralLineGridAPIs = new Array<SpiralLineGridAPI>()
+
+	SpiralOriginAPIs = new Array<SpiralOriginAPI>()
+
+	SpiralRhombusAPIs = new Array<SpiralRhombusAPI>()
+
+	SpiralRhombusGridAPIs = new Array<SpiralRhombusGridAPI>()
 
 	VerticalAxisAPIs = new Array<VerticalAxisAPI>()
 
@@ -82,6 +126,10 @@ export class BackRepoData {
 
 		this.CircleGridAPIs = data?.CircleGridAPIs || [];
 
+		this.FrontCurveAPIs = data?.FrontCurveAPIs || [];
+
+		this.FrontCurveStackAPIs = data?.FrontCurveStackAPIs || [];
+
 		this.HorizontalAxisAPIs = data?.HorizontalAxisAPIs || [];
 
 		this.KeyAPIs = data?.KeyAPIs || [];
@@ -95,6 +143,24 @@ export class BackRepoData {
 		this.RhombusGridAPIs = data?.RhombusGridAPIs || [];
 
 		this.ShapeCategoryAPIs = data?.ShapeCategoryAPIs || [];
+
+		this.SpiralBezierAPIs = data?.SpiralBezierAPIs || [];
+
+		this.SpiralBezierGridAPIs = data?.SpiralBezierGridAPIs || [];
+
+		this.SpiralCircleAPIs = data?.SpiralCircleAPIs || [];
+
+		this.SpiralCircleGridAPIs = data?.SpiralCircleGridAPIs || [];
+
+		this.SpiralLineAPIs = data?.SpiralLineAPIs || [];
+
+		this.SpiralLineGridAPIs = data?.SpiralLineGridAPIs || [];
+
+		this.SpiralOriginAPIs = data?.SpiralOriginAPIs || [];
+
+		this.SpiralRhombusAPIs = data?.SpiralRhombusAPIs || [];
+
+		this.SpiralRhombusGridAPIs = data?.SpiralRhombusGridAPIs || [];
 
 		this.VerticalAxisAPIs = data?.VerticalAxisAPIs || [];
 

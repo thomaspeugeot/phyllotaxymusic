@@ -132,6 +132,26 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "FrontCurve":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.FrontCurve](probe.stageOfInterest)
+			for _frontcurve := range set {
+				nodeInstance := (&tree.Node{Name: _frontcurve.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_frontcurve, "FrontCurve", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "FrontCurveStack":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.FrontCurveStack](probe.stageOfInterest)
+			for _frontcurvestack := range set {
+				nodeInstance := (&tree.Node{Name: _frontcurvestack.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_frontcurvestack, "FrontCurveStack", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "HorizontalAxis":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.HorizontalAxis](probe.stageOfInterest)
@@ -199,6 +219,96 @@ func fillUpTree(
 				nodeInstance := (&tree.Node{Name: _shapecategory.GetName()}).Stage(probe.treeStage)
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_shapecategory, "ShapeCategory", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "SpiralBezier":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralBezier](probe.stageOfInterest)
+			for _spiralbezier := range set {
+				nodeInstance := (&tree.Node{Name: _spiralbezier.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spiralbezier, "SpiralBezier", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "SpiralBezierGrid":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralBezierGrid](probe.stageOfInterest)
+			for _spiralbeziergrid := range set {
+				nodeInstance := (&tree.Node{Name: _spiralbeziergrid.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spiralbeziergrid, "SpiralBezierGrid", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "SpiralCircle":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralCircle](probe.stageOfInterest)
+			for _spiralcircle := range set {
+				nodeInstance := (&tree.Node{Name: _spiralcircle.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spiralcircle, "SpiralCircle", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "SpiralCircleGrid":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralCircleGrid](probe.stageOfInterest)
+			for _spiralcirclegrid := range set {
+				nodeInstance := (&tree.Node{Name: _spiralcirclegrid.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spiralcirclegrid, "SpiralCircleGrid", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "SpiralLine":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralLine](probe.stageOfInterest)
+			for _spiralline := range set {
+				nodeInstance := (&tree.Node{Name: _spiralline.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spiralline, "SpiralLine", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "SpiralLineGrid":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralLineGrid](probe.stageOfInterest)
+			for _spirallinegrid := range set {
+				nodeInstance := (&tree.Node{Name: _spirallinegrid.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spirallinegrid, "SpiralLineGrid", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "SpiralOrigin":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralOrigin](probe.stageOfInterest)
+			for _spiralorigin := range set {
+				nodeInstance := (&tree.Node{Name: _spiralorigin.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spiralorigin, "SpiralOrigin", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "SpiralRhombus":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralRhombus](probe.stageOfInterest)
+			for _spiralrhombus := range set {
+				nodeInstance := (&tree.Node{Name: _spiralrhombus.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spiralrhombus, "SpiralRhombus", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "SpiralRhombusGrid":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SpiralRhombusGrid](probe.stageOfInterest)
+			for _spiralrhombusgrid := range set {
+				nodeInstance := (&tree.Node{Name: _spiralrhombusgrid.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_spiralrhombusgrid, "SpiralRhombusGrid", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}

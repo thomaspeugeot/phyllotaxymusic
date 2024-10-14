@@ -8,10 +8,20 @@ import { AxisGridAPI } from './axisgrid-api'
 import { BezierAPI } from './bezier-api'
 import { BezierGridAPI } from './beziergrid-api'
 import { BezierGridStackAPI } from './beziergridstack-api'
+import { SpiralRhombusAPI } from './spiralrhombus-api'
+import { SpiralRhombusGridAPI } from './spiralrhombusgrid-api'
+import { SpiralCircleAPI } from './spiralcircle-api'
+import { SpiralCircleGridAPI } from './spiralcirclegrid-api'
+import { SpiralLineAPI } from './spiralline-api'
+import { SpiralLineGridAPI } from './spirallinegrid-api'
+import { SpiralBezierAPI } from './spiralbezier-api'
+import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
+import { FrontCurveStackAPI } from './frontcurvestack-api'
 import { KeyAPI } from './key-api'
 import { NoteInfoAPI } from './noteinfo-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
+import { SpiralOriginAPI } from './spiralorigin-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -29,12 +39,21 @@ export class ParameterAPI {
 	N: number = 0
 	M: number = 0
 	Z: number = 0
+	ShiftToNearestCircle: number = 0
 	InsideAngle: number = 0
 	SideLength: number = 0
 	StackWidth: number = 0
 	NbShitRight: number = 0
 	StackHeight: number = 0
 	BezierControlLengthRatio: number = 0
+	SpiralBezierStrength: number = 0
+	NbInterpolationPoints: number = 0
+	HourHandleRotationAngle: number = 0
+	HourHandleDiskDistance: number = 0
+	HourHandleRadius: number = 0
+	MinuteHandleRotationAngle: number = 0
+	MinuteHandleDiskDistance: number = 0
+	MinuteHandleRadius: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -51,6 +70,12 @@ export class ParameterAPI {
 	IsMinor: boolean = false
 	OriginX: number = 0
 	OriginY: number = 0
+	SpiralOriginX: number = 0
+	SpiralOriginY: number = 0
+	OriginCrossWidth: number = 0
+	SpiralRadiusRatio: number = 0
+	ShowSpiralBezierConstruct: boolean = false
+	ShowInterpolationPoints: boolean = false
 
 	// insertion point for other decls
 
@@ -101,7 +126,7 @@ export class ParameterPointersEncoding {
 
 	ConstructionCircleGridID: NullInt64 = new NullInt64 // if pointer is null, ConstructionCircleGrid.ID = 0
 
-	GrowthCurveSegmentID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveSegment.ID = 0
+	GrowthCurveSeedID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveSeed.ID = 0
 
 	GrowthCurveID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurve.ID = 0
 
@@ -118,6 +143,44 @@ export class ParameterPointersEncoding {
 	GrowthCurveNextShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveNextShiftedRight.ID = 0
 
 	GrowthCurveStackID: NullInt64 = new NullInt64 // if pointer is null, GrowthCurveStack.ID = 0
+
+	SpiralRhombusGridSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralRhombusGridSeed.ID = 0
+
+	SpiralRhombusGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralRhombusGrid.ID = 0
+
+	SpiralCircleSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralCircleSeed.ID = 0
+
+	SpiralCircleGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralCircleGrid.ID = 0
+
+	SpiralCircleFullGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralCircleFullGrid.ID = 0
+
+	SpiralConstructionOuterLineSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionOuterLineSeed.ID = 0
+
+	SpiralConstructionInnerLineSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionInnerLineSeed.ID = 0
+
+	SpiralConstructionOuterLineGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionOuterLineGrid.ID = 0
+
+	SpiralConstructionInnerLineGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionInnerLineGrid.ID = 0
+
+	SpiralConstructionCircleGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionCircleGrid.ID = 0
+
+	SpiralConstructionOuterLineFullGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralConstructionOuterLineFullGrid.ID = 0
+
+	SpiralBezierSeedID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierSeed.ID = 0
+
+	SpiralBezierGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierGrid.ID = 0
+
+	SpiralBezierFullGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierFullGrid.ID = 0
+
+	FrontCurveStackID: NullInt64 = new NullInt64 // if pointer is null, FrontCurveStack.ID = 0
+
+	HourCurveID: NullInt64 = new NullInt64 // if pointer is null, HourCurve.ID = 0
+
+	HourMarkerID: NullInt64 = new NullInt64 // if pointer is null, HourMarker.ID = 0
+
+	MinuteCurveID: NullInt64 = new NullInt64 // if pointer is null, MinuteCurve.ID = 0
+
+	MinuteMarkerID: NullInt64 = new NullInt64 // if pointer is null, MinuteMarker.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 
@@ -145,5 +208,7 @@ export class ParameterPointersEncoding {
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 
 	VerticalAxisID: NullInt64 = new NullInt64 // if pointer is null, VerticalAxis.ID = 0
+
+	SpiralOriginID: NullInt64 = new NullInt64 // if pointer is null, SpiralOrigin.ID = 0
 
 }

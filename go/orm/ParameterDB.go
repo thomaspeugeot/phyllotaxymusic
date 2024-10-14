@@ -131,9 +131,9 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	ConstructionCircleGridID sql.NullInt64
 
-	// field GrowthCurveSegment is a pointer to another Struct (optional or 0..1)
+	// field GrowthCurveSeed is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	GrowthCurveSegmentID sql.NullInt64
+	GrowthCurveSeedID sql.NullInt64
 
 	// field GrowthCurve is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -166,6 +166,82 @@ type ParameterPointersEncoding struct {
 	// field GrowthCurveStack is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	GrowthCurveStackID sql.NullInt64
+
+	// field SpiralRhombusGridSeed is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralRhombusGridSeedID sql.NullInt64
+
+	// field SpiralRhombusGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralRhombusGridID sql.NullInt64
+
+	// field SpiralCircleSeed is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralCircleSeedID sql.NullInt64
+
+	// field SpiralCircleGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralCircleGridID sql.NullInt64
+
+	// field SpiralCircleFullGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralCircleFullGridID sql.NullInt64
+
+	// field SpiralConstructionOuterLineSeed is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralConstructionOuterLineSeedID sql.NullInt64
+
+	// field SpiralConstructionInnerLineSeed is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralConstructionInnerLineSeedID sql.NullInt64
+
+	// field SpiralConstructionOuterLineGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralConstructionOuterLineGridID sql.NullInt64
+
+	// field SpiralConstructionInnerLineGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralConstructionInnerLineGridID sql.NullInt64
+
+	// field SpiralConstructionCircleGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralConstructionCircleGridID sql.NullInt64
+
+	// field SpiralConstructionOuterLineFullGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralConstructionOuterLineFullGridID sql.NullInt64
+
+	// field SpiralBezierSeed is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralBezierSeedID sql.NullInt64
+
+	// field SpiralBezierGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralBezierGridID sql.NullInt64
+
+	// field SpiralBezierFullGrid is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralBezierFullGridID sql.NullInt64
+
+	// field FrontCurveStack is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	FrontCurveStackID sql.NullInt64
+
+	// field HourCurve is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	HourCurveID sql.NullInt64
+
+	// field HourMarker is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	HourMarkerID sql.NullInt64
+
+	// field MinuteCurve is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	MinuteCurveID sql.NullInt64
+
+	// field MinuteMarker is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	MinuteMarkerID sql.NullInt64
 
 	// field Fkey is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -221,6 +297,10 @@ type ParameterPointersEncoding struct {
 	// field VerticalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	VerticalAxisID sql.NullInt64
+
+	// field SpiralOrigin is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	SpiralOriginID sql.NullInt64
 }
 
 // ParameterDB describes a parameter in the database
@@ -246,6 +326,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.Z
 	Z_Data sql.NullInt64
 
+	// Declation for basic field parameterDB.ShiftToNearestCircle
+	ShiftToNearestCircle_Data sql.NullInt64
+
 	// Declation for basic field parameterDB.InsideAngle
 	InsideAngle_Data sql.NullFloat64
 
@@ -263,6 +346,30 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.BezierControlLengthRatio
 	BezierControlLengthRatio_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.SpiralBezierStrength
+	SpiralBezierStrength_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.NbInterpolationPoints
+	NbInterpolationPoints_Data sql.NullInt64
+
+	// Declation for basic field parameterDB.HourHandleRotationAngle
+	HourHandleRotationAngle_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.HourHandleDiskDistance
+	HourHandleDiskDistance_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.HourHandleRadius
+	HourHandleRadius_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.MinuteHandleRotationAngle
+	MinuteHandleRotationAngle_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.MinuteHandleDiskDistance
+	MinuteHandleDiskDistance_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.MinuteHandleRadius
+	MinuteHandleRadius_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.FkeySizeRatio
 	FkeySizeRatio_Data sql.NullFloat64
@@ -312,6 +419,26 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.OriginY
 	OriginY_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.SpiralOriginX
+	SpiralOriginX_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.SpiralOriginY
+	SpiralOriginY_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.OriginCrossWidth
+	OriginCrossWidth_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.SpiralRadiusRatio
+	SpiralRadiusRatio_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.ShowSpiralBezierConstruct
+	// provide the sql storage for the boolan
+	ShowSpiralBezierConstruct_Data sql.NullBool
+
+	// Declation for basic field parameterDB.ShowInterpolationPoints
+	// provide the sql storage for the boolan
+	ShowInterpolationPoints_Data sql.NullBool
 	
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -343,49 +470,79 @@ type ParameterWOP struct {
 
 	Z int `xlsx:"4"`
 
-	InsideAngle float64 `xlsx:"5"`
+	ShiftToNearestCircle int `xlsx:"5"`
 
-	SideLength float64 `xlsx:"6"`
+	InsideAngle float64 `xlsx:"6"`
 
-	StackWidth int `xlsx:"7"`
+	SideLength float64 `xlsx:"7"`
 
-	NbShitRight int `xlsx:"8"`
+	StackWidth int `xlsx:"8"`
 
-	StackHeight int `xlsx:"9"`
+	NbShitRight int `xlsx:"9"`
 
-	BezierControlLengthRatio float64 `xlsx:"10"`
+	StackHeight int `xlsx:"10"`
 
-	FkeySizeRatio float64 `xlsx:"11"`
+	BezierControlLengthRatio float64 `xlsx:"11"`
 
-	FkeyOriginRelativeX float64 `xlsx:"12"`
+	SpiralBezierStrength float64 `xlsx:"12"`
 
-	FkeyOriginRelativeY float64 `xlsx:"13"`
+	NbInterpolationPoints int `xlsx:"13"`
 
-	PitchHeight float64 `xlsx:"14"`
+	HourHandleRotationAngle float64 `xlsx:"14"`
 
-	NbPitchLines int `xlsx:"15"`
+	HourHandleDiskDistance float64 `xlsx:"15"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"16"`
+	HourHandleRadius float64 `xlsx:"16"`
 
-	NbMeasureLines int `xlsx:"17"`
+	MinuteHandleRotationAngle float64 `xlsx:"17"`
 
-	NbMeasureLinesPerCurve int `xlsx:"18"`
+	MinuteHandleDiskDistance float64 `xlsx:"18"`
 
-	FirstVoiceShiftX float64 `xlsx:"19"`
+	MinuteHandleRadius float64 `xlsx:"19"`
 
-	FirstVoiceShiftY float64 `xlsx:"20"`
+	FkeySizeRatio float64 `xlsx:"20"`
 
-	PitchDifference int `xlsx:"21"`
+	FkeyOriginRelativeX float64 `xlsx:"21"`
 
-	Speed float64 `xlsx:"22"`
+	FkeyOriginRelativeY float64 `xlsx:"22"`
 
-	Level float64 `xlsx:"23"`
+	PitchHeight float64 `xlsx:"23"`
 
-	IsMinor bool `xlsx:"24"`
+	NbPitchLines int `xlsx:"24"`
 
-	OriginX float64 `xlsx:"25"`
+	MeasureLinesHeightRatio float64 `xlsx:"25"`
 
-	OriginY float64 `xlsx:"26"`
+	NbMeasureLines int `xlsx:"26"`
+
+	NbMeasureLinesPerCurve int `xlsx:"27"`
+
+	FirstVoiceShiftX float64 `xlsx:"28"`
+
+	FirstVoiceShiftY float64 `xlsx:"29"`
+
+	PitchDifference int `xlsx:"30"`
+
+	Speed float64 `xlsx:"31"`
+
+	Level float64 `xlsx:"32"`
+
+	IsMinor bool `xlsx:"33"`
+
+	OriginX float64 `xlsx:"34"`
+
+	OriginY float64 `xlsx:"35"`
+
+	SpiralOriginX float64 `xlsx:"36"`
+
+	SpiralOriginY float64 `xlsx:"37"`
+
+	OriginCrossWidth float64 `xlsx:"38"`
+
+	SpiralRadiusRatio float64 `xlsx:"39"`
+
+	ShowSpiralBezierConstruct bool `xlsx:"40"`
+
+	ShowInterpolationPoints bool `xlsx:"41"`
 	// insertion for WOP pointer fields
 }
 
@@ -396,12 +553,21 @@ var Parameter_Fields = []string{
 	"N",
 	"M",
 	"Z",
+	"ShiftToNearestCircle",
 	"InsideAngle",
 	"SideLength",
 	"StackWidth",
 	"NbShitRight",
 	"StackHeight",
 	"BezierControlLengthRatio",
+	"SpiralBezierStrength",
+	"NbInterpolationPoints",
+	"HourHandleRotationAngle",
+	"HourHandleDiskDistance",
+	"HourHandleRadius",
+	"MinuteHandleRotationAngle",
+	"MinuteHandleDiskDistance",
+	"MinuteHandleRadius",
 	"FkeySizeRatio",
 	"FkeyOriginRelativeX",
 	"FkeyOriginRelativeY",
@@ -418,6 +584,12 @@ var Parameter_Fields = []string{
 	"IsMinor",
 	"OriginX",
 	"OriginY",
+	"SpiralOriginX",
+	"SpiralOriginY",
+	"OriginCrossWidth",
+	"SpiralRadiusRatio",
+	"ShowSpiralBezierConstruct",
+	"ShowInterpolationPoints",
 }
 
 type BackRepoParameterStruct struct {
@@ -789,16 +961,16 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.ConstructionCircleGridID.Valid = true
 		}
 
-		// commit pointer value parameter.GrowthCurveSegment translates to updating the parameter.GrowthCurveSegmentID
-		parameterDB.GrowthCurveSegmentID.Valid = true // allow for a 0 value (nil association)
-		if parameter.GrowthCurveSegment != nil {
-			if GrowthCurveSegmentId, ok := backRepo.BackRepoBezier.Map_BezierPtr_BezierDBID[parameter.GrowthCurveSegment]; ok {
-				parameterDB.GrowthCurveSegmentID.Int64 = int64(GrowthCurveSegmentId)
-				parameterDB.GrowthCurveSegmentID.Valid = true
+		// commit pointer value parameter.GrowthCurveSeed translates to updating the parameter.GrowthCurveSeedID
+		parameterDB.GrowthCurveSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.GrowthCurveSeed != nil {
+			if GrowthCurveSeedId, ok := backRepo.BackRepoBezier.Map_BezierPtr_BezierDBID[parameter.GrowthCurveSeed]; ok {
+				parameterDB.GrowthCurveSeedID.Int64 = int64(GrowthCurveSeedId)
+				parameterDB.GrowthCurveSeedID.Valid = true
 			}
 		} else {
-			parameterDB.GrowthCurveSegmentID.Int64 = 0
-			parameterDB.GrowthCurveSegmentID.Valid = true
+			parameterDB.GrowthCurveSeedID.Int64 = 0
+			parameterDB.GrowthCurveSeedID.Valid = true
 		}
 
 		// commit pointer value parameter.GrowthCurve translates to updating the parameter.GrowthCurveID
@@ -895,6 +1067,234 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		} else {
 			parameterDB.GrowthCurveStackID.Int64 = 0
 			parameterDB.GrowthCurveStackID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralRhombusGridSeed translates to updating the parameter.SpiralRhombusGridSeedID
+		parameterDB.SpiralRhombusGridSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralRhombusGridSeed != nil {
+			if SpiralRhombusGridSeedId, ok := backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusPtr_SpiralRhombusDBID[parameter.SpiralRhombusGridSeed]; ok {
+				parameterDB.SpiralRhombusGridSeedID.Int64 = int64(SpiralRhombusGridSeedId)
+				parameterDB.SpiralRhombusGridSeedID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralRhombusGridSeedID.Int64 = 0
+			parameterDB.SpiralRhombusGridSeedID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralRhombusGrid translates to updating the parameter.SpiralRhombusGridID
+		parameterDB.SpiralRhombusGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralRhombusGrid != nil {
+			if SpiralRhombusGridId, ok := backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridPtr_SpiralRhombusGridDBID[parameter.SpiralRhombusGrid]; ok {
+				parameterDB.SpiralRhombusGridID.Int64 = int64(SpiralRhombusGridId)
+				parameterDB.SpiralRhombusGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralRhombusGridID.Int64 = 0
+			parameterDB.SpiralRhombusGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralCircleSeed translates to updating the parameter.SpiralCircleSeedID
+		parameterDB.SpiralCircleSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralCircleSeed != nil {
+			if SpiralCircleSeedId, ok := backRepo.BackRepoSpiralCircle.Map_SpiralCirclePtr_SpiralCircleDBID[parameter.SpiralCircleSeed]; ok {
+				parameterDB.SpiralCircleSeedID.Int64 = int64(SpiralCircleSeedId)
+				parameterDB.SpiralCircleSeedID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralCircleSeedID.Int64 = 0
+			parameterDB.SpiralCircleSeedID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralCircleGrid translates to updating the parameter.SpiralCircleGridID
+		parameterDB.SpiralCircleGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralCircleGrid != nil {
+			if SpiralCircleGridId, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridPtr_SpiralCircleGridDBID[parameter.SpiralCircleGrid]; ok {
+				parameterDB.SpiralCircleGridID.Int64 = int64(SpiralCircleGridId)
+				parameterDB.SpiralCircleGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralCircleGridID.Int64 = 0
+			parameterDB.SpiralCircleGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralCircleFullGrid translates to updating the parameter.SpiralCircleFullGridID
+		parameterDB.SpiralCircleFullGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralCircleFullGrid != nil {
+			if SpiralCircleFullGridId, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridPtr_SpiralCircleGridDBID[parameter.SpiralCircleFullGrid]; ok {
+				parameterDB.SpiralCircleFullGridID.Int64 = int64(SpiralCircleFullGridId)
+				parameterDB.SpiralCircleFullGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralCircleFullGridID.Int64 = 0
+			parameterDB.SpiralCircleFullGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralConstructionOuterLineSeed translates to updating the parameter.SpiralConstructionOuterLineSeedID
+		parameterDB.SpiralConstructionOuterLineSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionOuterLineSeed != nil {
+			if SpiralConstructionOuterLineSeedId, ok := backRepo.BackRepoSpiralLine.Map_SpiralLinePtr_SpiralLineDBID[parameter.SpiralConstructionOuterLineSeed]; ok {
+				parameterDB.SpiralConstructionOuterLineSeedID.Int64 = int64(SpiralConstructionOuterLineSeedId)
+				parameterDB.SpiralConstructionOuterLineSeedID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralConstructionOuterLineSeedID.Int64 = 0
+			parameterDB.SpiralConstructionOuterLineSeedID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralConstructionInnerLineSeed translates to updating the parameter.SpiralConstructionInnerLineSeedID
+		parameterDB.SpiralConstructionInnerLineSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionInnerLineSeed != nil {
+			if SpiralConstructionInnerLineSeedId, ok := backRepo.BackRepoSpiralLine.Map_SpiralLinePtr_SpiralLineDBID[parameter.SpiralConstructionInnerLineSeed]; ok {
+				parameterDB.SpiralConstructionInnerLineSeedID.Int64 = int64(SpiralConstructionInnerLineSeedId)
+				parameterDB.SpiralConstructionInnerLineSeedID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralConstructionInnerLineSeedID.Int64 = 0
+			parameterDB.SpiralConstructionInnerLineSeedID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralConstructionOuterLineGrid translates to updating the parameter.SpiralConstructionOuterLineGridID
+		parameterDB.SpiralConstructionOuterLineGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionOuterLineGrid != nil {
+			if SpiralConstructionOuterLineGridId, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridPtr_SpiralLineGridDBID[parameter.SpiralConstructionOuterLineGrid]; ok {
+				parameterDB.SpiralConstructionOuterLineGridID.Int64 = int64(SpiralConstructionOuterLineGridId)
+				parameterDB.SpiralConstructionOuterLineGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralConstructionOuterLineGridID.Int64 = 0
+			parameterDB.SpiralConstructionOuterLineGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralConstructionInnerLineGrid translates to updating the parameter.SpiralConstructionInnerLineGridID
+		parameterDB.SpiralConstructionInnerLineGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionInnerLineGrid != nil {
+			if SpiralConstructionInnerLineGridId, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridPtr_SpiralLineGridDBID[parameter.SpiralConstructionInnerLineGrid]; ok {
+				parameterDB.SpiralConstructionInnerLineGridID.Int64 = int64(SpiralConstructionInnerLineGridId)
+				parameterDB.SpiralConstructionInnerLineGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralConstructionInnerLineGridID.Int64 = 0
+			parameterDB.SpiralConstructionInnerLineGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralConstructionCircleGrid translates to updating the parameter.SpiralConstructionCircleGridID
+		parameterDB.SpiralConstructionCircleGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionCircleGrid != nil {
+			if SpiralConstructionCircleGridId, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridPtr_SpiralCircleGridDBID[parameter.SpiralConstructionCircleGrid]; ok {
+				parameterDB.SpiralConstructionCircleGridID.Int64 = int64(SpiralConstructionCircleGridId)
+				parameterDB.SpiralConstructionCircleGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralConstructionCircleGridID.Int64 = 0
+			parameterDB.SpiralConstructionCircleGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralConstructionOuterLineFullGrid translates to updating the parameter.SpiralConstructionOuterLineFullGridID
+		parameterDB.SpiralConstructionOuterLineFullGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralConstructionOuterLineFullGrid != nil {
+			if SpiralConstructionOuterLineFullGridId, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridPtr_SpiralLineGridDBID[parameter.SpiralConstructionOuterLineFullGrid]; ok {
+				parameterDB.SpiralConstructionOuterLineFullGridID.Int64 = int64(SpiralConstructionOuterLineFullGridId)
+				parameterDB.SpiralConstructionOuterLineFullGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralConstructionOuterLineFullGridID.Int64 = 0
+			parameterDB.SpiralConstructionOuterLineFullGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralBezierSeed translates to updating the parameter.SpiralBezierSeedID
+		parameterDB.SpiralBezierSeedID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralBezierSeed != nil {
+			if SpiralBezierSeedId, ok := backRepo.BackRepoSpiralBezier.Map_SpiralBezierPtr_SpiralBezierDBID[parameter.SpiralBezierSeed]; ok {
+				parameterDB.SpiralBezierSeedID.Int64 = int64(SpiralBezierSeedId)
+				parameterDB.SpiralBezierSeedID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralBezierSeedID.Int64 = 0
+			parameterDB.SpiralBezierSeedID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralBezierGrid translates to updating the parameter.SpiralBezierGridID
+		parameterDB.SpiralBezierGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralBezierGrid != nil {
+			if SpiralBezierGridId, ok := backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridPtr_SpiralBezierGridDBID[parameter.SpiralBezierGrid]; ok {
+				parameterDB.SpiralBezierGridID.Int64 = int64(SpiralBezierGridId)
+				parameterDB.SpiralBezierGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralBezierGridID.Int64 = 0
+			parameterDB.SpiralBezierGridID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralBezierFullGrid translates to updating the parameter.SpiralBezierFullGridID
+		parameterDB.SpiralBezierFullGridID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralBezierFullGrid != nil {
+			if SpiralBezierFullGridId, ok := backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridPtr_SpiralBezierGridDBID[parameter.SpiralBezierFullGrid]; ok {
+				parameterDB.SpiralBezierFullGridID.Int64 = int64(SpiralBezierFullGridId)
+				parameterDB.SpiralBezierFullGridID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralBezierFullGridID.Int64 = 0
+			parameterDB.SpiralBezierFullGridID.Valid = true
+		}
+
+		// commit pointer value parameter.FrontCurveStack translates to updating the parameter.FrontCurveStackID
+		parameterDB.FrontCurveStackID.Valid = true // allow for a 0 value (nil association)
+		if parameter.FrontCurveStack != nil {
+			if FrontCurveStackId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.FrontCurveStack]; ok {
+				parameterDB.FrontCurveStackID.Int64 = int64(FrontCurveStackId)
+				parameterDB.FrontCurveStackID.Valid = true
+			}
+		} else {
+			parameterDB.FrontCurveStackID.Int64 = 0
+			parameterDB.FrontCurveStackID.Valid = true
+		}
+
+		// commit pointer value parameter.HourCurve translates to updating the parameter.HourCurveID
+		parameterDB.HourCurveID.Valid = true // allow for a 0 value (nil association)
+		if parameter.HourCurve != nil {
+			if HourCurveId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.HourCurve]; ok {
+				parameterDB.HourCurveID.Int64 = int64(HourCurveId)
+				parameterDB.HourCurveID.Valid = true
+			}
+		} else {
+			parameterDB.HourCurveID.Int64 = 0
+			parameterDB.HourCurveID.Valid = true
+		}
+
+		// commit pointer value parameter.HourMarker translates to updating the parameter.HourMarkerID
+		parameterDB.HourMarkerID.Valid = true // allow for a 0 value (nil association)
+		if parameter.HourMarker != nil {
+			if HourMarkerId, ok := backRepo.BackRepoSpiralCircle.Map_SpiralCirclePtr_SpiralCircleDBID[parameter.HourMarker]; ok {
+				parameterDB.HourMarkerID.Int64 = int64(HourMarkerId)
+				parameterDB.HourMarkerID.Valid = true
+			}
+		} else {
+			parameterDB.HourMarkerID.Int64 = 0
+			parameterDB.HourMarkerID.Valid = true
+		}
+
+		// commit pointer value parameter.MinuteCurve translates to updating the parameter.MinuteCurveID
+		parameterDB.MinuteCurveID.Valid = true // allow for a 0 value (nil association)
+		if parameter.MinuteCurve != nil {
+			if MinuteCurveId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.MinuteCurve]; ok {
+				parameterDB.MinuteCurveID.Int64 = int64(MinuteCurveId)
+				parameterDB.MinuteCurveID.Valid = true
+			}
+		} else {
+			parameterDB.MinuteCurveID.Int64 = 0
+			parameterDB.MinuteCurveID.Valid = true
+		}
+
+		// commit pointer value parameter.MinuteMarker translates to updating the parameter.MinuteMarkerID
+		parameterDB.MinuteMarkerID.Valid = true // allow for a 0 value (nil association)
+		if parameter.MinuteMarker != nil {
+			if MinuteMarkerId, ok := backRepo.BackRepoSpiralCircle.Map_SpiralCirclePtr_SpiralCircleDBID[parameter.MinuteMarker]; ok {
+				parameterDB.MinuteMarkerID.Int64 = int64(MinuteMarkerId)
+				parameterDB.MinuteMarkerID.Valid = true
+			}
+		} else {
+			parameterDB.MinuteMarkerID.Int64 = 0
+			parameterDB.MinuteMarkerID.Valid = true
 		}
 
 		// commit pointer value parameter.Fkey translates to updating the parameter.FkeyID
@@ -1069,6 +1469,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		} else {
 			parameterDB.VerticalAxisID.Int64 = 0
 			parameterDB.VerticalAxisID.Valid = true
+		}
+
+		// commit pointer value parameter.SpiralOrigin translates to updating the parameter.SpiralOriginID
+		parameterDB.SpiralOriginID.Valid = true // allow for a 0 value (nil association)
+		if parameter.SpiralOrigin != nil {
+			if SpiralOriginId, ok := backRepo.BackRepoSpiralOrigin.Map_SpiralOriginPtr_SpiralOriginDBID[parameter.SpiralOrigin]; ok {
+				parameterDB.SpiralOriginID.Int64 = int64(SpiralOriginId)
+				parameterDB.SpiralOriginID.Valid = true
+			}
+		} else {
+			parameterDB.SpiralOriginID.Int64 = 0
+			parameterDB.SpiralOriginID.Valid = true
 		}
 
 		query := backRepoParameter.db.Save(&parameterDB)
@@ -1289,10 +1701,10 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.ConstructionCircleGridID.Int64 != 0 {
 		parameter.ConstructionCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.ConstructionCircleGridID.Int64)]
 	}
-	// GrowthCurveSegment field
-	parameter.GrowthCurveSegment = nil
-	if parameterDB.GrowthCurveSegmentID.Int64 != 0 {
-		parameter.GrowthCurveSegment = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.GrowthCurveSegmentID.Int64)]
+	// GrowthCurveSeed field
+	parameter.GrowthCurveSeed = nil
+	if parameterDB.GrowthCurveSeedID.Int64 != 0 {
+		parameter.GrowthCurveSeed = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.GrowthCurveSeedID.Int64)]
 	}
 	// GrowthCurve field
 	parameter.GrowthCurve = nil
@@ -1333,6 +1745,101 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	parameter.GrowthCurveStack = nil
 	if parameterDB.GrowthCurveStackID.Int64 != 0 {
 		parameter.GrowthCurveStack = backRepo.BackRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackPtr[uint(parameterDB.GrowthCurveStackID.Int64)]
+	}
+	// SpiralRhombusGridSeed field
+	parameter.SpiralRhombusGridSeed = nil
+	if parameterDB.SpiralRhombusGridSeedID.Int64 != 0 {
+		parameter.SpiralRhombusGridSeed = backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusPtr[uint(parameterDB.SpiralRhombusGridSeedID.Int64)]
+	}
+	// SpiralRhombusGrid field
+	parameter.SpiralRhombusGrid = nil
+	if parameterDB.SpiralRhombusGridID.Int64 != 0 {
+		parameter.SpiralRhombusGrid = backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr[uint(parameterDB.SpiralRhombusGridID.Int64)]
+	}
+	// SpiralCircleSeed field
+	parameter.SpiralCircleSeed = nil
+	if parameterDB.SpiralCircleSeedID.Int64 != 0 {
+		parameter.SpiralCircleSeed = backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(parameterDB.SpiralCircleSeedID.Int64)]
+	}
+	// SpiralCircleGrid field
+	parameter.SpiralCircleGrid = nil
+	if parameterDB.SpiralCircleGridID.Int64 != 0 {
+		parameter.SpiralCircleGrid = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralCircleGridID.Int64)]
+	}
+	// SpiralCircleFullGrid field
+	parameter.SpiralCircleFullGrid = nil
+	if parameterDB.SpiralCircleFullGridID.Int64 != 0 {
+		parameter.SpiralCircleFullGrid = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralCircleFullGridID.Int64)]
+	}
+	// SpiralConstructionOuterLineSeed field
+	parameter.SpiralConstructionOuterLineSeed = nil
+	if parameterDB.SpiralConstructionOuterLineSeedID.Int64 != 0 {
+		parameter.SpiralConstructionOuterLineSeed = backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(parameterDB.SpiralConstructionOuterLineSeedID.Int64)]
+	}
+	// SpiralConstructionInnerLineSeed field
+	parameter.SpiralConstructionInnerLineSeed = nil
+	if parameterDB.SpiralConstructionInnerLineSeedID.Int64 != 0 {
+		parameter.SpiralConstructionInnerLineSeed = backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(parameterDB.SpiralConstructionInnerLineSeedID.Int64)]
+	}
+	// SpiralConstructionOuterLineGrid field
+	parameter.SpiralConstructionOuterLineGrid = nil
+	if parameterDB.SpiralConstructionOuterLineGridID.Int64 != 0 {
+		parameter.SpiralConstructionOuterLineGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionOuterLineGridID.Int64)]
+	}
+	// SpiralConstructionInnerLineGrid field
+	parameter.SpiralConstructionInnerLineGrid = nil
+	if parameterDB.SpiralConstructionInnerLineGridID.Int64 != 0 {
+		parameter.SpiralConstructionInnerLineGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionInnerLineGridID.Int64)]
+	}
+	// SpiralConstructionCircleGrid field
+	parameter.SpiralConstructionCircleGrid = nil
+	if parameterDB.SpiralConstructionCircleGridID.Int64 != 0 {
+		parameter.SpiralConstructionCircleGrid = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralConstructionCircleGridID.Int64)]
+	}
+	// SpiralConstructionOuterLineFullGrid field
+	parameter.SpiralConstructionOuterLineFullGrid = nil
+	if parameterDB.SpiralConstructionOuterLineFullGridID.Int64 != 0 {
+		parameter.SpiralConstructionOuterLineFullGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionOuterLineFullGridID.Int64)]
+	}
+	// SpiralBezierSeed field
+	parameter.SpiralBezierSeed = nil
+	if parameterDB.SpiralBezierSeedID.Int64 != 0 {
+		parameter.SpiralBezierSeed = backRepo.BackRepoSpiralBezier.Map_SpiralBezierDBID_SpiralBezierPtr[uint(parameterDB.SpiralBezierSeedID.Int64)]
+	}
+	// SpiralBezierGrid field
+	parameter.SpiralBezierGrid = nil
+	if parameterDB.SpiralBezierGridID.Int64 != 0 {
+		parameter.SpiralBezierGrid = backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(parameterDB.SpiralBezierGridID.Int64)]
+	}
+	// SpiralBezierFullGrid field
+	parameter.SpiralBezierFullGrid = nil
+	if parameterDB.SpiralBezierFullGridID.Int64 != 0 {
+		parameter.SpiralBezierFullGrid = backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(parameterDB.SpiralBezierFullGridID.Int64)]
+	}
+	// FrontCurveStack field
+	parameter.FrontCurveStack = nil
+	if parameterDB.FrontCurveStackID.Int64 != 0 {
+		parameter.FrontCurveStack = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.FrontCurveStackID.Int64)]
+	}
+	// HourCurve field
+	parameter.HourCurve = nil
+	if parameterDB.HourCurveID.Int64 != 0 {
+		parameter.HourCurve = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.HourCurveID.Int64)]
+	}
+	// HourMarker field
+	parameter.HourMarker = nil
+	if parameterDB.HourMarkerID.Int64 != 0 {
+		parameter.HourMarker = backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(parameterDB.HourMarkerID.Int64)]
+	}
+	// MinuteCurve field
+	parameter.MinuteCurve = nil
+	if parameterDB.MinuteCurveID.Int64 != 0 {
+		parameter.MinuteCurve = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.MinuteCurveID.Int64)]
+	}
+	// MinuteMarker field
+	parameter.MinuteMarker = nil
+	if parameterDB.MinuteMarkerID.Int64 != 0 {
+		parameter.MinuteMarker = backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(parameterDB.MinuteMarkerID.Int64)]
 	}
 	// Fkey field
 	parameter.Fkey = nil
@@ -1408,6 +1915,11 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.VerticalAxisID.Int64 != 0 {
 		parameter.VerticalAxis = backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisPtr[uint(parameterDB.VerticalAxisID.Int64)]
 	}
+	// SpiralOrigin field
+	parameter.SpiralOrigin = nil
+	if parameterDB.SpiralOriginID.Int64 != 0 {
+		parameter.SpiralOrigin = backRepo.BackRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginPtr[uint(parameterDB.SpiralOriginID.Int64)]
+	}
 	return
 }
 
@@ -1454,6 +1966,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.Z_Data.Int64 = int64(parameter.Z)
 	parameterDB.Z_Data.Valid = true
 
+	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
+	parameterDB.ShiftToNearestCircle_Data.Valid = true
+
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
@@ -1471,6 +1986,30 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
+
+	parameterDB.SpiralBezierStrength_Data.Float64 = parameter.SpiralBezierStrength
+	parameterDB.SpiralBezierStrength_Data.Valid = true
+
+	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
+	parameterDB.NbInterpolationPoints_Data.Valid = true
+
+	parameterDB.HourHandleRotationAngle_Data.Float64 = parameter.HourHandleRotationAngle
+	parameterDB.HourHandleRotationAngle_Data.Valid = true
+
+	parameterDB.HourHandleDiskDistance_Data.Float64 = parameter.HourHandleDiskDistance
+	parameterDB.HourHandleDiskDistance_Data.Valid = true
+
+	parameterDB.HourHandleRadius_Data.Float64 = parameter.HourHandleRadius
+	parameterDB.HourHandleRadius_Data.Valid = true
+
+	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
+	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
+
+	parameterDB.MinuteHandleDiskDistance_Data.Float64 = parameter.MinuteHandleDiskDistance
+	parameterDB.MinuteHandleDiskDistance_Data.Valid = true
+
+	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
+	parameterDB.MinuteHandleRadius_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -1519,6 +2058,24 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.OriginY_Data.Float64 = parameter.OriginY
 	parameterDB.OriginY_Data.Valid = true
+
+	parameterDB.SpiralOriginX_Data.Float64 = parameter.SpiralOriginX
+	parameterDB.SpiralOriginX_Data.Valid = true
+
+	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
+	parameterDB.SpiralOriginY_Data.Valid = true
+
+	parameterDB.OriginCrossWidth_Data.Float64 = parameter.OriginCrossWidth
+	parameterDB.OriginCrossWidth_Data.Valid = true
+
+	parameterDB.SpiralRadiusRatio_Data.Float64 = parameter.SpiralRadiusRatio
+	parameterDB.SpiralRadiusRatio_Data.Valid = true
+
+	parameterDB.ShowSpiralBezierConstruct_Data.Bool = parameter.ShowSpiralBezierConstruct
+	parameterDB.ShowSpiralBezierConstruct_Data.Valid = true
+
+	parameterDB.ShowInterpolationPoints_Data.Bool = parameter.ShowInterpolationPoints
+	parameterDB.ShowInterpolationPoints_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -1537,6 +2094,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.Z_Data.Int64 = int64(parameter.Z)
 	parameterDB.Z_Data.Valid = true
 
+	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
+	parameterDB.ShiftToNearestCircle_Data.Valid = true
+
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
@@ -1554,6 +2114,30 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
+
+	parameterDB.SpiralBezierStrength_Data.Float64 = parameter.SpiralBezierStrength
+	parameterDB.SpiralBezierStrength_Data.Valid = true
+
+	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
+	parameterDB.NbInterpolationPoints_Data.Valid = true
+
+	parameterDB.HourHandleRotationAngle_Data.Float64 = parameter.HourHandleRotationAngle
+	parameterDB.HourHandleRotationAngle_Data.Valid = true
+
+	parameterDB.HourHandleDiskDistance_Data.Float64 = parameter.HourHandleDiskDistance
+	parameterDB.HourHandleDiskDistance_Data.Valid = true
+
+	parameterDB.HourHandleRadius_Data.Float64 = parameter.HourHandleRadius
+	parameterDB.HourHandleRadius_Data.Valid = true
+
+	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
+	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
+
+	parameterDB.MinuteHandleDiskDistance_Data.Float64 = parameter.MinuteHandleDiskDistance
+	parameterDB.MinuteHandleDiskDistance_Data.Valid = true
+
+	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
+	parameterDB.MinuteHandleRadius_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -1602,6 +2186,24 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.OriginY_Data.Float64 = parameter.OriginY
 	parameterDB.OriginY_Data.Valid = true
+
+	parameterDB.SpiralOriginX_Data.Float64 = parameter.SpiralOriginX
+	parameterDB.SpiralOriginX_Data.Valid = true
+
+	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
+	parameterDB.SpiralOriginY_Data.Valid = true
+
+	parameterDB.OriginCrossWidth_Data.Float64 = parameter.OriginCrossWidth
+	parameterDB.OriginCrossWidth_Data.Valid = true
+
+	parameterDB.SpiralRadiusRatio_Data.Float64 = parameter.SpiralRadiusRatio
+	parameterDB.SpiralRadiusRatio_Data.Valid = true
+
+	parameterDB.ShowSpiralBezierConstruct_Data.Bool = parameter.ShowSpiralBezierConstruct
+	parameterDB.ShowSpiralBezierConstruct_Data.Valid = true
+
+	parameterDB.ShowInterpolationPoints_Data.Bool = parameter.ShowInterpolationPoints
+	parameterDB.ShowInterpolationPoints_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -1620,6 +2222,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.Z_Data.Int64 = int64(parameter.Z)
 	parameterDB.Z_Data.Valid = true
 
+	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
+	parameterDB.ShiftToNearestCircle_Data.Valid = true
+
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
 
@@ -1637,6 +2242,30 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.BezierControlLengthRatio_Data.Float64 = parameter.BezierControlLengthRatio
 	parameterDB.BezierControlLengthRatio_Data.Valid = true
+
+	parameterDB.SpiralBezierStrength_Data.Float64 = parameter.SpiralBezierStrength
+	parameterDB.SpiralBezierStrength_Data.Valid = true
+
+	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
+	parameterDB.NbInterpolationPoints_Data.Valid = true
+
+	parameterDB.HourHandleRotationAngle_Data.Float64 = parameter.HourHandleRotationAngle
+	parameterDB.HourHandleRotationAngle_Data.Valid = true
+
+	parameterDB.HourHandleDiskDistance_Data.Float64 = parameter.HourHandleDiskDistance
+	parameterDB.HourHandleDiskDistance_Data.Valid = true
+
+	parameterDB.HourHandleRadius_Data.Float64 = parameter.HourHandleRadius
+	parameterDB.HourHandleRadius_Data.Valid = true
+
+	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
+	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
+
+	parameterDB.MinuteHandleDiskDistance_Data.Float64 = parameter.MinuteHandleDiskDistance
+	parameterDB.MinuteHandleDiskDistance_Data.Valid = true
+
+	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
+	parameterDB.MinuteHandleRadius_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -1685,6 +2314,24 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.OriginY_Data.Float64 = parameter.OriginY
 	parameterDB.OriginY_Data.Valid = true
+
+	parameterDB.SpiralOriginX_Data.Float64 = parameter.SpiralOriginX
+	parameterDB.SpiralOriginX_Data.Valid = true
+
+	parameterDB.SpiralOriginY_Data.Float64 = parameter.SpiralOriginY
+	parameterDB.SpiralOriginY_Data.Valid = true
+
+	parameterDB.OriginCrossWidth_Data.Float64 = parameter.OriginCrossWidth
+	parameterDB.OriginCrossWidth_Data.Valid = true
+
+	parameterDB.SpiralRadiusRatio_Data.Float64 = parameter.SpiralRadiusRatio
+	parameterDB.SpiralRadiusRatio_Data.Valid = true
+
+	parameterDB.ShowSpiralBezierConstruct_Data.Bool = parameter.ShowSpiralBezierConstruct
+	parameterDB.ShowSpiralBezierConstruct_Data.Valid = true
+
+	parameterDB.ShowInterpolationPoints_Data.Bool = parameter.ShowInterpolationPoints
+	parameterDB.ShowInterpolationPoints_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -1694,12 +2341,21 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Z = int(parameterDB.Z_Data.Int64)
+	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
+	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
+	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
+	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
+	parameter.HourHandleDiskDistance = parameterDB.HourHandleDiskDistance_Data.Float64
+	parameter.HourHandleRadius = parameterDB.HourHandleRadius_Data.Float64
+	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
+	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
+	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -1716,6 +2372,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
+	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
+	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
+	parameter.OriginCrossWidth = parameterDB.OriginCrossWidth_Data.Float64
+	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
+	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
+	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -1725,12 +2387,21 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Z = int(parameterDB.Z_Data.Int64)
+	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
+	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
+	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
+	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
+	parameter.HourHandleDiskDistance = parameterDB.HourHandleDiskDistance_Data.Float64
+	parameter.HourHandleRadius = parameterDB.HourHandleRadius_Data.Float64
+	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
+	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
+	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -1747,6 +2418,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
+	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
+	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
+	parameter.OriginCrossWidth = parameterDB.OriginCrossWidth_Data.Float64
+	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
+	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
+	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -1757,12 +2434,21 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Z = int(parameterDB.Z_Data.Int64)
+	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
 	parameter.StackHeight = int(parameterDB.StackHeight_Data.Int64)
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
+	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
+	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
+	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
+	parameter.HourHandleDiskDistance = parameterDB.HourHandleDiskDistance_Data.Float64
+	parameter.HourHandleRadius = parameterDB.HourHandleRadius_Data.Float64
+	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
+	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
+	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -1779,6 +2465,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
+	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
+	parameter.SpiralOriginY = parameterDB.SpiralOriginY_Data.Float64
+	parameter.OriginCrossWidth = parameterDB.OriginCrossWidth_Data.Float64
+	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
+	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
+	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo
@@ -2062,10 +2754,10 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 			parameterDB.ConstructionCircleGridID.Valid = true
 		}
 
-		// reindexing GrowthCurveSegment field
-		if parameterDB.GrowthCurveSegmentID.Int64 != 0 {
-			parameterDB.GrowthCurveSegmentID.Int64 = int64(BackRepoBezierid_atBckpTime_newID[uint(parameterDB.GrowthCurveSegmentID.Int64)])
-			parameterDB.GrowthCurveSegmentID.Valid = true
+		// reindexing GrowthCurveSeed field
+		if parameterDB.GrowthCurveSeedID.Int64 != 0 {
+			parameterDB.GrowthCurveSeedID.Int64 = int64(BackRepoBezierid_atBckpTime_newID[uint(parameterDB.GrowthCurveSeedID.Int64)])
+			parameterDB.GrowthCurveSeedID.Valid = true
 		}
 
 		// reindexing GrowthCurve field
@@ -2114,6 +2806,120 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.GrowthCurveStackID.Int64 != 0 {
 			parameterDB.GrowthCurveStackID.Int64 = int64(BackRepoBezierGridStackid_atBckpTime_newID[uint(parameterDB.GrowthCurveStackID.Int64)])
 			parameterDB.GrowthCurveStackID.Valid = true
+		}
+
+		// reindexing SpiralRhombusGridSeed field
+		if parameterDB.SpiralRhombusGridSeedID.Int64 != 0 {
+			parameterDB.SpiralRhombusGridSeedID.Int64 = int64(BackRepoSpiralRhombusid_atBckpTime_newID[uint(parameterDB.SpiralRhombusGridSeedID.Int64)])
+			parameterDB.SpiralRhombusGridSeedID.Valid = true
+		}
+
+		// reindexing SpiralRhombusGrid field
+		if parameterDB.SpiralRhombusGridID.Int64 != 0 {
+			parameterDB.SpiralRhombusGridID.Int64 = int64(BackRepoSpiralRhombusGridid_atBckpTime_newID[uint(parameterDB.SpiralRhombusGridID.Int64)])
+			parameterDB.SpiralRhombusGridID.Valid = true
+		}
+
+		// reindexing SpiralCircleSeed field
+		if parameterDB.SpiralCircleSeedID.Int64 != 0 {
+			parameterDB.SpiralCircleSeedID.Int64 = int64(BackRepoSpiralCircleid_atBckpTime_newID[uint(parameterDB.SpiralCircleSeedID.Int64)])
+			parameterDB.SpiralCircleSeedID.Valid = true
+		}
+
+		// reindexing SpiralCircleGrid field
+		if parameterDB.SpiralCircleGridID.Int64 != 0 {
+			parameterDB.SpiralCircleGridID.Int64 = int64(BackRepoSpiralCircleGridid_atBckpTime_newID[uint(parameterDB.SpiralCircleGridID.Int64)])
+			parameterDB.SpiralCircleGridID.Valid = true
+		}
+
+		// reindexing SpiralCircleFullGrid field
+		if parameterDB.SpiralCircleFullGridID.Int64 != 0 {
+			parameterDB.SpiralCircleFullGridID.Int64 = int64(BackRepoSpiralCircleGridid_atBckpTime_newID[uint(parameterDB.SpiralCircleFullGridID.Int64)])
+			parameterDB.SpiralCircleFullGridID.Valid = true
+		}
+
+		// reindexing SpiralConstructionOuterLineSeed field
+		if parameterDB.SpiralConstructionOuterLineSeedID.Int64 != 0 {
+			parameterDB.SpiralConstructionOuterLineSeedID.Int64 = int64(BackRepoSpiralLineid_atBckpTime_newID[uint(parameterDB.SpiralConstructionOuterLineSeedID.Int64)])
+			parameterDB.SpiralConstructionOuterLineSeedID.Valid = true
+		}
+
+		// reindexing SpiralConstructionInnerLineSeed field
+		if parameterDB.SpiralConstructionInnerLineSeedID.Int64 != 0 {
+			parameterDB.SpiralConstructionInnerLineSeedID.Int64 = int64(BackRepoSpiralLineid_atBckpTime_newID[uint(parameterDB.SpiralConstructionInnerLineSeedID.Int64)])
+			parameterDB.SpiralConstructionInnerLineSeedID.Valid = true
+		}
+
+		// reindexing SpiralConstructionOuterLineGrid field
+		if parameterDB.SpiralConstructionOuterLineGridID.Int64 != 0 {
+			parameterDB.SpiralConstructionOuterLineGridID.Int64 = int64(BackRepoSpiralLineGridid_atBckpTime_newID[uint(parameterDB.SpiralConstructionOuterLineGridID.Int64)])
+			parameterDB.SpiralConstructionOuterLineGridID.Valid = true
+		}
+
+		// reindexing SpiralConstructionInnerLineGrid field
+		if parameterDB.SpiralConstructionInnerLineGridID.Int64 != 0 {
+			parameterDB.SpiralConstructionInnerLineGridID.Int64 = int64(BackRepoSpiralLineGridid_atBckpTime_newID[uint(parameterDB.SpiralConstructionInnerLineGridID.Int64)])
+			parameterDB.SpiralConstructionInnerLineGridID.Valid = true
+		}
+
+		// reindexing SpiralConstructionCircleGrid field
+		if parameterDB.SpiralConstructionCircleGridID.Int64 != 0 {
+			parameterDB.SpiralConstructionCircleGridID.Int64 = int64(BackRepoSpiralCircleGridid_atBckpTime_newID[uint(parameterDB.SpiralConstructionCircleGridID.Int64)])
+			parameterDB.SpiralConstructionCircleGridID.Valid = true
+		}
+
+		// reindexing SpiralConstructionOuterLineFullGrid field
+		if parameterDB.SpiralConstructionOuterLineFullGridID.Int64 != 0 {
+			parameterDB.SpiralConstructionOuterLineFullGridID.Int64 = int64(BackRepoSpiralLineGridid_atBckpTime_newID[uint(parameterDB.SpiralConstructionOuterLineFullGridID.Int64)])
+			parameterDB.SpiralConstructionOuterLineFullGridID.Valid = true
+		}
+
+		// reindexing SpiralBezierSeed field
+		if parameterDB.SpiralBezierSeedID.Int64 != 0 {
+			parameterDB.SpiralBezierSeedID.Int64 = int64(BackRepoSpiralBezierid_atBckpTime_newID[uint(parameterDB.SpiralBezierSeedID.Int64)])
+			parameterDB.SpiralBezierSeedID.Valid = true
+		}
+
+		// reindexing SpiralBezierGrid field
+		if parameterDB.SpiralBezierGridID.Int64 != 0 {
+			parameterDB.SpiralBezierGridID.Int64 = int64(BackRepoSpiralBezierGridid_atBckpTime_newID[uint(parameterDB.SpiralBezierGridID.Int64)])
+			parameterDB.SpiralBezierGridID.Valid = true
+		}
+
+		// reindexing SpiralBezierFullGrid field
+		if parameterDB.SpiralBezierFullGridID.Int64 != 0 {
+			parameterDB.SpiralBezierFullGridID.Int64 = int64(BackRepoSpiralBezierGridid_atBckpTime_newID[uint(parameterDB.SpiralBezierFullGridID.Int64)])
+			parameterDB.SpiralBezierFullGridID.Valid = true
+		}
+
+		// reindexing FrontCurveStack field
+		if parameterDB.FrontCurveStackID.Int64 != 0 {
+			parameterDB.FrontCurveStackID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.FrontCurveStackID.Int64)])
+			parameterDB.FrontCurveStackID.Valid = true
+		}
+
+		// reindexing HourCurve field
+		if parameterDB.HourCurveID.Int64 != 0 {
+			parameterDB.HourCurveID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.HourCurveID.Int64)])
+			parameterDB.HourCurveID.Valid = true
+		}
+
+		// reindexing HourMarker field
+		if parameterDB.HourMarkerID.Int64 != 0 {
+			parameterDB.HourMarkerID.Int64 = int64(BackRepoSpiralCircleid_atBckpTime_newID[uint(parameterDB.HourMarkerID.Int64)])
+			parameterDB.HourMarkerID.Valid = true
+		}
+
+		// reindexing MinuteCurve field
+		if parameterDB.MinuteCurveID.Int64 != 0 {
+			parameterDB.MinuteCurveID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.MinuteCurveID.Int64)])
+			parameterDB.MinuteCurveID.Valid = true
+		}
+
+		// reindexing MinuteMarker field
+		if parameterDB.MinuteMarkerID.Int64 != 0 {
+			parameterDB.MinuteMarkerID.Int64 = int64(BackRepoSpiralCircleid_atBckpTime_newID[uint(parameterDB.MinuteMarkerID.Int64)])
+			parameterDB.MinuteMarkerID.Valid = true
 		}
 
 		// reindexing Fkey field
@@ -2192,6 +2998,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.VerticalAxisID.Int64 != 0 {
 			parameterDB.VerticalAxisID.Int64 = int64(BackRepoVerticalAxisid_atBckpTime_newID[uint(parameterDB.VerticalAxisID.Int64)])
 			parameterDB.VerticalAxisID.Valid = true
+		}
+
+		// reindexing SpiralOrigin field
+		if parameterDB.SpiralOriginID.Int64 != 0 {
+			parameterDB.SpiralOriginID.Int64 = int64(BackRepoSpiralOriginid_atBckpTime_newID[uint(parameterDB.SpiralOriginID.Int64)])
+			parameterDB.SpiralOriginID.Valid = true
 		}
 
 		// update databse with new index encoding

@@ -15,10 +15,12 @@ export class AxisAPI {
 	// insertion point for basic fields declarations
 	Name: string = ""
 	IsDisplayed: boolean = false
-	Angle: number = 0
+	AngleDegree: number = 0
 	Length: number = 0
 	CenterX: number = 0
 	CenterY: number = 0
+	EndX: number = 0
+	EndY: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""

@@ -79,8 +79,8 @@ type RhombusDB struct {
 	// Declation for basic field rhombusDB.SideLength
 	SideLength_Data sql.NullFloat64
 
-	// Declation for basic field rhombusDB.Angle
-	Angle_Data sql.NullFloat64
+	// Declation for basic field rhombusDB.AngleDegree
+	AngleDegree_Data sql.NullFloat64
 
 	// Declation for basic field rhombusDB.InsideAngle
 	InsideAngle_Data sql.NullFloat64
@@ -141,7 +141,7 @@ type RhombusWOP struct {
 
 	SideLength float64 `xlsx:"5"`
 
-	Angle float64 `xlsx:"6"`
+	AngleDegree float64 `xlsx:"6"`
 
 	InsideAngle float64 `xlsx:"7"`
 
@@ -171,7 +171,7 @@ var Rhombus_Fields = []string{
 	"CenterX",
 	"CenterY",
 	"SideLength",
-	"Angle",
+	"AngleDegree",
 	"InsideAngle",
 	"Color",
 	"FillOpacity",
@@ -479,8 +479,8 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombus(rhombus *models.Rhombus) 
 	rhombusDB.SideLength_Data.Float64 = rhombus.SideLength
 	rhombusDB.SideLength_Data.Valid = true
 
-	rhombusDB.Angle_Data.Float64 = rhombus.Angle
-	rhombusDB.Angle_Data.Valid = true
+	rhombusDB.AngleDegree_Data.Float64 = rhombus.AngleDegree
+	rhombusDB.AngleDegree_Data.Valid = true
 
 	rhombusDB.InsideAngle_Data.Float64 = rhombus.InsideAngle
 	rhombusDB.InsideAngle_Data.Valid = true
@@ -529,8 +529,8 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombus_WOP(rhombus *models.Rhomb
 	rhombusDB.SideLength_Data.Float64 = rhombus.SideLength
 	rhombusDB.SideLength_Data.Valid = true
 
-	rhombusDB.Angle_Data.Float64 = rhombus.Angle
-	rhombusDB.Angle_Data.Valid = true
+	rhombusDB.AngleDegree_Data.Float64 = rhombus.AngleDegree
+	rhombusDB.AngleDegree_Data.Valid = true
 
 	rhombusDB.InsideAngle_Data.Float64 = rhombus.InsideAngle
 	rhombusDB.InsideAngle_Data.Valid = true
@@ -579,8 +579,8 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsFromRhombusWOP(rhombus *RhombusWOP) {
 	rhombusDB.SideLength_Data.Float64 = rhombus.SideLength
 	rhombusDB.SideLength_Data.Valid = true
 
-	rhombusDB.Angle_Data.Float64 = rhombus.Angle
-	rhombusDB.Angle_Data.Valid = true
+	rhombusDB.AngleDegree_Data.Float64 = rhombus.AngleDegree
+	rhombusDB.AngleDegree_Data.Valid = true
 
 	rhombusDB.InsideAngle_Data.Float64 = rhombus.InsideAngle
 	rhombusDB.InsideAngle_Data.Valid = true
@@ -618,7 +618,7 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsToRhombus(rhombus *models.Rhombus) {
 	rhombus.CenterX = rhombusDB.CenterX_Data.Float64
 	rhombus.CenterY = rhombusDB.CenterY_Data.Float64
 	rhombus.SideLength = rhombusDB.SideLength_Data.Float64
-	rhombus.Angle = rhombusDB.Angle_Data.Float64
+	rhombus.AngleDegree = rhombusDB.AngleDegree_Data.Float64
 	rhombus.InsideAngle = rhombusDB.InsideAngle_Data.Float64
 	rhombus.Color = rhombusDB.Color_Data.String
 	rhombus.FillOpacity = rhombusDB.FillOpacity_Data.Float64
@@ -638,7 +638,7 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsToRhombus_WOP(rhombus *models.Rhombus
 	rhombus.CenterX = rhombusDB.CenterX_Data.Float64
 	rhombus.CenterY = rhombusDB.CenterY_Data.Float64
 	rhombus.SideLength = rhombusDB.SideLength_Data.Float64
-	rhombus.Angle = rhombusDB.Angle_Data.Float64
+	rhombus.AngleDegree = rhombusDB.AngleDegree_Data.Float64
 	rhombus.InsideAngle = rhombusDB.InsideAngle_Data.Float64
 	rhombus.Color = rhombusDB.Color_Data.String
 	rhombus.FillOpacity = rhombusDB.FillOpacity_Data.Float64
@@ -659,7 +659,7 @@ func (rhombusDB *RhombusDB) CopyBasicFieldsToRhombusWOP(rhombus *RhombusWOP) {
 	rhombus.CenterX = rhombusDB.CenterX_Data.Float64
 	rhombus.CenterY = rhombusDB.CenterY_Data.Float64
 	rhombus.SideLength = rhombusDB.SideLength_Data.Float64
-	rhombus.Angle = rhombusDB.Angle_Data.Float64
+	rhombus.AngleDegree = rhombusDB.AngleDegree_Data.Float64
 	rhombus.InsideAngle = rhombusDB.InsideAngle_Data.Float64
 	rhombus.Color = rhombusDB.Color_Data.String
 	rhombus.FillOpacity = rhombusDB.FillOpacity_Data.Float64

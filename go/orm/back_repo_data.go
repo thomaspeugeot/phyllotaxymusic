@@ -18,6 +18,10 @@ type BackRepoData struct {
 
 	CircleGridAPIs []*CircleGridAPI
 
+	FrontCurveAPIs []*FrontCurveAPI
+
+	FrontCurveStackAPIs []*FrontCurveStackAPI
+
 	HorizontalAxisAPIs []*HorizontalAxisAPI
 
 	KeyAPIs []*KeyAPI
@@ -31,6 +35,24 @@ type BackRepoData struct {
 	RhombusGridAPIs []*RhombusGridAPI
 
 	ShapeCategoryAPIs []*ShapeCategoryAPI
+
+	SpiralBezierAPIs []*SpiralBezierAPI
+
+	SpiralBezierGridAPIs []*SpiralBezierGridAPI
+
+	SpiralCircleAPIs []*SpiralCircleAPI
+
+	SpiralCircleGridAPIs []*SpiralCircleGridAPI
+
+	SpiralLineAPIs []*SpiralLineAPI
+
+	SpiralLineGridAPIs []*SpiralLineGridAPI
+
+	SpiralOriginAPIs []*SpiralOriginAPI
+
+	SpiralRhombusAPIs []*SpiralRhombusAPI
+
+	SpiralRhombusGridAPIs []*SpiralRhombusGridAPI
 
 	VerticalAxisAPIs []*VerticalAxisAPI
 }
@@ -107,6 +129,26 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		backRepoData.CircleGridAPIs = append(backRepoData.CircleGridAPIs, &circlegridAPI)
 	}
 
+	for _, frontcurveDB := range backRepo.BackRepoFrontCurve.Map_FrontCurveDBID_FrontCurveDB {
+
+		var frontcurveAPI FrontCurveAPI
+		frontcurveAPI.ID = frontcurveDB.ID
+		frontcurveAPI.FrontCurvePointersEncoding = frontcurveDB.FrontCurvePointersEncoding
+		frontcurveDB.CopyBasicFieldsToFrontCurve_WOP(&frontcurveAPI.FrontCurve_WOP)
+
+		backRepoData.FrontCurveAPIs = append(backRepoData.FrontCurveAPIs, &frontcurveAPI)
+	}
+
+	for _, frontcurvestackDB := range backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackDB {
+
+		var frontcurvestackAPI FrontCurveStackAPI
+		frontcurvestackAPI.ID = frontcurvestackDB.ID
+		frontcurvestackAPI.FrontCurveStackPointersEncoding = frontcurvestackDB.FrontCurveStackPointersEncoding
+		frontcurvestackDB.CopyBasicFieldsToFrontCurveStack_WOP(&frontcurvestackAPI.FrontCurveStack_WOP)
+
+		backRepoData.FrontCurveStackAPIs = append(backRepoData.FrontCurveStackAPIs, &frontcurvestackAPI)
+	}
+
 	for _, horizontalaxisDB := range backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisDB {
 
 		var horizontalaxisAPI HorizontalAxisAPI
@@ -175,6 +217,96 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		shapecategoryDB.CopyBasicFieldsToShapeCategory_WOP(&shapecategoryAPI.ShapeCategory_WOP)
 
 		backRepoData.ShapeCategoryAPIs = append(backRepoData.ShapeCategoryAPIs, &shapecategoryAPI)
+	}
+
+	for _, spiralbezierDB := range backRepo.BackRepoSpiralBezier.Map_SpiralBezierDBID_SpiralBezierDB {
+
+		var spiralbezierAPI SpiralBezierAPI
+		spiralbezierAPI.ID = spiralbezierDB.ID
+		spiralbezierAPI.SpiralBezierPointersEncoding = spiralbezierDB.SpiralBezierPointersEncoding
+		spiralbezierDB.CopyBasicFieldsToSpiralBezier_WOP(&spiralbezierAPI.SpiralBezier_WOP)
+
+		backRepoData.SpiralBezierAPIs = append(backRepoData.SpiralBezierAPIs, &spiralbezierAPI)
+	}
+
+	for _, spiralbeziergridDB := range backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridDB {
+
+		var spiralbeziergridAPI SpiralBezierGridAPI
+		spiralbeziergridAPI.ID = spiralbeziergridDB.ID
+		spiralbeziergridAPI.SpiralBezierGridPointersEncoding = spiralbeziergridDB.SpiralBezierGridPointersEncoding
+		spiralbeziergridDB.CopyBasicFieldsToSpiralBezierGrid_WOP(&spiralbeziergridAPI.SpiralBezierGrid_WOP)
+
+		backRepoData.SpiralBezierGridAPIs = append(backRepoData.SpiralBezierGridAPIs, &spiralbeziergridAPI)
+	}
+
+	for _, spiralcircleDB := range backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCircleDB {
+
+		var spiralcircleAPI SpiralCircleAPI
+		spiralcircleAPI.ID = spiralcircleDB.ID
+		spiralcircleAPI.SpiralCirclePointersEncoding = spiralcircleDB.SpiralCirclePointersEncoding
+		spiralcircleDB.CopyBasicFieldsToSpiralCircle_WOP(&spiralcircleAPI.SpiralCircle_WOP)
+
+		backRepoData.SpiralCircleAPIs = append(backRepoData.SpiralCircleAPIs, &spiralcircleAPI)
+	}
+
+	for _, spiralcirclegridDB := range backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridDB {
+
+		var spiralcirclegridAPI SpiralCircleGridAPI
+		spiralcirclegridAPI.ID = spiralcirclegridDB.ID
+		spiralcirclegridAPI.SpiralCircleGridPointersEncoding = spiralcirclegridDB.SpiralCircleGridPointersEncoding
+		spiralcirclegridDB.CopyBasicFieldsToSpiralCircleGrid_WOP(&spiralcirclegridAPI.SpiralCircleGrid_WOP)
+
+		backRepoData.SpiralCircleGridAPIs = append(backRepoData.SpiralCircleGridAPIs, &spiralcirclegridAPI)
+	}
+
+	for _, spirallineDB := range backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLineDB {
+
+		var spirallineAPI SpiralLineAPI
+		spirallineAPI.ID = spirallineDB.ID
+		spirallineAPI.SpiralLinePointersEncoding = spirallineDB.SpiralLinePointersEncoding
+		spirallineDB.CopyBasicFieldsToSpiralLine_WOP(&spirallineAPI.SpiralLine_WOP)
+
+		backRepoData.SpiralLineAPIs = append(backRepoData.SpiralLineAPIs, &spirallineAPI)
+	}
+
+	for _, spirallinegridDB := range backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridDB {
+
+		var spirallinegridAPI SpiralLineGridAPI
+		spirallinegridAPI.ID = spirallinegridDB.ID
+		spirallinegridAPI.SpiralLineGridPointersEncoding = spirallinegridDB.SpiralLineGridPointersEncoding
+		spirallinegridDB.CopyBasicFieldsToSpiralLineGrid_WOP(&spirallinegridAPI.SpiralLineGrid_WOP)
+
+		backRepoData.SpiralLineGridAPIs = append(backRepoData.SpiralLineGridAPIs, &spirallinegridAPI)
+	}
+
+	for _, spiraloriginDB := range backRepo.BackRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginDB {
+
+		var spiraloriginAPI SpiralOriginAPI
+		spiraloriginAPI.ID = spiraloriginDB.ID
+		spiraloriginAPI.SpiralOriginPointersEncoding = spiraloriginDB.SpiralOriginPointersEncoding
+		spiraloriginDB.CopyBasicFieldsToSpiralOrigin_WOP(&spiraloriginAPI.SpiralOrigin_WOP)
+
+		backRepoData.SpiralOriginAPIs = append(backRepoData.SpiralOriginAPIs, &spiraloriginAPI)
+	}
+
+	for _, spiralrhombusDB := range backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusDB {
+
+		var spiralrhombusAPI SpiralRhombusAPI
+		spiralrhombusAPI.ID = spiralrhombusDB.ID
+		spiralrhombusAPI.SpiralRhombusPointersEncoding = spiralrhombusDB.SpiralRhombusPointersEncoding
+		spiralrhombusDB.CopyBasicFieldsToSpiralRhombus_WOP(&spiralrhombusAPI.SpiralRhombus_WOP)
+
+		backRepoData.SpiralRhombusAPIs = append(backRepoData.SpiralRhombusAPIs, &spiralrhombusAPI)
+	}
+
+	for _, spiralrhombusgridDB := range backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridDB {
+
+		var spiralrhombusgridAPI SpiralRhombusGridAPI
+		spiralrhombusgridAPI.ID = spiralrhombusgridDB.ID
+		spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding = spiralrhombusgridDB.SpiralRhombusGridPointersEncoding
+		spiralrhombusgridDB.CopyBasicFieldsToSpiralRhombusGrid_WOP(&spiralrhombusgridAPI.SpiralRhombusGrid_WOP)
+
+		backRepoData.SpiralRhombusGridAPIs = append(backRepoData.SpiralRhombusGridAPIs, &spiralrhombusgridAPI)
 	}
 
 	for _, verticalaxisDB := range backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisDB {

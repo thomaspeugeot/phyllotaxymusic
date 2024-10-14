@@ -10,6 +10,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 
 	p.Shapes = append(p.Shapes, p.HorizontalAxis)
 	p.Shapes = append(p.Shapes, p.VerticalAxis)
+	p.Shapes = append(p.Shapes, p.SpiralOrigin)
 
 	p.ComputeInitialRhombus()
 	p.Shapes = append(p.Shapes, p.InitialRhombus)
@@ -45,9 +46,11 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.NextCircle)
 
 	p.ComputeGrowingRhombusGrid()
+	p.Shapes = append(p.Shapes, p.GrowingRhombusGridSeed)
 	p.Shapes = append(p.Shapes, p.GrowingRhombusGrid)
 
 	p.ComputeGrowingCircleGrid()
+	p.Shapes = append(p.Shapes, p.GrowingCircleGridSeed)
 	p.Shapes = append(p.Shapes, p.GrowingCircleGrid)
 
 	p.ComputeGrowingCircleGridLeft()
@@ -66,10 +69,16 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.ConstructionCircleGrid)
 
 	p.ComputeGrowthCurveSegment()
-	p.Shapes = append(p.Shapes, p.GrowthCurveSegment)
+	p.Shapes = append(p.Shapes, p.GrowthCurveSeed)
 
 	p.ComputeGrowthCurve()
 	p.Shapes = append(p.Shapes, p.GrowthCurve)
+
+	p.ComputeSpiralRhombusSeed()
+	p.Shapes = append(p.Shapes, p.SpiralRhombusGridSeed)
+
+	p.ComputeSpiralRhombusGrid()
+	p.Shapes = append(p.Shapes, p.SpiralRhombusGrid)
 
 	p.GrowthCurveShiftedRight.Move(p.GrowthCurveShiftedRightSeed, p.GrowthCurve,
 		p.RotatedAxis.Length, 0)
@@ -101,6 +110,45 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 		}
 	}
 	p.Shapes = append(p.Shapes, p.GrowthCurveStack)
+
+	p.ComputeSpiralCircleSeed()
+	p.Shapes = append(p.Shapes, p.SpiralCircleSeed)
+	p.ComputeSpiralCircleGrid()
+	p.Shapes = append(p.Shapes, p.SpiralCircleGrid)
+	p.ComputeSpiralCircleFullGrid()
+	p.Shapes = append(p.Shapes, p.SpiralCircleFullGrid)
+	p.computeSpiralConstructionOuterLineSeed()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineSeed)
+	p.computeSpiralConstructionInnerLineSeed()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionInnerLineSeed)
+
+	p.computeSpiralConstructionOuterLineGrid()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineGrid)
+	p.computeSpiralConstructionInnerLineGrid()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionInnerLineGrid)
+
+	p.computeSpiralConstructionOuterLineFullGrid()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionOuterLineFullGrid)
+
+	p.ComputeSpiralConstructionCircleGrid()
+	p.Shapes = append(p.Shapes, p.SpiralConstructionCircleGrid)
+	p.ComputeSpiralBezierSeed()
+	p.Shapes = append(p.Shapes, p.SpiralBezierSeed)
+	p.ComputeSpiralBezierGrid()
+	p.Shapes = append(p.Shapes, p.SpiralBezierGrid)
+	p.ComputeSpiralBezierFullGrid()
+	p.Shapes = append(p.Shapes, p.SpiralBezierFullGrid)
+
+	p.ComputeFrontCurveStacks(stage)
+	p.Shapes = append(p.Shapes, p.FrontCurveStack)
+	p.Shapes = append(p.Shapes, p.HourCurve)
+	p.Shapes = append(p.Shapes, p.MinuteCurve)
+	p.Shapes = append(p.Shapes, p.HourMarker)
+	p.Shapes = append(p.Shapes, p.MinuteMarker)
+
+	//
+	// MUSIC MAESTRO
+	//
 
 	p.ComputeFKey()
 	p.Shapes = append(p.Shapes, p.Fkey)

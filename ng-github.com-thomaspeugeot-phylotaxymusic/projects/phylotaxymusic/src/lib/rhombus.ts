@@ -23,7 +23,7 @@ export class Rhombus {
 	CenterX: number = 0
 	CenterY: number = 0
 	SideLength: number = 0
-	Angle: number = 0
+	AngleDegree: number = 0
 	InsideAngle: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
@@ -51,7 +51,7 @@ export function CopyRhombusToRhombusAPI(rhombus: Rhombus, rhombusAPI: RhombusAPI
 	rhombusAPI.CenterX = rhombus.CenterX
 	rhombusAPI.CenterY = rhombus.CenterY
 	rhombusAPI.SideLength = rhombus.SideLength
-	rhombusAPI.Angle = rhombus.Angle
+	rhombusAPI.AngleDegree = rhombus.AngleDegree
 	rhombusAPI.InsideAngle = rhombus.InsideAngle
 	rhombusAPI.Color = rhombus.Color
 	rhombusAPI.FillOpacity = rhombus.FillOpacity
@@ -90,7 +90,7 @@ export function CopyRhombusAPIToRhombus(rhombusAPI: RhombusAPI, rhombus: Rhombus
 	rhombus.CenterX = rhombusAPI.CenterX
 	rhombus.CenterY = rhombusAPI.CenterY
 	rhombus.SideLength = rhombusAPI.SideLength
-	rhombus.Angle = rhombusAPI.Angle
+	rhombus.AngleDegree = rhombusAPI.AngleDegree
 	rhombus.InsideAngle = rhombusAPI.InsideAngle
 	rhombus.Color = rhombusAPI.Color
 	rhombus.FillOpacity = rhombusAPI.FillOpacity
