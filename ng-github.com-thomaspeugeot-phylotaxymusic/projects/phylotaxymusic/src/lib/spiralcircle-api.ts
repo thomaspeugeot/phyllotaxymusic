@@ -29,6 +29,7 @@ export class SpiralCircleAPI {
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
 	ShowName: boolean = false
+	Path: string = ""
 
 	// insertion point for other decls
 

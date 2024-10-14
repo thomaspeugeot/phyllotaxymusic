@@ -636,7 +636,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Z = 7
 	__Parameter__000000_Reference.ShiftToNearestCircle = 2
 	__Parameter__000000_Reference.InsideAngle = 120.000000
-	__Parameter__000000_Reference.SideLength = 170.000000
+	__Parameter__000000_Reference.SideLength = 162.000000
 	__Parameter__000000_Reference.StackWidth = 1
 	__Parameter__000000_Reference.NbShitRight = 2
 	__Parameter__000000_Reference.StackHeight = 2
@@ -816,13 +816,14 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Construction_Circle_Spiral.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000000_Construction_Circle_Spiral.Transform = ``
 	__SpiralCircle__000000_Construction_Circle_Spiral.ShowName = false
+	__SpiralCircle__000000_Construction_Circle_Spiral.Path = ``
 
 	__SpiralCircle__000001_Hour_Marker.Name = `Hour Marker`
 	__SpiralCircle__000001_Hour_Marker.IsDisplayed = true
 	__SpiralCircle__000001_Hour_Marker.CenterX = 0.000000
-	__SpiralCircle__000001_Hour_Marker.CenterY = 222.870000
+	__SpiralCircle__000001_Hour_Marker.CenterY = 207.400000
 	__SpiralCircle__000001_Hour_Marker.HasBespokeRadius = true
-	__SpiralCircle__000001_Hour_Marker.BespopkeRadius = 24.770000
+	__SpiralCircle__000001_Hour_Marker.BespopkeRadius = 35.750000
 	__SpiralCircle__000001_Hour_Marker.Pitch = 0
 	__SpiralCircle__000001_Hour_Marker.Color = ``
 	__SpiralCircle__000001_Hour_Marker.FillOpacity = 0.000000
@@ -833,6 +834,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000001_Hour_Marker.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000001_Hour_Marker.Transform = ``
 	__SpiralCircle__000001_Hour_Marker.ShowName = false
+	__SpiralCircle__000001_Hour_Marker.Path = `M 535.750000 292.600000 A 35.750000 35.750000 0 1 0 464.250000 292.600000 A 35.750000 35.750000 0 1 0 535.750000 292.600000 Z`
 
 	__SpiralCircle__000002_Minute_Marker.Name = `Minute Marker`
 	__SpiralCircle__000002_Minute_Marker.IsDisplayed = true
@@ -850,6 +852,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000002_Minute_Marker.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000002_Minute_Marker.Transform = ``
 	__SpiralCircle__000002_Minute_Marker.ShowName = false
+	__SpiralCircle__000002_Minute_Marker.Path = `M 519.660000 215.930000 A 19.660000 19.660000 0 1 0 480.340000 215.930000 A 19.660000 19.660000 0 1 0 519.660000 215.930000 Z`
 
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.Name = `Brute Spiral Bezier Circle Grid`
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.IsDisplayed = true

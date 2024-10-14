@@ -2,13 +2,14 @@ package models
 
 import (
 	"fmt"
-	"log"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
 type SpiralCircle struct {
 	Circle
+
+	Path string
 }
 
 func (spiralCircle *SpiralCircle) Draw(
@@ -47,7 +48,7 @@ func (spiralCircle *SpiralCircle) Draw(
 		R, R, CX-R, CY, // First arc to the leftmost point
 		R, R, xStart, yStart) // Second arc back to the starting point
 
-	log.Println(pathData)
+	spiralCircle.Path = pathData
 
 	spiralCircle.Presentation.CopyTo(&svgCircle.Presentation)
 

@@ -2293,6 +2293,8 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralcircle_.Transform), formDiv)
 		case "ShowName":
 			FormDivBasicFieldToField(&(spiralcircle_.ShowName), formDiv)
+		case "Path":
+			FormDivBasicFieldToField(&(spiralcircle_.Path), formDiv)
 		case "FrontCurveStack:SpiralCircles":
 			// we need to retrieve the field owner before the change
 			var pastFrontCurveStackOwner *models.FrontCurveStack

@@ -723,6 +723,8 @@ func FillUpForm[T models.Gongstruct](
 			true, true, 600, true, 400)
 		BasicFieldtoForm("ShowName", instanceWithInferedType.ShowName, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("Path", instanceWithInferedType.Path, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		{
 			var rf models.ReverseField
 			_ = rf

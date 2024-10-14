@@ -519,6 +519,7 @@ type SpiralCircle_WOP struct {
 	StrokeDashArrayWhenSelected string
 	Transform string
 	ShowName bool
+	Path string
 }
 
 func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
@@ -539,6 +540,7 @@ func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
 	to.Transform = from.Transform
 	to.ShowName = from.ShowName
+	to.Path = from.Path
 }
 
 type SpiralCircleGrid_WOP struct {

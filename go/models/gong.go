@@ -5050,7 +5050,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case SpiralBezierGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralBeziers"}
 	case SpiralCircle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName", "Path"}
 	case SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case SpiralLine:
@@ -5245,7 +5245,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *SpiralBezierGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralBeziers"}
 	case *SpiralCircle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName", "Path"}
 	case *SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case *SpiralLine:
@@ -6116,6 +6116,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = inferedInstance.Transform
 		case "ShowName":
 			res = fmt.Sprintf("%t", inferedInstance.ShowName)
+		case "Path":
+			res = inferedInstance.Path
 		}
 	case *SpiralCircleGrid:
 		switch fieldName {
@@ -7176,6 +7178,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = inferedInstance.Transform
 		case "ShowName":
 			res = fmt.Sprintf("%t", inferedInstance.ShowName)
+		case "Path":
+			res = inferedInstance.Path
 		}
 	case SpiralCircleGrid:
 		switch fieldName {
