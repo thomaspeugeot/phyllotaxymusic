@@ -154,11 +154,11 @@ func _(stage *models.StageStruct) {
 	__Axis__000000_Construction_Axis.Name = `Construction Axis`
 	__Axis__000000_Construction_Axis.IsDisplayed = false
 	__Axis__000000_Construction_Axis.AngleDegree = 100.893395
-	__Axis__000000_Construction_Axis.Length = 162.000000
+	__Axis__000000_Construction_Axis.Length = 266.000000
 	__Axis__000000_Construction_Axis.CenterX = 0.000000
 	__Axis__000000_Construction_Axis.CenterY = 0.000000
-	__Axis__000000_Construction_Axis.EndX = -30.615122
-	__Axis__000000_Construction_Axis.EndY = 159.080842
+	__Axis__000000_Construction_Axis.EndX = -50.269275
+	__Axis__000000_Construction_Axis.EndY = 261.206815
 	__Axis__000000_Construction_Axis.Color = ``
 	__Axis__000000_Construction_Axis.FillOpacity = 0.000000
 	__Axis__000000_Construction_Axis.Stroke = `blue`
@@ -171,7 +171,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000001_Initial_Axis.Name = `Initial Axis`
 	__Axis__000001_Initial_Axis.IsDisplayed = false
 	__Axis__000001_Initial_Axis.AngleDegree = 79.106605
-	__Axis__000001_Initial_Axis.Length = 428.611712
+	__Axis__000001_Initial_Axis.Length = 703.769849
 	__Axis__000001_Initial_Axis.CenterX = 0.000000
 	__Axis__000001_Initial_Axis.CenterY = 0.000000
 	__Axis__000001_Initial_Axis.EndX = 0.000000
@@ -222,7 +222,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000004_Rotated_Axis.Name = `Rotated Axis`
 	__Axis__000004_Rotated_Axis.IsDisplayed = false
 	__Axis__000004_Rotated_Axis.AngleDegree = 0.000000
-	__Axis__000004_Rotated_Axis.Length = 428.611712
+	__Axis__000004_Rotated_Axis.Length = 703.769849
 	__Axis__000004_Rotated_Axis.CenterX = 0.000000
 	__Axis__000004_Rotated_Axis.CenterY = 0.000000
 	__Axis__000004_Rotated_Axis.EndX = 0.000000
@@ -342,14 +342,14 @@ func _(stage *models.StageStruct) {
 
 	__Bezier__000005_Growth_Curve_Seed.Name = `Growth Curve Seed`
 	__Bezier__000005_Growth_Curve_Seed.IsDisplayed = false
-	__Bezier__000005_Growth_Curve_Seed.StartX = -15.307561
-	__Bezier__000005_Growth_Curve_Seed.StartY = 79.540421
-	__Bezier__000005_Growth_Curve_Seed.ControlPointStartX = 35.598308
-	__Bezier__000005_Growth_Curve_Seed.ControlPointStartY = 89.337260
-	__Bezier__000005_Growth_Curve_Seed.EndX = 107.152928
-	__Bezier__000005_Growth_Curve_Seed.EndY = 185.594316
-	__Bezier__000005_Growth_Curve_Seed.ControlPointEndX = 56.247059
-	__Bezier__000005_Growth_Curve_Seed.ControlPointEndY = 175.797477
+	__Bezier__000005_Growth_Curve_Seed.StartX = -25.134637
+	__Bezier__000005_Growth_Curve_Seed.StartY = 130.603407
+	__Bezier__000005_Growth_Curve_Seed.ControlPointStartX = 58.451543
+	__Bezier__000005_Growth_Curve_Seed.ControlPointStartY = 146.689575
+	__Bezier__000005_Growth_Curve_Seed.EndX = 175.942462
+	__Bezier__000005_Growth_Curve_Seed.EndY = 304.741284
+	__Bezier__000005_Growth_Curve_Seed.ControlPointEndX = 92.356282
+	__Bezier__000005_Growth_Curve_Seed.ControlPointEndY = 288.655116
 	__Bezier__000005_Growth_Curve_Seed.Color = ``
 	__Bezier__000005_Growth_Curve_Seed.FillOpacity = 0.000000
 	__Bezier__000005_Growth_Curve_Seed.Stroke = `grey`
@@ -405,8 +405,8 @@ func _(stage *models.StageStruct) {
 
 	__Circle__000001_Construction_Circle.Name = `Construction Circle`
 	__Circle__000001_Construction_Circle.IsDisplayed = false
-	__Circle__000001_Construction_Circle.CenterX = -15.307561
-	__Circle__000001_Construction_Circle.CenterY = 79.540421
+	__Circle__000001_Construction_Circle.CenterX = -25.134637
+	__Circle__000001_Construction_Circle.CenterY = 130.603407
 	__Circle__000001_Construction_Circle.HasBespokeRadius = true
 	__Circle__000001_Construction_Circle.BespopkeRadius = 20.000000
 	__Circle__000001_Construction_Circle.Pitch = 0
@@ -473,8 +473,8 @@ func _(stage *models.StageStruct) {
 
 	__Circle__000005_Rotated_Next_Circle.Name = `Rotated Next Circle`
 	__Circle__000005_Rotated_Next_Circle.IsDisplayed = false
-	__Circle__000005_Rotated_Next_Circle.CenterX = 275.536101
-	__Circle__000005_Rotated_Next_Circle.CenterY = 53.026947
+	__Circle__000005_Rotated_Next_Circle.CenterX = 452.423474
+	__Circle__000005_Rotated_Next_Circle.CenterY = 87.068938
 	__Circle__000005_Rotated_Next_Circle.HasBespokeRadius = false
 	__Circle__000005_Rotated_Next_Circle.BespopkeRadius = 0.000000
 	__Circle__000005_Rotated_Next_Circle.Pitch = 0
@@ -516,16 +516,16 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
 
 	__FrontCurve__000000_Non_Rotated_0_.Name = `Non Rotated 0 `
-	__FrontCurve__000000_Non_Rotated_0_.Path = `M634.40 530.68 C636.90 523.30 638.63 517.47 640.57 510.53 C642.52 503.60 644.40 496.54 646.07 489.05 C647.75 481.57 649.39 473.84 650.64 465.62 C651.89 457.40 653.06 448.78 653.55 439.74 C654.04 430.69 654.31 421.11 653.60 411.32 C652.88 401.53 651.67 391.18 649.24 380.98 C646.82 370.79 643.56 360.17 639.04 350.15 C634.52 340.13 628.88 330.01 622.14 320.85 C615.40 311.70 607.40 302.86 598.60 295.25 C589.81 287.63 579.81 280.72 569.35 275.16 C558.90 269.60 547.45 265.06 535.89 261.88 C524.33 258.70 513.57 256.48 500.00 256.09 C486.43 255.69 469.28 256.53 454.50 259.53 C439.72 262.52 424.89 267.64 411.33 274.08 C397.78 280.52 384.74 288.90 373.18 298.17 C361.62 307.43 351.03 318.33 341.98 329.69 C332.92 341.05 325.15 353.64 318.84 366.30 C312.54 378.97 307.69 392.43 304.13 405.67 C300.57 418.91 298.50 432.54 297.49 445.74 C296.49 458.94 296.88 472.16 298.09 484.87 C299.31 497.58 301.75 510.03 304.80 521.99 C307.86 533.95 311.91 545.49 316.43 556.62 C320.96 567.76 326.24 578.41 331.96 588.81 C337.69 599.21 343.59 609.60 350.76 619.02 C357.92 628.43 365.88 637.77 374.95 645.31 C384.02 652.85 394.52 659.32 405.16 664.26 C415.80 669.20 427.43 672.77 438.78 674.94 C450.14 677.12 462.00 677.79 473.28 677.30 C484.55 676.81 495.89 674.84 506.44 672.00 C516.99 669.16 527.21 664.99 536.58 660.25 C545.94 655.51 554.70 649.69 562.63 643.56 C570.57 637.43 577.72 630.50 584.19 623.48 C590.65 616.45 596.28 608.92 601.40 601.40 C606.52 593.88 610.88 586.11 614.91 578.34 C618.94 570.58 622.35 562.74 625.60 554.80 C628.85 546.85 631.91 538.05 634.40 530.68 Z`
+	__FrontCurve__000000_Non_Rotated_0_.Path = `M720.69 550.37 C724.79 538.26 727.62 528.69 730.82 517.30 C734.01 505.91 737.09 494.32 739.85 482.03 C742.61 469.73 745.30 457.04 747.35 443.54 C749.39 430.05 751.32 415.91 752.13 401.05 C752.94 386.19 753.38 370.47 752.20 354.39 C751.02 338.31 749.04 321.32 745.05 304.58 C741.07 287.84 735.71 270.41 728.30 253.95 C720.88 237.50 711.62 220.87 700.55 205.85 C689.48 190.82 676.35 176.30 661.91 163.80 C647.46 151.29 631.04 139.95 613.88 130.82 C596.71 121.69 577.91 114.24 558.93 109.01 C539.95 103.79 522.27 100.14 500.00 99.50 C477.73 98.85 449.56 100.22 425.29 105.15 C401.02 110.07 376.66 118.47 354.41 129.04 C332.15 139.62 310.74 153.37 291.76 168.59 C272.78 183.81 255.40 201.71 240.53 220.36 C225.66 239.00 212.91 259.68 202.55 280.47 C192.19 301.26 184.23 323.38 178.38 345.12 C172.54 366.86 169.14 389.23 167.49 410.90 C165.84 432.58 166.47 454.29 168.48 475.16 C170.48 496.02 174.47 516.48 179.49 536.11 C184.51 555.75 191.15 574.69 198.59 592.97 C206.02 611.26 214.70 628.75 224.09 645.82 C233.48 662.90 243.19 679.96 254.95 695.42 C266.71 710.88 279.78 726.22 294.67 738.60 C309.56 750.98 326.81 761.60 344.28 769.71 C361.75 777.82 380.85 783.68 399.49 787.25 C418.13 790.82 437.61 791.93 456.12 791.12 C474.63 790.32 493.24 787.09 510.57 782.42 C527.89 777.76 544.68 770.92 560.06 763.13 C575.44 755.35 589.81 745.78 602.84 735.72 C615.87 725.65 627.62 714.28 638.23 702.75 C648.84 691.21 658.09 678.85 666.50 666.50 C674.91 654.15 682.06 641.39 688.68 628.64 C695.30 615.89 700.90 603.02 706.23 589.98 C711.57 576.93 716.59 562.48 720.69 550.37 Z`
 
 	__FrontCurve__000001_Non_Rotated_1_.Name = `Non Rotated 1 `
-	__FrontCurve__000001_Non_Rotated_1_.Path = `M350.76 619.02 C356.77 627.92 361.91 634.57 368.05 642.21 C374.19 649.85 380.63 657.38 387.61 664.84 C394.60 672.31 401.93 679.75 409.95 686.99 C417.97 694.23 426.46 701.49 435.75 708.30 C445.03 715.10 454.95 721.88 465.66 727.81 C476.37 733.75 487.88 739.45 500.00 743.91 C512.12 748.37 525.11 752.24 538.37 754.57 C551.63 756.89 565.67 758.20 579.54 757.86 C593.41 757.52 607.80 755.80 621.61 752.53 C635.42 749.26 649.37 744.41 662.42 738.22 C675.46 732.03 688.23 724.24 699.86 715.40 C711.48 706.55 721.59 697.85 732.16 685.14 C742.73 672.43 754.86 655.47 763.26 639.14 C771.67 622.81 778.20 604.92 782.59 587.17 C786.97 569.41 789.24 550.71 789.57 532.63 C789.89 514.54 788.04 496.11 784.56 478.68 C781.08 461.24 775.52 444.00 768.70 428.00 C761.88 412.00 753.20 396.66 743.65 382.67 C734.09 368.67 722.99 355.68 711.35 344.02 C699.71 332.36 686.89 321.91 673.78 312.71 C660.68 303.50 646.76 295.59 632.72 288.78 C618.68 281.96 604.14 276.42 589.56 271.82 C574.97 267.21 560.12 263.77 545.19 261.15 C530.27 258.53 515.12 256.36 500.00 256.09 C484.88 255.82 469.28 256.53 454.50 259.53 C439.72 262.52 424.89 267.64 411.33 274.08 C397.78 280.52 384.74 288.90 373.18 298.17 C361.62 307.43 351.03 318.33 341.98 329.69 C332.92 341.05 325.15 353.64 318.84 366.30 C312.54 378.97 307.69 392.43 304.13 405.67 C300.57 418.91 298.50 432.54 297.49 445.74 C296.49 458.94 296.88 472.16 298.09 484.87 C299.31 497.58 301.75 510.03 304.80 521.99 C307.86 533.95 311.91 545.49 316.43 556.62 C320.96 567.76 326.24 578.41 331.96 588.81 C337.69 599.21 344.74 610.12 350.76 619.02 Z`
+	__FrontCurve__000001_Non_Rotated_1_.Path = `M254.95 695.42 C264.82 710.03 273.26 720.96 283.34 733.50 C293.43 746.04 303.99 758.41 315.46 770.67 C326.93 782.92 338.97 795.14 352.14 807.03 C365.32 818.92 379.26 830.85 394.50 842.02 C409.75 853.19 426.04 864.31 443.62 874.06 C461.20 883.81 480.10 893.18 500.00 900.50 C519.90 907.82 541.24 914.18 563.00 917.99 C584.77 921.81 607.82 923.96 630.60 923.40 C653.38 922.84 677.00 920.02 699.68 914.65 C722.36 909.27 745.27 901.31 766.68 891.15 C788.10 880.99 809.08 868.20 828.16 853.68 C847.25 839.15 863.85 824.86 881.20 804.00 C898.55 783.13 918.47 755.27 932.27 728.46 C946.07 701.65 956.80 672.27 964.00 643.13 C971.20 613.98 974.92 583.26 975.46 553.57 C976.00 523.88 972.95 493.62 967.24 464.99 C961.53 436.35 952.39 408.06 941.20 381.78 C930.00 355.51 915.76 330.32 900.06 307.34 C884.37 284.36 866.15 263.02 847.03 243.88 C827.91 224.73 806.87 207.58 785.35 192.47 C763.83 177.35 740.97 164.37 717.92 153.18 C694.87 141.99 671.00 132.89 647.05 125.33 C623.10 117.77 598.71 112.12 574.21 107.81 C549.70 103.51 524.82 99.94 500.00 99.50 C475.18 99.05 449.56 100.22 425.29 105.15 C401.02 110.07 376.66 118.47 354.41 129.04 C332.15 139.62 310.74 153.37 291.76 168.59 C272.78 183.81 255.40 201.71 240.53 220.36 C225.66 239.00 212.91 259.68 202.55 280.47 C192.19 301.26 184.23 323.38 178.38 345.12 C172.54 366.86 169.14 389.23 167.49 410.90 C165.84 432.58 166.47 454.29 168.48 475.16 C170.48 496.02 174.47 516.48 179.49 536.11 C184.51 555.75 191.15 574.69 198.59 592.97 C206.02 611.26 214.70 628.75 224.09 645.82 C233.48 662.90 245.07 680.81 254.95 695.42 Z`
 
 	__FrontCurve__000002_Rotated_0_.Name = `Rotated 0 `
-	__FrontCurve__000002_Rotated_0_.Path = `M634.40 530.68 C636.90 523.30 638.63 517.47 640.57 510.53 C642.52 503.60 644.40 496.54 646.07 489.05 C647.75 481.57 649.39 473.84 650.64 465.62 C651.89 457.40 653.06 448.78 653.55 439.74 C654.04 430.69 654.31 421.11 653.60 411.32 C652.88 401.53 651.67 391.18 649.24 380.98 C646.82 370.79 643.56 360.17 639.04 350.15 C634.52 340.13 628.88 330.01 622.14 320.85 C615.40 311.70 607.40 302.86 598.60 295.25 C589.81 287.63 579.81 280.72 569.35 275.16 C558.90 269.60 547.45 265.06 535.89 261.88 C524.33 258.70 513.57 256.48 500.00 256.09 C486.43 255.69 469.28 256.53 454.50 259.53 C439.72 262.52 424.89 267.64 411.33 274.08 C397.78 280.52 384.74 288.90 373.18 298.17 C361.62 307.43 351.03 318.33 341.98 329.69 C332.92 341.05 325.15 353.64 318.84 366.30 C312.54 378.97 307.69 392.43 304.13 405.67 C300.57 418.91 298.50 432.54 297.49 445.74 C296.49 458.94 296.88 472.16 298.09 484.87 C299.31 497.58 301.75 510.03 304.80 521.99 C307.86 533.95 311.91 545.49 316.43 556.62 C320.96 567.76 326.24 578.41 331.96 588.81 C337.69 599.21 343.59 609.60 350.76 619.02 C357.92 628.43 365.88 637.77 374.95 645.31 C384.02 652.85 394.52 659.32 405.16 664.26 C415.80 669.20 427.43 672.77 438.78 674.94 C450.14 677.12 462.00 677.79 473.28 677.30 C484.55 676.81 495.89 674.84 506.44 672.00 C516.99 669.16 527.21 664.99 536.58 660.25 C545.94 655.51 554.70 649.69 562.63 643.56 C570.57 637.43 577.72 630.50 584.19 623.48 C590.65 616.45 596.28 608.92 601.40 601.40 C606.52 593.88 610.88 586.11 614.91 578.34 C618.94 570.58 622.35 562.74 625.60 554.80 C628.85 546.85 631.91 538.05 634.40 530.68 Z`
+	__FrontCurve__000002_Rotated_0_.Path = `M720.69 550.37 C724.79 538.26 727.62 528.69 730.82 517.30 C734.01 505.91 737.09 494.32 739.85 482.03 C742.61 469.73 745.30 457.04 747.35 443.54 C749.39 430.05 751.32 415.91 752.13 401.05 C752.94 386.19 753.38 370.47 752.20 354.39 C751.02 338.31 749.04 321.32 745.05 304.58 C741.07 287.84 735.71 270.41 728.30 253.95 C720.88 237.50 711.62 220.87 700.55 205.85 C689.48 190.82 676.35 176.30 661.91 163.80 C647.46 151.29 631.04 139.95 613.88 130.82 C596.71 121.69 577.91 114.24 558.93 109.01 C539.95 103.79 522.27 100.14 500.00 99.50 C477.73 98.85 449.56 100.22 425.29 105.15 C401.02 110.07 376.66 118.47 354.41 129.04 C332.15 139.62 310.74 153.37 291.76 168.59 C272.78 183.81 255.40 201.71 240.53 220.36 C225.66 239.00 212.91 259.68 202.55 280.47 C192.19 301.26 184.23 323.38 178.38 345.12 C172.54 366.86 169.14 389.23 167.49 410.90 C165.84 432.58 166.47 454.29 168.48 475.16 C170.48 496.02 174.47 516.48 179.49 536.11 C184.51 555.75 191.15 574.69 198.59 592.97 C206.02 611.26 214.70 628.75 224.09 645.82 C233.48 662.90 243.19 679.96 254.95 695.42 C266.71 710.88 279.78 726.22 294.67 738.60 C309.56 750.98 326.81 761.60 344.28 769.71 C361.75 777.82 380.85 783.68 399.49 787.25 C418.13 790.82 437.61 791.93 456.12 791.12 C474.63 790.32 493.24 787.09 510.57 782.42 C527.89 777.76 544.68 770.92 560.06 763.13 C575.44 755.35 589.81 745.78 602.84 735.72 C615.87 725.65 627.62 714.28 638.23 702.75 C648.84 691.21 658.09 678.85 666.50 666.50 C674.91 654.15 682.06 641.39 688.68 628.64 C695.30 615.89 700.90 603.02 706.23 589.98 C711.57 576.93 716.59 562.48 720.69 550.37 Z`
 
 	__FrontCurve__000003_Rotated_1_.Name = `Rotated 1 `
-	__FrontCurve__000003_Rotated_1_.Path = `M677.69 569.74 C682.39 560.08 685.59 552.31 689.13 543.17 C692.67 534.03 695.98 524.69 698.95 514.91 C701.92 505.13 704.70 495.06 706.96 484.49 C709.22 473.92 711.27 462.94 712.52 451.49 C713.77 440.05 714.67 428.07 714.46 415.83 C714.25 403.59 713.43 390.77 711.24 378.04 C709.04 365.32 705.89 352.13 701.28 339.49 C696.66 326.84 690.77 314.03 683.54 302.19 C676.31 290.34 667.63 278.74 657.89 268.42 C648.15 258.09 636.98 248.43 625.10 240.23 C613.22 232.03 600.08 224.86 586.61 219.22 C573.14 213.58 560.55 209.17 544.26 206.38 C527.97 203.58 507.21 201.56 488.87 202.44 C470.52 203.33 451.76 206.61 434.19 211.69 C416.63 216.77 399.30 224.16 383.47 232.92 C367.65 241.67 352.62 252.50 339.25 264.23 C325.89 275.96 313.75 289.39 303.30 303.30 C292.85 317.21 283.91 332.39 276.56 347.66 C269.22 362.94 263.51 379.04 259.24 394.96 C254.96 410.87 252.33 427.19 250.91 443.15 C249.49 459.10 249.60 475.11 250.72 490.67 C251.83 506.24 254.30 521.60 257.61 536.53 C260.91 551.47 265.36 566.05 270.55 580.29 C275.75 594.52 281.44 608.73 288.76 621.96 C296.09 635.18 304.51 648.34 314.49 659.64 C324.48 670.94 336.33 681.23 348.68 689.75 C361.03 698.27 374.81 705.37 388.62 710.75 C402.42 716.12 417.16 719.84 431.52 722.01 C445.88 724.17 460.67 724.60 474.79 723.73 C488.91 722.86 503.00 720.33 516.25 716.79 C529.49 713.26 542.33 708.24 554.26 702.51 C566.20 696.78 577.45 689.83 587.85 682.42 C598.25 675.01 607.82 666.67 616.64 658.05 C625.47 649.42 633.44 640.15 640.82 630.66 C648.20 621.17 654.78 611.27 660.93 601.12 C667.07 590.96 672.99 579.40 677.69 569.74 Z`
+	__FrontCurve__000003_Rotated_1_.Path = `M791.77 614.51 C799.48 598.65 804.73 585.88 810.55 570.88 C816.36 555.88 821.80 540.54 826.68 524.48 C831.56 508.42 836.11 491.89 839.83 474.53 C843.54 457.18 846.89 439.15 848.95 420.36 C851.00 401.57 852.49 381.90 852.14 361.80 C851.79 341.70 850.45 320.64 846.84 299.75 C843.24 278.86 838.07 257.20 830.49 236.44 C822.91 215.68 813.25 194.65 801.37 175.20 C789.50 155.75 775.25 136.70 759.25 119.75 C743.26 102.79 724.91 86.93 705.41 73.47 C685.90 60.01 664.33 48.23 642.21 38.96 C620.09 29.70 599.42 22.47 572.67 17.88 C545.92 13.28 511.84 9.96 481.72 11.41 C451.60 12.87 420.79 18.26 391.95 26.60 C363.11 34.94 334.65 47.08 308.66 61.46 C282.68 75.83 258.00 93.61 236.06 112.87 C214.12 132.13 194.18 154.19 177.02 177.02 C159.87 199.86 145.18 224.78 133.12 249.87 C121.06 274.95 111.70 301.39 104.68 327.52 C97.65 353.65 93.33 380.45 91.00 406.65 C88.66 432.84 88.85 459.13 90.68 484.68 C92.52 510.24 96.57 535.46 102.00 559.99 C107.43 584.51 114.73 608.45 123.25 631.83 C131.78 655.21 141.13 678.53 153.16 700.25 C165.18 721.97 179.01 743.57 195.40 762.13 C211.80 780.68 231.25 797.58 251.54 811.56 C271.82 825.55 294.44 837.21 317.11 846.04 C339.78 854.87 363.97 860.98 387.56 864.53 C411.14 868.09 435.42 868.79 458.61 867.37 C481.79 865.94 504.93 861.78 526.68 855.97 C548.42 850.16 569.50 841.92 589.10 832.51 C608.69 823.11 627.17 811.70 644.25 799.53 C661.32 787.36 677.03 773.68 691.53 759.51 C706.02 745.35 719.11 730.12 731.22 714.55 C743.34 698.97 754.15 682.71 764.24 666.03 C774.33 649.36 784.05 630.37 791.77 614.51 Z`
 
 	__FrontCurveStack__000000_Front_Curve_Stack.Name = `Front Curve Stack`
 	__FrontCurveStack__000000_Front_Curve_Stack.IsDisplayed = false
@@ -676,7 +676,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.CenterX = 0.000000
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.CenterY = 0.000000
-	__Rhombus__000000_Growing_Rhombus_Grid_Seed.SideLength = 162.000000
+	__Rhombus__000000_Growing_Rhombus_Grid_Seed.SideLength = 266.000000
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.AngleDegree = -79.106605
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.InsideAngle = 120.000000
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Color = ``
@@ -692,7 +692,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000001_Initial_Rhombus.IsDisplayed = false
 	__Rhombus__000001_Initial_Rhombus.CenterX = 0.000000
 	__Rhombus__000001_Initial_Rhombus.CenterY = 0.000000
-	__Rhombus__000001_Initial_Rhombus.SideLength = 162.000000
+	__Rhombus__000001_Initial_Rhombus.SideLength = 266.000000
 	__Rhombus__000001_Initial_Rhombus.AngleDegree = 0.000000
 	__Rhombus__000001_Initial_Rhombus.InsideAngle = 120.000000
 	__Rhombus__000001_Initial_Rhombus.Color = ``
@@ -706,9 +706,9 @@ func _(stage *models.StageStruct) {
 
 	__Rhombus__000002_Rotated_Next_Rhombus.Name = `Rotated Next Rhombus`
 	__Rhombus__000002_Rotated_Next_Rhombus.IsDisplayed = false
-	__Rhombus__000002_Rotated_Next_Rhombus.CenterX = 275.536101
-	__Rhombus__000002_Rotated_Next_Rhombus.CenterY = 53.026947
-	__Rhombus__000002_Rotated_Next_Rhombus.SideLength = 162.000000
+	__Rhombus__000002_Rotated_Next_Rhombus.CenterX = 452.423474
+	__Rhombus__000002_Rotated_Next_Rhombus.CenterY = 87.068938
+	__Rhombus__000002_Rotated_Next_Rhombus.SideLength = 266.000000
 	__Rhombus__000002_Rotated_Next_Rhombus.AngleDegree = -79.106605
 	__Rhombus__000002_Rotated_Next_Rhombus.InsideAngle = 120.000000
 	__Rhombus__000002_Rotated_Next_Rhombus.Color = ``
@@ -724,7 +724,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000003_Rotated_Rhombus.IsDisplayed = false
 	__Rhombus__000003_Rotated_Rhombus.CenterX = 0.000000
 	__Rhombus__000003_Rotated_Rhombus.CenterY = 0.000000
-	__Rhombus__000003_Rotated_Rhombus.SideLength = 162.000000
+	__Rhombus__000003_Rotated_Rhombus.SideLength = 266.000000
 	__Rhombus__000003_Rotated_Rhombus.AngleDegree = -79.106605
 	__Rhombus__000003_Rotated_Rhombus.InsideAngle = 120.000000
 	__Rhombus__000003_Rotated_Rhombus.Color = ``
@@ -777,14 +777,14 @@ func _(stage *models.StageStruct) {
 
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Name = `Spiral Bezier Seed`
 	__SpiralBezier__000000_Spiral_Bezier_Seed.IsDisplayed = false
-	__SpiralBezier__000000_Spiral_Bezier_Seed.StartX = 134.403972
-	__SpiralBezier__000000_Spiral_Bezier_Seed.StartY = -30.676830
-	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointStartX = 185.323861
-	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointStartY = 18.497105
+	__SpiralBezier__000000_Spiral_Bezier_Seed.StartX = 220.688004
+	__SpiralBezier__000000_Spiral_Bezier_Seed.StartY = -50.370597
+	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointStartX = 304.297204
+	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointStartY = 30.371789
 	__SpiralBezier__000000_Spiral_Bezier_Seed.EndX = 0.000000
-	__SpiralBezier__000000_Spiral_Bezier_Seed.EndY = 243.914316
-	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointEndX = 57.144588
-	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointEndY = 186.333956
+	__SpiralBezier__000000_Spiral_Bezier_Seed.EndY = 400.501284
+	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointEndX = 93.830003
+	__SpiralBezier__000000_Spiral_Bezier_Seed.ControlPointEndY = 305.955754
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Color = ``
 	__SpiralBezier__000000_Spiral_Bezier_Seed.FillOpacity = 0.000000
 	__SpiralBezier__000000_Spiral_Bezier_Seed.Stroke = `green`
@@ -802,7 +802,7 @@ func _(stage *models.StageStruct) {
 
 	__SpiralCircle__000000_Construction_Circle_Spiral.Name = `Construction Circle Spiral`
 	__SpiralCircle__000000_Construction_Circle_Spiral.IsDisplayed = false
-	__SpiralCircle__000000_Construction_Circle_Spiral.CenterX = 58.320000
+	__SpiralCircle__000000_Construction_Circle_Spiral.CenterX = 95.760000
 	__SpiralCircle__000000_Construction_Circle_Spiral.CenterY = 0.000000
 	__SpiralCircle__000000_Construction_Circle_Spiral.HasBespokeRadius = false
 	__SpiralCircle__000000_Construction_Circle_Spiral.BespopkeRadius = 0.000000
@@ -821,9 +821,9 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000001_Hour_Marker.Name = `Hour Marker`
 	__SpiralCircle__000001_Hour_Marker.IsDisplayed = true
 	__SpiralCircle__000001_Hour_Marker.CenterX = 0.000000
-	__SpiralCircle__000001_Hour_Marker.CenterY = 197.640000
+	__SpiralCircle__000001_Hour_Marker.CenterY = 313.880000
 	__SpiralCircle__000001_Hour_Marker.HasBespokeRadius = true
-	__SpiralCircle__000001_Hour_Marker.BespopkeRadius = 5791.500000
+	__SpiralCircle__000001_Hour_Marker.BespopkeRadius = 69.160000
 	__SpiralCircle__000001_Hour_Marker.Pitch = 0
 	__SpiralCircle__000001_Hour_Marker.Color = ``
 	__SpiralCircle__000001_Hour_Marker.FillOpacity = 0.000000
@@ -834,14 +834,14 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000001_Hour_Marker.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000001_Hour_Marker.Transform = ``
 	__SpiralCircle__000001_Hour_Marker.ShowName = false
-	__SpiralCircle__000001_Hour_Marker.Path = `M 6291.500000 302.360000 A 5791.500000 5791.500000 0 1 0 -5291.500000 302.360000 A 5791.500000 5791.500000 0 1 0 6291.500000 302.360000 Z`
+	__SpiralCircle__000001_Hour_Marker.Path = `M 569.160000 186.120000 A 69.160000 69.160000 0 1 0 430.840000 186.120000 A 69.160000 69.160000 0 1 0 569.160000 186.120000 Z`
 
 	__SpiralCircle__000002_Minute_Marker.Name = `Minute Marker`
 	__SpiralCircle__000002_Minute_Marker.IsDisplayed = true
 	__SpiralCircle__000002_Minute_Marker.CenterX = 0.000000
-	__SpiralCircle__000002_Minute_Marker.CenterY = 270.702000
+	__SpiralCircle__000002_Minute_Marker.CenterY = 444.486000
 	__SpiralCircle__000002_Minute_Marker.HasBespokeRadius = true
-	__SpiralCircle__000002_Minute_Marker.BespopkeRadius = 3184.920000
+	__SpiralCircle__000002_Minute_Marker.BespopkeRadius = 31.920000
 	__SpiralCircle__000002_Minute_Marker.Pitch = 0
 	__SpiralCircle__000002_Minute_Marker.Color = ``
 	__SpiralCircle__000002_Minute_Marker.FillOpacity = 0.000000
@@ -852,7 +852,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000002_Minute_Marker.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000002_Minute_Marker.Transform = ``
 	__SpiralCircle__000002_Minute_Marker.ShowName = false
-	__SpiralCircle__000002_Minute_Marker.Path = `M 3684.920000 229.298000 A 3184.920000 3184.920000 0 1 0 -2684.920000 229.298000 A 3184.920000 3184.920000 0 1 0 3684.920000 229.298000 Z`
+	__SpiralCircle__000002_Minute_Marker.Path = `M 531.920000 55.514000 A 31.920000 31.920000 0 1 0 468.080000 55.514000 A 31.920000 31.920000 0 1 0 531.920000 55.514000 Z`
 
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.Name = `Brute Spiral Bezier Circle Grid`
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.IsDisplayed = true
@@ -868,10 +868,10 @@ func _(stage *models.StageStruct) {
 
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Name = `Spiral Contruction Inner Line`
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.IsDisplayed = false
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartX = 134.403972
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndX = 58.320000
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartY = -30.676830
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndY = 0.000000
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartX = 220.688004
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndX = 95.760000
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartY = -50.370597
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndY = -0.000000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Color = ``
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.FillOpacity = 0.000000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Stroke = `blue`
@@ -883,10 +883,10 @@ func _(stage *models.StageStruct) {
 
 	__SpiralLine__000001_Spiral_Contruction_Outer_Line.Name = `Spiral Contruction Outer Line`
 	__SpiralLine__000001_Spiral_Contruction_Outer_Line.IsDisplayed = false
-	__SpiralLine__000001_Spiral_Contruction_Outer_Line.StartX = 134.403972
-	__SpiralLine__000001_Spiral_Contruction_Outer_Line.EndX = 195.871390
-	__SpiralLine__000001_Spiral_Contruction_Outer_Line.StartY = -30.676830
-	__SpiralLine__000001_Spiral_Contruction_Outer_Line.EndY = -94.326690
+	__SpiralLine__000001_Spiral_Contruction_Outer_Line.StartX = 220.688004
+	__SpiralLine__000001_Spiral_Contruction_Outer_Line.EndX = 321.615987
+	__SpiralLine__000001_Spiral_Contruction_Outer_Line.StartY = -50.370597
+	__SpiralLine__000001_Spiral_Contruction_Outer_Line.EndY = -154.882096
 	__SpiralLine__000001_Spiral_Contruction_Outer_Line.Color = ``
 	__SpiralLine__000001_Spiral_Contruction_Outer_Line.FillOpacity = 0.000000
 	__SpiralLine__000001_Spiral_Contruction_Outer_Line.Stroke = `green`
@@ -918,14 +918,14 @@ func _(stage *models.StageStruct) {
 
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Name = `Reference Spiral Rhombus`
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.IsDisplayed = false
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r0 = -20.688381
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r0 = -4.721988
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r1 = -36.807865
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r1 = 76.432319
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r2 = 134.403972
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r2 = -30.676830
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r3 = -13.800335
-	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r3 = -28.656690
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r0 = -33.969810
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r0 = -7.753388
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r1 = -60.437605
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r1 = 125.499980
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r2 = 220.688004
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r2 = -50.370597
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.X_r3 = -22.659809
+	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Y_r3 = -47.053577
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Color = `green`
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.FillOpacity = 1.000000
 	__SpiralRhombus__000000_Reference_Spiral_Rhombus.Stroke = `blue`
