@@ -238,7 +238,7 @@ func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
 `
 
 	// Create or open the index.html file
-	file, err := os.Create("index.html")
+	file, err := os.Create("../../../../myclock/index.html")
 	if err != nil {
 		return err
 	}
