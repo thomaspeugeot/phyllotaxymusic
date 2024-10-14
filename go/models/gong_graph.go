@@ -758,6 +758,12 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.MinuteMarker != nil {
 		StageBranch(stage, parameter.MinuteMarker)
 	}
+	if parameter.BackendCurve != nil {
+		StageBranch(stage, parameter.BackendCurve)
+	}
+	if parameter.BackendMarker != nil {
+		StageBranch(stage, parameter.BackendMarker)
+	}
 	if parameter.Fkey != nil {
 		StageBranch(stage, parameter.Fkey)
 	}
@@ -1627,6 +1633,12 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.MinuteMarker != nil {
 		parameterTo.MinuteMarker = CopyBranchSpiralCircle(mapOrigCopy, parameterFrom.MinuteMarker)
 	}
+	if parameterFrom.BackendCurve != nil {
+		parameterTo.BackendCurve = CopyBranchFrontCurveStack(mapOrigCopy, parameterFrom.BackendCurve)
+	}
+	if parameterFrom.BackendMarker != nil {
+		parameterTo.BackendMarker = CopyBranchSpiralCircle(mapOrigCopy, parameterFrom.BackendMarker)
+	}
 	if parameterFrom.Fkey != nil {
 		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
 	}
@@ -2467,6 +2479,12 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.MinuteMarker != nil {
 		UnstageBranch(stage, parameter.MinuteMarker)
+	}
+	if parameter.BackendCurve != nil {
+		UnstageBranch(stage, parameter.BackendCurve)
+	}
+	if parameter.BackendMarker != nil {
+		UnstageBranch(stage, parameter.BackendMarker)
 	}
 	if parameter.Fkey != nil {
 		UnstageBranch(stage, parameter.Fkey)

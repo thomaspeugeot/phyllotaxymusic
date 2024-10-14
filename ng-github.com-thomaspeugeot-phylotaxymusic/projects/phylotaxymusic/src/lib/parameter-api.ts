@@ -54,6 +54,9 @@ export class ParameterAPI {
 	MinuteHandleRotationAngle: number = 0
 	MinuteHandleDiskDistance: number = 0
 	MinuteHandleRadius: number = 0
+	BackendHandleRotationAngle: number = 0
+	BackendHandleDiskDistance: number = 0
+	BackendHandleRadius: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -181,6 +184,10 @@ export class ParameterPointersEncoding {
 	MinuteCurveID: NullInt64 = new NullInt64 // if pointer is null, MinuteCurve.ID = 0
 
 	MinuteMarkerID: NullInt64 = new NullInt64 // if pointer is null, MinuteMarker.ID = 0
+
+	BackendCurveID: NullInt64 = new NullInt64 // if pointer is null, BackendCurve.ID = 0
+
+	BackendMarkerID: NullInt64 = new NullInt64 // if pointer is null, BackendMarker.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 

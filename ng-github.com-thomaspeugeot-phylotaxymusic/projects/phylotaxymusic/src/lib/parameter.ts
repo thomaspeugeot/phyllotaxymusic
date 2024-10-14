@@ -59,6 +59,9 @@ export class Parameter {
 	MinuteHandleRotationAngle: number = 0
 	MinuteHandleDiskDistance: number = 0
 	MinuteHandleRadius: number = 0
+	BackendHandleRotationAngle: number = 0
+	BackendHandleDiskDistance: number = 0
+	BackendHandleRadius: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -181,6 +184,10 @@ export class Parameter {
 
 	MinuteMarker?: SpiralCircle
 
+	BackendCurve?: FrontCurveStack
+
+	BackendMarker?: SpiralCircle
+
 	Fkey?: Key
 
 	PitchLines?: AxisGrid
@@ -238,6 +245,9 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.MinuteHandleRotationAngle = parameter.MinuteHandleRotationAngle
 	parameterAPI.MinuteHandleDiskDistance = parameter.MinuteHandleDiskDistance
 	parameterAPI.MinuteHandleRadius = parameter.MinuteHandleRadius
+	parameterAPI.BackendHandleRotationAngle = parameter.BackendHandleRotationAngle
+	parameterAPI.BackendHandleDiskDistance = parameter.BackendHandleDiskDistance
+	parameterAPI.BackendHandleRadius = parameter.BackendHandleRadius
 	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
 	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
 	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
@@ -605,6 +615,20 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64 = 0 		
 	}
 
+	parameterAPI.ParameterPointersEncoding.BackendCurveID.Valid = true
+	if (parameter.BackendCurve != undefined) {
+		parameterAPI.ParameterPointersEncoding.BackendCurveID.Int64 = parameter.BackendCurve.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.BackendCurveID.Int64 = 0 		
+	}
+
+	parameterAPI.ParameterPointersEncoding.BackendMarkerID.Valid = true
+	if (parameter.BackendMarker != undefined) {
+		parameterAPI.ParameterPointersEncoding.BackendMarkerID.Int64 = parameter.BackendMarker.ID  
+	} else {
+		parameterAPI.ParameterPointersEncoding.BackendMarkerID.Int64 = 0 		
+	}
+
 	parameterAPI.ParameterPointersEncoding.FkeyID.Valid = true
 	if (parameter.Fkey != undefined) {
 		parameterAPI.ParameterPointersEncoding.FkeyID.Int64 = parameter.Fkey.ID  
@@ -742,6 +766,9 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.MinuteHandleRotationAngle = parameterAPI.MinuteHandleRotationAngle
 	parameter.MinuteHandleDiskDistance = parameterAPI.MinuteHandleDiskDistance
 	parameter.MinuteHandleRadius = parameterAPI.MinuteHandleRadius
+	parameter.BackendHandleRotationAngle = parameterAPI.BackendHandleRotationAngle
+	parameter.BackendHandleDiskDistance = parameterAPI.BackendHandleDiskDistance
+	parameter.BackendHandleRadius = parameterAPI.BackendHandleRadius
 	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
 	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX
 	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY
@@ -815,6 +842,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.HourMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64)
 	parameter.MinuteCurve = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64)
 	parameter.MinuteMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64)
+	parameter.BackendCurve = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.BackendCurveID.Int64)
+	parameter.BackendMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.BackendMarkerID.Int64)
 	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
 	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)

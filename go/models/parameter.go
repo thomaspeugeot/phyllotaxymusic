@@ -125,6 +125,13 @@ type Parameter struct {
 	MinuteHandleDiskDistance  float64
 	MinuteHandleRadius        float64
 
+	BackendCurve *FrontCurveStack
+
+	BackendHandleRotationAngle float64
+	BackendMarker              *SpiralCircle
+	BackendHandleDiskDistance  float64
+	BackendHandleRadius        float64
+
 	// the score
 	Fkey                *Key
 	FkeySizeRatio       float64

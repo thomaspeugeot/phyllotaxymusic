@@ -1681,6 +1681,27 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].MinuteHandleRadius = exprSign * fielValue
+				case "BackendHandleRotationAngle":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].BackendHandleRotationAngle = exprSign * fielValue
+				case "BackendHandleDiskDistance":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].BackendHandleDiskDistance = exprSign * fielValue
+				case "BackendHandleRadius":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].BackendHandleRadius = exprSign * fielValue
 				case "FkeySizeRatio":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -2769,6 +2790,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "MinuteMarker":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].MinuteMarker = __gong__map_SpiralCircle[targetIdentifier]
+				case "BackendCurve":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].BackendCurve = __gong__map_FrontCurveStack[targetIdentifier]
+				case "BackendMarker":
+					targetIdentifier := ident.Name
+					__gong__map_Parameter[identifier].BackendMarker = __gong__map_SpiralCircle[targetIdentifier]
 				case "Fkey":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].Fkey = __gong__map_Key[targetIdentifier]

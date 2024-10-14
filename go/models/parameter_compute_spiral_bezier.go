@@ -115,6 +115,7 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 	p.HourCurve.FrontCurves = p.HourCurve.FrontCurves[:0]
 	p.MinuteCurve.FrontCurves = p.MinuteCurve.FrontCurves[:0]
+	p.BackendCurve.FrontCurves = p.BackendCurve.FrontCurves[:0]
 
 	for idx, bezierGrid := range p.GrowthCurveStack.BezierGrids {
 
@@ -180,6 +181,17 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 			p.MinuteCurve.FrontCurves = append(p.MinuteCurve.FrontCurves, frontCurve)
 		}
+
+		if idx == 2 {
+			frontCurve := new(FrontCurve)
+			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.BackendHandleRotationAngle)
+			frontCurve.Path = str
+			frontCurve.Name = fmt.Sprintf("Rotated %d ", idx)
+
+			frontCurve.Stage(stage)
+
+			p.BackendCurve.FrontCurves = append(p.BackendCurve.FrontCurves, frontCurve)
+		}
 	}
 
 	// draw the markers
@@ -188,6 +200,11 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 	p.HourMarker.BespopkeRadius = p.HourHandleRadius * p.SideLength
 
 	p.MinuteMarker.CenterY = p.MinuteHandleDiskDistance * p.SideLength
+	p.MinuteMarker.CenterX = 0
 	p.MinuteMarker.HasBespokeRadius = true
 	p.MinuteMarker.BespopkeRadius = p.MinuteHandleRadius * p.SideLength
+
+	p.BackendMarker.CenterY = p.BackendHandleDiskDistance * p.SideLength
+	p.BackendMarker.HasBespokeRadius = true
+	p.BackendMarker.BespopkeRadius = p.BackendHandleRadius * p.SideLength
 }
