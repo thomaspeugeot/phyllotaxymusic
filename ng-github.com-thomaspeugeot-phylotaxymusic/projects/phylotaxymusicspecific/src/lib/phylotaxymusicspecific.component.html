@@ -111,13 +111,13 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan="3" rowspan="1">
-              <h4 style="margin-left: 8px; width: 100%;">Hour disk radius</h4>
+              <h4 style="margin-left: 8px; width: 100%;">Hour handle radius</h4>
             </mat-grid-tile>
             <mat-grid-tile colspan="2" rowspan="1">
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleRadius}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
-              <mat-slider min="0.0" max="100.0" step="0.05" showTickMarks discrete [displayWith]="formatLabel">
+              <mat-slider min="0.0" max="100.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].HourHandleRadius" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>
