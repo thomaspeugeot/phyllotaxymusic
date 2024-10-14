@@ -8,7 +8,7 @@
     </as-split-area>
     <as-split-area [size]="20">
       <as-split unit="pixel" direction="vertical">
-        <as-split-area [size]="520">
+        <as-split-area [size]="640">
           @if (frontRepo && frontRepo.array_Parameters[0]) {
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
               <mat-grid-tile colspan="3" rowspan="1">
@@ -105,7 +105,7 @@
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleDiskDistance}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
-              <mat-slider min="0.0" max="10.0" step="0.001" showTickMarks discrete [displayWith]="formatLabel">
+              <mat-slider min="0.0" max="10.0" step="0.005" showTickMarks discrete [displayWith]="formatLabel">
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].HourHandleDiskDistance" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>
@@ -117,7 +117,7 @@
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleRadius}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
-              <mat-slider min="0.0" max="100.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+              <mat-slider min="0.0" max="100.0" step="0.05" showTickMarks discrete [displayWith]="formatLabel">
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].HourHandleRadius" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>

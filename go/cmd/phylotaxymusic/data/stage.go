@@ -644,8 +644,8 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralBezierStrength = 0.800000
 	__Parameter__000000_Reference.NbInterpolationPoints = 12
 	__Parameter__000000_Reference.HourHandleRotationAngle = 0.000000
-	__Parameter__000000_Reference.HourHandleDiskDistance = 1.311000
-	__Parameter__000000_Reference.HourHandleRadius = 24.770000
+	__Parameter__000000_Reference.HourHandleDiskDistance = 1.220000
+	__Parameter__000000_Reference.HourHandleRadius = 35.750000
 	__Parameter__000000_Reference.MinuteHandleRotationAngle = -120.000000
 	__Parameter__000000_Reference.MinuteHandleDiskDistance = 1.671000
 	__Parameter__000000_Reference.MinuteHandleRadius = 19.660000
@@ -837,7 +837,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000002_Minute_Marker.Name = `Minute Marker`
 	__SpiralCircle__000002_Minute_Marker.IsDisplayed = true
 	__SpiralCircle__000002_Minute_Marker.CenterX = 0.000000
-	__SpiralCircle__000002_Minute_Marker.CenterY = 288.830000
+	__SpiralCircle__000002_Minute_Marker.CenterY = 284.070000
 	__SpiralCircle__000002_Minute_Marker.HasBespokeRadius = true
 	__SpiralCircle__000002_Minute_Marker.BespopkeRadius = 19.660000
 	__SpiralCircle__000002_Minute_Marker.Pitch = 0
@@ -903,7 +903,7 @@ func _(stage *models.StageStruct) {
 	__SpiralLineGrid__000002_Spiral_Construction_Outer_Line_Grid_Spiral.IsDisplayed = false
 
 	__SpiralOrigin__000000_Spiral_Origin.Name = `Spiral Origin`
-	__SpiralOrigin__000000_Spiral_Origin.IsDisplayed = true
+	__SpiralOrigin__000000_Spiral_Origin.IsDisplayed = false
 	__SpiralOrigin__000000_Spiral_Origin.Color = ``
 	__SpiralOrigin__000000_Spiral_Origin.FillOpacity = 0.000000
 	__SpiralOrigin__000000_Spiral_Origin.Stroke = `black`

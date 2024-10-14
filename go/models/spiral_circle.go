@@ -1,6 +1,9 @@
 package models
 
 import (
+	"fmt"
+	"log"
+
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
@@ -24,6 +27,27 @@ func (spiralCircle *SpiralCircle) Draw(
 	if spiralCircle.HasBespokeRadius {
 		svgCircle.Radius = spiralCircle.BespopkeRadius
 	}
+
+	// Now, create an SVG Path representing the same circle
+	CX := svgCircle.CX
+	CY := svgCircle.CY
+	R := svgCircle.Radius
+
+	// Starting point at angle 0 (rightmost point of the circle)
+	xStart := CX + R
+	yStart := CY
+
+	// Build the path data using two arc commands to form a complete circle
+	pathData := fmt.Sprintf(
+		"M %f %f "+
+			"A %f %f 0 1 0 %f %f "+
+			"A %f %f 0 1 0 %f %f "+
+			"Z",
+		xStart, yStart, // Move to the starting point
+		R, R, CX-R, CY, // First arc to the leftmost point
+		R, R, xStart, yStart) // Second arc back to the starting point
+
+	log.Println(pathData)
 
 	spiralCircle.Presentation.CopyTo(&svgCircle.Presentation)
 
