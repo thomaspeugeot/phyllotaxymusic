@@ -36,6 +36,9 @@ export class ParameterAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	BackendColor: string = ""
+	MinuteColor: string = ""
+	HourColor: string = ""
 	N: number = 0
 	M: number = 0
 	Z: number = 0
@@ -51,16 +54,13 @@ export class ParameterAPI {
 	HourHandleRotationAngle: number = 0
 	HourHandleDiskDistance: number = 0
 	HourHandleRadius: number = 0
-	HourColor: string = ""
 	MinuteHandleRotationAngle: number = 0
 	MinuteHandleDiskDistance: number = 0
 	MinuteHandleRadius: number = 0
-	MinuteColor: string = ""
 	MinuteOffset: number = 0
 	BackendHandleRotationAngle: number = 0
 	BackendHandleDiskDistance: number = 0
 	BackendHandleRadius: number = 0
-	BackendColor: string = ""
 	BackendOffset: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0

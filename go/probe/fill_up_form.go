@@ -399,6 +399,12 @@ func FillUpForm[T models.Gongstruct](
 		// insertion point
 		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("BackendColor", instanceWithInferedType.BackendColor, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("MinuteColor", instanceWithInferedType.MinuteColor, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("HourColor", instanceWithInferedType.HourColor, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		BasicFieldtoForm("N", instanceWithInferedType.N, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("M", instanceWithInferedType.M, instanceWithInferedType, probe.formStage, formGroup,
@@ -476,8 +482,6 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("HourHandleRadius", instanceWithInferedType.HourHandleRadius, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("HourColor", instanceWithInferedType.HourColor, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
 		AssociationFieldToForm("MinuteCurve", instanceWithInferedType.MinuteCurve, formGroup, probe)
 		BasicFieldtoForm("MinuteHandleRotationAngle", instanceWithInferedType.MinuteHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -485,8 +489,6 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("MinuteHandleDiskDistance", instanceWithInferedType.MinuteHandleDiskDistance, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("MinuteHandleRadius", instanceWithInferedType.MinuteHandleRadius, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("MinuteColor", instanceWithInferedType.MinuteColor, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("MinuteOffset", instanceWithInferedType.MinuteOffset, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -497,8 +499,6 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("BackendHandleDiskDistance", instanceWithInferedType.BackendHandleDiskDistance, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("BackendHandleRadius", instanceWithInferedType.BackendHandleRadius, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("BackendColor", instanceWithInferedType.BackendColor, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("BackendOffset", instanceWithInferedType.BackendOffset, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)

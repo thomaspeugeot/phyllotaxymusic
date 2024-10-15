@@ -6,9 +6,14 @@ import (
 
 type Parameter struct {
 	Name string
-	N    int
-	M    int
-	Z    int // number of rhombus
+
+	BackendColor string
+	MinuteColor  string
+	HourColor    string
+
+	N int
+	M int
+	Z int // number of rhombus
 
 	// how many circle to go around for the front curve
 	// the front curve goes from one circle to the nearest
@@ -117,7 +122,6 @@ type Parameter struct {
 	HourMarker              *SpiralCircle
 	HourHandleDiskDistance  float64
 	HourHandleRadius        float64
-	HourColor               string
 
 	MinuteCurve *FrontCurveStack
 
@@ -125,7 +129,6 @@ type Parameter struct {
 	MinuteMarker              *SpiralCircle
 	MinuteHandleDiskDistance  float64
 	MinuteHandleRadius        float64
-	MinuteColor               string
 
 	MinuteOffset float64
 
@@ -135,7 +138,6 @@ type Parameter struct {
 	BackendMarker              *SpiralCircle
 	BackendHandleDiskDistance  float64
 	BackendHandleRadius        float64
-	BackendColor               string
 
 	BackendOffset float64
 

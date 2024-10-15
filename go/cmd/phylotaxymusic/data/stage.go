@@ -652,6 +652,9 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000014_9.IsKept = true
 
 	__Parameter__000000_Reference.Name = `Reference`
+	__Parameter__000000_Reference.BackendColor = `#D1C5B4`
+	__Parameter__000000_Reference.MinuteColor = `#8FA382`
+	__Parameter__000000_Reference.HourColor = `#536C87`
 	__Parameter__000000_Reference.N = 2
 	__Parameter__000000_Reference.M = 1
 	__Parameter__000000_Reference.Z = 7
@@ -667,16 +670,13 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.HourHandleRotationAngle = 0.000000
 	__Parameter__000000_Reference.HourHandleDiskDistance = 1.165000
 	__Parameter__000000_Reference.HourHandleRadius = 0.190000
-	__Parameter__000000_Reference.HourColor = `lightgreen`
 	__Parameter__000000_Reference.MinuteHandleRotationAngle = -120.000000
 	__Parameter__000000_Reference.MinuteHandleDiskDistance = 1.795000
 	__Parameter__000000_Reference.MinuteHandleRadius = 0.090000
-	__Parameter__000000_Reference.MinuteColor = `lightblue`
 	__Parameter__000000_Reference.MinuteOffset = 24.000000
 	__Parameter__000000_Reference.BackendHandleRotationAngle = -120.500000
 	__Parameter__000000_Reference.BackendHandleDiskDistance = 2.700000
 	__Parameter__000000_Reference.BackendHandleRadius = 0.030000
-	__Parameter__000000_Reference.BackendColor = `lavender`
 	__Parameter__000000_Reference.BackendOffset = 159.000000
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
@@ -796,7 +796,7 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000006_6_Spiral_growth.IsExpanded = false
 
 	__ShapeCategory__000007_7_Spiral_Growth_Bezier.Name = `7. Spiral Growth Bezier`
-	__ShapeCategory__000007_7_Spiral_Growth_Bezier.IsExpanded = true
+	__ShapeCategory__000007_7_Spiral_Growth_Bezier.IsExpanded = false
 
 	__ShapeCategory__000008_8_Score_notation.Name = `8. Score notation`
 	__ShapeCategory__000008_8_Score_notation.IsExpanded = false

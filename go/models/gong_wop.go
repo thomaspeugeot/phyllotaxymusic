@@ -296,6 +296,9 @@ func (from *NoteInfo) CopyBasicFields(to *NoteInfo) {
 type Parameter_WOP struct {
 	// insertion point
 	Name string
+	BackendColor string
+	MinuteColor string
+	HourColor string
 	N int
 	M int
 	Z int
@@ -311,16 +314,13 @@ type Parameter_WOP struct {
 	HourHandleRotationAngle float64
 	HourHandleDiskDistance float64
 	HourHandleRadius float64
-	HourColor string
 	MinuteHandleRotationAngle float64
 	MinuteHandleDiskDistance float64
 	MinuteHandleRadius float64
-	MinuteColor string
 	MinuteOffset float64
 	BackendHandleRotationAngle float64
 	BackendHandleDiskDistance float64
 	BackendHandleRadius float64
-	BackendColor string
 	BackendOffset float64
 	FkeySizeRatio float64
 	FkeyOriginRelativeX float64
@@ -349,6 +349,9 @@ type Parameter_WOP struct {
 func (from *Parameter) CopyBasicFields(to *Parameter) {
 	// insertion point
 	to.Name = from.Name
+	to.BackendColor = from.BackendColor
+	to.MinuteColor = from.MinuteColor
+	to.HourColor = from.HourColor
 	to.N = from.N
 	to.M = from.M
 	to.Z = from.Z
@@ -364,16 +367,13 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.HourHandleRotationAngle = from.HourHandleRotationAngle
 	to.HourHandleDiskDistance = from.HourHandleDiskDistance
 	to.HourHandleRadius = from.HourHandleRadius
-	to.HourColor = from.HourColor
 	to.MinuteHandleRotationAngle = from.MinuteHandleRotationAngle
 	to.MinuteHandleDiskDistance = from.MinuteHandleDiskDistance
 	to.MinuteHandleRadius = from.MinuteHandleRadius
-	to.MinuteColor = from.MinuteColor
 	to.MinuteOffset = from.MinuteOffset
 	to.BackendHandleRotationAngle = from.BackendHandleRotationAngle
 	to.BackendHandleDiskDistance = from.BackendHandleDiskDistance
 	to.BackendHandleRadius = from.BackendHandleRadius
-	to.BackendColor = from.BackendColor
 	to.BackendOffset = from.BackendOffset
 	to.FkeySizeRatio = from.FkeySizeRatio
 	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX

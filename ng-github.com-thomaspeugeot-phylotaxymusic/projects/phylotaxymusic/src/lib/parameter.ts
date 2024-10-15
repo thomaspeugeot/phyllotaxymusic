@@ -41,6 +41,9 @@ export class Parameter {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	BackendColor: string = ""
+	MinuteColor: string = ""
+	HourColor: string = ""
 	N: number = 0
 	M: number = 0
 	Z: number = 0
@@ -56,16 +59,13 @@ export class Parameter {
 	HourHandleRotationAngle: number = 0
 	HourHandleDiskDistance: number = 0
 	HourHandleRadius: number = 0
-	HourColor: string = ""
 	MinuteHandleRotationAngle: number = 0
 	MinuteHandleDiskDistance: number = 0
 	MinuteHandleRadius: number = 0
-	MinuteColor: string = ""
 	MinuteOffset: number = 0
 	BackendHandleRotationAngle: number = 0
 	BackendHandleDiskDistance: number = 0
 	BackendHandleRadius: number = 0
-	BackendColor: string = ""
 	BackendOffset: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
@@ -232,6 +232,9 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 
 	// insertion point for basic fields copy operations
 	parameterAPI.Name = parameter.Name
+	parameterAPI.BackendColor = parameter.BackendColor
+	parameterAPI.MinuteColor = parameter.MinuteColor
+	parameterAPI.HourColor = parameter.HourColor
 	parameterAPI.N = parameter.N
 	parameterAPI.M = parameter.M
 	parameterAPI.Z = parameter.Z
@@ -247,16 +250,13 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.HourHandleRotationAngle = parameter.HourHandleRotationAngle
 	parameterAPI.HourHandleDiskDistance = parameter.HourHandleDiskDistance
 	parameterAPI.HourHandleRadius = parameter.HourHandleRadius
-	parameterAPI.HourColor = parameter.HourColor
 	parameterAPI.MinuteHandleRotationAngle = parameter.MinuteHandleRotationAngle
 	parameterAPI.MinuteHandleDiskDistance = parameter.MinuteHandleDiskDistance
 	parameterAPI.MinuteHandleRadius = parameter.MinuteHandleRadius
-	parameterAPI.MinuteColor = parameter.MinuteColor
 	parameterAPI.MinuteOffset = parameter.MinuteOffset
 	parameterAPI.BackendHandleRotationAngle = parameter.BackendHandleRotationAngle
 	parameterAPI.BackendHandleDiskDistance = parameter.BackendHandleDiskDistance
 	parameterAPI.BackendHandleRadius = parameter.BackendHandleRadius
-	parameterAPI.BackendColor = parameter.BackendColor
 	parameterAPI.BackendOffset = parameter.BackendOffset
 	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
 	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
@@ -758,6 +758,9 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 
 	// insertion point for basic fields copy operations
 	parameter.Name = parameterAPI.Name
+	parameter.BackendColor = parameterAPI.BackendColor
+	parameter.MinuteColor = parameterAPI.MinuteColor
+	parameter.HourColor = parameterAPI.HourColor
 	parameter.N = parameterAPI.N
 	parameter.M = parameterAPI.M
 	parameter.Z = parameterAPI.Z
@@ -773,16 +776,13 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.HourHandleRotationAngle = parameterAPI.HourHandleRotationAngle
 	parameter.HourHandleDiskDistance = parameterAPI.HourHandleDiskDistance
 	parameter.HourHandleRadius = parameterAPI.HourHandleRadius
-	parameter.HourColor = parameterAPI.HourColor
 	parameter.MinuteHandleRotationAngle = parameterAPI.MinuteHandleRotationAngle
 	parameter.MinuteHandleDiskDistance = parameterAPI.MinuteHandleDiskDistance
 	parameter.MinuteHandleRadius = parameterAPI.MinuteHandleRadius
-	parameter.MinuteColor = parameterAPI.MinuteColor
 	parameter.MinuteOffset = parameterAPI.MinuteOffset
 	parameter.BackendHandleRotationAngle = parameterAPI.BackendHandleRotationAngle
 	parameter.BackendHandleDiskDistance = parameterAPI.BackendHandleDiskDistance
 	parameter.BackendHandleRadius = parameterAPI.BackendHandleRadius
-	parameter.BackendColor = parameterAPI.BackendColor
 	parameter.BackendOffset = parameterAPI.BackendOffset
 	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
 	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX

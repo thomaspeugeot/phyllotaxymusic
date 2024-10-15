@@ -1431,6 +1431,12 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(parameter_.Name), formDiv)
+		case "BackendColor":
+			FormDivBasicFieldToField(&(parameter_.BackendColor), formDiv)
+		case "MinuteColor":
+			FormDivBasicFieldToField(&(parameter_.MinuteColor), formDiv)
+		case "HourColor":
+			FormDivBasicFieldToField(&(parameter_.HourColor), formDiv)
 		case "N":
 			FormDivBasicFieldToField(&(parameter_.N), formDiv)
 		case "M":
@@ -1555,8 +1561,6 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.HourHandleDiskDistance), formDiv)
 		case "HourHandleRadius":
 			FormDivBasicFieldToField(&(parameter_.HourHandleRadius), formDiv)
-		case "HourColor":
-			FormDivBasicFieldToField(&(parameter_.HourColor), formDiv)
 		case "MinuteCurve":
 			FormDivSelectFieldToField(&(parameter_.MinuteCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "MinuteHandleRotationAngle":
@@ -1567,8 +1571,6 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.MinuteHandleDiskDistance), formDiv)
 		case "MinuteHandleRadius":
 			FormDivBasicFieldToField(&(parameter_.MinuteHandleRadius), formDiv)
-		case "MinuteColor":
-			FormDivBasicFieldToField(&(parameter_.MinuteColor), formDiv)
 		case "MinuteOffset":
 			FormDivBasicFieldToField(&(parameter_.MinuteOffset), formDiv)
 		case "BackendCurve":
@@ -1581,8 +1583,6 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.BackendHandleDiskDistance), formDiv)
 		case "BackendHandleRadius":
 			FormDivBasicFieldToField(&(parameter_.BackendHandleRadius), formDiv)
-		case "BackendColor":
-			FormDivBasicFieldToField(&(parameter_.BackendColor), formDiv)
 		case "BackendOffset":
 			FormDivBasicFieldToField(&(parameter_.BackendOffset), formDiv)
 		case "Fkey":
