@@ -7,8 +7,9 @@ import (
 )
 
 // GenerateSmoothSVGPath generates an SVG path data string with smooth Bezier curves forming a closed loop.
-// The coordinates are shifted by xc and yc, then rotated around (cx, cy) by angle alpha (in degrees).
-func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha float64) string {
+// The coordinates are shifted by xc and yc, then rotated around (cx, cy) by angle alpha (in degrees),
+// and scaled around (cx, cy) by the scale factor.
+func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha, scale float64) string {
 	n := len(x)
 	if n < 2 || n != len(y) {
 		return ""
@@ -19,7 +20,7 @@ func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha float
 	cosAlpha := math.Cos(alphaRad)
 	sinAlpha := math.Sin(alphaRad)
 
-	// Shift and rotate the coordinates
+	// Shift, rotate, and scale the coordinates
 	xTransformed := make([]float64, n)
 	yTransformed := make([]float64, n)
 	for i := 0; i < n; i++ {
@@ -31,8 +32,12 @@ func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha float
 		xRotated := cosAlpha*(xShifted-cx) - sinAlpha*(yShifted-cy) + cx
 		yRotated := sinAlpha*(xShifted-cx) + cosAlpha*(yShifted-cy) + cy
 
-		xTransformed[i] = xRotated
-		yTransformed[i] = yRotated
+		// Scale around (cx, cy)
+		xScaled := cx + scale*(xRotated-cx)
+		yScaled := cy + scale*(yRotated-cy)
+
+		xTransformed[i] = xScaled
+		yTransformed[i] = yScaled
 	}
 
 	var path strings.Builder
@@ -61,15 +66,23 @@ func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha float
 		cp1xRotated := cosAlpha*(cp1xShifted-cx) - sinAlpha*(cp1yShifted-cy) + cx
 		cp1yRotated := sinAlpha*(cp1xShifted-cx) + cosAlpha*(cp1yShifted-cy) + cy
 
+		// Scale first control point
+		cp1xScaled := cx + scale*(cp1xRotated-cx)
+		cp1yScaled := cy + scale*(cp1yRotated-cy)
+
 		// Second control point
 		cp2xShifted := cp2x + xc
 		cp2yShifted := cp2y + yc
 		cp2xRotated := cosAlpha*(cp2xShifted-cx) - sinAlpha*(cp2yShifted-cy) + cx
 		cp2yRotated := sinAlpha*(cp2xShifted-cx) + cosAlpha*(cp2yShifted-cy) + cy
 
+		// Scale second control point
+		cp2xScaled := cx + scale*(cp2xRotated-cx)
+		cp2yScaled := cy + scale*(cp2yRotated-cy)
+
 		// Append cubic Bezier curve command
 		path.WriteString(fmt.Sprintf("C%.2f %.2f %.2f %.2f %.2f %.2f ",
-			cp1xRotated, cp1yRotated, cp2xRotated, cp2yRotated, xTransformed[p2], yTransformed[p2]))
+			cp1xScaled, cp1yScaled, cp2xScaled, cp2yScaled, xTransformed[p2], yTransformed[p2]))
 	}
 
 	// Close the path

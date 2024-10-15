@@ -1575,6 +1575,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.BackendHandleDiskDistance), formDiv)
 		case "BackendHandleRadius":
 			FormDivBasicFieldToField(&(parameter_.BackendHandleRadius), formDiv)
+		case "BackendScale":
+			FormDivBasicFieldToField(&(parameter_.BackendScale), formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":

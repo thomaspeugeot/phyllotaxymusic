@@ -317,6 +317,7 @@ type Parameter_WOP struct {
 	BackendHandleRotationAngle float64
 	BackendHandleDiskDistance float64
 	BackendHandleRadius float64
+	BackendScale float64
 	FkeySizeRatio float64
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
@@ -365,6 +366,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.BackendHandleRotationAngle = from.BackendHandleRotationAngle
 	to.BackendHandleDiskDistance = from.BackendHandleDiskDistance
 	to.BackendHandleRadius = from.BackendHandleRadius
+	to.BackendScale = from.BackendScale
 	to.FkeySizeRatio = from.FkeySizeRatio
 	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX
 	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY

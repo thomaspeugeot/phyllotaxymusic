@@ -388,6 +388,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.BackendHandleRadius
 	BackendHandleRadius_Data sql.NullFloat64
 
+	// Declation for basic field parameterDB.BackendScale
+	BackendScale_Data sql.NullFloat64
+
 	// Declation for basic field parameterDB.FkeySizeRatio
 	FkeySizeRatio_Data sql.NullFloat64
 
@@ -523,49 +526,51 @@ type ParameterWOP struct {
 
 	BackendHandleRadius float64 `xlsx:"22"`
 
-	FkeySizeRatio float64 `xlsx:"23"`
+	BackendScale float64 `xlsx:"23"`
 
-	FkeyOriginRelativeX float64 `xlsx:"24"`
+	FkeySizeRatio float64 `xlsx:"24"`
 
-	FkeyOriginRelativeY float64 `xlsx:"25"`
+	FkeyOriginRelativeX float64 `xlsx:"25"`
 
-	PitchHeight float64 `xlsx:"26"`
+	FkeyOriginRelativeY float64 `xlsx:"26"`
 
-	NbPitchLines int `xlsx:"27"`
+	PitchHeight float64 `xlsx:"27"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"28"`
+	NbPitchLines int `xlsx:"28"`
 
-	NbMeasureLines int `xlsx:"29"`
+	MeasureLinesHeightRatio float64 `xlsx:"29"`
 
-	NbMeasureLinesPerCurve int `xlsx:"30"`
+	NbMeasureLines int `xlsx:"30"`
 
-	FirstVoiceShiftX float64 `xlsx:"31"`
+	NbMeasureLinesPerCurve int `xlsx:"31"`
 
-	FirstVoiceShiftY float64 `xlsx:"32"`
+	FirstVoiceShiftX float64 `xlsx:"32"`
 
-	PitchDifference int `xlsx:"33"`
+	FirstVoiceShiftY float64 `xlsx:"33"`
 
-	Speed float64 `xlsx:"34"`
+	PitchDifference int `xlsx:"34"`
 
-	Level float64 `xlsx:"35"`
+	Speed float64 `xlsx:"35"`
 
-	IsMinor bool `xlsx:"36"`
+	Level float64 `xlsx:"36"`
 
-	OriginX float64 `xlsx:"37"`
+	IsMinor bool `xlsx:"37"`
 
-	OriginY float64 `xlsx:"38"`
+	OriginX float64 `xlsx:"38"`
 
-	SpiralOriginX float64 `xlsx:"39"`
+	OriginY float64 `xlsx:"39"`
 
-	SpiralOriginY float64 `xlsx:"40"`
+	SpiralOriginX float64 `xlsx:"40"`
 
-	OriginCrossWidth float64 `xlsx:"41"`
+	SpiralOriginY float64 `xlsx:"41"`
 
-	SpiralRadiusRatio float64 `xlsx:"42"`
+	OriginCrossWidth float64 `xlsx:"42"`
 
-	ShowSpiralBezierConstruct bool `xlsx:"43"`
+	SpiralRadiusRatio float64 `xlsx:"43"`
 
-	ShowInterpolationPoints bool `xlsx:"44"`
+	ShowSpiralBezierConstruct bool `xlsx:"44"`
+
+	ShowInterpolationPoints bool `xlsx:"45"`
 	// insertion for WOP pointer fields
 }
 
@@ -594,6 +599,7 @@ var Parameter_Fields = []string{
 	"BackendHandleRotationAngle",
 	"BackendHandleDiskDistance",
 	"BackendHandleRadius",
+	"BackendScale",
 	"FkeySizeRatio",
 	"FkeyOriginRelativeX",
 	"FkeyOriginRelativeY",
@@ -2080,6 +2086,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
 	parameterDB.BackendHandleRadius_Data.Valid = true
 
+	parameterDB.BackendScale_Data.Float64 = parameter.BackendScale
+	parameterDB.BackendScale_Data.Valid = true
+
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -2216,6 +2225,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
 	parameterDB.BackendHandleRadius_Data.Valid = true
+
+	parameterDB.BackendScale_Data.Float64 = parameter.BackendScale
+	parameterDB.BackendScale_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -2354,6 +2366,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
 	parameterDB.BackendHandleRadius_Data.Valid = true
 
+	parameterDB.BackendScale_Data.Float64 = parameter.BackendScale
+	parameterDB.BackendScale_Data.Valid = true
+
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -2446,6 +2461,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
+	parameter.BackendScale = parameterDB.BackendScale_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2495,6 +2511,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
+	parameter.BackendScale = parameterDB.BackendScale_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2545,6 +2562,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
+	parameter.BackendScale = parameterDB.BackendScale_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64

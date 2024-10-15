@@ -62,6 +62,7 @@ export class Parameter {
 	BackendHandleRotationAngle: number = 0
 	BackendHandleDiskDistance: number = 0
 	BackendHandleRadius: number = 0
+	BackendScale: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -248,6 +249,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.BackendHandleRotationAngle = parameter.BackendHandleRotationAngle
 	parameterAPI.BackendHandleDiskDistance = parameter.BackendHandleDiskDistance
 	parameterAPI.BackendHandleRadius = parameter.BackendHandleRadius
+	parameterAPI.BackendScale = parameter.BackendScale
 	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
 	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
 	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
@@ -769,6 +771,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.BackendHandleRotationAngle = parameterAPI.BackendHandleRotationAngle
 	parameter.BackendHandleDiskDistance = parameterAPI.BackendHandleDiskDistance
 	parameter.BackendHandleRadius = parameterAPI.BackendHandleRadius
+	parameter.BackendScale = parameterAPI.BackendScale
 	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
 	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX
 	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY

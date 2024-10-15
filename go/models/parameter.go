@@ -132,6 +132,8 @@ type Parameter struct {
 	BackendHandleDiskDistance  float64
 	BackendHandleRadius        float64
 
+	BackendScale float64
+
 	// the score
 	Fkey                *Key
 	FkeySizeRatio       float64

@@ -57,6 +57,7 @@ export class ParameterAPI {
 	BackendHandleRotationAngle: number = 0
 	BackendHandleDiskDistance: number = 0
 	BackendHandleRadius: number = 0
+	BackendScale: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0

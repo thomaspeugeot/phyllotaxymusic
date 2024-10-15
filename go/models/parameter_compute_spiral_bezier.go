@@ -152,7 +152,7 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 		{
 			frontCurve := new(FrontCurve)
-			str := GenerateSmoothSVGPath(xs, ys, 0, 0, 0, 0, 0)
+			str := GenerateSmoothSVGPath(xs, ys, 0, 0, 0, 0, 0, 1)
 			frontCurve.Path = str
 			frontCurve.Name = fmt.Sprintf("Non Rotated %d ", idx)
 			frontCurve.Stage(stage)
@@ -162,7 +162,7 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 		if idx == 0 {
 			frontCurve := new(FrontCurve)
-			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.HourHandleRotationAngle)
+			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.HourHandleRotationAngle, 1)
 			frontCurve.Path = str
 			frontCurve.Name = fmt.Sprintf("Rotated %d ", idx)
 
@@ -173,7 +173,7 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 		if idx == 1 {
 			frontCurve := new(FrontCurve)
-			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.MinuteHandleRotationAngle)
+			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.MinuteHandleRotationAngle, 1)
 			frontCurve.Path = str
 			frontCurve.Name = fmt.Sprintf("Rotated %d ", idx)
 
@@ -184,7 +184,7 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 		if idx == 2 {
 			frontCurve := new(FrontCurve)
-			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.BackendHandleRotationAngle)
+			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.BackendHandleRotationAngle, p.BackendScale)
 			frontCurve.Path = str
 			frontCurve.Name = fmt.Sprintf("Rotated %d ", idx)
 
