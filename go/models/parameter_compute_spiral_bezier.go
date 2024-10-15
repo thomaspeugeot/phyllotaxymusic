@@ -182,7 +182,7 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 			p.MinuteCurve.FrontCurves = append(p.MinuteCurve.FrontCurves, frontCurve)
 		}
 
-		if idx == 2 {
+		if idx == 1 {
 			frontCurve := new(FrontCurve)
 			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.BackendHandleRotationAngle, p.BackendScale)
 			frontCurve.Path = str

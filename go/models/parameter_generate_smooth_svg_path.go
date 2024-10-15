@@ -7,9 +7,9 @@ import (
 )
 
 // GenerateSmoothSVGPath generates an SVG path data string with smooth Bezier curves forming a closed loop.
-// The coordinates are shifted by xc and yc, then rotated around (cx, cy) by angle alpha (in degrees),
-// and scaled around (cx, cy) by the scale factor.
-func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha, scale float64) string {
+// The coordinates are shifted by xc and yc, rotated around (cx, cy) by angle alpha (in degrees),
+// and then offset outward from (cx, cy) by the specified offset distance.
+func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha, offset float64) string {
 	n := len(x)
 	if n < 2 || n != len(y) {
 		return ""
@@ -20,7 +20,7 @@ func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha, scal
 	cosAlpha := math.Cos(alphaRad)
 	sinAlpha := math.Sin(alphaRad)
 
-	// Shift, rotate, and scale the coordinates
+	// Shift, rotate, and offset the coordinates
 	xTransformed := make([]float64, n)
 	yTransformed := make([]float64, n)
 	for i := 0; i < n; i++ {
@@ -32,12 +32,21 @@ func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha, scal
 		xRotated := cosAlpha*(xShifted-cx) - sinAlpha*(yShifted-cy) + cx
 		yRotated := sinAlpha*(xShifted-cx) + cosAlpha*(yShifted-cy) + cy
 
-		// Scale around (cx, cy)
-		xScaled := cx + scale*(xRotated-cx)
-		yScaled := cy + scale*(yRotated-cy)
+		// Compute the vector from (cx, cy) to the rotated point
+		dx := xRotated - cx
+		dy := yRotated - cy
+		length := math.Hypot(dx, dy)
 
-		xTransformed[i] = xScaled
-		yTransformed[i] = yScaled
+		// Normalize the vector and apply the offset
+		if length != 0 {
+			dx /= length
+			dy /= length
+		}
+		xOffset := xRotated + offset*dx
+		yOffset := yRotated + offset*dy
+
+		xTransformed[i] = xOffset
+		yTransformed[i] = yOffset
 	}
 
 	var path strings.Builder
@@ -66,9 +75,16 @@ func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha, scal
 		cp1xRotated := cosAlpha*(cp1xShifted-cx) - sinAlpha*(cp1yShifted-cy) + cx
 		cp1yRotated := sinAlpha*(cp1xShifted-cx) + cosAlpha*(cp1yShifted-cy) + cy
 
-		// Scale first control point
-		cp1xScaled := cx + scale*(cp1xRotated-cx)
-		cp1yScaled := cy + scale*(cp1yRotated-cy)
+		// Offset first control point
+		dx1 := cp1xRotated - cx
+		dy1 := cp1yRotated - cy
+		length1 := math.Hypot(dx1, dy1)
+		if length1 != 0 {
+			dx1 /= length1
+			dy1 /= length1
+		}
+		cp1xOffset := cp1xRotated + offset*dx1
+		cp1yOffset := cp1yRotated + offset*dy1
 
 		// Second control point
 		cp2xShifted := cp2x + xc
@@ -76,13 +92,20 @@ func GenerateSmoothSVGPath(x []float64, y []float64, xc, yc, cx, cy, alpha, scal
 		cp2xRotated := cosAlpha*(cp2xShifted-cx) - sinAlpha*(cp2yShifted-cy) + cx
 		cp2yRotated := sinAlpha*(cp2xShifted-cx) + cosAlpha*(cp2yShifted-cy) + cy
 
-		// Scale second control point
-		cp2xScaled := cx + scale*(cp2xRotated-cx)
-		cp2yScaled := cy + scale*(cp2yRotated-cy)
+		// Offset second control point
+		dx2 := cp2xRotated - cx
+		dy2 := cp2yRotated - cy
+		length2 := math.Hypot(dx2, dy2)
+		if length2 != 0 {
+			dx2 /= length2
+			dy2 /= length2
+		}
+		cp2xOffset := cp2xRotated + offset*dx2
+		cp2yOffset := cp2yRotated + offset*dy2
 
 		// Append cubic Bezier curve command
 		path.WriteString(fmt.Sprintf("C%.2f %.2f %.2f %.2f %.2f %.2f ",
-			cp1xScaled, cp1yScaled, cp2xScaled, cp2yScaled, xTransformed[p2], yTransformed[p2]))
+			cp1xOffset, cp1yOffset, cp2xOffset, cp2yOffset, xTransformed[p2], yTransformed[p2]))
 	}
 
 	// Close the path

@@ -141,7 +141,7 @@
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].HourHandleRadius}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
-              <mat-slider min="0.0" max="100.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+              <mat-slider min="0.0" max="0.3" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].HourHandleRadius" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>
@@ -154,7 +154,7 @@
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteHandleDiskDistance}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
-              <mat-slider min="0.0" max="10.0" step="0.001" showTickMarks discrete [displayWith]="formatLabel">
+              <mat-slider min="1.4" max="2.0" step="0.005" showTickMarks discrete [displayWith]="formatLabel">
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteHandleDiskDistance" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>
@@ -166,19 +166,19 @@
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteHandleRadius}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
-              <mat-slider min="0.0" max="100.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+              <mat-slider min="0.0" max="1.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteHandleRadius" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>
 
             <mat-grid-tile colspan="3" rowspan="1">
-              <h4 style="margin-left: 8px; width: 100%;">Minute scale</h4>
+              <h4 style="margin-left: 8px; width: 100%;">Minute Scale</h4>
             </mat-grid-tile>
             <mat-grid-tile colspan="2" rowspan="1">
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteScale}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
-              <mat-slider min="1.0" max="1.2" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+              <mat-slider min="0.0" max="30" step="1" showTickMarks discrete [displayWith]="formatLabel">
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteScale" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>
@@ -210,13 +210,13 @@
 
 
             <mat-grid-tile colspan="3" rowspan="1">
-              <h4 style="margin-left: 8px; width: 100%;">Backend scale</h4>
+              <h4 style="margin-left: 8px; width: 100%;">Backend Scale</h4>
             </mat-grid-tile>
             <mat-grid-tile colspan="2" rowspan="1">
               <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].BackendScale}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
-              <mat-slider min="1.0" max="2.0" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+              <mat-slider min="0.0" max="200.0" step="1" showTickMarks discrete [displayWith]="formatLabel">
                 <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].BackendScale" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>
