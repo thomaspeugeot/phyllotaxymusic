@@ -652,9 +652,9 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000014_9.IsKept = true
 
 	__Parameter__000000_Reference.Name = `Reference`
-	__Parameter__000000_Reference.BackendColor = `#D1C5B4`
-	__Parameter__000000_Reference.MinuteColor = `#8FA382`
-	__Parameter__000000_Reference.HourColor = `#536C87`
+	__Parameter__000000_Reference.BackendColor = `#F1F1F1`
+	__Parameter__000000_Reference.MinuteColor = `#5A5A5A`
+	__Parameter__000000_Reference.HourColor = `#1E1E1E`
 	__Parameter__000000_Reference.N = 2
 	__Parameter__000000_Reference.M = 1
 	__Parameter__000000_Reference.Z = 7

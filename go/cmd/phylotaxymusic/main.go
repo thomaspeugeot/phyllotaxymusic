@@ -195,7 +195,7 @@ func generateIndexHTML(
         }
         svg {
             width: 100%;
-            height: calc(100% - 50px); /* Adjust height to accommodate slider */
+            height: calc(100% - 100px); /* Adjust height to accommodate slider and button */
             display: block;
         }
         #slider-container {
@@ -207,6 +207,19 @@ func generateIndexHTML(
         }
         #time-slider {
             width: 100%;
+        }
+		/* New styles for the button */
+        #button-container {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #e0e0e0;
+            text-align: center;
+        }
+        #color-button {
+            padding: 10px 20px;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -241,6 +254,11 @@ func generateIndexHTML(
         <input type="range" min="0" max="12" step="0.01" value="0" id="time-slider">
     </div>
 
+    <!-- Button Container -->
+    <div id="button-container">
+        <button id="color-button">Switch Colors</button>
+    </div>
+
     <!-- JavaScript code for rotation -->
     <script>
         (function() {
@@ -273,11 +291,34 @@ func generateIndexHTML(
                 minuteHandle.setAttribute('transform', 'rotate(' + currentAngleMinute + ' 500 500)');
             }
 
+            var backgroundElement = document.getElementById('background');
+            var colorButton = document.getElementById('color-button');
+
+            var colorSets = [
+                ['#D1C5B4', '#8FA382', '#536C87'], // Original colors
+                ['#F06A49', '#D6A539', '#006D6F'], // First set
+                ['#F1F1F1', '#5A5A5A', '#1E1E1E'], // Second set
+            ];
+
+            var colorSetIndex = 0;
+
+            function updateColors() {
+                // Increment the color set index
+                colorSetIndex = (colorSetIndex + 1) % colorSets.length;
+                var colors = colorSets[colorSetIndex];
+                backgroundElement.setAttribute('fill', colors[0]);
+                minuteHandle.setAttribute('fill', colors[1]);
+                hourHandle.setAttribute('fill', colors[2]);
+            }
+
             // Initialize clock
             updateClock();
 
             // Update clock when slider value changes
             timeSlider.addEventListener('input', updateClock);
+
+            // Add event listener to color button
+            colorButton.addEventListener('click', updateColors);
         })();
     </script>
 </body>
