@@ -126,17 +126,23 @@ func (parameterImpl *ParameterImpl) Generate() {
 	minuteHandleStack := mapFrontCurveStack["Minute Handle"]
 	minuteHandlePath := minuteHandleStack.FrontCurves[0]
 
+	BackendHandleStack := mapFrontCurveStack["Backend curve"]
+	BackendHandlePath := BackendHandleStack.FrontCurves[0]
+
 	mapSpiralCircle := *phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.SpiralCircle](
 		parameterImpl.phylotaxymusicStage)
 
 	hourHandleMarker := mapSpiralCircle["Hour Marker"]
 	minuteHandleMarker := mapSpiralCircle["Minute Marker"]
+	backendHandleMarker := mapSpiralCircle["Backend Marker"]
 
 	err := generateIndexHTML(
 		minuteHandlePath.Path,
 		minuteHandleMarker.Path,
 		hourHandlePath.Path,
 		hourHandleMarker.Path,
+		BackendHandlePath.Path,
+		backendHandleMarker.Path,
 	)
 	if err != nil {
 		panic(err)
@@ -155,7 +161,7 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 
 }
 
-func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
+func generateIndexHTML(string1a, string1b, string2a, string2b, string3a, string3b string) error {
 	const htmlTemplate = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -189,17 +195,14 @@ func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
 <body>
     <!-- Responsive SVG -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
-      <path id="background" d="
-        M 200,400
-        C 80,400 0,280 0,180
-        C 0,80 80,0 200,0
-        C 320,0 400,80 400,180
-        C 400,280 320,400 200,400
-        Z
-      " 
-      fill="none" 
-      fill-rule="evenodd"/>
 
+	<path id="background" d="
+		{{.String3a}}
+		{{.String3b}}
+		" 
+		fill="lavender" 
+		fill-rule="evenodd"/>
+		
       <path id="minute-handle" d="
       {{.String1a}}
       {{.String1b}}
@@ -211,6 +214,8 @@ func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
       {{.String2a}}
       {{.String2b}}
       " fill="lightgreen" fill-rule="evenodd" />
+
+
     </svg>
 
     <!-- Slider Container -->
@@ -281,11 +286,15 @@ func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
 		String1b string
 		String2a string
 		String2b string
+		String3a string
+		String3b string
 	}{
 		String1a: string1a,
 		String1b: string1b,
 		String2a: string2a,
 		String2b: string2b,
+		String3a: string3a,
+		String3b: string3b,
 	}
 
 	// Parse and execute the template with the provided data
