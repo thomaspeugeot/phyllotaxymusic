@@ -117,6 +117,7 @@ type Parameter struct {
 	HourMarker              *SpiralCircle
 	HourHandleDiskDistance  float64
 	HourHandleRadius        float64
+	HourColor               string
 
 	MinuteCurve *FrontCurveStack
 
@@ -124,6 +125,7 @@ type Parameter struct {
 	MinuteMarker              *SpiralCircle
 	MinuteHandleDiskDistance  float64
 	MinuteHandleRadius        float64
+	MinuteColor               string
 
 	MinuteOffset float64
 
@@ -133,6 +135,7 @@ type Parameter struct {
 	BackendMarker              *SpiralCircle
 	BackendHandleDiskDistance  float64
 	BackendHandleRadius        float64
+	BackendColor               string
 
 	BackendOffset float64
 

@@ -110,10 +110,12 @@ type ParameterImpl struct {
 
 // Generate implements models.GeneratorInterface.
 func (parameterImpl *ParameterImpl) Generate() {
-	parameterImpl.parameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
-	parameterImpl.parameter.GenerateSvg(parameterImpl.gongsvgStage)
-	parameterImpl.parameter.GenerateNotes(parameterImpl.gongtoneStage)
-	parameterImpl.tree.Generate(parameterImpl.parameter)
+	p := parameterImpl.parameter
+
+	p.ComputeShapes(parameterImpl.phylotaxymusicStage)
+	p.GenerateSvg(parameterImpl.gongsvgStage)
+	p.GenerateNotes(parameterImpl.gongtoneStage)
+	parameterImpl.tree.Generate(p)
 	parameterImpl.phylotaxymusicStage.Commit()
 
 	// get path of the hour handle
@@ -139,10 +141,15 @@ func (parameterImpl *ParameterImpl) Generate() {
 	err := generateIndexHTML(
 		minuteHandlePath.Path,
 		minuteHandleMarker.Path,
+		p.MinuteColor,
+
 		hourHandlePath.Path,
 		hourHandleMarker.Path,
+		p.HourColor,
+
 		BackendHandlePath.Path,
 		backendHandleMarker.Path,
+		p.BackendColor,
 	)
 	if err != nil {
 		panic(err)
@@ -161,7 +168,18 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 
 }
 
-func generateIndexHTML(string1a, string1b, string2a, string2b, string3a, string3b string) error {
+func generateIndexHTML(
+	MinutePath,
+	MinuteMarkerPath,
+	MinuteColor,
+
+	HourPath,
+	HourMarkerPath,
+	HourColor,
+
+	BackendPath,
+	BackendMarkerPath,
+	BackendColor string) error {
 	const htmlTemplate = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -197,23 +215,23 @@ func generateIndexHTML(string1a, string1b, string2a, string2b, string3a, string3
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
 
 	<path id="background" d="
-		{{.String3a}}
-		{{.String3b}}
+		{{.BackendPath}}
+		{{.BackendMarkerPath}}
 		" 
-		fill="lavender" 
+		fill="{{.BackendColor}}" 
 		fill-rule="evenodd"/>
 		
       <path id="minute-handle" d="
-      {{.String1a}}
-      {{.String1b}}
+      {{.MinutePath}}
+      {{.MinuteMarkerPath}}
       " 
-      fill="lightblue" 
+      fill="{{.MinuteColor}}" 
       fill-rule="evenodd"/>
 
       <path id="hour-handle" d="
-      {{.String2a}}
-      {{.String2b}}
-      " fill="lightgreen" fill-rule="evenodd" />
+      {{.HourPath}}
+      {{.HourMarkerPath}}
+      " fill="{{.HourColor}}" fill-rule="evenodd" />
 
 
     </svg>
@@ -282,19 +300,29 @@ func generateIndexHTML(string1a, string1b, string2a, string2b, string3a, string3
 
 	// Data to be injected into the template
 	data := struct {
-		String1a string
-		String1b string
-		String2a string
-		String2b string
-		String3a string
-		String3b string
+		BackendPath       string
+		BackendMarkerPath string
+		BackendColor      string
+
+		MinutePath       string
+		MinuteMarkerPath string
+		MinuteColor      string
+
+		HourPath       string
+		HourMarkerPath string
+		HourColor      string
 	}{
-		String1a: string1a,
-		String1b: string1b,
-		String2a: string2a,
-		String2b: string2b,
-		String3a: string3a,
-		String3b: string3b,
+		BackendPath:       BackendPath,
+		BackendMarkerPath: BackendMarkerPath,
+		BackendColor:      BackendColor,
+
+		MinutePath:       MinutePath,
+		MinuteMarkerPath: MinuteMarkerPath,
+		MinuteColor:      MinuteColor,
+
+		HourPath:       HourPath,
+		HourMarkerPath: HourMarkerPath,
+		HourColor:      HourColor,
 	}
 
 	// Parse and execute the template with the provided data

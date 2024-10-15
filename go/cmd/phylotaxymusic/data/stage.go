@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+
 	// injection point for ident package import declaration{{ImportPackageDeclaration}}
 )
 
@@ -666,13 +667,16 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.HourHandleRotationAngle = 0.000000
 	__Parameter__000000_Reference.HourHandleDiskDistance = 1.165000
 	__Parameter__000000_Reference.HourHandleRadius = 0.190000
+	__Parameter__000000_Reference.HourColor = `lightgreen`
 	__Parameter__000000_Reference.MinuteHandleRotationAngle = -120.000000
 	__Parameter__000000_Reference.MinuteHandleDiskDistance = 1.795000
 	__Parameter__000000_Reference.MinuteHandleRadius = 0.090000
+	__Parameter__000000_Reference.MinuteColor = `lightblue`
 	__Parameter__000000_Reference.MinuteOffset = 24.000000
 	__Parameter__000000_Reference.BackendHandleRotationAngle = -120.500000
 	__Parameter__000000_Reference.BackendHandleDiskDistance = 2.700000
 	__Parameter__000000_Reference.BackendHandleRadius = 0.030000
+	__Parameter__000000_Reference.BackendColor = `lavender`
 	__Parameter__000000_Reference.BackendOffset = 159.000000
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000

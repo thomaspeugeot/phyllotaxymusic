@@ -370,6 +370,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.HourHandleRadius
 	HourHandleRadius_Data sql.NullFloat64
 
+	// Declation for basic field parameterDB.HourColor
+	HourColor_Data sql.NullString
+
 	// Declation for basic field parameterDB.MinuteHandleRotationAngle
 	MinuteHandleRotationAngle_Data sql.NullFloat64
 
@@ -378,6 +381,9 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.MinuteHandleRadius
 	MinuteHandleRadius_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.MinuteColor
+	MinuteColor_Data sql.NullString
 
 	// Declation for basic field parameterDB.MinuteOffset
 	MinuteOffset_Data sql.NullFloat64
@@ -390,6 +396,9 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.BackendHandleRadius
 	BackendHandleRadius_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.BackendColor
+	BackendColor_Data sql.NullString
 
 	// Declation for basic field parameterDB.BackendOffset
 	BackendOffset_Data sql.NullFloat64
@@ -517,65 +526,71 @@ type ParameterWOP struct {
 
 	HourHandleRadius float64 `xlsx:"16"`
 
-	MinuteHandleRotationAngle float64 `xlsx:"17"`
+	HourColor string `xlsx:"17"`
 
-	MinuteHandleDiskDistance float64 `xlsx:"18"`
+	MinuteHandleRotationAngle float64 `xlsx:"18"`
 
-	MinuteHandleRadius float64 `xlsx:"19"`
+	MinuteHandleDiskDistance float64 `xlsx:"19"`
 
-	MinuteOffset float64 `xlsx:"20"`
+	MinuteHandleRadius float64 `xlsx:"20"`
 
-	BackendHandleRotationAngle float64 `xlsx:"21"`
+	MinuteColor string `xlsx:"21"`
 
-	BackendHandleDiskDistance float64 `xlsx:"22"`
+	MinuteOffset float64 `xlsx:"22"`
 
-	BackendHandleRadius float64 `xlsx:"23"`
+	BackendHandleRotationAngle float64 `xlsx:"23"`
 
-	BackendOffset float64 `xlsx:"24"`
+	BackendHandleDiskDistance float64 `xlsx:"24"`
 
-	FkeySizeRatio float64 `xlsx:"25"`
+	BackendHandleRadius float64 `xlsx:"25"`
 
-	FkeyOriginRelativeX float64 `xlsx:"26"`
+	BackendColor string `xlsx:"26"`
 
-	FkeyOriginRelativeY float64 `xlsx:"27"`
+	BackendOffset float64 `xlsx:"27"`
 
-	PitchHeight float64 `xlsx:"28"`
+	FkeySizeRatio float64 `xlsx:"28"`
 
-	NbPitchLines int `xlsx:"29"`
+	FkeyOriginRelativeX float64 `xlsx:"29"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"30"`
+	FkeyOriginRelativeY float64 `xlsx:"30"`
 
-	NbMeasureLines int `xlsx:"31"`
+	PitchHeight float64 `xlsx:"31"`
 
-	NbMeasureLinesPerCurve int `xlsx:"32"`
+	NbPitchLines int `xlsx:"32"`
 
-	FirstVoiceShiftX float64 `xlsx:"33"`
+	MeasureLinesHeightRatio float64 `xlsx:"33"`
 
-	FirstVoiceShiftY float64 `xlsx:"34"`
+	NbMeasureLines int `xlsx:"34"`
 
-	PitchDifference int `xlsx:"35"`
+	NbMeasureLinesPerCurve int `xlsx:"35"`
 
-	Speed float64 `xlsx:"36"`
+	FirstVoiceShiftX float64 `xlsx:"36"`
 
-	Level float64 `xlsx:"37"`
+	FirstVoiceShiftY float64 `xlsx:"37"`
 
-	IsMinor bool `xlsx:"38"`
+	PitchDifference int `xlsx:"38"`
 
-	OriginX float64 `xlsx:"39"`
+	Speed float64 `xlsx:"39"`
 
-	OriginY float64 `xlsx:"40"`
+	Level float64 `xlsx:"40"`
 
-	SpiralOriginX float64 `xlsx:"41"`
+	IsMinor bool `xlsx:"41"`
 
-	SpiralOriginY float64 `xlsx:"42"`
+	OriginX float64 `xlsx:"42"`
 
-	OriginCrossWidth float64 `xlsx:"43"`
+	OriginY float64 `xlsx:"43"`
 
-	SpiralRadiusRatio float64 `xlsx:"44"`
+	SpiralOriginX float64 `xlsx:"44"`
 
-	ShowSpiralBezierConstruct bool `xlsx:"45"`
+	SpiralOriginY float64 `xlsx:"45"`
 
-	ShowInterpolationPoints bool `xlsx:"46"`
+	OriginCrossWidth float64 `xlsx:"46"`
+
+	SpiralRadiusRatio float64 `xlsx:"47"`
+
+	ShowSpiralBezierConstruct bool `xlsx:"48"`
+
+	ShowInterpolationPoints bool `xlsx:"49"`
 	// insertion for WOP pointer fields
 }
 
@@ -598,13 +613,16 @@ var Parameter_Fields = []string{
 	"HourHandleRotationAngle",
 	"HourHandleDiskDistance",
 	"HourHandleRadius",
+	"HourColor",
 	"MinuteHandleRotationAngle",
 	"MinuteHandleDiskDistance",
 	"MinuteHandleRadius",
+	"MinuteColor",
 	"MinuteOffset",
 	"BackendHandleRotationAngle",
 	"BackendHandleDiskDistance",
 	"BackendHandleRadius",
+	"BackendColor",
 	"BackendOffset",
 	"FkeySizeRatio",
 	"FkeyOriginRelativeX",
@@ -2074,6 +2092,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.HourHandleRadius_Data.Float64 = parameter.HourHandleRadius
 	parameterDB.HourHandleRadius_Data.Valid = true
 
+	parameterDB.HourColor_Data.String = parameter.HourColor
+	parameterDB.HourColor_Data.Valid = true
+
 	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
 	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
 
@@ -2082,6 +2103,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
 	parameterDB.MinuteHandleRadius_Data.Valid = true
+
+	parameterDB.MinuteColor_Data.String = parameter.MinuteColor
+	parameterDB.MinuteColor_Data.Valid = true
 
 	parameterDB.MinuteOffset_Data.Float64 = parameter.MinuteOffset
 	parameterDB.MinuteOffset_Data.Valid = true
@@ -2094,6 +2118,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
 	parameterDB.BackendHandleRadius_Data.Valid = true
+
+	parameterDB.BackendColor_Data.String = parameter.BackendColor
+	parameterDB.BackendColor_Data.Valid = true
 
 	parameterDB.BackendOffset_Data.Float64 = parameter.BackendOffset
 	parameterDB.BackendOffset_Data.Valid = true
@@ -2217,6 +2244,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.HourHandleRadius_Data.Float64 = parameter.HourHandleRadius
 	parameterDB.HourHandleRadius_Data.Valid = true
 
+	parameterDB.HourColor_Data.String = parameter.HourColor
+	parameterDB.HourColor_Data.Valid = true
+
 	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
 	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
 
@@ -2225,6 +2255,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
 	parameterDB.MinuteHandleRadius_Data.Valid = true
+
+	parameterDB.MinuteColor_Data.String = parameter.MinuteColor
+	parameterDB.MinuteColor_Data.Valid = true
 
 	parameterDB.MinuteOffset_Data.Float64 = parameter.MinuteOffset
 	parameterDB.MinuteOffset_Data.Valid = true
@@ -2237,6 +2270,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
 	parameterDB.BackendHandleRadius_Data.Valid = true
+
+	parameterDB.BackendColor_Data.String = parameter.BackendColor
+	parameterDB.BackendColor_Data.Valid = true
 
 	parameterDB.BackendOffset_Data.Float64 = parameter.BackendOffset
 	parameterDB.BackendOffset_Data.Valid = true
@@ -2360,6 +2396,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.HourHandleRadius_Data.Float64 = parameter.HourHandleRadius
 	parameterDB.HourHandleRadius_Data.Valid = true
 
+	parameterDB.HourColor_Data.String = parameter.HourColor
+	parameterDB.HourColor_Data.Valid = true
+
 	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
 	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
 
@@ -2368,6 +2407,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
 	parameterDB.MinuteHandleRadius_Data.Valid = true
+
+	parameterDB.MinuteColor_Data.String = parameter.MinuteColor
+	parameterDB.MinuteColor_Data.Valid = true
 
 	parameterDB.MinuteOffset_Data.Float64 = parameter.MinuteOffset
 	parameterDB.MinuteOffset_Data.Valid = true
@@ -2380,6 +2422,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
 	parameterDB.BackendHandleRadius_Data.Valid = true
+
+	parameterDB.BackendColor_Data.String = parameter.BackendColor
+	parameterDB.BackendColor_Data.Valid = true
 
 	parameterDB.BackendOffset_Data.Float64 = parameter.BackendOffset
 	parameterDB.BackendOffset_Data.Valid = true
@@ -2470,13 +2515,16 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
 	parameter.HourHandleDiskDistance = parameterDB.HourHandleDiskDistance_Data.Float64
 	parameter.HourHandleRadius = parameterDB.HourHandleRadius_Data.Float64
+	parameter.HourColor = parameterDB.HourColor_Data.String
 	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
 	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
+	parameter.MinuteColor = parameterDB.MinuteColor_Data.String
 	parameter.MinuteOffset = parameterDB.MinuteOffset_Data.Float64
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
+	parameter.BackendColor = parameterDB.BackendColor_Data.String
 	parameter.BackendOffset = parameterDB.BackendOffset_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
@@ -2521,13 +2569,16 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
 	parameter.HourHandleDiskDistance = parameterDB.HourHandleDiskDistance_Data.Float64
 	parameter.HourHandleRadius = parameterDB.HourHandleRadius_Data.Float64
+	parameter.HourColor = parameterDB.HourColor_Data.String
 	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
 	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
+	parameter.MinuteColor = parameterDB.MinuteColor_Data.String
 	parameter.MinuteOffset = parameterDB.MinuteOffset_Data.Float64
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
+	parameter.BackendColor = parameterDB.BackendColor_Data.String
 	parameter.BackendOffset = parameterDB.BackendOffset_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
@@ -2573,13 +2624,16 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
 	parameter.HourHandleDiskDistance = parameterDB.HourHandleDiskDistance_Data.Float64
 	parameter.HourHandleRadius = parameterDB.HourHandleRadius_Data.Float64
+	parameter.HourColor = parameterDB.HourColor_Data.String
 	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
 	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
+	parameter.MinuteColor = parameterDB.MinuteColor_Data.String
 	parameter.MinuteOffset = parameterDB.MinuteOffset_Data.Float64
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
+	parameter.BackendColor = parameterDB.BackendColor_Data.String
 	parameter.BackendOffset = parameterDB.BackendOffset_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
