@@ -314,11 +314,11 @@ type Parameter_WOP struct {
 	MinuteHandleRotationAngle float64
 	MinuteHandleDiskDistance float64
 	MinuteHandleRadius float64
-	MinuteScale float64
+	MinuteOffset float64
 	BackendHandleRotationAngle float64
 	BackendHandleDiskDistance float64
 	BackendHandleRadius float64
-	BackendScale float64
+	BackendOffset float64
 	FkeySizeRatio float64
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
@@ -364,11 +364,11 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.MinuteHandleRotationAngle = from.MinuteHandleRotationAngle
 	to.MinuteHandleDiskDistance = from.MinuteHandleDiskDistance
 	to.MinuteHandleRadius = from.MinuteHandleRadius
-	to.MinuteScale = from.MinuteScale
+	to.MinuteOffset = from.MinuteOffset
 	to.BackendHandleRotationAngle = from.BackendHandleRotationAngle
 	to.BackendHandleDiskDistance = from.BackendHandleDiskDistance
 	to.BackendHandleRadius = from.BackendHandleRadius
-	to.BackendScale = from.BackendScale
+	to.BackendOffset = from.BackendOffset
 	to.FkeySizeRatio = from.FkeySizeRatio
 	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX
 	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY

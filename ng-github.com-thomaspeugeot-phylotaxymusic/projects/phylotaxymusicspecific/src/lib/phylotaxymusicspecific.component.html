@@ -172,14 +172,14 @@
             </mat-grid-tile>
 
             <mat-grid-tile colspan="3" rowspan="1">
-              <h4 style="margin-left: 8px; width: 100%;">Minute Scale</h4>
+              <h4 style="margin-left: 8px; width: 100%;">Minute Offset</h4>
             </mat-grid-tile>
             <mat-grid-tile colspan="2" rowspan="1">
-              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteScale}}</h4>
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].MinuteOffset}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
               <mat-slider min="0.0" max="30" step="1" showTickMarks discrete [displayWith]="formatLabel">
-                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteScale" (input)="input($event)">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].MinuteOffset" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>
 
@@ -210,14 +210,14 @@
 
 
             <mat-grid-tile colspan="3" rowspan="1">
-              <h4 style="margin-left: 8px; width: 100%;">Backend Scale</h4>
+              <h4 style="margin-left: 8px; width: 100%;">Backend Offset</h4>
             </mat-grid-tile>
             <mat-grid-tile colspan="2" rowspan="1">
-              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].BackendScale}}</h4>
+              <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].BackendOffset}}</h4>
             </mat-grid-tile>              
             <mat-grid-tile colspan="7" rowspan="1">
               <mat-slider min="0.0" max="200.0" step="1" showTickMarks discrete [displayWith]="formatLabel">
-                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].BackendScale" (input)="input($event)">
+                <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].BackendOffset" (input)="input($event)">
               </mat-slider>
             </mat-grid-tile>
 

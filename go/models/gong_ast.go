@@ -1681,13 +1681,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].MinuteHandleRadius = exprSign * fielValue
-				case "MinuteScale":
+				case "MinuteOffset":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].MinuteScale = exprSign * fielValue
+					__gong__map_Parameter[identifier].MinuteOffset = exprSign * fielValue
 				case "BackendHandleRotationAngle":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1709,13 +1709,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].BackendHandleRadius = exprSign * fielValue
-				case "BackendScale":
+				case "BackendOffset":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].BackendScale = exprSign * fielValue
+					__gong__map_Parameter[identifier].BackendOffset = exprSign * fielValue
 				case "FkeySizeRatio":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)

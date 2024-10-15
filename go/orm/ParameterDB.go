@@ -379,8 +379,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.MinuteHandleRadius
 	MinuteHandleRadius_Data sql.NullFloat64
 
-	// Declation for basic field parameterDB.MinuteScale
-	MinuteScale_Data sql.NullFloat64
+	// Declation for basic field parameterDB.MinuteOffset
+	MinuteOffset_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.BackendHandleRotationAngle
 	BackendHandleRotationAngle_Data sql.NullFloat64
@@ -391,8 +391,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.BackendHandleRadius
 	BackendHandleRadius_Data sql.NullFloat64
 
-	// Declation for basic field parameterDB.BackendScale
-	BackendScale_Data sql.NullFloat64
+	// Declation for basic field parameterDB.BackendOffset
+	BackendOffset_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.FkeySizeRatio
 	FkeySizeRatio_Data sql.NullFloat64
@@ -523,7 +523,7 @@ type ParameterWOP struct {
 
 	MinuteHandleRadius float64 `xlsx:"19"`
 
-	MinuteScale float64 `xlsx:"20"`
+	MinuteOffset float64 `xlsx:"20"`
 
 	BackendHandleRotationAngle float64 `xlsx:"21"`
 
@@ -531,7 +531,7 @@ type ParameterWOP struct {
 
 	BackendHandleRadius float64 `xlsx:"23"`
 
-	BackendScale float64 `xlsx:"24"`
+	BackendOffset float64 `xlsx:"24"`
 
 	FkeySizeRatio float64 `xlsx:"25"`
 
@@ -601,11 +601,11 @@ var Parameter_Fields = []string{
 	"MinuteHandleRotationAngle",
 	"MinuteHandleDiskDistance",
 	"MinuteHandleRadius",
-	"MinuteScale",
+	"MinuteOffset",
 	"BackendHandleRotationAngle",
 	"BackendHandleDiskDistance",
 	"BackendHandleRadius",
-	"BackendScale",
+	"BackendOffset",
 	"FkeySizeRatio",
 	"FkeyOriginRelativeX",
 	"FkeyOriginRelativeY",
@@ -2083,8 +2083,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
 	parameterDB.MinuteHandleRadius_Data.Valid = true
 
-	parameterDB.MinuteScale_Data.Float64 = parameter.MinuteScale
-	parameterDB.MinuteScale_Data.Valid = true
+	parameterDB.MinuteOffset_Data.Float64 = parameter.MinuteOffset
+	parameterDB.MinuteOffset_Data.Valid = true
 
 	parameterDB.BackendHandleRotationAngle_Data.Float64 = parameter.BackendHandleRotationAngle
 	parameterDB.BackendHandleRotationAngle_Data.Valid = true
@@ -2095,8 +2095,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
 	parameterDB.BackendHandleRadius_Data.Valid = true
 
-	parameterDB.BackendScale_Data.Float64 = parameter.BackendScale
-	parameterDB.BackendScale_Data.Valid = true
+	parameterDB.BackendOffset_Data.Float64 = parameter.BackendOffset
+	parameterDB.BackendOffset_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -2226,8 +2226,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
 	parameterDB.MinuteHandleRadius_Data.Valid = true
 
-	parameterDB.MinuteScale_Data.Float64 = parameter.MinuteScale
-	parameterDB.MinuteScale_Data.Valid = true
+	parameterDB.MinuteOffset_Data.Float64 = parameter.MinuteOffset
+	parameterDB.MinuteOffset_Data.Valid = true
 
 	parameterDB.BackendHandleRotationAngle_Data.Float64 = parameter.BackendHandleRotationAngle
 	parameterDB.BackendHandleRotationAngle_Data.Valid = true
@@ -2238,8 +2238,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
 	parameterDB.BackendHandleRadius_Data.Valid = true
 
-	parameterDB.BackendScale_Data.Float64 = parameter.BackendScale
-	parameterDB.BackendScale_Data.Valid = true
+	parameterDB.BackendOffset_Data.Float64 = parameter.BackendOffset
+	parameterDB.BackendOffset_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -2369,8 +2369,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
 	parameterDB.MinuteHandleRadius_Data.Valid = true
 
-	parameterDB.MinuteScale_Data.Float64 = parameter.MinuteScale
-	parameterDB.MinuteScale_Data.Valid = true
+	parameterDB.MinuteOffset_Data.Float64 = parameter.MinuteOffset
+	parameterDB.MinuteOffset_Data.Valid = true
 
 	parameterDB.BackendHandleRotationAngle_Data.Float64 = parameter.BackendHandleRotationAngle
 	parameterDB.BackendHandleRotationAngle_Data.Valid = true
@@ -2381,8 +2381,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
 	parameterDB.BackendHandleRadius_Data.Valid = true
 
-	parameterDB.BackendScale_Data.Float64 = parameter.BackendScale
-	parameterDB.BackendScale_Data.Valid = true
+	parameterDB.BackendOffset_Data.Float64 = parameter.BackendOffset
+	parameterDB.BackendOffset_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -2473,11 +2473,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
 	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
-	parameter.MinuteScale = parameterDB.MinuteScale_Data.Float64
+	parameter.MinuteOffset = parameterDB.MinuteOffset_Data.Float64
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
-	parameter.BackendScale = parameterDB.BackendScale_Data.Float64
+	parameter.BackendOffset = parameterDB.BackendOffset_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2524,11 +2524,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
 	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
-	parameter.MinuteScale = parameterDB.MinuteScale_Data.Float64
+	parameter.MinuteOffset = parameterDB.MinuteOffset_Data.Float64
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
-	parameter.BackendScale = parameterDB.BackendScale_Data.Float64
+	parameter.BackendOffset = parameterDB.BackendOffset_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2576,11 +2576,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
 	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
-	parameter.MinuteScale = parameterDB.MinuteScale_Data.Float64
+	parameter.MinuteOffset = parameterDB.MinuteOffset_Data.Float64
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
-	parameter.BackendScale = parameterDB.BackendScale_Data.Float64
+	parameter.BackendOffset = parameterDB.BackendOffset_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64

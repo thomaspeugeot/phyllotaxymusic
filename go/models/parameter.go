@@ -125,7 +125,7 @@ type Parameter struct {
 	MinuteHandleDiskDistance  float64
 	MinuteHandleRadius        float64
 
-	MinuteScale float64
+	MinuteOffset float64
 
 	BackendCurve *FrontCurveStack
 
@@ -134,7 +134,7 @@ type Parameter struct {
 	BackendHandleDiskDistance  float64
 	BackendHandleRadius        float64
 
-	BackendScale float64
+	BackendOffset float64
 
 	// the score
 	Fkey                *Key
