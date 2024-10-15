@@ -125,6 +125,8 @@ type Parameter struct {
 	MinuteHandleDiskDistance  float64
 	MinuteHandleRadius        float64
 
+	MinuteScale float64
+
 	BackendCurve *FrontCurveStack
 
 	BackendHandleRotationAngle float64

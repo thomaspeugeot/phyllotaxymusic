@@ -379,6 +379,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.MinuteHandleRadius
 	MinuteHandleRadius_Data sql.NullFloat64
 
+	// Declation for basic field parameterDB.MinuteScale
+	MinuteScale_Data sql.NullFloat64
+
 	// Declation for basic field parameterDB.BackendHandleRotationAngle
 	BackendHandleRotationAngle_Data sql.NullFloat64
 
@@ -520,57 +523,59 @@ type ParameterWOP struct {
 
 	MinuteHandleRadius float64 `xlsx:"19"`
 
-	BackendHandleRotationAngle float64 `xlsx:"20"`
+	MinuteScale float64 `xlsx:"20"`
 
-	BackendHandleDiskDistance float64 `xlsx:"21"`
+	BackendHandleRotationAngle float64 `xlsx:"21"`
 
-	BackendHandleRadius float64 `xlsx:"22"`
+	BackendHandleDiskDistance float64 `xlsx:"22"`
 
-	BackendScale float64 `xlsx:"23"`
+	BackendHandleRadius float64 `xlsx:"23"`
 
-	FkeySizeRatio float64 `xlsx:"24"`
+	BackendScale float64 `xlsx:"24"`
 
-	FkeyOriginRelativeX float64 `xlsx:"25"`
+	FkeySizeRatio float64 `xlsx:"25"`
 
-	FkeyOriginRelativeY float64 `xlsx:"26"`
+	FkeyOriginRelativeX float64 `xlsx:"26"`
 
-	PitchHeight float64 `xlsx:"27"`
+	FkeyOriginRelativeY float64 `xlsx:"27"`
 
-	NbPitchLines int `xlsx:"28"`
+	PitchHeight float64 `xlsx:"28"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"29"`
+	NbPitchLines int `xlsx:"29"`
 
-	NbMeasureLines int `xlsx:"30"`
+	MeasureLinesHeightRatio float64 `xlsx:"30"`
 
-	NbMeasureLinesPerCurve int `xlsx:"31"`
+	NbMeasureLines int `xlsx:"31"`
 
-	FirstVoiceShiftX float64 `xlsx:"32"`
+	NbMeasureLinesPerCurve int `xlsx:"32"`
 
-	FirstVoiceShiftY float64 `xlsx:"33"`
+	FirstVoiceShiftX float64 `xlsx:"33"`
 
-	PitchDifference int `xlsx:"34"`
+	FirstVoiceShiftY float64 `xlsx:"34"`
 
-	Speed float64 `xlsx:"35"`
+	PitchDifference int `xlsx:"35"`
 
-	Level float64 `xlsx:"36"`
+	Speed float64 `xlsx:"36"`
 
-	IsMinor bool `xlsx:"37"`
+	Level float64 `xlsx:"37"`
 
-	OriginX float64 `xlsx:"38"`
+	IsMinor bool `xlsx:"38"`
 
-	OriginY float64 `xlsx:"39"`
+	OriginX float64 `xlsx:"39"`
 
-	SpiralOriginX float64 `xlsx:"40"`
+	OriginY float64 `xlsx:"40"`
 
-	SpiralOriginY float64 `xlsx:"41"`
+	SpiralOriginX float64 `xlsx:"41"`
 
-	OriginCrossWidth float64 `xlsx:"42"`
+	SpiralOriginY float64 `xlsx:"42"`
 
-	SpiralRadiusRatio float64 `xlsx:"43"`
+	OriginCrossWidth float64 `xlsx:"43"`
 
-	ShowSpiralBezierConstruct bool `xlsx:"44"`
+	SpiralRadiusRatio float64 `xlsx:"44"`
 
-	ShowInterpolationPoints bool `xlsx:"45"`
+	ShowSpiralBezierConstruct bool `xlsx:"45"`
+
+	ShowInterpolationPoints bool `xlsx:"46"`
 	// insertion for WOP pointer fields
 }
 
@@ -596,6 +601,7 @@ var Parameter_Fields = []string{
 	"MinuteHandleRotationAngle",
 	"MinuteHandleDiskDistance",
 	"MinuteHandleRadius",
+	"MinuteScale",
 	"BackendHandleRotationAngle",
 	"BackendHandleDiskDistance",
 	"BackendHandleRadius",
@@ -2077,6 +2083,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
 	parameterDB.MinuteHandleRadius_Data.Valid = true
 
+	parameterDB.MinuteScale_Data.Float64 = parameter.MinuteScale
+	parameterDB.MinuteScale_Data.Valid = true
+
 	parameterDB.BackendHandleRotationAngle_Data.Float64 = parameter.BackendHandleRotationAngle
 	parameterDB.BackendHandleRotationAngle_Data.Valid = true
 
@@ -2216,6 +2225,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
 	parameterDB.MinuteHandleRadius_Data.Valid = true
+
+	parameterDB.MinuteScale_Data.Float64 = parameter.MinuteScale
+	parameterDB.MinuteScale_Data.Valid = true
 
 	parameterDB.BackendHandleRotationAngle_Data.Float64 = parameter.BackendHandleRotationAngle
 	parameterDB.BackendHandleRotationAngle_Data.Valid = true
@@ -2357,6 +2369,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
 	parameterDB.MinuteHandleRadius_Data.Valid = true
 
+	parameterDB.MinuteScale_Data.Float64 = parameter.MinuteScale
+	parameterDB.MinuteScale_Data.Valid = true
+
 	parameterDB.BackendHandleRotationAngle_Data.Float64 = parameter.BackendHandleRotationAngle
 	parameterDB.BackendHandleRotationAngle_Data.Valid = true
 
@@ -2458,6 +2473,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
 	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
+	parameter.MinuteScale = parameterDB.MinuteScale_Data.Float64
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
@@ -2508,6 +2524,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
 	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
+	parameter.MinuteScale = parameterDB.MinuteScale_Data.Float64
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
@@ -2559,6 +2576,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
 	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
 	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
+	parameter.MinuteScale = parameterDB.MinuteScale_Data.Float64
 	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
 	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
 	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64

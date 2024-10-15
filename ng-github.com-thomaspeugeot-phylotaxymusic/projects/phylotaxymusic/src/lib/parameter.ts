@@ -59,6 +59,7 @@ export class Parameter {
 	MinuteHandleRotationAngle: number = 0
 	MinuteHandleDiskDistance: number = 0
 	MinuteHandleRadius: number = 0
+	MinuteScale: number = 0
 	BackendHandleRotationAngle: number = 0
 	BackendHandleDiskDistance: number = 0
 	BackendHandleRadius: number = 0
@@ -246,6 +247,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.MinuteHandleRotationAngle = parameter.MinuteHandleRotationAngle
 	parameterAPI.MinuteHandleDiskDistance = parameter.MinuteHandleDiskDistance
 	parameterAPI.MinuteHandleRadius = parameter.MinuteHandleRadius
+	parameterAPI.MinuteScale = parameter.MinuteScale
 	parameterAPI.BackendHandleRotationAngle = parameter.BackendHandleRotationAngle
 	parameterAPI.BackendHandleDiskDistance = parameter.BackendHandleDiskDistance
 	parameterAPI.BackendHandleRadius = parameter.BackendHandleRadius
@@ -768,6 +770,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.MinuteHandleRotationAngle = parameterAPI.MinuteHandleRotationAngle
 	parameter.MinuteHandleDiskDistance = parameterAPI.MinuteHandleDiskDistance
 	parameter.MinuteHandleRadius = parameterAPI.MinuteHandleRadius
+	parameter.MinuteScale = parameterAPI.MinuteScale
 	parameter.BackendHandleRotationAngle = parameterAPI.BackendHandleRotationAngle
 	parameter.BackendHandleDiskDistance = parameterAPI.BackendHandleDiskDistance
 	parameter.BackendHandleRadius = parameterAPI.BackendHandleRadius

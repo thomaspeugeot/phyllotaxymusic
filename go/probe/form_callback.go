@@ -1565,6 +1565,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.MinuteHandleDiskDistance), formDiv)
 		case "MinuteHandleRadius":
 			FormDivBasicFieldToField(&(parameter_.MinuteHandleRadius), formDiv)
+		case "MinuteScale":
+			FormDivBasicFieldToField(&(parameter_.MinuteScale), formDiv)
 		case "BackendCurve":
 			FormDivSelectFieldToField(&(parameter_.BackendCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "BackendHandleRotationAngle":

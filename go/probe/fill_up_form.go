@@ -484,6 +484,8 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("MinuteHandleRadius", instanceWithInferedType.MinuteHandleRadius, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("MinuteScale", instanceWithInferedType.MinuteScale, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		AssociationFieldToForm("BackendCurve", instanceWithInferedType.BackendCurve, formGroup, probe)
 		BasicFieldtoForm("BackendHandleRotationAngle", instanceWithInferedType.BackendHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)

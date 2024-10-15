@@ -173,7 +173,7 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 		if idx == 1 {
 			frontCurve := new(FrontCurve)
-			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.MinuteHandleRotationAngle, 1)
+			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.MinuteHandleRotationAngle, p.MinuteScale)
 			frontCurve.Path = str
 			frontCurve.Name = fmt.Sprintf("Rotated %d ", idx)
 
