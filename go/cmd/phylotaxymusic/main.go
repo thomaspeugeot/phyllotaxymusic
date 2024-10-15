@@ -155,7 +155,6 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 
 }
 
-// Function to generate index.html
 func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
 	const htmlTemplate = `<!DOCTYPE html>
 <html lang="en">
@@ -172,8 +171,18 @@ func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
         }
         svg {
             width: 100%;
-            height: 100%;
+            height: calc(100% - 50px); /* Adjust height to accommodate slider */
             display: block;
+        }
+        #slider-container {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #f0f0f0;
+        }
+        #time-slider {
+            width: 100%;
         }
     </style>
 </head>
@@ -204,33 +213,48 @@ func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
       " fill="lightgreen" fill-rule="evenodd" />
     </svg>
 
+    <!-- Slider Container -->
+    <div id="slider-container">
+        <input type="range" min="0" max="12" step="0.01" value="0" id="time-slider">
+    </div>
+
     <!-- JavaScript code for rotation -->
     <script>
         (function() {
-            var now = new Date();
-            var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            var elapsedSeconds = (now - midnight) / 1000; // Seconds since midnight
-
-            var durationHour = 43200; // 12 hours in seconds (360 degrees)
-            var durationMinute = 3600; // 1 hour in seconds (360 degrees)
-
-            // Degrees per second
-            var anglePerSecondHour = 360 / durationHour; 
-            var anglePerSecondMinute = 360 / durationMinute; 
-
-            // Calculate the current angle based on elapsed time
-            var currentAngleHour = (elapsedSeconds % durationHour) * anglePerSecondHour;
-            var currentAngleMinute = (elapsedSeconds % durationMinute) * anglePerSecondMinute;
-
-            // Apply rotation using SVG transforms
             var hourHandle = document.getElementById('hour-handle');
             var minuteHandle = document.getElementById('minute-handle');
+            var timeSlider = document.getElementById('time-slider');
 
-            // currentAngleHour = 0
-            // currentAngleMinute = 0
+            function updateClock() {
+                var sliderValue = parseFloat(timeSlider.value); // Hours added
+                var now = new Date();
+                var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                var elapsedSeconds = (now - midnight) / 1000; // Seconds since midnight
 
-            hourHandle.setAttribute('transform', 'rotate(' + currentAngleHour + ' 500 500)');
-            minuteHandle.setAttribute('transform', 'rotate(' + currentAngleMinute + ' 500 500)');
+                // Add slider value in seconds
+                elapsedSeconds += sliderValue * 3600;
+
+                var durationHour = 43200; // 12 hours in seconds (360 degrees)
+                var durationMinute = 3600; // 1 hour in seconds (360 degrees)
+
+                // Degrees per second
+                var anglePerSecondHour = 360 / durationHour; 
+                var anglePerSecondMinute = 360 / durationMinute; 
+
+                // Calculate the current angle based on elapsed time
+                var currentAngleHour = (elapsedSeconds % durationHour) * anglePerSecondHour;
+                var currentAngleMinute = (elapsedSeconds % durationMinute) * anglePerSecondMinute;
+
+                // Apply rotation using SVG transforms
+                hourHandle.setAttribute('transform', 'rotate(' + currentAngleHour + ' 500 500)');
+                minuteHandle.setAttribute('transform', 'rotate(' + currentAngleMinute + ' 500 500)');
+            }
+
+            // Initialize clock
+            updateClock();
+
+            // Update clock when slider value changes
+            timeSlider.addEventListener('input', updateClock);
         })();
     </script>
 </body>
@@ -238,7 +262,14 @@ func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
 `
 
 	// Create or open the index.html file
-	file, err := os.Create("../../../../myclock/index.html")
+	file2, err := os.Create("../../../../myclock/index.html")
+	if err != nil {
+		return err
+	}
+	defer file2.Close()
+
+	// Create or open the index.html file
+	file, err := os.Create("index.html")
 	if err != nil {
 		return err
 	}
@@ -264,6 +295,11 @@ func generateIndexHTML(string1a, string1b, string2a, string2b string) error {
 	}
 
 	err = tmpl.Execute(file, data)
+	if err != nil {
+		return err
+	}
+
+	err = tmpl.Execute(file2, data)
 	if err != nil {
 		return err
 	}

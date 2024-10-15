@@ -827,9 +827,9 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Backend_Marker.Name = `Backend Marker`
 	__SpiralCircle__000000_Backend_Marker.IsDisplayed = true
 	__SpiralCircle__000000_Backend_Marker.CenterX = 0.000000
-	__SpiralCircle__000000_Backend_Marker.CenterY = 247.632000
+	__SpiralCircle__000000_Backend_Marker.CenterY = 343.107000
 	__SpiralCircle__000000_Backend_Marker.HasBespokeRadius = true
-	__SpiralCircle__000000_Backend_Marker.BespopkeRadius = 1334.640000
+	__SpiralCircle__000000_Backend_Marker.BespopkeRadius = 6.030000
 	__SpiralCircle__000000_Backend_Marker.Pitch = 0
 	__SpiralCircle__000000_Backend_Marker.Color = ``
 	__SpiralCircle__000000_Backend_Marker.FillOpacity = 0.000000
@@ -840,7 +840,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Backend_Marker.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000000_Backend_Marker.Transform = ``
 	__SpiralCircle__000000_Backend_Marker.ShowName = false
-	__SpiralCircle__000000_Backend_Marker.Path = `M 1834.640000 252.368000 A 1334.640000 1334.640000 0 1 0 -834.640000 252.368000 A 1334.640000 1334.640000 0 1 0 1834.640000 252.368000 Z`
+	__SpiralCircle__000000_Backend_Marker.Path = `M 506.030000 156.893000 A 6.030000 6.030000 0 1 0 493.970000 156.893000 A 6.030000 6.030000 0 1 0 506.030000 156.893000 Z`
 
 	__SpiralCircle__000001_Construction_Circle_Spiral.Name = `Construction Circle Spiral`
 	__SpiralCircle__000001_Construction_Circle_Spiral.IsDisplayed = false
