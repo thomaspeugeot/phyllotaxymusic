@@ -326,7 +326,7 @@ func generateIndexHTML(
     ['#2B3A42', '#A8B7C7', '#E3E7E9'], // Darker background with clearer hour handle (blueish tones)
     ['#174A32', '#68A691', '#B9DEC1'], // Green variations
     ['#7D4964', '#B787A3', '#E7C2D4'], // Rose variations
-	    ['blue', 'white', 'red'], // Rose variations
+	    ['red', 'white', 'blue'], // French colors
             ];
 
             var colorSetIndex = 0;
