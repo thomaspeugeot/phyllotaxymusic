@@ -209,7 +209,7 @@ func _(stage *models.StageStruct) {
 	__Axis__000003_Pitch_Line.Name = `Pitch Line`
 	__Axis__000003_Pitch_Line.IsDisplayed = false
 	__Axis__000003_Pitch_Line.AngleDegree = 0.000000
-	__Axis__000003_Pitch_Line.Length = 4000.000000
+	__Axis__000003_Pitch_Line.Length = 415.382956
 	__Axis__000003_Pitch_Line.CenterX = 0.000000
 	__Axis__000003_Pitch_Line.CenterY = 0.000000
 	__Axis__000003_Pitch_Line.EndX = 0.000000
@@ -229,8 +229,8 @@ func _(stage *models.StageStruct) {
 	__Axis__000004_Rotated_Axis.Length = 415.382956
 	__Axis__000004_Rotated_Axis.CenterX = 0.000000
 	__Axis__000004_Rotated_Axis.CenterY = 0.000000
-	__Axis__000004_Rotated_Axis.EndX = 0.000000
-	__Axis__000004_Rotated_Axis.EndY = 0.000000
+	__Axis__000004_Rotated_Axis.EndX = -29.670211
+	__Axis__000004_Rotated_Axis.EndY = 154.170939
 	__Axis__000004_Rotated_Axis.Color = ``
 	__Axis__000004_Rotated_Axis.FillOpacity = 0.000000
 	__Axis__000004_Rotated_Axis.Stroke = `black`
@@ -668,14 +668,14 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralBezierStrength = 0.800000
 	__Parameter__000000_Reference.NbInterpolationPoints = 12
 	__Parameter__000000_Reference.HourHandleRotationAngle = 0.000000
-	__Parameter__000000_Reference.HourHandleDiskDistance = 1.165000
-	__Parameter__000000_Reference.HourHandleRadius = 0.190000
+	__Parameter__000000_Reference.HourHandleDiskDistance = 1.090000
+	__Parameter__000000_Reference.HourHandleRadius = 0.210000
 	__Parameter__000000_Reference.MinuteHandleRotationAngle = -120.000000
-	__Parameter__000000_Reference.MinuteHandleDiskDistance = 1.795000
+	__Parameter__000000_Reference.MinuteHandleDiskDistance = 1.775000
 	__Parameter__000000_Reference.MinuteHandleRadius = 0.090000
 	__Parameter__000000_Reference.MinuteOffset = 24.000000
 	__Parameter__000000_Reference.BackendHandleRotationAngle = -120.500000
-	__Parameter__000000_Reference.BackendHandleDiskDistance = 2.700000
+	__Parameter__000000_Reference.BackendHandleDiskDistance = 2.640000
 	__Parameter__000000_Reference.BackendHandleRadius = 0.030000
 	__Parameter__000000_Reference.BackendOffset = 159.000000
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
@@ -722,7 +722,7 @@ func _(stage *models.StageStruct) {
 	__Rhombus__000001_Initial_Rhombus.CenterX = 0.000000
 	__Rhombus__000001_Initial_Rhombus.CenterY = 0.000000
 	__Rhombus__000001_Initial_Rhombus.SideLength = 157.000000
-	__Rhombus__000001_Initial_Rhombus.AngleDegree = 0.000000
+	__Rhombus__000001_Initial_Rhombus.AngleDegree = -79.106605
 	__Rhombus__000001_Initial_Rhombus.InsideAngle = 120.000000
 	__Rhombus__000001_Initial_Rhombus.Color = ``
 	__Rhombus__000001_Initial_Rhombus.FillOpacity = 0.000000
@@ -832,7 +832,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Backend_Marker.Name = `Backend Marker`
 	__SpiralCircle__000000_Backend_Marker.IsDisplayed = true
 	__SpiralCircle__000000_Backend_Marker.CenterX = 0.000000
-	__SpiralCircle__000000_Backend_Marker.CenterY = 423.900000
+	__SpiralCircle__000000_Backend_Marker.CenterY = 414.480000
 	__SpiralCircle__000000_Backend_Marker.HasBespokeRadius = true
 	__SpiralCircle__000000_Backend_Marker.BespopkeRadius = 4.710000
 	__SpiralCircle__000000_Backend_Marker.Pitch = 0
@@ -845,14 +845,14 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Backend_Marker.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000000_Backend_Marker.Transform = ``
 	__SpiralCircle__000000_Backend_Marker.ShowName = false
-	__SpiralCircle__000000_Backend_Marker.Path = `M 504.710000 76.100000 A 4.710000 4.710000 0 1 0 495.290000 76.100000 A 4.710000 4.710000 0 1 0 504.710000 76.100000 Z`
+	__SpiralCircle__000000_Backend_Marker.Path = `M 504.710000 85.520000 A 4.710000 4.710000 0 1 0 495.290000 85.520000 A 4.710000 4.710000 0 1 0 504.710000 85.520000 Z`
 
 	__SpiralCircle__000001_Construction_Circle_Spiral.Name = `Construction Circle Spiral`
 	__SpiralCircle__000001_Construction_Circle_Spiral.IsDisplayed = false
 	__SpiralCircle__000001_Construction_Circle_Spiral.CenterX = 56.520000
 	__SpiralCircle__000001_Construction_Circle_Spiral.CenterY = 0.000000
-	__SpiralCircle__000001_Construction_Circle_Spiral.HasBespokeRadius = false
-	__SpiralCircle__000001_Construction_Circle_Spiral.BespopkeRadius = 0.000000
+	__SpiralCircle__000001_Construction_Circle_Spiral.HasBespokeRadius = true
+	__SpiralCircle__000001_Construction_Circle_Spiral.BespopkeRadius = 14.130000
 	__SpiralCircle__000001_Construction_Circle_Spiral.Pitch = 0
 	__SpiralCircle__000001_Construction_Circle_Spiral.Color = ``
 	__SpiralCircle__000001_Construction_Circle_Spiral.FillOpacity = 0.000000
@@ -868,7 +868,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000002_Hour_Marker.Name = `Hour Marker`
 	__SpiralCircle__000002_Hour_Marker.IsDisplayed = true
 	__SpiralCircle__000002_Hour_Marker.CenterX = 0.000000
-	__SpiralCircle__000002_Hour_Marker.CenterY = 182.905000
+	__SpiralCircle__000002_Hour_Marker.CenterY = 170.345000
 	__SpiralCircle__000002_Hour_Marker.HasBespokeRadius = true
 	__SpiralCircle__000002_Hour_Marker.BespopkeRadius = 29.830000
 	__SpiralCircle__000002_Hour_Marker.Pitch = 0
@@ -881,12 +881,12 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000002_Hour_Marker.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000002_Hour_Marker.Transform = ``
 	__SpiralCircle__000002_Hour_Marker.ShowName = false
-	__SpiralCircle__000002_Hour_Marker.Path = `M 529.830000 317.095000 A 29.830000 29.830000 0 1 0 470.170000 317.095000 A 29.830000 29.830000 0 1 0 529.830000 317.095000 Z`
+	__SpiralCircle__000002_Hour_Marker.Path = `M 529.830000 329.655000 A 29.830000 29.830000 0 1 0 470.170000 329.655000 A 29.830000 29.830000 0 1 0 529.830000 329.655000 Z`
 
 	__SpiralCircle__000003_Minute_Marker.Name = `Minute Marker`
 	__SpiralCircle__000003_Minute_Marker.IsDisplayed = true
 	__SpiralCircle__000003_Minute_Marker.CenterX = 0.000000
-	__SpiralCircle__000003_Minute_Marker.CenterY = 281.815000
+	__SpiralCircle__000003_Minute_Marker.CenterY = 278.675000
 	__SpiralCircle__000003_Minute_Marker.HasBespokeRadius = true
 	__SpiralCircle__000003_Minute_Marker.BespopkeRadius = 14.130000
 	__SpiralCircle__000003_Minute_Marker.Pitch = 0
@@ -899,7 +899,7 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000003_Minute_Marker.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000003_Minute_Marker.Transform = ``
 	__SpiralCircle__000003_Minute_Marker.ShowName = false
-	__SpiralCircle__000003_Minute_Marker.Path = `M 514.130000 218.185000 A 14.130000 14.130000 0 1 0 485.870000 218.185000 A 14.130000 14.130000 0 1 0 514.130000 218.185000 Z`
+	__SpiralCircle__000003_Minute_Marker.Path = `M 514.130000 221.325000 A 14.130000 14.130000 0 1 0 485.870000 221.325000 A 14.130000 14.130000 0 1 0 514.130000 221.325000 Z`
 
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.Name = `Brute Spiral Bezier Circle Grid`
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.IsDisplayed = true

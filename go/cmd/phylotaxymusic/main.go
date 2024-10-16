@@ -119,6 +119,10 @@ func (parameterImpl *ParameterImpl) Generate() {
 	parameterImpl.phylotaxymusicStage.Commit()
 
 	// get path of the hour handle
+	parameterImpl.generateHTMLindex(p)
+}
+
+func (parameterImpl *ParameterImpl) generateHTMLindex(p *phylotaxymusic_models.Parameter) {
 	mapFrontCurveStack := *phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.FrontCurveStack](
 		parameterImpl.phylotaxymusicStage)
 
@@ -165,6 +169,7 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	updatedParameter.GenerateSvg(parameterImpl.gongsvgStage)
 	parameterImpl.tree.Generate(updatedParameter)
 	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage)
+	parameterImpl.generateHTMLindex(updatedParameter)
 
 }
 
@@ -185,7 +190,7 @@ func generateIndexHTML(
 <head>
     <meta charset="UTF-8">
     <title>Responsive Interactive Clock SVG</title>
-    <meta http-equiv="refresh" content="30">
+    <meta http-equiv="refresh" content="300">
     <style>
         body, html {
             margin: 0;
