@@ -305,13 +305,17 @@ func generateIndexHTML(
             var colorRankElement = document.getElementById('color-rank');
 
             var colorSets = [
-                ['#D1C5B4', '#8FA382', '#536C87'],
-                ['#F06A49', '#D6A539', '#006D6F'],
-                ['#F1F1F1', '#5A5A5A', '#1E1E1E'], 
-                ['#5A5A5A', '#F1F1F1', '#1E1E1E'], 
-                ['#2B3A42', '#A8B7C7', '#E3E7E9'], // Darker background with clearer hour handle (blueish tones)
-                ['#174A32', '#68A691', '#B9DEC1'], // Green variations
-                ['#7D4964', '#B787A3', '#E7C2D4'], // Rose variations
+    ['#D1C5B4', '#8FA382', '#536C87'],
+    ['#F06A49', '#D6A539', '#006D6F'], // Original set
+                ['#B0A18F', '#6F8D75', '#4E5E6A'], // Muted earth tones
+                ['#E0D7C6', '#A8A59D', '#6B6E70'], // Soft neutrals with depth
+                ['#C7B299', '#8E7C6D', '#5F4B3D'], // Warm, desaturated hues
+    ['#0C5C60', '#A6591F', '#F08271'], // New set 3 - inverted roles
+    ['#F1F1F1', '#5A5A5A', '#1E1E1E'], 
+    ['#5A5A5A', '#F1F1F1', '#1E1E1E'], 
+    ['#2B3A42', '#A8B7C7', '#E3E7E9'], // Darker background with clearer hour handle (blueish tones)
+    ['#174A32', '#68A691', '#B9DEC1'], // Green variations
+    ['#7D4964', '#B787A3', '#E7C2D4'], // Rose variations
             ];
 
             var colorSetIndex = 0;
