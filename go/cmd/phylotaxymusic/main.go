@@ -295,9 +295,14 @@ func generateIndexHTML(
             var colorButton = document.getElementById('color-button');
 
             var colorSets = [
-                ['#D1C5B4', '#8FA382', '#536C87'], // Original colors
-                ['#F06A49', '#D6A539', '#006D6F'], // First set
-                ['#F1F1F1', '#5A5A5A', '#1E1E1E'], // Second set
+                ['#D1C5B4', '#8FA382', '#536C87'],
+                ['#F06A49', '#D6A539', '#006D6F'],
+                ['#F1F1F1', '#5A5A5A', '#1E1E1E'], 
+				['#5A5A5A', '#F1F1F1', '#1E1E1E'], 
+
+				['#2B3A42', '#A8B7C7', '#E3E7E9'], // Darker background with clearer hour handle (blueish tones)
+		    	['#174A32', '#68A691', '#B9DEC1'], // Green variations
+    			['#7D4964', '#B787A3', '#E7C2D4'], // Rose variations
             ];
 
             var colorSetIndex = 0;
