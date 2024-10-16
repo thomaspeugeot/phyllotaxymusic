@@ -195,7 +195,7 @@ func generateIndexHTML(
         }
         svg {
             width: 100%;
-            height: calc(100% - 100px); /* Adjust height to accommodate slider and button */
+            height: calc(100% - 150px); /* Adjusted height to accommodate slider and larger buttons */
             display: block;
         }
         #slider-container {
@@ -208,18 +208,18 @@ func generateIndexHTML(
         #time-slider {
             width: 100%;
         }
-		/* New styles for the button */
+        /* Styles for the buttons */
         #button-container {
             width: 100%;
-            height: 50px;
             padding: 10px;
             box-sizing: border-box;
             background-color: #e0e0e0;
             text-align: center;
         }
-        #color-button {
-            padding: 10px 20px;
-            font-size: 16px;
+        .color-button {
+            padding: 20px 40px; /* Doubled padding */
+            font-size: 32px;     /* Doubled font size */
+            margin: 0 10px;      /* Added margin between buttons */
         }
     </style>
 </head>
@@ -227,13 +227,13 @@ func generateIndexHTML(
     <!-- Responsive SVG -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
 
-	<path id="background" d="
-		{{.BackendPath}}
-		{{.BackendMarkerPath}}
-		" 
-		fill="{{.BackendColor}}" 
-		fill-rule="evenodd"/>
-		
+    <path id="background" d="
+        {{.BackendPath}}
+        {{.BackendMarkerPath}}
+        " 
+        fill="{{.BackendColor}}" 
+        fill-rule="evenodd"/>
+        
       <path id="minute-handle" d="
       {{.MinutePath}}
       {{.MinuteMarkerPath}}
@@ -256,7 +256,8 @@ func generateIndexHTML(
 
     <!-- Button Container -->
     <div id="button-container">
-        <button id="color-button">Switch Colors</button>
+        <button id="color-button-backward" class="color-button">Previous Color</button>
+        <button id="color-button-forward" class="color-button">Next Color</button>
     </div>
 
     <!-- JavaScript code for rotation -->
@@ -292,24 +293,23 @@ func generateIndexHTML(
             }
 
             var backgroundElement = document.getElementById('background');
-            var colorButton = document.getElementById('color-button');
+            var colorButtonForward = document.getElementById('color-button-forward');
+            var colorButtonBackward = document.getElementById('color-button-backward');
 
             var colorSets = [
                 ['#D1C5B4', '#8FA382', '#536C87'],
                 ['#F06A49', '#D6A539', '#006D6F'],
                 ['#F1F1F1', '#5A5A5A', '#1E1E1E'], 
-				['#5A5A5A', '#F1F1F1', '#1E1E1E'], 
-
-				['#2B3A42', '#A8B7C7', '#E3E7E9'], // Darker background with clearer hour handle (blueish tones)
-		    	['#174A32', '#68A691', '#B9DEC1'], // Green variations
-    			['#7D4964', '#B787A3', '#E7C2D4'], // Rose variations
+                ['#5A5A5A', '#1E1E1E', '#F1F1F1'], 
+                ['#2B3A42', '#A8B7C7', '#E3E7E9'], // Darker background with clearer hour handle (blueish tones)
+                ['#174A32', '#68A691', '#B9DEC1'], // Green variations
+                ['#7D4964', '#B787A3', '#E7C2D4'], // Rose variations
             ];
 
             var colorSetIndex = 0;
 
-            function updateColors() {
-                // Increment the color set index
-                colorSetIndex = (colorSetIndex + 1) % colorSets.length;
+            function updateColors(delta) {
+                colorSetIndex = (colorSetIndex + delta + colorSets.length) % colorSets.length;
                 var colors = colorSets[colorSetIndex];
                 backgroundElement.setAttribute('fill', colors[0]);
                 minuteHandle.setAttribute('fill', colors[1]);
@@ -322,8 +322,9 @@ func generateIndexHTML(
             // Update clock when slider value changes
             timeSlider.addEventListener('input', updateClock);
 
-            // Add event listener to color button
-            colorButton.addEventListener('click', updateColors);
+            // Add event listeners to color buttons
+            colorButtonForward.addEventListener('click', function() { updateColors(1); });
+            colorButtonBackward.addEventListener('click', function() { updateColors(-1); });
         })();
     </script>
 </body>
