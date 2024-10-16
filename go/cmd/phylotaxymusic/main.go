@@ -240,10 +240,15 @@ func generateIndexHTML(
 
     <path id="background" d="
         {{.BackendPath}}
-        {{.BackendMarkerPath}}
         " 
         fill="{{.BackendColor}}" 
-        fill-rule="evenodd"/>
+        />
+
+	<path id="background" d="
+        {{.BackendMarkerPath}}
+        " 
+        fill="red" 
+        />
         
       <path id="minute-handle" d="
       {{.MinutePath}}

@@ -676,7 +676,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.MinuteOffset = 24.000000
 	__Parameter__000000_Reference.BackendHandleRotationAngle = -120.500000
 	__Parameter__000000_Reference.BackendHandleDiskDistance = 2.640000
-	__Parameter__000000_Reference.BackendHandleRadius = 0.030000
+	__Parameter__000000_Reference.BackendHandleRadius = 0.070000
 	__Parameter__000000_Reference.BackendOffset = 159.000000
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
