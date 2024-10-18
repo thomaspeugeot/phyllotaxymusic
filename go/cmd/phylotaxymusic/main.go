@@ -200,18 +200,53 @@ func generateIndexHTML(
         }
         svg {
             width: 100%;
-            height: calc(100% - 150px); /* Adjusted height to accommodate slider and larger buttons */
+            height: calc(100% - 300px); /* Adjusted height to accommodate larger slider and buttons */
             display: block;
         }
         #slider-container {
             width: 100%;
-            height: 50px;
+            height: 150px; /* Tripled the height */
             padding: 10px;
             box-sizing: border-box;
             background-color: #f0f0f0;
         }
         #time-slider {
             width: 100%;
+            height: 100px; /* Adjusted height for the slider */
+            -webkit-appearance: none; /* Remove default appearance */
+            appearance: none;
+            margin-top: 25px; /* Center the slider vertically */
+        }
+        /* Style for the slider track */
+        #time-slider::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 20px; /* Height of the track */
+            background: #ddd;
+            border-radius: 10px;
+        }
+        #time-slider::-moz-range-track {
+            width: 100%;
+            height: 20px;
+            background: #ddd;
+            border-radius: 10px;
+        }
+        /* Style for the slider thumb */
+        #time-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            background: #4CAF50;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -10px; /* Align thumb with track */
+        }
+        #time-slider::-moz-range-thumb {
+            width: 40px;
+            height: 40px;
+            background: #4CAF50;
+            border-radius: 50%;
+            cursor: pointer;
         }
         /* Styles for the buttons and rank display */
         #button-container {
@@ -222,12 +257,12 @@ func generateIndexHTML(
             text-align: center;
         }
         .color-button {
-            padding: 20px 40px; /* Doubled padding */
-            font-size: 32px;     /* Doubled font size */
-            margin: 0 10px;      /* Added margin between buttons */
+            padding: 20px 40px;
+            font-size: 32px;
+            margin: 0 10px;
         }
         .color-rank {
-            font-size: 32px;     /* Match font size with buttons */
+            font-size: 32px;
             margin: 0 10px;
             vertical-align: middle;
             display: inline-block;
@@ -244,7 +279,7 @@ func generateIndexHTML(
         fill="{{.BackendColor}}" 
         />
 
-	<path id="background" d="
+    <path id="background" d="
         {{.BackendMarkerPath}}
         " 
         fill="red" 
