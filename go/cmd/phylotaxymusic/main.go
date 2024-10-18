@@ -236,7 +236,7 @@ func generateIndexHTML(
             appearance: none;
             width: 40px;
             height: 40px;
-            background: #4CAF50;
+            background: "grey";
             border-radius: 50%;
             cursor: pointer;
             margin-top: -10px; /* Align thumb with track */
@@ -244,7 +244,7 @@ func generateIndexHTML(
         #time-slider::-moz-range-thumb {
             width: 40px;
             height: 40px;
-            background: #4CAF50;
+            background: "grey";
             border-radius: 50%;
             cursor: pointer;
         }
