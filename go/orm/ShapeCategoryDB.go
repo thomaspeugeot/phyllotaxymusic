@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -65,7 +66,7 @@ type ShapeCategoryDB struct {
 	// Declation for basic field shapecategoryDB.IsExpanded
 	// provide the sql storage for the boolan
 	IsExpanded_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	ShapeCategoryPointersEncoding
@@ -111,7 +112,7 @@ type BackRepoShapeCategoryStruct struct {
 	// stores ShapeCategory according to their gorm ID
 	Map_ShapeCategoryDBID_ShapeCategoryPtr map[uint]*models.ShapeCategory
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -121,7 +122,7 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) GetStage() (stage *mod
 	return
 }
 
-func (backRepoShapeCategory *BackRepoShapeCategoryStruct) GetDB() *gorm.DB {
+func (backRepoShapeCategory *BackRepoShapeCategoryStruct) GetDB() db.DBInterface {
 	return backRepoShapeCategory.db
 }
 
@@ -158,9 +159,10 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CommitDeleteInstance(i
 
 	// shapecategory is not staged anymore, remove shapecategoryDB
 	shapecategoryDB := backRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryDB[id]
-	query := backRepoShapeCategory.db.Unscoped().Delete(&shapecategoryDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoShapeCategory.db.Unscoped()
+	_, err := db.Delete(&shapecategoryDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -184,9 +186,9 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CommitPhaseOneInstance
 	var shapecategoryDB ShapeCategoryDB
 	shapecategoryDB.CopyBasicFieldsFromShapeCategory(shapecategory)
 
-	query := backRepoShapeCategory.db.Create(&shapecategoryDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoShapeCategory.db.Create(&shapecategoryDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -218,9 +220,9 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CommitPhaseTwoInstance
 		shapecategoryDB.CopyBasicFieldsFromShapeCategory(shapecategory)
 
 		// insertion point for translating pointers encodings into actual pointers
-		query := backRepoShapeCategory.db.Save(&shapecategoryDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoShapeCategory.db.Save(&shapecategoryDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -239,9 +241,9 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CommitPhaseTwoInstance
 func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CheckoutPhaseOne() (Error error) {
 
 	shapecategoryDBArray := make([]ShapeCategoryDB, 0)
-	query := backRepoShapeCategory.db.Find(&shapecategoryDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoShapeCategory.db.Find(&shapecategoryDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -352,7 +354,7 @@ func (backRepo *BackRepoStruct) CheckoutShapeCategory(shapecategory *models.Shap
 			var shapecategoryDB ShapeCategoryDB
 			shapecategoryDB.ID = id
 
-			if err := backRepo.BackRepoShapeCategory.db.First(&shapecategoryDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoShapeCategory.db.First(&shapecategoryDB, id); err != nil {
 				log.Fatalln("CheckoutShapeCategory : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoShapeCategory.CheckoutPhaseOneInstance(&shapecategoryDB)
@@ -511,9 +513,9 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) rowVisitorShapeCategor
 
 		shapecategoryDB_ID_atBackupTime := shapecategoryDB.ID
 		shapecategoryDB.ID = 0
-		query := backRepoShapeCategory.db.Create(shapecategoryDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoShapeCategory.db.Create(shapecategoryDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryDB[shapecategoryDB.ID] = shapecategoryDB
 		BackRepoShapeCategoryid_atBckpTime_newID[shapecategoryDB_ID_atBackupTime] = shapecategoryDB.ID
@@ -548,9 +550,9 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) RestorePhaseOne(dirPat
 
 		shapecategoryDB_ID_atBackupTime := shapecategoryDB.ID
 		shapecategoryDB.ID = 0
-		query := backRepoShapeCategory.db.Create(shapecategoryDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoShapeCategory.db.Create(shapecategoryDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryDB[shapecategoryDB.ID] = shapecategoryDB
 		BackRepoShapeCategoryid_atBckpTime_newID[shapecategoryDB_ID_atBackupTime] = shapecategoryDB.ID
@@ -572,9 +574,10 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) RestorePhaseTwo() {
 
 		// insertion point for reindexing pointers encoding
 		// update databse with new index encoding
-		query := backRepoShapeCategory.db.Model(shapecategoryDB).Updates(*shapecategoryDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoShapeCategory.db.Model(shapecategoryDB)
+		_, err := db.Updates(*shapecategoryDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

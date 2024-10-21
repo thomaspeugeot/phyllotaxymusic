@@ -70,12 +70,12 @@ func (controller *Controller) GetSpiralLineGrids(c *gin.Context) {
 	}
 	db := backRepo.BackRepoSpiralLineGrid.GetDB()
 
-	query := db.Find(&spirallinegridDBs)
-	if query.Error != nil {
+	_, err := db.Find(&spirallinegridDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostSpiralLineGrid(c *gin.Context) {
 	spirallinegridDB.SpiralLineGridPointersEncoding = input.SpiralLineGridPointersEncoding
 	spirallinegridDB.CopyBasicFieldsFromSpiralLineGrid_WOP(&input.SpiralLineGrid_WOP)
 
-	query := db.Create(&spirallinegridDB)
-	if query.Error != nil {
+	_, err = db.Create(&spirallinegridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetSpiralLineGrid(c *gin.Context) {
 
 	// Get spirallinegridDB in DB
 	var spirallinegridDB orm.SpiralLineGridDB
-	if err := db.First(&spirallinegridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spirallinegridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateSpiralLineGrid(c *gin.Context) {
 	var spirallinegridDB orm.SpiralLineGridDB
 
 	// fetch the spirallinegrid
-	query := db.First(&spirallinegridDB, c.Param("id"))
+	_, err := db.First(&spirallinegridDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateSpiralLineGrid(c *gin.Context) {
 	spirallinegridDB.CopyBasicFieldsFromSpiralLineGrid_WOP(&input.SpiralLineGrid_WOP)
 	spirallinegridDB.SpiralLineGridPointersEncoding = input.SpiralLineGridPointersEncoding
 
-	query = db.Model(&spirallinegridDB).Updates(spirallinegridDB)
-	if query.Error != nil {
+	db, _ = db.Model(&spirallinegridDB)
+	_, err = db.Updates(spirallinegridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteSpiralLineGrid(c *gin.Context) {
 
 	// Get model if exist
 	var spirallinegridDB orm.SpiralLineGridDB
-	if err := db.First(&spirallinegridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spirallinegridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteSpiralLineGrid(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&spirallinegridDB)
+	db.Unscoped()
+	db.Delete(&spirallinegridDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	spirallinegridDeleted := new(models.SpiralLineGrid)

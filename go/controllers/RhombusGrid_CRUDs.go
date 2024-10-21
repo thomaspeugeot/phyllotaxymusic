@@ -70,12 +70,12 @@ func (controller *Controller) GetRhombusGrids(c *gin.Context) {
 	}
 	db := backRepo.BackRepoRhombusGrid.GetDB()
 
-	query := db.Find(&rhombusgridDBs)
-	if query.Error != nil {
+	_, err := db.Find(&rhombusgridDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostRhombusGrid(c *gin.Context) {
 	rhombusgridDB.RhombusGridPointersEncoding = input.RhombusGridPointersEncoding
 	rhombusgridDB.CopyBasicFieldsFromRhombusGrid_WOP(&input.RhombusGrid_WOP)
 
-	query := db.Create(&rhombusgridDB)
-	if query.Error != nil {
+	_, err = db.Create(&rhombusgridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetRhombusGrid(c *gin.Context) {
 
 	// Get rhombusgridDB in DB
 	var rhombusgridDB orm.RhombusGridDB
-	if err := db.First(&rhombusgridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&rhombusgridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateRhombusGrid(c *gin.Context) {
 	var rhombusgridDB orm.RhombusGridDB
 
 	// fetch the rhombusgrid
-	query := db.First(&rhombusgridDB, c.Param("id"))
+	_, err := db.First(&rhombusgridDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateRhombusGrid(c *gin.Context) {
 	rhombusgridDB.CopyBasicFieldsFromRhombusGrid_WOP(&input.RhombusGrid_WOP)
 	rhombusgridDB.RhombusGridPointersEncoding = input.RhombusGridPointersEncoding
 
-	query = db.Model(&rhombusgridDB).Updates(rhombusgridDB)
-	if query.Error != nil {
+	db, _ = db.Model(&rhombusgridDB)
+	_, err = db.Updates(rhombusgridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteRhombusGrid(c *gin.Context) {
 
 	// Get model if exist
 	var rhombusgridDB orm.RhombusGridDB
-	if err := db.First(&rhombusgridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&rhombusgridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteRhombusGrid(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&rhombusgridDB)
+	db.Unscoped()
+	db.Delete(&rhombusgridDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	rhombusgridDeleted := new(models.RhombusGrid)

@@ -70,12 +70,12 @@ func (controller *Controller) GetAxiss(c *gin.Context) {
 	}
 	db := backRepo.BackRepoAxis.GetDB()
 
-	query := db.Find(&axisDBs)
-	if query.Error != nil {
+	_, err := db.Find(&axisDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostAxis(c *gin.Context) {
 	axisDB.AxisPointersEncoding = input.AxisPointersEncoding
 	axisDB.CopyBasicFieldsFromAxis_WOP(&input.Axis_WOP)
 
-	query := db.Create(&axisDB)
-	if query.Error != nil {
+	_, err = db.Create(&axisDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetAxis(c *gin.Context) {
 
 	// Get axisDB in DB
 	var axisDB orm.AxisDB
-	if err := db.First(&axisDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&axisDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateAxis(c *gin.Context) {
 	var axisDB orm.AxisDB
 
 	// fetch the axis
-	query := db.First(&axisDB, c.Param("id"))
+	_, err := db.First(&axisDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateAxis(c *gin.Context) {
 	axisDB.CopyBasicFieldsFromAxis_WOP(&input.Axis_WOP)
 	axisDB.AxisPointersEncoding = input.AxisPointersEncoding
 
-	query = db.Model(&axisDB).Updates(axisDB)
-	if query.Error != nil {
+	db, _ = db.Model(&axisDB)
+	_, err = db.Updates(axisDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteAxis(c *gin.Context) {
 
 	// Get model if exist
 	var axisDB orm.AxisDB
-	if err := db.First(&axisDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&axisDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteAxis(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&axisDB)
+	db.Unscoped()
+	db.Delete(&axisDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	axisDeleted := new(models.Axis)

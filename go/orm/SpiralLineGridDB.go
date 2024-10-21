@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -72,7 +73,7 @@ type SpiralLineGridDB struct {
 	// Declation for basic field spirallinegridDB.IsDisplayed
 	// provide the sql storage for the boolan
 	IsDisplayed_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	SpiralLineGridPointersEncoding
@@ -118,7 +119,7 @@ type BackRepoSpiralLineGridStruct struct {
 	// stores SpiralLineGrid according to their gorm ID
 	Map_SpiralLineGridDBID_SpiralLineGridPtr map[uint]*models.SpiralLineGrid
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -128,7 +129,7 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) GetStage() (stage *m
 	return
 }
 
-func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) GetDB() *gorm.DB {
+func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) GetDB() db.DBInterface {
 	return backRepoSpiralLineGrid.db
 }
 
@@ -165,9 +166,10 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CommitDeleteInstance
 
 	// spirallinegrid is not staged anymore, remove spirallinegridDB
 	spirallinegridDB := backRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridDB[id]
-	query := backRepoSpiralLineGrid.db.Unscoped().Delete(&spirallinegridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoSpiralLineGrid.db.Unscoped()
+	_, err := db.Delete(&spirallinegridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -191,9 +193,9 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CommitPhaseOneInstan
 	var spirallinegridDB SpiralLineGridDB
 	spirallinegridDB.CopyBasicFieldsFromSpiralLineGrid(spirallinegrid)
 
-	query := backRepoSpiralLineGrid.db.Create(&spirallinegridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoSpiralLineGrid.db.Create(&spirallinegridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -255,9 +257,9 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CommitPhaseTwoInstan
 				append(spirallinegridDB.SpiralLineGridPointersEncoding.SpiralLines, int(spirallineAssocEnd_DB.ID))
 		}
 
-		query := backRepoSpiralLineGrid.db.Save(&spirallinegridDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoSpiralLineGrid.db.Save(&spirallinegridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -276,9 +278,9 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CommitPhaseTwoInstan
 func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CheckoutPhaseOne() (Error error) {
 
 	spirallinegridDBArray := make([]SpiralLineGridDB, 0)
-	query := backRepoSpiralLineGrid.db.Find(&spirallinegridDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoSpiralLineGrid.db.Find(&spirallinegridDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -403,7 +405,7 @@ func (backRepo *BackRepoStruct) CheckoutSpiralLineGrid(spirallinegrid *models.Sp
 			var spirallinegridDB SpiralLineGridDB
 			spirallinegridDB.ID = id
 
-			if err := backRepo.BackRepoSpiralLineGrid.db.First(&spirallinegridDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoSpiralLineGrid.db.First(&spirallinegridDB, id); err != nil {
 				log.Fatalln("CheckoutSpiralLineGrid : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoSpiralLineGrid.CheckoutPhaseOneInstance(&spirallinegridDB)
@@ -562,9 +564,9 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) rowVisitorSpiralLine
 
 		spirallinegridDB_ID_atBackupTime := spirallinegridDB.ID
 		spirallinegridDB.ID = 0
-		query := backRepoSpiralLineGrid.db.Create(spirallinegridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralLineGrid.db.Create(spirallinegridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridDB[spirallinegridDB.ID] = spirallinegridDB
 		BackRepoSpiralLineGridid_atBckpTime_newID[spirallinegridDB_ID_atBackupTime] = spirallinegridDB.ID
@@ -599,9 +601,9 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) RestorePhaseOne(dirP
 
 		spirallinegridDB_ID_atBackupTime := spirallinegridDB.ID
 		spirallinegridDB.ID = 0
-		query := backRepoSpiralLineGrid.db.Create(spirallinegridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralLineGrid.db.Create(spirallinegridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridDB[spirallinegridDB.ID] = spirallinegridDB
 		BackRepoSpiralLineGridid_atBckpTime_newID[spirallinegridDB_ID_atBackupTime] = spirallinegridDB.ID
@@ -629,9 +631,10 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoSpiralLineGrid.db.Model(spirallinegridDB).Updates(*spirallinegridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoSpiralLineGrid.db.Model(spirallinegridDB)
+		_, err := db.Updates(*spirallinegridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

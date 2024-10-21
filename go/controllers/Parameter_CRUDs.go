@@ -70,12 +70,12 @@ func (controller *Controller) GetParameters(c *gin.Context) {
 	}
 	db := backRepo.BackRepoParameter.GetDB()
 
-	query := db.Find(&parameterDBs)
-	if query.Error != nil {
+	_, err := db.Find(&parameterDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostParameter(c *gin.Context) {
 	parameterDB.ParameterPointersEncoding = input.ParameterPointersEncoding
 	parameterDB.CopyBasicFieldsFromParameter_WOP(&input.Parameter_WOP)
 
-	query := db.Create(&parameterDB)
-	if query.Error != nil {
+	_, err = db.Create(&parameterDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetParameter(c *gin.Context) {
 
 	// Get parameterDB in DB
 	var parameterDB orm.ParameterDB
-	if err := db.First(&parameterDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&parameterDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateParameter(c *gin.Context) {
 	var parameterDB orm.ParameterDB
 
 	// fetch the parameter
-	query := db.First(&parameterDB, c.Param("id"))
+	_, err := db.First(&parameterDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateParameter(c *gin.Context) {
 	parameterDB.CopyBasicFieldsFromParameter_WOP(&input.Parameter_WOP)
 	parameterDB.ParameterPointersEncoding = input.ParameterPointersEncoding
 
-	query = db.Model(&parameterDB).Updates(parameterDB)
-	if query.Error != nil {
+	db, _ = db.Model(&parameterDB)
+	_, err = db.Updates(parameterDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteParameter(c *gin.Context) {
 
 	// Get model if exist
 	var parameterDB orm.ParameterDB
-	if err := db.First(&parameterDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&parameterDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteParameter(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&parameterDB)
+	db.Unscoped()
+	db.Delete(&parameterDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	parameterDeleted := new(models.Parameter)

@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -93,7 +94,7 @@ type SpiralOriginDB struct {
 
 	// Declation for basic field spiraloriginDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	SpiralOriginPointersEncoding
@@ -163,7 +164,7 @@ type BackRepoSpiralOriginStruct struct {
 	// stores SpiralOrigin according to their gorm ID
 	Map_SpiralOriginDBID_SpiralOriginPtr map[uint]*models.SpiralOrigin
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -173,7 +174,7 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) GetStage() (stage *model
 	return
 }
 
-func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) GetDB() *gorm.DB {
+func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) GetDB() db.DBInterface {
 	return backRepoSpiralOrigin.db
 }
 
@@ -210,9 +211,10 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CommitDeleteInstance(id 
 
 	// spiralorigin is not staged anymore, remove spiraloriginDB
 	spiraloriginDB := backRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginDB[id]
-	query := backRepoSpiralOrigin.db.Unscoped().Delete(&spiraloriginDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoSpiralOrigin.db.Unscoped()
+	_, err := db.Delete(&spiraloriginDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -236,9 +238,9 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CommitPhaseOneInstance(s
 	var spiraloriginDB SpiralOriginDB
 	spiraloriginDB.CopyBasicFieldsFromSpiralOrigin(spiralorigin)
 
-	query := backRepoSpiralOrigin.db.Create(&spiraloriginDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoSpiralOrigin.db.Create(&spiraloriginDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -282,9 +284,9 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CommitPhaseTwoInstance(b
 			spiraloriginDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoSpiralOrigin.db.Save(&spiraloriginDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoSpiralOrigin.db.Save(&spiraloriginDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -303,9 +305,9 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CommitPhaseTwoInstance(b
 func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CheckoutPhaseOne() (Error error) {
 
 	spiraloriginDBArray := make([]SpiralOriginDB, 0)
-	query := backRepoSpiralOrigin.db.Find(&spiraloriginDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoSpiralOrigin.db.Find(&spiraloriginDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -421,7 +423,7 @@ func (backRepo *BackRepoStruct) CheckoutSpiralOrigin(spiralorigin *models.Spiral
 			var spiraloriginDB SpiralOriginDB
 			spiraloriginDB.ID = id
 
-			if err := backRepo.BackRepoSpiralOrigin.db.First(&spiraloriginDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoSpiralOrigin.db.First(&spiraloriginDB, id); err != nil {
 				log.Fatalln("CheckoutSpiralOrigin : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoSpiralOrigin.CheckoutPhaseOneInstance(&spiraloriginDB)
@@ -676,9 +678,9 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) rowVisitorSpiralOrigin(r
 
 		spiraloriginDB_ID_atBackupTime := spiraloriginDB.ID
 		spiraloriginDB.ID = 0
-		query := backRepoSpiralOrigin.db.Create(spiraloriginDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralOrigin.db.Create(spiraloriginDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginDB[spiraloriginDB.ID] = spiraloriginDB
 		BackRepoSpiralOriginid_atBckpTime_newID[spiraloriginDB_ID_atBackupTime] = spiraloriginDB.ID
@@ -713,9 +715,9 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) RestorePhaseOne(dirPath 
 
 		spiraloriginDB_ID_atBackupTime := spiraloriginDB.ID
 		spiraloriginDB.ID = 0
-		query := backRepoSpiralOrigin.db.Create(spiraloriginDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralOrigin.db.Create(spiraloriginDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginDB[spiraloriginDB.ID] = spiraloriginDB
 		BackRepoSpiralOriginid_atBckpTime_newID[spiraloriginDB_ID_atBackupTime] = spiraloriginDB.ID
@@ -743,9 +745,10 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoSpiralOrigin.db.Model(spiraloriginDB).Updates(*spiraloriginDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoSpiralOrigin.db.Model(spiraloriginDB)
+		_, err := db.Updates(*spiraloriginDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -72,7 +73,7 @@ type SpiralRhombusGridDB struct {
 	// Declation for basic field spiralrhombusgridDB.IsDisplayed
 	// provide the sql storage for the boolan
 	IsDisplayed_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	SpiralRhombusGridPointersEncoding
@@ -118,7 +119,7 @@ type BackRepoSpiralRhombusGridStruct struct {
 	// stores SpiralRhombusGrid according to their gorm ID
 	Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr map[uint]*models.SpiralRhombusGrid
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -128,7 +129,7 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) GetStage() (st
 	return
 }
 
-func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) GetDB() *gorm.DB {
+func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) GetDB() db.DBInterface {
 	return backRepoSpiralRhombusGrid.db
 }
 
@@ -165,9 +166,10 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitDeleteIn
 
 	// spiralrhombusgrid is not staged anymore, remove spiralrhombusgridDB
 	spiralrhombusgridDB := backRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridDB[id]
-	query := backRepoSpiralRhombusGrid.db.Unscoped().Delete(&spiralrhombusgridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoSpiralRhombusGrid.db.Unscoped()
+	_, err := db.Delete(&spiralrhombusgridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -191,9 +193,9 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitPhaseOne
 	var spiralrhombusgridDB SpiralRhombusGridDB
 	spiralrhombusgridDB.CopyBasicFieldsFromSpiralRhombusGrid(spiralrhombusgrid)
 
-	query := backRepoSpiralRhombusGrid.db.Create(&spiralrhombusgridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoSpiralRhombusGrid.db.Create(&spiralrhombusgridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -255,9 +257,9 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitPhaseTwo
 				append(spiralrhombusgridDB.SpiralRhombusGridPointersEncoding.SpiralRhombuses, int(spiralrhombusAssocEnd_DB.ID))
 		}
 
-		query := backRepoSpiralRhombusGrid.db.Save(&spiralrhombusgridDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoSpiralRhombusGrid.db.Save(&spiralrhombusgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -276,9 +278,9 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitPhaseTwo
 func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CheckoutPhaseOne() (Error error) {
 
 	spiralrhombusgridDBArray := make([]SpiralRhombusGridDB, 0)
-	query := backRepoSpiralRhombusGrid.db.Find(&spiralrhombusgridDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoSpiralRhombusGrid.db.Find(&spiralrhombusgridDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -403,7 +405,7 @@ func (backRepo *BackRepoStruct) CheckoutSpiralRhombusGrid(spiralrhombusgrid *mod
 			var spiralrhombusgridDB SpiralRhombusGridDB
 			spiralrhombusgridDB.ID = id
 
-			if err := backRepo.BackRepoSpiralRhombusGrid.db.First(&spiralrhombusgridDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoSpiralRhombusGrid.db.First(&spiralrhombusgridDB, id); err != nil {
 				log.Fatalln("CheckoutSpiralRhombusGrid : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoSpiralRhombusGrid.CheckoutPhaseOneInstance(&spiralrhombusgridDB)
@@ -562,9 +564,9 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) rowVisitorSpir
 
 		spiralrhombusgridDB_ID_atBackupTime := spiralrhombusgridDB.ID
 		spiralrhombusgridDB.ID = 0
-		query := backRepoSpiralRhombusGrid.db.Create(spiralrhombusgridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralRhombusGrid.db.Create(spiralrhombusgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridDB[spiralrhombusgridDB.ID] = spiralrhombusgridDB
 		BackRepoSpiralRhombusGridid_atBckpTime_newID[spiralrhombusgridDB_ID_atBackupTime] = spiralrhombusgridDB.ID
@@ -599,9 +601,9 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) RestorePhaseOn
 
 		spiralrhombusgridDB_ID_atBackupTime := spiralrhombusgridDB.ID
 		spiralrhombusgridDB.ID = 0
-		query := backRepoSpiralRhombusGrid.db.Create(spiralrhombusgridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralRhombusGrid.db.Create(spiralrhombusgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridDB[spiralrhombusgridDB.ID] = spiralrhombusgridDB
 		BackRepoSpiralRhombusGridid_atBckpTime_newID[spiralrhombusgridDB_ID_atBackupTime] = spiralrhombusgridDB.ID
@@ -629,9 +631,10 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) RestorePhaseTw
 		}
 
 		// update databse with new index encoding
-		query := backRepoSpiralRhombusGrid.db.Model(spiralrhombusgridDB).Updates(*spiralrhombusgridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoSpiralRhombusGrid.db.Model(spiralrhombusgridDB)
+		_, err := db.Updates(*spiralrhombusgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

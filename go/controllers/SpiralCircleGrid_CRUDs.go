@@ -70,12 +70,12 @@ func (controller *Controller) GetSpiralCircleGrids(c *gin.Context) {
 	}
 	db := backRepo.BackRepoSpiralCircleGrid.GetDB()
 
-	query := db.Find(&spiralcirclegridDBs)
-	if query.Error != nil {
+	_, err := db.Find(&spiralcirclegridDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostSpiralCircleGrid(c *gin.Context) {
 	spiralcirclegridDB.SpiralCircleGridPointersEncoding = input.SpiralCircleGridPointersEncoding
 	spiralcirclegridDB.CopyBasicFieldsFromSpiralCircleGrid_WOP(&input.SpiralCircleGrid_WOP)
 
-	query := db.Create(&spiralcirclegridDB)
-	if query.Error != nil {
+	_, err = db.Create(&spiralcirclegridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetSpiralCircleGrid(c *gin.Context) {
 
 	// Get spiralcirclegridDB in DB
 	var spiralcirclegridDB orm.SpiralCircleGridDB
-	if err := db.First(&spiralcirclegridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spiralcirclegridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateSpiralCircleGrid(c *gin.Context) {
 	var spiralcirclegridDB orm.SpiralCircleGridDB
 
 	// fetch the spiralcirclegrid
-	query := db.First(&spiralcirclegridDB, c.Param("id"))
+	_, err := db.First(&spiralcirclegridDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateSpiralCircleGrid(c *gin.Context) {
 	spiralcirclegridDB.CopyBasicFieldsFromSpiralCircleGrid_WOP(&input.SpiralCircleGrid_WOP)
 	spiralcirclegridDB.SpiralCircleGridPointersEncoding = input.SpiralCircleGridPointersEncoding
 
-	query = db.Model(&spiralcirclegridDB).Updates(spiralcirclegridDB)
-	if query.Error != nil {
+	db, _ = db.Model(&spiralcirclegridDB)
+	_, err = db.Updates(spiralcirclegridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteSpiralCircleGrid(c *gin.Context) {
 
 	// Get model if exist
 	var spiralcirclegridDB orm.SpiralCircleGridDB
-	if err := db.First(&spiralcirclegridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spiralcirclegridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteSpiralCircleGrid(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&spiralcirclegridDB)
+	db.Unscoped()
+	db.Delete(&spiralcirclegridDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	spiralcirclegridDeleted := new(models.SpiralCircleGrid)

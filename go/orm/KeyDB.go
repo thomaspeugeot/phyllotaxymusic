@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -96,7 +97,7 @@ type KeyDB struct {
 
 	// Declation for basic field keyDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	KeyPointersEncoding
@@ -169,7 +170,7 @@ type BackRepoKeyStruct struct {
 	// stores Key according to their gorm ID
 	Map_KeyDBID_KeyPtr map[uint]*models.Key
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -179,7 +180,7 @@ func (backRepoKey *BackRepoKeyStruct) GetStage() (stage *models.StageStruct) {
 	return
 }
 
-func (backRepoKey *BackRepoKeyStruct) GetDB() *gorm.DB {
+func (backRepoKey *BackRepoKeyStruct) GetDB() db.DBInterface {
 	return backRepoKey.db
 }
 
@@ -216,9 +217,10 @@ func (backRepoKey *BackRepoKeyStruct) CommitDeleteInstance(id uint) (Error error
 
 	// key is not staged anymore, remove keyDB
 	keyDB := backRepoKey.Map_KeyDBID_KeyDB[id]
-	query := backRepoKey.db.Unscoped().Delete(&keyDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoKey.db.Unscoped()
+	_, err := db.Delete(&keyDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -242,9 +244,9 @@ func (backRepoKey *BackRepoKeyStruct) CommitPhaseOneInstance(key *models.Key) (E
 	var keyDB KeyDB
 	keyDB.CopyBasicFieldsFromKey(key)
 
-	query := backRepoKey.db.Create(&keyDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoKey.db.Create(&keyDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -288,9 +290,9 @@ func (backRepoKey *BackRepoKeyStruct) CommitPhaseTwoInstance(backRepo *BackRepoS
 			keyDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoKey.db.Save(&keyDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoKey.db.Save(&keyDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -309,9 +311,9 @@ func (backRepoKey *BackRepoKeyStruct) CommitPhaseTwoInstance(backRepo *BackRepoS
 func (backRepoKey *BackRepoKeyStruct) CheckoutPhaseOne() (Error error) {
 
 	keyDBArray := make([]KeyDB, 0)
-	query := backRepoKey.db.Find(&keyDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoKey.db.Find(&keyDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -427,7 +429,7 @@ func (backRepo *BackRepoStruct) CheckoutKey(key *models.Key) {
 			var keyDB KeyDB
 			keyDB.ID = id
 
-			if err := backRepo.BackRepoKey.db.First(&keyDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoKey.db.First(&keyDB, id); err != nil {
 				log.Fatalln("CheckoutKey : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoKey.CheckoutPhaseOneInstance(&keyDB)
@@ -694,9 +696,9 @@ func (backRepoKey *BackRepoKeyStruct) rowVisitorKey(row *xlsx.Row) error {
 
 		keyDB_ID_atBackupTime := keyDB.ID
 		keyDB.ID = 0
-		query := backRepoKey.db.Create(keyDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoKey.db.Create(keyDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoKey.Map_KeyDBID_KeyDB[keyDB.ID] = keyDB
 		BackRepoKeyid_atBckpTime_newID[keyDB_ID_atBackupTime] = keyDB.ID
@@ -731,9 +733,9 @@ func (backRepoKey *BackRepoKeyStruct) RestorePhaseOne(dirPath string) {
 
 		keyDB_ID_atBackupTime := keyDB.ID
 		keyDB.ID = 0
-		query := backRepoKey.db.Create(keyDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoKey.db.Create(keyDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoKey.Map_KeyDBID_KeyDB[keyDB.ID] = keyDB
 		BackRepoKeyid_atBckpTime_newID[keyDB_ID_atBackupTime] = keyDB.ID
@@ -761,9 +763,10 @@ func (backRepoKey *BackRepoKeyStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoKey.db.Model(keyDB).Updates(*keyDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoKey.db.Model(keyDB)
+		_, err := db.Updates(*keyDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

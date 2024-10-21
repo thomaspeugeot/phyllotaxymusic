@@ -70,12 +70,12 @@ func (controller *Controller) GetKeys(c *gin.Context) {
 	}
 	db := backRepo.BackRepoKey.GetDB()
 
-	query := db.Find(&keyDBs)
-	if query.Error != nil {
+	_, err := db.Find(&keyDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostKey(c *gin.Context) {
 	keyDB.KeyPointersEncoding = input.KeyPointersEncoding
 	keyDB.CopyBasicFieldsFromKey_WOP(&input.Key_WOP)
 
-	query := db.Create(&keyDB)
-	if query.Error != nil {
+	_, err = db.Create(&keyDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetKey(c *gin.Context) {
 
 	// Get keyDB in DB
 	var keyDB orm.KeyDB
-	if err := db.First(&keyDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&keyDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateKey(c *gin.Context) {
 	var keyDB orm.KeyDB
 
 	// fetch the key
-	query := db.First(&keyDB, c.Param("id"))
+	_, err := db.First(&keyDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateKey(c *gin.Context) {
 	keyDB.CopyBasicFieldsFromKey_WOP(&input.Key_WOP)
 	keyDB.KeyPointersEncoding = input.KeyPointersEncoding
 
-	query = db.Model(&keyDB).Updates(keyDB)
-	if query.Error != nil {
+	db, _ = db.Model(&keyDB)
+	_, err = db.Updates(keyDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteKey(c *gin.Context) {
 
 	// Get model if exist
 	var keyDB orm.KeyDB
-	if err := db.First(&keyDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&keyDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteKey(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&keyDB)
+	db.Unscoped()
+	db.Delete(&keyDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	keyDeleted := new(models.Key)

@@ -70,12 +70,12 @@ func (controller *Controller) GetSpiralBezierGrids(c *gin.Context) {
 	}
 	db := backRepo.BackRepoSpiralBezierGrid.GetDB()
 
-	query := db.Find(&spiralbeziergridDBs)
-	if query.Error != nil {
+	_, err := db.Find(&spiralbeziergridDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostSpiralBezierGrid(c *gin.Context) {
 	spiralbeziergridDB.SpiralBezierGridPointersEncoding = input.SpiralBezierGridPointersEncoding
 	spiralbeziergridDB.CopyBasicFieldsFromSpiralBezierGrid_WOP(&input.SpiralBezierGrid_WOP)
 
-	query := db.Create(&spiralbeziergridDB)
-	if query.Error != nil {
+	_, err = db.Create(&spiralbeziergridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetSpiralBezierGrid(c *gin.Context) {
 
 	// Get spiralbeziergridDB in DB
 	var spiralbeziergridDB orm.SpiralBezierGridDB
-	if err := db.First(&spiralbeziergridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spiralbeziergridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateSpiralBezierGrid(c *gin.Context) {
 	var spiralbeziergridDB orm.SpiralBezierGridDB
 
 	// fetch the spiralbeziergrid
-	query := db.First(&spiralbeziergridDB, c.Param("id"))
+	_, err := db.First(&spiralbeziergridDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateSpiralBezierGrid(c *gin.Context) {
 	spiralbeziergridDB.CopyBasicFieldsFromSpiralBezierGrid_WOP(&input.SpiralBezierGrid_WOP)
 	spiralbeziergridDB.SpiralBezierGridPointersEncoding = input.SpiralBezierGridPointersEncoding
 
-	query = db.Model(&spiralbeziergridDB).Updates(spiralbeziergridDB)
-	if query.Error != nil {
+	db, _ = db.Model(&spiralbeziergridDB)
+	_, err = db.Updates(spiralbeziergridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteSpiralBezierGrid(c *gin.Context) {
 
 	// Get model if exist
 	var spiralbeziergridDB orm.SpiralBezierGridDB
-	if err := db.First(&spiralbeziergridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spiralbeziergridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteSpiralBezierGrid(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&spiralbeziergridDB)
+	db.Unscoped()
+	db.Delete(&spiralbeziergridDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	spiralbeziergridDeleted := new(models.SpiralBezierGrid)

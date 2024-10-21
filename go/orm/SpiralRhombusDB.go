@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -117,7 +118,7 @@ type SpiralRhombusDB struct {
 
 	// Declation for basic field spiralrhombusDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	SpiralRhombusPointersEncoding
@@ -211,7 +212,7 @@ type BackRepoSpiralRhombusStruct struct {
 	// stores SpiralRhombus according to their gorm ID
 	Map_SpiralRhombusDBID_SpiralRhombusPtr map[uint]*models.SpiralRhombus
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -221,7 +222,7 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) GetStage() (stage *mod
 	return
 }
 
-func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) GetDB() *gorm.DB {
+func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) GetDB() db.DBInterface {
 	return backRepoSpiralRhombus.db
 }
 
@@ -258,9 +259,10 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CommitDeleteInstance(i
 
 	// spiralrhombus is not staged anymore, remove spiralrhombusDB
 	spiralrhombusDB := backRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusDB[id]
-	query := backRepoSpiralRhombus.db.Unscoped().Delete(&spiralrhombusDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoSpiralRhombus.db.Unscoped()
+	_, err := db.Delete(&spiralrhombusDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -284,9 +286,9 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CommitPhaseOneInstance
 	var spiralrhombusDB SpiralRhombusDB
 	spiralrhombusDB.CopyBasicFieldsFromSpiralRhombus(spiralrhombus)
 
-	query := backRepoSpiralRhombus.db.Create(&spiralrhombusDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoSpiralRhombus.db.Create(&spiralrhombusDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -330,9 +332,9 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CommitPhaseTwoInstance
 			spiralrhombusDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoSpiralRhombus.db.Save(&spiralrhombusDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoSpiralRhombus.db.Save(&spiralrhombusDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -351,9 +353,9 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CommitPhaseTwoInstance
 func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CheckoutPhaseOne() (Error error) {
 
 	spiralrhombusDBArray := make([]SpiralRhombusDB, 0)
-	query := backRepoSpiralRhombus.db.Find(&spiralrhombusDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoSpiralRhombus.db.Find(&spiralrhombusDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -469,7 +471,7 @@ func (backRepo *BackRepoStruct) CheckoutSpiralRhombus(spiralrhombus *models.Spir
 			var spiralrhombusDB SpiralRhombusDB
 			spiralrhombusDB.ID = id
 
-			if err := backRepo.BackRepoSpiralRhombus.db.First(&spiralrhombusDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoSpiralRhombus.db.First(&spiralrhombusDB, id); err != nil {
 				log.Fatalln("CheckoutSpiralRhombus : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoSpiralRhombus.CheckoutPhaseOneInstance(&spiralrhombusDB)
@@ -820,9 +822,9 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) rowVisitorSpiralRhombu
 
 		spiralrhombusDB_ID_atBackupTime := spiralrhombusDB.ID
 		spiralrhombusDB.ID = 0
-		query := backRepoSpiralRhombus.db.Create(spiralrhombusDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralRhombus.db.Create(spiralrhombusDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusDB[spiralrhombusDB.ID] = spiralrhombusDB
 		BackRepoSpiralRhombusid_atBckpTime_newID[spiralrhombusDB_ID_atBackupTime] = spiralrhombusDB.ID
@@ -857,9 +859,9 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) RestorePhaseOne(dirPat
 
 		spiralrhombusDB_ID_atBackupTime := spiralrhombusDB.ID
 		spiralrhombusDB.ID = 0
-		query := backRepoSpiralRhombus.db.Create(spiralrhombusDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralRhombus.db.Create(spiralrhombusDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusDB[spiralrhombusDB.ID] = spiralrhombusDB
 		BackRepoSpiralRhombusid_atBckpTime_newID[spiralrhombusDB_ID_atBackupTime] = spiralrhombusDB.ID
@@ -887,9 +889,10 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoSpiralRhombus.db.Model(spiralrhombusDB).Updates(*spiralrhombusDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoSpiralRhombus.db.Model(spiralrhombusDB)
+		_, err := db.Updates(*spiralrhombusDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

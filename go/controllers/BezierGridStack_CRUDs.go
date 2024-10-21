@@ -70,12 +70,12 @@ func (controller *Controller) GetBezierGridStacks(c *gin.Context) {
 	}
 	db := backRepo.BackRepoBezierGridStack.GetDB()
 
-	query := db.Find(&beziergridstackDBs)
-	if query.Error != nil {
+	_, err := db.Find(&beziergridstackDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostBezierGridStack(c *gin.Context) {
 	beziergridstackDB.BezierGridStackPointersEncoding = input.BezierGridStackPointersEncoding
 	beziergridstackDB.CopyBasicFieldsFromBezierGridStack_WOP(&input.BezierGridStack_WOP)
 
-	query := db.Create(&beziergridstackDB)
-	if query.Error != nil {
+	_, err = db.Create(&beziergridstackDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetBezierGridStack(c *gin.Context) {
 
 	// Get beziergridstackDB in DB
 	var beziergridstackDB orm.BezierGridStackDB
-	if err := db.First(&beziergridstackDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&beziergridstackDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateBezierGridStack(c *gin.Context) {
 	var beziergridstackDB orm.BezierGridStackDB
 
 	// fetch the beziergridstack
-	query := db.First(&beziergridstackDB, c.Param("id"))
+	_, err := db.First(&beziergridstackDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateBezierGridStack(c *gin.Context) {
 	beziergridstackDB.CopyBasicFieldsFromBezierGridStack_WOP(&input.BezierGridStack_WOP)
 	beziergridstackDB.BezierGridStackPointersEncoding = input.BezierGridStackPointersEncoding
 
-	query = db.Model(&beziergridstackDB).Updates(beziergridstackDB)
-	if query.Error != nil {
+	db, _ = db.Model(&beziergridstackDB)
+	_, err = db.Updates(beziergridstackDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteBezierGridStack(c *gin.Context) {
 
 	// Get model if exist
 	var beziergridstackDB orm.BezierGridStackDB
-	if err := db.First(&beziergridstackDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&beziergridstackDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteBezierGridStack(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&beziergridstackDB)
+	db.Unscoped()
+	db.Delete(&beziergridstackDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	beziergridstackDeleted := new(models.BezierGridStack)

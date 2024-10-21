@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -471,7 +472,7 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.ShowInterpolationPoints
 	// provide the sql storage for the boolan
 	ShowInterpolationPoints_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	ParameterPointersEncoding
@@ -658,7 +659,7 @@ type BackRepoParameterStruct struct {
 	// stores Parameter according to their gorm ID
 	Map_ParameterDBID_ParameterPtr map[uint]*models.Parameter
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -668,7 +669,7 @@ func (backRepoParameter *BackRepoParameterStruct) GetStage() (stage *models.Stag
 	return
 }
 
-func (backRepoParameter *BackRepoParameterStruct) GetDB() *gorm.DB {
+func (backRepoParameter *BackRepoParameterStruct) GetDB() db.DBInterface {
 	return backRepoParameter.db
 }
 
@@ -705,9 +706,10 @@ func (backRepoParameter *BackRepoParameterStruct) CommitDeleteInstance(id uint) 
 
 	// parameter is not staged anymore, remove parameterDB
 	parameterDB := backRepoParameter.Map_ParameterDBID_ParameterDB[id]
-	query := backRepoParameter.db.Unscoped().Delete(&parameterDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoParameter.db.Unscoped()
+	_, err := db.Delete(&parameterDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -731,9 +733,9 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseOneInstance(paramet
 	var parameterDB ParameterDB
 	parameterDB.CopyBasicFieldsFromParameter(parameter)
 
-	query := backRepoParameter.db.Create(&parameterDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoParameter.db.Create(&parameterDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -1563,9 +1565,9 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.SpiralOriginID.Valid = true
 		}
 
-		query := backRepoParameter.db.Save(&parameterDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoParameter.db.Save(&parameterDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -1584,9 +1586,9 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 func (backRepoParameter *BackRepoParameterStruct) CheckoutPhaseOne() (Error error) {
 
 	parameterDBArray := make([]ParameterDB, 0)
-	query := backRepoParameter.db.Find(&parameterDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoParameter.db.Find(&parameterDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -2031,7 +2033,7 @@ func (backRepo *BackRepoStruct) CheckoutParameter(parameter *models.Parameter) {
 			var parameterDB ParameterDB
 			parameterDB.ID = id
 
-			if err := backRepo.BackRepoParameter.db.First(&parameterDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoParameter.db.First(&parameterDB, id); err != nil {
 				log.Fatalln("CheckoutParameter : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoParameter.CheckoutPhaseOneInstance(&parameterDB)
@@ -2754,9 +2756,9 @@ func (backRepoParameter *BackRepoParameterStruct) rowVisitorParameter(row *xlsx.
 
 		parameterDB_ID_atBackupTime := parameterDB.ID
 		parameterDB.ID = 0
-		query := backRepoParameter.db.Create(parameterDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoParameter.db.Create(parameterDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoParameter.Map_ParameterDBID_ParameterDB[parameterDB.ID] = parameterDB
 		BackRepoParameterid_atBckpTime_newID[parameterDB_ID_atBackupTime] = parameterDB.ID
@@ -2791,9 +2793,9 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseOne(dirPath string
 
 		parameterDB_ID_atBackupTime := parameterDB.ID
 		parameterDB.ID = 0
-		query := backRepoParameter.db.Create(parameterDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoParameter.db.Create(parameterDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoParameter.Map_ParameterDBID_ParameterDB[parameterDB.ID] = parameterDB
 		BackRepoParameterid_atBckpTime_newID[parameterDB_ID_atBackupTime] = parameterDB.ID
@@ -3205,9 +3207,10 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoParameter.db.Model(parameterDB).Updates(*parameterDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoParameter.db.Model(parameterDB)
+		_, err := db.Updates(*parameterDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

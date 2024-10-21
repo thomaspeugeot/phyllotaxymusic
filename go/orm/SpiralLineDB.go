@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -105,7 +106,7 @@ type SpiralLineDB struct {
 
 	// Declation for basic field spirallineDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	SpiralLinePointersEncoding
@@ -187,7 +188,7 @@ type BackRepoSpiralLineStruct struct {
 	// stores SpiralLine according to their gorm ID
 	Map_SpiralLineDBID_SpiralLinePtr map[uint]*models.SpiralLine
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -197,7 +198,7 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) GetStage() (stage *models.St
 	return
 }
 
-func (backRepoSpiralLine *BackRepoSpiralLineStruct) GetDB() *gorm.DB {
+func (backRepoSpiralLine *BackRepoSpiralLineStruct) GetDB() db.DBInterface {
 	return backRepoSpiralLine.db
 }
 
@@ -234,9 +235,10 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) CommitDeleteInstance(id uint
 
 	// spiralline is not staged anymore, remove spirallineDB
 	spirallineDB := backRepoSpiralLine.Map_SpiralLineDBID_SpiralLineDB[id]
-	query := backRepoSpiralLine.db.Unscoped().Delete(&spirallineDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoSpiralLine.db.Unscoped()
+	_, err := db.Delete(&spirallineDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -260,9 +262,9 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) CommitPhaseOneInstance(spira
 	var spirallineDB SpiralLineDB
 	spirallineDB.CopyBasicFieldsFromSpiralLine(spiralline)
 
-	query := backRepoSpiralLine.db.Create(&spirallineDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoSpiralLine.db.Create(&spirallineDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -306,9 +308,9 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) CommitPhaseTwoInstance(backR
 			spirallineDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoSpiralLine.db.Save(&spirallineDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoSpiralLine.db.Save(&spirallineDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -327,9 +329,9 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) CommitPhaseTwoInstance(backR
 func (backRepoSpiralLine *BackRepoSpiralLineStruct) CheckoutPhaseOne() (Error error) {
 
 	spirallineDBArray := make([]SpiralLineDB, 0)
-	query := backRepoSpiralLine.db.Find(&spirallineDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoSpiralLine.db.Find(&spirallineDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -445,7 +447,7 @@ func (backRepo *BackRepoStruct) CheckoutSpiralLine(spiralline *models.SpiralLine
 			var spirallineDB SpiralLineDB
 			spirallineDB.ID = id
 
-			if err := backRepo.BackRepoSpiralLine.db.First(&spirallineDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoSpiralLine.db.First(&spirallineDB, id); err != nil {
 				log.Fatalln("CheckoutSpiralLine : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoSpiralLine.CheckoutPhaseOneInstance(&spirallineDB)
@@ -748,9 +750,9 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) rowVisitorSpiralLine(row *xl
 
 		spirallineDB_ID_atBackupTime := spirallineDB.ID
 		spirallineDB.ID = 0
-		query := backRepoSpiralLine.db.Create(spirallineDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralLine.db.Create(spirallineDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralLine.Map_SpiralLineDBID_SpiralLineDB[spirallineDB.ID] = spirallineDB
 		BackRepoSpiralLineid_atBckpTime_newID[spirallineDB_ID_atBackupTime] = spirallineDB.ID
@@ -785,9 +787,9 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) RestorePhaseOne(dirPath stri
 
 		spirallineDB_ID_atBackupTime := spirallineDB.ID
 		spirallineDB.ID = 0
-		query := backRepoSpiralLine.db.Create(spirallineDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralLine.db.Create(spirallineDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralLine.Map_SpiralLineDBID_SpiralLineDB[spirallineDB.ID] = spirallineDB
 		BackRepoSpiralLineid_atBckpTime_newID[spirallineDB_ID_atBackupTime] = spirallineDB.ID
@@ -815,9 +817,10 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoSpiralLine.db.Model(spirallineDB).Updates(*spirallineDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoSpiralLine.db.Model(spirallineDB)
+		_, err := db.Updates(*spirallineDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

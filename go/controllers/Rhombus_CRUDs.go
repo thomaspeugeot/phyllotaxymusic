@@ -70,12 +70,12 @@ func (controller *Controller) GetRhombuss(c *gin.Context) {
 	}
 	db := backRepo.BackRepoRhombus.GetDB()
 
-	query := db.Find(&rhombusDBs)
-	if query.Error != nil {
+	_, err := db.Find(&rhombusDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostRhombus(c *gin.Context) {
 	rhombusDB.RhombusPointersEncoding = input.RhombusPointersEncoding
 	rhombusDB.CopyBasicFieldsFromRhombus_WOP(&input.Rhombus_WOP)
 
-	query := db.Create(&rhombusDB)
-	if query.Error != nil {
+	_, err = db.Create(&rhombusDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetRhombus(c *gin.Context) {
 
 	// Get rhombusDB in DB
 	var rhombusDB orm.RhombusDB
-	if err := db.First(&rhombusDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&rhombusDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateRhombus(c *gin.Context) {
 	var rhombusDB orm.RhombusDB
 
 	// fetch the rhombus
-	query := db.First(&rhombusDB, c.Param("id"))
+	_, err := db.First(&rhombusDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateRhombus(c *gin.Context) {
 	rhombusDB.CopyBasicFieldsFromRhombus_WOP(&input.Rhombus_WOP)
 	rhombusDB.RhombusPointersEncoding = input.RhombusPointersEncoding
 
-	query = db.Model(&rhombusDB).Updates(rhombusDB)
-	if query.Error != nil {
+	db, _ = db.Model(&rhombusDB)
+	_, err = db.Updates(rhombusDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteRhombus(c *gin.Context) {
 
 	// Get model if exist
 	var rhombusDB orm.RhombusDB
-	if err := db.First(&rhombusDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&rhombusDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteRhombus(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&rhombusDB)
+	db.Unscoped()
+	db.Delete(&rhombusDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	rhombusDeleted := new(models.Rhombus)

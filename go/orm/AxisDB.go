@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -111,7 +112,7 @@ type AxisDB struct {
 
 	// Declation for basic field axisDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	AxisPointersEncoding
@@ -199,7 +200,7 @@ type BackRepoAxisStruct struct {
 	// stores Axis according to their gorm ID
 	Map_AxisDBID_AxisPtr map[uint]*models.Axis
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -209,7 +210,7 @@ func (backRepoAxis *BackRepoAxisStruct) GetStage() (stage *models.StageStruct) {
 	return
 }
 
-func (backRepoAxis *BackRepoAxisStruct) GetDB() *gorm.DB {
+func (backRepoAxis *BackRepoAxisStruct) GetDB() db.DBInterface {
 	return backRepoAxis.db
 }
 
@@ -246,9 +247,10 @@ func (backRepoAxis *BackRepoAxisStruct) CommitDeleteInstance(id uint) (Error err
 
 	// axis is not staged anymore, remove axisDB
 	axisDB := backRepoAxis.Map_AxisDBID_AxisDB[id]
-	query := backRepoAxis.db.Unscoped().Delete(&axisDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoAxis.db.Unscoped()
+	_, err := db.Delete(&axisDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -272,9 +274,9 @@ func (backRepoAxis *BackRepoAxisStruct) CommitPhaseOneInstance(axis *models.Axis
 	var axisDB AxisDB
 	axisDB.CopyBasicFieldsFromAxis(axis)
 
-	query := backRepoAxis.db.Create(&axisDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoAxis.db.Create(&axisDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -318,9 +320,9 @@ func (backRepoAxis *BackRepoAxisStruct) CommitPhaseTwoInstance(backRepo *BackRep
 			axisDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoAxis.db.Save(&axisDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoAxis.db.Save(&axisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -339,9 +341,9 @@ func (backRepoAxis *BackRepoAxisStruct) CommitPhaseTwoInstance(backRepo *BackRep
 func (backRepoAxis *BackRepoAxisStruct) CheckoutPhaseOne() (Error error) {
 
 	axisDBArray := make([]AxisDB, 0)
-	query := backRepoAxis.db.Find(&axisDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoAxis.db.Find(&axisDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -457,7 +459,7 @@ func (backRepo *BackRepoStruct) CheckoutAxis(axis *models.Axis) {
 			var axisDB AxisDB
 			axisDB.ID = id
 
-			if err := backRepo.BackRepoAxis.db.First(&axisDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoAxis.db.First(&axisDB, id); err != nil {
 				log.Fatalln("CheckoutAxis : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoAxis.CheckoutPhaseOneInstance(&axisDB)
@@ -784,9 +786,9 @@ func (backRepoAxis *BackRepoAxisStruct) rowVisitorAxis(row *xlsx.Row) error {
 
 		axisDB_ID_atBackupTime := axisDB.ID
 		axisDB.ID = 0
-		query := backRepoAxis.db.Create(axisDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoAxis.db.Create(axisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoAxis.Map_AxisDBID_AxisDB[axisDB.ID] = axisDB
 		BackRepoAxisid_atBckpTime_newID[axisDB_ID_atBackupTime] = axisDB.ID
@@ -821,9 +823,9 @@ func (backRepoAxis *BackRepoAxisStruct) RestorePhaseOne(dirPath string) {
 
 		axisDB_ID_atBackupTime := axisDB.ID
 		axisDB.ID = 0
-		query := backRepoAxis.db.Create(axisDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoAxis.db.Create(axisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoAxis.Map_AxisDBID_AxisDB[axisDB.ID] = axisDB
 		BackRepoAxisid_atBckpTime_newID[axisDB_ID_atBackupTime] = axisDB.ID
@@ -851,9 +853,10 @@ func (backRepoAxis *BackRepoAxisStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoAxis.db.Model(axisDB).Updates(*axisDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoAxis.db.Model(axisDB)
+		_, err := db.Updates(*axisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

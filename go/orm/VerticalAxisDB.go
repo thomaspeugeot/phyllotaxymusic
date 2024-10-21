@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -99,7 +100,7 @@ type VerticalAxisDB struct {
 
 	// Declation for basic field verticalaxisDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	VerticalAxisPointersEncoding
@@ -175,7 +176,7 @@ type BackRepoVerticalAxisStruct struct {
 	// stores VerticalAxis according to their gorm ID
 	Map_VerticalAxisDBID_VerticalAxisPtr map[uint]*models.VerticalAxis
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -185,7 +186,7 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) GetStage() (stage *model
 	return
 }
 
-func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) GetDB() *gorm.DB {
+func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) GetDB() db.DBInterface {
 	return backRepoVerticalAxis.db
 }
 
@@ -222,9 +223,10 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitDeleteInstance(id 
 
 	// verticalaxis is not staged anymore, remove verticalaxisDB
 	verticalaxisDB := backRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisDB[id]
-	query := backRepoVerticalAxis.db.Unscoped().Delete(&verticalaxisDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoVerticalAxis.db.Unscoped()
+	_, err := db.Delete(&verticalaxisDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -248,9 +250,9 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitPhaseOneInstance(v
 	var verticalaxisDB VerticalAxisDB
 	verticalaxisDB.CopyBasicFieldsFromVerticalAxis(verticalaxis)
 
-	query := backRepoVerticalAxis.db.Create(&verticalaxisDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoVerticalAxis.db.Create(&verticalaxisDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -294,9 +296,9 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitPhaseTwoInstance(b
 			verticalaxisDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoVerticalAxis.db.Save(&verticalaxisDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoVerticalAxis.db.Save(&verticalaxisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -315,9 +317,9 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitPhaseTwoInstance(b
 func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CheckoutPhaseOne() (Error error) {
 
 	verticalaxisDBArray := make([]VerticalAxisDB, 0)
-	query := backRepoVerticalAxis.db.Find(&verticalaxisDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoVerticalAxis.db.Find(&verticalaxisDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -433,7 +435,7 @@ func (backRepo *BackRepoStruct) CheckoutVerticalAxis(verticalaxis *models.Vertic
 			var verticalaxisDB VerticalAxisDB
 			verticalaxisDB.ID = id
 
-			if err := backRepo.BackRepoVerticalAxis.db.First(&verticalaxisDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoVerticalAxis.db.First(&verticalaxisDB, id); err != nil {
 				log.Fatalln("CheckoutVerticalAxis : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoVerticalAxis.CheckoutPhaseOneInstance(&verticalaxisDB)
@@ -712,9 +714,9 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) rowVisitorVerticalAxis(r
 
 		verticalaxisDB_ID_atBackupTime := verticalaxisDB.ID
 		verticalaxisDB.ID = 0
-		query := backRepoVerticalAxis.db.Create(verticalaxisDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoVerticalAxis.db.Create(verticalaxisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisDB[verticalaxisDB.ID] = verticalaxisDB
 		BackRepoVerticalAxisid_atBckpTime_newID[verticalaxisDB_ID_atBackupTime] = verticalaxisDB.ID
@@ -749,9 +751,9 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) RestorePhaseOne(dirPath 
 
 		verticalaxisDB_ID_atBackupTime := verticalaxisDB.ID
 		verticalaxisDB.ID = 0
-		query := backRepoVerticalAxis.db.Create(verticalaxisDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoVerticalAxis.db.Create(verticalaxisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisDB[verticalaxisDB.ID] = verticalaxisDB
 		BackRepoVerticalAxisid_atBckpTime_newID[verticalaxisDB_ID_atBackupTime] = verticalaxisDB.ID
@@ -779,9 +781,10 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoVerticalAxis.db.Model(verticalaxisDB).Updates(*verticalaxisDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoVerticalAxis.db.Model(verticalaxisDB)
+		_, err := db.Updates(*verticalaxisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

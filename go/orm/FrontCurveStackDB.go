@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -99,7 +100,7 @@ type FrontCurveStackDB struct {
 
 	// Declation for basic field frontcurvestackDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	FrontCurveStackPointersEncoding
@@ -169,7 +170,7 @@ type BackRepoFrontCurveStackStruct struct {
 	// stores FrontCurveStack according to their gorm ID
 	Map_FrontCurveStackDBID_FrontCurveStackPtr map[uint]*models.FrontCurveStack
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -179,7 +180,7 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) GetStage() (stage 
 	return
 }
 
-func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) GetDB() *gorm.DB {
+func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) GetDB() db.DBInterface {
 	return backRepoFrontCurveStack.db
 }
 
@@ -216,9 +217,10 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CommitDeleteInstan
 
 	// frontcurvestack is not staged anymore, remove frontcurvestackDB
 	frontcurvestackDB := backRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackDB[id]
-	query := backRepoFrontCurveStack.db.Unscoped().Delete(&frontcurvestackDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoFrontCurveStack.db.Unscoped()
+	_, err := db.Delete(&frontcurvestackDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -242,9 +244,9 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CommitPhaseOneInst
 	var frontcurvestackDB FrontCurveStackDB
 	frontcurvestackDB.CopyBasicFieldsFromFrontCurveStack(frontcurvestack)
 
-	query := backRepoFrontCurveStack.db.Create(&frontcurvestackDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoFrontCurveStack.db.Create(&frontcurvestackDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -324,9 +326,9 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CommitPhaseTwoInst
 				append(frontcurvestackDB.FrontCurveStackPointersEncoding.SpiralCircles, int(spiralcircleAssocEnd_DB.ID))
 		}
 
-		query := backRepoFrontCurveStack.db.Save(&frontcurvestackDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoFrontCurveStack.db.Save(&frontcurvestackDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -345,9 +347,9 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CommitPhaseTwoInst
 func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CheckoutPhaseOne() (Error error) {
 
 	frontcurvestackDBArray := make([]FrontCurveStackDB, 0)
-	query := backRepoFrontCurveStack.db.Find(&frontcurvestackDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoFrontCurveStack.db.Find(&frontcurvestackDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -481,7 +483,7 @@ func (backRepo *BackRepoStruct) CheckoutFrontCurveStack(frontcurvestack *models.
 			var frontcurvestackDB FrontCurveStackDB
 			frontcurvestackDB.ID = id
 
-			if err := backRepo.BackRepoFrontCurveStack.db.First(&frontcurvestackDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoFrontCurveStack.db.First(&frontcurvestackDB, id); err != nil {
 				log.Fatalln("CheckoutFrontCurveStack : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoFrontCurveStack.CheckoutPhaseOneInstance(&frontcurvestackDB)
@@ -736,9 +738,9 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) rowVisitorFrontCur
 
 		frontcurvestackDB_ID_atBackupTime := frontcurvestackDB.ID
 		frontcurvestackDB.ID = 0
-		query := backRepoFrontCurveStack.db.Create(frontcurvestackDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoFrontCurveStack.db.Create(frontcurvestackDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackDB[frontcurvestackDB.ID] = frontcurvestackDB
 		BackRepoFrontCurveStackid_atBckpTime_newID[frontcurvestackDB_ID_atBackupTime] = frontcurvestackDB.ID
@@ -773,9 +775,9 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) RestorePhaseOne(di
 
 		frontcurvestackDB_ID_atBackupTime := frontcurvestackDB.ID
 		frontcurvestackDB.ID = 0
-		query := backRepoFrontCurveStack.db.Create(frontcurvestackDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoFrontCurveStack.db.Create(frontcurvestackDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackDB[frontcurvestackDB.ID] = frontcurvestackDB
 		BackRepoFrontCurveStackid_atBckpTime_newID[frontcurvestackDB_ID_atBackupTime] = frontcurvestackDB.ID
@@ -803,9 +805,10 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) RestorePhaseTwo() 
 		}
 
 		// update databse with new index encoding
-		query := backRepoFrontCurveStack.db.Model(frontcurvestackDB).Updates(*frontcurvestackDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoFrontCurveStack.db.Model(frontcurvestackDB)
+		_, err := db.Updates(*frontcurvestackDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

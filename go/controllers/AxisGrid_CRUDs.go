@@ -70,12 +70,12 @@ func (controller *Controller) GetAxisGrids(c *gin.Context) {
 	}
 	db := backRepo.BackRepoAxisGrid.GetDB()
 
-	query := db.Find(&axisgridDBs)
-	if query.Error != nil {
+	_, err := db.Find(&axisgridDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostAxisGrid(c *gin.Context) {
 	axisgridDB.AxisGridPointersEncoding = input.AxisGridPointersEncoding
 	axisgridDB.CopyBasicFieldsFromAxisGrid_WOP(&input.AxisGrid_WOP)
 
-	query := db.Create(&axisgridDB)
-	if query.Error != nil {
+	_, err = db.Create(&axisgridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetAxisGrid(c *gin.Context) {
 
 	// Get axisgridDB in DB
 	var axisgridDB orm.AxisGridDB
-	if err := db.First(&axisgridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&axisgridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateAxisGrid(c *gin.Context) {
 	var axisgridDB orm.AxisGridDB
 
 	// fetch the axisgrid
-	query := db.First(&axisgridDB, c.Param("id"))
+	_, err := db.First(&axisgridDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateAxisGrid(c *gin.Context) {
 	axisgridDB.CopyBasicFieldsFromAxisGrid_WOP(&input.AxisGrid_WOP)
 	axisgridDB.AxisGridPointersEncoding = input.AxisGridPointersEncoding
 
-	query = db.Model(&axisgridDB).Updates(axisgridDB)
-	if query.Error != nil {
+	db, _ = db.Model(&axisgridDB)
+	_, err = db.Updates(axisgridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteAxisGrid(c *gin.Context) {
 
 	// Get model if exist
 	var axisgridDB orm.AxisGridDB
-	if err := db.First(&axisgridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&axisgridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteAxisGrid(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&axisgridDB)
+	db.Unscoped()
+	db.Delete(&axisgridDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	axisgridDeleted := new(models.AxisGrid)

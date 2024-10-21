@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -72,7 +73,7 @@ type SpiralBezierGridDB struct {
 	// Declation for basic field spiralbeziergridDB.IsDisplayed
 	// provide the sql storage for the boolan
 	IsDisplayed_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	SpiralBezierGridPointersEncoding
@@ -118,7 +119,7 @@ type BackRepoSpiralBezierGridStruct struct {
 	// stores SpiralBezierGrid according to their gorm ID
 	Map_SpiralBezierGridDBID_SpiralBezierGridPtr map[uint]*models.SpiralBezierGrid
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -128,7 +129,7 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) GetStage() (stag
 	return
 }
 
-func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) GetDB() *gorm.DB {
+func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) GetDB() db.DBInterface {
 	return backRepoSpiralBezierGrid.db
 }
 
@@ -165,9 +166,10 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CommitDeleteInst
 
 	// spiralbeziergrid is not staged anymore, remove spiralbeziergridDB
 	spiralbeziergridDB := backRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridDB[id]
-	query := backRepoSpiralBezierGrid.db.Unscoped().Delete(&spiralbeziergridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoSpiralBezierGrid.db.Unscoped()
+	_, err := db.Delete(&spiralbeziergridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -191,9 +193,9 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CommitPhaseOneIn
 	var spiralbeziergridDB SpiralBezierGridDB
 	spiralbeziergridDB.CopyBasicFieldsFromSpiralBezierGrid(spiralbeziergrid)
 
-	query := backRepoSpiralBezierGrid.db.Create(&spiralbeziergridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoSpiralBezierGrid.db.Create(&spiralbeziergridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -255,9 +257,9 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CommitPhaseTwoIn
 				append(spiralbeziergridDB.SpiralBezierGridPointersEncoding.SpiralBeziers, int(spiralbezierAssocEnd_DB.ID))
 		}
 
-		query := backRepoSpiralBezierGrid.db.Save(&spiralbeziergridDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoSpiralBezierGrid.db.Save(&spiralbeziergridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -276,9 +278,9 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CommitPhaseTwoIn
 func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CheckoutPhaseOne() (Error error) {
 
 	spiralbeziergridDBArray := make([]SpiralBezierGridDB, 0)
-	query := backRepoSpiralBezierGrid.db.Find(&spiralbeziergridDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoSpiralBezierGrid.db.Find(&spiralbeziergridDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -403,7 +405,7 @@ func (backRepo *BackRepoStruct) CheckoutSpiralBezierGrid(spiralbeziergrid *model
 			var spiralbeziergridDB SpiralBezierGridDB
 			spiralbeziergridDB.ID = id
 
-			if err := backRepo.BackRepoSpiralBezierGrid.db.First(&spiralbeziergridDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoSpiralBezierGrid.db.First(&spiralbeziergridDB, id); err != nil {
 				log.Fatalln("CheckoutSpiralBezierGrid : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoSpiralBezierGrid.CheckoutPhaseOneInstance(&spiralbeziergridDB)
@@ -562,9 +564,9 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) rowVisitorSpiral
 
 		spiralbeziergridDB_ID_atBackupTime := spiralbeziergridDB.ID
 		spiralbeziergridDB.ID = 0
-		query := backRepoSpiralBezierGrid.db.Create(spiralbeziergridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralBezierGrid.db.Create(spiralbeziergridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridDB[spiralbeziergridDB.ID] = spiralbeziergridDB
 		BackRepoSpiralBezierGridid_atBckpTime_newID[spiralbeziergridDB_ID_atBackupTime] = spiralbeziergridDB.ID
@@ -599,9 +601,9 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) RestorePhaseOne(
 
 		spiralbeziergridDB_ID_atBackupTime := spiralbeziergridDB.ID
 		spiralbeziergridDB.ID = 0
-		query := backRepoSpiralBezierGrid.db.Create(spiralbeziergridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralBezierGrid.db.Create(spiralbeziergridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridDB[spiralbeziergridDB.ID] = spiralbeziergridDB
 		BackRepoSpiralBezierGridid_atBckpTime_newID[spiralbeziergridDB_ID_atBackupTime] = spiralbeziergridDB.ID
@@ -629,9 +631,10 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) RestorePhaseTwo(
 		}
 
 		// update databse with new index encoding
-		query := backRepoSpiralBezierGrid.db.Model(spiralbeziergridDB).Updates(*spiralbeziergridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoSpiralBezierGrid.db.Model(spiralbeziergridDB)
+		_, err := db.Updates(*spiralbeziergridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

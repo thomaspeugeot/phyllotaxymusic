@@ -70,12 +70,12 @@ func (controller *Controller) GetHorizontalAxiss(c *gin.Context) {
 	}
 	db := backRepo.BackRepoHorizontalAxis.GetDB()
 
-	query := db.Find(&horizontalaxisDBs)
-	if query.Error != nil {
+	_, err := db.Find(&horizontalaxisDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostHorizontalAxis(c *gin.Context) {
 	horizontalaxisDB.HorizontalAxisPointersEncoding = input.HorizontalAxisPointersEncoding
 	horizontalaxisDB.CopyBasicFieldsFromHorizontalAxis_WOP(&input.HorizontalAxis_WOP)
 
-	query := db.Create(&horizontalaxisDB)
-	if query.Error != nil {
+	_, err = db.Create(&horizontalaxisDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetHorizontalAxis(c *gin.Context) {
 
 	// Get horizontalaxisDB in DB
 	var horizontalaxisDB orm.HorizontalAxisDB
-	if err := db.First(&horizontalaxisDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&horizontalaxisDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateHorizontalAxis(c *gin.Context) {
 	var horizontalaxisDB orm.HorizontalAxisDB
 
 	// fetch the horizontalaxis
-	query := db.First(&horizontalaxisDB, c.Param("id"))
+	_, err := db.First(&horizontalaxisDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateHorizontalAxis(c *gin.Context) {
 	horizontalaxisDB.CopyBasicFieldsFromHorizontalAxis_WOP(&input.HorizontalAxis_WOP)
 	horizontalaxisDB.HorizontalAxisPointersEncoding = input.HorizontalAxisPointersEncoding
 
-	query = db.Model(&horizontalaxisDB).Updates(horizontalaxisDB)
-	if query.Error != nil {
+	db, _ = db.Model(&horizontalaxisDB)
+	_, err = db.Updates(horizontalaxisDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteHorizontalAxis(c *gin.Context) {
 
 	// Get model if exist
 	var horizontalaxisDB orm.HorizontalAxisDB
-	if err := db.First(&horizontalaxisDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&horizontalaxisDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteHorizontalAxis(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&horizontalaxisDB)
+	db.Unscoped()
+	db.Delete(&horizontalaxisDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	horizontalaxisDeleted := new(models.HorizontalAxis)

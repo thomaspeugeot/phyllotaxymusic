@@ -70,12 +70,12 @@ func (controller *Controller) GetFrontCurveStacks(c *gin.Context) {
 	}
 	db := backRepo.BackRepoFrontCurveStack.GetDB()
 
-	query := db.Find(&frontcurvestackDBs)
-	if query.Error != nil {
+	_, err := db.Find(&frontcurvestackDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostFrontCurveStack(c *gin.Context) {
 	frontcurvestackDB.FrontCurveStackPointersEncoding = input.FrontCurveStackPointersEncoding
 	frontcurvestackDB.CopyBasicFieldsFromFrontCurveStack_WOP(&input.FrontCurveStack_WOP)
 
-	query := db.Create(&frontcurvestackDB)
-	if query.Error != nil {
+	_, err = db.Create(&frontcurvestackDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetFrontCurveStack(c *gin.Context) {
 
 	// Get frontcurvestackDB in DB
 	var frontcurvestackDB orm.FrontCurveStackDB
-	if err := db.First(&frontcurvestackDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&frontcurvestackDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateFrontCurveStack(c *gin.Context) {
 	var frontcurvestackDB orm.FrontCurveStackDB
 
 	// fetch the frontcurvestack
-	query := db.First(&frontcurvestackDB, c.Param("id"))
+	_, err := db.First(&frontcurvestackDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateFrontCurveStack(c *gin.Context) {
 	frontcurvestackDB.CopyBasicFieldsFromFrontCurveStack_WOP(&input.FrontCurveStack_WOP)
 	frontcurvestackDB.FrontCurveStackPointersEncoding = input.FrontCurveStackPointersEncoding
 
-	query = db.Model(&frontcurvestackDB).Updates(frontcurvestackDB)
-	if query.Error != nil {
+	db, _ = db.Model(&frontcurvestackDB)
+	_, err = db.Updates(frontcurvestackDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteFrontCurveStack(c *gin.Context) {
 
 	// Get model if exist
 	var frontcurvestackDB orm.FrontCurveStackDB
-	if err := db.First(&frontcurvestackDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&frontcurvestackDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteFrontCurveStack(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&frontcurvestackDB)
+	db.Unscoped()
+	db.Delete(&frontcurvestackDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	frontcurvestackDeleted := new(models.FrontCurveStack)

@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -117,7 +118,7 @@ type SpiralBezierDB struct {
 
 	// Declation for basic field spiralbezierDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	SpiralBezierPointersEncoding
@@ -211,7 +212,7 @@ type BackRepoSpiralBezierStruct struct {
 	// stores SpiralBezier according to their gorm ID
 	Map_SpiralBezierDBID_SpiralBezierPtr map[uint]*models.SpiralBezier
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -221,7 +222,7 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) GetStage() (stage *model
 	return
 }
 
-func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) GetDB() *gorm.DB {
+func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) GetDB() db.DBInterface {
 	return backRepoSpiralBezier.db
 }
 
@@ -258,9 +259,10 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CommitDeleteInstance(id 
 
 	// spiralbezier is not staged anymore, remove spiralbezierDB
 	spiralbezierDB := backRepoSpiralBezier.Map_SpiralBezierDBID_SpiralBezierDB[id]
-	query := backRepoSpiralBezier.db.Unscoped().Delete(&spiralbezierDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoSpiralBezier.db.Unscoped()
+	_, err := db.Delete(&spiralbezierDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -284,9 +286,9 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CommitPhaseOneInstance(s
 	var spiralbezierDB SpiralBezierDB
 	spiralbezierDB.CopyBasicFieldsFromSpiralBezier(spiralbezier)
 
-	query := backRepoSpiralBezier.db.Create(&spiralbezierDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoSpiralBezier.db.Create(&spiralbezierDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -330,9 +332,9 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CommitPhaseTwoInstance(b
 			spiralbezierDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoSpiralBezier.db.Save(&spiralbezierDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoSpiralBezier.db.Save(&spiralbezierDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -351,9 +353,9 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CommitPhaseTwoInstance(b
 func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CheckoutPhaseOne() (Error error) {
 
 	spiralbezierDBArray := make([]SpiralBezierDB, 0)
-	query := backRepoSpiralBezier.db.Find(&spiralbezierDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoSpiralBezier.db.Find(&spiralbezierDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -469,7 +471,7 @@ func (backRepo *BackRepoStruct) CheckoutSpiralBezier(spiralbezier *models.Spiral
 			var spiralbezierDB SpiralBezierDB
 			spiralbezierDB.ID = id
 
-			if err := backRepo.BackRepoSpiralBezier.db.First(&spiralbezierDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoSpiralBezier.db.First(&spiralbezierDB, id); err != nil {
 				log.Fatalln("CheckoutSpiralBezier : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoSpiralBezier.CheckoutPhaseOneInstance(&spiralbezierDB)
@@ -820,9 +822,9 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) rowVisitorSpiralBezier(r
 
 		spiralbezierDB_ID_atBackupTime := spiralbezierDB.ID
 		spiralbezierDB.ID = 0
-		query := backRepoSpiralBezier.db.Create(spiralbezierDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralBezier.db.Create(spiralbezierDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralBezier.Map_SpiralBezierDBID_SpiralBezierDB[spiralbezierDB.ID] = spiralbezierDB
 		BackRepoSpiralBezierid_atBckpTime_newID[spiralbezierDB_ID_atBackupTime] = spiralbezierDB.ID
@@ -857,9 +859,9 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) RestorePhaseOne(dirPath 
 
 		spiralbezierDB_ID_atBackupTime := spiralbezierDB.ID
 		spiralbezierDB.ID = 0
-		query := backRepoSpiralBezier.db.Create(spiralbezierDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoSpiralBezier.db.Create(spiralbezierDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoSpiralBezier.Map_SpiralBezierDBID_SpiralBezierDB[spiralbezierDB.ID] = spiralbezierDB
 		BackRepoSpiralBezierid_atBckpTime_newID[spiralbezierDB_ID_atBackupTime] = spiralbezierDB.ID
@@ -887,9 +889,10 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoSpiralBezier.db.Model(spiralbezierDB).Updates(*spiralbezierDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoSpiralBezier.db.Model(spiralbezierDB)
+		_, err := db.Updates(*spiralbezierDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

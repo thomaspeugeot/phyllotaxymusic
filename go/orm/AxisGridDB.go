@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -76,7 +77,7 @@ type AxisGridDB struct {
 	// Declation for basic field axisgridDB.IsDisplayed
 	// provide the sql storage for the boolan
 	IsDisplayed_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	AxisGridPointersEncoding
@@ -122,7 +123,7 @@ type BackRepoAxisGridStruct struct {
 	// stores AxisGrid according to their gorm ID
 	Map_AxisGridDBID_AxisGridPtr map[uint]*models.AxisGrid
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -132,7 +133,7 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) GetStage() (stage *models.StageS
 	return
 }
 
-func (backRepoAxisGrid *BackRepoAxisGridStruct) GetDB() *gorm.DB {
+func (backRepoAxisGrid *BackRepoAxisGridStruct) GetDB() db.DBInterface {
 	return backRepoAxisGrid.db
 }
 
@@ -169,9 +170,10 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitDeleteInstance(id uint) (E
 
 	// axisgrid is not staged anymore, remove axisgridDB
 	axisgridDB := backRepoAxisGrid.Map_AxisGridDBID_AxisGridDB[id]
-	query := backRepoAxisGrid.db.Unscoped().Delete(&axisgridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoAxisGrid.db.Unscoped()
+	_, err := db.Delete(&axisgridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -195,9 +197,9 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitPhaseOneInstance(axisgrid 
 	var axisgridDB AxisGridDB
 	axisgridDB.CopyBasicFieldsFromAxisGrid(axisgrid)
 
-	query := backRepoAxisGrid.db.Create(&axisgridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoAxisGrid.db.Create(&axisgridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -271,9 +273,9 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitPhaseTwoInstance(backRepo 
 				append(axisgridDB.AxisGridPointersEncoding.Axiss, int(axisAssocEnd_DB.ID))
 		}
 
-		query := backRepoAxisGrid.db.Save(&axisgridDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoAxisGrid.db.Save(&axisgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -292,9 +294,9 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitPhaseTwoInstance(backRepo 
 func (backRepoAxisGrid *BackRepoAxisGridStruct) CheckoutPhaseOne() (Error error) {
 
 	axisgridDBArray := make([]AxisGridDB, 0)
-	query := backRepoAxisGrid.db.Find(&axisgridDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoAxisGrid.db.Find(&axisgridDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -424,7 +426,7 @@ func (backRepo *BackRepoStruct) CheckoutAxisGrid(axisgrid *models.AxisGrid) {
 			var axisgridDB AxisGridDB
 			axisgridDB.ID = id
 
-			if err := backRepo.BackRepoAxisGrid.db.First(&axisgridDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoAxisGrid.db.First(&axisgridDB, id); err != nil {
 				log.Fatalln("CheckoutAxisGrid : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoAxisGrid.CheckoutPhaseOneInstance(&axisgridDB)
@@ -583,9 +585,9 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) rowVisitorAxisGrid(row *xlsx.Row
 
 		axisgridDB_ID_atBackupTime := axisgridDB.ID
 		axisgridDB.ID = 0
-		query := backRepoAxisGrid.db.Create(axisgridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoAxisGrid.db.Create(axisgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoAxisGrid.Map_AxisGridDBID_AxisGridDB[axisgridDB.ID] = axisgridDB
 		BackRepoAxisGridid_atBckpTime_newID[axisgridDB_ID_atBackupTime] = axisgridDB.ID
@@ -620,9 +622,9 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) RestorePhaseOne(dirPath string) 
 
 		axisgridDB_ID_atBackupTime := axisgridDB.ID
 		axisgridDB.ID = 0
-		query := backRepoAxisGrid.db.Create(axisgridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoAxisGrid.db.Create(axisgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoAxisGrid.Map_AxisGridDBID_AxisGridDB[axisgridDB.ID] = axisgridDB
 		BackRepoAxisGridid_atBckpTime_newID[axisgridDB_ID_atBackupTime] = axisgridDB.ID
@@ -656,9 +658,10 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoAxisGrid.db.Model(axisgridDB).Updates(*axisgridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoAxisGrid.db.Model(axisgridDB)
+		_, err := db.Updates(*axisgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

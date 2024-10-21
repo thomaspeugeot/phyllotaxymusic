@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -65,7 +66,7 @@ type NoteInfoDB struct {
 	// Declation for basic field noteinfoDB.IsKept
 	// provide the sql storage for the boolan
 	IsKept_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	NoteInfoPointersEncoding
@@ -111,7 +112,7 @@ type BackRepoNoteInfoStruct struct {
 	// stores NoteInfo according to their gorm ID
 	Map_NoteInfoDBID_NoteInfoPtr map[uint]*models.NoteInfo
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -121,7 +122,7 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) GetStage() (stage *models.StageS
 	return
 }
 
-func (backRepoNoteInfo *BackRepoNoteInfoStruct) GetDB() *gorm.DB {
+func (backRepoNoteInfo *BackRepoNoteInfoStruct) GetDB() db.DBInterface {
 	return backRepoNoteInfo.db
 }
 
@@ -158,9 +159,10 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) CommitDeleteInstance(id uint) (E
 
 	// noteinfo is not staged anymore, remove noteinfoDB
 	noteinfoDB := backRepoNoteInfo.Map_NoteInfoDBID_NoteInfoDB[id]
-	query := backRepoNoteInfo.db.Unscoped().Delete(&noteinfoDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoNoteInfo.db.Unscoped()
+	_, err := db.Delete(&noteinfoDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -184,9 +186,9 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) CommitPhaseOneInstance(noteinfo 
 	var noteinfoDB NoteInfoDB
 	noteinfoDB.CopyBasicFieldsFromNoteInfo(noteinfo)
 
-	query := backRepoNoteInfo.db.Create(&noteinfoDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoNoteInfo.db.Create(&noteinfoDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -218,9 +220,9 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) CommitPhaseTwoInstance(backRepo 
 		noteinfoDB.CopyBasicFieldsFromNoteInfo(noteinfo)
 
 		// insertion point for translating pointers encodings into actual pointers
-		query := backRepoNoteInfo.db.Save(&noteinfoDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoNoteInfo.db.Save(&noteinfoDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -239,9 +241,9 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) CommitPhaseTwoInstance(backRepo 
 func (backRepoNoteInfo *BackRepoNoteInfoStruct) CheckoutPhaseOne() (Error error) {
 
 	noteinfoDBArray := make([]NoteInfoDB, 0)
-	query := backRepoNoteInfo.db.Find(&noteinfoDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoNoteInfo.db.Find(&noteinfoDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -352,7 +354,7 @@ func (backRepo *BackRepoStruct) CheckoutNoteInfo(noteinfo *models.NoteInfo) {
 			var noteinfoDB NoteInfoDB
 			noteinfoDB.ID = id
 
-			if err := backRepo.BackRepoNoteInfo.db.First(&noteinfoDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoNoteInfo.db.First(&noteinfoDB, id); err != nil {
 				log.Fatalln("CheckoutNoteInfo : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoNoteInfo.CheckoutPhaseOneInstance(&noteinfoDB)
@@ -511,9 +513,9 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) rowVisitorNoteInfo(row *xlsx.Row
 
 		noteinfoDB_ID_atBackupTime := noteinfoDB.ID
 		noteinfoDB.ID = 0
-		query := backRepoNoteInfo.db.Create(noteinfoDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoNoteInfo.db.Create(noteinfoDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoNoteInfo.Map_NoteInfoDBID_NoteInfoDB[noteinfoDB.ID] = noteinfoDB
 		BackRepoNoteInfoid_atBckpTime_newID[noteinfoDB_ID_atBackupTime] = noteinfoDB.ID
@@ -548,9 +550,9 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) RestorePhaseOne(dirPath string) 
 
 		noteinfoDB_ID_atBackupTime := noteinfoDB.ID
 		noteinfoDB.ID = 0
-		query := backRepoNoteInfo.db.Create(noteinfoDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoNoteInfo.db.Create(noteinfoDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoNoteInfo.Map_NoteInfoDBID_NoteInfoDB[noteinfoDB.ID] = noteinfoDB
 		BackRepoNoteInfoid_atBckpTime_newID[noteinfoDB_ID_atBackupTime] = noteinfoDB.ID
@@ -572,9 +574,10 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) RestorePhaseTwo() {
 
 		// insertion point for reindexing pointers encoding
 		// update databse with new index encoding
-		query := backRepoNoteInfo.db.Model(noteinfoDB).Updates(*noteinfoDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoNoteInfo.db.Model(noteinfoDB)
+		_, err := db.Updates(*noteinfoDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

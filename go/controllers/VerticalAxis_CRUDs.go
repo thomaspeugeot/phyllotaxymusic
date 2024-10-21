@@ -70,12 +70,12 @@ func (controller *Controller) GetVerticalAxiss(c *gin.Context) {
 	}
 	db := backRepo.BackRepoVerticalAxis.GetDB()
 
-	query := db.Find(&verticalaxisDBs)
-	if query.Error != nil {
+	_, err := db.Find(&verticalaxisDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostVerticalAxis(c *gin.Context) {
 	verticalaxisDB.VerticalAxisPointersEncoding = input.VerticalAxisPointersEncoding
 	verticalaxisDB.CopyBasicFieldsFromVerticalAxis_WOP(&input.VerticalAxis_WOP)
 
-	query := db.Create(&verticalaxisDB)
-	if query.Error != nil {
+	_, err = db.Create(&verticalaxisDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetVerticalAxis(c *gin.Context) {
 
 	// Get verticalaxisDB in DB
 	var verticalaxisDB orm.VerticalAxisDB
-	if err := db.First(&verticalaxisDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&verticalaxisDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateVerticalAxis(c *gin.Context) {
 	var verticalaxisDB orm.VerticalAxisDB
 
 	// fetch the verticalaxis
-	query := db.First(&verticalaxisDB, c.Param("id"))
+	_, err := db.First(&verticalaxisDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateVerticalAxis(c *gin.Context) {
 	verticalaxisDB.CopyBasicFieldsFromVerticalAxis_WOP(&input.VerticalAxis_WOP)
 	verticalaxisDB.VerticalAxisPointersEncoding = input.VerticalAxisPointersEncoding
 
-	query = db.Model(&verticalaxisDB).Updates(verticalaxisDB)
-	if query.Error != nil {
+	db, _ = db.Model(&verticalaxisDB)
+	_, err = db.Updates(verticalaxisDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteVerticalAxis(c *gin.Context) {
 
 	// Get model if exist
 	var verticalaxisDB orm.VerticalAxisDB
-	if err := db.First(&verticalaxisDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&verticalaxisDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteVerticalAxis(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&verticalaxisDB)
+	db.Unscoped()
+	db.Delete(&verticalaxisDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	verticalaxisDeleted := new(models.VerticalAxis)

@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -108,7 +109,7 @@ type RhombusDB struct {
 
 	// Declation for basic field rhombusDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	RhombusPointersEncoding
@@ -193,7 +194,7 @@ type BackRepoRhombusStruct struct {
 	// stores Rhombus according to their gorm ID
 	Map_RhombusDBID_RhombusPtr map[uint]*models.Rhombus
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -203,7 +204,7 @@ func (backRepoRhombus *BackRepoRhombusStruct) GetStage() (stage *models.StageStr
 	return
 }
 
-func (backRepoRhombus *BackRepoRhombusStruct) GetDB() *gorm.DB {
+func (backRepoRhombus *BackRepoRhombusStruct) GetDB() db.DBInterface {
 	return backRepoRhombus.db
 }
 
@@ -240,9 +241,10 @@ func (backRepoRhombus *BackRepoRhombusStruct) CommitDeleteInstance(id uint) (Err
 
 	// rhombus is not staged anymore, remove rhombusDB
 	rhombusDB := backRepoRhombus.Map_RhombusDBID_RhombusDB[id]
-	query := backRepoRhombus.db.Unscoped().Delete(&rhombusDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoRhombus.db.Unscoped()
+	_, err := db.Delete(&rhombusDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -266,9 +268,9 @@ func (backRepoRhombus *BackRepoRhombusStruct) CommitPhaseOneInstance(rhombus *mo
 	var rhombusDB RhombusDB
 	rhombusDB.CopyBasicFieldsFromRhombus(rhombus)
 
-	query := backRepoRhombus.db.Create(&rhombusDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoRhombus.db.Create(&rhombusDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -312,9 +314,9 @@ func (backRepoRhombus *BackRepoRhombusStruct) CommitPhaseTwoInstance(backRepo *B
 			rhombusDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoRhombus.db.Save(&rhombusDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoRhombus.db.Save(&rhombusDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -333,9 +335,9 @@ func (backRepoRhombus *BackRepoRhombusStruct) CommitPhaseTwoInstance(backRepo *B
 func (backRepoRhombus *BackRepoRhombusStruct) CheckoutPhaseOne() (Error error) {
 
 	rhombusDBArray := make([]RhombusDB, 0)
-	query := backRepoRhombus.db.Find(&rhombusDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoRhombus.db.Find(&rhombusDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -451,7 +453,7 @@ func (backRepo *BackRepoStruct) CheckoutRhombus(rhombus *models.Rhombus) {
 			var rhombusDB RhombusDB
 			rhombusDB.ID = id
 
-			if err := backRepo.BackRepoRhombus.db.First(&rhombusDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoRhombus.db.First(&rhombusDB, id); err != nil {
 				log.Fatalln("CheckoutRhombus : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoRhombus.CheckoutPhaseOneInstance(&rhombusDB)
@@ -766,9 +768,9 @@ func (backRepoRhombus *BackRepoRhombusStruct) rowVisitorRhombus(row *xlsx.Row) e
 
 		rhombusDB_ID_atBackupTime := rhombusDB.ID
 		rhombusDB.ID = 0
-		query := backRepoRhombus.db.Create(rhombusDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoRhombus.db.Create(rhombusDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoRhombus.Map_RhombusDBID_RhombusDB[rhombusDB.ID] = rhombusDB
 		BackRepoRhombusid_atBckpTime_newID[rhombusDB_ID_atBackupTime] = rhombusDB.ID
@@ -803,9 +805,9 @@ func (backRepoRhombus *BackRepoRhombusStruct) RestorePhaseOne(dirPath string) {
 
 		rhombusDB_ID_atBackupTime := rhombusDB.ID
 		rhombusDB.ID = 0
-		query := backRepoRhombus.db.Create(rhombusDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoRhombus.db.Create(rhombusDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoRhombus.Map_RhombusDBID_RhombusDB[rhombusDB.ID] = rhombusDB
 		BackRepoRhombusid_atBckpTime_newID[rhombusDB_ID_atBackupTime] = rhombusDB.ID
@@ -833,9 +835,10 @@ func (backRepoRhombus *BackRepoRhombusStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoRhombus.db.Model(rhombusDB).Updates(*rhombusDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoRhombus.db.Model(rhombusDB)
+		_, err := db.Updates(*rhombusDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

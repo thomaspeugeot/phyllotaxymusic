@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -76,7 +77,7 @@ type RhombusGridDB struct {
 	// Declation for basic field rhombusgridDB.IsDisplayed
 	// provide the sql storage for the boolan
 	IsDisplayed_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	RhombusGridPointersEncoding
@@ -122,7 +123,7 @@ type BackRepoRhombusGridStruct struct {
 	// stores RhombusGrid according to their gorm ID
 	Map_RhombusGridDBID_RhombusGridPtr map[uint]*models.RhombusGrid
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -132,7 +133,7 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) GetStage() (stage *models.
 	return
 }
 
-func (backRepoRhombusGrid *BackRepoRhombusGridStruct) GetDB() *gorm.DB {
+func (backRepoRhombusGrid *BackRepoRhombusGridStruct) GetDB() db.DBInterface {
 	return backRepoRhombusGrid.db
 }
 
@@ -169,9 +170,10 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitDeleteInstance(id ui
 
 	// rhombusgrid is not staged anymore, remove rhombusgridDB
 	rhombusgridDB := backRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridDB[id]
-	query := backRepoRhombusGrid.db.Unscoped().Delete(&rhombusgridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoRhombusGrid.db.Unscoped()
+	_, err := db.Delete(&rhombusgridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -195,9 +197,9 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseOneInstance(rho
 	var rhombusgridDB RhombusGridDB
 	rhombusgridDB.CopyBasicFieldsFromRhombusGrid(rhombusgrid)
 
-	query := backRepoRhombusGrid.db.Create(&rhombusgridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoRhombusGrid.db.Create(&rhombusgridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -271,9 +273,9 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseTwoInstance(bac
 				append(rhombusgridDB.RhombusGridPointersEncoding.Rhombuses, int(rhombusAssocEnd_DB.ID))
 		}
 
-		query := backRepoRhombusGrid.db.Save(&rhombusgridDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoRhombusGrid.db.Save(&rhombusgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -292,9 +294,9 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseTwoInstance(bac
 func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CheckoutPhaseOne() (Error error) {
 
 	rhombusgridDBArray := make([]RhombusGridDB, 0)
-	query := backRepoRhombusGrid.db.Find(&rhombusgridDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoRhombusGrid.db.Find(&rhombusgridDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -424,7 +426,7 @@ func (backRepo *BackRepoStruct) CheckoutRhombusGrid(rhombusgrid *models.RhombusG
 			var rhombusgridDB RhombusGridDB
 			rhombusgridDB.ID = id
 
-			if err := backRepo.BackRepoRhombusGrid.db.First(&rhombusgridDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoRhombusGrid.db.First(&rhombusgridDB, id); err != nil {
 				log.Fatalln("CheckoutRhombusGrid : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoRhombusGrid.CheckoutPhaseOneInstance(&rhombusgridDB)
@@ -583,9 +585,9 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) rowVisitorRhombusGrid(row 
 
 		rhombusgridDB_ID_atBackupTime := rhombusgridDB.ID
 		rhombusgridDB.ID = 0
-		query := backRepoRhombusGrid.db.Create(rhombusgridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoRhombusGrid.db.Create(rhombusgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridDB[rhombusgridDB.ID] = rhombusgridDB
 		BackRepoRhombusGridid_atBckpTime_newID[rhombusgridDB_ID_atBackupTime] = rhombusgridDB.ID
@@ -620,9 +622,9 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) RestorePhaseOne(dirPath st
 
 		rhombusgridDB_ID_atBackupTime := rhombusgridDB.ID
 		rhombusgridDB.ID = 0
-		query := backRepoRhombusGrid.db.Create(rhombusgridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoRhombusGrid.db.Create(rhombusgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridDB[rhombusgridDB.ID] = rhombusgridDB
 		BackRepoRhombusGridid_atBckpTime_newID[rhombusgridDB_ID_atBackupTime] = rhombusgridDB.ID
@@ -656,9 +658,10 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoRhombusGrid.db.Model(rhombusgridDB).Updates(*rhombusgridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoRhombusGrid.db.Model(rhombusgridDB)
+		_, err := db.Updates(*rhombusgridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

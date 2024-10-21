@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -117,7 +118,7 @@ type BezierDB struct {
 
 	// Declation for basic field bezierDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	BezierPointersEncoding
@@ -211,7 +212,7 @@ type BackRepoBezierStruct struct {
 	// stores Bezier according to their gorm ID
 	Map_BezierDBID_BezierPtr map[uint]*models.Bezier
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -221,7 +222,7 @@ func (backRepoBezier *BackRepoBezierStruct) GetStage() (stage *models.StageStruc
 	return
 }
 
-func (backRepoBezier *BackRepoBezierStruct) GetDB() *gorm.DB {
+func (backRepoBezier *BackRepoBezierStruct) GetDB() db.DBInterface {
 	return backRepoBezier.db
 }
 
@@ -258,9 +259,10 @@ func (backRepoBezier *BackRepoBezierStruct) CommitDeleteInstance(id uint) (Error
 
 	// bezier is not staged anymore, remove bezierDB
 	bezierDB := backRepoBezier.Map_BezierDBID_BezierDB[id]
-	query := backRepoBezier.db.Unscoped().Delete(&bezierDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoBezier.db.Unscoped()
+	_, err := db.Delete(&bezierDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -284,9 +286,9 @@ func (backRepoBezier *BackRepoBezierStruct) CommitPhaseOneInstance(bezier *model
 	var bezierDB BezierDB
 	bezierDB.CopyBasicFieldsFromBezier(bezier)
 
-	query := backRepoBezier.db.Create(&bezierDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoBezier.db.Create(&bezierDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -330,9 +332,9 @@ func (backRepoBezier *BackRepoBezierStruct) CommitPhaseTwoInstance(backRepo *Bac
 			bezierDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoBezier.db.Save(&bezierDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoBezier.db.Save(&bezierDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -351,9 +353,9 @@ func (backRepoBezier *BackRepoBezierStruct) CommitPhaseTwoInstance(backRepo *Bac
 func (backRepoBezier *BackRepoBezierStruct) CheckoutPhaseOne() (Error error) {
 
 	bezierDBArray := make([]BezierDB, 0)
-	query := backRepoBezier.db.Find(&bezierDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoBezier.db.Find(&bezierDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -469,7 +471,7 @@ func (backRepo *BackRepoStruct) CheckoutBezier(bezier *models.Bezier) {
 			var bezierDB BezierDB
 			bezierDB.ID = id
 
-			if err := backRepo.BackRepoBezier.db.First(&bezierDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoBezier.db.First(&bezierDB, id); err != nil {
 				log.Fatalln("CheckoutBezier : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoBezier.CheckoutPhaseOneInstance(&bezierDB)
@@ -820,9 +822,9 @@ func (backRepoBezier *BackRepoBezierStruct) rowVisitorBezier(row *xlsx.Row) erro
 
 		bezierDB_ID_atBackupTime := bezierDB.ID
 		bezierDB.ID = 0
-		query := backRepoBezier.db.Create(bezierDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoBezier.db.Create(bezierDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoBezier.Map_BezierDBID_BezierDB[bezierDB.ID] = bezierDB
 		BackRepoBezierid_atBckpTime_newID[bezierDB_ID_atBackupTime] = bezierDB.ID
@@ -857,9 +859,9 @@ func (backRepoBezier *BackRepoBezierStruct) RestorePhaseOne(dirPath string) {
 
 		bezierDB_ID_atBackupTime := bezierDB.ID
 		bezierDB.ID = 0
-		query := backRepoBezier.db.Create(bezierDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoBezier.db.Create(bezierDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoBezier.Map_BezierDBID_BezierDB[bezierDB.ID] = bezierDB
 		BackRepoBezierid_atBckpTime_newID[bezierDB_ID_atBackupTime] = bezierDB.ID
@@ -887,9 +889,10 @@ func (backRepoBezier *BackRepoBezierStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoBezier.db.Model(bezierDB).Updates(*bezierDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoBezier.db.Model(bezierDB)
+		_, err := db.Updates(*bezierDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

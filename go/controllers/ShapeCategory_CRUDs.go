@@ -70,12 +70,12 @@ func (controller *Controller) GetShapeCategorys(c *gin.Context) {
 	}
 	db := backRepo.BackRepoShapeCategory.GetDB()
 
-	query := db.Find(&shapecategoryDBs)
-	if query.Error != nil {
+	_, err := db.Find(&shapecategoryDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostShapeCategory(c *gin.Context) {
 	shapecategoryDB.ShapeCategoryPointersEncoding = input.ShapeCategoryPointersEncoding
 	shapecategoryDB.CopyBasicFieldsFromShapeCategory_WOP(&input.ShapeCategory_WOP)
 
-	query := db.Create(&shapecategoryDB)
-	if query.Error != nil {
+	_, err = db.Create(&shapecategoryDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetShapeCategory(c *gin.Context) {
 
 	// Get shapecategoryDB in DB
 	var shapecategoryDB orm.ShapeCategoryDB
-	if err := db.First(&shapecategoryDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&shapecategoryDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateShapeCategory(c *gin.Context) {
 	var shapecategoryDB orm.ShapeCategoryDB
 
 	// fetch the shapecategory
-	query := db.First(&shapecategoryDB, c.Param("id"))
+	_, err := db.First(&shapecategoryDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateShapeCategory(c *gin.Context) {
 	shapecategoryDB.CopyBasicFieldsFromShapeCategory_WOP(&input.ShapeCategory_WOP)
 	shapecategoryDB.ShapeCategoryPointersEncoding = input.ShapeCategoryPointersEncoding
 
-	query = db.Model(&shapecategoryDB).Updates(shapecategoryDB)
-	if query.Error != nil {
+	db, _ = db.Model(&shapecategoryDB)
+	_, err = db.Updates(shapecategoryDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteShapeCategory(c *gin.Context) {
 
 	// Get model if exist
 	var shapecategoryDB orm.ShapeCategoryDB
-	if err := db.First(&shapecategoryDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&shapecategoryDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteShapeCategory(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&shapecategoryDB)
+	db.Unscoped()
+	db.Delete(&shapecategoryDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	shapecategoryDeleted := new(models.ShapeCategory)

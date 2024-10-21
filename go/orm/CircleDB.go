@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -113,7 +114,7 @@ type CircleDB struct {
 	// Declation for basic field circleDB.ShowName
 	// provide the sql storage for the boolan
 	ShowName_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	CirclePointersEncoding
@@ -201,7 +202,7 @@ type BackRepoCircleStruct struct {
 	// stores Circle according to their gorm ID
 	Map_CircleDBID_CirclePtr map[uint]*models.Circle
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -211,7 +212,7 @@ func (backRepoCircle *BackRepoCircleStruct) GetStage() (stage *models.StageStruc
 	return
 }
 
-func (backRepoCircle *BackRepoCircleStruct) GetDB() *gorm.DB {
+func (backRepoCircle *BackRepoCircleStruct) GetDB() db.DBInterface {
 	return backRepoCircle.db
 }
 
@@ -248,9 +249,10 @@ func (backRepoCircle *BackRepoCircleStruct) CommitDeleteInstance(id uint) (Error
 
 	// circle is not staged anymore, remove circleDB
 	circleDB := backRepoCircle.Map_CircleDBID_CircleDB[id]
-	query := backRepoCircle.db.Unscoped().Delete(&circleDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoCircle.db.Unscoped()
+	_, err := db.Delete(&circleDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -274,9 +276,9 @@ func (backRepoCircle *BackRepoCircleStruct) CommitPhaseOneInstance(circle *model
 	var circleDB CircleDB
 	circleDB.CopyBasicFieldsFromCircle(circle)
 
-	query := backRepoCircle.db.Create(&circleDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoCircle.db.Create(&circleDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -320,9 +322,9 @@ func (backRepoCircle *BackRepoCircleStruct) CommitPhaseTwoInstance(backRepo *Bac
 			circleDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoCircle.db.Save(&circleDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoCircle.db.Save(&circleDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -341,9 +343,9 @@ func (backRepoCircle *BackRepoCircleStruct) CommitPhaseTwoInstance(backRepo *Bac
 func (backRepoCircle *BackRepoCircleStruct) CheckoutPhaseOne() (Error error) {
 
 	circleDBArray := make([]CircleDB, 0)
-	query := backRepoCircle.db.Find(&circleDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoCircle.db.Find(&circleDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -459,7 +461,7 @@ func (backRepo *BackRepoStruct) CheckoutCircle(circle *models.Circle) {
 			var circleDB CircleDB
 			circleDB.ID = id
 
-			if err := backRepo.BackRepoCircle.db.First(&circleDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoCircle.db.First(&circleDB, id); err != nil {
 				log.Fatalln("CheckoutCircle : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoCircle.CheckoutPhaseOneInstance(&circleDB)
@@ -786,9 +788,9 @@ func (backRepoCircle *BackRepoCircleStruct) rowVisitorCircle(row *xlsx.Row) erro
 
 		circleDB_ID_atBackupTime := circleDB.ID
 		circleDB.ID = 0
-		query := backRepoCircle.db.Create(circleDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoCircle.db.Create(circleDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoCircle.Map_CircleDBID_CircleDB[circleDB.ID] = circleDB
 		BackRepoCircleid_atBckpTime_newID[circleDB_ID_atBackupTime] = circleDB.ID
@@ -823,9 +825,9 @@ func (backRepoCircle *BackRepoCircleStruct) RestorePhaseOne(dirPath string) {
 
 		circleDB_ID_atBackupTime := circleDB.ID
 		circleDB.ID = 0
-		query := backRepoCircle.db.Create(circleDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoCircle.db.Create(circleDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoCircle.Map_CircleDBID_CircleDB[circleDB.ID] = circleDB
 		BackRepoCircleid_atBckpTime_newID[circleDB_ID_atBackupTime] = circleDB.ID
@@ -853,9 +855,10 @@ func (backRepoCircle *BackRepoCircleStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoCircle.db.Model(circleDB).Updates(*circleDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoCircle.db.Model(circleDB)
+		_, err := db.Updates(*circleDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

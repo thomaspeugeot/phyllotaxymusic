@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -76,7 +77,7 @@ type BezierGridDB struct {
 	// Declation for basic field beziergridDB.IsDisplayed
 	// provide the sql storage for the boolan
 	IsDisplayed_Data sql.NullBool
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	BezierGridPointersEncoding
@@ -122,7 +123,7 @@ type BackRepoBezierGridStruct struct {
 	// stores BezierGrid according to their gorm ID
 	Map_BezierGridDBID_BezierGridPtr map[uint]*models.BezierGrid
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -132,7 +133,7 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) GetStage() (stage *models.St
 	return
 }
 
-func (backRepoBezierGrid *BackRepoBezierGridStruct) GetDB() *gorm.DB {
+func (backRepoBezierGrid *BackRepoBezierGridStruct) GetDB() db.DBInterface {
 	return backRepoBezierGrid.db
 }
 
@@ -169,9 +170,10 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) CommitDeleteInstance(id uint
 
 	// beziergrid is not staged anymore, remove beziergridDB
 	beziergridDB := backRepoBezierGrid.Map_BezierGridDBID_BezierGridDB[id]
-	query := backRepoBezierGrid.db.Unscoped().Delete(&beziergridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoBezierGrid.db.Unscoped()
+	_, err := db.Delete(&beziergridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -195,9 +197,9 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) CommitPhaseOneInstance(bezie
 	var beziergridDB BezierGridDB
 	beziergridDB.CopyBasicFieldsFromBezierGrid(beziergrid)
 
-	query := backRepoBezierGrid.db.Create(&beziergridDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoBezierGrid.db.Create(&beziergridDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -271,9 +273,9 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) CommitPhaseTwoInstance(backR
 				append(beziergridDB.BezierGridPointersEncoding.Beziers, int(bezierAssocEnd_DB.ID))
 		}
 
-		query := backRepoBezierGrid.db.Save(&beziergridDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoBezierGrid.db.Save(&beziergridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -292,9 +294,9 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) CommitPhaseTwoInstance(backR
 func (backRepoBezierGrid *BackRepoBezierGridStruct) CheckoutPhaseOne() (Error error) {
 
 	beziergridDBArray := make([]BezierGridDB, 0)
-	query := backRepoBezierGrid.db.Find(&beziergridDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoBezierGrid.db.Find(&beziergridDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -424,7 +426,7 @@ func (backRepo *BackRepoStruct) CheckoutBezierGrid(beziergrid *models.BezierGrid
 			var beziergridDB BezierGridDB
 			beziergridDB.ID = id
 
-			if err := backRepo.BackRepoBezierGrid.db.First(&beziergridDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoBezierGrid.db.First(&beziergridDB, id); err != nil {
 				log.Fatalln("CheckoutBezierGrid : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoBezierGrid.CheckoutPhaseOneInstance(&beziergridDB)
@@ -583,9 +585,9 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) rowVisitorBezierGrid(row *xl
 
 		beziergridDB_ID_atBackupTime := beziergridDB.ID
 		beziergridDB.ID = 0
-		query := backRepoBezierGrid.db.Create(beziergridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoBezierGrid.db.Create(beziergridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoBezierGrid.Map_BezierGridDBID_BezierGridDB[beziergridDB.ID] = beziergridDB
 		BackRepoBezierGridid_atBckpTime_newID[beziergridDB_ID_atBackupTime] = beziergridDB.ID
@@ -620,9 +622,9 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) RestorePhaseOne(dirPath stri
 
 		beziergridDB_ID_atBackupTime := beziergridDB.ID
 		beziergridDB.ID = 0
-		query := backRepoBezierGrid.db.Create(beziergridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoBezierGrid.db.Create(beziergridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoBezierGrid.Map_BezierGridDBID_BezierGridDB[beziergridDB.ID] = beziergridDB
 		BackRepoBezierGridid_atBckpTime_newID[beziergridDB_ID_atBackupTime] = beziergridDB.ID
@@ -656,9 +658,10 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoBezierGrid.db.Model(beziergridDB).Updates(*beziergridDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoBezierGrid.db.Model(beziergridDB)
+		_, err := db.Updates(*beziergridDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

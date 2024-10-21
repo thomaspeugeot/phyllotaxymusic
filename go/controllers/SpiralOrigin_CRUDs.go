@@ -70,12 +70,12 @@ func (controller *Controller) GetSpiralOrigins(c *gin.Context) {
 	}
 	db := backRepo.BackRepoSpiralOrigin.GetDB()
 
-	query := db.Find(&spiraloriginDBs)
-	if query.Error != nil {
+	_, err := db.Find(&spiraloriginDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostSpiralOrigin(c *gin.Context) {
 	spiraloriginDB.SpiralOriginPointersEncoding = input.SpiralOriginPointersEncoding
 	spiraloriginDB.CopyBasicFieldsFromSpiralOrigin_WOP(&input.SpiralOrigin_WOP)
 
-	query := db.Create(&spiraloriginDB)
-	if query.Error != nil {
+	_, err = db.Create(&spiraloriginDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetSpiralOrigin(c *gin.Context) {
 
 	// Get spiraloriginDB in DB
 	var spiraloriginDB orm.SpiralOriginDB
-	if err := db.First(&spiraloriginDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spiraloriginDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateSpiralOrigin(c *gin.Context) {
 	var spiraloriginDB orm.SpiralOriginDB
 
 	// fetch the spiralorigin
-	query := db.First(&spiraloriginDB, c.Param("id"))
+	_, err := db.First(&spiraloriginDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateSpiralOrigin(c *gin.Context) {
 	spiraloriginDB.CopyBasicFieldsFromSpiralOrigin_WOP(&input.SpiralOrigin_WOP)
 	spiraloriginDB.SpiralOriginPointersEncoding = input.SpiralOriginPointersEncoding
 
-	query = db.Model(&spiraloriginDB).Updates(spiraloriginDB)
-	if query.Error != nil {
+	db, _ = db.Model(&spiraloriginDB)
+	_, err = db.Updates(spiraloriginDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteSpiralOrigin(c *gin.Context) {
 
 	// Get model if exist
 	var spiraloriginDB orm.SpiralOriginDB
-	if err := db.First(&spiraloriginDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spiraloriginDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteSpiralOrigin(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&spiraloriginDB)
+	db.Unscoped()
+	db.Delete(&spiraloriginDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	spiraloriginDeleted := new(models.SpiralOrigin)

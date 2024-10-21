@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/thomaspeugeot/phylotaxymusic/go/db"
 	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 )
 
@@ -99,7 +100,7 @@ type HorizontalAxisDB struct {
 
 	// Declation for basic field horizontalaxisDB.Transform
 	Transform_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	HorizontalAxisPointersEncoding
@@ -175,7 +176,7 @@ type BackRepoHorizontalAxisStruct struct {
 	// stores HorizontalAxis according to their gorm ID
 	Map_HorizontalAxisDBID_HorizontalAxisPtr map[uint]*models.HorizontalAxis
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -185,7 +186,7 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) GetStage() (stage *m
 	return
 }
 
-func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) GetDB() *gorm.DB {
+func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) GetDB() db.DBInterface {
 	return backRepoHorizontalAxis.db
 }
 
@@ -222,9 +223,10 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitDeleteInstance
 
 	// horizontalaxis is not staged anymore, remove horizontalaxisDB
 	horizontalaxisDB := backRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisDB[id]
-	query := backRepoHorizontalAxis.db.Unscoped().Delete(&horizontalaxisDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoHorizontalAxis.db.Unscoped()
+	_, err := db.Delete(&horizontalaxisDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -248,9 +250,9 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitPhaseOneInstan
 	var horizontalaxisDB HorizontalAxisDB
 	horizontalaxisDB.CopyBasicFieldsFromHorizontalAxis(horizontalaxis)
 
-	query := backRepoHorizontalAxis.db.Create(&horizontalaxisDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoHorizontalAxis.db.Create(&horizontalaxisDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -294,9 +296,9 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitPhaseTwoInstan
 			horizontalaxisDB.ShapeCategoryID.Valid = true
 		}
 
-		query := backRepoHorizontalAxis.db.Save(&horizontalaxisDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoHorizontalAxis.db.Save(&horizontalaxisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -315,9 +317,9 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitPhaseTwoInstan
 func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CheckoutPhaseOne() (Error error) {
 
 	horizontalaxisDBArray := make([]HorizontalAxisDB, 0)
-	query := backRepoHorizontalAxis.db.Find(&horizontalaxisDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoHorizontalAxis.db.Find(&horizontalaxisDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -433,7 +435,7 @@ func (backRepo *BackRepoStruct) CheckoutHorizontalAxis(horizontalaxis *models.Ho
 			var horizontalaxisDB HorizontalAxisDB
 			horizontalaxisDB.ID = id
 
-			if err := backRepo.BackRepoHorizontalAxis.db.First(&horizontalaxisDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoHorizontalAxis.db.First(&horizontalaxisDB, id); err != nil {
 				log.Fatalln("CheckoutHorizontalAxis : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoHorizontalAxis.CheckoutPhaseOneInstance(&horizontalaxisDB)
@@ -712,9 +714,9 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) rowVisitorHorizontal
 
 		horizontalaxisDB_ID_atBackupTime := horizontalaxisDB.ID
 		horizontalaxisDB.ID = 0
-		query := backRepoHorizontalAxis.db.Create(horizontalaxisDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoHorizontalAxis.db.Create(horizontalaxisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisDB[horizontalaxisDB.ID] = horizontalaxisDB
 		BackRepoHorizontalAxisid_atBckpTime_newID[horizontalaxisDB_ID_atBackupTime] = horizontalaxisDB.ID
@@ -749,9 +751,9 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) RestorePhaseOne(dirP
 
 		horizontalaxisDB_ID_atBackupTime := horizontalaxisDB.ID
 		horizontalaxisDB.ID = 0
-		query := backRepoHorizontalAxis.db.Create(horizontalaxisDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoHorizontalAxis.db.Create(horizontalaxisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisDB[horizontalaxisDB.ID] = horizontalaxisDB
 		BackRepoHorizontalAxisid_atBckpTime_newID[horizontalaxisDB_ID_atBackupTime] = horizontalaxisDB.ID
@@ -779,9 +781,10 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) RestorePhaseTwo() {
 		}
 
 		// update databse with new index encoding
-		query := backRepoHorizontalAxis.db.Model(horizontalaxisDB).Updates(*horizontalaxisDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoHorizontalAxis.db.Model(horizontalaxisDB)
+		_, err := db.Updates(*horizontalaxisDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

@@ -70,12 +70,12 @@ func (controller *Controller) GetSpiralRhombusGrids(c *gin.Context) {
 	}
 	db := backRepo.BackRepoSpiralRhombusGrid.GetDB()
 
-	query := db.Find(&spiralrhombusgridDBs)
-	if query.Error != nil {
+	_, err := db.Find(&spiralrhombusgridDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostSpiralRhombusGrid(c *gin.Context) {
 	spiralrhombusgridDB.SpiralRhombusGridPointersEncoding = input.SpiralRhombusGridPointersEncoding
 	spiralrhombusgridDB.CopyBasicFieldsFromSpiralRhombusGrid_WOP(&input.SpiralRhombusGrid_WOP)
 
-	query := db.Create(&spiralrhombusgridDB)
-	if query.Error != nil {
+	_, err = db.Create(&spiralrhombusgridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetSpiralRhombusGrid(c *gin.Context) {
 
 	// Get spiralrhombusgridDB in DB
 	var spiralrhombusgridDB orm.SpiralRhombusGridDB
-	if err := db.First(&spiralrhombusgridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spiralrhombusgridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateSpiralRhombusGrid(c *gin.Context) {
 	var spiralrhombusgridDB orm.SpiralRhombusGridDB
 
 	// fetch the spiralrhombusgrid
-	query := db.First(&spiralrhombusgridDB, c.Param("id"))
+	_, err := db.First(&spiralrhombusgridDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateSpiralRhombusGrid(c *gin.Context) {
 	spiralrhombusgridDB.CopyBasicFieldsFromSpiralRhombusGrid_WOP(&input.SpiralRhombusGrid_WOP)
 	spiralrhombusgridDB.SpiralRhombusGridPointersEncoding = input.SpiralRhombusGridPointersEncoding
 
-	query = db.Model(&spiralrhombusgridDB).Updates(spiralrhombusgridDB)
-	if query.Error != nil {
+	db, _ = db.Model(&spiralrhombusgridDB)
+	_, err = db.Updates(spiralrhombusgridDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteSpiralRhombusGrid(c *gin.Context) {
 
 	// Get model if exist
 	var spiralrhombusgridDB orm.SpiralRhombusGridDB
-	if err := db.First(&spiralrhombusgridDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&spiralrhombusgridDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteSpiralRhombusGrid(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&spiralrhombusgridDB)
+	db.Unscoped()
+	db.Delete(&spiralrhombusgridDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	spiralrhombusgridDeleted := new(models.SpiralRhombusGrid)
