@@ -18,6 +18,22 @@
 			"group": "build"
 		},
 		{
+			"label": "02 - run phylotaxymusic -unmarshallFromCode=music.go -marshallOnCommit=music",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/go/cmd/phylotaxymusic"
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-diagrams",
+				"-unmarshallFromCode=data/music.go",
+				"-marshallOnCommit=data/music"
+			],
+			"group": "build"
+		},
+		{
 			"label": "02 - run phylotaxymusic w/o diagrams",
 			"type": "shell",
 			"options": {

@@ -13,7 +13,7 @@ npm i
 ng build
 cd ../go/cmd/phylotaxymusic
 go build
-./phylotaxymusic -unmarshallFromCode=data/stage.go -marshallOnCommit=data/stage
+./phylotaxymusic -unmarshallFromCode=data/music.go -marshallOnCommit=data/music
 ```
 
 launch your browser to http://localhost:8080/
