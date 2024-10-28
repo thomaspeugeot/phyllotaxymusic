@@ -118,7 +118,9 @@ func (parameterImpl *ParameterImpl) Generate() {
 	parameterImpl.phylotaxymusicStage.Commit()
 
 	// get path of the hour handle
-	parameterImpl.generateHTMLindex(p)
+	if parameterImpl.parameter.BackendCurve.IsDisplayed {
+		parameterImpl.generateHTMLindex(p)
+	}
 }
 
 func (parameterImpl *ParameterImpl) generateHTMLindex(p *phylotaxymusic_models.Parameter) {
@@ -203,6 +205,8 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	updatedParameter.GenerateSvg(parameterImpl.gongsvgStage)
 	parameterImpl.tree.Generate(updatedParameter)
 	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage)
-	parameterImpl.generateHTMLindex(updatedParameter)
-
+	// get path of the hour handle
+	if parameterImpl.parameter.BackendCurve.IsDisplayed {
+		parameterImpl.generateHTMLindex(updatedParameter)
+	}
 }
