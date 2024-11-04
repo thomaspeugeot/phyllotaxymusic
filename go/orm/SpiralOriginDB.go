@@ -212,7 +212,7 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CommitDeleteInstance(id 
 	// spiralorigin is not staged anymore, remove spiraloriginDB
 	spiraloriginDB := backRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginDB[id]
 	db, _ := backRepoSpiralOrigin.db.Unscoped()
-	_, err := db.Delete(&spiraloriginDB)
+	_, err := db.Delete(spiraloriginDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -284,7 +284,7 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CommitPhaseTwoInstance(b
 			spiraloriginDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoSpiralOrigin.db.Save(&spiraloriginDB)
+		_, err := backRepoSpiralOrigin.db.Save(spiraloriginDB)
 		if err != nil {
 			log.Fatal(err)
 		}

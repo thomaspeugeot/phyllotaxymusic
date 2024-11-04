@@ -171,7 +171,7 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitDeleteInstance(id ui
 	// rhombusgrid is not staged anymore, remove rhombusgridDB
 	rhombusgridDB := backRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridDB[id]
 	db, _ := backRepoRhombusGrid.db.Unscoped()
-	_, err := db.Delete(&rhombusgridDB)
+	_, err := db.Delete(rhombusgridDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -273,7 +273,7 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseTwoInstance(bac
 				append(rhombusgridDB.RhombusGridPointersEncoding.Rhombuses, int(rhombusAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoRhombusGrid.db.Save(&rhombusgridDB)
+		_, err := backRepoRhombusGrid.db.Save(rhombusgridDB)
 		if err != nil {
 			log.Fatal(err)
 		}

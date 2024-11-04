@@ -218,7 +218,7 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CommitDeleteInstan
 	// frontcurvestack is not staged anymore, remove frontcurvestackDB
 	frontcurvestackDB := backRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackDB[id]
 	db, _ := backRepoFrontCurveStack.db.Unscoped()
-	_, err := db.Delete(&frontcurvestackDB)
+	_, err := db.Delete(frontcurvestackDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -326,7 +326,7 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CommitPhaseTwoInst
 				append(frontcurvestackDB.FrontCurveStackPointersEncoding.SpiralCircles, int(spiralcircleAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoFrontCurveStack.db.Save(&frontcurvestackDB)
+		_, err := backRepoFrontCurveStack.db.Save(frontcurvestackDB)
 		if err != nil {
 			log.Fatal(err)
 		}

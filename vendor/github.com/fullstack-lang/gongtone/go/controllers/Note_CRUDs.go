@@ -70,12 +70,12 @@ func (controller *Controller) GetNotes(c *gin.Context) {
 	}
 	db := backRepo.BackRepoNote.GetDB()
 
-	query := db.Find(&noteDBs)
-	if query.Error != nil {
+	_, err := db.Find(&noteDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostNote(c *gin.Context) {
 	noteDB.NotePointersEncoding = input.NotePointersEncoding
 	noteDB.CopyBasicFieldsFromNote_WOP(&input.Note_WOP)
 
-	query := db.Create(&noteDB)
-	if query.Error != nil {
+	_, err = db.Create(&noteDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetNote(c *gin.Context) {
 
 	// Get noteDB in DB
 	var noteDB orm.NoteDB
-	if err := db.First(&noteDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&noteDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateNote(c *gin.Context) {
 	var noteDB orm.NoteDB
 
 	// fetch the note
-	query := db.First(&noteDB, c.Param("id"))
+	_, err := db.First(&noteDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateNote(c *gin.Context) {
 	noteDB.CopyBasicFieldsFromNote_WOP(&input.Note_WOP)
 	noteDB.NotePointersEncoding = input.NotePointersEncoding
 
-	query = db.Model(&noteDB).Updates(noteDB)
-	if query.Error != nil {
+	db, _ = db.Model(&noteDB)
+	_, err = db.Updates(&noteDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteNote(c *gin.Context) {
 
 	// Get model if exist
 	var noteDB orm.NoteDB
-	if err := db.First(&noteDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&noteDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteNote(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&noteDB)
+	db.Unscoped()
+	db.Delete(&noteDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	noteDeleted := new(models.Note)

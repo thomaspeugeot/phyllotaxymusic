@@ -489,11 +489,15 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 									switch gongstructName {
 									// insertion point for identifiers
 									case "Freqency":
-										instanceFreqency := (&Freqency{Name: instanceName}).Stage(stage)
+										instanceFreqency := new(Freqency)
+										instanceFreqency.Name = instanceName
+										instanceFreqency.Stage(stage)
 										instance = any(instanceFreqency)
 										__gong__map_Freqency[identifier] = instanceFreqency
 									case "Note":
-										instanceNote := (&Note{Name: instanceName}).Stage(stage)
+										instanceNote := new(Note)
+										instanceNote.Name = instanceName
+										instanceNote.Stage(stage)
 										instance = any(instanceNote)
 										__gong__map_Note[identifier] = instanceNote
 									}

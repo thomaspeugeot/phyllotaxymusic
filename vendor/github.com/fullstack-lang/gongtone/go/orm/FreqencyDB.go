@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/fullstack-lang/gongtone/go/db"
 	"github.com/fullstack-lang/gongtone/go/models"
 )
 
@@ -61,7 +62,7 @@ type FreqencyDB struct {
 
 	// Declation for basic field freqencyDB.Name
 	Name_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	FreqencyPointersEncoding
@@ -104,7 +105,7 @@ type BackRepoFreqencyStruct struct {
 	// stores Freqency according to their gorm ID
 	Map_FreqencyDBID_FreqencyPtr map[uint]*models.Freqency
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -114,7 +115,7 @@ func (backRepoFreqency *BackRepoFreqencyStruct) GetStage() (stage *models.StageS
 	return
 }
 
-func (backRepoFreqency *BackRepoFreqencyStruct) GetDB() *gorm.DB {
+func (backRepoFreqency *BackRepoFreqencyStruct) GetDB() db.DBInterface {
 	return backRepoFreqency.db
 }
 
@@ -151,9 +152,10 @@ func (backRepoFreqency *BackRepoFreqencyStruct) CommitDeleteInstance(id uint) (E
 
 	// freqency is not staged anymore, remove freqencyDB
 	freqencyDB := backRepoFreqency.Map_FreqencyDBID_FreqencyDB[id]
-	query := backRepoFreqency.db.Unscoped().Delete(&freqencyDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoFreqency.db.Unscoped()
+	_, err := db.Delete(freqencyDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -177,9 +179,9 @@ func (backRepoFreqency *BackRepoFreqencyStruct) CommitPhaseOneInstance(freqency 
 	var freqencyDB FreqencyDB
 	freqencyDB.CopyBasicFieldsFromFreqency(freqency)
 
-	query := backRepoFreqency.db.Create(&freqencyDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoFreqency.db.Create(&freqencyDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -211,9 +213,9 @@ func (backRepoFreqency *BackRepoFreqencyStruct) CommitPhaseTwoInstance(backRepo 
 		freqencyDB.CopyBasicFieldsFromFreqency(freqency)
 
 		// insertion point for translating pointers encodings into actual pointers
-		query := backRepoFreqency.db.Save(&freqencyDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoFreqency.db.Save(freqencyDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -232,9 +234,9 @@ func (backRepoFreqency *BackRepoFreqencyStruct) CommitPhaseTwoInstance(backRepo 
 func (backRepoFreqency *BackRepoFreqencyStruct) CheckoutPhaseOne() (Error error) {
 
 	freqencyDBArray := make([]FreqencyDB, 0)
-	query := backRepoFreqency.db.Find(&freqencyDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoFreqency.db.Find(&freqencyDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -345,7 +347,7 @@ func (backRepo *BackRepoStruct) CheckoutFreqency(freqency *models.Freqency) {
 			var freqencyDB FreqencyDB
 			freqencyDB.ID = id
 
-			if err := backRepo.BackRepoFreqency.db.First(&freqencyDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoFreqency.db.First(&freqencyDB, id); err != nil {
 				log.Fatalln("CheckoutFreqency : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoFreqency.CheckoutPhaseOneInstance(&freqencyDB)
@@ -492,9 +494,9 @@ func (backRepoFreqency *BackRepoFreqencyStruct) rowVisitorFreqency(row *xlsx.Row
 
 		freqencyDB_ID_atBackupTime := freqencyDB.ID
 		freqencyDB.ID = 0
-		query := backRepoFreqency.db.Create(freqencyDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoFreqency.db.Create(freqencyDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoFreqency.Map_FreqencyDBID_FreqencyDB[freqencyDB.ID] = freqencyDB
 		BackRepoFreqencyid_atBckpTime_newID[freqencyDB_ID_atBackupTime] = freqencyDB.ID
@@ -529,9 +531,9 @@ func (backRepoFreqency *BackRepoFreqencyStruct) RestorePhaseOne(dirPath string) 
 
 		freqencyDB_ID_atBackupTime := freqencyDB.ID
 		freqencyDB.ID = 0
-		query := backRepoFreqency.db.Create(freqencyDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoFreqency.db.Create(freqencyDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoFreqency.Map_FreqencyDBID_FreqencyDB[freqencyDB.ID] = freqencyDB
 		BackRepoFreqencyid_atBckpTime_newID[freqencyDB_ID_atBackupTime] = freqencyDB.ID
@@ -553,9 +555,10 @@ func (backRepoFreqency *BackRepoFreqencyStruct) RestorePhaseTwo() {
 
 		// insertion point for reindexing pointers encoding
 		// update databse with new index encoding
-		query := backRepoFreqency.db.Model(freqencyDB).Updates(*freqencyDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoFreqency.db.Model(freqencyDB)
+		_, err := db.Updates(*freqencyDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

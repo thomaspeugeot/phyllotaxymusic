@@ -167,7 +167,7 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CommitDeleteInst
 	// spiralbeziergrid is not staged anymore, remove spiralbeziergridDB
 	spiralbeziergridDB := backRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridDB[id]
 	db, _ := backRepoSpiralBezierGrid.db.Unscoped()
-	_, err := db.Delete(&spiralbeziergridDB)
+	_, err := db.Delete(spiralbeziergridDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -257,7 +257,7 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CommitPhaseTwoIn
 				append(spiralbeziergridDB.SpiralBezierGridPointersEncoding.SpiralBeziers, int(spiralbezierAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoSpiralBezierGrid.db.Save(&spiralbeziergridDB)
+		_, err := backRepoSpiralBezierGrid.db.Save(spiralbeziergridDB)
 		if err != nil {
 			log.Fatal(err)
 		}

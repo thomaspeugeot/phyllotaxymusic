@@ -280,7 +280,7 @@ func (controller *Controller) UpdateRhombusGrid(c *gin.Context) {
 	rhombusgridDB.RhombusGridPointersEncoding = input.RhombusGridPointersEncoding
 
 	db, _ = db.Model(&rhombusgridDB)
-	_, err = db.Updates(rhombusgridDB)
+	_, err = db.Updates(&rhombusgridDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

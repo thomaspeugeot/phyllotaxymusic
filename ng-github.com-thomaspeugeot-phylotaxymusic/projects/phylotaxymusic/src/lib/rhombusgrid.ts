@@ -83,6 +83,11 @@ export function CopyRhombusGridAPIToRhombusGrid(rhombusgridAPI: RhombusGridAPI, 
 	rhombusgrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(rhombusgridAPI.RhombusGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(rhombusgridAPI.RhombusGridPointersEncoding.Rhombuses)) {
+		console.error('Rects is not an array:', rhombusgridAPI.RhombusGridPointersEncoding.Rhombuses);
+		return;
+	}
+
 	rhombusgrid.Rhombuses = new Array<Rhombus>()
 	for (let _id of rhombusgridAPI.RhombusGridPointersEncoding.Rhombuses) {
 		let _rhombus = frontRepo.map_ID_Rhombus.get(_id)

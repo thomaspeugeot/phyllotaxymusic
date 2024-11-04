@@ -280,7 +280,7 @@ func (controller *Controller) UpdateSpiralOrigin(c *gin.Context) {
 	spiraloriginDB.SpiralOriginPointersEncoding = input.SpiralOriginPointersEncoding
 
 	db, _ = db.Model(&spiraloriginDB)
-	_, err = db.Updates(spiraloriginDB)
+	_, err = db.Updates(&spiraloriginDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

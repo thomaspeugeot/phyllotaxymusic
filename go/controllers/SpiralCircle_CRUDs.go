@@ -280,7 +280,7 @@ func (controller *Controller) UpdateSpiralCircle(c *gin.Context) {
 	spiralcircleDB.SpiralCirclePointersEncoding = input.SpiralCirclePointersEncoding
 
 	db, _ = db.Model(&spiralcircleDB)
-	_, err = db.Updates(spiralcircleDB)
+	_, err = db.Updates(&spiralcircleDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

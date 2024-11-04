@@ -875,6 +875,11 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralOrigin = frontRepo.map_ID_SpiralOrigin.get(parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(parameterAPI.ParameterPointersEncoding.NoteInfos)) {
+		console.error('Rects is not an array:', parameterAPI.ParameterPointersEncoding.NoteInfos);
+		return;
+	}
+
 	parameter.NoteInfos = new Array<NoteInfo>()
 	for (let _id of parameterAPI.ParameterPointersEncoding.NoteInfos) {
 		let _noteinfo = frontRepo.map_ID_NoteInfo.get(_id)

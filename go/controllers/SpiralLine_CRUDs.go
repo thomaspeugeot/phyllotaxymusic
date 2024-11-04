@@ -280,7 +280,7 @@ func (controller *Controller) UpdateSpiralLine(c *gin.Context) {
 	spirallineDB.SpiralLinePointersEncoding = input.SpiralLinePointersEncoding
 
 	db, _ = db.Model(&spirallineDB)
-	_, err = db.Updates(spirallineDB)
+	_, err = db.Updates(&spirallineDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

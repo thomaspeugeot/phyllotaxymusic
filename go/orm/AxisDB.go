@@ -248,7 +248,7 @@ func (backRepoAxis *BackRepoAxisStruct) CommitDeleteInstance(id uint) (Error err
 	// axis is not staged anymore, remove axisDB
 	axisDB := backRepoAxis.Map_AxisDBID_AxisDB[id]
 	db, _ := backRepoAxis.db.Unscoped()
-	_, err := db.Delete(&axisDB)
+	_, err := db.Delete(axisDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -320,7 +320,7 @@ func (backRepoAxis *BackRepoAxisStruct) CommitPhaseTwoInstance(backRepo *BackRep
 			axisDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoAxis.db.Save(&axisDB)
+		_, err := backRepoAxis.db.Save(axisDB)
 		if err != nil {
 			log.Fatal(err)
 		}

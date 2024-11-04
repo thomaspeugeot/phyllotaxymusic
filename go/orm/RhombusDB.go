@@ -242,7 +242,7 @@ func (backRepoRhombus *BackRepoRhombusStruct) CommitDeleteInstance(id uint) (Err
 	// rhombus is not staged anymore, remove rhombusDB
 	rhombusDB := backRepoRhombus.Map_RhombusDBID_RhombusDB[id]
 	db, _ := backRepoRhombus.db.Unscoped()
-	_, err := db.Delete(&rhombusDB)
+	_, err := db.Delete(rhombusDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -314,7 +314,7 @@ func (backRepoRhombus *BackRepoRhombusStruct) CommitPhaseTwoInstance(backRepo *B
 			rhombusDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoRhombus.db.Save(&rhombusDB)
+		_, err := backRepoRhombus.db.Save(rhombusDB)
 		if err != nil {
 			log.Fatal(err)
 		}

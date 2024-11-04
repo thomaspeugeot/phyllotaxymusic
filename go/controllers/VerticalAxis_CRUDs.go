@@ -280,7 +280,7 @@ func (controller *Controller) UpdateVerticalAxis(c *gin.Context) {
 	verticalaxisDB.VerticalAxisPointersEncoding = input.VerticalAxisPointersEncoding
 
 	db, _ = db.Model(&verticalaxisDB)
-	_, err = db.Updates(verticalaxisDB)
+	_, err = db.Updates(&verticalaxisDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

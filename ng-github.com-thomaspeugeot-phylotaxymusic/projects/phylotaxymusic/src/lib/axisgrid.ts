@@ -83,6 +83,11 @@ export function CopyAxisGridAPIToAxisGrid(axisgridAPI: AxisGridAPI, axisgrid: Ax
 	axisgrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(axisgridAPI.AxisGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(axisgridAPI.AxisGridPointersEncoding.Axiss)) {
+		console.error('Rects is not an array:', axisgridAPI.AxisGridPointersEncoding.Axiss);
+		return;
+	}
+
 	axisgrid.Axiss = new Array<Axis>()
 	for (let _id of axisgridAPI.AxisGridPointersEncoding.Axiss) {
 		let _axis = frontRepo.map_ID_Axis.get(_id)

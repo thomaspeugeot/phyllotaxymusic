@@ -73,6 +73,11 @@ export function CopySpiralLineGridAPIToSpiralLineGrid(spirallinegridAPI: SpiralL
 	spirallinegrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(spirallinegridAPI.SpiralLineGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(spirallinegridAPI.SpiralLineGridPointersEncoding.SpiralLines)) {
+		console.error('Rects is not an array:', spirallinegridAPI.SpiralLineGridPointersEncoding.SpiralLines);
+		return;
+	}
+
 	spirallinegrid.SpiralLines = new Array<SpiralLine>()
 	for (let _id of spirallinegridAPI.SpiralLineGridPointersEncoding.SpiralLines) {
 		let _spiralline = frontRepo.map_ID_SpiralLine.get(_id)

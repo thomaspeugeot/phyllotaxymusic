@@ -73,6 +73,11 @@ export function CopyBezierGridStackAPIToBezierGridStack(beziergridstackAPI: Bezi
 	beziergridstack.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(beziergridstackAPI.BezierGridStackPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(beziergridstackAPI.BezierGridStackPointersEncoding.BezierGrids)) {
+		console.error('Rects is not an array:', beziergridstackAPI.BezierGridStackPointersEncoding.BezierGrids);
+		return;
+	}
+
 	beziergridstack.BezierGrids = new Array<BezierGrid>()
 	for (let _id of beziergridstackAPI.BezierGridStackPointersEncoding.BezierGrids) {
 		let _beziergrid = frontRepo.map_ID_BezierGrid.get(_id)

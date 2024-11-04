@@ -280,7 +280,7 @@ func (controller *Controller) UpdateShapeCategory(c *gin.Context) {
 	shapecategoryDB.ShapeCategoryPointersEncoding = input.ShapeCategoryPointersEncoding
 
 	db, _ = db.Model(&shapecategoryDB)
-	_, err = db.Updates(shapecategoryDB)
+	_, err = db.Updates(&shapecategoryDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

@@ -260,7 +260,7 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CommitDeleteInstance(i
 	// spiralrhombus is not staged anymore, remove spiralrhombusDB
 	spiralrhombusDB := backRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusDB[id]
 	db, _ := backRepoSpiralRhombus.db.Unscoped()
-	_, err := db.Delete(&spiralrhombusDB)
+	_, err := db.Delete(spiralrhombusDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -332,7 +332,7 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CommitPhaseTwoInstance
 			spiralrhombusDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoSpiralRhombus.db.Save(&spiralrhombusDB)
+		_, err := backRepoSpiralRhombus.db.Save(spiralrhombusDB)
 		if err != nil {
 			log.Fatal(err)
 		}

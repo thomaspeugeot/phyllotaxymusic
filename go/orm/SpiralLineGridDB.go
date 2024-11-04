@@ -167,7 +167,7 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CommitDeleteInstance
 	// spirallinegrid is not staged anymore, remove spirallinegridDB
 	spirallinegridDB := backRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridDB[id]
 	db, _ := backRepoSpiralLineGrid.db.Unscoped()
-	_, err := db.Delete(&spirallinegridDB)
+	_, err := db.Delete(spirallinegridDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -257,7 +257,7 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CommitPhaseTwoInstan
 				append(spirallinegridDB.SpiralLineGridPointersEncoding.SpiralLines, int(spirallineAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoSpiralLineGrid.db.Save(&spirallinegridDB)
+		_, err := backRepoSpiralLineGrid.db.Save(spirallinegridDB)
 		if err != nil {
 			log.Fatal(err)
 		}

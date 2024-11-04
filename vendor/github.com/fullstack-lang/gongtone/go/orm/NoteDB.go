@@ -17,6 +17,7 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
+	"github.com/fullstack-lang/gongtone/go/db"
 	"github.com/fullstack-lang/gongtone/go/models"
 )
 
@@ -76,7 +77,7 @@ type NoteDB struct {
 
 	// Declation for basic field noteDB.Info
 	Info_Data sql.NullString
-	
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	NotePointersEncoding
@@ -131,7 +132,7 @@ type BackRepoNoteStruct struct {
 	// stores Note according to their gorm ID
 	Map_NoteDBID_NotePtr map[uint]*models.Note
 
-	db *gorm.DB
+	db db.DBInterface
 
 	stage *models.StageStruct
 }
@@ -141,7 +142,7 @@ func (backRepoNote *BackRepoNoteStruct) GetStage() (stage *models.StageStruct) {
 	return
 }
 
-func (backRepoNote *BackRepoNoteStruct) GetDB() *gorm.DB {
+func (backRepoNote *BackRepoNoteStruct) GetDB() db.DBInterface {
 	return backRepoNote.db
 }
 
@@ -178,9 +179,10 @@ func (backRepoNote *BackRepoNoteStruct) CommitDeleteInstance(id uint) (Error err
 
 	// note is not staged anymore, remove noteDB
 	noteDB := backRepoNote.Map_NoteDBID_NoteDB[id]
-	query := backRepoNote.db.Unscoped().Delete(&noteDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	db, _ := backRepoNote.db.Unscoped()
+	_, err := db.Delete(noteDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -204,9 +206,9 @@ func (backRepoNote *BackRepoNoteStruct) CommitPhaseOneInstance(note *models.Note
 	var noteDB NoteDB
 	noteDB.CopyBasicFieldsFromNote(note)
 
-	query := backRepoNote.db.Create(&noteDB)
-	if query.Error != nil {
-		log.Fatal(query.Error)
+	_, err := backRepoNote.db.Create(&noteDB)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// update stores
@@ -256,9 +258,9 @@ func (backRepoNote *BackRepoNoteStruct) CommitPhaseTwoInstance(backRepo *BackRep
 				append(noteDB.NotePointersEncoding.Frequencies, int(freqencyAssocEnd_DB.ID))
 		}
 
-		query := backRepoNote.db.Save(&noteDB)
-		if query.Error != nil {
-			log.Fatalln(query.Error)
+		_, err := backRepoNote.db.Save(noteDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 	} else {
@@ -277,9 +279,9 @@ func (backRepoNote *BackRepoNoteStruct) CommitPhaseTwoInstance(backRepo *BackRep
 func (backRepoNote *BackRepoNoteStruct) CheckoutPhaseOne() (Error error) {
 
 	noteDBArray := make([]NoteDB, 0)
-	query := backRepoNote.db.Find(&noteDBArray)
-	if query.Error != nil {
-		return query.Error
+	_, err := backRepoNote.db.Find(&noteDBArray)
+	if err != nil {
+		return err
 	}
 
 	// list of instances to be removed
@@ -399,7 +401,7 @@ func (backRepo *BackRepoStruct) CheckoutNote(note *models.Note) {
 			var noteDB NoteDB
 			noteDB.ID = id
 
-			if err := backRepo.BackRepoNote.db.First(&noteDB, id).Error; err != nil {
+			if _, err := backRepo.BackRepoNote.db.First(&noteDB, id); err != nil {
 				log.Fatalln("CheckoutNote : Problem with getting object with id:", id)
 			}
 			backRepo.BackRepoNote.CheckoutPhaseOneInstance(&noteDB)
@@ -594,9 +596,9 @@ func (backRepoNote *BackRepoNoteStruct) rowVisitorNote(row *xlsx.Row) error {
 
 		noteDB_ID_atBackupTime := noteDB.ID
 		noteDB.ID = 0
-		query := backRepoNote.db.Create(noteDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoNote.db.Create(noteDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoNote.Map_NoteDBID_NoteDB[noteDB.ID] = noteDB
 		BackRepoNoteid_atBckpTime_newID[noteDB_ID_atBackupTime] = noteDB.ID
@@ -631,9 +633,9 @@ func (backRepoNote *BackRepoNoteStruct) RestorePhaseOne(dirPath string) {
 
 		noteDB_ID_atBackupTime := noteDB.ID
 		noteDB.ID = 0
-		query := backRepoNote.db.Create(noteDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		_, err := backRepoNote.db.Create(noteDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 		backRepoNote.Map_NoteDBID_NoteDB[noteDB.ID] = noteDB
 		BackRepoNoteid_atBckpTime_newID[noteDB_ID_atBackupTime] = noteDB.ID
@@ -655,9 +657,10 @@ func (backRepoNote *BackRepoNoteStruct) RestorePhaseTwo() {
 
 		// insertion point for reindexing pointers encoding
 		// update databse with new index encoding
-		query := backRepoNote.db.Model(noteDB).Updates(*noteDB)
-		if query.Error != nil {
-			log.Fatal(query.Error)
+		db, _ := backRepoNote.db.Model(noteDB)
+		_, err := db.Updates(*noteDB)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 

@@ -280,7 +280,7 @@ func (controller *Controller) UpdateAxisGrid(c *gin.Context) {
 	axisgridDB.AxisGridPointersEncoding = input.AxisGridPointersEncoding
 
 	db, _ = db.Model(&axisgridDB)
-	_, err = db.Updates(axisgridDB)
+	_, err = db.Updates(&axisgridDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

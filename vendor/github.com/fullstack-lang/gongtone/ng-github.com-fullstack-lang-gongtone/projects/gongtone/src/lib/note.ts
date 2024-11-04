@@ -71,6 +71,11 @@ export function CopyNoteAPIToNote(noteAPI: NoteAPI, note: Note, frontRepo: Front
 	// insertion point for pointer fields encoding
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(noteAPI.NotePointersEncoding.Frequencies)) {
+		console.error('Rects is not an array:', noteAPI.NotePointersEncoding.Frequencies);
+		return;
+	}
+
 	note.Frequencies = new Array<Freqency>()
 	for (let _id of noteAPI.NotePointersEncoding.Frequencies) {
 		let _freqency = frontRepo.map_ID_Freqency.get(_id)

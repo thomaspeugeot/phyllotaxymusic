@@ -84,6 +84,11 @@ export function CopySpiralCircleGridAPIToSpiralCircleGrid(spiralcirclegridAPI: S
 	spiralcirclegrid.SpiralRhombusGrid = frontRepo.map_ID_SpiralRhombusGrid.get(spiralcirclegridAPI.SpiralCircleGridPointersEncoding.SpiralRhombusGridID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(spiralcirclegridAPI.SpiralCircleGridPointersEncoding.SpiralCircles)) {
+		console.error('Rects is not an array:', spiralcirclegridAPI.SpiralCircleGridPointersEncoding.SpiralCircles);
+		return;
+	}
+
 	spiralcirclegrid.SpiralCircles = new Array<SpiralCircle>()
 	for (let _id of spiralcirclegridAPI.SpiralCircleGridPointersEncoding.SpiralCircles) {
 		let _spiralcircle = frontRepo.map_ID_SpiralCircle.get(_id)

@@ -236,7 +236,7 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) CommitDeleteInstance(id uint
 	// spiralline is not staged anymore, remove spirallineDB
 	spirallineDB := backRepoSpiralLine.Map_SpiralLineDBID_SpiralLineDB[id]
 	db, _ := backRepoSpiralLine.db.Unscoped()
-	_, err := db.Delete(&spirallineDB)
+	_, err := db.Delete(spirallineDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -308,7 +308,7 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) CommitPhaseTwoInstance(backR
 			spirallineDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoSpiralLine.db.Save(&spirallineDB)
+		_, err := backRepoSpiralLine.db.Save(spirallineDB)
 		if err != nil {
 			log.Fatal(err)
 		}

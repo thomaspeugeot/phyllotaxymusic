@@ -280,7 +280,7 @@ func (controller *Controller) UpdateRhombus(c *gin.Context) {
 	rhombusDB.RhombusPointersEncoding = input.RhombusPointersEncoding
 
 	db, _ = db.Model(&rhombusDB)
-	_, err = db.Updates(rhombusDB)
+	_, err = db.Updates(&rhombusDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

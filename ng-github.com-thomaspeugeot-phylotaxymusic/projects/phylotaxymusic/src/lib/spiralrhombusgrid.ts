@@ -73,6 +73,11 @@ export function CopySpiralRhombusGridAPIToSpiralRhombusGrid(spiralrhombusgridAPI
 	spiralrhombusgrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.SpiralRhombuses)) {
+		console.error('Rects is not an array:', spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.SpiralRhombuses);
+		return;
+	}
+
 	spiralrhombusgrid.SpiralRhombuses = new Array<SpiralRhombus>()
 	for (let _id of spiralrhombusgridAPI.SpiralRhombusGridPointersEncoding.SpiralRhombuses) {
 		let _spiralrhombus = frontRepo.map_ID_SpiralRhombus.get(_id)

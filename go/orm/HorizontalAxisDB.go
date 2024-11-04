@@ -224,7 +224,7 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitDeleteInstance
 	// horizontalaxis is not staged anymore, remove horizontalaxisDB
 	horizontalaxisDB := backRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisDB[id]
 	db, _ := backRepoHorizontalAxis.db.Unscoped()
-	_, err := db.Delete(&horizontalaxisDB)
+	_, err := db.Delete(horizontalaxisDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -296,7 +296,7 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitPhaseTwoInstan
 			horizontalaxisDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoHorizontalAxis.db.Save(&horizontalaxisDB)
+		_, err := backRepoHorizontalAxis.db.Save(horizontalaxisDB)
 		if err != nil {
 			log.Fatal(err)
 		}

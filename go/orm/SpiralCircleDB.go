@@ -256,7 +256,7 @@ func (backRepoSpiralCircle *BackRepoSpiralCircleStruct) CommitDeleteInstance(id 
 	// spiralcircle is not staged anymore, remove spiralcircleDB
 	spiralcircleDB := backRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCircleDB[id]
 	db, _ := backRepoSpiralCircle.db.Unscoped()
-	_, err := db.Delete(&spiralcircleDB)
+	_, err := db.Delete(spiralcircleDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -328,7 +328,7 @@ func (backRepoSpiralCircle *BackRepoSpiralCircleStruct) CommitPhaseTwoInstance(b
 			spiralcircleDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoSpiralCircle.db.Save(&spiralcircleDB)
+		_, err := backRepoSpiralCircle.db.Save(spiralcircleDB)
 		if err != nil {
 			log.Fatal(err)
 		}

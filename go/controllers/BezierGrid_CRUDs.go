@@ -280,7 +280,7 @@ func (controller *Controller) UpdateBezierGrid(c *gin.Context) {
 	beziergridDB.BezierGridPointersEncoding = input.BezierGridPointersEncoding
 
 	db, _ = db.Model(&beziergridDB)
-	_, err = db.Updates(beziergridDB)
+	_, err = db.Updates(&beziergridDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

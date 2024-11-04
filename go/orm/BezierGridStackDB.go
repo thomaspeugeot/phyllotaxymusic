@@ -167,7 +167,7 @@ func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) CommitDeleteInstan
 	// beziergridstack is not staged anymore, remove beziergridstackDB
 	beziergridstackDB := backRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackDB[id]
 	db, _ := backRepoBezierGridStack.db.Unscoped()
-	_, err := db.Delete(&beziergridstackDB)
+	_, err := db.Delete(beziergridstackDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -257,7 +257,7 @@ func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) CommitPhaseTwoInst
 				append(beziergridstackDB.BezierGridStackPointersEncoding.BezierGrids, int(beziergridAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoBezierGridStack.db.Save(&beziergridstackDB)
+		_, err := backRepoBezierGridStack.db.Save(beziergridstackDB)
 		if err != nil {
 			log.Fatal(err)
 		}

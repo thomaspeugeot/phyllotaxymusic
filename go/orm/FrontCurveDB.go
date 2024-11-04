@@ -159,7 +159,7 @@ func (backRepoFrontCurve *BackRepoFrontCurveStruct) CommitDeleteInstance(id uint
 	// frontcurve is not staged anymore, remove frontcurveDB
 	frontcurveDB := backRepoFrontCurve.Map_FrontCurveDBID_FrontCurveDB[id]
 	db, _ := backRepoFrontCurve.db.Unscoped()
-	_, err := db.Delete(&frontcurveDB)
+	_, err := db.Delete(frontcurveDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -219,7 +219,7 @@ func (backRepoFrontCurve *BackRepoFrontCurveStruct) CommitPhaseTwoInstance(backR
 		frontcurveDB.CopyBasicFieldsFromFrontCurve(frontcurve)
 
 		// insertion point for translating pointers encodings into actual pointers
-		_, err := backRepoFrontCurve.db.Save(&frontcurveDB)
+		_, err := backRepoFrontCurve.db.Save(frontcurveDB)
 		if err != nil {
 			log.Fatal(err)
 		}

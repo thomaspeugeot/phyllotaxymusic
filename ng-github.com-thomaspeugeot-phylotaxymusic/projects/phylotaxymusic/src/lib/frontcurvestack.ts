@@ -104,6 +104,11 @@ export function CopyFrontCurveStackAPIToFrontCurveStack(frontcurvestackAPI: Fron
 	frontcurvestack.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(frontcurvestackAPI.FrontCurveStackPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(frontcurvestackAPI.FrontCurveStackPointersEncoding.FrontCurves)) {
+		console.error('Rects is not an array:', frontcurvestackAPI.FrontCurveStackPointersEncoding.FrontCurves);
+		return;
+	}
+
 	frontcurvestack.FrontCurves = new Array<FrontCurve>()
 	for (let _id of frontcurvestackAPI.FrontCurveStackPointersEncoding.FrontCurves) {
 		let _frontcurve = frontRepo.map_ID_FrontCurve.get(_id)
@@ -111,6 +116,11 @@ export function CopyFrontCurveStackAPIToFrontCurveStack(frontcurvestackAPI: Fron
 			frontcurvestack.FrontCurves.push(_frontcurve!)
 		}
 	}
+	if (!Array.isArray(frontcurvestackAPI.FrontCurveStackPointersEncoding.SpiralCircles)) {
+		console.error('Rects is not an array:', frontcurvestackAPI.FrontCurveStackPointersEncoding.SpiralCircles);
+		return;
+	}
+
 	frontcurvestack.SpiralCircles = new Array<SpiralCircle>()
 	for (let _id of frontcurvestackAPI.FrontCurveStackPointersEncoding.SpiralCircles) {
 		let _spiralcircle = frontRepo.map_ID_SpiralCircle.get(_id)

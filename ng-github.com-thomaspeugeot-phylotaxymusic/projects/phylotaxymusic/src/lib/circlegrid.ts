@@ -83,6 +83,11 @@ export function CopyCircleGridAPIToCircleGrid(circlegridAPI: CircleGridAPI, circ
 	circlegrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(circlegridAPI.CircleGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(circlegridAPI.CircleGridPointersEncoding.Circles)) {
+		console.error('Rects is not an array:', circlegridAPI.CircleGridPointersEncoding.Circles);
+		return;
+	}
+
 	circlegrid.Circles = new Array<Circle>()
 	for (let _id of circlegridAPI.CircleGridPointersEncoding.Circles) {
 		let _circle = frontRepo.map_ID_Circle.get(_id)

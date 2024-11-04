@@ -280,7 +280,7 @@ func (controller *Controller) UpdateCircle(c *gin.Context) {
 	circleDB.CirclePointersEncoding = input.CirclePointersEncoding
 
 	db, _ = db.Model(&circleDB)
-	_, err = db.Updates(circleDB)
+	_, err = db.Updates(&circleDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

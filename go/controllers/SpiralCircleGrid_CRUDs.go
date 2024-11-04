@@ -280,7 +280,7 @@ func (controller *Controller) UpdateSpiralCircleGrid(c *gin.Context) {
 	spiralcirclegridDB.SpiralCircleGridPointersEncoding = input.SpiralCircleGridPointersEncoding
 
 	db, _ = db.Model(&spiralcirclegridDB)
-	_, err = db.Updates(spiralcirclegridDB)
+	_, err = db.Updates(&spiralcirclegridDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

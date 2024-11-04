@@ -707,7 +707,7 @@ func (backRepoParameter *BackRepoParameterStruct) CommitDeleteInstance(id uint) 
 	// parameter is not staged anymore, remove parameterDB
 	parameterDB := backRepoParameter.Map_ParameterDBID_ParameterDB[id]
 	db, _ := backRepoParameter.db.Unscoped()
-	_, err := db.Delete(&parameterDB)
+	_, err := db.Delete(parameterDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -1565,7 +1565,7 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.SpiralOriginID.Valid = true
 		}
 
-		_, err := backRepoParameter.db.Save(&parameterDB)
+		_, err := backRepoParameter.db.Save(parameterDB)
 		if err != nil {
 			log.Fatal(err)
 		}

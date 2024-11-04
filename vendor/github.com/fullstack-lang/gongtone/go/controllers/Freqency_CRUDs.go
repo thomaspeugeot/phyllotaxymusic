@@ -70,12 +70,12 @@ func (controller *Controller) GetFreqencys(c *gin.Context) {
 	}
 	db := backRepo.BackRepoFreqency.GetDB()
 
-	query := db.Find(&freqencyDBs)
-	if query.Error != nil {
+	_, err := db.Find(&freqencyDBs)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -151,12 +151,12 @@ func (controller *Controller) PostFreqency(c *gin.Context) {
 	freqencyDB.FreqencyPointersEncoding = input.FreqencyPointersEncoding
 	freqencyDB.CopyBasicFieldsFromFreqency_WOP(&input.Freqency_WOP)
 
-	query := db.Create(&freqencyDB)
-	if query.Error != nil {
+	_, err = db.Create(&freqencyDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -205,7 +205,7 @@ func (controller *Controller) GetFreqency(c *gin.Context) {
 
 	// Get freqencyDB in DB
 	var freqencyDB orm.FreqencyDB
-	if err := db.First(&freqencyDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&freqencyDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -264,13 +264,13 @@ func (controller *Controller) UpdateFreqency(c *gin.Context) {
 	var freqencyDB orm.FreqencyDB
 
 	// fetch the freqency
-	query := db.First(&freqencyDB, c.Param("id"))
+	_, err := db.First(&freqencyDB, c.Param("id"))
 
-	if query.Error != nil {
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -279,12 +279,13 @@ func (controller *Controller) UpdateFreqency(c *gin.Context) {
 	freqencyDB.CopyBasicFieldsFromFreqency_WOP(&input.Freqency_WOP)
 	freqencyDB.FreqencyPointersEncoding = input.FreqencyPointersEncoding
 
-	query = db.Model(&freqencyDB).Updates(freqencyDB)
-	if query.Error != nil {
+	db, _ = db.Model(&freqencyDB)
+	_, err = db.Updates(&freqencyDB)
+	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
-		returnError.Body.Message = query.Error.Error()
-		log.Println(query.Error.Error())
+		returnError.Body.Message = err.Error()
+		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, returnError.Body)
 		return
 	}
@@ -343,7 +344,7 @@ func (controller *Controller) DeleteFreqency(c *gin.Context) {
 
 	// Get model if exist
 	var freqencyDB orm.FreqencyDB
-	if err := db.First(&freqencyDB, c.Param("id")).Error; err != nil {
+	if _, err := db.First(&freqencyDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -353,7 +354,8 @@ func (controller *Controller) DeleteFreqency(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&freqencyDB)
+	db.Unscoped()
+	db.Delete(&freqencyDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
 	freqencyDeleted := new(models.Freqency)

@@ -160,7 +160,7 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) CommitDeleteInstance(id uint) (E
 	// noteinfo is not staged anymore, remove noteinfoDB
 	noteinfoDB := backRepoNoteInfo.Map_NoteInfoDBID_NoteInfoDB[id]
 	db, _ := backRepoNoteInfo.db.Unscoped()
-	_, err := db.Delete(&noteinfoDB)
+	_, err := db.Delete(noteinfoDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -220,7 +220,7 @@ func (backRepoNoteInfo *BackRepoNoteInfoStruct) CommitPhaseTwoInstance(backRepo 
 		noteinfoDB.CopyBasicFieldsFromNoteInfo(noteinfo)
 
 		// insertion point for translating pointers encodings into actual pointers
-		_, err := backRepoNoteInfo.db.Save(&noteinfoDB)
+		_, err := backRepoNoteInfo.db.Save(noteinfoDB)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -280,7 +280,7 @@ func (controller *Controller) UpdateSpiralBezier(c *gin.Context) {
 	spiralbezierDB.SpiralBezierPointersEncoding = input.SpiralBezierPointersEncoding
 
 	db, _ = db.Model(&spiralbezierDB)
-	_, err = db.Updates(spiralbezierDB)
+	_, err = db.Updates(&spiralbezierDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

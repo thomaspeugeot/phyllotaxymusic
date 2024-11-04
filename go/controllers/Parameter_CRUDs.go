@@ -280,7 +280,7 @@ func (controller *Controller) UpdateParameter(c *gin.Context) {
 	parameterDB.ParameterPointersEncoding = input.ParameterPointersEncoding
 
 	db, _ = db.Model(&parameterDB)
-	_, err = db.Updates(parameterDB)
+	_, err = db.Updates(&parameterDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

@@ -160,7 +160,7 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CommitDeleteInstance(i
 	// shapecategory is not staged anymore, remove shapecategoryDB
 	shapecategoryDB := backRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryDB[id]
 	db, _ := backRepoShapeCategory.db.Unscoped()
-	_, err := db.Delete(&shapecategoryDB)
+	_, err := db.Delete(shapecategoryDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -220,7 +220,7 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CommitPhaseTwoInstance
 		shapecategoryDB.CopyBasicFieldsFromShapeCategory(shapecategory)
 
 		// insertion point for translating pointers encodings into actual pointers
-		_, err := backRepoShapeCategory.db.Save(&shapecategoryDB)
+		_, err := backRepoShapeCategory.db.Save(shapecategoryDB)
 		if err != nil {
 			log.Fatal(err)
 		}

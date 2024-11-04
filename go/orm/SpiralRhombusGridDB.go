@@ -167,7 +167,7 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitDeleteIn
 	// spiralrhombusgrid is not staged anymore, remove spiralrhombusgridDB
 	spiralrhombusgridDB := backRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridDB[id]
 	db, _ := backRepoSpiralRhombusGrid.db.Unscoped()
-	_, err := db.Delete(&spiralrhombusgridDB)
+	_, err := db.Delete(spiralrhombusgridDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -257,7 +257,7 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitPhaseTwo
 				append(spiralrhombusgridDB.SpiralRhombusGridPointersEncoding.SpiralRhombuses, int(spiralrhombusAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoSpiralRhombusGrid.db.Save(&spiralrhombusgridDB)
+		_, err := backRepoSpiralRhombusGrid.db.Save(spiralrhombusgridDB)
 		if err != nil {
 			log.Fatal(err)
 		}

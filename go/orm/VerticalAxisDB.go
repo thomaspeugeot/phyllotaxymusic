@@ -224,7 +224,7 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitDeleteInstance(id 
 	// verticalaxis is not staged anymore, remove verticalaxisDB
 	verticalaxisDB := backRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisDB[id]
 	db, _ := backRepoVerticalAxis.db.Unscoped()
-	_, err := db.Delete(&verticalaxisDB)
+	_, err := db.Delete(verticalaxisDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -296,7 +296,7 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitPhaseTwoInstance(b
 			verticalaxisDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoVerticalAxis.db.Save(&verticalaxisDB)
+		_, err := backRepoVerticalAxis.db.Save(verticalaxisDB)
 		if err != nil {
 			log.Fatal(err)
 		}

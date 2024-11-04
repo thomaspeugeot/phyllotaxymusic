@@ -171,7 +171,7 @@ func (backRepoSpiralCircleGrid *BackRepoSpiralCircleGridStruct) CommitDeleteInst
 	// spiralcirclegrid is not staged anymore, remove spiralcirclegridDB
 	spiralcirclegridDB := backRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridDB[id]
 	db, _ := backRepoSpiralCircleGrid.db.Unscoped()
-	_, err := db.Delete(&spiralcirclegridDB)
+	_, err := db.Delete(spiralcirclegridDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -273,7 +273,7 @@ func (backRepoSpiralCircleGrid *BackRepoSpiralCircleGridStruct) CommitPhaseTwoIn
 				append(spiralcirclegridDB.SpiralCircleGridPointersEncoding.SpiralCircles, int(spiralcircleAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoSpiralCircleGrid.db.Save(&spiralcirclegridDB)
+		_, err := backRepoSpiralCircleGrid.db.Save(spiralcirclegridDB)
 		if err != nil {
 			log.Fatal(err)
 		}

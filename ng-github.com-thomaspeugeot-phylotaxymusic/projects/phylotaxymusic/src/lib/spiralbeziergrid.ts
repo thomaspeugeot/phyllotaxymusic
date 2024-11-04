@@ -73,6 +73,11 @@ export function CopySpiralBezierGridAPIToSpiralBezierGrid(spiralbeziergridAPI: S
 	spiralbeziergrid.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(spiralbeziergridAPI.SpiralBezierGridPointersEncoding.ShapeCategoryID.Int64)
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(spiralbeziergridAPI.SpiralBezierGridPointersEncoding.SpiralBeziers)) {
+		console.error('Rects is not an array:', spiralbeziergridAPI.SpiralBezierGridPointersEncoding.SpiralBeziers);
+		return;
+	}
+
 	spiralbeziergrid.SpiralBeziers = new Array<SpiralBezier>()
 	for (let _id of spiralbeziergridAPI.SpiralBezierGridPointersEncoding.SpiralBeziers) {
 		let _spiralbezier = frontRepo.map_ID_SpiralBezier.get(_id)

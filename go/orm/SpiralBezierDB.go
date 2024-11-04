@@ -260,7 +260,7 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CommitDeleteInstance(id 
 	// spiralbezier is not staged anymore, remove spiralbezierDB
 	spiralbezierDB := backRepoSpiralBezier.Map_SpiralBezierDBID_SpiralBezierDB[id]
 	db, _ := backRepoSpiralBezier.db.Unscoped()
-	_, err := db.Delete(&spiralbezierDB)
+	_, err := db.Delete(spiralbezierDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -332,7 +332,7 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CommitPhaseTwoInstance(b
 			spiralbezierDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoSpiralBezier.db.Save(&spiralbezierDB)
+		_, err := backRepoSpiralBezier.db.Save(spiralbezierDB)
 		if err != nil {
 			log.Fatal(err)
 		}

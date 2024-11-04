@@ -280,7 +280,7 @@ func (controller *Controller) UpdateSpiralRhombus(c *gin.Context) {
 	spiralrhombusDB.SpiralRhombusPointersEncoding = input.SpiralRhombusPointersEncoding
 
 	db, _ = db.Model(&spiralrhombusDB)
-	_, err = db.Updates(spiralrhombusDB)
+	_, err = db.Updates(&spiralrhombusDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

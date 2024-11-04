@@ -280,7 +280,7 @@ func (controller *Controller) UpdateKey(c *gin.Context) {
 	keyDB.KeyPointersEncoding = input.KeyPointersEncoding
 
 	db, _ = db.Model(&keyDB)
-	_, err = db.Updates(keyDB)
+	_, err = db.Updates(&keyDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

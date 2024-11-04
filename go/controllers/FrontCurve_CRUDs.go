@@ -280,7 +280,7 @@ func (controller *Controller) UpdateFrontCurve(c *gin.Context) {
 	frontcurveDB.FrontCurvePointersEncoding = input.FrontCurvePointersEncoding
 
 	db, _ = db.Model(&frontcurveDB)
-	_, err = db.Updates(frontcurveDB)
+	_, err = db.Updates(&frontcurveDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest

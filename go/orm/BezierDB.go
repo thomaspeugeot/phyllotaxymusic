@@ -260,7 +260,7 @@ func (backRepoBezier *BackRepoBezierStruct) CommitDeleteInstance(id uint) (Error
 	// bezier is not staged anymore, remove bezierDB
 	bezierDB := backRepoBezier.Map_BezierDBID_BezierDB[id]
 	db, _ := backRepoBezier.db.Unscoped()
-	_, err := db.Delete(&bezierDB)
+	_, err := db.Delete(bezierDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -332,7 +332,7 @@ func (backRepoBezier *BackRepoBezierStruct) CommitPhaseTwoInstance(backRepo *Bac
 			bezierDB.ShapeCategoryID.Valid = true
 		}
 
-		_, err := backRepoBezier.db.Save(&bezierDB)
+		_, err := backRepoBezier.db.Save(bezierDB)
 		if err != nil {
 			log.Fatal(err)
 		}

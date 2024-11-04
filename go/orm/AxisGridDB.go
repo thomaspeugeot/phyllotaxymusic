@@ -171,7 +171,7 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitDeleteInstance(id uint) (E
 	// axisgrid is not staged anymore, remove axisgridDB
 	axisgridDB := backRepoAxisGrid.Map_AxisGridDBID_AxisGridDB[id]
 	db, _ := backRepoAxisGrid.db.Unscoped()
-	_, err := db.Delete(&axisgridDB)
+	_, err := db.Delete(axisgridDB)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -273,7 +273,7 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitPhaseTwoInstance(backRepo 
 				append(axisgridDB.AxisGridPointersEncoding.Axiss, int(axisAssocEnd_DB.ID))
 		}
 
-		_, err := backRepoAxisGrid.db.Save(&axisgridDB)
+		_, err := backRepoAxisGrid.db.Save(axisgridDB)
 		if err != nil {
 			log.Fatal(err)
 		}
