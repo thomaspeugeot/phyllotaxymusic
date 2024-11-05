@@ -211,5 +211,14 @@
 			],
 			"group": "build"
 		},
+		{
+            "label": "00 - compile wasm",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}/go/cmd/phylotaxymusic"
+            },
+            "command": "GOOS=js GOARCH=wasm go build -o wasmworkbench.wasm"
+        },
 	]
 }

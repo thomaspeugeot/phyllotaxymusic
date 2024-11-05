@@ -13,6 +13,17 @@
             ]
         },
         {
+            "name": "go server -unmarshallFromCode=data/test.go -marshallOnCommit=data/test",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/go/cmd/phylotaxymusic/main.go",
+            "args": [
+                "-unmarshallFromCode=data/test.go",
+                "-marshallOnCommit=data/test"
+            ]
+        },
+        {
             "name": "go server -unmarshallFromCode=data/music.go -marshallOnCommit=data/music",
             "type": "go",
             "request": "launch",
