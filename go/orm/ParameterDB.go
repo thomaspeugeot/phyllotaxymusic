@@ -473,6 +473,9 @@ type ParameterDB struct {
 	// provide the sql storage for the boolan
 	ShowInterpolationPoints_Data sql.NullBool
 
+	// Declation for basic field parameterDB.ActualNotesTemporalShift
+	ActualNotesTemporalShift_Data sql.NullInt64
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	ParameterPointersEncoding
@@ -592,6 +595,8 @@ type ParameterWOP struct {
 	ShowSpiralBezierConstruct bool `xlsx:"48"`
 
 	ShowInterpolationPoints bool `xlsx:"49"`
+
+	ActualNotesTemporalShift int `xlsx:"50"`
 	// insertion for WOP pointer fields
 }
 
@@ -647,6 +652,7 @@ var Parameter_Fields = []string{
 	"SpiralRadiusRatio",
 	"ShowSpiralBezierConstruct",
 	"ShowInterpolationPoints",
+	"ActualNotesTemporalShift",
 }
 
 type BackRepoParameterStruct struct {
@@ -2192,6 +2198,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.ShowInterpolationPoints_Data.Bool = parameter.ShowInterpolationPoints
 	parameterDB.ShowInterpolationPoints_Data.Valid = true
+
+	parameterDB.ActualNotesTemporalShift_Data.Int64 = int64(parameter.ActualNotesTemporalShift)
+	parameterDB.ActualNotesTemporalShift_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -2344,6 +2353,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.ShowInterpolationPoints_Data.Bool = parameter.ShowInterpolationPoints
 	parameterDB.ShowInterpolationPoints_Data.Valid = true
+
+	parameterDB.ActualNotesTemporalShift_Data.Int64 = int64(parameter.ActualNotesTemporalShift)
+	parameterDB.ActualNotesTemporalShift_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -2496,6 +2508,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.ShowInterpolationPoints_Data.Bool = parameter.ShowInterpolationPoints
 	parameterDB.ShowInterpolationPoints_Data.Valid = true
+
+	parameterDB.ActualNotesTemporalShift_Data.Int64 = int64(parameter.ActualNotesTemporalShift)
+	parameterDB.ActualNotesTemporalShift_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -2550,6 +2565,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
+	parameter.ActualNotesTemporalShift = int(parameterDB.ActualNotesTemporalShift_Data.Int64)
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -2604,6 +2620,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
+	parameter.ActualNotesTemporalShift = int(parameterDB.ActualNotesTemporalShift_Data.Int64)
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -2659,6 +2676,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
+	parameter.ActualNotesTemporalShift = int(parameterDB.ActualNotesTemporalShift_Data.Int64)
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo

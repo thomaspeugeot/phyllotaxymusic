@@ -1182,9 +1182,11 @@ export class FrontRepoService {
 
 		return new Observable(observer => {
 			this.socket!.onmessage = event => {
-				let _this = this
+
 
 				const backRepoData = new BackRepoData(JSON.parse(event.data))
+
+				let frontRepo = new (FrontRepo)
 
 				// 
 				// First Step: init map of instances
@@ -1192,314 +1194,314 @@ export class FrontRepoService {
 				// init the arrays
 				// insertion point sub template for init 
 				// init the arrays
-				this.frontRepo.array_Axiss = []
-				this.frontRepo.map_ID_Axis.clear()
+				frontRepo.array_Axiss = []
+				frontRepo.map_ID_Axis.clear()
 
 				backRepoData.AxisAPIs.forEach(
 					axisAPI => {
 						let axis = new Axis
-						this.frontRepo.array_Axiss.push(axis)
-						this.frontRepo.map_ID_Axis.set(axisAPI.ID, axis)
+						frontRepo.array_Axiss.push(axis)
+						frontRepo.map_ID_Axis.set(axisAPI.ID, axis)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_AxisGrids = []
-				this.frontRepo.map_ID_AxisGrid.clear()
+				frontRepo.array_AxisGrids = []
+				frontRepo.map_ID_AxisGrid.clear()
 
 				backRepoData.AxisGridAPIs.forEach(
 					axisgridAPI => {
 						let axisgrid = new AxisGrid
-						this.frontRepo.array_AxisGrids.push(axisgrid)
-						this.frontRepo.map_ID_AxisGrid.set(axisgridAPI.ID, axisgrid)
+						frontRepo.array_AxisGrids.push(axisgrid)
+						frontRepo.map_ID_AxisGrid.set(axisgridAPI.ID, axisgrid)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_Beziers = []
-				this.frontRepo.map_ID_Bezier.clear()
+				frontRepo.array_Beziers = []
+				frontRepo.map_ID_Bezier.clear()
 
 				backRepoData.BezierAPIs.forEach(
 					bezierAPI => {
 						let bezier = new Bezier
-						this.frontRepo.array_Beziers.push(bezier)
-						this.frontRepo.map_ID_Bezier.set(bezierAPI.ID, bezier)
+						frontRepo.array_Beziers.push(bezier)
+						frontRepo.map_ID_Bezier.set(bezierAPI.ID, bezier)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_BezierGrids = []
-				this.frontRepo.map_ID_BezierGrid.clear()
+				frontRepo.array_BezierGrids = []
+				frontRepo.map_ID_BezierGrid.clear()
 
 				backRepoData.BezierGridAPIs.forEach(
 					beziergridAPI => {
 						let beziergrid = new BezierGrid
-						this.frontRepo.array_BezierGrids.push(beziergrid)
-						this.frontRepo.map_ID_BezierGrid.set(beziergridAPI.ID, beziergrid)
+						frontRepo.array_BezierGrids.push(beziergrid)
+						frontRepo.map_ID_BezierGrid.set(beziergridAPI.ID, beziergrid)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_BezierGridStacks = []
-				this.frontRepo.map_ID_BezierGridStack.clear()
+				frontRepo.array_BezierGridStacks = []
+				frontRepo.map_ID_BezierGridStack.clear()
 
 				backRepoData.BezierGridStackAPIs.forEach(
 					beziergridstackAPI => {
 						let beziergridstack = new BezierGridStack
-						this.frontRepo.array_BezierGridStacks.push(beziergridstack)
-						this.frontRepo.map_ID_BezierGridStack.set(beziergridstackAPI.ID, beziergridstack)
+						frontRepo.array_BezierGridStacks.push(beziergridstack)
+						frontRepo.map_ID_BezierGridStack.set(beziergridstackAPI.ID, beziergridstack)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_Circles = []
-				this.frontRepo.map_ID_Circle.clear()
+				frontRepo.array_Circles = []
+				frontRepo.map_ID_Circle.clear()
 
 				backRepoData.CircleAPIs.forEach(
 					circleAPI => {
 						let circle = new Circle
-						this.frontRepo.array_Circles.push(circle)
-						this.frontRepo.map_ID_Circle.set(circleAPI.ID, circle)
+						frontRepo.array_Circles.push(circle)
+						frontRepo.map_ID_Circle.set(circleAPI.ID, circle)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_CircleGrids = []
-				this.frontRepo.map_ID_CircleGrid.clear()
+				frontRepo.array_CircleGrids = []
+				frontRepo.map_ID_CircleGrid.clear()
 
 				backRepoData.CircleGridAPIs.forEach(
 					circlegridAPI => {
 						let circlegrid = new CircleGrid
-						this.frontRepo.array_CircleGrids.push(circlegrid)
-						this.frontRepo.map_ID_CircleGrid.set(circlegridAPI.ID, circlegrid)
+						frontRepo.array_CircleGrids.push(circlegrid)
+						frontRepo.map_ID_CircleGrid.set(circlegridAPI.ID, circlegrid)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_FrontCurves = []
-				this.frontRepo.map_ID_FrontCurve.clear()
+				frontRepo.array_FrontCurves = []
+				frontRepo.map_ID_FrontCurve.clear()
 
 				backRepoData.FrontCurveAPIs.forEach(
 					frontcurveAPI => {
 						let frontcurve = new FrontCurve
-						this.frontRepo.array_FrontCurves.push(frontcurve)
-						this.frontRepo.map_ID_FrontCurve.set(frontcurveAPI.ID, frontcurve)
+						frontRepo.array_FrontCurves.push(frontcurve)
+						frontRepo.map_ID_FrontCurve.set(frontcurveAPI.ID, frontcurve)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_FrontCurveStacks = []
-				this.frontRepo.map_ID_FrontCurveStack.clear()
+				frontRepo.array_FrontCurveStacks = []
+				frontRepo.map_ID_FrontCurveStack.clear()
 
 				backRepoData.FrontCurveStackAPIs.forEach(
 					frontcurvestackAPI => {
 						let frontcurvestack = new FrontCurveStack
-						this.frontRepo.array_FrontCurveStacks.push(frontcurvestack)
-						this.frontRepo.map_ID_FrontCurveStack.set(frontcurvestackAPI.ID, frontcurvestack)
+						frontRepo.array_FrontCurveStacks.push(frontcurvestack)
+						frontRepo.map_ID_FrontCurveStack.set(frontcurvestackAPI.ID, frontcurvestack)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_HorizontalAxiss = []
-				this.frontRepo.map_ID_HorizontalAxis.clear()
+				frontRepo.array_HorizontalAxiss = []
+				frontRepo.map_ID_HorizontalAxis.clear()
 
 				backRepoData.HorizontalAxisAPIs.forEach(
 					horizontalaxisAPI => {
 						let horizontalaxis = new HorizontalAxis
-						this.frontRepo.array_HorizontalAxiss.push(horizontalaxis)
-						this.frontRepo.map_ID_HorizontalAxis.set(horizontalaxisAPI.ID, horizontalaxis)
+						frontRepo.array_HorizontalAxiss.push(horizontalaxis)
+						frontRepo.map_ID_HorizontalAxis.set(horizontalaxisAPI.ID, horizontalaxis)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_Keys = []
-				this.frontRepo.map_ID_Key.clear()
+				frontRepo.array_Keys = []
+				frontRepo.map_ID_Key.clear()
 
 				backRepoData.KeyAPIs.forEach(
 					keyAPI => {
 						let key = new Key
-						this.frontRepo.array_Keys.push(key)
-						this.frontRepo.map_ID_Key.set(keyAPI.ID, key)
+						frontRepo.array_Keys.push(key)
+						frontRepo.map_ID_Key.set(keyAPI.ID, key)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_NoteInfos = []
-				this.frontRepo.map_ID_NoteInfo.clear()
+				frontRepo.array_NoteInfos = []
+				frontRepo.map_ID_NoteInfo.clear()
 
 				backRepoData.NoteInfoAPIs.forEach(
 					noteinfoAPI => {
 						let noteinfo = new NoteInfo
-						this.frontRepo.array_NoteInfos.push(noteinfo)
-						this.frontRepo.map_ID_NoteInfo.set(noteinfoAPI.ID, noteinfo)
+						frontRepo.array_NoteInfos.push(noteinfo)
+						frontRepo.map_ID_NoteInfo.set(noteinfoAPI.ID, noteinfo)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_Parameters = []
-				this.frontRepo.map_ID_Parameter.clear()
+				frontRepo.array_Parameters = []
+				frontRepo.map_ID_Parameter.clear()
 
 				backRepoData.ParameterAPIs.forEach(
 					parameterAPI => {
 						let parameter = new Parameter
-						this.frontRepo.array_Parameters.push(parameter)
-						this.frontRepo.map_ID_Parameter.set(parameterAPI.ID, parameter)
+						frontRepo.array_Parameters.push(parameter)
+						frontRepo.map_ID_Parameter.set(parameterAPI.ID, parameter)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_Rhombuss = []
-				this.frontRepo.map_ID_Rhombus.clear()
+				frontRepo.array_Rhombuss = []
+				frontRepo.map_ID_Rhombus.clear()
 
 				backRepoData.RhombusAPIs.forEach(
 					rhombusAPI => {
 						let rhombus = new Rhombus
-						this.frontRepo.array_Rhombuss.push(rhombus)
-						this.frontRepo.map_ID_Rhombus.set(rhombusAPI.ID, rhombus)
+						frontRepo.array_Rhombuss.push(rhombus)
+						frontRepo.map_ID_Rhombus.set(rhombusAPI.ID, rhombus)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_RhombusGrids = []
-				this.frontRepo.map_ID_RhombusGrid.clear()
+				frontRepo.array_RhombusGrids = []
+				frontRepo.map_ID_RhombusGrid.clear()
 
 				backRepoData.RhombusGridAPIs.forEach(
 					rhombusgridAPI => {
 						let rhombusgrid = new RhombusGrid
-						this.frontRepo.array_RhombusGrids.push(rhombusgrid)
-						this.frontRepo.map_ID_RhombusGrid.set(rhombusgridAPI.ID, rhombusgrid)
+						frontRepo.array_RhombusGrids.push(rhombusgrid)
+						frontRepo.map_ID_RhombusGrid.set(rhombusgridAPI.ID, rhombusgrid)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_ShapeCategorys = []
-				this.frontRepo.map_ID_ShapeCategory.clear()
+				frontRepo.array_ShapeCategorys = []
+				frontRepo.map_ID_ShapeCategory.clear()
 
 				backRepoData.ShapeCategoryAPIs.forEach(
 					shapecategoryAPI => {
 						let shapecategory = new ShapeCategory
-						this.frontRepo.array_ShapeCategorys.push(shapecategory)
-						this.frontRepo.map_ID_ShapeCategory.set(shapecategoryAPI.ID, shapecategory)
+						frontRepo.array_ShapeCategorys.push(shapecategory)
+						frontRepo.map_ID_ShapeCategory.set(shapecategoryAPI.ID, shapecategory)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_SpiralBeziers = []
-				this.frontRepo.map_ID_SpiralBezier.clear()
+				frontRepo.array_SpiralBeziers = []
+				frontRepo.map_ID_SpiralBezier.clear()
 
 				backRepoData.SpiralBezierAPIs.forEach(
 					spiralbezierAPI => {
 						let spiralbezier = new SpiralBezier
-						this.frontRepo.array_SpiralBeziers.push(spiralbezier)
-						this.frontRepo.map_ID_SpiralBezier.set(spiralbezierAPI.ID, spiralbezier)
+						frontRepo.array_SpiralBeziers.push(spiralbezier)
+						frontRepo.map_ID_SpiralBezier.set(spiralbezierAPI.ID, spiralbezier)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_SpiralBezierGrids = []
-				this.frontRepo.map_ID_SpiralBezierGrid.clear()
+				frontRepo.array_SpiralBezierGrids = []
+				frontRepo.map_ID_SpiralBezierGrid.clear()
 
 				backRepoData.SpiralBezierGridAPIs.forEach(
 					spiralbeziergridAPI => {
 						let spiralbeziergrid = new SpiralBezierGrid
-						this.frontRepo.array_SpiralBezierGrids.push(spiralbeziergrid)
-						this.frontRepo.map_ID_SpiralBezierGrid.set(spiralbeziergridAPI.ID, spiralbeziergrid)
+						frontRepo.array_SpiralBezierGrids.push(spiralbeziergrid)
+						frontRepo.map_ID_SpiralBezierGrid.set(spiralbeziergridAPI.ID, spiralbeziergrid)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_SpiralCircles = []
-				this.frontRepo.map_ID_SpiralCircle.clear()
+				frontRepo.array_SpiralCircles = []
+				frontRepo.map_ID_SpiralCircle.clear()
 
 				backRepoData.SpiralCircleAPIs.forEach(
 					spiralcircleAPI => {
 						let spiralcircle = new SpiralCircle
-						this.frontRepo.array_SpiralCircles.push(spiralcircle)
-						this.frontRepo.map_ID_SpiralCircle.set(spiralcircleAPI.ID, spiralcircle)
+						frontRepo.array_SpiralCircles.push(spiralcircle)
+						frontRepo.map_ID_SpiralCircle.set(spiralcircleAPI.ID, spiralcircle)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_SpiralCircleGrids = []
-				this.frontRepo.map_ID_SpiralCircleGrid.clear()
+				frontRepo.array_SpiralCircleGrids = []
+				frontRepo.map_ID_SpiralCircleGrid.clear()
 
 				backRepoData.SpiralCircleGridAPIs.forEach(
 					spiralcirclegridAPI => {
 						let spiralcirclegrid = new SpiralCircleGrid
-						this.frontRepo.array_SpiralCircleGrids.push(spiralcirclegrid)
-						this.frontRepo.map_ID_SpiralCircleGrid.set(spiralcirclegridAPI.ID, spiralcirclegrid)
+						frontRepo.array_SpiralCircleGrids.push(spiralcirclegrid)
+						frontRepo.map_ID_SpiralCircleGrid.set(spiralcirclegridAPI.ID, spiralcirclegrid)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_SpiralLines = []
-				this.frontRepo.map_ID_SpiralLine.clear()
+				frontRepo.array_SpiralLines = []
+				frontRepo.map_ID_SpiralLine.clear()
 
 				backRepoData.SpiralLineAPIs.forEach(
 					spirallineAPI => {
 						let spiralline = new SpiralLine
-						this.frontRepo.array_SpiralLines.push(spiralline)
-						this.frontRepo.map_ID_SpiralLine.set(spirallineAPI.ID, spiralline)
+						frontRepo.array_SpiralLines.push(spiralline)
+						frontRepo.map_ID_SpiralLine.set(spirallineAPI.ID, spiralline)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_SpiralLineGrids = []
-				this.frontRepo.map_ID_SpiralLineGrid.clear()
+				frontRepo.array_SpiralLineGrids = []
+				frontRepo.map_ID_SpiralLineGrid.clear()
 
 				backRepoData.SpiralLineGridAPIs.forEach(
 					spirallinegridAPI => {
 						let spirallinegrid = new SpiralLineGrid
-						this.frontRepo.array_SpiralLineGrids.push(spirallinegrid)
-						this.frontRepo.map_ID_SpiralLineGrid.set(spirallinegridAPI.ID, spirallinegrid)
+						frontRepo.array_SpiralLineGrids.push(spirallinegrid)
+						frontRepo.map_ID_SpiralLineGrid.set(spirallinegridAPI.ID, spirallinegrid)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_SpiralOrigins = []
-				this.frontRepo.map_ID_SpiralOrigin.clear()
+				frontRepo.array_SpiralOrigins = []
+				frontRepo.map_ID_SpiralOrigin.clear()
 
 				backRepoData.SpiralOriginAPIs.forEach(
 					spiraloriginAPI => {
 						let spiralorigin = new SpiralOrigin
-						this.frontRepo.array_SpiralOrigins.push(spiralorigin)
-						this.frontRepo.map_ID_SpiralOrigin.set(spiraloriginAPI.ID, spiralorigin)
+						frontRepo.array_SpiralOrigins.push(spiralorigin)
+						frontRepo.map_ID_SpiralOrigin.set(spiraloriginAPI.ID, spiralorigin)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_SpiralRhombuss = []
-				this.frontRepo.map_ID_SpiralRhombus.clear()
+				frontRepo.array_SpiralRhombuss = []
+				frontRepo.map_ID_SpiralRhombus.clear()
 
 				backRepoData.SpiralRhombusAPIs.forEach(
 					spiralrhombusAPI => {
 						let spiralrhombus = new SpiralRhombus
-						this.frontRepo.array_SpiralRhombuss.push(spiralrhombus)
-						this.frontRepo.map_ID_SpiralRhombus.set(spiralrhombusAPI.ID, spiralrhombus)
+						frontRepo.array_SpiralRhombuss.push(spiralrhombus)
+						frontRepo.map_ID_SpiralRhombus.set(spiralrhombusAPI.ID, spiralrhombus)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_SpiralRhombusGrids = []
-				this.frontRepo.map_ID_SpiralRhombusGrid.clear()
+				frontRepo.array_SpiralRhombusGrids = []
+				frontRepo.map_ID_SpiralRhombusGrid.clear()
 
 				backRepoData.SpiralRhombusGridAPIs.forEach(
 					spiralrhombusgridAPI => {
 						let spiralrhombusgrid = new SpiralRhombusGrid
-						this.frontRepo.array_SpiralRhombusGrids.push(spiralrhombusgrid)
-						this.frontRepo.map_ID_SpiralRhombusGrid.set(spiralrhombusgridAPI.ID, spiralrhombusgrid)
+						frontRepo.array_SpiralRhombusGrids.push(spiralrhombusgrid)
+						frontRepo.map_ID_SpiralRhombusGrid.set(spiralrhombusgridAPI.ID, spiralrhombusgrid)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_VerticalAxiss = []
-				this.frontRepo.map_ID_VerticalAxis.clear()
+				frontRepo.array_VerticalAxiss = []
+				frontRepo.map_ID_VerticalAxis.clear()
 
 				backRepoData.VerticalAxisAPIs.forEach(
 					verticalaxisAPI => {
 						let verticalaxis = new VerticalAxis
-						this.frontRepo.array_VerticalAxiss.push(verticalaxis)
-						this.frontRepo.map_ID_VerticalAxis.set(verticalaxisAPI.ID, verticalaxis)
+						frontRepo.array_VerticalAxiss.push(verticalaxis)
+						frontRepo.map_ID_VerticalAxis.set(verticalaxisAPI.ID, verticalaxis)
 					}
 				)
 
@@ -1512,214 +1514,214 @@ export class FrontRepoService {
 				// fill up front objects
 				backRepoData.AxisAPIs.forEach(
 					axisAPI => {
-						let axis = this.frontRepo.map_ID_Axis.get(axisAPI.ID)
-						CopyAxisAPIToAxis(axisAPI, axis!, this.frontRepo)
+						let axis = frontRepo.map_ID_Axis.get(axisAPI.ID)
+						CopyAxisAPIToAxis(axisAPI, axis!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.AxisGridAPIs.forEach(
 					axisgridAPI => {
-						let axisgrid = this.frontRepo.map_ID_AxisGrid.get(axisgridAPI.ID)
-						CopyAxisGridAPIToAxisGrid(axisgridAPI, axisgrid!, this.frontRepo)
+						let axisgrid = frontRepo.map_ID_AxisGrid.get(axisgridAPI.ID)
+						CopyAxisGridAPIToAxisGrid(axisgridAPI, axisgrid!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.BezierAPIs.forEach(
 					bezierAPI => {
-						let bezier = this.frontRepo.map_ID_Bezier.get(bezierAPI.ID)
-						CopyBezierAPIToBezier(bezierAPI, bezier!, this.frontRepo)
+						let bezier = frontRepo.map_ID_Bezier.get(bezierAPI.ID)
+						CopyBezierAPIToBezier(bezierAPI, bezier!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.BezierGridAPIs.forEach(
 					beziergridAPI => {
-						let beziergrid = this.frontRepo.map_ID_BezierGrid.get(beziergridAPI.ID)
-						CopyBezierGridAPIToBezierGrid(beziergridAPI, beziergrid!, this.frontRepo)
+						let beziergrid = frontRepo.map_ID_BezierGrid.get(beziergridAPI.ID)
+						CopyBezierGridAPIToBezierGrid(beziergridAPI, beziergrid!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.BezierGridStackAPIs.forEach(
 					beziergridstackAPI => {
-						let beziergridstack = this.frontRepo.map_ID_BezierGridStack.get(beziergridstackAPI.ID)
-						CopyBezierGridStackAPIToBezierGridStack(beziergridstackAPI, beziergridstack!, this.frontRepo)
+						let beziergridstack = frontRepo.map_ID_BezierGridStack.get(beziergridstackAPI.ID)
+						CopyBezierGridStackAPIToBezierGridStack(beziergridstackAPI, beziergridstack!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.CircleAPIs.forEach(
 					circleAPI => {
-						let circle = this.frontRepo.map_ID_Circle.get(circleAPI.ID)
-						CopyCircleAPIToCircle(circleAPI, circle!, this.frontRepo)
+						let circle = frontRepo.map_ID_Circle.get(circleAPI.ID)
+						CopyCircleAPIToCircle(circleAPI, circle!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.CircleGridAPIs.forEach(
 					circlegridAPI => {
-						let circlegrid = this.frontRepo.map_ID_CircleGrid.get(circlegridAPI.ID)
-						CopyCircleGridAPIToCircleGrid(circlegridAPI, circlegrid!, this.frontRepo)
+						let circlegrid = frontRepo.map_ID_CircleGrid.get(circlegridAPI.ID)
+						CopyCircleGridAPIToCircleGrid(circlegridAPI, circlegrid!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.FrontCurveAPIs.forEach(
 					frontcurveAPI => {
-						let frontcurve = this.frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
-						CopyFrontCurveAPIToFrontCurve(frontcurveAPI, frontcurve!, this.frontRepo)
+						let frontcurve = frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
+						CopyFrontCurveAPIToFrontCurve(frontcurveAPI, frontcurve!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.FrontCurveStackAPIs.forEach(
 					frontcurvestackAPI => {
-						let frontcurvestack = this.frontRepo.map_ID_FrontCurveStack.get(frontcurvestackAPI.ID)
-						CopyFrontCurveStackAPIToFrontCurveStack(frontcurvestackAPI, frontcurvestack!, this.frontRepo)
+						let frontcurvestack = frontRepo.map_ID_FrontCurveStack.get(frontcurvestackAPI.ID)
+						CopyFrontCurveStackAPIToFrontCurveStack(frontcurvestackAPI, frontcurvestack!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.HorizontalAxisAPIs.forEach(
 					horizontalaxisAPI => {
-						let horizontalaxis = this.frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
-						CopyHorizontalAxisAPIToHorizontalAxis(horizontalaxisAPI, horizontalaxis!, this.frontRepo)
+						let horizontalaxis = frontRepo.map_ID_HorizontalAxis.get(horizontalaxisAPI.ID)
+						CopyHorizontalAxisAPIToHorizontalAxis(horizontalaxisAPI, horizontalaxis!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.KeyAPIs.forEach(
 					keyAPI => {
-						let key = this.frontRepo.map_ID_Key.get(keyAPI.ID)
-						CopyKeyAPIToKey(keyAPI, key!, this.frontRepo)
+						let key = frontRepo.map_ID_Key.get(keyAPI.ID)
+						CopyKeyAPIToKey(keyAPI, key!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.NoteInfoAPIs.forEach(
 					noteinfoAPI => {
-						let noteinfo = this.frontRepo.map_ID_NoteInfo.get(noteinfoAPI.ID)
-						CopyNoteInfoAPIToNoteInfo(noteinfoAPI, noteinfo!, this.frontRepo)
+						let noteinfo = frontRepo.map_ID_NoteInfo.get(noteinfoAPI.ID)
+						CopyNoteInfoAPIToNoteInfo(noteinfoAPI, noteinfo!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.ParameterAPIs.forEach(
 					parameterAPI => {
-						let parameter = this.frontRepo.map_ID_Parameter.get(parameterAPI.ID)
-						CopyParameterAPIToParameter(parameterAPI, parameter!, this.frontRepo)
+						let parameter = frontRepo.map_ID_Parameter.get(parameterAPI.ID)
+						CopyParameterAPIToParameter(parameterAPI, parameter!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.RhombusAPIs.forEach(
 					rhombusAPI => {
-						let rhombus = this.frontRepo.map_ID_Rhombus.get(rhombusAPI.ID)
-						CopyRhombusAPIToRhombus(rhombusAPI, rhombus!, this.frontRepo)
+						let rhombus = frontRepo.map_ID_Rhombus.get(rhombusAPI.ID)
+						CopyRhombusAPIToRhombus(rhombusAPI, rhombus!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.RhombusGridAPIs.forEach(
 					rhombusgridAPI => {
-						let rhombusgrid = this.frontRepo.map_ID_RhombusGrid.get(rhombusgridAPI.ID)
-						CopyRhombusGridAPIToRhombusGrid(rhombusgridAPI, rhombusgrid!, this.frontRepo)
+						let rhombusgrid = frontRepo.map_ID_RhombusGrid.get(rhombusgridAPI.ID)
+						CopyRhombusGridAPIToRhombusGrid(rhombusgridAPI, rhombusgrid!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.ShapeCategoryAPIs.forEach(
 					shapecategoryAPI => {
-						let shapecategory = this.frontRepo.map_ID_ShapeCategory.get(shapecategoryAPI.ID)
-						CopyShapeCategoryAPIToShapeCategory(shapecategoryAPI, shapecategory!, this.frontRepo)
+						let shapecategory = frontRepo.map_ID_ShapeCategory.get(shapecategoryAPI.ID)
+						CopyShapeCategoryAPIToShapeCategory(shapecategoryAPI, shapecategory!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.SpiralBezierAPIs.forEach(
 					spiralbezierAPI => {
-						let spiralbezier = this.frontRepo.map_ID_SpiralBezier.get(spiralbezierAPI.ID)
-						CopySpiralBezierAPIToSpiralBezier(spiralbezierAPI, spiralbezier!, this.frontRepo)
+						let spiralbezier = frontRepo.map_ID_SpiralBezier.get(spiralbezierAPI.ID)
+						CopySpiralBezierAPIToSpiralBezier(spiralbezierAPI, spiralbezier!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.SpiralBezierGridAPIs.forEach(
 					spiralbeziergridAPI => {
-						let spiralbeziergrid = this.frontRepo.map_ID_SpiralBezierGrid.get(spiralbeziergridAPI.ID)
-						CopySpiralBezierGridAPIToSpiralBezierGrid(spiralbeziergridAPI, spiralbeziergrid!, this.frontRepo)
+						let spiralbeziergrid = frontRepo.map_ID_SpiralBezierGrid.get(spiralbeziergridAPI.ID)
+						CopySpiralBezierGridAPIToSpiralBezierGrid(spiralbeziergridAPI, spiralbeziergrid!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.SpiralCircleAPIs.forEach(
 					spiralcircleAPI => {
-						let spiralcircle = this.frontRepo.map_ID_SpiralCircle.get(spiralcircleAPI.ID)
-						CopySpiralCircleAPIToSpiralCircle(spiralcircleAPI, spiralcircle!, this.frontRepo)
+						let spiralcircle = frontRepo.map_ID_SpiralCircle.get(spiralcircleAPI.ID)
+						CopySpiralCircleAPIToSpiralCircle(spiralcircleAPI, spiralcircle!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.SpiralCircleGridAPIs.forEach(
 					spiralcirclegridAPI => {
-						let spiralcirclegrid = this.frontRepo.map_ID_SpiralCircleGrid.get(spiralcirclegridAPI.ID)
-						CopySpiralCircleGridAPIToSpiralCircleGrid(spiralcirclegridAPI, spiralcirclegrid!, this.frontRepo)
+						let spiralcirclegrid = frontRepo.map_ID_SpiralCircleGrid.get(spiralcirclegridAPI.ID)
+						CopySpiralCircleGridAPIToSpiralCircleGrid(spiralcirclegridAPI, spiralcirclegrid!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.SpiralLineAPIs.forEach(
 					spirallineAPI => {
-						let spiralline = this.frontRepo.map_ID_SpiralLine.get(spirallineAPI.ID)
-						CopySpiralLineAPIToSpiralLine(spirallineAPI, spiralline!, this.frontRepo)
+						let spiralline = frontRepo.map_ID_SpiralLine.get(spirallineAPI.ID)
+						CopySpiralLineAPIToSpiralLine(spirallineAPI, spiralline!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.SpiralLineGridAPIs.forEach(
 					spirallinegridAPI => {
-						let spirallinegrid = this.frontRepo.map_ID_SpiralLineGrid.get(spirallinegridAPI.ID)
-						CopySpiralLineGridAPIToSpiralLineGrid(spirallinegridAPI, spirallinegrid!, this.frontRepo)
+						let spirallinegrid = frontRepo.map_ID_SpiralLineGrid.get(spirallinegridAPI.ID)
+						CopySpiralLineGridAPIToSpiralLineGrid(spirallinegridAPI, spirallinegrid!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.SpiralOriginAPIs.forEach(
 					spiraloriginAPI => {
-						let spiralorigin = this.frontRepo.map_ID_SpiralOrigin.get(spiraloriginAPI.ID)
-						CopySpiralOriginAPIToSpiralOrigin(spiraloriginAPI, spiralorigin!, this.frontRepo)
+						let spiralorigin = frontRepo.map_ID_SpiralOrigin.get(spiraloriginAPI.ID)
+						CopySpiralOriginAPIToSpiralOrigin(spiraloriginAPI, spiralorigin!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.SpiralRhombusAPIs.forEach(
 					spiralrhombusAPI => {
-						let spiralrhombus = this.frontRepo.map_ID_SpiralRhombus.get(spiralrhombusAPI.ID)
-						CopySpiralRhombusAPIToSpiralRhombus(spiralrhombusAPI, spiralrhombus!, this.frontRepo)
+						let spiralrhombus = frontRepo.map_ID_SpiralRhombus.get(spiralrhombusAPI.ID)
+						CopySpiralRhombusAPIToSpiralRhombus(spiralrhombusAPI, spiralrhombus!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.SpiralRhombusGridAPIs.forEach(
 					spiralrhombusgridAPI => {
-						let spiralrhombusgrid = this.frontRepo.map_ID_SpiralRhombusGrid.get(spiralrhombusgridAPI.ID)
-						CopySpiralRhombusGridAPIToSpiralRhombusGrid(spiralrhombusgridAPI, spiralrhombusgrid!, this.frontRepo)
+						let spiralrhombusgrid = frontRepo.map_ID_SpiralRhombusGrid.get(spiralrhombusgridAPI.ID)
+						CopySpiralRhombusGridAPIToSpiralRhombusGrid(spiralrhombusgridAPI, spiralrhombusgrid!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.VerticalAxisAPIs.forEach(
 					verticalaxisAPI => {
-						let verticalaxis = this.frontRepo.map_ID_VerticalAxis.get(verticalaxisAPI.ID)
-						CopyVerticalAxisAPIToVerticalAxis(verticalaxisAPI, verticalaxis!, this.frontRepo)
+						let verticalaxis = frontRepo.map_ID_VerticalAxis.get(verticalaxisAPI.ID)
+						CopyVerticalAxisAPIToVerticalAxis(verticalaxisAPI, verticalaxis!, frontRepo)
 					}
 				)
 
 
 
-				observer.next(this.frontRepo)
+				observer.next(frontRepo)
 			}
 			this.socket!.onerror = event => {
 				observer.error(event)

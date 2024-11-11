@@ -89,6 +89,7 @@ export class Parameter {
 	SpiralRadiusRatio: number = 0
 	ShowSpiralBezierConstruct: boolean = false
 	ShowInterpolationPoints: boolean = false
+	ActualNotesTemporalShift: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 	InitialRhombus?: Rhombus
@@ -280,6 +281,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.SpiralRadiusRatio = parameter.SpiralRadiusRatio
 	parameterAPI.ShowSpiralBezierConstruct = parameter.ShowSpiralBezierConstruct
 	parameterAPI.ShowInterpolationPoints = parameter.ShowInterpolationPoints
+	parameterAPI.ActualNotesTemporalShift = parameter.ActualNotesTemporalShift
 
 	// insertion point for pointer fields encoding
 	parameterAPI.ParameterPointersEncoding.InitialRhombusID.Valid = true
@@ -806,6 +808,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralRadiusRatio = parameterAPI.SpiralRadiusRatio
 	parameter.ShowSpiralBezierConstruct = parameterAPI.ShowSpiralBezierConstruct
 	parameter.ShowInterpolationPoints = parameterAPI.ShowInterpolationPoints
+	parameter.ActualNotesTemporalShift = parameterAPI.ActualNotesTemporalShift
 
 	// insertion point for pointer fields encoding
 	parameter.InitialRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64)

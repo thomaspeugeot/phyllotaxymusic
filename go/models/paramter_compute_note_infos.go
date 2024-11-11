@@ -1,6 +1,12 @@
 package models
 
+import "fmt"
+
 func (p *Parameter) ComputeNoteInfos(stage *StageStruct) {
+
+	for i, noteInfo := range p.NoteInfos {
+		noteInfo.Name = fmt.Sprintf("%d", i)
+	}
 
 	if len(p.NoteInfos) == p.NbMeasureLinesPerCurve {
 		return
@@ -13,4 +19,5 @@ func (p *Parameter) ComputeNoteInfos(stage *StageStruct) {
 		}
 		p.NoteInfos = p.NoteInfos[:p.NbMeasureLinesPerCurve]
 	}
+
 }

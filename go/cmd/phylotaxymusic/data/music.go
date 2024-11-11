@@ -90,13 +90,13 @@ func _(stage *models.StageStruct) {
 
 	__Key__000000_F_key := (&models.Key{}).Stage(stage)
 
-	__NoteInfo__000000_1 := (&models.NoteInfo{}).Stage(stage)
-	__NoteInfo__000001_10 := (&models.NoteInfo{}).Stage(stage)
-	__NoteInfo__000002_11 := (&models.NoteInfo{}).Stage(stage)
-	__NoteInfo__000003_12 := (&models.NoteInfo{}).Stage(stage)
-	__NoteInfo__000004_13 := (&models.NoteInfo{}).Stage(stage)
-	__NoteInfo__000005_14 := (&models.NoteInfo{}).Stage(stage)
-	__NoteInfo__000006_15 := (&models.NoteInfo{}).Stage(stage)
+	__NoteInfo__000000_0 := (&models.NoteInfo{}).Stage(stage)
+	__NoteInfo__000001_1 := (&models.NoteInfo{}).Stage(stage)
+	__NoteInfo__000002_10 := (&models.NoteInfo{}).Stage(stage)
+	__NoteInfo__000003_11 := (&models.NoteInfo{}).Stage(stage)
+	__NoteInfo__000004_12 := (&models.NoteInfo{}).Stage(stage)
+	__NoteInfo__000005_13 := (&models.NoteInfo{}).Stage(stage)
+	__NoteInfo__000006_14 := (&models.NoteInfo{}).Stage(stage)
 	__NoteInfo__000007_2 := (&models.NoteInfo{}).Stage(stage)
 	__NoteInfo__000008_3 := (&models.NoteInfo{}).Stage(stage)
 	__NoteInfo__000009_4 := (&models.NoteInfo{}).Stage(stage)
@@ -626,35 +626,35 @@ func _(stage *models.StageStruct) {
 	__Key__000000_F_key.StrokeDashArrayWhenSelected = ``
 	__Key__000000_F_key.Transform = `scale(0.2,-0.2)`
 
-	__NoteInfo__000000_1.Name = `1`
-	__NoteInfo__000000_1.IsKept = true
+	__NoteInfo__000000_0.Name = `0`
+	__NoteInfo__000000_0.IsKept = true
 
-	__NoteInfo__000001_10.Name = `10`
-	__NoteInfo__000001_10.IsKept = true
+	__NoteInfo__000001_1.Name = `1`
+	__NoteInfo__000001_1.IsKept = false
 
-	__NoteInfo__000002_11.Name = `11`
-	__NoteInfo__000002_11.IsKept = false
+	__NoteInfo__000002_10.Name = `10`
+	__NoteInfo__000002_10.IsKept = false
 
-	__NoteInfo__000003_12.Name = `12`
-	__NoteInfo__000003_12.IsKept = false
+	__NoteInfo__000003_11.Name = `11`
+	__NoteInfo__000003_11.IsKept = false
 
-	__NoteInfo__000004_13.Name = `13`
-	__NoteInfo__000004_13.IsKept = true
+	__NoteInfo__000004_12.Name = `12`
+	__NoteInfo__000004_12.IsKept = true
 
-	__NoteInfo__000005_14.Name = `14`
-	__NoteInfo__000005_14.IsKept = true
+	__NoteInfo__000005_13.Name = `13`
+	__NoteInfo__000005_13.IsKept = true
 
-	__NoteInfo__000006_15.Name = `15`
-	__NoteInfo__000006_15.IsKept = false
+	__NoteInfo__000006_14.Name = `14`
+	__NoteInfo__000006_14.IsKept = false
 
 	__NoteInfo__000007_2.Name = `2`
-	__NoteInfo__000007_2.IsKept = false
+	__NoteInfo__000007_2.IsKept = true
 
 	__NoteInfo__000008_3.Name = `3`
-	__NoteInfo__000008_3.IsKept = true
+	__NoteInfo__000008_3.IsKept = false
 
 	__NoteInfo__000009_4.Name = `4`
-	__NoteInfo__000009_4.IsKept = false
+	__NoteInfo__000009_4.IsKept = true
 
 	__NoteInfo__000010_5.Name = `5`
 	__NoteInfo__000010_5.IsKept = true
@@ -720,6 +720,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralRadiusRatio = 1.060000
 	__Parameter__000000_Reference.ShowSpiralBezierConstruct = false
 	__Parameter__000000_Reference.ShowInterpolationPoints = false
+	__Parameter__000000_Reference.ActualNotesTemporalShift = 5
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
@@ -1148,7 +1149,8 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceNotesShiftedRight = __CircleGrid__000001_First_Voice_note_shifted_right
 	__Parameter__000000_Reference.SecondVoiceNotes = __CircleGrid__000008_Second_Voice_notes
 	__Parameter__000000_Reference.SecondVoiceNotesShiftedRight = __CircleGrid__000007_Second_Voice_Notes_Shift_Right
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000000_1)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000000_0)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000001_1)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000007_2)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000008_3)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000009_4)
@@ -1157,12 +1159,11 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000012_7)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000013_8)
 	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000014_9)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000001_10)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000002_11)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000003_12)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000004_13)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000005_14)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000006_15)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000002_10)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000003_11)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000004_12)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000005_13)
+	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000006_14)
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Parameter__000000_Reference.SpiralOrigin = __SpiralOrigin__000000_Spiral_Origin

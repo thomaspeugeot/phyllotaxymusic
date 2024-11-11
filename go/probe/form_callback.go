@@ -1657,6 +1657,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.ShowSpiralBezierConstruct), formDiv)
 		case "ShowInterpolationPoints":
 			FormDivBasicFieldToField(&(parameter_.ShowInterpolationPoints), formDiv)
+		case "ActualNotesTemporalShift":
+			FormDivBasicFieldToField(&(parameter_.ActualNotesTemporalShift), formDiv)
 		}
 	}
 

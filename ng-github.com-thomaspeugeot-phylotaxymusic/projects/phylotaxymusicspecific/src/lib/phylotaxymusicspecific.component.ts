@@ -116,4 +116,13 @@ export class PhylotaxymusicspecificComponent implements OnInit {
 
     return `${value}`;
   }
+
+  getNoteInfoAtOffset(i: number): phylotaxymusic.NoteInfo | undefined {
+    const noteInfos = this.frontRepo!.array_Parameters[0].NoteInfos;
+    const bruteOffsetIndex = i - this.frontRepo!.array_Parameters[0].ActualNotesTemporalShift + noteInfos.length
+    const offsetIndex = bruteOffsetIndex %
+      noteInfos.length;
+    console.log(i, this.frontRepo!.array_Parameters[0].ActualNotesTemporalShift, bruteOffsetIndex, offsetIndex)
+    return noteInfos[offsetIndex];
+  }
 }

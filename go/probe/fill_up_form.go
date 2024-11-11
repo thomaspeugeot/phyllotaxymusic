@@ -561,6 +561,8 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("ShowInterpolationPoints", instanceWithInferedType.ShowInterpolationPoints, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("ActualNotesTemporalShift", instanceWithInferedType.ActualNotesTemporalShift, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 
 	case *models.Rhombus:
 		// insertion point

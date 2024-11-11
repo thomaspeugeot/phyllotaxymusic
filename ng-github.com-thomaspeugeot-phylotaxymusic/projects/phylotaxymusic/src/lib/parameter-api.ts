@@ -84,6 +84,7 @@ export class ParameterAPI {
 	SpiralRadiusRatio: number = 0
 	ShowSpiralBezierConstruct: boolean = false
 	ShowInterpolationPoints: boolean = false
+	ActualNotesTemporalShift: number = 0
 
 	// insertion point for other decls
 

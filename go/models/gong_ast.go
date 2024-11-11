@@ -1861,6 +1861,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].SpiralRadiusRatio = exprSign * fielValue
+				case "ActualNotesTemporalShift":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].ActualNotesTemporalShift = int(exprSign) * int(fielValue)
 				}
 			case "Rhombus":
 				switch fieldName {

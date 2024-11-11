@@ -199,6 +199,9 @@ type Parameter struct {
 
 	ShowSpiralBezierConstruct bool
 	ShowInterpolationPoints   bool
+
+	// number of "minimal" notes to the shift
+	ActualNotesTemporalShift int
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {

@@ -344,6 +344,7 @@ type Parameter_WOP struct {
 	SpiralRadiusRatio float64
 	ShowSpiralBezierConstruct bool
 	ShowInterpolationPoints bool
+	ActualNotesTemporalShift int
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -397,6 +398,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.SpiralRadiusRatio = from.SpiralRadiusRatio
 	to.ShowSpiralBezierConstruct = from.ShowSpiralBezierConstruct
 	to.ShowInterpolationPoints = from.ShowInterpolationPoints
+	to.ActualNotesTemporalShift = from.ActualNotesTemporalShift
 }
 
 type Rhombus_WOP struct {
