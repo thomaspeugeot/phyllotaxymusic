@@ -56,9 +56,9 @@ export class ParameterAPI {
 	FkeyOriginRelativeY: number = 0
 	PitchHeight: number = 0
 	NbPitchLines: number = 0
-	MeasureLinesHeightRatio: number = 0
-	NbMeasureLines: number = 0
-	NbMeasureLinesPerCurve: number = 0
+	BeatLinesHeightRatio: number = 0
+	NbBeatLines: number = 0
+	NbBeatLinesPerCurve: number = 0
 	FirstVoiceShiftX: number = 0
 	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
@@ -73,7 +73,7 @@ export class ParameterAPI {
 	SpiralRadiusRatio: number = 0
 	ShowSpiralBezierConstruct: boolean = false
 	ShowInterpolationPoints: boolean = false
-	ActualNotesTemporalShift: number = 0
+	ActualBeatsTemporalShift: number = 0
 
 	// insertion point for other decls
 
@@ -176,7 +176,7 @@ export class ParameterPointersEncoding {
 
 	PitchLinesID: NullInt64 = new NullInt64 // if pointer is null, PitchLines.ID = 0
 
-	MeasureLinesID: NullInt64 = new NullInt64 // if pointer is null, MeasureLines.ID = 0
+	BeatLinesID: NullInt64 = new NullInt64 // if pointer is null, BeatLines.ID = 0
 
 	FirstVoiceID: NullInt64 = new NullInt64 // if pointer is null, FirstVoice.ID = 0
 

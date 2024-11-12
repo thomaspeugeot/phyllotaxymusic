@@ -1565,14 +1565,14 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.PitchHeight), formDiv)
 		case "NbPitchLines":
 			FormDivBasicFieldToField(&(parameter_.NbPitchLines), formDiv)
-		case "MeasureLines":
-			FormDivSelectFieldToField(&(parameter_.MeasureLines), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "MeasureLinesHeightRatio":
-			FormDivBasicFieldToField(&(parameter_.MeasureLinesHeightRatio), formDiv)
-		case "NbMeasureLines":
-			FormDivBasicFieldToField(&(parameter_.NbMeasureLines), formDiv)
-		case "NbMeasureLinesPerCurve":
-			FormDivBasicFieldToField(&(parameter_.NbMeasureLinesPerCurve), formDiv)
+		case "BeatLines":
+			FormDivSelectFieldToField(&(parameter_.BeatLines), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "BeatLinesHeightRatio":
+			FormDivBasicFieldToField(&(parameter_.BeatLinesHeightRatio), formDiv)
+		case "NbBeatLines":
+			FormDivBasicFieldToField(&(parameter_.NbBeatLines), formDiv)
+		case "NbBeatLinesPerCurve":
+			FormDivBasicFieldToField(&(parameter_.NbBeatLinesPerCurve), formDiv)
 		case "FirstVoice":
 			FormDivSelectFieldToField(&(parameter_.FirstVoice), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FirstVoiceShiftRigth":
@@ -1623,8 +1623,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.ShowSpiralBezierConstruct), formDiv)
 		case "ShowInterpolationPoints":
 			FormDivBasicFieldToField(&(parameter_.ShowInterpolationPoints), formDiv)
-		case "ActualNotesTemporalShift":
-			FormDivBasicFieldToField(&(parameter_.ActualNotesTemporalShift), formDiv)
+		case "ActualBeatsTemporalShift":
+			FormDivBasicFieldToField(&(parameter_.ActualBeatsTemporalShift), formDiv)
 		}
 	}
 

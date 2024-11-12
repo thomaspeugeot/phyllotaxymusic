@@ -316,9 +316,9 @@ type Parameter_WOP struct {
 	FkeyOriginRelativeY float64
 	PitchHeight float64
 	NbPitchLines int
-	MeasureLinesHeightRatio float64
-	NbMeasureLines int
-	NbMeasureLinesPerCurve int
+	BeatLinesHeightRatio float64
+	NbBeatLines int
+	NbBeatLinesPerCurve int
 	FirstVoiceShiftX float64
 	FirstVoiceShiftY float64
 	PitchDifference int
@@ -333,7 +333,7 @@ type Parameter_WOP struct {
 	SpiralRadiusRatio float64
 	ShowSpiralBezierConstruct bool
 	ShowInterpolationPoints bool
-	ActualNotesTemporalShift int
+	ActualBeatsTemporalShift int
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -359,9 +359,9 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY
 	to.PitchHeight = from.PitchHeight
 	to.NbPitchLines = from.NbPitchLines
-	to.MeasureLinesHeightRatio = from.MeasureLinesHeightRatio
-	to.NbMeasureLines = from.NbMeasureLines
-	to.NbMeasureLinesPerCurve = from.NbMeasureLinesPerCurve
+	to.BeatLinesHeightRatio = from.BeatLinesHeightRatio
+	to.NbBeatLines = from.NbBeatLines
+	to.NbBeatLinesPerCurve = from.NbBeatLinesPerCurve
 	to.FirstVoiceShiftX = from.FirstVoiceShiftX
 	to.FirstVoiceShiftY = from.FirstVoiceShiftY
 	to.PitchDifference = from.PitchDifference
@@ -376,7 +376,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.SpiralRadiusRatio = from.SpiralRadiusRatio
 	to.ShowSpiralBezierConstruct = from.ShowSpiralBezierConstruct
 	to.ShowInterpolationPoints = from.ShowInterpolationPoints
-	to.ActualNotesTemporalShift = from.ActualNotesTemporalShift
+	to.ActualBeatsTemporalShift = from.ActualBeatsTemporalShift
 }
 
 type Rhombus_WOP struct {

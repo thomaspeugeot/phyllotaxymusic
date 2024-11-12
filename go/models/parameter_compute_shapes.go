@@ -153,7 +153,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.PitchLines)
 
 	p.ComputeMeasureLines()
-	p.Shapes = append(p.Shapes, p.MeasureLines)
+	p.Shapes = append(p.Shapes, p.BeatLines)
 
 	p.FirstVoice.Move(p.FirstVoice.Reference, p.GrowthCurve,
 		float64(p.FirstVoiceShiftX)*p.SideLength,

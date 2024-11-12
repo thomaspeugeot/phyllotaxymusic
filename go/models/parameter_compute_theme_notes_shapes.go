@@ -6,14 +6,14 @@ func (p *Parameter) computeThemeNotesShapes(bezierGrid *BezierGrid, g *CircleGri
 
 	g.Circles = g.Circles[:0]
 
-	measureLength := p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
+	measureLength := p.RotatedAxis.Length / float64(p.NbBeatLinesPerCurve)
 
 	//
 	// nb of measures to jump before the first bezier
 	//
 	nbMeasureToJump := int(bezierGrid.Beziers[0].StartX/measureLength + 0.5)
 
-	for i := range p.NbMeasureLinesPerCurve {
+	for i := range p.NbBeatLinesPerCurve {
 
 		c := new(Circle)
 		*c = *g.Reference

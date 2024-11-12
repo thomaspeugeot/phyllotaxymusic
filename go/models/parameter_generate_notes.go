@@ -41,7 +41,7 @@ func (p *Parameter) generateNotesFromCircleGrid(
 	circleGrid *CircleGrid,
 	gongtoneStage *gongtone_models.StageStruct) {
 
-	unitMeasureLength := p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
+	unitMeasureLength := p.RotatedAxis.Length / float64(p.NbBeatLinesPerCurve)
 
 	for _, c := range circleGrid.Circles {
 

@@ -1686,27 +1686,27 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].NbPitchLines = int(exprSign) * int(fielValue)
-				case "MeasureLinesHeightRatio":
+				case "BeatLinesHeightRatio":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].MeasureLinesHeightRatio = exprSign * fielValue
-				case "NbMeasureLines":
+					__gong__map_Parameter[identifier].BeatLinesHeightRatio = exprSign * fielValue
+				case "NbBeatLines":
 					// convert string to int
 					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].NbMeasureLines = int(exprSign) * int(fielValue)
-				case "NbMeasureLinesPerCurve":
+					__gong__map_Parameter[identifier].NbBeatLines = int(exprSign) * int(fielValue)
+				case "NbBeatLinesPerCurve":
 					// convert string to int
 					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].NbMeasureLinesPerCurve = int(exprSign) * int(fielValue)
+					__gong__map_Parameter[identifier].NbBeatLinesPerCurve = int(exprSign) * int(fielValue)
 				case "FirstVoiceShiftX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1784,13 +1784,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].SpiralRadiusRatio = exprSign * fielValue
-				case "ActualNotesTemporalShift":
+				case "ActualBeatsTemporalShift":
 					// convert string to int
 					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].ActualNotesTemporalShift = int(exprSign) * int(fielValue)
+					__gong__map_Parameter[identifier].ActualBeatsTemporalShift = int(exprSign) * int(fielValue)
 				}
 			case "Rhombus":
 				switch fieldName {
@@ -2740,9 +2740,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "PitchLines":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].PitchLines = __gong__map_AxisGrid[targetIdentifier]
-				case "MeasureLines":
+				case "BeatLines":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].MeasureLines = __gong__map_AxisGrid[targetIdentifier]
+					__gong__map_Parameter[identifier].BeatLines = __gong__map_AxisGrid[targetIdentifier]
 				case "FirstVoice":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].FirstVoice = __gong__map_BezierGrid[targetIdentifier]

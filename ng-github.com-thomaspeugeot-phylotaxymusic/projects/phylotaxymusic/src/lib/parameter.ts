@@ -61,9 +61,9 @@ export class Parameter {
 	FkeyOriginRelativeY: number = 0
 	PitchHeight: number = 0
 	NbPitchLines: number = 0
-	MeasureLinesHeightRatio: number = 0
-	NbMeasureLines: number = 0
-	NbMeasureLinesPerCurve: number = 0
+	BeatLinesHeightRatio: number = 0
+	NbBeatLines: number = 0
+	NbBeatLinesPerCurve: number = 0
 	FirstVoiceShiftX: number = 0
 	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
@@ -78,7 +78,7 @@ export class Parameter {
 	SpiralRadiusRatio: number = 0
 	ShowSpiralBezierConstruct: boolean = false
 	ShowInterpolationPoints: boolean = false
-	ActualNotesTemporalShift: number = 0
+	ActualBeatsTemporalShift: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 	InitialRhombus?: Rhombus
@@ -175,7 +175,7 @@ export class Parameter {
 
 	PitchLines?: AxisGrid
 
-	MeasureLines?: AxisGrid
+	BeatLines?: AxisGrid
 
 	FirstVoice?: BezierGrid
 
@@ -230,9 +230,9 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
 	parameterAPI.PitchHeight = parameter.PitchHeight
 	parameterAPI.NbPitchLines = parameter.NbPitchLines
-	parameterAPI.MeasureLinesHeightRatio = parameter.MeasureLinesHeightRatio
-	parameterAPI.NbMeasureLines = parameter.NbMeasureLines
-	parameterAPI.NbMeasureLinesPerCurve = parameter.NbMeasureLinesPerCurve
+	parameterAPI.BeatLinesHeightRatio = parameter.BeatLinesHeightRatio
+	parameterAPI.NbBeatLines = parameter.NbBeatLines
+	parameterAPI.NbBeatLinesPerCurve = parameter.NbBeatLinesPerCurve
 	parameterAPI.FirstVoiceShiftX = parameter.FirstVoiceShiftX
 	parameterAPI.FirstVoiceShiftY = parameter.FirstVoiceShiftY
 	parameterAPI.PitchDifference = parameter.PitchDifference
@@ -247,7 +247,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.SpiralRadiusRatio = parameter.SpiralRadiusRatio
 	parameterAPI.ShowSpiralBezierConstruct = parameter.ShowSpiralBezierConstruct
 	parameterAPI.ShowInterpolationPoints = parameter.ShowInterpolationPoints
-	parameterAPI.ActualNotesTemporalShift = parameter.ActualNotesTemporalShift
+	parameterAPI.ActualBeatsTemporalShift = parameter.ActualBeatsTemporalShift
 
 	// insertion point for pointer fields encoding
 	parameterAPI.ParameterPointersEncoding.InitialRhombusID.Valid = true
@@ -579,11 +579,11 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.MeasureLinesID.Valid = true
-	if (parameter.MeasureLines != undefined) {
-		parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64 = parameter.MeasureLines.ID  
+	parameterAPI.ParameterPointersEncoding.BeatLinesID.Valid = true
+	if (parameter.BeatLines != undefined) {
+		parameterAPI.ParameterPointersEncoding.BeatLinesID.Int64 = parameter.BeatLines.ID  
 	} else {
-		parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64 = 0 		
+		parameterAPI.ParameterPointersEncoding.BeatLinesID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.FirstVoiceID.Valid = true
@@ -704,9 +704,9 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY
 	parameter.PitchHeight = parameterAPI.PitchHeight
 	parameter.NbPitchLines = parameterAPI.NbPitchLines
-	parameter.MeasureLinesHeightRatio = parameterAPI.MeasureLinesHeightRatio
-	parameter.NbMeasureLines = parameterAPI.NbMeasureLines
-	parameter.NbMeasureLinesPerCurve = parameterAPI.NbMeasureLinesPerCurve
+	parameter.BeatLinesHeightRatio = parameterAPI.BeatLinesHeightRatio
+	parameter.NbBeatLines = parameterAPI.NbBeatLines
+	parameter.NbBeatLinesPerCurve = parameterAPI.NbBeatLinesPerCurve
 	parameter.FirstVoiceShiftX = parameterAPI.FirstVoiceShiftX
 	parameter.FirstVoiceShiftY = parameterAPI.FirstVoiceShiftY
 	parameter.PitchDifference = parameterAPI.PitchDifference
@@ -721,7 +721,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralRadiusRatio = parameterAPI.SpiralRadiusRatio
 	parameter.ShowSpiralBezierConstruct = parameterAPI.ShowSpiralBezierConstruct
 	parameter.ShowInterpolationPoints = parameterAPI.ShowInterpolationPoints
-	parameter.ActualNotesTemporalShift = parameterAPI.ActualNotesTemporalShift
+	parameter.ActualBeatsTemporalShift = parameterAPI.ActualBeatsTemporalShift
 
 	// insertion point for pointer fields encoding
 	parameter.InitialRhombus = frontRepo.map_ID_Rhombus.get(parameterAPI.ParameterPointersEncoding.InitialRhombusID.Int64)
@@ -771,7 +771,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.FrontCurveStack = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64)
 	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
-	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)
+	parameter.BeatLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.BeatLinesID.Int64)
 	parameter.FirstVoice = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceID.Int64)
 	parameter.FirstVoiceShiftRigth = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceShiftRigthID.Int64)
 	parameter.SecondVoice = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceID.Int64)

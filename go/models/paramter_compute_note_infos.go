@@ -8,16 +8,16 @@ func (p *Parameter) ComputeNoteInfos(stage *StageStruct) {
 		noteInfo.Name = fmt.Sprintf("%d", i)
 	}
 
-	if len(p.NoteInfos) == p.NbMeasureLinesPerCurve {
+	if len(p.NoteInfos) == p.NbBeatLinesPerCurve {
 		return
 	}
 
 	// remove extra note infos
-	if len(p.NoteInfos) > p.NbMeasureLinesPerCurve {
-		for _, ni := range p.NoteInfos[p.NbMeasureLinesPerCurve:] {
+	if len(p.NoteInfos) > p.NbBeatLinesPerCurve {
+		for _, ni := range p.NoteInfos[p.NbBeatLinesPerCurve:] {
 			ni.Unstage(stage)
 		}
-		p.NoteInfos = p.NoteInfos[:p.NbMeasureLinesPerCurve]
+		p.NoteInfos = p.NoteInfos[:p.NbBeatLinesPerCurve]
 	}
 
 }

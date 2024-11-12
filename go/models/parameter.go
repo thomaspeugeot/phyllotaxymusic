@@ -124,10 +124,10 @@ type Parameter struct {
 	PitchHeight  float64
 	NbPitchLines int
 
-	MeasureLines            *AxisGrid
-	MeasureLinesHeightRatio float64
-	NbMeasureLines          int
-	NbMeasureLinesPerCurve  int
+	BeatLines            *AxisGrid
+	BeatLinesHeightRatio float64
+	NbBeatLines          int
+	NbBeatLinesPerCurve  int
 
 	// Composing
 	FirstVoice           *BezierGrid
@@ -174,7 +174,7 @@ type Parameter struct {
 	ShowInterpolationPoints   bool
 
 	// number of "minimal" notes to the shift
-	ActualNotesTemporalShift int
+	ActualBeatsTemporalShift int
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {

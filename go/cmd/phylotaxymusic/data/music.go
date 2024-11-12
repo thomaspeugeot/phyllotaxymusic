@@ -708,9 +708,9 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
 	__Parameter__000000_Reference.PitchHeight = 0.040000
 	__Parameter__000000_Reference.NbPitchLines = 169
-	__Parameter__000000_Reference.MeasureLinesHeightRatio = 0.170000
-	__Parameter__000000_Reference.NbMeasureLines = 300
-	__Parameter__000000_Reference.NbMeasureLinesPerCurve = 22
+	__Parameter__000000_Reference.BeatLinesHeightRatio = 0.170000
+	__Parameter__000000_Reference.NbBeatLines = 300
+	__Parameter__000000_Reference.NbBeatLinesPerCurve = 22
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 0.100000
 	__Parameter__000000_Reference.PitchDifference = 7
@@ -725,7 +725,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.SpiralRadiusRatio = 1.060000
 	__Parameter__000000_Reference.ShowSpiralBezierConstruct = false
 	__Parameter__000000_Reference.ShowInterpolationPoints = false
-	__Parameter__000000_Reference.ActualNotesTemporalShift = 8
+	__Parameter__000000_Reference.ActualBeatsTemporalShift = 8
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false
@@ -1136,7 +1136,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FrontCurveStack = __FrontCurveStack__000001_Front_Curve_Stack
 	__Parameter__000000_Reference.Fkey = __Key__000000_F_key
 	__Parameter__000000_Reference.PitchLines = __AxisGrid__000002_Pitch_Lines
-	__Parameter__000000_Reference.MeasureLines = __AxisGrid__000001_Measure_Lines
+	__Parameter__000000_Reference.BeatLines = __AxisGrid__000001_Measure_Lines
 	__Parameter__000000_Reference.FirstVoice = __BezierGrid__000002_First_Voice
 	__Parameter__000000_Reference.FirstVoiceShiftRigth = __BezierGrid__000003_First_Voice_Shift_Right
 	__Parameter__000000_Reference.SecondVoice = __BezierGrid__000000_2nb_Voice

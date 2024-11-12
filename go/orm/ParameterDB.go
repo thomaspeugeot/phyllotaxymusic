@@ -236,9 +236,9 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	PitchLinesID sql.NullInt64
 
-	// field MeasureLines is a pointer to another Struct (optional or 0..1)
+	// field BeatLines is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
-	MeasureLinesID sql.NullInt64
+	BeatLinesID sql.NullInt64
 
 	// field FirstVoice is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
@@ -362,14 +362,14 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.NbPitchLines
 	NbPitchLines_Data sql.NullInt64
 
-	// Declation for basic field parameterDB.MeasureLinesHeightRatio
-	MeasureLinesHeightRatio_Data sql.NullFloat64
+	// Declation for basic field parameterDB.BeatLinesHeightRatio
+	BeatLinesHeightRatio_Data sql.NullFloat64
 
-	// Declation for basic field parameterDB.NbMeasureLines
-	NbMeasureLines_Data sql.NullInt64
+	// Declation for basic field parameterDB.NbBeatLines
+	NbBeatLines_Data sql.NullInt64
 
-	// Declation for basic field parameterDB.NbMeasureLinesPerCurve
-	NbMeasureLinesPerCurve_Data sql.NullInt64
+	// Declation for basic field parameterDB.NbBeatLinesPerCurve
+	NbBeatLinesPerCurve_Data sql.NullInt64
 
 	// Declation for basic field parameterDB.FirstVoiceShiftX
 	FirstVoiceShiftX_Data sql.NullFloat64
@@ -416,8 +416,8 @@ type ParameterDB struct {
 	// provide the sql storage for the boolan
 	ShowInterpolationPoints_Data sql.NullBool
 
-	// Declation for basic field parameterDB.ActualNotesTemporalShift
-	ActualNotesTemporalShift_Data sql.NullInt64
+	// Declation for basic field parameterDB.ActualBeatsTemporalShift
+	ActualBeatsTemporalShift_Data sql.NullInt64
 
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -483,11 +483,11 @@ type ParameterWOP struct {
 
 	NbPitchLines int `xlsx:"21"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"22"`
+	BeatLinesHeightRatio float64 `xlsx:"22"`
 
-	NbMeasureLines int `xlsx:"23"`
+	NbBeatLines int `xlsx:"23"`
 
-	NbMeasureLinesPerCurve int `xlsx:"24"`
+	NbBeatLinesPerCurve int `xlsx:"24"`
 
 	FirstVoiceShiftX float64 `xlsx:"25"`
 
@@ -517,7 +517,7 @@ type ParameterWOP struct {
 
 	ShowInterpolationPoints bool `xlsx:"38"`
 
-	ActualNotesTemporalShift int `xlsx:"39"`
+	ActualBeatsTemporalShift int `xlsx:"39"`
 	// insertion for WOP pointer fields
 }
 
@@ -545,9 +545,9 @@ var Parameter_Fields = []string{
 	"FkeyOriginRelativeY",
 	"PitchHeight",
 	"NbPitchLines",
-	"MeasureLinesHeightRatio",
-	"NbMeasureLines",
-	"NbMeasureLinesPerCurve",
+	"BeatLinesHeightRatio",
+	"NbBeatLines",
+	"NbBeatLinesPerCurve",
 	"FirstVoiceShiftX",
 	"FirstVoiceShiftY",
 	"PitchDifference",
@@ -562,7 +562,7 @@ var Parameter_Fields = []string{
 	"SpiralRadiusRatio",
 	"ShowSpiralBezierConstruct",
 	"ShowInterpolationPoints",
-	"ActualNotesTemporalShift",
+	"ActualBeatsTemporalShift",
 }
 
 type BackRepoParameterStruct struct {
@@ -1247,16 +1247,16 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.PitchLinesID.Valid = true
 		}
 
-		// commit pointer value parameter.MeasureLines translates to updating the parameter.MeasureLinesID
-		parameterDB.MeasureLinesID.Valid = true // allow for a 0 value (nil association)
-		if parameter.MeasureLines != nil {
-			if MeasureLinesId, ok := backRepo.BackRepoAxisGrid.Map_AxisGridPtr_AxisGridDBID[parameter.MeasureLines]; ok {
-				parameterDB.MeasureLinesID.Int64 = int64(MeasureLinesId)
-				parameterDB.MeasureLinesID.Valid = true
+		// commit pointer value parameter.BeatLines translates to updating the parameter.BeatLinesID
+		parameterDB.BeatLinesID.Valid = true // allow for a 0 value (nil association)
+		if parameter.BeatLines != nil {
+			if BeatLinesId, ok := backRepo.BackRepoAxisGrid.Map_AxisGridPtr_AxisGridDBID[parameter.BeatLines]; ok {
+				parameterDB.BeatLinesID.Int64 = int64(BeatLinesId)
+				parameterDB.BeatLinesID.Valid = true
 			}
 		} else {
-			parameterDB.MeasureLinesID.Int64 = 0
-			parameterDB.MeasureLinesID.Valid = true
+			parameterDB.BeatLinesID.Int64 = 0
+			parameterDB.BeatLinesID.Valid = true
 		}
 
 		// commit pointer value parameter.FirstVoice translates to updating the parameter.FirstVoiceID
@@ -1757,10 +1757,10 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.PitchLinesID.Int64 != 0 {
 		parameter.PitchLines = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.PitchLinesID.Int64)]
 	}
-	// MeasureLines field
-	parameter.MeasureLines = nil
-	if parameterDB.MeasureLinesID.Int64 != 0 {
-		parameter.MeasureLines = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.MeasureLinesID.Int64)]
+	// BeatLines field
+	parameter.BeatLines = nil
+	if parameterDB.BeatLinesID.Int64 != 0 {
+		parameter.BeatLines = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.BeatLinesID.Int64)]
 	}
 	// FirstVoice field
 	parameter.FirstVoice = nil
@@ -1923,14 +1923,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.NbPitchLines_Data.Int64 = int64(parameter.NbPitchLines)
 	parameterDB.NbPitchLines_Data.Valid = true
 
-	parameterDB.MeasureLinesHeightRatio_Data.Float64 = parameter.MeasureLinesHeightRatio
-	parameterDB.MeasureLinesHeightRatio_Data.Valid = true
+	parameterDB.BeatLinesHeightRatio_Data.Float64 = parameter.BeatLinesHeightRatio
+	parameterDB.BeatLinesHeightRatio_Data.Valid = true
 
-	parameterDB.NbMeasureLines_Data.Int64 = int64(parameter.NbMeasureLines)
-	parameterDB.NbMeasureLines_Data.Valid = true
+	parameterDB.NbBeatLines_Data.Int64 = int64(parameter.NbBeatLines)
+	parameterDB.NbBeatLines_Data.Valid = true
 
-	parameterDB.NbMeasureLinesPerCurve_Data.Int64 = int64(parameter.NbMeasureLinesPerCurve)
-	parameterDB.NbMeasureLinesPerCurve_Data.Valid = true
+	parameterDB.NbBeatLinesPerCurve_Data.Int64 = int64(parameter.NbBeatLinesPerCurve)
+	parameterDB.NbBeatLinesPerCurve_Data.Valid = true
 
 	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
 	parameterDB.FirstVoiceShiftX_Data.Valid = true
@@ -1974,8 +1974,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.ShowInterpolationPoints_Data.Bool = parameter.ShowInterpolationPoints
 	parameterDB.ShowInterpolationPoints_Data.Valid = true
 
-	parameterDB.ActualNotesTemporalShift_Data.Int64 = int64(parameter.ActualNotesTemporalShift)
-	parameterDB.ActualNotesTemporalShift_Data.Valid = true
+	parameterDB.ActualBeatsTemporalShift_Data.Int64 = int64(parameter.ActualBeatsTemporalShift)
+	parameterDB.ActualBeatsTemporalShift_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -2045,14 +2045,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.NbPitchLines_Data.Int64 = int64(parameter.NbPitchLines)
 	parameterDB.NbPitchLines_Data.Valid = true
 
-	parameterDB.MeasureLinesHeightRatio_Data.Float64 = parameter.MeasureLinesHeightRatio
-	parameterDB.MeasureLinesHeightRatio_Data.Valid = true
+	parameterDB.BeatLinesHeightRatio_Data.Float64 = parameter.BeatLinesHeightRatio
+	parameterDB.BeatLinesHeightRatio_Data.Valid = true
 
-	parameterDB.NbMeasureLines_Data.Int64 = int64(parameter.NbMeasureLines)
-	parameterDB.NbMeasureLines_Data.Valid = true
+	parameterDB.NbBeatLines_Data.Int64 = int64(parameter.NbBeatLines)
+	parameterDB.NbBeatLines_Data.Valid = true
 
-	parameterDB.NbMeasureLinesPerCurve_Data.Int64 = int64(parameter.NbMeasureLinesPerCurve)
-	parameterDB.NbMeasureLinesPerCurve_Data.Valid = true
+	parameterDB.NbBeatLinesPerCurve_Data.Int64 = int64(parameter.NbBeatLinesPerCurve)
+	parameterDB.NbBeatLinesPerCurve_Data.Valid = true
 
 	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
 	parameterDB.FirstVoiceShiftX_Data.Valid = true
@@ -2096,8 +2096,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.ShowInterpolationPoints_Data.Bool = parameter.ShowInterpolationPoints
 	parameterDB.ShowInterpolationPoints_Data.Valid = true
 
-	parameterDB.ActualNotesTemporalShift_Data.Int64 = int64(parameter.ActualNotesTemporalShift)
-	parameterDB.ActualNotesTemporalShift_Data.Valid = true
+	parameterDB.ActualBeatsTemporalShift_Data.Int64 = int64(parameter.ActualBeatsTemporalShift)
+	parameterDB.ActualBeatsTemporalShift_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -2167,14 +2167,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.NbPitchLines_Data.Int64 = int64(parameter.NbPitchLines)
 	parameterDB.NbPitchLines_Data.Valid = true
 
-	parameterDB.MeasureLinesHeightRatio_Data.Float64 = parameter.MeasureLinesHeightRatio
-	parameterDB.MeasureLinesHeightRatio_Data.Valid = true
+	parameterDB.BeatLinesHeightRatio_Data.Float64 = parameter.BeatLinesHeightRatio
+	parameterDB.BeatLinesHeightRatio_Data.Valid = true
 
-	parameterDB.NbMeasureLines_Data.Int64 = int64(parameter.NbMeasureLines)
-	parameterDB.NbMeasureLines_Data.Valid = true
+	parameterDB.NbBeatLines_Data.Int64 = int64(parameter.NbBeatLines)
+	parameterDB.NbBeatLines_Data.Valid = true
 
-	parameterDB.NbMeasureLinesPerCurve_Data.Int64 = int64(parameter.NbMeasureLinesPerCurve)
-	parameterDB.NbMeasureLinesPerCurve_Data.Valid = true
+	parameterDB.NbBeatLinesPerCurve_Data.Int64 = int64(parameter.NbBeatLinesPerCurve)
+	parameterDB.NbBeatLinesPerCurve_Data.Valid = true
 
 	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
 	parameterDB.FirstVoiceShiftX_Data.Valid = true
@@ -2218,8 +2218,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.ShowInterpolationPoints_Data.Bool = parameter.ShowInterpolationPoints
 	parameterDB.ShowInterpolationPoints_Data.Valid = true
 
-	parameterDB.ActualNotesTemporalShift_Data.Int64 = int64(parameter.ActualNotesTemporalShift)
-	parameterDB.ActualNotesTemporalShift_Data.Valid = true
+	parameterDB.ActualBeatsTemporalShift_Data.Int64 = int64(parameter.ActualBeatsTemporalShift)
+	parameterDB.ActualBeatsTemporalShift_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -2246,9 +2246,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
 	parameter.PitchHeight = parameterDB.PitchHeight_Data.Float64
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
-	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
-	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
-	parameter.NbMeasureLinesPerCurve = int(parameterDB.NbMeasureLinesPerCurve_Data.Int64)
+	parameter.BeatLinesHeightRatio = parameterDB.BeatLinesHeightRatio_Data.Float64
+	parameter.NbBeatLines = int(parameterDB.NbBeatLines_Data.Int64)
+	parameter.NbBeatLinesPerCurve = int(parameterDB.NbBeatLinesPerCurve_Data.Int64)
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
@@ -2263,7 +2263,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
-	parameter.ActualNotesTemporalShift = int(parameterDB.ActualNotesTemporalShift_Data.Int64)
+	parameter.ActualBeatsTemporalShift = int(parameterDB.ActualBeatsTemporalShift_Data.Int64)
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -2290,9 +2290,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
 	parameter.PitchHeight = parameterDB.PitchHeight_Data.Float64
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
-	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
-	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
-	parameter.NbMeasureLinesPerCurve = int(parameterDB.NbMeasureLinesPerCurve_Data.Int64)
+	parameter.BeatLinesHeightRatio = parameterDB.BeatLinesHeightRatio_Data.Float64
+	parameter.NbBeatLines = int(parameterDB.NbBeatLines_Data.Int64)
+	parameter.NbBeatLinesPerCurve = int(parameterDB.NbBeatLinesPerCurve_Data.Int64)
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
@@ -2307,7 +2307,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
-	parameter.ActualNotesTemporalShift = int(parameterDB.ActualNotesTemporalShift_Data.Int64)
+	parameter.ActualBeatsTemporalShift = int(parameterDB.ActualBeatsTemporalShift_Data.Int64)
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -2335,9 +2335,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
 	parameter.PitchHeight = parameterDB.PitchHeight_Data.Float64
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
-	parameter.MeasureLinesHeightRatio = parameterDB.MeasureLinesHeightRatio_Data.Float64
-	parameter.NbMeasureLines = int(parameterDB.NbMeasureLines_Data.Int64)
-	parameter.NbMeasureLinesPerCurve = int(parameterDB.NbMeasureLinesPerCurve_Data.Int64)
+	parameter.BeatLinesHeightRatio = parameterDB.BeatLinesHeightRatio_Data.Float64
+	parameter.NbBeatLines = int(parameterDB.NbBeatLines_Data.Int64)
+	parameter.NbBeatLinesPerCurve = int(parameterDB.NbBeatLinesPerCurve_Data.Int64)
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
@@ -2352,7 +2352,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.SpiralRadiusRatio = parameterDB.SpiralRadiusRatio_Data.Float64
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
-	parameter.ActualNotesTemporalShift = int(parameterDB.ActualNotesTemporalShift_Data.Int64)
+	parameter.ActualBeatsTemporalShift = int(parameterDB.ActualBeatsTemporalShift_Data.Int64)
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo
@@ -2792,10 +2792,10 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 			parameterDB.PitchLinesID.Valid = true
 		}
 
-		// reindexing MeasureLines field
-		if parameterDB.MeasureLinesID.Int64 != 0 {
-			parameterDB.MeasureLinesID.Int64 = int64(BackRepoAxisGridid_atBckpTime_newID[uint(parameterDB.MeasureLinesID.Int64)])
-			parameterDB.MeasureLinesID.Valid = true
+		// reindexing BeatLines field
+		if parameterDB.BeatLinesID.Int64 != 0 {
+			parameterDB.BeatLinesID.Int64 = int64(BackRepoAxisGridid_atBckpTime_newID[uint(parameterDB.BeatLinesID.Int64)])
+			parameterDB.BeatLinesID.Valid = true
 		}
 
 		// reindexing FirstVoice field

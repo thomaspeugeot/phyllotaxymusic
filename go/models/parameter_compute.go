@@ -491,18 +491,18 @@ func (p *Parameter) ComputePitchLines() {
 
 func (p *Parameter) ComputeMeasureLines() {
 
-	g := p.MeasureLines
+	g := p.BeatLines
 	g.Axiss = g.Axiss[0:]
 
-	for i := range p.NbMeasureLines {
+	for i := range p.NbBeatLines {
 		a := new(Axis)
-		*a = *p.MeasureLines.Reference
+		*a = *p.BeatLines.Reference
 
 		g.Axiss = append(g.Axiss, a)
 
-		a.CenterX = float64(i) * p.RotatedAxis.Length / float64(p.NbMeasureLinesPerCurve)
+		a.CenterX = float64(i) * p.RotatedAxis.Length / float64(p.NbBeatLinesPerCurve)
 
-		if i%p.NbMeasureLinesPerCurve == 0 {
+		if i%p.NbBeatLinesPerCurve == 0 {
 			a.StrokeWidth *= 2
 		}
 	}

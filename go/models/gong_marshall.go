@@ -1154,20 +1154,20 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MeasureLinesHeightRatio")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.MeasureLinesHeightRatio))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BeatLinesHeightRatio")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.BeatLinesHeightRatio))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbMeasureLines")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbMeasureLines))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbBeatLines")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbBeatLines))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbMeasureLinesPerCurve")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbMeasureLinesPerCurve))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbBeatLinesPerCurve")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbBeatLinesPerCurve))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
@@ -1256,8 +1256,8 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ActualNotesTemporalShift")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.ActualNotesTemporalShift))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ActualBeatsTemporalShift")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.ActualBeatsTemporalShift))
 		initializerStatements += setValueField
 
 	}
@@ -2979,11 +2979,11 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
-		if parameter.MeasureLines != nil {
+		if parameter.BeatLines != nil {
 			setPointerField = PointerFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "MeasureLines")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_AxisGrid_Identifiers[parameter.MeasureLines])
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "BeatLines")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_AxisGrid_Identifiers[parameter.BeatLines])
 			pointersInitializesStatements += setPointerField
 		}
 

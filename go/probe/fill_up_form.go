@@ -486,12 +486,12 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("NbPitchLines", instanceWithInferedType.NbPitchLines, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		AssociationFieldToForm("MeasureLines", instanceWithInferedType.MeasureLines, formGroup, probe)
-		BasicFieldtoForm("MeasureLinesHeightRatio", instanceWithInferedType.MeasureLinesHeightRatio, instanceWithInferedType, probe.formStage, formGroup,
+		AssociationFieldToForm("BeatLines", instanceWithInferedType.BeatLines, formGroup, probe)
+		BasicFieldtoForm("BeatLinesHeightRatio", instanceWithInferedType.BeatLinesHeightRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("NbMeasureLines", instanceWithInferedType.NbMeasureLines, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("NbBeatLines", instanceWithInferedType.NbBeatLines, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("NbMeasureLinesPerCurve", instanceWithInferedType.NbMeasureLinesPerCurve, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("NbBeatLinesPerCurve", instanceWithInferedType.NbBeatLinesPerCurve, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("FirstVoice", instanceWithInferedType.FirstVoice, formGroup, probe)
 		AssociationFieldToForm("FirstVoiceShiftRigth", instanceWithInferedType.FirstVoiceShiftRigth, formGroup, probe)
@@ -533,7 +533,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("ShowInterpolationPoints", instanceWithInferedType.ShowInterpolationPoints, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("ActualNotesTemporalShift", instanceWithInferedType.ActualNotesTemporalShift, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("ActualBeatsTemporalShift", instanceWithInferedType.ActualBeatsTemporalShift, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 
 	case *models.Rhombus:
