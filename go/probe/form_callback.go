@@ -1551,40 +1551,6 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.FrontCurveStack), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "NbInterpolationPoints":
 			FormDivBasicFieldToField(&(parameter_.NbInterpolationPoints), formDiv)
-		case "HourCurve":
-			FormDivSelectFieldToField(&(parameter_.HourCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "HourHandleRotationAngle":
-			FormDivBasicFieldToField(&(parameter_.HourHandleRotationAngle), formDiv)
-		case "HourMarker":
-			FormDivSelectFieldToField(&(parameter_.HourMarker), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "HourHandleDiskDistance":
-			FormDivBasicFieldToField(&(parameter_.HourHandleDiskDistance), formDiv)
-		case "HourHandleRadius":
-			FormDivBasicFieldToField(&(parameter_.HourHandleRadius), formDiv)
-		case "MinuteCurve":
-			FormDivSelectFieldToField(&(parameter_.MinuteCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "MinuteHandleRotationAngle":
-			FormDivBasicFieldToField(&(parameter_.MinuteHandleRotationAngle), formDiv)
-		case "MinuteMarker":
-			FormDivSelectFieldToField(&(parameter_.MinuteMarker), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "MinuteHandleDiskDistance":
-			FormDivBasicFieldToField(&(parameter_.MinuteHandleDiskDistance), formDiv)
-		case "MinuteHandleRadius":
-			FormDivBasicFieldToField(&(parameter_.MinuteHandleRadius), formDiv)
-		case "MinuteOffset":
-			FormDivBasicFieldToField(&(parameter_.MinuteOffset), formDiv)
-		case "BackendCurve":
-			FormDivSelectFieldToField(&(parameter_.BackendCurve), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "BackendHandleRotationAngle":
-			FormDivBasicFieldToField(&(parameter_.BackendHandleRotationAngle), formDiv)
-		case "BackendMarker":
-			FormDivSelectFieldToField(&(parameter_.BackendMarker), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "BackendHandleDiskDistance":
-			FormDivBasicFieldToField(&(parameter_.BackendHandleDiskDistance), formDiv)
-		case "BackendHandleRadius":
-			FormDivBasicFieldToField(&(parameter_.BackendHandleRadius), formDiv)
-		case "BackendOffset":
-			FormDivBasicFieldToField(&(parameter_.BackendOffset), formDiv)
 		case "Fkey":
 			FormDivSelectFieldToField(&(parameter_.Fkey), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FkeySizeRatio":

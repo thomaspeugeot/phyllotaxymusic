@@ -114,33 +114,6 @@ type Parameter struct {
 	FrontCurveStack       *FrontCurveStack
 	NbInterpolationPoints int
 
-	// taking into accound the rotation to align the
-	// curve on the 12 th hour
-	HourCurve *FrontCurveStack
-
-	HourHandleRotationAngle float64
-	HourMarker              *SpiralCircle
-	HourHandleDiskDistance  float64
-	HourHandleRadius        float64
-
-	MinuteCurve *FrontCurveStack
-
-	MinuteHandleRotationAngle float64
-	MinuteMarker              *SpiralCircle
-	MinuteHandleDiskDistance  float64
-	MinuteHandleRadius        float64
-
-	MinuteOffset float64
-
-	BackendCurve *FrontCurveStack
-
-	BackendHandleRotationAngle float64
-	BackendMarker              *SpiralCircle
-	BackendHandleDiskDistance  float64
-	BackendHandleRadius        float64
-
-	BackendOffset float64
-
 	// the score
 	Fkey                *Key
 	FkeySizeRatio       float64

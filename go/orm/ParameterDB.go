@@ -228,30 +228,6 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	FrontCurveStackID sql.NullInt64
 
-	// field HourCurve is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	HourCurveID sql.NullInt64
-
-	// field HourMarker is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	HourMarkerID sql.NullInt64
-
-	// field MinuteCurve is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	MinuteCurveID sql.NullInt64
-
-	// field MinuteMarker is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	MinuteMarkerID sql.NullInt64
-
-	// field BackendCurve is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	BackendCurveID sql.NullInt64
-
-	// field BackendMarker is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	BackendMarkerID sql.NullInt64
-
 	// field Fkey is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	FkeyID sql.NullInt64
@@ -370,39 +346,6 @@ type ParameterDB struct {
 
 	// Declation for basic field parameterDB.NbInterpolationPoints
 	NbInterpolationPoints_Data sql.NullInt64
-
-	// Declation for basic field parameterDB.HourHandleRotationAngle
-	HourHandleRotationAngle_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.HourHandleDiskDistance
-	HourHandleDiskDistance_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.HourHandleRadius
-	HourHandleRadius_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.MinuteHandleRotationAngle
-	MinuteHandleRotationAngle_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.MinuteHandleDiskDistance
-	MinuteHandleDiskDistance_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.MinuteHandleRadius
-	MinuteHandleRadius_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.MinuteOffset
-	MinuteOffset_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.BackendHandleRotationAngle
-	BackendHandleRotationAngle_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.BackendHandleDiskDistance
-	BackendHandleDiskDistance_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.BackendHandleRadius
-	BackendHandleRadius_Data sql.NullFloat64
-
-	// Declation for basic field parameterDB.BackendOffset
-	BackendOffset_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.FkeySizeRatio
 	FkeySizeRatio_Data sql.NullFloat64
@@ -530,73 +473,51 @@ type ParameterWOP struct {
 
 	NbInterpolationPoints int `xlsx:"16"`
 
-	HourHandleRotationAngle float64 `xlsx:"17"`
+	FkeySizeRatio float64 `xlsx:"17"`
 
-	HourHandleDiskDistance float64 `xlsx:"18"`
+	FkeyOriginRelativeX float64 `xlsx:"18"`
 
-	HourHandleRadius float64 `xlsx:"19"`
+	FkeyOriginRelativeY float64 `xlsx:"19"`
 
-	MinuteHandleRotationAngle float64 `xlsx:"20"`
+	PitchHeight float64 `xlsx:"20"`
 
-	MinuteHandleDiskDistance float64 `xlsx:"21"`
+	NbPitchLines int `xlsx:"21"`
 
-	MinuteHandleRadius float64 `xlsx:"22"`
+	MeasureLinesHeightRatio float64 `xlsx:"22"`
 
-	MinuteOffset float64 `xlsx:"23"`
+	NbMeasureLines int `xlsx:"23"`
 
-	BackendHandleRotationAngle float64 `xlsx:"24"`
+	NbMeasureLinesPerCurve int `xlsx:"24"`
 
-	BackendHandleDiskDistance float64 `xlsx:"25"`
+	FirstVoiceShiftX float64 `xlsx:"25"`
 
-	BackendHandleRadius float64 `xlsx:"26"`
+	FirstVoiceShiftY float64 `xlsx:"26"`
 
-	BackendOffset float64 `xlsx:"27"`
+	PitchDifference int `xlsx:"27"`
 
-	FkeySizeRatio float64 `xlsx:"28"`
+	Speed float64 `xlsx:"28"`
 
-	FkeyOriginRelativeX float64 `xlsx:"29"`
+	Level float64 `xlsx:"29"`
 
-	FkeyOriginRelativeY float64 `xlsx:"30"`
+	IsMinor bool `xlsx:"30"`
 
-	PitchHeight float64 `xlsx:"31"`
+	OriginX float64 `xlsx:"31"`
 
-	NbPitchLines int `xlsx:"32"`
+	OriginY float64 `xlsx:"32"`
 
-	MeasureLinesHeightRatio float64 `xlsx:"33"`
+	SpiralOriginX float64 `xlsx:"33"`
 
-	NbMeasureLines int `xlsx:"34"`
+	SpiralOriginY float64 `xlsx:"34"`
 
-	NbMeasureLinesPerCurve int `xlsx:"35"`
+	OriginCrossWidth float64 `xlsx:"35"`
 
-	FirstVoiceShiftX float64 `xlsx:"36"`
+	SpiralRadiusRatio float64 `xlsx:"36"`
 
-	FirstVoiceShiftY float64 `xlsx:"37"`
+	ShowSpiralBezierConstruct bool `xlsx:"37"`
 
-	PitchDifference int `xlsx:"38"`
+	ShowInterpolationPoints bool `xlsx:"38"`
 
-	Speed float64 `xlsx:"39"`
-
-	Level float64 `xlsx:"40"`
-
-	IsMinor bool `xlsx:"41"`
-
-	OriginX float64 `xlsx:"42"`
-
-	OriginY float64 `xlsx:"43"`
-
-	SpiralOriginX float64 `xlsx:"44"`
-
-	SpiralOriginY float64 `xlsx:"45"`
-
-	OriginCrossWidth float64 `xlsx:"46"`
-
-	SpiralRadiusRatio float64 `xlsx:"47"`
-
-	ShowSpiralBezierConstruct bool `xlsx:"48"`
-
-	ShowInterpolationPoints bool `xlsx:"49"`
-
-	ActualNotesTemporalShift int `xlsx:"50"`
+	ActualNotesTemporalShift int `xlsx:"39"`
 	// insertion for WOP pointer fields
 }
 
@@ -619,17 +540,6 @@ var Parameter_Fields = []string{
 	"BezierControlLengthRatio",
 	"SpiralBezierStrength",
 	"NbInterpolationPoints",
-	"HourHandleRotationAngle",
-	"HourHandleDiskDistance",
-	"HourHandleRadius",
-	"MinuteHandleRotationAngle",
-	"MinuteHandleDiskDistance",
-	"MinuteHandleRadius",
-	"MinuteOffset",
-	"BackendHandleRotationAngle",
-	"BackendHandleDiskDistance",
-	"BackendHandleRadius",
-	"BackendOffset",
 	"FkeySizeRatio",
 	"FkeyOriginRelativeX",
 	"FkeyOriginRelativeY",
@@ -1313,78 +1223,6 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.FrontCurveStackID.Valid = true
 		}
 
-		// commit pointer value parameter.HourCurve translates to updating the parameter.HourCurveID
-		parameterDB.HourCurveID.Valid = true // allow for a 0 value (nil association)
-		if parameter.HourCurve != nil {
-			if HourCurveId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.HourCurve]; ok {
-				parameterDB.HourCurveID.Int64 = int64(HourCurveId)
-				parameterDB.HourCurveID.Valid = true
-			}
-		} else {
-			parameterDB.HourCurveID.Int64 = 0
-			parameterDB.HourCurveID.Valid = true
-		}
-
-		// commit pointer value parameter.HourMarker translates to updating the parameter.HourMarkerID
-		parameterDB.HourMarkerID.Valid = true // allow for a 0 value (nil association)
-		if parameter.HourMarker != nil {
-			if HourMarkerId, ok := backRepo.BackRepoSpiralCircle.Map_SpiralCirclePtr_SpiralCircleDBID[parameter.HourMarker]; ok {
-				parameterDB.HourMarkerID.Int64 = int64(HourMarkerId)
-				parameterDB.HourMarkerID.Valid = true
-			}
-		} else {
-			parameterDB.HourMarkerID.Int64 = 0
-			parameterDB.HourMarkerID.Valid = true
-		}
-
-		// commit pointer value parameter.MinuteCurve translates to updating the parameter.MinuteCurveID
-		parameterDB.MinuteCurveID.Valid = true // allow for a 0 value (nil association)
-		if parameter.MinuteCurve != nil {
-			if MinuteCurveId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.MinuteCurve]; ok {
-				parameterDB.MinuteCurveID.Int64 = int64(MinuteCurveId)
-				parameterDB.MinuteCurveID.Valid = true
-			}
-		} else {
-			parameterDB.MinuteCurveID.Int64 = 0
-			parameterDB.MinuteCurveID.Valid = true
-		}
-
-		// commit pointer value parameter.MinuteMarker translates to updating the parameter.MinuteMarkerID
-		parameterDB.MinuteMarkerID.Valid = true // allow for a 0 value (nil association)
-		if parameter.MinuteMarker != nil {
-			if MinuteMarkerId, ok := backRepo.BackRepoSpiralCircle.Map_SpiralCirclePtr_SpiralCircleDBID[parameter.MinuteMarker]; ok {
-				parameterDB.MinuteMarkerID.Int64 = int64(MinuteMarkerId)
-				parameterDB.MinuteMarkerID.Valid = true
-			}
-		} else {
-			parameterDB.MinuteMarkerID.Int64 = 0
-			parameterDB.MinuteMarkerID.Valid = true
-		}
-
-		// commit pointer value parameter.BackendCurve translates to updating the parameter.BackendCurveID
-		parameterDB.BackendCurveID.Valid = true // allow for a 0 value (nil association)
-		if parameter.BackendCurve != nil {
-			if BackendCurveId, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackPtr_FrontCurveStackDBID[parameter.BackendCurve]; ok {
-				parameterDB.BackendCurveID.Int64 = int64(BackendCurveId)
-				parameterDB.BackendCurveID.Valid = true
-			}
-		} else {
-			parameterDB.BackendCurveID.Int64 = 0
-			parameterDB.BackendCurveID.Valid = true
-		}
-
-		// commit pointer value parameter.BackendMarker translates to updating the parameter.BackendMarkerID
-		parameterDB.BackendMarkerID.Valid = true // allow for a 0 value (nil association)
-		if parameter.BackendMarker != nil {
-			if BackendMarkerId, ok := backRepo.BackRepoSpiralCircle.Map_SpiralCirclePtr_SpiralCircleDBID[parameter.BackendMarker]; ok {
-				parameterDB.BackendMarkerID.Int64 = int64(BackendMarkerId)
-				parameterDB.BackendMarkerID.Valid = true
-			}
-		} else {
-			parameterDB.BackendMarkerID.Int64 = 0
-			parameterDB.BackendMarkerID.Valid = true
-		}
-
 		// commit pointer value parameter.Fkey translates to updating the parameter.FkeyID
 		parameterDB.FkeyID.Valid = true // allow for a 0 value (nil association)
 		if parameter.Fkey != nil {
@@ -1909,36 +1747,6 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	if parameterDB.FrontCurveStackID.Int64 != 0 {
 		parameter.FrontCurveStack = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.FrontCurveStackID.Int64)]
 	}
-	// HourCurve field
-	parameter.HourCurve = nil
-	if parameterDB.HourCurveID.Int64 != 0 {
-		parameter.HourCurve = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.HourCurveID.Int64)]
-	}
-	// HourMarker field
-	parameter.HourMarker = nil
-	if parameterDB.HourMarkerID.Int64 != 0 {
-		parameter.HourMarker = backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(parameterDB.HourMarkerID.Int64)]
-	}
-	// MinuteCurve field
-	parameter.MinuteCurve = nil
-	if parameterDB.MinuteCurveID.Int64 != 0 {
-		parameter.MinuteCurve = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.MinuteCurveID.Int64)]
-	}
-	// MinuteMarker field
-	parameter.MinuteMarker = nil
-	if parameterDB.MinuteMarkerID.Int64 != 0 {
-		parameter.MinuteMarker = backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(parameterDB.MinuteMarkerID.Int64)]
-	}
-	// BackendCurve field
-	parameter.BackendCurve = nil
-	if parameterDB.BackendCurveID.Int64 != 0 {
-		parameter.BackendCurve = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.BackendCurveID.Int64)]
-	}
-	// BackendMarker field
-	parameter.BackendMarker = nil
-	if parameterDB.BackendMarkerID.Int64 != 0 {
-		parameter.BackendMarker = backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(parameterDB.BackendMarkerID.Int64)]
-	}
 	// Fkey field
 	parameter.Fkey = nil
 	if parameterDB.FkeyID.Int64 != 0 {
@@ -2100,39 +1908,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
 	parameterDB.NbInterpolationPoints_Data.Valid = true
 
-	parameterDB.HourHandleRotationAngle_Data.Float64 = parameter.HourHandleRotationAngle
-	parameterDB.HourHandleRotationAngle_Data.Valid = true
-
-	parameterDB.HourHandleDiskDistance_Data.Float64 = parameter.HourHandleDiskDistance
-	parameterDB.HourHandleDiskDistance_Data.Valid = true
-
-	parameterDB.HourHandleRadius_Data.Float64 = parameter.HourHandleRadius
-	parameterDB.HourHandleRadius_Data.Valid = true
-
-	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
-	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
-
-	parameterDB.MinuteHandleDiskDistance_Data.Float64 = parameter.MinuteHandleDiskDistance
-	parameterDB.MinuteHandleDiskDistance_Data.Valid = true
-
-	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
-	parameterDB.MinuteHandleRadius_Data.Valid = true
-
-	parameterDB.MinuteOffset_Data.Float64 = parameter.MinuteOffset
-	parameterDB.MinuteOffset_Data.Valid = true
-
-	parameterDB.BackendHandleRotationAngle_Data.Float64 = parameter.BackendHandleRotationAngle
-	parameterDB.BackendHandleRotationAngle_Data.Valid = true
-
-	parameterDB.BackendHandleDiskDistance_Data.Float64 = parameter.BackendHandleDiskDistance
-	parameterDB.BackendHandleDiskDistance_Data.Valid = true
-
-	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
-	parameterDB.BackendHandleRadius_Data.Valid = true
-
-	parameterDB.BackendOffset_Data.Float64 = parameter.BackendOffset
-	parameterDB.BackendOffset_Data.Valid = true
-
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -2254,39 +2029,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
 	parameterDB.NbInterpolationPoints_Data.Valid = true
-
-	parameterDB.HourHandleRotationAngle_Data.Float64 = parameter.HourHandleRotationAngle
-	parameterDB.HourHandleRotationAngle_Data.Valid = true
-
-	parameterDB.HourHandleDiskDistance_Data.Float64 = parameter.HourHandleDiskDistance
-	parameterDB.HourHandleDiskDistance_Data.Valid = true
-
-	parameterDB.HourHandleRadius_Data.Float64 = parameter.HourHandleRadius
-	parameterDB.HourHandleRadius_Data.Valid = true
-
-	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
-	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
-
-	parameterDB.MinuteHandleDiskDistance_Data.Float64 = parameter.MinuteHandleDiskDistance
-	parameterDB.MinuteHandleDiskDistance_Data.Valid = true
-
-	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
-	parameterDB.MinuteHandleRadius_Data.Valid = true
-
-	parameterDB.MinuteOffset_Data.Float64 = parameter.MinuteOffset
-	parameterDB.MinuteOffset_Data.Valid = true
-
-	parameterDB.BackendHandleRotationAngle_Data.Float64 = parameter.BackendHandleRotationAngle
-	parameterDB.BackendHandleRotationAngle_Data.Valid = true
-
-	parameterDB.BackendHandleDiskDistance_Data.Float64 = parameter.BackendHandleDiskDistance
-	parameterDB.BackendHandleDiskDistance_Data.Valid = true
-
-	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
-	parameterDB.BackendHandleRadius_Data.Valid = true
-
-	parameterDB.BackendOffset_Data.Float64 = parameter.BackendOffset
-	parameterDB.BackendOffset_Data.Valid = true
 
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
@@ -2410,39 +2152,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.NbInterpolationPoints_Data.Int64 = int64(parameter.NbInterpolationPoints)
 	parameterDB.NbInterpolationPoints_Data.Valid = true
 
-	parameterDB.HourHandleRotationAngle_Data.Float64 = parameter.HourHandleRotationAngle
-	parameterDB.HourHandleRotationAngle_Data.Valid = true
-
-	parameterDB.HourHandleDiskDistance_Data.Float64 = parameter.HourHandleDiskDistance
-	parameterDB.HourHandleDiskDistance_Data.Valid = true
-
-	parameterDB.HourHandleRadius_Data.Float64 = parameter.HourHandleRadius
-	parameterDB.HourHandleRadius_Data.Valid = true
-
-	parameterDB.MinuteHandleRotationAngle_Data.Float64 = parameter.MinuteHandleRotationAngle
-	parameterDB.MinuteHandleRotationAngle_Data.Valid = true
-
-	parameterDB.MinuteHandleDiskDistance_Data.Float64 = parameter.MinuteHandleDiskDistance
-	parameterDB.MinuteHandleDiskDistance_Data.Valid = true
-
-	parameterDB.MinuteHandleRadius_Data.Float64 = parameter.MinuteHandleRadius
-	parameterDB.MinuteHandleRadius_Data.Valid = true
-
-	parameterDB.MinuteOffset_Data.Float64 = parameter.MinuteOffset
-	parameterDB.MinuteOffset_Data.Valid = true
-
-	parameterDB.BackendHandleRotationAngle_Data.Float64 = parameter.BackendHandleRotationAngle
-	parameterDB.BackendHandleRotationAngle_Data.Valid = true
-
-	parameterDB.BackendHandleDiskDistance_Data.Float64 = parameter.BackendHandleDiskDistance
-	parameterDB.BackendHandleDiskDistance_Data.Valid = true
-
-	parameterDB.BackendHandleRadius_Data.Float64 = parameter.BackendHandleRadius
-	parameterDB.BackendHandleRadius_Data.Valid = true
-
-	parameterDB.BackendOffset_Data.Float64 = parameter.BackendOffset
-	parameterDB.BackendOffset_Data.Valid = true
-
 	parameterDB.FkeySizeRatio_Data.Float64 = parameter.FkeySizeRatio
 	parameterDB.FkeySizeRatio_Data.Valid = true
 
@@ -2532,17 +2241,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
 	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
-	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
-	parameter.HourHandleDiskDistance = parameterDB.HourHandleDiskDistance_Data.Float64
-	parameter.HourHandleRadius = parameterDB.HourHandleRadius_Data.Float64
-	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
-	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
-	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
-	parameter.MinuteOffset = parameterDB.MinuteOffset_Data.Float64
-	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
-	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
-	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
-	parameter.BackendOffset = parameterDB.BackendOffset_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2587,17 +2285,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
 	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
-	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
-	parameter.HourHandleDiskDistance = parameterDB.HourHandleDiskDistance_Data.Float64
-	parameter.HourHandleRadius = parameterDB.HourHandleRadius_Data.Float64
-	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
-	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
-	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
-	parameter.MinuteOffset = parameterDB.MinuteOffset_Data.Float64
-	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
-	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
-	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
-	parameter.BackendOffset = parameterDB.BackendOffset_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -2643,17 +2330,6 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.BezierControlLengthRatio = parameterDB.BezierControlLengthRatio_Data.Float64
 	parameter.SpiralBezierStrength = parameterDB.SpiralBezierStrength_Data.Float64
 	parameter.NbInterpolationPoints = int(parameterDB.NbInterpolationPoints_Data.Int64)
-	parameter.HourHandleRotationAngle = parameterDB.HourHandleRotationAngle_Data.Float64
-	parameter.HourHandleDiskDistance = parameterDB.HourHandleDiskDistance_Data.Float64
-	parameter.HourHandleRadius = parameterDB.HourHandleRadius_Data.Float64
-	parameter.MinuteHandleRotationAngle = parameterDB.MinuteHandleRotationAngle_Data.Float64
-	parameter.MinuteHandleDiskDistance = parameterDB.MinuteHandleDiskDistance_Data.Float64
-	parameter.MinuteHandleRadius = parameterDB.MinuteHandleRadius_Data.Float64
-	parameter.MinuteOffset = parameterDB.MinuteOffset_Data.Float64
-	parameter.BackendHandleRotationAngle = parameterDB.BackendHandleRotationAngle_Data.Float64
-	parameter.BackendHandleDiskDistance = parameterDB.BackendHandleDiskDistance_Data.Float64
-	parameter.BackendHandleRadius = parameterDB.BackendHandleRadius_Data.Float64
-	parameter.BackendOffset = parameterDB.BackendOffset_Data.Float64
 	parameter.FkeySizeRatio = parameterDB.FkeySizeRatio_Data.Float64
 	parameter.FkeyOriginRelativeX = parameterDB.FkeyOriginRelativeX_Data.Float64
 	parameter.FkeyOriginRelativeY = parameterDB.FkeyOriginRelativeY_Data.Float64
@@ -3102,42 +2778,6 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.FrontCurveStackID.Int64 != 0 {
 			parameterDB.FrontCurveStackID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.FrontCurveStackID.Int64)])
 			parameterDB.FrontCurveStackID.Valid = true
-		}
-
-		// reindexing HourCurve field
-		if parameterDB.HourCurveID.Int64 != 0 {
-			parameterDB.HourCurveID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.HourCurveID.Int64)])
-			parameterDB.HourCurveID.Valid = true
-		}
-
-		// reindexing HourMarker field
-		if parameterDB.HourMarkerID.Int64 != 0 {
-			parameterDB.HourMarkerID.Int64 = int64(BackRepoSpiralCircleid_atBckpTime_newID[uint(parameterDB.HourMarkerID.Int64)])
-			parameterDB.HourMarkerID.Valid = true
-		}
-
-		// reindexing MinuteCurve field
-		if parameterDB.MinuteCurveID.Int64 != 0 {
-			parameterDB.MinuteCurveID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.MinuteCurveID.Int64)])
-			parameterDB.MinuteCurveID.Valid = true
-		}
-
-		// reindexing MinuteMarker field
-		if parameterDB.MinuteMarkerID.Int64 != 0 {
-			parameterDB.MinuteMarkerID.Int64 = int64(BackRepoSpiralCircleid_atBckpTime_newID[uint(parameterDB.MinuteMarkerID.Int64)])
-			parameterDB.MinuteMarkerID.Valid = true
-		}
-
-		// reindexing BackendCurve field
-		if parameterDB.BackendCurveID.Int64 != 0 {
-			parameterDB.BackendCurveID.Int64 = int64(BackRepoFrontCurveStackid_atBckpTime_newID[uint(parameterDB.BackendCurveID.Int64)])
-			parameterDB.BackendCurveID.Valid = true
-		}
-
-		// reindexing BackendMarker field
-		if parameterDB.BackendMarkerID.Int64 != 0 {
-			parameterDB.BackendMarkerID.Int64 = int64(BackRepoSpiralCircleid_atBckpTime_newID[uint(parameterDB.BackendMarkerID.Int64)])
-			parameterDB.BackendMarkerID.Valid = true
 		}
 
 		// reindexing Fkey field

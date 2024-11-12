@@ -51,17 +51,6 @@ export class ParameterAPI {
 	BezierControlLengthRatio: number = 0
 	SpiralBezierStrength: number = 0
 	NbInterpolationPoints: number = 0
-	HourHandleRotationAngle: number = 0
-	HourHandleDiskDistance: number = 0
-	HourHandleRadius: number = 0
-	MinuteHandleRotationAngle: number = 0
-	MinuteHandleDiskDistance: number = 0
-	MinuteHandleRadius: number = 0
-	MinuteOffset: number = 0
-	BackendHandleRotationAngle: number = 0
-	BackendHandleDiskDistance: number = 0
-	BackendHandleRadius: number = 0
-	BackendOffset: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -182,18 +171,6 @@ export class ParameterPointersEncoding {
 	SpiralBezierFullGridID: NullInt64 = new NullInt64 // if pointer is null, SpiralBezierFullGrid.ID = 0
 
 	FrontCurveStackID: NullInt64 = new NullInt64 // if pointer is null, FrontCurveStack.ID = 0
-
-	HourCurveID: NullInt64 = new NullInt64 // if pointer is null, HourCurve.ID = 0
-
-	HourMarkerID: NullInt64 = new NullInt64 // if pointer is null, HourMarker.ID = 0
-
-	MinuteCurveID: NullInt64 = new NullInt64 // if pointer is null, MinuteCurve.ID = 0
-
-	MinuteMarkerID: NullInt64 = new NullInt64 // if pointer is null, MinuteMarker.ID = 0
-
-	BackendCurveID: NullInt64 = new NullInt64 // if pointer is null, BackendCurve.ID = 0
-
-	BackendMarkerID: NullInt64 = new NullInt64 // if pointer is null, BackendMarker.ID = 0
 
 	FkeyID: NullInt64 = new NullInt64 // if pointer is null, Fkey.ID = 0
 

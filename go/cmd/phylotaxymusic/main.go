@@ -5,7 +5,6 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
 
 	phylotaxymusic_stack "github.com/thomaspeugeot/phylotaxymusic/go/stack"
@@ -116,84 +115,6 @@ func (parameterImpl *ParameterImpl) Generate() {
 	p.GenerateNotes(parameterImpl.gongtoneStage)
 	parameterImpl.tree.Generate(p)
 	parameterImpl.phylotaxymusicStage.Commit()
-
-	// get path of the hour handle
-	if parameterImpl.parameter.BackendCurve.IsDisplayed {
-		parameterImpl.generateHTMLindex(p)
-	}
-}
-
-func (parameterImpl *ParameterImpl) generateHTMLindex(p *phylotaxymusic_models.Parameter) {
-	mapFrontCurveStack := *phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.FrontCurveStack](
-		parameterImpl.phylotaxymusicStage)
-
-	hourHandleStack := mapFrontCurveStack["Hour Handle"]
-	hourHandlePath := hourHandleStack.FrontCurves[0]
-
-	minuteHandleStack := mapFrontCurveStack["Minute Handle"]
-	minuteHandlePath := minuteHandleStack.FrontCurves[0]
-
-	BackendHandleStack := mapFrontCurveStack["Backend curve"]
-	BackendHandlePath := BackendHandleStack.FrontCurves[0]
-
-	mapSpiralCircle := *phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.SpiralCircle](
-		parameterImpl.phylotaxymusicStage)
-
-	hourHandleMarker := mapSpiralCircle["Hour Marker"]
-	minuteHandleMarker := mapSpiralCircle["Minute Marker"]
-	backendHandleMarker := mapSpiralCircle["Backend Marker"]
-
-	err := models.GenerateIndexHTML(
-		"../../../../myclock/index.html",
-		minuteHandlePath.Path,
-		minuteHandleMarker.Path,
-		p.MinuteColor,
-
-		hourHandlePath.Path,
-		hourHandleMarker.Path,
-		p.HourColor,
-
-		BackendHandlePath.Path,
-		backendHandleMarker.Path,
-		p.BackendColor,
-	)
-	if err != nil {
-		panic(err)
-	}
-	err = models.GenerateIndexHTML(
-		"./index.html",
-		minuteHandlePath.Path,
-		minuteHandleMarker.Path,
-		p.MinuteColor,
-
-		hourHandlePath.Path,
-		hourHandleMarker.Path,
-		p.HourColor,
-
-		BackendHandlePath.Path,
-		backendHandleMarker.Path,
-		p.BackendColor,
-	)
-	if err != nil {
-		panic(err)
-	}
-	err = models.GenerateSVG(
-		"./svg/clock.svg",
-		minuteHandlePath.Path,
-		minuteHandleMarker.Path,
-		p.MinuteColor,
-
-		hourHandlePath.Path,
-		hourHandleMarker.Path,
-		p.HourColor,
-
-		BackendHandlePath.Path,
-		backendHandleMarker.Path,
-		p.BackendColor,
-	)
-	if err != nil {
-		panic(err)
-	}
 }
 
 func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {
@@ -205,8 +126,5 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	updatedParameter.GenerateSvg(parameterImpl.gongsvgStage)
 	parameterImpl.tree.Generate(updatedParameter)
 	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage)
-	// get path of the hour handle
-	if parameterImpl.parameter.BackendCurve.IsDisplayed {
-		parameterImpl.generateHTMLindex(updatedParameter)
-	}
+
 }

@@ -474,34 +474,6 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("FrontCurveStack", instanceWithInferedType.FrontCurveStack, formGroup, probe)
 		BasicFieldtoForm("NbInterpolationPoints", instanceWithInferedType.NbInterpolationPoints, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		AssociationFieldToForm("HourCurve", instanceWithInferedType.HourCurve, formGroup, probe)
-		BasicFieldtoForm("HourHandleRotationAngle", instanceWithInferedType.HourHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		AssociationFieldToForm("HourMarker", instanceWithInferedType.HourMarker, formGroup, probe)
-		BasicFieldtoForm("HourHandleDiskDistance", instanceWithInferedType.HourHandleDiskDistance, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("HourHandleRadius", instanceWithInferedType.HourHandleRadius, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		AssociationFieldToForm("MinuteCurve", instanceWithInferedType.MinuteCurve, formGroup, probe)
-		BasicFieldtoForm("MinuteHandleRotationAngle", instanceWithInferedType.MinuteHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		AssociationFieldToForm("MinuteMarker", instanceWithInferedType.MinuteMarker, formGroup, probe)
-		BasicFieldtoForm("MinuteHandleDiskDistance", instanceWithInferedType.MinuteHandleDiskDistance, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("MinuteHandleRadius", instanceWithInferedType.MinuteHandleRadius, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("MinuteOffset", instanceWithInferedType.MinuteOffset, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		AssociationFieldToForm("BackendCurve", instanceWithInferedType.BackendCurve, formGroup, probe)
-		BasicFieldtoForm("BackendHandleRotationAngle", instanceWithInferedType.BackendHandleRotationAngle, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		AssociationFieldToForm("BackendMarker", instanceWithInferedType.BackendMarker, formGroup, probe)
-		BasicFieldtoForm("BackendHandleDiskDistance", instanceWithInferedType.BackendHandleDiskDistance, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("BackendHandleRadius", instanceWithInferedType.BackendHandleRadius, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("BackendOffset", instanceWithInferedType.BackendOffset, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
 		AssociationFieldToForm("Fkey", instanceWithInferedType.Fkey, formGroup, probe)
 		BasicFieldtoForm("FkeySizeRatio", instanceWithInferedType.FkeySizeRatio, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)

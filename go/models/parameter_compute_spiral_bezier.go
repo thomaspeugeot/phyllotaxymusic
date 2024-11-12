@@ -113,10 +113,6 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 	p.FrontCurveStack.FrontCurves = p.FrontCurveStack.FrontCurves[:0]
 	p.FrontCurveStack.SpiralCircles = p.FrontCurveStack.SpiralCircles[:0]
 
-	p.HourCurve.FrontCurves = p.HourCurve.FrontCurves[:0]
-	p.MinuteCurve.FrontCurves = p.MinuteCurve.FrontCurves[:0]
-	p.BackendCurve.FrontCurves = p.BackendCurve.FrontCurves[:0]
-
 	for idx, bezierGrid := range p.GrowthCurveStack.BezierGrids {
 
 		var xs, ys []float64
@@ -159,52 +155,5 @@ func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
 
 			p.FrontCurveStack.FrontCurves = append(p.FrontCurveStack.FrontCurves, frontCurve)
 		}
-
-		if idx == 0 {
-			frontCurve := new(FrontCurve)
-			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.HourHandleRotationAngle, 1)
-			frontCurve.Path = str
-			frontCurve.Name = fmt.Sprintf("Rotated %d ", idx)
-
-			frontCurve.Stage(stage)
-
-			p.HourCurve.FrontCurves = append(p.HourCurve.FrontCurves, frontCurve)
-		}
-
-		if idx == 1 {
-			frontCurve := new(FrontCurve)
-			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.MinuteHandleRotationAngle, p.MinuteOffset)
-			frontCurve.Path = str
-			frontCurve.Name = fmt.Sprintf("Rotated %d ", idx)
-
-			frontCurve.Stage(stage)
-
-			p.MinuteCurve.FrontCurves = append(p.MinuteCurve.FrontCurves, frontCurve)
-		}
-
-		if idx == 1 {
-			frontCurve := new(FrontCurve)
-			str := GenerateSmoothSVGPath(xs, ys, 0, 0, p.SpiralOriginX, p.SpiralOriginY, p.BackendHandleRotationAngle, p.BackendOffset)
-			frontCurve.Path = str
-			frontCurve.Name = fmt.Sprintf("Rotated %d ", idx)
-
-			frontCurve.Stage(stage)
-
-			p.BackendCurve.FrontCurves = append(p.BackendCurve.FrontCurves, frontCurve)
-		}
 	}
-
-	// draw the markers
-	p.HourMarker.CenterY = p.HourHandleDiskDistance * p.SideLength
-	p.HourMarker.HasBespokeRadius = true
-	p.HourMarker.BespopkeRadius = p.HourHandleRadius * p.SideLength
-
-	p.MinuteMarker.CenterY = p.MinuteHandleDiskDistance * p.SideLength
-	p.MinuteMarker.CenterX = 0
-	p.MinuteMarker.HasBespokeRadius = true
-	p.MinuteMarker.BespopkeRadius = p.MinuteHandleRadius * p.SideLength
-
-	p.BackendMarker.CenterY = p.BackendHandleDiskDistance * p.SideLength
-	p.BackendMarker.HasBespokeRadius = true
-	p.BackendMarker.BespopkeRadius = p.BackendHandleRadius * p.SideLength
 }

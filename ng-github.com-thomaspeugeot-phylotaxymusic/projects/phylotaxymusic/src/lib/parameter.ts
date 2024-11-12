@@ -56,17 +56,6 @@ export class Parameter {
 	BezierControlLengthRatio: number = 0
 	SpiralBezierStrength: number = 0
 	NbInterpolationPoints: number = 0
-	HourHandleRotationAngle: number = 0
-	HourHandleDiskDistance: number = 0
-	HourHandleRadius: number = 0
-	MinuteHandleRotationAngle: number = 0
-	MinuteHandleDiskDistance: number = 0
-	MinuteHandleRadius: number = 0
-	MinuteOffset: number = 0
-	BackendHandleRotationAngle: number = 0
-	BackendHandleDiskDistance: number = 0
-	BackendHandleRadius: number = 0
-	BackendOffset: number = 0
 	FkeySizeRatio: number = 0
 	FkeyOriginRelativeX: number = 0
 	FkeyOriginRelativeY: number = 0
@@ -182,18 +171,6 @@ export class Parameter {
 
 	FrontCurveStack?: FrontCurveStack
 
-	HourCurve?: FrontCurveStack
-
-	HourMarker?: SpiralCircle
-
-	MinuteCurve?: FrontCurveStack
-
-	MinuteMarker?: SpiralCircle
-
-	BackendCurve?: FrontCurveStack
-
-	BackendMarker?: SpiralCircle
-
 	Fkey?: Key
 
 	PitchLines?: AxisGrid
@@ -248,17 +225,6 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.BezierControlLengthRatio = parameter.BezierControlLengthRatio
 	parameterAPI.SpiralBezierStrength = parameter.SpiralBezierStrength
 	parameterAPI.NbInterpolationPoints = parameter.NbInterpolationPoints
-	parameterAPI.HourHandleRotationAngle = parameter.HourHandleRotationAngle
-	parameterAPI.HourHandleDiskDistance = parameter.HourHandleDiskDistance
-	parameterAPI.HourHandleRadius = parameter.HourHandleRadius
-	parameterAPI.MinuteHandleRotationAngle = parameter.MinuteHandleRotationAngle
-	parameterAPI.MinuteHandleDiskDistance = parameter.MinuteHandleDiskDistance
-	parameterAPI.MinuteHandleRadius = parameter.MinuteHandleRadius
-	parameterAPI.MinuteOffset = parameter.MinuteOffset
-	parameterAPI.BackendHandleRotationAngle = parameter.BackendHandleRotationAngle
-	parameterAPI.BackendHandleDiskDistance = parameter.BackendHandleDiskDistance
-	parameterAPI.BackendHandleRadius = parameter.BackendHandleRadius
-	parameterAPI.BackendOffset = parameter.BackendOffset
 	parameterAPI.FkeySizeRatio = parameter.FkeySizeRatio
 	parameterAPI.FkeyOriginRelativeX = parameter.FkeyOriginRelativeX
 	parameterAPI.FkeyOriginRelativeY = parameter.FkeyOriginRelativeY
@@ -599,48 +565,6 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.HourCurveID.Valid = true
-	if (parameter.HourCurve != undefined) {
-		parameterAPI.ParameterPointersEncoding.HourCurveID.Int64 = parameter.HourCurve.ID  
-	} else {
-		parameterAPI.ParameterPointersEncoding.HourCurveID.Int64 = 0 		
-	}
-
-	parameterAPI.ParameterPointersEncoding.HourMarkerID.Valid = true
-	if (parameter.HourMarker != undefined) {
-		parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64 = parameter.HourMarker.ID  
-	} else {
-		parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64 = 0 		
-	}
-
-	parameterAPI.ParameterPointersEncoding.MinuteCurveID.Valid = true
-	if (parameter.MinuteCurve != undefined) {
-		parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64 = parameter.MinuteCurve.ID  
-	} else {
-		parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64 = 0 		
-	}
-
-	parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Valid = true
-	if (parameter.MinuteMarker != undefined) {
-		parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64 = parameter.MinuteMarker.ID  
-	} else {
-		parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64 = 0 		
-	}
-
-	parameterAPI.ParameterPointersEncoding.BackendCurveID.Valid = true
-	if (parameter.BackendCurve != undefined) {
-		parameterAPI.ParameterPointersEncoding.BackendCurveID.Int64 = parameter.BackendCurve.ID  
-	} else {
-		parameterAPI.ParameterPointersEncoding.BackendCurveID.Int64 = 0 		
-	}
-
-	parameterAPI.ParameterPointersEncoding.BackendMarkerID.Valid = true
-	if (parameter.BackendMarker != undefined) {
-		parameterAPI.ParameterPointersEncoding.BackendMarkerID.Int64 = parameter.BackendMarker.ID  
-	} else {
-		parameterAPI.ParameterPointersEncoding.BackendMarkerID.Int64 = 0 		
-	}
-
 	parameterAPI.ParameterPointersEncoding.FkeyID.Valid = true
 	if (parameter.Fkey != undefined) {
 		parameterAPI.ParameterPointersEncoding.FkeyID.Int64 = parameter.Fkey.ID  
@@ -775,17 +699,6 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.BezierControlLengthRatio = parameterAPI.BezierControlLengthRatio
 	parameter.SpiralBezierStrength = parameterAPI.SpiralBezierStrength
 	parameter.NbInterpolationPoints = parameterAPI.NbInterpolationPoints
-	parameter.HourHandleRotationAngle = parameterAPI.HourHandleRotationAngle
-	parameter.HourHandleDiskDistance = parameterAPI.HourHandleDiskDistance
-	parameter.HourHandleRadius = parameterAPI.HourHandleRadius
-	parameter.MinuteHandleRotationAngle = parameterAPI.MinuteHandleRotationAngle
-	parameter.MinuteHandleDiskDistance = parameterAPI.MinuteHandleDiskDistance
-	parameter.MinuteHandleRadius = parameterAPI.MinuteHandleRadius
-	parameter.MinuteOffset = parameterAPI.MinuteOffset
-	parameter.BackendHandleRotationAngle = parameterAPI.BackendHandleRotationAngle
-	parameter.BackendHandleDiskDistance = parameterAPI.BackendHandleDiskDistance
-	parameter.BackendHandleRadius = parameterAPI.BackendHandleRadius
-	parameter.BackendOffset = parameterAPI.BackendOffset
 	parameter.FkeySizeRatio = parameterAPI.FkeySizeRatio
 	parameter.FkeyOriginRelativeX = parameterAPI.FkeyOriginRelativeX
 	parameter.FkeyOriginRelativeY = parameterAPI.FkeyOriginRelativeY
@@ -856,12 +769,6 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.SpiralBezierGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierGridID.Int64)
 	parameter.SpiralBezierFullGrid = frontRepo.map_ID_SpiralBezierGrid.get(parameterAPI.ParameterPointersEncoding.SpiralBezierFullGridID.Int64)
 	parameter.FrontCurveStack = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.FrontCurveStackID.Int64)
-	parameter.HourCurve = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.HourCurveID.Int64)
-	parameter.HourMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.HourMarkerID.Int64)
-	parameter.MinuteCurve = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.MinuteCurveID.Int64)
-	parameter.MinuteMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.MinuteMarkerID.Int64)
-	parameter.BackendCurve = frontRepo.map_ID_FrontCurveStack.get(parameterAPI.ParameterPointersEncoding.BackendCurveID.Int64)
-	parameter.BackendMarker = frontRepo.map_ID_SpiralCircle.get(parameterAPI.ParameterPointersEncoding.BackendMarkerID.Int64)
 	parameter.Fkey = frontRepo.map_ID_Key.get(parameterAPI.ParameterPointersEncoding.FkeyID.Int64)
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
 	parameter.MeasureLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.MeasureLinesID.Int64)

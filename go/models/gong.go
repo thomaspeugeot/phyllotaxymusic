@@ -2825,18 +2825,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			SpiralBezierFullGrid: &SpiralBezierGrid{Name: "SpiralBezierFullGrid"},
 			// field is initialized with an instance of FrontCurveStack with the name of the field
 			FrontCurveStack: &FrontCurveStack{Name: "FrontCurveStack"},
-			// field is initialized with an instance of FrontCurveStack with the name of the field
-			HourCurve: &FrontCurveStack{Name: "HourCurve"},
-			// field is initialized with an instance of SpiralCircle with the name of the field
-			HourMarker: &SpiralCircle{Circle: Circle {Name: "HourMarker"}},
-			// field is initialized with an instance of FrontCurveStack with the name of the field
-			MinuteCurve: &FrontCurveStack{Name: "MinuteCurve"},
-			// field is initialized with an instance of SpiralCircle with the name of the field
-			MinuteMarker: &SpiralCircle{Circle: Circle {Name: "MinuteMarker"}},
-			// field is initialized with an instance of FrontCurveStack with the name of the field
-			BackendCurve: &FrontCurveStack{Name: "BackendCurve"},
-			// field is initialized with an instance of SpiralCircle with the name of the field
-			BackendMarker: &SpiralCircle{Circle: Circle {Name: "BackendMarker"}},
 			// field is initialized with an instance of Key with the name of the field
 			Fkey: &Key{Name: "Fkey"},
 			// field is initialized with an instance of AxisGrid with the name of the field
@@ -4026,108 +4014,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
-		case "HourCurve":
-			res := make(map[*FrontCurveStack][]*Parameter)
-			for parameter := range stage.Parameters {
-				if parameter.HourCurve != nil {
-					frontcurvestack_ := parameter.HourCurve
-					var parameters []*Parameter
-					_, ok := res[frontcurvestack_]
-					if ok {
-						parameters = res[frontcurvestack_]
-					} else {
-						parameters = make([]*Parameter, 0)
-					}
-					parameters = append(parameters, parameter)
-					res[frontcurvestack_] = parameters
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		case "HourMarker":
-			res := make(map[*SpiralCircle][]*Parameter)
-			for parameter := range stage.Parameters {
-				if parameter.HourMarker != nil {
-					spiralcircle_ := parameter.HourMarker
-					var parameters []*Parameter
-					_, ok := res[spiralcircle_]
-					if ok {
-						parameters = res[spiralcircle_]
-					} else {
-						parameters = make([]*Parameter, 0)
-					}
-					parameters = append(parameters, parameter)
-					res[spiralcircle_] = parameters
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		case "MinuteCurve":
-			res := make(map[*FrontCurveStack][]*Parameter)
-			for parameter := range stage.Parameters {
-				if parameter.MinuteCurve != nil {
-					frontcurvestack_ := parameter.MinuteCurve
-					var parameters []*Parameter
-					_, ok := res[frontcurvestack_]
-					if ok {
-						parameters = res[frontcurvestack_]
-					} else {
-						parameters = make([]*Parameter, 0)
-					}
-					parameters = append(parameters, parameter)
-					res[frontcurvestack_] = parameters
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		case "MinuteMarker":
-			res := make(map[*SpiralCircle][]*Parameter)
-			for parameter := range stage.Parameters {
-				if parameter.MinuteMarker != nil {
-					spiralcircle_ := parameter.MinuteMarker
-					var parameters []*Parameter
-					_, ok := res[spiralcircle_]
-					if ok {
-						parameters = res[spiralcircle_]
-					} else {
-						parameters = make([]*Parameter, 0)
-					}
-					parameters = append(parameters, parameter)
-					res[spiralcircle_] = parameters
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		case "BackendCurve":
-			res := make(map[*FrontCurveStack][]*Parameter)
-			for parameter := range stage.Parameters {
-				if parameter.BackendCurve != nil {
-					frontcurvestack_ := parameter.BackendCurve
-					var parameters []*Parameter
-					_, ok := res[frontcurvestack_]
-					if ok {
-						parameters = res[frontcurvestack_]
-					} else {
-						parameters = make([]*Parameter, 0)
-					}
-					parameters = append(parameters, parameter)
-					res[frontcurvestack_] = parameters
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		case "BackendMarker":
-			res := make(map[*SpiralCircle][]*Parameter)
-			for parameter := range stage.Parameters {
-				if parameter.BackendMarker != nil {
-					spiralcircle_ := parameter.BackendMarker
-					var parameters []*Parameter
-					_, ok := res[spiralcircle_]
-					if ok {
-						parameters = res[spiralcircle_]
-					} else {
-						parameters = make([]*Parameter, 0)
-					}
-					parameters = append(parameters, parameter)
-					res[spiralcircle_] = parameters
-				}
-			}
-			return any(res).(map[*End][]*Start)
 		case "Fkey":
 			res := make(map[*Key][]*Parameter)
 			for parameter := range stage.Parameters {
@@ -5076,7 +4962,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case NoteInfo:
 		res = []string{"Name", "IsKept"}
 	case Parameter:
-		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "HourCurve", "HourHandleRotationAngle", "HourMarker", "HourHandleDiskDistance", "HourHandleRadius", "MinuteCurve", "MinuteHandleRotationAngle", "MinuteMarker", "MinuteHandleDiskDistance", "MinuteHandleRadius", "MinuteOffset", "BackendCurve", "BackendHandleRotationAngle", "BackendMarker", "BackendHandleDiskDistance", "BackendHandleRadius", "BackendOffset", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualNotesTemporalShift"}
+		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualNotesTemporalShift"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "AngleDegree", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
@@ -5271,7 +5157,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *NoteInfo:
 		res = []string{"Name", "IsKept"}
 	case *Parameter:
-		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "HourCurve", "HourHandleRotationAngle", "HourMarker", "HourHandleDiskDistance", "HourHandleRadius", "MinuteCurve", "MinuteHandleRotationAngle", "MinuteMarker", "MinuteHandleDiskDistance", "MinuteHandleRadius", "MinuteOffset", "BackendCurve", "BackendHandleRotationAngle", "BackendMarker", "BackendHandleDiskDistance", "BackendHandleRadius", "BackendOffset", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualNotesTemporalShift"}
+		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "MeasureLines", "MeasureLinesHeightRatio", "NbMeasureLines", "NbMeasureLinesPerCurve", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "Speed", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "NoteInfos", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualNotesTemporalShift"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "AngleDegree", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
@@ -5853,52 +5739,6 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			}
 		case "NbInterpolationPoints":
 			res = fmt.Sprintf("%d", inferedInstance.NbInterpolationPoints)
-		case "HourCurve":
-			if inferedInstance.HourCurve != nil {
-				res = inferedInstance.HourCurve.Name
-			}
-		case "HourHandleRotationAngle":
-			res = fmt.Sprintf("%f", inferedInstance.HourHandleRotationAngle)
-		case "HourMarker":
-			if inferedInstance.HourMarker != nil {
-				res = inferedInstance.HourMarker.Name
-			}
-		case "HourHandleDiskDistance":
-			res = fmt.Sprintf("%f", inferedInstance.HourHandleDiskDistance)
-		case "HourHandleRadius":
-			res = fmt.Sprintf("%f", inferedInstance.HourHandleRadius)
-		case "MinuteCurve":
-			if inferedInstance.MinuteCurve != nil {
-				res = inferedInstance.MinuteCurve.Name
-			}
-		case "MinuteHandleRotationAngle":
-			res = fmt.Sprintf("%f", inferedInstance.MinuteHandleRotationAngle)
-		case "MinuteMarker":
-			if inferedInstance.MinuteMarker != nil {
-				res = inferedInstance.MinuteMarker.Name
-			}
-		case "MinuteHandleDiskDistance":
-			res = fmt.Sprintf("%f", inferedInstance.MinuteHandleDiskDistance)
-		case "MinuteHandleRadius":
-			res = fmt.Sprintf("%f", inferedInstance.MinuteHandleRadius)
-		case "MinuteOffset":
-			res = fmt.Sprintf("%f", inferedInstance.MinuteOffset)
-		case "BackendCurve":
-			if inferedInstance.BackendCurve != nil {
-				res = inferedInstance.BackendCurve.Name
-			}
-		case "BackendHandleRotationAngle":
-			res = fmt.Sprintf("%f", inferedInstance.BackendHandleRotationAngle)
-		case "BackendMarker":
-			if inferedInstance.BackendMarker != nil {
-				res = inferedInstance.BackendMarker.Name
-			}
-		case "BackendHandleDiskDistance":
-			res = fmt.Sprintf("%f", inferedInstance.BackendHandleDiskDistance)
-		case "BackendHandleRadius":
-			res = fmt.Sprintf("%f", inferedInstance.BackendHandleRadius)
-		case "BackendOffset":
-			res = fmt.Sprintf("%f", inferedInstance.BackendOffset)
 		case "Fkey":
 			if inferedInstance.Fkey != nil {
 				res = inferedInstance.Fkey.Name
@@ -6941,52 +6781,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			}
 		case "NbInterpolationPoints":
 			res = fmt.Sprintf("%d", inferedInstance.NbInterpolationPoints)
-		case "HourCurve":
-			if inferedInstance.HourCurve != nil {
-				res = inferedInstance.HourCurve.Name
-			}
-		case "HourHandleRotationAngle":
-			res = fmt.Sprintf("%f", inferedInstance.HourHandleRotationAngle)
-		case "HourMarker":
-			if inferedInstance.HourMarker != nil {
-				res = inferedInstance.HourMarker.Name
-			}
-		case "HourHandleDiskDistance":
-			res = fmt.Sprintf("%f", inferedInstance.HourHandleDiskDistance)
-		case "HourHandleRadius":
-			res = fmt.Sprintf("%f", inferedInstance.HourHandleRadius)
-		case "MinuteCurve":
-			if inferedInstance.MinuteCurve != nil {
-				res = inferedInstance.MinuteCurve.Name
-			}
-		case "MinuteHandleRotationAngle":
-			res = fmt.Sprintf("%f", inferedInstance.MinuteHandleRotationAngle)
-		case "MinuteMarker":
-			if inferedInstance.MinuteMarker != nil {
-				res = inferedInstance.MinuteMarker.Name
-			}
-		case "MinuteHandleDiskDistance":
-			res = fmt.Sprintf("%f", inferedInstance.MinuteHandleDiskDistance)
-		case "MinuteHandleRadius":
-			res = fmt.Sprintf("%f", inferedInstance.MinuteHandleRadius)
-		case "MinuteOffset":
-			res = fmt.Sprintf("%f", inferedInstance.MinuteOffset)
-		case "BackendCurve":
-			if inferedInstance.BackendCurve != nil {
-				res = inferedInstance.BackendCurve.Name
-			}
-		case "BackendHandleRotationAngle":
-			res = fmt.Sprintf("%f", inferedInstance.BackendHandleRotationAngle)
-		case "BackendMarker":
-			if inferedInstance.BackendMarker != nil {
-				res = inferedInstance.BackendMarker.Name
-			}
-		case "BackendHandleDiskDistance":
-			res = fmt.Sprintf("%f", inferedInstance.BackendHandleDiskDistance)
-		case "BackendHandleRadius":
-			res = fmt.Sprintf("%f", inferedInstance.BackendHandleRadius)
-		case "BackendOffset":
-			res = fmt.Sprintf("%f", inferedInstance.BackendOffset)
 		case "Fkey":
 			if inferedInstance.Fkey != nil {
 				res = inferedInstance.Fkey.Name

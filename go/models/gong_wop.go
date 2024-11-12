@@ -311,17 +311,6 @@ type Parameter_WOP struct {
 	BezierControlLengthRatio float64
 	SpiralBezierStrength float64
 	NbInterpolationPoints int
-	HourHandleRotationAngle float64
-	HourHandleDiskDistance float64
-	HourHandleRadius float64
-	MinuteHandleRotationAngle float64
-	MinuteHandleDiskDistance float64
-	MinuteHandleRadius float64
-	MinuteOffset float64
-	BackendHandleRotationAngle float64
-	BackendHandleDiskDistance float64
-	BackendHandleRadius float64
-	BackendOffset float64
 	FkeySizeRatio float64
 	FkeyOriginRelativeX float64
 	FkeyOriginRelativeY float64
@@ -365,17 +354,6 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.BezierControlLengthRatio = from.BezierControlLengthRatio
 	to.SpiralBezierStrength = from.SpiralBezierStrength
 	to.NbInterpolationPoints = from.NbInterpolationPoints
-	to.HourHandleRotationAngle = from.HourHandleRotationAngle
-	to.HourHandleDiskDistance = from.HourHandleDiskDistance
-	to.HourHandleRadius = from.HourHandleRadius
-	to.MinuteHandleRotationAngle = from.MinuteHandleRotationAngle
-	to.MinuteHandleDiskDistance = from.MinuteHandleDiskDistance
-	to.MinuteHandleRadius = from.MinuteHandleRadius
-	to.MinuteOffset = from.MinuteOffset
-	to.BackendHandleRotationAngle = from.BackendHandleRotationAngle
-	to.BackendHandleDiskDistance = from.BackendHandleDiskDistance
-	to.BackendHandleRadius = from.BackendHandleRadius
-	to.BackendOffset = from.BackendOffset
 	to.FkeySizeRatio = from.FkeySizeRatio
 	to.FkeyOriginRelativeX = from.FkeyOriginRelativeX
 	to.FkeyOriginRelativeY = from.FkeyOriginRelativeY

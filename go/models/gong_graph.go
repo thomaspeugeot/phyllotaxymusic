@@ -746,24 +746,6 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	if parameter.FrontCurveStack != nil {
 		StageBranch(stage, parameter.FrontCurveStack)
 	}
-	if parameter.HourCurve != nil {
-		StageBranch(stage, parameter.HourCurve)
-	}
-	if parameter.HourMarker != nil {
-		StageBranch(stage, parameter.HourMarker)
-	}
-	if parameter.MinuteCurve != nil {
-		StageBranch(stage, parameter.MinuteCurve)
-	}
-	if parameter.MinuteMarker != nil {
-		StageBranch(stage, parameter.MinuteMarker)
-	}
-	if parameter.BackendCurve != nil {
-		StageBranch(stage, parameter.BackendCurve)
-	}
-	if parameter.BackendMarker != nil {
-		StageBranch(stage, parameter.BackendMarker)
-	}
 	if parameter.Fkey != nil {
 		StageBranch(stage, parameter.Fkey)
 	}
@@ -1621,24 +1603,6 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	if parameterFrom.FrontCurveStack != nil {
 		parameterTo.FrontCurveStack = CopyBranchFrontCurveStack(mapOrigCopy, parameterFrom.FrontCurveStack)
 	}
-	if parameterFrom.HourCurve != nil {
-		parameterTo.HourCurve = CopyBranchFrontCurveStack(mapOrigCopy, parameterFrom.HourCurve)
-	}
-	if parameterFrom.HourMarker != nil {
-		parameterTo.HourMarker = CopyBranchSpiralCircle(mapOrigCopy, parameterFrom.HourMarker)
-	}
-	if parameterFrom.MinuteCurve != nil {
-		parameterTo.MinuteCurve = CopyBranchFrontCurveStack(mapOrigCopy, parameterFrom.MinuteCurve)
-	}
-	if parameterFrom.MinuteMarker != nil {
-		parameterTo.MinuteMarker = CopyBranchSpiralCircle(mapOrigCopy, parameterFrom.MinuteMarker)
-	}
-	if parameterFrom.BackendCurve != nil {
-		parameterTo.BackendCurve = CopyBranchFrontCurveStack(mapOrigCopy, parameterFrom.BackendCurve)
-	}
-	if parameterFrom.BackendMarker != nil {
-		parameterTo.BackendMarker = CopyBranchSpiralCircle(mapOrigCopy, parameterFrom.BackendMarker)
-	}
 	if parameterFrom.Fkey != nil {
 		parameterTo.Fkey = CopyBranchKey(mapOrigCopy, parameterFrom.Fkey)
 	}
@@ -2467,24 +2431,6 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.FrontCurveStack != nil {
 		UnstageBranch(stage, parameter.FrontCurveStack)
-	}
-	if parameter.HourCurve != nil {
-		UnstageBranch(stage, parameter.HourCurve)
-	}
-	if parameter.HourMarker != nil {
-		UnstageBranch(stage, parameter.HourMarker)
-	}
-	if parameter.MinuteCurve != nil {
-		UnstageBranch(stage, parameter.MinuteCurve)
-	}
-	if parameter.MinuteMarker != nil {
-		UnstageBranch(stage, parameter.MinuteMarker)
-	}
-	if parameter.BackendCurve != nil {
-		UnstageBranch(stage, parameter.BackendCurve)
-	}
-	if parameter.BackendMarker != nil {
-		UnstageBranch(stage, parameter.BackendMarker)
 	}
 	if parameter.Fkey != nil {
 		UnstageBranch(stage, parameter.Fkey)
