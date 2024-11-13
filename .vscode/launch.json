@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "go server -unmarshallFromCode=data/music.go -marshallOnCommit=data/music",
+            "name": "go server on music",
             "type": "go",
             "request": "launch",
             "mode": "debug",
