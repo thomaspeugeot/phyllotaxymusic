@@ -586,13 +586,13 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000000_0.IsKept = true
 
 	__NoteInfo__000001_1.Name = `1`
-	__NoteInfo__000001_1.IsKept = false
+	__NoteInfo__000001_1.IsKept = true
 
 	__NoteInfo__000002_10.Name = `10`
-	__NoteInfo__000002_10.IsKept = false
+	__NoteInfo__000002_10.IsKept = true
 
 	__NoteInfo__000003_11.Name = `11`
-	__NoteInfo__000003_11.IsKept = false
+	__NoteInfo__000003_11.IsKept = true
 
 	__NoteInfo__000004_12.Name = `12`
 	__NoteInfo__000004_12.IsKept = false
@@ -604,16 +604,16 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000006_14.IsKept = false
 
 	__NoteInfo__000007_15.Name = `15`
-	__NoteInfo__000007_15.IsKept = false
+	__NoteInfo__000007_15.IsKept = true
 
 	__NoteInfo__000008_16.Name = `16`
-	__NoteInfo__000008_16.IsKept = true
+	__NoteInfo__000008_16.IsKept = false
 
 	__NoteInfo__000009_17.Name = `17`
-	__NoteInfo__000009_17.IsKept = false
+	__NoteInfo__000009_17.IsKept = true
 
 	__NoteInfo__000010_18.Name = `18`
-	__NoteInfo__000010_18.IsKept = false
+	__NoteInfo__000010_18.IsKept = true
 
 	__NoteInfo__000011_19.Name = `19`
 	__NoteInfo__000011_19.IsKept = false
@@ -628,10 +628,10 @@ func _(stage *models.StageStruct) {
 	__NoteInfo__000014_21.IsKept = false
 
 	__NoteInfo__000015_3.Name = `3`
-	__NoteInfo__000015_3.IsKept = false
+	__NoteInfo__000015_3.IsKept = true
 
 	__NoteInfo__000016_4.Name = `4`
-	__NoteInfo__000016_4.IsKept = false
+	__NoteInfo__000016_4.IsKept = true
 
 	__NoteInfo__000017_5.Name = `5`
 	__NoteInfo__000017_5.IsKept = false
