@@ -122,7 +122,7 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     const bruteOffsetIndex = i - this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift + noteInfos.length
     const offsetIndex = bruteOffsetIndex %
       noteInfos.length;
-    console.log(i, this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift, bruteOffsetIndex, offsetIndex)
+    // console.log(i, this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift, bruteOffsetIndex, offsetIndex)
     return noteInfos[offsetIndex];
   }
 }
