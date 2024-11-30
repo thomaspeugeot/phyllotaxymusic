@@ -1,4 +1,4 @@
-# github.com/bytedance/sonic v1.12.3
+# github.com/bytedance/sonic v1.12.4
 ## explicit; go 1.17
 github.com/bytedance/sonic
 github.com/bytedance/sonic/ast
@@ -49,7 +49,7 @@ github.com/dustin/go-humanize
 # github.com/frankban/quicktest v1.14.6
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20241104173016-b6a6ef106828
+# github.com/fullstack-lang/gong v0.0.0-20241109111535-bbfb41b7cac2
 ## explicit; go 1.23.1
 github.com/fullstack-lang/gong/go/controllers
 github.com/fullstack-lang/gong/go/db
@@ -58,7 +58,7 @@ github.com/fullstack-lang/gong/go/ignore
 github.com/fullstack-lang/gong/go/models
 github.com/fullstack-lang/gong/go/orm
 github.com/fullstack-lang/gong/ng-github.com-fullstack-lang-gong/projects
-# github.com/fullstack-lang/gongdoc v0.0.0-20241104172809-0a30f18316af
+# github.com/fullstack-lang/gongdoc v0.0.0-20241109111535-aa1796f001aa
 ## explicit; go 1.23.1
 github.com/fullstack-lang/gongdoc/go/adapter
 github.com/fullstack-lang/gongdoc/go/controllers
@@ -70,7 +70,7 @@ github.com/fullstack-lang/gongdoc/go/load
 github.com/fullstack-lang/gongdoc/go/models
 github.com/fullstack-lang/gongdoc/go/orm
 github.com/fullstack-lang/gongdoc/ng-github.com-fullstack-lang-gongdoc/projects
-# github.com/fullstack-lang/gongsvg v0.0.0-20241104172820-6f5112974c1c
+# github.com/fullstack-lang/gongsvg v0.0.0-20241109111536-5f07426906ae
 ## explicit; go 1.23.1
 github.com/fullstack-lang/gongsvg/go
 github.com/fullstack-lang/gongsvg/go/controllers
@@ -81,7 +81,7 @@ github.com/fullstack-lang/gongsvg/go/orm
 github.com/fullstack-lang/gongsvg/go/probe
 github.com/fullstack-lang/gongsvg/go/stack
 github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects
-# github.com/fullstack-lang/gongtable v0.0.0-20241104172820-3f1aadecc1e0
+# github.com/fullstack-lang/gongtable v0.0.0-20241109111536-c8032ca0d89a
 ## explicit; go 1.23.1
 github.com/fullstack-lang/gongtable/go/controllers
 github.com/fullstack-lang/gongtable/go/db
@@ -100,7 +100,7 @@ github.com/fullstack-lang/gongtone/go/orm
 github.com/fullstack-lang/gongtone/go/probe
 github.com/fullstack-lang/gongtone/go/stack
 github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects
-# github.com/fullstack-lang/gongtree v0.0.0-20241104172822-2652a30fa67b
+# github.com/fullstack-lang/gongtree v0.0.0-20241130070052-003d6e0482ce
 ## explicit; go 1.23.1
 github.com/fullstack-lang/gongtree/go
 github.com/fullstack-lang/gongtree/go/buttons
@@ -190,8 +190,8 @@ github.com/jinzhu/now
 # github.com/json-iterator/go v1.1.12
 ## explicit; go 1.12
 github.com/json-iterator/go
-# github.com/klauspost/cpuid/v2 v2.2.8
-## explicit; go 1.15
+# github.com/klauspost/cpuid/v2 v2.2.9
+## explicit; go 1.20
 github.com/klauspost/cpuid/v2
 # github.com/kr/pretty v0.3.1
 ## explicit; go 1.12
@@ -246,7 +246,7 @@ github.com/rogpeppe/go-internal/fmtsort
 # github.com/shabbyrobe/xmlwriter v0.0.0-20230525083848-85336ec334fa
 ## explicit; go 1.13
 github.com/shabbyrobe/xmlwriter
-# github.com/tealeg/xlsx/v3 v3.3.10
+# github.com/tealeg/xlsx/v3 v3.3.11
 ## explicit; go 1.18
 github.com/tealeg/xlsx/v3
 # github.com/twitchyliquid64/golang-asm v0.15.1
@@ -280,24 +280,24 @@ github.com/xuri/excelize/v2
 # github.com/xuri/nfp v0.0.0-20240318013403-ab9948c2c4a7
 ## explicit; go 1.15
 github.com/xuri/nfp
-# golang.org/x/arch v0.11.0
+# golang.org/x/arch v0.12.0
 ## explicit; go 1.18
 golang.org/x/arch/x86/x86asm
-# golang.org/x/crypto v0.28.0
+# golang.org/x/crypto v0.29.0
 ## explicit; go 1.20
 golang.org/x/crypto/md4
 golang.org/x/crypto/ripemd160
 golang.org/x/crypto/sha3
-# golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c
+# golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f
 ## explicit; go 1.22.0
 golang.org/x/exp/constraints
-# golang.org/x/mod v0.21.0
+# golang.org/x/mod v0.22.0
 ## explicit; go 1.22.0
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/modfile
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/net v0.30.0
+# golang.org/x/net v0.31.0
 ## explicit; go 1.18
 golang.org/x/net/html
 golang.org/x/net/html/atom
@@ -307,12 +307,12 @@ golang.org/x/net/http2
 golang.org/x/net/http2/h2c
 golang.org/x/net/http2/hpack
 golang.org/x/net/idna
-# golang.org/x/sys v0.26.0
+# golang.org/x/sys v0.27.0
 ## explicit; go 1.18
 golang.org/x/sys/cpu
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/text v0.19.0
+# golang.org/x/text v0.20.0
 ## explicit; go 1.18
 golang.org/x/text/cases
 golang.org/x/text/encoding

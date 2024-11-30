@@ -2,6 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Edge",
+            "request": "launch",
+            "type": "msedge",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}/ng-github.com-thomaspeugeot-phylotaxymusic"
+        },
+        {
             "name": "go server on music",
             "type": "go",
             "request": "launch",
