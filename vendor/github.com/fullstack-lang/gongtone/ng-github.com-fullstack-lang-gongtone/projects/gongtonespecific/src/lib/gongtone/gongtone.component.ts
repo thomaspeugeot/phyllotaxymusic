@@ -1,121 +1,201 @@
-import { Component, OnInit } from '@angular/core';
-
-import * as Tone from "tone"
-
-import * as gongtone from '../../../../gongtone/src/public-api'
-
-
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import * as Tone from 'tone';
+import * as gongtone from '../../../../gongtone/src/public-api';
+
+import { Subject } from 'rxjs';
+import { takeUntil, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'lib-gongtone',
   standalone: true,
   imports: [
-    MatButtonModule, MatDividerModule, MatIconModule
+    MatButtonModule,
+    MatDividerModule,
+    MatIconModule
   ],
   templateUrl: './gongtone.component.html',
   styleUrl: './gongtone.component.css'
 })
-export class GongtoneComponent implements OnInit {
+export class GongtoneComponent implements OnInit, OnDestroy {
+  private synth: Tone.PolySynth | undefined;
+  private sampler: Tone.Sampler | undefined;
+  private destroy$ = new Subject<void>();
 
-  synth: Tone.PolySynth<Tone.Synth<Tone.SynthOptions>> | undefined
-  sampler: Tone.Sampler | undefined
+  readonly StacksNames = gongtone.StacksNames;
 
-
-  StacksNames = gongtone.StacksNames
-
-  public frontRepo?: gongtone.FrontRepo
+  frontRepo?: gongtone.FrontRepo;
+  isLoading = false;
+  isPlaying = false;
 
   constructor(
     private frontRepoService: gongtone.FrontRepoService,
-  ) {
-
-  }
+    private ngZone: NgZone,
+    private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
-    this.synth = new Tone.PolySynth().toDestination()
-
-    console.log("ngOnInit")
-
-    this.frontRepoService.connectToWebSocket(this.StacksNames.Gongtone).subscribe(
-      gongtablesFrontRepo => {
-        this.frontRepo = gongtablesFrontRepo
-      }
-    )
+    this.initializeSynth();
+    this.connectToWebSocket();
   }
 
-  stop() {
-
-    Tone.getTransport().stop()
-
-    // const now = Tone.now()
-    // if (this.sampler != undefined) {
-    //   this.sampler.releaseAll(now)
-    //   console.log("releassed", this.sampler)
-    // }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.stopPlayback();
   }
 
-  play() {
-
-    if (this.synth) {
-
-      const now = Tone.now();
-
-      this.sampler = new Tone.Sampler({
-        urls: {
-          C3: "C3.mp3",
-          "D#3": "Ds3.mp3",
-          "F#3": "Fs3.mp3",
-          A3: "A3.mp3",
-          C4: "C4.mp3",
-          "D#4": "Ds4.mp3",
-          "F#4": "Fs4.mp3",
-          A4: "A4.mp3",
-          C5: "C5.mp3",
-          "D#5": "Ds5.mp3",
-        },
-        release: 1,
-        baseUrl: "assets/audio/salamander/",
-        onload: () => {
-          let transport = Tone.getTransport()
-
-          transport.start()
-        }
-      }).toDestination();
-
-      //
-      // compute full duration of theme
-      //
-      var duration: number = 0
-      for (let note of this.frontRepo!.getFrontArray<gongtone.Note>(gongtone.Note.GONGSTRUCT_NAME)) {
-        if (note.Start + note.Duration > duration) {
-          duration = note.Start + note.Duration
-        }
-      }
-      console.log("duration", duration)
-
-      const loop = new Tone.Loop((time) => {
-        for (let note of this.frontRepo!.getFrontArray<gongtone.Note>(gongtone.Note.GONGSTRUCT_NAME)) {
-
-          var frequencies = new Array<string>()
-          for (let freq of note.Frequencies) {
-            frequencies.push(freq.Name)
-          }
-
-          if (this.sampler != undefined) {
-            // console.log(now, now + note.Start, now + note.Start + note.Duration)
-            this.sampler.triggerAttackRelease(frequencies, note.Duration, time + note.Start)
-            // sampler.triggerAttackRelease(["Eb4", "G4", "Bb4"], 4, 4);
-          }
-        }
-      }, duration).start(0);
-
-
+  private initializeSynth(): void {
+    try {
+      this.synth = new Tone.PolySynth().toDestination();
+    } catch (error) {
+      this.handleAudioInitError(error);
     }
   }
 
+  private connectToWebSocket(): void {
+    this.frontRepoService.connectToWebSocket(this.StacksNames.Gongtone)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(error => {
+          this.handleWebSocketError(error);
+          throw error;
+        })
+      )
+      .subscribe(gongtablesFrontRepo => {
+        this.frontRepo = gongtablesFrontRepo;
+      });
+  }
 
+  stopPlayback(): void {
+    this.ngZone.runOutsideAngular(() => {
+      try {
+        Tone.getTransport().stop();
+        this.sampler?.dispose();
+        this.isPlaying = false;
+      } catch (error) {
+        console.error('Error stopping playback:', error);
+      }
+    });
+  }
 
+  play(): void {
+    if (!this.frontRepo) {
+      this.showError('No data available for playback');
+      return;
+    }
+
+    this.isLoading = true;
+    this.ngZone.runOutsideAngular(() => {
+      try {
+        const notes = this.frontRepo!.getFrontArray<gongtone.Note>(gongtone.Note.GONGSTRUCT_NAME);
+        const duration = this.calculateTotalDuration(notes);
+        this.initializeSampler(duration, notes);
+      } catch (error) {
+        this.handlePlaybackError(error);
+      }
+    });
+  }
+
+  private initializeSampler(duration: number, notes: gongtone.Note[]): void {
+    const audioBaseUrl = `${window.location.origin}/assets/audio/salamander/`;
+
+    // Prefer OGG files, fall back to MP3
+    const urls: { [key: string]: string } = {
+      C3: `${audioBaseUrl}C3.ogg`,
+      'D#3': `${audioBaseUrl}Ds3.ogg`,
+      'F#3': `${audioBaseUrl}Fs3.ogg`,
+      A3: `${audioBaseUrl}A3.ogg`,
+      C4: `${audioBaseUrl}C4.ogg`,
+      'D#4': `${audioBaseUrl}Ds4.ogg`,
+      'F#4': `${audioBaseUrl}Fs4.ogg`,
+      A4: `${audioBaseUrl}A4.ogg`,
+      C5: `${audioBaseUrl}C5.ogg`,
+      'D#5': `${audioBaseUrl}Ds5.ogg`
+    };
+
+    this.sampler = new Tone.Sampler({
+      urls: urls,
+      release: 1,
+      onload: () => {
+        console.log('Sampler loaded successfully');
+        this.startPlayback(duration, notes);
+      },
+      onerror: (error) => {
+        console.error('Sampler load error:', error);
+
+        // Detailed error logging
+        if (error instanceof Event) {
+          const target = error.target as HTMLAudioElement;
+          console.error('Failed Audio Source:', {
+            src: target.src,
+            error: target.error,
+            errorCode: target.error?.code
+          });
+        }
+
+        this.showError('Failed to load audio samples');
+      }
+    }).toDestination();
+  }
+
+  private calculateTotalDuration(notes: gongtone.Note[]): number {
+    return notes.reduce((maxDuration, note) =>
+      Math.max(maxDuration, note.Start + note.Duration), 0);
+  }
+
+  private startPlayback(duration: number, notes: gongtone.Note[]): void {
+    this.ngZone.runOutsideAngular(() => {
+      try {
+        this.isLoading = false;
+        this.isPlaying = true;
+
+        const loop = new Tone.Loop((time) => {
+          notes.forEach(note => {
+            const frequencies = note.Frequencies.map(freq => freq.Name);
+            this.sampler?.triggerAttackRelease(frequencies, note.Duration, time + note.Start);
+          });
+        }, duration).start(0);
+
+        Tone.getTransport().start();
+      } catch (error) {
+        this.handlePlaybackError(error);
+      }
+    });
+  }
+
+  private handleWebSocketError(error: any): void {
+    console.error('WebSocket connection error:', error);
+    this.showError('Failed to connect to WebSocket');
+  }
+
+  private handleAudioInitError(error: any): void {
+    console.error('Audio initialization error:', error);
+    this.showError('Failed to initialize audio');
+  }
+
+  private handleSamplerLoadError(error: any): void {
+    console.error('Sampler load error:', error);
+    this.showError('Failed to load audio samples');
+    this.isLoading = false;
+  }
+
+  private handlePlaybackError(error: any): void {
+    console.error('Playback error:', error);
+    this.showError('Playback failed');
+    this.isLoading = false;
+    this.isPlaying = false;
+  }
+
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
+    });
+  }
 }

@@ -1,10 +1,23 @@
-<h4>gongtone</h4>
-<button mat-fab aria-label="Play" (click)="play()">
-    <mat-icon>play_circle</mat-icon>
-</button>
-
-<button mat-fab aria-label="Play" (click)="stop()">
-    <mat-icon>stop_circle</mat-icon>
-</button>
-
-
+<div class="gongtone-container">
+    <h4 class="gongtone-title">Gongtone</h4>
+    
+    <div class="gongtone-controls">
+      <button 
+        mat-fab 
+        color="primary" 
+        aria-label="Play" 
+        (click)="play()"
+        [disabled]="!frontRepo">
+        <mat-icon>play_circle</mat-icon>
+      </button>
+      
+      <button 
+        mat-fab 
+        color="warn" 
+        aria-label="Stop" 
+        (click)="stopPlayback()"
+        [disabled]="!frontRepo">
+        <mat-icon>stop_circle</mat-icon>
+      </button>
+    </div>
+  </div>
