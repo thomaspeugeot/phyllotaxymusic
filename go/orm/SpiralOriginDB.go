@@ -397,11 +397,25 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CheckoutPhaseTwoInstance
 func (spiraloriginDB *SpiralOriginDB) DecodePointers(backRepo *BackRepoStruct, spiralorigin *models.SpiralOrigin) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	spiralorigin.ShapeCategory = nil
-	if spiraloriginDB.ShapeCategoryID.Int64 != 0 {
-		spiralorigin.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(spiraloriginDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := spiraloriginDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: spiralorigin.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if spiralorigin.ShapeCategory == nil || spiralorigin.ShapeCategory != tmp {
+				spiralorigin.ShapeCategory = tmp
+			}
+		} else {
+			spiralorigin.ShapeCategory = nil
+		}
 	}
+	
 	return
 }
 

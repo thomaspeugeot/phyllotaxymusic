@@ -77,10 +77,11 @@ export class GongtoneComponent implements OnInit {
           "D#5": "Ds5.mp3",
         },
         release: 1,
-        baseUrl: "https://tonejs.github.io/audio/salamander/",
+        baseUrl: "assets/audio/salamander/",
         onload: () => {
+          let transport = Tone.getTransport()
 
-          Tone.getTransport().start()
+          transport.start()
         }
       }).toDestination();
 

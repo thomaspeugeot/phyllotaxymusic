@@ -1522,286 +1522,1070 @@ func (backRepoParameter *BackRepoParameterStruct) CheckoutPhaseTwoInstance(backR
 func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, parameter *models.Parameter) {
 
 	// insertion point for checkout of pointer encoding
-	// InitialRhombus field
-	parameter.InitialRhombus = nil
-	if parameterDB.InitialRhombusID.Int64 != 0 {
-		parameter.InitialRhombus = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(parameterDB.InitialRhombusID.Int64)]
+	// InitialRhombus field	
+	{
+		id := parameterDB.InitialRhombusID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.InitialRhombus, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.InitialRhombus == nil || parameter.InitialRhombus != tmp {
+				parameter.InitialRhombus = tmp
+			}
+		} else {
+			parameter.InitialRhombus = nil
+		}
 	}
-	// InitialCircle field
-	parameter.InitialCircle = nil
-	if parameterDB.InitialCircleID.Int64 != 0 {
-		parameter.InitialCircle = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(parameterDB.InitialCircleID.Int64)]
+	
+	// InitialCircle field	
+	{
+		id := parameterDB.InitialCircleID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.InitialCircle, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.InitialCircle == nil || parameter.InitialCircle != tmp {
+				parameter.InitialCircle = tmp
+			}
+		} else {
+			parameter.InitialCircle = nil
+		}
 	}
-	// InitialRhombusGrid field
-	parameter.InitialRhombusGrid = nil
-	if parameterDB.InitialRhombusGridID.Int64 != 0 {
-		parameter.InitialRhombusGrid = backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(parameterDB.InitialRhombusGridID.Int64)]
+	
+	// InitialRhombusGrid field	
+	{
+		id := parameterDB.InitialRhombusGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.InitialRhombusGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.InitialRhombusGrid == nil || parameter.InitialRhombusGrid != tmp {
+				parameter.InitialRhombusGrid = tmp
+			}
+		} else {
+			parameter.InitialRhombusGrid = nil
+		}
 	}
-	// InitialCircleGrid field
-	parameter.InitialCircleGrid = nil
-	if parameterDB.InitialCircleGridID.Int64 != 0 {
-		parameter.InitialCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.InitialCircleGridID.Int64)]
+	
+	// InitialCircleGrid field	
+	{
+		id := parameterDB.InitialCircleGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.InitialCircleGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.InitialCircleGrid == nil || parameter.InitialCircleGrid != tmp {
+				parameter.InitialCircleGrid = tmp
+			}
+		} else {
+			parameter.InitialCircleGrid = nil
+		}
 	}
-	// InitialAxis field
-	parameter.InitialAxis = nil
-	if parameterDB.InitialAxisID.Int64 != 0 {
-		parameter.InitialAxis = backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(parameterDB.InitialAxisID.Int64)]
+	
+	// InitialAxis field	
+	{
+		id := parameterDB.InitialAxisID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.InitialAxis, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.InitialAxis == nil || parameter.InitialAxis != tmp {
+				parameter.InitialAxis = tmp
+			}
+		} else {
+			parameter.InitialAxis = nil
+		}
 	}
-	// RotatedAxis field
-	parameter.RotatedAxis = nil
-	if parameterDB.RotatedAxisID.Int64 != 0 {
-		parameter.RotatedAxis = backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(parameterDB.RotatedAxisID.Int64)]
+	
+	// RotatedAxis field	
+	{
+		id := parameterDB.RotatedAxisID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.RotatedAxis, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.RotatedAxis == nil || parameter.RotatedAxis != tmp {
+				parameter.RotatedAxis = tmp
+			}
+		} else {
+			parameter.RotatedAxis = nil
+		}
 	}
-	// RotatedRhombus field
-	parameter.RotatedRhombus = nil
-	if parameterDB.RotatedRhombusID.Int64 != 0 {
-		parameter.RotatedRhombus = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(parameterDB.RotatedRhombusID.Int64)]
+	
+	// RotatedRhombus field	
+	{
+		id := parameterDB.RotatedRhombusID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.RotatedRhombus, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.RotatedRhombus == nil || parameter.RotatedRhombus != tmp {
+				parameter.RotatedRhombus = tmp
+			}
+		} else {
+			parameter.RotatedRhombus = nil
+		}
 	}
-	// RotatedRhombusGrid field
-	parameter.RotatedRhombusGrid = nil
-	if parameterDB.RotatedRhombusGridID.Int64 != 0 {
-		parameter.RotatedRhombusGrid = backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(parameterDB.RotatedRhombusGridID.Int64)]
+	
+	// RotatedRhombusGrid field	
+	{
+		id := parameterDB.RotatedRhombusGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.RotatedRhombusGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.RotatedRhombusGrid == nil || parameter.RotatedRhombusGrid != tmp {
+				parameter.RotatedRhombusGrid = tmp
+			}
+		} else {
+			parameter.RotatedRhombusGrid = nil
+		}
 	}
-	// RotatedCircleGrid field
-	parameter.RotatedCircleGrid = nil
-	if parameterDB.RotatedCircleGridID.Int64 != 0 {
-		parameter.RotatedCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.RotatedCircleGridID.Int64)]
+	
+	// RotatedCircleGrid field	
+	{
+		id := parameterDB.RotatedCircleGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.RotatedCircleGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.RotatedCircleGrid == nil || parameter.RotatedCircleGrid != tmp {
+				parameter.RotatedCircleGrid = tmp
+			}
+		} else {
+			parameter.RotatedCircleGrid = nil
+		}
 	}
-	// NextRhombus field
-	parameter.NextRhombus = nil
-	if parameterDB.NextRhombusID.Int64 != 0 {
-		parameter.NextRhombus = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(parameterDB.NextRhombusID.Int64)]
+	
+	// NextRhombus field	
+	{
+		id := parameterDB.NextRhombusID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.NextRhombus, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.NextRhombus == nil || parameter.NextRhombus != tmp {
+				parameter.NextRhombus = tmp
+			}
+		} else {
+			parameter.NextRhombus = nil
+		}
 	}
-	// NextCircle field
-	parameter.NextCircle = nil
-	if parameterDB.NextCircleID.Int64 != 0 {
-		parameter.NextCircle = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(parameterDB.NextCircleID.Int64)]
+	
+	// NextCircle field	
+	{
+		id := parameterDB.NextCircleID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.NextCircle, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.NextCircle == nil || parameter.NextCircle != tmp {
+				parameter.NextCircle = tmp
+			}
+		} else {
+			parameter.NextCircle = nil
+		}
 	}
-	// GrowingRhombusGridSeed field
-	parameter.GrowingRhombusGridSeed = nil
-	if parameterDB.GrowingRhombusGridSeedID.Int64 != 0 {
-		parameter.GrowingRhombusGridSeed = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(parameterDB.GrowingRhombusGridSeedID.Int64)]
+	
+	// GrowingRhombusGridSeed field	
+	{
+		id := parameterDB.GrowingRhombusGridSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowingRhombusGridSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowingRhombusGridSeed == nil || parameter.GrowingRhombusGridSeed != tmp {
+				parameter.GrowingRhombusGridSeed = tmp
+			}
+		} else {
+			parameter.GrowingRhombusGridSeed = nil
+		}
 	}
-	// GrowingRhombusGrid field
-	parameter.GrowingRhombusGrid = nil
-	if parameterDB.GrowingRhombusGridID.Int64 != 0 {
-		parameter.GrowingRhombusGrid = backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(parameterDB.GrowingRhombusGridID.Int64)]
+	
+	// GrowingRhombusGrid field	
+	{
+		id := parameterDB.GrowingRhombusGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowingRhombusGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowingRhombusGrid == nil || parameter.GrowingRhombusGrid != tmp {
+				parameter.GrowingRhombusGrid = tmp
+			}
+		} else {
+			parameter.GrowingRhombusGrid = nil
+		}
 	}
-	// GrowingCircleGridSeed field
-	parameter.GrowingCircleGridSeed = nil
-	if parameterDB.GrowingCircleGridSeedID.Int64 != 0 {
-		parameter.GrowingCircleGridSeed = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(parameterDB.GrowingCircleGridSeedID.Int64)]
+	
+	// GrowingCircleGridSeed field	
+	{
+		id := parameterDB.GrowingCircleGridSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowingCircleGridSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowingCircleGridSeed == nil || parameter.GrowingCircleGridSeed != tmp {
+				parameter.GrowingCircleGridSeed = tmp
+			}
+		} else {
+			parameter.GrowingCircleGridSeed = nil
+		}
 	}
-	// GrowingCircleGrid field
-	parameter.GrowingCircleGrid = nil
-	if parameterDB.GrowingCircleGridID.Int64 != 0 {
-		parameter.GrowingCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.GrowingCircleGridID.Int64)]
+	
+	// GrowingCircleGrid field	
+	{
+		id := parameterDB.GrowingCircleGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowingCircleGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowingCircleGrid == nil || parameter.GrowingCircleGrid != tmp {
+				parameter.GrowingCircleGrid = tmp
+			}
+		} else {
+			parameter.GrowingCircleGrid = nil
+		}
 	}
-	// GrowingCircleGridLeftSeed field
-	parameter.GrowingCircleGridLeftSeed = nil
-	if parameterDB.GrowingCircleGridLeftSeedID.Int64 != 0 {
-		parameter.GrowingCircleGridLeftSeed = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(parameterDB.GrowingCircleGridLeftSeedID.Int64)]
+	
+	// GrowingCircleGridLeftSeed field	
+	{
+		id := parameterDB.GrowingCircleGridLeftSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowingCircleGridLeftSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowingCircleGridLeftSeed == nil || parameter.GrowingCircleGridLeftSeed != tmp {
+				parameter.GrowingCircleGridLeftSeed = tmp
+			}
+		} else {
+			parameter.GrowingCircleGridLeftSeed = nil
+		}
 	}
-	// GrowingCircleGridLeft field
-	parameter.GrowingCircleGridLeft = nil
-	if parameterDB.GrowingCircleGridLeftID.Int64 != 0 {
-		parameter.GrowingCircleGridLeft = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.GrowingCircleGridLeftID.Int64)]
+	
+	// GrowingCircleGridLeft field	
+	{
+		id := parameterDB.GrowingCircleGridLeftID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowingCircleGridLeft, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowingCircleGridLeft == nil || parameter.GrowingCircleGridLeft != tmp {
+				parameter.GrowingCircleGridLeft = tmp
+			}
+		} else {
+			parameter.GrowingCircleGridLeft = nil
+		}
 	}
-	// ConstructionAxis field
-	parameter.ConstructionAxis = nil
-	if parameterDB.ConstructionAxisID.Int64 != 0 {
-		parameter.ConstructionAxis = backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(parameterDB.ConstructionAxisID.Int64)]
+	
+	// ConstructionAxis field	
+	{
+		id := parameterDB.ConstructionAxisID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.ConstructionAxis, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.ConstructionAxis == nil || parameter.ConstructionAxis != tmp {
+				parameter.ConstructionAxis = tmp
+			}
+		} else {
+			parameter.ConstructionAxis = nil
+		}
 	}
-	// ConstructionAxisGrid field
-	parameter.ConstructionAxisGrid = nil
-	if parameterDB.ConstructionAxisGridID.Int64 != 0 {
-		parameter.ConstructionAxisGrid = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.ConstructionAxisGridID.Int64)]
+	
+	// ConstructionAxisGrid field	
+	{
+		id := parameterDB.ConstructionAxisGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.ConstructionAxisGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.ConstructionAxisGrid == nil || parameter.ConstructionAxisGrid != tmp {
+				parameter.ConstructionAxisGrid = tmp
+			}
+		} else {
+			parameter.ConstructionAxisGrid = nil
+		}
 	}
-	// ConstructionCircle field
-	parameter.ConstructionCircle = nil
-	if parameterDB.ConstructionCircleID.Int64 != 0 {
-		parameter.ConstructionCircle = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(parameterDB.ConstructionCircleID.Int64)]
+	
+	// ConstructionCircle field	
+	{
+		id := parameterDB.ConstructionCircleID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.ConstructionCircle, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.ConstructionCircle == nil || parameter.ConstructionCircle != tmp {
+				parameter.ConstructionCircle = tmp
+			}
+		} else {
+			parameter.ConstructionCircle = nil
+		}
 	}
-	// ConstructionCircleGrid field
-	parameter.ConstructionCircleGrid = nil
-	if parameterDB.ConstructionCircleGridID.Int64 != 0 {
-		parameter.ConstructionCircleGrid = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.ConstructionCircleGridID.Int64)]
+	
+	// ConstructionCircleGrid field	
+	{
+		id := parameterDB.ConstructionCircleGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.ConstructionCircleGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.ConstructionCircleGrid == nil || parameter.ConstructionCircleGrid != tmp {
+				parameter.ConstructionCircleGrid = tmp
+			}
+		} else {
+			parameter.ConstructionCircleGrid = nil
+		}
 	}
-	// GrowthCurveSeed field
-	parameter.GrowthCurveSeed = nil
-	if parameterDB.GrowthCurveSeedID.Int64 != 0 {
-		parameter.GrowthCurveSeed = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.GrowthCurveSeedID.Int64)]
+	
+	// GrowthCurveSeed field	
+	{
+		id := parameterDB.GrowthCurveSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowthCurveSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowthCurveSeed == nil || parameter.GrowthCurveSeed != tmp {
+				parameter.GrowthCurveSeed = tmp
+			}
+		} else {
+			parameter.GrowthCurveSeed = nil
+		}
 	}
-	// GrowthCurve field
-	parameter.GrowthCurve = nil
-	if parameterDB.GrowthCurveID.Int64 != 0 {
-		parameter.GrowthCurve = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.GrowthCurveID.Int64)]
+	
+	// GrowthCurve field	
+	{
+		id := parameterDB.GrowthCurveID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowthCurve, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowthCurve == nil || parameter.GrowthCurve != tmp {
+				parameter.GrowthCurve = tmp
+			}
+		} else {
+			parameter.GrowthCurve = nil
+		}
 	}
-	// GrowthCurveShiftedRightSeed field
-	parameter.GrowthCurveShiftedRightSeed = nil
-	if parameterDB.GrowthCurveShiftedRightSeedID.Int64 != 0 {
-		parameter.GrowthCurveShiftedRightSeed = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.GrowthCurveShiftedRightSeedID.Int64)]
+	
+	// GrowthCurveShiftedRightSeed field	
+	{
+		id := parameterDB.GrowthCurveShiftedRightSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowthCurveShiftedRightSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowthCurveShiftedRightSeed == nil || parameter.GrowthCurveShiftedRightSeed != tmp {
+				parameter.GrowthCurveShiftedRightSeed = tmp
+			}
+		} else {
+			parameter.GrowthCurveShiftedRightSeed = nil
+		}
 	}
-	// GrowthCurveShiftedRight field
-	parameter.GrowthCurveShiftedRight = nil
-	if parameterDB.GrowthCurveShiftedRightID.Int64 != 0 {
-		parameter.GrowthCurveShiftedRight = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.GrowthCurveShiftedRightID.Int64)]
+	
+	// GrowthCurveShiftedRight field	
+	{
+		id := parameterDB.GrowthCurveShiftedRightID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowthCurveShiftedRight, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowthCurveShiftedRight == nil || parameter.GrowthCurveShiftedRight != tmp {
+				parameter.GrowthCurveShiftedRight = tmp
+			}
+		} else {
+			parameter.GrowthCurveShiftedRight = nil
+		}
 	}
-	// GrowthCurveNextSeed field
-	parameter.GrowthCurveNextSeed = nil
-	if parameterDB.GrowthCurveNextSeedID.Int64 != 0 {
-		parameter.GrowthCurveNextSeed = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.GrowthCurveNextSeedID.Int64)]
+	
+	// GrowthCurveNextSeed field	
+	{
+		id := parameterDB.GrowthCurveNextSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowthCurveNextSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowthCurveNextSeed == nil || parameter.GrowthCurveNextSeed != tmp {
+				parameter.GrowthCurveNextSeed = tmp
+			}
+		} else {
+			parameter.GrowthCurveNextSeed = nil
+		}
 	}
-	// GrowthCurveNext field
-	parameter.GrowthCurveNext = nil
-	if parameterDB.GrowthCurveNextID.Int64 != 0 {
-		parameter.GrowthCurveNext = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.GrowthCurveNextID.Int64)]
+	
+	// GrowthCurveNext field	
+	{
+		id := parameterDB.GrowthCurveNextID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowthCurveNext, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowthCurveNext == nil || parameter.GrowthCurveNext != tmp {
+				parameter.GrowthCurveNext = tmp
+			}
+		} else {
+			parameter.GrowthCurveNext = nil
+		}
 	}
-	// GrowthCurveNextShiftedRightSeed field
-	parameter.GrowthCurveNextShiftedRightSeed = nil
-	if parameterDB.GrowthCurveNextShiftedRightSeedID.Int64 != 0 {
-		parameter.GrowthCurveNextShiftedRightSeed = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(parameterDB.GrowthCurveNextShiftedRightSeedID.Int64)]
+	
+	// GrowthCurveNextShiftedRightSeed field	
+	{
+		id := parameterDB.GrowthCurveNextShiftedRightSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowthCurveNextShiftedRightSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowthCurveNextShiftedRightSeed == nil || parameter.GrowthCurveNextShiftedRightSeed != tmp {
+				parameter.GrowthCurveNextShiftedRightSeed = tmp
+			}
+		} else {
+			parameter.GrowthCurveNextShiftedRightSeed = nil
+		}
 	}
-	// GrowthCurveNextShiftedRight field
-	parameter.GrowthCurveNextShiftedRight = nil
-	if parameterDB.GrowthCurveNextShiftedRightID.Int64 != 0 {
-		parameter.GrowthCurveNextShiftedRight = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.GrowthCurveNextShiftedRightID.Int64)]
+	
+	// GrowthCurveNextShiftedRight field	
+	{
+		id := parameterDB.GrowthCurveNextShiftedRightID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowthCurveNextShiftedRight, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowthCurveNextShiftedRight == nil || parameter.GrowthCurveNextShiftedRight != tmp {
+				parameter.GrowthCurveNextShiftedRight = tmp
+			}
+		} else {
+			parameter.GrowthCurveNextShiftedRight = nil
+		}
 	}
-	// GrowthCurveStack field
-	parameter.GrowthCurveStack = nil
-	if parameterDB.GrowthCurveStackID.Int64 != 0 {
-		parameter.GrowthCurveStack = backRepo.BackRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackPtr[uint(parameterDB.GrowthCurveStackID.Int64)]
+	
+	// GrowthCurveStack field	
+	{
+		id := parameterDB.GrowthCurveStackID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.GrowthCurveStack, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.GrowthCurveStack == nil || parameter.GrowthCurveStack != tmp {
+				parameter.GrowthCurveStack = tmp
+			}
+		} else {
+			parameter.GrowthCurveStack = nil
+		}
 	}
-	// SpiralRhombusGridSeed field
-	parameter.SpiralRhombusGridSeed = nil
-	if parameterDB.SpiralRhombusGridSeedID.Int64 != 0 {
-		parameter.SpiralRhombusGridSeed = backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusPtr[uint(parameterDB.SpiralRhombusGridSeedID.Int64)]
+	
+	// SpiralRhombusGridSeed field	
+	{
+		id := parameterDB.SpiralRhombusGridSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralRhombusGridSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralRhombusGridSeed == nil || parameter.SpiralRhombusGridSeed != tmp {
+				parameter.SpiralRhombusGridSeed = tmp
+			}
+		} else {
+			parameter.SpiralRhombusGridSeed = nil
+		}
 	}
-	// SpiralRhombusGrid field
-	parameter.SpiralRhombusGrid = nil
-	if parameterDB.SpiralRhombusGridID.Int64 != 0 {
-		parameter.SpiralRhombusGrid = backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr[uint(parameterDB.SpiralRhombusGridID.Int64)]
+	
+	// SpiralRhombusGrid field	
+	{
+		id := parameterDB.SpiralRhombusGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralRhombusGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralRhombusGrid == nil || parameter.SpiralRhombusGrid != tmp {
+				parameter.SpiralRhombusGrid = tmp
+			}
+		} else {
+			parameter.SpiralRhombusGrid = nil
+		}
 	}
-	// SpiralCircleSeed field
-	parameter.SpiralCircleSeed = nil
-	if parameterDB.SpiralCircleSeedID.Int64 != 0 {
-		parameter.SpiralCircleSeed = backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(parameterDB.SpiralCircleSeedID.Int64)]
+	
+	// SpiralCircleSeed field	
+	{
+		id := parameterDB.SpiralCircleSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralCircleSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralCircleSeed == nil || parameter.SpiralCircleSeed != tmp {
+				parameter.SpiralCircleSeed = tmp
+			}
+		} else {
+			parameter.SpiralCircleSeed = nil
+		}
 	}
-	// SpiralCircleGrid field
-	parameter.SpiralCircleGrid = nil
-	if parameterDB.SpiralCircleGridID.Int64 != 0 {
-		parameter.SpiralCircleGrid = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralCircleGridID.Int64)]
+	
+	// SpiralCircleGrid field	
+	{
+		id := parameterDB.SpiralCircleGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralCircleGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralCircleGrid == nil || parameter.SpiralCircleGrid != tmp {
+				parameter.SpiralCircleGrid = tmp
+			}
+		} else {
+			parameter.SpiralCircleGrid = nil
+		}
 	}
-	// SpiralCircleFullGrid field
-	parameter.SpiralCircleFullGrid = nil
-	if parameterDB.SpiralCircleFullGridID.Int64 != 0 {
-		parameter.SpiralCircleFullGrid = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralCircleFullGridID.Int64)]
+	
+	// SpiralCircleFullGrid field	
+	{
+		id := parameterDB.SpiralCircleFullGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralCircleFullGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralCircleFullGrid == nil || parameter.SpiralCircleFullGrid != tmp {
+				parameter.SpiralCircleFullGrid = tmp
+			}
+		} else {
+			parameter.SpiralCircleFullGrid = nil
+		}
 	}
-	// SpiralConstructionOuterLineSeed field
-	parameter.SpiralConstructionOuterLineSeed = nil
-	if parameterDB.SpiralConstructionOuterLineSeedID.Int64 != 0 {
-		parameter.SpiralConstructionOuterLineSeed = backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(parameterDB.SpiralConstructionOuterLineSeedID.Int64)]
+	
+	// SpiralConstructionOuterLineSeed field	
+	{
+		id := parameterDB.SpiralConstructionOuterLineSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralConstructionOuterLineSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralConstructionOuterLineSeed == nil || parameter.SpiralConstructionOuterLineSeed != tmp {
+				parameter.SpiralConstructionOuterLineSeed = tmp
+			}
+		} else {
+			parameter.SpiralConstructionOuterLineSeed = nil
+		}
 	}
-	// SpiralConstructionInnerLineSeed field
-	parameter.SpiralConstructionInnerLineSeed = nil
-	if parameterDB.SpiralConstructionInnerLineSeedID.Int64 != 0 {
-		parameter.SpiralConstructionInnerLineSeed = backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(parameterDB.SpiralConstructionInnerLineSeedID.Int64)]
+	
+	// SpiralConstructionInnerLineSeed field	
+	{
+		id := parameterDB.SpiralConstructionInnerLineSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralConstructionInnerLineSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralConstructionInnerLineSeed == nil || parameter.SpiralConstructionInnerLineSeed != tmp {
+				parameter.SpiralConstructionInnerLineSeed = tmp
+			}
+		} else {
+			parameter.SpiralConstructionInnerLineSeed = nil
+		}
 	}
-	// SpiralConstructionOuterLineGrid field
-	parameter.SpiralConstructionOuterLineGrid = nil
-	if parameterDB.SpiralConstructionOuterLineGridID.Int64 != 0 {
-		parameter.SpiralConstructionOuterLineGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionOuterLineGridID.Int64)]
+	
+	// SpiralConstructionOuterLineGrid field	
+	{
+		id := parameterDB.SpiralConstructionOuterLineGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralConstructionOuterLineGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralConstructionOuterLineGrid == nil || parameter.SpiralConstructionOuterLineGrid != tmp {
+				parameter.SpiralConstructionOuterLineGrid = tmp
+			}
+		} else {
+			parameter.SpiralConstructionOuterLineGrid = nil
+		}
 	}
-	// SpiralConstructionInnerLineGrid field
-	parameter.SpiralConstructionInnerLineGrid = nil
-	if parameterDB.SpiralConstructionInnerLineGridID.Int64 != 0 {
-		parameter.SpiralConstructionInnerLineGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionInnerLineGridID.Int64)]
+	
+	// SpiralConstructionInnerLineGrid field	
+	{
+		id := parameterDB.SpiralConstructionInnerLineGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralConstructionInnerLineGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralConstructionInnerLineGrid == nil || parameter.SpiralConstructionInnerLineGrid != tmp {
+				parameter.SpiralConstructionInnerLineGrid = tmp
+			}
+		} else {
+			parameter.SpiralConstructionInnerLineGrid = nil
+		}
 	}
-	// SpiralConstructionCircleGrid field
-	parameter.SpiralConstructionCircleGrid = nil
-	if parameterDB.SpiralConstructionCircleGridID.Int64 != 0 {
-		parameter.SpiralConstructionCircleGrid = backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(parameterDB.SpiralConstructionCircleGridID.Int64)]
+	
+	// SpiralConstructionCircleGrid field	
+	{
+		id := parameterDB.SpiralConstructionCircleGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralConstructionCircleGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralConstructionCircleGrid == nil || parameter.SpiralConstructionCircleGrid != tmp {
+				parameter.SpiralConstructionCircleGrid = tmp
+			}
+		} else {
+			parameter.SpiralConstructionCircleGrid = nil
+		}
 	}
-	// SpiralConstructionOuterLineFullGrid field
-	parameter.SpiralConstructionOuterLineFullGrid = nil
-	if parameterDB.SpiralConstructionOuterLineFullGridID.Int64 != 0 {
-		parameter.SpiralConstructionOuterLineFullGrid = backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(parameterDB.SpiralConstructionOuterLineFullGridID.Int64)]
+	
+	// SpiralConstructionOuterLineFullGrid field	
+	{
+		id := parameterDB.SpiralConstructionOuterLineFullGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralConstructionOuterLineFullGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralConstructionOuterLineFullGrid == nil || parameter.SpiralConstructionOuterLineFullGrid != tmp {
+				parameter.SpiralConstructionOuterLineFullGrid = tmp
+			}
+		} else {
+			parameter.SpiralConstructionOuterLineFullGrid = nil
+		}
 	}
-	// SpiralBezierSeed field
-	parameter.SpiralBezierSeed = nil
-	if parameterDB.SpiralBezierSeedID.Int64 != 0 {
-		parameter.SpiralBezierSeed = backRepo.BackRepoSpiralBezier.Map_SpiralBezierDBID_SpiralBezierPtr[uint(parameterDB.SpiralBezierSeedID.Int64)]
+	
+	// SpiralBezierSeed field	
+	{
+		id := parameterDB.SpiralBezierSeedID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralBezier.Map_SpiralBezierDBID_SpiralBezierPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralBezierSeed, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralBezierSeed == nil || parameter.SpiralBezierSeed != tmp {
+				parameter.SpiralBezierSeed = tmp
+			}
+		} else {
+			parameter.SpiralBezierSeed = nil
+		}
 	}
-	// SpiralBezierGrid field
-	parameter.SpiralBezierGrid = nil
-	if parameterDB.SpiralBezierGridID.Int64 != 0 {
-		parameter.SpiralBezierGrid = backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(parameterDB.SpiralBezierGridID.Int64)]
+	
+	// SpiralBezierGrid field	
+	{
+		id := parameterDB.SpiralBezierGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralBezierGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralBezierGrid == nil || parameter.SpiralBezierGrid != tmp {
+				parameter.SpiralBezierGrid = tmp
+			}
+		} else {
+			parameter.SpiralBezierGrid = nil
+		}
 	}
-	// SpiralBezierFullGrid field
-	parameter.SpiralBezierFullGrid = nil
-	if parameterDB.SpiralBezierFullGridID.Int64 != 0 {
-		parameter.SpiralBezierFullGrid = backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(parameterDB.SpiralBezierFullGridID.Int64)]
+	
+	// SpiralBezierFullGrid field	
+	{
+		id := parameterDB.SpiralBezierFullGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralBezierFullGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralBezierFullGrid == nil || parameter.SpiralBezierFullGrid != tmp {
+				parameter.SpiralBezierFullGrid = tmp
+			}
+		} else {
+			parameter.SpiralBezierFullGrid = nil
+		}
 	}
-	// FrontCurveStack field
-	parameter.FrontCurveStack = nil
-	if parameterDB.FrontCurveStackID.Int64 != 0 {
-		parameter.FrontCurveStack = backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(parameterDB.FrontCurveStackID.Int64)]
+	
+	// FrontCurveStack field	
+	{
+		id := parameterDB.FrontCurveStackID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.FrontCurveStack, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.FrontCurveStack == nil || parameter.FrontCurveStack != tmp {
+				parameter.FrontCurveStack = tmp
+			}
+		} else {
+			parameter.FrontCurveStack = nil
+		}
 	}
-	// Fkey field
-	parameter.Fkey = nil
-	if parameterDB.FkeyID.Int64 != 0 {
-		parameter.Fkey = backRepo.BackRepoKey.Map_KeyDBID_KeyPtr[uint(parameterDB.FkeyID.Int64)]
+	
+	// Fkey field	
+	{
+		id := parameterDB.FkeyID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoKey.Map_KeyDBID_KeyPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.Fkey, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.Fkey == nil || parameter.Fkey != tmp {
+				parameter.Fkey = tmp
+			}
+		} else {
+			parameter.Fkey = nil
+		}
 	}
-	// PitchLines field
-	parameter.PitchLines = nil
-	if parameterDB.PitchLinesID.Int64 != 0 {
-		parameter.PitchLines = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.PitchLinesID.Int64)]
+	
+	// PitchLines field	
+	{
+		id := parameterDB.PitchLinesID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.PitchLines, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.PitchLines == nil || parameter.PitchLines != tmp {
+				parameter.PitchLines = tmp
+			}
+		} else {
+			parameter.PitchLines = nil
+		}
 	}
-	// BeatLines field
-	parameter.BeatLines = nil
-	if parameterDB.BeatLinesID.Int64 != 0 {
-		parameter.BeatLines = backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(parameterDB.BeatLinesID.Int64)]
+	
+	// BeatLines field	
+	{
+		id := parameterDB.BeatLinesID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.BeatLines, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.BeatLines == nil || parameter.BeatLines != tmp {
+				parameter.BeatLines = tmp
+			}
+		} else {
+			parameter.BeatLines = nil
+		}
 	}
-	// FirstVoice field
-	parameter.FirstVoice = nil
-	if parameterDB.FirstVoiceID.Int64 != 0 {
-		parameter.FirstVoice = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.FirstVoiceID.Int64)]
+	
+	// FirstVoice field	
+	{
+		id := parameterDB.FirstVoiceID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.FirstVoice, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.FirstVoice == nil || parameter.FirstVoice != tmp {
+				parameter.FirstVoice = tmp
+			}
+		} else {
+			parameter.FirstVoice = nil
+		}
 	}
-	// FirstVoiceShiftRigth field
-	parameter.FirstVoiceShiftRigth = nil
-	if parameterDB.FirstVoiceShiftRigthID.Int64 != 0 {
-		parameter.FirstVoiceShiftRigth = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.FirstVoiceShiftRigthID.Int64)]
+	
+	// FirstVoiceShiftRigth field	
+	{
+		id := parameterDB.FirstVoiceShiftRigthID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.FirstVoiceShiftRigth, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.FirstVoiceShiftRigth == nil || parameter.FirstVoiceShiftRigth != tmp {
+				parameter.FirstVoiceShiftRigth = tmp
+			}
+		} else {
+			parameter.FirstVoiceShiftRigth = nil
+		}
 	}
-	// SecondVoice field
-	parameter.SecondVoice = nil
-	if parameterDB.SecondVoiceID.Int64 != 0 {
-		parameter.SecondVoice = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.SecondVoiceID.Int64)]
+	
+	// SecondVoice field	
+	{
+		id := parameterDB.SecondVoiceID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SecondVoice, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SecondVoice == nil || parameter.SecondVoice != tmp {
+				parameter.SecondVoice = tmp
+			}
+		} else {
+			parameter.SecondVoice = nil
+		}
 	}
-	// SecondVoiceShiftedRight field
-	parameter.SecondVoiceShiftedRight = nil
-	if parameterDB.SecondVoiceShiftedRightID.Int64 != 0 {
-		parameter.SecondVoiceShiftedRight = backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(parameterDB.SecondVoiceShiftedRightID.Int64)]
+	
+	// SecondVoiceShiftedRight field	
+	{
+		id := parameterDB.SecondVoiceShiftedRightID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SecondVoiceShiftedRight, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SecondVoiceShiftedRight == nil || parameter.SecondVoiceShiftedRight != tmp {
+				parameter.SecondVoiceShiftedRight = tmp
+			}
+		} else {
+			parameter.SecondVoiceShiftedRight = nil
+		}
 	}
-	// FirstVoiceNotes field
-	parameter.FirstVoiceNotes = nil
-	if parameterDB.FirstVoiceNotesID.Int64 != 0 {
-		parameter.FirstVoiceNotes = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.FirstVoiceNotesID.Int64)]
+	
+	// FirstVoiceNotes field	
+	{
+		id := parameterDB.FirstVoiceNotesID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.FirstVoiceNotes, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.FirstVoiceNotes == nil || parameter.FirstVoiceNotes != tmp {
+				parameter.FirstVoiceNotes = tmp
+			}
+		} else {
+			parameter.FirstVoiceNotes = nil
+		}
 	}
-	// FirstVoiceNotesShiftedRight field
-	parameter.FirstVoiceNotesShiftedRight = nil
-	if parameterDB.FirstVoiceNotesShiftedRightID.Int64 != 0 {
-		parameter.FirstVoiceNotesShiftedRight = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.FirstVoiceNotesShiftedRightID.Int64)]
+	
+	// FirstVoiceNotesShiftedRight field	
+	{
+		id := parameterDB.FirstVoiceNotesShiftedRightID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.FirstVoiceNotesShiftedRight, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.FirstVoiceNotesShiftedRight == nil || parameter.FirstVoiceNotesShiftedRight != tmp {
+				parameter.FirstVoiceNotesShiftedRight = tmp
+			}
+		} else {
+			parameter.FirstVoiceNotesShiftedRight = nil
+		}
 	}
-	// SecondVoiceNotes field
-	parameter.SecondVoiceNotes = nil
-	if parameterDB.SecondVoiceNotesID.Int64 != 0 {
-		parameter.SecondVoiceNotes = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.SecondVoiceNotesID.Int64)]
+	
+	// SecondVoiceNotes field	
+	{
+		id := parameterDB.SecondVoiceNotesID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SecondVoiceNotes, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SecondVoiceNotes == nil || parameter.SecondVoiceNotes != tmp {
+				parameter.SecondVoiceNotes = tmp
+			}
+		} else {
+			parameter.SecondVoiceNotes = nil
+		}
 	}
-	// SecondVoiceNotesShiftedRight field
-	parameter.SecondVoiceNotesShiftedRight = nil
-	if parameterDB.SecondVoiceNotesShiftedRightID.Int64 != 0 {
-		parameter.SecondVoiceNotesShiftedRight = backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(parameterDB.SecondVoiceNotesShiftedRightID.Int64)]
+	
+	// SecondVoiceNotesShiftedRight field	
+	{
+		id := parameterDB.SecondVoiceNotesShiftedRightID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SecondVoiceNotesShiftedRight, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SecondVoiceNotesShiftedRight == nil || parameter.SecondVoiceNotesShiftedRight != tmp {
+				parameter.SecondVoiceNotesShiftedRight = tmp
+			}
+		} else {
+			parameter.SecondVoiceNotesShiftedRight = nil
+		}
 	}
+	
 	// This loop redeem parameter.NoteInfos in the stage from the encode in the back repo
 	// It parses all NoteInfoDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance
@@ -1811,21 +2595,63 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		parameter.NoteInfos = append(parameter.NoteInfos, backRepo.BackRepoNoteInfo.Map_NoteInfoDBID_NoteInfoPtr[uint(_NoteInfoid)])
 	}
 
-	// HorizontalAxis field
-	parameter.HorizontalAxis = nil
-	if parameterDB.HorizontalAxisID.Int64 != 0 {
-		parameter.HorizontalAxis = backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisPtr[uint(parameterDB.HorizontalAxisID.Int64)]
+	// HorizontalAxis field	
+	{
+		id := parameterDB.HorizontalAxisID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.HorizontalAxis, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.HorizontalAxis == nil || parameter.HorizontalAxis != tmp {
+				parameter.HorizontalAxis = tmp
+			}
+		} else {
+			parameter.HorizontalAxis = nil
+		}
 	}
-	// VerticalAxis field
-	parameter.VerticalAxis = nil
-	if parameterDB.VerticalAxisID.Int64 != 0 {
-		parameter.VerticalAxis = backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisPtr[uint(parameterDB.VerticalAxisID.Int64)]
+	
+	// VerticalAxis field	
+	{
+		id := parameterDB.VerticalAxisID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.VerticalAxis, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.VerticalAxis == nil || parameter.VerticalAxis != tmp {
+				parameter.VerticalAxis = tmp
+			}
+		} else {
+			parameter.VerticalAxis = nil
+		}
 	}
-	// SpiralOrigin field
-	parameter.SpiralOrigin = nil
-	if parameterDB.SpiralOriginID.Int64 != 0 {
-		parameter.SpiralOrigin = backRepo.BackRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginPtr[uint(parameterDB.SpiralOriginID.Int64)]
+	
+	// SpiralOrigin field	
+	{
+		id := parameterDB.SpiralOriginID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.SpiralOrigin, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.SpiralOrigin == nil || parameter.SpiralOrigin != tmp {
+				parameter.SpiralOrigin = tmp
+			}
+		} else {
+			parameter.SpiralOrigin = nil
+		}
 	}
+	
 	return
 }
 

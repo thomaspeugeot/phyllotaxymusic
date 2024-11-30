@@ -102,7 +102,7 @@ export class GongtonetestComponent {
         A4: "A4.mp3",
       },
       release: 1,
-      baseUrl: "https://tonejs.github.io/audio/salamander/",
+      baseUrl: "assets/audio/salamander/",
     }).toDestination();
 
     Tone.loaded().then(() => {

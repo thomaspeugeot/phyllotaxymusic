@@ -386,16 +386,44 @@ func (backRepoCircleGrid *BackRepoCircleGridStruct) CheckoutPhaseTwoInstance(bac
 func (circlegridDB *CircleGridDB) DecodePointers(backRepo *BackRepoStruct, circlegrid *models.CircleGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// Reference field
-	circlegrid.Reference = nil
-	if circlegridDB.ReferenceID.Int64 != 0 {
-		circlegrid.Reference = backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(circlegridDB.ReferenceID.Int64)]
+	// Reference field	
+	{
+		id := circlegridDB.ReferenceID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: circlegrid.Reference, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if circlegrid.Reference == nil || circlegrid.Reference != tmp {
+				circlegrid.Reference = tmp
+			}
+		} else {
+			circlegrid.Reference = nil
+		}
 	}
-	// ShapeCategory field
-	circlegrid.ShapeCategory = nil
-	if circlegridDB.ShapeCategoryID.Int64 != 0 {
-		circlegrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(circlegridDB.ShapeCategoryID.Int64)]
+	
+	// ShapeCategory field	
+	{
+		id := circlegridDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: circlegrid.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if circlegrid.ShapeCategory == nil || circlegrid.ShapeCategory != tmp {
+				circlegrid.ShapeCategory = tmp
+			}
+		} else {
+			circlegrid.ShapeCategory = nil
+		}
 	}
+	
 	// This loop redeem circlegrid.Circles in the stage from the encode in the back repo
 	// It parses all CircleDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

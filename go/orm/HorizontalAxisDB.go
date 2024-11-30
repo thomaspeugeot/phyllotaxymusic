@@ -409,11 +409,25 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CheckoutPhaseTwoInst
 func (horizontalaxisDB *HorizontalAxisDB) DecodePointers(backRepo *BackRepoStruct, horizontalaxis *models.HorizontalAxis) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	horizontalaxis.ShapeCategory = nil
-	if horizontalaxisDB.ShapeCategoryID.Int64 != 0 {
-		horizontalaxis.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(horizontalaxisDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := horizontalaxisDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: horizontalaxis.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if horizontalaxis.ShapeCategory == nil || horizontalaxis.ShapeCategory != tmp {
+				horizontalaxis.ShapeCategory = tmp
+			}
+		} else {
+			horizontalaxis.ShapeCategory = nil
+		}
 	}
+	
 	return
 }
 

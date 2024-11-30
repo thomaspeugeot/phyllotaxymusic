@@ -370,11 +370,25 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CheckoutPhaseT
 func (spiralrhombusgridDB *SpiralRhombusGridDB) DecodePointers(backRepo *BackRepoStruct, spiralrhombusgrid *models.SpiralRhombusGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	spiralrhombusgrid.ShapeCategory = nil
-	if spiralrhombusgridDB.ShapeCategoryID.Int64 != 0 {
-		spiralrhombusgrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(spiralrhombusgridDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := spiralrhombusgridDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: spiralrhombusgrid.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if spiralrhombusgrid.ShapeCategory == nil || spiralrhombusgrid.ShapeCategory != tmp {
+				spiralrhombusgrid.ShapeCategory = tmp
+			}
+		} else {
+			spiralrhombusgrid.ShapeCategory = nil
+		}
 	}
+	
 	// This loop redeem spiralrhombusgrid.SpiralRhombuses in the stage from the encode in the back repo
 	// It parses all SpiralRhombusDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

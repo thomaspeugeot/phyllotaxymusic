@@ -386,16 +386,44 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CheckoutPhaseTwoInstance(b
 func (rhombusgridDB *RhombusGridDB) DecodePointers(backRepo *BackRepoStruct, rhombusgrid *models.RhombusGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// Reference field
-	rhombusgrid.Reference = nil
-	if rhombusgridDB.ReferenceID.Int64 != 0 {
-		rhombusgrid.Reference = backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(rhombusgridDB.ReferenceID.Int64)]
+	// Reference field	
+	{
+		id := rhombusgridDB.ReferenceID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: rhombusgrid.Reference, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if rhombusgrid.Reference == nil || rhombusgrid.Reference != tmp {
+				rhombusgrid.Reference = tmp
+			}
+		} else {
+			rhombusgrid.Reference = nil
+		}
 	}
-	// ShapeCategory field
-	rhombusgrid.ShapeCategory = nil
-	if rhombusgridDB.ShapeCategoryID.Int64 != 0 {
-		rhombusgrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(rhombusgridDB.ShapeCategoryID.Int64)]
+	
+	// ShapeCategory field	
+	{
+		id := rhombusgridDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: rhombusgrid.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if rhombusgrid.ShapeCategory == nil || rhombusgrid.ShapeCategory != tmp {
+				rhombusgrid.ShapeCategory = tmp
+			}
+		} else {
+			rhombusgrid.ShapeCategory = nil
+		}
 	}
+	
 	// This loop redeem rhombusgrid.Rhombuses in the stage from the encode in the back repo
 	// It parses all RhombusDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

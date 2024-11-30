@@ -445,11 +445,25 @@ func (backRepoBezier *BackRepoBezierStruct) CheckoutPhaseTwoInstance(backRepo *B
 func (bezierDB *BezierDB) DecodePointers(backRepo *BackRepoStruct, bezier *models.Bezier) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	bezier.ShapeCategory = nil
-	if bezierDB.ShapeCategoryID.Int64 != 0 {
-		bezier.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(bezierDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := bezierDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: bezier.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if bezier.ShapeCategory == nil || bezier.ShapeCategory != tmp {
+				bezier.ShapeCategory = tmp
+			}
+		} else {
+			bezier.ShapeCategory = nil
+		}
 	}
+	
 	return
 }
 

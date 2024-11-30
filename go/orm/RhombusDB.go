@@ -427,11 +427,25 @@ func (backRepoRhombus *BackRepoRhombusStruct) CheckoutPhaseTwoInstance(backRepo 
 func (rhombusDB *RhombusDB) DecodePointers(backRepo *BackRepoStruct, rhombus *models.Rhombus) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	rhombus.ShapeCategory = nil
-	if rhombusDB.ShapeCategoryID.Int64 != 0 {
-		rhombus.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(rhombusDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := rhombusDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: rhombus.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if rhombus.ShapeCategory == nil || rhombus.ShapeCategory != tmp {
+				rhombus.ShapeCategory = tmp
+			}
+		} else {
+			rhombus.ShapeCategory = nil
+		}
 	}
+	
 	return
 }
 

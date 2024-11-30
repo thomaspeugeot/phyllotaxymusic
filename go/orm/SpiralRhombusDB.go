@@ -445,11 +445,25 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CheckoutPhaseTwoInstan
 func (spiralrhombusDB *SpiralRhombusDB) DecodePointers(backRepo *BackRepoStruct, spiralrhombus *models.SpiralRhombus) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	spiralrhombus.ShapeCategory = nil
-	if spiralrhombusDB.ShapeCategoryID.Int64 != 0 {
-		spiralrhombus.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(spiralrhombusDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := spiralrhombusDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: spiralrhombus.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if spiralrhombus.ShapeCategory == nil || spiralrhombus.ShapeCategory != tmp {
+				spiralrhombus.ShapeCategory = tmp
+			}
+		} else {
+			spiralrhombus.ShapeCategory = nil
+		}
 	}
+	
 	return
 }
 

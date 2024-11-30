@@ -386,16 +386,44 @@ func (backRepoSpiralCircleGrid *BackRepoSpiralCircleGridStruct) CheckoutPhaseTwo
 func (spiralcirclegridDB *SpiralCircleGridDB) DecodePointers(backRepo *BackRepoStruct, spiralcirclegrid *models.SpiralCircleGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	spiralcirclegrid.ShapeCategory = nil
-	if spiralcirclegridDB.ShapeCategoryID.Int64 != 0 {
-		spiralcirclegrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(spiralcirclegridDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := spiralcirclegridDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: spiralcirclegrid.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if spiralcirclegrid.ShapeCategory == nil || spiralcirclegrid.ShapeCategory != tmp {
+				spiralcirclegrid.ShapeCategory = tmp
+			}
+		} else {
+			spiralcirclegrid.ShapeCategory = nil
+		}
 	}
-	// SpiralRhombusGrid field
-	spiralcirclegrid.SpiralRhombusGrid = nil
-	if spiralcirclegridDB.SpiralRhombusGridID.Int64 != 0 {
-		spiralcirclegrid.SpiralRhombusGrid = backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr[uint(spiralcirclegridDB.SpiralRhombusGridID.Int64)]
+	
+	// SpiralRhombusGrid field	
+	{
+		id := spiralcirclegridDB.SpiralRhombusGridID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: spiralcirclegrid.SpiralRhombusGrid, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if spiralcirclegrid.SpiralRhombusGrid == nil || spiralcirclegrid.SpiralRhombusGrid != tmp {
+				spiralcirclegrid.SpiralRhombusGrid = tmp
+			}
+		} else {
+			spiralcirclegrid.SpiralRhombusGrid = nil
+		}
 	}
+	
 	// This loop redeem spiralcirclegrid.SpiralCircles in the stage from the encode in the back repo
 	// It parses all SpiralCircleDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

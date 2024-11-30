@@ -370,11 +370,25 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CheckoutPhaseTwoInst
 func (spirallinegridDB *SpiralLineGridDB) DecodePointers(backRepo *BackRepoStruct, spirallinegrid *models.SpiralLineGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	spirallinegrid.ShapeCategory = nil
-	if spirallinegridDB.ShapeCategoryID.Int64 != 0 {
-		spirallinegrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(spirallinegridDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := spirallinegridDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: spirallinegrid.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if spirallinegrid.ShapeCategory == nil || spirallinegrid.ShapeCategory != tmp {
+				spirallinegrid.ShapeCategory = tmp
+			}
+		} else {
+			spirallinegrid.ShapeCategory = nil
+		}
 	}
+	
 	// This loop redeem spirallinegrid.SpiralLines in the stage from the encode in the back repo
 	// It parses all SpiralLineDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

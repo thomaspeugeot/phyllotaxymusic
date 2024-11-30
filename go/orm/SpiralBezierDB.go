@@ -445,11 +445,25 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CheckoutPhaseTwoInstance
 func (spiralbezierDB *SpiralBezierDB) DecodePointers(backRepo *BackRepoStruct, spiralbezier *models.SpiralBezier) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	spiralbezier.ShapeCategory = nil
-	if spiralbezierDB.ShapeCategoryID.Int64 != 0 {
-		spiralbezier.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(spiralbezierDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := spiralbezierDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: spiralbezier.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if spiralbezier.ShapeCategory == nil || spiralbezier.ShapeCategory != tmp {
+				spiralbezier.ShapeCategory = tmp
+			}
+		} else {
+			spiralbezier.ShapeCategory = nil
+		}
 	}
+	
 	return
 }
 

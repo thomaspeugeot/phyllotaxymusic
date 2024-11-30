@@ -370,11 +370,25 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CheckoutPhaseTwo
 func (spiralbeziergridDB *SpiralBezierGridDB) DecodePointers(backRepo *BackRepoStruct, spiralbeziergrid *models.SpiralBezierGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	spiralbeziergrid.ShapeCategory = nil
-	if spiralbeziergridDB.ShapeCategoryID.Int64 != 0 {
-		spiralbeziergrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(spiralbeziergridDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := spiralbeziergridDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: spiralbeziergrid.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if spiralbeziergrid.ShapeCategory == nil || spiralbeziergrid.ShapeCategory != tmp {
+				spiralbeziergrid.ShapeCategory = tmp
+			}
+		} else {
+			spiralbeziergrid.ShapeCategory = nil
+		}
 	}
+	
 	// This loop redeem spiralbeziergrid.SpiralBeziers in the stage from the encode in the back repo
 	// It parses all SpiralBezierDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

@@ -2,6 +2,8 @@
 
 ![Phylotaxy music](image.png)
 
+ONLY WORKS WITH EDGE (bug !)
+
 ## Compiling & running the application
 
 git, go version => 1.23 and npm version >= 18 are needed

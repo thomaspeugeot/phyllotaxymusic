@@ -409,11 +409,25 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CheckoutPhaseTwoInstance
 func (verticalaxisDB *VerticalAxisDB) DecodePointers(backRepo *BackRepoStruct, verticalaxis *models.VerticalAxis) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	verticalaxis.ShapeCategory = nil
-	if verticalaxisDB.ShapeCategoryID.Int64 != 0 {
-		verticalaxis.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(verticalaxisDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := verticalaxisDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: verticalaxis.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if verticalaxis.ShapeCategory == nil || verticalaxis.ShapeCategory != tmp {
+				verticalaxis.ShapeCategory = tmp
+			}
+		} else {
+			verticalaxis.ShapeCategory = nil
+		}
 	}
+	
 	return
 }
 

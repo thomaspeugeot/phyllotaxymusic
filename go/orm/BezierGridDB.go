@@ -386,16 +386,44 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) CheckoutPhaseTwoInstance(bac
 func (beziergridDB *BezierGridDB) DecodePointers(backRepo *BackRepoStruct, beziergrid *models.BezierGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// Reference field
-	beziergrid.Reference = nil
-	if beziergridDB.ReferenceID.Int64 != 0 {
-		beziergrid.Reference = backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(beziergridDB.ReferenceID.Int64)]
+	// Reference field	
+	{
+		id := beziergridDB.ReferenceID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: beziergrid.Reference, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if beziergrid.Reference == nil || beziergrid.Reference != tmp {
+				beziergrid.Reference = tmp
+			}
+		} else {
+			beziergrid.Reference = nil
+		}
 	}
-	// ShapeCategory field
-	beziergrid.ShapeCategory = nil
-	if beziergridDB.ShapeCategoryID.Int64 != 0 {
-		beziergrid.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(beziergridDB.ShapeCategoryID.Int64)]
+	
+	// ShapeCategory field	
+	{
+		id := beziergridDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: beziergrid.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if beziergrid.ShapeCategory == nil || beziergrid.ShapeCategory != tmp {
+				beziergrid.ShapeCategory = tmp
+			}
+		} else {
+			beziergrid.ShapeCategory = nil
+		}
 	}
+	
 	// This loop redeem beziergrid.Beziers in the stage from the encode in the back repo
 	// It parses all BezierDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

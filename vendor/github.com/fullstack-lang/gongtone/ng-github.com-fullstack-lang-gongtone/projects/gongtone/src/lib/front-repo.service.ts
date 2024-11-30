@@ -270,9 +270,11 @@ export class FrontRepoService {
 
 		return new Observable(observer => {
 			this.socket!.onmessage = event => {
-				let _this = this
+
 
 				const backRepoData = new BackRepoData(JSON.parse(event.data))
+
+				let frontRepo = new (FrontRepo)
 
 				// 
 				// First Step: init map of instances
@@ -280,26 +282,26 @@ export class FrontRepoService {
 				// init the arrays
 				// insertion point sub template for init 
 				// init the arrays
-				this.frontRepo.array_Freqencys = []
-				this.frontRepo.map_ID_Freqency.clear()
+				frontRepo.array_Freqencys = []
+				frontRepo.map_ID_Freqency.clear()
 
 				backRepoData.FreqencyAPIs.forEach(
 					freqencyAPI => {
 						let freqency = new Freqency
-						this.frontRepo.array_Freqencys.push(freqency)
-						this.frontRepo.map_ID_Freqency.set(freqencyAPI.ID, freqency)
+						frontRepo.array_Freqencys.push(freqency)
+						frontRepo.map_ID_Freqency.set(freqencyAPI.ID, freqency)
 					}
 				)
 
 				// init the arrays
-				this.frontRepo.array_Notes = []
-				this.frontRepo.map_ID_Note.clear()
+				frontRepo.array_Notes = []
+				frontRepo.map_ID_Note.clear()
 
 				backRepoData.NoteAPIs.forEach(
 					noteAPI => {
 						let note = new Note
-						this.frontRepo.array_Notes.push(note)
-						this.frontRepo.map_ID_Note.set(noteAPI.ID, note)
+						frontRepo.array_Notes.push(note)
+						frontRepo.map_ID_Note.set(noteAPI.ID, note)
 					}
 				)
 
@@ -312,22 +314,22 @@ export class FrontRepoService {
 				// fill up front objects
 				backRepoData.FreqencyAPIs.forEach(
 					freqencyAPI => {
-						let freqency = this.frontRepo.map_ID_Freqency.get(freqencyAPI.ID)
-						CopyFreqencyAPIToFreqency(freqencyAPI, freqency!, this.frontRepo)
+						let freqency = frontRepo.map_ID_Freqency.get(freqencyAPI.ID)
+						CopyFreqencyAPIToFreqency(freqencyAPI, freqency!, frontRepo)
 					}
 				)
 
 				// fill up front objects
 				backRepoData.NoteAPIs.forEach(
 					noteAPI => {
-						let note = this.frontRepo.map_ID_Note.get(noteAPI.ID)
-						CopyNoteAPIToNote(noteAPI, note!, this.frontRepo)
+						let note = frontRepo.map_ID_Note.get(noteAPI.ID)
+						CopyNoteAPIToNote(noteAPI, note!, frontRepo)
 					}
 				)
 
 
 
-				observer.next(this.frontRepo)
+				observer.next(frontRepo)
 			}
 			this.socket!.onerror = event => {
 				observer.error(event)

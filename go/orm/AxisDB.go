@@ -433,11 +433,25 @@ func (backRepoAxis *BackRepoAxisStruct) CheckoutPhaseTwoInstance(backRepo *BackR
 func (axisDB *AxisDB) DecodePointers(backRepo *BackRepoStruct, axis *models.Axis) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
-	axis.ShapeCategory = nil
-	if axisDB.ShapeCategoryID.Int64 != 0 {
-		axis.ShapeCategory = backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(axisDB.ShapeCategoryID.Int64)]
+	// ShapeCategory field	
+	{
+		id := axisDB.ShapeCategoryID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: axis.ShapeCategory, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if axis.ShapeCategory == nil || axis.ShapeCategory != tmp {
+				axis.ShapeCategory = tmp
+			}
+		} else {
+			axis.ShapeCategory = nil
+		}
 	}
+	
 	return
 }
 
