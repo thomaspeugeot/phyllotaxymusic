@@ -657,7 +657,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Z = 16
 	__Parameter__000000_Reference.ShiftToNearestCircle = 3
 	__Parameter__000000_Reference.InsideAngle = 112.000000
-	__Parameter__000000_Reference.SideLength = 180.000000
+	__Parameter__000000_Reference.SideLength = 189.000000
 	__Parameter__000000_Reference.StackWidth = 1
 	__Parameter__000000_Reference.NbShitRight = 2
 	__Parameter__000000_Reference.StackHeight = 8
@@ -667,7 +667,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
-	__Parameter__000000_Reference.PitchHeight = 0.040000
+	__Parameter__000000_Reference.PitchHeight = 0.088000
 	__Parameter__000000_Reference.NbPitchLines = 169
 	__Parameter__000000_Reference.BeatLinesHeightRatio = 0.170000
 	__Parameter__000000_Reference.NbBeatLines = 300
