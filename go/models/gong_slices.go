@@ -180,6 +180,9 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 	case *Key:
 		// insertion point per field
 
+	case *MovingLine:
+		// insertion point per field
+
 	case *NoteInfo:
 		// insertion point per field
 
@@ -427,6 +430,9 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	// insertion point per field
 
 	// Compute reverse map for named struct Key
+	// insertion point per field
+
+	// Compute reverse map for named struct MovingLine
 	// insertion point per field
 
 	// Compute reverse map for named struct NoteInfo

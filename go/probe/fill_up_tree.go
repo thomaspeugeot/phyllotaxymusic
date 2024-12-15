@@ -172,6 +172,16 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "MovingLine":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.MovingLine](probe.stageOfInterest)
+			for _movingline := range set {
+				nodeInstance := (&tree.Node{Name: _movingline.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_movingline, "MovingLine", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "NoteInfo":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.NoteInfo](probe.stageOfInterest)

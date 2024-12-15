@@ -57,6 +57,10 @@ export * from './lib/key-api'
 export * from './lib/key'
 export * from './lib/key.service'
 
+export * from './lib/movingline-api'
+export * from './lib/movingline'
+export * from './lib/movingline.service'
+
 export * from './lib/noteinfo-api'
 export * from './lib/noteinfo'
 export * from './lib/noteinfo.service'

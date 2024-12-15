@@ -286,6 +286,10 @@ type ParameterPointersEncoding struct {
 	// field SpiralOrigin is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	SpiralOriginID sql.NullInt64
+
+	// field Cursor is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	CursorID sql.NullInt64
 }
 
 // ParameterDB describes a parameter in the database
@@ -1407,6 +1411,18 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		} else {
 			parameterDB.SpiralOriginID.Int64 = 0
 			parameterDB.SpiralOriginID.Valid = true
+		}
+
+		// commit pointer value parameter.Cursor translates to updating the parameter.CursorID
+		parameterDB.CursorID.Valid = true // allow for a 0 value (nil association)
+		if parameter.Cursor != nil {
+			if CursorId, ok := backRepo.BackRepoMovingLine.Map_MovingLinePtr_MovingLineDBID[parameter.Cursor]; ok {
+				parameterDB.CursorID.Int64 = int64(CursorId)
+				parameterDB.CursorID.Valid = true
+			}
+		} else {
+			parameterDB.CursorID.Int64 = 0
+			parameterDB.CursorID.Valid = true
 		}
 
 		_, err := backRepoParameter.db.Save(parameterDB)
@@ -2652,6 +2668,25 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		}
 	}
 	
+	// Cursor field	
+	{
+		id := parameterDB.CursorID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoMovingLine.Map_MovingLineDBID_MovingLinePtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: parameter.Cursor, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if parameter.Cursor == nil || parameter.Cursor != tmp {
+				parameter.Cursor = tmp
+			}
+		} else {
+			parameter.Cursor = nil
+		}
+	}
+	
 	return
 }
 
@@ -3688,6 +3723,12 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.SpiralOriginID.Int64 != 0 {
 			parameterDB.SpiralOriginID.Int64 = int64(BackRepoSpiralOriginid_atBckpTime_newID[uint(parameterDB.SpiralOriginID.Int64)])
 			parameterDB.SpiralOriginID.Valid = true
+		}
+
+		// reindexing Cursor field
+		if parameterDB.CursorID.Int64 != 0 {
+			parameterDB.CursorID.Int64 = int64(BackRepoMovingLineid_atBckpTime_newID[uint(parameterDB.CursorID.Int64)])
+			parameterDB.CursorID.Valid = true
 		}
 
 		// update databse with new index encoding

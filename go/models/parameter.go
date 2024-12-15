@@ -175,6 +175,9 @@ type Parameter struct {
 
 	// number of "minimal" notes to the shift
 	ActualBeatsTemporalShift int
+
+	// cursor vertical line
+	Cursor *MovingLine
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {

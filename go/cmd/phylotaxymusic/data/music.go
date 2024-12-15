@@ -84,6 +84,8 @@ func _(stage *models.StageStruct) {
 
 	__Key__000000_F_key := (&models.Key{}).Stage(stage)
 
+	__MovingLine__000000_Cursor := (&models.MovingLine{}).Stage(stage)
+
 	__NoteInfo__000000_0 := (&models.NoteInfo{}).Stage(stage)
 	__NoteInfo__000001_1 := (&models.NoteInfo{}).Stage(stage)
 	__NoteInfo__000002_10 := (&models.NoteInfo{}).Stage(stage)
@@ -582,6 +584,21 @@ func _(stage *models.StageStruct) {
 	__Key__000000_F_key.StrokeDashArrayWhenSelected = ``
 	__Key__000000_F_key.Transform = `scale(0.2,-0.2)`
 
+	__MovingLine__000000_Cursor.Name = `Cursor`
+	__MovingLine__000000_Cursor.IsDisplayed = true
+	__MovingLine__000000_Cursor.AngleDegree = 0.000000
+	__MovingLine__000000_Cursor.Length = 100.000000
+	__MovingLine__000000_Cursor.CenterX = 0.000000
+	__MovingLine__000000_Cursor.CenterY = 0.000000
+	__MovingLine__000000_Cursor.Color = ``
+	__MovingLine__000000_Cursor.FillOpacity = 0.000000
+	__MovingLine__000000_Cursor.Stroke = `black`
+	__MovingLine__000000_Cursor.StrokeOpacity = 0.700000
+	__MovingLine__000000_Cursor.StrokeWidth = 0.000000
+	__MovingLine__000000_Cursor.StrokeDashArray = ``
+	__MovingLine__000000_Cursor.StrokeDashArrayWhenSelected = ``
+	__MovingLine__000000_Cursor.Transform = ``
+
 	__NoteInfo__000000_0.Name = `0`
 	__NoteInfo__000000_0.IsKept = true
 
@@ -993,6 +1010,7 @@ func _(stage *models.StageStruct) {
 	__FrontCurveStack__000000_Front_Curve_Stack.FrontCurves = append(__FrontCurveStack__000000_Front_Curve_Stack.FrontCurves, __FrontCurve__000007_Non_Rotated_7_)
 	__HorizontalAxis__000000_Horizontal_Axis.ShapeCategory = __ShapeCategory__000000_0_Axes
 	__Key__000000_F_key.ShapeCategory = __ShapeCategory__000008_8_Score_notation
+	__MovingLine__000000_Cursor.ShapeCategory = __ShapeCategory__000009_9_Composer
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000001_Initial_Rhombus
 	__Parameter__000000_Reference.InitialCircle = __Circle__000004_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000001_Initial_Rhombus_Grid
@@ -1074,6 +1092,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Parameter__000000_Reference.SpiralOrigin = __SpiralOrigin__000000_Spiral_Origin
+	__Parameter__000000_Reference.Cursor = __MovingLine__000000_Cursor
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.ShapeCategory = __ShapeCategory__000003_3_Growing
 	__Rhombus__000001_Initial_Rhombus.ShapeCategory = __ShapeCategory__000001_1_Initial
 	__Rhombus__000002_Rotated_Next_Rhombus.ShapeCategory = __ShapeCategory__000002_2_Rotated
