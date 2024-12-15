@@ -5104,7 +5104,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Key:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Path", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case MovingLine:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AngleDegree", "Length", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AngleDegree", "Length", "CenterX", "CenterY", "SpeedX", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case NoteInfo:
 		res = []string{"Name", "IsKept"}
 	case Parameter:
@@ -5304,7 +5304,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Key:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Path", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *MovingLine:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AngleDegree", "Length", "CenterX", "CenterY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AngleDegree", "Length", "CenterX", "CenterY", "SpeedX", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *NoteInfo:
 		res = []string{"Name", "IsKept"}
 	case *Parameter:
@@ -5686,6 +5686,8 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.CenterX)
 		case "CenterY":
 			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+		case "SpeedX":
+			res = fmt.Sprintf("%f", inferedInstance.SpeedX)
 		case "Color":
 			res = inferedInstance.Color
 		case "FillOpacity":
@@ -6768,6 +6770,8 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.CenterX)
 		case "CenterY":
 			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+		case "SpeedX":
+			res = fmt.Sprintf("%f", inferedInstance.SpeedX)
 		case "Color":
 			res = inferedInstance.Color
 		case "FillOpacity":

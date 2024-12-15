@@ -289,6 +289,7 @@ type MovingLine_WOP struct {
 	Length float64
 	CenterX float64
 	CenterY float64
+	SpeedX float64
 	Color string
 	FillOpacity float64
 	Stroke string
@@ -307,6 +308,7 @@ func (from *MovingLine) CopyBasicFields(to *MovingLine) {
 	to.Length = from.Length
 	to.CenterX = from.CenterX
 	to.CenterY = from.CenterY
+	to.SpeedX = from.SpeedX
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke

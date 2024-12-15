@@ -83,6 +83,9 @@ type MovingLineDB struct {
 	// Declation for basic field movinglineDB.CenterY
 	CenterY_Data sql.NullFloat64
 
+	// Declation for basic field movinglineDB.SpeedX
+	SpeedX_Data sql.NullFloat64
+
 	// Declation for basic field movinglineDB.Color
 	Color_Data sql.NullString
 
@@ -141,21 +144,23 @@ type MovingLineWOP struct {
 
 	CenterY float64 `xlsx:"6"`
 
-	Color string `xlsx:"7"`
+	SpeedX float64 `xlsx:"7"`
 
-	FillOpacity float64 `xlsx:"8"`
+	Color string `xlsx:"8"`
 
-	Stroke string `xlsx:"9"`
+	FillOpacity float64 `xlsx:"9"`
 
-	StrokeOpacity float64 `xlsx:"10"`
+	Stroke string `xlsx:"10"`
 
-	StrokeWidth float64 `xlsx:"11"`
+	StrokeOpacity float64 `xlsx:"11"`
 
-	StrokeDashArray string `xlsx:"12"`
+	StrokeWidth float64 `xlsx:"12"`
 
-	StrokeDashArrayWhenSelected string `xlsx:"13"`
+	StrokeDashArray string `xlsx:"13"`
 
-	Transform string `xlsx:"14"`
+	StrokeDashArrayWhenSelected string `xlsx:"14"`
+
+	Transform string `xlsx:"15"`
 	// insertion for WOP pointer fields
 }
 
@@ -168,6 +173,7 @@ var MovingLine_Fields = []string{
 	"Length",
 	"CenterX",
 	"CenterY",
+	"SpeedX",
 	"Color",
 	"FillOpacity",
 	"Stroke",
@@ -492,6 +498,9 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsFromMovingLine(movingline *mode
 	movinglineDB.CenterY_Data.Float64 = movingline.CenterY
 	movinglineDB.CenterY_Data.Valid = true
 
+	movinglineDB.SpeedX_Data.Float64 = movingline.SpeedX
+	movinglineDB.SpeedX_Data.Valid = true
+
 	movinglineDB.Color_Data.String = movingline.Color
 	movinglineDB.Color_Data.Valid = true
 
@@ -538,6 +547,9 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsFromMovingLine_WOP(movingline *
 
 	movinglineDB.CenterY_Data.Float64 = movingline.CenterY
 	movinglineDB.CenterY_Data.Valid = true
+
+	movinglineDB.SpeedX_Data.Float64 = movingline.SpeedX
+	movinglineDB.SpeedX_Data.Valid = true
 
 	movinglineDB.Color_Data.String = movingline.Color
 	movinglineDB.Color_Data.Valid = true
@@ -586,6 +598,9 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsFromMovingLineWOP(movingline *M
 	movinglineDB.CenterY_Data.Float64 = movingline.CenterY
 	movinglineDB.CenterY_Data.Valid = true
 
+	movinglineDB.SpeedX_Data.Float64 = movingline.SpeedX
+	movinglineDB.SpeedX_Data.Valid = true
+
 	movinglineDB.Color_Data.String = movingline.Color
 	movinglineDB.Color_Data.Valid = true
 
@@ -620,6 +635,7 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsToMovingLine(movingline *models
 	movingline.Length = movinglineDB.Length_Data.Float64
 	movingline.CenterX = movinglineDB.CenterX_Data.Float64
 	movingline.CenterY = movinglineDB.CenterY_Data.Float64
+	movingline.SpeedX = movinglineDB.SpeedX_Data.Float64
 	movingline.Color = movinglineDB.Color_Data.String
 	movingline.FillOpacity = movinglineDB.FillOpacity_Data.Float64
 	movingline.Stroke = movinglineDB.Stroke_Data.String
@@ -639,6 +655,7 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsToMovingLine_WOP(movingline *mo
 	movingline.Length = movinglineDB.Length_Data.Float64
 	movingline.CenterX = movinglineDB.CenterX_Data.Float64
 	movingline.CenterY = movinglineDB.CenterY_Data.Float64
+	movingline.SpeedX = movinglineDB.SpeedX_Data.Float64
 	movingline.Color = movinglineDB.Color_Data.String
 	movingline.FillOpacity = movinglineDB.FillOpacity_Data.Float64
 	movingline.Stroke = movinglineDB.Stroke_Data.String
@@ -659,6 +676,7 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsToMovingLineWOP(movingline *Mov
 	movingline.Length = movinglineDB.Length_Data.Float64
 	movingline.CenterX = movinglineDB.CenterX_Data.Float64
 	movingline.CenterY = movinglineDB.CenterY_Data.Float64
+	movingline.SpeedX = movinglineDB.SpeedX_Data.Float64
 	movingline.Color = movinglineDB.Color_Data.String
 	movingline.FillOpacity = movinglineDB.FillOpacity_Data.Float64
 	movingline.Stroke = movinglineDB.Stroke_Data.String

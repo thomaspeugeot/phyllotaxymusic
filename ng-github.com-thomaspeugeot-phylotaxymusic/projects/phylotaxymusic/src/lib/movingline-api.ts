@@ -19,6 +19,7 @@ export class MovingLineAPI {
 	Length: number = 0
 	CenterX: number = 0
 	CenterY: number = 0
+	SpeedX: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""

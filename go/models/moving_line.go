@@ -16,6 +16,8 @@ type MovingLine struct {
 
 	CenterX, CenterY float64
 
+	SpeedX float64
+
 	Presentation
 }
 
@@ -35,6 +37,14 @@ func (movingline *MovingLine) Draw(gongsvgStage *gongsvg_models.StageStruct,
 
 	line.X2 = line.X1 + movingline.Length*math.Cos(angleRad)
 	line.Y2 = line.Y1 - movingline.Length*math.Sin(angleRad)
+
+	// animateX1 := new(gongsvg_models.Animate).Stage(gongsvgStage)
+	// animateX1.AttributeName = "x1"
+	// animateX1.Dur = "2s"
+	// animateX1.Values = fmt.Sprintf("%d;%d", int(line.X1), int(line.X1+300))
+	// animateX1.RepeatCount = `indefinite`
+
+	// line.Animates = append(line.Animates, animateX1)
 
 	movingline.Presentation.CopyTo(&line.Presentation)
 }

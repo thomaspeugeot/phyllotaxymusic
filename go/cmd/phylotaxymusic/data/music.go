@@ -246,13 +246,13 @@ func _(stage *models.StageStruct) {
 	__Axis__000004_Rotated_Axis.Transform = ``
 
 	__AxisGrid__000000_Beat_Lines.Name = `Beat Lines`
-	__AxisGrid__000000_Beat_Lines.IsDisplayed = true
+	__AxisGrid__000000_Beat_Lines.IsDisplayed = false
 
 	__AxisGrid__000001_Construction_Axis_Grid.Name = `Construction Axis Grid`
 	__AxisGrid__000001_Construction_Axis_Grid.IsDisplayed = false
 
 	__AxisGrid__000002_Pitch_Lines.Name = `Pitch Lines`
-	__AxisGrid__000002_Pitch_Lines.IsDisplayed = true
+	__AxisGrid__000002_Pitch_Lines.IsDisplayed = false
 
 	__Bezier__000000_2nd_voice_seed.Name = `2nd voice seed`
 	__Bezier__000000_2nd_voice_seed.IsDisplayed = false
@@ -590,6 +590,7 @@ func _(stage *models.StageStruct) {
 	__MovingLine__000000_Cursor.Length = 2000.000000
 	__MovingLine__000000_Cursor.CenterX = 0.000000
 	__MovingLine__000000_Cursor.CenterY = 186.660000
+	__MovingLine__000000_Cursor.SpeedX = 0.000000
 	__MovingLine__000000_Cursor.Color = ``
 	__MovingLine__000000_Cursor.FillOpacity = 0.000000
 	__MovingLine__000000_Cursor.Stroke = `lightgray`

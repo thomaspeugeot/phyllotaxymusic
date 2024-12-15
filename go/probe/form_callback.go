@@ -1322,6 +1322,8 @@ func (movinglineFormCallback *MovingLineFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(movingline_.CenterX), formDiv)
 		case "CenterY":
 			FormDivBasicFieldToField(&(movingline_.CenterY), formDiv)
+		case "SpeedX":
+			FormDivBasicFieldToField(&(movingline_.SpeedX), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(movingline_.Color), formDiv)
 		case "FillOpacity":
