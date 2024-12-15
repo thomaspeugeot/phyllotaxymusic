@@ -381,7 +381,13 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("CenterY", instanceWithInferedType.CenterY, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("SpeedX", instanceWithInferedType.SpeedX, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("StartX", instanceWithInferedType.StartX, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("EndX", instanceWithInferedType.EndX, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("DurationSeconds", instanceWithInferedType.DurationSeconds, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("IsMoving", instanceWithInferedType.IsMoving, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Color", instanceWithInferedType.Color, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -570,6 +576,8 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("ActualBeatsTemporalShift", instanceWithInferedType.ActualBeatsTemporalShift, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("Cursor", instanceWithInferedType.Cursor, formGroup, probe)
+		BasicFieldtoForm("IsPlaying", instanceWithInferedType.IsPlaying, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 
 	case *models.Rhombus:
 		// insertion point

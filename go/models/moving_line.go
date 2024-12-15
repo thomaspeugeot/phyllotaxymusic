@@ -16,7 +16,9 @@ type MovingLine struct {
 
 	CenterX, CenterY float64
 
-	SpeedX float64
+	StartX, EndX    float64
+	DurationSeconds float64
+	IsMoving        bool
 
 	Presentation
 }

@@ -1590,13 +1590,27 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_MovingLine[identifier].CenterY = exprSign * fielValue
-				case "SpeedX":
+				case "StartX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_MovingLine[identifier].SpeedX = exprSign * fielValue
+					__gong__map_MovingLine[identifier].StartX = exprSign * fielValue
+				case "EndX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_MovingLine[identifier].EndX = exprSign * fielValue
+				case "DurationSeconds":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_MovingLine[identifier].DurationSeconds = exprSign * fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -2697,6 +2711,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "ShapeCategory":
 					targetIdentifier := ident.Name
 					__gong__map_MovingLine[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
+				case "IsMoving":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_MovingLine[identifier].IsMoving = fielValue
 				}
 			case "NoteInfo":
 				switch fieldName {
@@ -2913,6 +2934,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "Cursor":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].Cursor = __gong__map_MovingLine[targetIdentifier]
+				case "IsPlaying":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].IsPlaying = fielValue
 				}
 			case "Rhombus":
 				switch fieldName {

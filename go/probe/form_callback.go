@@ -1322,8 +1322,14 @@ func (movinglineFormCallback *MovingLineFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(movingline_.CenterX), formDiv)
 		case "CenterY":
 			FormDivBasicFieldToField(&(movingline_.CenterY), formDiv)
-		case "SpeedX":
-			FormDivBasicFieldToField(&(movingline_.SpeedX), formDiv)
+		case "StartX":
+			FormDivBasicFieldToField(&(movingline_.StartX), formDiv)
+		case "EndX":
+			FormDivBasicFieldToField(&(movingline_.EndX), formDiv)
+		case "DurationSeconds":
+			FormDivBasicFieldToField(&(movingline_.DurationSeconds), formDiv)
+		case "IsMoving":
+			FormDivBasicFieldToField(&(movingline_.IsMoving), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(movingline_.Color), formDiv)
 		case "FillOpacity":
@@ -1734,6 +1740,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.ActualBeatsTemporalShift), formDiv)
 		case "Cursor":
 			FormDivSelectFieldToField(&(parameter_.Cursor), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "IsPlaying":
+			FormDivBasicFieldToField(&(parameter_.IsPlaying), formDiv)
 		}
 	}
 

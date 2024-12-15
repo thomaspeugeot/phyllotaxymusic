@@ -24,7 +24,10 @@ export class MovingLine {
 	Length: number = 0
 	CenterX: number = 0
 	CenterY: number = 0
-	SpeedX: number = 0
+	StartX: number = 0
+	EndX: number = 0
+	DurationSeconds: number = 0
+	IsMoving: boolean = false
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -52,7 +55,10 @@ export function CopyMovingLineToMovingLineAPI(movingline: MovingLine, movingline
 	movinglineAPI.Length = movingline.Length
 	movinglineAPI.CenterX = movingline.CenterX
 	movinglineAPI.CenterY = movingline.CenterY
-	movinglineAPI.SpeedX = movingline.SpeedX
+	movinglineAPI.StartX = movingline.StartX
+	movinglineAPI.EndX = movingline.EndX
+	movinglineAPI.DurationSeconds = movingline.DurationSeconds
+	movinglineAPI.IsMoving = movingline.IsMoving
 	movinglineAPI.Color = movingline.Color
 	movinglineAPI.FillOpacity = movingline.FillOpacity
 	movinglineAPI.Stroke = movingline.Stroke
@@ -91,7 +97,10 @@ export function CopyMovingLineAPIToMovingLine(movinglineAPI: MovingLineAPI, movi
 	movingline.Length = movinglineAPI.Length
 	movingline.CenterX = movinglineAPI.CenterX
 	movingline.CenterY = movinglineAPI.CenterY
-	movingline.SpeedX = movinglineAPI.SpeedX
+	movingline.StartX = movinglineAPI.StartX
+	movingline.EndX = movinglineAPI.EndX
+	movingline.DurationSeconds = movinglineAPI.DurationSeconds
+	movingline.IsMoving = movinglineAPI.IsMoving
 	movingline.Color = movinglineAPI.Color
 	movingline.FillOpacity = movinglineAPI.FillOpacity
 	movingline.Stroke = movinglineAPI.Stroke

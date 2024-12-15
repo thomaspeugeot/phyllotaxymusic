@@ -372,7 +372,7 @@ func _(stage *models.StageStruct) {
 	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
-	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
+	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = true
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
 	__BezierGrid__000002_First_Voice.IsDisplayed = true
@@ -590,7 +590,10 @@ func _(stage *models.StageStruct) {
 	__MovingLine__000000_Cursor.Length = 2000.000000
 	__MovingLine__000000_Cursor.CenterX = 0.000000
 	__MovingLine__000000_Cursor.CenterY = 186.660000
-	__MovingLine__000000_Cursor.SpeedX = 0.000000
+	__MovingLine__000000_Cursor.StartX = 0.000000
+	__MovingLine__000000_Cursor.EndX = 204.000000
+	__MovingLine__000000_Cursor.DurationSeconds = 1.000000
+	__MovingLine__000000_Cursor.IsMoving = false
 	__MovingLine__000000_Cursor.Color = ``
 	__MovingLine__000000_Cursor.FillOpacity = 0.000000
 	__MovingLine__000000_Cursor.Stroke = `lightgray`
@@ -693,7 +696,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 1.830000
 	__Parameter__000000_Reference.PitchDifference = 12
-	__Parameter__000000_Reference.Speed = 4.050000
+	__Parameter__000000_Reference.Speed = 1.000000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
 	__Parameter__000000_Reference.OriginX = 40.000000
@@ -705,6 +708,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.ShowSpiralBezierConstruct = false
 	__Parameter__000000_Reference.ShowInterpolationPoints = false
 	__Parameter__000000_Reference.ActualBeatsTemporalShift = 8
+	__Parameter__000000_Reference.IsPlaying = false
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false

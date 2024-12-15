@@ -112,7 +112,7 @@ func (parameterImpl *ParameterImpl) Generate() {
 
 	p.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	p.GenerateSvg(parameterImpl.gongsvgStage)
-	p.GenerateNotes(parameterImpl.gongtoneStage)
+	p.GenerateNotes(parameterImpl.gongtoneStage, parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 	parameterImpl.tree.Generate(p)
 	parameterImpl.phylotaxymusicStage.Commit()
 }
@@ -125,6 +125,6 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	updatedParameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	updatedParameter.GenerateSvg(parameterImpl.gongsvgStage)
 	parameterImpl.tree.Generate(updatedParameter)
-	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage)
+	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage, parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 
 }

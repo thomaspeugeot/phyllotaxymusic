@@ -83,8 +83,18 @@ type MovingLineDB struct {
 	// Declation for basic field movinglineDB.CenterY
 	CenterY_Data sql.NullFloat64
 
-	// Declation for basic field movinglineDB.SpeedX
-	SpeedX_Data sql.NullFloat64
+	// Declation for basic field movinglineDB.StartX
+	StartX_Data sql.NullFloat64
+
+	// Declation for basic field movinglineDB.EndX
+	EndX_Data sql.NullFloat64
+
+	// Declation for basic field movinglineDB.DurationSeconds
+	DurationSeconds_Data sql.NullFloat64
+
+	// Declation for basic field movinglineDB.IsMoving
+	// provide the sql storage for the boolan
+	IsMoving_Data sql.NullBool
 
 	// Declation for basic field movinglineDB.Color
 	Color_Data sql.NullString
@@ -144,23 +154,29 @@ type MovingLineWOP struct {
 
 	CenterY float64 `xlsx:"6"`
 
-	SpeedX float64 `xlsx:"7"`
+	StartX float64 `xlsx:"7"`
 
-	Color string `xlsx:"8"`
+	EndX float64 `xlsx:"8"`
 
-	FillOpacity float64 `xlsx:"9"`
+	DurationSeconds float64 `xlsx:"9"`
 
-	Stroke string `xlsx:"10"`
+	IsMoving bool `xlsx:"10"`
 
-	StrokeOpacity float64 `xlsx:"11"`
+	Color string `xlsx:"11"`
 
-	StrokeWidth float64 `xlsx:"12"`
+	FillOpacity float64 `xlsx:"12"`
 
-	StrokeDashArray string `xlsx:"13"`
+	Stroke string `xlsx:"13"`
 
-	StrokeDashArrayWhenSelected string `xlsx:"14"`
+	StrokeOpacity float64 `xlsx:"14"`
 
-	Transform string `xlsx:"15"`
+	StrokeWidth float64 `xlsx:"15"`
+
+	StrokeDashArray string `xlsx:"16"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"17"`
+
+	Transform string `xlsx:"18"`
 	// insertion for WOP pointer fields
 }
 
@@ -173,7 +189,10 @@ var MovingLine_Fields = []string{
 	"Length",
 	"CenterX",
 	"CenterY",
-	"SpeedX",
+	"StartX",
+	"EndX",
+	"DurationSeconds",
+	"IsMoving",
 	"Color",
 	"FillOpacity",
 	"Stroke",
@@ -498,8 +517,17 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsFromMovingLine(movingline *mode
 	movinglineDB.CenterY_Data.Float64 = movingline.CenterY
 	movinglineDB.CenterY_Data.Valid = true
 
-	movinglineDB.SpeedX_Data.Float64 = movingline.SpeedX
-	movinglineDB.SpeedX_Data.Valid = true
+	movinglineDB.StartX_Data.Float64 = movingline.StartX
+	movinglineDB.StartX_Data.Valid = true
+
+	movinglineDB.EndX_Data.Float64 = movingline.EndX
+	movinglineDB.EndX_Data.Valid = true
+
+	movinglineDB.DurationSeconds_Data.Float64 = movingline.DurationSeconds
+	movinglineDB.DurationSeconds_Data.Valid = true
+
+	movinglineDB.IsMoving_Data.Bool = movingline.IsMoving
+	movinglineDB.IsMoving_Data.Valid = true
 
 	movinglineDB.Color_Data.String = movingline.Color
 	movinglineDB.Color_Data.Valid = true
@@ -548,8 +576,17 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsFromMovingLine_WOP(movingline *
 	movinglineDB.CenterY_Data.Float64 = movingline.CenterY
 	movinglineDB.CenterY_Data.Valid = true
 
-	movinglineDB.SpeedX_Data.Float64 = movingline.SpeedX
-	movinglineDB.SpeedX_Data.Valid = true
+	movinglineDB.StartX_Data.Float64 = movingline.StartX
+	movinglineDB.StartX_Data.Valid = true
+
+	movinglineDB.EndX_Data.Float64 = movingline.EndX
+	movinglineDB.EndX_Data.Valid = true
+
+	movinglineDB.DurationSeconds_Data.Float64 = movingline.DurationSeconds
+	movinglineDB.DurationSeconds_Data.Valid = true
+
+	movinglineDB.IsMoving_Data.Bool = movingline.IsMoving
+	movinglineDB.IsMoving_Data.Valid = true
 
 	movinglineDB.Color_Data.String = movingline.Color
 	movinglineDB.Color_Data.Valid = true
@@ -598,8 +635,17 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsFromMovingLineWOP(movingline *M
 	movinglineDB.CenterY_Data.Float64 = movingline.CenterY
 	movinglineDB.CenterY_Data.Valid = true
 
-	movinglineDB.SpeedX_Data.Float64 = movingline.SpeedX
-	movinglineDB.SpeedX_Data.Valid = true
+	movinglineDB.StartX_Data.Float64 = movingline.StartX
+	movinglineDB.StartX_Data.Valid = true
+
+	movinglineDB.EndX_Data.Float64 = movingline.EndX
+	movinglineDB.EndX_Data.Valid = true
+
+	movinglineDB.DurationSeconds_Data.Float64 = movingline.DurationSeconds
+	movinglineDB.DurationSeconds_Data.Valid = true
+
+	movinglineDB.IsMoving_Data.Bool = movingline.IsMoving
+	movinglineDB.IsMoving_Data.Valid = true
 
 	movinglineDB.Color_Data.String = movingline.Color
 	movinglineDB.Color_Data.Valid = true
@@ -635,7 +681,10 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsToMovingLine(movingline *models
 	movingline.Length = movinglineDB.Length_Data.Float64
 	movingline.CenterX = movinglineDB.CenterX_Data.Float64
 	movingline.CenterY = movinglineDB.CenterY_Data.Float64
-	movingline.SpeedX = movinglineDB.SpeedX_Data.Float64
+	movingline.StartX = movinglineDB.StartX_Data.Float64
+	movingline.EndX = movinglineDB.EndX_Data.Float64
+	movingline.DurationSeconds = movinglineDB.DurationSeconds_Data.Float64
+	movingline.IsMoving = movinglineDB.IsMoving_Data.Bool
 	movingline.Color = movinglineDB.Color_Data.String
 	movingline.FillOpacity = movinglineDB.FillOpacity_Data.Float64
 	movingline.Stroke = movinglineDB.Stroke_Data.String
@@ -655,7 +704,10 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsToMovingLine_WOP(movingline *mo
 	movingline.Length = movinglineDB.Length_Data.Float64
 	movingline.CenterX = movinglineDB.CenterX_Data.Float64
 	movingline.CenterY = movinglineDB.CenterY_Data.Float64
-	movingline.SpeedX = movinglineDB.SpeedX_Data.Float64
+	movingline.StartX = movinglineDB.StartX_Data.Float64
+	movingline.EndX = movinglineDB.EndX_Data.Float64
+	movingline.DurationSeconds = movinglineDB.DurationSeconds_Data.Float64
+	movingline.IsMoving = movinglineDB.IsMoving_Data.Bool
 	movingline.Color = movinglineDB.Color_Data.String
 	movingline.FillOpacity = movinglineDB.FillOpacity_Data.Float64
 	movingline.Stroke = movinglineDB.Stroke_Data.String
@@ -676,7 +728,10 @@ func (movinglineDB *MovingLineDB) CopyBasicFieldsToMovingLineWOP(movingline *Mov
 	movingline.Length = movinglineDB.Length_Data.Float64
 	movingline.CenterX = movinglineDB.CenterX_Data.Float64
 	movingline.CenterY = movinglineDB.CenterY_Data.Float64
-	movingline.SpeedX = movinglineDB.SpeedX_Data.Float64
+	movingline.StartX = movinglineDB.StartX_Data.Float64
+	movingline.EndX = movinglineDB.EndX_Data.Float64
+	movingline.DurationSeconds = movinglineDB.DurationSeconds_Data.Float64
+	movingline.IsMoving = movinglineDB.IsMoving_Data.Bool
 	movingline.Color = movinglineDB.Color_Data.String
 	movingline.FillOpacity = movinglineDB.FillOpacity_Data.Float64
 	movingline.Stroke = movinglineDB.Stroke_Data.String

@@ -289,7 +289,10 @@ type MovingLine_WOP struct {
 	Length float64
 	CenterX float64
 	CenterY float64
-	SpeedX float64
+	StartX float64
+	EndX float64
+	DurationSeconds float64
+	IsMoving bool
 	Color string
 	FillOpacity float64
 	Stroke string
@@ -308,7 +311,10 @@ func (from *MovingLine) CopyBasicFields(to *MovingLine) {
 	to.Length = from.Length
 	to.CenterX = from.CenterX
 	to.CenterY = from.CenterY
-	to.SpeedX = from.SpeedX
+	to.StartX = from.StartX
+	to.EndX = from.EndX
+	to.DurationSeconds = from.DurationSeconds
+	to.IsMoving = from.IsMoving
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
@@ -372,6 +378,7 @@ type Parameter_WOP struct {
 	ShowSpiralBezierConstruct bool
 	ShowInterpolationPoints bool
 	ActualBeatsTemporalShift int
+	IsPlaying bool
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -415,6 +422,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.ShowSpiralBezierConstruct = from.ShowSpiralBezierConstruct
 	to.ShowInterpolationPoints = from.ShowInterpolationPoints
 	to.ActualBeatsTemporalShift = from.ActualBeatsTemporalShift
+	to.IsPlaying = from.IsPlaying
 }
 
 type Rhombus_WOP struct {

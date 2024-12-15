@@ -177,7 +177,8 @@ type Parameter struct {
 	ActualBeatsTemporalShift int
 
 	// cursor vertical line
-	Cursor *MovingLine
+	Cursor    *MovingLine
+	IsPlaying bool
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
