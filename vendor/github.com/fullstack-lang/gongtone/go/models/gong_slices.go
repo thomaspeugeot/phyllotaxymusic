@@ -58,6 +58,9 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 			}
 		}
 
+	case *Player:
+		// insertion point per field
+
 	default:
 		_ = owningInstanceInfered // to avoid "declared and not used" error if no named struct has slices
 	}
@@ -80,5 +83,8 @@ func (stage *StageStruct) ComputeReverseMaps() {
 			stage.Note_Frequencies_reverseMap[_freqency] = note
 		}
 	}
+
+	// Compute reverse map for named struct Player
+	// insertion point per field
 
 }

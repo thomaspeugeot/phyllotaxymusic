@@ -67,6 +67,15 @@ type StageStruct struct {
 	OnAfterNoteDeleteCallback OnAfterDeleteInterface[Note]
 	OnAfterNoteReadCallback   OnAfterReadInterface[Note]
 
+	Players           map[*Player]any
+	Players_mapString map[string]*Player
+
+	// insertion point for slice of pointers maps
+	OnAfterPlayerCreateCallback OnAfterCreateInterface[Player]
+	OnAfterPlayerUpdateCallback OnAfterUpdateInterface[Player]
+	OnAfterPlayerDeleteCallback OnAfterDeleteInterface[Player]
+	OnAfterPlayerReadCallback   OnAfterReadInterface[Player]
+
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
 	AllModelsStructDeleteCallback AllModelsStructDeleteInterface
@@ -139,6 +148,8 @@ type BackRepoInterface interface {
 	CheckoutFreqency(freqency *Freqency)
 	CommitNote(note *Note)
 	CheckoutNote(note *Note)
+	CommitPlayer(player *Player)
+	CheckoutPlayer(player *Player)
 	GetLastCommitFromBackNb() uint
 	GetLastPushFromFrontNb() uint
 }
@@ -151,6 +162,9 @@ func NewStage(path string) (stage *StageStruct) {
 
 		Notes:           make(map[*Note]any),
 		Notes_mapString: make(map[string]*Note),
+
+		Players:           make(map[*Player]any),
+		Players_mapString: make(map[string]*Player),
 
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
@@ -187,6 +201,7 @@ func (stage *StageStruct) Commit() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Freqency"] = len(stage.Freqencys)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
+	stage.Map_GongStructName_InstancesNb["Player"] = len(stage.Players)
 
 }
 
@@ -199,6 +214,7 @@ func (stage *StageStruct) Checkout() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Freqency"] = len(stage.Freqencys)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
+	stage.Map_GongStructName_InstancesNb["Player"] = len(stage.Players)
 
 }
 
@@ -331,15 +347,67 @@ func (note *Note) GetName() (res string) {
 	return note.Name
 }
 
+// Stage puts player to the model stage
+func (player *Player) Stage(stage *StageStruct) *Player {
+	stage.Players[player] = __member
+	stage.Players_mapString[player.Name] = player
+
+	return player
+}
+
+// Unstage removes player off the model stage
+func (player *Player) Unstage(stage *StageStruct) *Player {
+	delete(stage.Players, player)
+	delete(stage.Players_mapString, player.Name)
+	return player
+}
+
+// UnstageVoid removes player off the model stage
+func (player *Player) UnstageVoid(stage *StageStruct) {
+	delete(stage.Players, player)
+	delete(stage.Players_mapString, player.Name)
+}
+
+// commit player to the back repo (if it is already staged)
+func (player *Player) Commit(stage *StageStruct) *Player {
+	if _, ok := stage.Players[player]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitPlayer(player)
+		}
+	}
+	return player
+}
+
+func (player *Player) CommitVoid(stage *StageStruct) {
+	player.Commit(stage)
+}
+
+// Checkout player to the back repo (if it is already staged)
+func (player *Player) Checkout(stage *StageStruct) *Player {
+	if _, ok := stage.Players[player]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutPlayer(player)
+		}
+	}
+	return player
+}
+
+// for satisfaction of GongStruct interface
+func (player *Player) GetName() (res string) {
+	return player.Name
+}
+
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMFreqency(Freqency *Freqency)
 	CreateORMNote(Note *Note)
+	CreateORMPlayer(Player *Player)
 }
 
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
 	DeleteORMFreqency(Freqency *Freqency)
 	DeleteORMNote(Note *Note)
+	DeleteORMPlayer(Player *Player)
 }
 
 func (stage *StageStruct) Reset() { // insertion point for array reset
@@ -348,6 +416,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.Notes = make(map[*Note]any)
 	stage.Notes_mapString = make(map[string]*Note)
+
+	stage.Players = make(map[*Player]any)
+	stage.Players_mapString = make(map[string]*Player)
 
 }
 
@@ -358,6 +429,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 	stage.Notes = nil
 	stage.Notes_mapString = nil
 
+	stage.Players = nil
+	stage.Players_mapString = nil
+
 }
 
 func (stage *StageStruct) Unstage() { // insertion point for array nil
@@ -367,6 +441,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 
 	for note := range stage.Notes {
 		note.Unstage(stage)
+	}
+
+	for player := range stage.Players {
+		player.Unstage(stage)
 	}
 
 }
@@ -434,6 +512,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Freqencys).(*Type)
 	case map[*Note]any:
 		return any(&stage.Notes).(*Type)
+	case map[*Player]any:
+		return any(&stage.Players).(*Type)
 	default:
 		return nil
 	}
@@ -450,6 +530,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Freqencys_mapString).(*Type)
 	case map[string]*Note:
 		return any(&stage.Notes_mapString).(*Type)
+	case map[string]*Player:
+		return any(&stage.Players_mapString).(*Type)
 	default:
 		return nil
 	}
@@ -466,6 +548,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Freqencys).(*map[*Type]any)
 	case Note:
 		return any(&stage.Notes).(*map[*Type]any)
+	case Player:
+		return any(&stage.Players).(*map[*Type]any)
 	default:
 		return nil
 	}
@@ -482,6 +566,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.Freqencys).(*map[Type]any)
 	case *Note:
 		return any(&stage.Notes).(*map[Type]any)
+	case *Player:
+		return any(&stage.Players).(*map[Type]any)
 	default:
 		return nil
 	}
@@ -498,6 +584,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Freqencys_mapString).(*map[string]*Type)
 	case Note:
 		return any(&stage.Notes_mapString).(*map[string]*Type)
+	case Player:
+		return any(&stage.Players_mapString).(*map[string]*Type)
 	default:
 		return nil
 	}
@@ -521,6 +609,10 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of Freqency with the name of the field
 			Frequencies: []*Freqency{{Name: "Frequencies"}},
+		}).(*Type)
+	case Player:
+		return any(&Player{
+			// Initialisation of associations
 		}).(*Type)
 	default:
 		return nil
@@ -547,6 +639,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 		}
 	// reverse maps of direct associations of Note
 	case Note:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Player
+	case Player:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -584,6 +681,11 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			}
 			return any(res).(map[*End]*Start)
 		}
+	// reverse maps of direct associations of Player
+	case Player:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	}
 	return nil
 }
@@ -600,6 +702,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Freqency"
 	case Note:
 		res = "Note"
+	case Player:
+		res = "Player"
 	}
 	return res
 }
@@ -616,6 +720,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "Freqency"
 	case *Note:
 		res = "Note"
+	case *Player:
+		res = "Player"
 	}
 	return res
 }
@@ -631,6 +737,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name"}
 	case Note:
 		res = []string{"Name", "Frequencies", "Start", "Duration", "Velocity", "Info"}
+	case Player:
+		res = []string{"Name", "Status"}
 	}
 	return
 }
@@ -658,6 +766,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case Note:
 		var rf ReverseField
 		_ = rf
+	case Player:
+		var rf ReverseField
+		_ = rf
 	}
 	return
 }
@@ -673,6 +784,8 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 		res = []string{"Name"}
 	case *Note:
 		res = []string{"Name", "Frequencies", "Start", "Duration", "Velocity", "Info"}
+	case *Player:
+		res = []string{"Name", "Status"}
 	}
 	return
 }
@@ -707,6 +820,15 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res = fmt.Sprintf("%f", inferedInstance.Velocity)
 		case "Info":
 			res = inferedInstance.Info
+		}
+	case *Player:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "Status":
+			enum := inferedInstance.Status
+			res = enum.ToCodeString()
 		}
 	default:
 		_ = inferedInstance
@@ -744,6 +866,15 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = fmt.Sprintf("%f", inferedInstance.Velocity)
 		case "Info":
 			res = inferedInstance.Info
+		}
+	case Player:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res = inferedInstance.Name
+		case "Status":
+			enum := inferedInstance.Status
+			res = enum.ToCodeString()
 		}
 	default:
 		_ = inferedInstance

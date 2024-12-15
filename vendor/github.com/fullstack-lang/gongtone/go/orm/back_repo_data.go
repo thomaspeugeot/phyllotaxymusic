@@ -7,6 +7,8 @@ type BackRepoData struct {
 	FreqencyAPIs []*FreqencyAPI
 
 	NoteAPIs []*NoteAPI
+
+	PlayerAPIs []*PlayerAPI
 }
 
 func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepoData) {
@@ -34,6 +36,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		noteDB.CopyBasicFieldsToNote_WOP(&noteAPI.Note_WOP)
 
 		backRepoData.NoteAPIs = append(backRepoData.NoteAPIs, &noteAPI)
+	}
+
+	for _, playerDB := range backRepo.BackRepoPlayer.Map_PlayerDBID_PlayerDB {
+
+		var playerAPI PlayerAPI
+		playerAPI.ID = playerDB.ID
+		playerAPI.PlayerPointersEncoding = playerDB.PlayerPointersEncoding
+		playerDB.CopyBasicFieldsToPlayer_WOP(&playerAPI.Player_WOP)
+
+		backRepoData.PlayerAPIs = append(backRepoData.PlayerAPIs, &playerAPI)
 	}
 
 }

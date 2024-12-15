@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
@@ -29,6 +31,13 @@ func (p *Parameter) GenerateNotes(gongtoneStage *gongtone_models.StageStruct) {
 	}
 	if p.SecondVoiceNotesShiftedRight.IsDisplayed {
 		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, gongtoneStage)
+	}
+
+	player := new(gongtone_models.Player).Stage(gongtoneStage)
+	player.OnDI = func(p *gongtone_models.Player) error {
+		fmt.Printf("Injecting dependencies for player: %s\n", p.Name)
+		// Perform any dependency injection logic here
+		return nil
 	}
 
 	gongtoneStage.Commit()

@@ -11,6 +11,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *Note:
 		ok = stage.IsStagedNote(target)
 
+	case *Player:
+		ok = stage.IsStagedPlayer(target)
+
 	default:
 		_ = target
 	}
@@ -32,6 +35,13 @@ func (stage *StageStruct) IsStagedNote(note *Note) (ok bool) {
 	return
 }
 
+func (stage *StageStruct) IsStagedPlayer(player *Player) (ok bool) {
+
+	_, ok = stage.Players[player]
+
+	return
+}
+
 // StageBranch stages instance and apply StageBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the instance
 //
@@ -45,6 +55,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Note:
 		stage.StageBranchNote(target)
+
+	case *Player:
+		stage.StageBranchPlayer(target)
 
 	default:
 		_ = target
@@ -85,6 +98,21 @@ func (stage *StageStruct) StageBranchNote(note *Note) {
 
 }
 
+func (stage *StageStruct) StageBranchPlayer(player *Player) {
+
+	// check if instance is already staged
+	if IsStaged(stage, player) {
+		return
+	}
+
+	player.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 // CopyBranch stages instance and apply CopyBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the instance
 //
@@ -102,6 +130,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *Note:
 		toT := CopyBranchNote(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *Player:
+		toT := CopyBranchPlayer(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	default:
@@ -152,6 +184,25 @@ func CopyBranchNote(mapOrigCopy map[any]any, noteFrom *Note) (noteTo *Note) {
 	return
 }
 
+func CopyBranchPlayer(mapOrigCopy map[any]any, playerFrom *Player) (playerTo *Player) {
+
+	// playerFrom has already been copied
+	if _playerTo, ok := mapOrigCopy[playerFrom]; ok {
+		playerTo = _playerTo.(*Player)
+		return
+	}
+
+	playerTo = new(Player)
+	mapOrigCopy[playerFrom] = playerTo
+	playerFrom.CopyBasicFields(playerTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 // UnstageBranch stages instance and apply UnstageBranch on all gongstruct instances that are
 // referenced by pointers or slices of pointers of the insance
 //
@@ -165,6 +216,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Note:
 		stage.UnstageBranchNote(target)
+
+	case *Player:
+		stage.UnstageBranchPlayer(target)
 
 	default:
 		_ = target
@@ -202,5 +256,20 @@ func (stage *StageStruct) UnstageBranchNote(note *Note) {
 	for _, _freqency := range note.Frequencies {
 		UnstageBranch(stage, _freqency)
 	}
+
+}
+
+func (stage *StageStruct) UnstageBranchPlayer(player *Player) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, player) {
+		return
+	}
+
+	player.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }

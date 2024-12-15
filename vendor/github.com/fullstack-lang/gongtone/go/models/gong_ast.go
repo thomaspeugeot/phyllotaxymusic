@@ -316,6 +316,7 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 // insertion point for identifiers maps
 var __gong__map_Freqency = make(map[string]*Freqency)
 var __gong__map_Note = make(map[string]*Note)
+var __gong__map_Player = make(map[string]*Player)
 
 // Parser needs to be configured for having the [Name1.Name2] or [pkg.Name1] ...
 // to be recognized as a proper identifier.
@@ -500,6 +501,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceNote.Stage(stage)
 										instance = any(instanceNote)
 										__gong__map_Note[identifier] = instanceNote
+									case "Player":
+										instancePlayer := new(Player)
+										instancePlayer.Name = instanceName
+										instancePlayer.Stage(stage)
+										instance = any(instancePlayer)
+										__gong__map_Player[identifier] = instancePlayer
 									}
 									__gong__map_Indentifiers_gongstructName[identifier] = gongstructName
 									return
@@ -544,6 +551,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "Player":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						}
 					}
 				}
@@ -582,6 +593,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Freqency[targetIdentifier]
 							__gong__map_Note[identifier].Frequencies =
 								append(__gong__map_Note[identifier].Frequencies, target)
+						}
+					case "Player":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
 						}
 					}
 				case *ast.SelectorExpr:
@@ -673,6 +688,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Note[identifier].Info = fielValue
 				}
+			case "Player":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Player[identifier].Name = fielValue
+				}
 			}
 		case *ast.Ident:
 			// assignment to boolean field ?
@@ -692,6 +715,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				// insertion point for field dependant code
 				}
 			case "Note":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
+			case "Player":
 				switch fieldName {
 				// insertion point for field dependant code
 				}
@@ -730,6 +757,17 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "Note":
 					switch fieldName {
 					// insertion point for enum assign code
+					}
+				case "Player":
+					switch fieldName {
+					// insertion point for enum assign code
+					case "Status":
+						var val Status
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Player[identifier].Status = Status(val)
 					}
 				}
 			}

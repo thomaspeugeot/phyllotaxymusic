@@ -186,6 +186,48 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_Player_Identifiers := make(map[*Player]string)
+	_ = map_Player_Identifiers
+
+	playerOrdered := []*Player{}
+	for player := range stage.Players {
+		playerOrdered = append(playerOrdered, player)
+	}
+	sort.Slice(playerOrdered[:], func(i, j int) bool {
+		return playerOrdered[i].Name < playerOrdered[j].Name
+	})
+	if len(playerOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, player := range playerOrdered {
+
+		id = generatesIdentifier("Player", idx, player.Name)
+		map_Player_Identifiers[player] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Player")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", player.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(player.Name))
+		initializerStatements += setValueField
+
+		if player.Status != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Status")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+player.Status.ToCodeString())
+			initializerStatements += setValueField
+		}
+
+	}
+
 	// insertion initialization of objects to stage
 	for idx, freqency := range freqencyOrdered {
 		var setPointerField string
@@ -213,6 +255,16 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			pointersInitializesStatements += setPointerField
 		}
 
+	}
+
+	for idx, player := range playerOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Player", idx, player.Name)
+		map_Player_Identifiers[player] = id
+
+		// Initialisation of values
 	}
 
 	res = strings.ReplaceAll(res, "{{Identifiers}}", identifiersDecl)

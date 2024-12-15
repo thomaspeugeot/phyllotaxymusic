@@ -21,5 +21,10 @@ export * from './lib/note-api'
 export * from './lib/note'
 export * from './lib/note.service'
 
+export * from './lib/player-api'
+export * from './lib/player'
+export * from './lib/player.service'
+
 
 export * from './lib/StacksNames'
+export * from './lib/Status'

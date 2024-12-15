@@ -58,6 +58,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "Note" {
 		fillUpTable[models.Note](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "Player" {
+		fillUpTable[models.Player](nodeImplGongstruct.probe)
+	}
 
 	// set color for node and reset all other nodes color
 	for node := range *gongtree_models.GetGongstructInstancesSet[gongtree_models.Node](gongtreeStage) {

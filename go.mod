@@ -7,7 +7,7 @@ require (
 	github.com/fullstack-lang/gongdoc v0.0.0-20241118055028-b29dade3ed5d
 	github.com/fullstack-lang/gongsvg v0.0.0-20241215051549-485ffac8271a
 	github.com/fullstack-lang/gongtable v0.0.0-20241118055028-9c52bae3338d
-	github.com/fullstack-lang/gongtone v0.0.0-20241202073035-380288fc4ef9
+	github.com/fullstack-lang/gongtone v0.0.0-20241215055706-be6c36987f5e
 	github.com/fullstack-lang/gongtree v0.0.0-20241130070052-003d6e0482ce
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 	github.com/gin-contrib/cors v1.7.2

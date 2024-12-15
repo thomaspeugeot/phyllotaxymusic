@@ -34,8 +34,11 @@ export class GongtoneComponent implements OnInit, OnDestroy {
 
   constructor(
     private frontRepoService: gongtone.FrontRepoService,
+    private playerService: gongtone.PlayerService,
+
     private ngZone: NgZone,
     private snackBar: MatSnackBar
+
   ) { }
 
   ngOnInit(): void {
@@ -81,6 +84,16 @@ export class GongtoneComponent implements OnInit, OnDestroy {
         console.error('Error stopping playback:', error);
       }
     });
+    const players = this.frontRepo!.getFrontArray<gongtone.Player>(gongtone.Player.GONGSTRUCT_NAME)
+    if (players.length == 1) {
+      let player = players[0]
+      player.Status = gongtone.Status.PAUSED
+      this.playerService.updateFront(player, this.StacksNames.Gongtone).subscribe(
+        () => {
+          console.log("gongtone: status set to PAUSED")
+        }
+      )
+    }
   }
 
   play(): void {
@@ -99,6 +112,17 @@ export class GongtoneComponent implements OnInit, OnDestroy {
         this.handlePlaybackError(error);
       }
     });
+
+    const players = this.frontRepo!.getFrontArray<gongtone.Player>(gongtone.Player.GONGSTRUCT_NAME)
+    if (players.length == 1) {
+      let player = players[0]
+      player.Status = gongtone.Status.PLAYING
+      this.playerService.updateFront(player, this.StacksNames.Gongtone).subscribe(
+        () => {
+          console.log("gongtone: status set to PLAYING")
+        }
+      )
+    }
   }
 
   private initializeSampler(duration: number, notes: gongtone.Note[]): void {

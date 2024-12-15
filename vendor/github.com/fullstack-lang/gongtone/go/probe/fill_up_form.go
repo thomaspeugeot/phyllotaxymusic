@@ -59,6 +59,12 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("Info", instanceWithInferedType.Info, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 
+	case *models.Player:
+		// insertion point
+		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		EnumTypeStringToForm("Status", instanceWithInferedType.Status, instanceWithInferedType, probe.formStage, formGroup)
+
 	default:
 		_ = instanceWithInferedType
 	}
