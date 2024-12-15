@@ -489,7 +489,7 @@ func (p *Parameter) ComputePitchLines() {
 	}
 }
 
-func (p *Parameter) ComputeMeasureLines() {
+func (p *Parameter) ComputeBeatLines() {
 
 	g := p.BeatLines
 	g.Axiss = g.Axiss[0:]

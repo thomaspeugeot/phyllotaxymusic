@@ -152,7 +152,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputePitchLines()
 	p.Shapes = append(p.Shapes, p.PitchLines)
 
-	p.ComputeMeasureLines()
+	p.ComputeBeatLines()
 	p.Shapes = append(p.Shapes, p.BeatLines)
 
 	p.FirstVoice.Move(p.FirstVoice.Reference, p.GrowthCurve,
@@ -186,6 +186,10 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.SecondVoiceNotesShiftedRight.Move(p.SecondVoiceNotesShiftedRight.Reference, p.SecondVoiceNotes,
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotesShiftedRight)
+
+	// add cursor
+	p.computeCursor()
+	p.Shapes = append(p.Shapes, p.Cursor)
 
 	p.ComputeNoteInfos(stage)
 }

@@ -24,14 +24,14 @@ func _(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
-	__Axis__000000_Construction_Axis := (&models.Axis{}).Stage(stage)
-	__Axis__000001_Initial_Axis := (&models.Axis{}).Stage(stage)
-	__Axis__000002_Measure := (&models.Axis{}).Stage(stage)
+	__Axis__000000_Beat_Reference := (&models.Axis{}).Stage(stage)
+	__Axis__000001_Construction_Axis := (&models.Axis{}).Stage(stage)
+	__Axis__000002_Initial_Axis := (&models.Axis{}).Stage(stage)
 	__Axis__000003_Pitch_Line := (&models.Axis{}).Stage(stage)
 	__Axis__000004_Rotated_Axis := (&models.Axis{}).Stage(stage)
 
-	__AxisGrid__000000_Construction_Axis_Grid := (&models.AxisGrid{}).Stage(stage)
-	__AxisGrid__000001_Measure_Lines := (&models.AxisGrid{}).Stage(stage)
+	__AxisGrid__000000_Beat_Lines := (&models.AxisGrid{}).Stage(stage)
+	__AxisGrid__000001_Construction_Axis_Grid := (&models.AxisGrid{}).Stage(stage)
 	__AxisGrid__000002_Pitch_Lines := (&models.AxisGrid{}).Stage(stage)
 
 	__Bezier__000000_2nd_voice_seed := (&models.Bezier{}).Stage(stage)
@@ -160,56 +160,56 @@ func _(stage *models.StageStruct) {
 
 	// Setup of values
 
-	__Axis__000000_Construction_Axis.Name = `Construction Axis`
-	__Axis__000000_Construction_Axis.IsDisplayed = false
-	__Axis__000000_Construction_Axis.AngleDegree = 97.682917
-	__Axis__000000_Construction_Axis.Length = 114.075352
-	__Axis__000000_Construction_Axis.CenterX = 0.000000
-	__Axis__000000_Construction_Axis.CenterY = 0.000000
-	__Axis__000000_Construction_Axis.EndX = -15.250814
-	__Axis__000000_Construction_Axis.EndY = 113.051310
-	__Axis__000000_Construction_Axis.Color = ``
-	__Axis__000000_Construction_Axis.FillOpacity = 0.000000
-	__Axis__000000_Construction_Axis.Stroke = `blue`
-	__Axis__000000_Construction_Axis.StrokeOpacity = 0.700000
-	__Axis__000000_Construction_Axis.StrokeWidth = 2.000000
-	__Axis__000000_Construction_Axis.StrokeDashArray = ``
-	__Axis__000000_Construction_Axis.StrokeDashArrayWhenSelected = ``
-	__Axis__000000_Construction_Axis.Transform = ``
+	__Axis__000000_Beat_Reference.Name = `Beat Reference`
+	__Axis__000000_Beat_Reference.IsDisplayed = false
+	__Axis__000000_Beat_Reference.AngleDegree = 90.000000
+	__Axis__000000_Beat_Reference.Length = 2000.000000
+	__Axis__000000_Beat_Reference.CenterX = 0.000000
+	__Axis__000000_Beat_Reference.CenterY = 0.000000
+	__Axis__000000_Beat_Reference.EndX = 0.000000
+	__Axis__000000_Beat_Reference.EndY = 0.000000
+	__Axis__000000_Beat_Reference.Color = ``
+	__Axis__000000_Beat_Reference.FillOpacity = 0.000000
+	__Axis__000000_Beat_Reference.Stroke = `grey`
+	__Axis__000000_Beat_Reference.StrokeOpacity = 0.800000
+	__Axis__000000_Beat_Reference.StrokeWidth = 1.000000
+	__Axis__000000_Beat_Reference.StrokeDashArray = ``
+	__Axis__000000_Beat_Reference.StrokeDashArrayWhenSelected = ``
+	__Axis__000000_Beat_Reference.Transform = ``
 
-	__Axis__000001_Initial_Axis.Name = `Initial Axis`
-	__Axis__000001_Initial_Axis.IsDisplayed = false
-	__Axis__000001_Initial_Axis.AngleDegree = 82.317083
-	__Axis__000001_Initial_Axis.Length = 426.639056
-	__Axis__000001_Initial_Axis.CenterX = 0.000000
-	__Axis__000001_Initial_Axis.CenterY = 0.000000
-	__Axis__000001_Initial_Axis.EndX = 0.000000
-	__Axis__000001_Initial_Axis.EndY = 0.000000
-	__Axis__000001_Initial_Axis.Color = ``
-	__Axis__000001_Initial_Axis.FillOpacity = 0.000000
-	__Axis__000001_Initial_Axis.Stroke = `black`
-	__Axis__000001_Initial_Axis.StrokeOpacity = 1.000000
-	__Axis__000001_Initial_Axis.StrokeWidth = 2.000000
-	__Axis__000001_Initial_Axis.StrokeDashArray = ``
-	__Axis__000001_Initial_Axis.StrokeDashArrayWhenSelected = ``
-	__Axis__000001_Initial_Axis.Transform = ``
+	__Axis__000001_Construction_Axis.Name = `Construction Axis`
+	__Axis__000001_Construction_Axis.IsDisplayed = false
+	__Axis__000001_Construction_Axis.AngleDegree = 97.682917
+	__Axis__000001_Construction_Axis.Length = 114.075352
+	__Axis__000001_Construction_Axis.CenterX = 0.000000
+	__Axis__000001_Construction_Axis.CenterY = 0.000000
+	__Axis__000001_Construction_Axis.EndX = -15.250814
+	__Axis__000001_Construction_Axis.EndY = 113.051310
+	__Axis__000001_Construction_Axis.Color = ``
+	__Axis__000001_Construction_Axis.FillOpacity = 0.000000
+	__Axis__000001_Construction_Axis.Stroke = `blue`
+	__Axis__000001_Construction_Axis.StrokeOpacity = 0.700000
+	__Axis__000001_Construction_Axis.StrokeWidth = 2.000000
+	__Axis__000001_Construction_Axis.StrokeDashArray = ``
+	__Axis__000001_Construction_Axis.StrokeDashArrayWhenSelected = ``
+	__Axis__000001_Construction_Axis.Transform = ``
 
-	__Axis__000002_Measure.Name = `Measure`
-	__Axis__000002_Measure.IsDisplayed = false
-	__Axis__000002_Measure.AngleDegree = 90.000000
-	__Axis__000002_Measure.Length = 2000.000000
-	__Axis__000002_Measure.CenterX = 0.000000
-	__Axis__000002_Measure.CenterY = 0.000000
-	__Axis__000002_Measure.EndX = 0.000000
-	__Axis__000002_Measure.EndY = 0.000000
-	__Axis__000002_Measure.Color = ``
-	__Axis__000002_Measure.FillOpacity = 0.000000
-	__Axis__000002_Measure.Stroke = `grey`
-	__Axis__000002_Measure.StrokeOpacity = 0.800000
-	__Axis__000002_Measure.StrokeWidth = 1.000000
-	__Axis__000002_Measure.StrokeDashArray = ``
-	__Axis__000002_Measure.StrokeDashArrayWhenSelected = ``
-	__Axis__000002_Measure.Transform = ``
+	__Axis__000002_Initial_Axis.Name = `Initial Axis`
+	__Axis__000002_Initial_Axis.IsDisplayed = false
+	__Axis__000002_Initial_Axis.AngleDegree = 82.317083
+	__Axis__000002_Initial_Axis.Length = 426.639056
+	__Axis__000002_Initial_Axis.CenterX = 0.000000
+	__Axis__000002_Initial_Axis.CenterY = 0.000000
+	__Axis__000002_Initial_Axis.EndX = 0.000000
+	__Axis__000002_Initial_Axis.EndY = 0.000000
+	__Axis__000002_Initial_Axis.Color = ``
+	__Axis__000002_Initial_Axis.FillOpacity = 0.000000
+	__Axis__000002_Initial_Axis.Stroke = `black`
+	__Axis__000002_Initial_Axis.StrokeOpacity = 1.000000
+	__Axis__000002_Initial_Axis.StrokeWidth = 2.000000
+	__Axis__000002_Initial_Axis.StrokeDashArray = ``
+	__Axis__000002_Initial_Axis.StrokeDashArrayWhenSelected = ``
+	__Axis__000002_Initial_Axis.Transform = ``
 
 	__Axis__000003_Pitch_Line.Name = `Pitch Line`
 	__Axis__000003_Pitch_Line.IsDisplayed = false
@@ -245,11 +245,11 @@ func _(stage *models.StageStruct) {
 	__Axis__000004_Rotated_Axis.StrokeDashArrayWhenSelected = ``
 	__Axis__000004_Rotated_Axis.Transform = ``
 
-	__AxisGrid__000000_Construction_Axis_Grid.Name = `Construction Axis Grid`
-	__AxisGrid__000000_Construction_Axis_Grid.IsDisplayed = false
+	__AxisGrid__000000_Beat_Lines.Name = `Beat Lines`
+	__AxisGrid__000000_Beat_Lines.IsDisplayed = true
 
-	__AxisGrid__000001_Measure_Lines.Name = `Measure Lines`
-	__AxisGrid__000001_Measure_Lines.IsDisplayed = true
+	__AxisGrid__000001_Construction_Axis_Grid.Name = `Construction Axis Grid`
+	__AxisGrid__000001_Construction_Axis_Grid.IsDisplayed = false
 
 	__AxisGrid__000002_Pitch_Lines.Name = `Pitch Lines`
 	__AxisGrid__000002_Pitch_Lines.IsDisplayed = true
@@ -560,7 +560,7 @@ func _(stage *models.StageStruct) {
 	__FrontCurveStack__000000_Front_Curve_Stack.Transform = ``
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
-	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
+	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = false
 	__HorizontalAxis__000000_Horizontal_Axis.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Color = ``
@@ -573,7 +573,7 @@ func _(stage *models.StageStruct) {
 	__HorizontalAxis__000000_Horizontal_Axis.Transform = ``
 
 	__Key__000000_F_key.Name = `F key`
-	__Key__000000_F_key.IsDisplayed = false
+	__Key__000000_F_key.IsDisplayed = true
 	__Key__000000_F_key.Path = `M562 -21c0 89 -65 150 -155 150c7 -44 34 -203 55 -323c71 29 100 102 100 173zM420 -206l-58 329c-59 -14 -104 -63 -104 -124c0 -49 22 -75 61 -99c12 -8 22 -13 22 -22s-9 -13 -17 -13c-80 0 -135 96 -135 166c0 94 62 190 153 217c-7 41 -14 88 -23 142 c-15 -15 -31 -29 -48 -44c-88 -76 -174 -185 -174 -307c0 -151 122 -251 265 -251c19 0 38 2 58 6zM332 822c-8 -31 -11 -65 -11 -102c0 -42 5 -81 11 -121c69 68 146 146 146 250c0 69 -24 118 -39 118c-52 0 -98 -105 -107 -145zM122 -513c0 66 45 123 115 123 c75 0 116 -57 116 -111c0 -64 -47 -104 -94 -111c-3 -1 -5 -2 -5 -4c0 -1 2 -2 3 -3c2 0 23 -5 47 -5c101 0 154 55 154 159c0 53 -11 123 -30 219c-23 -4 -50 -7 -79 -7c-186 0 -349 147 -349 334c0 200 126 321 217 406c21 17 73 70 74 71c-17 112 -22 161 -22 215 c0 84 18 212 82 288c33 39 64 51 71 51c18 0 47 -35 71 -86c16 -36 44 -110 44 -201c0 -159 -73 -284 -179 -395c9 -56 19 -115 29 -175c146 0 253 -102 253 -253c0 -103 -73 -205 -171 -237c6 -39 12 -69 15 -89c10 -57 16 -102 16 -141c0 -63 -14 -129 -68 -167 c-36 -22 -77 -34 -124 -34c-135 0 -186 87 -186 153z`
 	__Key__000000_F_key.Color = `black`
 	__Key__000000_F_key.FillOpacity = 0.300000
@@ -586,15 +586,15 @@ func _(stage *models.StageStruct) {
 
 	__MovingLine__000000_Cursor.Name = `Cursor`
 	__MovingLine__000000_Cursor.IsDisplayed = true
-	__MovingLine__000000_Cursor.AngleDegree = 0.000000
-	__MovingLine__000000_Cursor.Length = 100.000000
+	__MovingLine__000000_Cursor.AngleDegree = 90.000000
+	__MovingLine__000000_Cursor.Length = 2000.000000
 	__MovingLine__000000_Cursor.CenterX = 0.000000
-	__MovingLine__000000_Cursor.CenterY = 0.000000
+	__MovingLine__000000_Cursor.CenterY = 186.660000
 	__MovingLine__000000_Cursor.Color = ``
 	__MovingLine__000000_Cursor.FillOpacity = 0.000000
-	__MovingLine__000000_Cursor.Stroke = `black`
+	__MovingLine__000000_Cursor.Stroke = `lightgray`
 	__MovingLine__000000_Cursor.StrokeOpacity = 0.700000
-	__MovingLine__000000_Cursor.StrokeWidth = 0.000000
+	__MovingLine__000000_Cursor.StrokeWidth = 6.000000
 	__MovingLine__000000_Cursor.StrokeDashArray = ``
 	__MovingLine__000000_Cursor.StrokeDashArrayWhenSelected = ``
 	__MovingLine__000000_Cursor.Transform = ``
@@ -690,7 +690,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbBeatLines = 300
 	__Parameter__000000_Reference.NbBeatLinesPerCurve = 22
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
-	__Parameter__000000_Reference.FirstVoiceShiftY = 1.740000
+	__Parameter__000000_Reference.FirstVoiceShiftY = 1.830000
 	__Parameter__000000_Reference.PitchDifference = 12
 	__Parameter__000000_Reference.Speed = 4.050000
 	__Parameter__000000_Reference.Level = 2.200000
@@ -949,13 +949,13 @@ func _(stage *models.StageStruct) {
 	__VerticalAxis__000000_Vertical_Axis.Transform = ``
 
 	// Setup of pointers
-	__Axis__000000_Construction_Axis.ShapeCategory = __ShapeCategory__000004_4_Construction
-	__Axis__000001_Initial_Axis.ShapeCategory = __ShapeCategory__000001_1_Initial
+	__Axis__000001_Construction_Axis.ShapeCategory = __ShapeCategory__000004_4_Construction
+	__Axis__000002_Initial_Axis.ShapeCategory = __ShapeCategory__000001_1_Initial
 	__Axis__000004_Rotated_Axis.ShapeCategory = __ShapeCategory__000002_2_Rotated
-	__AxisGrid__000000_Construction_Axis_Grid.Reference = __Axis__000000_Construction_Axis
-	__AxisGrid__000000_Construction_Axis_Grid.ShapeCategory = __ShapeCategory__000004_4_Construction
-	__AxisGrid__000001_Measure_Lines.Reference = __Axis__000002_Measure
-	__AxisGrid__000001_Measure_Lines.ShapeCategory = __ShapeCategory__000008_8_Score_notation
+	__AxisGrid__000000_Beat_Lines.Reference = __Axis__000000_Beat_Reference
+	__AxisGrid__000000_Beat_Lines.ShapeCategory = __ShapeCategory__000008_8_Score_notation
+	__AxisGrid__000001_Construction_Axis_Grid.Reference = __Axis__000001_Construction_Axis
+	__AxisGrid__000001_Construction_Axis_Grid.ShapeCategory = __ShapeCategory__000004_4_Construction
 	__AxisGrid__000002_Pitch_Lines.Reference = __Axis__000003_Pitch_Line
 	__AxisGrid__000002_Pitch_Lines.ShapeCategory = __ShapeCategory__000008_8_Score_notation
 	__Bezier__000002_Growth_Bezier_Right_Seed.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
@@ -1010,12 +1010,12 @@ func _(stage *models.StageStruct) {
 	__FrontCurveStack__000000_Front_Curve_Stack.FrontCurves = append(__FrontCurveStack__000000_Front_Curve_Stack.FrontCurves, __FrontCurve__000007_Non_Rotated_7_)
 	__HorizontalAxis__000000_Horizontal_Axis.ShapeCategory = __ShapeCategory__000000_0_Axes
 	__Key__000000_F_key.ShapeCategory = __ShapeCategory__000008_8_Score_notation
-	__MovingLine__000000_Cursor.ShapeCategory = __ShapeCategory__000009_9_Composer
+	__MovingLine__000000_Cursor.ShapeCategory = __ShapeCategory__000008_8_Score_notation
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000001_Initial_Rhombus
 	__Parameter__000000_Reference.InitialCircle = __Circle__000004_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000001_Initial_Rhombus_Grid
 	__Parameter__000000_Reference.InitialCircleGrid = __CircleGrid__000005_Initial_Circle_Grid
-	__Parameter__000000_Reference.InitialAxis = __Axis__000001_Initial_Axis
+	__Parameter__000000_Reference.InitialAxis = __Axis__000002_Initial_Axis
 	__Parameter__000000_Reference.RotatedAxis = __Axis__000004_Rotated_Axis
 	__Parameter__000000_Reference.RotatedRhombus = __Rhombus__000003_Rotated_Rhombus
 	__Parameter__000000_Reference.RotatedRhombusGrid = __RhombusGrid__000002_Rotated_Rhombus_Grid
@@ -1028,8 +1028,8 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.GrowingCircleGrid = __CircleGrid__000003_Growing_Circle_Grid
 	__Parameter__000000_Reference.GrowingCircleGridLeftSeed = __Circle__000003_Growing_Seed_Left
 	__Parameter__000000_Reference.GrowingCircleGridLeft = __CircleGrid__000004_Growing_Circle_Grid_Shifted_Left
-	__Parameter__000000_Reference.ConstructionAxis = __Axis__000000_Construction_Axis
-	__Parameter__000000_Reference.ConstructionAxisGrid = __AxisGrid__000000_Construction_Axis_Grid
+	__Parameter__000000_Reference.ConstructionAxis = __Axis__000001_Construction_Axis
+	__Parameter__000000_Reference.ConstructionAxisGrid = __AxisGrid__000001_Construction_Axis_Grid
 	__Parameter__000000_Reference.ConstructionCircle = __Circle__000001_Construction_Circle
 	__Parameter__000000_Reference.ConstructionCircleGrid = __CircleGrid__000000_Construction_Circle_Grid
 	__Parameter__000000_Reference.GrowthCurveSeed = __Bezier__000005_Growth_Curve_Seed
@@ -1058,7 +1058,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FrontCurveStack = __FrontCurveStack__000000_Front_Curve_Stack
 	__Parameter__000000_Reference.Fkey = __Key__000000_F_key
 	__Parameter__000000_Reference.PitchLines = __AxisGrid__000002_Pitch_Lines
-	__Parameter__000000_Reference.BeatLines = __AxisGrid__000001_Measure_Lines
+	__Parameter__000000_Reference.BeatLines = __AxisGrid__000000_Beat_Lines
 	__Parameter__000000_Reference.FirstVoice = __BezierGrid__000002_First_Voice
 	__Parameter__000000_Reference.FirstVoiceShiftRigth = __BezierGrid__000003_First_Voice_Shift_Right
 	__Parameter__000000_Reference.SecondVoice = __BezierGrid__000000_2nb_Voice
