@@ -54,10 +54,6 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterMovingLineCreateCallback != nil {
 			stage.OnAfterMovingLineCreateCallback.OnAfterCreate(stage, target)
 		}
-	case *NoteInfo:
-		if stage.OnAfterNoteInfoCreateCallback != nil {
-			stage.OnAfterNoteInfoCreateCallback.OnAfterCreate(stage, target)
-		}
 	case *Parameter:
 		if stage.OnAfterParameterCreateCallback != nil {
 			stage.OnAfterParameterCreateCallback.OnAfterCreate(stage, target)
@@ -183,11 +179,6 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*MovingLine)
 		if stage.OnAfterMovingLineUpdateCallback != nil {
 			stage.OnAfterMovingLineUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
-		}
-	case *NoteInfo:
-		newTarget := any(new).(*NoteInfo)
-		if stage.OnAfterNoteInfoUpdateCallback != nil {
-			stage.OnAfterNoteInfoUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *Parameter:
 		newTarget := any(new).(*Parameter)
@@ -329,11 +320,6 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*MovingLine)
 			stage.OnAfterMovingLineDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
-	case *NoteInfo:
-		if stage.OnAfterNoteInfoDeleteCallback != nil {
-			staged := any(staged).(*NoteInfo)
-			stage.OnAfterNoteInfoDeleteCallback.OnAfterDelete(stage, staged, front)
-		}
 	case *Parameter:
 		if stage.OnAfterParameterDeleteCallback != nil {
 			staged := any(staged).(*Parameter)
@@ -462,10 +448,6 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterMovingLineReadCallback != nil {
 			stage.OnAfterMovingLineReadCallback.OnAfterRead(stage, target)
 		}
-	case *NoteInfo:
-		if stage.OnAfterNoteInfoReadCallback != nil {
-			stage.OnAfterNoteInfoReadCallback.OnAfterRead(stage, target)
-		}
 	case *Parameter:
 		if stage.OnAfterParameterReadCallback != nil {
 			stage.OnAfterParameterReadCallback.OnAfterRead(stage, target)
@@ -569,9 +551,6 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *MovingLine:
 		stage.OnAfterMovingLineUpdateCallback = any(callback).(OnAfterUpdateInterface[MovingLine])
 	
-	case *NoteInfo:
-		stage.OnAfterNoteInfoUpdateCallback = any(callback).(OnAfterUpdateInterface[NoteInfo])
-	
 	case *Parameter:
 		stage.OnAfterParameterUpdateCallback = any(callback).(OnAfterUpdateInterface[Parameter])
 	
@@ -656,9 +635,6 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *MovingLine:
 		stage.OnAfterMovingLineCreateCallback = any(callback).(OnAfterCreateInterface[MovingLine])
-	
-	case *NoteInfo:
-		stage.OnAfterNoteInfoCreateCallback = any(callback).(OnAfterCreateInterface[NoteInfo])
 	
 	case *Parameter:
 		stage.OnAfterParameterCreateCallback = any(callback).(OnAfterCreateInterface[Parameter])
@@ -745,9 +721,6 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *MovingLine:
 		stage.OnAfterMovingLineDeleteCallback = any(callback).(OnAfterDeleteInterface[MovingLine])
 	
-	case *NoteInfo:
-		stage.OnAfterNoteInfoDeleteCallback = any(callback).(OnAfterDeleteInterface[NoteInfo])
-	
 	case *Parameter:
 		stage.OnAfterParameterDeleteCallback = any(callback).(OnAfterDeleteInterface[Parameter])
 	
@@ -832,9 +805,6 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *MovingLine:
 		stage.OnAfterMovingLineReadCallback = any(callback).(OnAfterReadInterface[MovingLine])
-	
-	case *NoteInfo:
-		stage.OnAfterNoteInfoReadCallback = any(callback).(OnAfterReadInterface[NoteInfo])
 	
 	case *Parameter:
 		stage.OnAfterParameterReadCallback = any(callback).(OnAfterReadInterface[Parameter])

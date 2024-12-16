@@ -23,7 +23,6 @@ import { SpiralBezier } from './spiralbezier'
 import { SpiralBezierGrid } from './spiralbeziergrid'
 import { FrontCurveStack } from './frontcurvestack'
 import { Key } from './key'
-import { NoteInfo } from './noteinfo'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 import { SpiralOrigin } from './spiralorigin'
@@ -196,7 +195,6 @@ export class Parameter {
 
 	SecondVoiceNotesShiftedRight?: CircleGrid
 
-	NoteInfos: Array<NoteInfo> = []
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
@@ -679,11 +677,6 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 
 
 	// insertion point for slice of pointers fields encoding
-	parameterAPI.ParameterPointersEncoding.NoteInfos = []
-	for (let _noteinfo of parameter.NoteInfos) {
-		parameterAPI.ParameterPointersEncoding.NoteInfos.push(_noteinfo.ID)
-	}
-
 }
 
 // CopyParameterAPIToParameter update basic, pointers and slice of pointers fields of parameter
@@ -802,16 +795,4 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.Cursor = frontRepo.map_ID_MovingLine.get(parameterAPI.ParameterPointersEncoding.CursorID.Int64)
 
 	// insertion point for slice of pointers fields encoding
-	if (!Array.isArray(parameterAPI.ParameterPointersEncoding.NoteInfos)) {
-		console.error('Rects is not an array:', parameterAPI.ParameterPointersEncoding.NoteInfos);
-		return;
-	}
-
-	parameter.NoteInfos = new Array<NoteInfo>()
-	for (let _id of parameterAPI.ParameterPointersEncoding.NoteInfos) {
-		let _noteinfo = frontRepo.map_ID_NoteInfo.get(_id)
-		if (_noteinfo != undefined) {
-			parameter.NoteInfos.push(_noteinfo!)
-		}
-	}
 }

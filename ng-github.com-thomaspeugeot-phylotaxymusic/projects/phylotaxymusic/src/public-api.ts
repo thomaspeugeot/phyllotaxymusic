@@ -61,10 +61,6 @@ export * from './lib/movingline-api'
 export * from './lib/movingline'
 export * from './lib/movingline.service'
 
-export * from './lib/noteinfo-api'
-export * from './lib/noteinfo'
-export * from './lib/noteinfo.service'
-
 export * from './lib/parameter-api'
 export * from './lib/parameter'
 export * from './lib/parameter.service'

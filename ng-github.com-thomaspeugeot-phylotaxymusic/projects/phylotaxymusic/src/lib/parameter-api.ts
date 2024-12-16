@@ -18,7 +18,6 @@ import { SpiralBezierAPI } from './spiralbezier-api'
 import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
 import { FrontCurveStackAPI } from './frontcurvestack-api'
 import { KeyAPI } from './key-api'
-import { NoteInfoAPI } from './noteinfo-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 import { SpiralOriginAPI } from './spiralorigin-api'
@@ -197,7 +196,6 @@ export class ParameterPointersEncoding {
 
 	SecondVoiceNotesShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, SecondVoiceNotesShiftedRight.ID = 0
 
-	NoteInfos: number[] = []
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 
 	VerticalAxisID: NullInt64 = new NullInt64 // if pointer is null, VerticalAxis.ID = 0

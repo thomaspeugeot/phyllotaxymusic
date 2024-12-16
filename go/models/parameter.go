@@ -152,11 +152,6 @@ type Parameter struct {
 	//
 	IsMinor bool
 
-	//
-	// Information per note
-	//
-	NoteInfos []*NoteInfo
-
 	// ThemeBinaryEncoding is the encoding of the theme
 	// on a 64 bits integer.
 	//

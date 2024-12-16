@@ -109,18 +109,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		// insertion point
 		}
 
-	case *models.NoteInfo:
-		switch reverseField.GongstructName {
-		// insertion point
-		case "Parameter":
-			switch reverseField.Fieldname {
-			case "NoteInfos":
-				if _parameter, ok := stage.Parameter_NoteInfos_reverseMap[inst]; ok {
-					res = _parameter.Name
-				}
-			}
-		}
-
 	case *models.Parameter:
 		switch reverseField.GongstructName {
 		// insertion point
@@ -331,16 +319,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 	case *models.MovingLine:
 		switch reverseField.GongstructName {
 		// insertion point
-		}
-
-	case *models.NoteInfo:
-		switch reverseField.GongstructName {
-		// insertion point
-		case "Parameter":
-			switch reverseField.Fieldname {
-			case "NoteInfos":
-				res = stage.Parameter_NoteInfos_reverseMap[inst]
-			}
 		}
 
 	case *models.Parameter:

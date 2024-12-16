@@ -326,7 +326,6 @@ var __gong__map_FrontCurveStack = make(map[string]*FrontCurveStack)
 var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
 var __gong__map_Key = make(map[string]*Key)
 var __gong__map_MovingLine = make(map[string]*MovingLine)
-var __gong__map_NoteInfo = make(map[string]*NoteInfo)
 var __gong__map_Parameter = make(map[string]*Parameter)
 var __gong__map_Rhombus = make(map[string]*Rhombus)
 var __gong__map_RhombusGrid = make(map[string]*RhombusGrid)
@@ -585,12 +584,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceMovingLine.Stage(stage)
 										instance = any(instanceMovingLine)
 										__gong__map_MovingLine[identifier] = instanceMovingLine
-									case "NoteInfo":
-										instanceNoteInfo := new(NoteInfo)
-										instanceNoteInfo.Name = instanceName
-										instanceNoteInfo.Stage(stage)
-										instance = any(instanceNoteInfo)
-										__gong__map_NoteInfo[identifier] = instanceNoteInfo
 									case "Parameter":
 										instanceParameter := new(Parameter)
 										instanceParameter.Name = instanceName
@@ -759,10 +752,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
-						case "NoteInfo":
-							switch fieldName {
-							// insertion point for date assign code
-							}
 						case "Parameter":
 							switch fieldName {
 							// insertion point for date assign code
@@ -928,19 +917,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
-					case "NoteInfo":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						}
 					case "Parameter":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
-						case "NoteInfos":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							target := __gong__map_NoteInfo[targetIdentifier]
-							__gong__map_Parameter[identifier].NoteInfos =
-								append(__gong__map_Parameter[identifier].NoteInfos, target)
 						}
 					case "Rhombus":
 						switch fieldName {
@@ -1652,14 +1631,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_MovingLine[identifier].Transform = fielValue
-				}
-			case "NoteInfo":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_NoteInfo[identifier].Name = fielValue
 				}
 			case "Parameter":
 				switch fieldName {
@@ -2726,17 +2697,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					__gong__map_MovingLine[identifier].IsMoving = fielValue
 				}
-			case "NoteInfo":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "IsKept":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_NoteInfo[identifier].IsKept = fielValue
-				}
 			case "Parameter":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -3221,10 +3181,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "MovingLine":
-					switch fieldName {
-					// insertion point for enum assign code
-					}
-				case "NoteInfo":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

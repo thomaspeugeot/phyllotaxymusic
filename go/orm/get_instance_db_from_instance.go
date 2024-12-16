@@ -63,10 +63,6 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 		movinglineInstance := any(concreteInstance).(*models.MovingLine)
 		ret2 := backRepo.BackRepoMovingLine.GetMovingLineDBFromMovingLinePtr(movinglineInstance)
 		ret = any(ret2).(*T2)
-	case *models.NoteInfo:
-		noteinfoInstance := any(concreteInstance).(*models.NoteInfo)
-		ret2 := backRepo.BackRepoNoteInfo.GetNoteInfoDBFromNoteInfoPtr(noteinfoInstance)
-		ret = any(ret2).(*T2)
 	case *models.Parameter:
 		parameterInstance := any(concreteInstance).(*models.Parameter)
 		ret2 := backRepo.BackRepoParameter.GetParameterDBFromParameterPtr(parameterInstance)
@@ -193,11 +189,6 @@ func GetID[T models.Gongstruct](
 		id = int(tmp.ID)
 	case *models.MovingLine:
 		tmp := GetInstanceDBFromInstance[models.MovingLine, MovingLineDB](
-			stage, backRepo, inst,
-		)
-		id = int(tmp.ID)
-	case *models.NoteInfo:
-		tmp := GetInstanceDBFromInstance[models.NoteInfo, NoteInfoDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -341,11 +332,6 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.MovingLine:
 		tmp := GetInstanceDBFromInstance[models.MovingLine, MovingLineDB](
-			stage, backRepo, inst,
-		)
-		id = int(tmp.ID)
-	case *models.NoteInfo:
-		tmp := GetInstanceDBFromInstance[models.NoteInfo, NoteInfoDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

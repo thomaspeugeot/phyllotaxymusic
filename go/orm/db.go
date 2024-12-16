@@ -68,10 +68,6 @@ type DBLite struct {
 
 	nextIDMovingLineDB uint
 
-	noteinfoDBs map[uint]*NoteInfoDB
-
-	nextIDNoteInfoDB uint
-
 	parameterDBs map[uint]*ParameterDB
 
 	nextIDParameterDB uint
@@ -157,8 +153,6 @@ func NewDBLite() *DBLite {
 		keyDBs: make(map[uint]*KeyDB),
 
 		movinglineDBs: make(map[uint]*MovingLineDB),
-
-		noteinfoDBs: make(map[uint]*NoteInfoDB),
 
 		parameterDBs: make(map[uint]*ParameterDB),
 
@@ -249,10 +243,6 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		db.nextIDMovingLineDB++
 		v.ID = db.nextIDMovingLineDB
 		db.movinglineDBs[v.ID] = v
-	case *NoteInfoDB:
-		db.nextIDNoteInfoDB++
-		v.ID = db.nextIDNoteInfoDB
-		db.noteinfoDBs[v.ID] = v
 	case *ParameterDB:
 		db.nextIDParameterDB++
 		v.ID = db.nextIDParameterDB
@@ -361,8 +351,6 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 		delete(db.keyDBs, v.ID)
 	case *MovingLineDB:
 		delete(db.movinglineDBs, v.ID)
-	case *NoteInfoDB:
-		delete(db.noteinfoDBs, v.ID)
 	case *ParameterDB:
 		delete(db.parameterDBs, v.ID)
 	case *RhombusDB:
@@ -444,9 +432,6 @@ func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 		return db, nil
 	case *MovingLineDB:
 		db.movinglineDBs[v.ID] = v
-		return db, nil
-	case *NoteInfoDB:
-		db.noteinfoDBs[v.ID] = v
 		return db, nil
 	case *ParameterDB:
 		db.parameterDBs[v.ID] = v
@@ -577,12 +562,6 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 			*existing = *v
 		} else {
 			return nil, errors.New("db MovingLine github.com/thomaspeugeot/phylotaxymusic/go, record not found")
-		}
-	case *NoteInfoDB:
-		if existing, ok := db.noteinfoDBs[v.ID]; ok {
-			*existing = *v
-		} else {
-			return nil, errors.New("db NoteInfo github.com/thomaspeugeot/phylotaxymusic/go, record not found")
 		}
 	case *ParameterDB:
 		if existing, ok := db.parameterDBs[v.ID]; ok {
@@ -751,12 +730,6 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 	case *[]MovingLineDB:
 		*ptr = make([]MovingLineDB, 0, len(db.movinglineDBs))
 		for _, v := range db.movinglineDBs {
-			*ptr = append(*ptr, *v)
-		}
-		return db, nil
-	case *[]NoteInfoDB:
-		*ptr = make([]NoteInfoDB, 0, len(db.noteinfoDBs))
-		for _, v := range db.noteinfoDBs {
 			*ptr = append(*ptr, *v)
 		}
 		return db, nil
@@ -996,16 +969,6 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		movinglineDB, _ := instanceDB.(*MovingLineDB)
 		*movinglineDB = *tmp
-		
-	case *NoteInfoDB:
-		tmp, ok := db.noteinfoDBs[uint(i)]
-
-		if !ok {
-			return nil, errors.New(fmt.Sprintf("db.First NoteInfo Unkown entry %d", i))
-		}
-
-		noteinfoDB, _ := instanceDB.(*NoteInfoDB)
-		*noteinfoDB = *tmp
 		
 	case *ParameterDB:
 		tmp, ok := db.parameterDBs[uint(i)]

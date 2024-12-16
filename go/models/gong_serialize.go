@@ -26,7 +26,6 @@ func SerializeStage(stage *StageStruct, filename string) {
 		SerializeExcelize[HorizontalAxis](stage, f)
 		SerializeExcelize[Key](stage, f)
 		SerializeExcelize[MovingLine](stage, f)
-		SerializeExcelize[NoteInfo](stage, f)
 		SerializeExcelize[Parameter](stage, f)
 		SerializeExcelize[Rhombus](stage, f)
 		SerializeExcelize[RhombusGrid](stage, f)

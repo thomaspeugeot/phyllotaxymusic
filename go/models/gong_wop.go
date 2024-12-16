@@ -325,18 +325,6 @@ func (from *MovingLine) CopyBasicFields(to *MovingLine) {
 	to.Transform = from.Transform
 }
 
-type NoteInfo_WOP struct {
-	// insertion point
-	Name string
-	IsKept bool
-}
-
-func (from *NoteInfo) CopyBasicFields(to *NoteInfo) {
-	// insertion point
-	to.Name = from.Name
-	to.IsKept = from.IsKept
-}
-
 type Parameter_WOP struct {
 	// insertion point
 	Name string

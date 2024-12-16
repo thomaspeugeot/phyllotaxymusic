@@ -86,11 +86,6 @@ func _(stage *models.StageStruct) {
 
 	__MovingLine__000000_Cursor := (&models.MovingLine{}).Stage(stage)
 
-	__NoteInfo__000000_0 := (&models.NoteInfo{}).Stage(stage)
-	__NoteInfo__000001_1 := (&models.NoteInfo{}).Stage(stage)
-	__NoteInfo__000002_2 := (&models.NoteInfo{}).Stage(stage)
-	__NoteInfo__000003_3 := (&models.NoteInfo{}).Stage(stage)
-
 	__Parameter__000000_Reference := (&models.Parameter{}).Stage(stage)
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed := (&models.Rhombus{}).Stage(stage)
@@ -574,7 +569,7 @@ func _(stage *models.StageStruct) {
 	__MovingLine__000000_Cursor.CenterY = 366.000000
 	__MovingLine__000000_Cursor.StartX = 0.000000
 	__MovingLine__000000_Cursor.EndX = 400.000000
-	__MovingLine__000000_Cursor.DurationSeconds = 16.000000
+	__MovingLine__000000_Cursor.DurationSeconds = 6.000000
 	__MovingLine__000000_Cursor.IsMoving = false
 	__MovingLine__000000_Cursor.Color = ``
 	__MovingLine__000000_Cursor.FillOpacity = 0.000000
@@ -584,18 +579,6 @@ func _(stage *models.StageStruct) {
 	__MovingLine__000000_Cursor.StrokeDashArray = ``
 	__MovingLine__000000_Cursor.StrokeDashArrayWhenSelected = ``
 	__MovingLine__000000_Cursor.Transform = ``
-
-	__NoteInfo__000000_0.Name = `0`
-	__NoteInfo__000000_0.IsKept = false
-
-	__NoteInfo__000001_1.Name = `1`
-	__NoteInfo__000001_1.IsKept = false
-
-	__NoteInfo__000002_2.Name = `2`
-	__NoteInfo__000002_2.IsKept = false
-
-	__NoteInfo__000003_3.Name = `3`
-	__NoteInfo__000003_3.IsKept = false
 
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.BackendColor = `#F1F1F1`
@@ -627,7 +610,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.BeatsPerSecond = 1.000000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 61447
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 61449
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000
@@ -1001,10 +984,6 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceNotesShiftedRight = __CircleGrid__000001_First_Voice_note_shifted_right
 	__Parameter__000000_Reference.SecondVoiceNotes = __CircleGrid__000008_Second_Voice_notes
 	__Parameter__000000_Reference.SecondVoiceNotesShiftedRight = __CircleGrid__000007_Second_Voice_Notes_Shift_Right
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000000_0)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000001_1)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000002_2)
-	__Parameter__000000_Reference.NoteInfos = append(__Parameter__000000_Reference.NoteInfos, __NoteInfo__000003_3)
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Parameter__000000_Reference.SpiralOrigin = __SpiralOrigin__000000_Spiral_Origin

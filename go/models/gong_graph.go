@@ -41,9 +41,6 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *MovingLine:
 		ok = stage.IsStagedMovingLine(target)
 
-	case *NoteInfo:
-		ok = stage.IsStagedNoteInfo(target)
-
 	case *Parameter:
 		ok = stage.IsStagedParameter(target)
 
@@ -173,13 +170,6 @@ func (stage *StageStruct) IsStagedKey(key *Key) (ok bool) {
 func (stage *StageStruct) IsStagedMovingLine(movingline *MovingLine) (ok bool) {
 
 	_, ok = stage.MovingLines[movingline]
-
-	return
-}
-
-func (stage *StageStruct) IsStagedNoteInfo(noteinfo *NoteInfo) (ok bool) {
-
-	_, ok = stage.NoteInfos[noteinfo]
 
 	return
 }
@@ -325,9 +315,6 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *MovingLine:
 		stage.StageBranchMovingLine(target)
-
-	case *NoteInfo:
-		stage.StageBranchNoteInfo(target)
 
 	case *Parameter:
 		stage.StageBranchParameter(target)
@@ -617,21 +604,6 @@ func (stage *StageStruct) StageBranchMovingLine(movingline *MovingLine) {
 
 }
 
-func (stage *StageStruct) StageBranchNoteInfo(noteinfo *NoteInfo) {
-
-	// check if instance is already staged
-	if IsStaged(stage, noteinfo) {
-		return
-	}
-
-	noteinfo.Stage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
 func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 
 	// check if instance is already staged
@@ -824,9 +796,6 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _noteinfo := range parameter.NoteInfos {
-		StageBranch(stage, _noteinfo)
-	}
 
 }
 
@@ -1139,10 +1108,6 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *MovingLine:
 		toT := CopyBranchMovingLine(mapOrigCopy, fromT)
-		return any(toT).(*Type)
-
-	case *NoteInfo:
-		toT := CopyBranchNoteInfo(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *Parameter:
@@ -1496,25 +1461,6 @@ func CopyBranchMovingLine(mapOrigCopy map[any]any, movinglineFrom *MovingLine) (
 	return
 }
 
-func CopyBranchNoteInfo(mapOrigCopy map[any]any, noteinfoFrom *NoteInfo) (noteinfoTo *NoteInfo) {
-
-	// noteinfoFrom has already been copied
-	if _noteinfoTo, ok := mapOrigCopy[noteinfoFrom]; ok {
-		noteinfoTo = _noteinfoTo.(*NoteInfo)
-		return
-	}
-
-	noteinfoTo = new(NoteInfo)
-	mapOrigCopy[noteinfoFrom] = noteinfoTo
-	noteinfoFrom.CopyBasicFields(noteinfoTo)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-	return
-}
-
 func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (parameterTo *Parameter) {
 
 	// parameterFrom has already been copied
@@ -1710,9 +1656,6 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _noteinfo := range parameterFrom.NoteInfos {
-		parameterTo.NoteInfos = append(parameterTo.NoteInfos, CopyBranchNoteInfo(mapOrigCopy, _noteinfo))
-	}
 
 	return
 }
@@ -2065,9 +2008,6 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *MovingLine:
 		stage.UnstageBranchMovingLine(target)
 
-	case *NoteInfo:
-		stage.UnstageBranchNoteInfo(target)
-
 	case *Parameter:
 		stage.UnstageBranchParameter(target)
 
@@ -2356,21 +2296,6 @@ func (stage *StageStruct) UnstageBranchMovingLine(movingline *MovingLine) {
 
 }
 
-func (stage *StageStruct) UnstageBranchNoteInfo(noteinfo *NoteInfo) {
-
-	// check if instance is already staged
-	if !IsStaged(stage, noteinfo) {
-		return
-	}
-
-	noteinfo.Unstage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
 func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 
 	// check if instance is already staged
@@ -2563,9 +2488,6 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
-	for _, _noteinfo := range parameter.NoteInfos {
-		UnstageBranch(stage, _noteinfo)
-	}
 
 }
 

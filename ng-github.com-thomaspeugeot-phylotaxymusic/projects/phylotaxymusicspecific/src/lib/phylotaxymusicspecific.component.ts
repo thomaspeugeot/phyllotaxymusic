@@ -46,20 +46,6 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./phylotaxymusicspecific.component.css'],
 })
 export class PhylotaxymusicspecificComponent implements OnInit {
-  onChange(i: number) {
-
-    let parameter = this.frontRepo!.array_Parameters[0]
-    let noteInfo = parameter.NoteInfos[i]
-
-    this.noteInfoService.updateFront(noteInfo, this.StacksNames.Phylotaxy).subscribe(
-      () => {
-
-        // in order to provoke backend rework
-        let event2: Event = new Event('input');
-        this.input(event2)
-      }
-    )
-  }
 
   readonly checked = model(false);
   readonly indeterminate = model(false);
@@ -93,7 +79,6 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     private frontRepoService: phylotaxymusic.FrontRepoService,
 
     private parameterService: phylotaxymusic.ParameterService,
-    private noteInfoService: phylotaxymusic.NoteInfoService,
   ) {
 
   }
@@ -115,15 +100,6 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     }
 
     return `${value}`;
-  }
-
-  getNoteInfoAtOffset(i: number): phylotaxymusic.NoteInfo | undefined {
-    const noteInfos = this.frontRepo!.array_Parameters[0].NoteInfos;
-    const bruteOffsetIndex = i - this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift + noteInfos.length
-    const offsetIndex = bruteOffsetIndex %
-      noteInfos.length;
-    // console.log(i, this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift, bruteOffsetIndex, offsetIndex)
-    return noteInfos[offsetIndex];
   }
 
   // Check if a specific note is played

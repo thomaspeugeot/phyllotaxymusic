@@ -44,8 +44,6 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.Key](probe)
 	case *models.MovingLine:
 		fillUpTable[models.MovingLine](probe)
-	case *models.NoteInfo:
-		fillUpTable[models.NoteInfo](probe)
 	case *models.Parameter:
 		fillUpTable[models.Parameter](probe)
 	case *models.Rhombus:

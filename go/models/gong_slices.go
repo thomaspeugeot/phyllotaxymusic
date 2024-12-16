@@ -183,30 +183,8 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 	case *MovingLine:
 		// insertion point per field
 
-	case *NoteInfo:
-		// insertion point per field
-
 	case *Parameter:
 		// insertion point per field
-		if fieldName == "NoteInfos" {
-
-			// walk all instances of the owning type
-			for _instance := range *GetGongstructInstancesSetFromPointerType[OwningType](stage) {
-				if any(_instance).(*Parameter) != owningInstanceInfered {
-					_inferedTypeInstance := any(_instance).(*Parameter)
-					reference := make([]FieldType, 0)
-					targetFieldSlice := any(_inferedTypeInstance.NoteInfos).([]FieldType)
-					copy(targetFieldSlice, reference)
-					_inferedTypeInstance.NoteInfos = _inferedTypeInstance.NoteInfos[0:]
-					for _, fieldInstance := range reference {
-						if _, ok := setOfFieldInstances[any(fieldInstance).(FieldType)]; !ok {
-							_inferedTypeInstance.NoteInfos =
-								append(_inferedTypeInstance.NoteInfos, any(fieldInstance).(*NoteInfo))
-						}
-					}
-				}
-			}
-		}
 
 	case *Rhombus:
 		// insertion point per field
@@ -435,19 +413,8 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	// Compute reverse map for named struct MovingLine
 	// insertion point per field
 
-	// Compute reverse map for named struct NoteInfo
-	// insertion point per field
-
 	// Compute reverse map for named struct Parameter
 	// insertion point per field
-	clear(stage.Parameter_NoteInfos_reverseMap)
-	stage.Parameter_NoteInfos_reverseMap = make(map[*NoteInfo]*Parameter)
-	for parameter := range stage.Parameters {
-		_ = parameter
-		for _, _noteinfo := range parameter.NoteInfos {
-			stage.Parameter_NoteInfos_reverseMap[_noteinfo] = parameter
-		}
-	}
 
 	// Compute reverse map for named struct Rhombus
 	// insertion point per field
