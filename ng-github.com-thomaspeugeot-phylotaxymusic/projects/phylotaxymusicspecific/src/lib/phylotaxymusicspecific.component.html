@@ -307,6 +307,28 @@
             </mat-grid-list>
           }
           @if (frontRepo && frontRepo.array_Parameters[0]) {
+            <!-- Display checkboxes for each note -->
+            <div *ngFor="let note of [].constructor(frontRepo.array_Parameters[0].NbOfBeatsInTheme); let i = index">
+              <label>
+                <input 
+                  type="checkbox" 
+                  [checked]="isNotePlayed(frontRepo.array_Parameters[0].ThemeBinaryEncoding, i)" 
+                  (change)="toggleNote(i)" 
+                />
+                {{ i + 1 }}
+              </label>
+              <label>
+                <input 
+                  type="checkbox" 
+                  [checked]="isNotePlayedWithOffset(frontRepo.array_Parameters[0].ThemeBinaryEncoding, i)" 
+                  disabled=true
+                />
+              </label>
+            </div>
+            <p>
+              Current Encoding: {{ frontRepo.array_Parameters[0].ThemeBinaryEncoding }}
+            </p>
+
             <section class="example-section">
               <div *ngFor="let noteInfo of frontRepo.array_Parameters[0].NoteInfos; 
               let i = index; ">

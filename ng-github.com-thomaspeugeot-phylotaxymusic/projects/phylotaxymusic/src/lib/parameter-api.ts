@@ -66,6 +66,7 @@ export class ParameterAPI {
 	BeatsPerSecond: number = 0
 	Level: number = 0
 	IsMinor: boolean = false
+	ThemeBinaryEncoding: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 	SpiralOriginX: number = 0

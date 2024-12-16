@@ -369,6 +369,7 @@ type Parameter_WOP struct {
 	BeatsPerSecond float64
 	Level float64
 	IsMinor bool
+	ThemeBinaryEncoding int
 	OriginX float64
 	OriginY float64
 	SpiralOriginX float64
@@ -413,6 +414,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.BeatsPerSecond = from.BeatsPerSecond
 	to.Level = from.Level
 	to.IsMinor = from.IsMinor
+	to.ThemeBinaryEncoding = from.ThemeBinaryEncoding
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
 	to.SpiralOriginX = from.SpiralOriginX

@@ -554,6 +554,8 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("IsMinor", instanceWithInferedType.IsMinor, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationSliceToForm("NoteInfos", instanceWithInferedType, &instanceWithInferedType.NoteInfos, formGroup, probe)
+		BasicFieldtoForm("ThemeBinaryEncoding", instanceWithInferedType.ThemeBinaryEncoding, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,

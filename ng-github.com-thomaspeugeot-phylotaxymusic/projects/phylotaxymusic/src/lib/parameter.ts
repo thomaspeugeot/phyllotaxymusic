@@ -71,6 +71,7 @@ export class Parameter {
 	BeatsPerSecond: number = 0
 	Level: number = 0
 	IsMinor: boolean = false
+	ThemeBinaryEncoding: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 	SpiralOriginX: number = 0
@@ -243,6 +244,7 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.BeatsPerSecond = parameter.BeatsPerSecond
 	parameterAPI.Level = parameter.Level
 	parameterAPI.IsMinor = parameter.IsMinor
+	parameterAPI.ThemeBinaryEncoding = parameter.ThemeBinaryEncoding
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 	parameterAPI.SpiralOriginX = parameter.SpiralOriginX
@@ -725,6 +727,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.BeatsPerSecond = parameterAPI.BeatsPerSecond
 	parameter.Level = parameterAPI.Level
 	parameter.IsMinor = parameterAPI.IsMinor
+	parameter.ThemeBinaryEncoding = parameterAPI.ThemeBinaryEncoding
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 	parameter.SpiralOriginX = parameterAPI.SpiralOriginX

@@ -394,6 +394,9 @@ type ParameterDB struct {
 	// provide the sql storage for the boolan
 	IsMinor_Data sql.NullBool
 
+	// Declation for basic field parameterDB.ThemeBinaryEncoding
+	ThemeBinaryEncoding_Data sql.NullInt64
+
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
 
@@ -509,25 +512,27 @@ type ParameterWOP struct {
 
 	IsMinor bool `xlsx:"30"`
 
-	OriginX float64 `xlsx:"31"`
+	ThemeBinaryEncoding int `xlsx:"31"`
 
-	OriginY float64 `xlsx:"32"`
+	OriginX float64 `xlsx:"32"`
 
-	SpiralOriginX float64 `xlsx:"33"`
+	OriginY float64 `xlsx:"33"`
 
-	SpiralOriginY float64 `xlsx:"34"`
+	SpiralOriginX float64 `xlsx:"34"`
 
-	OriginCrossWidth float64 `xlsx:"35"`
+	SpiralOriginY float64 `xlsx:"35"`
 
-	SpiralRadiusRatio float64 `xlsx:"36"`
+	OriginCrossWidth float64 `xlsx:"36"`
 
-	ShowSpiralBezierConstruct bool `xlsx:"37"`
+	SpiralRadiusRatio float64 `xlsx:"37"`
 
-	ShowInterpolationPoints bool `xlsx:"38"`
+	ShowSpiralBezierConstruct bool `xlsx:"38"`
 
-	ActualBeatsTemporalShift int `xlsx:"39"`
+	ShowInterpolationPoints bool `xlsx:"39"`
 
-	IsPlaying bool `xlsx:"40"`
+	ActualBeatsTemporalShift int `xlsx:"40"`
+
+	IsPlaying bool `xlsx:"41"`
 	// insertion for WOP pointer fields
 }
 
@@ -564,6 +569,7 @@ var Parameter_Fields = []string{
 	"BeatsPerSecond",
 	"Level",
 	"IsMinor",
+	"ThemeBinaryEncoding",
 	"OriginX",
 	"OriginY",
 	"SpiralOriginX",
@@ -2818,6 +2824,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.IsMinor_Data.Bool = parameter.IsMinor
 	parameterDB.IsMinor_Data.Valid = true
 
+	parameterDB.ThemeBinaryEncoding_Data.Int64 = int64(parameter.ThemeBinaryEncoding)
+	parameterDB.ThemeBinaryEncoding_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -2942,6 +2951,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.IsMinor_Data.Bool = parameter.IsMinor
 	parameterDB.IsMinor_Data.Valid = true
+
+	parameterDB.ThemeBinaryEncoding_Data.Int64 = int64(parameter.ThemeBinaryEncoding)
+	parameterDB.ThemeBinaryEncoding_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -3068,6 +3080,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.IsMinor_Data.Bool = parameter.IsMinor
 	parameterDB.IsMinor_Data.Valid = true
 
+	parameterDB.ThemeBinaryEncoding_Data.Int64 = int64(parameter.ThemeBinaryEncoding)
+	parameterDB.ThemeBinaryEncoding_Data.Valid = true
+
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
 
@@ -3132,6 +3147,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.BeatsPerSecond = parameterDB.BeatsPerSecond_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
+	parameter.ThemeBinaryEncoding = int(parameterDB.ThemeBinaryEncoding_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
@@ -3177,6 +3193,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.BeatsPerSecond = parameterDB.BeatsPerSecond_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
+	parameter.ThemeBinaryEncoding = int(parameterDB.ThemeBinaryEncoding_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
@@ -3223,6 +3240,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.BeatsPerSecond = parameterDB.BeatsPerSecond_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
+	parameter.ThemeBinaryEncoding = int(parameterDB.ThemeBinaryEncoding_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64

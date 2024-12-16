@@ -125,4 +125,32 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     // console.log(i, this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift, bruteOffsetIndex, offsetIndex)
     return noteInfos[offsetIndex];
   }
+
+  // Check if a specific note is played
+  isNotePlayed(encoding: number, rank: number): boolean {
+    return (encoding & (1 << rank)) !== 0;
+  }
+
+  // Check if a specific note is played
+  isNotePlayedWithOffset(encoding: number, rank: number): boolean {
+    const nbBeatsInTheme = this.frontRepo!.array_Parameters[0].NbOfBeatsInTheme
+    const bruteOffsetIndex = rank - this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift + nbBeatsInTheme
+
+    const offsetIndex = bruteOffsetIndex % nbBeatsInTheme
+    return (encoding & (1 << offsetIndex)) !== 0;
+  }
+
+
+
+  // Toggle the state of a specific note
+  toggleNote(rank: number): void {
+    const parameter = this.frontRepo!.array_Parameters[0];
+    if (this.isNotePlayed(parameter.ThemeBinaryEncoding, rank)) {
+      // Turn off the note
+      parameter.ThemeBinaryEncoding &= ~(1 << rank);
+    } else {
+      // Turn on the note
+      parameter.ThemeBinaryEncoding |= (1 << rank);
+    }
+  }
 }
