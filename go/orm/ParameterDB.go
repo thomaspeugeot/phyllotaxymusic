@@ -372,8 +372,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.NbBeatLines
 	NbBeatLines_Data sql.NullInt64
 
-	// Declation for basic field parameterDB.NbBeatLinesPerCurve
-	NbBeatLinesPerCurve_Data sql.NullInt64
+	// Declation for basic field parameterDB.NbOfBeatsInTheme
+	NbOfBeatsInTheme_Data sql.NullInt64
 
 	// Declation for basic field parameterDB.FirstVoiceShiftX
 	FirstVoiceShiftX_Data sql.NullFloat64
@@ -384,8 +384,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.PitchDifference
 	PitchDifference_Data sql.NullInt64
 
-	// Declation for basic field parameterDB.Speed
-	Speed_Data sql.NullFloat64
+	// Declation for basic field parameterDB.BeatsPerSecond
+	BeatsPerSecond_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.Level
 	Level_Data sql.NullFloat64
@@ -495,7 +495,7 @@ type ParameterWOP struct {
 
 	NbBeatLines int `xlsx:"23"`
 
-	NbBeatLinesPerCurve int `xlsx:"24"`
+	NbOfBeatsInTheme int `xlsx:"24"`
 
 	FirstVoiceShiftX float64 `xlsx:"25"`
 
@@ -503,7 +503,7 @@ type ParameterWOP struct {
 
 	PitchDifference int `xlsx:"27"`
 
-	Speed float64 `xlsx:"28"`
+	BeatsPerSecond float64 `xlsx:"28"`
 
 	Level float64 `xlsx:"29"`
 
@@ -557,11 +557,11 @@ var Parameter_Fields = []string{
 	"NbPitchLines",
 	"BeatLinesHeightRatio",
 	"NbBeatLines",
-	"NbBeatLinesPerCurve",
+	"NbOfBeatsInTheme",
 	"FirstVoiceShiftX",
 	"FirstVoiceShiftY",
 	"PitchDifference",
-	"Speed",
+	"BeatsPerSecond",
 	"Level",
 	"IsMinor",
 	"OriginX",
@@ -2797,8 +2797,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.NbBeatLines_Data.Int64 = int64(parameter.NbBeatLines)
 	parameterDB.NbBeatLines_Data.Valid = true
 
-	parameterDB.NbBeatLinesPerCurve_Data.Int64 = int64(parameter.NbBeatLinesPerCurve)
-	parameterDB.NbBeatLinesPerCurve_Data.Valid = true
+	parameterDB.NbOfBeatsInTheme_Data.Int64 = int64(parameter.NbOfBeatsInTheme)
+	parameterDB.NbOfBeatsInTheme_Data.Valid = true
 
 	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
 	parameterDB.FirstVoiceShiftX_Data.Valid = true
@@ -2809,8 +2809,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
-	parameterDB.Speed_Data.Float64 = parameter.Speed
-	parameterDB.Speed_Data.Valid = true
+	parameterDB.BeatsPerSecond_Data.Float64 = parameter.BeatsPerSecond
+	parameterDB.BeatsPerSecond_Data.Valid = true
 
 	parameterDB.Level_Data.Float64 = parameter.Level
 	parameterDB.Level_Data.Valid = true
@@ -2922,8 +2922,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.NbBeatLines_Data.Int64 = int64(parameter.NbBeatLines)
 	parameterDB.NbBeatLines_Data.Valid = true
 
-	parameterDB.NbBeatLinesPerCurve_Data.Int64 = int64(parameter.NbBeatLinesPerCurve)
-	parameterDB.NbBeatLinesPerCurve_Data.Valid = true
+	parameterDB.NbOfBeatsInTheme_Data.Int64 = int64(parameter.NbOfBeatsInTheme)
+	parameterDB.NbOfBeatsInTheme_Data.Valid = true
 
 	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
 	parameterDB.FirstVoiceShiftX_Data.Valid = true
@@ -2934,8 +2934,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
-	parameterDB.Speed_Data.Float64 = parameter.Speed
-	parameterDB.Speed_Data.Valid = true
+	parameterDB.BeatsPerSecond_Data.Float64 = parameter.BeatsPerSecond
+	parameterDB.BeatsPerSecond_Data.Valid = true
 
 	parameterDB.Level_Data.Float64 = parameter.Level
 	parameterDB.Level_Data.Valid = true
@@ -3047,8 +3047,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.NbBeatLines_Data.Int64 = int64(parameter.NbBeatLines)
 	parameterDB.NbBeatLines_Data.Valid = true
 
-	parameterDB.NbBeatLinesPerCurve_Data.Int64 = int64(parameter.NbBeatLinesPerCurve)
-	parameterDB.NbBeatLinesPerCurve_Data.Valid = true
+	parameterDB.NbOfBeatsInTheme_Data.Int64 = int64(parameter.NbOfBeatsInTheme)
+	parameterDB.NbOfBeatsInTheme_Data.Valid = true
 
 	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
 	parameterDB.FirstVoiceShiftX_Data.Valid = true
@@ -3059,8 +3059,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
-	parameterDB.Speed_Data.Float64 = parameter.Speed
-	parameterDB.Speed_Data.Valid = true
+	parameterDB.BeatsPerSecond_Data.Float64 = parameter.BeatsPerSecond
+	parameterDB.BeatsPerSecond_Data.Valid = true
 
 	parameterDB.Level_Data.Float64 = parameter.Level
 	parameterDB.Level_Data.Valid = true
@@ -3125,11 +3125,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.BeatLinesHeightRatio = parameterDB.BeatLinesHeightRatio_Data.Float64
 	parameter.NbBeatLines = int(parameterDB.NbBeatLines_Data.Int64)
-	parameter.NbBeatLinesPerCurve = int(parameterDB.NbBeatLinesPerCurve_Data.Int64)
+	parameter.NbOfBeatsInTheme = int(parameterDB.NbOfBeatsInTheme_Data.Int64)
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
-	parameter.Speed = parameterDB.Speed_Data.Float64
+	parameter.BeatsPerSecond = parameterDB.BeatsPerSecond_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
@@ -3170,11 +3170,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.BeatLinesHeightRatio = parameterDB.BeatLinesHeightRatio_Data.Float64
 	parameter.NbBeatLines = int(parameterDB.NbBeatLines_Data.Int64)
-	parameter.NbBeatLinesPerCurve = int(parameterDB.NbBeatLinesPerCurve_Data.Int64)
+	parameter.NbOfBeatsInTheme = int(parameterDB.NbOfBeatsInTheme_Data.Int64)
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
-	parameter.Speed = parameterDB.Speed_Data.Float64
+	parameter.BeatsPerSecond = parameterDB.BeatsPerSecond_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
@@ -3216,11 +3216,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.BeatLinesHeightRatio = parameterDB.BeatLinesHeightRatio_Data.Float64
 	parameter.NbBeatLines = int(parameterDB.NbBeatLines_Data.Int64)
-	parameter.NbBeatLinesPerCurve = int(parameterDB.NbBeatLinesPerCurve_Data.Int64)
+	parameter.NbOfBeatsInTheme = int(parameterDB.NbOfBeatsInTheme_Data.Int64)
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
-	parameter.Speed = parameterDB.Speed_Data.Float64
+	parameter.BeatsPerSecond = parameterDB.BeatsPerSecond_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
 	parameter.OriginX = parameterDB.OriginX_Data.Float64

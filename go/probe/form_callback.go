@@ -1684,8 +1684,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.BeatLinesHeightRatio), formDiv)
 		case "NbBeatLines":
 			FormDivBasicFieldToField(&(parameter_.NbBeatLines), formDiv)
-		case "NbBeatLinesPerCurve":
-			FormDivBasicFieldToField(&(parameter_.NbBeatLinesPerCurve), formDiv)
+		case "NbOfBeatsInTheme":
+			FormDivBasicFieldToField(&(parameter_.NbOfBeatsInTheme), formDiv)
 		case "FirstVoice":
 			FormDivSelectFieldToField(&(parameter_.FirstVoice), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FirstVoiceShiftRigth":
@@ -1700,8 +1700,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SecondVoiceShiftedRight), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "PitchDifference":
 			FormDivBasicFieldToField(&(parameter_.PitchDifference), formDiv)
-		case "Speed":
-			FormDivBasicFieldToField(&(parameter_.Speed), formDiv)
+		case "BeatsPerSecond":
+			FormDivBasicFieldToField(&(parameter_.BeatsPerSecond), formDiv)
 		case "Level":
 			FormDivBasicFieldToField(&(parameter_.Level), formDiv)
 		case "FirstVoiceNotes":

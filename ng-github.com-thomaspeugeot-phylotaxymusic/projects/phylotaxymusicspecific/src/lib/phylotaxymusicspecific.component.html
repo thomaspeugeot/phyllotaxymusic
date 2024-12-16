@@ -211,25 +211,25 @@
               </mat-grid-tile>
 
               <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Nb Beats / Curve</h4>
+                <h4 style="margin-left: 8px; width: 100%;">Nb Beats in Theme</h4>
               </mat-grid-tile>
               <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbBeatLinesPerCurve}}</h4>
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbOfBeatsInTheme}}</h4>
               </mat-grid-tile>              
               <mat-grid-tile colspan="7" rowspan="1">
                 <mat-slider min="0" max="128" step="1" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbBeatLinesPerCurve" (input)="input($event)">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbOfBeatsInTheme" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
               <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Speed</h4>
+                <h4 style="margin-left: 8px; width: 100%;">BeatsPerSecond</h4>
               </mat-grid-tile>
               <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].Speed}}</h4>
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].BeatsPerSecond}}</h4>
               </mat-grid-tile>              
               <mat-grid-tile colspan="7" rowspan="1">
                 <mat-slider min="0" max="20" step="0.05" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Speed" (input)="input($event)">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].BeatsPerSecond" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
 

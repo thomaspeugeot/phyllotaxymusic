@@ -21,6 +21,7 @@ func (player *Player) InjectDependency(callback func(*Player) error) {
 func (player *Player) OnAfterUpdate(stage *StageStruct, stagedInstance, frontInstance *Player) {
 	// Example of invoking the DI callback
 	if player.OnDI != nil {
+		player.Status = frontInstance.Status
 		err := player.OnDI(player)
 		if err != nil {
 			fmt.Printf("Dependency injection failed: %v\n", err)

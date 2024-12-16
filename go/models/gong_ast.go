@@ -1813,13 +1813,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].NbBeatLines = int(exprSign) * int(fielValue)
-				case "NbBeatLinesPerCurve":
+				case "NbOfBeatsInTheme":
 					// convert string to int
 					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].NbBeatLinesPerCurve = int(exprSign) * int(fielValue)
+					__gong__map_Parameter[identifier].NbOfBeatsInTheme = int(exprSign) * int(fielValue)
 				case "FirstVoiceShiftX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1841,13 +1841,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].PitchDifference = int(exprSign) * int(fielValue)
-				case "Speed":
+				case "BeatsPerSecond":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].Speed = exprSign * fielValue
+					__gong__map_Parameter[identifier].BeatsPerSecond = exprSign * fielValue
 				case "Level":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)

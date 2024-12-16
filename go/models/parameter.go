@@ -127,7 +127,7 @@ type Parameter struct {
 	BeatLines            *AxisGrid
 	BeatLinesHeightRatio float64
 	NbBeatLines          int
-	NbBeatLinesPerCurve  int
+	NbOfBeatsInTheme     int
 
 	// Composing
 	FirstVoice           *BezierGrid
@@ -138,7 +138,7 @@ type Parameter struct {
 	SecondVoice             *BezierGrid
 	SecondVoiceShiftedRight *BezierGrid
 	PitchDifference         int
-	Speed                   float64
+	BeatsPerSecond          float64
 	Level                   float64
 
 	// interpolating notes

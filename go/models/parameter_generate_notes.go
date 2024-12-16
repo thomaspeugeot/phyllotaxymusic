@@ -62,7 +62,7 @@ func (p *Parameter) generateNotesFromCircleGrid(
 	circleGrid *CircleGrid,
 	gongtoneStage *gongtone_models.StageStruct) {
 
-	beatLength := p.RotatedAxis.Length / float64(p.NbBeatLinesPerCurve)
+	beatLength := p.RotatedAxis.Length / float64(p.NbOfBeatsInTheme)
 
 	for _, c := range circleGrid.Circles {
 
@@ -83,7 +83,7 @@ func (p *Parameter) generateNotesFromCircleGrid(
 		c.note = note
 		note.Frequencies = append(note.Frequencies, freq)
 
-		note.Start = (c.CenterX / beatLength) / p.Speed
+		note.Start = (c.CenterX / beatLength) / p.BeatsPerSecond
 
 		note.Velocity = p.Level
 	}
@@ -95,11 +95,11 @@ func (p *Parameter) generateNotesFromCircleGrid(
 			continue
 		}
 
-		c.note.Duration = 1 / p.Speed
+		c.note.Duration = 1 / p.BeatsPerSecond
 
 		for _, _c := range circleGrid.Circles[i:] {
 			if !_c.isKept {
-				c.note.Duration += 1 / p.Speed
+				c.note.Duration += 1 / p.BeatsPerSecond
 			}
 		}
 	}

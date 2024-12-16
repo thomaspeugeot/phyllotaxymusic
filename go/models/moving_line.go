@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"math"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
@@ -27,6 +28,7 @@ func (movingline *MovingLine) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	layer *gongsvg_models.Layer,
 	parameter *Parameter,
 ) {
+	themeWidth := parameter.RotatedAxis.Length
 
 	line := new(gongsvg_models.Line).Stage(gongsvgStage)
 	line.Name = movingline.Name
@@ -40,13 +42,27 @@ func (movingline *MovingLine) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	line.X2 = line.X1 + movingline.Length*math.Cos(angleRad)
 	line.Y2 = line.Y1 - movingline.Length*math.Sin(angleRad)
 
-	// animateX1 := new(gongsvg_models.Animate).Stage(gongsvgStage)
-	// animateX1.AttributeName = "x1"
-	// animateX1.Dur = "2s"
-	// animateX1.Values = fmt.Sprintf("%d;%d", int(line.X1), int(line.X1+300))
-	// animateX1.RepeatCount = `indefinite`
+	if movingline.IsMoving {
+		{
+			animateX1 := new(gongsvg_models.Animate).Stage(gongsvgStage)
+			animateX1.AttributeName = "x1"
+			animateX1.Dur = fmt.Sprintf("%0.3fs", movingline.DurationSeconds)
+			animateX1.Values = fmt.Sprintf("%f;%f", line.X1, line.X1+themeWidth)
+			animateX1.RepeatCount = `indefinite`
 
-	// line.Animates = append(line.Animates, animateX1)
+			line.Animates = append(line.Animates, animateX1)
+		}
+		{
+			animateX2 := new(gongsvg_models.Animate).Stage(gongsvgStage)
+			animateX2.AttributeName = "x2"
+			animateX2.Dur = fmt.Sprintf("%0.3fs", movingline.DurationSeconds)
+			animateX2.Values = fmt.Sprintf("%f;%f", line.X1, line.X1+themeWidth)
+			animateX2.RepeatCount = `indefinite`
+
+			line.Animates = append(line.Animates, animateX2)
+		}
+
+	}
 
 	movingline.Presentation.CopyTo(&line.Presentation)
 }

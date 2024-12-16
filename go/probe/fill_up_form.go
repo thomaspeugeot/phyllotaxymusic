@@ -531,7 +531,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("NbBeatLines", instanceWithInferedType.NbBeatLines, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("NbBeatLinesPerCurve", instanceWithInferedType.NbBeatLinesPerCurve, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("NbOfBeatsInTheme", instanceWithInferedType.NbOfBeatsInTheme, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("FirstVoice", instanceWithInferedType.FirstVoice, formGroup, probe)
 		AssociationFieldToForm("FirstVoiceShiftRigth", instanceWithInferedType.FirstVoiceShiftRigth, formGroup, probe)
@@ -543,7 +543,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("SecondVoiceShiftedRight", instanceWithInferedType.SecondVoiceShiftedRight, formGroup, probe)
 		BasicFieldtoForm("PitchDifference", instanceWithInferedType.PitchDifference, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("Speed", instanceWithInferedType.Speed, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("BeatsPerSecond", instanceWithInferedType.BeatsPerSecond, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Level", instanceWithInferedType.Level, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)

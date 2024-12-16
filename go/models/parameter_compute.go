@@ -500,9 +500,9 @@ func (p *Parameter) ComputeBeatLines() {
 
 		g.Axiss = append(g.Axiss, a)
 
-		a.CenterX = float64(i) * p.RotatedAxis.Length / float64(p.NbBeatLinesPerCurve)
+		a.CenterX = float64(i) * p.RotatedAxis.Length / float64(p.NbOfBeatsInTheme)
 
-		if i%p.NbBeatLinesPerCurve == 0 {
+		if i%p.NbOfBeatsInTheme == 0 {
 			a.StrokeWidth *= 2
 		}
 	}

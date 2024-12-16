@@ -362,11 +362,11 @@ type Parameter_WOP struct {
 	NbPitchLines int
 	BeatLinesHeightRatio float64
 	NbBeatLines int
-	NbBeatLinesPerCurve int
+	NbOfBeatsInTheme int
 	FirstVoiceShiftX float64
 	FirstVoiceShiftY float64
 	PitchDifference int
-	Speed float64
+	BeatsPerSecond float64
 	Level float64
 	IsMinor bool
 	OriginX float64
@@ -406,11 +406,11 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.NbPitchLines = from.NbPitchLines
 	to.BeatLinesHeightRatio = from.BeatLinesHeightRatio
 	to.NbBeatLines = from.NbBeatLines
-	to.NbBeatLinesPerCurve = from.NbBeatLinesPerCurve
+	to.NbOfBeatsInTheme = from.NbOfBeatsInTheme
 	to.FirstVoiceShiftX = from.FirstVoiceShiftX
 	to.FirstVoiceShiftY = from.FirstVoiceShiftY
 	to.PitchDifference = from.PitchDifference
-	to.Speed = from.Speed
+	to.BeatsPerSecond = from.BeatsPerSecond
 	to.Level = from.Level
 	to.IsMinor = from.IsMinor
 	to.OriginX = from.OriginX

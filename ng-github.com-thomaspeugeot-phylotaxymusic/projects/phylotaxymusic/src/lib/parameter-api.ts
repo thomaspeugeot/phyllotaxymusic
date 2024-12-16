@@ -59,11 +59,11 @@ export class ParameterAPI {
 	NbPitchLines: number = 0
 	BeatLinesHeightRatio: number = 0
 	NbBeatLines: number = 0
-	NbBeatLinesPerCurve: number = 0
+	NbOfBeatsInTheme: number = 0
 	FirstVoiceShiftX: number = 0
 	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
-	Speed: number = 0
+	BeatsPerSecond: number = 0
 	Level: number = 0
 	IsMinor: boolean = false
 	OriginX: number = 0

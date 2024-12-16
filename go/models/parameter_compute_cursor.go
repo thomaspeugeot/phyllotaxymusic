@@ -9,5 +9,5 @@ func (p *Parameter) computeCursor() {
 	p.Cursor.IsMoving = p.IsPlaying
 	p.Cursor.StartX = p.Cursor.CenterX
 	p.Cursor.EndX = p.SideLength * 2
-	p.Cursor.DurationSeconds = 1 / p.Speed
+	p.Cursor.DurationSeconds = float64(p.NbOfBeatsInTheme) / p.BeatsPerSecond
 }

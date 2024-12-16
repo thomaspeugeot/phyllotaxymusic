@@ -1302,8 +1302,8 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbBeatLinesPerCurve")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbBeatLinesPerCurve))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbOfBeatsInTheme")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbOfBeatsInTheme))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
@@ -1326,8 +1326,8 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Speed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.Speed))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BeatsPerSecond")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.BeatsPerSecond))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
