@@ -217,7 +217,7 @@
                 <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbOfBeatsInTheme}}</h4>
               </mat-grid-tile>              
               <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0" max="128" step="1" showTickMarks discrete [displayWith]="formatLabel">
+                <mat-slider min="1" max="64" step="1" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbOfBeatsInTheme" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>

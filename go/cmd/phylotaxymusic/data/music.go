@@ -586,16 +586,16 @@ func _(stage *models.StageStruct) {
 	__MovingLine__000000_Cursor.Transform = ``
 
 	__NoteInfo__000000_0.Name = `0`
-	__NoteInfo__000000_0.IsKept = true
+	__NoteInfo__000000_0.IsKept = false
 
 	__NoteInfo__000001_1.Name = `1`
-	__NoteInfo__000001_1.IsKept = true
+	__NoteInfo__000001_1.IsKept = false
 
 	__NoteInfo__000002_2.Name = `2`
-	__NoteInfo__000002_2.IsKept = true
+	__NoteInfo__000002_2.IsKept = false
 
 	__NoteInfo__000003_3.Name = `3`
-	__NoteInfo__000003_3.IsKept = true
+	__NoteInfo__000003_3.IsKept = false
 
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.BackendColor = `#F1F1F1`
@@ -620,14 +620,14 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbPitchLines = 169
 	__Parameter__000000_Reference.BeatLinesHeightRatio = 0.170000
 	__Parameter__000000_Reference.NbBeatLines = 300
-	__Parameter__000000_Reference.NbOfBeatsInTheme = 16
+	__Parameter__000000_Reference.NbOfBeatsInTheme = 6
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 1.830000
 	__Parameter__000000_Reference.PitchDifference = 12
 	__Parameter__000000_Reference.BeatsPerSecond = 1.000000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 0
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 61447
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000

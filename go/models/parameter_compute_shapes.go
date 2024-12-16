@@ -190,6 +190,4 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	// add cursor
 	p.computeCursor()
 	p.Shapes = append(p.Shapes, p.Cursor)
-
-	p.ComputeNoteInfos(stage)
 }

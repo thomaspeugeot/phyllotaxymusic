@@ -148,9 +148,19 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     if (this.isNotePlayed(parameter.ThemeBinaryEncoding, rank)) {
       // Turn off the note
       parameter.ThemeBinaryEncoding &= ~(1 << rank);
+      this.parameterService.updateFront(parameter, this.StacksNames.Phylotaxy).subscribe(
+        () => {
+
+        }
+      )
     } else {
       // Turn on the note
       parameter.ThemeBinaryEncoding |= (1 << rank);
+      this.parameterService.updateFront(parameter, this.StacksNames.Phylotaxy).subscribe(
+        () => {
+
+        }
+      )
     }
   }
 }
