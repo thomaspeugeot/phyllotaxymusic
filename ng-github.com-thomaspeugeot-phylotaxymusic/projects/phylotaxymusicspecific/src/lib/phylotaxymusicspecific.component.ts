@@ -19,6 +19,8 @@ import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lan
 
 
 import { CommonModule } from '@angular/common';
+import { MovingLineComponent } from "./moving-line.component";
+import { FakeWebsocketService } from './fake-websocket.service';
 
 @Component({
   selector: 'lib-phylotaxymusicspecific',
@@ -27,20 +29,16 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     MatSliderModule,
     MatRadioModule,
-
     MatCardModule,
     MatCheckboxModule,
-
     FormsModule,
     MatFormFieldModule,
-
     AngularSplitModule,
     MatGridListModule,
-
     GongsvgDiagrammingComponent,
     TreeComponent,
     GongtoneComponent,
-
+    MovingLineComponent
   ],
   templateUrl: './phylotaxymusicspecific.component.html',
   styleUrls: ['./phylotaxymusicspecific.component.css'],
@@ -79,6 +77,8 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     private frontRepoService: phylotaxymusic.FrontRepoService,
 
     private parameterService: phylotaxymusic.ParameterService,
+
+    private fakeWebsocketService: FakeWebsocketService
   ) {
 
   }
@@ -92,6 +92,8 @@ export class PhylotaxymusicspecificComponent implements OnInit {
         this.frontRepo = gongtablesFrontRepo
       }
     )
+
+    this.fakeWebsocketService.startEmittingPosition()
   }
 
   formatLabel(value: number): string {
