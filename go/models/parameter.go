@@ -182,8 +182,13 @@ type Parameter struct {
 	ActualBeatsTemporalShift int
 
 	// cursor vertical line
-	Cursor    *Cursor
-	IsPlaying bool
+	Cursor *Cursor
+
+	notifyCh chan struct{}
+}
+
+func (parameter *Parameter) SetNotifyChannel(notifyCh chan struct{}) {
+	parameter.notifyCh = notifyCh
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {

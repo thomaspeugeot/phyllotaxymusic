@@ -6,6 +6,7 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"time"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	"github.com/gin-gonic/gin"
@@ -27,9 +28,16 @@ type Cursor struct {
 	IsMoving        bool
 
 	Presentation
+
+	// to receive notification that the music started
+	notifyCh chan struct{}
 }
 
-func (movingline *Cursor) Draw(gongsvgStage *gongsvg_models.StageStruct,
+func (cursor *Cursor) SetNotifyChannel(notifyCh chan struct{}) {
+	cursor.notifyCh = notifyCh
+}
+
+func (cursor *Cursor) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	layer *gongsvg_models.Layer,
 	parameter *Parameter,
 ) {
@@ -37,16 +45,16 @@ func (movingline *Cursor) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	_ = themeWidth
 
 	line := new(gongsvg_models.Line)
-	line.Name = movingline.Name
+	line.Name = cursor.Name
 	layer.Lines = append(layer.Lines, line)
 
-	angleRad := DegreesToRadians(movingline.AngleDegree)
+	angleRad := DegreesToRadians(cursor.AngleDegree)
 
-	line.X1 = parameter.OriginX + movingline.CenterX
-	line.Y1 = parameter.OriginY - movingline.CenterY
+	line.X1 = parameter.OriginX + cursor.CenterX
+	line.Y1 = parameter.OriginY - cursor.CenterY
 
-	line.X2 = line.X1 + movingline.Length*math.Cos(angleRad)
-	line.Y2 = line.Y1 - movingline.Length*math.Sin(angleRad)
+	line.X2 = line.X1 + cursor.Length*math.Cos(angleRad)
+	line.Y2 = line.Y1 - cursor.Length*math.Sin(angleRad)
 
 }
 
@@ -103,20 +111,26 @@ func (cursor *Cursor) OnWebSocketConnection(c *gin.Context) {
 			// Context canceled, exit the loop
 			return
 		default:
-			// message := ""
 
-			// // Send backRepo data
-			// err = wsConnection.WriteJSON(message)
-			// if err != nil {
-			// 	log.Println("cursor start\n", stackPath,
-			// 		"client no longer receiver web socket message,closing websocket handler")
-			// 	fmt.Println(err)
-			// 	cancel() // Cancel the context
-			// 	return
-			// } else {
-			// 	log.Println(time.Now().Format("2006-01-02 15:04:05.000000"),
-			// 		"sent cursor start")
-			// }
+			for range cursor.notifyCh {
+				fmt.Println("Cursor: Received signal")
+				// Perform whatever action is required after receiving the signal.
+
+				message := ""
+
+				// Send backRepo data
+				err = wsConnection.WriteJSON(message)
+				if err != nil {
+					log.Println("cursor start\n", stackPath,
+						"client no longer receiver web socket message,closing websocket handler")
+					fmt.Println(err)
+					cancel() // Cancel the context
+					return
+				} else {
+					log.Println(time.Now().Format("2006-01-02 15:04:05.000000"),
+						"sent cursor start")
+				}
+			}
 
 		}
 	}

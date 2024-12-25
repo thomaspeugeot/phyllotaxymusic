@@ -1617,8 +1617,6 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.ActualBeatsTemporalShift), formDiv)
 		case "Cursor":
 			FormDivSelectFieldToField(&(parameter_.Cursor), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "IsPlaying":
-			FormDivBasicFieldToField(&(parameter_.IsPlaying), formDiv)
 		}
 	}
 

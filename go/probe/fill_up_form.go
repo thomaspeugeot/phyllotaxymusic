@@ -545,8 +545,6 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("ActualBeatsTemporalShift", instanceWithInferedType.ActualBeatsTemporalShift, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("Cursor", instanceWithInferedType.Cursor, formGroup, probe)
-		BasicFieldtoForm("IsPlaying", instanceWithInferedType.IsPlaying, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
 
 	case *models.Rhombus:
 		// insertion point

@@ -2891,13 +2891,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "Cursor":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].Cursor = __gong__map_Cursor[targetIdentifier]
-				case "IsPlaying":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Parameter[identifier].IsPlaying = fielValue
 				}
 			case "Rhombus":
 				switch fieldName {

@@ -619,7 +619,6 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.ShowSpiralBezierConstruct = false
 	__Parameter__000000_Reference.ShowInterpolationPoints = false
 	__Parameter__000000_Reference.ActualBeatsTemporalShift = 8
-	__Parameter__000000_Reference.IsPlaying = false
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false

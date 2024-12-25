@@ -75,7 +75,6 @@ export class ParameterAPI {
 	ShowSpiralBezierConstruct: boolean = false
 	ShowInterpolationPoints: boolean = false
 	ActualBeatsTemporalShift: number = 0
-	IsPlaying: boolean = false
 
 	// insertion point for other decls
 

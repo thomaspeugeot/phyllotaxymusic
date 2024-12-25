@@ -106,6 +106,11 @@ func main() {
 	routerGroup := r.Group("/api/github.com/thomaspeugeot/phylotaxymusic/go")
 	routerGroup.GET("/v1/ws/stage/cursorStart", cursorSingloton.OnWebSocketConnection)
 
+	// connect parameter to cursor for start playing notification
+	notifyCh := make(chan struct{})
+	cursorSingloton.SetNotifyChannel(notifyCh)
+	parameter.SetNotifyChannel(notifyCh)
+
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
 	if err != nil {

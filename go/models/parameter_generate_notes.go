@@ -37,6 +37,8 @@ func (p *Parameter) GenerateNotes(
 
 	player := new(gongtone_models.Player).Stage(gongtoneStage)
 	player.OnDI = func(player *gongtone_models.Player) error {
+		// notify the cursor
+		p.notifyCh <- struct{}{}
 		return nil
 	}
 
