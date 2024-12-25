@@ -92,6 +92,19 @@ func main() {
 	tree.Generate(parameter)
 
 	// start web socket for the cursor start
+	//
+	// fetch the cursor in the stage
+	// branch the websocket on the cursor
+	var cursorSingloton *phylotaxymusic_models.Cursor
+	setOfCursors := *phylotaxymusic_models.GetGongstructInstancesSet[phylotaxymusic_models.Cursor](parameterImpl.phylotaxymusicStage)
+	if len(setOfCursors) != 1 {
+		log.Fatalln("expecting one cursor. found", len(setOfCursors))
+	}
+	for cursor_ := range setOfCursors {
+		cursorSingloton = cursor_
+	}
+	routerGroup := r.Group("/api/github.com/thomaspeugeot/phylotaxymusic/go")
+	routerGroup.GET("/v1/ws/stage/cursorStart", cursorSingloton.OnWebSocketConnection)
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))

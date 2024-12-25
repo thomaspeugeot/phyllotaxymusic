@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
@@ -39,16 +37,6 @@ func (p *Parameter) GenerateNotes(
 
 	player := new(gongtone_models.Player).Stage(gongtoneStage)
 	player.OnDI = func(player *gongtone_models.Player) error {
-		fmt.Printf("Getting player status: %s\n", player.Status.ToString())
-
-		// generate the svg
-		if player.Status == gongtone_models.PLAYING {
-			p.IsPlaying = true
-		} else {
-			p.IsPlaying = false
-		}
-		p.ComputeShapes(phylotaxymusicStage)
-		p.GenerateSvg(gongsvgStage)
 		return nil
 	}
 

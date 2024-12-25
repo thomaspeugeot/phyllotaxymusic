@@ -1,4 +1,4 @@
-import { Component, model, OnInit } from '@angular/core';
+import { Component, Input, model, OnInit } from '@angular/core';
 
 import * as phylotaxymusic from '../../../phylotaxymusic/src/public-api'
 
@@ -21,6 +21,8 @@ import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lan
 import { CommonModule } from '@angular/common';
 import { MovingLineComponent } from "./moving-line.component";
 import { FakeWebsocketService } from './fake-websocket.service';
+import { HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lib-phylotaxymusicspecific',
@@ -44,6 +46,8 @@ import { FakeWebsocketService } from './fake-websocket.service';
   styleUrls: ['./phylotaxymusicspecific.component.css'],
 })
 export class PhylotaxymusicspecificComponent implements OnInit {
+
+  private socket: WebSocket | undefined
 
   readonly checked = model(false);
   readonly indeterminate = model(false);
@@ -92,6 +96,16 @@ export class PhylotaxymusicspecificComponent implements OnInit {
         this.frontRepo = gongtablesFrontRepo
       }
     )
+
+    let params = new HttpParams().set("GONG__StackPath", this.StacksNames.Phylotaxy)
+    let basePath = 'ws://localhost:8080/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/ws/stage/cursorStart'
+    let paramString = params.toString()
+    let url = `${basePath}?${paramString}`
+    this.socket = new WebSocket(url)
+
+    this.socket!.onmessage = event => {
+    }
+
 
     this.fakeWebsocketService.startEmittingPosition()
   }
