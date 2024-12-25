@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import * as phylotaxymusic from '../../../phylotaxymusic/src/public-api'
+
+
 @Injectable({ providedIn: 'root' })
 export class FakeWebsocketService {
+
+    StacksNames = phylotaxymusic.StacksNames
+
     private positionSubject = new BehaviorSubject<number>(0);
 
     /**

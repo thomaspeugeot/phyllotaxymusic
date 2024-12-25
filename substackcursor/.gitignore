@@ -1,0 +1,5 @@
+node_modules
+
+go/cmd/substackcursor/substackcursor
+go/cmd/substackcursor/substackcursor.exe
+go/cmd/substackcursor/__debug_bin*

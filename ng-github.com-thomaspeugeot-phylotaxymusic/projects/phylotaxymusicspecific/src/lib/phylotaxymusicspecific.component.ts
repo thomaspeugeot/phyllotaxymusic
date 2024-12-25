@@ -104,10 +104,10 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     this.socket = new WebSocket(url)
 
     this.socket!.onmessage = event => {
+      console.log("recevied music start")
+
+      this.fakeWebsocketService.startEmittingPosition()
     }
-
-
-    this.fakeWebsocketService.startEmittingPosition()
   }
 
   formatLabel(value: number): string {

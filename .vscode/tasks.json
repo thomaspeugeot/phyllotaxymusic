@@ -212,13 +212,42 @@
 			"group": "build"
 		},
 		{
-            "label": "00 - compile wasm",
-            "type": "shell",
-            "group": "build",
-            "options": {
-                "cwd": "${workspaceFolder}/go/cmd/phylotaxymusic"
-            },
-            "command": "GOOS=js GOARCH=wasm go build -o wasmworkbench.wasm"
-        },
+			"label": "00 - compile wasm",
+			"type": "shell",
+			"group": "build",
+			"options": {
+				"cwd": "${workspaceFolder}/go/cmd/phylotaxymusic"
+			},
+			"command": "GOOS=js GOARCH=wasm go build -o wasmworkbench.wasm"
+		},
+		{
+			"label": "01 - gongc substackcursor -skipGoModCommands -skipNpmInstall",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/substackcursor/go/models"
+			},
+			"command": "gongc",
+			"group": "build",
+			"args": [
+				"-skipGoModCommands",
+				"-skipNpmInstall"
+			]
+		},
+		{
+			"label": "02 - run substackcursor -unmarshallFromCode=stage.go -marshallOnCommit=stage",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/substackcursor/go/cmd/substackcursor"
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-diagrams",
+				"-unmarshallFromCode=data/stage.go",
+				"-marshallOnCommit=data/stage"
+			],
+			"group": "build"
+		}
 	]
 }
