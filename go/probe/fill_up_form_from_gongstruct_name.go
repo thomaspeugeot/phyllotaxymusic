@@ -117,6 +117,19 @@ func FillUpFormFromGongstructName(
 		circlegrid := new(models.CircleGrid)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(circlegrid, formGroup, probe)
+	case "Cursor":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "Cursor Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__CursorFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		cursor := new(models.Cursor)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(cursor, formGroup, probe)
 	case "FrontCurve":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
@@ -169,19 +182,6 @@ func FillUpFormFromGongstructName(
 		key := new(models.Key)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(key, formGroup, probe)
-	case "MovingLine":
-		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
-			Label: prefix + "MovingLine Form",
-		}).Stage(formStage)
-		formGroup.OnSave = __gong__New__MovingLineFormCallback(
-			nil,
-			probe,
-			formGroup,
-		)
-		movingline := new(models.MovingLine)
-		formGroup.HasSuppressButton = !isNewInstance
-		FillUpForm(movingline, formGroup, probe)
 	case "Parameter":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),

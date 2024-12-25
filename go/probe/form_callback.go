@@ -847,6 +847,115 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 
 	fillUpTree(circlegridFormCallback.probe)
 }
+func __gong__New__CursorFormCallback(
+	cursor *models.Cursor,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (cursorFormCallback *CursorFormCallback) {
+	cursorFormCallback = new(CursorFormCallback)
+	cursorFormCallback.probe = probe
+	cursorFormCallback.cursor = cursor
+	cursorFormCallback.formGroup = formGroup
+
+	cursorFormCallback.CreationMode = (cursor == nil)
+
+	return
+}
+
+type CursorFormCallback struct {
+	cursor *models.Cursor
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (cursorFormCallback *CursorFormCallback) OnSave() {
+
+	log.Println("CursorFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	cursorFormCallback.probe.formStage.Checkout()
+
+	if cursorFormCallback.cursor == nil {
+		cursorFormCallback.cursor = new(models.Cursor).Stage(cursorFormCallback.probe.stageOfInterest)
+	}
+	cursor_ := cursorFormCallback.cursor
+	_ = cursor_
+
+	for _, formDiv := range cursorFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(cursor_.Name), formDiv)
+		case "AngleDegree":
+			FormDivBasicFieldToField(&(cursor_.AngleDegree), formDiv)
+		case "Length":
+			FormDivBasicFieldToField(&(cursor_.Length), formDiv)
+		case "CenterX":
+			FormDivBasicFieldToField(&(cursor_.CenterX), formDiv)
+		case "CenterY":
+			FormDivBasicFieldToField(&(cursor_.CenterY), formDiv)
+		case "StartX":
+			FormDivBasicFieldToField(&(cursor_.StartX), formDiv)
+		case "EndX":
+			FormDivBasicFieldToField(&(cursor_.EndX), formDiv)
+		case "DurationSeconds":
+			FormDivBasicFieldToField(&(cursor_.DurationSeconds), formDiv)
+		case "IsMoving":
+			FormDivBasicFieldToField(&(cursor_.IsMoving), formDiv)
+		case "Color":
+			FormDivBasicFieldToField(&(cursor_.Color), formDiv)
+		case "FillOpacity":
+			FormDivBasicFieldToField(&(cursor_.FillOpacity), formDiv)
+		case "Stroke":
+			FormDivBasicFieldToField(&(cursor_.Stroke), formDiv)
+		case "StrokeOpacity":
+			FormDivBasicFieldToField(&(cursor_.StrokeOpacity), formDiv)
+		case "StrokeWidth":
+			FormDivBasicFieldToField(&(cursor_.StrokeWidth), formDiv)
+		case "StrokeDashArray":
+			FormDivBasicFieldToField(&(cursor_.StrokeDashArray), formDiv)
+		case "StrokeDashArrayWhenSelected":
+			FormDivBasicFieldToField(&(cursor_.StrokeDashArrayWhenSelected), formDiv)
+		case "Transform":
+			FormDivBasicFieldToField(&(cursor_.Transform), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if cursorFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		cursor_.Unstage(cursorFormCallback.probe.stageOfInterest)
+	}
+
+	cursorFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.Cursor](
+		cursorFormCallback.probe,
+	)
+	cursorFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if cursorFormCallback.CreationMode || cursorFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		cursorFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(cursorFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__CursorFormCallback(
+			nil,
+			cursorFormCallback.probe,
+			newFormGroup,
+		)
+		cursor := new(models.Cursor)
+		FillUpForm(cursor, newFormGroup, cursorFormCallback.probe)
+		cursorFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(cursorFormCallback.probe)
+}
 func __gong__New__FrontCurveFormCallback(
 	frontcurve *models.FrontCurve,
 	probe *Probe,
@@ -1264,119 +1373,6 @@ func (keyFormCallback *KeyFormCallback) OnSave() {
 	}
 
 	fillUpTree(keyFormCallback.probe)
-}
-func __gong__New__MovingLineFormCallback(
-	movingline *models.MovingLine,
-	probe *Probe,
-	formGroup *table.FormGroup,
-) (movinglineFormCallback *MovingLineFormCallback) {
-	movinglineFormCallback = new(MovingLineFormCallback)
-	movinglineFormCallback.probe = probe
-	movinglineFormCallback.movingline = movingline
-	movinglineFormCallback.formGroup = formGroup
-
-	movinglineFormCallback.CreationMode = (movingline == nil)
-
-	return
-}
-
-type MovingLineFormCallback struct {
-	movingline *models.MovingLine
-
-	// If the form call is called on the creation of a new instnace
-	CreationMode bool
-
-	probe *Probe
-
-	formGroup *table.FormGroup
-}
-
-func (movinglineFormCallback *MovingLineFormCallback) OnSave() {
-
-	log.Println("MovingLineFormCallback, OnSave")
-
-	// checkout formStage to have the form group on the stage synchronized with the
-	// back repo (and front repo)
-	movinglineFormCallback.probe.formStage.Checkout()
-
-	if movinglineFormCallback.movingline == nil {
-		movinglineFormCallback.movingline = new(models.MovingLine).Stage(movinglineFormCallback.probe.stageOfInterest)
-	}
-	movingline_ := movinglineFormCallback.movingline
-	_ = movingline_
-
-	for _, formDiv := range movinglineFormCallback.formGroup.FormDivs {
-		switch formDiv.Name {
-		// insertion point per field
-		case "Name":
-			FormDivBasicFieldToField(&(movingline_.Name), formDiv)
-		case "IsDisplayed":
-			FormDivBasicFieldToField(&(movingline_.IsDisplayed), formDiv)
-		case "ShapeCategory":
-			FormDivSelectFieldToField(&(movingline_.ShapeCategory), movinglineFormCallback.probe.stageOfInterest, formDiv)
-		case "AngleDegree":
-			FormDivBasicFieldToField(&(movingline_.AngleDegree), formDiv)
-		case "Length":
-			FormDivBasicFieldToField(&(movingline_.Length), formDiv)
-		case "CenterX":
-			FormDivBasicFieldToField(&(movingline_.CenterX), formDiv)
-		case "CenterY":
-			FormDivBasicFieldToField(&(movingline_.CenterY), formDiv)
-		case "StartX":
-			FormDivBasicFieldToField(&(movingline_.StartX), formDiv)
-		case "EndX":
-			FormDivBasicFieldToField(&(movingline_.EndX), formDiv)
-		case "DurationSeconds":
-			FormDivBasicFieldToField(&(movingline_.DurationSeconds), formDiv)
-		case "IsMoving":
-			FormDivBasicFieldToField(&(movingline_.IsMoving), formDiv)
-		case "Color":
-			FormDivBasicFieldToField(&(movingline_.Color), formDiv)
-		case "FillOpacity":
-			FormDivBasicFieldToField(&(movingline_.FillOpacity), formDiv)
-		case "Stroke":
-			FormDivBasicFieldToField(&(movingline_.Stroke), formDiv)
-		case "StrokeOpacity":
-			FormDivBasicFieldToField(&(movingline_.StrokeOpacity), formDiv)
-		case "StrokeWidth":
-			FormDivBasicFieldToField(&(movingline_.StrokeWidth), formDiv)
-		case "StrokeDashArray":
-			FormDivBasicFieldToField(&(movingline_.StrokeDashArray), formDiv)
-		case "StrokeDashArrayWhenSelected":
-			FormDivBasicFieldToField(&(movingline_.StrokeDashArrayWhenSelected), formDiv)
-		case "Transform":
-			FormDivBasicFieldToField(&(movingline_.Transform), formDiv)
-		}
-	}
-
-	// manage the suppress operation
-	if movinglineFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		movingline_.Unstage(movinglineFormCallback.probe.stageOfInterest)
-	}
-
-	movinglineFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.MovingLine](
-		movinglineFormCallback.probe,
-	)
-	movinglineFormCallback.probe.tableStage.Commit()
-
-	// display a new form by reset the form stage
-	if movinglineFormCallback.CreationMode || movinglineFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		movinglineFormCallback.probe.formStage.Reset()
-		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
-		}).Stage(movinglineFormCallback.probe.formStage)
-		newFormGroup.OnSave = __gong__New__MovingLineFormCallback(
-			nil,
-			movinglineFormCallback.probe,
-			newFormGroup,
-		)
-		movingline := new(models.MovingLine)
-		FillUpForm(movingline, newFormGroup, movinglineFormCallback.probe)
-		movinglineFormCallback.probe.formStage.Commit()
-	}
-
-	fillUpTree(movinglineFormCallback.probe)
 }
 func __gong__New__ParameterFormCallback(
 	parameter *models.Parameter,

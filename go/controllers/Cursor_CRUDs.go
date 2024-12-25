@@ -14,16 +14,16 @@ import (
 )
 
 // declaration in order to justify use of the models import
-var __MovingLine__dummysDeclaration__ models.MovingLine
-var __MovingLine_time__dummyDeclaration time.Duration
+var __Cursor__dummysDeclaration__ models.Cursor
+var __Cursor_time__dummyDeclaration time.Duration
 
-var mutexMovingLine sync.Mutex
+var mutexCursor sync.Mutex
 
-// An MovingLineID parameter model.
+// An CursorID parameter model.
 //
 // This is used for operations that want the ID of an order in the path
-// swagger:parameters getMovingLine updateMovingLine deleteMovingLine
-type MovingLineID struct {
+// swagger:parameters getCursor updateCursor deleteCursor
+type CursorID struct {
 	// The ID of the order
 	//
 	// in: path
@@ -31,29 +31,29 @@ type MovingLineID struct {
 	ID int64
 }
 
-// MovingLineInput is a schema that can validate the user’s
+// CursorInput is a schema that can validate the user’s
 // input to prevent us from getting invalid data
-// swagger:parameters postMovingLine updateMovingLine
-type MovingLineInput struct {
-	// The MovingLine to submit or modify
+// swagger:parameters postCursor updateCursor
+type CursorInput struct {
+	// The Cursor to submit or modify
 	// in: body
-	MovingLine *orm.MovingLineAPI
+	Cursor *orm.CursorAPI
 }
 
-// GetMovingLines
+// GetCursors
 //
-// swagger:route GET /movinglines movinglines getMovingLines
+// swagger:route GET /cursors cursors getCursors
 //
-// # Get all movinglines
+// # Get all cursors
 //
 // Responses:
 // default: genericError
 //
-//	200: movinglineDBResponse
-func (controller *Controller) GetMovingLines(c *gin.Context) {
+//	200: cursorDBResponse
+func (controller *Controller) GetCursors(c *gin.Context) {
 
 	// source slice
-	var movinglineDBs []orm.MovingLineDB
+	var cursorDBs []orm.CursorDB
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -61,16 +61,16 @@ func (controller *Controller) GetMovingLines(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetMovingLines", "GONG__StackPath", stackPath)
+			// log.Println("GetCursors", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMovingLine.GetDB()
+	db := backRepo.BackRepoCursor.GetDB()
 
-	_, err := db.Find(&movinglineDBs)
+	_, err := db.Find(&cursorDBs)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -81,29 +81,29 @@ func (controller *Controller) GetMovingLines(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	movinglineAPIs := make([]orm.MovingLineAPI, 0)
+	cursorAPIs := make([]orm.CursorAPI, 0)
 
-	// for each movingline, update fields from the database nullable fields
-	for idx := range movinglineDBs {
-		movinglineDB := &movinglineDBs[idx]
-		_ = movinglineDB
-		var movinglineAPI orm.MovingLineAPI
+	// for each cursor, update fields from the database nullable fields
+	for idx := range cursorDBs {
+		cursorDB := &cursorDBs[idx]
+		_ = cursorDB
+		var cursorAPI orm.CursorAPI
 
 		// insertion point for updating fields
-		movinglineAPI.ID = movinglineDB.ID
-		movinglineDB.CopyBasicFieldsToMovingLine_WOP(&movinglineAPI.MovingLine_WOP)
-		movinglineAPI.MovingLinePointersEncoding = movinglineDB.MovingLinePointersEncoding
-		movinglineAPIs = append(movinglineAPIs, movinglineAPI)
+		cursorAPI.ID = cursorDB.ID
+		cursorDB.CopyBasicFieldsToCursor_WOP(&cursorAPI.Cursor_WOP)
+		cursorAPI.CursorPointersEncoding = cursorDB.CursorPointersEncoding
+		cursorAPIs = append(cursorAPIs, cursorAPI)
 	}
 
-	c.JSON(http.StatusOK, movinglineAPIs)
+	c.JSON(http.StatusOK, cursorAPIs)
 }
 
-// PostMovingLine
+// PostCursor
 //
-// swagger:route POST /movinglines movinglines postMovingLine
+// swagger:route POST /cursors cursors postCursor
 //
-// Creates a movingline
+// Creates a cursor
 //
 //	Consumes:
 //	- application/json
@@ -113,10 +113,10 @@ func (controller *Controller) GetMovingLines(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func (controller *Controller) PostMovingLine(c *gin.Context) {
+func (controller *Controller) PostCursor(c *gin.Context) {
 
-	mutexMovingLine.Lock()
-	defer mutexMovingLine.Unlock()
+	mutexCursor.Lock()
+	defer mutexCursor.Unlock()
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -124,17 +124,17 @@ func (controller *Controller) PostMovingLine(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("PostMovingLines", "GONG__StackPath", stackPath)
+			// log.Println("PostCursors", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMovingLine.GetDB()
+	db := backRepo.BackRepoCursor.GetDB()
 
 	// Validate input
-	var input orm.MovingLineAPI
+	var input orm.CursorAPI
 
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
@@ -146,12 +146,12 @@ func (controller *Controller) PostMovingLine(c *gin.Context) {
 		return
 	}
 
-	// Create movingline
-	movinglineDB := orm.MovingLineDB{}
-	movinglineDB.MovingLinePointersEncoding = input.MovingLinePointersEncoding
-	movinglineDB.CopyBasicFieldsFromMovingLine_WOP(&input.MovingLine_WOP)
+	// Create cursor
+	cursorDB := orm.CursorDB{}
+	cursorDB.CursorPointersEncoding = input.CursorPointersEncoding
+	cursorDB.CopyBasicFieldsFromCursor_WOP(&input.Cursor_WOP)
 
-	_, err = db.Create(&movinglineDB)
+	_, err = db.Create(&cursorDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -162,31 +162,31 @@ func (controller *Controller) PostMovingLine(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	backRepo.BackRepoMovingLine.CheckoutPhaseOneInstance(&movinglineDB)
-	movingline := backRepo.BackRepoMovingLine.Map_MovingLineDBID_MovingLinePtr[movinglineDB.ID]
+	backRepo.BackRepoCursor.CheckoutPhaseOneInstance(&cursorDB)
+	cursor := backRepo.BackRepoCursor.Map_CursorDBID_CursorPtr[cursorDB.ID]
 
-	if movingline != nil {
-		models.AfterCreateFromFront(backRepo.GetStage(), movingline)
+	if cursor != nil {
+		models.AfterCreateFromFront(backRepo.GetStage(), cursor)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	backRepo.IncrementPushFromFrontNb()
 
-	c.JSON(http.StatusOK, movinglineDB)
+	c.JSON(http.StatusOK, cursorDB)
 }
 
-// GetMovingLine
+// GetCursor
 //
-// swagger:route GET /movinglines/{ID} movinglines getMovingLine
+// swagger:route GET /cursors/{ID} cursors getCursor
 //
-// Gets the details for a movingline.
+// Gets the details for a cursor.
 //
 // Responses:
 // default: genericError
 //
-//	200: movinglineDBResponse
-func (controller *Controller) GetMovingLine(c *gin.Context) {
+//	200: cursorDBResponse
+func (controller *Controller) GetCursor(c *gin.Context) {
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -194,18 +194,18 @@ func (controller *Controller) GetMovingLine(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetMovingLine", "GONG__StackPath", stackPath)
+			// log.Println("GetCursor", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMovingLine.GetDB()
+	db := backRepo.BackRepoCursor.GetDB()
 
-	// Get movinglineDB in DB
-	var movinglineDB orm.MovingLineDB
-	if _, err := db.First(&movinglineDB, c.Param("id")); err != nil {
+	// Get cursorDB in DB
+	var cursorDB orm.CursorDB
+	if _, err := db.First(&cursorDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -214,28 +214,28 @@ func (controller *Controller) GetMovingLine(c *gin.Context) {
 		return
 	}
 
-	var movinglineAPI orm.MovingLineAPI
-	movinglineAPI.ID = movinglineDB.ID
-	movinglineAPI.MovingLinePointersEncoding = movinglineDB.MovingLinePointersEncoding
-	movinglineDB.CopyBasicFieldsToMovingLine_WOP(&movinglineAPI.MovingLine_WOP)
+	var cursorAPI orm.CursorAPI
+	cursorAPI.ID = cursorDB.ID
+	cursorAPI.CursorPointersEncoding = cursorDB.CursorPointersEncoding
+	cursorDB.CopyBasicFieldsToCursor_WOP(&cursorAPI.Cursor_WOP)
 
-	c.JSON(http.StatusOK, movinglineAPI)
+	c.JSON(http.StatusOK, cursorAPI)
 }
 
-// UpdateMovingLine
+// UpdateCursor
 //
-// swagger:route PATCH /movinglines/{ID} movinglines updateMovingLine
+// swagger:route PATCH /cursors/{ID} cursors updateCursor
 //
-// # Update a movingline
+// # Update a cursor
 //
 // Responses:
 // default: genericError
 //
-//	200: movinglineDBResponse
-func (controller *Controller) UpdateMovingLine(c *gin.Context) {
+//	200: cursorDBResponse
+func (controller *Controller) UpdateCursor(c *gin.Context) {
 
-	mutexMovingLine.Lock()
-	defer mutexMovingLine.Unlock()
+	mutexCursor.Lock()
+	defer mutexCursor.Unlock()
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -243,17 +243,17 @@ func (controller *Controller) UpdateMovingLine(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("UpdateMovingLine", "GONG__StackPath", stackPath)
+			// log.Println("UpdateCursor", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMovingLine.GetDB()
+	db := backRepo.BackRepoCursor.GetDB()
 
 	// Validate input
-	var input orm.MovingLineAPI
+	var input orm.CursorAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -261,10 +261,10 @@ func (controller *Controller) UpdateMovingLine(c *gin.Context) {
 	}
 
 	// Get model if exist
-	var movinglineDB orm.MovingLineDB
+	var cursorDB orm.CursorDB
 
-	// fetch the movingline
-	_, err := db.First(&movinglineDB, c.Param("id"))
+	// fetch the cursor
+	_, err := db.First(&cursorDB, c.Param("id"))
 
 	if err != nil {
 		var returnError GenericError
@@ -276,11 +276,11 @@ func (controller *Controller) UpdateMovingLine(c *gin.Context) {
 	}
 
 	// update
-	movinglineDB.CopyBasicFieldsFromMovingLine_WOP(&input.MovingLine_WOP)
-	movinglineDB.MovingLinePointersEncoding = input.MovingLinePointersEncoding
+	cursorDB.CopyBasicFieldsFromCursor_WOP(&input.Cursor_WOP)
+	cursorDB.CursorPointersEncoding = input.CursorPointersEncoding
 
-	db, _ = db.Model(&movinglineDB)
-	_, err = db.Updates(&movinglineDB)
+	db, _ = db.Model(&cursorDB)
+	_, err = db.Updates(&cursorDB)
 	if err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -291,16 +291,16 @@ func (controller *Controller) UpdateMovingLine(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	movinglineNew := new(models.MovingLine)
-	movinglineDB.CopyBasicFieldsToMovingLine(movinglineNew)
+	cursorNew := new(models.Cursor)
+	cursorDB.CopyBasicFieldsToCursor(cursorNew)
 
 	// redeem pointers
-	movinglineDB.DecodePointers(backRepo, movinglineNew)
+	cursorDB.DecodePointers(backRepo, cursorNew)
 
 	// get stage instance from DB instance, and call callback function
-	movinglineOld := backRepo.BackRepoMovingLine.Map_MovingLineDBID_MovingLinePtr[movinglineDB.ID]
-	if movinglineOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), movinglineOld, movinglineNew)
+	cursorOld := backRepo.BackRepoCursor.Map_CursorDBID_CursorPtr[cursorDB.ID]
+	if cursorOld != nil {
+		models.AfterUpdateFromFront(backRepo.GetStage(), cursorOld, cursorNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -309,23 +309,23 @@ func (controller *Controller) UpdateMovingLine(c *gin.Context) {
 	// generates a checkout
 	backRepo.IncrementPushFromFrontNb()
 
-	// return status OK with the marshalling of the the movinglineDB
-	c.JSON(http.StatusOK, movinglineDB)
+	// return status OK with the marshalling of the the cursorDB
+	c.JSON(http.StatusOK, cursorDB)
 }
 
-// DeleteMovingLine
+// DeleteCursor
 //
-// swagger:route DELETE /movinglines/{ID} movinglines deleteMovingLine
+// swagger:route DELETE /cursors/{ID} cursors deleteCursor
 //
-// # Delete a movingline
+// # Delete a cursor
 //
 // default: genericError
 //
-//	200: movinglineDBResponse
-func (controller *Controller) DeleteMovingLine(c *gin.Context) {
+//	200: cursorDBResponse
+func (controller *Controller) DeleteCursor(c *gin.Context) {
 
-	mutexMovingLine.Lock()
-	defer mutexMovingLine.Unlock()
+	mutexCursor.Lock()
+	defer mutexCursor.Unlock()
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
@@ -333,18 +333,18 @@ func (controller *Controller) DeleteMovingLine(c *gin.Context) {
 		value := _values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("DeleteMovingLine", "GONG__StackPath", stackPath)
+			// log.Println("DeleteCursor", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
 	}
-	db := backRepo.BackRepoMovingLine.GetDB()
+	db := backRepo.BackRepoCursor.GetDB()
 
 	// Get model if exist
-	var movinglineDB orm.MovingLineDB
-	if _, err := db.First(&movinglineDB, c.Param("id")); err != nil {
+	var cursorDB orm.CursorDB
+	if _, err := db.First(&cursorDB, c.Param("id")); err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -355,16 +355,16 @@ func (controller *Controller) DeleteMovingLine(c *gin.Context) {
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
 	db.Unscoped()
-	db.Delete(&movinglineDB)
+	db.Delete(&cursorDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
-	movinglineDeleted := new(models.MovingLine)
-	movinglineDB.CopyBasicFieldsToMovingLine(movinglineDeleted)
+	cursorDeleted := new(models.Cursor)
+	cursorDB.CopyBasicFieldsToCursor(cursorDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	movinglineStaged := backRepo.BackRepoMovingLine.Map_MovingLineDBID_MovingLinePtr[movinglineDB.ID]
-	if movinglineStaged != nil {
-		models.AfterDeleteFromFront(backRepo.GetStage(), movinglineStaged, movinglineDeleted)
+	cursorStaged := backRepo.BackRepoCursor.Map_CursorDBID_CursorPtr[cursorDB.ID]
+	if cursorStaged != nil {
+		models.AfterDeleteFromFront(backRepo.GetStage(), cursorStaged, cursorDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

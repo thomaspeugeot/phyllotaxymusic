@@ -98,6 +98,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/circlegrids/:id", GetController().UpdateCircleGrid)
 		v1.DELETE("/v1/circlegrids/:id", GetController().DeleteCircleGrid)
 
+		v1.GET("/v1/cursors", GetController().GetCursors)
+		v1.GET("/v1/cursors/:id", GetController().GetCursor)
+		v1.POST("/v1/cursors", GetController().PostCursor)
+		v1.PATCH("/v1/cursors/:id", GetController().UpdateCursor)
+		v1.PUT("/v1/cursors/:id", GetController().UpdateCursor)
+		v1.DELETE("/v1/cursors/:id", GetController().DeleteCursor)
+
 		v1.GET("/v1/frontcurves", GetController().GetFrontCurves)
 		v1.GET("/v1/frontcurves/:id", GetController().GetFrontCurve)
 		v1.POST("/v1/frontcurves", GetController().PostFrontCurve)
@@ -125,13 +132,6 @@ func registerControllers(r *gin.Engine) {
 		v1.PATCH("/v1/keys/:id", GetController().UpdateKey)
 		v1.PUT("/v1/keys/:id", GetController().UpdateKey)
 		v1.DELETE("/v1/keys/:id", GetController().DeleteKey)
-
-		v1.GET("/v1/movinglines", GetController().GetMovingLines)
-		v1.GET("/v1/movinglines/:id", GetController().GetMovingLine)
-		v1.POST("/v1/movinglines", GetController().PostMovingLine)
-		v1.PATCH("/v1/movinglines/:id", GetController().UpdateMovingLine)
-		v1.PUT("/v1/movinglines/:id", GetController().UpdateMovingLine)
-		v1.DELETE("/v1/movinglines/:id", GetController().DeleteMovingLine)
 
 		v1.GET("/v1/parameters", GetController().GetParameters)
 		v1.GET("/v1/parameters/:id", GetController().GetParameter)

@@ -18,6 +18,8 @@ type BackRepoData struct {
 
 	CircleGridAPIs []*CircleGridAPI
 
+	CursorAPIs []*CursorAPI
+
 	FrontCurveAPIs []*FrontCurveAPI
 
 	FrontCurveStackAPIs []*FrontCurveStackAPI
@@ -25,8 +27,6 @@ type BackRepoData struct {
 	HorizontalAxisAPIs []*HorizontalAxisAPI
 
 	KeyAPIs []*KeyAPI
-
-	MovingLineAPIs []*MovingLineAPI
 
 	ParameterAPIs []*ParameterAPI
 
@@ -134,6 +134,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		backRepoData.CircleGridAPIs = append(backRepoData.CircleGridAPIs, &circlegridAPI)
 	}
 
+	for _, cursorDB := range backRepo.BackRepoCursor.Map_CursorDBID_CursorDB {
+
+		var cursorAPI CursorAPI
+		cursorAPI.ID = cursorDB.ID
+		cursorAPI.CursorPointersEncoding = cursorDB.CursorPointersEncoding
+		cursorDB.CopyBasicFieldsToCursor_WOP(&cursorAPI.Cursor_WOP)
+
+		backRepoData.CursorAPIs = append(backRepoData.CursorAPIs, &cursorAPI)
+	}
+
 	for _, frontcurveDB := range backRepo.BackRepoFrontCurve.Map_FrontCurveDBID_FrontCurveDB {
 
 		var frontcurveAPI FrontCurveAPI
@@ -172,16 +182,6 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		keyDB.CopyBasicFieldsToKey_WOP(&keyAPI.Key_WOP)
 
 		backRepoData.KeyAPIs = append(backRepoData.KeyAPIs, &keyAPI)
-	}
-
-	for _, movinglineDB := range backRepo.BackRepoMovingLine.Map_MovingLineDBID_MovingLineDB {
-
-		var movinglineAPI MovingLineAPI
-		movinglineAPI.ID = movinglineDB.ID
-		movinglineAPI.MovingLinePointersEncoding = movinglineDB.MovingLinePointersEncoding
-		movinglineDB.CopyBasicFieldsToMovingLine_WOP(&movinglineAPI.MovingLine_WOP)
-
-		backRepoData.MovingLineAPIs = append(backRepoData.MovingLineAPIs, &movinglineAPI)
 	}
 
 	for _, parameterDB := range backRepo.BackRepoParameter.Map_ParameterDBID_ParameterDB {

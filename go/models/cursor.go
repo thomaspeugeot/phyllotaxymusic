@@ -6,9 +6,8 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
-type MovingLine struct {
+type Cursor struct {
 	Name string
-	AbstractShape
 
 	// in degrees
 	AngleDegree float64
@@ -23,7 +22,7 @@ type MovingLine struct {
 	Presentation
 }
 
-func (movingline *MovingLine) Draw(gongsvgStage *gongsvg_models.StageStruct,
+func (movingline *Cursor) Draw(gongsvgStage *gongsvg_models.StageStruct,
 	layer *gongsvg_models.Layer,
 	parameter *Parameter,
 ) {

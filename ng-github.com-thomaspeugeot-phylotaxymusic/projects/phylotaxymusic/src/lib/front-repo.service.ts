@@ -32,6 +32,10 @@ import { CircleGridAPI } from './circlegrid-api'
 import { CircleGrid, CopyCircleGridAPIToCircleGrid } from './circlegrid'
 import { CircleGridService } from './circlegrid.service'
 
+import { CursorAPI } from './cursor-api'
+import { Cursor, CopyCursorAPIToCursor } from './cursor'
+import { CursorService } from './cursor.service'
+
 import { FrontCurveAPI } from './frontcurve-api'
 import { FrontCurve, CopyFrontCurveAPIToFrontCurve } from './frontcurve'
 import { FrontCurveService } from './frontcurve.service'
@@ -47,10 +51,6 @@ import { HorizontalAxisService } from './horizontalaxis.service'
 import { KeyAPI } from './key-api'
 import { Key, CopyKeyAPIToKey } from './key'
 import { KeyService } from './key.service'
-
-import { MovingLineAPI } from './movingline-api'
-import { MovingLine, CopyMovingLineAPIToMovingLine } from './movingline'
-import { MovingLineService } from './movingline.service'
 
 import { ParameterAPI } from './parameter-api'
 import { Parameter, CopyParameterAPIToParameter } from './parameter'
@@ -136,6 +136,9 @@ export class FrontRepo { // insertion point sub template
 	array_CircleGrids = new Array<CircleGrid>() // array of front instances
 	map_ID_CircleGrid = new Map<number, CircleGrid>() // map of front instances
 
+	array_Cursors = new Array<Cursor>() // array of front instances
+	map_ID_Cursor = new Map<number, Cursor>() // map of front instances
+
 	array_FrontCurves = new Array<FrontCurve>() // array of front instances
 	map_ID_FrontCurve = new Map<number, FrontCurve>() // map of front instances
 
@@ -147,9 +150,6 @@ export class FrontRepo { // insertion point sub template
 
 	array_Keys = new Array<Key>() // array of front instances
 	map_ID_Key = new Map<number, Key>() // map of front instances
-
-	array_MovingLines = new Array<MovingLine>() // array of front instances
-	map_ID_MovingLine = new Map<number, MovingLine>() // map of front instances
 
 	array_Parameters = new Array<Parameter>() // array of front instances
 	map_ID_Parameter = new Map<number, Parameter>() // map of front instances
@@ -214,6 +214,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Circles as unknown as Array<Type>
 			case 'CircleGrid':
 				return this.array_CircleGrids as unknown as Array<Type>
+			case 'Cursor':
+				return this.array_Cursors as unknown as Array<Type>
 			case 'FrontCurve':
 				return this.array_FrontCurves as unknown as Array<Type>
 			case 'FrontCurveStack':
@@ -222,8 +224,6 @@ export class FrontRepo { // insertion point sub template
 				return this.array_HorizontalAxiss as unknown as Array<Type>
 			case 'Key':
 				return this.array_Keys as unknown as Array<Type>
-			case 'MovingLine':
-				return this.array_MovingLines as unknown as Array<Type>
 			case 'Parameter':
 				return this.array_Parameters as unknown as Array<Type>
 			case 'Rhombus':
@@ -274,6 +274,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Circle as unknown as Map<number, Type>
 			case 'CircleGrid':
 				return this.map_ID_CircleGrid as unknown as Map<number, Type>
+			case 'Cursor':
+				return this.map_ID_Cursor as unknown as Map<number, Type>
 			case 'FrontCurve':
 				return this.map_ID_FrontCurve as unknown as Map<number, Type>
 			case 'FrontCurveStack':
@@ -282,8 +284,6 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_HorizontalAxis as unknown as Map<number, Type>
 			case 'Key':
 				return this.map_ID_Key as unknown as Map<number, Type>
-			case 'MovingLine':
-				return this.map_ID_MovingLine as unknown as Map<number, Type>
 			case 'Parameter':
 				return this.map_ID_Parameter as unknown as Map<number, Type>
 			case 'Rhombus':
@@ -386,11 +386,11 @@ export class FrontRepoService {
 		private beziergridstackService: BezierGridStackService,
 		private circleService: CircleService,
 		private circlegridService: CircleGridService,
+		private cursorService: CursorService,
 		private frontcurveService: FrontCurveService,
 		private frontcurvestackService: FrontCurveStackService,
 		private horizontalaxisService: HorizontalAxisService,
 		private keyService: KeyService,
-		private movinglineService: MovingLineService,
 		private parameterService: ParameterService,
 		private rhombusService: RhombusService,
 		private rhombusgridService: RhombusGridService,
@@ -444,11 +444,11 @@ export class FrontRepoService {
 		Observable<BezierGridStackAPI[]>,
 		Observable<CircleAPI[]>,
 		Observable<CircleGridAPI[]>,
+		Observable<CursorAPI[]>,
 		Observable<FrontCurveAPI[]>,
 		Observable<FrontCurveStackAPI[]>,
 		Observable<HorizontalAxisAPI[]>,
 		Observable<KeyAPI[]>,
-		Observable<MovingLineAPI[]>,
 		Observable<ParameterAPI[]>,
 		Observable<RhombusAPI[]>,
 		Observable<RhombusGridAPI[]>,
@@ -480,11 +480,11 @@ export class FrontRepoService {
 			this.beziergridstackService.getBezierGridStacks(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.cursorService.getCursors(this.GONG__StackPath, this.frontRepo),
 			this.frontcurveService.getFrontCurves(this.GONG__StackPath, this.frontRepo),
 			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
-			this.movinglineService.getMovingLines(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
@@ -521,11 +521,11 @@ export class FrontRepoService {
 			this.beziergridstackService.getBezierGridStacks(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.cursorService.getCursors(this.GONG__StackPath, this.frontRepo),
 			this.frontcurveService.getFrontCurves(this.GONG__StackPath, this.frontRepo),
 			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
-			this.movinglineService.getMovingLines(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
@@ -557,11 +557,11 @@ export class FrontRepoService {
 						beziergridstacks_,
 						circles_,
 						circlegrids_,
+						cursors_,
 						frontcurves_,
 						frontcurvestacks_,
 						horizontalaxiss_,
 						keys_,
-						movinglines_,
 						parameters_,
 						rhombuss_,
 						rhombusgrids_,
@@ -594,6 +594,8 @@ export class FrontRepoService {
 						circles = circles_ as CircleAPI[]
 						var circlegrids: CircleGridAPI[]
 						circlegrids = circlegrids_ as CircleGridAPI[]
+						var cursors: CursorAPI[]
+						cursors = cursors_ as CursorAPI[]
 						var frontcurves: FrontCurveAPI[]
 						frontcurves = frontcurves_ as FrontCurveAPI[]
 						var frontcurvestacks: FrontCurveStackAPI[]
@@ -602,8 +604,6 @@ export class FrontRepoService {
 						horizontalaxiss = horizontalaxiss_ as HorizontalAxisAPI[]
 						var keys: KeyAPI[]
 						keys = keys_ as KeyAPI[]
-						var movinglines: MovingLineAPI[]
-						movinglines = movinglines_ as MovingLineAPI[]
 						var parameters: ParameterAPI[]
 						parameters = parameters_ as ParameterAPI[]
 						var rhombuss: RhombusAPI[]
@@ -721,6 +721,18 @@ export class FrontRepoService {
 						)
 
 						// init the arrays
+						this.frontRepo.array_Cursors = []
+						this.frontRepo.map_ID_Cursor.clear()
+
+						cursors.forEach(
+							cursorAPI => {
+								let cursor = new Cursor
+								this.frontRepo.array_Cursors.push(cursor)
+								this.frontRepo.map_ID_Cursor.set(cursorAPI.ID, cursor)
+							}
+						)
+
+						// init the arrays
 						this.frontRepo.array_FrontCurves = []
 						this.frontRepo.map_ID_FrontCurve.clear()
 
@@ -765,18 +777,6 @@ export class FrontRepoService {
 								let key = new Key
 								this.frontRepo.array_Keys.push(key)
 								this.frontRepo.map_ID_Key.set(keyAPI.ID, key)
-							}
-						)
-
-						// init the arrays
-						this.frontRepo.array_MovingLines = []
-						this.frontRepo.map_ID_MovingLine.clear()
-
-						movinglines.forEach(
-							movinglineAPI => {
-								let movingline = new MovingLine
-								this.frontRepo.array_MovingLines.push(movingline)
-								this.frontRepo.map_ID_MovingLine.set(movinglineAPI.ID, movingline)
 							}
 						)
 
@@ -1009,6 +1009,14 @@ export class FrontRepoService {
 						)
 
 						// fill up front objects
+						cursors.forEach(
+							cursorAPI => {
+								let cursor = this.frontRepo.map_ID_Cursor.get(cursorAPI.ID)
+								CopyCursorAPIToCursor(cursorAPI, cursor!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
 						frontcurves.forEach(
 							frontcurveAPI => {
 								let frontcurve = this.frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
@@ -1037,14 +1045,6 @@ export class FrontRepoService {
 							keyAPI => {
 								let key = this.frontRepo.map_ID_Key.get(keyAPI.ID)
 								CopyKeyAPIToKey(keyAPI, key!, this.frontRepo)
-							}
-						)
-
-						// fill up front objects
-						movinglines.forEach(
-							movinglineAPI => {
-								let movingline = this.frontRepo.map_ID_MovingLine.get(movinglineAPI.ID)
-								CopyMovingLineAPIToMovingLine(movinglineAPI, movingline!, this.frontRepo)
 							}
 						)
 
@@ -1278,6 +1278,18 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				frontRepo.array_Cursors = []
+				frontRepo.map_ID_Cursor.clear()
+
+				backRepoData.CursorAPIs.forEach(
+					cursorAPI => {
+						let cursor = new Cursor
+						frontRepo.array_Cursors.push(cursor)
+						frontRepo.map_ID_Cursor.set(cursorAPI.ID, cursor)
+					}
+				)
+
+				// init the arrays
 				frontRepo.array_FrontCurves = []
 				frontRepo.map_ID_FrontCurve.clear()
 
@@ -1322,18 +1334,6 @@ export class FrontRepoService {
 						let key = new Key
 						frontRepo.array_Keys.push(key)
 						frontRepo.map_ID_Key.set(keyAPI.ID, key)
-					}
-				)
-
-				// init the arrays
-				frontRepo.array_MovingLines = []
-				frontRepo.map_ID_MovingLine.clear()
-
-				backRepoData.MovingLineAPIs.forEach(
-					movinglineAPI => {
-						let movingline = new MovingLine
-						frontRepo.array_MovingLines.push(movingline)
-						frontRepo.map_ID_MovingLine.set(movinglineAPI.ID, movingline)
 					}
 				)
 
@@ -1568,6 +1568,14 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.CursorAPIs.forEach(
+					cursorAPI => {
+						let cursor = frontRepo.map_ID_Cursor.get(cursorAPI.ID)
+						CopyCursorAPIToCursor(cursorAPI, cursor!, frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.FrontCurveAPIs.forEach(
 					frontcurveAPI => {
 						let frontcurve = frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
@@ -1596,14 +1604,6 @@ export class FrontRepoService {
 					keyAPI => {
 						let key = frontRepo.map_ID_Key.get(keyAPI.ID)
 						CopyKeyAPIToKey(keyAPI, key!, frontRepo)
-					}
-				)
-
-				// fill up front objects
-				backRepoData.MovingLineAPIs.forEach(
-					movinglineAPI => {
-						let movingline = frontRepo.map_ID_MovingLine.get(movinglineAPI.ID)
-						CopyMovingLineAPIToMovingLine(movinglineAPI, movingline!, frontRepo)
 					}
 				)
 
@@ -1759,19 +1759,19 @@ export function getCircleUniqueID(id: number): number {
 export function getCircleGridUniqueID(id: number): number {
 	return 59 * id
 }
-export function getFrontCurveUniqueID(id: number): number {
+export function getCursorUniqueID(id: number): number {
 	return 61 * id
 }
-export function getFrontCurveStackUniqueID(id: number): number {
+export function getFrontCurveUniqueID(id: number): number {
 	return 67 * id
 }
-export function getHorizontalAxisUniqueID(id: number): number {
+export function getFrontCurveStackUniqueID(id: number): number {
 	return 71 * id
 }
-export function getKeyUniqueID(id: number): number {
+export function getHorizontalAxisUniqueID(id: number): number {
 	return 73 * id
 }
-export function getMovingLineUniqueID(id: number): number {
+export function getKeyUniqueID(id: number): number {
 	return 79 * id
 }
 export function getParameterUniqueID(id: number): number {

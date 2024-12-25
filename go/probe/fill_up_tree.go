@@ -132,6 +132,16 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "Cursor":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.Cursor](probe.stageOfInterest)
+			for _cursor := range set {
+				nodeInstance := (&tree.Node{Name: _cursor.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_cursor, "Cursor", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "FrontCurve":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.FrontCurve](probe.stageOfInterest)
@@ -169,16 +179,6 @@ func fillUpTree(
 				nodeInstance := (&tree.Node{Name: _key.GetName()}).Stage(probe.treeStage)
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_key, "Key", probe)
-
-				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
-			}
-		case "MovingLine":
-			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.MovingLine](probe.stageOfInterest)
-			for _movingline := range set {
-				nodeInstance := (&tree.Node{Name: _movingline.GetName()}).Stage(probe.treeStage)
-				nodeInstance.IsNodeClickable = true
-				nodeInstance.Impl = NewInstanceNodeCallback(_movingline, "MovingLine", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}

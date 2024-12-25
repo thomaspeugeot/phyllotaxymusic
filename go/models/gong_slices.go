@@ -130,6 +130,9 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 			}
 		}
 
+	case *Cursor:
+		// insertion point per field
+
 	case *FrontCurve:
 		// insertion point per field
 
@@ -178,9 +181,6 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 		// insertion point per field
 
 	case *Key:
-		// insertion point per field
-
-	case *MovingLine:
 		// insertion point per field
 
 	case *Parameter:
@@ -382,6 +382,9 @@ func (stage *StageStruct) ComputeReverseMaps() {
 		}
 	}
 
+	// Compute reverse map for named struct Cursor
+	// insertion point per field
+
 	// Compute reverse map for named struct FrontCurve
 	// insertion point per field
 
@@ -408,9 +411,6 @@ func (stage *StageStruct) ComputeReverseMaps() {
 	// insertion point per field
 
 	// Compute reverse map for named struct Key
-	// insertion point per field
-
-	// Compute reverse map for named struct MovingLine
 	// insertion point per field
 
 	// Compute reverse map for named struct Parameter

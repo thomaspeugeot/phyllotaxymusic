@@ -118,6 +118,15 @@ type StageStruct struct {
 	OnAfterCircleGridDeleteCallback OnAfterDeleteInterface[CircleGrid]
 	OnAfterCircleGridReadCallback   OnAfterReadInterface[CircleGrid]
 
+	Cursors           map[*Cursor]any
+	Cursors_mapString map[string]*Cursor
+
+	// insertion point for slice of pointers maps
+	OnAfterCursorCreateCallback OnAfterCreateInterface[Cursor]
+	OnAfterCursorUpdateCallback OnAfterUpdateInterface[Cursor]
+	OnAfterCursorDeleteCallback OnAfterDeleteInterface[Cursor]
+	OnAfterCursorReadCallback   OnAfterReadInterface[Cursor]
+
 	FrontCurves           map[*FrontCurve]any
 	FrontCurves_mapString map[string]*FrontCurve
 
@@ -157,15 +166,6 @@ type StageStruct struct {
 	OnAfterKeyUpdateCallback OnAfterUpdateInterface[Key]
 	OnAfterKeyDeleteCallback OnAfterDeleteInterface[Key]
 	OnAfterKeyReadCallback   OnAfterReadInterface[Key]
-
-	MovingLines           map[*MovingLine]any
-	MovingLines_mapString map[string]*MovingLine
-
-	// insertion point for slice of pointers maps
-	OnAfterMovingLineCreateCallback OnAfterCreateInterface[MovingLine]
-	OnAfterMovingLineUpdateCallback OnAfterUpdateInterface[MovingLine]
-	OnAfterMovingLineDeleteCallback OnAfterDeleteInterface[MovingLine]
-	OnAfterMovingLineReadCallback   OnAfterReadInterface[MovingLine]
 
 	Parameters           map[*Parameter]any
 	Parameters_mapString map[string]*Parameter
@@ -385,6 +385,8 @@ type BackRepoInterface interface {
 	CheckoutCircle(circle *Circle)
 	CommitCircleGrid(circlegrid *CircleGrid)
 	CheckoutCircleGrid(circlegrid *CircleGrid)
+	CommitCursor(cursor *Cursor)
+	CheckoutCursor(cursor *Cursor)
 	CommitFrontCurve(frontcurve *FrontCurve)
 	CheckoutFrontCurve(frontcurve *FrontCurve)
 	CommitFrontCurveStack(frontcurvestack *FrontCurveStack)
@@ -393,8 +395,6 @@ type BackRepoInterface interface {
 	CheckoutHorizontalAxis(horizontalaxis *HorizontalAxis)
 	CommitKey(key *Key)
 	CheckoutKey(key *Key)
-	CommitMovingLine(movingline *MovingLine)
-	CheckoutMovingLine(movingline *MovingLine)
 	CommitParameter(parameter *Parameter)
 	CheckoutParameter(parameter *Parameter)
 	CommitRhombus(rhombus *Rhombus)
@@ -451,6 +451,9 @@ func NewStage(path string) (stage *StageStruct) {
 		CircleGrids:           make(map[*CircleGrid]any),
 		CircleGrids_mapString: make(map[string]*CircleGrid),
 
+		Cursors:           make(map[*Cursor]any),
+		Cursors_mapString: make(map[string]*Cursor),
+
 		FrontCurves:           make(map[*FrontCurve]any),
 		FrontCurves_mapString: make(map[string]*FrontCurve),
 
@@ -462,9 +465,6 @@ func NewStage(path string) (stage *StageStruct) {
 
 		Keys:           make(map[*Key]any),
 		Keys_mapString: make(map[string]*Key),
-
-		MovingLines:           make(map[*MovingLine]any),
-		MovingLines_mapString: make(map[string]*MovingLine),
 
 		Parameters:           make(map[*Parameter]any),
 		Parameters_mapString: make(map[string]*Parameter),
@@ -548,11 +548,11 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["BezierGridStack"] = len(stage.BezierGridStacks)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
+	stage.Map_GongStructName_InstancesNb["Cursor"] = len(stage.Cursors)
 	stage.Map_GongStructName_InstancesNb["FrontCurve"] = len(stage.FrontCurves)
 	stage.Map_GongStructName_InstancesNb["FrontCurveStack"] = len(stage.FrontCurveStacks)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
 	stage.Map_GongStructName_InstancesNb["Key"] = len(stage.Keys)
-	stage.Map_GongStructName_InstancesNb["MovingLine"] = len(stage.MovingLines)
 	stage.Map_GongStructName_InstancesNb["Parameter"] = len(stage.Parameters)
 	stage.Map_GongStructName_InstancesNb["Rhombus"] = len(stage.Rhombuss)
 	stage.Map_GongStructName_InstancesNb["RhombusGrid"] = len(stage.RhombusGrids)
@@ -584,11 +584,11 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["BezierGridStack"] = len(stage.BezierGridStacks)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
+	stage.Map_GongStructName_InstancesNb["Cursor"] = len(stage.Cursors)
 	stage.Map_GongStructName_InstancesNb["FrontCurve"] = len(stage.FrontCurves)
 	stage.Map_GongStructName_InstancesNb["FrontCurveStack"] = len(stage.FrontCurveStacks)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
 	stage.Map_GongStructName_InstancesNb["Key"] = len(stage.Keys)
-	stage.Map_GongStructName_InstancesNb["MovingLine"] = len(stage.MovingLines)
 	stage.Map_GongStructName_InstancesNb["Parameter"] = len(stage.Parameters)
 	stage.Map_GongStructName_InstancesNb["Rhombus"] = len(stage.Rhombuss)
 	stage.Map_GongStructName_InstancesNb["RhombusGrid"] = len(stage.RhombusGrids)
@@ -985,6 +985,56 @@ func (circlegrid *CircleGrid) GetName() (res string) {
 	return circlegrid.Name
 }
 
+// Stage puts cursor to the model stage
+func (cursor *Cursor) Stage(stage *StageStruct) *Cursor {
+	stage.Cursors[cursor] = __member
+	stage.Cursors_mapString[cursor.Name] = cursor
+
+	return cursor
+}
+
+// Unstage removes cursor off the model stage
+func (cursor *Cursor) Unstage(stage *StageStruct) *Cursor {
+	delete(stage.Cursors, cursor)
+	delete(stage.Cursors_mapString, cursor.Name)
+	return cursor
+}
+
+// UnstageVoid removes cursor off the model stage
+func (cursor *Cursor) UnstageVoid(stage *StageStruct) {
+	delete(stage.Cursors, cursor)
+	delete(stage.Cursors_mapString, cursor.Name)
+}
+
+// commit cursor to the back repo (if it is already staged)
+func (cursor *Cursor) Commit(stage *StageStruct) *Cursor {
+	if _, ok := stage.Cursors[cursor]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitCursor(cursor)
+		}
+	}
+	return cursor
+}
+
+func (cursor *Cursor) CommitVoid(stage *StageStruct) {
+	cursor.Commit(stage)
+}
+
+// Checkout cursor to the back repo (if it is already staged)
+func (cursor *Cursor) Checkout(stage *StageStruct) *Cursor {
+	if _, ok := stage.Cursors[cursor]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutCursor(cursor)
+		}
+	}
+	return cursor
+}
+
+// for satisfaction of GongStruct interface
+func (cursor *Cursor) GetName() (res string) {
+	return cursor.Name
+}
+
 // Stage puts frontcurve to the model stage
 func (frontcurve *FrontCurve) Stage(stage *StageStruct) *FrontCurve {
 	stage.FrontCurves[frontcurve] = __member
@@ -1183,56 +1233,6 @@ func (key *Key) Checkout(stage *StageStruct) *Key {
 // for satisfaction of GongStruct interface
 func (key *Key) GetName() (res string) {
 	return key.Name
-}
-
-// Stage puts movingline to the model stage
-func (movingline *MovingLine) Stage(stage *StageStruct) *MovingLine {
-	stage.MovingLines[movingline] = __member
-	stage.MovingLines_mapString[movingline.Name] = movingline
-
-	return movingline
-}
-
-// Unstage removes movingline off the model stage
-func (movingline *MovingLine) Unstage(stage *StageStruct) *MovingLine {
-	delete(stage.MovingLines, movingline)
-	delete(stage.MovingLines_mapString, movingline.Name)
-	return movingline
-}
-
-// UnstageVoid removes movingline off the model stage
-func (movingline *MovingLine) UnstageVoid(stage *StageStruct) {
-	delete(stage.MovingLines, movingline)
-	delete(stage.MovingLines_mapString, movingline.Name)
-}
-
-// commit movingline to the back repo (if it is already staged)
-func (movingline *MovingLine) Commit(stage *StageStruct) *MovingLine {
-	if _, ok := stage.MovingLines[movingline]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CommitMovingLine(movingline)
-		}
-	}
-	return movingline
-}
-
-func (movingline *MovingLine) CommitVoid(stage *StageStruct) {
-	movingline.Commit(stage)
-}
-
-// Checkout movingline to the back repo (if it is already staged)
-func (movingline *MovingLine) Checkout(stage *StageStruct) *MovingLine {
-	if _, ok := stage.MovingLines[movingline]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutMovingLine(movingline)
-		}
-	}
-	return movingline
-}
-
-// for satisfaction of GongStruct interface
-func (movingline *MovingLine) GetName() (res string) {
-	return movingline.Name
 }
 
 // Stage puts parameter to the model stage
@@ -1944,11 +1944,11 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMBezierGridStack(BezierGridStack *BezierGridStack)
 	CreateORMCircle(Circle *Circle)
 	CreateORMCircleGrid(CircleGrid *CircleGrid)
+	CreateORMCursor(Cursor *Cursor)
 	CreateORMFrontCurve(FrontCurve *FrontCurve)
 	CreateORMFrontCurveStack(FrontCurveStack *FrontCurveStack)
 	CreateORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
 	CreateORMKey(Key *Key)
-	CreateORMMovingLine(MovingLine *MovingLine)
 	CreateORMParameter(Parameter *Parameter)
 	CreateORMRhombus(Rhombus *Rhombus)
 	CreateORMRhombusGrid(RhombusGrid *RhombusGrid)
@@ -1973,11 +1973,11 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMBezierGridStack(BezierGridStack *BezierGridStack)
 	DeleteORMCircle(Circle *Circle)
 	DeleteORMCircleGrid(CircleGrid *CircleGrid)
+	DeleteORMCursor(Cursor *Cursor)
 	DeleteORMFrontCurve(FrontCurve *FrontCurve)
 	DeleteORMFrontCurveStack(FrontCurveStack *FrontCurveStack)
 	DeleteORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
 	DeleteORMKey(Key *Key)
-	DeleteORMMovingLine(MovingLine *MovingLine)
 	DeleteORMParameter(Parameter *Parameter)
 	DeleteORMRhombus(Rhombus *Rhombus)
 	DeleteORMRhombusGrid(RhombusGrid *RhombusGrid)
@@ -2016,6 +2016,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 	stage.CircleGrids = make(map[*CircleGrid]any)
 	stage.CircleGrids_mapString = make(map[string]*CircleGrid)
 
+	stage.Cursors = make(map[*Cursor]any)
+	stage.Cursors_mapString = make(map[string]*Cursor)
+
 	stage.FrontCurves = make(map[*FrontCurve]any)
 	stage.FrontCurves_mapString = make(map[string]*FrontCurve)
 
@@ -2027,9 +2030,6 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.Keys = make(map[*Key]any)
 	stage.Keys_mapString = make(map[string]*Key)
-
-	stage.MovingLines = make(map[*MovingLine]any)
-	stage.MovingLines_mapString = make(map[string]*MovingLine)
 
 	stage.Parameters = make(map[*Parameter]any)
 	stage.Parameters_mapString = make(map[string]*Parameter)
@@ -2097,6 +2097,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 	stage.CircleGrids = nil
 	stage.CircleGrids_mapString = nil
 
+	stage.Cursors = nil
+	stage.Cursors_mapString = nil
+
 	stage.FrontCurves = nil
 	stage.FrontCurves_mapString = nil
 
@@ -2108,9 +2111,6 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.Keys = nil
 	stage.Keys_mapString = nil
-
-	stage.MovingLines = nil
-	stage.MovingLines_mapString = nil
 
 	stage.Parameters = nil
 	stage.Parameters_mapString = nil
@@ -2185,6 +2185,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 		circlegrid.Unstage(stage)
 	}
 
+	for cursor := range stage.Cursors {
+		cursor.Unstage(stage)
+	}
+
 	for frontcurve := range stage.FrontCurves {
 		frontcurve.Unstage(stage)
 	}
@@ -2199,10 +2203,6 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 
 	for key := range stage.Keys {
 		key.Unstage(stage)
-	}
-
-	for movingline := range stage.MovingLines {
-		movingline.Unstage(stage)
 	}
 
 	for parameter := range stage.Parameters {
@@ -2336,6 +2336,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Circles).(*Type)
 	case map[*CircleGrid]any:
 		return any(&stage.CircleGrids).(*Type)
+	case map[*Cursor]any:
+		return any(&stage.Cursors).(*Type)
 	case map[*FrontCurve]any:
 		return any(&stage.FrontCurves).(*Type)
 	case map[*FrontCurveStack]any:
@@ -2344,8 +2346,6 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.HorizontalAxiss).(*Type)
 	case map[*Key]any:
 		return any(&stage.Keys).(*Type)
-	case map[*MovingLine]any:
-		return any(&stage.MovingLines).(*Type)
 	case map[*Parameter]any:
 		return any(&stage.Parameters).(*Type)
 	case map[*Rhombus]any:
@@ -2400,6 +2400,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Circles_mapString).(*Type)
 	case map[string]*CircleGrid:
 		return any(&stage.CircleGrids_mapString).(*Type)
+	case map[string]*Cursor:
+		return any(&stage.Cursors_mapString).(*Type)
 	case map[string]*FrontCurve:
 		return any(&stage.FrontCurves_mapString).(*Type)
 	case map[string]*FrontCurveStack:
@@ -2408,8 +2410,6 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.HorizontalAxiss_mapString).(*Type)
 	case map[string]*Key:
 		return any(&stage.Keys_mapString).(*Type)
-	case map[string]*MovingLine:
-		return any(&stage.MovingLines_mapString).(*Type)
 	case map[string]*Parameter:
 		return any(&stage.Parameters_mapString).(*Type)
 	case map[string]*Rhombus:
@@ -2464,6 +2464,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Circles).(*map[*Type]any)
 	case CircleGrid:
 		return any(&stage.CircleGrids).(*map[*Type]any)
+	case Cursor:
+		return any(&stage.Cursors).(*map[*Type]any)
 	case FrontCurve:
 		return any(&stage.FrontCurves).(*map[*Type]any)
 	case FrontCurveStack:
@@ -2472,8 +2474,6 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.HorizontalAxiss).(*map[*Type]any)
 	case Key:
 		return any(&stage.Keys).(*map[*Type]any)
-	case MovingLine:
-		return any(&stage.MovingLines).(*map[*Type]any)
 	case Parameter:
 		return any(&stage.Parameters).(*map[*Type]any)
 	case Rhombus:
@@ -2528,6 +2528,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.Circles).(*map[Type]any)
 	case *CircleGrid:
 		return any(&stage.CircleGrids).(*map[Type]any)
+	case *Cursor:
+		return any(&stage.Cursors).(*map[Type]any)
 	case *FrontCurve:
 		return any(&stage.FrontCurves).(*map[Type]any)
 	case *FrontCurveStack:
@@ -2536,8 +2538,6 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.HorizontalAxiss).(*map[Type]any)
 	case *Key:
 		return any(&stage.Keys).(*map[Type]any)
-	case *MovingLine:
-		return any(&stage.MovingLines).(*map[Type]any)
 	case *Parameter:
 		return any(&stage.Parameters).(*map[Type]any)
 	case *Rhombus:
@@ -2592,6 +2592,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Circles_mapString).(*map[string]*Type)
 	case CircleGrid:
 		return any(&stage.CircleGrids_mapString).(*map[string]*Type)
+	case Cursor:
+		return any(&stage.Cursors_mapString).(*map[string]*Type)
 	case FrontCurve:
 		return any(&stage.FrontCurves_mapString).(*map[string]*Type)
 	case FrontCurveStack:
@@ -2600,8 +2602,6 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.HorizontalAxiss_mapString).(*map[string]*Type)
 	case Key:
 		return any(&stage.Keys_mapString).(*map[string]*Type)
-	case MovingLine:
-		return any(&stage.MovingLines_mapString).(*map[string]*Type)
 	case Parameter:
 		return any(&stage.Parameters_mapString).(*map[string]*Type)
 	case Rhombus:
@@ -2700,6 +2700,10 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with AbstractShape problem with composites
 			
 		}).(*Type)
+	case Cursor:
+		return any(&Cursor{
+			// Initialisation of associations
+		}).(*Type)
 	case FrontCurve:
 		return any(&FrontCurve{
 			// Initialisation of associations
@@ -2710,7 +2714,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of FrontCurve with the name of the field
 			FrontCurves: []*FrontCurve{{Name: "FrontCurves"}},
 			// field is initialized with an instance of SpiralCircle with the name of the field
-			SpiralCircles: []*SpiralCircle{{Circle: Circle {Name: "SpiralCircles"}}},
+			SpiralCircles: []*SpiralCircle{{Circle: Circle{Name: "SpiralCircles"}}},
 			// field is initialized with AbstractShape problem with composites
 			
 		}).(*Type)
@@ -2722,12 +2726,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 		}).(*Type)
 	case Key:
 		return any(&Key{
-			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
-			
-		}).(*Type)
-	case MovingLine:
-		return any(&MovingLine{
 			// Initialisation of associations
 			// field is initialized with AbstractShape problem with composites
 			
@@ -2800,7 +2798,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralRhombusGrid with the name of the field
 			SpiralRhombusGrid: &SpiralRhombusGrid{Name: "SpiralRhombusGrid"},
 			// field is initialized with an instance of SpiralCircle with the name of the field
-			SpiralCircleSeed: &SpiralCircle{Circle: Circle {Name: "SpiralCircleSeed"}},
+			SpiralCircleSeed: &SpiralCircle{Circle: Circle{Name: "SpiralCircleSeed"}},
 			// field is initialized with an instance of SpiralCircleGrid with the name of the field
 			SpiralCircleGrid: &SpiralCircleGrid{Name: "SpiralCircleGrid"},
 			// field is initialized with an instance of SpiralCircleGrid with the name of the field
@@ -2853,8 +2851,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			VerticalAxis: &VerticalAxis{Name: "VerticalAxis"},
 			// field is initialized with an instance of SpiralOrigin with the name of the field
 			SpiralOrigin: &SpiralOrigin{Name: "SpiralOrigin"},
-			// field is initialized with an instance of MovingLine with the name of the field
-			Cursor: &MovingLine{Name: "Cursor"},
+			// field is initialized with an instance of Cursor with the name of the field
+			Cursor: &Cursor{Name: "Cursor"},
 		}).(*Type)
 	case Rhombus:
 		return any(&Rhombus{
@@ -2902,7 +2900,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralRhombusGrid with the name of the field
 			SpiralRhombusGrid: &SpiralRhombusGrid{Name: "SpiralRhombusGrid"},
 			// field is initialized with an instance of SpiralCircle with the name of the field
-			SpiralCircles: []*SpiralCircle{{Circle: Circle {Name: "SpiralCircles"}}},
+			SpiralCircles: []*SpiralCircle{{Circle: Circle{Name: "SpiralCircles"}}},
 			// field is initialized with AbstractShape problem with composites
 			
 		}).(*Type)
@@ -3169,6 +3167,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 			}
 			return any(res).(map[*End][]*Start)
 		}
+	// reverse maps of direct associations of Cursor
+	case Cursor:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	// reverse maps of direct associations of FrontCurve
 	case FrontCurve:
 		switch fieldname {
@@ -3236,28 +3239,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 					}
 					keys = append(keys, key)
 					res[shapecategory_] = keys
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		}
-	// reverse maps of direct associations of MovingLine
-	case MovingLine:
-		switch fieldname {
-		// insertion point for per direct association field
-		case "ShapeCategory":
-			res := make(map[*ShapeCategory][]*MovingLine)
-			for movingline := range stage.MovingLines {
-				if movingline.ShapeCategory != nil {
-					shapecategory_ := movingline.ShapeCategory
-					var movinglines []*MovingLine
-					_, ok := res[shapecategory_]
-					if ok {
-						movinglines = res[shapecategory_]
-					} else {
-						movinglines = make([]*MovingLine, 0)
-					}
-					movinglines = append(movinglines, movingline)
-					res[shapecategory_] = movinglines
 				}
 			}
 			return any(res).(map[*End][]*Start)
@@ -4270,19 +4251,19 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 			}
 			return any(res).(map[*End][]*Start)
 		case "Cursor":
-			res := make(map[*MovingLine][]*Parameter)
+			res := make(map[*Cursor][]*Parameter)
 			for parameter := range stage.Parameters {
 				if parameter.Cursor != nil {
-					movingline_ := parameter.Cursor
+					cursor_ := parameter.Cursor
 					var parameters []*Parameter
-					_, ok := res[movingline_]
+					_, ok := res[cursor_]
 					if ok {
-						parameters = res[movingline_]
+						parameters = res[cursor_]
 					} else {
 						parameters = make([]*Parameter, 0)
 					}
 					parameters = append(parameters, parameter)
-					res[movingline_] = parameters
+					res[cursor_] = parameters
 				}
 			}
 			return any(res).(map[*End][]*Start)
@@ -4673,6 +4654,11 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			}
 			return any(res).(map[*End]*Start)
 		}
+	// reverse maps of direct associations of Cursor
+	case Cursor:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	// reverse maps of direct associations of FrontCurve
 	case FrontCurve:
 		switch fieldname {
@@ -4706,11 +4692,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		}
 	// reverse maps of direct associations of Key
 	case Key:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
-	// reverse maps of direct associations of MovingLine
-	case MovingLine:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -4850,6 +4831,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Circle"
 	case CircleGrid:
 		res = "CircleGrid"
+	case Cursor:
+		res = "Cursor"
 	case FrontCurve:
 		res = "FrontCurve"
 	case FrontCurveStack:
@@ -4858,8 +4841,6 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "HorizontalAxis"
 	case Key:
 		res = "Key"
-	case MovingLine:
-		res = "MovingLine"
 	case Parameter:
 		res = "Parameter"
 	case Rhombus:
@@ -4914,6 +4895,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "Circle"
 	case *CircleGrid:
 		res = "CircleGrid"
+	case *Cursor:
+		res = "Cursor"
 	case *FrontCurve:
 		res = "FrontCurve"
 	case *FrontCurveStack:
@@ -4922,8 +4905,6 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "HorizontalAxis"
 	case *Key:
 		res = "Key"
-	case *MovingLine:
-		res = "MovingLine"
 	case *Parameter:
 		res = "Parameter"
 	case *Rhombus:
@@ -4977,6 +4958,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName"}
 	case CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
+	case Cursor:
+		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case FrontCurve:
 		res = []string{"Name", "Path"}
 	case FrontCurveStack:
@@ -4985,8 +4968,6 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case Key:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Path", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case MovingLine:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case Parameter:
 		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "BeatLines", "BeatLinesHeightRatio", "NbBeatLines", "NbOfBeatsInTheme", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "BeatsPerSecond", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "ThemeBinaryEncoding", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualBeatsTemporalShift", "Cursor", "IsPlaying"}
 	case Rhombus:
@@ -5066,6 +5047,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case CircleGrid:
 		var rf ReverseField
 		_ = rf
+	case Cursor:
+		var rf ReverseField
+		_ = rf
 	case FrontCurve:
 		var rf ReverseField
 		_ = rf
@@ -5079,9 +5063,6 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 		var rf ReverseField
 		_ = rf
 	case Key:
-		var rf ReverseField
-		_ = rf
-	case MovingLine:
 		var rf ReverseField
 		_ = rf
 	case Parameter:
@@ -5169,6 +5150,8 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName"}
 	case *CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
+	case *Cursor:
+		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *FrontCurve:
 		res = []string{"Name", "Path"}
 	case *FrontCurveStack:
@@ -5177,8 +5160,6 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AxisHandleBorderLength", "Axis_Length", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *Key:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Path", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case *MovingLine:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *Parameter:
 		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "BeatLines", "BeatLinesHeightRatio", "NbBeatLines", "NbOfBeatsInTheme", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "BeatsPerSecond", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "ThemeBinaryEncoding", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualBeatsTemporalShift", "Cursor", "IsPlaying"}
 	case *Rhombus:
@@ -5211,7 +5192,40 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	return
 }
 
-func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fieldName string) (res string) {
+type GongFieldValueType string
+
+const (
+	GongFieldValueTypeInt     GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat   GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool    GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeOthers  GongFieldValueType = "GongFieldValueTypeOthers"
+)
+
+type GongFieldValue struct {
+	valueString string
+	GongFieldValueType
+	valueInt   int
+	valueFloat float64
+	valueBool  bool
+}
+
+func (gongValueField *GongFieldValue) GetValueString() string {
+	return gongValueField.valueString
+}
+
+func (gongValueField *GongFieldValue) GetValueInt() int {
+	return gongValueField.valueInt
+}
+	
+func (gongValueField *GongFieldValue) GetValueFloat() float64 {
+	return gongValueField.valueFloat
+}
+	
+func (gongValueField *GongFieldValue) GetValueBool() bool {
+	return gongValueField.valueBool
+}
+
+func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fieldName string) (res GongFieldValue) {
 
 	switch inferedInstance := any(instance).(type) {
 	// insertion point for generic get gongstruct field value
@@ -5219,1070 +5233,1394 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "AngleDegree":
-			res = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueFloat = inferedInstance.AngleDegree
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Length":
-			res = fmt.Sprintf("%f", inferedInstance.Length)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Length)
+			res.valueFloat = inferedInstance.Length
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndY":
-			res = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueFloat = inferedInstance.EndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *AxisGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Reference":
 			if inferedInstance.Reference != nil {
-				res = inferedInstance.Reference.Name
+				res.valueString = inferedInstance.Reference.Name
 			}
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Axiss":
 			for idx, __instance__ := range inferedInstance.Axiss {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case *Bezier:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "StartX":
-			res = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StartY":
-			res = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueFloat = inferedInstance.StartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointStartX":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointStartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointStartX)
+			res.valueFloat = inferedInstance.ControlPointStartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointStartY":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointStartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointStartY)
+			res.valueFloat = inferedInstance.ControlPointStartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndY":
-			res = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueFloat = inferedInstance.EndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointEndX":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointEndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointEndX)
+			res.valueFloat = inferedInstance.ControlPointEndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointEndY":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointEndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointEndY)
+			res.valueFloat = inferedInstance.ControlPointEndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *BezierGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Reference":
 			if inferedInstance.Reference != nil {
-				res = inferedInstance.Reference.Name
+				res.valueString = inferedInstance.Reference.Name
 			}
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Beziers":
 			for idx, __instance__ := range inferedInstance.Beziers {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case *BezierGridStack:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "BezierGrids":
 			for idx, __instance__ := range inferedInstance.BezierGrids {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case *Circle:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "HasBespokeRadius":
-			res = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
+			res.valueBool = inferedInstance.HasBespokeRadius
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "BespopkeRadius":
-			res = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+			res.valueFloat = inferedInstance.BespopkeRadius
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Pitch":
-			res = fmt.Sprintf("%d", inferedInstance.Pitch)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.Pitch)
+			res.valueInt = inferedInstance.Pitch
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		case "ShowName":
-			res = fmt.Sprintf("%t", inferedInstance.ShowName)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowName)
+			res.valueBool = inferedInstance.ShowName
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	case *CircleGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Reference":
 			if inferedInstance.Reference != nil {
-				res = inferedInstance.Reference.Name
+				res.valueString = inferedInstance.Reference.Name
 			}
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Circles":
 			for idx, __instance__ := range inferedInstance.Circles {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
+		}
+	case *Cursor:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res.valueString = inferedInstance.Name
+		case "AngleDegree":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueFloat = inferedInstance.AngleDegree
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Length":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Length)
+			res.valueFloat = inferedInstance.Length
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "CenterX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "CenterY":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StartX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "EndX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "DurationSeconds":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
+			res.valueFloat = inferedInstance.DurationSeconds
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "IsMoving":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsMoving)
+			res.valueBool = inferedInstance.IsMoving
+			res.GongFieldValueType = GongFieldValueTypeBool
+		case "Color":
+			res.valueString = inferedInstance.Color
+		case "FillOpacity":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Stroke":
+			res.valueString = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StrokeWidth":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StrokeDashArray":
+			res.valueString = inferedInstance.StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
+		case "Transform":
+			res.valueString = inferedInstance.Transform
 		}
 	case *FrontCurve:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Path":
-			res = inferedInstance.Path
+			res.valueString = inferedInstance.Path
 		}
 	case *FrontCurveStack:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "FrontCurves":
 			for idx, __instance__ := range inferedInstance.FrontCurves {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		case "SpiralCircles":
 			for idx, __instance__ := range inferedInstance.SpiralCircles {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *HorizontalAxis:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "AxisHandleBorderLength":
-			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+			res.valueFloat = inferedInstance.AxisHandleBorderLength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Axis_Length":
-			res = fmt.Sprintf("%f", inferedInstance.Axis_Length)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Axis_Length)
+			res.valueFloat = inferedInstance.Axis_Length
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *Key:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Path":
-			res = inferedInstance.Path
+			res.valueString = inferedInstance.Path
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
-		}
-	case *MovingLine:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res = inferedInstance.Name
-		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
-		case "ShapeCategory":
-			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
-			}
-		case "AngleDegree":
-			res = fmt.Sprintf("%f", inferedInstance.AngleDegree)
-		case "Length":
-			res = fmt.Sprintf("%f", inferedInstance.Length)
-		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
-		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
-		case "StartX":
-			res = fmt.Sprintf("%f", inferedInstance.StartX)
-		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
-		case "DurationSeconds":
-			res = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
-		case "IsMoving":
-			res = fmt.Sprintf("%t", inferedInstance.IsMoving)
-		case "Color":
-			res = inferedInstance.Color
-		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-		case "Stroke":
-			res = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *Parameter:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "BackendColor":
-			res = inferedInstance.BackendColor
+			res.valueString = inferedInstance.BackendColor
 		case "MinuteColor":
-			res = inferedInstance.MinuteColor
+			res.valueString = inferedInstance.MinuteColor
 		case "HourColor":
-			res = inferedInstance.HourColor
+			res.valueString = inferedInstance.HourColor
 		case "N":
-			res = fmt.Sprintf("%d", inferedInstance.N)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.N)
+			res.valueInt = inferedInstance.N
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "M":
-			res = fmt.Sprintf("%d", inferedInstance.M)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.M)
+			res.valueInt = inferedInstance.M
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Z":
-			res = fmt.Sprintf("%d", inferedInstance.Z)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.Z)
+			res.valueInt = inferedInstance.Z
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "ShiftToNearestCircle":
-			res = fmt.Sprintf("%d", inferedInstance.ShiftToNearestCircle)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.ShiftToNearestCircle)
+			res.valueInt = inferedInstance.ShiftToNearestCircle
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "InsideAngle":
-			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.InsideAngle)
+			res.valueFloat = inferedInstance.InsideAngle
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SideLength":
-			res = fmt.Sprintf("%f", inferedInstance.SideLength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SideLength)
+			res.valueFloat = inferedInstance.SideLength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "InitialRhombus":
 			if inferedInstance.InitialRhombus != nil {
-				res = inferedInstance.InitialRhombus.Name
+				res.valueString = inferedInstance.InitialRhombus.Name
 			}
 		case "InitialCircle":
 			if inferedInstance.InitialCircle != nil {
-				res = inferedInstance.InitialCircle.Name
+				res.valueString = inferedInstance.InitialCircle.Name
 			}
 		case "InitialRhombusGrid":
 			if inferedInstance.InitialRhombusGrid != nil {
-				res = inferedInstance.InitialRhombusGrid.Name
+				res.valueString = inferedInstance.InitialRhombusGrid.Name
 			}
 		case "InitialCircleGrid":
 			if inferedInstance.InitialCircleGrid != nil {
-				res = inferedInstance.InitialCircleGrid.Name
+				res.valueString = inferedInstance.InitialCircleGrid.Name
 			}
 		case "InitialAxis":
 			if inferedInstance.InitialAxis != nil {
-				res = inferedInstance.InitialAxis.Name
+				res.valueString = inferedInstance.InitialAxis.Name
 			}
 		case "RotatedAxis":
 			if inferedInstance.RotatedAxis != nil {
-				res = inferedInstance.RotatedAxis.Name
+				res.valueString = inferedInstance.RotatedAxis.Name
 			}
 		case "RotatedRhombus":
 			if inferedInstance.RotatedRhombus != nil {
-				res = inferedInstance.RotatedRhombus.Name
+				res.valueString = inferedInstance.RotatedRhombus.Name
 			}
 		case "RotatedRhombusGrid":
 			if inferedInstance.RotatedRhombusGrid != nil {
-				res = inferedInstance.RotatedRhombusGrid.Name
+				res.valueString = inferedInstance.RotatedRhombusGrid.Name
 			}
 		case "RotatedCircleGrid":
 			if inferedInstance.RotatedCircleGrid != nil {
-				res = inferedInstance.RotatedCircleGrid.Name
+				res.valueString = inferedInstance.RotatedCircleGrid.Name
 			}
 		case "NextRhombus":
 			if inferedInstance.NextRhombus != nil {
-				res = inferedInstance.NextRhombus.Name
+				res.valueString = inferedInstance.NextRhombus.Name
 			}
 		case "NextCircle":
 			if inferedInstance.NextCircle != nil {
-				res = inferedInstance.NextCircle.Name
+				res.valueString = inferedInstance.NextCircle.Name
 			}
 		case "GrowingRhombusGridSeed":
 			if inferedInstance.GrowingRhombusGridSeed != nil {
-				res = inferedInstance.GrowingRhombusGridSeed.Name
+				res.valueString = inferedInstance.GrowingRhombusGridSeed.Name
 			}
 		case "GrowingRhombusGrid":
 			if inferedInstance.GrowingRhombusGrid != nil {
-				res = inferedInstance.GrowingRhombusGrid.Name
+				res.valueString = inferedInstance.GrowingRhombusGrid.Name
 			}
 		case "GrowingCircleGridSeed":
 			if inferedInstance.GrowingCircleGridSeed != nil {
-				res = inferedInstance.GrowingCircleGridSeed.Name
+				res.valueString = inferedInstance.GrowingCircleGridSeed.Name
 			}
 		case "GrowingCircleGrid":
 			if inferedInstance.GrowingCircleGrid != nil {
-				res = inferedInstance.GrowingCircleGrid.Name
+				res.valueString = inferedInstance.GrowingCircleGrid.Name
 			}
 		case "GrowingCircleGridLeftSeed":
 			if inferedInstance.GrowingCircleGridLeftSeed != nil {
-				res = inferedInstance.GrowingCircleGridLeftSeed.Name
+				res.valueString = inferedInstance.GrowingCircleGridLeftSeed.Name
 			}
 		case "GrowingCircleGridLeft":
 			if inferedInstance.GrowingCircleGridLeft != nil {
-				res = inferedInstance.GrowingCircleGridLeft.Name
+				res.valueString = inferedInstance.GrowingCircleGridLeft.Name
 			}
 		case "ConstructionAxis":
 			if inferedInstance.ConstructionAxis != nil {
-				res = inferedInstance.ConstructionAxis.Name
+				res.valueString = inferedInstance.ConstructionAxis.Name
 			}
 		case "ConstructionAxisGrid":
 			if inferedInstance.ConstructionAxisGrid != nil {
-				res = inferedInstance.ConstructionAxisGrid.Name
+				res.valueString = inferedInstance.ConstructionAxisGrid.Name
 			}
 		case "ConstructionCircle":
 			if inferedInstance.ConstructionCircle != nil {
-				res = inferedInstance.ConstructionCircle.Name
+				res.valueString = inferedInstance.ConstructionCircle.Name
 			}
 		case "ConstructionCircleGrid":
 			if inferedInstance.ConstructionCircleGrid != nil {
-				res = inferedInstance.ConstructionCircleGrid.Name
+				res.valueString = inferedInstance.ConstructionCircleGrid.Name
 			}
 		case "GrowthCurveSeed":
 			if inferedInstance.GrowthCurveSeed != nil {
-				res = inferedInstance.GrowthCurveSeed.Name
+				res.valueString = inferedInstance.GrowthCurveSeed.Name
 			}
 		case "GrowthCurve":
 			if inferedInstance.GrowthCurve != nil {
-				res = inferedInstance.GrowthCurve.Name
+				res.valueString = inferedInstance.GrowthCurve.Name
 			}
 		case "GrowthCurveShiftedRightSeed":
 			if inferedInstance.GrowthCurveShiftedRightSeed != nil {
-				res = inferedInstance.GrowthCurveShiftedRightSeed.Name
+				res.valueString = inferedInstance.GrowthCurveShiftedRightSeed.Name
 			}
 		case "GrowthCurveShiftedRight":
 			if inferedInstance.GrowthCurveShiftedRight != nil {
-				res = inferedInstance.GrowthCurveShiftedRight.Name
+				res.valueString = inferedInstance.GrowthCurveShiftedRight.Name
 			}
 		case "GrowthCurveNextSeed":
 			if inferedInstance.GrowthCurveNextSeed != nil {
-				res = inferedInstance.GrowthCurveNextSeed.Name
+				res.valueString = inferedInstance.GrowthCurveNextSeed.Name
 			}
 		case "GrowthCurveNext":
 			if inferedInstance.GrowthCurveNext != nil {
-				res = inferedInstance.GrowthCurveNext.Name
+				res.valueString = inferedInstance.GrowthCurveNext.Name
 			}
 		case "GrowthCurveNextShiftedRightSeed":
 			if inferedInstance.GrowthCurveNextShiftedRightSeed != nil {
-				res = inferedInstance.GrowthCurveNextShiftedRightSeed.Name
+				res.valueString = inferedInstance.GrowthCurveNextShiftedRightSeed.Name
 			}
 		case "GrowthCurveNextShiftedRight":
 			if inferedInstance.GrowthCurveNextShiftedRight != nil {
-				res = inferedInstance.GrowthCurveNextShiftedRight.Name
+				res.valueString = inferedInstance.GrowthCurveNextShiftedRight.Name
 			}
 		case "GrowthCurveStack":
 			if inferedInstance.GrowthCurveStack != nil {
-				res = inferedInstance.GrowthCurveStack.Name
+				res.valueString = inferedInstance.GrowthCurveStack.Name
 			}
 		case "StackWidth":
-			res = fmt.Sprintf("%d", inferedInstance.StackWidth)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.StackWidth)
+			res.valueInt = inferedInstance.StackWidth
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "NbShitRight":
-			res = fmt.Sprintf("%d", inferedInstance.NbShitRight)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbShitRight)
+			res.valueInt = inferedInstance.NbShitRight
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "StackHeight":
-			res = fmt.Sprintf("%d", inferedInstance.StackHeight)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.StackHeight)
+			res.valueInt = inferedInstance.StackHeight
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "BezierControlLengthRatio":
-			res = fmt.Sprintf("%f", inferedInstance.BezierControlLengthRatio)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BezierControlLengthRatio)
+			res.valueFloat = inferedInstance.BezierControlLengthRatio
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SpiralRhombusGridSeed":
 			if inferedInstance.SpiralRhombusGridSeed != nil {
-				res = inferedInstance.SpiralRhombusGridSeed.Name
+				res.valueString = inferedInstance.SpiralRhombusGridSeed.Name
 			}
 		case "SpiralRhombusGrid":
 			if inferedInstance.SpiralRhombusGrid != nil {
-				res = inferedInstance.SpiralRhombusGrid.Name
+				res.valueString = inferedInstance.SpiralRhombusGrid.Name
 			}
 		case "SpiralCircleSeed":
 			if inferedInstance.SpiralCircleSeed != nil {
-				res = inferedInstance.SpiralCircleSeed.Name
+				res.valueString = inferedInstance.SpiralCircleSeed.Name
 			}
 		case "SpiralCircleGrid":
 			if inferedInstance.SpiralCircleGrid != nil {
-				res = inferedInstance.SpiralCircleGrid.Name
+				res.valueString = inferedInstance.SpiralCircleGrid.Name
 			}
 		case "SpiralCircleFullGrid":
 			if inferedInstance.SpiralCircleFullGrid != nil {
-				res = inferedInstance.SpiralCircleFullGrid.Name
+				res.valueString = inferedInstance.SpiralCircleFullGrid.Name
 			}
 		case "SpiralConstructionOuterLineSeed":
 			if inferedInstance.SpiralConstructionOuterLineSeed != nil {
-				res = inferedInstance.SpiralConstructionOuterLineSeed.Name
+				res.valueString = inferedInstance.SpiralConstructionOuterLineSeed.Name
 			}
 		case "SpiralConstructionInnerLineSeed":
 			if inferedInstance.SpiralConstructionInnerLineSeed != nil {
-				res = inferedInstance.SpiralConstructionInnerLineSeed.Name
+				res.valueString = inferedInstance.SpiralConstructionInnerLineSeed.Name
 			}
 		case "SpiralConstructionOuterLineGrid":
 			if inferedInstance.SpiralConstructionOuterLineGrid != nil {
-				res = inferedInstance.SpiralConstructionOuterLineGrid.Name
+				res.valueString = inferedInstance.SpiralConstructionOuterLineGrid.Name
 			}
 		case "SpiralConstructionInnerLineGrid":
 			if inferedInstance.SpiralConstructionInnerLineGrid != nil {
-				res = inferedInstance.SpiralConstructionInnerLineGrid.Name
+				res.valueString = inferedInstance.SpiralConstructionInnerLineGrid.Name
 			}
 		case "SpiralConstructionCircleGrid":
 			if inferedInstance.SpiralConstructionCircleGrid != nil {
-				res = inferedInstance.SpiralConstructionCircleGrid.Name
+				res.valueString = inferedInstance.SpiralConstructionCircleGrid.Name
 			}
 		case "SpiralConstructionOuterLineFullGrid":
 			if inferedInstance.SpiralConstructionOuterLineFullGrid != nil {
-				res = inferedInstance.SpiralConstructionOuterLineFullGrid.Name
+				res.valueString = inferedInstance.SpiralConstructionOuterLineFullGrid.Name
 			}
 		case "SpiralBezierSeed":
 			if inferedInstance.SpiralBezierSeed != nil {
-				res = inferedInstance.SpiralBezierSeed.Name
+				res.valueString = inferedInstance.SpiralBezierSeed.Name
 			}
 		case "SpiralBezierGrid":
 			if inferedInstance.SpiralBezierGrid != nil {
-				res = inferedInstance.SpiralBezierGrid.Name
+				res.valueString = inferedInstance.SpiralBezierGrid.Name
 			}
 		case "SpiralBezierFullGrid":
 			if inferedInstance.SpiralBezierFullGrid != nil {
-				res = inferedInstance.SpiralBezierFullGrid.Name
+				res.valueString = inferedInstance.SpiralBezierFullGrid.Name
 			}
 		case "SpiralBezierStrength":
-			res = fmt.Sprintf("%f", inferedInstance.SpiralBezierStrength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SpiralBezierStrength)
+			res.valueFloat = inferedInstance.SpiralBezierStrength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FrontCurveStack":
 			if inferedInstance.FrontCurveStack != nil {
-				res = inferedInstance.FrontCurveStack.Name
+				res.valueString = inferedInstance.FrontCurveStack.Name
 			}
 		case "NbInterpolationPoints":
-			res = fmt.Sprintf("%d", inferedInstance.NbInterpolationPoints)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbInterpolationPoints)
+			res.valueInt = inferedInstance.NbInterpolationPoints
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Fkey":
 			if inferedInstance.Fkey != nil {
-				res = inferedInstance.Fkey.Name
+				res.valueString = inferedInstance.Fkey.Name
 			}
 		case "FkeySizeRatio":
-			res = fmt.Sprintf("%f", inferedInstance.FkeySizeRatio)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FkeySizeRatio)
+			res.valueFloat = inferedInstance.FkeySizeRatio
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FkeyOriginRelativeX":
-			res = fmt.Sprintf("%f", inferedInstance.FkeyOriginRelativeX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FkeyOriginRelativeX)
+			res.valueFloat = inferedInstance.FkeyOriginRelativeX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FkeyOriginRelativeY":
-			res = fmt.Sprintf("%f", inferedInstance.FkeyOriginRelativeY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FkeyOriginRelativeY)
+			res.valueFloat = inferedInstance.FkeyOriginRelativeY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "PitchLines":
 			if inferedInstance.PitchLines != nil {
-				res = inferedInstance.PitchLines.Name
+				res.valueString = inferedInstance.PitchLines.Name
 			}
 		case "PitchHeight":
-			res = fmt.Sprintf("%f", inferedInstance.PitchHeight)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.PitchHeight)
+			res.valueFloat = inferedInstance.PitchHeight
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "NbPitchLines":
-			res = fmt.Sprintf("%d", inferedInstance.NbPitchLines)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbPitchLines)
+			res.valueInt = inferedInstance.NbPitchLines
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "BeatLines":
 			if inferedInstance.BeatLines != nil {
-				res = inferedInstance.BeatLines.Name
+				res.valueString = inferedInstance.BeatLines.Name
 			}
 		case "BeatLinesHeightRatio":
-			res = fmt.Sprintf("%f", inferedInstance.BeatLinesHeightRatio)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BeatLinesHeightRatio)
+			res.valueFloat = inferedInstance.BeatLinesHeightRatio
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "NbBeatLines":
-			res = fmt.Sprintf("%d", inferedInstance.NbBeatLines)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbBeatLines)
+			res.valueInt = inferedInstance.NbBeatLines
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "NbOfBeatsInTheme":
-			res = fmt.Sprintf("%d", inferedInstance.NbOfBeatsInTheme)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbOfBeatsInTheme)
+			res.valueInt = inferedInstance.NbOfBeatsInTheme
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "FirstVoice":
 			if inferedInstance.FirstVoice != nil {
-				res = inferedInstance.FirstVoice.Name
+				res.valueString = inferedInstance.FirstVoice.Name
 			}
 		case "FirstVoiceShiftRigth":
 			if inferedInstance.FirstVoiceShiftRigth != nil {
-				res = inferedInstance.FirstVoiceShiftRigth.Name
+				res.valueString = inferedInstance.FirstVoiceShiftRigth.Name
 			}
 		case "FirstVoiceShiftX":
-			res = fmt.Sprintf("%f", inferedInstance.FirstVoiceShiftX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FirstVoiceShiftX)
+			res.valueFloat = inferedInstance.FirstVoiceShiftX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FirstVoiceShiftY":
-			res = fmt.Sprintf("%f", inferedInstance.FirstVoiceShiftY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FirstVoiceShiftY)
+			res.valueFloat = inferedInstance.FirstVoiceShiftY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SecondVoice":
 			if inferedInstance.SecondVoice != nil {
-				res = inferedInstance.SecondVoice.Name
+				res.valueString = inferedInstance.SecondVoice.Name
 			}
 		case "SecondVoiceShiftedRight":
 			if inferedInstance.SecondVoiceShiftedRight != nil {
-				res = inferedInstance.SecondVoiceShiftedRight.Name
+				res.valueString = inferedInstance.SecondVoiceShiftedRight.Name
 			}
 		case "PitchDifference":
-			res = fmt.Sprintf("%d", inferedInstance.PitchDifference)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.PitchDifference)
+			res.valueInt = inferedInstance.PitchDifference
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "BeatsPerSecond":
-			res = fmt.Sprintf("%f", inferedInstance.BeatsPerSecond)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BeatsPerSecond)
+			res.valueFloat = inferedInstance.BeatsPerSecond
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Level":
-			res = fmt.Sprintf("%f", inferedInstance.Level)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Level)
+			res.valueFloat = inferedInstance.Level
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FirstVoiceNotes":
 			if inferedInstance.FirstVoiceNotes != nil {
-				res = inferedInstance.FirstVoiceNotes.Name
+				res.valueString = inferedInstance.FirstVoiceNotes.Name
 			}
 		case "FirstVoiceNotesShiftedRight":
 			if inferedInstance.FirstVoiceNotesShiftedRight != nil {
-				res = inferedInstance.FirstVoiceNotesShiftedRight.Name
+				res.valueString = inferedInstance.FirstVoiceNotesShiftedRight.Name
 			}
 		case "SecondVoiceNotes":
 			if inferedInstance.SecondVoiceNotes != nil {
-				res = inferedInstance.SecondVoiceNotes.Name
+				res.valueString = inferedInstance.SecondVoiceNotes.Name
 			}
 		case "SecondVoiceNotesShiftedRight":
 			if inferedInstance.SecondVoiceNotesShiftedRight != nil {
-				res = inferedInstance.SecondVoiceNotesShiftedRight.Name
+				res.valueString = inferedInstance.SecondVoiceNotesShiftedRight.Name
 			}
 		case "IsMinor":
-			res = fmt.Sprintf("%t", inferedInstance.IsMinor)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsMinor)
+			res.valueBool = inferedInstance.IsMinor
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ThemeBinaryEncoding":
-			res = fmt.Sprintf("%d", inferedInstance.ThemeBinaryEncoding)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.ThemeBinaryEncoding)
+			res.valueInt = inferedInstance.ThemeBinaryEncoding
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "OriginX":
-			res = fmt.Sprintf("%f", inferedInstance.OriginX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.OriginX)
+			res.valueFloat = inferedInstance.OriginX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "OriginY":
-			res = fmt.Sprintf("%f", inferedInstance.OriginY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.OriginY)
+			res.valueFloat = inferedInstance.OriginY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "HorizontalAxis":
 			if inferedInstance.HorizontalAxis != nil {
-				res = inferedInstance.HorizontalAxis.Name
+				res.valueString = inferedInstance.HorizontalAxis.Name
 			}
 		case "VerticalAxis":
 			if inferedInstance.VerticalAxis != nil {
-				res = inferedInstance.VerticalAxis.Name
+				res.valueString = inferedInstance.VerticalAxis.Name
 			}
 		case "SpiralOrigin":
 			if inferedInstance.SpiralOrigin != nil {
-				res = inferedInstance.SpiralOrigin.Name
+				res.valueString = inferedInstance.SpiralOrigin.Name
 			}
 		case "SpiralOriginX":
-			res = fmt.Sprintf("%f", inferedInstance.SpiralOriginX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SpiralOriginX)
+			res.valueFloat = inferedInstance.SpiralOriginX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SpiralOriginY":
-			res = fmt.Sprintf("%f", inferedInstance.SpiralOriginY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SpiralOriginY)
+			res.valueFloat = inferedInstance.SpiralOriginY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "OriginCrossWidth":
-			res = fmt.Sprintf("%f", inferedInstance.OriginCrossWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.OriginCrossWidth)
+			res.valueFloat = inferedInstance.OriginCrossWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SpiralRadiusRatio":
-			res = fmt.Sprintf("%f", inferedInstance.SpiralRadiusRatio)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SpiralRadiusRatio)
+			res.valueFloat = inferedInstance.SpiralRadiusRatio
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ShowSpiralBezierConstruct":
-			res = fmt.Sprintf("%t", inferedInstance.ShowSpiralBezierConstruct)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowSpiralBezierConstruct)
+			res.valueBool = inferedInstance.ShowSpiralBezierConstruct
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShowInterpolationPoints":
-			res = fmt.Sprintf("%t", inferedInstance.ShowInterpolationPoints)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowInterpolationPoints)
+			res.valueBool = inferedInstance.ShowInterpolationPoints
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ActualBeatsTemporalShift":
-			res = fmt.Sprintf("%d", inferedInstance.ActualBeatsTemporalShift)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.ActualBeatsTemporalShift)
+			res.valueInt = inferedInstance.ActualBeatsTemporalShift
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Cursor":
 			if inferedInstance.Cursor != nil {
-				res = inferedInstance.Cursor.Name
+				res.valueString = inferedInstance.Cursor.Name
 			}
 		case "IsPlaying":
-			res = fmt.Sprintf("%t", inferedInstance.IsPlaying)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsPlaying)
+			res.valueBool = inferedInstance.IsPlaying
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	case *Rhombus:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SideLength":
-			res = fmt.Sprintf("%f", inferedInstance.SideLength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SideLength)
+			res.valueFloat = inferedInstance.SideLength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "AngleDegree":
-			res = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueFloat = inferedInstance.AngleDegree
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "InsideAngle":
-			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.InsideAngle)
+			res.valueFloat = inferedInstance.InsideAngle
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *RhombusGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Reference":
 			if inferedInstance.Reference != nil {
-				res = inferedInstance.Reference.Name
+				res.valueString = inferedInstance.Reference.Name
 			}
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Rhombuses":
 			for idx, __instance__ := range inferedInstance.Rhombuses {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case *ShapeCategory:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsExpanded":
-			res = fmt.Sprintf("%t", inferedInstance.IsExpanded)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsExpanded)
+			res.valueBool = inferedInstance.IsExpanded
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	case *SpiralBezier:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "StartX":
-			res = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StartY":
-			res = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueFloat = inferedInstance.StartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointStartX":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointStartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointStartX)
+			res.valueFloat = inferedInstance.ControlPointStartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointStartY":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointStartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointStartY)
+			res.valueFloat = inferedInstance.ControlPointStartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndY":
-			res = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueFloat = inferedInstance.EndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointEndX":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointEndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointEndX)
+			res.valueFloat = inferedInstance.ControlPointEndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointEndY":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointEndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointEndY)
+			res.valueFloat = inferedInstance.ControlPointEndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *SpiralBezierGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "SpiralBeziers":
 			for idx, __instance__ := range inferedInstance.SpiralBeziers {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case *SpiralCircle:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "HasBespokeRadius":
-			res = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
+			res.valueBool = inferedInstance.HasBespokeRadius
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "BespopkeRadius":
-			res = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+			res.valueFloat = inferedInstance.BespopkeRadius
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Pitch":
-			res = fmt.Sprintf("%d", inferedInstance.Pitch)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.Pitch)
+			res.valueInt = inferedInstance.Pitch
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		case "ShowName":
-			res = fmt.Sprintf("%t", inferedInstance.ShowName)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowName)
+			res.valueBool = inferedInstance.ShowName
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "Path":
-			res = inferedInstance.Path
+			res.valueString = inferedInstance.Path
 		}
 	case *SpiralCircleGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "SpiralRhombusGrid":
 			if inferedInstance.SpiralRhombusGrid != nil {
-				res = inferedInstance.SpiralRhombusGrid.Name
+				res.valueString = inferedInstance.SpiralRhombusGrid.Name
 			}
 		case "SpiralCircles":
 			for idx, __instance__ := range inferedInstance.SpiralCircles {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case *SpiralLine:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "StartX":
-			res = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StartY":
-			res = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueFloat = inferedInstance.StartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndY":
-			res = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueFloat = inferedInstance.EndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *SpiralLineGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "SpiralLines":
 			for idx, __instance__ := range inferedInstance.SpiralLines {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case *SpiralOrigin:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *SpiralRhombus:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "X_r0":
-			res = fmt.Sprintf("%f", inferedInstance.X_r0)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.X_r0)
+			res.valueFloat = inferedInstance.X_r0
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Y_r0":
-			res = fmt.Sprintf("%f", inferedInstance.Y_r0)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_r0)
+			res.valueFloat = inferedInstance.Y_r0
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "X_r1":
-			res = fmt.Sprintf("%f", inferedInstance.X_r1)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.X_r1)
+			res.valueFloat = inferedInstance.X_r1
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Y_r1":
-			res = fmt.Sprintf("%f", inferedInstance.Y_r1)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_r1)
+			res.valueFloat = inferedInstance.Y_r1
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "X_r2":
-			res = fmt.Sprintf("%f", inferedInstance.X_r2)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.X_r2)
+			res.valueFloat = inferedInstance.X_r2
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Y_r2":
-			res = fmt.Sprintf("%f", inferedInstance.Y_r2)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_r2)
+			res.valueFloat = inferedInstance.Y_r2
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "X_r3":
-			res = fmt.Sprintf("%f", inferedInstance.X_r3)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.X_r3)
+			res.valueFloat = inferedInstance.X_r3
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Y_r3":
-			res = fmt.Sprintf("%f", inferedInstance.Y_r3)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_r3)
+			res.valueFloat = inferedInstance.Y_r3
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case *SpiralRhombusGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "SpiralRhombuses":
 			for idx, __instance__ := range inferedInstance.SpiralRhombuses {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case *VerticalAxis:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "AxisHandleBorderLength":
-			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+			res.valueFloat = inferedInstance.AxisHandleBorderLength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Axis_Length":
-			res = fmt.Sprintf("%f", inferedInstance.Axis_Length)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Axis_Length)
+			res.valueFloat = inferedInstance.Axis_Length
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	default:
 		_ = inferedInstance
@@ -6290,7 +6628,7 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 	return
 }
 
-func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res string) {
+func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res GongFieldValue) {
 
 	switch inferedInstance := any(instance).(type) {
 	// insertion point for generic get gongstruct field value
@@ -6298,1070 +6636,1394 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "AngleDegree":
-			res = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueFloat = inferedInstance.AngleDegree
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Length":
-			res = fmt.Sprintf("%f", inferedInstance.Length)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Length)
+			res.valueFloat = inferedInstance.Length
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndY":
-			res = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueFloat = inferedInstance.EndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case AxisGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Reference":
 			if inferedInstance.Reference != nil {
-				res = inferedInstance.Reference.Name
+				res.valueString = inferedInstance.Reference.Name
 			}
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Axiss":
 			for idx, __instance__ := range inferedInstance.Axiss {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case Bezier:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "StartX":
-			res = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StartY":
-			res = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueFloat = inferedInstance.StartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointStartX":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointStartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointStartX)
+			res.valueFloat = inferedInstance.ControlPointStartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointStartY":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointStartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointStartY)
+			res.valueFloat = inferedInstance.ControlPointStartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndY":
-			res = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueFloat = inferedInstance.EndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointEndX":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointEndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointEndX)
+			res.valueFloat = inferedInstance.ControlPointEndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointEndY":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointEndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointEndY)
+			res.valueFloat = inferedInstance.ControlPointEndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case BezierGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Reference":
 			if inferedInstance.Reference != nil {
-				res = inferedInstance.Reference.Name
+				res.valueString = inferedInstance.Reference.Name
 			}
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Beziers":
 			for idx, __instance__ := range inferedInstance.Beziers {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case BezierGridStack:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "BezierGrids":
 			for idx, __instance__ := range inferedInstance.BezierGrids {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case Circle:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "HasBespokeRadius":
-			res = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
+			res.valueBool = inferedInstance.HasBespokeRadius
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "BespopkeRadius":
-			res = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+			res.valueFloat = inferedInstance.BespopkeRadius
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Pitch":
-			res = fmt.Sprintf("%d", inferedInstance.Pitch)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.Pitch)
+			res.valueInt = inferedInstance.Pitch
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		case "ShowName":
-			res = fmt.Sprintf("%t", inferedInstance.ShowName)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowName)
+			res.valueBool = inferedInstance.ShowName
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	case CircleGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Reference":
 			if inferedInstance.Reference != nil {
-				res = inferedInstance.Reference.Name
+				res.valueString = inferedInstance.Reference.Name
 			}
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Circles":
 			for idx, __instance__ := range inferedInstance.Circles {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
+		}
+	case Cursor:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res.valueString = inferedInstance.Name
+		case "AngleDegree":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueFloat = inferedInstance.AngleDegree
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Length":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Length)
+			res.valueFloat = inferedInstance.Length
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "CenterX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "CenterY":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StartX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "EndX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "DurationSeconds":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
+			res.valueFloat = inferedInstance.DurationSeconds
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "IsMoving":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsMoving)
+			res.valueBool = inferedInstance.IsMoving
+			res.GongFieldValueType = GongFieldValueTypeBool
+		case "Color":
+			res.valueString = inferedInstance.Color
+		case "FillOpacity":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Stroke":
+			res.valueString = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StrokeWidth":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StrokeDashArray":
+			res.valueString = inferedInstance.StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
+		case "Transform":
+			res.valueString = inferedInstance.Transform
 		}
 	case FrontCurve:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Path":
-			res = inferedInstance.Path
+			res.valueString = inferedInstance.Path
 		}
 	case FrontCurveStack:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "FrontCurves":
 			for idx, __instance__ := range inferedInstance.FrontCurves {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		case "SpiralCircles":
 			for idx, __instance__ := range inferedInstance.SpiralCircles {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case HorizontalAxis:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "AxisHandleBorderLength":
-			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+			res.valueFloat = inferedInstance.AxisHandleBorderLength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Axis_Length":
-			res = fmt.Sprintf("%f", inferedInstance.Axis_Length)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Axis_Length)
+			res.valueFloat = inferedInstance.Axis_Length
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case Key:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Path":
-			res = inferedInstance.Path
+			res.valueString = inferedInstance.Path
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
-		}
-	case MovingLine:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res = inferedInstance.Name
-		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
-		case "ShapeCategory":
-			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
-			}
-		case "AngleDegree":
-			res = fmt.Sprintf("%f", inferedInstance.AngleDegree)
-		case "Length":
-			res = fmt.Sprintf("%f", inferedInstance.Length)
-		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
-		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
-		case "StartX":
-			res = fmt.Sprintf("%f", inferedInstance.StartX)
-		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
-		case "DurationSeconds":
-			res = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
-		case "IsMoving":
-			res = fmt.Sprintf("%t", inferedInstance.IsMoving)
-		case "Color":
-			res = inferedInstance.Color
-		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-		case "Stroke":
-			res = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case Parameter:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "BackendColor":
-			res = inferedInstance.BackendColor
+			res.valueString = inferedInstance.BackendColor
 		case "MinuteColor":
-			res = inferedInstance.MinuteColor
+			res.valueString = inferedInstance.MinuteColor
 		case "HourColor":
-			res = inferedInstance.HourColor
+			res.valueString = inferedInstance.HourColor
 		case "N":
-			res = fmt.Sprintf("%d", inferedInstance.N)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.N)
+			res.valueInt = inferedInstance.N
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "M":
-			res = fmt.Sprintf("%d", inferedInstance.M)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.M)
+			res.valueInt = inferedInstance.M
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Z":
-			res = fmt.Sprintf("%d", inferedInstance.Z)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.Z)
+			res.valueInt = inferedInstance.Z
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "ShiftToNearestCircle":
-			res = fmt.Sprintf("%d", inferedInstance.ShiftToNearestCircle)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.ShiftToNearestCircle)
+			res.valueInt = inferedInstance.ShiftToNearestCircle
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "InsideAngle":
-			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.InsideAngle)
+			res.valueFloat = inferedInstance.InsideAngle
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SideLength":
-			res = fmt.Sprintf("%f", inferedInstance.SideLength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SideLength)
+			res.valueFloat = inferedInstance.SideLength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "InitialRhombus":
 			if inferedInstance.InitialRhombus != nil {
-				res = inferedInstance.InitialRhombus.Name
+				res.valueString = inferedInstance.InitialRhombus.Name
 			}
 		case "InitialCircle":
 			if inferedInstance.InitialCircle != nil {
-				res = inferedInstance.InitialCircle.Name
+				res.valueString = inferedInstance.InitialCircle.Name
 			}
 		case "InitialRhombusGrid":
 			if inferedInstance.InitialRhombusGrid != nil {
-				res = inferedInstance.InitialRhombusGrid.Name
+				res.valueString = inferedInstance.InitialRhombusGrid.Name
 			}
 		case "InitialCircleGrid":
 			if inferedInstance.InitialCircleGrid != nil {
-				res = inferedInstance.InitialCircleGrid.Name
+				res.valueString = inferedInstance.InitialCircleGrid.Name
 			}
 		case "InitialAxis":
 			if inferedInstance.InitialAxis != nil {
-				res = inferedInstance.InitialAxis.Name
+				res.valueString = inferedInstance.InitialAxis.Name
 			}
 		case "RotatedAxis":
 			if inferedInstance.RotatedAxis != nil {
-				res = inferedInstance.RotatedAxis.Name
+				res.valueString = inferedInstance.RotatedAxis.Name
 			}
 		case "RotatedRhombus":
 			if inferedInstance.RotatedRhombus != nil {
-				res = inferedInstance.RotatedRhombus.Name
+				res.valueString = inferedInstance.RotatedRhombus.Name
 			}
 		case "RotatedRhombusGrid":
 			if inferedInstance.RotatedRhombusGrid != nil {
-				res = inferedInstance.RotatedRhombusGrid.Name
+				res.valueString = inferedInstance.RotatedRhombusGrid.Name
 			}
 		case "RotatedCircleGrid":
 			if inferedInstance.RotatedCircleGrid != nil {
-				res = inferedInstance.RotatedCircleGrid.Name
+				res.valueString = inferedInstance.RotatedCircleGrid.Name
 			}
 		case "NextRhombus":
 			if inferedInstance.NextRhombus != nil {
-				res = inferedInstance.NextRhombus.Name
+				res.valueString = inferedInstance.NextRhombus.Name
 			}
 		case "NextCircle":
 			if inferedInstance.NextCircle != nil {
-				res = inferedInstance.NextCircle.Name
+				res.valueString = inferedInstance.NextCircle.Name
 			}
 		case "GrowingRhombusGridSeed":
 			if inferedInstance.GrowingRhombusGridSeed != nil {
-				res = inferedInstance.GrowingRhombusGridSeed.Name
+				res.valueString = inferedInstance.GrowingRhombusGridSeed.Name
 			}
 		case "GrowingRhombusGrid":
 			if inferedInstance.GrowingRhombusGrid != nil {
-				res = inferedInstance.GrowingRhombusGrid.Name
+				res.valueString = inferedInstance.GrowingRhombusGrid.Name
 			}
 		case "GrowingCircleGridSeed":
 			if inferedInstance.GrowingCircleGridSeed != nil {
-				res = inferedInstance.GrowingCircleGridSeed.Name
+				res.valueString = inferedInstance.GrowingCircleGridSeed.Name
 			}
 		case "GrowingCircleGrid":
 			if inferedInstance.GrowingCircleGrid != nil {
-				res = inferedInstance.GrowingCircleGrid.Name
+				res.valueString = inferedInstance.GrowingCircleGrid.Name
 			}
 		case "GrowingCircleGridLeftSeed":
 			if inferedInstance.GrowingCircleGridLeftSeed != nil {
-				res = inferedInstance.GrowingCircleGridLeftSeed.Name
+				res.valueString = inferedInstance.GrowingCircleGridLeftSeed.Name
 			}
 		case "GrowingCircleGridLeft":
 			if inferedInstance.GrowingCircleGridLeft != nil {
-				res = inferedInstance.GrowingCircleGridLeft.Name
+				res.valueString = inferedInstance.GrowingCircleGridLeft.Name
 			}
 		case "ConstructionAxis":
 			if inferedInstance.ConstructionAxis != nil {
-				res = inferedInstance.ConstructionAxis.Name
+				res.valueString = inferedInstance.ConstructionAxis.Name
 			}
 		case "ConstructionAxisGrid":
 			if inferedInstance.ConstructionAxisGrid != nil {
-				res = inferedInstance.ConstructionAxisGrid.Name
+				res.valueString = inferedInstance.ConstructionAxisGrid.Name
 			}
 		case "ConstructionCircle":
 			if inferedInstance.ConstructionCircle != nil {
-				res = inferedInstance.ConstructionCircle.Name
+				res.valueString = inferedInstance.ConstructionCircle.Name
 			}
 		case "ConstructionCircleGrid":
 			if inferedInstance.ConstructionCircleGrid != nil {
-				res = inferedInstance.ConstructionCircleGrid.Name
+				res.valueString = inferedInstance.ConstructionCircleGrid.Name
 			}
 		case "GrowthCurveSeed":
 			if inferedInstance.GrowthCurveSeed != nil {
-				res = inferedInstance.GrowthCurveSeed.Name
+				res.valueString = inferedInstance.GrowthCurveSeed.Name
 			}
 		case "GrowthCurve":
 			if inferedInstance.GrowthCurve != nil {
-				res = inferedInstance.GrowthCurve.Name
+				res.valueString = inferedInstance.GrowthCurve.Name
 			}
 		case "GrowthCurveShiftedRightSeed":
 			if inferedInstance.GrowthCurveShiftedRightSeed != nil {
-				res = inferedInstance.GrowthCurveShiftedRightSeed.Name
+				res.valueString = inferedInstance.GrowthCurveShiftedRightSeed.Name
 			}
 		case "GrowthCurveShiftedRight":
 			if inferedInstance.GrowthCurveShiftedRight != nil {
-				res = inferedInstance.GrowthCurveShiftedRight.Name
+				res.valueString = inferedInstance.GrowthCurveShiftedRight.Name
 			}
 		case "GrowthCurveNextSeed":
 			if inferedInstance.GrowthCurveNextSeed != nil {
-				res = inferedInstance.GrowthCurveNextSeed.Name
+				res.valueString = inferedInstance.GrowthCurveNextSeed.Name
 			}
 		case "GrowthCurveNext":
 			if inferedInstance.GrowthCurveNext != nil {
-				res = inferedInstance.GrowthCurveNext.Name
+				res.valueString = inferedInstance.GrowthCurveNext.Name
 			}
 		case "GrowthCurveNextShiftedRightSeed":
 			if inferedInstance.GrowthCurveNextShiftedRightSeed != nil {
-				res = inferedInstance.GrowthCurveNextShiftedRightSeed.Name
+				res.valueString = inferedInstance.GrowthCurveNextShiftedRightSeed.Name
 			}
 		case "GrowthCurveNextShiftedRight":
 			if inferedInstance.GrowthCurveNextShiftedRight != nil {
-				res = inferedInstance.GrowthCurveNextShiftedRight.Name
+				res.valueString = inferedInstance.GrowthCurveNextShiftedRight.Name
 			}
 		case "GrowthCurveStack":
 			if inferedInstance.GrowthCurveStack != nil {
-				res = inferedInstance.GrowthCurveStack.Name
+				res.valueString = inferedInstance.GrowthCurveStack.Name
 			}
 		case "StackWidth":
-			res = fmt.Sprintf("%d", inferedInstance.StackWidth)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.StackWidth)
+			res.valueInt = inferedInstance.StackWidth
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "NbShitRight":
-			res = fmt.Sprintf("%d", inferedInstance.NbShitRight)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbShitRight)
+			res.valueInt = inferedInstance.NbShitRight
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "StackHeight":
-			res = fmt.Sprintf("%d", inferedInstance.StackHeight)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.StackHeight)
+			res.valueInt = inferedInstance.StackHeight
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "BezierControlLengthRatio":
-			res = fmt.Sprintf("%f", inferedInstance.BezierControlLengthRatio)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BezierControlLengthRatio)
+			res.valueFloat = inferedInstance.BezierControlLengthRatio
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SpiralRhombusGridSeed":
 			if inferedInstance.SpiralRhombusGridSeed != nil {
-				res = inferedInstance.SpiralRhombusGridSeed.Name
+				res.valueString = inferedInstance.SpiralRhombusGridSeed.Name
 			}
 		case "SpiralRhombusGrid":
 			if inferedInstance.SpiralRhombusGrid != nil {
-				res = inferedInstance.SpiralRhombusGrid.Name
+				res.valueString = inferedInstance.SpiralRhombusGrid.Name
 			}
 		case "SpiralCircleSeed":
 			if inferedInstance.SpiralCircleSeed != nil {
-				res = inferedInstance.SpiralCircleSeed.Name
+				res.valueString = inferedInstance.SpiralCircleSeed.Name
 			}
 		case "SpiralCircleGrid":
 			if inferedInstance.SpiralCircleGrid != nil {
-				res = inferedInstance.SpiralCircleGrid.Name
+				res.valueString = inferedInstance.SpiralCircleGrid.Name
 			}
 		case "SpiralCircleFullGrid":
 			if inferedInstance.SpiralCircleFullGrid != nil {
-				res = inferedInstance.SpiralCircleFullGrid.Name
+				res.valueString = inferedInstance.SpiralCircleFullGrid.Name
 			}
 		case "SpiralConstructionOuterLineSeed":
 			if inferedInstance.SpiralConstructionOuterLineSeed != nil {
-				res = inferedInstance.SpiralConstructionOuterLineSeed.Name
+				res.valueString = inferedInstance.SpiralConstructionOuterLineSeed.Name
 			}
 		case "SpiralConstructionInnerLineSeed":
 			if inferedInstance.SpiralConstructionInnerLineSeed != nil {
-				res = inferedInstance.SpiralConstructionInnerLineSeed.Name
+				res.valueString = inferedInstance.SpiralConstructionInnerLineSeed.Name
 			}
 		case "SpiralConstructionOuterLineGrid":
 			if inferedInstance.SpiralConstructionOuterLineGrid != nil {
-				res = inferedInstance.SpiralConstructionOuterLineGrid.Name
+				res.valueString = inferedInstance.SpiralConstructionOuterLineGrid.Name
 			}
 		case "SpiralConstructionInnerLineGrid":
 			if inferedInstance.SpiralConstructionInnerLineGrid != nil {
-				res = inferedInstance.SpiralConstructionInnerLineGrid.Name
+				res.valueString = inferedInstance.SpiralConstructionInnerLineGrid.Name
 			}
 		case "SpiralConstructionCircleGrid":
 			if inferedInstance.SpiralConstructionCircleGrid != nil {
-				res = inferedInstance.SpiralConstructionCircleGrid.Name
+				res.valueString = inferedInstance.SpiralConstructionCircleGrid.Name
 			}
 		case "SpiralConstructionOuterLineFullGrid":
 			if inferedInstance.SpiralConstructionOuterLineFullGrid != nil {
-				res = inferedInstance.SpiralConstructionOuterLineFullGrid.Name
+				res.valueString = inferedInstance.SpiralConstructionOuterLineFullGrid.Name
 			}
 		case "SpiralBezierSeed":
 			if inferedInstance.SpiralBezierSeed != nil {
-				res = inferedInstance.SpiralBezierSeed.Name
+				res.valueString = inferedInstance.SpiralBezierSeed.Name
 			}
 		case "SpiralBezierGrid":
 			if inferedInstance.SpiralBezierGrid != nil {
-				res = inferedInstance.SpiralBezierGrid.Name
+				res.valueString = inferedInstance.SpiralBezierGrid.Name
 			}
 		case "SpiralBezierFullGrid":
 			if inferedInstance.SpiralBezierFullGrid != nil {
-				res = inferedInstance.SpiralBezierFullGrid.Name
+				res.valueString = inferedInstance.SpiralBezierFullGrid.Name
 			}
 		case "SpiralBezierStrength":
-			res = fmt.Sprintf("%f", inferedInstance.SpiralBezierStrength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SpiralBezierStrength)
+			res.valueFloat = inferedInstance.SpiralBezierStrength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FrontCurveStack":
 			if inferedInstance.FrontCurveStack != nil {
-				res = inferedInstance.FrontCurveStack.Name
+				res.valueString = inferedInstance.FrontCurveStack.Name
 			}
 		case "NbInterpolationPoints":
-			res = fmt.Sprintf("%d", inferedInstance.NbInterpolationPoints)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbInterpolationPoints)
+			res.valueInt = inferedInstance.NbInterpolationPoints
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Fkey":
 			if inferedInstance.Fkey != nil {
-				res = inferedInstance.Fkey.Name
+				res.valueString = inferedInstance.Fkey.Name
 			}
 		case "FkeySizeRatio":
-			res = fmt.Sprintf("%f", inferedInstance.FkeySizeRatio)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FkeySizeRatio)
+			res.valueFloat = inferedInstance.FkeySizeRatio
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FkeyOriginRelativeX":
-			res = fmt.Sprintf("%f", inferedInstance.FkeyOriginRelativeX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FkeyOriginRelativeX)
+			res.valueFloat = inferedInstance.FkeyOriginRelativeX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FkeyOriginRelativeY":
-			res = fmt.Sprintf("%f", inferedInstance.FkeyOriginRelativeY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FkeyOriginRelativeY)
+			res.valueFloat = inferedInstance.FkeyOriginRelativeY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "PitchLines":
 			if inferedInstance.PitchLines != nil {
-				res = inferedInstance.PitchLines.Name
+				res.valueString = inferedInstance.PitchLines.Name
 			}
 		case "PitchHeight":
-			res = fmt.Sprintf("%f", inferedInstance.PitchHeight)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.PitchHeight)
+			res.valueFloat = inferedInstance.PitchHeight
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "NbPitchLines":
-			res = fmt.Sprintf("%d", inferedInstance.NbPitchLines)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbPitchLines)
+			res.valueInt = inferedInstance.NbPitchLines
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "BeatLines":
 			if inferedInstance.BeatLines != nil {
-				res = inferedInstance.BeatLines.Name
+				res.valueString = inferedInstance.BeatLines.Name
 			}
 		case "BeatLinesHeightRatio":
-			res = fmt.Sprintf("%f", inferedInstance.BeatLinesHeightRatio)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BeatLinesHeightRatio)
+			res.valueFloat = inferedInstance.BeatLinesHeightRatio
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "NbBeatLines":
-			res = fmt.Sprintf("%d", inferedInstance.NbBeatLines)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbBeatLines)
+			res.valueInt = inferedInstance.NbBeatLines
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "NbOfBeatsInTheme":
-			res = fmt.Sprintf("%d", inferedInstance.NbOfBeatsInTheme)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.NbOfBeatsInTheme)
+			res.valueInt = inferedInstance.NbOfBeatsInTheme
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "FirstVoice":
 			if inferedInstance.FirstVoice != nil {
-				res = inferedInstance.FirstVoice.Name
+				res.valueString = inferedInstance.FirstVoice.Name
 			}
 		case "FirstVoiceShiftRigth":
 			if inferedInstance.FirstVoiceShiftRigth != nil {
-				res = inferedInstance.FirstVoiceShiftRigth.Name
+				res.valueString = inferedInstance.FirstVoiceShiftRigth.Name
 			}
 		case "FirstVoiceShiftX":
-			res = fmt.Sprintf("%f", inferedInstance.FirstVoiceShiftX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FirstVoiceShiftX)
+			res.valueFloat = inferedInstance.FirstVoiceShiftX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FirstVoiceShiftY":
-			res = fmt.Sprintf("%f", inferedInstance.FirstVoiceShiftY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FirstVoiceShiftY)
+			res.valueFloat = inferedInstance.FirstVoiceShiftY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SecondVoice":
 			if inferedInstance.SecondVoice != nil {
-				res = inferedInstance.SecondVoice.Name
+				res.valueString = inferedInstance.SecondVoice.Name
 			}
 		case "SecondVoiceShiftedRight":
 			if inferedInstance.SecondVoiceShiftedRight != nil {
-				res = inferedInstance.SecondVoiceShiftedRight.Name
+				res.valueString = inferedInstance.SecondVoiceShiftedRight.Name
 			}
 		case "PitchDifference":
-			res = fmt.Sprintf("%d", inferedInstance.PitchDifference)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.PitchDifference)
+			res.valueInt = inferedInstance.PitchDifference
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "BeatsPerSecond":
-			res = fmt.Sprintf("%f", inferedInstance.BeatsPerSecond)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BeatsPerSecond)
+			res.valueFloat = inferedInstance.BeatsPerSecond
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Level":
-			res = fmt.Sprintf("%f", inferedInstance.Level)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Level)
+			res.valueFloat = inferedInstance.Level
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "FirstVoiceNotes":
 			if inferedInstance.FirstVoiceNotes != nil {
-				res = inferedInstance.FirstVoiceNotes.Name
+				res.valueString = inferedInstance.FirstVoiceNotes.Name
 			}
 		case "FirstVoiceNotesShiftedRight":
 			if inferedInstance.FirstVoiceNotesShiftedRight != nil {
-				res = inferedInstance.FirstVoiceNotesShiftedRight.Name
+				res.valueString = inferedInstance.FirstVoiceNotesShiftedRight.Name
 			}
 		case "SecondVoiceNotes":
 			if inferedInstance.SecondVoiceNotes != nil {
-				res = inferedInstance.SecondVoiceNotes.Name
+				res.valueString = inferedInstance.SecondVoiceNotes.Name
 			}
 		case "SecondVoiceNotesShiftedRight":
 			if inferedInstance.SecondVoiceNotesShiftedRight != nil {
-				res = inferedInstance.SecondVoiceNotesShiftedRight.Name
+				res.valueString = inferedInstance.SecondVoiceNotesShiftedRight.Name
 			}
 		case "IsMinor":
-			res = fmt.Sprintf("%t", inferedInstance.IsMinor)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsMinor)
+			res.valueBool = inferedInstance.IsMinor
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ThemeBinaryEncoding":
-			res = fmt.Sprintf("%d", inferedInstance.ThemeBinaryEncoding)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.ThemeBinaryEncoding)
+			res.valueInt = inferedInstance.ThemeBinaryEncoding
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "OriginX":
-			res = fmt.Sprintf("%f", inferedInstance.OriginX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.OriginX)
+			res.valueFloat = inferedInstance.OriginX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "OriginY":
-			res = fmt.Sprintf("%f", inferedInstance.OriginY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.OriginY)
+			res.valueFloat = inferedInstance.OriginY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "HorizontalAxis":
 			if inferedInstance.HorizontalAxis != nil {
-				res = inferedInstance.HorizontalAxis.Name
+				res.valueString = inferedInstance.HorizontalAxis.Name
 			}
 		case "VerticalAxis":
 			if inferedInstance.VerticalAxis != nil {
-				res = inferedInstance.VerticalAxis.Name
+				res.valueString = inferedInstance.VerticalAxis.Name
 			}
 		case "SpiralOrigin":
 			if inferedInstance.SpiralOrigin != nil {
-				res = inferedInstance.SpiralOrigin.Name
+				res.valueString = inferedInstance.SpiralOrigin.Name
 			}
 		case "SpiralOriginX":
-			res = fmt.Sprintf("%f", inferedInstance.SpiralOriginX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SpiralOriginX)
+			res.valueFloat = inferedInstance.SpiralOriginX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SpiralOriginY":
-			res = fmt.Sprintf("%f", inferedInstance.SpiralOriginY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SpiralOriginY)
+			res.valueFloat = inferedInstance.SpiralOriginY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "OriginCrossWidth":
-			res = fmt.Sprintf("%f", inferedInstance.OriginCrossWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.OriginCrossWidth)
+			res.valueFloat = inferedInstance.OriginCrossWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SpiralRadiusRatio":
-			res = fmt.Sprintf("%f", inferedInstance.SpiralRadiusRatio)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SpiralRadiusRatio)
+			res.valueFloat = inferedInstance.SpiralRadiusRatio
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ShowSpiralBezierConstruct":
-			res = fmt.Sprintf("%t", inferedInstance.ShowSpiralBezierConstruct)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowSpiralBezierConstruct)
+			res.valueBool = inferedInstance.ShowSpiralBezierConstruct
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShowInterpolationPoints":
-			res = fmt.Sprintf("%t", inferedInstance.ShowInterpolationPoints)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowInterpolationPoints)
+			res.valueBool = inferedInstance.ShowInterpolationPoints
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ActualBeatsTemporalShift":
-			res = fmt.Sprintf("%d", inferedInstance.ActualBeatsTemporalShift)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.ActualBeatsTemporalShift)
+			res.valueInt = inferedInstance.ActualBeatsTemporalShift
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Cursor":
 			if inferedInstance.Cursor != nil {
-				res = inferedInstance.Cursor.Name
+				res.valueString = inferedInstance.Cursor.Name
 			}
 		case "IsPlaying":
-			res = fmt.Sprintf("%t", inferedInstance.IsPlaying)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsPlaying)
+			res.valueBool = inferedInstance.IsPlaying
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	case Rhombus:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "SideLength":
-			res = fmt.Sprintf("%f", inferedInstance.SideLength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.SideLength)
+			res.valueFloat = inferedInstance.SideLength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "AngleDegree":
-			res = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
+			res.valueFloat = inferedInstance.AngleDegree
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "InsideAngle":
-			res = fmt.Sprintf("%f", inferedInstance.InsideAngle)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.InsideAngle)
+			res.valueFloat = inferedInstance.InsideAngle
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case RhombusGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Reference":
 			if inferedInstance.Reference != nil {
-				res = inferedInstance.Reference.Name
+				res.valueString = inferedInstance.Reference.Name
 			}
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Rhombuses":
 			for idx, __instance__ := range inferedInstance.Rhombuses {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case ShapeCategory:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsExpanded":
-			res = fmt.Sprintf("%t", inferedInstance.IsExpanded)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsExpanded)
+			res.valueBool = inferedInstance.IsExpanded
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	case SpiralBezier:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "StartX":
-			res = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StartY":
-			res = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueFloat = inferedInstance.StartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointStartX":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointStartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointStartX)
+			res.valueFloat = inferedInstance.ControlPointStartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointStartY":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointStartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointStartY)
+			res.valueFloat = inferedInstance.ControlPointStartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndY":
-			res = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueFloat = inferedInstance.EndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointEndX":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointEndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointEndX)
+			res.valueFloat = inferedInstance.ControlPointEndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "ControlPointEndY":
-			res = fmt.Sprintf("%f", inferedInstance.ControlPointEndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.ControlPointEndY)
+			res.valueFloat = inferedInstance.ControlPointEndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case SpiralBezierGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "SpiralBeziers":
 			for idx, __instance__ := range inferedInstance.SpiralBeziers {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case SpiralCircle:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "CenterX":
-			res = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
+			res.valueFloat = inferedInstance.CenterX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "CenterY":
-			res = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
+			res.valueFloat = inferedInstance.CenterY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "HasBespokeRadius":
-			res = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBespokeRadius)
+			res.valueBool = inferedInstance.HasBespokeRadius
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "BespopkeRadius":
-			res = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.BespopkeRadius)
+			res.valueFloat = inferedInstance.BespopkeRadius
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Pitch":
-			res = fmt.Sprintf("%d", inferedInstance.Pitch)
+			res.valueString = fmt.Sprintf("%d", inferedInstance.Pitch)
+			res.valueInt = inferedInstance.Pitch
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		case "ShowName":
-			res = fmt.Sprintf("%t", inferedInstance.ShowName)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowName)
+			res.valueBool = inferedInstance.ShowName
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "Path":
-			res = inferedInstance.Path
+			res.valueString = inferedInstance.Path
 		}
 	case SpiralCircleGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "SpiralRhombusGrid":
 			if inferedInstance.SpiralRhombusGrid != nil {
-				res = inferedInstance.SpiralRhombusGrid.Name
+				res.valueString = inferedInstance.SpiralRhombusGrid.Name
 			}
 		case "SpiralCircles":
 			for idx, __instance__ := range inferedInstance.SpiralCircles {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case SpiralLine:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "StartX":
-			res = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndX":
-			res = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StartY":
-			res = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartY)
+			res.valueFloat = inferedInstance.StartY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "EndY":
-			res = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndY)
+			res.valueFloat = inferedInstance.EndY
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case SpiralLineGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "SpiralLines":
 			for idx, __instance__ := range inferedInstance.SpiralLines {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case SpiralOrigin:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case SpiralRhombus:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "X_r0":
-			res = fmt.Sprintf("%f", inferedInstance.X_r0)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.X_r0)
+			res.valueFloat = inferedInstance.X_r0
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Y_r0":
-			res = fmt.Sprintf("%f", inferedInstance.Y_r0)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_r0)
+			res.valueFloat = inferedInstance.Y_r0
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "X_r1":
-			res = fmt.Sprintf("%f", inferedInstance.X_r1)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.X_r1)
+			res.valueFloat = inferedInstance.X_r1
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Y_r1":
-			res = fmt.Sprintf("%f", inferedInstance.Y_r1)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_r1)
+			res.valueFloat = inferedInstance.Y_r1
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "X_r2":
-			res = fmt.Sprintf("%f", inferedInstance.X_r2)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.X_r2)
+			res.valueFloat = inferedInstance.X_r2
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Y_r2":
-			res = fmt.Sprintf("%f", inferedInstance.Y_r2)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_r2)
+			res.valueFloat = inferedInstance.Y_r2
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "X_r3":
-			res = fmt.Sprintf("%f", inferedInstance.X_r3)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.X_r3)
+			res.valueFloat = inferedInstance.X_r3
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Y_r3":
-			res = fmt.Sprintf("%f", inferedInstance.Y_r3)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_r3)
+			res.valueFloat = inferedInstance.Y_r3
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	case SpiralRhombusGrid:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "SpiralRhombuses":
 			for idx, __instance__ := range inferedInstance.SpiralRhombuses {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		}
 	case VerticalAxis:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "IsDisplayed":
-			res = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisplayed)
+			res.valueBool = inferedInstance.IsDisplayed
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "ShapeCategory":
 			if inferedInstance.ShapeCategory != nil {
-				res = inferedInstance.ShapeCategory.Name
+				res.valueString = inferedInstance.ShapeCategory.Name
 			}
 		case "AxisHandleBorderLength":
-			res = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.AxisHandleBorderLength)
+			res.valueFloat = inferedInstance.AxisHandleBorderLength
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Axis_Length":
-			res = fmt.Sprintf("%f", inferedInstance.Axis_Length)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Axis_Length)
+			res.valueFloat = inferedInstance.Axis_Length
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Color":
-			res = inferedInstance.Color
+			res.valueString = inferedInstance.Color
 		case "FillOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Stroke":
-			res = inferedInstance.Stroke
+			res.valueString = inferedInstance.Stroke
 		case "StrokeOpacity":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeWidth":
-			res = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StrokeDashArray":
-			res = inferedInstance.StrokeDashArray
+			res.valueString = inferedInstance.StrokeDashArray
 		case "StrokeDashArrayWhenSelected":
-			res = inferedInstance.StrokeDashArrayWhenSelected
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
-			res = inferedInstance.Transform
+			res.valueString = inferedInstance.Transform
 		}
 	default:
 		_ = inferedInstance

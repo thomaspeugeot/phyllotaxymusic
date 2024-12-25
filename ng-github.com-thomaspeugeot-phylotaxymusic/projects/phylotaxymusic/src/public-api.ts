@@ -41,6 +41,10 @@ export * from './lib/circlegrid-api'
 export * from './lib/circlegrid'
 export * from './lib/circlegrid.service'
 
+export * from './lib/cursor-api'
+export * from './lib/cursor'
+export * from './lib/cursor.service'
+
 export * from './lib/frontcurve-api'
 export * from './lib/frontcurve'
 export * from './lib/frontcurve.service'
@@ -56,10 +60,6 @@ export * from './lib/horizontalaxis.service'
 export * from './lib/key-api'
 export * from './lib/key'
 export * from './lib/key.service'
-
-export * from './lib/movingline-api'
-export * from './lib/movingline'
-export * from './lib/movingline.service'
 
 export * from './lib/parameter-api'
 export * from './lib/parameter'

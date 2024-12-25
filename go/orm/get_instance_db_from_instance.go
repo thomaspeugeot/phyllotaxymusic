@@ -43,6 +43,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 		circlegridInstance := any(concreteInstance).(*models.CircleGrid)
 		ret2 := backRepo.BackRepoCircleGrid.GetCircleGridDBFromCircleGridPtr(circlegridInstance)
 		ret = any(ret2).(*T2)
+	case *models.Cursor:
+		cursorInstance := any(concreteInstance).(*models.Cursor)
+		ret2 := backRepo.BackRepoCursor.GetCursorDBFromCursorPtr(cursorInstance)
+		ret = any(ret2).(*T2)
 	case *models.FrontCurve:
 		frontcurveInstance := any(concreteInstance).(*models.FrontCurve)
 		ret2 := backRepo.BackRepoFrontCurve.GetFrontCurveDBFromFrontCurvePtr(frontcurveInstance)
@@ -58,10 +62,6 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 	case *models.Key:
 		keyInstance := any(concreteInstance).(*models.Key)
 		ret2 := backRepo.BackRepoKey.GetKeyDBFromKeyPtr(keyInstance)
-		ret = any(ret2).(*T2)
-	case *models.MovingLine:
-		movinglineInstance := any(concreteInstance).(*models.MovingLine)
-		ret2 := backRepo.BackRepoMovingLine.GetMovingLineDBFromMovingLinePtr(movinglineInstance)
 		ret = any(ret2).(*T2)
 	case *models.Parameter:
 		parameterInstance := any(concreteInstance).(*models.Parameter)
@@ -167,6 +167,11 @@ func GetID[T models.Gongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.Cursor:
+		tmp := GetInstanceDBFromInstance[models.Cursor, CursorDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.FrontCurve:
 		tmp := GetInstanceDBFromInstance[models.FrontCurve, FrontCurveDB](
 			stage, backRepo, inst,
@@ -184,11 +189,6 @@ func GetID[T models.Gongstruct](
 		id = int(tmp.ID)
 	case *models.Key:
 		tmp := GetInstanceDBFromInstance[models.Key, KeyDB](
-			stage, backRepo, inst,
-		)
-		id = int(tmp.ID)
-	case *models.MovingLine:
-		tmp := GetInstanceDBFromInstance[models.MovingLine, MovingLineDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -310,6 +310,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.Cursor:
+		tmp := GetInstanceDBFromInstance[models.Cursor, CursorDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.FrontCurve:
 		tmp := GetInstanceDBFromInstance[models.FrontCurve, FrontCurveDB](
 			stage, backRepo, inst,
@@ -327,11 +332,6 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.Key:
 		tmp := GetInstanceDBFromInstance[models.Key, KeyDB](
-			stage, backRepo, inst,
-		)
-		id = int(tmp.ID)
-	case *models.MovingLine:
-		tmp := GetInstanceDBFromInstance[models.MovingLine, MovingLineDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

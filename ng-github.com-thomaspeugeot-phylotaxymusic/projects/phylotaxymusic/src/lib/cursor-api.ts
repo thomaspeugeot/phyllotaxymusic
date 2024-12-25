@@ -1,12 +1,11 @@
 // insertion point for imports
-import { ShapeCategoryAPI } from './shapecategory-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class MovingLineAPI {
+export class CursorAPI {
 
-	static GONGSTRUCT_NAME = "MovingLine"
+	static GONGSTRUCT_NAME = "Cursor"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -14,7 +13,6 @@ export class MovingLineAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	IsDisplayed: boolean = false
 	AngleDegree: number = 0
 	Length: number = 0
 	CenterX: number = 0
@@ -34,11 +32,9 @@ export class MovingLineAPI {
 
 	// insertion point for other decls
 
-	MovingLinePointersEncoding: MovingLinePointersEncoding = new MovingLinePointersEncoding
+	CursorPointersEncoding: CursorPointersEncoding = new CursorPointersEncoding
 }
 
-export class MovingLinePointersEncoding {
+export class CursorPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
-	ShapeCategoryID: NullInt64 = new NullInt64 // if pointer is null, ShapeCategory.ID = 0
-
 }

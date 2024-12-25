@@ -26,7 +26,7 @@ import { Key } from './key'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 import { SpiralOrigin } from './spiralorigin'
-import { MovingLine } from './movingline'
+import { Cursor } from './cursor'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -201,7 +201,7 @@ export class Parameter {
 
 	SpiralOrigin?: SpiralOrigin
 
-	Cursor?: MovingLine
+	Cursor?: Cursor
 
 }
 
@@ -792,7 +792,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 	parameter.SpiralOrigin = frontRepo.map_ID_SpiralOrigin.get(parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64)
-	parameter.Cursor = frontRepo.map_ID_MovingLine.get(parameterAPI.ParameterPointersEncoding.CursorID.Int64)
+	parameter.Cursor = frontRepo.map_ID_Cursor.get(parameterAPI.ParameterPointersEncoding.CursorID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

@@ -91,6 +91,8 @@ func main() {
 
 	tree.Generate(parameter)
 
+	// start web socket for the cursor start
+
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
 	if err != nil {

@@ -69,6 +69,8 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right := (&models.CircleGrid{}).Stage(stage)
 	__CircleGrid__000008_Second_Voice_notes := (&models.CircleGrid{}).Stage(stage)
 
+	__Cursor__000000_Cursor := (&models.Cursor{}).Stage(stage)
+
 	__FrontCurve__000000_Non_Rotated_0_ := (&models.FrontCurve{}).Stage(stage)
 	__FrontCurve__000001_Non_Rotated_1_ := (&models.FrontCurve{}).Stage(stage)
 	__FrontCurve__000002_Non_Rotated_2_ := (&models.FrontCurve{}).Stage(stage)
@@ -83,8 +85,6 @@ func _(stage *models.StageStruct) {
 	__HorizontalAxis__000000_Horizontal_Axis := (&models.HorizontalAxis{}).Stage(stage)
 
 	__Key__000000_F_key := (&models.Key{}).Stage(stage)
-
-	__MovingLine__000000_Cursor := (&models.MovingLine{}).Stage(stage)
 
 	__Parameter__000000_Reference := (&models.Parameter{}).Stage(stage)
 
@@ -501,6 +501,24 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
 	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
 
+	__Cursor__000000_Cursor.Name = `Cursor`
+	__Cursor__000000_Cursor.AngleDegree = 90.000000
+	__Cursor__000000_Cursor.Length = 2000.000000
+	__Cursor__000000_Cursor.CenterX = 0.000000
+	__Cursor__000000_Cursor.CenterY = 366.000000
+	__Cursor__000000_Cursor.StartX = 0.000000
+	__Cursor__000000_Cursor.EndX = 400.000000
+	__Cursor__000000_Cursor.DurationSeconds = 6.000000
+	__Cursor__000000_Cursor.IsMoving = false
+	__Cursor__000000_Cursor.Color = ``
+	__Cursor__000000_Cursor.FillOpacity = 0.000000
+	__Cursor__000000_Cursor.Stroke = `lightgray`
+	__Cursor__000000_Cursor.StrokeOpacity = 0.700000
+	__Cursor__000000_Cursor.StrokeWidth = 6.000000
+	__Cursor__000000_Cursor.StrokeDashArray = ``
+	__Cursor__000000_Cursor.StrokeDashArrayWhenSelected = ``
+	__Cursor__000000_Cursor.Transform = ``
+
 	__FrontCurve__000000_Non_Rotated_0_.Name = `Non Rotated 0 `
 	__FrontCurve__000000_Non_Rotated_0_.Path = `M821.64 536.73 C823.54 525.79 824.78 516.78 826.15 506.64 C827.53 496.50 828.67 486.32 829.90 475.88 C831.13 465.44 832.19 454.95 833.56 443.99 C834.92 433.04 836.26 421.98 838.07 410.15 C839.89 398.31 842.17 386.11 844.45 373.00 C846.73 359.89 850.13 345.73 851.74 331.49 C853.35 317.26 854.95 301.98 854.11 287.60 C853.26 273.23 850.69 258.78 846.67 245.23 C842.66 231.67 836.77 218.60 830.03 206.29 C823.29 193.97 815.09 182.28 806.25 171.34 C797.42 160.39 787.46 150.11 777.02 140.60 C766.58 131.08 756.56 122.88 743.59 114.24 C730.63 105.59 714.61 95.95 699.22 88.73 C683.84 81.50 667.63 75.37 651.28 70.90 C634.93 66.43 617.92 63.28 601.11 61.88 C584.29 60.49 567.06 60.70 550.38 62.53 C533.71 64.36 516.97 68.07 501.07 72.86 C485.17 77.65 469.66 84.34 454.98 91.27 C440.30 98.20 426.37 106.47 412.97 114.45 C399.58 122.43 386.96 130.92 374.62 139.16 C362.27 147.40 350.51 155.64 338.90 163.90 C327.29 172.16 316.06 180.32 304.98 188.69 C293.90 197.07 283.06 205.44 272.42 214.17 C261.78 222.89 250.52 232.59 241.12 241.04 C231.71 249.49 224.29 256.72 215.99 264.87 C207.69 273.02 199.61 281.39 191.34 289.94 C183.06 298.49 174.95 307.22 166.37 316.16 C157.78 325.09 149.21 334.16 139.84 343.55 C130.47 352.94 120.56 362.36 110.16 372.50 C99.75 382.64 87.87 392.93 77.41 404.40 C66.96 415.86 55.91 428.17 47.42 441.30 C38.92 454.43 31.81 468.70 26.44 483.17 C21.07 497.64 17.55 512.91 15.22 528.11 C12.89 543.31 12.16 558.94 12.46 574.37 C12.75 589.79 14.41 605.38 16.98 620.67 C19.56 635.95 22.62 649.81 27.90 666.07 C33.17 682.34 40.37 701.53 48.63 718.26 C56.88 734.98 66.55 751.33 77.44 766.42 C88.33 781.51 100.64 795.93 113.96 808.80 C127.28 821.67 142.01 833.50 157.37 843.63 C172.73 853.77 189.38 862.42 206.10 869.63 C222.82 876.83 240.47 882.25 257.67 886.87 C274.87 891.50 292.37 894.54 309.31 897.38 C326.24 900.22 342.92 902.10 359.26 903.92 C375.60 905.73 391.53 907.09 407.35 908.25 C423.17 909.41 438.66 910.32 454.17 910.87 C469.68 911.42 485.01 911.73 500.40 911.55 C515.79 911.37 531.21 911.23 546.51 909.78 C561.82 908.33 577.30 906.44 592.23 902.85 C607.16 899.25 622.05 894.39 636.07 888.23 C650.09 882.07 663.82 874.55 676.36 865.87 C688.89 857.18 700.79 847.07 711.30 836.12 C721.80 825.17 731.23 812.79 739.40 800.17 C747.56 787.54 754.29 773.76 760.30 760.37 C766.30 746.98 770.95 733.09 775.43 719.81 C779.91 706.52 783.54 693.40 787.19 680.68 C790.84 667.96 794.10 655.66 797.33 643.48 C800.55 631.30 803.62 619.49 806.52 607.62 C809.42 595.75 812.22 584.08 814.74 572.26 C817.26 560.45 819.74 547.66 821.64 536.73 Z`
 
@@ -560,25 +578,6 @@ func _(stage *models.StageStruct) {
 	__Key__000000_F_key.StrokeDashArray = ``
 	__Key__000000_F_key.StrokeDashArrayWhenSelected = ``
 	__Key__000000_F_key.Transform = `scale(0.2,-0.2)`
-
-	__MovingLine__000000_Cursor.Name = `Cursor`
-	__MovingLine__000000_Cursor.IsDisplayed = true
-	__MovingLine__000000_Cursor.AngleDegree = 90.000000
-	__MovingLine__000000_Cursor.Length = 2000.000000
-	__MovingLine__000000_Cursor.CenterX = 0.000000
-	__MovingLine__000000_Cursor.CenterY = 366.000000
-	__MovingLine__000000_Cursor.StartX = 0.000000
-	__MovingLine__000000_Cursor.EndX = 400.000000
-	__MovingLine__000000_Cursor.DurationSeconds = 6.000000
-	__MovingLine__000000_Cursor.IsMoving = false
-	__MovingLine__000000_Cursor.Color = ``
-	__MovingLine__000000_Cursor.FillOpacity = 0.000000
-	__MovingLine__000000_Cursor.Stroke = `lightgray`
-	__MovingLine__000000_Cursor.StrokeOpacity = 0.700000
-	__MovingLine__000000_Cursor.StrokeWidth = 6.000000
-	__MovingLine__000000_Cursor.StrokeDashArray = ``
-	__MovingLine__000000_Cursor.StrokeDashArrayWhenSelected = ``
-	__MovingLine__000000_Cursor.Transform = ``
 
 	__Parameter__000000_Reference.Name = `Reference`
 	__Parameter__000000_Reference.BackendColor = `#F1F1F1`
@@ -927,7 +926,6 @@ func _(stage *models.StageStruct) {
 	__FrontCurveStack__000000_Front_Curve_Stack.FrontCurves = append(__FrontCurveStack__000000_Front_Curve_Stack.FrontCurves, __FrontCurve__000007_Non_Rotated_7_)
 	__HorizontalAxis__000000_Horizontal_Axis.ShapeCategory = __ShapeCategory__000000_0_Axes
 	__Key__000000_F_key.ShapeCategory = __ShapeCategory__000008_8_Score_notation
-	__MovingLine__000000_Cursor.ShapeCategory = __ShapeCategory__000008_8_Score_notation
 	__Parameter__000000_Reference.InitialRhombus = __Rhombus__000001_Initial_Rhombus
 	__Parameter__000000_Reference.InitialCircle = __Circle__000004_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000001_Initial_Rhombus_Grid
@@ -987,7 +985,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Parameter__000000_Reference.SpiralOrigin = __SpiralOrigin__000000_Spiral_Origin
-	__Parameter__000000_Reference.Cursor = __MovingLine__000000_Cursor
+	__Parameter__000000_Reference.Cursor = __Cursor__000000_Cursor
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.ShapeCategory = __ShapeCategory__000003_3_Growing
 	__Rhombus__000001_Initial_Rhombus.ShapeCategory = __ShapeCategory__000001_1_Initial
 	__Rhombus__000002_Rotated_Next_Rhombus.ShapeCategory = __ShapeCategory__000002_2_Rotated

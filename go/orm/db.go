@@ -48,6 +48,10 @@ type DBLite struct {
 
 	nextIDCircleGridDB uint
 
+	cursorDBs map[uint]*CursorDB
+
+	nextIDCursorDB uint
+
 	frontcurveDBs map[uint]*FrontCurveDB
 
 	nextIDFrontCurveDB uint
@@ -63,10 +67,6 @@ type DBLite struct {
 	keyDBs map[uint]*KeyDB
 
 	nextIDKeyDB uint
-
-	movinglineDBs map[uint]*MovingLineDB
-
-	nextIDMovingLineDB uint
 
 	parameterDBs map[uint]*ParameterDB
 
@@ -144,6 +144,8 @@ func NewDBLite() *DBLite {
 
 		circlegridDBs: make(map[uint]*CircleGridDB),
 
+		cursorDBs: make(map[uint]*CursorDB),
+
 		frontcurveDBs: make(map[uint]*FrontCurveDB),
 
 		frontcurvestackDBs: make(map[uint]*FrontCurveStackDB),
@@ -151,8 +153,6 @@ func NewDBLite() *DBLite {
 		horizontalaxisDBs: make(map[uint]*HorizontalAxisDB),
 
 		keyDBs: make(map[uint]*KeyDB),
-
-		movinglineDBs: make(map[uint]*MovingLineDB),
 
 		parameterDBs: make(map[uint]*ParameterDB),
 
@@ -223,6 +223,10 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		db.nextIDCircleGridDB++
 		v.ID = db.nextIDCircleGridDB
 		db.circlegridDBs[v.ID] = v
+	case *CursorDB:
+		db.nextIDCursorDB++
+		v.ID = db.nextIDCursorDB
+		db.cursorDBs[v.ID] = v
 	case *FrontCurveDB:
 		db.nextIDFrontCurveDB++
 		v.ID = db.nextIDFrontCurveDB
@@ -239,10 +243,6 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		db.nextIDKeyDB++
 		v.ID = db.nextIDKeyDB
 		db.keyDBs[v.ID] = v
-	case *MovingLineDB:
-		db.nextIDMovingLineDB++
-		v.ID = db.nextIDMovingLineDB
-		db.movinglineDBs[v.ID] = v
 	case *ParameterDB:
 		db.nextIDParameterDB++
 		v.ID = db.nextIDParameterDB
@@ -341,6 +341,8 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 		delete(db.circleDBs, v.ID)
 	case *CircleGridDB:
 		delete(db.circlegridDBs, v.ID)
+	case *CursorDB:
+		delete(db.cursorDBs, v.ID)
 	case *FrontCurveDB:
 		delete(db.frontcurveDBs, v.ID)
 	case *FrontCurveStackDB:
@@ -349,8 +351,6 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 		delete(db.horizontalaxisDBs, v.ID)
 	case *KeyDB:
 		delete(db.keyDBs, v.ID)
-	case *MovingLineDB:
-		delete(db.movinglineDBs, v.ID)
 	case *ParameterDB:
 		delete(db.parameterDBs, v.ID)
 	case *RhombusDB:
@@ -418,6 +418,9 @@ func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 	case *CircleGridDB:
 		db.circlegridDBs[v.ID] = v
 		return db, nil
+	case *CursorDB:
+		db.cursorDBs[v.ID] = v
+		return db, nil
 	case *FrontCurveDB:
 		db.frontcurveDBs[v.ID] = v
 		return db, nil
@@ -429,9 +432,6 @@ func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 		return db, nil
 	case *KeyDB:
 		db.keyDBs[v.ID] = v
-		return db, nil
-	case *MovingLineDB:
-		db.movinglineDBs[v.ID] = v
 		return db, nil
 	case *ParameterDB:
 		db.parameterDBs[v.ID] = v
@@ -533,6 +533,12 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 		} else {
 			return nil, errors.New("db CircleGrid github.com/thomaspeugeot/phylotaxymusic/go, record not found")
 		}
+	case *CursorDB:
+		if existing, ok := db.cursorDBs[v.ID]; ok {
+			*existing = *v
+		} else {
+			return nil, errors.New("db Cursor github.com/thomaspeugeot/phylotaxymusic/go, record not found")
+		}
 	case *FrontCurveDB:
 		if existing, ok := db.frontcurveDBs[v.ID]; ok {
 			*existing = *v
@@ -556,12 +562,6 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 			*existing = *v
 		} else {
 			return nil, errors.New("db Key github.com/thomaspeugeot/phylotaxymusic/go, record not found")
-		}
-	case *MovingLineDB:
-		if existing, ok := db.movinglineDBs[v.ID]; ok {
-			*existing = *v
-		} else {
-			return nil, errors.New("db MovingLine github.com/thomaspeugeot/phylotaxymusic/go, record not found")
 		}
 	case *ParameterDB:
 		if existing, ok := db.parameterDBs[v.ID]; ok {
@@ -703,6 +703,12 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 			*ptr = append(*ptr, *v)
 		}
 		return db, nil
+	case *[]CursorDB:
+		*ptr = make([]CursorDB, 0, len(db.cursorDBs))
+		for _, v := range db.cursorDBs {
+			*ptr = append(*ptr, *v)
+		}
+		return db, nil
 	case *[]FrontCurveDB:
 		*ptr = make([]FrontCurveDB, 0, len(db.frontcurveDBs))
 		for _, v := range db.frontcurveDBs {
@@ -724,12 +730,6 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 	case *[]KeyDB:
 		*ptr = make([]KeyDB, 0, len(db.keyDBs))
 		for _, v := range db.keyDBs {
-			*ptr = append(*ptr, *v)
-		}
-		return db, nil
-	case *[]MovingLineDB:
-		*ptr = make([]MovingLineDB, 0, len(db.movinglineDBs))
-		for _, v := range db.movinglineDBs {
 			*ptr = append(*ptr, *v)
 		}
 		return db, nil
@@ -920,6 +920,16 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 		circlegridDB, _ := instanceDB.(*CircleGridDB)
 		*circlegridDB = *tmp
 		
+	case *CursorDB:
+		tmp, ok := db.cursorDBs[uint(i)]
+
+		if !ok {
+			return nil, errors.New(fmt.Sprintf("db.First Cursor Unkown entry %d", i))
+		}
+
+		cursorDB, _ := instanceDB.(*CursorDB)
+		*cursorDB = *tmp
+		
 	case *FrontCurveDB:
 		tmp, ok := db.frontcurveDBs[uint(i)]
 
@@ -959,16 +969,6 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		keyDB, _ := instanceDB.(*KeyDB)
 		*keyDB = *tmp
-		
-	case *MovingLineDB:
-		tmp, ok := db.movinglineDBs[uint(i)]
-
-		if !ok {
-			return nil, errors.New(fmt.Sprintf("db.First MovingLine Unkown entry %d", i))
-		}
-
-		movinglineDB, _ := instanceDB.(*MovingLineDB)
-		*movinglineDB = *tmp
 		
 	case *ParameterDB:
 		tmp, ok := db.parameterDBs[uint(i)]

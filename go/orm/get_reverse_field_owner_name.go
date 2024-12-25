@@ -77,6 +77,11 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		// insertion point
 		}
 
+	case *models.Cursor:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
 	case *models.FrontCurve:
 		switch reverseField.GongstructName {
 		// insertion point
@@ -100,11 +105,6 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		}
 
 	case *models.Key:
-		switch reverseField.GongstructName {
-		// insertion point
-		}
-
-	case *models.MovingLine:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
@@ -291,6 +291,11 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		// insertion point
 		}
 
+	case *models.Cursor:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
 	case *models.FrontCurve:
 		switch reverseField.GongstructName {
 		// insertion point
@@ -312,11 +317,6 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		}
 
 	case *models.Key:
-		switch reverseField.GongstructName {
-		// insertion point
-		}
-
-	case *models.MovingLine:
 		switch reverseField.GongstructName {
 		// insertion point
 		}

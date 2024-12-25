@@ -182,7 +182,7 @@ type Parameter struct {
 	ActualBeatsTemporalShift int
 
 	// cursor vertical line
-	Cursor    *MovingLine
+	Cursor    *Cursor
 	IsPlaying bool
 }
 

@@ -1408,7 +1408,7 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		// commit pointer value parameter.Cursor translates to updating the parameter.CursorID
 		parameterDB.CursorID.Valid = true // allow for a 0 value (nil association)
 		if parameter.Cursor != nil {
-			if CursorId, ok := backRepo.BackRepoMovingLine.Map_MovingLinePtr_MovingLineDBID[parameter.Cursor]; ok {
+			if CursorId, ok := backRepo.BackRepoCursor.Map_CursorPtr_CursorDBID[parameter.Cursor]; ok {
 				parameterDB.CursorID.Int64 = int64(CursorId)
 				parameterDB.CursorID.Valid = true
 			}
@@ -2655,7 +2655,7 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 	{
 		id := parameterDB.CursorID.Int64
 		if id != 0 {
-			tmp, ok := backRepo.BackRepoMovingLine.Map_MovingLineDBID_MovingLinePtr[uint(id)]
+			tmp, ok := backRepo.BackRepoCursor.Map_CursorDBID_CursorPtr[uint(id)]
 
 			if !ok {
 				log.Fatalln("DecodePointers: parameter.Cursor, unknown pointer id", id)
@@ -3734,7 +3734,7 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 
 		// reindexing Cursor field
 		if parameterDB.CursorID.Int64 != 0 {
-			parameterDB.CursorID.Int64 = int64(BackRepoMovingLineid_atBckpTime_newID[uint(parameterDB.CursorID.Int64)])
+			parameterDB.CursorID.Int64 = int64(BackRepoCursorid_atBckpTime_newID[uint(parameterDB.CursorID.Int64)])
 			parameterDB.CursorID.Valid = true
 		}
 

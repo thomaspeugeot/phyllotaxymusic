@@ -26,6 +26,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *CircleGrid:
 		ok = stage.IsStagedCircleGrid(target)
 
+	case *Cursor:
+		ok = stage.IsStagedCursor(target)
+
 	case *FrontCurve:
 		ok = stage.IsStagedFrontCurve(target)
 
@@ -37,9 +40,6 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 	case *Key:
 		ok = stage.IsStagedKey(target)
-
-	case *MovingLine:
-		ok = stage.IsStagedMovingLine(target)
 
 	case *Parameter:
 		ok = stage.IsStagedParameter(target)
@@ -139,6 +139,13 @@ func (stage *StageStruct) IsStagedCircleGrid(circlegrid *CircleGrid) (ok bool) {
 	return
 }
 
+func (stage *StageStruct) IsStagedCursor(cursor *Cursor) (ok bool) {
+
+	_, ok = stage.Cursors[cursor]
+
+	return
+}
+
 func (stage *StageStruct) IsStagedFrontCurve(frontcurve *FrontCurve) (ok bool) {
 
 	_, ok = stage.FrontCurves[frontcurve]
@@ -163,13 +170,6 @@ func (stage *StageStruct) IsStagedHorizontalAxis(horizontalaxis *HorizontalAxis)
 func (stage *StageStruct) IsStagedKey(key *Key) (ok bool) {
 
 	_, ok = stage.Keys[key]
-
-	return
-}
-
-func (stage *StageStruct) IsStagedMovingLine(movingline *MovingLine) (ok bool) {
-
-	_, ok = stage.MovingLines[movingline]
 
 	return
 }
@@ -301,6 +301,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *CircleGrid:
 		stage.StageBranchCircleGrid(target)
 
+	case *Cursor:
+		stage.StageBranchCursor(target)
+
 	case *FrontCurve:
 		stage.StageBranchFrontCurve(target)
 
@@ -312,9 +315,6 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Key:
 		stage.StageBranchKey(target)
-
-	case *MovingLine:
-		stage.StageBranchMovingLine(target)
 
 	case *Parameter:
 		stage.StageBranchParameter(target)
@@ -511,6 +511,21 @@ func (stage *StageStruct) StageBranchCircleGrid(circlegrid *CircleGrid) {
 
 }
 
+func (stage *StageStruct) StageBranchCursor(cursor *Cursor) {
+
+	// check if instance is already staged
+	if IsStaged(stage, cursor) {
+		return
+	}
+
+	cursor.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *StageStruct) StageBranchFrontCurve(frontcurve *FrontCurve) {
 
 	// check if instance is already staged
@@ -580,24 +595,6 @@ func (stage *StageStruct) StageBranchKey(key *Key) {
 	//insertion point for the staging of instances referenced by pointers
 	if key.ShapeCategory != nil {
 		StageBranch(stage, key.ShapeCategory)
-	}
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
-func (stage *StageStruct) StageBranchMovingLine(movingline *MovingLine) {
-
-	// check if instance is already staged
-	if IsStaged(stage, movingline) {
-		return
-	}
-
-	movingline.Stage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-	if movingline.ShapeCategory != nil {
-		StageBranch(stage, movingline.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -1090,6 +1087,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchCircleGrid(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
+	case *Cursor:
+		toT := CopyBranchCursor(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *FrontCurve:
 		toT := CopyBranchFrontCurve(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -1104,10 +1105,6 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *Key:
 		toT := CopyBranchKey(mapOrigCopy, fromT)
-		return any(toT).(*Type)
-
-	case *MovingLine:
-		toT := CopyBranchMovingLine(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *Parameter:
@@ -1348,6 +1345,25 @@ func CopyBranchCircleGrid(mapOrigCopy map[any]any, circlegridFrom *CircleGrid) (
 	return
 }
 
+func CopyBranchCursor(mapOrigCopy map[any]any, cursorFrom *Cursor) (cursorTo *Cursor) {
+
+	// cursorFrom has already been copied
+	if _cursorTo, ok := mapOrigCopy[cursorFrom]; ok {
+		cursorTo = _cursorTo.(*Cursor)
+		return
+	}
+
+	cursorTo = new(Cursor)
+	mapOrigCopy[cursorFrom] = cursorTo
+	cursorFrom.CopyBasicFields(cursorTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 func CopyBranchFrontCurve(mapOrigCopy map[any]any, frontcurveFrom *FrontCurve) (frontcurveTo *FrontCurve) {
 
 	// frontcurveFrom has already been copied
@@ -1432,28 +1448,6 @@ func CopyBranchKey(mapOrigCopy map[any]any, keyFrom *Key) (keyTo *Key) {
 	//insertion point for the staging of instances referenced by pointers
 	if keyFrom.ShapeCategory != nil {
 		keyTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, keyFrom.ShapeCategory)
-	}
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-	return
-}
-
-func CopyBranchMovingLine(mapOrigCopy map[any]any, movinglineFrom *MovingLine) (movinglineTo *MovingLine) {
-
-	// movinglineFrom has already been copied
-	if _movinglineTo, ok := mapOrigCopy[movinglineFrom]; ok {
-		movinglineTo = _movinglineTo.(*MovingLine)
-		return
-	}
-
-	movinglineTo = new(MovingLine)
-	mapOrigCopy[movinglineFrom] = movinglineTo
-	movinglineFrom.CopyBasicFields(movinglineTo)
-
-	//insertion point for the staging of instances referenced by pointers
-	if movinglineFrom.ShapeCategory != nil {
-		movinglineTo.ShapeCategory = CopyBranchShapeCategory(mapOrigCopy, movinglineFrom.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -1652,7 +1646,7 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 		parameterTo.SpiralOrigin = CopyBranchSpiralOrigin(mapOrigCopy, parameterFrom.SpiralOrigin)
 	}
 	if parameterFrom.Cursor != nil {
-		parameterTo.Cursor = CopyBranchMovingLine(mapOrigCopy, parameterFrom.Cursor)
+		parameterTo.Cursor = CopyBranchCursor(mapOrigCopy, parameterFrom.Cursor)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -1993,6 +1987,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *CircleGrid:
 		stage.UnstageBranchCircleGrid(target)
 
+	case *Cursor:
+		stage.UnstageBranchCursor(target)
+
 	case *FrontCurve:
 		stage.UnstageBranchFrontCurve(target)
 
@@ -2004,9 +2001,6 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Key:
 		stage.UnstageBranchKey(target)
-
-	case *MovingLine:
-		stage.UnstageBranchMovingLine(target)
 
 	case *Parameter:
 		stage.UnstageBranchParameter(target)
@@ -2203,6 +2197,21 @@ func (stage *StageStruct) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
 
 }
 
+func (stage *StageStruct) UnstageBranchCursor(cursor *Cursor) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, cursor) {
+		return
+	}
+
+	cursor.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *StageStruct) UnstageBranchFrontCurve(frontcurve *FrontCurve) {
 
 	// check if instance is already staged
@@ -2272,24 +2281,6 @@ func (stage *StageStruct) UnstageBranchKey(key *Key) {
 	//insertion point for the staging of instances referenced by pointers
 	if key.ShapeCategory != nil {
 		UnstageBranch(stage, key.ShapeCategory)
-	}
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
-func (stage *StageStruct) UnstageBranchMovingLine(movingline *MovingLine) {
-
-	// check if instance is already staged
-	if !IsStaged(stage, movingline) {
-		return
-	}
-
-	movingline.Unstage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-	if movingline.ShapeCategory != nil {
-		UnstageBranch(stage, movingline.ShapeCategory)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers

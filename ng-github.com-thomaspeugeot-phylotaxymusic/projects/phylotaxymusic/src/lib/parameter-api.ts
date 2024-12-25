@@ -21,7 +21,7 @@ import { KeyAPI } from './key-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 import { SpiralOriginAPI } from './spiralorigin-api'
-import { MovingLineAPI } from './movingline-api'
+import { CursorAPI } from './cursor-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
