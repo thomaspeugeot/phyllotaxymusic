@@ -7,24 +7,31 @@ import * as substackcursor from '../../../substackcursor/src/public-api'
   imports: [],
   template: `
     <svg width="1000" height="1000">
-      <!-- 
-        A single vertical line, whose x-position is bound
-        to the 'x' field updated by the fake websocket.
-      -->
-      <line
+     <line
         [attr.x1]="x"
-        [attr.y1]="cursor!.Y1"
+        [attr.y1]="0"
         [attr.x2]="x"
-        [attr.y2]="cursor!.Y2"
+        [attr.y2]="1000"
         stroke="black"
-        stroke-width="2"
+        stroke-width="6"
       />
+
+       <line 
+        [attr.x1]="xe"
+        [attr.y1]="0"
+        [attr.x2]="xe"
+        [attr.y2]="1000"
+        stroke="black"
+        stroke-width="6"
+      />
+      
     </svg>
   `,
   styles: ``
 })
 export class SubstackcursorspecificComponent implements OnInit {
   x = 0;
+  xe = 500
   private animationFrameId: number | null = null;  // Store animation frame ID
 
   StacksNames = substackcursor.StacksNames;
@@ -47,6 +54,7 @@ export class SubstackcursorspecificComponent implements OnInit {
         console.assert(cursors.length == 1);
         this.cursor = cursors[0];
         this.x = this.cursor.StartX
+        this.xe = this.cursor.EndX
 
         if (this.cursor.IsPlaying == true) {
           this.startEmittingPosition();

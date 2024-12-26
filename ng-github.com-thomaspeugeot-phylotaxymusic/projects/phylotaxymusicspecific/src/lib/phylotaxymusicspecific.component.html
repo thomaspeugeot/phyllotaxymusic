@@ -37,12 +37,12 @@
       </div>
     </as-split-area>
     
-
     <as-split-area [size]="20">
       <as-split unit="pixel" direction="vertical">
         <as-split-area [size]="60">
           @if (frontRepo && frontRepo.array_Parameters[0]) {
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
+
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Side Length</h4>
               </mat-grid-tile>
@@ -51,7 +51,7 @@
               </mat-grid-tile>
               <mat-grid-tile colspan="7" rowspan="1">
                 <mat-slider style="width: 100%;" 
-                min="1.0" max="600.0" step="1" showTickMarks discrete [displayWith]="formatLabel">
+                min="5.0" max="200.0" step="5" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SideLength" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>

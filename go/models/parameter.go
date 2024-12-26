@@ -199,6 +199,8 @@ func (parameter *Parameter) SetCursor(cursor *substackcursor_models.Cursor) {
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
 
 	log.Println("Diagram, OnAfterUpdate", parameter.Name)
+	backRepoParameter.cursor = parameter.cursor // small cooking stuff
+	backRepoParameter.notifyCh = parameter.notifyCh
 	parameter.Impl.OnUpdated(backRepoParameter)
 
 }

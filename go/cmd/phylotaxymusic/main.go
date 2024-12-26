@@ -110,6 +110,8 @@ func main() {
 	parameterImpl.Generate()
 	tree.Generate(parameter)
 
+	cursorStack.Stage.Commit()
+
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
 	if err != nil {
