@@ -24,6 +24,7 @@ import { takeUntil, catchError } from 'rxjs/operators';
 export class GongtoneComponent implements OnInit, OnDestroy {
   private synth: Tone.PolySynth | undefined;
   private sampler: Tone.Sampler | undefined;
+  private currentLoop: Tone.Loop | undefined;
   private destroy$ = new Subject<void>();
 
   readonly StacksNames = gongtone.StacksNames;
@@ -35,10 +36,8 @@ export class GongtoneComponent implements OnInit, OnDestroy {
   constructor(
     private frontRepoService: gongtone.FrontRepoService,
     private playerService: gongtone.PlayerService,
-
     private ngZone: NgZone,
     private snackBar: MatSnackBar
-
   ) { }
 
   ngOnInit(): void {
@@ -77,22 +76,36 @@ export class GongtoneComponent implements OnInit, OnDestroy {
   stopPlayback(): void {
     this.ngZone.runOutsideAngular(() => {
       try {
+        // Stop and dispose of the current loop
+        if (this.currentLoop) {
+          this.currentLoop.stop();
+          this.currentLoop.dispose();
+          this.currentLoop = undefined;
+        }
+
+        // Stop the transport and dispose of the sampler
         Tone.getTransport().stop();
-        this.sampler?.dispose();
+        Tone.getTransport().cancel(); // Cancel all scheduled events
+        if (this.sampler) {
+          this.sampler.dispose();
+          this.sampler = undefined;
+        }
+
         this.isPlaying = false;
       } catch (error) {
         console.error('Error stopping playback:', error);
       }
     });
-    const players = this.frontRepo!.getFrontArray<gongtone.Player>(gongtone.Player.GONGSTRUCT_NAME)
-    if (players.length == 1) {
-      let player = players[0]
-      player.Status = gongtone.Status.PAUSED
+
+    const players = this.frontRepo?.getFrontArray<gongtone.Player>(gongtone.Player.GONGSTRUCT_NAME);
+    if (players && players.length === 1) {
+      const player = players[0];
+      player.Status = gongtone.Status.PAUSED;
       this.playerService.updateFront(player, this.StacksNames.Gongtone).subscribe(
         () => {
-          console.log("gongtone: status set to PAUSED")
+          console.log("gongtone: status set to PAUSED");
         }
-      )
+      );
     }
   }
 
@@ -101,6 +114,9 @@ export class GongtoneComponent implements OnInit, OnDestroy {
       this.showError('No data available for playback');
       return;
     }
+
+    // Stop any existing playback before starting new one
+    this.stopPlayback();
 
     this.isLoading = true;
     this.ngZone.runOutsideAngular(() => {
@@ -113,15 +129,15 @@ export class GongtoneComponent implements OnInit, OnDestroy {
       }
     });
 
-    const players = this.frontRepo!.getFrontArray<gongtone.Player>(gongtone.Player.GONGSTRUCT_NAME)
-    if (players.length == 1) {
-      let player = players[0]
-      player.Status = gongtone.Status.PLAYING
+    const players = this.frontRepo.getFrontArray<gongtone.Player>(gongtone.Player.GONGSTRUCT_NAME);
+    if (players.length === 1) {
+      const player = players[0];
+      player.Status = gongtone.Status.PLAYING;
       this.playerService.updateFront(player, this.StacksNames.Gongtone).subscribe(
         () => {
-          console.log("gongtone: status set to PLAYING")
+          console.log("gongtone: status set to PLAYING");
         }
-      )
+      );
     }
   }
 
@@ -162,7 +178,7 @@ export class GongtoneComponent implements OnInit, OnDestroy {
           });
         }
 
-        this.showError('Failed to load audio samples');
+        this.handleSamplerLoadError(error);
       }
     }).toDestination();
   }
@@ -178,7 +194,8 @@ export class GongtoneComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.isPlaying = true;
 
-        const loop = new Tone.Loop((time) => {
+        // Create and store the new loop
+        this.currentLoop = new Tone.Loop((time) => {
           notes.forEach(note => {
             const frequencies = note.Frequencies.map(freq => freq.Name);
             this.sampler?.triggerAttackRelease(frequencies, note.Duration, time + note.Start);
@@ -216,10 +233,12 @@ export class GongtoneComponent implements OnInit, OnDestroy {
   }
 
   private showError(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top'
+    this.ngZone.run(() => {
+      this.snackBar.open(message, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
     });
   }
 }

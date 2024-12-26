@@ -52,6 +52,9 @@ import { LinkSegmentsPipe } from '../link-segments.pipe'
 })
 export class GongsvgDiagrammingComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  @ViewChild('svgContainer', { static: true }) 
+  private svgContainer!: ElementRef<SVGSVGElement>
+
   @Input() GONG__StackPath: string = ""
 
   @ViewChild('textWidthCalculator') textWidthCalculator: TextWidthCalculatorComponent | undefined
@@ -301,6 +304,9 @@ export class GongsvgDiagrammingComponent implements OnInit, OnDestroy, AfterView
 
         this.resetAllLinksPreviousStartEndRects()
 
+        // Reset all animations
+        this.resetAnimationsProgrammatically()
+
         // Manually trigger change detection
         this.changeDetectorRef.detectChanges()
 
@@ -308,6 +314,30 @@ export class GongsvgDiagrammingComponent implements OnInit, OnDestroy, AfterView
           "in promise to front repose servive pull", "gongsvgFrontRepo not good")
       }
     )
+  }
+
+  private resetAnimationsProgrammatically() {
+    const allAnimateElements = this.svgContainer.nativeElement.querySelectorAll('animate');
+    
+    allAnimateElements.forEach((animateEl: SVGAnimateElement) => {
+
+      console.log("animate modif")
+
+      const parentElement = animateEl.parentElement;
+      const attributeName = animateEl.getAttribute('attributeName');
+      const fromValue = animateEl.getAttribute('from');
+      
+      if (parentElement && attributeName && fromValue) {
+        // Reset to initial value
+        parentElement.setAttribute(attributeName, fromValue);
+
+        console.log("reseted")
+        animateEl.beginElement()
+
+        // Force a reflow to ensure reset
+        void parentElement.offsetWidth;
+      }
+    });
   }
 
   ngOnDestroy() {

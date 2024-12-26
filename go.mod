@@ -3,11 +3,11 @@ module github.com/thomaspeugeot/phylotaxymusic
 go 1.23.1
 
 require (
-	github.com/fullstack-lang/gong v0.0.0-20241204162226-923b025bd3b2
+	github.com/fullstack-lang/gong v0.0.0-20241220165500-359db4993a9a
 	github.com/fullstack-lang/gongdoc v0.0.0-20241118055028-b29dade3ed5d
-	github.com/fullstack-lang/gongsvg v0.0.0-20241215051549-485ffac8271a
+	github.com/fullstack-lang/gongsvg v0.0.0-20241216143319-8b758bc56ac2
 	github.com/fullstack-lang/gongtable v0.0.0-20241118055028-9c52bae3338d
-	github.com/fullstack-lang/gongtone v0.0.0-20241215112701-7584bfb9b1bf
+	github.com/fullstack-lang/gongtone v0.0.0-20241226210739-b9d21e3a2ed0
 	github.com/fullstack-lang/gongtree v0.0.0-20241130070052-003d6e0482ce
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 	github.com/gin-contrib/cors v1.7.2
@@ -21,7 +21,7 @@ require (
 )
 
 require (
-	github.com/bytedance/sonic v1.12.5 // indirect
+	github.com/bytedance/sonic v1.12.6 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
@@ -63,15 +63,15 @@ require (
 	github.com/xuri/nfp v0.0.0-20240318013403-ab9948c2c4a7 // indirect
 	golang.org/x/arch v0.12.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
-	golang.org/x/exp v0.0.0-20241210194714-1829a127f884 // indirect
+	golang.org/x/exp v0.0.0-20241217172543-b2144cdd0a67 // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/net v0.32.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
-	google.golang.org/protobuf v1.35.2 // indirect
+	google.golang.org/protobuf v1.36.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	modernc.org/libc v1.61.4 // indirect
-	modernc.org/mathutil v1.6.0 // indirect
+	modernc.org/libc v1.61.5 // indirect
+	modernc.org/mathutil v1.7.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
-	modernc.org/sqlite v1.34.2 // indirect
+	modernc.org/sqlite v1.34.4 // indirect
 )

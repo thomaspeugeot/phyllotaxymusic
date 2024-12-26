@@ -6,7 +6,7 @@
             (dragover)="backgroundDragOver($event)" -->
             <lib-text-width-calculator #textWidthCalculator></lib-text-width-calculator>
 
-<svg [attr.width]="svgWidth" [attr.height]="svgHeight" >
+<svg #svgContainer [attr.width]="svgWidth" [attr.height]="svgHeight" >
     <g>
 
         <!-- this rect is for catching mouse event that are in the void -->
@@ -83,11 +83,23 @@
                 
                 <!-- Use ng-container to repeat animate tags -->
                 <ng-container *ngFor="let animate of line.Animates">
-                  <animate 
-                    [attr.attributeName]="animate.AttributeName" 
-                    [attr.values]="animate.Values" 
-                    [attr.dur]="animate.Dur" 
-                    [attr.repeatCount]="animate.RepeatCount" />
+                    @if (animate.Values != "") {
+                        <animate 
+                        [attr.attributeName]="animate.AttributeName" 
+                        [attr.values]="animate.Values" 
+                        [attr.dur]="animate.Dur" 
+                        [attr.repeatCount]="animate.RepeatCount"
+                        begin="0" />
+                    }
+                    @if (animate.From != "") {
+                        <animate 
+                        [attr.attributeName]="animate.AttributeName" 
+                        [attr.from]="animate.From" 
+                        [attr.to]="animate.To" 
+                        [attr.dur]="animate.Dur" 
+                        [attr.repeatCount]="animate.RepeatCount" />
+                    }
+
                 </ng-container>
               </line>
               

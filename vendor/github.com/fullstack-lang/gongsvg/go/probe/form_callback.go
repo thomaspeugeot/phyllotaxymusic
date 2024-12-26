@@ -67,6 +67,10 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(animate_.AttributeName), formDiv)
 		case "Values":
 			FormDivBasicFieldToField(&(animate_.Values), formDiv)
+		case "From":
+			FormDivBasicFieldToField(&(animate_.From), formDiv)
+		case "To":
+			FormDivBasicFieldToField(&(animate_.To), formDiv)
 		case "Dur":
 			FormDivBasicFieldToField(&(animate_.Dur), formDiv)
 		case "RepeatCount":

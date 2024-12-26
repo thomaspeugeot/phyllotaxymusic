@@ -344,16 +344,16 @@ func _(stage *models.StageStruct) {
 	__Bezier__000005_Growth_Curve_Seed.Transform = ``
 
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
-	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
+	__BezierGrid__000000_2nb_Voice.IsDisplayed = false
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
-	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = true
+	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
 	__BezierGrid__000002_First_Voice.IsDisplayed = true
 
 	__BezierGrid__000003_First_Voice_Shift_Right.Name = `First Voice Shift Right`
-	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = true
+	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = false
 
 	__BezierGrid__000004_Growth_Curve.Name = `Growth Curve`
 	__BezierGrid__000004_Growth_Curve.IsDisplayed = false
@@ -476,7 +476,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_First_Voice_note_shifted_right.Name = `First Voice note shifted right`
-	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = true
+	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = false
 
 	__CircleGrid__000002_First_Voice_notes.Name = `First Voice notes`
 	__CircleGrid__000002_First_Voice_notes.IsDisplayed = true
@@ -497,7 +497,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
-	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
+	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
 
 	__FrontCurve__000000_Non_Rotated_0_.Name = `Non Rotated 0 `
 	__FrontCurve__000000_Non_Rotated_0_.Path = `M677.23 520.51 C678.28 514.49 678.96 509.54 679.72 503.96 C680.48 498.38 681.10 492.78 681.78 487.04 C682.46 481.30 683.04 475.53 683.79 469.50 C684.54 463.48 685.28 457.39 686.28 450.89 C687.28 444.38 688.54 437.67 689.79 430.46 C691.05 423.25 692.92 415.46 693.81 407.63 C694.69 399.80 695.58 391.40 695.11 383.49 C694.65 375.58 693.24 367.64 691.03 360.18 C688.82 352.73 685.58 345.54 681.88 338.77 C678.17 332.00 673.66 325.57 668.80 319.55 C663.94 313.53 658.47 307.88 652.73 302.65 C646.98 297.42 641.47 292.91 634.34 288.16 C627.21 283.41 618.40 278.11 609.94 274.14 C601.48 270.17 592.56 266.80 583.57 264.35 C574.57 261.89 565.22 260.17 555.97 259.40 C546.72 258.64 537.24 258.76 528.06 259.77 C518.89 260.78 509.68 262.83 500.93 265.46 C492.18 268.10 483.65 271.78 475.57 275.59 C467.49 279.41 459.82 283.95 452.45 288.34 C445.08 292.72 438.14 297.39 431.34 301.92 C424.55 306.45 418.08 310.98 411.69 315.51 C405.31 320.05 399.13 324.53 393.04 329.13 C386.95 333.74 380.99 338.33 375.14 343.13 C369.29 347.92 363.10 353.25 357.93 357.89 C352.76 362.53 348.69 366.51 344.13 370.98 C339.57 375.46 335.13 380.07 330.58 384.77 C326.04 389.47 321.58 394.27 316.87 399.18 C312.15 404.10 307.44 409.08 302.29 414.25 C297.15 419.42 291.70 424.60 285.98 430.18 C280.27 435.76 273.73 441.42 267.99 447.74 C262.24 454.05 256.17 460.82 251.50 468.05 C246.82 475.27 242.91 483.13 239.95 491.09 C237.00 499.06 235.05 507.46 233.77 515.82 C232.48 524.19 232.08 532.78 232.23 541.27 C232.39 549.76 233.30 558.33 234.71 566.74 C236.12 575.15 237.80 582.77 240.70 591.72 C243.59 600.66 247.55 611.22 252.08 620.42 C256.62 629.62 261.93 638.61 267.92 646.91 C273.91 655.21 280.67 663.14 288.00 670.22 C295.32 677.29 303.42 683.79 311.87 689.37 C320.31 694.94 329.47 699.70 338.66 703.66 C347.85 707.62 357.56 710.60 367.02 713.14 C376.48 715.68 386.11 717.36 395.42 718.92 C404.73 720.48 413.91 721.51 422.90 722.51 C431.88 723.50 440.64 724.25 449.34 724.88 C458.04 725.52 466.57 726.02 475.10 726.32 C483.63 726.63 492.06 726.79 500.52 726.69 C508.99 726.59 517.47 726.52 525.89 725.72 C534.30 724.92 542.82 723.88 551.03 721.90 C559.24 719.92 567.43 717.25 575.15 713.86 C582.86 710.47 590.41 706.33 597.31 701.55 C604.20 696.78 610.75 691.21 616.53 685.19 C622.31 679.17 627.49 672.36 631.98 665.41 C636.48 658.47 640.18 650.89 643.48 643.52 C646.79 636.15 649.34 628.51 651.81 621.21 C654.27 613.90 656.27 606.69 658.28 599.69 C660.28 592.69 662.08 585.93 663.85 579.23 C665.63 572.53 667.32 566.03 668.91 559.50 C670.51 552.97 672.05 546.55 673.44 540.05 C674.82 533.55 676.19 526.52 677.23 520.51 Z`
@@ -589,7 +589,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.BeatsPerSecond = 2.050000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 12691
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 29327
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000

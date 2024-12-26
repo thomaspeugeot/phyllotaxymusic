@@ -790,7 +790,40 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	return
 }
 
-func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fieldName string) (res string) {
+type GongFieldValueType string
+
+const (
+	GongFieldValueTypeInt     GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat   GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool    GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeOthers  GongFieldValueType = "GongFieldValueTypeOthers"
+)
+
+type GongFieldValue struct {
+	valueString string
+	GongFieldValueType
+	valueInt   int
+	valueFloat float64
+	valueBool  bool
+}
+
+func (gongValueField *GongFieldValue) GetValueString() string {
+	return gongValueField.valueString
+}
+
+func (gongValueField *GongFieldValue) GetValueInt() int {
+	return gongValueField.valueInt
+}
+	
+func (gongValueField *GongFieldValue) GetValueFloat() float64 {
+	return gongValueField.valueFloat
+}
+	
+func (gongValueField *GongFieldValue) GetValueBool() bool {
+	return gongValueField.valueBool
+}
+
+func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fieldName string) (res GongFieldValue) {
 
 	switch inferedInstance := any(instance).(type) {
 	// insertion point for generic get gongstruct field value
@@ -798,37 +831,43 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		}
 	case *Note:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Frequencies":
 			for idx, __instance__ := range inferedInstance.Frequencies {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		case "Start":
-			res = fmt.Sprintf("%f", inferedInstance.Start)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Start)
+			res.valueFloat = inferedInstance.Start
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Duration":
-			res = fmt.Sprintf("%f", inferedInstance.Duration)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Duration)
+			res.valueFloat = inferedInstance.Duration
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Velocity":
-			res = fmt.Sprintf("%f", inferedInstance.Velocity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Velocity)
+			res.valueFloat = inferedInstance.Velocity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Info":
-			res = inferedInstance.Info
+			res.valueString = inferedInstance.Info
 		}
 	case *Player:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Status":
 			enum := inferedInstance.Status
-			res = enum.ToCodeString()
+			res.valueString = enum.ToCodeString()
 		}
 	default:
 		_ = inferedInstance
@@ -836,7 +875,7 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 	return
 }
 
-func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res string) {
+func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res GongFieldValue) {
 
 	switch inferedInstance := any(instance).(type) {
 	// insertion point for generic get gongstruct field value
@@ -844,37 +883,43 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		}
 	case Note:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Frequencies":
 			for idx, __instance__ := range inferedInstance.Frequencies {
 				if idx > 0 {
-					res += "\n"
+					res.valueString += "\n"
 				}
-				res += __instance__.Name
+				res.valueString += __instance__.Name
 			}
 		case "Start":
-			res = fmt.Sprintf("%f", inferedInstance.Start)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Start)
+			res.valueFloat = inferedInstance.Start
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Duration":
-			res = fmt.Sprintf("%f", inferedInstance.Duration)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Duration)
+			res.valueFloat = inferedInstance.Duration
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Velocity":
-			res = fmt.Sprintf("%f", inferedInstance.Velocity)
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Velocity)
+			res.valueFloat = inferedInstance.Velocity
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Info":
-			res = inferedInstance.Info
+			res.valueString = inferedInstance.Info
 		}
 	case Player:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = inferedInstance.Name
+			res.valueString = inferedInstance.Name
 		case "Status":
 			enum := inferedInstance.Status
-			res = enum.ToCodeString()
+			res.valueString = enum.ToCodeString()
 		}
 	default:
 		_ = inferedInstance
