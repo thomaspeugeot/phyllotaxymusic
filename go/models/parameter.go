@@ -184,10 +184,10 @@ type Parameter struct {
 	// cursor vertical line
 	Cursor *Cursor
 
-	notifyCh chan struct{}
+	notifyCh chan bool
 }
 
-func (parameter *Parameter) SetNotifyChannel(notifyCh chan struct{}) {
+func (parameter *Parameter) SetNotifyChannel(notifyCh chan bool) {
 	parameter.notifyCh = notifyCh
 }
 

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
 import * as substackcursor from '../../../substackcursor/src/public-api'
-
 
 @Component({
   selector: 'lib-substackcursorspecific',
@@ -26,35 +24,31 @@ import * as substackcursor from '../../../substackcursor/src/public-api'
   styles: ``
 })
 export class SubstackcursorspecificComponent implements OnInit {
-  x = 0
+  x = 0;
+  private animationFrameId: number | null = null;  // Store animation frame ID
 
-  StacksNames = substackcursor.StacksNames
-  public frontRepo?: substackcursor.FrontRepo
-
-
+  StacksNames = substackcursor.StacksNames;
+  public frontRepo?: substackcursor.FrontRepo;
 
   constructor(
     private frontRepoService: substackcursor.FrontRepoService,
-  ) {
-
-  }
+  ) { }
 
   ngOnInit(): void {
-
-    console.log("ngOnInit")
+    console.log("ngOnInit");
 
     this.frontRepoService.connectToWebSocket(this.StacksNames.Substackcursor).subscribe({
       next: (gongtablesFrontRepo) => {
         this.frontRepo = gongtablesFrontRepo;
 
-        let cursors = this.frontRepo.getFrontArray<substackcursor.Cursor>(substackcursor.Cursor.GONGSTRUCT_NAME)
+        let cursors = this.frontRepo.getFrontArray<substackcursor.Cursor>(substackcursor.Cursor.GONGSTRUCT_NAME);
 
-        console.assert(cursors.length == 1)
-        let cursor = cursors[0]
+        console.assert(cursors.length == 1);
+        let cursor = cursors[0];
         if (cursor.IsPlaying == true) {
-          this.startEmittingPosition()
+          this.startEmittingPosition();
         } else {
-          // for chat gpt. What is the best way to stop the update of this.x ?
+          this.stopEmittingPosition();  // Stop the animation if IsPlaying is false
         }
       },
       error: (err) => {
@@ -65,12 +59,11 @@ export class SubstackcursorspecificComponent implements OnInit {
         console.log("WebSocket connection complete.");
       },
     });
-
   }
 
   /**
- * Smoothly move the line from x=0 to x=1000 over 5 seconds using requestAnimationFrame.
- */
+   * Smoothly move the line from x=0 to x=1000 over 5 seconds using requestAnimationFrame.
+   */
   public startEmittingPosition(): void {
     const duration = 5000;   // 5 seconds
     const endPosition = 1000;
@@ -84,16 +77,25 @@ export class SubstackcursorspecificComponent implements OnInit {
       // progress goes from 0.0 to 1.0 as time goes by
       const progress = Math.min(elapsed / duration, 1);
       // Position is progress * 1000
-      this.x = progress * endPosition
+      this.x = progress * endPosition;
 
       // Keep going until we reach progress=1.0
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        this.animationFrameId = requestAnimationFrame(animate);
       }
     };
 
     // Kick off our "animation"
-    requestAnimationFrame(animate);
+    this.animationFrameId = requestAnimationFrame(animate);
   }
 
+  /**
+   * Stop emitting position by canceling the animation frame.
+   */
+  public stopEmittingPosition(): void {
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+  }
 }

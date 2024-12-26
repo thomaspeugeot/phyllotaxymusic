@@ -102,7 +102,7 @@ func main() {
 	cursorStack.Stage.Commit()
 
 	// connect parameter to cursor for start playing notification
-	notifyCh := make(chan struct{})
+	notifyCh := make(chan bool)
 	cursor.SetNotifyChannel(notifyCh)
 	parameter.SetNotifyChannel(notifyCh)
 
