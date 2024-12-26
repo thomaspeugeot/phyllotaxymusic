@@ -48,14 +48,6 @@ import { KeyAPI } from './key-api'
 import { Key, CopyKeyAPIToKey } from './key'
 import { KeyService } from './key.service'
 
-import { MovingLineAPI } from './movingline-api'
-import { MovingLine, CopyMovingLineAPIToMovingLine } from './movingline'
-import { MovingLineService } from './movingline.service'
-
-import { NoteInfoAPI } from './noteinfo-api'
-import { NoteInfo, CopyNoteInfoAPIToNoteInfo } from './noteinfo'
-import { NoteInfoService } from './noteinfo.service'
-
 import { ParameterAPI } from './parameter-api'
 import { Parameter, CopyParameterAPIToParameter } from './parameter'
 import { ParameterService } from './parameter.service'
@@ -152,12 +144,6 @@ export class FrontRepo { // insertion point sub template
 	array_Keys = new Array<Key>() // array of front instances
 	map_ID_Key = new Map<number, Key>() // map of front instances
 
-	array_MovingLines = new Array<MovingLine>() // array of front instances
-	map_ID_MovingLine = new Map<number, MovingLine>() // map of front instances
-
-	array_NoteInfos = new Array<NoteInfo>() // array of front instances
-	map_ID_NoteInfo = new Map<number, NoteInfo>() // map of front instances
-
 	array_Parameters = new Array<Parameter>() // array of front instances
 	map_ID_Parameter = new Map<number, Parameter>() // map of front instances
 
@@ -229,10 +215,6 @@ export class FrontRepo { // insertion point sub template
 				return this.array_HorizontalAxiss as unknown as Array<Type>
 			case 'Key':
 				return this.array_Keys as unknown as Array<Type>
-			case 'MovingLine':
-				return this.array_MovingLines as unknown as Array<Type>
-			case 'NoteInfo':
-				return this.array_NoteInfos as unknown as Array<Type>
 			case 'Parameter':
 				return this.array_Parameters as unknown as Array<Type>
 			case 'Rhombus':
@@ -291,10 +273,6 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_HorizontalAxis as unknown as Map<number, Type>
 			case 'Key':
 				return this.map_ID_Key as unknown as Map<number, Type>
-			case 'MovingLine':
-				return this.map_ID_MovingLine as unknown as Map<number, Type>
-			case 'NoteInfo':
-				return this.map_ID_NoteInfo as unknown as Map<number, Type>
 			case 'Parameter':
 				return this.map_ID_Parameter as unknown as Map<number, Type>
 			case 'Rhombus':
@@ -401,8 +379,6 @@ export class FrontRepoService {
 		private frontcurvestackService: FrontCurveStackService,
 		private horizontalaxisService: HorizontalAxisService,
 		private keyService: KeyService,
-		private movinglineService: MovingLineService,
-		private noteinfoService: NoteInfoService,
 		private parameterService: ParameterService,
 		private rhombusService: RhombusService,
 		private rhombusgridService: RhombusGridService,
@@ -460,8 +436,6 @@ export class FrontRepoService {
 		Observable<FrontCurveStackAPI[]>,
 		Observable<HorizontalAxisAPI[]>,
 		Observable<KeyAPI[]>,
-		Observable<MovingLineAPI[]>,
-		Observable<NoteInfoAPI[]>,
 		Observable<ParameterAPI[]>,
 		Observable<RhombusAPI[]>,
 		Observable<RhombusGridAPI[]>,
@@ -497,8 +471,6 @@ export class FrontRepoService {
 			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
-			this.movinglineService.getMovingLines(this.GONG__StackPath, this.frontRepo),
-			this.noteinfoService.getNoteInfos(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
@@ -539,8 +511,6 @@ export class FrontRepoService {
 			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
 			this.keyService.getKeys(this.GONG__StackPath, this.frontRepo),
-			this.movinglineService.getMovingLines(this.GONG__StackPath, this.frontRepo),
-			this.noteinfoService.getNoteInfos(this.GONG__StackPath, this.frontRepo),
 			this.parameterService.getParameters(this.GONG__StackPath, this.frontRepo),
 			this.rhombusService.getRhombuss(this.GONG__StackPath, this.frontRepo),
 			this.rhombusgridService.getRhombusGrids(this.GONG__StackPath, this.frontRepo),
@@ -576,8 +546,6 @@ export class FrontRepoService {
 						frontcurvestacks_,
 						horizontalaxiss_,
 						keys_,
-						movinglines_,
-						noteinfos_,
 						parameters_,
 						rhombuss_,
 						rhombusgrids_,
@@ -618,10 +586,6 @@ export class FrontRepoService {
 						horizontalaxiss = horizontalaxiss_ as HorizontalAxisAPI[]
 						var keys: KeyAPI[]
 						keys = keys_ as KeyAPI[]
-						var movinglines: MovingLineAPI[]
-						movinglines = movinglines_ as MovingLineAPI[]
-						var noteinfos: NoteInfoAPI[]
-						noteinfos = noteinfos_ as NoteInfoAPI[]
 						var parameters: ParameterAPI[]
 						parameters = parameters_ as ParameterAPI[]
 						var rhombuss: RhombusAPI[]
@@ -783,30 +747,6 @@ export class FrontRepoService {
 								let key = new Key
 								this.frontRepo.array_Keys.push(key)
 								this.frontRepo.map_ID_Key.set(keyAPI.ID, key)
-							}
-						)
-
-						// init the arrays
-						this.frontRepo.array_MovingLines = []
-						this.frontRepo.map_ID_MovingLine.clear()
-
-						movinglines.forEach(
-							movinglineAPI => {
-								let movingline = new MovingLine
-								this.frontRepo.array_MovingLines.push(movingline)
-								this.frontRepo.map_ID_MovingLine.set(movinglineAPI.ID, movingline)
-							}
-						)
-
-						// init the arrays
-						this.frontRepo.array_NoteInfos = []
-						this.frontRepo.map_ID_NoteInfo.clear()
-
-						noteinfos.forEach(
-							noteinfoAPI => {
-								let noteinfo = new NoteInfo
-								this.frontRepo.array_NoteInfos.push(noteinfo)
-								this.frontRepo.map_ID_NoteInfo.set(noteinfoAPI.ID, noteinfo)
 							}
 						)
 
@@ -1067,22 +1007,6 @@ export class FrontRepoService {
 							keyAPI => {
 								let key = this.frontRepo.map_ID_Key.get(keyAPI.ID)
 								CopyKeyAPIToKey(keyAPI, key!, this.frontRepo)
-							}
-						)
-
-						// fill up front objects
-						movinglines.forEach(
-							movinglineAPI => {
-								let movingline = this.frontRepo.map_ID_MovingLine.get(movinglineAPI.ID)
-								CopyMovingLineAPIToMovingLine(movinglineAPI, movingline!, this.frontRepo)
-							}
-						)
-
-						// fill up front objects
-						noteinfos.forEach(
-							noteinfoAPI => {
-								let noteinfo = this.frontRepo.map_ID_NoteInfo.get(noteinfoAPI.ID)
-								CopyNoteInfoAPIToNoteInfo(noteinfoAPI, noteinfo!, this.frontRepo)
 							}
 						)
 
@@ -1364,30 +1288,6 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
-				frontRepo.array_MovingLines = []
-				frontRepo.map_ID_MovingLine.clear()
-
-				backRepoData.MovingLineAPIs.forEach(
-					movinglineAPI => {
-						let movingline = new MovingLine
-						frontRepo.array_MovingLines.push(movingline)
-						frontRepo.map_ID_MovingLine.set(movinglineAPI.ID, movingline)
-					}
-				)
-
-				// init the arrays
-				frontRepo.array_NoteInfos = []
-				frontRepo.map_ID_NoteInfo.clear()
-
-				backRepoData.NoteInfoAPIs.forEach(
-					noteinfoAPI => {
-						let noteinfo = new NoteInfo
-						frontRepo.array_NoteInfos.push(noteinfo)
-						frontRepo.map_ID_NoteInfo.set(noteinfoAPI.ID, noteinfo)
-					}
-				)
-
-				// init the arrays
 				frontRepo.array_Parameters = []
 				frontRepo.map_ID_Parameter.clear()
 
@@ -1650,22 +1550,6 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
-				backRepoData.MovingLineAPIs.forEach(
-					movinglineAPI => {
-						let movingline = frontRepo.map_ID_MovingLine.get(movinglineAPI.ID)
-						CopyMovingLineAPIToMovingLine(movinglineAPI, movingline!, frontRepo)
-					}
-				)
-
-				// fill up front objects
-				backRepoData.NoteInfoAPIs.forEach(
-					noteinfoAPI => {
-						let noteinfo = frontRepo.map_ID_NoteInfo.get(noteinfoAPI.ID)
-						CopyNoteInfoAPIToNoteInfo(noteinfoAPI, noteinfo!, frontRepo)
-					}
-				)
-
-				// fill up front objects
 				backRepoData.ParameterAPIs.forEach(
 					parameterAPI => {
 						let parameter = frontRepo.map_ID_Parameter.get(parameterAPI.ID)
@@ -1829,51 +1713,45 @@ export function getHorizontalAxisUniqueID(id: number): number {
 export function getKeyUniqueID(id: number): number {
 	return 73 * id
 }
-export function getMovingLineUniqueID(id: number): number {
+export function getParameterUniqueID(id: number): number {
 	return 79 * id
 }
-export function getNoteInfoUniqueID(id: number): number {
+export function getRhombusUniqueID(id: number): number {
 	return 83 * id
 }
-export function getParameterUniqueID(id: number): number {
+export function getRhombusGridUniqueID(id: number): number {
 	return 89 * id
 }
-export function getRhombusUniqueID(id: number): number {
+export function getShapeCategoryUniqueID(id: number): number {
 	return 97 * id
 }
-export function getRhombusGridUniqueID(id: number): number {
+export function getSpiralBezierUniqueID(id: number): number {
 	return 101 * id
 }
-export function getShapeCategoryUniqueID(id: number): number {
+export function getSpiralBezierGridUniqueID(id: number): number {
 	return 103 * id
 }
-export function getSpiralBezierUniqueID(id: number): number {
+export function getSpiralCircleUniqueID(id: number): number {
 	return 107 * id
 }
-export function getSpiralBezierGridUniqueID(id: number): number {
+export function getSpiralCircleGridUniqueID(id: number): number {
 	return 109 * id
 }
-export function getSpiralCircleUniqueID(id: number): number {
+export function getSpiralLineUniqueID(id: number): number {
 	return 113 * id
 }
-export function getSpiralCircleGridUniqueID(id: number): number {
+export function getSpiralLineGridUniqueID(id: number): number {
 	return 127 * id
 }
-export function getSpiralLineUniqueID(id: number): number {
+export function getSpiralOriginUniqueID(id: number): number {
 	return 131 * id
 }
-export function getSpiralLineGridUniqueID(id: number): number {
+export function getSpiralRhombusUniqueID(id: number): number {
 	return 137 * id
 }
-export function getSpiralOriginUniqueID(id: number): number {
+export function getSpiralRhombusGridUniqueID(id: number): number {
 	return 139 * id
 }
-export function getSpiralRhombusUniqueID(id: number): number {
-	return 149 * id
-}
-export function getSpiralRhombusGridUniqueID(id: number): number {
-	return 151 * id
-}
 export function getVerticalAxisUniqueID(id: number): number {
-	return 157 * id
+	return 149 * id
 }

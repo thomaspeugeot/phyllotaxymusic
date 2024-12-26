@@ -25,8 +25,6 @@ func SerializeStage(stage *StageStruct, filename string) {
 		SerializeExcelize[FrontCurveStack](stage, f)
 		SerializeExcelize[HorizontalAxis](stage, f)
 		SerializeExcelize[Key](stage, f)
-		SerializeExcelize[MovingLine](stage, f)
-		SerializeExcelize[NoteInfo](stage, f)
 		SerializeExcelize[Parameter](stage, f)
 		SerializeExcelize[Rhombus](stage, f)
 		SerializeExcelize[RhombusGrid](stage, f)
@@ -78,7 +76,7 @@ func Serialize[Type Gongstruct](stage *StageStruct, tab Tabulator) {
 		line := tab.AddRow(sheetName)
 		for index, fieldName := range GetFields[Type]() {
 			tab.AddCell(sheetName, line, index, GetFieldStringValue(
-				any(*instance).(Type), fieldName))
+				any(*instance).(Type), fieldName).valueString)
 			// f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), GetFieldStringValue(
 			// 	any(*instance).(Type), fieldName))
 		}
@@ -124,8 +122,8 @@ func SerializeExcelize[Type Gongstruct](stage *StageStruct, f *excelize.File) {
 	for instance := range set {
 		line = line + 1
 		for index, fieldName := range GetFields[Type]() {
-			f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), GetFieldStringValue(
-				any(*instance).(Type), fieldName))
+			fieldStringValue := GetFieldStringValue(any(*instance).(Type), fieldName)
+			f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), fieldStringValue.GetValueString())
 		}
 	}
 

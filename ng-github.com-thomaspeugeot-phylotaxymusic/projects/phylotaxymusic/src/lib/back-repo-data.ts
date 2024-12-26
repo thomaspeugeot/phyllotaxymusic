@@ -23,10 +23,6 @@ import { HorizontalAxisAPI } from './horizontalaxis-api'
 
 import { KeyAPI } from './key-api'
 
-import { MovingLineAPI } from './movingline-api'
-
-import { NoteInfoAPI } from './noteinfo-api'
-
 import { ParameterAPI } from './parameter-api'
 
 import { RhombusAPI } from './rhombus-api'
@@ -79,10 +75,6 @@ export class BackRepoData {
 	HorizontalAxisAPIs = new Array<HorizontalAxisAPI>()
 
 	KeyAPIs = new Array<KeyAPI>()
-
-	MovingLineAPIs = new Array<MovingLineAPI>()
-
-	NoteInfoAPIs = new Array<NoteInfoAPI>()
 
 	ParameterAPIs = new Array<ParameterAPI>()
 
@@ -137,10 +129,6 @@ export class BackRepoData {
 		this.HorizontalAxisAPIs = data?.HorizontalAxisAPIs || [];
 
 		this.KeyAPIs = data?.KeyAPIs || [];
-
-		this.MovingLineAPIs = data?.MovingLineAPIs || [];
-
-		this.NoteInfoAPIs = data?.NoteInfoAPIs || [];
 
 		this.ParameterAPIs = data?.ParameterAPIs || [];
 

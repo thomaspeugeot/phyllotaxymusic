@@ -281,54 +281,6 @@ func (from *Key) CopyBasicFields(to *Key) {
 	to.Transform = from.Transform
 }
 
-type MovingLine_WOP struct {
-	// insertion point
-	Name string
-	IsDisplayed bool
-	AngleDegree float64
-	Length float64
-	CenterX float64
-	CenterY float64
-	Color string
-	FillOpacity float64
-	Stroke string
-	StrokeOpacity float64
-	StrokeWidth float64
-	StrokeDashArray string
-	StrokeDashArrayWhenSelected string
-	Transform string
-}
-
-func (from *MovingLine) CopyBasicFields(to *MovingLine) {
-	// insertion point
-	to.Name = from.Name
-	to.IsDisplayed = from.IsDisplayed
-	to.AngleDegree = from.AngleDegree
-	to.Length = from.Length
-	to.CenterX = from.CenterX
-	to.CenterY = from.CenterY
-	to.Color = from.Color
-	to.FillOpacity = from.FillOpacity
-	to.Stroke = from.Stroke
-	to.StrokeOpacity = from.StrokeOpacity
-	to.StrokeWidth = from.StrokeWidth
-	to.StrokeDashArray = from.StrokeDashArray
-	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
-	to.Transform = from.Transform
-}
-
-type NoteInfo_WOP struct {
-	// insertion point
-	Name string
-	IsKept bool
-}
-
-func (from *NoteInfo) CopyBasicFields(to *NoteInfo) {
-	// insertion point
-	to.Name = from.Name
-	to.IsKept = from.IsKept
-}
-
 type Parameter_WOP struct {
 	// insertion point
 	Name string
@@ -354,13 +306,14 @@ type Parameter_WOP struct {
 	NbPitchLines int
 	BeatLinesHeightRatio float64
 	NbBeatLines int
-	NbBeatLinesPerCurve int
+	NbOfBeatsInTheme int
 	FirstVoiceShiftX float64
 	FirstVoiceShiftY float64
 	PitchDifference int
-	Speed float64
+	BeatsPerSecond float64
 	Level float64
 	IsMinor bool
+	ThemeBinaryEncoding int
 	OriginX float64
 	OriginY float64
 	SpiralOriginX float64
@@ -397,13 +350,14 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.NbPitchLines = from.NbPitchLines
 	to.BeatLinesHeightRatio = from.BeatLinesHeightRatio
 	to.NbBeatLines = from.NbBeatLines
-	to.NbBeatLinesPerCurve = from.NbBeatLinesPerCurve
+	to.NbOfBeatsInTheme = from.NbOfBeatsInTheme
 	to.FirstVoiceShiftX = from.FirstVoiceShiftX
 	to.FirstVoiceShiftY = from.FirstVoiceShiftY
 	to.PitchDifference = from.PitchDifference
-	to.Speed = from.Speed
+	to.BeatsPerSecond = from.BeatsPerSecond
 	to.Level = from.Level
 	to.IsMinor = from.IsMinor
+	to.ThemeBinaryEncoding = from.ThemeBinaryEncoding
 	to.OriginX = from.OriginX
 	to.OriginY = from.OriginY
 	to.SpiralOriginX = from.SpiralOriginX

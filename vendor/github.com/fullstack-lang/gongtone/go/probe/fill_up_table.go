@@ -24,6 +24,8 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.Freqency](probe)
 	case *models.Note:
 		fillUpTable[models.Note](probe)
+	case *models.Player:
+		fillUpTable[models.Player](probe)
 	default:
 		log.Println("unknow type")
 	}

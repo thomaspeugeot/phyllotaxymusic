@@ -34,6 +34,8 @@ func (cellDeleteIconImpl *CellDeleteIconImpl[T]) CellIconUpdated(stage *gongtabl
 		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	case *models.Note:
 		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
+	case *models.Player:
+		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
 	default:
 		_ = instancesTyped
 	}

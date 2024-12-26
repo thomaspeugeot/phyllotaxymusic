@@ -36,11 +36,9 @@ import { SpiralBezierAPI } from './spiralbezier-api'
 import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
 import { FrontCurveStackAPI } from './frontcurvestack-api'
 import { KeyAPI } from './key-api'
-import { NoteInfoAPI } from './noteinfo-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 import { SpiralOriginAPI } from './spiralorigin-api'
-import { MovingLineAPI } from './movingline-api'
 
 @Injectable({
   providedIn: 'root'

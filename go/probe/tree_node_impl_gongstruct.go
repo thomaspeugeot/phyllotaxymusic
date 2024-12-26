@@ -85,12 +85,6 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "Key" {
 		fillUpTable[models.Key](nodeImplGongstruct.probe)
 	}
-	if nodeImplGongstruct.gongStruct.GetName() == "MovingLine" {
-		fillUpTable[models.MovingLine](nodeImplGongstruct.probe)
-	}
-	if nodeImplGongstruct.gongStruct.GetName() == "NoteInfo" {
-		fillUpTable[models.NoteInfo](nodeImplGongstruct.probe)
-	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Parameter" {
 		fillUpTable[models.Parameter](nodeImplGongstruct.probe)
 	}

@@ -68,23 +68,29 @@
             </ng-container>
             <ng-container *ngFor="let line of layer.Lines">
                 <line
-                    class="click-through"
-                    [attr.x1]="line.X1"
-                    [attr.y1]="line.Y1"
-                    [attr.x2]="line.X2"
-                    [attr.y2]="line.Y2"
-                    [attr.fill]="line.Color"
-                    [attr.fill-opacity]="line.FillOpacity"
-                    [attr.stroke]="line.Stroke"
-                    [attr.stroke-opacity]="line.StrokeOpacity"
-                    [attr.stroke-width]="line.StrokeWidth"
-                    [attr.stroke-dasharray]="line.StrokeDashArray"
-                    [attr.transform]="line.Transform" />
-                <animate *ngFor="let animate of line.Animates" 
+                class="click-through"
+                [attr.x1]="line.X1"
+                [attr.y1]="line.Y1"
+                [attr.x2]="line.X2"
+                [attr.y2]="line.Y2"
+                [attr.fill]="line.Color"
+                [attr.fill-opacity]="line.FillOpacity"
+                [attr.stroke]="line.Stroke"
+                [attr.stroke-opacity]="line.StrokeOpacity"
+                [attr.stroke-width]="line.StrokeWidth"
+                [attr.stroke-dasharray]="line.StrokeDashArray"
+                [attr.transform]="line.Transform">
+                
+                <!-- Use ng-container to repeat animate tags -->
+                <ng-container *ngFor="let animate of line.Animates">
+                  <animate 
                     [attr.attributeName]="animate.AttributeName" 
                     [attr.values]="animate.Values" 
                     [attr.dur]="animate.Dur" 
                     [attr.repeatCount]="animate.RepeatCount" />
+                </ng-container>
+              </line>
+              
             </ng-container>
             <ng-container *ngFor="let text of layer.Texts">
                 <text

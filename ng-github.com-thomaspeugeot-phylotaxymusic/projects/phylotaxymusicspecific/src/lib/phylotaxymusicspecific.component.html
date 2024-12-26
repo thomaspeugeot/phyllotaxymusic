@@ -3,14 +3,46 @@
         <lib-tree [GONG__StackPath]="StacksNames.SidebarTree" [name]="TreeNames.Sidebar"></lib-tree>
     </as-split-area>
     <as-split-area [size]="65">
-        <lib-gongsvg-diagramming [GONG__StackPath]="StacksNames.GongsvgStackName">
+      <!-- Parent container must be position: relative 
+           so its absolutely positioned children
+           can stack with z-index -->
+      <div style="position: relative; width: 100%; height: 100%;">
+        
+        <!-- Diagram behind (z-index: 1) -->
+        <lib-gongsvg-diagramming
+          [GONG__StackPath]="StacksNames.GongsvgStackName"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+          "
+        >
         </lib-gongsvg-diagramming>
+    
+        <!-- Moving line in front (z-index: 2) -->
+        <lib-substackcursorspecific
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+          "
+        >
+        </lib-substackcursorspecific>
+      </div>
     </as-split-area>
+    
     <as-split-area [size]="20">
       <as-split unit="pixel" direction="vertical">
         <as-split-area [size]="60">
           @if (frontRepo && frontRepo.array_Parameters[0]) {
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
+
               <mat-grid-tile colspan="3" rowspan="1">
                 <h4 style="margin-left: 8px; width: 100%;">Side Length</h4>
               </mat-grid-tile>
@@ -19,7 +51,7 @@
               </mat-grid-tile>
               <mat-grid-tile colspan="7" rowspan="1">
                 <mat-slider style="width: 100%;" 
-                min="1.0" max="600.0" step="1" showTickMarks discrete [displayWith]="formatLabel">
+                min="5.0" max="200.0" step="5" showTickMarks discrete [displayWith]="formatLabel">
                   <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].SideLength" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
@@ -211,25 +243,25 @@
               </mat-grid-tile>
 
               <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Nb Beats / Curve</h4>
+                <h4 style="margin-left: 8px; width: 100%;">Nb Beats in Theme</h4>
               </mat-grid-tile>
               <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbBeatLinesPerCurve}}</h4>
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].NbOfBeatsInTheme}}</h4>
               </mat-grid-tile>              
               <mat-grid-tile colspan="7" rowspan="1">
-                <mat-slider min="0" max="128" step="1" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbBeatLinesPerCurve" (input)="input($event)">
+                <mat-slider min="1" max="64" step="1" showTickMarks discrete [displayWith]="formatLabel">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].NbOfBeatsInTheme" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
               <mat-grid-tile colspan="3" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">Speed</h4>
+                <h4 style="margin-left: 8px; width: 100%;">BeatsPerSecond</h4>
               </mat-grid-tile>
               <mat-grid-tile colspan="2" rowspan="1">
-                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].Speed}}</h4>
+                <h4 style="margin-left: 8px; width: 100%;">{{frontRepo.array_Parameters[0].BeatsPerSecond}}</h4>
               </mat-grid-tile>              
               <mat-grid-tile colspan="7" rowspan="1">
                 <mat-slider min="0" max="20" step="0.05" showTickMarks discrete [displayWith]="formatLabel">
-                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].Speed" (input)="input($event)">
+                  <input matSliderThumb [(ngModel)]="frontRepo.array_Parameters[0].BeatsPerSecond" (input)="input($event)">
                 </mat-slider>
               </mat-grid-tile>
 
@@ -307,22 +339,27 @@
             </mat-grid-list>
           }
           @if (frontRepo && frontRepo.array_Parameters[0]) {
-            <section class="example-section">
-              <div *ngFor="let noteInfo of frontRepo.array_Parameters[0].NoteInfos; 
-              let i = index; ">
-  
-                  <mat-checkbox class="example-margin" 
-                  [(ngModel)]="noteInfo.IsKept" 
-                  (change)="onChange(i)">{{i}}</mat-checkbox>
-                
-                  <span *ngIf="getNoteInfoAtOffset(i) as offsetNoteInfo">
-                    <mat-checkbox class="example-margin"
-                    disabled="true"
-                    [(ngModel)]="offsetNoteInfo.IsKept" 
-                    (change)="onChange(i)">{{ offsetNoteInfo.Name }}</mat-checkbox>
-                  </span>
-              </div>
-            </section>
+            <!-- Display checkboxes for each note -->
+            <div *ngFor="let note of [].constructor(frontRepo.array_Parameters[0].NbOfBeatsInTheme); let i = index">
+              <label>
+                <input 
+                  type="checkbox" 
+                  [checked]="isNotePlayed(frontRepo.array_Parameters[0].ThemeBinaryEncoding, i)" 
+                  (change)="toggleNote(i)" 
+                />
+                {{ i + 1 }}
+              </label>
+              <label>
+                <input 
+                  type="checkbox" 
+                  [checked]="isNotePlayedWithOffset(frontRepo.array_Parameters[0].ThemeBinaryEncoding, i)" 
+                  disabled=true
+                />
+              </label>
+            </div>
+            <p>
+              Current Encoding: {{ frontRepo.array_Parameters[0].ThemeBinaryEncoding }}
+            </p>
           }
         </as-split-area>
 
@@ -335,10 +372,3 @@
 
     </as-split-area>
 </as-split>
-
-
-
-
-
-
-  

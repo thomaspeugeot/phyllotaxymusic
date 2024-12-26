@@ -18,11 +18,9 @@ import { SpiralBezierAPI } from './spiralbezier-api'
 import { SpiralBezierGridAPI } from './spiralbeziergrid-api'
 import { FrontCurveStackAPI } from './frontcurvestack-api'
 import { KeyAPI } from './key-api'
-import { NoteInfoAPI } from './noteinfo-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 import { SpiralOriginAPI } from './spiralorigin-api'
-import { MovingLineAPI } from './movingline-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -59,13 +57,14 @@ export class ParameterAPI {
 	NbPitchLines: number = 0
 	BeatLinesHeightRatio: number = 0
 	NbBeatLines: number = 0
-	NbBeatLinesPerCurve: number = 0
+	NbOfBeatsInTheme: number = 0
 	FirstVoiceShiftX: number = 0
 	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
-	Speed: number = 0
+	BeatsPerSecond: number = 0
 	Level: number = 0
 	IsMinor: boolean = false
+	ThemeBinaryEncoding: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 	SpiralOriginX: number = 0
@@ -195,13 +194,10 @@ export class ParameterPointersEncoding {
 
 	SecondVoiceNotesShiftedRightID: NullInt64 = new NullInt64 // if pointer is null, SecondVoiceNotesShiftedRight.ID = 0
 
-	NoteInfos: number[] = []
 	HorizontalAxisID: NullInt64 = new NullInt64 // if pointer is null, HorizontalAxis.ID = 0
 
 	VerticalAxisID: NullInt64 = new NullInt64 // if pointer is null, VerticalAxis.ID = 0
 
 	SpiralOriginID: NullInt64 = new NullInt64 // if pointer is null, SpiralOrigin.ID = 0
-
-	CursorID: NullInt64 = new NullInt64 // if pointer is null, Cursor.ID = 0
 
 }

@@ -2,6 +2,7 @@
     "name": "phylotaxymusic",
     "workspaces": [
         "ng-github.com-thomaspeugeot-phylotaxymusic",
+        "substackcursor/ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor",
         "vendor/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree",
         "vendor/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg",
         "vendor/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone",

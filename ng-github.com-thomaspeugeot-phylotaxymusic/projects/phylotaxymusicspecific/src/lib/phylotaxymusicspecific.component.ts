@@ -1,4 +1,4 @@
-import { Component, model, OnInit } from '@angular/core';
+import { Component, Input, model, OnInit } from '@angular/core';
 
 import * as phylotaxymusic from '../../../phylotaxymusic/src/public-api'
 
@@ -16,9 +16,11 @@ import { AngularSplitModule } from 'angular-split';
 import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
 import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
 import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtonespecific/src/lib/gongtone/gongtone.component'
-
+import { SubstackcursorspecificComponent } from '../../../../../substackcursor/ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor/projects/substackcursorspecific/src/public-api'
 
 import { CommonModule } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lib-phylotaxymusicspecific',
@@ -27,39 +29,23 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     MatSliderModule,
     MatRadioModule,
-
     MatCardModule,
     MatCheckboxModule,
-
     FormsModule,
     MatFormFieldModule,
-
     AngularSplitModule,
     MatGridListModule,
-
     GongsvgDiagrammingComponent,
     TreeComponent,
     GongtoneComponent,
-
+    SubstackcursorspecificComponent
   ],
   templateUrl: './phylotaxymusicspecific.component.html',
   styleUrls: ['./phylotaxymusicspecific.component.css'],
 })
 export class PhylotaxymusicspecificComponent implements OnInit {
-  onChange(i: number) {
 
-    let parameter = this.frontRepo!.array_Parameters[0]
-    let noteInfo = parameter.NoteInfos[i]
-
-    this.noteInfoService.updateFront(noteInfo, this.StacksNames.Phylotaxy).subscribe(
-      () => {
-
-        // in order to provoke backend rework
-        let event2: Event = new Event('input');
-        this.input(event2)
-      }
-    )
-  }
+  private socket: WebSocket | undefined
 
   readonly checked = model(false);
   readonly indeterminate = model(false);
@@ -93,7 +79,6 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     private frontRepoService: phylotaxymusic.FrontRepoService,
 
     private parameterService: phylotaxymusic.ParameterService,
-    private noteInfoService: phylotaxymusic.NoteInfoService,
   ) {
 
   }
@@ -117,12 +102,41 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     return `${value}`;
   }
 
-  getNoteInfoAtOffset(i: number): phylotaxymusic.NoteInfo | undefined {
-    const noteInfos = this.frontRepo!.array_Parameters[0].NoteInfos;
-    const bruteOffsetIndex = i - this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift + noteInfos.length
-    const offsetIndex = bruteOffsetIndex %
-      noteInfos.length;
-    // console.log(i, this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift, bruteOffsetIndex, offsetIndex)
-    return noteInfos[offsetIndex];
+  // Check if a specific note is played
+  isNotePlayed(encoding: number, rank: number): boolean {
+    return (encoding & (1 << rank)) !== 0;
+  }
+
+  // Check if a specific note is played
+  isNotePlayedWithOffset(encoding: number, rank: number): boolean {
+    const nbBeatsInTheme = this.frontRepo!.array_Parameters[0].NbOfBeatsInTheme
+    const bruteOffsetIndex = rank - this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift + nbBeatsInTheme
+
+    const offsetIndex = bruteOffsetIndex % nbBeatsInTheme
+    return (encoding & (1 << offsetIndex)) !== 0;
+  }
+
+
+
+  // Toggle the state of a specific note
+  toggleNote(rank: number): void {
+    const parameter = this.frontRepo!.array_Parameters[0];
+    if (this.isNotePlayed(parameter.ThemeBinaryEncoding, rank)) {
+      // Turn off the note
+      parameter.ThemeBinaryEncoding &= ~(1 << rank);
+      this.parameterService.updateFront(parameter, this.StacksNames.Phylotaxy).subscribe(
+        () => {
+
+        }
+      )
+    } else {
+      // Turn on the note
+      parameter.ThemeBinaryEncoding |= (1 << rank);
+      this.parameterService.updateFront(parameter, this.StacksNames.Phylotaxy).subscribe(
+        () => {
+
+        }
+      )
+    }
   }
 }

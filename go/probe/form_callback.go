@@ -1265,232 +1265,6 @@ func (keyFormCallback *KeyFormCallback) OnSave() {
 
 	fillUpTree(keyFormCallback.probe)
 }
-func __gong__New__MovingLineFormCallback(
-	movingline *models.MovingLine,
-	probe *Probe,
-	formGroup *table.FormGroup,
-) (movinglineFormCallback *MovingLineFormCallback) {
-	movinglineFormCallback = new(MovingLineFormCallback)
-	movinglineFormCallback.probe = probe
-	movinglineFormCallback.movingline = movingline
-	movinglineFormCallback.formGroup = formGroup
-
-	movinglineFormCallback.CreationMode = (movingline == nil)
-
-	return
-}
-
-type MovingLineFormCallback struct {
-	movingline *models.MovingLine
-
-	// If the form call is called on the creation of a new instnace
-	CreationMode bool
-
-	probe *Probe
-
-	formGroup *table.FormGroup
-}
-
-func (movinglineFormCallback *MovingLineFormCallback) OnSave() {
-
-	log.Println("MovingLineFormCallback, OnSave")
-
-	// checkout formStage to have the form group on the stage synchronized with the
-	// back repo (and front repo)
-	movinglineFormCallback.probe.formStage.Checkout()
-
-	if movinglineFormCallback.movingline == nil {
-		movinglineFormCallback.movingline = new(models.MovingLine).Stage(movinglineFormCallback.probe.stageOfInterest)
-	}
-	movingline_ := movinglineFormCallback.movingline
-	_ = movingline_
-
-	for _, formDiv := range movinglineFormCallback.formGroup.FormDivs {
-		switch formDiv.Name {
-		// insertion point per field
-		case "Name":
-			FormDivBasicFieldToField(&(movingline_.Name), formDiv)
-		case "IsDisplayed":
-			FormDivBasicFieldToField(&(movingline_.IsDisplayed), formDiv)
-		case "ShapeCategory":
-			FormDivSelectFieldToField(&(movingline_.ShapeCategory), movinglineFormCallback.probe.stageOfInterest, formDiv)
-		case "AngleDegree":
-			FormDivBasicFieldToField(&(movingline_.AngleDegree), formDiv)
-		case "Length":
-			FormDivBasicFieldToField(&(movingline_.Length), formDiv)
-		case "CenterX":
-			FormDivBasicFieldToField(&(movingline_.CenterX), formDiv)
-		case "CenterY":
-			FormDivBasicFieldToField(&(movingline_.CenterY), formDiv)
-		case "Color":
-			FormDivBasicFieldToField(&(movingline_.Color), formDiv)
-		case "FillOpacity":
-			FormDivBasicFieldToField(&(movingline_.FillOpacity), formDiv)
-		case "Stroke":
-			FormDivBasicFieldToField(&(movingline_.Stroke), formDiv)
-		case "StrokeOpacity":
-			FormDivBasicFieldToField(&(movingline_.StrokeOpacity), formDiv)
-		case "StrokeWidth":
-			FormDivBasicFieldToField(&(movingline_.StrokeWidth), formDiv)
-		case "StrokeDashArray":
-			FormDivBasicFieldToField(&(movingline_.StrokeDashArray), formDiv)
-		case "StrokeDashArrayWhenSelected":
-			FormDivBasicFieldToField(&(movingline_.StrokeDashArrayWhenSelected), formDiv)
-		case "Transform":
-			FormDivBasicFieldToField(&(movingline_.Transform), formDiv)
-		}
-	}
-
-	// manage the suppress operation
-	if movinglineFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		movingline_.Unstage(movinglineFormCallback.probe.stageOfInterest)
-	}
-
-	movinglineFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.MovingLine](
-		movinglineFormCallback.probe,
-	)
-	movinglineFormCallback.probe.tableStage.Commit()
-
-	// display a new form by reset the form stage
-	if movinglineFormCallback.CreationMode || movinglineFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		movinglineFormCallback.probe.formStage.Reset()
-		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
-		}).Stage(movinglineFormCallback.probe.formStage)
-		newFormGroup.OnSave = __gong__New__MovingLineFormCallback(
-			nil,
-			movinglineFormCallback.probe,
-			newFormGroup,
-		)
-		movingline := new(models.MovingLine)
-		FillUpForm(movingline, newFormGroup, movinglineFormCallback.probe)
-		movinglineFormCallback.probe.formStage.Commit()
-	}
-
-	fillUpTree(movinglineFormCallback.probe)
-}
-func __gong__New__NoteInfoFormCallback(
-	noteinfo *models.NoteInfo,
-	probe *Probe,
-	formGroup *table.FormGroup,
-) (noteinfoFormCallback *NoteInfoFormCallback) {
-	noteinfoFormCallback = new(NoteInfoFormCallback)
-	noteinfoFormCallback.probe = probe
-	noteinfoFormCallback.noteinfo = noteinfo
-	noteinfoFormCallback.formGroup = formGroup
-
-	noteinfoFormCallback.CreationMode = (noteinfo == nil)
-
-	return
-}
-
-type NoteInfoFormCallback struct {
-	noteinfo *models.NoteInfo
-
-	// If the form call is called on the creation of a new instnace
-	CreationMode bool
-
-	probe *Probe
-
-	formGroup *table.FormGroup
-}
-
-func (noteinfoFormCallback *NoteInfoFormCallback) OnSave() {
-
-	log.Println("NoteInfoFormCallback, OnSave")
-
-	// checkout formStage to have the form group on the stage synchronized with the
-	// back repo (and front repo)
-	noteinfoFormCallback.probe.formStage.Checkout()
-
-	if noteinfoFormCallback.noteinfo == nil {
-		noteinfoFormCallback.noteinfo = new(models.NoteInfo).Stage(noteinfoFormCallback.probe.stageOfInterest)
-	}
-	noteinfo_ := noteinfoFormCallback.noteinfo
-	_ = noteinfo_
-
-	for _, formDiv := range noteinfoFormCallback.formGroup.FormDivs {
-		switch formDiv.Name {
-		// insertion point per field
-		case "Name":
-			FormDivBasicFieldToField(&(noteinfo_.Name), formDiv)
-		case "IsKept":
-			FormDivBasicFieldToField(&(noteinfo_.IsKept), formDiv)
-		case "Parameter:NoteInfos":
-			// we need to retrieve the field owner before the change
-			var pastParameterOwner *models.Parameter
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "Parameter"
-			rf.Fieldname = "NoteInfos"
-			reverseFieldOwner := orm.GetReverseFieldOwner(
-				noteinfoFormCallback.probe.stageOfInterest,
-				noteinfoFormCallback.probe.backRepoOfInterest,
-				noteinfo_,
-				&rf)
-
-			if reverseFieldOwner != nil {
-				pastParameterOwner = reverseFieldOwner.(*models.Parameter)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastParameterOwner != nil {
-					idx := slices.Index(pastParameterOwner.NoteInfos, noteinfo_)
-					pastParameterOwner.NoteInfos = slices.Delete(pastParameterOwner.NoteInfos, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _parameter := range *models.GetGongstructInstancesSet[models.Parameter](noteinfoFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _parameter.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newParameterOwner := _parameter // we have a match
-						if pastParameterOwner != nil {
-							if newParameterOwner != pastParameterOwner {
-								idx := slices.Index(pastParameterOwner.NoteInfos, noteinfo_)
-								pastParameterOwner.NoteInfos = slices.Delete(pastParameterOwner.NoteInfos, idx, idx+1)
-								newParameterOwner.NoteInfos = append(newParameterOwner.NoteInfos, noteinfo_)
-							}
-						} else {
-							newParameterOwner.NoteInfos = append(newParameterOwner.NoteInfos, noteinfo_)
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// manage the suppress operation
-	if noteinfoFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		noteinfo_.Unstage(noteinfoFormCallback.probe.stageOfInterest)
-	}
-
-	noteinfoFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.NoteInfo](
-		noteinfoFormCallback.probe,
-	)
-	noteinfoFormCallback.probe.tableStage.Commit()
-
-	// display a new form by reset the form stage
-	if noteinfoFormCallback.CreationMode || noteinfoFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		noteinfoFormCallback.probe.formStage.Reset()
-		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
-		}).Stage(noteinfoFormCallback.probe.formStage)
-		newFormGroup.OnSave = __gong__New__NoteInfoFormCallback(
-			nil,
-			noteinfoFormCallback.probe,
-			newFormGroup,
-		)
-		noteinfo := new(models.NoteInfo)
-		FillUpForm(noteinfo, newFormGroup, noteinfoFormCallback.probe)
-		noteinfoFormCallback.probe.formStage.Commit()
-	}
-
-	fillUpTree(noteinfoFormCallback.probe)
-}
 func __gong__New__ParameterFormCallback(
 	parameter *models.Parameter,
 	probe *Probe,
@@ -1676,8 +1450,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.BeatLinesHeightRatio), formDiv)
 		case "NbBeatLines":
 			FormDivBasicFieldToField(&(parameter_.NbBeatLines), formDiv)
-		case "NbBeatLinesPerCurve":
-			FormDivBasicFieldToField(&(parameter_.NbBeatLinesPerCurve), formDiv)
+		case "NbOfBeatsInTheme":
+			FormDivBasicFieldToField(&(parameter_.NbOfBeatsInTheme), formDiv)
 		case "FirstVoice":
 			FormDivSelectFieldToField(&(parameter_.FirstVoice), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FirstVoiceShiftRigth":
@@ -1692,8 +1466,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SecondVoiceShiftedRight), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "PitchDifference":
 			FormDivBasicFieldToField(&(parameter_.PitchDifference), formDiv)
-		case "Speed":
-			FormDivBasicFieldToField(&(parameter_.Speed), formDiv)
+		case "BeatsPerSecond":
+			FormDivBasicFieldToField(&(parameter_.BeatsPerSecond), formDiv)
 		case "Level":
 			FormDivBasicFieldToField(&(parameter_.Level), formDiv)
 		case "FirstVoiceNotes":
@@ -1706,6 +1480,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(parameter_.SecondVoiceNotesShiftedRight), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "IsMinor":
 			FormDivBasicFieldToField(&(parameter_.IsMinor), formDiv)
+		case "ThemeBinaryEncoding":
+			FormDivBasicFieldToField(&(parameter_.ThemeBinaryEncoding), formDiv)
 		case "OriginX":
 			FormDivBasicFieldToField(&(parameter_.OriginX), formDiv)
 		case "OriginY":
@@ -1730,8 +1506,6 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.ShowInterpolationPoints), formDiv)
 		case "ActualBeatsTemporalShift":
 			FormDivBasicFieldToField(&(parameter_.ActualBeatsTemporalShift), formDiv)
-		case "Cursor":
-			FormDivSelectFieldToField(&(parameter_.Cursor), parameterFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 

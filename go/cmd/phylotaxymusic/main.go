@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
-
 	phylotaxymusic_stack "github.com/thomaspeugeot/phylotaxymusic/go/stack"
 	phylotaxymusic_static "github.com/thomaspeugeot/phylotaxymusic/go/static"
 
@@ -17,6 +16,9 @@ import (
 	gongtone_stack "github.com/fullstack-lang/gongtone/go/stack"
 
 	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
+
+	substackcursor_models "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
+	substackcursor_stack "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/stack"
 )
 
 var (
@@ -51,6 +53,7 @@ func main() {
 	gongsvg_stack := gongsvg_stack.NewStack(r, phylotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
 	gongtree_stack := gongtree_stack.NewStack(r, phylotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
 	gongtone_stack := gongtone_stack.NewStack(r, phylotaxymusic_models.GongtoneStackName.ToString(), "", "", "", true, true)
+	cursorStack := substackcursor_stack.NewStack(r, substackcursor_models.Substackcursor.ToString(), "", "", "", false, false)
 
 	// get the only diagram
 	parameters := phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.Parameter](phylotaxymusicStack.Stage)
@@ -83,19 +86,36 @@ func main() {
 	parameterImpl.gongtoneStage = gongtone_stack.Stage
 	parameterImpl.phylotaxymusicStage = phylotaxymusicStack.Stage
 	parameterImpl.tree = tree
+	parameterImpl.substackcursorStage = cursorStack.Stage
 
 	parameter.Impl = parameterImpl
-
 	phylotaxymusic_models.GeneratorSingloton.Impl = parameterImpl
-	parameterImpl.Generate()
 
+	cursor := new(substackcursor_models.Cursor).Stage(cursorStack.Stage)
+	_ = cursor
+	cursorStack.Stage.Commit()
+
+	// connect parameter to cursor for start playing notification
+	notifyCh := make(chan bool)
+	cursor.SetNotifyChannel(notifyCh)
+	parameter.SetNotifyChannel(notifyCh)
+	parameter.SetCursor(cursor)
+
+	// wait loop in cursor. Will commit once it receive a notification.
+	cursor.WaitForPlayNotifications(cursorStack.Stage)
+
+	// generate other stacks
+	parameterImpl.Generate()
 	tree.Generate(parameter)
 
-	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
+	cursorStack.Stage.Commit()
+
+	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
+
 }
 
 type ParameterImpl struct {
@@ -104,6 +124,7 @@ type ParameterImpl struct {
 	phylotaxymusicStage *phylotaxymusic_models.StageStruct
 	parameter           *phylotaxymusic_models.Parameter
 	tree                *phylotaxymusic_models.Tree
+	substackcursorStage *substackcursor_models.StageStruct
 }
 
 // Generate implements models.GeneratorInterface.
@@ -112,9 +133,10 @@ func (parameterImpl *ParameterImpl) Generate() {
 
 	p.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	p.GenerateSvg(parameterImpl.gongsvgStage)
-	p.GenerateNotes(parameterImpl.gongtoneStage)
+	p.GenerateNotes(parameterImpl.gongtoneStage, parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
 	parameterImpl.tree.Generate(p)
 	parameterImpl.phylotaxymusicStage.Commit()
+	parameterImpl.substackcursorStage.Commit()
 }
 
 func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {
@@ -125,6 +147,6 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_m
 	updatedParameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
 	updatedParameter.GenerateSvg(parameterImpl.gongsvgStage)
 	parameterImpl.tree.Generate(updatedParameter)
-	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage)
-
+	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage, parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
+	parameterImpl.substackcursorStage.Commit()
 }

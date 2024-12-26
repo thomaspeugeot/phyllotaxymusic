@@ -23,11 +23,9 @@ import { SpiralBezier } from './spiralbezier'
 import { SpiralBezierGrid } from './spiralbeziergrid'
 import { FrontCurveStack } from './frontcurvestack'
 import { Key } from './key'
-import { NoteInfo } from './noteinfo'
 import { HorizontalAxis } from './horizontalaxis'
 import { VerticalAxis } from './verticalaxis'
 import { SpiralOrigin } from './spiralorigin'
-import { MovingLine } from './movingline'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -64,13 +62,14 @@ export class Parameter {
 	NbPitchLines: number = 0
 	BeatLinesHeightRatio: number = 0
 	NbBeatLines: number = 0
-	NbBeatLinesPerCurve: number = 0
+	NbOfBeatsInTheme: number = 0
 	FirstVoiceShiftX: number = 0
 	FirstVoiceShiftY: number = 0
 	PitchDifference: number = 0
-	Speed: number = 0
+	BeatsPerSecond: number = 0
 	Level: number = 0
 	IsMinor: boolean = false
+	ThemeBinaryEncoding: number = 0
 	OriginX: number = 0
 	OriginY: number = 0
 	SpiralOriginX: number = 0
@@ -194,14 +193,11 @@ export class Parameter {
 
 	SecondVoiceNotesShiftedRight?: CircleGrid
 
-	NoteInfos: Array<NoteInfo> = []
 	HorizontalAxis?: HorizontalAxis
 
 	VerticalAxis?: VerticalAxis
 
 	SpiralOrigin?: SpiralOrigin
-
-	Cursor?: MovingLine
 
 }
 
@@ -235,13 +231,14 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.NbPitchLines = parameter.NbPitchLines
 	parameterAPI.BeatLinesHeightRatio = parameter.BeatLinesHeightRatio
 	parameterAPI.NbBeatLines = parameter.NbBeatLines
-	parameterAPI.NbBeatLinesPerCurve = parameter.NbBeatLinesPerCurve
+	parameterAPI.NbOfBeatsInTheme = parameter.NbOfBeatsInTheme
 	parameterAPI.FirstVoiceShiftX = parameter.FirstVoiceShiftX
 	parameterAPI.FirstVoiceShiftY = parameter.FirstVoiceShiftY
 	parameterAPI.PitchDifference = parameter.PitchDifference
-	parameterAPI.Speed = parameter.Speed
+	parameterAPI.BeatsPerSecond = parameter.BeatsPerSecond
 	parameterAPI.Level = parameter.Level
 	parameterAPI.IsMinor = parameter.IsMinor
+	parameterAPI.ThemeBinaryEncoding = parameter.ThemeBinaryEncoding
 	parameterAPI.OriginX = parameter.OriginX
 	parameterAPI.OriginY = parameter.OriginY
 	parameterAPI.SpiralOriginX = parameter.SpiralOriginX
@@ -666,20 +663,8 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.CursorID.Valid = true
-	if (parameter.Cursor != undefined) {
-		parameterAPI.ParameterPointersEncoding.CursorID.Int64 = parameter.Cursor.ID  
-	} else {
-		parameterAPI.ParameterPointersEncoding.CursorID.Int64 = 0 		
-	}
-
 
 	// insertion point for slice of pointers fields encoding
-	parameterAPI.ParameterPointersEncoding.NoteInfos = []
-	for (let _noteinfo of parameter.NoteInfos) {
-		parameterAPI.ParameterPointersEncoding.NoteInfos.push(_noteinfo.ID)
-	}
-
 }
 
 // CopyParameterAPIToParameter update basic, pointers and slice of pointers fields of parameter
@@ -716,13 +701,14 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.NbPitchLines = parameterAPI.NbPitchLines
 	parameter.BeatLinesHeightRatio = parameterAPI.BeatLinesHeightRatio
 	parameter.NbBeatLines = parameterAPI.NbBeatLines
-	parameter.NbBeatLinesPerCurve = parameterAPI.NbBeatLinesPerCurve
+	parameter.NbOfBeatsInTheme = parameterAPI.NbOfBeatsInTheme
 	parameter.FirstVoiceShiftX = parameterAPI.FirstVoiceShiftX
 	parameter.FirstVoiceShiftY = parameterAPI.FirstVoiceShiftY
 	parameter.PitchDifference = parameterAPI.PitchDifference
-	parameter.Speed = parameterAPI.Speed
+	parameter.BeatsPerSecond = parameterAPI.BeatsPerSecond
 	parameter.Level = parameterAPI.Level
 	parameter.IsMinor = parameterAPI.IsMinor
+	parameter.ThemeBinaryEncoding = parameterAPI.ThemeBinaryEncoding
 	parameter.OriginX = parameterAPI.OriginX
 	parameter.OriginY = parameterAPI.OriginY
 	parameter.SpiralOriginX = parameterAPI.SpiralOriginX
@@ -793,19 +779,6 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.HorizontalAxis = frontRepo.map_ID_HorizontalAxis.get(parameterAPI.ParameterPointersEncoding.HorizontalAxisID.Int64)
 	parameter.VerticalAxis = frontRepo.map_ID_VerticalAxis.get(parameterAPI.ParameterPointersEncoding.VerticalAxisID.Int64)
 	parameter.SpiralOrigin = frontRepo.map_ID_SpiralOrigin.get(parameterAPI.ParameterPointersEncoding.SpiralOriginID.Int64)
-	parameter.Cursor = frontRepo.map_ID_MovingLine.get(parameterAPI.ParameterPointersEncoding.CursorID.Int64)
 
 	// insertion point for slice of pointers fields encoding
-	if (!Array.isArray(parameterAPI.ParameterPointersEncoding.NoteInfos)) {
-		console.error('Rects is not an array:', parameterAPI.ParameterPointersEncoding.NoteInfos);
-		return;
-	}
-
-	parameter.NoteInfos = new Array<NoteInfo>()
-	for (let _id of parameterAPI.ParameterPointersEncoding.NoteInfos) {
-		let _noteinfo = frontRepo.map_ID_NoteInfo.get(_id)
-		if (_noteinfo != undefined) {
-			parameter.NoteInfos.push(_noteinfo!)
-		}
-	}
 }

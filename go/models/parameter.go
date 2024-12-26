@@ -2,6 +2,8 @@ package models
 
 import (
 	"log"
+
+	substackcursor_models "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
 )
 
 type Parameter struct {
@@ -127,7 +129,7 @@ type Parameter struct {
 	BeatLines            *AxisGrid
 	BeatLinesHeightRatio float64
 	NbBeatLines          int
-	NbBeatLinesPerCurve  int
+	NbOfBeatsInTheme     int
 
 	// Composing
 	FirstVoice           *BezierGrid
@@ -138,7 +140,7 @@ type Parameter struct {
 	SecondVoice             *BezierGrid
 	SecondVoiceShiftedRight *BezierGrid
 	PitchDifference         int
-	Speed                   float64
+	BeatsPerSecond          float64
 	Level                   float64
 
 	// interpolating notes
@@ -152,10 +154,15 @@ type Parameter struct {
 	//
 	IsMinor bool
 
+	// ThemeBinaryEncoding is the encoding of the theme
+	// on a 64 bits integer.
 	//
-	// Information per note
-	//
-	NoteInfos []*NoteInfo
+	// 0 means no notes is played
+	// 1 means the first note is played
+	// 2 means the second note is played
+	// 3 means the first and second note are played
+	// etc....
+	ThemeBinaryEncoding int
 
 	// for drawing purpose
 	OriginX        float64
@@ -176,17 +183,51 @@ type Parameter struct {
 	// number of "minimal" notes to the shift
 	ActualBeatsTemporalShift int
 
-	// cursor vertical line
-	Cursor *MovingLine
+	notifyCh chan bool
+
+	cursor *substackcursor_models.Cursor
+}
+
+func (parameter *Parameter) SetNotifyChannel(notifyCh chan bool) {
+	parameter.notifyCh = notifyCh
+}
+
+func (parameter *Parameter) SetCursor(cursor *substackcursor_models.Cursor) {
+	parameter.cursor = cursor
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
 
 	log.Println("Diagram, OnAfterUpdate", parameter.Name)
+	backRepoParameter.cursor = parameter.cursor // small cooking stuff
+	backRepoParameter.notifyCh = parameter.notifyCh
 	parameter.Impl.OnUpdated(backRepoParameter)
 
 }
 
 type ParameterImplInterface interface {
 	OnUpdated(updatedDiagram *Parameter)
+}
+
+// IsNotePlayed checks whether the note at the specified rank is played.
+//
+// The notes are represented using a 64-bit integer where each bit corresponds
+// to a specific note. For example:
+// - If ThemeBinaryEncoding = 5 (binary: 101), the 0th and 2nd notes are played.
+//
+// Parameters:
+// - rank (int): The rank of the note to check (0-based index, must be between 0 and 63).
+//
+// Returns:
+// - bool: `true` if the note at the specified rank is played, `false` otherwise.
+//
+// Notes:
+// - If the rank is outside the valid range (0 to 63), the method returns `false`.
+func (parameter *Parameter) IsNotePlayed(rank int) bool {
+	if rank < 0 || rank > 63 {
+		// Rank must be between 0 and 63 for a 64-bit integer
+		return false
+	}
+	// Check if the rank-th note is played
+	return parameter.ThemeBinaryEncoding&(1<<rank) != 0
 }

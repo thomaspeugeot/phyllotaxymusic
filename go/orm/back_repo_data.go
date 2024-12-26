@@ -26,10 +26,6 @@ type BackRepoData struct {
 
 	KeyAPIs []*KeyAPI
 
-	MovingLineAPIs []*MovingLineAPI
-
-	NoteInfoAPIs []*NoteInfoAPI
-
 	ParameterAPIs []*ParameterAPI
 
 	RhombusAPIs []*RhombusAPI
@@ -174,26 +170,6 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		keyDB.CopyBasicFieldsToKey_WOP(&keyAPI.Key_WOP)
 
 		backRepoData.KeyAPIs = append(backRepoData.KeyAPIs, &keyAPI)
-	}
-
-	for _, movinglineDB := range backRepo.BackRepoMovingLine.Map_MovingLineDBID_MovingLineDB {
-
-		var movinglineAPI MovingLineAPI
-		movinglineAPI.ID = movinglineDB.ID
-		movinglineAPI.MovingLinePointersEncoding = movinglineDB.MovingLinePointersEncoding
-		movinglineDB.CopyBasicFieldsToMovingLine_WOP(&movinglineAPI.MovingLine_WOP)
-
-		backRepoData.MovingLineAPIs = append(backRepoData.MovingLineAPIs, &movinglineAPI)
-	}
-
-	for _, noteinfoDB := range backRepo.BackRepoNoteInfo.Map_NoteInfoDBID_NoteInfoDB {
-
-		var noteinfoAPI NoteInfoAPI
-		noteinfoAPI.ID = noteinfoDB.ID
-		noteinfoAPI.NoteInfoPointersEncoding = noteinfoDB.NoteInfoPointersEncoding
-		noteinfoDB.CopyBasicFieldsToNoteInfo_WOP(&noteinfoAPI.NoteInfo_WOP)
-
-		backRepoData.NoteInfoAPIs = append(backRepoData.NoteInfoAPIs, &noteinfoAPI)
 	}
 
 	for _, parameterDB := range backRepo.BackRepoParameter.Map_ParameterDBID_ParameterDB {

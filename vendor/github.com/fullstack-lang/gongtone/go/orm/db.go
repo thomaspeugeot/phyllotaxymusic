@@ -27,6 +27,10 @@ type DBLite struct {
 	noteDBs map[uint]*NoteDB
 
 	nextIDNoteDB uint
+
+	playerDBs map[uint]*PlayerDB
+
+	nextIDPlayerDB uint
 }
 
 // NewDBLite creates a new instance of DBLite
@@ -37,6 +41,8 @@ func NewDBLite() *DBLite {
 		freqencyDBs: make(map[uint]*FreqencyDB),
 
 		noteDBs: make(map[uint]*NoteDB),
+
+		playerDBs: make(map[uint]*PlayerDB),
 	}
 }
 
@@ -59,6 +65,10 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		db.nextIDNoteDB++
 		v.ID = db.nextIDNoteDB
 		db.noteDBs[v.ID] = v
+	case *PlayerDB:
+		db.nextIDPlayerDB++
+		v.ID = db.nextIDPlayerDB
+		db.playerDBs[v.ID] = v
 	default:
 		return nil, errors.New("github.com/fullstack-lang/gongtone/go, unsupported type in Create")
 	}
@@ -91,6 +101,8 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 		delete(db.freqencyDBs, v.ID)
 	case *NoteDB:
 		delete(db.noteDBs, v.ID)
+	case *PlayerDB:
+		delete(db.playerDBs, v.ID)
 	default:
 		return nil, errors.New("github.com/fullstack-lang/gongtone/go, unsupported type in Delete")
 	}
@@ -114,6 +126,9 @@ func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 		return db, nil
 	case *NoteDB:
 		db.noteDBs[v.ID] = v
+		return db, nil
+	case *PlayerDB:
+		db.playerDBs[v.ID] = v
 		return db, nil
 	default:
 		return nil, errors.New("github.com/fullstack-lang/gongtone/go, Save: unsupported type")
@@ -143,6 +158,12 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 		} else {
 			return nil, errors.New("db Note github.com/fullstack-lang/gongtone/go, record not found")
 		}
+	case *PlayerDB:
+		if existing, ok := db.playerDBs[v.ID]; ok {
+			*existing = *v
+		} else {
+			return nil, errors.New("db Player github.com/fullstack-lang/gongtone/go, record not found")
+		}
 	default:
 		return nil, errors.New("github.com/fullstack-lang/gongtone/go, unsupported type in Updates")
 	}
@@ -166,6 +187,12 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 	case *[]NoteDB:
 		*ptr = make([]NoteDB, 0, len(db.noteDBs))
 		for _, v := range db.noteDBs {
+			*ptr = append(*ptr, *v)
+		}
+		return db, nil
+	case *[]PlayerDB:
+		*ptr = make([]PlayerDB, 0, len(db.playerDBs))
+		for _, v := range db.playerDBs {
 			*ptr = append(*ptr, *v)
 		}
 		return db, nil
@@ -221,6 +248,16 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		noteDB, _ := instanceDB.(*NoteDB)
 		*noteDB = *tmp
+		
+	case *PlayerDB:
+		tmp, ok := db.playerDBs[uint(i)]
+
+		if !ok {
+			return nil, errors.New(fmt.Sprintf("db.First Player Unkown entry %d", i))
+		}
+
+		playerDB, _ := instanceDB.(*PlayerDB)
+		*playerDB = *tmp
 		
 	default:
 		return nil, errors.New("github.com/fullstack-lang/gongtone/go, Unkown type")

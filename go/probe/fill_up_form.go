@@ -366,67 +366,6 @@ func FillUpForm[T models.Gongstruct](
 		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
 			true, true, 600, true, 400)
 
-	case *models.MovingLine:
-		// insertion point
-		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("IsDisplayed", instanceWithInferedType.IsDisplayed, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
-		BasicFieldtoForm("AngleDegree", instanceWithInferedType.AngleDegree, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("Length", instanceWithInferedType.Length, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("CenterX", instanceWithInferedType.CenterX, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("CenterY", instanceWithInferedType.CenterY, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("Color", instanceWithInferedType.Color, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("FillOpacity", instanceWithInferedType.FillOpacity, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("Stroke", instanceWithInferedType.Stroke, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("StrokeOpacity", instanceWithInferedType.StrokeOpacity, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("StrokeWidth", instanceWithInferedType.StrokeWidth, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("StrokeDashArray", instanceWithInferedType.StrokeDashArray, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("StrokeDashArrayWhenSelected", instanceWithInferedType.StrokeDashArrayWhenSelected, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
-			true, true, 600, true, 400)
-
-	case *models.NoteInfo:
-		// insertion point
-		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		BasicFieldtoForm("IsKept", instanceWithInferedType.IsKept, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
-		{
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "Parameter"
-			rf.Fieldname = "NoteInfos"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
-			if reverseFieldOwner != nil {
-				AssociationReverseFieldToForm(
-					reverseFieldOwner.(*models.Parameter),
-					"NoteInfos",
-					instanceWithInferedType,
-					formGroup,
-					probe)
-			} else {
-				AssociationReverseFieldToForm[*models.Parameter, *models.NoteInfo](
-					nil,
-					"NoteInfos",
-					instanceWithInferedType,
-					formGroup,
-					probe)
-			}
-		}
-
 	case *models.Parameter:
 		// insertion point
 		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
@@ -523,7 +462,7 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("NbBeatLines", instanceWithInferedType.NbBeatLines, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("NbBeatLinesPerCurve", instanceWithInferedType.NbBeatLinesPerCurve, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("NbOfBeatsInTheme", instanceWithInferedType.NbOfBeatsInTheme, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationFieldToForm("FirstVoice", instanceWithInferedType.FirstVoice, formGroup, probe)
 		AssociationFieldToForm("FirstVoiceShiftRigth", instanceWithInferedType.FirstVoiceShiftRigth, formGroup, probe)
@@ -535,7 +474,7 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("SecondVoiceShiftedRight", instanceWithInferedType.SecondVoiceShiftedRight, formGroup, probe)
 		BasicFieldtoForm("PitchDifference", instanceWithInferedType.PitchDifference, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("Speed", instanceWithInferedType.Speed, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("BeatsPerSecond", instanceWithInferedType.BeatsPerSecond, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Level", instanceWithInferedType.Level, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -545,7 +484,8 @@ func FillUpForm[T models.Gongstruct](
 		AssociationFieldToForm("SecondVoiceNotesShiftedRight", instanceWithInferedType.SecondVoiceNotesShiftedRight, formGroup, probe)
 		BasicFieldtoForm("IsMinor", instanceWithInferedType.IsMinor, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		AssociationSliceToForm("NoteInfos", instanceWithInferedType, &instanceWithInferedType.NoteInfos, formGroup, probe)
+		BasicFieldtoForm("ThemeBinaryEncoding", instanceWithInferedType.ThemeBinaryEncoding, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginX", instanceWithInferedType.OriginX, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OriginY", instanceWithInferedType.OriginY, instanceWithInferedType, probe.formStage, formGroup,
@@ -567,7 +507,6 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("ActualBeatsTemporalShift", instanceWithInferedType.ActualBeatsTemporalShift, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		AssociationFieldToForm("Cursor", instanceWithInferedType.Cursor, formGroup, probe)
 
 	case *models.Rhombus:
 		// insertion point

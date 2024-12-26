@@ -222,3 +222,82 @@ func (noteFormCallback *NoteFormCallback) OnSave() {
 
 	fillUpTree(noteFormCallback.probe)
 }
+func __gong__New__PlayerFormCallback(
+	player *models.Player,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (playerFormCallback *PlayerFormCallback) {
+	playerFormCallback = new(PlayerFormCallback)
+	playerFormCallback.probe = probe
+	playerFormCallback.player = player
+	playerFormCallback.formGroup = formGroup
+
+	playerFormCallback.CreationMode = (player == nil)
+
+	return
+}
+
+type PlayerFormCallback struct {
+	player *models.Player
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (playerFormCallback *PlayerFormCallback) OnSave() {
+
+	log.Println("PlayerFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	playerFormCallback.probe.formStage.Checkout()
+
+	if playerFormCallback.player == nil {
+		playerFormCallback.player = new(models.Player).Stage(playerFormCallback.probe.stageOfInterest)
+	}
+	player_ := playerFormCallback.player
+	_ = player_
+
+	for _, formDiv := range playerFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(player_.Name), formDiv)
+		case "Status":
+			FormDivEnumStringFieldToField(&(player_.Status), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if playerFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		player_.Unstage(playerFormCallback.probe.stageOfInterest)
+	}
+
+	playerFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.Player](
+		playerFormCallback.probe,
+	)
+	playerFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if playerFormCallback.CreationMode || playerFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		playerFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(playerFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__PlayerFormCallback(
+			nil,
+			playerFormCallback.probe,
+			newFormGroup,
+		)
+		player := new(models.Player)
+		FillUpForm(player, newFormGroup, playerFormCallback.probe)
+		playerFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(playerFormCallback.probe)
+}

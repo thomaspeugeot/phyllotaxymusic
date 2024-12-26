@@ -12,6 +12,10 @@ import { NoteAPI } from './note-api'
 import { Note, CopyNoteAPIToNote } from './note'
 import { NoteService } from './note.service'
 
+import { PlayerAPI } from './player-api'
+import { Player, CopyPlayerAPIToPlayer } from './player'
+import { PlayerService } from './player.service'
+
 
 import { BackRepoData } from './back-repo-data'
 
@@ -25,6 +29,9 @@ export class FrontRepo { // insertion point sub template
 	array_Notes = new Array<Note>() // array of front instances
 	map_ID_Note = new Map<number, Note>() // map of front instances
 
+	array_Players = new Array<Player>() // array of front instances
+	map_ID_Player = new Map<number, Player>() // map of front instances
+
 
 	// getFrontArray allows for a get function that is robust to refactoring of the named struct name
 	// for instance frontRepo.getArray<Astruct>( Astruct.GONGSTRUCT_NAME), is robust to a refactoring of Astruct identifier
@@ -36,6 +43,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Freqencys as unknown as Array<Type>
 			case 'Note':
 				return this.array_Notes as unknown as Array<Type>
+			case 'Player':
+				return this.array_Players as unknown as Array<Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -48,6 +57,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Freqency as unknown as Map<number, Type>
 			case 'Note':
 				return this.map_ID_Note as unknown as Map<number, Type>
+			case 'Player':
+				return this.map_ID_Player as unknown as Map<number, Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -117,6 +128,7 @@ export class FrontRepoService {
 		private http: HttpClient, // insertion point sub template 
 		private freqencyService: FreqencyService,
 		private noteService: NoteService,
+		private playerService: PlayerService,
 	) { }
 
 	// postService provides a post function for each struct name
@@ -151,6 +163,7 @@ export class FrontRepoService {
 		// insertion point sub template 
 		Observable<FreqencyAPI[]>,
 		Observable<NoteAPI[]>,
+		Observable<PlayerAPI[]>,
 	] = [
 			// Using "combineLatest" with a placeholder observable.
 			//
@@ -163,6 +176,7 @@ export class FrontRepoService {
 			// insertion point sub template
 			this.freqencyService.getFreqencys(this.GONG__StackPath, this.frontRepo),
 			this.noteService.getNotes(this.GONG__StackPath, this.frontRepo),
+			this.playerService.getPlayers(this.GONG__StackPath, this.frontRepo),
 		];
 
 	//
@@ -180,6 +194,7 @@ export class FrontRepoService {
 			// insertion point sub template
 			this.freqencyService.getFreqencys(this.GONG__StackPath, this.frontRepo),
 			this.noteService.getNotes(this.GONG__StackPath, this.frontRepo),
+			this.playerService.getPlayers(this.GONG__StackPath, this.frontRepo),
 		]
 
 		return new Observable<FrontRepo>(
@@ -192,6 +207,7 @@ export class FrontRepoService {
 						// insertion point sub template for declarations 
 						freqencys_,
 						notes_,
+						players_,
 					]) => {
 						let _this = this
 						// Typing can be messy with many items. Therefore, type casting is necessary here
@@ -200,6 +216,8 @@ export class FrontRepoService {
 						freqencys = freqencys_ as FreqencyAPI[]
 						var notes: NoteAPI[]
 						notes = notes_ as NoteAPI[]
+						var players: PlayerAPI[]
+						players = players_ as PlayerAPI[]
 
 						// 
 						// First Step: init map of instances
@@ -228,6 +246,18 @@ export class FrontRepoService {
 							}
 						)
 
+						// init the arrays
+						this.frontRepo.array_Players = []
+						this.frontRepo.map_ID_Player.clear()
+
+						players.forEach(
+							playerAPI => {
+								let player = new Player
+								this.frontRepo.array_Players.push(player)
+								this.frontRepo.map_ID_Player.set(playerAPI.ID, player)
+							}
+						)
+
 
 						// 
 						// Second Step: reddeem front objects
@@ -245,6 +275,14 @@ export class FrontRepoService {
 							noteAPI => {
 								let note = this.frontRepo.map_ID_Note.get(noteAPI.ID)
 								CopyNoteAPIToNote(noteAPI, note!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						players.forEach(
+							playerAPI => {
+								let player = this.frontRepo.map_ID_Player.get(playerAPI.ID)
+								CopyPlayerAPIToPlayer(playerAPI, player!, this.frontRepo)
 							}
 						)
 
@@ -305,6 +343,18 @@ export class FrontRepoService {
 					}
 				)
 
+				// init the arrays
+				frontRepo.array_Players = []
+				frontRepo.map_ID_Player.clear()
+
+				backRepoData.PlayerAPIs.forEach(
+					playerAPI => {
+						let player = new Player
+						frontRepo.array_Players.push(player)
+						frontRepo.map_ID_Player.set(playerAPI.ID, player)
+					}
+				)
+
 
 				// 
 				// Second Step: reddeem front objects
@@ -324,6 +374,14 @@ export class FrontRepoService {
 					noteAPI => {
 						let note = frontRepo.map_ID_Note.get(noteAPI.ID)
 						CopyNoteAPIToNote(noteAPI, note!, frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.PlayerAPIs.forEach(
+					playerAPI => {
+						let player = frontRepo.map_ID_Player.get(playerAPI.ID)
+						CopyPlayerAPIToPlayer(playerAPI, player!, frontRepo)
 					}
 				)
 
@@ -351,4 +409,7 @@ export function getFreqencyUniqueID(id: number): number {
 }
 export function getNoteUniqueID(id: number): number {
 	return 37 * id
+}
+export function getPlayerUniqueID(id: number): number {
+	return 41 * id
 }

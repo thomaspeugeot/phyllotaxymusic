@@ -46,10 +46,6 @@ type BackRepoStruct struct {
 
 	BackRepoKey BackRepoKeyStruct
 
-	BackRepoMovingLine BackRepoMovingLineStruct
-
-	BackRepoNoteInfo BackRepoNoteInfoStruct
-
 	BackRepoParameter BackRepoParameterStruct
 
 	BackRepoRhombus BackRepoRhombusStruct
@@ -110,8 +106,6 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		&FrontCurveStackDB{},
 		&HorizontalAxisDB{},
 		&KeyDB{},
-		&MovingLineDB{},
-		&NoteInfoDB{},
 		&ParameterDB{},
 		&RhombusDB{},
 		&RhombusGridDB{},
@@ -216,22 +210,6 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		Map_KeyDBID_KeyPtr: make(map[uint]*models.Key, 0),
 		Map_KeyDBID_KeyDB:  make(map[uint]*KeyDB, 0),
 		Map_KeyPtr_KeyDBID: make(map[*models.Key]uint, 0),
-
-		db:    db,
-		stage: stage,
-	}
-	backRepo.BackRepoMovingLine = BackRepoMovingLineStruct{
-		Map_MovingLineDBID_MovingLinePtr: make(map[uint]*models.MovingLine, 0),
-		Map_MovingLineDBID_MovingLineDB:  make(map[uint]*MovingLineDB, 0),
-		Map_MovingLinePtr_MovingLineDBID: make(map[*models.MovingLine]uint, 0),
-
-		db:    db,
-		stage: stage,
-	}
-	backRepo.BackRepoNoteInfo = BackRepoNoteInfoStruct{
-		Map_NoteInfoDBID_NoteInfoPtr: make(map[uint]*models.NoteInfo, 0),
-		Map_NoteInfoDBID_NoteInfoDB:  make(map[uint]*NoteInfoDB, 0),
-		Map_NoteInfoPtr_NoteInfoDBID: make(map[*models.NoteInfo]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -412,8 +390,6 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoFrontCurveStack.CommitPhaseOne(stage)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseOne(stage)
 	backRepo.BackRepoKey.CommitPhaseOne(stage)
-	backRepo.BackRepoMovingLine.CommitPhaseOne(stage)
-	backRepo.BackRepoNoteInfo.CommitPhaseOne(stage)
 	backRepo.BackRepoParameter.CommitPhaseOne(stage)
 	backRepo.BackRepoRhombus.CommitPhaseOne(stage)
 	backRepo.BackRepoRhombusGrid.CommitPhaseOne(stage)
@@ -441,8 +417,6 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoFrontCurveStack.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoKey.CommitPhaseTwo(backRepo)
-	backRepo.BackRepoMovingLine.CommitPhaseTwo(backRepo)
-	backRepo.BackRepoNoteInfo.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoParameter.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoRhombus.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoRhombusGrid.CommitPhaseTwo(backRepo)
@@ -475,8 +449,6 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoFrontCurveStack.CheckoutPhaseOne()
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseOne()
 	backRepo.BackRepoKey.CheckoutPhaseOne()
-	backRepo.BackRepoMovingLine.CheckoutPhaseOne()
-	backRepo.BackRepoNoteInfo.CheckoutPhaseOne()
 	backRepo.BackRepoParameter.CheckoutPhaseOne()
 	backRepo.BackRepoRhombus.CheckoutPhaseOne()
 	backRepo.BackRepoRhombusGrid.CheckoutPhaseOne()
@@ -504,8 +476,6 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoFrontCurveStack.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoKey.CheckoutPhaseTwo(backRepo)
-	backRepo.BackRepoMovingLine.CheckoutPhaseTwo(backRepo)
-	backRepo.BackRepoNoteInfo.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoParameter.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoRhombus.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoRhombusGrid.CheckoutPhaseTwo(backRepo)
@@ -538,8 +508,6 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	backRepo.BackRepoFrontCurveStack.Backup(dirPath)
 	backRepo.BackRepoHorizontalAxis.Backup(dirPath)
 	backRepo.BackRepoKey.Backup(dirPath)
-	backRepo.BackRepoMovingLine.Backup(dirPath)
-	backRepo.BackRepoNoteInfo.Backup(dirPath)
 	backRepo.BackRepoParameter.Backup(dirPath)
 	backRepo.BackRepoRhombus.Backup(dirPath)
 	backRepo.BackRepoRhombusGrid.Backup(dirPath)
@@ -575,8 +543,6 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	backRepo.BackRepoFrontCurveStack.BackupXL(file)
 	backRepo.BackRepoHorizontalAxis.BackupXL(file)
 	backRepo.BackRepoKey.BackupXL(file)
-	backRepo.BackRepoMovingLine.BackupXL(file)
-	backRepo.BackRepoNoteInfo.BackupXL(file)
 	backRepo.BackRepoParameter.BackupXL(file)
 	backRepo.BackRepoRhombus.BackupXL(file)
 	backRepo.BackRepoRhombusGrid.BackupXL(file)
@@ -626,8 +592,6 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoFrontCurveStack.RestorePhaseOne(dirPath)
 	backRepo.BackRepoHorizontalAxis.RestorePhaseOne(dirPath)
 	backRepo.BackRepoKey.RestorePhaseOne(dirPath)
-	backRepo.BackRepoMovingLine.RestorePhaseOne(dirPath)
-	backRepo.BackRepoNoteInfo.RestorePhaseOne(dirPath)
 	backRepo.BackRepoParameter.RestorePhaseOne(dirPath)
 	backRepo.BackRepoRhombus.RestorePhaseOne(dirPath)
 	backRepo.BackRepoRhombusGrid.RestorePhaseOne(dirPath)
@@ -659,8 +623,6 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoFrontCurveStack.RestorePhaseTwo()
 	backRepo.BackRepoHorizontalAxis.RestorePhaseTwo()
 	backRepo.BackRepoKey.RestorePhaseTwo()
-	backRepo.BackRepoMovingLine.RestorePhaseTwo()
-	backRepo.BackRepoNoteInfo.RestorePhaseTwo()
 	backRepo.BackRepoParameter.RestorePhaseTwo()
 	backRepo.BackRepoRhombus.RestorePhaseTwo()
 	backRepo.BackRepoRhombusGrid.RestorePhaseTwo()
@@ -713,8 +675,6 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoFrontCurveStack.RestoreXLPhaseOne(file)
 	backRepo.BackRepoHorizontalAxis.RestoreXLPhaseOne(file)
 	backRepo.BackRepoKey.RestoreXLPhaseOne(file)
-	backRepo.BackRepoMovingLine.RestoreXLPhaseOne(file)
-	backRepo.BackRepoNoteInfo.RestoreXLPhaseOne(file)
 	backRepo.BackRepoParameter.RestoreXLPhaseOne(file)
 	backRepo.BackRepoRhombus.RestoreXLPhaseOne(file)
 	backRepo.BackRepoRhombusGrid.RestoreXLPhaseOne(file)

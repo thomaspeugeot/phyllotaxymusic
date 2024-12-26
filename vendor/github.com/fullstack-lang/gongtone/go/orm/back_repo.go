@@ -28,6 +28,8 @@ type BackRepoStruct struct {
 
 	BackRepoNote BackRepoNoteStruct
 
+	BackRepoPlayer BackRepoPlayerStruct
+
 	CommitFromBackNb uint // records commit increments when performed by the back
 
 	PushFromFrontNb uint // records commit increments when performed by the front
@@ -51,6 +53,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 	db = dbgorm.NewDBWrapper(filename, "github_com_fullstack_lang_gongtone_go",
 		&FreqencyDB{},
 		&NoteDB{},
+		&PlayerDB{},
 	)
 	THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm */
 
@@ -69,6 +72,14 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		Map_NoteDBID_NotePtr: make(map[uint]*models.Note, 0),
 		Map_NoteDBID_NoteDB:  make(map[uint]*NoteDB, 0),
 		Map_NotePtr_NoteDBID: make(map[*models.Note]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoPlayer = BackRepoPlayerStruct{
+		Map_PlayerDBID_PlayerPtr: make(map[uint]*models.Player, 0),
+		Map_PlayerDBID_PlayerDB:  make(map[uint]*PlayerDB, 0),
+		Map_PlayerPtr_PlayerDBID: make(map[*models.Player]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -128,10 +139,12 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
 	backRepo.BackRepoFreqency.CommitPhaseOne(stage)
 	backRepo.BackRepoNote.CommitPhaseOne(stage)
+	backRepo.BackRepoPlayer.CommitPhaseOne(stage)
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoFreqency.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoNote.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoPlayer.CommitPhaseTwo(backRepo)
 
 	backRepo.IncrementCommitFromBackNb()
 }
@@ -141,10 +154,12 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
 	backRepo.BackRepoFreqency.CheckoutPhaseOne()
 	backRepo.BackRepoNote.CheckoutPhaseOne()
+	backRepo.BackRepoPlayer.CheckoutPhaseOne()
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoFreqency.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoNote.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoPlayer.CheckoutPhaseTwo(backRepo)
 }
 
 // Backup the BackRepoStruct
@@ -154,6 +169,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	// insertion point for per struct backup
 	backRepo.BackRepoFreqency.Backup(dirPath)
 	backRepo.BackRepoNote.Backup(dirPath)
+	backRepo.BackRepoPlayer.Backup(dirPath)
 }
 
 // Backup in XL the BackRepoStruct
@@ -166,6 +182,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	// insertion point for per struct backup
 	backRepo.BackRepoFreqency.BackupXL(file)
 	backRepo.BackRepoNote.BackupXL(file)
+	backRepo.BackRepoPlayer.BackupXL(file)
 
 	var b bytes.Buffer
 	writer := bufio.NewWriter(&b)
@@ -192,6 +209,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	// insertion point for per struct backup
 	backRepo.BackRepoFreqency.RestorePhaseOne(dirPath)
 	backRepo.BackRepoNote.RestorePhaseOne(dirPath)
+	backRepo.BackRepoPlayer.RestorePhaseOne(dirPath)
 
 	//
 	// restauration second phase (reindex pointers with the new ID)
@@ -200,6 +218,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	// insertion point for per struct backup
 	backRepo.BackRepoFreqency.RestorePhaseTwo()
 	backRepo.BackRepoNote.RestorePhaseTwo()
+	backRepo.BackRepoPlayer.RestorePhaseTwo()
 
 	backRepo.stage.Checkout()
 }
@@ -229,6 +248,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	// insertion point for per struct backup
 	backRepo.BackRepoFreqency.RestoreXLPhaseOne(file)
 	backRepo.BackRepoNote.RestoreXLPhaseOne(file)
+	backRepo.BackRepoPlayer.RestoreXLPhaseOne(file)
 
 	// commit the restored stage
 	backRepo.stage.Commit()

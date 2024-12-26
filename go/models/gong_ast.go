@@ -325,8 +325,6 @@ var __gong__map_FrontCurve = make(map[string]*FrontCurve)
 var __gong__map_FrontCurveStack = make(map[string]*FrontCurveStack)
 var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
 var __gong__map_Key = make(map[string]*Key)
-var __gong__map_MovingLine = make(map[string]*MovingLine)
-var __gong__map_NoteInfo = make(map[string]*NoteInfo)
 var __gong__map_Parameter = make(map[string]*Parameter)
 var __gong__map_Rhombus = make(map[string]*Rhombus)
 var __gong__map_RhombusGrid = make(map[string]*RhombusGrid)
@@ -579,18 +577,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceKey.Stage(stage)
 										instance = any(instanceKey)
 										__gong__map_Key[identifier] = instanceKey
-									case "MovingLine":
-										instanceMovingLine := new(MovingLine)
-										instanceMovingLine.Name = instanceName
-										instanceMovingLine.Stage(stage)
-										instance = any(instanceMovingLine)
-										__gong__map_MovingLine[identifier] = instanceMovingLine
-									case "NoteInfo":
-										instanceNoteInfo := new(NoteInfo)
-										instanceNoteInfo.Name = instanceName
-										instanceNoteInfo.Stage(stage)
-										instance = any(instanceNoteInfo)
-										__gong__map_NoteInfo[identifier] = instanceNoteInfo
 									case "Parameter":
 										instanceParameter := new(Parameter)
 										instanceParameter.Name = instanceName
@@ -755,14 +741,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
-						case "MovingLine":
-							switch fieldName {
-							// insertion point for date assign code
-							}
-						case "NoteInfo":
-							switch fieldName {
-							// insertion point for date assign code
-							}
 						case "Parameter":
 							switch fieldName {
 							// insertion point for date assign code
@@ -924,23 +902,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
-					case "MovingLine":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						}
-					case "NoteInfo":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						}
 					case "Parameter":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
-						case "NoteInfos":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							target := __gong__map_NoteInfo[targetIdentifier]
-							__gong__map_Parameter[identifier].NoteInfos =
-								append(__gong__map_Parameter[identifier].NoteInfos, target)
 						}
 					case "Rhombus":
 						switch fieldName {
@@ -1555,91 +1519,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Key[identifier].Transform = fielValue
 				}
-			case "MovingLine":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_MovingLine[identifier].Name = fielValue
-				case "AngleDegree":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_MovingLine[identifier].AngleDegree = exprSign * fielValue
-				case "Length":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_MovingLine[identifier].Length = exprSign * fielValue
-				case "CenterX":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_MovingLine[identifier].CenterX = exprSign * fielValue
-				case "CenterY":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_MovingLine[identifier].CenterY = exprSign * fielValue
-				case "Color":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_MovingLine[identifier].Color = fielValue
-				case "FillOpacity":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_MovingLine[identifier].FillOpacity = exprSign * fielValue
-				case "Stroke":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_MovingLine[identifier].Stroke = fielValue
-				case "StrokeOpacity":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_MovingLine[identifier].StrokeOpacity = exprSign * fielValue
-				case "StrokeWidth":
-					// convert string to float64
-					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_MovingLine[identifier].StrokeWidth = exprSign * fielValue
-				case "StrokeDashArray":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_MovingLine[identifier].StrokeDashArray = fielValue
-				case "StrokeDashArrayWhenSelected":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_MovingLine[identifier].StrokeDashArrayWhenSelected = fielValue
-				case "Transform":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_MovingLine[identifier].Transform = fielValue
-				}
-			case "NoteInfo":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_NoteInfo[identifier].Name = fielValue
-				}
 			case "Parameter":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1792,13 +1671,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].NbBeatLines = int(exprSign) * int(fielValue)
-				case "NbBeatLinesPerCurve":
+				case "NbOfBeatsInTheme":
 					// convert string to int
 					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].NbBeatLinesPerCurve = int(exprSign) * int(fielValue)
+					__gong__map_Parameter[identifier].NbOfBeatsInTheme = int(exprSign) * int(fielValue)
 				case "FirstVoiceShiftX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1820,13 +1699,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].PitchDifference = int(exprSign) * int(fielValue)
-				case "Speed":
+				case "BeatsPerSecond":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
 					if err != nil {
 						log.Fatalln(err)
 					}
-					__gong__map_Parameter[identifier].Speed = exprSign * fielValue
+					__gong__map_Parameter[identifier].BeatsPerSecond = exprSign * fielValue
 				case "Level":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1834,6 +1713,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].Level = exprSign * fielValue
+				case "ThemeBinaryEncoding":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Parameter[identifier].ThemeBinaryEncoding = int(exprSign) * int(fielValue)
 				case "OriginX":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -2677,31 +2563,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					targetIdentifier := ident.Name
 					__gong__map_Key[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
-			case "MovingLine":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "IsDisplayed":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_MovingLine[identifier].IsDisplayed = fielValue
-				case "ShapeCategory":
-					targetIdentifier := ident.Name
-					__gong__map_MovingLine[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
-				}
-			case "NoteInfo":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "IsKept":
-					// convert string to boolean
-					fielValue, err := strconv.ParseBool(ident.Name)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_NoteInfo[identifier].IsKept = fielValue
-				}
 			case "Parameter":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -2903,9 +2764,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].ShowInterpolationPoints = fielValue
-				case "Cursor":
-					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].Cursor = __gong__map_MovingLine[targetIdentifier]
 				}
 			case "Rhombus":
 				switch fieldName {
@@ -3175,14 +3033,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "Key":
-					switch fieldName {
-					// insertion point for enum assign code
-					}
-				case "MovingLine":
-					switch fieldName {
-					// insertion point for enum assign code
-					}
-				case "NoteInfo":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

@@ -272,9 +272,6 @@ type ParameterPointersEncoding struct {
 	// This field is generated into another field to enable AS ONE association
 	SecondVoiceNotesShiftedRightID sql.NullInt64
 
-	// field NoteInfos is a slice of pointers to another Struct (optional or 0..1)
-	NoteInfos IntSlice `gorm:"type:TEXT"`
-
 	// field HorizontalAxis is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	HorizontalAxisID sql.NullInt64
@@ -286,10 +283,6 @@ type ParameterPointersEncoding struct {
 	// field SpiralOrigin is a pointer to another Struct (optional or 0..1)
 	// This field is generated into another field to enable AS ONE association
 	SpiralOriginID sql.NullInt64
-
-	// field Cursor is a pointer to another Struct (optional or 0..1)
-	// This field is generated into another field to enable AS ONE association
-	CursorID sql.NullInt64
 }
 
 // ParameterDB describes a parameter in the database
@@ -372,8 +365,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.NbBeatLines
 	NbBeatLines_Data sql.NullInt64
 
-	// Declation for basic field parameterDB.NbBeatLinesPerCurve
-	NbBeatLinesPerCurve_Data sql.NullInt64
+	// Declation for basic field parameterDB.NbOfBeatsInTheme
+	NbOfBeatsInTheme_Data sql.NullInt64
 
 	// Declation for basic field parameterDB.FirstVoiceShiftX
 	FirstVoiceShiftX_Data sql.NullFloat64
@@ -384,8 +377,8 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.PitchDifference
 	PitchDifference_Data sql.NullInt64
 
-	// Declation for basic field parameterDB.Speed
-	Speed_Data sql.NullFloat64
+	// Declation for basic field parameterDB.BeatsPerSecond
+	BeatsPerSecond_Data sql.NullFloat64
 
 	// Declation for basic field parameterDB.Level
 	Level_Data sql.NullFloat64
@@ -393,6 +386,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.IsMinor
 	// provide the sql storage for the boolan
 	IsMinor_Data sql.NullBool
+
+	// Declation for basic field parameterDB.ThemeBinaryEncoding
+	ThemeBinaryEncoding_Data sql.NullInt64
 
 	// Declation for basic field parameterDB.OriginX
 	OriginX_Data sql.NullFloat64
@@ -491,7 +487,7 @@ type ParameterWOP struct {
 
 	NbBeatLines int `xlsx:"23"`
 
-	NbBeatLinesPerCurve int `xlsx:"24"`
+	NbOfBeatsInTheme int `xlsx:"24"`
 
 	FirstVoiceShiftX float64 `xlsx:"25"`
 
@@ -499,29 +495,31 @@ type ParameterWOP struct {
 
 	PitchDifference int `xlsx:"27"`
 
-	Speed float64 `xlsx:"28"`
+	BeatsPerSecond float64 `xlsx:"28"`
 
 	Level float64 `xlsx:"29"`
 
 	IsMinor bool `xlsx:"30"`
 
-	OriginX float64 `xlsx:"31"`
+	ThemeBinaryEncoding int `xlsx:"31"`
 
-	OriginY float64 `xlsx:"32"`
+	OriginX float64 `xlsx:"32"`
 
-	SpiralOriginX float64 `xlsx:"33"`
+	OriginY float64 `xlsx:"33"`
 
-	SpiralOriginY float64 `xlsx:"34"`
+	SpiralOriginX float64 `xlsx:"34"`
 
-	OriginCrossWidth float64 `xlsx:"35"`
+	SpiralOriginY float64 `xlsx:"35"`
 
-	SpiralRadiusRatio float64 `xlsx:"36"`
+	OriginCrossWidth float64 `xlsx:"36"`
 
-	ShowSpiralBezierConstruct bool `xlsx:"37"`
+	SpiralRadiusRatio float64 `xlsx:"37"`
 
-	ShowInterpolationPoints bool `xlsx:"38"`
+	ShowSpiralBezierConstruct bool `xlsx:"38"`
 
-	ActualBeatsTemporalShift int `xlsx:"39"`
+	ShowInterpolationPoints bool `xlsx:"39"`
+
+	ActualBeatsTemporalShift int `xlsx:"40"`
 	// insertion for WOP pointer fields
 }
 
@@ -551,13 +549,14 @@ var Parameter_Fields = []string{
 	"NbPitchLines",
 	"BeatLinesHeightRatio",
 	"NbBeatLines",
-	"NbBeatLinesPerCurve",
+	"NbOfBeatsInTheme",
 	"FirstVoiceShiftX",
 	"FirstVoiceShiftY",
 	"PitchDifference",
-	"Speed",
+	"BeatsPerSecond",
 	"Level",
 	"IsMinor",
+	"ThemeBinaryEncoding",
 	"OriginX",
 	"OriginY",
 	"SpiralOriginX",
@@ -1359,24 +1358,6 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 			parameterDB.SecondVoiceNotesShiftedRightID.Valid = true
 		}
 
-		// 1. reset
-		parameterDB.ParameterPointersEncoding.NoteInfos = make([]int, 0)
-		// 2. encode
-		for _, noteinfoAssocEnd := range parameter.NoteInfos {
-			noteinfoAssocEnd_DB :=
-				backRepo.BackRepoNoteInfo.GetNoteInfoDBFromNoteInfoPtr(noteinfoAssocEnd)
-			
-			// the stage might be inconsistant, meaning that the noteinfoAssocEnd_DB might
-			// be missing from the stage. In this case, the commit operation is robust
-			// An alternative would be to crash here to reveal the missing element.
-			if noteinfoAssocEnd_DB == nil {
-				continue
-			}
-			
-			parameterDB.ParameterPointersEncoding.NoteInfos =
-				append(parameterDB.ParameterPointersEncoding.NoteInfos, int(noteinfoAssocEnd_DB.ID))
-		}
-
 		// commit pointer value parameter.HorizontalAxis translates to updating the parameter.HorizontalAxisID
 		parameterDB.HorizontalAxisID.Valid = true // allow for a 0 value (nil association)
 		if parameter.HorizontalAxis != nil {
@@ -1411,18 +1392,6 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseTwoInstance(backRep
 		} else {
 			parameterDB.SpiralOriginID.Int64 = 0
 			parameterDB.SpiralOriginID.Valid = true
-		}
-
-		// commit pointer value parameter.Cursor translates to updating the parameter.CursorID
-		parameterDB.CursorID.Valid = true // allow for a 0 value (nil association)
-		if parameter.Cursor != nil {
-			if CursorId, ok := backRepo.BackRepoMovingLine.Map_MovingLinePtr_MovingLineDBID[parameter.Cursor]; ok {
-				parameterDB.CursorID.Int64 = int64(CursorId)
-				parameterDB.CursorID.Valid = true
-			}
-		} else {
-			parameterDB.CursorID.Int64 = 0
-			parameterDB.CursorID.Valid = true
 		}
 
 		_, err := backRepoParameter.db.Save(parameterDB)
@@ -2602,15 +2571,6 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		}
 	}
 	
-	// This loop redeem parameter.NoteInfos in the stage from the encode in the back repo
-	// It parses all NoteInfoDB in the back repo and if the reverse pointer encoding matches the back repo ID
-	// it appends the stage instance
-	// 1. reset the slice
-	parameter.NoteInfos = parameter.NoteInfos[:0]
-	for _, _NoteInfoid := range parameterDB.ParameterPointersEncoding.NoteInfos {
-		parameter.NoteInfos = append(parameter.NoteInfos, backRepo.BackRepoNoteInfo.Map_NoteInfoDBID_NoteInfoPtr[uint(_NoteInfoid)])
-	}
-
 	// HorizontalAxis field	
 	{
 		id := parameterDB.HorizontalAxisID.Int64
@@ -2665,25 +2625,6 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			}
 		} else {
 			parameter.SpiralOrigin = nil
-		}
-	}
-	
-	// Cursor field	
-	{
-		id := parameterDB.CursorID.Int64
-		if id != 0 {
-			tmp, ok := backRepo.BackRepoMovingLine.Map_MovingLineDBID_MovingLinePtr[uint(id)]
-
-			if !ok {
-				log.Fatalln("DecodePointers: parameter.Cursor, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.Cursor == nil || parameter.Cursor != tmp {
-				parameter.Cursor = tmp
-			}
-		} else {
-			parameter.Cursor = nil
 		}
 	}
 	
@@ -2790,8 +2731,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.NbBeatLines_Data.Int64 = int64(parameter.NbBeatLines)
 	parameterDB.NbBeatLines_Data.Valid = true
 
-	parameterDB.NbBeatLinesPerCurve_Data.Int64 = int64(parameter.NbBeatLinesPerCurve)
-	parameterDB.NbBeatLinesPerCurve_Data.Valid = true
+	parameterDB.NbOfBeatsInTheme_Data.Int64 = int64(parameter.NbOfBeatsInTheme)
+	parameterDB.NbOfBeatsInTheme_Data.Valid = true
 
 	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
 	parameterDB.FirstVoiceShiftX_Data.Valid = true
@@ -2802,14 +2743,17 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
-	parameterDB.Speed_Data.Float64 = parameter.Speed
-	parameterDB.Speed_Data.Valid = true
+	parameterDB.BeatsPerSecond_Data.Float64 = parameter.BeatsPerSecond
+	parameterDB.BeatsPerSecond_Data.Valid = true
 
 	parameterDB.Level_Data.Float64 = parameter.Level
 	parameterDB.Level_Data.Valid = true
 
 	parameterDB.IsMinor_Data.Bool = parameter.IsMinor
 	parameterDB.IsMinor_Data.Valid = true
+
+	parameterDB.ThemeBinaryEncoding_Data.Int64 = int64(parameter.ThemeBinaryEncoding)
+	parameterDB.ThemeBinaryEncoding_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -2912,8 +2856,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.NbBeatLines_Data.Int64 = int64(parameter.NbBeatLines)
 	parameterDB.NbBeatLines_Data.Valid = true
 
-	parameterDB.NbBeatLinesPerCurve_Data.Int64 = int64(parameter.NbBeatLinesPerCurve)
-	parameterDB.NbBeatLinesPerCurve_Data.Valid = true
+	parameterDB.NbOfBeatsInTheme_Data.Int64 = int64(parameter.NbOfBeatsInTheme)
+	parameterDB.NbOfBeatsInTheme_Data.Valid = true
 
 	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
 	parameterDB.FirstVoiceShiftX_Data.Valid = true
@@ -2924,14 +2868,17 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
-	parameterDB.Speed_Data.Float64 = parameter.Speed
-	parameterDB.Speed_Data.Valid = true
+	parameterDB.BeatsPerSecond_Data.Float64 = parameter.BeatsPerSecond
+	parameterDB.BeatsPerSecond_Data.Valid = true
 
 	parameterDB.Level_Data.Float64 = parameter.Level
 	parameterDB.Level_Data.Valid = true
 
 	parameterDB.IsMinor_Data.Bool = parameter.IsMinor
 	parameterDB.IsMinor_Data.Valid = true
+
+	parameterDB.ThemeBinaryEncoding_Data.Int64 = int64(parameter.ThemeBinaryEncoding)
+	parameterDB.ThemeBinaryEncoding_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -3034,8 +2981,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.NbBeatLines_Data.Int64 = int64(parameter.NbBeatLines)
 	parameterDB.NbBeatLines_Data.Valid = true
 
-	parameterDB.NbBeatLinesPerCurve_Data.Int64 = int64(parameter.NbBeatLinesPerCurve)
-	parameterDB.NbBeatLinesPerCurve_Data.Valid = true
+	parameterDB.NbOfBeatsInTheme_Data.Int64 = int64(parameter.NbOfBeatsInTheme)
+	parameterDB.NbOfBeatsInTheme_Data.Valid = true
 
 	parameterDB.FirstVoiceShiftX_Data.Float64 = parameter.FirstVoiceShiftX
 	parameterDB.FirstVoiceShiftX_Data.Valid = true
@@ -3046,14 +2993,17 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.PitchDifference_Data.Int64 = int64(parameter.PitchDifference)
 	parameterDB.PitchDifference_Data.Valid = true
 
-	parameterDB.Speed_Data.Float64 = parameter.Speed
-	parameterDB.Speed_Data.Valid = true
+	parameterDB.BeatsPerSecond_Data.Float64 = parameter.BeatsPerSecond
+	parameterDB.BeatsPerSecond_Data.Valid = true
 
 	parameterDB.Level_Data.Float64 = parameter.Level
 	parameterDB.Level_Data.Valid = true
 
 	parameterDB.IsMinor_Data.Bool = parameter.IsMinor
 	parameterDB.IsMinor_Data.Valid = true
+
+	parameterDB.ThemeBinaryEncoding_Data.Int64 = int64(parameter.ThemeBinaryEncoding)
+	parameterDB.ThemeBinaryEncoding_Data.Valid = true
 
 	parameterDB.OriginX_Data.Float64 = parameter.OriginX
 	parameterDB.OriginX_Data.Valid = true
@@ -3109,13 +3059,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.BeatLinesHeightRatio = parameterDB.BeatLinesHeightRatio_Data.Float64
 	parameter.NbBeatLines = int(parameterDB.NbBeatLines_Data.Int64)
-	parameter.NbBeatLinesPerCurve = int(parameterDB.NbBeatLinesPerCurve_Data.Int64)
+	parameter.NbOfBeatsInTheme = int(parameterDB.NbOfBeatsInTheme_Data.Int64)
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
-	parameter.Speed = parameterDB.Speed_Data.Float64
+	parameter.BeatsPerSecond = parameterDB.BeatsPerSecond_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
+	parameter.ThemeBinaryEncoding = int(parameterDB.ThemeBinaryEncoding_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
@@ -3153,13 +3104,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.BeatLinesHeightRatio = parameterDB.BeatLinesHeightRatio_Data.Float64
 	parameter.NbBeatLines = int(parameterDB.NbBeatLines_Data.Int64)
-	parameter.NbBeatLinesPerCurve = int(parameterDB.NbBeatLinesPerCurve_Data.Int64)
+	parameter.NbOfBeatsInTheme = int(parameterDB.NbOfBeatsInTheme_Data.Int64)
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
-	parameter.Speed = parameterDB.Speed_Data.Float64
+	parameter.BeatsPerSecond = parameterDB.BeatsPerSecond_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
+	parameter.ThemeBinaryEncoding = int(parameterDB.ThemeBinaryEncoding_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
@@ -3198,13 +3150,14 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.NbPitchLines = int(parameterDB.NbPitchLines_Data.Int64)
 	parameter.BeatLinesHeightRatio = parameterDB.BeatLinesHeightRatio_Data.Float64
 	parameter.NbBeatLines = int(parameterDB.NbBeatLines_Data.Int64)
-	parameter.NbBeatLinesPerCurve = int(parameterDB.NbBeatLinesPerCurve_Data.Int64)
+	parameter.NbOfBeatsInTheme = int(parameterDB.NbOfBeatsInTheme_Data.Int64)
 	parameter.FirstVoiceShiftX = parameterDB.FirstVoiceShiftX_Data.Float64
 	parameter.FirstVoiceShiftY = parameterDB.FirstVoiceShiftY_Data.Float64
 	parameter.PitchDifference = int(parameterDB.PitchDifference_Data.Int64)
-	parameter.Speed = parameterDB.Speed_Data.Float64
+	parameter.BeatsPerSecond = parameterDB.BeatsPerSecond_Data.Float64
 	parameter.Level = parameterDB.Level_Data.Float64
 	parameter.IsMinor = parameterDB.IsMinor_Data.Bool
+	parameter.ThemeBinaryEncoding = int(parameterDB.ThemeBinaryEncoding_Data.Int64)
 	parameter.OriginX = parameterDB.OriginX_Data.Float64
 	parameter.OriginY = parameterDB.OriginY_Data.Float64
 	parameter.SpiralOriginX = parameterDB.SpiralOriginX_Data.Float64
@@ -3723,12 +3676,6 @@ func (backRepoParameter *BackRepoParameterStruct) RestorePhaseTwo() {
 		if parameterDB.SpiralOriginID.Int64 != 0 {
 			parameterDB.SpiralOriginID.Int64 = int64(BackRepoSpiralOriginid_atBckpTime_newID[uint(parameterDB.SpiralOriginID.Int64)])
 			parameterDB.SpiralOriginID.Valid = true
-		}
-
-		// reindexing Cursor field
-		if parameterDB.CursorID.Int64 != 0 {
-			parameterDB.CursorID.Int64 = int64(BackRepoMovingLineid_atBckpTime_newID[uint(parameterDB.CursorID.Int64)])
-			parameterDB.CursorID.Valid = true
 		}
 
 		// update databse with new index encoding

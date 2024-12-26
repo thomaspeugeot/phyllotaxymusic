@@ -19,12 +19,12 @@ github.com/fullstack-lang/gong v0.0.0-20241204162226-923b025bd3b2 h1:pdV+NkH3heQ
 github.com/fullstack-lang/gong v0.0.0-20241204162226-923b025bd3b2/go.mod h1:1hFV7AW7YPV9uCQ1KifP5x11RlCb8b95XEfhPj+J2L0=
 github.com/fullstack-lang/gongdoc v0.0.0-20241118055028-b29dade3ed5d h1:wrSElAQH8PMD/5EkuHYDOqNR5ukXUUt3Vc545yVtgKQ=
 github.com/fullstack-lang/gongdoc v0.0.0-20241118055028-b29dade3ed5d/go.mod h1:MC1jlnQU7/i7I663wZ59rH7dhwYTn2jwiYafOu/dRm8=
-github.com/fullstack-lang/gongsvg v0.0.0-20241118055028-30637543170e h1:Nw9/32LPiltIXcvNrBj+j6LqdpnPyRjm+cjHDKG8d3Y=
-github.com/fullstack-lang/gongsvg v0.0.0-20241118055028-30637543170e/go.mod h1:T+RzwA03qaDKoN7X0eRKhjGTPLJjzYXgfTWqWQAwF5w=
+github.com/fullstack-lang/gongsvg v0.0.0-20241215051549-485ffac8271a h1:gGgNdrV5V0BSQ05ZPBEiHGfVGFb3q/FsiJov6oGqUpw=
+github.com/fullstack-lang/gongsvg v0.0.0-20241215051549-485ffac8271a/go.mod h1:T+RzwA03qaDKoN7X0eRKhjGTPLJjzYXgfTWqWQAwF5w=
 github.com/fullstack-lang/gongtable v0.0.0-20241118055028-9c52bae3338d h1:u0usoQkHOQ7emoTniErMOZS8ZX2c4AOAOiwNAD//poU=
 github.com/fullstack-lang/gongtable v0.0.0-20241118055028-9c52bae3338d/go.mod h1:BlblJqx/9ttatp8huzgZvUjXSGduFMsqY/7SeEk4/lU=
-github.com/fullstack-lang/gongtone v0.0.0-20241202073035-380288fc4ef9 h1:XDIYO2UcSqtJjcuh3mJHVVO0OPI+7jsZSIfQOtdKSPA=
-github.com/fullstack-lang/gongtone v0.0.0-20241202073035-380288fc4ef9/go.mod h1:PJcULvtkniU/l6PNOeX74saGk4NMOPI6BC0TJn7wf+g=
+github.com/fullstack-lang/gongtone v0.0.0-20241215112701-7584bfb9b1bf h1:Rb9siYO4SbiKRszISfz7eLBvCfcgQEwOSwjrVhaNGpI=
+github.com/fullstack-lang/gongtone v0.0.0-20241215112701-7584bfb9b1bf/go.mod h1:BrrTcqrMSZZeBjKjI8Qp9UxRsaSdPJJ5dvCi5XJulP8=
 github.com/fullstack-lang/gongtree v0.0.0-20241130070052-003d6e0482ce h1:e01FmOlLBeDyFQP7rweVOBUDYYM61a3fG5nUs6jQpxk=
 github.com/fullstack-lang/gongtree v0.0.0-20241130070052-003d6e0482ce/go.mod h1:AwJau9+cqiWS8HQLS8vAe4c4XdzSPDOs44RbvalRSCQ=
 github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369 h1:tnlpjk07ksmzjPSoMBZ8FW088WI1VdnJ5d/lbNUHqBw=

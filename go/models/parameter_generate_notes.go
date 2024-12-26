@@ -1,10 +1,16 @@
 package models
 
 import (
+	"log"
+
+	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
-func (p *Parameter) GenerateNotes(gongtoneStage *gongtone_models.StageStruct) {
+func (p *Parameter) GenerateNotes(
+	gongtoneStage *gongtone_models.StageStruct,
+	gongsvgStage *gongsvg_models.StageStruct,
+	phylotaxymusicStage *StageStruct) {
 
 	gongtoneStage.Reset()
 
@@ -31,6 +37,16 @@ func (p *Parameter) GenerateNotes(gongtoneStage *gongtone_models.StageStruct) {
 		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, gongtoneStage)
 	}
 
+	player := new(gongtone_models.Player).Stage(gongtoneStage)
+	player.OnDI = func(player *gongtone_models.Player) error {
+
+		// notify the cursor
+		value := player.Status == gongtone_models.PLAYING
+		log.Println("put the value into the channel", value)
+		p.notifyCh <- value
+		return nil
+	}
+
 	gongtoneStage.Commit()
 
 }
@@ -41,7 +57,7 @@ func (p *Parameter) generateNotesFromCircleGrid(
 	circleGrid *CircleGrid,
 	gongtoneStage *gongtone_models.StageStruct) {
 
-	unitMeasureLength := p.RotatedAxis.Length / float64(p.NbBeatLinesPerCurve)
+	beatLength := p.RotatedAxis.Length / float64(p.NbOfBeatsInTheme)
 
 	for _, c := range circleGrid.Circles {
 
@@ -62,7 +78,7 @@ func (p *Parameter) generateNotesFromCircleGrid(
 		c.note = note
 		note.Frequencies = append(note.Frequencies, freq)
 
-		note.Start = (c.CenterX / unitMeasureLength) / p.Speed
+		note.Start = (c.CenterX / beatLength) / p.BeatsPerSecond
 
 		note.Velocity = p.Level
 	}
@@ -74,11 +90,11 @@ func (p *Parameter) generateNotesFromCircleGrid(
 			continue
 		}
 
-		c.note.Duration = 1 / p.Speed
+		c.note.Duration = 1 / p.BeatsPerSecond
 
 		for _, _c := range circleGrid.Circles[i:] {
 			if !_c.isKept {
-				c.note.Duration += 1 / p.Speed
+				c.note.Duration += 1 / p.BeatsPerSecond
 			}
 		}
 	}

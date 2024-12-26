@@ -35,3 +35,15 @@ func (from *Note) CopyBasicFields(to *Note) {
 	to.Info = from.Info
 }
 
+type Player_WOP struct {
+	// insertion point
+	Name string
+	Status Status
+}
+
+func (from *Player) CopyBasicFields(to *Player) {
+	// insertion point
+	to.Name = from.Name
+	to.Status = from.Status
+}
+
