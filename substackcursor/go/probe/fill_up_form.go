@@ -54,6 +54,8 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
 			true, true, 600, true, 400)
+		BasicFieldtoForm("IsPlaying", instanceWithInferedType.IsPlaying, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 
 	default:
 		_ = instanceWithInferedType

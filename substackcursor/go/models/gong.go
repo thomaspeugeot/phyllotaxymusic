@@ -510,7 +510,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Cursor:
-		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "IsPlaying"}
 	}
 	return
 }
@@ -544,7 +544,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *Cursor:
-		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
+		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "IsPlaying"}
 	}
 	return
 }
@@ -645,6 +645,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
 			res.valueString = inferedInstance.Transform
+		case "IsPlaying":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsPlaying)
+			res.valueBool = inferedInstance.IsPlaying
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	default:
 		_ = inferedInstance
@@ -715,6 +719,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
 			res.valueString = inferedInstance.Transform
+		case "IsPlaying":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsPlaying)
+			res.valueBool = inferedInstance.IsPlaying
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	default:
 		_ = inferedInstance

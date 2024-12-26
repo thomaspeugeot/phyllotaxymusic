@@ -112,6 +112,10 @@ type CursorDB struct {
 	// Declation for basic field cursorDB.Transform
 	Transform_Data sql.NullString
 
+	// Declation for basic field cursorDB.IsPlaying
+	// provide the sql storage for the boolan
+	IsPlaying_Data sql.NullBool
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	CursorPointersEncoding
@@ -167,6 +171,8 @@ type CursorWOP struct {
 	StrokeDashArrayWhenSelected string `xlsx:"16"`
 
 	Transform string `xlsx:"17"`
+
+	IsPlaying bool `xlsx:"18"`
 	// insertion for WOP pointer fields
 }
 
@@ -190,6 +196,7 @@ var Cursor_Fields = []string{
 	"StrokeDashArray",
 	"StrokeDashArrayWhenSelected",
 	"Transform",
+	"IsPlaying",
 }
 
 type BackRepoCursorStruct struct {
@@ -507,6 +514,9 @@ func (cursorDB *CursorDB) CopyBasicFieldsFromCursor(cursor *models.Cursor) {
 
 	cursorDB.Transform_Data.String = cursor.Transform
 	cursorDB.Transform_Data.Valid = true
+
+	cursorDB.IsPlaying_Data.Bool = cursor.IsPlaying
+	cursorDB.IsPlaying_Data.Valid = true
 }
 
 // CopyBasicFieldsFromCursor_WOP
@@ -563,6 +573,9 @@ func (cursorDB *CursorDB) CopyBasicFieldsFromCursor_WOP(cursor *models.Cursor_WO
 
 	cursorDB.Transform_Data.String = cursor.Transform
 	cursorDB.Transform_Data.Valid = true
+
+	cursorDB.IsPlaying_Data.Bool = cursor.IsPlaying
+	cursorDB.IsPlaying_Data.Valid = true
 }
 
 // CopyBasicFieldsFromCursorWOP
@@ -619,6 +632,9 @@ func (cursorDB *CursorDB) CopyBasicFieldsFromCursorWOP(cursor *CursorWOP) {
 
 	cursorDB.Transform_Data.String = cursor.Transform
 	cursorDB.Transform_Data.Valid = true
+
+	cursorDB.IsPlaying_Data.Bool = cursor.IsPlaying
+	cursorDB.IsPlaying_Data.Valid = true
 }
 
 // CopyBasicFieldsToCursor
@@ -641,6 +657,7 @@ func (cursorDB *CursorDB) CopyBasicFieldsToCursor(cursor *models.Cursor) {
 	cursor.StrokeDashArray = cursorDB.StrokeDashArray_Data.String
 	cursor.StrokeDashArrayWhenSelected = cursorDB.StrokeDashArrayWhenSelected_Data.String
 	cursor.Transform = cursorDB.Transform_Data.String
+	cursor.IsPlaying = cursorDB.IsPlaying_Data.Bool
 }
 
 // CopyBasicFieldsToCursor_WOP
@@ -663,6 +680,7 @@ func (cursorDB *CursorDB) CopyBasicFieldsToCursor_WOP(cursor *models.Cursor_WOP)
 	cursor.StrokeDashArray = cursorDB.StrokeDashArray_Data.String
 	cursor.StrokeDashArrayWhenSelected = cursorDB.StrokeDashArrayWhenSelected_Data.String
 	cursor.Transform = cursorDB.Transform_Data.String
+	cursor.IsPlaying = cursorDB.IsPlaying_Data.Bool
 }
 
 // CopyBasicFieldsToCursorWOP
@@ -686,6 +704,7 @@ func (cursorDB *CursorDB) CopyBasicFieldsToCursorWOP(cursor *CursorWOP) {
 	cursor.StrokeDashArray = cursorDB.StrokeDashArray_Data.String
 	cursor.StrokeDashArrayWhenSelected = cursorDB.StrokeDashArrayWhenSelected_Data.String
 	cursor.Transform = cursorDB.Transform_Data.String
+	cursor.IsPlaying = cursorDB.IsPlaying_Data.Bool
 }
 
 // Backup generates a json file from a slice of all CursorDB instances in the backrepo

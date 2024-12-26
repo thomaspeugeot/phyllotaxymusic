@@ -95,6 +95,8 @@ func (cursorFormCallback *CursorFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(cursor_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(cursor_.Transform), formDiv)
+		case "IsPlaying":
+			FormDivBasicFieldToField(&(cursor_.IsPlaying), formDiv)
 		}
 	}
 

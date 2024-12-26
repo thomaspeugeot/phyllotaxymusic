@@ -34,6 +34,7 @@ export class Cursor {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
+	IsPlaying: boolean = false
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -62,6 +63,7 @@ export function CopyCursorToCursorAPI(cursor: Cursor, cursorAPI: CursorAPI) {
 	cursorAPI.StrokeDashArray = cursor.StrokeDashArray
 	cursorAPI.StrokeDashArrayWhenSelected = cursor.StrokeDashArrayWhenSelected
 	cursorAPI.Transform = cursor.Transform
+	cursorAPI.IsPlaying = cursor.IsPlaying
 
 	// insertion point for pointer fields encoding
 
@@ -96,6 +98,7 @@ export function CopyCursorAPIToCursor(cursorAPI: CursorAPI, cursor: Cursor, fron
 	cursor.StrokeDashArray = cursorAPI.StrokeDashArray
 	cursor.StrokeDashArrayWhenSelected = cursorAPI.StrokeDashArrayWhenSelected
 	cursor.Transform = cursorAPI.Transform
+	cursor.IsPlaying = cursorAPI.IsPlaying
 
 	// insertion point for pointer fields encoding
 

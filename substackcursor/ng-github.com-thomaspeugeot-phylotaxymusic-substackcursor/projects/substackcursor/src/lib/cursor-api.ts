@@ -29,6 +29,7 @@ export class CursorAPI {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
+	IsPlaying: boolean = false
 
 	// insertion point for other decls
 

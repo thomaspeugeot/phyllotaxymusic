@@ -26,6 +26,7 @@ type Cursor_WOP struct {
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
 	Transform string
+	IsPlaying bool
 }
 
 func (from *Cursor) CopyBasicFields(to *Cursor) {
@@ -47,5 +48,6 @@ func (from *Cursor) CopyBasicFields(to *Cursor) {
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
 	to.Transform = from.Transform
+	to.IsPlaying = from.IsPlaying
 }
 

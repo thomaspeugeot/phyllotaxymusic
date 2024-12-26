@@ -15,6 +15,22 @@ type Cursor struct {
 
 	Presentation
 
+	IsPlaying bool
+
 	// to receive notification that the music started
 	notifyCh chan struct{}
+}
+
+func (cursor *Cursor) SetNotifyChannel(notifyCh chan struct{}) {
+	cursor.notifyCh = notifyCh
+}
+
+func (cursor *Cursor) WaitForPlayNotifications(stage *StageStruct) {
+	go func() {
+
+		for range cursor.notifyCh {
+			cursor.IsPlaying = true
+			stage.Commit()
+		}
+	}()
 }

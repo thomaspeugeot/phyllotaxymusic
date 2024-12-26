@@ -47,7 +47,15 @@ export class SubstackcursorspecificComponent implements OnInit {
       next: (gongtablesFrontRepo) => {
         this.frontRepo = gongtablesFrontRepo;
 
-        this.startEmittingPosition()
+        let cursors = this.frontRepo.getFrontArray<substackcursor.Cursor>(substackcursor.Cursor.GONGSTRUCT_NAME)
+
+        console.assert(cursors.length == 1)
+        let cursor = cursors[0]
+        if (cursor.IsPlaying == true) {
+          this.startEmittingPosition()
+        } else {
+          // for chat gpt. What is the best way to stop the update of this.x ?
+        }
       },
       error: (err) => {
         // this will capture any errors thrown by the Observable

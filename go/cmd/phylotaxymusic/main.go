@@ -101,6 +101,14 @@ func main() {
 	_ = cursor
 	cursorStack.Stage.Commit()
 
+	// connect parameter to cursor for start playing notification
+	notifyCh := make(chan struct{})
+	cursor.SetNotifyChannel(notifyCh)
+	parameter.SetNotifyChannel(notifyCh)
+
+	// wait loop in cursor. Will commit once it receive a notification.
+	cursor.WaitForPlayNotifications(cursorStack.Stage)
+
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
 	if err != nil {
