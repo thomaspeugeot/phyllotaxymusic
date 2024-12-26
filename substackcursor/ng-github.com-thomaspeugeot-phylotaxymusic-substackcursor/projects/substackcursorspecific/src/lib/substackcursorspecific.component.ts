@@ -13,9 +13,9 @@ import * as substackcursor from '../../../substackcursor/src/public-api'
       -->
       <line
         [attr.x1]="x"
-        y1="0"
+        [attr.y1]="cursor!.Y1"
         [attr.x2]="x"
-        y2="1000"
+        [attr.y2]="cursor!.Y2"
         stroke="black"
         stroke-width="2"
       />
@@ -29,6 +29,7 @@ export class SubstackcursorspecificComponent implements OnInit {
 
   StacksNames = substackcursor.StacksNames;
   public frontRepo?: substackcursor.FrontRepo;
+  public cursor: substackcursor.Cursor | undefined
 
   constructor(
     private frontRepoService: substackcursor.FrontRepoService,
@@ -44,8 +45,10 @@ export class SubstackcursorspecificComponent implements OnInit {
         let cursors = this.frontRepo.getFrontArray<substackcursor.Cursor>(substackcursor.Cursor.GONGSTRUCT_NAME);
 
         console.assert(cursors.length == 1);
-        let cursor = cursors[0];
-        if (cursor.IsPlaying == true) {
+        this.cursor = cursors[0];
+        this.x = this.cursor.StartX
+
+        if (this.cursor.IsPlaying == true) {
           this.startEmittingPosition();
         } else {
           this.stopEmittingPosition();  // Stop the animation if IsPlaying is false
@@ -65,8 +68,13 @@ export class SubstackcursorspecificComponent implements OnInit {
    * Smoothly move the line from x=0 to x=1000 over 5 seconds using requestAnimationFrame.
    */
   public startEmittingPosition(): void {
-    const duration = 5000;   // 5 seconds
-    const endPosition = 1000;
+
+    if (this.cursor == undefined) {
+      return
+    }
+
+    const duration = 1000 * this.cursor.DurationSeconds   // 5 seconds
+    const endPosition = this.cursor?.EndX;
     let startTime: number | null = null;
 
     const animate = (timestamp: number) => {
@@ -77,7 +85,7 @@ export class SubstackcursorspecificComponent implements OnInit {
       // progress goes from 0.0 to 1.0 as time goes by
       const progress = Math.min(elapsed / duration, 1);
       // Position is progress * 1000
-      this.x = progress * endPosition;
+      this.x = this.cursor!.StartX + progress * endPosition;
 
       // Keep going until we reach progress=1.0
       if (progress < 1) {

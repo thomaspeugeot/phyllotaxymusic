@@ -63,30 +63,20 @@ type CursorDB struct {
 	// Declation for basic field cursorDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field cursorDB.AngleDegree
-	AngleDegree_Data sql.NullFloat64
-
-	// Declation for basic field cursorDB.Length
-	Length_Data sql.NullFloat64
-
-	// Declation for basic field cursorDB.CenterX
-	CenterX_Data sql.NullFloat64
-
-	// Declation for basic field cursorDB.CenterY
-	CenterY_Data sql.NullFloat64
-
 	// Declation for basic field cursorDB.StartX
 	StartX_Data sql.NullFloat64
 
 	// Declation for basic field cursorDB.EndX
 	EndX_Data sql.NullFloat64
 
+	// Declation for basic field cursorDB.Y1
+	Y1_Data sql.NullFloat64
+
+	// Declation for basic field cursorDB.Y2
+	Y2_Data sql.NullFloat64
+
 	// Declation for basic field cursorDB.DurationSeconds
 	DurationSeconds_Data sql.NullFloat64
-
-	// Declation for basic field cursorDB.IsMoving
-	// provide the sql storage for the boolan
-	IsMoving_Data sql.NullBool
 
 	// Declation for basic field cursorDB.Color
 	Color_Data sql.NullString
@@ -140,39 +130,33 @@ type CursorWOP struct {
 
 	Name string `xlsx:"1"`
 
-	AngleDegree float64 `xlsx:"2"`
+	StartX float64 `xlsx:"2"`
 
-	Length float64 `xlsx:"3"`
+	EndX float64 `xlsx:"3"`
 
-	CenterX float64 `xlsx:"4"`
+	Y1 float64 `xlsx:"4"`
 
-	CenterY float64 `xlsx:"5"`
+	Y2 float64 `xlsx:"5"`
 
-	StartX float64 `xlsx:"6"`
+	DurationSeconds float64 `xlsx:"6"`
 
-	EndX float64 `xlsx:"7"`
+	Color string `xlsx:"7"`
 
-	DurationSeconds float64 `xlsx:"8"`
+	FillOpacity float64 `xlsx:"8"`
 
-	IsMoving bool `xlsx:"9"`
+	Stroke string `xlsx:"9"`
 
-	Color string `xlsx:"10"`
+	StrokeOpacity float64 `xlsx:"10"`
 
-	FillOpacity float64 `xlsx:"11"`
+	StrokeWidth float64 `xlsx:"11"`
 
-	Stroke string `xlsx:"12"`
+	StrokeDashArray string `xlsx:"12"`
 
-	StrokeOpacity float64 `xlsx:"13"`
+	StrokeDashArrayWhenSelected string `xlsx:"13"`
 
-	StrokeWidth float64 `xlsx:"14"`
+	Transform string `xlsx:"14"`
 
-	StrokeDashArray string `xlsx:"15"`
-
-	StrokeDashArrayWhenSelected string `xlsx:"16"`
-
-	Transform string `xlsx:"17"`
-
-	IsPlaying bool `xlsx:"18"`
+	IsPlaying bool `xlsx:"15"`
 	// insertion for WOP pointer fields
 }
 
@@ -180,14 +164,11 @@ var Cursor_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"AngleDegree",
-	"Length",
-	"CenterX",
-	"CenterY",
 	"StartX",
 	"EndX",
+	"Y1",
+	"Y2",
 	"DurationSeconds",
-	"IsMoving",
 	"Color",
 	"FillOpacity",
 	"Stroke",
@@ -467,29 +448,20 @@ func (cursorDB *CursorDB) CopyBasicFieldsFromCursor(cursor *models.Cursor) {
 	cursorDB.Name_Data.String = cursor.Name
 	cursorDB.Name_Data.Valid = true
 
-	cursorDB.AngleDegree_Data.Float64 = cursor.AngleDegree
-	cursorDB.AngleDegree_Data.Valid = true
-
-	cursorDB.Length_Data.Float64 = cursor.Length
-	cursorDB.Length_Data.Valid = true
-
-	cursorDB.CenterX_Data.Float64 = cursor.CenterX
-	cursorDB.CenterX_Data.Valid = true
-
-	cursorDB.CenterY_Data.Float64 = cursor.CenterY
-	cursorDB.CenterY_Data.Valid = true
-
 	cursorDB.StartX_Data.Float64 = cursor.StartX
 	cursorDB.StartX_Data.Valid = true
 
 	cursorDB.EndX_Data.Float64 = cursor.EndX
 	cursorDB.EndX_Data.Valid = true
 
+	cursorDB.Y1_Data.Float64 = cursor.Y1
+	cursorDB.Y1_Data.Valid = true
+
+	cursorDB.Y2_Data.Float64 = cursor.Y2
+	cursorDB.Y2_Data.Valid = true
+
 	cursorDB.DurationSeconds_Data.Float64 = cursor.DurationSeconds
 	cursorDB.DurationSeconds_Data.Valid = true
-
-	cursorDB.IsMoving_Data.Bool = cursor.IsMoving
-	cursorDB.IsMoving_Data.Valid = true
 
 	cursorDB.Color_Data.String = cursor.Color
 	cursorDB.Color_Data.Valid = true
@@ -526,29 +498,20 @@ func (cursorDB *CursorDB) CopyBasicFieldsFromCursor_WOP(cursor *models.Cursor_WO
 	cursorDB.Name_Data.String = cursor.Name
 	cursorDB.Name_Data.Valid = true
 
-	cursorDB.AngleDegree_Data.Float64 = cursor.AngleDegree
-	cursorDB.AngleDegree_Data.Valid = true
-
-	cursorDB.Length_Data.Float64 = cursor.Length
-	cursorDB.Length_Data.Valid = true
-
-	cursorDB.CenterX_Data.Float64 = cursor.CenterX
-	cursorDB.CenterX_Data.Valid = true
-
-	cursorDB.CenterY_Data.Float64 = cursor.CenterY
-	cursorDB.CenterY_Data.Valid = true
-
 	cursorDB.StartX_Data.Float64 = cursor.StartX
 	cursorDB.StartX_Data.Valid = true
 
 	cursorDB.EndX_Data.Float64 = cursor.EndX
 	cursorDB.EndX_Data.Valid = true
 
+	cursorDB.Y1_Data.Float64 = cursor.Y1
+	cursorDB.Y1_Data.Valid = true
+
+	cursorDB.Y2_Data.Float64 = cursor.Y2
+	cursorDB.Y2_Data.Valid = true
+
 	cursorDB.DurationSeconds_Data.Float64 = cursor.DurationSeconds
 	cursorDB.DurationSeconds_Data.Valid = true
-
-	cursorDB.IsMoving_Data.Bool = cursor.IsMoving
-	cursorDB.IsMoving_Data.Valid = true
 
 	cursorDB.Color_Data.String = cursor.Color
 	cursorDB.Color_Data.Valid = true
@@ -585,29 +548,20 @@ func (cursorDB *CursorDB) CopyBasicFieldsFromCursorWOP(cursor *CursorWOP) {
 	cursorDB.Name_Data.String = cursor.Name
 	cursorDB.Name_Data.Valid = true
 
-	cursorDB.AngleDegree_Data.Float64 = cursor.AngleDegree
-	cursorDB.AngleDegree_Data.Valid = true
-
-	cursorDB.Length_Data.Float64 = cursor.Length
-	cursorDB.Length_Data.Valid = true
-
-	cursorDB.CenterX_Data.Float64 = cursor.CenterX
-	cursorDB.CenterX_Data.Valid = true
-
-	cursorDB.CenterY_Data.Float64 = cursor.CenterY
-	cursorDB.CenterY_Data.Valid = true
-
 	cursorDB.StartX_Data.Float64 = cursor.StartX
 	cursorDB.StartX_Data.Valid = true
 
 	cursorDB.EndX_Data.Float64 = cursor.EndX
 	cursorDB.EndX_Data.Valid = true
 
+	cursorDB.Y1_Data.Float64 = cursor.Y1
+	cursorDB.Y1_Data.Valid = true
+
+	cursorDB.Y2_Data.Float64 = cursor.Y2
+	cursorDB.Y2_Data.Valid = true
+
 	cursorDB.DurationSeconds_Data.Float64 = cursor.DurationSeconds
 	cursorDB.DurationSeconds_Data.Valid = true
-
-	cursorDB.IsMoving_Data.Bool = cursor.IsMoving
-	cursorDB.IsMoving_Data.Valid = true
 
 	cursorDB.Color_Data.String = cursor.Color
 	cursorDB.Color_Data.Valid = true
@@ -641,14 +595,11 @@ func (cursorDB *CursorDB) CopyBasicFieldsFromCursorWOP(cursor *CursorWOP) {
 func (cursorDB *CursorDB) CopyBasicFieldsToCursor(cursor *models.Cursor) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	cursor.Name = cursorDB.Name_Data.String
-	cursor.AngleDegree = cursorDB.AngleDegree_Data.Float64
-	cursor.Length = cursorDB.Length_Data.Float64
-	cursor.CenterX = cursorDB.CenterX_Data.Float64
-	cursor.CenterY = cursorDB.CenterY_Data.Float64
 	cursor.StartX = cursorDB.StartX_Data.Float64
 	cursor.EndX = cursorDB.EndX_Data.Float64
+	cursor.Y1 = cursorDB.Y1_Data.Float64
+	cursor.Y2 = cursorDB.Y2_Data.Float64
 	cursor.DurationSeconds = cursorDB.DurationSeconds_Data.Float64
-	cursor.IsMoving = cursorDB.IsMoving_Data.Bool
 	cursor.Color = cursorDB.Color_Data.String
 	cursor.FillOpacity = cursorDB.FillOpacity_Data.Float64
 	cursor.Stroke = cursorDB.Stroke_Data.String
@@ -664,14 +615,11 @@ func (cursorDB *CursorDB) CopyBasicFieldsToCursor(cursor *models.Cursor) {
 func (cursorDB *CursorDB) CopyBasicFieldsToCursor_WOP(cursor *models.Cursor_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	cursor.Name = cursorDB.Name_Data.String
-	cursor.AngleDegree = cursorDB.AngleDegree_Data.Float64
-	cursor.Length = cursorDB.Length_Data.Float64
-	cursor.CenterX = cursorDB.CenterX_Data.Float64
-	cursor.CenterY = cursorDB.CenterY_Data.Float64
 	cursor.StartX = cursorDB.StartX_Data.Float64
 	cursor.EndX = cursorDB.EndX_Data.Float64
+	cursor.Y1 = cursorDB.Y1_Data.Float64
+	cursor.Y2 = cursorDB.Y2_Data.Float64
 	cursor.DurationSeconds = cursorDB.DurationSeconds_Data.Float64
-	cursor.IsMoving = cursorDB.IsMoving_Data.Bool
 	cursor.Color = cursorDB.Color_Data.String
 	cursor.FillOpacity = cursorDB.FillOpacity_Data.Float64
 	cursor.Stroke = cursorDB.Stroke_Data.String
@@ -688,14 +636,11 @@ func (cursorDB *CursorDB) CopyBasicFieldsToCursorWOP(cursor *CursorWOP) {
 	cursor.ID = int(cursorDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	cursor.Name = cursorDB.Name_Data.String
-	cursor.AngleDegree = cursorDB.AngleDegree_Data.Float64
-	cursor.Length = cursorDB.Length_Data.Float64
-	cursor.CenterX = cursorDB.CenterX_Data.Float64
-	cursor.CenterY = cursorDB.CenterY_Data.Float64
 	cursor.StartX = cursorDB.StartX_Data.Float64
 	cursor.EndX = cursorDB.EndX_Data.Float64
+	cursor.Y1 = cursorDB.Y1_Data.Float64
+	cursor.Y2 = cursorDB.Y2_Data.Float64
 	cursor.DurationSeconds = cursorDB.DurationSeconds_Data.Float64
-	cursor.IsMoving = cursorDB.IsMoving_Data.Bool
 	cursor.Color = cursorDB.Color_Data.String
 	cursor.FillOpacity = cursorDB.FillOpacity_Data.Float64
 	cursor.Stroke = cursorDB.Stroke_Data.String

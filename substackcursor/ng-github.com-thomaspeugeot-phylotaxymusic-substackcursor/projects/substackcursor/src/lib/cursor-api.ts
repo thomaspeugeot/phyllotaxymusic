@@ -13,14 +13,11 @@ export class CursorAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	AngleDegree: number = 0
-	Length: number = 0
-	CenterX: number = 0
-	CenterY: number = 0
 	StartX: number = 0
 	EndX: number = 0
+	Y1: number = 0
+	Y2: number = 0
 	DurationSeconds: number = 0
-	IsMoving: boolean = false
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""

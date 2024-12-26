@@ -26,9 +26,6 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *CircleGrid:
 		ok = stage.IsStagedCircleGrid(target)
 
-	case *Cursor:
-		ok = stage.IsStagedCursor(target)
-
 	case *FrontCurve:
 		ok = stage.IsStagedFrontCurve(target)
 
@@ -135,13 +132,6 @@ func (stage *StageStruct) IsStagedCircle(circle *Circle) (ok bool) {
 func (stage *StageStruct) IsStagedCircleGrid(circlegrid *CircleGrid) (ok bool) {
 
 	_, ok = stage.CircleGrids[circlegrid]
-
-	return
-}
-
-func (stage *StageStruct) IsStagedCursor(cursor *Cursor) (ok bool) {
-
-	_, ok = stage.Cursors[cursor]
 
 	return
 }
@@ -300,9 +290,6 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *CircleGrid:
 		stage.StageBranchCircleGrid(target)
-
-	case *Cursor:
-		stage.StageBranchCursor(target)
 
 	case *FrontCurve:
 		stage.StageBranchFrontCurve(target)
@@ -508,21 +495,6 @@ func (stage *StageStruct) StageBranchCircleGrid(circlegrid *CircleGrid) {
 	for _, _circle := range circlegrid.Circles {
 		StageBranch(stage, _circle)
 	}
-
-}
-
-func (stage *StageStruct) StageBranchCursor(cursor *Cursor) {
-
-	// check if instance is already staged
-	if IsStaged(stage, cursor) {
-		return
-	}
-
-	cursor.Stage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -787,9 +759,6 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.SpiralOrigin != nil {
 		StageBranch(stage, parameter.SpiralOrigin)
-	}
-	if parameter.Cursor != nil {
-		StageBranch(stage, parameter.Cursor)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -1087,10 +1056,6 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchCircleGrid(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
-	case *Cursor:
-		toT := CopyBranchCursor(mapOrigCopy, fromT)
-		return any(toT).(*Type)
-
 	case *FrontCurve:
 		toT := CopyBranchFrontCurve(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -1341,25 +1306,6 @@ func CopyBranchCircleGrid(mapOrigCopy map[any]any, circlegridFrom *CircleGrid) (
 	for _, _circle := range circlegridFrom.Circles {
 		circlegridTo.Circles = append(circlegridTo.Circles, CopyBranchCircle(mapOrigCopy, _circle))
 	}
-
-	return
-}
-
-func CopyBranchCursor(mapOrigCopy map[any]any, cursorFrom *Cursor) (cursorTo *Cursor) {
-
-	// cursorFrom has already been copied
-	if _cursorTo, ok := mapOrigCopy[cursorFrom]; ok {
-		cursorTo = _cursorTo.(*Cursor)
-		return
-	}
-
-	cursorTo = new(Cursor)
-	mapOrigCopy[cursorFrom] = cursorTo
-	cursorFrom.CopyBasicFields(cursorTo)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
 
 	return
 }
@@ -1644,9 +1590,6 @@ func CopyBranchParameter(mapOrigCopy map[any]any, parameterFrom *Parameter) (par
 	}
 	if parameterFrom.SpiralOrigin != nil {
 		parameterTo.SpiralOrigin = CopyBranchSpiralOrigin(mapOrigCopy, parameterFrom.SpiralOrigin)
-	}
-	if parameterFrom.Cursor != nil {
-		parameterTo.Cursor = CopyBranchCursor(mapOrigCopy, parameterFrom.Cursor)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
@@ -1987,9 +1930,6 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *CircleGrid:
 		stage.UnstageBranchCircleGrid(target)
 
-	case *Cursor:
-		stage.UnstageBranchCursor(target)
-
 	case *FrontCurve:
 		stage.UnstageBranchFrontCurve(target)
 
@@ -2194,21 +2134,6 @@ func (stage *StageStruct) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
 	for _, _circle := range circlegrid.Circles {
 		UnstageBranch(stage, _circle)
 	}
-
-}
-
-func (stage *StageStruct) UnstageBranchCursor(cursor *Cursor) {
-
-	// check if instance is already staged
-	if !IsStaged(stage, cursor) {
-		return
-	}
-
-	cursor.Unstage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -2473,9 +2398,6 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 	}
 	if parameter.SpiralOrigin != nil {
 		UnstageBranch(stage, parameter.SpiralOrigin)
-	}
-	if parameter.Cursor != nil {
-		UnstageBranch(stage, parameter.Cursor)
 	}
 
 	//insertion point for the staging of instances referenced by slice of pointers

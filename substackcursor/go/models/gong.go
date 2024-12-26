@@ -510,7 +510,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Cursor:
-		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "IsPlaying"}
+		res = []string{"Name", "StartX", "EndX", "Y1", "Y2", "DurationSeconds", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "IsPlaying"}
 	}
 	return
 }
@@ -544,7 +544,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *Cursor:
-		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "IsPlaying"}
+		res = []string{"Name", "StartX", "EndX", "Y1", "Y2", "DurationSeconds", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "IsPlaying"}
 	}
 	return
 }
@@ -591,22 +591,6 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "AngleDegree":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
-			res.valueFloat = inferedInstance.AngleDegree
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Length":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Length)
-			res.valueFloat = inferedInstance.Length
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CenterX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
-			res.valueFloat = inferedInstance.CenterX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CenterY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
-			res.valueFloat = inferedInstance.CenterY
-			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StartX":
 			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
 			res.valueFloat = inferedInstance.StartX
@@ -615,14 +599,18 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
 			res.valueFloat = inferedInstance.EndX
 			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Y1":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y1)
+			res.valueFloat = inferedInstance.Y1
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Y2":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y2)
+			res.valueFloat = inferedInstance.Y2
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "DurationSeconds":
 			res.valueString = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
 			res.valueFloat = inferedInstance.DurationSeconds
 			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "IsMoving":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsMoving)
-			res.valueBool = inferedInstance.IsMoving
-			res.GongFieldValueType = GongFieldValueTypeBool
 		case "Color":
 			res.valueString = inferedInstance.Color
 		case "FillOpacity":
@@ -665,22 +653,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "AngleDegree":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
-			res.valueFloat = inferedInstance.AngleDegree
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Length":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Length)
-			res.valueFloat = inferedInstance.Length
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CenterX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
-			res.valueFloat = inferedInstance.CenterX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CenterY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
-			res.valueFloat = inferedInstance.CenterY
-			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "StartX":
 			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
 			res.valueFloat = inferedInstance.StartX
@@ -689,14 +661,18 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
 			res.valueFloat = inferedInstance.EndX
 			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Y1":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y1)
+			res.valueFloat = inferedInstance.Y1
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Y2":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y2)
+			res.valueFloat = inferedInstance.Y2
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "DurationSeconds":
 			res.valueString = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
 			res.valueFloat = inferedInstance.DurationSeconds
 			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "IsMoving":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsMoving)
-			res.valueBool = inferedInstance.IsMoving
-			res.GongFieldValueType = GongFieldValueTypeBool
 		case "Color":
 			res.valueString = inferedInstance.Color
 		case "FillOpacity":

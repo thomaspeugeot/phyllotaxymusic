@@ -130,9 +130,6 @@ func EvictInOtherSlices[OwningType PointerToGongstruct, FieldType PointerToGongs
 			}
 		}
 
-	case *Cursor:
-		// insertion point per field
-
 	case *FrontCurve:
 		// insertion point per field
 
@@ -381,9 +378,6 @@ func (stage *StageStruct) ComputeReverseMaps() {
 			stage.CircleGrid_Circles_reverseMap[_circle] = circlegrid
 		}
 	}
-
-	// Compute reverse map for named struct Cursor
-	// insertion point per field
 
 	// Compute reverse map for named struct FrontCurve
 	// insertion point per field

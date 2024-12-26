@@ -39,7 +39,6 @@ import { KeyAPI } from './key-api'
 import { HorizontalAxisAPI } from './horizontalaxis-api'
 import { VerticalAxisAPI } from './verticalaxis-api'
 import { SpiralOriginAPI } from './spiralorigin-api'
-import { CursorAPI } from './cursor-api'
 
 @Injectable({
   providedIn: 'root'

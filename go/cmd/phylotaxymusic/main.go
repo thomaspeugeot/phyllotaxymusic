@@ -87,11 +87,7 @@ func main() {
 	parameterImpl.tree = tree
 
 	parameter.Impl = parameterImpl
-
 	phylotaxymusic_models.GeneratorSingloton.Impl = parameterImpl
-	parameterImpl.Generate()
-
-	tree.Generate(parameter)
 
 	// prepare the substack that displays the cursor
 	cursorStack := substackcursor_stack.NewStack(r, substackcursor_models.Substackcursor.ToString(), "", "", "", false, false)
@@ -105,9 +101,14 @@ func main() {
 	notifyCh := make(chan bool)
 	cursor.SetNotifyChannel(notifyCh)
 	parameter.SetNotifyChannel(notifyCh)
+	parameter.SetCursor(cursor)
 
 	// wait loop in cursor. Will commit once it receive a notification.
 	cursor.WaitForPlayNotifications(cursorStack.Stage)
+
+	// generate other stacks
+	parameterImpl.Generate()
+	tree.Generate(parameter)
 
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))

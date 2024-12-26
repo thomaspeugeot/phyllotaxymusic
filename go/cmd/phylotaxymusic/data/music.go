@@ -69,8 +69,6 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right := (&models.CircleGrid{}).Stage(stage)
 	__CircleGrid__000008_Second_Voice_notes := (&models.CircleGrid{}).Stage(stage)
 
-	__Cursor__000000_Cursor := (&models.Cursor{}).Stage(stage)
-
 	__FrontCurve__000000_Non_Rotated_0_ := (&models.FrontCurve{}).Stage(stage)
 	__FrontCurve__000001_Non_Rotated_1_ := (&models.FrontCurve{}).Stage(stage)
 	__FrontCurve__000002_Non_Rotated_2_ := (&models.FrontCurve{}).Stage(stage)
@@ -500,24 +498,6 @@ func _(stage *models.StageStruct) {
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
 	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
-
-	__Cursor__000000_Cursor.Name = `Cursor`
-	__Cursor__000000_Cursor.AngleDegree = 90.000000
-	__Cursor__000000_Cursor.Length = 2000.000000
-	__Cursor__000000_Cursor.CenterX = 0.000000
-	__Cursor__000000_Cursor.CenterY = 252.540000
-	__Cursor__000000_Cursor.StartX = 0.000000
-	__Cursor__000000_Cursor.EndX = 276.000000
-	__Cursor__000000_Cursor.DurationSeconds = 2.644628
-	__Cursor__000000_Cursor.IsMoving = false
-	__Cursor__000000_Cursor.Color = ``
-	__Cursor__000000_Cursor.FillOpacity = 0.000000
-	__Cursor__000000_Cursor.Stroke = `lightgray`
-	__Cursor__000000_Cursor.StrokeOpacity = 0.700000
-	__Cursor__000000_Cursor.StrokeWidth = 6.000000
-	__Cursor__000000_Cursor.StrokeDashArray = ``
-	__Cursor__000000_Cursor.StrokeDashArrayWhenSelected = ``
-	__Cursor__000000_Cursor.Transform = ``
 
 	__FrontCurve__000000_Non_Rotated_0_.Name = `Non Rotated 0 `
 	__FrontCurve__000000_Non_Rotated_0_.Path = `M722.16 525.55 C723.47 518.01 724.33 511.79 725.28 504.79 C726.23 497.80 727.01 490.77 727.87 483.57 C728.72 476.36 729.45 469.12 730.39 461.56 C731.33 454.00 732.26 446.37 733.51 438.21 C734.76 430.05 736.34 421.62 737.91 412.58 C739.48 403.53 741.83 393.76 742.94 383.94 C744.06 374.12 745.16 363.58 744.58 353.66 C744.00 343.73 742.23 333.77 739.46 324.42 C736.69 315.07 732.63 306.05 727.98 297.55 C723.33 289.05 717.67 280.99 711.57 273.44 C705.48 265.88 698.61 258.80 691.40 252.23 C684.20 245.67 677.29 240.01 668.34 234.05 C659.39 228.09 648.34 221.44 637.72 216.46 C627.11 211.48 615.93 207.25 604.65 204.17 C593.36 201.08 581.63 198.92 570.02 197.96 C558.42 197.00 546.52 197.15 535.02 198.41 C523.51 199.68 511.96 202.25 500.98 205.56 C490.01 208.86 479.30 213.48 469.17 218.26 C459.03 223.05 449.42 228.75 440.17 234.26 C430.92 239.76 422.22 245.61 413.70 251.30 C405.17 256.98 397.05 262.67 389.04 268.36 C381.03 274.05 373.28 279.68 365.64 285.45 C357.99 291.23 350.52 297.00 343.18 303.01 C335.84 309.03 328.07 315.71 321.59 321.54 C315.10 327.36 309.99 332.35 304.27 337.97 C298.55 343.59 292.97 349.36 287.27 355.26 C281.57 361.16 275.97 367.18 270.06 373.35 C264.14 379.51 258.23 385.77 251.77 392.25 C245.31 398.73 238.48 405.23 231.30 412.24 C224.13 419.24 215.93 426.34 208.72 434.26 C201.50 442.17 193.89 450.67 188.02 459.74 C182.16 468.80 177.25 478.65 173.54 488.64 C169.83 498.63 167.40 509.17 165.78 519.66 C164.17 530.15 163.67 540.94 163.87 551.58 C164.07 562.23 165.20 572.99 166.97 583.53 C168.75 594.08 170.86 603.64 174.49 614.86 C178.13 626.08 183.09 639.33 188.78 650.87 C194.48 662.41 201.15 673.69 208.66 684.10 C216.17 694.51 224.66 704.46 233.85 713.34 C243.04 722.22 253.20 730.38 263.80 737.37 C274.39 744.36 285.88 750.33 297.42 755.30 C308.95 760.27 321.13 764.01 333.00 767.20 C344.87 770.39 356.94 772.49 368.63 774.44 C380.31 776.40 391.82 777.70 403.10 778.95 C414.37 780.20 425.36 781.14 436.28 781.93 C447.19 782.73 457.88 783.36 468.58 783.74 C479.29 784.12 489.86 784.33 500.48 784.21 C511.10 784.08 521.74 783.99 532.30 782.98 C542.86 781.98 553.55 780.68 563.85 778.20 C574.15 775.72 584.42 772.36 594.10 768.11 C603.77 763.85 613.25 758.67 621.90 752.67 C630.55 746.68 638.76 739.70 646.01 732.15 C653.26 724.59 659.77 716.05 665.40 707.34 C671.04 698.63 675.68 689.12 679.82 679.88 C683.97 670.63 687.18 661.05 690.27 651.88 C693.36 642.72 695.86 633.66 698.38 624.89 C700.90 616.11 703.16 607.62 705.38 599.22 C707.60 590.81 709.72 582.66 711.73 574.47 C713.73 566.28 715.66 558.23 717.40 550.07 C719.14 541.92 720.85 533.10 722.16 525.55 Z`
@@ -984,7 +964,6 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.HorizontalAxis = __HorizontalAxis__000000_Horizontal_Axis
 	__Parameter__000000_Reference.VerticalAxis = __VerticalAxis__000000_Vertical_Axis
 	__Parameter__000000_Reference.SpiralOrigin = __SpiralOrigin__000000_Spiral_Origin
-	__Parameter__000000_Reference.Cursor = __Cursor__000000_Cursor
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.ShapeCategory = __ShapeCategory__000003_3_Growing
 	__Rhombus__000001_Initial_Rhombus.ShapeCategory = __ShapeCategory__000001_1_Initial
 	__Rhombus__000002_Rotated_Next_Rhombus.ShapeCategory = __ShapeCategory__000002_2_Rotated

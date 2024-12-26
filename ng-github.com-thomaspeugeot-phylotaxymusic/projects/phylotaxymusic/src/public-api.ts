@@ -41,10 +41,6 @@ export * from './lib/circlegrid-api'
 export * from './lib/circlegrid'
 export * from './lib/circlegrid.service'
 
-export * from './lib/cursor-api'
-export * from './lib/cursor'
-export * from './lib/cursor.service'
-
 export * from './lib/frontcurve-api'
 export * from './lib/frontcurve'
 export * from './lib/frontcurve.service'

@@ -48,10 +48,6 @@ type DBLite struct {
 
 	nextIDCircleGridDB uint
 
-	cursorDBs map[uint]*CursorDB
-
-	nextIDCursorDB uint
-
 	frontcurveDBs map[uint]*FrontCurveDB
 
 	nextIDFrontCurveDB uint
@@ -144,8 +140,6 @@ func NewDBLite() *DBLite {
 
 		circlegridDBs: make(map[uint]*CircleGridDB),
 
-		cursorDBs: make(map[uint]*CursorDB),
-
 		frontcurveDBs: make(map[uint]*FrontCurveDB),
 
 		frontcurvestackDBs: make(map[uint]*FrontCurveStackDB),
@@ -223,10 +217,6 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		db.nextIDCircleGridDB++
 		v.ID = db.nextIDCircleGridDB
 		db.circlegridDBs[v.ID] = v
-	case *CursorDB:
-		db.nextIDCursorDB++
-		v.ID = db.nextIDCursorDB
-		db.cursorDBs[v.ID] = v
 	case *FrontCurveDB:
 		db.nextIDFrontCurveDB++
 		v.ID = db.nextIDFrontCurveDB
@@ -341,8 +331,6 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 		delete(db.circleDBs, v.ID)
 	case *CircleGridDB:
 		delete(db.circlegridDBs, v.ID)
-	case *CursorDB:
-		delete(db.cursorDBs, v.ID)
 	case *FrontCurveDB:
 		delete(db.frontcurveDBs, v.ID)
 	case *FrontCurveStackDB:
@@ -417,9 +405,6 @@ func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 		return db, nil
 	case *CircleGridDB:
 		db.circlegridDBs[v.ID] = v
-		return db, nil
-	case *CursorDB:
-		db.cursorDBs[v.ID] = v
 		return db, nil
 	case *FrontCurveDB:
 		db.frontcurveDBs[v.ID] = v
@@ -532,12 +517,6 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 			*existing = *v
 		} else {
 			return nil, errors.New("db CircleGrid github.com/thomaspeugeot/phylotaxymusic/go, record not found")
-		}
-	case *CursorDB:
-		if existing, ok := db.cursorDBs[v.ID]; ok {
-			*existing = *v
-		} else {
-			return nil, errors.New("db Cursor github.com/thomaspeugeot/phylotaxymusic/go, record not found")
 		}
 	case *FrontCurveDB:
 		if existing, ok := db.frontcurveDBs[v.ID]; ok {
@@ -700,12 +679,6 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 	case *[]CircleGridDB:
 		*ptr = make([]CircleGridDB, 0, len(db.circlegridDBs))
 		for _, v := range db.circlegridDBs {
-			*ptr = append(*ptr, *v)
-		}
-		return db, nil
-	case *[]CursorDB:
-		*ptr = make([]CursorDB, 0, len(db.cursorDBs))
-		for _, v := range db.cursorDBs {
 			*ptr = append(*ptr, *v)
 		}
 		return db, nil
@@ -919,16 +892,6 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		circlegridDB, _ := instanceDB.(*CircleGridDB)
 		*circlegridDB = *tmp
-		
-	case *CursorDB:
-		tmp, ok := db.cursorDBs[uint(i)]
-
-		if !ok {
-			return nil, errors.New(fmt.Sprintf("db.First Cursor Unkown entry %d", i))
-		}
-
-		cursorDB, _ := instanceDB.(*CursorDB)
-		*cursorDB = *tmp
 		
 	case *FrontCurveDB:
 		tmp, ok := db.frontcurveDBs[uint(i)]

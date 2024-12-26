@@ -15,8 +15,6 @@ import { CircleAPI } from './circle-api'
 
 import { CircleGridAPI } from './circlegrid-api'
 
-import { CursorAPI } from './cursor-api'
-
 import { FrontCurveAPI } from './frontcurve-api'
 
 import { FrontCurveStackAPI } from './frontcurvestack-api'
@@ -69,8 +67,6 @@ export class BackRepoData {
 	CircleAPIs = new Array<CircleAPI>()
 
 	CircleGridAPIs = new Array<CircleGridAPI>()
-
-	CursorAPIs = new Array<CursorAPI>()
 
 	FrontCurveAPIs = new Array<FrontCurveAPI>()
 
@@ -125,8 +121,6 @@ export class BackRepoData {
 		this.CircleAPIs = data?.CircleAPIs || [];
 
 		this.CircleGridAPIs = data?.CircleGridAPIs || [];
-
-		this.CursorAPIs = data?.CursorAPIs || [];
 
 		this.FrontCurveAPIs = data?.FrontCurveAPIs || [];
 

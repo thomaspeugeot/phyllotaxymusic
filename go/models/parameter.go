@@ -2,6 +2,8 @@ package models
 
 import (
 	"log"
+
+	substackcursor_models "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
 )
 
 type Parameter struct {
@@ -181,14 +183,17 @@ type Parameter struct {
 	// number of "minimal" notes to the shift
 	ActualBeatsTemporalShift int
 
-	// cursor vertical line
-	Cursor *Cursor
-
 	notifyCh chan bool
+
+	cursor *substackcursor_models.Cursor
 }
 
 func (parameter *Parameter) SetNotifyChannel(notifyCh chan bool) {
 	parameter.notifyCh = notifyCh
+}
+
+func (parameter *Parameter) SetCursor(cursor *substackcursor_models.Cursor) {
+	parameter.cursor = cursor
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {

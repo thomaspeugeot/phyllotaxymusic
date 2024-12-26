@@ -18,8 +18,6 @@ type BackRepoData struct {
 
 	CircleGridAPIs []*CircleGridAPI
 
-	CursorAPIs []*CursorAPI
-
 	FrontCurveAPIs []*FrontCurveAPI
 
 	FrontCurveStackAPIs []*FrontCurveStackAPI
@@ -132,16 +130,6 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		circlegridDB.CopyBasicFieldsToCircleGrid_WOP(&circlegridAPI.CircleGrid_WOP)
 
 		backRepoData.CircleGridAPIs = append(backRepoData.CircleGridAPIs, &circlegridAPI)
-	}
-
-	for _, cursorDB := range backRepo.BackRepoCursor.Map_CursorDBID_CursorDB {
-
-		var cursorAPI CursorAPI
-		cursorAPI.ID = cursorDB.ID
-		cursorAPI.CursorPointersEncoding = cursorDB.CursorPointersEncoding
-		cursorDB.CopyBasicFieldsToCursor_WOP(&cursorAPI.Cursor_WOP)
-
-		backRepoData.CursorAPIs = append(backRepoData.CursorAPIs, &cursorAPI)
 	}
 
 	for _, frontcurveDB := range backRepo.BackRepoFrontCurve.Map_FrontCurveDBID_FrontCurveDB {

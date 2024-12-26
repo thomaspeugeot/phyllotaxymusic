@@ -98,13 +98,6 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/circlegrids/:id", GetController().UpdateCircleGrid)
 		v1.DELETE("/v1/circlegrids/:id", GetController().DeleteCircleGrid)
 
-		v1.GET("/v1/cursors", GetController().GetCursors)
-		v1.GET("/v1/cursors/:id", GetController().GetCursor)
-		v1.POST("/v1/cursors", GetController().PostCursor)
-		v1.PATCH("/v1/cursors/:id", GetController().UpdateCursor)
-		v1.PUT("/v1/cursors/:id", GetController().UpdateCursor)
-		v1.DELETE("/v1/cursors/:id", GetController().DeleteCursor)
-
 		v1.GET("/v1/frontcurves", GetController().GetFrontCurves)
 		v1.GET("/v1/frontcurves/:id", GetController().GetFrontCurve)
 		v1.POST("/v1/frontcurves", GetController().PostFrontCurve)

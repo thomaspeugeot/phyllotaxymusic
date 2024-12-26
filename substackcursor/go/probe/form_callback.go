@@ -63,22 +63,16 @@ func (cursorFormCallback *CursorFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(cursor_.Name), formDiv)
-		case "AngleDegree":
-			FormDivBasicFieldToField(&(cursor_.AngleDegree), formDiv)
-		case "Length":
-			FormDivBasicFieldToField(&(cursor_.Length), formDiv)
-		case "CenterX":
-			FormDivBasicFieldToField(&(cursor_.CenterX), formDiv)
-		case "CenterY":
-			FormDivBasicFieldToField(&(cursor_.CenterY), formDiv)
 		case "StartX":
 			FormDivBasicFieldToField(&(cursor_.StartX), formDiv)
 		case "EndX":
 			FormDivBasicFieldToField(&(cursor_.EndX), formDiv)
+		case "Y1":
+			FormDivBasicFieldToField(&(cursor_.Y1), formDiv)
+		case "Y2":
+			FormDivBasicFieldToField(&(cursor_.Y2), formDiv)
 		case "DurationSeconds":
 			FormDivBasicFieldToField(&(cursor_.DurationSeconds), formDiv)
-		case "IsMoving":
-			FormDivBasicFieldToField(&(cursor_.IsMoving), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(cursor_.Color), formDiv)
 		case "FillOpacity":

@@ -5,15 +5,11 @@ import "log"
 type Cursor struct {
 	Name string
 
-	// in degrees
-	AngleDegree float64
-	Length      float64
+	// where it starts and end
+	StartX, EndX float64
+	Y1, Y2       float64
 
-	CenterX, CenterY float64
-
-	StartX, EndX    float64
 	DurationSeconds float64
-	IsMoving        bool
 
 	Presentation
 

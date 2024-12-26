@@ -179,48 +179,6 @@ func (from *CircleGrid) CopyBasicFields(to *CircleGrid) {
 	to.IsDisplayed = from.IsDisplayed
 }
 
-type Cursor_WOP struct {
-	// insertion point
-	Name string
-	AngleDegree float64
-	Length float64
-	CenterX float64
-	CenterY float64
-	StartX float64
-	EndX float64
-	DurationSeconds float64
-	IsMoving bool
-	Color string
-	FillOpacity float64
-	Stroke string
-	StrokeOpacity float64
-	StrokeWidth float64
-	StrokeDashArray string
-	StrokeDashArrayWhenSelected string
-	Transform string
-}
-
-func (from *Cursor) CopyBasicFields(to *Cursor) {
-	// insertion point
-	to.Name = from.Name
-	to.AngleDegree = from.AngleDegree
-	to.Length = from.Length
-	to.CenterX = from.CenterX
-	to.CenterY = from.CenterY
-	to.StartX = from.StartX
-	to.EndX = from.EndX
-	to.DurationSeconds = from.DurationSeconds
-	to.IsMoving = from.IsMoving
-	to.Color = from.Color
-	to.FillOpacity = from.FillOpacity
-	to.Stroke = from.Stroke
-	to.StrokeOpacity = from.StrokeOpacity
-	to.StrokeWidth = from.StrokeWidth
-	to.StrokeDashArray = from.StrokeDashArray
-	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
-	to.Transform = from.Transform
-}
-
 type FrontCurve_WOP struct {
 	// insertion point
 	Name string

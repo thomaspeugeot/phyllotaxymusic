@@ -18,14 +18,11 @@ export class Cursor {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	AngleDegree: number = 0
-	Length: number = 0
-	CenterX: number = 0
-	CenterY: number = 0
 	StartX: number = 0
 	EndX: number = 0
+	Y1: number = 0
+	Y2: number = 0
 	DurationSeconds: number = 0
-	IsMoving: boolean = false
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -47,14 +44,11 @@ export function CopyCursorToCursorAPI(cursor: Cursor, cursorAPI: CursorAPI) {
 
 	// insertion point for basic fields copy operations
 	cursorAPI.Name = cursor.Name
-	cursorAPI.AngleDegree = cursor.AngleDegree
-	cursorAPI.Length = cursor.Length
-	cursorAPI.CenterX = cursor.CenterX
-	cursorAPI.CenterY = cursor.CenterY
 	cursorAPI.StartX = cursor.StartX
 	cursorAPI.EndX = cursor.EndX
+	cursorAPI.Y1 = cursor.Y1
+	cursorAPI.Y2 = cursor.Y2
 	cursorAPI.DurationSeconds = cursor.DurationSeconds
-	cursorAPI.IsMoving = cursor.IsMoving
 	cursorAPI.Color = cursor.Color
 	cursorAPI.FillOpacity = cursor.FillOpacity
 	cursorAPI.Stroke = cursor.Stroke
@@ -82,14 +76,11 @@ export function CopyCursorAPIToCursor(cursorAPI: CursorAPI, cursor: Cursor, fron
 
 	// insertion point for basic fields copy operations
 	cursor.Name = cursorAPI.Name
-	cursor.AngleDegree = cursorAPI.AngleDegree
-	cursor.Length = cursorAPI.Length
-	cursor.CenterX = cursorAPI.CenterX
-	cursor.CenterY = cursorAPI.CenterY
 	cursor.StartX = cursorAPI.StartX
 	cursor.EndX = cursorAPI.EndX
+	cursor.Y1 = cursorAPI.Y1
+	cursor.Y2 = cursorAPI.Y2
 	cursor.DurationSeconds = cursorAPI.DurationSeconds
-	cursor.IsMoving = cursorAPI.IsMoving
 	cursor.Color = cursorAPI.Color
 	cursor.FillOpacity = cursorAPI.FillOpacity
 	cursor.Stroke = cursorAPI.Stroke

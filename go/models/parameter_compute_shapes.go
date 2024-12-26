@@ -188,5 +188,5 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotesShiftedRight)
 
 	// add cursor
-	p.computeCursor()
+	p.computeCursorSVGCoords()
 }

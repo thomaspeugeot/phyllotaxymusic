@@ -118,15 +118,6 @@ type StageStruct struct {
 	OnAfterCircleGridDeleteCallback OnAfterDeleteInterface[CircleGrid]
 	OnAfterCircleGridReadCallback   OnAfterReadInterface[CircleGrid]
 
-	Cursors           map[*Cursor]any
-	Cursors_mapString map[string]*Cursor
-
-	// insertion point for slice of pointers maps
-	OnAfterCursorCreateCallback OnAfterCreateInterface[Cursor]
-	OnAfterCursorUpdateCallback OnAfterUpdateInterface[Cursor]
-	OnAfterCursorDeleteCallback OnAfterDeleteInterface[Cursor]
-	OnAfterCursorReadCallback   OnAfterReadInterface[Cursor]
-
 	FrontCurves           map[*FrontCurve]any
 	FrontCurves_mapString map[string]*FrontCurve
 
@@ -385,8 +376,6 @@ type BackRepoInterface interface {
 	CheckoutCircle(circle *Circle)
 	CommitCircleGrid(circlegrid *CircleGrid)
 	CheckoutCircleGrid(circlegrid *CircleGrid)
-	CommitCursor(cursor *Cursor)
-	CheckoutCursor(cursor *Cursor)
 	CommitFrontCurve(frontcurve *FrontCurve)
 	CheckoutFrontCurve(frontcurve *FrontCurve)
 	CommitFrontCurveStack(frontcurvestack *FrontCurveStack)
@@ -450,9 +439,6 @@ func NewStage(path string) (stage *StageStruct) {
 
 		CircleGrids:           make(map[*CircleGrid]any),
 		CircleGrids_mapString: make(map[string]*CircleGrid),
-
-		Cursors:           make(map[*Cursor]any),
-		Cursors_mapString: make(map[string]*Cursor),
 
 		FrontCurves:           make(map[*FrontCurve]any),
 		FrontCurves_mapString: make(map[string]*FrontCurve),
@@ -548,7 +534,6 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["BezierGridStack"] = len(stage.BezierGridStacks)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
-	stage.Map_GongStructName_InstancesNb["Cursor"] = len(stage.Cursors)
 	stage.Map_GongStructName_InstancesNb["FrontCurve"] = len(stage.FrontCurves)
 	stage.Map_GongStructName_InstancesNb["FrontCurveStack"] = len(stage.FrontCurveStacks)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
@@ -584,7 +569,6 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["BezierGridStack"] = len(stage.BezierGridStacks)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
-	stage.Map_GongStructName_InstancesNb["Cursor"] = len(stage.Cursors)
 	stage.Map_GongStructName_InstancesNb["FrontCurve"] = len(stage.FrontCurves)
 	stage.Map_GongStructName_InstancesNb["FrontCurveStack"] = len(stage.FrontCurveStacks)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
@@ -983,56 +967,6 @@ func (circlegrid *CircleGrid) Checkout(stage *StageStruct) *CircleGrid {
 // for satisfaction of GongStruct interface
 func (circlegrid *CircleGrid) GetName() (res string) {
 	return circlegrid.Name
-}
-
-// Stage puts cursor to the model stage
-func (cursor *Cursor) Stage(stage *StageStruct) *Cursor {
-	stage.Cursors[cursor] = __member
-	stage.Cursors_mapString[cursor.Name] = cursor
-
-	return cursor
-}
-
-// Unstage removes cursor off the model stage
-func (cursor *Cursor) Unstage(stage *StageStruct) *Cursor {
-	delete(stage.Cursors, cursor)
-	delete(stage.Cursors_mapString, cursor.Name)
-	return cursor
-}
-
-// UnstageVoid removes cursor off the model stage
-func (cursor *Cursor) UnstageVoid(stage *StageStruct) {
-	delete(stage.Cursors, cursor)
-	delete(stage.Cursors_mapString, cursor.Name)
-}
-
-// commit cursor to the back repo (if it is already staged)
-func (cursor *Cursor) Commit(stage *StageStruct) *Cursor {
-	if _, ok := stage.Cursors[cursor]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CommitCursor(cursor)
-		}
-	}
-	return cursor
-}
-
-func (cursor *Cursor) CommitVoid(stage *StageStruct) {
-	cursor.Commit(stage)
-}
-
-// Checkout cursor to the back repo (if it is already staged)
-func (cursor *Cursor) Checkout(stage *StageStruct) *Cursor {
-	if _, ok := stage.Cursors[cursor]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutCursor(cursor)
-		}
-	}
-	return cursor
-}
-
-// for satisfaction of GongStruct interface
-func (cursor *Cursor) GetName() (res string) {
-	return cursor.Name
 }
 
 // Stage puts frontcurve to the model stage
@@ -1944,7 +1878,6 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMBezierGridStack(BezierGridStack *BezierGridStack)
 	CreateORMCircle(Circle *Circle)
 	CreateORMCircleGrid(CircleGrid *CircleGrid)
-	CreateORMCursor(Cursor *Cursor)
 	CreateORMFrontCurve(FrontCurve *FrontCurve)
 	CreateORMFrontCurveStack(FrontCurveStack *FrontCurveStack)
 	CreateORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
@@ -1973,7 +1906,6 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMBezierGridStack(BezierGridStack *BezierGridStack)
 	DeleteORMCircle(Circle *Circle)
 	DeleteORMCircleGrid(CircleGrid *CircleGrid)
-	DeleteORMCursor(Cursor *Cursor)
 	DeleteORMFrontCurve(FrontCurve *FrontCurve)
 	DeleteORMFrontCurveStack(FrontCurveStack *FrontCurveStack)
 	DeleteORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
@@ -2015,9 +1947,6 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.CircleGrids = make(map[*CircleGrid]any)
 	stage.CircleGrids_mapString = make(map[string]*CircleGrid)
-
-	stage.Cursors = make(map[*Cursor]any)
-	stage.Cursors_mapString = make(map[string]*Cursor)
 
 	stage.FrontCurves = make(map[*FrontCurve]any)
 	stage.FrontCurves_mapString = make(map[string]*FrontCurve)
@@ -2096,9 +2025,6 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.CircleGrids = nil
 	stage.CircleGrids_mapString = nil
-
-	stage.Cursors = nil
-	stage.Cursors_mapString = nil
 
 	stage.FrontCurves = nil
 	stage.FrontCurves_mapString = nil
@@ -2183,10 +2109,6 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 
 	for circlegrid := range stage.CircleGrids {
 		circlegrid.Unstage(stage)
-	}
-
-	for cursor := range stage.Cursors {
-		cursor.Unstage(stage)
 	}
 
 	for frontcurve := range stage.FrontCurves {
@@ -2336,8 +2258,6 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Circles).(*Type)
 	case map[*CircleGrid]any:
 		return any(&stage.CircleGrids).(*Type)
-	case map[*Cursor]any:
-		return any(&stage.Cursors).(*Type)
 	case map[*FrontCurve]any:
 		return any(&stage.FrontCurves).(*Type)
 	case map[*FrontCurveStack]any:
@@ -2400,8 +2320,6 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Circles_mapString).(*Type)
 	case map[string]*CircleGrid:
 		return any(&stage.CircleGrids_mapString).(*Type)
-	case map[string]*Cursor:
-		return any(&stage.Cursors_mapString).(*Type)
 	case map[string]*FrontCurve:
 		return any(&stage.FrontCurves_mapString).(*Type)
 	case map[string]*FrontCurveStack:
@@ -2464,8 +2382,6 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Circles).(*map[*Type]any)
 	case CircleGrid:
 		return any(&stage.CircleGrids).(*map[*Type]any)
-	case Cursor:
-		return any(&stage.Cursors).(*map[*Type]any)
 	case FrontCurve:
 		return any(&stage.FrontCurves).(*map[*Type]any)
 	case FrontCurveStack:
@@ -2528,8 +2444,6 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.Circles).(*map[Type]any)
 	case *CircleGrid:
 		return any(&stage.CircleGrids).(*map[Type]any)
-	case *Cursor:
-		return any(&stage.Cursors).(*map[Type]any)
 	case *FrontCurve:
 		return any(&stage.FrontCurves).(*map[Type]any)
 	case *FrontCurveStack:
@@ -2592,8 +2506,6 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Circles_mapString).(*map[string]*Type)
 	case CircleGrid:
 		return any(&stage.CircleGrids_mapString).(*map[string]*Type)
-	case Cursor:
-		return any(&stage.Cursors_mapString).(*map[string]*Type)
 	case FrontCurve:
 		return any(&stage.FrontCurves_mapString).(*map[string]*Type)
 	case FrontCurveStack:
@@ -2699,10 +2611,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Circles: []*Circle{{Name: "Circles"}},
 			// field is initialized with AbstractShape problem with composites
 			
-		}).(*Type)
-	case Cursor:
-		return any(&Cursor{
-			// Initialisation of associations
 		}).(*Type)
 	case FrontCurve:
 		return any(&FrontCurve{
@@ -2851,8 +2759,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			VerticalAxis: &VerticalAxis{Name: "VerticalAxis"},
 			// field is initialized with an instance of SpiralOrigin with the name of the field
 			SpiralOrigin: &SpiralOrigin{Name: "SpiralOrigin"},
-			// field is initialized with an instance of Cursor with the name of the field
-			Cursor: &Cursor{Name: "Cursor"},
 		}).(*Type)
 	case Rhombus:
 		return any(&Rhombus{
@@ -3166,11 +3072,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
-		}
-	// reverse maps of direct associations of Cursor
-	case Cursor:
-		switch fieldname {
-		// insertion point for per direct association field
 		}
 	// reverse maps of direct associations of FrontCurve
 	case FrontCurve:
@@ -4250,23 +4151,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
-		case "Cursor":
-			res := make(map[*Cursor][]*Parameter)
-			for parameter := range stage.Parameters {
-				if parameter.Cursor != nil {
-					cursor_ := parameter.Cursor
-					var parameters []*Parameter
-					_, ok := res[cursor_]
-					if ok {
-						parameters = res[cursor_]
-					} else {
-						parameters = make([]*Parameter, 0)
-					}
-					parameters = append(parameters, parameter)
-					res[cursor_] = parameters
-				}
-			}
-			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Rhombus
 	case Rhombus:
@@ -4654,11 +4538,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			}
 			return any(res).(map[*End]*Start)
 		}
-	// reverse maps of direct associations of Cursor
-	case Cursor:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
 	// reverse maps of direct associations of FrontCurve
 	case FrontCurve:
 		switch fieldname {
@@ -4831,8 +4710,6 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Circle"
 	case CircleGrid:
 		res = "CircleGrid"
-	case Cursor:
-		res = "Cursor"
 	case FrontCurve:
 		res = "FrontCurve"
 	case FrontCurveStack:
@@ -4895,8 +4772,6 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "Circle"
 	case *CircleGrid:
 		res = "CircleGrid"
-	case *Cursor:
-		res = "Cursor"
 	case *FrontCurve:
 		res = "FrontCurve"
 	case *FrontCurveStack:
@@ -4958,8 +4833,6 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName"}
 	case CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
-	case Cursor:
-		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case FrontCurve:
 		res = []string{"Name", "Path"}
 	case FrontCurveStack:
@@ -4969,7 +4842,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Key:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Path", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case Parameter:
-		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "BeatLines", "BeatLinesHeightRatio", "NbBeatLines", "NbOfBeatsInTheme", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "BeatsPerSecond", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "ThemeBinaryEncoding", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualBeatsTemporalShift", "Cursor"}
+		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "BeatLines", "BeatLinesHeightRatio", "NbBeatLines", "NbOfBeatsInTheme", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "BeatsPerSecond", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "ThemeBinaryEncoding", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualBeatsTemporalShift"}
 	case Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "AngleDegree", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RhombusGrid:
@@ -5045,9 +4918,6 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 		rf.Fieldname = "Circles"
 		res = append(res, rf)
 	case CircleGrid:
-		var rf ReverseField
-		_ = rf
-	case Cursor:
 		var rf ReverseField
 		_ = rf
 	case FrontCurve:
@@ -5150,8 +5020,6 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName"}
 	case *CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
-	case *Cursor:
-		res = []string{"Name", "AngleDegree", "Length", "CenterX", "CenterY", "StartX", "EndX", "DurationSeconds", "IsMoving", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *FrontCurve:
 		res = []string{"Name", "Path"}
 	case *FrontCurveStack:
@@ -5161,7 +5029,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Key:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "Path", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *Parameter:
-		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "BeatLines", "BeatLinesHeightRatio", "NbBeatLines", "NbOfBeatsInTheme", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "BeatsPerSecond", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "ThemeBinaryEncoding", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualBeatsTemporalShift", "Cursor"}
+		res = []string{"Name", "BackendColor", "MinuteColor", "HourColor", "N", "M", "Z", "ShiftToNearestCircle", "InsideAngle", "SideLength", "InitialRhombus", "InitialCircle", "InitialRhombusGrid", "InitialCircleGrid", "InitialAxis", "RotatedAxis", "RotatedRhombus", "RotatedRhombusGrid", "RotatedCircleGrid", "NextRhombus", "NextCircle", "GrowingRhombusGridSeed", "GrowingRhombusGrid", "GrowingCircleGridSeed", "GrowingCircleGrid", "GrowingCircleGridLeftSeed", "GrowingCircleGridLeft", "ConstructionAxis", "ConstructionAxisGrid", "ConstructionCircle", "ConstructionCircleGrid", "GrowthCurveSeed", "GrowthCurve", "GrowthCurveShiftedRightSeed", "GrowthCurveShiftedRight", "GrowthCurveNextSeed", "GrowthCurveNext", "GrowthCurveNextShiftedRightSeed", "GrowthCurveNextShiftedRight", "GrowthCurveStack", "StackWidth", "NbShitRight", "StackHeight", "BezierControlLengthRatio", "SpiralRhombusGridSeed", "SpiralRhombusGrid", "SpiralCircleSeed", "SpiralCircleGrid", "SpiralCircleFullGrid", "SpiralConstructionOuterLineSeed", "SpiralConstructionInnerLineSeed", "SpiralConstructionOuterLineGrid", "SpiralConstructionInnerLineGrid", "SpiralConstructionCircleGrid", "SpiralConstructionOuterLineFullGrid", "SpiralBezierSeed", "SpiralBezierGrid", "SpiralBezierFullGrid", "SpiralBezierStrength", "FrontCurveStack", "NbInterpolationPoints", "Fkey", "FkeySizeRatio", "FkeyOriginRelativeX", "FkeyOriginRelativeY", "PitchLines", "PitchHeight", "NbPitchLines", "BeatLines", "BeatLinesHeightRatio", "NbBeatLines", "NbOfBeatsInTheme", "FirstVoice", "FirstVoiceShiftRigth", "FirstVoiceShiftX", "FirstVoiceShiftY", "SecondVoice", "SecondVoiceShiftedRight", "PitchDifference", "BeatsPerSecond", "Level", "FirstVoiceNotes", "FirstVoiceNotesShiftedRight", "SecondVoiceNotes", "SecondVoiceNotesShiftedRight", "IsMinor", "ThemeBinaryEncoding", "OriginX", "OriginY", "HorizontalAxis", "VerticalAxis", "SpiralOrigin", "SpiralOriginX", "SpiralOriginY", "OriginCrossWidth", "SpiralRadiusRatio", "ShowSpiralBezierConstruct", "ShowInterpolationPoints", "ActualBeatsTemporalShift"}
 	case *Rhombus:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "SideLength", "AngleDegree", "InsideAngle", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RhombusGrid:
@@ -5512,66 +5380,6 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 				}
 				res.valueString += __instance__.Name
 			}
-		}
-	case *Cursor:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "AngleDegree":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
-			res.valueFloat = inferedInstance.AngleDegree
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Length":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Length)
-			res.valueFloat = inferedInstance.Length
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CenterX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
-			res.valueFloat = inferedInstance.CenterX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CenterY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
-			res.valueFloat = inferedInstance.CenterY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StartX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
-			res.valueFloat = inferedInstance.StartX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "EndX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
-			res.valueFloat = inferedInstance.EndX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "DurationSeconds":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
-			res.valueFloat = inferedInstance.DurationSeconds
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "IsMoving":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsMoving)
-			res.valueBool = inferedInstance.IsMoving
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
 		}
 	case *FrontCurve:
 		switch fieldName {
@@ -6104,10 +5912,6 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res.valueString = fmt.Sprintf("%d", inferedInstance.ActualBeatsTemporalShift)
 			res.valueInt = inferedInstance.ActualBeatsTemporalShift
 			res.GongFieldValueType = GongFieldValueTypeInt
-		case "Cursor":
-			if inferedInstance.Cursor != nil {
-				res.valueString = inferedInstance.Cursor.Name
-			}
 		}
 	case *Rhombus:
 		switch fieldName {
@@ -6912,66 +6716,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				res.valueString += __instance__.Name
 			}
 		}
-	case Cursor:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "AngleDegree":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.AngleDegree)
-			res.valueFloat = inferedInstance.AngleDegree
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Length":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Length)
-			res.valueFloat = inferedInstance.Length
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CenterX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterX)
-			res.valueFloat = inferedInstance.CenterX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CenterY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CenterY)
-			res.valueFloat = inferedInstance.CenterY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StartX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
-			res.valueFloat = inferedInstance.StartX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "EndX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
-			res.valueFloat = inferedInstance.EndX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "DurationSeconds":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
-			res.valueFloat = inferedInstance.DurationSeconds
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "IsMoving":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsMoving)
-			res.valueBool = inferedInstance.IsMoving
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		}
 	case FrontCurve:
 		switch fieldName {
 		// string value of fields
@@ -7503,10 +7247,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res.valueString = fmt.Sprintf("%d", inferedInstance.ActualBeatsTemporalShift)
 			res.valueInt = inferedInstance.ActualBeatsTemporalShift
 			res.GongFieldValueType = GongFieldValueTypeInt
-		case "Cursor":
-			if inferedInstance.Cursor != nil {
-				res.valueString = inferedInstance.Cursor.Name
-			}
 		}
 	case Rhombus:
 		switch fieldName {

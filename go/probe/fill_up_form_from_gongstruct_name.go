@@ -117,19 +117,6 @@ func FillUpFormFromGongstructName(
 		circlegrid := new(models.CircleGrid)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(circlegrid, formGroup, probe)
-	case "Cursor":
-		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
-			Label: prefix + "Cursor Form",
-		}).Stage(formStage)
-		formGroup.OnSave = __gong__New__CursorFormCallback(
-			nil,
-			probe,
-			formGroup,
-		)
-		cursor := new(models.Cursor)
-		formGroup.HasSuppressButton = !isNewInstance
-		FillUpForm(cursor, formGroup, probe)
 	case "FrontCurve":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),
