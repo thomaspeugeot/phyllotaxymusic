@@ -16,11 +16,9 @@ import { AngularSplitModule } from 'angular-split';
 import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
 import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
 import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtonespecific/src/lib/gongtone/gongtone.component'
-
+import { SubstackcursorspecificComponent } from '../../../../../substackcursor/ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor/projects/substackcursorspecific/src/public-api'
 
 import { CommonModule } from '@angular/common';
-import { MovingLineComponent } from "./moving-line.component";
-import { FakeWebsocketService } from './fake-websocket.service';
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -40,7 +38,7 @@ import { Observable } from 'rxjs';
     GongsvgDiagrammingComponent,
     TreeComponent,
     GongtoneComponent,
-    MovingLineComponent
+    SubstackcursorspecificComponent
   ],
   templateUrl: './phylotaxymusicspecific.component.html',
   styleUrls: ['./phylotaxymusicspecific.component.css'],
@@ -81,8 +79,6 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     private frontRepoService: phylotaxymusic.FrontRepoService,
 
     private parameterService: phylotaxymusic.ParameterService,
-
-    private fakeWebsocketService: FakeWebsocketService
   ) {
 
   }
@@ -96,18 +92,6 @@ export class PhylotaxymusicspecificComponent implements OnInit {
         this.frontRepo = gongtablesFrontRepo
       }
     )
-
-    let params = new HttpParams().set("GONG__StackPath", this.StacksNames.Phylotaxy)
-    let basePath = 'ws://localhost:8080/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/ws/stage/cursorStart'
-    let paramString = params.toString()
-    let url = `${basePath}?${paramString}`
-    this.socket = new WebSocket(url)
-
-    this.socket!.onmessage = event => {
-      console.log("recevied music start")
-
-      this.fakeWebsocketService.startEmittingPosition()
-    }
   }
 
   formatLabel(value: number): string {

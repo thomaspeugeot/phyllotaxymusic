@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
-
 	phylotaxymusic_stack "github.com/thomaspeugeot/phylotaxymusic/go/stack"
 	phylotaxymusic_static "github.com/thomaspeugeot/phylotaxymusic/go/static"
 
@@ -17,6 +16,9 @@ import (
 	gongtone_stack "github.com/fullstack-lang/gongtone/go/stack"
 
 	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
+
+	substackcursor_models "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
+	substackcursor_stack "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/stack"
 )
 
 var (
@@ -91,31 +93,20 @@ func main() {
 
 	tree.Generate(parameter)
 
-	// start web socket for the cursor start
-	//
-	// fetch the cursor in the stage
-	// branch the websocket on the cursor
-	var cursorSingloton *phylotaxymusic_models.Cursor
-	setOfCursors := *phylotaxymusic_models.GetGongstructInstancesSet[phylotaxymusic_models.Cursor](parameterImpl.phylotaxymusicStage)
-	if len(setOfCursors) != 1 {
-		log.Fatalln("expecting one cursor. found", len(setOfCursors))
-	}
-	for cursor_ := range setOfCursors {
-		cursorSingloton = cursor_
-	}
-	routerGroup := r.Group("/api/github.com/thomaspeugeot/phylotaxymusic/go")
-	routerGroup.GET("/v1/ws/stage/cursorStart", cursorSingloton.OnWebSocketConnection)
+	// prepare the substack that displays the cursor
+	cursorStack := substackcursor_stack.NewStack(r, substackcursor_models.Substackcursor.ToString(), "", "", "", false, false)
+	_ = cursorStack
 
-	// connect parameter to cursor for start playing notification
-	notifyCh := make(chan struct{})
-	cursorSingloton.SetNotifyChannel(notifyCh)
-	parameter.SetNotifyChannel(notifyCh)
+	cursor := new(substackcursor_models.Cursor).Stage(cursorStack.Stage)
+	_ = cursor
+	cursorStack.Stage.Commit()
 
-	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))
+	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
+
 }
 
 type ParameterImpl struct {
