@@ -1,5 +1,7 @@
 package models
 
+import "log"
+
 type Cursor struct {
 	Name string
 
@@ -28,8 +30,9 @@ func (cursor *Cursor) SetNotifyChannel(notifyCh chan bool) {
 func (cursor *Cursor) WaitForPlayNotifications(stage *StageStruct) {
 	go func() {
 
-		for range cursor.notifyCh {
-			cursor.IsPlaying = <-cursor.notifyCh
+		for newOrder := range cursor.notifyCh {
+			cursor.IsPlaying = newOrder
+			log.Println("cursor received new order via channel", cursor.IsPlaying)
 			stage.Commit()
 		}
 	}()

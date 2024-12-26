@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
@@ -39,7 +41,9 @@ func (p *Parameter) GenerateNotes(
 	player.OnDI = func(player *gongtone_models.Player) error {
 
 		// notify the cursor
-		p.notifyCh <- player.Status == gongtone_models.PLAYING
+		value := player.Status == gongtone_models.PLAYING
+		log.Println("put the value into the channel", value)
+		p.notifyCh <- value
 		return nil
 	}
 
