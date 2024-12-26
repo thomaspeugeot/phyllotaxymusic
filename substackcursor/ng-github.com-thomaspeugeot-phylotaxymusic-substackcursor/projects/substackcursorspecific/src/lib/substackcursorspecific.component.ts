@@ -14,6 +14,7 @@ import * as substackcursor from '../../../substackcursor/src/public-api'
         [attr.y2]="1000"
         stroke="black"
         stroke-width="6"
+        stroke-opacity="0.5"
       />
 
        <line 
@@ -23,6 +24,7 @@ import * as substackcursor from '../../../substackcursor/src/public-api'
         [attr.y2]="1000"
         stroke="black"
         stroke-width="6"
+        stroke-opacity="0.5"
       />
       
     </svg>
@@ -82,7 +84,7 @@ export class SubstackcursorspecificComponent implements OnInit {
     }
 
     const duration = 1000 * this.cursor.DurationSeconds   // 5 seconds
-    const endPosition = this.cursor?.EndX;
+    const proressAbciss = this.cursor?.EndX - this.cursor?.StartX;
     let startTime: number | null = null;
 
     const animate = (timestamp: number) => {
@@ -93,10 +95,11 @@ export class SubstackcursorspecificComponent implements OnInit {
       // progress goes from 0.0 to 1.0 as time goes by
       const progress = Math.min(elapsed / duration, 1);
       // Position is progress * 1000
-      this.x = this.cursor!.StartX + progress * endPosition;
+      this.x = this.cursor!.StartX + progress * proressAbciss;
 
       // Keep going until we reach progress=1.0
       if (progress < 1) {
+        console.log(progress)
         this.animationFrameId = requestAnimationFrame(animate);
       }
     };

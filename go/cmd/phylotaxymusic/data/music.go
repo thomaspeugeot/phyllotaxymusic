@@ -344,16 +344,16 @@ func _(stage *models.StageStruct) {
 	__Bezier__000005_Growth_Curve_Seed.Transform = ``
 
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
-	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
+	__BezierGrid__000000_2nb_Voice.IsDisplayed = false
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
-	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = true
+	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
 	__BezierGrid__000002_First_Voice.IsDisplayed = true
 
 	__BezierGrid__000003_First_Voice_Shift_Right.Name = `First Voice Shift Right`
-	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = true
+	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = false
 
 	__BezierGrid__000004_Growth_Curve.Name = `Growth Curve`
 	__BezierGrid__000004_Growth_Curve.IsDisplayed = false
@@ -476,7 +476,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_First_Voice_note_shifted_right.Name = `First Voice note shifted right`
-	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = true
+	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = false
 
 	__CircleGrid__000002_First_Voice_notes.Name = `First Voice notes`
 	__CircleGrid__000002_First_Voice_notes.IsDisplayed = true
@@ -494,10 +494,10 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000006_Rotated_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Name = `Second Voice Notes Shift Right`
-	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = true
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
-	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
+	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
 
 	__FrontCurve__000000_Non_Rotated_0_.Name = `Non Rotated 0 `
 	__FrontCurve__000000_Non_Rotated_0_.Path = `M637.12 516.01 C637.93 511.36 638.45 507.53 639.04 503.22 C639.62 498.91 640.11 494.58 640.63 490.15 C641.16 485.71 641.61 481.25 642.19 476.59 C642.77 471.94 643.34 467.24 644.11 462.21 C644.88 457.18 645.86 451.99 646.82 446.42 C647.79 440.85 649.24 434.83 649.93 428.78 C650.61 422.73 651.30 416.24 650.94 410.13 C650.58 404.02 649.49 397.88 647.78 392.12 C646.08 386.36 643.58 380.81 640.71 375.58 C637.85 370.34 634.36 365.38 630.61 360.73 C626.85 356.07 622.62 351.71 618.19 347.67 C613.75 343.63 609.49 340.14 603.98 336.47 C598.47 332.80 591.66 328.71 585.12 325.64 C578.58 322.58 571.69 319.97 564.74 318.08 C557.79 316.18 550.56 314.85 543.41 314.26 C536.26 313.67 528.94 313.76 521.85 314.54 C514.76 315.32 507.64 316.91 500.88 318.94 C494.12 320.98 487.52 323.82 481.28 326.77 C475.03 329.71 469.11 333.23 463.41 336.61 C457.72 340.00 452.35 343.61 447.10 347.11 C441.86 350.61 436.85 354.11 431.92 357.61 C426.99 361.11 422.21 364.58 417.51 368.13 C412.80 371.69 408.19 375.24 403.67 378.94 C399.15 382.65 394.37 386.76 390.38 390.35 C386.39 393.94 383.24 397.00 379.72 400.47 C376.19 403.93 372.76 407.48 369.25 411.11 C365.74 414.75 362.30 418.46 358.65 422.25 C355.01 426.05 351.37 429.90 347.40 433.89 C343.42 437.89 339.21 441.89 334.80 446.21 C330.38 450.52 325.33 454.89 320.89 459.77 C316.45 464.65 311.76 469.88 308.15 475.47 C304.54 481.05 301.52 487.12 299.23 493.28 C296.95 499.43 295.45 505.93 294.45 512.39 C293.46 518.85 293.15 525.50 293.27 532.06 C293.39 538.62 294.09 545.24 295.18 551.74 C296.27 558.24 297.57 564.13 299.80 571.04 C302.04 577.95 305.09 586.11 308.60 593.22 C312.10 600.33 316.21 607.28 320.83 613.69 C325.46 620.11 330.69 626.23 336.35 631.70 C342.00 637.17 348.26 642.20 354.79 646.50 C361.31 650.81 368.39 654.49 375.49 657.55 C382.59 660.61 390.10 662.91 397.41 664.87 C404.72 666.84 412.15 668.13 419.35 669.33 C426.54 670.54 433.63 671.34 440.58 672.11 C447.52 672.87 454.29 673.45 461.01 673.94 C467.74 674.43 474.32 674.82 480.91 675.05 C487.50 675.29 494.02 675.42 500.56 675.34 C507.10 675.26 513.66 675.20 520.16 674.58 C526.67 673.97 533.25 673.16 539.59 671.63 C545.94 670.11 552.27 668.04 558.23 665.42 C564.19 662.80 570.02 659.60 575.35 655.91 C580.68 652.22 585.74 647.92 590.20 643.26 C594.67 638.61 598.68 633.35 602.15 627.98 C605.62 622.61 608.48 616.76 611.03 611.06 C613.59 605.37 615.56 599.47 617.47 593.82 C619.37 588.18 620.91 582.60 622.47 577.19 C624.02 571.78 625.41 566.56 626.78 561.38 C628.15 556.20 629.45 551.18 630.69 546.14 C631.92 541.09 633.11 536.13 634.18 531.11 C635.26 526.09 636.31 520.65 637.12 516.01 Z`
@@ -568,7 +568,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.Z = 16
 	__Parameter__000000_Reference.ShiftToNearestCircle = 3
 	__Parameter__000000_Reference.InsideAngle = 112.000000
-	__Parameter__000000_Reference.SideLength = 85.000000
+	__Parameter__000000_Reference.SideLength = 115.000000
 	__Parameter__000000_Reference.StackWidth = 1
 	__Parameter__000000_Reference.NbShitRight = 2
 	__Parameter__000000_Reference.StackHeight = 8
@@ -586,7 +586,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 1.830000
 	__Parameter__000000_Reference.PitchDifference = 12
-	__Parameter__000000_Reference.BeatsPerSecond = 6.050000
+	__Parameter__000000_Reference.BeatsPerSecond = 2.050000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
 	__Parameter__000000_Reference.ThemeBinaryEncoding = 50115
