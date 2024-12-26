@@ -38,5 +38,6 @@ func (g *CircleGrid) Move(seed *Circle, source *CircleGrid, x, y float64) {
 		g.Circles = append(g.Circles, _b)
 
 		_b.move(b, x, y)
+		_b.isKept = b.isKept
 	}
 }

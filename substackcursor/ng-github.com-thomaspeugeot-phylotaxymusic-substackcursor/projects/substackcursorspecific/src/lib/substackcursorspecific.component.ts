@@ -6,13 +6,13 @@ import * as substackcursor from '../../../substackcursor/src/public-api'
   standalone: true,
   imports: [],
   template: `
-    <svg width="1000" height="1000">
+    <svg [attr.width]="xe" height="1000">
      <line
         [attr.x1]="x"
         [attr.y1]="0"
         [attr.x2]="x"
         [attr.y2]="1000"
-        stroke="black"
+        stroke="grey"
         stroke-width="6"
         stroke-opacity="0.5"
       />
@@ -22,7 +22,7 @@ import * as substackcursor from '../../../substackcursor/src/public-api'
         [attr.y1]="0"
         [attr.x2]="xe"
         [attr.y2]="1000"
-        stroke="black"
+        stroke="grey"
         stroke-width="6"
         stroke-opacity="0.5"
       />
@@ -74,32 +74,34 @@ export class SubstackcursorspecificComponent implements OnInit {
     });
   }
 
-  /**
-   * Smoothly move the line from x=0 to x=1000 over 5 seconds using requestAnimationFrame.
-   */
   public startEmittingPosition(): void {
-
     if (this.cursor == undefined) {
-      return
+      return;
     }
 
-    const duration = 1000 * this.cursor.DurationSeconds   // 5 seconds
-    const proressAbciss = this.cursor?.EndX - this.cursor?.StartX;
+    const duration = 1000 * this.cursor.DurationSeconds;
+    const progressAbciss = this.cursor.EndX - this.cursor.StartX;
     let startTime: number | null = null;
+    let previousTimestamp: number | null = null;
 
     const animate = (timestamp: number) => {
       if (!startTime) {
         startTime = timestamp;
+        previousTimestamp = timestamp;
       }
-      const elapsed = (timestamp - startTime) % duration; // Use modulo to loop the time
-      const progress = elapsed / duration;
-      this.x = this.cursor!.StartX + progress * proressAbciss;
 
-      // Always continue the animation
+      // Calculate elapsed time since last frame
+      const deltaTime = timestamp - previousTimestamp!;
+      previousTimestamp = timestamp;
+
+      // Subtract 50ms from the elapsed time calculation
+      const elapsed = ((timestamp - startTime - 300) % duration);
+      const progress = elapsed / duration;
+      this.x = this.cursor!.StartX + progress * progressAbciss;
+
       this.animationFrameId = requestAnimationFrame(animate);
     }
 
-    // Kick off our "animation"
     this.animationFrameId = requestAnimationFrame(animate);
   }
 
