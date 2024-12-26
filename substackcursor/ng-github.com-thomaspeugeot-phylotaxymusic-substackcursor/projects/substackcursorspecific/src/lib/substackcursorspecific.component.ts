@@ -91,18 +91,13 @@ export class SubstackcursorspecificComponent implements OnInit {
       if (!startTime) {
         startTime = timestamp;
       }
-      const elapsed = timestamp - startTime;
-      // progress goes from 0.0 to 1.0 as time goes by
-      const progress = Math.min(elapsed / duration, 1);
-      // Position is progress * 1000
+      const elapsed = (timestamp - startTime) % duration; // Use modulo to loop the time
+      const progress = elapsed / duration;
       this.x = this.cursor!.StartX + progress * proressAbciss;
 
-      // Keep going until we reach progress=1.0
-      if (progress < 1) {
-        console.log(progress)
-        this.animationFrameId = requestAnimationFrame(animate);
-      }
-    };
+      // Always continue the animation
+      this.animationFrameId = requestAnimationFrame(animate);
+    }
 
     // Kick off our "animation"
     this.animationFrameId = requestAnimationFrame(animate);
