@@ -94,7 +94,7 @@ export class ShapeCategoryService {
       catchError(this.handleError<ShapeCategoryAPI>('postShapeCategory'))
     );
   }
-
+  
   /** POST: add a new shapecategory to the server */
   post(shapecategorydb: ShapeCategoryAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<ShapeCategoryAPI> {
     return this.postShapeCategory(shapecategorydb, GONG__StackPath, frontRepo)

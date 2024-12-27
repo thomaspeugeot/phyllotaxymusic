@@ -95,7 +95,7 @@ export class HorizontalAxisService {
       catchError(this.handleError<HorizontalAxisAPI>('postHorizontalAxis'))
     );
   }
-
+  
   /** POST: add a new horizontalaxis to the server */
   post(horizontalaxisdb: HorizontalAxisAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<HorizontalAxisAPI> {
     return this.postHorizontalAxis(horizontalaxisdb, GONG__StackPath, frontRepo)

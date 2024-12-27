@@ -95,7 +95,7 @@ export class CircleService {
       catchError(this.handleError<CircleAPI>('postCircle'))
     );
   }
-
+  
   /** POST: add a new circle to the server */
   post(circledb: CircleAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<CircleAPI> {
     return this.postCircle(circledb, GONG__StackPath, frontRepo)

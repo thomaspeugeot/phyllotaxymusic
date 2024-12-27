@@ -435,7 +435,7 @@ func (backRepoCircle *BackRepoCircleStruct) CheckoutPhaseTwoInstance(backRepo *B
 func (circleDB *CircleDB) DecodePointers(backRepo *BackRepoStruct, circle *models.Circle) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := circleDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -453,7 +453,7 @@ func (circleDB *CircleDB) DecodePointers(backRepo *BackRepoStruct, circle *model
 			circle.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

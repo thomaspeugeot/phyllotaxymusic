@@ -96,7 +96,7 @@ export class RhombusGridService {
       catchError(this.handleError<RhombusGridAPI>('postRhombusGrid'))
     );
   }
-
+  
   /** POST: add a new rhombusgrid to the server */
   post(rhombusgriddb: RhombusGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<RhombusGridAPI> {
     return this.postRhombusGrid(rhombusgriddb, GONG__StackPath, frontRepo)

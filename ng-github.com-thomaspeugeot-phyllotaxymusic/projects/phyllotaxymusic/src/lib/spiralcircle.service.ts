@@ -95,7 +95,7 @@ export class SpiralCircleService {
       catchError(this.handleError<SpiralCircleAPI>('postSpiralCircle'))
     );
   }
-
+  
   /** POST: add a new spiralcircle to the server */
   post(spiralcircledb: SpiralCircleAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralCircleAPI> {
     return this.postSpiralCircle(spiralcircledb, GONG__StackPath, frontRepo)

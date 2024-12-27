@@ -95,7 +95,7 @@ export class SpiralOriginService {
       catchError(this.handleError<SpiralOriginAPI>('postSpiralOrigin'))
     );
   }
-
+  
   /** POST: add a new spiralorigin to the server */
   post(spiralorigindb: SpiralOriginAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralOriginAPI> {
     return this.postSpiralOrigin(spiralorigindb, GONG__StackPath, frontRepo)

@@ -96,7 +96,7 @@ export class AxisGridService {
       catchError(this.handleError<AxisGridAPI>('postAxisGrid'))
     );
   }
-
+  
   /** POST: add a new axisgrid to the server */
   post(axisgriddb: AxisGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AxisGridAPI> {
     return this.postAxisGrid(axisgriddb, GONG__StackPath, frontRepo)

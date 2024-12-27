@@ -433,7 +433,7 @@ func (backRepoAxis *BackRepoAxisStruct) CheckoutPhaseTwoInstance(backRepo *BackR
 func (axisDB *AxisDB) DecodePointers(backRepo *BackRepoStruct, axis *models.Axis) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := axisDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -451,7 +451,7 @@ func (axisDB *AxisDB) DecodePointers(backRepo *BackRepoStruct, axis *models.Axis
 			axis.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

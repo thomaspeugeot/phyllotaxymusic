@@ -116,7 +116,7 @@ export class ParameterService {
       catchError(this.handleError<ParameterAPI>('postParameter'))
     );
   }
-
+  
   /** POST: add a new parameter to the server */
   post(parameterdb: ParameterAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<ParameterAPI> {
     return this.postParameter(parameterdb, GONG__StackPath, frontRepo)

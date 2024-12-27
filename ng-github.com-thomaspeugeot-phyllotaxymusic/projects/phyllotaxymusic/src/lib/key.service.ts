@@ -95,7 +95,7 @@ export class KeyService {
       catchError(this.handleError<KeyAPI>('postKey'))
     );
   }
-
+  
   /** POST: add a new key to the server */
   post(keydb: KeyAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<KeyAPI> {
     return this.postKey(keydb, GONG__StackPath, frontRepo)

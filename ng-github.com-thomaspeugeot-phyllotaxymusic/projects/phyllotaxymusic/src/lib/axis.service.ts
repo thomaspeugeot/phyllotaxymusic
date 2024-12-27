@@ -95,7 +95,7 @@ export class AxisService {
       catchError(this.handleError<AxisAPI>('postAxis'))
     );
   }
-
+  
   /** POST: add a new axis to the server */
   post(axisdb: AxisAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AxisAPI> {
     return this.postAxis(axisdb, GONG__StackPath, frontRepo)

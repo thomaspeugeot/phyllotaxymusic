@@ -96,7 +96,7 @@ export class SpiralLineGridService {
       catchError(this.handleError<SpiralLineGridAPI>('postSpiralLineGrid'))
     );
   }
-
+  
   /** POST: add a new spirallinegrid to the server */
   post(spirallinegriddb: SpiralLineGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralLineGridAPI> {
     return this.postSpiralLineGrid(spirallinegriddb, GONG__StackPath, frontRepo)

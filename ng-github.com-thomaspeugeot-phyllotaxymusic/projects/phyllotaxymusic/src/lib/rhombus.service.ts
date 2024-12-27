@@ -95,7 +95,7 @@ export class RhombusService {
       catchError(this.handleError<RhombusAPI>('postRhombus'))
     );
   }
-
+  
   /** POST: add a new rhombus to the server */
   post(rhombusdb: RhombusAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<RhombusAPI> {
     return this.postRhombus(rhombusdb, GONG__StackPath, frontRepo)

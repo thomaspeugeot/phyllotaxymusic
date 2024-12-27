@@ -409,7 +409,7 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CheckoutPhaseTwoInst
 func (horizontalaxisDB *HorizontalAxisDB) DecodePointers(backRepo *BackRepoStruct, horizontalaxis *models.HorizontalAxis) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := horizontalaxisDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -427,7 +427,7 @@ func (horizontalaxisDB *HorizontalAxisDB) DecodePointers(backRepo *BackRepoStruc
 			horizontalaxis.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

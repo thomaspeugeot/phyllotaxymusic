@@ -95,7 +95,7 @@ export class SpiralBezierService {
       catchError(this.handleError<SpiralBezierAPI>('postSpiralBezier'))
     );
   }
-
+  
   /** POST: add a new spiralbezier to the server */
   post(spiralbezierdb: SpiralBezierAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralBezierAPI> {
     return this.postSpiralBezier(spiralbezierdb, GONG__StackPath, frontRepo)

@@ -403,7 +403,7 @@ func (backRepoKey *BackRepoKeyStruct) CheckoutPhaseTwoInstance(backRepo *BackRep
 func (keyDB *KeyDB) DecodePointers(backRepo *BackRepoStruct, key *models.Key) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := keyDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -421,7 +421,7 @@ func (keyDB *KeyDB) DecodePointers(backRepo *BackRepoStruct, key *models.Key) {
 			key.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

@@ -421,7 +421,7 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) CheckoutPhaseTwoInstance(bac
 func (spirallineDB *SpiralLineDB) DecodePointers(backRepo *BackRepoStruct, spiralline *models.SpiralLine) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := spirallineDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -439,7 +439,7 @@ func (spirallineDB *SpiralLineDB) DecodePointers(backRepo *BackRepoStruct, spira
 			spiralline.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

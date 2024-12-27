@@ -97,7 +97,7 @@ export class FrontCurveStackService {
       catchError(this.handleError<FrontCurveStackAPI>('postFrontCurveStack'))
     );
   }
-
+  
   /** POST: add a new frontcurvestack to the server */
   post(frontcurvestackdb: FrontCurveStackAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<FrontCurveStackAPI> {
     return this.postFrontCurveStack(frontcurvestackdb, GONG__StackPath, frontRepo)

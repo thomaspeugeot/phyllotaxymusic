@@ -96,7 +96,7 @@ export class BezierGridService {
       catchError(this.handleError<BezierGridAPI>('postBezierGrid'))
     );
   }
-
+  
   /** POST: add a new beziergrid to the server */
   post(beziergriddb: BezierGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<BezierGridAPI> {
     return this.postBezierGrid(beziergriddb, GONG__StackPath, frontRepo)

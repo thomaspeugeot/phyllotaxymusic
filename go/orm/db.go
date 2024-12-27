@@ -832,7 +832,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		axisDB, _ := instanceDB.(*AxisDB)
 		*axisDB = *tmp
-
+		
 	case *AxisGridDB:
 		tmp, ok := db.axisgridDBs[uint(i)]
 
@@ -842,7 +842,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		axisgridDB, _ := instanceDB.(*AxisGridDB)
 		*axisgridDB = *tmp
-
+		
 	case *BezierDB:
 		tmp, ok := db.bezierDBs[uint(i)]
 
@@ -852,7 +852,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		bezierDB, _ := instanceDB.(*BezierDB)
 		*bezierDB = *tmp
-
+		
 	case *BezierGridDB:
 		tmp, ok := db.beziergridDBs[uint(i)]
 
@@ -862,7 +862,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		beziergridDB, _ := instanceDB.(*BezierGridDB)
 		*beziergridDB = *tmp
-
+		
 	case *BezierGridStackDB:
 		tmp, ok := db.beziergridstackDBs[uint(i)]
 
@@ -872,7 +872,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		beziergridstackDB, _ := instanceDB.(*BezierGridStackDB)
 		*beziergridstackDB = *tmp
-
+		
 	case *CircleDB:
 		tmp, ok := db.circleDBs[uint(i)]
 
@@ -882,7 +882,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		circleDB, _ := instanceDB.(*CircleDB)
 		*circleDB = *tmp
-
+		
 	case *CircleGridDB:
 		tmp, ok := db.circlegridDBs[uint(i)]
 
@@ -892,7 +892,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		circlegridDB, _ := instanceDB.(*CircleGridDB)
 		*circlegridDB = *tmp
-
+		
 	case *FrontCurveDB:
 		tmp, ok := db.frontcurveDBs[uint(i)]
 
@@ -902,7 +902,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		frontcurveDB, _ := instanceDB.(*FrontCurveDB)
 		*frontcurveDB = *tmp
-
+		
 	case *FrontCurveStackDB:
 		tmp, ok := db.frontcurvestackDBs[uint(i)]
 
@@ -912,7 +912,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		frontcurvestackDB, _ := instanceDB.(*FrontCurveStackDB)
 		*frontcurvestackDB = *tmp
-
+		
 	case *HorizontalAxisDB:
 		tmp, ok := db.horizontalaxisDBs[uint(i)]
 
@@ -922,7 +922,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		horizontalaxisDB, _ := instanceDB.(*HorizontalAxisDB)
 		*horizontalaxisDB = *tmp
-
+		
 	case *KeyDB:
 		tmp, ok := db.keyDBs[uint(i)]
 
@@ -932,7 +932,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		keyDB, _ := instanceDB.(*KeyDB)
 		*keyDB = *tmp
-
+		
 	case *ParameterDB:
 		tmp, ok := db.parameterDBs[uint(i)]
 
@@ -942,7 +942,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		parameterDB, _ := instanceDB.(*ParameterDB)
 		*parameterDB = *tmp
-
+		
 	case *RhombusDB:
 		tmp, ok := db.rhombusDBs[uint(i)]
 
@@ -952,7 +952,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		rhombusDB, _ := instanceDB.(*RhombusDB)
 		*rhombusDB = *tmp
-
+		
 	case *RhombusGridDB:
 		tmp, ok := db.rhombusgridDBs[uint(i)]
 
@@ -962,7 +962,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		rhombusgridDB, _ := instanceDB.(*RhombusGridDB)
 		*rhombusgridDB = *tmp
-
+		
 	case *ShapeCategoryDB:
 		tmp, ok := db.shapecategoryDBs[uint(i)]
 
@@ -972,7 +972,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		shapecategoryDB, _ := instanceDB.(*ShapeCategoryDB)
 		*shapecategoryDB = *tmp
-
+		
 	case *SpiralBezierDB:
 		tmp, ok := db.spiralbezierDBs[uint(i)]
 
@@ -982,7 +982,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		spiralbezierDB, _ := instanceDB.(*SpiralBezierDB)
 		*spiralbezierDB = *tmp
-
+		
 	case *SpiralBezierGridDB:
 		tmp, ok := db.spiralbeziergridDBs[uint(i)]
 
@@ -992,7 +992,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		spiralbeziergridDB, _ := instanceDB.(*SpiralBezierGridDB)
 		*spiralbeziergridDB = *tmp
-
+		
 	case *SpiralCircleDB:
 		tmp, ok := db.spiralcircleDBs[uint(i)]
 
@@ -1002,7 +1002,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		spiralcircleDB, _ := instanceDB.(*SpiralCircleDB)
 		*spiralcircleDB = *tmp
-
+		
 	case *SpiralCircleGridDB:
 		tmp, ok := db.spiralcirclegridDBs[uint(i)]
 
@@ -1012,7 +1012,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		spiralcirclegridDB, _ := instanceDB.(*SpiralCircleGridDB)
 		*spiralcirclegridDB = *tmp
-
+		
 	case *SpiralLineDB:
 		tmp, ok := db.spirallineDBs[uint(i)]
 
@@ -1022,7 +1022,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		spirallineDB, _ := instanceDB.(*SpiralLineDB)
 		*spirallineDB = *tmp
-
+		
 	case *SpiralLineGridDB:
 		tmp, ok := db.spirallinegridDBs[uint(i)]
 
@@ -1032,7 +1032,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		spirallinegridDB, _ := instanceDB.(*SpiralLineGridDB)
 		*spirallinegridDB = *tmp
-
+		
 	case *SpiralOriginDB:
 		tmp, ok := db.spiraloriginDBs[uint(i)]
 
@@ -1042,7 +1042,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		spiraloriginDB, _ := instanceDB.(*SpiralOriginDB)
 		*spiraloriginDB = *tmp
-
+		
 	case *SpiralRhombusDB:
 		tmp, ok := db.spiralrhombusDBs[uint(i)]
 
@@ -1052,7 +1052,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		spiralrhombusDB, _ := instanceDB.(*SpiralRhombusDB)
 		*spiralrhombusDB = *tmp
-
+		
 	case *SpiralRhombusGridDB:
 		tmp, ok := db.spiralrhombusgridDBs[uint(i)]
 
@@ -1062,7 +1062,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		spiralrhombusgridDB, _ := instanceDB.(*SpiralRhombusGridDB)
 		*spiralrhombusgridDB = *tmp
-
+		
 	case *VerticalAxisDB:
 		tmp, ok := db.verticalaxisDBs[uint(i)]
 
@@ -1072,10 +1072,11 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		verticalaxisDB, _ := instanceDB.(*VerticalAxisDB)
 		*verticalaxisDB = *tmp
-
+		
 	default:
 		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/go, Unkown type")
 	}
-
+	
 	return db, nil
 }
+

@@ -409,7 +409,7 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CheckoutPhaseTwoInstance
 func (verticalaxisDB *VerticalAxisDB) DecodePointers(backRepo *BackRepoStruct, verticalaxis *models.VerticalAxis) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := verticalaxisDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -427,7 +427,7 @@ func (verticalaxisDB *VerticalAxisDB) DecodePointers(backRepo *BackRepoStruct, v
 			verticalaxis.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

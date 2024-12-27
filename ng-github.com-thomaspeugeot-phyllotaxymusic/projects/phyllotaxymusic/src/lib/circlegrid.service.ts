@@ -96,7 +96,7 @@ export class CircleGridService {
       catchError(this.handleError<CircleGridAPI>('postCircleGrid'))
     );
   }
-
+  
   /** POST: add a new circlegrid to the server */
   post(circlegriddb: CircleGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<CircleGridAPI> {
     return this.postCircleGrid(circlegriddb, GONG__StackPath, frontRepo)

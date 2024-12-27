@@ -95,7 +95,7 @@ export class SpiralRhombusService {
       catchError(this.handleError<SpiralRhombusAPI>('postSpiralRhombus'))
     );
   }
-
+  
   /** POST: add a new spiralrhombus to the server */
   post(spiralrhombusdb: SpiralRhombusAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralRhombusAPI> {
     return this.postSpiralRhombus(spiralrhombusdb, GONG__StackPath, frontRepo)

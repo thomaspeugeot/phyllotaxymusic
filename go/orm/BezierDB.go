@@ -445,7 +445,7 @@ func (backRepoBezier *BackRepoBezierStruct) CheckoutPhaseTwoInstance(backRepo *B
 func (bezierDB *BezierDB) DecodePointers(backRepo *BackRepoStruct, bezier *models.Bezier) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := bezierDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -463,7 +463,7 @@ func (bezierDB *BezierDB) DecodePointers(backRepo *BackRepoStruct, bezier *model
 			bezier.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

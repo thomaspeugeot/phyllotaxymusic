@@ -427,7 +427,7 @@ func (backRepoRhombus *BackRepoRhombusStruct) CheckoutPhaseTwoInstance(backRepo 
 func (rhombusDB *RhombusDB) DecodePointers(backRepo *BackRepoStruct, rhombus *models.Rhombus) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := rhombusDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -445,7 +445,7 @@ func (rhombusDB *RhombusDB) DecodePointers(backRepo *BackRepoStruct, rhombus *mo
 			rhombus.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

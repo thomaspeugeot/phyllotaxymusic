@@ -94,7 +94,7 @@ export class FrontCurveService {
       catchError(this.handleError<FrontCurveAPI>('postFrontCurve'))
     );
   }
-
+  
   /** POST: add a new frontcurve to the server */
   post(frontcurvedb: FrontCurveAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<FrontCurveAPI> {
     return this.postFrontCurve(frontcurvedb, GONG__StackPath, frontRepo)

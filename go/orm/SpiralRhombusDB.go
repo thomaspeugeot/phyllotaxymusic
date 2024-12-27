@@ -445,7 +445,7 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CheckoutPhaseTwoInstan
 func (spiralrhombusDB *SpiralRhombusDB) DecodePointers(backRepo *BackRepoStruct, spiralrhombus *models.SpiralRhombus) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := spiralrhombusDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -463,7 +463,7 @@ func (spiralrhombusDB *SpiralRhombusDB) DecodePointers(backRepo *BackRepoStruct,
 			spiralrhombus.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

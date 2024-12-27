@@ -95,7 +95,7 @@ export class BezierService {
       catchError(this.handleError<BezierAPI>('postBezier'))
     );
   }
-
+  
   /** POST: add a new bezier to the server */
   post(bezierdb: BezierAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<BezierAPI> {
     return this.postBezier(bezierdb, GONG__StackPath, frontRepo)

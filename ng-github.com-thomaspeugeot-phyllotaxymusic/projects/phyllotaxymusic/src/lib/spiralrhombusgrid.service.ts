@@ -96,7 +96,7 @@ export class SpiralRhombusGridService {
       catchError(this.handleError<SpiralRhombusGridAPI>('postSpiralRhombusGrid'))
     );
   }
-
+  
   /** POST: add a new spiralrhombusgrid to the server */
   post(spiralrhombusgriddb: SpiralRhombusGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralRhombusGridAPI> {
     return this.postSpiralRhombusGrid(spiralrhombusgriddb, GONG__StackPath, frontRepo)

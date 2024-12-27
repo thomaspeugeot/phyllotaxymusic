@@ -397,7 +397,7 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CheckoutPhaseTwoInstance
 func (spiraloriginDB *SpiralOriginDB) DecodePointers(backRepo *BackRepoStruct, spiralorigin *models.SpiralOrigin) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := spiraloriginDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -415,7 +415,7 @@ func (spiraloriginDB *SpiralOriginDB) DecodePointers(backRepo *BackRepoStruct, s
 			spiralorigin.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 

@@ -223,6 +223,7 @@ type GongstructEnumIntField interface {
 }
 
 type PointerToGongstructEnumIntField interface {
+	
 	FromCodeString(input string) (err error)
 }
 

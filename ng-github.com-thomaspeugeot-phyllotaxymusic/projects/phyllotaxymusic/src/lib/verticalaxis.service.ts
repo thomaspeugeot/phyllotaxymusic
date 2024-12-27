@@ -95,7 +95,7 @@ export class VerticalAxisService {
       catchError(this.handleError<VerticalAxisAPI>('postVerticalAxis'))
     );
   }
-
+  
   /** POST: add a new verticalaxis to the server */
   post(verticalaxisdb: VerticalAxisAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<VerticalAxisAPI> {
     return this.postVerticalAxis(verticalaxisdb, GONG__StackPath, frontRepo)

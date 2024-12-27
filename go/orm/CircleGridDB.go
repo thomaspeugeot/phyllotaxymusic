@@ -261,14 +261,14 @@ func (backRepoCircleGrid *BackRepoCircleGridStruct) CommitPhaseTwoInstance(backR
 		for _, circleAssocEnd := range circlegrid.Circles {
 			circleAssocEnd_DB :=
 				backRepo.BackRepoCircle.GetCircleDBFromCirclePtr(circleAssocEnd)
-
+			
 			// the stage might be inconsistant, meaning that the circleAssocEnd_DB might
 			// be missing from the stage. In this case, the commit operation is robust
 			// An alternative would be to crash here to reveal the missing element.
 			if circleAssocEnd_DB == nil {
 				continue
 			}
-
+			
 			circlegridDB.CircleGridPointersEncoding.Circles =
 				append(circlegridDB.CircleGridPointersEncoding.Circles, int(circleAssocEnd_DB.ID))
 		}
@@ -386,7 +386,7 @@ func (backRepoCircleGrid *BackRepoCircleGridStruct) CheckoutPhaseTwoInstance(bac
 func (circlegridDB *CircleGridDB) DecodePointers(backRepo *BackRepoStruct, circlegrid *models.CircleGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// Reference field
+	// Reference field	
 	{
 		id := circlegridDB.ReferenceID.Int64
 		if id != 0 {
@@ -404,8 +404,8 @@ func (circlegridDB *CircleGridDB) DecodePointers(backRepo *BackRepoStruct, circl
 			circlegrid.Reference = nil
 		}
 	}
-
-	// ShapeCategory field
+	
+	// ShapeCategory field	
 	{
 		id := circlegridDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -423,7 +423,7 @@ func (circlegridDB *CircleGridDB) DecodePointers(backRepo *BackRepoStruct, circl
 			circlegrid.ShapeCategory = nil
 		}
 	}
-
+	
 	// This loop redeem circlegrid.Circles in the stage from the encode in the back repo
 	// It parses all CircleDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

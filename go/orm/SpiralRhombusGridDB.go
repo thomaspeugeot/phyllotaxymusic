@@ -245,14 +245,14 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitPhaseTwo
 		for _, spiralrhombusAssocEnd := range spiralrhombusgrid.SpiralRhombuses {
 			spiralrhombusAssocEnd_DB :=
 				backRepo.BackRepoSpiralRhombus.GetSpiralRhombusDBFromSpiralRhombusPtr(spiralrhombusAssocEnd)
-
+			
 			// the stage might be inconsistant, meaning that the spiralrhombusAssocEnd_DB might
 			// be missing from the stage. In this case, the commit operation is robust
 			// An alternative would be to crash here to reveal the missing element.
 			if spiralrhombusAssocEnd_DB == nil {
 				continue
 			}
-
+			
 			spiralrhombusgridDB.SpiralRhombusGridPointersEncoding.SpiralRhombuses =
 				append(spiralrhombusgridDB.SpiralRhombusGridPointersEncoding.SpiralRhombuses, int(spiralrhombusAssocEnd_DB.ID))
 		}
@@ -370,7 +370,7 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CheckoutPhaseT
 func (spiralrhombusgridDB *SpiralRhombusGridDB) DecodePointers(backRepo *BackRepoStruct, spiralrhombusgrid *models.SpiralRhombusGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := spiralrhombusgridDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -388,7 +388,7 @@ func (spiralrhombusgridDB *SpiralRhombusGridDB) DecodePointers(backRepo *BackRep
 			spiralrhombusgrid.ShapeCategory = nil
 		}
 	}
-
+	
 	// This loop redeem spiralrhombusgrid.SpiralRhombuses in the stage from the encode in the back repo
 	// It parses all SpiralRhombusDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

@@ -445,7 +445,7 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CheckoutPhaseTwoInstance
 func (spiralbezierDB *SpiralBezierDB) DecodePointers(backRepo *BackRepoStruct, spiralbezier *models.SpiralBezier) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field
+	// ShapeCategory field	
 	{
 		id := spiralbezierDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -463,7 +463,7 @@ func (spiralbezierDB *SpiralBezierDB) DecodePointers(backRepo *BackRepoStruct, s
 			spiralbezier.ShapeCategory = nil
 		}
 	}
-
+	
 	return
 }
 
