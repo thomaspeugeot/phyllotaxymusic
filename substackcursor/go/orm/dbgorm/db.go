@@ -2,8 +2,8 @@
 package dbgorm
 
 import (
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/db"
 	"github.com/glebarez/sqlite"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/db"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )

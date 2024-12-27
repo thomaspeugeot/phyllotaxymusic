@@ -6,12 +6,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/fullstack"
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/orm"
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/probe"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/fullstack"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/probe"
 
-	substackcursor_go "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go"
+	substackcursor_go "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +29,7 @@ func (impl *BeforeCommitImplementation) BeforeCommit(stage *models.StageStruct) 
 	defer file.Close()
 
 	stage.Checkout()
-	stage.Marshall(file, "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models", "main")
+	stage.Marshall(file, "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models", "main")
 }
 
 type Stack struct {

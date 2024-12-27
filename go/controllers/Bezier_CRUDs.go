@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
-	"github.com/thomaspeugeot/phylotaxymusic/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/orm"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,7 +66,7 @@ func (controller *Controller) GetBeziers(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoBezier.GetDB()
 
@@ -129,7 +129,7 @@ func (controller *Controller) PostBezier(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoBezier.GetDB()
 
@@ -199,7 +199,7 @@ func (controller *Controller) GetBezier(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoBezier.GetDB()
 
@@ -248,7 +248,7 @@ func (controller *Controller) UpdateBezier(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoBezier.GetDB()
 
@@ -338,7 +338,7 @@ func (controller *Controller) DeleteBezier(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoBezier.GetDB()
 

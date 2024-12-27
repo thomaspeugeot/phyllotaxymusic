@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
-	"github.com/thomaspeugeot/phylotaxymusic/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/orm"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,7 +66,7 @@ func (controller *Controller) GetSpiralCircles(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoSpiralCircle.GetDB()
 
@@ -129,7 +129,7 @@ func (controller *Controller) PostSpiralCircle(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoSpiralCircle.GetDB()
 
@@ -199,7 +199,7 @@ func (controller *Controller) GetSpiralCircle(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoSpiralCircle.GetDB()
 
@@ -248,7 +248,7 @@ func (controller *Controller) UpdateSpiralCircle(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoSpiralCircle.GetDB()
 
@@ -338,7 +338,7 @@ func (controller *Controller) DeleteSpiralCircle(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoSpiralCircle.GetDB()
 

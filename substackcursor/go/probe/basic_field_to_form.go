@@ -7,7 +7,7 @@ import (
 
 	form "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
 )
 
 func BasicFieldtoForm[T models.PointerToGongstruct, TF models.GongtructBasicField](
@@ -22,11 +22,11 @@ func BasicFieldtoForm[T models.PointerToGongstruct, TF models.GongtructBasicFiel
 		}).Stage(formStage)
 		formGroup.FormDivs = append(formGroup.FormDivs, formDiv)
 		formField := (&form.FormField{
-			Name:            fieldName,
-			Label:           fieldName,
-			Placeholder:     "",
-			HasBespokeWidth: isBespokeWidth,
-			BespokeWidthPx:  bespokeWidth,
+			Name:             fieldName,
+			Label:            fieldName,
+			Placeholder:      "",
+			HasBespokeWidth:  isBespokeWidth,
+			BespokeWidthPx:   bespokeWidth,
 			HasBespokeHeight: isBespokeHeight,
 			BespokeHeightPx:  bespokeHeight,
 		}).Stage(formStage)

@@ -3,7 +3,7 @@ package models
 import (
 	"log"
 
-	substackcursor_models "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
+	substackcursor_models "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
 )
 
 type Parameter struct {

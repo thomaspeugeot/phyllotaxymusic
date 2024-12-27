@@ -6,12 +6,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/fullstack"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
-	"github.com/thomaspeugeot/phylotaxymusic/go/orm"
-	"github.com/thomaspeugeot/phylotaxymusic/go/probe"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/fullstack"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/probe"
 
-	phylotaxymusic_go "github.com/thomaspeugeot/phylotaxymusic/go"
+	phyllotaxymusic_go "github.com/thomaspeugeot/phyllotaxymusic/go"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +29,7 @@ func (impl *BeforeCommitImplementation) BeforeCommit(stage *models.StageStruct) 
 	defer file.Close()
 
 	stage.Checkout()
-	stage.Marshall(file, "github.com/thomaspeugeot/phylotaxymusic/go/models", "main")
+	stage.Marshall(file, "github.com/thomaspeugeot/phyllotaxymusic/go/models", "main")
 }
 
 type Stack struct {
@@ -122,7 +122,7 @@ func NewStack(
 	}
 
 	if withProbe {
-		stack.Probe = probe.NewProbe(r, phylotaxymusic_go.GoModelsDir, phylotaxymusic_go.GoDiagramsDir,
+		stack.Probe = probe.NewProbe(r, phyllotaxymusic_go.GoModelsDir, phyllotaxymusic_go.GoDiagramsDir,
 			embeddedDiagrams, stackPath, stage, backRepo)
 	}
 

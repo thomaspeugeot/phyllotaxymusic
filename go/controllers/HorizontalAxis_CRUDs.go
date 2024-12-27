@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
-	"github.com/thomaspeugeot/phylotaxymusic/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/orm"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,7 +66,7 @@ func (controller *Controller) GetHorizontalAxiss(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoHorizontalAxis.GetDB()
 
@@ -129,7 +129,7 @@ func (controller *Controller) PostHorizontalAxis(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoHorizontalAxis.GetDB()
 
@@ -199,7 +199,7 @@ func (controller *Controller) GetHorizontalAxis(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoHorizontalAxis.GetDB()
 
@@ -248,7 +248,7 @@ func (controller *Controller) UpdateHorizontalAxis(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoHorizontalAxis.GetDB()
 
@@ -338,7 +338,7 @@ func (controller *Controller) DeleteHorizontalAxis(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoHorizontalAxis.GetDB()
 

@@ -81,7 +81,7 @@ type StageStruct struct {
 }
 
 func (stage *StageStruct) GetType() string {
-	return "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
+	return "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
 }
 
 type GONG__Identifier struct {
@@ -552,10 +552,10 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt     GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat   GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool    GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers  GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
 )
 
 type GongFieldValue struct {
@@ -573,11 +573,11 @@ func (gongValueField *GongFieldValue) GetValueString() string {
 func (gongValueField *GongFieldValue) GetValueInt() int {
 	return gongValueField.valueInt
 }
-	
+
 func (gongValueField *GongFieldValue) GetValueFloat() float64 {
 	return gongValueField.valueFloat
 }
-	
+
 func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }

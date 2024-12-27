@@ -319,7 +319,7 @@ type StageStruct struct {
 }
 
 func (stage *StageStruct) GetType() string {
-	return "github.com/thomaspeugeot/phylotaxymusic/go/models"
+	return "github.com/thomaspeugeot/phyllotaxymusic/go/models"
 }
 
 type GONG__Identifier struct {

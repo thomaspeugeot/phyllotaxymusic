@@ -2,16 +2,16 @@
 package fullstack
 
 import (
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/controllers"
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/controllers"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm"
 
 	"github.com/gin-gonic/gin"
 
 	// this will import the angular front end source code directory (versionned with git) in the vendor directory
 	// this path will be included in the "tsconfig.json" front end compilation paths
 	// to include this stack front end code
-	_ "github.com/thomaspeugeot/phylotaxymusic/substackcursor/ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor/projects"
+	_ "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor/projects"
 )
 
 // NewStackInstance creates a new stack instance from the Stack Model

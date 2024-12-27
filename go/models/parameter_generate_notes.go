@@ -10,7 +10,7 @@ import (
 func (p *Parameter) GenerateNotes(
 	gongtoneStage *gongtone_models.StageStruct,
 	gongsvgStage *gongsvg_models.StageStruct,
-	phylotaxymusicStage *StageStruct) {
+	phyllotaxymusicStage *StageStruct) {
 
 	gongtoneStage.Reset()
 

@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm"
 
 	"github.com/gin-gonic/gin"
 
@@ -47,7 +47,7 @@ type ValidationError struct {
 
 // registerControllers register controllers
 func registerControllers(r *gin.Engine) {
-	v1 := r.Group("/api/github.com/thomaspeugeot/phylotaxymusic/substackcursor/go")
+	v1 := r.Group("/api/github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go")
 	{ // insertion point for registrations
 		v1.GET("/v1/cursors", GetController().GetCursors)
 		v1.GET("/v1/cursors/:id", GetController().GetCursor)
@@ -85,7 +85,7 @@ func (controller *Controller) stacks(c *gin.Context) {
 // them on the web socket connection
 func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Context) {
 
-	// log.Println("Stack github.com/thomaspeugeot/phylotaxymusic/substackcursor/go, onWebSocketRequestForBackRepoContent")
+	// log.Println("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, onWebSocketRequestForBackRepoContent")
 
 	// Upgrader specifies parameters for upgrading an HTTP connection to a
 	// WebSocket connection.
@@ -117,7 +117,7 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 		}
 	}
 
-	log.Printf("Stack github.com/thomaspeugeot/phylotaxymusic/substackcursor/go: stack path: '%s', new ws index %d",
+	log.Printf("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go: stack path: '%s', new ws index %d",
 		stackPath, controller.listenerIndex,
 	)
 	index := controller.listenerIndex
@@ -125,7 +125,7 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/substackcursor/go, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, Unkown stack", stackPath)
 	}
 	updateCommitBackRepoNbChannel := backRepo.SubscribeToCommitNb(ctx)
 
@@ -135,7 +135,7 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 			// ReadMessage is used to detect client disconnection
 			_, _, err := wsConnection.ReadMessage()
 			if err != nil {
-				log.Println("github.com/thomaspeugeot/phylotaxymusic/substackcursor/go", stackPath, "WS client disconnected:", err)
+				log.Println("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go", stackPath, "WS client disconnected:", err)
 				cancel() // Cancel the context
 				return
 			}
@@ -147,12 +147,12 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 
 	err = wsConnection.WriteJSON(backRepoData)
 	if err != nil {
-		log.Println("github.com/thomaspeugeot/phylotaxymusic/substackcursor/go:\n",
+		log.Println("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go:\n",
 			"client no longer receiver web socket message, assuming it is no longer alive, closing websocket handler")
 		fmt.Println(err)
 		return
 	} else {
-		log.Println(time.Now().Format("2006-01-02 15:04:05.000000"), "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go: 1st sent backRepoData of stack:", stackPath, "index", index)
+		log.Println(time.Now().Format("2006-01-02 15:04:05.000000"), "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go: 1st sent backRepoData of stack:", stackPath, "index", index)
 	}
 	for {
 		select {
@@ -172,13 +172,13 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 				// Send backRepo data
 				err = wsConnection.WriteJSON(backRepoData)
 				if err != nil {
-					log.Println("github.com/thomaspeugeot/phylotaxymusic/substackcursor/go:\n", stackPath,
+					log.Println("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go:\n", stackPath,
 						"client no longer receiver web socket message,closing websocket handler")
 					fmt.Println(err)
 					cancel() // Cancel the context
 					return
 				} else {
-					log.Println(time.Now().Format("2006-01-02 15:04:05.000000"), "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go: sent backRepoData of stack:", stackPath, "index", index)
+					log.Println(time.Now().Format("2006-01-02 15:04:05.000000"), "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go: sent backRepoData of stack:", stackPath, "index", index)
 				}
 			}
 		}
@@ -198,7 +198,7 @@ func (controller *Controller) GetLastCommitFromBackNb(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models, Unkown stack", stackPath)
 	}
 	res := backRepo.GetLastCommitFromBackNb()
 
@@ -218,7 +218,7 @@ func (controller *Controller) GetLastPushFromFrontNb(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models, Unkown stack", stackPath)
 	}
 	res := backRepo.GetLastPushFromFrontNb()
 

@@ -10,7 +10,7 @@ import (
 	form "github.com/fullstack-lang/gongtable/go/models"
 	gongtable_models "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
 )
 
 // AssociationSliceToForm add a form div with 2 buttons
@@ -46,7 +46,7 @@ func AssociationSliceToForm[InstanceType models.PointerToGongstruct, FieldType m
 	formSortAssocButton.OnSortEdition = onSortingEditon
 
 }
-	
+
 type OnAssocEditon[InstanceType models.PointerToGongstruct, FieldType models.PointerToGongstruct] struct {
 	instance  InstanceType
 	field     *[]FieldType

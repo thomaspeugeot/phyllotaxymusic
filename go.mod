@@ -1,4 +1,4 @@
-module github.com/thomaspeugeot/phylotaxymusic
+module github.com/thomaspeugeot/phyllotaxymusic
 
 go 1.23.1
 

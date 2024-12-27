@@ -7,7 +7,7 @@ type StacksNames string
 // values for TableExtraNameEnum
 const (
 	// we have three application stacks. All have the same name
-	Phylotaxy StacksNames = "phylotaxymusic"
+	Phylotaxy StacksNames = "phyllotaxymusic"
 
 	GongsvgStackName  StacksNames = "gongsvg"
 	SidebarTree       StacksNames = "sidebar tree"

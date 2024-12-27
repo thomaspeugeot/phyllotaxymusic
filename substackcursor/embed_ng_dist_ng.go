@@ -5,5 +5,5 @@ import "embed"
 // NgDistNg is the export of angular distribution. This allows
 // embedding of the pages in the web server
 //
-//go:embed ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor/dist/ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor
+//go:embed ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor/dist/ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor
 var NgDistNg embed.FS

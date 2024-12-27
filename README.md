@@ -9,13 +9,13 @@ ONLY WORKS WITH EDGE (bug !)
 git, go version => 1.23 and npm version >= 18 are needed
 
 ```
-git clone https://github.com/thomaspeugeot/phylotaxymusic.git
-cd phylotaxymusic/ng-github.com-thomaspeugeot-phylotaxymusic
+git clone https://github.com/thomaspeugeot/phyllotaxymusic.git
+cd phyllotaxymusic/ng-github.com-thomaspeugeot-phyllotaxymusic
 npm i
 ng build
-cd ../go/cmd/phylotaxymusic
+cd ../go/cmd/phyllotaxymusic
 go build
-./phylotaxymusic -unmarshallFromCode=data/music.go -marshallOnCommit=data/music
+./phyllotaxymusic -unmarshallFromCode=data/music.go -marshallOnCommit=data/music
 ```
 
 launch your browser to http://localhost:8080/

@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)

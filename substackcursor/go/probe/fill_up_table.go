@@ -10,8 +10,8 @@ import (
 
 	"github.com/fullstack-lang/maticons/maticons"
 
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm"
 )
 
 func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
