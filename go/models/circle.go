@@ -47,8 +47,23 @@ func (circle *Circle) Draw(
 
 	circle.Presentation.CopyTo(&svgCircle.Presentation)
 
+	svgRect := new(gongsvg_models.Rect).Stage(gongsvgStage)
+	layer.Rects = append(layer.Rects, svgRect)
+
+	rectWidth := 20.0
+
+	svgRect.X = p.OriginX + circle.CenterX - rectWidth/2.0
+	svgRect.Y = p.OriginY - circle.CenterY - rectWidth/2.0
+	svgRect.Width = rectWidth
+	svgRect.Height = rectWidth
+	svgRect.Name = circle.Name
+	circle.Presentation.CopyTo(&svgRect.Presentation)
+
 	if !circle.isKept {
 		svgCircle.StrokeWidth /= 2.0
+		svgRect.StrokeWidth /= 2.0
+	} else {
+
 	}
 
 	if circle.ShowName {
