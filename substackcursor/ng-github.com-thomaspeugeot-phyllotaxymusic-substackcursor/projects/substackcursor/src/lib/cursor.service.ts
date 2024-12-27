@@ -94,7 +94,7 @@ export class CursorService {
       catchError(this.handleError<CursorAPI>('postCursor'))
     );
   }
-
+  
   /** POST: add a new cursor to the server */
   post(cursordb: CursorAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<CursorAPI> {
     return this.postCursor(cursordb, GONG__StackPath, frontRepo)
