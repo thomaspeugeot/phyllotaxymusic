@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
@@ -26,6 +28,39 @@ type Circle struct {
 	note *gongtone_models.Note
 
 	ShowName bool
+
+	Impl   CircleUpdater
+	BeatNb int // rank within the theme
+}
+
+type CircleUpdater interface {
+	Updated()
+}
+
+func NewCircleUpdaterImpl(parameter *Parameter, beatNb int) *CircleUpdaterImpl {
+	return &CircleUpdaterImpl{
+		parameter: parameter,
+		beatNb:    beatNb,
+	}
+}
+
+type CircleUpdaterImpl struct {
+	beatNb    int
+	parameter *Parameter
+}
+
+func (circleUpdaterImpl *CircleUpdaterImpl) Updated() {
+
+	circleUpdaterImpl.parameter.ToggleNotePlayed(circleUpdaterImpl.beatNb)
+
+}
+
+// RectUpdated implements models.RectImplInterface.
+func (circle *Circle) RectUpdated(updatedRect *gongsvg_models.Rect) {
+
+	log.Println("circle updated")
+
+	circle.Impl.Updated()
 }
 
 func (circle *Circle) Draw(
@@ -65,6 +100,10 @@ func (circle *Circle) Draw(
 	} else {
 
 	}
+
+	// put the callback
+	svgRect.Impl = circle
+	circle.Impl = NewCircleUpdaterImpl(p, circle.BeatNb)
 
 	if circle.ShowName {
 		svgText := new(gongsvg_models.Text).Stage(gongsvgStage)

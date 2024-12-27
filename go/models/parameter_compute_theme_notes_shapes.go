@@ -13,16 +13,17 @@ func (p *Parameter) computeThemeNotesShapes(bezierGrid *BezierGrid, g *CircleGri
 	//
 	nbMeasureToJump := int(bezierGrid.Beziers[0].StartX/beatWidth + 0.5)
 
-	for i := range p.NbOfBeatsInTheme {
+	for beatNb := range p.NbOfBeatsInTheme {
 
 		c := new(Circle)
+		c.BeatNb = beatNb
 		*c = *g.Reference
 
-		c.isKept = p.IsNotePlayed(i)
+		c.isKept = p.IsNotePlayed(beatNb)
 
 		g.Circles = append(g.Circles, c)
 
-		c.CenterX = float64(i+nbMeasureToJump) * beatWidth
+		c.CenterX = float64(beatNb+nbMeasureToJump) * beatWidth
 
 		//
 		// compute which bezier is concerned
@@ -52,6 +53,7 @@ func (p *Parameter) computeThemeNotesShapes(bezierGrid *BezierGrid, g *CircleGri
 		} else {
 			pitchAdjusment = -1
 		}
+
 		//
 		// set pitch on minor or major
 		//

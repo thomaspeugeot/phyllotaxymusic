@@ -223,11 +223,24 @@ type ParameterImplInterface interface {
 //
 // Notes:
 // - If the rank is outside the valid range (0 to 63), the method returns `false`.
-func (parameter *Parameter) IsNotePlayed(rank int) bool {
-	if rank < 0 || rank > 63 {
+func (parameter *Parameter) IsNotePlayed(beatNb int) bool {
+	if beatNb < 0 || beatNb > 63 {
 		// Rank must be between 0 and 63 for a 64-bit integer
 		return false
 	}
 	// Check if the rank-th note is played
-	return parameter.ThemeBinaryEncoding&(1<<rank) != 0
+	return parameter.ThemeBinaryEncoding&(1<<beatNb) != 0
+}
+
+// ToggleNotePlayed toggles the note at the specified rank.
+//
+// If the rank is valid (0 <= rank <= 63), it flips the bit at that position
+// in parameter.ThemeBinaryEncoding. Otherwise, it does nothing.
+func (parameter *Parameter) ToggleNotePlayed(beatNb int) {
+	if beatNb < 0 || beatNb > 63 {
+		return // Ignore invalid ranks
+	}
+
+	// Flip the bit at `rank`
+	parameter.ThemeBinaryEncoding ^= 1 << beatNb
 }
