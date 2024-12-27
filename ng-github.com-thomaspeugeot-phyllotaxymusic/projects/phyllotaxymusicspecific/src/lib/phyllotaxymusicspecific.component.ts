@@ -1,6 +1,6 @@
 import { Component, Input, model, OnInit } from '@angular/core';
 
-import * as phylotaxymusic from '../../../phylotaxymusic/src/public-api'
+import * as phyllotaxymusic from '../../../phyllotaxymusic/src/public-api'
 
 import { MatSliderModule } from '@angular/material/slider'
 import { FormsModule } from '@angular/forms';  // Import FormsModule
@@ -16,14 +16,14 @@ import { AngularSplitModule } from 'angular-split';
 import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
 import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
 import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtonespecific/src/lib/gongtone/gongtone.component'
-import { SubstackcursorspecificComponent } from '../../../../../substackcursor/ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor/projects/substackcursorspecific/src/public-api'
+import { SubstackcursorspecificComponent } from '../../../../../substackcursor/ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor/projects/substackcursorspecific/src/public-api'
 
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'lib-phylotaxymusicspecific',
+  selector: 'lib-phyllotaxymusicspecific',
   standalone: true,
   imports: [
     CommonModule,
@@ -40,10 +40,10 @@ import { Observable } from 'rxjs';
     GongtoneComponent,
     SubstackcursorspecificComponent
   ],
-  templateUrl: './phylotaxymusicspecific.component.html',
-  styleUrls: ['./phylotaxymusicspecific.component.css'],
+  templateUrl: './phyllotaxymusicspecific.component.html',
+  styleUrls: ['./phyllotaxymusicspecific.component.css'],
 })
-export class PhylotaxymusicspecificComponent implements OnInit {
+export class PhyllotaxymusicspecificComponent implements OnInit {
 
   private socket: WebSocket | undefined
 
@@ -65,20 +65,20 @@ export class PhylotaxymusicspecificComponent implements OnInit {
     )
   }
 
-  StacksNames = phylotaxymusic.StacksNames
-  StackName = phylotaxymusic.StacksNames.Phylotaxy
-  TreeNames = phylotaxymusic.TreeNames
+  StacksNames = phyllotaxymusic.StacksNames
+  StackName = phyllotaxymusic.StacksNames.Phylotaxy
+  TreeNames = phyllotaxymusic.TreeNames
 
 
   toto: number = 40.0
   rowHeight: string = "50px"
 
-  public frontRepo?: phylotaxymusic.FrontRepo
+  public frontRepo?: phyllotaxymusic.FrontRepo
 
   constructor(
-    private frontRepoService: phylotaxymusic.FrontRepoService,
+    private frontRepoService: phyllotaxymusic.FrontRepoService,
 
-    private parameterService: phylotaxymusic.ParameterService,
+    private parameterService: phyllotaxymusic.ParameterService,
   ) {
 
   }

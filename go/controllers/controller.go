@@ -4,7 +4,7 @@ package controllers
 import (
 	"sync"
 
-	phylotaxymusic_orm "github.com/thomaspeugeot/phylotaxymusic/go/orm"
+	phyllotaxymusic_orm "github.com/thomaspeugeot/phyllotaxymusic/go/orm"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +15,7 @@ import (
 type Controller struct {
 
 	// Map_BackRepos is the map to the backRepo instance according to the stack instance path
-	Map_BackRepos map[string]*phylotaxymusic_orm.BackRepoStruct
+	Map_BackRepos map[string]*phyllotaxymusic_orm.BackRepoStruct
 
 	listenerIndex int // Counter to track the number of listeners
 }
@@ -34,12 +34,12 @@ var doControllerInitOnce sync.Once
 func GetController() *Controller {
 	doControllerInitOnce.Do(func() {
 		_controllerSingloton = &Controller{
-			Map_BackRepos: make(map[string]*phylotaxymusic_orm.BackRepoStruct),
+			Map_BackRepos: make(map[string]*phyllotaxymusic_orm.BackRepoStruct),
 		}
 	})
 	return _controllerSingloton
 }
 
-func (controller *Controller) AddBackRepo(backRepo *phylotaxymusic_orm.BackRepoStruct, stackPath string) {
+func (controller *Controller) AddBackRepo(backRepo *phyllotaxymusic_orm.BackRepoStruct, stackPath string) {
 	GetController().Map_BackRepos[stackPath] = backRepo
 }

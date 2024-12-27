@@ -4,7 +4,7 @@ package controllers
 import (
 	"sync"
 
-	substackcursor_orm "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/orm"
+	substackcursor_orm "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm"
 
 	"github.com/gin-gonic/gin"
 )

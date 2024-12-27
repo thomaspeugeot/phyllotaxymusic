@@ -42,7 +42,7 @@ export class RhombusService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.rhombussUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/rhombuss';
+    this.rhombussUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/rhombuss';
   }
 
   /** GET rhombuss from the server */
@@ -95,7 +95,7 @@ export class RhombusService {
       catchError(this.handleError<RhombusAPI>('postRhombus'))
     );
   }
-  
+
   /** POST: add a new rhombus to the server */
   post(rhombusdb: RhombusAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<RhombusAPI> {
     return this.postRhombus(rhombusdb, GONG__StackPath, frontRepo)

@@ -2,10 +2,10 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "02 - run phylotaxymusic -unmarshallFromCode=stage.go -marshallOnCommit=stage",
+			"label": "02 - run phyllotaxymusic -unmarshallFromCode=stage.go -marshallOnCommit=stage",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/go/cmd/phylotaxymusic"
+				"cwd": "${workspaceFolder}/go/cmd/phyllotaxymusic"
 			},
 			"command": "go",
 			"args": [
@@ -18,10 +18,10 @@
 			"group": "build"
 		},
 		{
-			"label": "02 - run phylotaxymusic -unmarshallFromCode=music.go -marshallOnCommit=music",
+			"label": "02 - run phyllotaxymusic -unmarshallFromCode=music.go -marshallOnCommit=music",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/go/cmd/phylotaxymusic"
+				"cwd": "${workspaceFolder}/go/cmd/phyllotaxymusic"
 			},
 			"command": "go",
 			"args": [
@@ -34,10 +34,10 @@
 			"group": "build"
 		},
 		{
-			"label": "02 - run phylotaxymusic w/o diagrams",
+			"label": "02 - run phyllotaxymusic w/o diagrams",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/go/cmd/phylotaxymusic"
+				"cwd": "${workspaceFolder}/go/cmd/phyllotaxymusic"
 			},
 			"command": "go",
 			"args": [
@@ -58,19 +58,19 @@
 		{
 			"label": "03 - ng build",
 			"type": "shell",
-			"command": "cd ng-github.com-thomaspeugeot-phylotaxymusic; ng build",
+			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic; ng build",
 			"group": "build",
 			"problemMatcher": []
 		},
 		{
 			"label": "04 - ng serve --host=127.0.0.1",
 			"type": "shell",
-			"command": "cd ng-github.com-thomaspeugeot-phylotaxymusic; ng serve --host=127.0.0.1",
+			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic; ng serve --host=127.0.0.1",
 			"group": "build",
 			"problemMatcher": []
 		},
 		{
-			"label": "01 - gongc phylotaxymusic",
+			"label": "01 - gongc phyllotaxymusic",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -80,7 +80,7 @@
 			"args": []
 		},
 		{
-			"label": "01 - gongc phylotaxymusic -clean",
+			"label": "01 - gongc phyllotaxymusic -clean",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -92,7 +92,7 @@
 			]
 		},
 		{
-			"label": "01 - gongc phylotaxymusic -skipNg",
+			"label": "01 - gongc phyllotaxymusic -skipNg",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -104,7 +104,7 @@
 			]
 		},
 		{
-			"label": "01 - gongc phylotaxymusic -skipGoModCommands",
+			"label": "01 - gongc phyllotaxymusic -skipGoModCommands",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -116,7 +116,7 @@
 			]
 		},
 		{
-			"label": "01 - gongc phylotaxymusic -skipNg -skipGoModCommands",
+			"label": "01 - gongc phyllotaxymusic -skipNg -skipGoModCommands",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -130,7 +130,7 @@
 			]
 		},
 		{
-			"label": "01 - gongc phylotaxymusic -skipNpmInstall -skipGoModCommands",
+			"label": "01 - gongc phyllotaxymusic -skipNpmInstall -skipGoModCommands",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -203,7 +203,7 @@
 			"label": "00 - go build",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/go/cmd/phylotaxymusic"
+				"cwd": "${workspaceFolder}/go/cmd/phyllotaxymusic"
 			},
 			"command": "go",
 			"args": [
@@ -216,7 +216,7 @@
 			"type": "shell",
 			"group": "build",
 			"options": {
-				"cwd": "${workspaceFolder}/go/cmd/phylotaxymusic"
+				"cwd": "${workspaceFolder}/go/cmd/phyllotaxymusic"
 			},
 			"command": "GOOS=js GOARCH=wasm go build -o wasmworkbench.wasm"
 		},

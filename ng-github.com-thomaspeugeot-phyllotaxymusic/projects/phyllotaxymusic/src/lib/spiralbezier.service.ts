@@ -42,7 +42,7 @@ export class SpiralBezierService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.spiralbeziersUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/spiralbeziers';
+    this.spiralbeziersUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/spiralbeziers';
   }
 
   /** GET spiralbeziers from the server */
@@ -95,7 +95,7 @@ export class SpiralBezierService {
       catchError(this.handleError<SpiralBezierAPI>('postSpiralBezier'))
     );
   }
-  
+
   /** POST: add a new spiralbezier to the server */
   post(spiralbezierdb: SpiralBezierAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralBezierAPI> {
     return this.postSpiralBezier(spiralbezierdb, GONG__StackPath, frontRepo)

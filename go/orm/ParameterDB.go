@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -1507,7 +1507,7 @@ func (backRepoParameter *BackRepoParameterStruct) CheckoutPhaseTwoInstance(backR
 func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, parameter *models.Parameter) {
 
 	// insertion point for checkout of pointer encoding
-	// InitialRhombus field	
+	// InitialRhombus field
 	{
 		id := parameterDB.InitialRhombusID.Int64
 		if id != 0 {
@@ -1525,8 +1525,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.InitialRhombus = nil
 		}
 	}
-	
-	// InitialCircle field	
+
+	// InitialCircle field
 	{
 		id := parameterDB.InitialCircleID.Int64
 		if id != 0 {
@@ -1544,8 +1544,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.InitialCircle = nil
 		}
 	}
-	
-	// InitialRhombusGrid field	
+
+	// InitialRhombusGrid field
 	{
 		id := parameterDB.InitialRhombusGridID.Int64
 		if id != 0 {
@@ -1563,8 +1563,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.InitialRhombusGrid = nil
 		}
 	}
-	
-	// InitialCircleGrid field	
+
+	// InitialCircleGrid field
 	{
 		id := parameterDB.InitialCircleGridID.Int64
 		if id != 0 {
@@ -1582,8 +1582,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.InitialCircleGrid = nil
 		}
 	}
-	
-	// InitialAxis field	
+
+	// InitialAxis field
 	{
 		id := parameterDB.InitialAxisID.Int64
 		if id != 0 {
@@ -1601,8 +1601,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.InitialAxis = nil
 		}
 	}
-	
-	// RotatedAxis field	
+
+	// RotatedAxis field
 	{
 		id := parameterDB.RotatedAxisID.Int64
 		if id != 0 {
@@ -1620,8 +1620,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.RotatedAxis = nil
 		}
 	}
-	
-	// RotatedRhombus field	
+
+	// RotatedRhombus field
 	{
 		id := parameterDB.RotatedRhombusID.Int64
 		if id != 0 {
@@ -1639,8 +1639,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.RotatedRhombus = nil
 		}
 	}
-	
-	// RotatedRhombusGrid field	
+
+	// RotatedRhombusGrid field
 	{
 		id := parameterDB.RotatedRhombusGridID.Int64
 		if id != 0 {
@@ -1658,8 +1658,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.RotatedRhombusGrid = nil
 		}
 	}
-	
-	// RotatedCircleGrid field	
+
+	// RotatedCircleGrid field
 	{
 		id := parameterDB.RotatedCircleGridID.Int64
 		if id != 0 {
@@ -1677,8 +1677,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.RotatedCircleGrid = nil
 		}
 	}
-	
-	// NextRhombus field	
+
+	// NextRhombus field
 	{
 		id := parameterDB.NextRhombusID.Int64
 		if id != 0 {
@@ -1696,8 +1696,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.NextRhombus = nil
 		}
 	}
-	
-	// NextCircle field	
+
+	// NextCircle field
 	{
 		id := parameterDB.NextCircleID.Int64
 		if id != 0 {
@@ -1715,8 +1715,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.NextCircle = nil
 		}
 	}
-	
-	// GrowingRhombusGridSeed field	
+
+	// GrowingRhombusGridSeed field
 	{
 		id := parameterDB.GrowingRhombusGridSeedID.Int64
 		if id != 0 {
@@ -1734,8 +1734,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowingRhombusGridSeed = nil
 		}
 	}
-	
-	// GrowingRhombusGrid field	
+
+	// GrowingRhombusGrid field
 	{
 		id := parameterDB.GrowingRhombusGridID.Int64
 		if id != 0 {
@@ -1753,8 +1753,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowingRhombusGrid = nil
 		}
 	}
-	
-	// GrowingCircleGridSeed field	
+
+	// GrowingCircleGridSeed field
 	{
 		id := parameterDB.GrowingCircleGridSeedID.Int64
 		if id != 0 {
@@ -1772,8 +1772,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowingCircleGridSeed = nil
 		}
 	}
-	
-	// GrowingCircleGrid field	
+
+	// GrowingCircleGrid field
 	{
 		id := parameterDB.GrowingCircleGridID.Int64
 		if id != 0 {
@@ -1791,8 +1791,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowingCircleGrid = nil
 		}
 	}
-	
-	// GrowingCircleGridLeftSeed field	
+
+	// GrowingCircleGridLeftSeed field
 	{
 		id := parameterDB.GrowingCircleGridLeftSeedID.Int64
 		if id != 0 {
@@ -1810,8 +1810,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowingCircleGridLeftSeed = nil
 		}
 	}
-	
-	// GrowingCircleGridLeft field	
+
+	// GrowingCircleGridLeft field
 	{
 		id := parameterDB.GrowingCircleGridLeftID.Int64
 		if id != 0 {
@@ -1829,8 +1829,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowingCircleGridLeft = nil
 		}
 	}
-	
-	// ConstructionAxis field	
+
+	// ConstructionAxis field
 	{
 		id := parameterDB.ConstructionAxisID.Int64
 		if id != 0 {
@@ -1848,8 +1848,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.ConstructionAxis = nil
 		}
 	}
-	
-	// ConstructionAxisGrid field	
+
+	// ConstructionAxisGrid field
 	{
 		id := parameterDB.ConstructionAxisGridID.Int64
 		if id != 0 {
@@ -1867,8 +1867,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.ConstructionAxisGrid = nil
 		}
 	}
-	
-	// ConstructionCircle field	
+
+	// ConstructionCircle field
 	{
 		id := parameterDB.ConstructionCircleID.Int64
 		if id != 0 {
@@ -1886,8 +1886,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.ConstructionCircle = nil
 		}
 	}
-	
-	// ConstructionCircleGrid field	
+
+	// ConstructionCircleGrid field
 	{
 		id := parameterDB.ConstructionCircleGridID.Int64
 		if id != 0 {
@@ -1905,8 +1905,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.ConstructionCircleGrid = nil
 		}
 	}
-	
-	// GrowthCurveSeed field	
+
+	// GrowthCurveSeed field
 	{
 		id := parameterDB.GrowthCurveSeedID.Int64
 		if id != 0 {
@@ -1924,8 +1924,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowthCurveSeed = nil
 		}
 	}
-	
-	// GrowthCurve field	
+
+	// GrowthCurve field
 	{
 		id := parameterDB.GrowthCurveID.Int64
 		if id != 0 {
@@ -1943,8 +1943,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowthCurve = nil
 		}
 	}
-	
-	// GrowthCurveShiftedRightSeed field	
+
+	// GrowthCurveShiftedRightSeed field
 	{
 		id := parameterDB.GrowthCurveShiftedRightSeedID.Int64
 		if id != 0 {
@@ -1962,8 +1962,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowthCurveShiftedRightSeed = nil
 		}
 	}
-	
-	// GrowthCurveShiftedRight field	
+
+	// GrowthCurveShiftedRight field
 	{
 		id := parameterDB.GrowthCurveShiftedRightID.Int64
 		if id != 0 {
@@ -1981,8 +1981,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowthCurveShiftedRight = nil
 		}
 	}
-	
-	// GrowthCurveNextSeed field	
+
+	// GrowthCurveNextSeed field
 	{
 		id := parameterDB.GrowthCurveNextSeedID.Int64
 		if id != 0 {
@@ -2000,8 +2000,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowthCurveNextSeed = nil
 		}
 	}
-	
-	// GrowthCurveNext field	
+
+	// GrowthCurveNext field
 	{
 		id := parameterDB.GrowthCurveNextID.Int64
 		if id != 0 {
@@ -2019,8 +2019,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowthCurveNext = nil
 		}
 	}
-	
-	// GrowthCurveNextShiftedRightSeed field	
+
+	// GrowthCurveNextShiftedRightSeed field
 	{
 		id := parameterDB.GrowthCurveNextShiftedRightSeedID.Int64
 		if id != 0 {
@@ -2038,8 +2038,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowthCurveNextShiftedRightSeed = nil
 		}
 	}
-	
-	// GrowthCurveNextShiftedRight field	
+
+	// GrowthCurveNextShiftedRight field
 	{
 		id := parameterDB.GrowthCurveNextShiftedRightID.Int64
 		if id != 0 {
@@ -2057,8 +2057,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowthCurveNextShiftedRight = nil
 		}
 	}
-	
-	// GrowthCurveStack field	
+
+	// GrowthCurveStack field
 	{
 		id := parameterDB.GrowthCurveStackID.Int64
 		if id != 0 {
@@ -2076,8 +2076,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.GrowthCurveStack = nil
 		}
 	}
-	
-	// SpiralRhombusGridSeed field	
+
+	// SpiralRhombusGridSeed field
 	{
 		id := parameterDB.SpiralRhombusGridSeedID.Int64
 		if id != 0 {
@@ -2095,8 +2095,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralRhombusGridSeed = nil
 		}
 	}
-	
-	// SpiralRhombusGrid field	
+
+	// SpiralRhombusGrid field
 	{
 		id := parameterDB.SpiralRhombusGridID.Int64
 		if id != 0 {
@@ -2114,8 +2114,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralRhombusGrid = nil
 		}
 	}
-	
-	// SpiralCircleSeed field	
+
+	// SpiralCircleSeed field
 	{
 		id := parameterDB.SpiralCircleSeedID.Int64
 		if id != 0 {
@@ -2133,8 +2133,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralCircleSeed = nil
 		}
 	}
-	
-	// SpiralCircleGrid field	
+
+	// SpiralCircleGrid field
 	{
 		id := parameterDB.SpiralCircleGridID.Int64
 		if id != 0 {
@@ -2152,8 +2152,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralCircleGrid = nil
 		}
 	}
-	
-	// SpiralCircleFullGrid field	
+
+	// SpiralCircleFullGrid field
 	{
 		id := parameterDB.SpiralCircleFullGridID.Int64
 		if id != 0 {
@@ -2171,8 +2171,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralCircleFullGrid = nil
 		}
 	}
-	
-	// SpiralConstructionOuterLineSeed field	
+
+	// SpiralConstructionOuterLineSeed field
 	{
 		id := parameterDB.SpiralConstructionOuterLineSeedID.Int64
 		if id != 0 {
@@ -2190,8 +2190,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralConstructionOuterLineSeed = nil
 		}
 	}
-	
-	// SpiralConstructionInnerLineSeed field	
+
+	// SpiralConstructionInnerLineSeed field
 	{
 		id := parameterDB.SpiralConstructionInnerLineSeedID.Int64
 		if id != 0 {
@@ -2209,8 +2209,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralConstructionInnerLineSeed = nil
 		}
 	}
-	
-	// SpiralConstructionOuterLineGrid field	
+
+	// SpiralConstructionOuterLineGrid field
 	{
 		id := parameterDB.SpiralConstructionOuterLineGridID.Int64
 		if id != 0 {
@@ -2228,8 +2228,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralConstructionOuterLineGrid = nil
 		}
 	}
-	
-	// SpiralConstructionInnerLineGrid field	
+
+	// SpiralConstructionInnerLineGrid field
 	{
 		id := parameterDB.SpiralConstructionInnerLineGridID.Int64
 		if id != 0 {
@@ -2247,8 +2247,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralConstructionInnerLineGrid = nil
 		}
 	}
-	
-	// SpiralConstructionCircleGrid field	
+
+	// SpiralConstructionCircleGrid field
 	{
 		id := parameterDB.SpiralConstructionCircleGridID.Int64
 		if id != 0 {
@@ -2266,8 +2266,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralConstructionCircleGrid = nil
 		}
 	}
-	
-	// SpiralConstructionOuterLineFullGrid field	
+
+	// SpiralConstructionOuterLineFullGrid field
 	{
 		id := parameterDB.SpiralConstructionOuterLineFullGridID.Int64
 		if id != 0 {
@@ -2285,8 +2285,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralConstructionOuterLineFullGrid = nil
 		}
 	}
-	
-	// SpiralBezierSeed field	
+
+	// SpiralBezierSeed field
 	{
 		id := parameterDB.SpiralBezierSeedID.Int64
 		if id != 0 {
@@ -2304,8 +2304,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralBezierSeed = nil
 		}
 	}
-	
-	// SpiralBezierGrid field	
+
+	// SpiralBezierGrid field
 	{
 		id := parameterDB.SpiralBezierGridID.Int64
 		if id != 0 {
@@ -2323,8 +2323,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralBezierGrid = nil
 		}
 	}
-	
-	// SpiralBezierFullGrid field	
+
+	// SpiralBezierFullGrid field
 	{
 		id := parameterDB.SpiralBezierFullGridID.Int64
 		if id != 0 {
@@ -2342,8 +2342,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralBezierFullGrid = nil
 		}
 	}
-	
-	// FrontCurveStack field	
+
+	// FrontCurveStack field
 	{
 		id := parameterDB.FrontCurveStackID.Int64
 		if id != 0 {
@@ -2361,8 +2361,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.FrontCurveStack = nil
 		}
 	}
-	
-	// Fkey field	
+
+	// Fkey field
 	{
 		id := parameterDB.FkeyID.Int64
 		if id != 0 {
@@ -2380,8 +2380,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.Fkey = nil
 		}
 	}
-	
-	// PitchLines field	
+
+	// PitchLines field
 	{
 		id := parameterDB.PitchLinesID.Int64
 		if id != 0 {
@@ -2399,8 +2399,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.PitchLines = nil
 		}
 	}
-	
-	// BeatLines field	
+
+	// BeatLines field
 	{
 		id := parameterDB.BeatLinesID.Int64
 		if id != 0 {
@@ -2418,8 +2418,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.BeatLines = nil
 		}
 	}
-	
-	// FirstVoice field	
+
+	// FirstVoice field
 	{
 		id := parameterDB.FirstVoiceID.Int64
 		if id != 0 {
@@ -2437,8 +2437,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.FirstVoice = nil
 		}
 	}
-	
-	// FirstVoiceShiftRigth field	
+
+	// FirstVoiceShiftRigth field
 	{
 		id := parameterDB.FirstVoiceShiftRigthID.Int64
 		if id != 0 {
@@ -2456,8 +2456,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.FirstVoiceShiftRigth = nil
 		}
 	}
-	
-	// SecondVoice field	
+
+	// SecondVoice field
 	{
 		id := parameterDB.SecondVoiceID.Int64
 		if id != 0 {
@@ -2475,8 +2475,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SecondVoice = nil
 		}
 	}
-	
-	// SecondVoiceShiftedRight field	
+
+	// SecondVoiceShiftedRight field
 	{
 		id := parameterDB.SecondVoiceShiftedRightID.Int64
 		if id != 0 {
@@ -2494,8 +2494,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SecondVoiceShiftedRight = nil
 		}
 	}
-	
-	// FirstVoiceNotes field	
+
+	// FirstVoiceNotes field
 	{
 		id := parameterDB.FirstVoiceNotesID.Int64
 		if id != 0 {
@@ -2513,8 +2513,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.FirstVoiceNotes = nil
 		}
 	}
-	
-	// FirstVoiceNotesShiftedRight field	
+
+	// FirstVoiceNotesShiftedRight field
 	{
 		id := parameterDB.FirstVoiceNotesShiftedRightID.Int64
 		if id != 0 {
@@ -2532,8 +2532,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.FirstVoiceNotesShiftedRight = nil
 		}
 	}
-	
-	// SecondVoiceNotes field	
+
+	// SecondVoiceNotes field
 	{
 		id := parameterDB.SecondVoiceNotesID.Int64
 		if id != 0 {
@@ -2551,8 +2551,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SecondVoiceNotes = nil
 		}
 	}
-	
-	// SecondVoiceNotesShiftedRight field	
+
+	// SecondVoiceNotesShiftedRight field
 	{
 		id := parameterDB.SecondVoiceNotesShiftedRightID.Int64
 		if id != 0 {
@@ -2570,8 +2570,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SecondVoiceNotesShiftedRight = nil
 		}
 	}
-	
-	// HorizontalAxis field	
+
+	// HorizontalAxis field
 	{
 		id := parameterDB.HorizontalAxisID.Int64
 		if id != 0 {
@@ -2589,8 +2589,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.HorizontalAxis = nil
 		}
 	}
-	
-	// VerticalAxis field	
+
+	// VerticalAxis field
 	{
 		id := parameterDB.VerticalAxisID.Int64
 		if id != 0 {
@@ -2608,8 +2608,8 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.VerticalAxis = nil
 		}
 	}
-	
-	// SpiralOrigin field	
+
+	// SpiralOrigin field
 	{
 		id := parameterDB.SpiralOriginID.Int64
 		if id != 0 {
@@ -2627,7 +2627,7 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 			parameter.SpiralOrigin = nil
 		}
 	}
-	
+
 	return
 }
 

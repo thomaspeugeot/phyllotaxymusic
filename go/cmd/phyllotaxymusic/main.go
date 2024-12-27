@@ -5,9 +5,9 @@ import (
 	"log"
 	"strconv"
 
-	phylotaxymusic_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
-	phylotaxymusic_stack "github.com/thomaspeugeot/phylotaxymusic/go/stack"
-	phylotaxymusic_static "github.com/thomaspeugeot/phylotaxymusic/go/static"
+	phyllotaxymusic_models "github.com/thomaspeugeot/phyllotaxymusic/go/models"
+	phyllotaxymusic_stack "github.com/thomaspeugeot/phyllotaxymusic/go/stack"
+	phyllotaxymusic_static "github.com/thomaspeugeot/phyllotaxymusic/go/static"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongsvg_stack "github.com/fullstack-lang/gongsvg/go/stack"
@@ -17,8 +17,8 @@ import (
 
 	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
 
-	substackcursor_models "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
-	substackcursor_stack "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/stack"
+	substackcursor_models "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	substackcursor_stack "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/stack"
 )
 
 var (
@@ -35,28 +35,28 @@ var (
 
 func main() {
 
-	log.SetPrefix("phylotaxymusic: ")
+	log.SetPrefix("phyllotaxymusic: ")
 	log.SetFlags(0)
 
 	// parse program arguments
 	flag.Parse()
 
 	// setup the static file server and get the controller
-	r := phylotaxymusic_static.ServeStaticFiles(*logGINFlag)
+	r := phyllotaxymusic_static.ServeStaticFiles(*logGINFlag)
 
-	// setup phylotaxymusicStack
-	phylotaxymusicStack := phylotaxymusic_stack.NewStack(r,
-		phylotaxymusic_models.Phylotaxy.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
-	phylotaxymusicStack.Probe.Refresh()
-	phylotaxymusicStack.Stage.Checkout()
+	// setup phyllotaxymusicStack
+	phyllotaxymusicStack := phyllotaxymusic_stack.NewStack(r,
+		phyllotaxymusic_models.Phylotaxy.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+	phyllotaxymusicStack.Probe.Refresh()
+	phyllotaxymusicStack.Stage.Checkout()
 
-	gongsvg_stack := gongsvg_stack.NewStack(r, phylotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
-	gongtree_stack := gongtree_stack.NewStack(r, phylotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
-	gongtone_stack := gongtone_stack.NewStack(r, phylotaxymusic_models.GongtoneStackName.ToString(), "", "", "", true, true)
+	gongsvg_stack := gongsvg_stack.NewStack(r, phyllotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
+	gongtree_stack := gongtree_stack.NewStack(r, phyllotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
+	gongtone_stack := gongtone_stack.NewStack(r, phyllotaxymusic_models.GongtoneStackName.ToString(), "", "", "", true, true)
 	cursorStack := substackcursor_stack.NewStack(r, substackcursor_models.Substackcursor.ToString(), "", "", "", false, false)
 
 	// get the only diagram
-	parameters := phylotaxymusic_models.GetGongstructInstancesMap[phylotaxymusic_models.Parameter](phylotaxymusicStack.Stage)
+	parameters := phyllotaxymusic_models.GetGongstructInstancesMap[phyllotaxymusic_models.Parameter](phyllotaxymusicStack.Stage)
 
 	if len(*parameters) == 0 {
 		log.Println("")
@@ -76,20 +76,20 @@ func main() {
 
 	parameter := (*parameters)["Reference"]
 
-	tree := new(phylotaxymusic_models.Tree)
+	tree := new(phyllotaxymusic_models.Tree)
 	tree.TreeStack = gongtree_stack
-	tree.Stage = phylotaxymusicStack.Stage
+	tree.Stage = phyllotaxymusicStack.Stage
 
 	parameterImpl := new(ParameterImpl)
 	parameterImpl.parameter = parameter
 	parameterImpl.gongsvgStage = gongsvg_stack.Stage
 	parameterImpl.gongtoneStage = gongtone_stack.Stage
-	parameterImpl.phylotaxymusicStage = phylotaxymusicStack.Stage
+	parameterImpl.phyllotaxymusicStage = phyllotaxymusicStack.Stage
 	parameterImpl.tree = tree
 	parameterImpl.substackcursorStage = cursorStack.Stage
 
 	parameter.Impl = parameterImpl
-	phylotaxymusic_models.GeneratorSingloton.Impl = parameterImpl
+	phyllotaxymusic_models.GeneratorSingloton.Impl = parameterImpl
 
 	cursor := new(substackcursor_models.Cursor).Stage(cursorStack.Stage)
 	_ = cursor
@@ -119,34 +119,34 @@ func main() {
 }
 
 type ParameterImpl struct {
-	gongsvgStage        *gongsvg_models.StageStruct
-	gongtoneStage       *gongtone_models.StageStruct
-	phylotaxymusicStage *phylotaxymusic_models.StageStruct
-	parameter           *phylotaxymusic_models.Parameter
-	tree                *phylotaxymusic_models.Tree
-	substackcursorStage *substackcursor_models.StageStruct
+	gongsvgStage         *gongsvg_models.StageStruct
+	gongtoneStage        *gongtone_models.StageStruct
+	phyllotaxymusicStage *phyllotaxymusic_models.StageStruct
+	parameter            *phyllotaxymusic_models.Parameter
+	tree                 *phyllotaxymusic_models.Tree
+	substackcursorStage  *substackcursor_models.StageStruct
 }
 
 // Generate implements models.GeneratorInterface.
 func (parameterImpl *ParameterImpl) Generate() {
 	p := parameterImpl.parameter
 
-	p.ComputeShapes(parameterImpl.phylotaxymusicStage)
+	p.ComputeShapes(parameterImpl.phyllotaxymusicStage)
 	p.GenerateSvg(parameterImpl.gongsvgStage)
-	p.GenerateNotes(parameterImpl.gongtoneStage, parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
+	p.GenerateNotes(parameterImpl.gongtoneStage, parameterImpl.gongsvgStage, parameterImpl.phyllotaxymusicStage)
 	parameterImpl.tree.Generate(p)
-	parameterImpl.phylotaxymusicStage.Commit()
+	parameterImpl.phyllotaxymusicStage.Commit()
 	parameterImpl.substackcursorStage.Commit()
 }
 
-func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phylotaxymusic_models.Parameter) {
+func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phyllotaxymusic_models.Parameter) {
 
 	log.Println("OnUpdated", parameterImpl.parameter.InsideAngle, parameterImpl.parameter.SideLength)
-	// phylotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
+	// phyllotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phyllotaxymusicStage)
 
-	updatedParameter.ComputeShapes(parameterImpl.phylotaxymusicStage)
+	updatedParameter.ComputeShapes(parameterImpl.phyllotaxymusicStage)
 	updatedParameter.GenerateSvg(parameterImpl.gongsvgStage)
 	parameterImpl.tree.Generate(updatedParameter)
-	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage, parameterImpl.gongsvgStage, parameterImpl.phylotaxymusicStage)
+	updatedParameter.GenerateNotes(parameterImpl.gongtoneStage, parameterImpl.gongsvgStage, parameterImpl.phyllotaxymusicStage)
 	parameterImpl.substackcursorStage.Commit()
 }

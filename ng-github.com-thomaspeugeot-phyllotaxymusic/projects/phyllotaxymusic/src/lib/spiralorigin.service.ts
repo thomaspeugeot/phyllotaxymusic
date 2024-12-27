@@ -42,7 +42,7 @@ export class SpiralOriginService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.spiraloriginsUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/spiralorigins';
+    this.spiraloriginsUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/spiralorigins';
   }
 
   /** GET spiralorigins from the server */
@@ -95,7 +95,7 @@ export class SpiralOriginService {
       catchError(this.handleError<SpiralOriginAPI>('postSpiralOrigin'))
     );
   }
-  
+
   /** POST: add a new spiralorigin to the server */
   post(spiralorigindb: SpiralOriginAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralOriginAPI> {
     return this.postSpiralOrigin(spiralorigindb, GONG__StackPath, frontRepo)

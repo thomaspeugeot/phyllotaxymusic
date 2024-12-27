@@ -1,4 +1,4 @@
-package phylotaxymusic
+package phyllotaxymusic
 
 import "embed"
 

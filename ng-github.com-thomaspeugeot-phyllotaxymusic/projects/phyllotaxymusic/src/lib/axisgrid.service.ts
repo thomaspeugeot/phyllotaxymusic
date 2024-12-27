@@ -43,7 +43,7 @@ export class AxisGridService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.axisgridsUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/axisgrids';
+    this.axisgridsUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/axisgrids';
   }
 
   /** GET axisgrids from the server */
@@ -96,7 +96,7 @@ export class AxisGridService {
       catchError(this.handleError<AxisGridAPI>('postAxisGrid'))
     );
   }
-  
+
   /** POST: add a new axisgrid to the server */
   post(axisgriddb: AxisGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AxisGridAPI> {
     return this.postAxisGrid(axisgriddb, GONG__StackPath, frontRepo)

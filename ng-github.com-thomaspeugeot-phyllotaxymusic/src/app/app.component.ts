@@ -11,9 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { AngularSplitModule } from 'angular-split';
 
-import * as phylotaxymusic from '../../projects/phylotaxymusic/src/public-api'
+import * as phyllotaxymusic from '../../projects/phyllotaxymusic/src/public-api'
 
-import { PhylotaxymusicspecificComponent } from '../../projects/phylotaxymusicspecific/src/public-api'
+import { PhyllotaxymusicspecificComponent } from '../../projects/phyllotaxymusicspecific/src/public-api'
 
 import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
 import { MaterialTableComponent } from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtablespecific/src/lib/material-table/material-table.component';
@@ -45,7 +45,7 @@ import * as gongtone from '@vendored_components/github.com/fullstack-lang/gongto
     MaterialFormComponent,
     PanelComponent,
 
-    PhylotaxymusicspecificComponent
+    PhyllotaxymusicspecificComponent
 
   ],
 
@@ -53,26 +53,26 @@ import * as gongtone from '@vendored_components/github.com/fullstack-lang/gongto
 })
 export class AppComponent implements OnInit {
 
-  phylotaxymusic = 'Phylotaxymusic'
-  probe = 'Phylotaxymusic Data/Model'
+  phyllotaxymusic = 'Phyllotaxymusic'
+  probe = 'Phyllotaxymusic Data/Model'
   svg_probe = 'svg probe'
   tree_probe = "tree probe"
   tone_probe = "tone probe"
-  view = this.phylotaxymusic
+  view = this.phyllotaxymusic
 
-  views: string[] = [this.phylotaxymusic, this.probe, this.svg_probe, this.tree_probe, this.tone_probe];
+  views: string[] = [this.phyllotaxymusic, this.probe, this.svg_probe, this.tree_probe, this.tone_probe];
 
   scrollStyle = {
     'overflow- x': 'auto',
     'width': '100%',  // Ensure the div takes the full width of its parent container
   }
 
-  StackName = "phylotaxymusic"
-  StackType = phylotaxymusic.StackType
+  StackName = "phyllotaxymusic"
+  StackType = phyllotaxymusic.StackType
 
   TableExtraPathEnum = gongtable.TableExtraPathEnum
 
-  StacksNames = phylotaxymusic.StacksNames
+  StacksNames = phyllotaxymusic.StacksNames
   SVGStackType = gongsvg.StackType
   TreeStackType = gongtree.StackType
   ToneStackType = gongtone.StackType

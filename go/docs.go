@@ -1,9 +1,9 @@
-// Package phylotaxymusic phylotaxymusic backend API
+// Package phyllotaxymusic phyllotaxymusic backend API
 //
-// phylotaxymusic exposes types of a package.
+// phyllotaxymusic exposes types of a package.
 //
 //	Schemes: http
-//	BasePath: /api/github.com/thomaspeugeot/phylotaxymusic/go/v1
+//	BasePath: /api/github.com/thomaspeugeot/phyllotaxymusic/go/v1
 //	Version: 0.1
 //	Host: localhost:8080
 //
@@ -22,4 +22,4 @@
 //	type: basic
 //
 // swagger:meta
-package phylotaxymusic
+package phyllotaxymusic

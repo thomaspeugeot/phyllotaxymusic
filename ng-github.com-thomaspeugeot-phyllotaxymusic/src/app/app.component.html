@@ -7,13 +7,13 @@
     </mat-radio-group>
 </ng-template>
 
-<as-split unit="pixel" *ngIf="view==phylotaxymusic" direction="vertical">
+<as-split unit="pixel" *ngIf="view==phyllotaxymusic" direction="vertical">
     <as-split-area [size]=40>
         <ng-container *ngTemplateOutlet="radioToolbar"></ng-container>
     </as-split-area>
     <as-split-area [size]="$any('*')">
-        <lib-phylotaxymusicspecific GONG__StackPath="phylotaxymusic">
-        </lib-phylotaxymusicspecific>
+        <lib-phyllotaxymusicspecific GONG__StackPath="phyllotaxymusic">
+        </lib-phyllotaxymusicspecific>
     </as-split-area>
 </as-split>
 

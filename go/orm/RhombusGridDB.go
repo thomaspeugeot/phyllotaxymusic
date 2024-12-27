@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -261,14 +261,14 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseTwoInstance(bac
 		for _, rhombusAssocEnd := range rhombusgrid.Rhombuses {
 			rhombusAssocEnd_DB :=
 				backRepo.BackRepoRhombus.GetRhombusDBFromRhombusPtr(rhombusAssocEnd)
-			
+
 			// the stage might be inconsistant, meaning that the rhombusAssocEnd_DB might
 			// be missing from the stage. In this case, the commit operation is robust
 			// An alternative would be to crash here to reveal the missing element.
 			if rhombusAssocEnd_DB == nil {
 				continue
 			}
-			
+
 			rhombusgridDB.RhombusGridPointersEncoding.Rhombuses =
 				append(rhombusgridDB.RhombusGridPointersEncoding.Rhombuses, int(rhombusAssocEnd_DB.ID))
 		}
@@ -386,7 +386,7 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CheckoutPhaseTwoInstance(b
 func (rhombusgridDB *RhombusGridDB) DecodePointers(backRepo *BackRepoStruct, rhombusgrid *models.RhombusGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// Reference field	
+	// Reference field
 	{
 		id := rhombusgridDB.ReferenceID.Int64
 		if id != 0 {
@@ -404,8 +404,8 @@ func (rhombusgridDB *RhombusGridDB) DecodePointers(backRepo *BackRepoStruct, rho
 			rhombusgrid.Reference = nil
 		}
 	}
-	
-	// ShapeCategory field	
+
+	// ShapeCategory field
 	{
 		id := rhombusgridDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -423,7 +423,7 @@ func (rhombusgridDB *RhombusGridDB) DecodePointers(backRepo *BackRepoStruct, rho
 			rhombusgrid.ShapeCategory = nil
 		}
 	}
-	
+
 	// This loop redeem rhombusgrid.Rhombuses in the stage from the encode in the back repo
 	// It parses all RhombusDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

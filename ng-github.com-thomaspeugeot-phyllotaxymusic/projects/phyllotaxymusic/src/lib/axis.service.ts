@@ -42,7 +42,7 @@ export class AxisService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.axissUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/axiss';
+    this.axissUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/axiss';
   }
 
   /** GET axiss from the server */
@@ -95,7 +95,7 @@ export class AxisService {
       catchError(this.handleError<AxisAPI>('postAxis'))
     );
   }
-  
+
   /** POST: add a new axis to the server */
   post(axisdb: AxisAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AxisAPI> {
     return this.postAxis(axisdb, GONG__StackPath, frontRepo)

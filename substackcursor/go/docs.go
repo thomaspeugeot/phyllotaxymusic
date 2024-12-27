@@ -3,7 +3,7 @@
 // substackcursor exposes types of a package.
 //
 //	Schemes: http
-//	BasePath: /api/github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/v1
+//	BasePath: /api/github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/v1
 //	Version: 0.1
 //	Host: localhost:8080
 //

@@ -42,7 +42,7 @@ export class KeyService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.keysUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/keys';
+    this.keysUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/keys';
   }
 
   /** GET keys from the server */
@@ -95,7 +95,7 @@ export class KeyService {
       catchError(this.handleError<KeyAPI>('postKey'))
     );
   }
-  
+
   /** POST: add a new key to the server */
   post(keydb: KeyAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<KeyAPI> {
     return this.postKey(keydb, GONG__StackPath, frontRepo)

@@ -1,6 +1,6 @@
-go/cmd/phylotaxymusic/phylotaxymusic
+go/cmd/phyllotaxymusic/phyllotaxymusic
 __debug_bin*
 *.exe
 .DS_Store
 node_modules
-go/cmd/phylotaxymusic/wasmworkbench.wasm
+go/cmd/phyllotaxymusic/wasmworkbench.wasm

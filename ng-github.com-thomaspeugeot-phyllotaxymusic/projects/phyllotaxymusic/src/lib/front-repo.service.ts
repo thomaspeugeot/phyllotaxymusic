@@ -107,7 +107,7 @@ import { VerticalAxisService } from './verticalaxis.service'
 
 import { BackRepoData } from './back-repo-data'
 
-export const StackType = "github.com/thomaspeugeot/phylotaxymusic/go/models"
+export const StackType = "github.com/thomaspeugeot/phyllotaxymusic/go/models"
 
 // FrontRepo stores all instances in a front repository (design pattern repository)
 export class FrontRepo { // insertion point sub template
@@ -1137,7 +1137,7 @@ export class FrontRepoService {
 
 
 		let params = new HttpParams().set("GONG__StackPath", this.GONG__StackPath)
-		let basePath = 'ws://localhost:8080/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/ws/stage'
+		let basePath = 'ws://localhost:8080/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/ws/stage'
 		let paramString = params.toString()
 		let url = `${basePath}?${paramString}`
 		this.socket = new WebSocket(url)

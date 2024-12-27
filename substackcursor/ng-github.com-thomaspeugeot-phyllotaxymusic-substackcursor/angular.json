@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "newProjectRoot": "projects",
   "projects": {
-    "ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor": {
+    "ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor": {
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -36,7 +36,7 @@
             ],
             "browser": "src/main.ts",
             "index": "src/index.html",
-            "outputPath": "dist/ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor",
+            "outputPath": "dist/ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor",
             "polyfills": [
               "zone.js"
             ],
@@ -51,17 +51,17 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor:build"
+            "buildTarget": "ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor:build"
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "development": {
-              "buildTarget": "ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor:build:development"
+              "buildTarget": "ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor:build:development"
             },
             "production": {
-              "buildTarget": "ng-github.com-thomaspeugeot-phylotaxymusic-substackcursor:build:production"
+              "buildTarget": "ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor:build:production"
             }
           },
           "defaultConfiguration": "development"

@@ -7,12 +7,12 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
 )
 
 type TreeNodeImplGongstruct struct {
 	gongStruct *gong_models.GongStruct
-	probe *Probe
+	probe      *Probe
 }
 
 func NewTreeNodeImplGongstruct(

@@ -43,7 +43,7 @@ export class RhombusGridService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.rhombusgridsUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/rhombusgrids';
+    this.rhombusgridsUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/rhombusgrids';
   }
 
   /** GET rhombusgrids from the server */
@@ -96,7 +96,7 @@ export class RhombusGridService {
       catchError(this.handleError<RhombusGridAPI>('postRhombusGrid'))
     );
   }
-  
+
   /** POST: add a new rhombusgrid to the server */
   post(rhombusgriddb: RhombusGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<RhombusGridAPI> {
     return this.postRhombusGrid(rhombusgriddb, GONG__StackPath, frontRepo)

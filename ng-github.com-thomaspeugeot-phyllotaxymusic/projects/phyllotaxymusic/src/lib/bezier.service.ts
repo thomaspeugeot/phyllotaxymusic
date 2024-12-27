@@ -42,7 +42,7 @@ export class BezierService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.beziersUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/beziers';
+    this.beziersUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/beziers';
   }
 
   /** GET beziers from the server */
@@ -95,7 +95,7 @@ export class BezierService {
       catchError(this.handleError<BezierAPI>('postBezier'))
     );
   }
-  
+
   /** POST: add a new bezier to the server */
   post(bezierdb: BezierAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<BezierAPI> {
     return this.postBezier(bezierdb, GONG__StackPath, frontRepo)

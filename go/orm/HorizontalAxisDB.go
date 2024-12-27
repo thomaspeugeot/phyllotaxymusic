@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -409,7 +409,7 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CheckoutPhaseTwoInst
 func (horizontalaxisDB *HorizontalAxisDB) DecodePointers(backRepo *BackRepoStruct, horizontalaxis *models.HorizontalAxis) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field	
+	// ShapeCategory field
 	{
 		id := horizontalaxisDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -427,7 +427,7 @@ func (horizontalaxisDB *HorizontalAxisDB) DecodePointers(backRepo *BackRepoStruc
 			horizontalaxis.ShapeCategory = nil
 		}
 	}
-	
+
 	return
 }
 

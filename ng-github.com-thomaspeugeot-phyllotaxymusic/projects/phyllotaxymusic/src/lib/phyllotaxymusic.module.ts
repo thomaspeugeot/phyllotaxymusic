@@ -66,4 +66,4 @@ import { AppRoutingModule } from './app-routing.module';
 		{ provide: MatDialogRef, useValue: { close: () => { } } }
 	],
 })
-export class PhylotaxymusicModule { }
+export class PhyllotaxymusicModule { }

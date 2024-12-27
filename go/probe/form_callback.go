@@ -8,8 +8,8 @@ import (
 
 	table "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
-	"github.com/thomaspeugeot/phylotaxymusic/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/orm"
 )
 
 const __dummmy__time = time.Nanosecond

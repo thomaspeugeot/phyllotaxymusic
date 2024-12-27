@@ -44,7 +44,7 @@ export class SpiralCircleGridService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.spiralcirclegridsUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/spiralcirclegrids';
+    this.spiralcirclegridsUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/spiralcirclegrids';
   }
 
   /** GET spiralcirclegrids from the server */
@@ -97,7 +97,7 @@ export class SpiralCircleGridService {
       catchError(this.handleError<SpiralCircleGridAPI>('postSpiralCircleGrid'))
     );
   }
-  
+
   /** POST: add a new spiralcirclegrid to the server */
   post(spiralcirclegriddb: SpiralCircleGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralCircleGridAPI> {
     return this.postSpiralCircleGrid(spiralcirclegriddb, GONG__StackPath, frontRepo)

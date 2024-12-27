@@ -42,7 +42,7 @@ export class SpiralCircleService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.spiralcirclesUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/spiralcircles';
+    this.spiralcirclesUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/spiralcircles';
   }
 
   /** GET spiralcircles from the server */
@@ -95,7 +95,7 @@ export class SpiralCircleService {
       catchError(this.handleError<SpiralCircleAPI>('postSpiralCircle'))
     );
   }
-  
+
   /** POST: add a new spiralcircle to the server */
   post(spiralcircledb: SpiralCircleAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralCircleAPI> {
     return this.postSpiralCircle(spiralcircledb, GONG__StackPath, frontRepo)

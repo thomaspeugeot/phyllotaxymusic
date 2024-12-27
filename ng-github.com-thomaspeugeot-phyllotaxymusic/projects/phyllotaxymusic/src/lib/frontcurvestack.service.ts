@@ -44,7 +44,7 @@ export class FrontCurveStackService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.frontcurvestacksUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/frontcurvestacks';
+    this.frontcurvestacksUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/frontcurvestacks';
   }
 
   /** GET frontcurvestacks from the server */
@@ -97,7 +97,7 @@ export class FrontCurveStackService {
       catchError(this.handleError<FrontCurveStackAPI>('postFrontCurveStack'))
     );
   }
-  
+
   /** POST: add a new frontcurvestack to the server */
   post(frontcurvestackdb: FrontCurveStackAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<FrontCurveStackAPI> {
     return this.postFrontCurveStack(frontcurvestackdb, GONG__StackPath, frontRepo)

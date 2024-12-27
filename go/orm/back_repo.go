@@ -11,11 +11,11 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 
 	/* THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm
-	"github.com/thomaspeugeot/phylotaxymusic/go/orm/dbgorm"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/orm/dbgorm"
 	THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm */
 
 	"github.com/tealeg/xlsx/v3"
@@ -81,10 +81,10 @@ type BackRepoStruct struct {
 	stage *models.StageStruct
 
 	// the back repo can broadcast the CommitFromBackNb to all interested subscribers
-	rwMutex     sync.RWMutex
+	rwMutex sync.RWMutex
 
 	subscribersRwMutex sync.RWMutex
-	subscribers []chan int
+	subscribers        []chan int
 }
 
 func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepoStruct) {
@@ -94,7 +94,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 	db = NewDBLite()
 
 	/* THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm
-	db = dbgorm.NewDBWrapper(filename, "github_com_thomaspeugeot_phylotaxymusic_go",
+	db = dbgorm.NewDBWrapper(filename, "github_com_thomaspeugeot_phyllotaxymusic_go",
 		&AxisDB{},
 		&AxisGridDB{},
 		&BezierDB{},

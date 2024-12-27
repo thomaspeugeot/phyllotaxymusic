@@ -42,7 +42,7 @@ export class SpiralLineService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.spirallinesUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/spirallines';
+    this.spirallinesUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/spirallines';
   }
 
   /** GET spirallines from the server */
@@ -95,7 +95,7 @@ export class SpiralLineService {
       catchError(this.handleError<SpiralLineAPI>('postSpiralLine'))
     );
   }
-  
+
   /** POST: add a new spiralline to the server */
   post(spirallinedb: SpiralLineAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralLineAPI> {
     return this.postSpiralLine(spirallinedb, GONG__StackPath, frontRepo)

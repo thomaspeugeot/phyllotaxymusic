@@ -41,7 +41,7 @@ export class ShapeCategoryService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.shapecategorysUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/shapecategorys';
+    this.shapecategorysUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/shapecategorys';
   }
 
   /** GET shapecategorys from the server */
@@ -94,7 +94,7 @@ export class ShapeCategoryService {
       catchError(this.handleError<ShapeCategoryAPI>('postShapeCategory'))
     );
   }
-  
+
   /** POST: add a new shapecategory to the server */
   post(shapecategorydb: ShapeCategoryAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<ShapeCategoryAPI> {
     return this.postShapeCategory(shapecategorydb, GONG__StackPath, frontRepo)

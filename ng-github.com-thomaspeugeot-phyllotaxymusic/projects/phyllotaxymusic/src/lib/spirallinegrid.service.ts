@@ -43,7 +43,7 @@ export class SpiralLineGridService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.spirallinegridsUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/spirallinegrids';
+    this.spirallinegridsUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/spirallinegrids';
   }
 
   /** GET spirallinegrids from the server */
@@ -96,7 +96,7 @@ export class SpiralLineGridService {
       catchError(this.handleError<SpiralLineGridAPI>('postSpiralLineGrid'))
     );
   }
-  
+
   /** POST: add a new spirallinegrid to the server */
   post(spirallinegriddb: SpiralLineGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralLineGridAPI> {
     return this.postSpiralLineGrid(spirallinegriddb, GONG__StackPath, frontRepo)

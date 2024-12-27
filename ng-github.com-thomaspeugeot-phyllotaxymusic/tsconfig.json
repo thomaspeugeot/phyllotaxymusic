@@ -19,11 +19,11 @@
       "@vendored_components/*": [
         "../vendor/*",
       ],
-      "phylotaxymusic": [
-        "./dist/phylotaxymusic"
+      "phyllotaxymusic": [
+        "./dist/phyllotaxymusic"
       ],
-      "phylotaxymusicspecific": [
-        "./dist/phylotaxymusicspecific"
+      "phyllotaxymusicspecific": [
+        "./dist/phyllotaxymusicspecific"
       ]
     },
     "importHelpers": true,

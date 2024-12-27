@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -421,7 +421,7 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) CheckoutPhaseTwoInstance(bac
 func (spirallineDB *SpiralLineDB) DecodePointers(backRepo *BackRepoStruct, spiralline *models.SpiralLine) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field	
+	// ShapeCategory field
 	{
 		id := spirallineDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -439,7 +439,7 @@ func (spirallineDB *SpiralLineDB) DecodePointers(backRepo *BackRepoStruct, spira
 			spiralline.ShapeCategory = nil
 		}
 	}
-	
+
 	return
 }
 

@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -445,7 +445,7 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CheckoutPhaseTwoInstan
 func (spiralrhombusDB *SpiralRhombusDB) DecodePointers(backRepo *BackRepoStruct, spiralrhombus *models.SpiralRhombus) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field	
+	// ShapeCategory field
 	{
 		id := spiralrhombusDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -463,7 +463,7 @@ func (spiralrhombusDB *SpiralRhombusDB) DecodePointers(backRepo *BackRepoStruct,
 			spiralrhombus.ShapeCategory = nil
 		}
 	}
-	
+
 	return
 }
 

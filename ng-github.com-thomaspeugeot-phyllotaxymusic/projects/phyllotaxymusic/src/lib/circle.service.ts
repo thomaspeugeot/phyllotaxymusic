@@ -42,7 +42,7 @@ export class CircleService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.circlesUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/circles';
+    this.circlesUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/circles';
   }
 
   /** GET circles from the server */
@@ -95,7 +95,7 @@ export class CircleService {
       catchError(this.handleError<CircleAPI>('postCircle'))
     );
   }
-  
+
   /** POST: add a new circle to the server */
   post(circledb: CircleAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<CircleAPI> {
     return this.postCircle(circledb, GONG__StackPath, frontRepo)

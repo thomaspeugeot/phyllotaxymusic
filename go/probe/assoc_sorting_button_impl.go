@@ -9,7 +9,7 @@ import (
 	form "github.com/fullstack-lang/gongtable/go/models"
 	gongtable_models "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 func NewOnSortingEditon[InstanceType models.PointerToGongstruct, FieldType models.PointerToGongstruct](
@@ -102,9 +102,9 @@ func NewTableSortSaver[InstanceType models.PointerToGongstruct, FieldType models
 }
 
 type TableSortSaver[InstanceType models.PointerToGongstruct, FieldType models.PointerToGongstruct] struct {
-	instance   InstanceType
-	field      *[]FieldType
-	probe *Probe
+	instance InstanceType
+	field    *[]FieldType
+	probe    *Probe
 
 	// map giving the relation between the row ID and the instance
 	map_RowID_instance *map[*gongtable_models.Row]FieldType

@@ -41,7 +41,7 @@ export class CursorService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.cursorsUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/v1/cursors';
+    this.cursorsUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/v1/cursors';
   }
 
   /** GET cursors from the server */
@@ -94,7 +94,7 @@ export class CursorService {
       catchError(this.handleError<CursorAPI>('postCursor'))
     );
   }
-  
+
   /** POST: add a new cursor to the server */
   post(cursordb: CursorAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<CursorAPI> {
     return this.postCursor(cursordb, GONG__StackPath, frontRepo)

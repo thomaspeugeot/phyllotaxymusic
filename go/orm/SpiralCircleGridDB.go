@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -261,14 +261,14 @@ func (backRepoSpiralCircleGrid *BackRepoSpiralCircleGridStruct) CommitPhaseTwoIn
 		for _, spiralcircleAssocEnd := range spiralcirclegrid.SpiralCircles {
 			spiralcircleAssocEnd_DB :=
 				backRepo.BackRepoSpiralCircle.GetSpiralCircleDBFromSpiralCirclePtr(spiralcircleAssocEnd)
-			
+
 			// the stage might be inconsistant, meaning that the spiralcircleAssocEnd_DB might
 			// be missing from the stage. In this case, the commit operation is robust
 			// An alternative would be to crash here to reveal the missing element.
 			if spiralcircleAssocEnd_DB == nil {
 				continue
 			}
-			
+
 			spiralcirclegridDB.SpiralCircleGridPointersEncoding.SpiralCircles =
 				append(spiralcirclegridDB.SpiralCircleGridPointersEncoding.SpiralCircles, int(spiralcircleAssocEnd_DB.ID))
 		}
@@ -386,7 +386,7 @@ func (backRepoSpiralCircleGrid *BackRepoSpiralCircleGridStruct) CheckoutPhaseTwo
 func (spiralcirclegridDB *SpiralCircleGridDB) DecodePointers(backRepo *BackRepoStruct, spiralcirclegrid *models.SpiralCircleGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field	
+	// ShapeCategory field
 	{
 		id := spiralcirclegridDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -404,8 +404,8 @@ func (spiralcirclegridDB *SpiralCircleGridDB) DecodePointers(backRepo *BackRepoS
 			spiralcirclegrid.ShapeCategory = nil
 		}
 	}
-	
-	// SpiralRhombusGrid field	
+
+	// SpiralRhombusGrid field
 	{
 		id := spiralcirclegridDB.SpiralRhombusGridID.Int64
 		if id != 0 {
@@ -423,7 +423,7 @@ func (spiralcirclegridDB *SpiralCircleGridDB) DecodePointers(backRepo *BackRepoS
 			spiralcirclegrid.SpiralRhombusGrid = nil
 		}
 	}
-	
+
 	// This loop redeem spiralcirclegrid.SpiralCircles in the stage from the encode in the back repo
 	// It parses all SpiralCircleDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

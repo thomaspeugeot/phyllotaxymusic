@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -245,14 +245,14 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CommitPhaseTwoInstan
 		for _, spirallineAssocEnd := range spirallinegrid.SpiralLines {
 			spirallineAssocEnd_DB :=
 				backRepo.BackRepoSpiralLine.GetSpiralLineDBFromSpiralLinePtr(spirallineAssocEnd)
-			
+
 			// the stage might be inconsistant, meaning that the spirallineAssocEnd_DB might
 			// be missing from the stage. In this case, the commit operation is robust
 			// An alternative would be to crash here to reveal the missing element.
 			if spirallineAssocEnd_DB == nil {
 				continue
 			}
-			
+
 			spirallinegridDB.SpiralLineGridPointersEncoding.SpiralLines =
 				append(spirallinegridDB.SpiralLineGridPointersEncoding.SpiralLines, int(spirallineAssocEnd_DB.ID))
 		}
@@ -370,7 +370,7 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CheckoutPhaseTwoInst
 func (spirallinegridDB *SpiralLineGridDB) DecodePointers(backRepo *BackRepoStruct, spirallinegrid *models.SpiralLineGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field	
+	// ShapeCategory field
 	{
 		id := spirallinegridDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -388,7 +388,7 @@ func (spirallinegridDB *SpiralLineGridDB) DecodePointers(backRepo *BackRepoStruc
 			spirallinegrid.ShapeCategory = nil
 		}
 	}
-	
+
 	// This loop redeem spirallinegrid.SpiralLines in the stage from the encode in the back repo
 	// It parses all SpiralLineDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

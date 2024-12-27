@@ -43,7 +43,7 @@ export class BezierGridStackService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.beziergridstacksUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/beziergridstacks';
+    this.beziergridstacksUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/beziergridstacks';
   }
 
   /** GET beziergridstacks from the server */
@@ -96,7 +96,7 @@ export class BezierGridStackService {
       catchError(this.handleError<BezierGridStackAPI>('postBezierGridStack'))
     );
   }
-  
+
   /** POST: add a new beziergridstack to the server */
   post(beziergridstackdb: BezierGridStackAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<BezierGridStackAPI> {
     return this.postBezierGridStack(beziergridstackdb, GONG__StackPath, frontRepo)

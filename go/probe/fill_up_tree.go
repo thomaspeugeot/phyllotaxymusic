@@ -10,7 +10,7 @@ import (
 
 	gong_models "github.com/fullstack-lang/gong/go/models"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 func fillUpTree(

@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -245,14 +245,14 @@ func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) CommitPhaseTwoInst
 		for _, beziergridAssocEnd := range beziergridstack.BezierGrids {
 			beziergridAssocEnd_DB :=
 				backRepo.BackRepoBezierGrid.GetBezierGridDBFromBezierGridPtr(beziergridAssocEnd)
-			
+
 			// the stage might be inconsistant, meaning that the beziergridAssocEnd_DB might
 			// be missing from the stage. In this case, the commit operation is robust
 			// An alternative would be to crash here to reveal the missing element.
 			if beziergridAssocEnd_DB == nil {
 				continue
 			}
-			
+
 			beziergridstackDB.BezierGridStackPointersEncoding.BezierGrids =
 				append(beziergridstackDB.BezierGridStackPointersEncoding.BezierGrids, int(beziergridAssocEnd_DB.ID))
 		}
@@ -370,7 +370,7 @@ func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) CheckoutPhaseTwoIn
 func (beziergridstackDB *BezierGridStackDB) DecodePointers(backRepo *BackRepoStruct, beziergridstack *models.BezierGridStack) {
 
 	// insertion point for checkout of pointer encoding
-	// ShapeCategory field	
+	// ShapeCategory field
 	{
 		id := beziergridstackDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -388,7 +388,7 @@ func (beziergridstackDB *BezierGridStackDB) DecodePointers(backRepo *BackRepoStr
 			beziergridstack.ShapeCategory = nil
 		}
 	}
-	
+
 	// This loop redeem beziergridstack.BezierGrids in the stage from the encode in the back repo
 	// It parses all BezierGridDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

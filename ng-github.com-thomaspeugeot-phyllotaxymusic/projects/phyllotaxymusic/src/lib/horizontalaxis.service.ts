@@ -42,7 +42,7 @@ export class HorizontalAxisService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.horizontalaxissUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/horizontalaxiss';
+    this.horizontalaxissUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/horizontalaxiss';
   }
 
   /** GET horizontalaxiss from the server */
@@ -95,7 +95,7 @@ export class HorizontalAxisService {
       catchError(this.handleError<HorizontalAxisAPI>('postHorizontalAxis'))
     );
   }
-  
+
   /** POST: add a new horizontalaxis to the server */
   post(horizontalaxisdb: HorizontalAxisAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<HorizontalAxisAPI> {
     return this.postHorizontalAxis(horizontalaxisdb, GONG__StackPath, frontRepo)

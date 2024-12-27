@@ -41,7 +41,7 @@ export class FrontCurveService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.frontcurvesUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/frontcurves';
+    this.frontcurvesUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/frontcurves';
   }
 
   /** GET frontcurves from the server */
@@ -94,7 +94,7 @@ export class FrontCurveService {
       catchError(this.handleError<FrontCurveAPI>('postFrontCurve'))
     );
   }
-  
+
   /** POST: add a new frontcurve to the server */
   post(frontcurvedb: FrontCurveAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<FrontCurveAPI> {
     return this.postFrontCurve(frontcurvedb, GONG__StackPath, frontRepo)

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PhylotaxymusicspecificComponent } from './phylotaxymusicspecific.component';
+import { PhyllotaxymusicspecificComponent } from './phyllotaxymusicspecific.component';
 
-describe('PhylotaxymusicspecificComponent', () => {
-  let component: PhylotaxymusicspecificComponent;
-  let fixture: ComponentFixture<PhylotaxymusicspecificComponent>;
+describe('PhyllotaxymusicspecificComponent', () => {
+  let component: PhyllotaxymusicspecificComponent;
+  let fixture: ComponentFixture<PhyllotaxymusicspecificComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PhylotaxymusicspecificComponent]
+      imports: [PhyllotaxymusicspecificComponent]
     })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(PhylotaxymusicspecificComponent);
+      .compileComponents();
+
+    fixture = TestBed.createComponent(PhyllotaxymusicspecificComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

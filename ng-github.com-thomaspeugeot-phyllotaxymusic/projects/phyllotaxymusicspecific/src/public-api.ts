@@ -1,5 +1,5 @@
 /*
- * Public API Surface of phylotaxymusicspecific
+ * Public API Surface of phyllotaxymusicspecific
  */
 
-export * from './lib/phylotaxymusicspecific.component';
+export * from './lib/phyllotaxymusicspecific.component';

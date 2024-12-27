@@ -1,9 +1,9 @@
 // generated from ng_file_public_api_ts.go
 /*
-* Public API Surface of phylotaxymusic
+* Public API Surface of phyllotaxymusic
 */
 
-export * from './lib/phylotaxymusic.module'
+export * from './lib/phyllotaxymusic.module'
 
 export * from './lib/front-repo.service'
 export * from './lib/null-int64'

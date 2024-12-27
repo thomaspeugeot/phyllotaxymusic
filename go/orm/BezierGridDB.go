@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -261,14 +261,14 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) CommitPhaseTwoInstance(backR
 		for _, bezierAssocEnd := range beziergrid.Beziers {
 			bezierAssocEnd_DB :=
 				backRepo.BackRepoBezier.GetBezierDBFromBezierPtr(bezierAssocEnd)
-			
+
 			// the stage might be inconsistant, meaning that the bezierAssocEnd_DB might
 			// be missing from the stage. In this case, the commit operation is robust
 			// An alternative would be to crash here to reveal the missing element.
 			if bezierAssocEnd_DB == nil {
 				continue
 			}
-			
+
 			beziergridDB.BezierGridPointersEncoding.Beziers =
 				append(beziergridDB.BezierGridPointersEncoding.Beziers, int(bezierAssocEnd_DB.ID))
 		}
@@ -386,7 +386,7 @@ func (backRepoBezierGrid *BackRepoBezierGridStruct) CheckoutPhaseTwoInstance(bac
 func (beziergridDB *BezierGridDB) DecodePointers(backRepo *BackRepoStruct, beziergrid *models.BezierGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// Reference field	
+	// Reference field
 	{
 		id := beziergridDB.ReferenceID.Int64
 		if id != 0 {
@@ -404,8 +404,8 @@ func (beziergridDB *BezierGridDB) DecodePointers(backRepo *BackRepoStruct, bezie
 			beziergrid.Reference = nil
 		}
 	}
-	
-	// ShapeCategory field	
+
+	// ShapeCategory field
 	{
 		id := beziergridDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -423,7 +423,7 @@ func (beziergridDB *BezierGridDB) DecodePointers(backRepo *BackRepoStruct, bezie
 			beziergrid.ShapeCategory = nil
 		}
 	}
-	
+
 	// This loop redeem beziergrid.Beziers in the stage from the encode in the back repo
 	// It parses all BezierDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

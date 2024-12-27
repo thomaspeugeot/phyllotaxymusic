@@ -17,8 +17,8 @@ import (
 	form "github.com/fullstack-lang/gongtable/go/models"
 	tree "github.com/fullstack-lang/gongtree/go/models"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
-	"github.com/thomaspeugeot/phylotaxymusic/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/orm"
 )
 
 type Probe struct {

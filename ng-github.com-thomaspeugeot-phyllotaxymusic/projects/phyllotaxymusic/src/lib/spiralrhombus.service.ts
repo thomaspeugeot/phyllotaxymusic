@@ -42,7 +42,7 @@ export class SpiralRhombusService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.spiralrhombussUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/spiralrhombuss';
+    this.spiralrhombussUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/spiralrhombuss';
   }
 
   /** GET spiralrhombuss from the server */
@@ -95,7 +95,7 @@ export class SpiralRhombusService {
       catchError(this.handleError<SpiralRhombusAPI>('postSpiralRhombus'))
     );
   }
-  
+
   /** POST: add a new spiralrhombus to the server */
   post(spiralrhombusdb: SpiralRhombusAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<SpiralRhombusAPI> {
     return this.postSpiralRhombus(spiralrhombusdb, GONG__StackPath, frontRepo)

@@ -17,8 +17,8 @@ import (
 
 	"github.com/tealeg/xlsx/v3"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // dummy variable to have the import declaration wihthout compile failure (even if no code needing this import is generated)
@@ -261,14 +261,14 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitPhaseTwoInstance(backRepo 
 		for _, axisAssocEnd := range axisgrid.Axiss {
 			axisAssocEnd_DB :=
 				backRepo.BackRepoAxis.GetAxisDBFromAxisPtr(axisAssocEnd)
-			
+
 			// the stage might be inconsistant, meaning that the axisAssocEnd_DB might
 			// be missing from the stage. In this case, the commit operation is robust
 			// An alternative would be to crash here to reveal the missing element.
 			if axisAssocEnd_DB == nil {
 				continue
 			}
-			
+
 			axisgridDB.AxisGridPointersEncoding.Axiss =
 				append(axisgridDB.AxisGridPointersEncoding.Axiss, int(axisAssocEnd_DB.ID))
 		}
@@ -386,7 +386,7 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) CheckoutPhaseTwoInstance(backRep
 func (axisgridDB *AxisGridDB) DecodePointers(backRepo *BackRepoStruct, axisgrid *models.AxisGrid) {
 
 	// insertion point for checkout of pointer encoding
-	// Reference field	
+	// Reference field
 	{
 		id := axisgridDB.ReferenceID.Int64
 		if id != 0 {
@@ -404,8 +404,8 @@ func (axisgridDB *AxisGridDB) DecodePointers(backRepo *BackRepoStruct, axisgrid 
 			axisgrid.Reference = nil
 		}
 	}
-	
-	// ShapeCategory field	
+
+	// ShapeCategory field
 	{
 		id := axisgridDB.ShapeCategoryID.Int64
 		if id != 0 {
@@ -423,7 +423,7 @@ func (axisgridDB *AxisGridDB) DecodePointers(backRepo *BackRepoStruct, axisgrid 
 			axisgrid.ShapeCategory = nil
 		}
 	}
-	
+
 	// This loop redeem axisgrid.Axiss in the stage from the encode in the back repo
 	// It parses all AxisDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance

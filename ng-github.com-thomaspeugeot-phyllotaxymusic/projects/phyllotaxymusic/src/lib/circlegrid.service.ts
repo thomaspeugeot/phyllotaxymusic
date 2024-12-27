@@ -43,7 +43,7 @@ export class CircleGridService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.circlegridsUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/circlegrids';
+    this.circlegridsUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/circlegrids';
   }
 
   /** GET circlegrids from the server */
@@ -96,7 +96,7 @@ export class CircleGridService {
       catchError(this.handleError<CircleGridAPI>('postCircleGrid'))
     );
   }
-  
+
   /** POST: add a new circlegrid to the server */
   post(circlegriddb: CircleGridAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<CircleGridAPI> {
     return this.postCircleGrid(circlegriddb, GONG__StackPath, frontRepo)

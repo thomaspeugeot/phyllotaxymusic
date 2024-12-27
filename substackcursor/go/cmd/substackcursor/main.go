@@ -5,8 +5,8 @@ import (
 	"log"
 	"strconv"
 
-	substackcursor_stack "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/stack"
-	substackcursor_static "github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/static"
+	substackcursor_stack "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/stack"
+	substackcursor_static "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/static"
 )
 
 var (

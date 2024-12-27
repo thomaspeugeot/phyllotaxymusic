@@ -11,11 +11,11 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/db"
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
 
 	/* THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm
-	"github.com/thomaspeugeot/phylotaxymusic/substackcursor/go/orm/dbgorm"
+	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm/dbgorm"
 	THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm */
 
 	"github.com/tealeg/xlsx/v3"
@@ -33,10 +33,10 @@ type BackRepoStruct struct {
 	stage *models.StageStruct
 
 	// the back repo can broadcast the CommitFromBackNb to all interested subscribers
-	rwMutex     sync.RWMutex
+	rwMutex sync.RWMutex
 
 	subscribersRwMutex sync.RWMutex
-	subscribers []chan int
+	subscribers        []chan int
 }
 
 func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepoStruct) {
@@ -46,7 +46,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 	db = NewDBLite()
 
 	/* THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm
-	db = dbgorm.NewDBWrapper(filename, "github_com_thomaspeugeot_phylotaxymusic_substackcursor_go",
+	db = dbgorm.NewDBWrapper(filename, "github_com_thomaspeugeot_phyllotaxymusic_substackcursor_go",
 		&CursorDB{},
 	)
 	THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm */

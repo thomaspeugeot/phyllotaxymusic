@@ -42,7 +42,7 @@ export class VerticalAxisService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.verticalaxissUrl = origin + '/api/github.com/thomaspeugeot/phylotaxymusic/go/v1/verticalaxiss';
+    this.verticalaxissUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/go/v1/verticalaxiss';
   }
 
   /** GET verticalaxiss from the server */
@@ -95,7 +95,7 @@ export class VerticalAxisService {
       catchError(this.handleError<VerticalAxisAPI>('postVerticalAxis'))
     );
   }
-  
+
   /** POST: add a new verticalaxis to the server */
   post(verticalaxisdb: VerticalAxisAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<VerticalAxisAPI> {
     return this.postVerticalAxis(verticalaxisdb, GONG__StackPath, frontRepo)

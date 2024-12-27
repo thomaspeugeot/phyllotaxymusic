@@ -6,7 +6,7 @@ import (
 
 	gongtable "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 func NewCellDeleteIconImpl[T models.Gongstruct](
@@ -20,8 +20,8 @@ func NewCellDeleteIconImpl[T models.Gongstruct](
 }
 
 type CellDeleteIconImpl[T models.Gongstruct] struct {
-	Instance   *T
-	probe *Probe
+	Instance *T
+	probe    *Probe
 }
 
 func (cellDeleteIconImpl *CellDeleteIconImpl[T]) CellIconUpdated(stage *gongtable.StageStruct,
@@ -89,4 +89,3 @@ func (cellDeleteIconImpl *CellDeleteIconImpl[T]) CellIconUpdated(stage *gongtabl
 	fillUpTree(cellDeleteIconImpl.probe)
 	cellDeleteIconImpl.probe.tableStage.Commit()
 }
-

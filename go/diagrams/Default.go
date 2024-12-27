@@ -6,7 +6,7 @@ import (
 	"github.com/fullstack-lang/gongdoc/go/models"
 
 	// injection point for ident package import declaration
-	ref_models "github.com/thomaspeugeot/phylotaxymusic/go/models"
+	ref_models "github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // generated in order to avoid error in the package import

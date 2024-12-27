@@ -7,7 +7,7 @@ import (
 
 	form "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phylotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 func FormDivBasicFieldToField[TF models.GongtructBasicField](field *TF, formDiv *form.FormDiv) {
