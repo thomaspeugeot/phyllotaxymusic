@@ -227,7 +227,7 @@ func _(stage *models.StageStruct) {
 	__AxisGrid__000001_Construction_Axis_Grid.IsDisplayed = false
 
 	__AxisGrid__000002_Pitch_Lines.Name = `Pitch Lines`
-	__AxisGrid__000002_Pitch_Lines.IsDisplayed = true
+	__AxisGrid__000002_Pitch_Lines.IsDisplayed = false
 
 	__Bezier__000000_2nd_voice_seed.Name = `2nd voice seed`
 	__Bezier__000000_2nd_voice_seed.IsDisplayed = false
@@ -589,7 +589,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.BeatsPerSecond = 2.050000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 29327
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 1
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000

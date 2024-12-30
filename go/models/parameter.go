@@ -198,10 +198,20 @@ func (parameter *Parameter) SetCursor(cursor *substackcursor_models.Cursor) {
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
 
+	// Check if `parameter` and `stagedParameter` point to the same memory
+	if parameter == stagedParameter {
+		log.Println("Main hypothesis is OK: the parameter in OnUpdate is the stage parameter")
+	}
+
+	stage.Checkout()
+	parameters := GetGongstructInstancesMap[Parameter](stage)
+	parameter_ := (*parameters)["Reference"]
+	if parameter_ == parameter {
+		log.Println("Main hypothesis is OK: The checkout only copy the values")
+	}
+
 	log.Println("Diagram, OnAfterUpdate", parameter.Name)
-	backRepoParameter.cursor = parameter.cursor // small cooking stuff
-	backRepoParameter.notifyCh = parameter.notifyCh
-	parameter.Impl.OnUpdated(backRepoParameter)
+	parameter.Impl.OnUpdated(parameter)
 
 }
 
