@@ -7,7 +7,7 @@ import (
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 )
 
-func (tree *TreeProxy) Generate(parameter *Parameter) {
+func (tree *TreeProxy) UpdateAndCommitTreeStage(parameter *Parameter) {
 
 	tree.gongtreeStage.Reset()
 	tree.NodeTree = new(gongtree_models.Tree).Stage(tree.gongtreeStage)

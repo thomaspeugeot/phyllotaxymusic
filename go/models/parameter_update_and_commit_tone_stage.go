@@ -6,7 +6,7 @@ import (
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
-func (p *Parameter) GenerateNotes() {
+func (p *Parameter) UpdateAndCommitToneStage() {
 
 	p.gongtoneStage.Reset()
 

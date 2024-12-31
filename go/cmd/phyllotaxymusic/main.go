@@ -83,16 +83,16 @@ func main() {
 	parameter.SetGongtoneStage(gongtone_stack.Stage)
 	parameter.SetSubstackcursorStage(cursorStack.Stage)
 
-	tree := new(phyllotaxymusic_models.TreeProxy)
-	tree.SetGongtreeStage(gongtree_stack.Stage)
-	tree.PhyllotaxyStage = phyllotaxymusic_stack.Stage
+	treeProxy := new(phyllotaxymusic_models.TreeProxy)
+	treeProxy.SetGongtreeStage(gongtree_stack.Stage)
+	treeProxy.PhyllotaxyStage = phyllotaxymusic_stack.Stage
 
 	parameterImpl := new(ParameterImpl)
 	parameterImpl.parameter = parameter
 	parameterImpl.gongsvgStage = gongsvg_stack.Stage
 	parameterImpl.gongtoneStage = gongtone_stack.Stage
 	parameterImpl.phyllotaxymusicStage = phyllotaxymusic_stack.Stage
-	parameterImpl.ShapeTree = tree
+	parameterImpl.TreeProxy = treeProxy
 	parameterImpl.substackcursorStage = cursorStack.Stage
 
 	parameter.Impl = parameterImpl
@@ -113,7 +113,7 @@ func main() {
 
 	// generate other stacks
 	parameterImpl.Generate()
-	tree.Generate(parameter)
+	treeProxy.UpdateAndCommitTreeStage(parameter)
 
 	cursorStack.Stage.Commit()
 
@@ -130,7 +130,7 @@ type ParameterImpl struct {
 	gongtoneStage        *gongtone_models.StageStruct
 	phyllotaxymusicStage *phyllotaxymusic_models.StageStruct
 	parameter            *phyllotaxymusic_models.Parameter
-	ShapeTree            *phyllotaxymusic_models.TreeProxy
+	TreeProxy            *phyllotaxymusic_models.TreeProxy
 	substackcursorStage  *substackcursor_models.StageStruct
 }
 
@@ -138,12 +138,12 @@ type ParameterImpl struct {
 func (parameterImpl *ParameterImpl) Generate() {
 	p := parameterImpl.parameter
 
-	p.ComputeShapes()
-	p.GenerateSvg()
-	p.GenerateNotes()
-	parameterImpl.ShapeTree.Generate(p)
+	p.UpdatePhyllotaxyStage()
+	p.UpdateAndCommitCursorStage()
+	p.UpdateAndCommitSVGStage()
+	p.UpdateAndCommitToneStage()
+	parameterImpl.TreeProxy.UpdateAndCommitTreeStage(p)
 	p.PhyllotaxymusicStage.Commit()
-	p.SubstackcursorStage.Commit()
 }
 
 func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phyllotaxymusic_models.Parameter) {
@@ -151,9 +151,11 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phyllotaxymusic_
 	log.Println("OnUpdated", parameterImpl.parameter.InsideAngle, parameterImpl.parameter.SideLength)
 	// phyllotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phyllotaxymusicStage)
 
-	updatedParameter.ComputeShapes()
-	updatedParameter.GenerateSvg()
-	parameterImpl.ShapeTree.Generate(updatedParameter)
-	updatedParameter.GenerateNotes()
-	updatedParameter.SubstackcursorStage.Commit()
+	p := parameterImpl.parameter
+
+	p.UpdatePhyllotaxyStage()
+	p.UpdateAndCommitCursorStage()
+	p.UpdateAndCommitSVGStage()
+	p.UpdateAndCommitToneStage()
+	parameterImpl.TreeProxy.UpdateAndCommitTreeStage(p)
 }

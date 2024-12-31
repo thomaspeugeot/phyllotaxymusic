@@ -11,7 +11,7 @@ func (parameter *Parameter) GenerateSvgShape(layer *gongsvg_models.Layer, shape 
 	}
 }
 
-func (parameter *Parameter) GenerateSvg() {
+func (parameter *Parameter) UpdateAndCommitSVGStage() {
 
 	parameter.gongsvgStage.Reset()
 

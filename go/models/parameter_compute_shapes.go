@@ -1,6 +1,6 @@
 package models
 
-func (p *Parameter) ComputeShapes() {
+func (p *Parameter) UpdatePhyllotaxyStage() {
 
 	if p.Z < p.M+p.N+1 {
 		p.Z = p.M + p.N + 1
@@ -187,6 +187,4 @@ func (p *Parameter) ComputeShapes() {
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotesShiftedRight)
 
-	// add cursor
-	p.computeCursorSVGCoords()
 }
