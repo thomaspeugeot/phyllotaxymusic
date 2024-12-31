@@ -6,6 +6,7 @@ import (
 	substackcursor_models "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
@@ -195,8 +196,10 @@ type Parameter struct {
 	gongsvgStage         *gongsvg_models.StageStruct
 	gongtoneStage        *gongtone_models.StageStruct
 	PhyllotaxymusicStage *StageStruct
-	shapeTree            *TreeProxy
+	gongtreeStage        *gongtree_models.StageStruct
 	SubstackcursorStage  *substackcursor_models.StageStruct
+
+	TreeProxy *TreeProxy
 }
 
 func (parameter *Parameter) SetNotifyChannel(notifyCh chan bool) {
@@ -221,6 +224,19 @@ func (parameter *Parameter) SetGongtoneStage(gongtoneStage *gongtone_models.Stag
 
 func (parameter *Parameter) SetPhyllotaxymusicStage(phyllotaxymusicStage *StageStruct) {
 	parameter.PhyllotaxymusicStage = phyllotaxymusicStage
+}
+
+func (parameter *Parameter) SetTreeProxy() {
+	if parameter.PhyllotaxymusicStage == nil ||
+		parameter.gongsvgStage == nil {
+		log.Fatalln("SetTreeProxy, stages not set")
+	}
+
+	treeProxy := new(TreeProxy)
+	treeProxy.SetGongtreeStage(parameter.gongtreeStage)
+	treeProxy.PhyllotaxyStage = parameter.PhyllotaxymusicStage
+
+	parameter.TreeProxy = treeProxy
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
@@ -280,4 +296,8 @@ func (parameter *Parameter) ToggleNotePlayed(beatNb int) {
 
 	// Flip the bit at `rank`
 	parameter.ThemeBinaryEncoding ^= 1 << beatNb
+}
+
+func (parameter *Parameter) SetGongtreeStage(gongtreeStage *gongtree_models.StageStruct) {
+	parameter.gongtreeStage = gongtreeStage
 }

@@ -57,10 +57,9 @@ func main() {
 
 	// get the only diagram
 	parameters := phyllotaxymusic_models.GetGongstructInstancesMap[phyllotaxymusic_models.Parameter](phyllotaxymusic_stack.Stage)
-
-	if len(*parameters) == 0 {
-		log.Println("")
-		// log.Fatalln("")
+	parameter, ok := (*parameters)["Reference"]
+	if !ok {
+		log.Fatal("no Reference parameter on stage")
 	}
 
 	f4 := new(gongtone_models.Freqency).Stage(gongtone_stack.Stage)
@@ -74,14 +73,14 @@ func main() {
 
 	gongtone_stack.Stage.Commit()
 
-	parameter := (*parameters)["Reference"]
-
 	// parameter is used for coordinating all updates to the
 	// phyllotaxy stage and compute all updates to the all stages
 	parameter.SetGongsvgStage(gongsvg_stack.Stage)
 	parameter.SetPhyllotaxymusicStage(phyllotaxymusic_stack.Stage)
 	parameter.SetGongtoneStage(gongtone_stack.Stage)
 	parameter.SetSubstackcursorStage(cursorStack.Stage)
+	parameter.SetGongtreeStage(gongtree_stack.Stage)
+	parameter.SetTreeProxy()
 
 	treeProxy := new(phyllotaxymusic_models.TreeProxy)
 	treeProxy.SetGongtreeStage(gongtree_stack.Stage)
@@ -113,7 +112,7 @@ func main() {
 
 	// generate other stacks
 	parameterImpl.Generate()
-	treeProxy.UpdateAndCommitTreeStage(parameter)
+	treeProxy.UpdateAndCommitTreeStage()
 
 	cursorStack.Stage.Commit()
 
@@ -142,7 +141,7 @@ func (parameterImpl *ParameterImpl) Generate() {
 	p.UpdateAndCommitCursorStage()
 	p.UpdateAndCommitSVGStage()
 	p.UpdateAndCommitToneStage()
-	parameterImpl.TreeProxy.UpdateAndCommitTreeStage(p)
+	p.TreeProxy.UpdateAndCommitTreeStage()
 	p.PhyllotaxymusicStage.Commit()
 }
 
@@ -157,5 +156,5 @@ func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phyllotaxymusic_
 	p.UpdateAndCommitCursorStage()
 	p.UpdateAndCommitSVGStage()
 	p.UpdateAndCommitToneStage()
-	parameterImpl.TreeProxy.UpdateAndCommitTreeStage(p)
+	p.TreeProxy.UpdateAndCommitTreeStage()
 }
