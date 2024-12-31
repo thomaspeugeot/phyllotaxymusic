@@ -4,26 +4,26 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
-func (parameter *Parameter) GenerateSvgShape(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_models.Layer, shape Shape) {
+func (parameter *Parameter) GenerateSvgShape(layer *gongsvg_models.Layer, shape ShapeInterface) {
 
 	if shape.GetIsDisplayed() {
-		shape.Draw(gongsvgStage, layer, parameter)
+		shape.Draw(parameter.gongsvgStage, layer, parameter)
 	}
 }
 
-func (parameter *Parameter) GenerateSvg(gongsvgStage *gongsvg_models.StageStruct) {
+func (parameter *Parameter) GenerateSvg() {
 
-	gongsvgStage.Reset()
+	parameter.gongsvgStage.Reset()
 
-	svg := (&gongsvg_models.SVG{Name: `SVG`}).Stage(gongsvgStage)
-	layer := (&gongsvg_models.Layer{Name: "Layer 1"}).Stage(gongsvgStage)
+	svg := (&gongsvg_models.SVG{Name: `SVG`}).Stage(parameter.gongsvgStage)
+	layer := (&gongsvg_models.Layer{Name: "Layer 1"}).Stage(parameter.gongsvgStage)
 	layer.Display = true
 	svg.Layers = append(svg.Layers, layer)
 
 	for _, shape := range parameter.Shapes {
-		parameter.GenerateSvgShape(gongsvgStage, layer, shape)
+		parameter.GenerateSvgShape(layer, shape)
 	}
 
-	gongsvgStage.Commit()
+	parameter.gongsvgStage.Commit()
 
 }

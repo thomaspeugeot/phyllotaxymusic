@@ -2,23 +2,20 @@ package models
 
 import (
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
-	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
 )
 
-// Tree, for tree workspace holds the supporting data for performing operation on the weber tree
-type Tree struct {
-	Stage *StageStruct
+// TreeProxy, is for construing the gongtree Tree
+type TreeProxy struct {
+	PhyllotaxyStage *StageStruct
 
-	TreeStack *gongtree_stack.Stack
-
-	NodeTree *gongtree_models.Tree
+	gongtreeStage *gongtree_models.StageStruct
+	NodeTree      *gongtree_models.Tree
 
 	// AllDiagramNodes is a pratical way to access all diagrams nodes
 	// tree
 	AllDiagramNodes []*gongtree_models.Node
+}
 
-	// SVGGenerator is the callback for generating the SVG
-	SVGGenerator interface {
-		GenerateSVG(parameter *Parameter)
-	}
+func (tree *TreeProxy) SetGongtreeStage(gongtreeStage *gongtree_models.StageStruct) {
+	tree.gongtreeStage = gongtreeStage
 }

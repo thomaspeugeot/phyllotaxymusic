@@ -9,7 +9,7 @@ type BezierGrid struct {
 
 	Reference *Bezier
 
-	AbstractShape
+	Shape
 
 	Beziers []*Bezier
 }

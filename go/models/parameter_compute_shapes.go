@@ -1,6 +1,6 @@
 package models
 
-func (p *Parameter) ComputeShapes(stage *StageStruct) {
+func (p *Parameter) ComputeShapes() {
 
 	if p.Z < p.M+p.N+1 {
 		p.Z = p.M + p.N + 1
@@ -18,10 +18,10 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeInitialCircle()
 	p.Shapes = append(p.Shapes, p.InitialCircle)
 
-	p.ComputeInitialRhombusGrid(stage)
+	p.ComputeInitialRhombusGrid(p.PhyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.InitialRhombusGrid)
 
-	p.ComputeInitialCircleGrid(stage)
+	p.ComputeInitialCircleGrid(p.PhyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.InitialCircleGrid)
 
 	p.ComputeInitialAxis()
@@ -33,10 +33,10 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.computeRotatedRhombus()
 	p.Shapes = append(p.Shapes, p.RotatedRhombus)
 
-	p.computeRotatedRhombusGrid(stage)
+	p.computeRotatedRhombusGrid(p.PhyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.RotatedRhombusGrid)
 
-	p.computeRotatedCircleGrid(stage)
+	p.computeRotatedCircleGrid(p.PhyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.RotatedCircleGrid)
 
 	p.ComputeNextRhombus()
@@ -139,7 +139,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeSpiralBezierFullGrid()
 	p.Shapes = append(p.Shapes, p.SpiralBezierFullGrid)
 
-	p.ComputeFrontCurveStacks(stage)
+	p.ComputeFrontCurveStacks(p.PhyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.FrontCurveStack)
 
 	//

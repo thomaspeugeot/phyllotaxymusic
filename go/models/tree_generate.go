@@ -7,17 +7,16 @@ import (
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 )
 
-func (tree *Tree) Generate(parameter *Parameter) {
+func (tree *TreeProxy) Generate(parameter *Parameter) {
 
-	tree.TreeStack.Stage.Reset()
-
-	tree.NodeTree = new(gongtree_models.Tree).Stage(tree.TreeStack.Stage)
+	tree.gongtreeStage.Reset()
+	tree.NodeTree = new(gongtree_models.Tree).Stage(tree.gongtreeStage)
 	tree.NodeTree.Name = string(Sidebar)
 
 	//
 	// collect all shape categories
 	//
-	map_ShapeCategory_Shapes := make(map[*ShapeCategory][]Shape, 0)
+	map_ShapeCategory_Shapes := make(map[*ShapeCategory][]ShapeInterface, 0)
 	for _, shape := range parameter.Shapes {
 		sc := shape.GetShapeCategory()
 		if sc == nil {
@@ -25,7 +24,7 @@ func (tree *Tree) Generate(parameter *Parameter) {
 		}
 
 		if map_ShapeCategory_Shapes[sc] == nil {
-			map_ShapeCategory_Shapes[sc] = make([]Shape, 0)
+			map_ShapeCategory_Shapes[sc] = make([]ShapeInterface, 0)
 		}
 		map_ShapeCategory_Shapes[sc] = append(map_ShapeCategory_Shapes[sc], shape)
 	}
@@ -40,7 +39,7 @@ func (tree *Tree) Generate(parameter *Parameter) {
 
 	for _, sc := range shapeCategories {
 		shapes := map_ShapeCategory_Shapes[sc]
-		node := new(gongtree_models.Node).Stage(tree.TreeStack.Stage)
+		node := new(gongtree_models.Node).Stage(tree.gongtreeStage)
 		node.Name = sc.GetName()
 
 		if sc.IsExpanded {
@@ -51,7 +50,7 @@ func (tree *Tree) Generate(parameter *Parameter) {
 
 		node.Impl = &shapeCategoryNodeImpl{
 			sc:    sc,
-			stage: tree.Stage,
+			stage: tree.PhyllotaxyStage,
 		}
 
 		tree.NodeTree.RootNodes = append(tree.NodeTree.RootNodes, node)
@@ -66,7 +65,7 @@ func (tree *Tree) Generate(parameter *Parameter) {
 		}
 	}
 
-	tree.TreeStack.Stage.Commit()
+	tree.gongtreeStage.Commit()
 }
 
 type shapeCategoryNodeImpl struct {
@@ -86,16 +85,16 @@ func (shapeCategoryNodeImpl *shapeCategoryNodeImpl) OnAfterUpdate(
 	shapeCategoryNodeImpl.stage.Commit()
 }
 
-func AddShape[T Shape](tree *Tree, s T, shapeCategoryNode *gongtree_models.Node) {
+func AddShape[T ShapeInterface](tree *TreeProxy, s T, shapeCategoryNode *gongtree_models.Node) {
 	tree.addNode(s.GetName(), s, shapeCategoryNode, s.GetIsDisplayed())
 }
 
-func (tree *Tree) addNode(
+func (tree *TreeProxy) addNode(
 	name string,
 	impl gongtree_models.NodeImplInterface,
 	sc *gongtree_models.Node,
 	isChecked bool) {
-	node := new(gongtree_models.Node).Stage(tree.TreeStack.Stage)
+	node := new(gongtree_models.Node).Stage(tree.gongtreeStage)
 	node.Name = name
 
 	node.IsNodeClickable = true

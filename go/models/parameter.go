@@ -4,6 +4,10 @@ import (
 	"log"
 
 	substackcursor_models "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+
+	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+
+	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
 type Parameter struct {
@@ -31,7 +35,7 @@ type Parameter struct {
 	//
 	// Shapes
 	//
-	Shapes []Shape
+	Shapes []ShapeInterface
 
 	InitialRhombus     *Rhombus
 	InitialCircle      *Circle
@@ -183,9 +187,16 @@ type Parameter struct {
 	// number of "minimal" notes to the shift
 	ActualBeatsTemporalShift int
 
+	// not persisted fields
 	notifyCh chan bool
 
 	cursor *substackcursor_models.Cursor
+
+	gongsvgStage         *gongsvg_models.StageStruct
+	gongtoneStage        *gongtone_models.StageStruct
+	PhyllotaxymusicStage *StageStruct
+	shapeTree            *TreeProxy
+	SubstackcursorStage  *substackcursor_models.StageStruct
 }
 
 func (parameter *Parameter) SetNotifyChannel(notifyCh chan bool) {
@@ -194,6 +205,22 @@ func (parameter *Parameter) SetNotifyChannel(notifyCh chan bool) {
 
 func (parameter *Parameter) SetCursor(cursor *substackcursor_models.Cursor) {
 	parameter.cursor = cursor
+}
+
+func (parameter *Parameter) SetSubstackcursorStage(substackCursorStage *substackcursor_models.StageStruct) {
+	parameter.SubstackcursorStage = substackCursorStage
+}
+
+func (parameter *Parameter) SetGongsvgStage(gongsvgStage *gongsvg_models.StageStruct) {
+	parameter.gongsvgStage = gongsvgStage
+}
+
+func (parameter *Parameter) SetGongtoneStage(gongtoneStage *gongtone_models.StageStruct) {
+	parameter.gongtoneStage = gongtoneStage
+}
+
+func (parameter *Parameter) SetPhyllotaxymusicStage(phyllotaxymusicStage *StageStruct) {
+	parameter.PhyllotaxymusicStage = phyllotaxymusicStage
 }
 
 func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {

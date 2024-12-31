@@ -21,21 +21,21 @@ func (from *Button) CopyBasicFields(to *Button) {
 
 type Node_WOP struct {
 	// insertion point
-	Name string
-	FontStyle FontStyleEnum
-	BackgroundColor string
-	IsExpanded bool
-	HasCheckboxButton bool
-	IsChecked bool
-	IsCheckboxDisabled bool
-	HasSecondCheckboxButton bool
-	IsSecondCheckboxChecked bool
+	Name                     string
+	FontStyle                FontStyleEnum
+	BackgroundColor          string
+	IsExpanded               bool
+	HasCheckboxButton        bool
+	IsChecked                bool
+	IsCheckboxDisabled       bool
+	HasSecondCheckboxButton  bool
+	IsSecondCheckboxChecked  bool
 	IsSecondCheckboxDisabled bool
-	TextAfterSecondCheckbox string
-	IsInEditMode bool
-	IsNodeClickable bool
-	IsWithPreceedingIcon bool
-	PreceedingIcon string
+	TextAfterSecondCheckbox  string
+	IsInEditMode             bool
+	IsNodeClickable          bool
+	IsWithPreceedingIcon     bool
+	PreceedingIcon           string
 }
 
 func (from *Node) CopyBasicFields(to *Node) {
@@ -60,7 +60,7 @@ func (from *Node) CopyBasicFields(to *Node) {
 type SVGIcon_WOP struct {
 	// insertion point
 	Name string
-	SVG string
+	SVG  string
 }
 
 func (from *SVGIcon) CopyBasicFields(to *SVGIcon) {
@@ -78,4 +78,3 @@ func (from *Tree) CopyBasicFields(to *Tree) {
 	// insertion point
 	to.Name = from.Name
 }
-

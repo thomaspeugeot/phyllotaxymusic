@@ -11,7 +11,7 @@ import (
 type Circle struct {
 	Name string
 
-	AbstractShape
+	Shape
 	CenterX, CenterY float64
 
 	HasBespokeRadius bool

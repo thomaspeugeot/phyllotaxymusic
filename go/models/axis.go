@@ -8,7 +8,7 @@ import (
 
 type Axis struct {
 	Name string
-	AbstractShape
+	Shape
 
 	// in degrees
 	AngleDegree float64

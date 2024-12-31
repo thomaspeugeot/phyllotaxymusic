@@ -7,7 +7,7 @@ import (
 type VerticalAxis struct {
 	Name string
 
-	AbstractShape
+	Shape
 	AxisHandleBorderLength float64
 	Axis_Length            float64
 

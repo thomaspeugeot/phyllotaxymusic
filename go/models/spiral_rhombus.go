@@ -10,7 +10,7 @@ import (
 type SpiralRhombus struct {
 	Name string
 
-	AbstractShape
+	Shape
 
 	// not persisted by gong
 	X_r0, Y_r0, X_r1, Y_r1, X_r2, Y_r2, X_r3, Y_r3 float64

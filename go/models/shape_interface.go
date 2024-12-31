@@ -6,7 +6,7 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
-type Shape interface {
+type ShapeInterface interface {
 	gongtree_models.NodeImplInterface
 	GetName() string
 	GetIsDisplayed() bool
