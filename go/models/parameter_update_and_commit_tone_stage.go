@@ -1,6 +1,9 @@
 package models
 
 import (
+	"fmt"
+	"log"
+
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
@@ -44,6 +47,10 @@ func (p *Parameter) UpdateAndCommitToneStage() {
 
 }
 
+// generateNotesFromCircleGrid processes a set of circles to create corresponding notes,
+// assigning frequencies and computing their durations. It uses information from the given
+// keyboard mapping, frequency map, and circle grid. Newly created Freqency and Note
+// objects are staged in the provided gongtoneStage.
 func (p *Parameter) generateNotesFromCircleGrid(
 	keyboard []string,
 	map_Freqs map[string]*gongtone_models.Freqency,
@@ -52,7 +59,7 @@ func (p *Parameter) generateNotesFromCircleGrid(
 
 	beatLength := p.RotatedAxis.Length / float64(p.NbOfBeatsInTheme)
 
-	for _, c := range circleGrid.Circles {
+	for idx, c := range circleGrid.Circles {
 
 		if !c.isKept {
 			continue
@@ -68,6 +75,7 @@ func (p *Parameter) generateNotesFromCircleGrid(
 		}
 
 		note := new(gongtone_models.Note).Stage(gongtoneStage)
+		note.Name = fmt.Sprintf("Note %2d", idx)
 		c.note = note
 		note.Frequencies = append(note.Frequencies, freq)
 
@@ -85,10 +93,14 @@ func (p *Parameter) generateNotesFromCircleGrid(
 
 		c.note.Duration = 1 / p.BeatsPerSecond
 
-		for _, _c := range circleGrid.Circles[i:] {
-			if !_c.isKept {
-				c.note.Duration += 1 / p.BeatsPerSecond
+		remainingCircles := circleGrid.Circles[i+1:]
+
+		for _, _c := range remainingCircles {
+			if _c.isKept {
+				break
 			}
+			c.note.Duration += 1 / p.BeatsPerSecond
 		}
+		log.Println(c.note.Name, c.note.Duration)
 	}
 }
