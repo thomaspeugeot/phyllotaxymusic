@@ -11,7 +11,7 @@ import (
 type Rhombus struct {
 	Name string
 
-	AbstractShape
+	Shape
 
 	CenterX, CenterY float64
 
@@ -89,13 +89,13 @@ func (r *Rhombus) getCoordinates() ([4]float64, [4]float64) {
 
 func (r Rhombus) Copy() Rhombus {
 	return Rhombus{
-		Name:          r.Name,
-		AbstractShape: r.AbstractShape, // Assuming AbstractShape is a copyable struct
-		CenterX:       r.CenterX,
-		CenterY:       r.CenterY,
-		SideLength:    r.SideLength,
-		AngleDegree:   r.AngleDegree,
-		InsideAngle:   r.InsideAngle,
-		Presentation:  r.Presentation, // Assuming Presentation is a copyable struct
+		Name:         r.Name,
+		Shape:        r.Shape, // Assuming AbstractShape is a copyable struct
+		CenterX:      r.CenterX,
+		CenterY:      r.CenterY,
+		SideLength:   r.SideLength,
+		AngleDegree:  r.AngleDegree,
+		InsideAngle:  r.InsideAngle,
+		Presentation: r.Presentation, // Assuming Presentation is a copyable struct
 	}
 }

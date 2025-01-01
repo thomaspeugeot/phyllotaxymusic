@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
-
 	// injection point for ident package import declaration{{ImportPackageDeclaration}}
 )
 
@@ -376,7 +375,6 @@ func _(stage *models.StageStruct) {
 	__Circle__000000_0.CenterY = 0.000000
 	__Circle__000000_0.HasBespokeRadius = false
 	__Circle__000000_0.BespopkeRadius = 0.000000
-	__Circle__000000_0.Pitch = 0
 	__Circle__000000_0.Color = ``
 	__Circle__000000_0.FillOpacity = 0.000000
 	__Circle__000000_0.Stroke = `blue`
@@ -385,7 +383,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000000_0.StrokeDashArray = ``
 	__Circle__000000_0.StrokeDashArrayWhenSelected = ``
 	__Circle__000000_0.Transform = ``
+	__Circle__000000_0.Pitch = 0
 	__Circle__000000_0.ShowName = false
+	__Circle__000000_0.BeatNb = 0
 
 	__Circle__000001_Construction_Circle.Name = `Construction Circle`
 	__Circle__000001_Construction_Circle.IsDisplayed = false
@@ -393,7 +393,6 @@ func _(stage *models.StageStruct) {
 	__Circle__000001_Construction_Circle.CenterY = 60.959040
 	__Circle__000001_Construction_Circle.HasBespokeRadius = true
 	__Circle__000001_Construction_Circle.BespopkeRadius = 20.000000
-	__Circle__000001_Construction_Circle.Pitch = 0
 	__Circle__000001_Construction_Circle.Color = ``
 	__Circle__000001_Construction_Circle.FillOpacity = 0.000000
 	__Circle__000001_Construction_Circle.Stroke = `blue`
@@ -402,7 +401,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000001_Construction_Circle.StrokeDashArray = ``
 	__Circle__000001_Construction_Circle.StrokeDashArrayWhenSelected = ``
 	__Circle__000001_Construction_Circle.Transform = ``
+	__Circle__000001_Construction_Circle.Pitch = 0
 	__Circle__000001_Construction_Circle.ShowName = false
+	__Circle__000001_Construction_Circle.BeatNb = 0
 
 	__Circle__000002_First_voice_notes_seed.Name = `First voice notes seed`
 	__Circle__000002_First_voice_notes_seed.IsDisplayed = false
@@ -410,7 +411,6 @@ func _(stage *models.StageStruct) {
 	__Circle__000002_First_voice_notes_seed.CenterY = 0.000000
 	__Circle__000002_First_voice_notes_seed.HasBespokeRadius = true
 	__Circle__000002_First_voice_notes_seed.BespopkeRadius = 10.000000
-	__Circle__000002_First_voice_notes_seed.Pitch = 0
 	__Circle__000002_First_voice_notes_seed.Color = ``
 	__Circle__000002_First_voice_notes_seed.FillOpacity = 0.000000
 	__Circle__000002_First_voice_notes_seed.Stroke = `grey`
@@ -419,7 +419,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000002_First_voice_notes_seed.StrokeDashArray = ``
 	__Circle__000002_First_voice_notes_seed.StrokeDashArrayWhenSelected = ``
 	__Circle__000002_First_voice_notes_seed.Transform = ``
+	__Circle__000002_First_voice_notes_seed.Pitch = 0
 	__Circle__000002_First_voice_notes_seed.ShowName = false
+	__Circle__000002_First_voice_notes_seed.BeatNb = 0
 
 	__Circle__000003_Growing_Seed_Left.Name = `Growing Seed Left`
 	__Circle__000003_Growing_Seed_Left.IsDisplayed = false
@@ -427,7 +429,6 @@ func _(stage *models.StageStruct) {
 	__Circle__000003_Growing_Seed_Left.CenterY = 0.000000
 	__Circle__000003_Growing_Seed_Left.HasBespokeRadius = false
 	__Circle__000003_Growing_Seed_Left.BespopkeRadius = 0.000000
-	__Circle__000003_Growing_Seed_Left.Pitch = 0
 	__Circle__000003_Growing_Seed_Left.Color = ``
 	__Circle__000003_Growing_Seed_Left.FillOpacity = 0.000000
 	__Circle__000003_Growing_Seed_Left.Stroke = `green`
@@ -436,7 +437,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000003_Growing_Seed_Left.StrokeDashArray = ``
 	__Circle__000003_Growing_Seed_Left.StrokeDashArrayWhenSelected = ``
 	__Circle__000003_Growing_Seed_Left.Transform = ``
+	__Circle__000003_Growing_Seed_Left.Pitch = 0
 	__Circle__000003_Growing_Seed_Left.ShowName = false
+	__Circle__000003_Growing_Seed_Left.BeatNb = 0
 
 	__Circle__000004_Initial_Circle.Name = `Initial Circle`
 	__Circle__000004_Initial_Circle.IsDisplayed = false
@@ -444,7 +447,6 @@ func _(stage *models.StageStruct) {
 	__Circle__000004_Initial_Circle.CenterY = 0.000000
 	__Circle__000004_Initial_Circle.HasBespokeRadius = false
 	__Circle__000004_Initial_Circle.BespopkeRadius = 0.000000
-	__Circle__000004_Initial_Circle.Pitch = 0
 	__Circle__000004_Initial_Circle.Color = ``
 	__Circle__000004_Initial_Circle.FillOpacity = 0.000000
 	__Circle__000004_Initial_Circle.Stroke = `lightblue`
@@ -453,7 +455,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000004_Initial_Circle.StrokeDashArray = ``
 	__Circle__000004_Initial_Circle.StrokeDashArrayWhenSelected = ``
 	__Circle__000004_Initial_Circle.Transform = ``
+	__Circle__000004_Initial_Circle.Pitch = 0
 	__Circle__000004_Initial_Circle.ShowName = false
+	__Circle__000004_Initial_Circle.BeatNb = 0
 
 	__Circle__000005_Rotated_Next_Circle.Name = `Rotated Next Circle`
 	__Circle__000005_Rotated_Next_Circle.IsDisplayed = false
@@ -461,7 +465,6 @@ func _(stage *models.StageStruct) {
 	__Circle__000005_Rotated_Next_Circle.CenterY = 24.383616
 	__Circle__000005_Rotated_Next_Circle.HasBespokeRadius = false
 	__Circle__000005_Rotated_Next_Circle.BespopkeRadius = 0.000000
-	__Circle__000005_Rotated_Next_Circle.Pitch = 0
 	__Circle__000005_Rotated_Next_Circle.Color = ``
 	__Circle__000005_Rotated_Next_Circle.FillOpacity = 0.000000
 	__Circle__000005_Rotated_Next_Circle.Stroke = `yellow`
@@ -470,7 +473,9 @@ func _(stage *models.StageStruct) {
 	__Circle__000005_Rotated_Next_Circle.StrokeDashArray = ``
 	__Circle__000005_Rotated_Next_Circle.StrokeDashArrayWhenSelected = ``
 	__Circle__000005_Rotated_Next_Circle.Transform = ``
+	__Circle__000005_Rotated_Next_Circle.Pitch = 0
 	__Circle__000005_Rotated_Next_Circle.ShowName = false
+	__Circle__000005_Rotated_Next_Circle.BeatNb = 0
 
 	__CircleGrid__000000_Construction_Circle_Grid.Name = `Construction Circle Grid`
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
@@ -586,10 +591,10 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceShiftX = -0.070000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 1.830000
 	__Parameter__000000_Reference.PitchDifference = 12
-	__Parameter__000000_Reference.BeatsPerSecond = 2.050000
+	__Parameter__000000_Reference.BeatsPerSecond = 4.500000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 29327
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 12911
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000
@@ -674,7 +679,7 @@ func _(stage *models.StageStruct) {
 	__RhombusGrid__000002_Rotated_Rhombus_Grid.IsDisplayed = false
 
 	__ShapeCategory__000000_0_Axes.Name = `0. Axes`
-	__ShapeCategory__000000_0_Axes.IsExpanded = true
+	__ShapeCategory__000000_0_Axes.IsExpanded = false
 
 	__ShapeCategory__000001_1_Initial.Name = `1. Initial`
 	__ShapeCategory__000001_1_Initial.IsExpanded = false
@@ -734,7 +739,6 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Construction_Circle_Spiral.CenterY = 0.000000
 	__SpiralCircle__000000_Construction_Circle_Spiral.HasBespokeRadius = true
 	__SpiralCircle__000000_Construction_Circle_Spiral.BespopkeRadius = 14.130000
-	__SpiralCircle__000000_Construction_Circle_Spiral.Pitch = 0
 	__SpiralCircle__000000_Construction_Circle_Spiral.Color = ``
 	__SpiralCircle__000000_Construction_Circle_Spiral.FillOpacity = 0.000000
 	__SpiralCircle__000000_Construction_Circle_Spiral.Stroke = `blue`
@@ -743,7 +747,9 @@ func _(stage *models.StageStruct) {
 	__SpiralCircle__000000_Construction_Circle_Spiral.StrokeDashArray = ``
 	__SpiralCircle__000000_Construction_Circle_Spiral.StrokeDashArrayWhenSelected = ``
 	__SpiralCircle__000000_Construction_Circle_Spiral.Transform = ``
+	__SpiralCircle__000000_Construction_Circle_Spiral.Pitch = 0
 	__SpiralCircle__000000_Construction_Circle_Spiral.ShowName = false
+	__SpiralCircle__000000_Construction_Circle_Spiral.BeatNb = 0
 	__SpiralCircle__000000_Construction_Circle_Spiral.Path = `M 704.930000 500.000000 A 14.130000 14.130000 0 1 0 676.670000 500.000000 A 14.130000 14.130000 0 1 0 704.930000 500.000000 Z`
 
 	__SpiralCircleGrid__000000_Brute_Spiral_Bezier_Circle_Grid.Name = `Brute Spiral Bezier Circle Grid`
@@ -954,7 +960,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.PitchLines = __AxisGrid__000002_Pitch_Lines
 	__Parameter__000000_Reference.BeatLines = __AxisGrid__000000_Beat_Lines
 	__Parameter__000000_Reference.FirstVoice = __BezierGrid__000002_First_Voice
-	__Parameter__000000_Reference.FirstVoiceShiftRigth = __BezierGrid__000003_First_Voice_Shift_Right
+	__Parameter__000000_Reference.FirstVoiceShiftedRigth = __BezierGrid__000003_First_Voice_Shift_Right
 	__Parameter__000000_Reference.SecondVoice = __BezierGrid__000000_2nb_Voice
 	__Parameter__000000_Reference.SecondVoiceShiftedRight = __BezierGrid__000001_2nd_voice_shifted_right
 	__Parameter__000000_Reference.FirstVoiceNotes = __CircleGrid__000002_First_Voice_notes

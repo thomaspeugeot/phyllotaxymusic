@@ -6,8 +6,13 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
-type Shape interface {
+// ShapeInterface
+type ShapeInterface interface {
+
+	// It is call from a node update
+	SetCallbackOn(*gongtree_models.Node, *Parameter)
 	gongtree_models.NodeImplInterface
+
 	GetName() string
 	GetIsDisplayed() bool
 	GetShapeCategory() *ShapeCategory

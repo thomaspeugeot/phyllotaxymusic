@@ -84,9 +84,6 @@ type CircleDB struct {
 	// Declation for basic field circleDB.BespopkeRadius
 	BespopkeRadius_Data sql.NullFloat64
 
-	// Declation for basic field circleDB.Pitch
-	Pitch_Data sql.NullInt64
-
 	// Declation for basic field circleDB.Color
 	Color_Data sql.NullString
 
@@ -111,9 +108,15 @@ type CircleDB struct {
 	// Declation for basic field circleDB.Transform
 	Transform_Data sql.NullString
 
+	// Declation for basic field circleDB.Pitch
+	Pitch_Data sql.NullInt64
+
 	// Declation for basic field circleDB.ShowName
 	// provide the sql storage for the boolan
 	ShowName_Data sql.NullBool
+
+	// Declation for basic field circleDB.BeatNb
+	BeatNb_Data sql.NullInt64
 
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -149,25 +152,27 @@ type CircleWOP struct {
 
 	BespopkeRadius float64 `xlsx:"6"`
 
-	Pitch int `xlsx:"7"`
+	Color string `xlsx:"7"`
 
-	Color string `xlsx:"8"`
+	FillOpacity float64 `xlsx:"8"`
 
-	FillOpacity float64 `xlsx:"9"`
+	Stroke string `xlsx:"9"`
 
-	Stroke string `xlsx:"10"`
+	StrokeOpacity float64 `xlsx:"10"`
 
-	StrokeOpacity float64 `xlsx:"11"`
+	StrokeWidth float64 `xlsx:"11"`
 
-	StrokeWidth float64 `xlsx:"12"`
+	StrokeDashArray string `xlsx:"12"`
 
-	StrokeDashArray string `xlsx:"13"`
+	StrokeDashArrayWhenSelected string `xlsx:"13"`
 
-	StrokeDashArrayWhenSelected string `xlsx:"14"`
+	Transform string `xlsx:"14"`
 
-	Transform string `xlsx:"15"`
+	Pitch int `xlsx:"15"`
 
 	ShowName bool `xlsx:"16"`
+
+	BeatNb int `xlsx:"17"`
 	// insertion for WOP pointer fields
 }
 
@@ -180,7 +185,6 @@ var Circle_Fields = []string{
 	"CenterY",
 	"HasBespokeRadius",
 	"BespopkeRadius",
-	"Pitch",
 	"Color",
 	"FillOpacity",
 	"Stroke",
@@ -189,7 +193,9 @@ var Circle_Fields = []string{
 	"StrokeDashArray",
 	"StrokeDashArrayWhenSelected",
 	"Transform",
+	"Pitch",
 	"ShowName",
+	"BeatNb",
 }
 
 type BackRepoCircleStruct struct {
@@ -506,9 +512,6 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle(circle *models.Circle) {
 	circleDB.BespopkeRadius_Data.Float64 = circle.BespopkeRadius
 	circleDB.BespopkeRadius_Data.Valid = true
 
-	circleDB.Pitch_Data.Int64 = int64(circle.Pitch)
-	circleDB.Pitch_Data.Valid = true
-
 	circleDB.Color_Data.String = circle.Color
 	circleDB.Color_Data.Valid = true
 
@@ -533,8 +536,14 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle(circle *models.Circle) {
 	circleDB.Transform_Data.String = circle.Transform
 	circleDB.Transform_Data.Valid = true
 
+	circleDB.Pitch_Data.Int64 = int64(circle.Pitch)
+	circleDB.Pitch_Data.Valid = true
+
 	circleDB.ShowName_Data.Bool = circle.ShowName
 	circleDB.ShowName_Data.Valid = true
+
+	circleDB.BeatNb_Data.Int64 = int64(circle.BeatNb)
+	circleDB.BeatNb_Data.Valid = true
 }
 
 // CopyBasicFieldsFromCircle_WOP
@@ -559,9 +568,6 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle_WOP(circle *models.Circle_WO
 	circleDB.BespopkeRadius_Data.Float64 = circle.BespopkeRadius
 	circleDB.BespopkeRadius_Data.Valid = true
 
-	circleDB.Pitch_Data.Int64 = int64(circle.Pitch)
-	circleDB.Pitch_Data.Valid = true
-
 	circleDB.Color_Data.String = circle.Color
 	circleDB.Color_Data.Valid = true
 
@@ -586,8 +592,14 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle_WOP(circle *models.Circle_WO
 	circleDB.Transform_Data.String = circle.Transform
 	circleDB.Transform_Data.Valid = true
 
+	circleDB.Pitch_Data.Int64 = int64(circle.Pitch)
+	circleDB.Pitch_Data.Valid = true
+
 	circleDB.ShowName_Data.Bool = circle.ShowName
 	circleDB.ShowName_Data.Valid = true
+
+	circleDB.BeatNb_Data.Int64 = int64(circle.BeatNb)
+	circleDB.BeatNb_Data.Valid = true
 }
 
 // CopyBasicFieldsFromCircleWOP
@@ -612,9 +624,6 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircleWOP(circle *CircleWOP) {
 	circleDB.BespopkeRadius_Data.Float64 = circle.BespopkeRadius
 	circleDB.BespopkeRadius_Data.Valid = true
 
-	circleDB.Pitch_Data.Int64 = int64(circle.Pitch)
-	circleDB.Pitch_Data.Valid = true
-
 	circleDB.Color_Data.String = circle.Color
 	circleDB.Color_Data.Valid = true
 
@@ -639,8 +648,14 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircleWOP(circle *CircleWOP) {
 	circleDB.Transform_Data.String = circle.Transform
 	circleDB.Transform_Data.Valid = true
 
+	circleDB.Pitch_Data.Int64 = int64(circle.Pitch)
+	circleDB.Pitch_Data.Valid = true
+
 	circleDB.ShowName_Data.Bool = circle.ShowName
 	circleDB.ShowName_Data.Valid = true
+
+	circleDB.BeatNb_Data.Int64 = int64(circle.BeatNb)
+	circleDB.BeatNb_Data.Valid = true
 }
 
 // CopyBasicFieldsToCircle
@@ -652,7 +667,6 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle(circle *models.Circle) {
 	circle.CenterY = circleDB.CenterY_Data.Float64
 	circle.HasBespokeRadius = circleDB.HasBespokeRadius_Data.Bool
 	circle.BespopkeRadius = circleDB.BespopkeRadius_Data.Float64
-	circle.Pitch = int(circleDB.Pitch_Data.Int64)
 	circle.Color = circleDB.Color_Data.String
 	circle.FillOpacity = circleDB.FillOpacity_Data.Float64
 	circle.Stroke = circleDB.Stroke_Data.String
@@ -661,7 +675,9 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle(circle *models.Circle) {
 	circle.StrokeDashArray = circleDB.StrokeDashArray_Data.String
 	circle.StrokeDashArrayWhenSelected = circleDB.StrokeDashArrayWhenSelected_Data.String
 	circle.Transform = circleDB.Transform_Data.String
+	circle.Pitch = int(circleDB.Pitch_Data.Int64)
 	circle.ShowName = circleDB.ShowName_Data.Bool
+	circle.BeatNb = int(circleDB.BeatNb_Data.Int64)
 }
 
 // CopyBasicFieldsToCircle_WOP
@@ -673,7 +689,6 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle_WOP(circle *models.Circle_WOP)
 	circle.CenterY = circleDB.CenterY_Data.Float64
 	circle.HasBespokeRadius = circleDB.HasBespokeRadius_Data.Bool
 	circle.BespopkeRadius = circleDB.BespopkeRadius_Data.Float64
-	circle.Pitch = int(circleDB.Pitch_Data.Int64)
 	circle.Color = circleDB.Color_Data.String
 	circle.FillOpacity = circleDB.FillOpacity_Data.Float64
 	circle.Stroke = circleDB.Stroke_Data.String
@@ -682,7 +697,9 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle_WOP(circle *models.Circle_WOP)
 	circle.StrokeDashArray = circleDB.StrokeDashArray_Data.String
 	circle.StrokeDashArrayWhenSelected = circleDB.StrokeDashArrayWhenSelected_Data.String
 	circle.Transform = circleDB.Transform_Data.String
+	circle.Pitch = int(circleDB.Pitch_Data.Int64)
 	circle.ShowName = circleDB.ShowName_Data.Bool
+	circle.BeatNb = int(circleDB.BeatNb_Data.Int64)
 }
 
 // CopyBasicFieldsToCircleWOP
@@ -695,7 +712,6 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircleWOP(circle *CircleWOP) {
 	circle.CenterY = circleDB.CenterY_Data.Float64
 	circle.HasBespokeRadius = circleDB.HasBespokeRadius_Data.Bool
 	circle.BespopkeRadius = circleDB.BespopkeRadius_Data.Float64
-	circle.Pitch = int(circleDB.Pitch_Data.Int64)
 	circle.Color = circleDB.Color_Data.String
 	circle.FillOpacity = circleDB.FillOpacity_Data.Float64
 	circle.Stroke = circleDB.Stroke_Data.String
@@ -704,7 +720,9 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircleWOP(circle *CircleWOP) {
 	circle.StrokeDashArray = circleDB.StrokeDashArray_Data.String
 	circle.StrokeDashArrayWhenSelected = circleDB.StrokeDashArrayWhenSelected_Data.String
 	circle.Transform = circleDB.Transform_Data.String
+	circle.Pitch = int(circleDB.Pitch_Data.Int64)
 	circle.ShowName = circleDB.ShowName_Data.Bool
+	circle.BeatNb = int(circleDB.BeatNb_Data.Int64)
 }
 
 // Backup generates a json file from a slice of all CircleDB instances in the backrepo

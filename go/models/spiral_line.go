@@ -7,7 +7,7 @@ import (
 type SpiralLine struct {
 	Name string
 
-	AbstractShape
+	Shape
 
 	StartX, EndX, StartY, EndY float64
 

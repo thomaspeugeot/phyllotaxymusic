@@ -24,7 +24,6 @@ export class Circle {
 	CenterY: number = 0
 	HasBespokeRadius: boolean = false
 	BespopkeRadius: number = 0
-	Pitch: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -33,7 +32,9 @@ export class Circle {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
+	Pitch: number = 0
 	ShowName: boolean = false
+	BeatNb: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 	ShapeCategory?: ShapeCategory
@@ -53,7 +54,6 @@ export function CopyCircleToCircleAPI(circle: Circle, circleAPI: CircleAPI) {
 	circleAPI.CenterY = circle.CenterY
 	circleAPI.HasBespokeRadius = circle.HasBespokeRadius
 	circleAPI.BespopkeRadius = circle.BespopkeRadius
-	circleAPI.Pitch = circle.Pitch
 	circleAPI.Color = circle.Color
 	circleAPI.FillOpacity = circle.FillOpacity
 	circleAPI.Stroke = circle.Stroke
@@ -62,7 +62,9 @@ export function CopyCircleToCircleAPI(circle: Circle, circleAPI: CircleAPI) {
 	circleAPI.StrokeDashArray = circle.StrokeDashArray
 	circleAPI.StrokeDashArrayWhenSelected = circle.StrokeDashArrayWhenSelected
 	circleAPI.Transform = circle.Transform
+	circleAPI.Pitch = circle.Pitch
 	circleAPI.ShowName = circle.ShowName
+	circleAPI.BeatNb = circle.BeatNb
 
 	// insertion point for pointer fields encoding
 	circleAPI.CirclePointersEncoding.ShapeCategoryID.Valid = true
@@ -93,7 +95,6 @@ export function CopyCircleAPIToCircle(circleAPI: CircleAPI, circle: Circle, fron
 	circle.CenterY = circleAPI.CenterY
 	circle.HasBespokeRadius = circleAPI.HasBespokeRadius
 	circle.BespopkeRadius = circleAPI.BespopkeRadius
-	circle.Pitch = circleAPI.Pitch
 	circle.Color = circleAPI.Color
 	circle.FillOpacity = circleAPI.FillOpacity
 	circle.Stroke = circleAPI.Stroke
@@ -102,7 +103,9 @@ export function CopyCircleAPIToCircle(circleAPI: CircleAPI, circle: Circle, fron
 	circle.StrokeDashArray = circleAPI.StrokeDashArray
 	circle.StrokeDashArrayWhenSelected = circleAPI.StrokeDashArrayWhenSelected
 	circle.Transform = circleAPI.Transform
+	circle.Pitch = circleAPI.Pitch
 	circle.ShowName = circleAPI.ShowName
+	circle.BeatNb = circleAPI.BeatNb
 
 	// insertion point for pointer fields encoding
 	circle.ShapeCategory = frontRepo.map_ID_ShapeCategory.get(circleAPI.CirclePointersEncoding.ShapeCategoryID.Int64)

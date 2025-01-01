@@ -1,6 +1,6 @@
 package models
 
-func (p *Parameter) ComputeShapes(stage *StageStruct) {
+func (p *Parameter) UpdatePhyllotaxyStage() {
 
 	if p.Z < p.M+p.N+1 {
 		p.Z = p.M + p.N + 1
@@ -18,10 +18,10 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeInitialCircle()
 	p.Shapes = append(p.Shapes, p.InitialCircle)
 
-	p.ComputeInitialRhombusGrid(stage)
+	p.ComputeInitialRhombusGrid(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.InitialRhombusGrid)
 
-	p.ComputeInitialCircleGrid(stage)
+	p.ComputeInitialCircleGrid(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.InitialCircleGrid)
 
 	p.ComputeInitialAxis()
@@ -33,10 +33,10 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.computeRotatedRhombus()
 	p.Shapes = append(p.Shapes, p.RotatedRhombus)
 
-	p.computeRotatedRhombusGrid(stage)
+	p.computeRotatedRhombusGrid(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.RotatedRhombusGrid)
 
-	p.computeRotatedCircleGrid(stage)
+	p.computeRotatedCircleGrid(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.RotatedCircleGrid)
 
 	p.ComputeNextRhombus()
@@ -139,7 +139,7 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.ComputeSpiralBezierFullGrid()
 	p.Shapes = append(p.Shapes, p.SpiralBezierFullGrid)
 
-	p.ComputeFrontCurveStacks(stage)
+	p.ComputeFrontCurveStacks(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.FrontCurveStack)
 
 	//
@@ -160,9 +160,9 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 		float64(p.FirstVoiceShiftY)*p.SideLength)
 	p.Shapes = append(p.Shapes, p.FirstVoice)
 
-	p.FirstVoiceShiftRigth.Move(p.FirstVoiceShiftRigth.Reference, p.FirstVoice,
+	p.FirstVoiceShiftedRigth.Move(p.FirstVoiceShiftedRigth.Reference, p.FirstVoice,
 		p.RotatedAxis.Length, 0)
-	p.Shapes = append(p.Shapes, p.FirstVoiceShiftRigth)
+	p.Shapes = append(p.Shapes, p.FirstVoiceShiftedRigth)
 
 	p.SecondVoice.Move(p.SecondVoice.Reference, p.FirstVoice,
 		p.NextCircle.CenterX,
@@ -176,17 +176,13 @@ func (p *Parameter) ComputeShapes(stage *StageStruct) {
 	p.computeThemeNotesShapes(p.FirstVoice, p.FirstVoiceNotes)
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotes)
 
-	p.FirstVoiceNotesShiftedRight.Move(p.FirstVoiceNotes.Reference, p.FirstVoiceNotes,
-		p.RotatedAxis.Length, 0)
+	p.computeThemeNotesShapes(p.FirstVoiceShiftedRigth, p.FirstVoiceNotesShiftedRight)
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotesShiftedRight)
 
 	p.computeThemeNotesShapes(p.SecondVoice, p.SecondVoiceNotes)
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotes)
 
-	p.SecondVoiceNotesShiftedRight.Move(p.SecondVoiceNotesShiftedRight.Reference, p.SecondVoiceNotes,
-		p.RotatedAxis.Length, 0)
+	p.computeThemeNotesShapes(p.SecondVoiceShiftedRight, p.SecondVoiceNotesShiftedRight)
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotesShiftedRight)
 
-	// add cursor
-	p.computeCursorSVGCoords()
 }

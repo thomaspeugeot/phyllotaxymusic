@@ -9,7 +9,7 @@ import (
 type Key struct {
 	Name string
 
-	AbstractShape
+	Shape
 
 	Path string
 

@@ -7,7 +7,7 @@ import (
 type SpiralLineGrid struct {
 	Name string
 
-	AbstractShape
+	Shape
 
 	SpiralLines []*SpiralLine
 }

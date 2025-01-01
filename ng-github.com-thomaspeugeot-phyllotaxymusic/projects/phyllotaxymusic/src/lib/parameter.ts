@@ -179,7 +179,7 @@ export class Parameter {
 
 	FirstVoice?: BezierGrid
 
-	FirstVoiceShiftRigth?: BezierGrid
+	FirstVoiceShiftedRigth?: BezierGrid
 
 	SecondVoice?: BezierGrid
 
@@ -593,11 +593,11 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 		parameterAPI.ParameterPointersEncoding.FirstVoiceID.Int64 = 0 		
 	}
 
-	parameterAPI.ParameterPointersEncoding.FirstVoiceShiftRigthID.Valid = true
-	if (parameter.FirstVoiceShiftRigth != undefined) {
-		parameterAPI.ParameterPointersEncoding.FirstVoiceShiftRigthID.Int64 = parameter.FirstVoiceShiftRigth.ID  
+	parameterAPI.ParameterPointersEncoding.FirstVoiceShiftedRigthID.Valid = true
+	if (parameter.FirstVoiceShiftedRigth != undefined) {
+		parameterAPI.ParameterPointersEncoding.FirstVoiceShiftedRigthID.Int64 = parameter.FirstVoiceShiftedRigth.ID  
 	} else {
-		parameterAPI.ParameterPointersEncoding.FirstVoiceShiftRigthID.Int64 = 0 		
+		parameterAPI.ParameterPointersEncoding.FirstVoiceShiftedRigthID.Int64 = 0 		
 	}
 
 	parameterAPI.ParameterPointersEncoding.SecondVoiceID.Valid = true
@@ -769,7 +769,7 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.PitchLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.PitchLinesID.Int64)
 	parameter.BeatLines = frontRepo.map_ID_AxisGrid.get(parameterAPI.ParameterPointersEncoding.BeatLinesID.Int64)
 	parameter.FirstVoice = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceID.Int64)
-	parameter.FirstVoiceShiftRigth = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceShiftRigthID.Int64)
+	parameter.FirstVoiceShiftedRigth = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceShiftedRigthID.Int64)
 	parameter.SecondVoice = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceID.Int64)
 	parameter.SecondVoiceShiftedRight = frontRepo.map_ID_BezierGrid.get(parameterAPI.ParameterPointersEncoding.SecondVoiceShiftedRightID.Int64)
 	parameter.FirstVoiceNotes = frontRepo.map_ID_CircleGrid.get(parameterAPI.ParameterPointersEncoding.FirstVoiceNotesID.Int64)

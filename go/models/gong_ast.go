@@ -1285,13 +1285,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_Circle[identifier].BespopkeRadius = exprSign * fielValue
-				case "Pitch":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Circle[identifier].Pitch = int(exprSign) * int(fielValue)
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1333,6 +1326,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Circle[identifier].Transform = fielValue
+				case "Pitch":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Circle[identifier].Pitch = int(exprSign) * int(fielValue)
+				case "BeatNb":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Circle[identifier].BeatNb = int(exprSign) * int(fielValue)
 				}
 			case "CircleGrid":
 				switch fieldName {
@@ -2011,13 +2018,6 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						log.Fatalln(err)
 					}
 					__gong__map_SpiralCircle[identifier].BespopkeRadius = exprSign * fielValue
-				case "Pitch":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_SpiralCircle[identifier].Pitch = int(exprSign) * int(fielValue)
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -2059,6 +2059,20 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_SpiralCircle[identifier].Transform = fielValue
+				case "Pitch":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralCircle[identifier].Pitch = int(exprSign) * int(fielValue)
+				case "BeatNb":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_SpiralCircle[identifier].BeatNb = int(exprSign) * int(fielValue)
 				case "Path":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -2713,9 +2727,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "FirstVoice":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].FirstVoice = __gong__map_BezierGrid[targetIdentifier]
-				case "FirstVoiceShiftRigth":
+				case "FirstVoiceShiftedRigth":
 					targetIdentifier := ident.Name
-					__gong__map_Parameter[identifier].FirstVoiceShiftRigth = __gong__map_BezierGrid[targetIdentifier]
+					__gong__map_Parameter[identifier].FirstVoiceShiftedRigth = __gong__map_BezierGrid[targetIdentifier]
 				case "SecondVoice":
 					targetIdentifier := ident.Name
 					__gong__map_Parameter[identifier].SecondVoice = __gong__map_BezierGrid[targetIdentifier]

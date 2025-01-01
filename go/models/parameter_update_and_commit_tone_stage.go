@@ -3,16 +3,12 @@ package models
 import (
 	"log"
 
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
-func (p *Parameter) GenerateNotes(
-	gongtoneStage *gongtone_models.StageStruct,
-	gongsvgStage *gongsvg_models.StageStruct,
-	phyllotaxymusicStage *StageStruct) {
+func (p *Parameter) UpdateAndCommitToneStage() {
 
-	gongtoneStage.Reset()
+	p.gongtoneStage.Reset()
 
 	// we consider that the scale start at C3
 	keyboard := gongtone_models.GeneratePianoNotes()
@@ -25,19 +21,19 @@ func (p *Parameter) GenerateNotes(
 
 	// note.Info = fmt.Sprintf("%40d", i)
 	if p.FirstVoiceNotes.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotes, gongtoneStage)
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotes, p.gongtoneStage)
 	}
 	if p.FirstVoiceNotesShiftedRight.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotesShiftedRight, gongtoneStage)
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotesShiftedRight, p.gongtoneStage)
 	}
 	if p.SecondVoiceNotes.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotes, gongtoneStage)
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotes, p.gongtoneStage)
 	}
 	if p.SecondVoiceNotesShiftedRight.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, gongtoneStage)
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, p.gongtoneStage)
 	}
 
-	player := new(gongtone_models.Player).Stage(gongtoneStage)
+	player := new(gongtone_models.Player).Stage(p.gongtoneStage)
 	player.OnDI = func(player *gongtone_models.Player) error {
 
 		// notify the cursor
@@ -47,7 +43,7 @@ func (p *Parameter) GenerateNotes(
 		return nil
 	}
 
-	gongtoneStage.Commit()
+	p.gongtoneStage.Commit()
 
 }
 

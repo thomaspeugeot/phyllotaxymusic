@@ -9,7 +9,7 @@ type AxisGrid struct {
 
 	Reference *Axis
 
-	AbstractShape
+	Shape
 
 	Axiss []*Axis
 }

@@ -9,7 +9,7 @@ import (
 
 type Bezier struct {
 	Name string
-	AbstractShape
+	Shape
 
 	StartX, StartY                         float64
 	ControlPointStartX, ControlPointStartY float64

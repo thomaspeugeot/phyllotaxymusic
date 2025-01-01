@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-// computeCursorSVGCoords computes cursor
+// UpdateAndCommitCursorStage computes cursor
 // StartX, EndX and DurationSeconds according to
 // parameter displayed voices notes amon
 //
@@ -13,7 +13,7 @@ import (
 // SecondVoiceNotes,
 // FirstVoiceNotesShiftedRight
 // SecondVoiceNotesShiftedRight
-func (p *Parameter) computeCursorSVGCoords() {
+func (p *Parameter) UpdateAndCommitCursorStage() {
 
 	if p.cursor == nil {
 		log.Fatal("no cursor")
@@ -41,7 +41,7 @@ func (p *Parameter) computeCursorSVGCoords() {
 		x2+p.OriginX+(themVisualLenght)/float64(p.NbOfBeatsInTheme)
 	p.cursor.DurationSeconds = ((p.cursor.EndX - p.cursor.StartX) / themVisualLenght) * themeDuration
 
-	log.Printf("%+v", p.cursor)
+	p.substackcursorStage.Commit()
 }
 
 // computeStartEnd inspects each displayed CircleGrid and returns two values:

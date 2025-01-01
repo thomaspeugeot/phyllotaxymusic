@@ -4,6 +4,11 @@ import (
 	"log"
 
 	substackcursor_models "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+
+	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+
+	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
 type Parameter struct {
@@ -31,7 +36,7 @@ type Parameter struct {
 	//
 	// Shapes
 	//
-	Shapes []Shape
+	Shapes []ShapeInterface
 
 	InitialRhombus     *Rhombus
 	InitialCircle      *Circle
@@ -132,10 +137,10 @@ type Parameter struct {
 	NbOfBeatsInTheme     int
 
 	// Composing
-	FirstVoice           *BezierGrid
-	FirstVoiceShiftRigth *BezierGrid
-	FirstVoiceShiftX     float64
-	FirstVoiceShiftY     float64
+	FirstVoice             *BezierGrid
+	FirstVoiceShiftedRigth *BezierGrid
+	FirstVoiceShiftX       float64
+	FirstVoiceShiftY       float64
 
 	SecondVoice             *BezierGrid
 	SecondVoiceShiftedRight *BezierGrid
@@ -183,9 +188,18 @@ type Parameter struct {
 	// number of "minimal" notes to the shift
 	ActualBeatsTemporalShift int
 
+	// not persisted fields
 	notifyCh chan bool
 
 	cursor *substackcursor_models.Cursor
+
+	phyllotaxymusicStage *StageStruct
+	gongsvgStage         *gongsvg_models.StageStruct
+	gongtoneStage        *gongtone_models.StageStruct
+	gongtreeStage        *gongtree_models.StageStruct
+	substackcursorStage  *substackcursor_models.StageStruct
+
+	treeProxy *TreeProxy
 }
 
 func (parameter *Parameter) SetNotifyChannel(notifyCh chan bool) {
@@ -196,13 +210,59 @@ func (parameter *Parameter) SetCursor(cursor *substackcursor_models.Cursor) {
 	parameter.cursor = cursor
 }
 
-func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
+func (parameter *Parameter) SetSubstackcursorStage(substackCursorStage *substackcursor_models.StageStruct) {
+	parameter.substackcursorStage = substackCursorStage
+}
+
+func (parameter *Parameter) SetGongsvgStage(gongsvgStage *gongsvg_models.StageStruct) {
+	parameter.gongsvgStage = gongsvgStage
+}
+
+func (parameter *Parameter) SetGongtoneStage(gongtoneStage *gongtone_models.StageStruct) {
+	parameter.gongtoneStage = gongtoneStage
+}
+
+func (parameter *Parameter) SetPhyllotaxymusicStage(phyllotaxymusicStage *StageStruct) {
+	parameter.phyllotaxymusicStage = phyllotaxymusicStage
+}
+func (parameter *Parameter) CommitPhyllotaxymusicStage() {
+	parameter.phyllotaxymusicStage.Commit()
+}
+
+func (parameter *Parameter) SetTreeProxy() {
+	if parameter.phyllotaxymusicStage == nil ||
+		parameter.gongtreeStage == nil {
+		log.Fatalln("SetTreeProxy, stages not set")
+	}
+
+	treeProxy := new(TreeProxy)
+	treeProxy.SetGongtreeStage(parameter.gongtreeStage)
+	treeProxy.PhyllotaxyStage = parameter.phyllotaxymusicStage
+
+	parameter.treeProxy = treeProxy
+}
+
+func (parameter *Parameter) OnAfterUpdate(phyllotaxyStage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
+
+	// Check if `parameter` and `stagedParameter` point to the same memory
+	if parameter == stagedParameter {
+		log.Println("Main hypothesis is OK: the parameter in OnUpdate is the stage parameter")
+	}
+
+	phyllotaxyStage.Checkout()
+	parameters := GetGongstructInstancesMap[Parameter](phyllotaxyStage)
+	parameter_ := (*parameters)["Reference"]
+	if parameter_ == parameter {
+		log.Println("Main hypothesis is OK: The checkout only copy the values")
+	}
 
 	log.Println("Diagram, OnAfterUpdate", parameter.Name)
-	backRepoParameter.cursor = parameter.cursor // small cooking stuff
-	backRepoParameter.notifyCh = parameter.notifyCh
-	parameter.Impl.OnUpdated(backRepoParameter)
 
+	parameter.UpdatePhyllotaxyStage()
+	parameter.UpdateAndCommitCursorStage()
+	parameter.UpdateAndCommitSVGStage()
+	parameter.UpdateAndCommitToneStage()
+	parameter.treeProxy.UpdateAndCommitTreeStage()
 }
 
 type ParameterImplInterface interface {
@@ -223,11 +283,37 @@ type ParameterImplInterface interface {
 //
 // Notes:
 // - If the rank is outside the valid range (0 to 63), the method returns `false`.
-func (parameter *Parameter) IsNotePlayed(rank int) bool {
-	if rank < 0 || rank > 63 {
+func (parameter *Parameter) IsNotePlayed(beatNb int) bool {
+	if beatNb < 0 || beatNb > 63 {
 		// Rank must be between 0 and 63 for a 64-bit integer
 		return false
 	}
 	// Check if the rank-th note is played
-	return parameter.ThemeBinaryEncoding&(1<<rank) != 0
+	return parameter.ThemeBinaryEncoding&(1<<beatNb) != 0
+}
+
+// ToggleNotePlayed toggles the note at the specified rank.
+//
+// If the rank is valid (0 <= rank <= 63), it flips the bit at that position
+// in parameter.ThemeBinaryEncoding. Otherwise, it does nothing.
+func (parameter *Parameter) ToggleNotePlayed(beatNb int) {
+	if beatNb < 0 || beatNb > 63 {
+		return // Ignore invalid ranks
+	}
+
+	// Flip the bit at `rank`
+	// log.Println("parameter.ThemeBinaryEncoding, before flip at beat", beatNb, parameter.ThemeBinaryEncoding)
+	parameter.ThemeBinaryEncoding ^= 1 << beatNb
+	// log.Println("parameter.ThemeBinaryEncoding, after flip at beat", beatNb, parameter.ThemeBinaryEncoding)
+}
+
+func (parameter *Parameter) SetGongtreeStage(gongtreeStage *gongtree_models.StageStruct) {
+	parameter.gongtreeStage = gongtreeStage
+}
+
+func (parameter *Parameter) UpdateAndCommitTreeStage() {
+	if parameter.gongtreeStage == nil || parameter.treeProxy == nil {
+		log.Fatalln("UpdateAndCommitTreeStage, missing fields to parameters")
+	}
+	parameter.treeProxy.UpdateAndCommitTreeStage()
 }

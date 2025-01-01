@@ -8,7 +8,7 @@ import (
 
 type SpiralBezier struct {
 	Name string
-	AbstractShape
+	Shape
 
 	StartX, StartY                         float64
 	ControlPointStartX, ControlPointStartY float64

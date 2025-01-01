@@ -5,7 +5,7 @@ import gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 type SpiralBezierGrid struct {
 	Name string
 
-	AbstractShape
+	Shape
 
 	SpiralBeziers []*SpiralBezier
 }

@@ -5,7 +5,7 @@ import gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 type SpiralOrigin struct {
 	Name string
 
-	AbstractShape
+	Shape
 
 	Presentation
 }

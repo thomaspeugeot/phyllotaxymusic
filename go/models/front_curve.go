@@ -12,7 +12,7 @@ type FrontCurve struct {
 
 type FrontCurveStack struct {
 	Name string
-	AbstractShape
+	Shape
 
 	FrontCurves []*FrontCurve
 
