@@ -4,7 +4,7 @@ import (
 	"log"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
-	"github.com/fullstack-lang/gongtree/go/models"
+	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 )
 
 type Shape struct {
@@ -21,16 +21,16 @@ func (abstractShape *Shape) GetShapeCategory() *ShapeCategory {
 }
 
 // OnAfterUpdate implements models.NodeImplInterface.
-func (hideableShape *Shape) OnAfterUpdate(stage *models.StageStruct, stagedNode *models.Node, frontNode *models.Node) {
+func (shape *Shape) OnAfterUpdate(stage *gongtree_models.StageStruct, stagedNode *gongtree_models.Node, frontNode *gongtree_models.Node) {
 	log.Println("Node clicked", frontNode.GetName())
 
 	if frontNode.IsChecked && !stagedNode.IsChecked {
-		hideableShape.IsDisplayed = true
+		shape.IsDisplayed = true
 		stagedNode.IsChecked = frontNode.IsChecked
 		GeneratorSingloton.Generate()
 	}
 	if !frontNode.IsChecked && stagedNode.IsChecked {
-		hideableShape.IsDisplayed = false
+		shape.IsDisplayed = false
 		stagedNode.IsChecked = frontNode.IsChecked
 		GeneratorSingloton.Generate()
 	}

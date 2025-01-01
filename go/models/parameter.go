@@ -239,23 +239,27 @@ func (parameter *Parameter) SetTreeProxy() {
 	parameter.TreeProxy = treeProxy
 }
 
-func (parameter *Parameter) OnAfterUpdate(stage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
+func (parameter *Parameter) OnAfterUpdate(phyllotaxyStage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
 
 	// Check if `parameter` and `stagedParameter` point to the same memory
 	if parameter == stagedParameter {
 		log.Println("Main hypothesis is OK: the parameter in OnUpdate is the stage parameter")
 	}
 
-	stage.Checkout()
-	parameters := GetGongstructInstancesMap[Parameter](stage)
+	phyllotaxyStage.Checkout()
+	parameters := GetGongstructInstancesMap[Parameter](phyllotaxyStage)
 	parameter_ := (*parameters)["Reference"]
 	if parameter_ == parameter {
 		log.Println("Main hypothesis is OK: The checkout only copy the values")
 	}
 
 	log.Println("Diagram, OnAfterUpdate", parameter.Name)
-	parameter.Impl.OnUpdated(parameter)
 
+	parameter.UpdatePhyllotaxyStage()
+	parameter.UpdateAndCommitCursorStage()
+	parameter.UpdateAndCommitSVGStage()
+	parameter.UpdateAndCommitToneStage()
+	parameter.TreeProxy.UpdateAndCommitTreeStage()
 }
 
 type ParameterImplInterface interface {

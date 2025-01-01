@@ -94,7 +94,6 @@ func main() {
 	parameterImpl.TreeProxy = treeProxy
 	parameterImpl.substackcursorStage = cursorStack.Stage
 
-	parameter.Impl = parameterImpl
 	phyllotaxymusic_models.GeneratorSingloton.Impl = parameterImpl
 
 	cursor := new(substackcursor_models.Cursor).Stage(cursorStack.Stage)
@@ -112,7 +111,6 @@ func main() {
 
 	// generate other stacks
 	parameterImpl.Generate()
-	treeProxy.UpdateAndCommitTreeStage()
 
 	cursorStack.Stage.Commit()
 
@@ -143,18 +141,4 @@ func (parameterImpl *ParameterImpl) Generate() {
 	p.UpdateAndCommitToneStage()
 	p.TreeProxy.UpdateAndCommitTreeStage()
 	p.PhyllotaxymusicStage.Commit()
-}
-
-func (parameterImpl *ParameterImpl) OnUpdated(updatedParameter *phyllotaxymusic_models.Parameter) {
-
-	log.Println("OnUpdated", parameterImpl.parameter.InsideAngle, parameterImpl.parameter.SideLength)
-	// phyllotaxymusic_svg.GenerateSvg(parameterImpl.gongsvgStage, parameterImpl.phyllotaxymusicStage)
-
-	p := parameterImpl.parameter
-
-	p.UpdatePhyllotaxyStage()
-	p.UpdateAndCommitCursorStage()
-	p.UpdateAndCommitSVGStage()
-	p.UpdateAndCommitToneStage()
-	p.TreeProxy.UpdateAndCommitTreeStage()
 }
