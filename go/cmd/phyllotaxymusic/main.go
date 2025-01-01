@@ -69,19 +69,10 @@ func main() {
 	parameter.SetGongtreeStage(gongtree_stack.Stage)
 	parameter.SetTreeProxy()
 
-	cursor := new(substackcursor_models.Cursor).Stage(cursorStack.Stage)
-	_ = cursor
-	cursorStack.Stage.Commit()
-
 	// connect parameter to cursor for start playing notification
-	notifyCh := make(chan bool)
-	cursor.SetNotifyChannel(notifyCh)
-	parameter.SetNotifyChannel(notifyCh)
-	parameter.SetCursor(cursor)
-
-	// wait loop in cursor. Will commit once it receive a notification.
-	cursor.WaitForPlayNotifications(cursorStack.Stage)
+	cursor := new(substackcursor_models.Cursor).Stage(cursorStack.Stage)
 	cursorStack.Stage.Commit()
+	parameter.SetCursor(cursor)
 
 	parameter.UpdatePhyllotaxyStage()
 	parameter.UpdateAndCommitCursorStage()
