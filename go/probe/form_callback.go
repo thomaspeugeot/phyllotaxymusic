@@ -670,8 +670,6 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circle_.HasBespokeRadius), formDiv)
 		case "BespopkeRadius":
 			FormDivBasicFieldToField(&(circle_.BespopkeRadius), formDiv)
-		case "Pitch":
-			FormDivBasicFieldToField(&(circle_.Pitch), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(circle_.Color), formDiv)
 		case "FillOpacity":
@@ -688,6 +686,8 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circle_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(circle_.Transform), formDiv)
+		case "Pitch":
+			FormDivBasicFieldToField(&(circle_.Pitch), formDiv)
 		case "ShowName":
 			FormDivBasicFieldToField(&(circle_.ShowName), formDiv)
 		case "BeatNb":
@@ -1456,8 +1456,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.NbOfBeatsInTheme), formDiv)
 		case "FirstVoice":
 			FormDivSelectFieldToField(&(parameter_.FirstVoice), parameterFormCallback.probe.stageOfInterest, formDiv)
-		case "FirstVoiceShiftRigth":
-			FormDivSelectFieldToField(&(parameter_.FirstVoiceShiftRigth), parameterFormCallback.probe.stageOfInterest, formDiv)
+		case "FirstVoiceShiftedRigth":
+			FormDivSelectFieldToField(&(parameter_.FirstVoiceShiftedRigth), parameterFormCallback.probe.stageOfInterest, formDiv)
 		case "FirstVoiceShiftX":
 			FormDivBasicFieldToField(&(parameter_.FirstVoiceShiftX), formDiv)
 		case "FirstVoiceShiftY":
@@ -2144,8 +2144,6 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralcircle_.HasBespokeRadius), formDiv)
 		case "BespopkeRadius":
 			FormDivBasicFieldToField(&(spiralcircle_.BespopkeRadius), formDiv)
-		case "Pitch":
-			FormDivBasicFieldToField(&(spiralcircle_.Pitch), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(spiralcircle_.Color), formDiv)
 		case "FillOpacity":
@@ -2162,6 +2160,8 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralcircle_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(spiralcircle_.Transform), formDiv)
+		case "Pitch":
+			FormDivBasicFieldToField(&(spiralcircle_.Pitch), formDiv)
 		case "ShowName":
 			FormDivBasicFieldToField(&(spiralcircle_.ShowName), formDiv)
 		case "BeatNb":

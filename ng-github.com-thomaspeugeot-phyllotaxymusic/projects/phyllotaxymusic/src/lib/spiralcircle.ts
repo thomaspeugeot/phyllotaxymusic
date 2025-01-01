@@ -24,7 +24,6 @@ export class SpiralCircle {
 	CenterY: number = 0
 	HasBespokeRadius: boolean = false
 	BespopkeRadius: number = 0
-	Pitch: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -33,6 +32,7 @@ export class SpiralCircle {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
+	Pitch: number = 0
 	ShowName: boolean = false
 	BeatNb: number = 0
 	Path: string = ""
@@ -55,7 +55,6 @@ export function CopySpiralCircleToSpiralCircleAPI(spiralcircle: SpiralCircle, sp
 	spiralcircleAPI.CenterY = spiralcircle.CenterY
 	spiralcircleAPI.HasBespokeRadius = spiralcircle.HasBespokeRadius
 	spiralcircleAPI.BespopkeRadius = spiralcircle.BespopkeRadius
-	spiralcircleAPI.Pitch = spiralcircle.Pitch
 	spiralcircleAPI.Color = spiralcircle.Color
 	spiralcircleAPI.FillOpacity = spiralcircle.FillOpacity
 	spiralcircleAPI.Stroke = spiralcircle.Stroke
@@ -64,6 +63,7 @@ export function CopySpiralCircleToSpiralCircleAPI(spiralcircle: SpiralCircle, sp
 	spiralcircleAPI.StrokeDashArray = spiralcircle.StrokeDashArray
 	spiralcircleAPI.StrokeDashArrayWhenSelected = spiralcircle.StrokeDashArrayWhenSelected
 	spiralcircleAPI.Transform = spiralcircle.Transform
+	spiralcircleAPI.Pitch = spiralcircle.Pitch
 	spiralcircleAPI.ShowName = spiralcircle.ShowName
 	spiralcircleAPI.BeatNb = spiralcircle.BeatNb
 	spiralcircleAPI.Path = spiralcircle.Path
@@ -97,7 +97,6 @@ export function CopySpiralCircleAPIToSpiralCircle(spiralcircleAPI: SpiralCircleA
 	spiralcircle.CenterY = spiralcircleAPI.CenterY
 	spiralcircle.HasBespokeRadius = spiralcircleAPI.HasBespokeRadius
 	spiralcircle.BespopkeRadius = spiralcircleAPI.BespopkeRadius
-	spiralcircle.Pitch = spiralcircleAPI.Pitch
 	spiralcircle.Color = spiralcircleAPI.Color
 	spiralcircle.FillOpacity = spiralcircleAPI.FillOpacity
 	spiralcircle.Stroke = spiralcircleAPI.Stroke
@@ -106,6 +105,7 @@ export function CopySpiralCircleAPIToSpiralCircle(spiralcircleAPI: SpiralCircleA
 	spiralcircle.StrokeDashArray = spiralcircleAPI.StrokeDashArray
 	spiralcircle.StrokeDashArrayWhenSelected = spiralcircleAPI.StrokeDashArrayWhenSelected
 	spiralcircle.Transform = spiralcircleAPI.Transform
+	spiralcircle.Pitch = spiralcircleAPI.Pitch
 	spiralcircle.ShowName = spiralcircleAPI.ShowName
 	spiralcircle.BeatNb = spiralcircleAPI.BeatNb
 	spiralcircle.Path = spiralcircleAPI.Path

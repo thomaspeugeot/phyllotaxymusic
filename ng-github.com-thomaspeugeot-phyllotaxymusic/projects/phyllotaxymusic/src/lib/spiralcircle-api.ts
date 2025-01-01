@@ -19,7 +19,6 @@ export class SpiralCircleAPI {
 	CenterY: number = 0
 	HasBespokeRadius: boolean = false
 	BespopkeRadius: number = 0
-	Pitch: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -28,6 +27,7 @@ export class SpiralCircleAPI {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
+	Pitch: number = 0
 	ShowName: boolean = false
 	BeatNb: number = 0
 	Path: string = ""

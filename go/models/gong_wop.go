@@ -135,7 +135,6 @@ type Circle_WOP struct {
 	CenterY float64
 	HasBespokeRadius bool
 	BespopkeRadius float64
-	Pitch int
 	Color string
 	FillOpacity float64
 	Stroke string
@@ -144,6 +143,7 @@ type Circle_WOP struct {
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
 	Transform string
+	Pitch int
 	ShowName bool
 	BeatNb int
 }
@@ -156,7 +156,6 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 	to.CenterY = from.CenterY
 	to.HasBespokeRadius = from.HasBespokeRadius
 	to.BespopkeRadius = from.BespopkeRadius
-	to.Pitch = from.Pitch
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
@@ -165,6 +164,7 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
 	to.Transform = from.Transform
+	to.Pitch = from.Pitch
 	to.ShowName = from.ShowName
 	to.BeatNb = from.BeatNb
 }
@@ -497,7 +497,6 @@ type SpiralCircle_WOP struct {
 	CenterY float64
 	HasBespokeRadius bool
 	BespopkeRadius float64
-	Pitch int
 	Color string
 	FillOpacity float64
 	Stroke string
@@ -506,6 +505,7 @@ type SpiralCircle_WOP struct {
 	StrokeDashArray string
 	StrokeDashArrayWhenSelected string
 	Transform string
+	Pitch int
 	ShowName bool
 	BeatNb int
 	Path string
@@ -519,7 +519,6 @@ func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
 	to.CenterY = from.CenterY
 	to.HasBespokeRadius = from.HasBespokeRadius
 	to.BespopkeRadius = from.BespopkeRadius
-	to.Pitch = from.Pitch
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
@@ -528,6 +527,7 @@ func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
 	to.Transform = from.Transform
+	to.Pitch = from.Pitch
 	to.ShowName = from.ShowName
 	to.BeatNb = from.BeatNb
 	to.Path = from.Path

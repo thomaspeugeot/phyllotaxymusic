@@ -16,9 +16,10 @@ func (p *Parameter) computeThemeNotesShapes(bezierGrid *BezierGrid, g *CircleGri
 	for beatNb := range p.NbOfBeatsInTheme {
 
 		c := new(Circle)
-		c.BeatNb = beatNb
 		*c = *g.Reference
 
+		c.isANote = true
+		c.BeatNb = beatNb
 		c.isKept = p.IsNotePlayed(beatNb)
 
 		g.Circles = append(g.Circles, c)

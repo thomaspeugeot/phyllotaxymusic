@@ -17,13 +17,16 @@ type Circle struct {
 	HasBespokeRadius bool
 	BespopkeRadius   float64
 
+	Presentation
+
+	// following field are used if the Circle is a note
+	isANote bool
+
 	Pitch int
 
 	// effect of the note info on the circle
 	// will influence how it is drawn and played
 	isKept bool
-
-	Presentation
 
 	note *gongtone_models.Note
 
@@ -52,7 +55,12 @@ type CircleUpdaterImpl struct {
 func (circleUpdaterImpl *CircleUpdaterImpl) Updated() {
 
 	circleUpdaterImpl.parameter.ToggleNotePlayed(circleUpdaterImpl.beatNb)
-
+	circleUpdaterImpl.parameter.UpdatePhyllotaxyStage()
+	circleUpdaterImpl.parameter.UpdateAndCommitCursorStage()
+	circleUpdaterImpl.parameter.UpdateAndCommitSVGStage()
+	circleUpdaterImpl.parameter.UpdateAndCommitToneStage()
+	circleUpdaterImpl.parameter.UpdateAndCommitTreeStage()
+	circleUpdaterImpl.parameter.CommitPhyllotaxymusicStage()
 }
 
 // RectUpdated implements models.RectImplInterface.
@@ -69,41 +77,43 @@ func (circle *Circle) Draw(
 	p *Parameter,
 ) {
 
-	svgCircle := new(gongsvg_models.Circle).Stage(gongsvgStage)
-	layer.Circles = append(layer.Circles, svgCircle)
+	// add a reactive gongsvg rect
+	if circle.isANote {
+		svgRect := new(gongsvg_models.Rect).Stage(gongsvgStage)
+		layer.Rects = append(layer.Rects, svgRect)
 
-	svgCircle.CX = p.OriginX + circle.CenterX
-	svgCircle.CY = p.OriginY - circle.CenterY
-	svgCircle.Radius = p.SideLength / 2.0
+		rectWidth := 20.0
 
-	if circle.HasBespokeRadius {
-		svgCircle.Radius = circle.BespopkeRadius
-	}
+		svgRect.X = p.OriginX + circle.CenterX - rectWidth/2.0
+		svgRect.Y = p.OriginY - circle.CenterY - rectWidth/2.0
+		svgRect.Width = rectWidth
+		svgRect.Height = rectWidth
+		svgRect.Name = circle.Name
+		circle.Presentation.CopyTo(&svgRect.Presentation)
 
-	circle.Presentation.CopyTo(&svgCircle.Presentation)
+		if !circle.isKept {
+			svgRect.StrokeWidth /= 2.0
+		} else {
 
-	svgRect := new(gongsvg_models.Rect).Stage(gongsvgStage)
-	layer.Rects = append(layer.Rects, svgRect)
+		}
 
-	rectWidth := 20.0
-
-	svgRect.X = p.OriginX + circle.CenterX - rectWidth/2.0
-	svgRect.Y = p.OriginY - circle.CenterY - rectWidth/2.0
-	svgRect.Width = rectWidth
-	svgRect.Height = rectWidth
-	svgRect.Name = circle.Name
-	circle.Presentation.CopyTo(&svgRect.Presentation)
-
-	if !circle.isKept {
-		svgCircle.StrokeWidth /= 2.0
-		svgRect.StrokeWidth /= 2.0
+		// put the callback
+		svgRect.Impl = circle
+		circle.Impl = NewCircleUpdaterImpl(p, circle.BeatNb)
 	} else {
+		svgCircle := new(gongsvg_models.Circle).Stage(gongsvgStage)
+		layer.Circles = append(layer.Circles, svgCircle)
 
+		svgCircle.CX = p.OriginX + circle.CenterX
+		svgCircle.CY = p.OriginY - circle.CenterY
+		svgCircle.Radius = p.SideLength / 2.0
+
+		if circle.HasBespokeRadius {
+			svgCircle.Radius = circle.BespopkeRadius
+		}
+
+		circle.Presentation.CopyTo(&svgCircle.Presentation)
 	}
-
-	// put the callback
-	svgRect.Impl = circle
-	circle.Impl = NewCircleUpdaterImpl(p, circle.BeatNb)
 
 	if circle.ShowName {
 		svgText := new(gongsvg_models.Text).Stage(gongsvgStage)

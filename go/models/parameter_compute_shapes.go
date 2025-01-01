@@ -160,9 +160,9 @@ func (p *Parameter) UpdatePhyllotaxyStage() {
 		float64(p.FirstVoiceShiftY)*p.SideLength)
 	p.Shapes = append(p.Shapes, p.FirstVoice)
 
-	p.FirstVoiceShiftRigth.Move(p.FirstVoiceShiftRigth.Reference, p.FirstVoice,
+	p.FirstVoiceShiftedRigth.Move(p.FirstVoiceShiftedRigth.Reference, p.FirstVoice,
 		p.RotatedAxis.Length, 0)
-	p.Shapes = append(p.Shapes, p.FirstVoiceShiftRigth)
+	p.Shapes = append(p.Shapes, p.FirstVoiceShiftedRigth)
 
 	p.SecondVoice.Move(p.SecondVoice.Reference, p.FirstVoice,
 		p.NextCircle.CenterX,
@@ -176,15 +176,13 @@ func (p *Parameter) UpdatePhyllotaxyStage() {
 	p.computeThemeNotesShapes(p.FirstVoice, p.FirstVoiceNotes)
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotes)
 
-	p.FirstVoiceNotesShiftedRight.Move(p.FirstVoiceNotes.Reference, p.FirstVoiceNotes,
-		p.RotatedAxis.Length, 0)
+	p.computeThemeNotesShapes(p.FirstVoiceShiftedRigth, p.FirstVoiceNotesShiftedRight)
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotesShiftedRight)
 
 	p.computeThemeNotesShapes(p.SecondVoice, p.SecondVoiceNotes)
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotes)
 
-	p.SecondVoiceNotesShiftedRight.Move(p.SecondVoiceNotesShiftedRight.Reference, p.SecondVoiceNotes,
-		p.RotatedAxis.Length, 0)
+	p.computeThemeNotesShapes(p.SecondVoiceShiftedRight, p.SecondVoiceNotesShiftedRight)
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotesShiftedRight)
 
 }

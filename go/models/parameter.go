@@ -137,10 +137,10 @@ type Parameter struct {
 	NbOfBeatsInTheme     int
 
 	// Composing
-	FirstVoice           *BezierGrid
-	FirstVoiceShiftRigth *BezierGrid
-	FirstVoiceShiftX     float64
-	FirstVoiceShiftY     float64
+	FirstVoice             *BezierGrid
+	FirstVoiceShiftedRigth *BezierGrid
+	FirstVoiceShiftX       float64
+	FirstVoiceShiftY       float64
 
 	SecondVoice             *BezierGrid
 	SecondVoiceShiftedRight *BezierGrid
@@ -302,7 +302,9 @@ func (parameter *Parameter) ToggleNotePlayed(beatNb int) {
 	}
 
 	// Flip the bit at `rank`
+	// log.Println("parameter.ThemeBinaryEncoding, before flip at beat", beatNb, parameter.ThemeBinaryEncoding)
 	parameter.ThemeBinaryEncoding ^= 1 << beatNb
+	// log.Println("parameter.ThemeBinaryEncoding, after flip at beat", beatNb, parameter.ThemeBinaryEncoding)
 }
 
 func (parameter *Parameter) SetGongtreeStage(gongtreeStage *gongtree_models.StageStruct) {
