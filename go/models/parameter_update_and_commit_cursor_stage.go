@@ -41,9 +41,7 @@ func (p *Parameter) UpdateAndCommitCursorStage() {
 		x2+p.OriginX+(themVisualLenght)/float64(p.NbOfBeatsInTheme)
 	p.cursor.DurationSeconds = ((p.cursor.EndX - p.cursor.StartX) / themVisualLenght) * themeDuration
 
-	log.Printf("%+v", p.cursor)
-
-	p.SubstackcursorStage.Commit()
+	p.substackcursorStage.Commit()
 }
 
 // computeStartEnd inspects each displayed CircleGrid and returns two values:

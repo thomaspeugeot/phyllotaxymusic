@@ -18,10 +18,10 @@ func (p *Parameter) UpdatePhyllotaxyStage() {
 	p.ComputeInitialCircle()
 	p.Shapes = append(p.Shapes, p.InitialCircle)
 
-	p.ComputeInitialRhombusGrid(p.PhyllotaxymusicStage)
+	p.ComputeInitialRhombusGrid(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.InitialRhombusGrid)
 
-	p.ComputeInitialCircleGrid(p.PhyllotaxymusicStage)
+	p.ComputeInitialCircleGrid(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.InitialCircleGrid)
 
 	p.ComputeInitialAxis()
@@ -33,10 +33,10 @@ func (p *Parameter) UpdatePhyllotaxyStage() {
 	p.computeRotatedRhombus()
 	p.Shapes = append(p.Shapes, p.RotatedRhombus)
 
-	p.computeRotatedRhombusGrid(p.PhyllotaxymusicStage)
+	p.computeRotatedRhombusGrid(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.RotatedRhombusGrid)
 
-	p.computeRotatedCircleGrid(p.PhyllotaxymusicStage)
+	p.computeRotatedCircleGrid(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.RotatedCircleGrid)
 
 	p.ComputeNextRhombus()
@@ -139,7 +139,7 @@ func (p *Parameter) UpdatePhyllotaxyStage() {
 	p.ComputeSpiralBezierFullGrid()
 	p.Shapes = append(p.Shapes, p.SpiralBezierFullGrid)
 
-	p.ComputeFrontCurveStacks(p.PhyllotaxymusicStage)
+	p.ComputeFrontCurveStacks(p.phyllotaxymusicStage)
 	p.Shapes = append(p.Shapes, p.FrontCurveStack)
 
 	//

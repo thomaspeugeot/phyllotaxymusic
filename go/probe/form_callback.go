@@ -690,6 +690,8 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circle_.Transform), formDiv)
 		case "ShowName":
 			FormDivBasicFieldToField(&(circle_.ShowName), formDiv)
+		case "BeatNb":
+			FormDivBasicFieldToField(&(circle_.BeatNb), formDiv)
 		case "CircleGrid:Circles":
 			// we need to retrieve the field owner before the change
 			var pastCircleGridOwner *models.CircleGrid
@@ -2162,6 +2164,8 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralcircle_.Transform), formDiv)
 		case "ShowName":
 			FormDivBasicFieldToField(&(spiralcircle_.ShowName), formDiv)
+		case "BeatNb":
+			FormDivBasicFieldToField(&(spiralcircle_.BeatNb), formDiv)
 		case "Path":
 			FormDivBasicFieldToField(&(spiralcircle_.Path), formDiv)
 		case "FrontCurveStack:SpiralCircles":

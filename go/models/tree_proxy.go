@@ -95,21 +95,26 @@ func (treeProxy *TreeProxy) UpdateAndCommitTreeStage() {
 
 		treeProxy.Tree.RootNodes = append(treeProxy.Tree.RootNodes, node)
 		for _, s := range shapes {
-			addShapeNode(treeProxy, s, node)
+			addShapeNode(treeProxy, s, node, parameter)
 		}
 	}
 
 	for _, shape := range parameter.Shapes {
 		if shape.GetShapeCategory() == nil {
-			addShapeNode(treeProxy, shape, nil)
+			addShapeNode(treeProxy, shape, nil, parameter)
 		}
 	}
 
 	treeProxy.gongtreeStage.Commit()
 }
 
-func addShapeNode[T ShapeInterface](treeProxy *TreeProxy, shape T, shapeCategoryNode *gongtree_models.Node) {
-	treeProxy.addShapeNode(shape.GetName(), shape, shapeCategoryNode, shape.GetIsDisplayed())
+func addShapeNode(
+	treeProxy *TreeProxy,
+	shape ShapeInterface,
+	shapeCategoryNode *gongtree_models.Node,
+	parameter *Parameter,
+) {
+	treeProxy.addShapeNode(shape.GetName(), shape, shapeCategoryNode, shape.GetIsDisplayed(), parameter)
 }
 
 // addShapeNode is an internal helper method of TreeProxy that creates a GONG Tree node
@@ -121,9 +126,10 @@ func addShapeNode[T ShapeInterface](treeProxy *TreeProxy, shape T, shapeCategory
 //   - isChecked: Whether the node’s checkbox should be initially checked.
 func (treeProxy *TreeProxy) addShapeNode(
 	name string,
-	impl gongtree_models.NodeImplInterface,
+	shape ShapeInterface,
 	shapeCategoryNode *gongtree_models.Node,
-	isChecked bool) {
+	isChecked bool,
+	parameter *Parameter) {
 
 	node := new(gongtree_models.Node).Stage(treeProxy.gongtreeStage)
 	node.Name = name
@@ -134,7 +140,7 @@ func (treeProxy *TreeProxy) addShapeNode(
 	node.HasCheckboxButton = true
 	node.IsChecked = isChecked
 
-	node.Impl = impl
+	shape.SetCallbackOn(node, parameter)
 
 	if shapeCategoryNode != nil {
 		shapeCategoryNode.Children = append(shapeCategoryNode.Children, node)

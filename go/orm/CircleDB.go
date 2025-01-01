@@ -115,6 +115,9 @@ type CircleDB struct {
 	// provide the sql storage for the boolan
 	ShowName_Data sql.NullBool
 
+	// Declation for basic field circleDB.BeatNb
+	BeatNb_Data sql.NullInt64
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	CirclePointersEncoding
@@ -168,6 +171,8 @@ type CircleWOP struct {
 	Transform string `xlsx:"15"`
 
 	ShowName bool `xlsx:"16"`
+
+	BeatNb int `xlsx:"17"`
 	// insertion for WOP pointer fields
 }
 
@@ -190,6 +195,7 @@ var Circle_Fields = []string{
 	"StrokeDashArrayWhenSelected",
 	"Transform",
 	"ShowName",
+	"BeatNb",
 }
 
 type BackRepoCircleStruct struct {
@@ -535,6 +541,9 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle(circle *models.Circle) {
 
 	circleDB.ShowName_Data.Bool = circle.ShowName
 	circleDB.ShowName_Data.Valid = true
+
+	circleDB.BeatNb_Data.Int64 = int64(circle.BeatNb)
+	circleDB.BeatNb_Data.Valid = true
 }
 
 // CopyBasicFieldsFromCircle_WOP
@@ -588,6 +597,9 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircle_WOP(circle *models.Circle_WO
 
 	circleDB.ShowName_Data.Bool = circle.ShowName
 	circleDB.ShowName_Data.Valid = true
+
+	circleDB.BeatNb_Data.Int64 = int64(circle.BeatNb)
+	circleDB.BeatNb_Data.Valid = true
 }
 
 // CopyBasicFieldsFromCircleWOP
@@ -641,6 +653,9 @@ func (circleDB *CircleDB) CopyBasicFieldsFromCircleWOP(circle *CircleWOP) {
 
 	circleDB.ShowName_Data.Bool = circle.ShowName
 	circleDB.ShowName_Data.Valid = true
+
+	circleDB.BeatNb_Data.Int64 = int64(circle.BeatNb)
+	circleDB.BeatNb_Data.Valid = true
 }
 
 // CopyBasicFieldsToCircle
@@ -662,6 +677,7 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle(circle *models.Circle) {
 	circle.StrokeDashArrayWhenSelected = circleDB.StrokeDashArrayWhenSelected_Data.String
 	circle.Transform = circleDB.Transform_Data.String
 	circle.ShowName = circleDB.ShowName_Data.Bool
+	circle.BeatNb = int(circleDB.BeatNb_Data.Int64)
 }
 
 // CopyBasicFieldsToCircle_WOP
@@ -683,6 +699,7 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircle_WOP(circle *models.Circle_WOP)
 	circle.StrokeDashArrayWhenSelected = circleDB.StrokeDashArrayWhenSelected_Data.String
 	circle.Transform = circleDB.Transform_Data.String
 	circle.ShowName = circleDB.ShowName_Data.Bool
+	circle.BeatNb = int(circleDB.BeatNb_Data.Int64)
 }
 
 // CopyBasicFieldsToCircleWOP
@@ -705,6 +722,7 @@ func (circleDB *CircleDB) CopyBasicFieldsToCircleWOP(circle *CircleWOP) {
 	circle.StrokeDashArrayWhenSelected = circleDB.StrokeDashArrayWhenSelected_Data.String
 	circle.Transform = circleDB.Transform_Data.String
 	circle.ShowName = circleDB.ShowName_Data.Bool
+	circle.BeatNb = int(circleDB.BeatNb_Data.Int64)
 }
 
 // Backup generates a json file from a slice of all CircleDB instances in the backrepo

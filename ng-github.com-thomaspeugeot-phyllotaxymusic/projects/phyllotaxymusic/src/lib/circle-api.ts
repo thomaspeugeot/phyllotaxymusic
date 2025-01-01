@@ -29,6 +29,7 @@ export class CircleAPI {
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
 	ShowName: boolean = false
+	BeatNb: number = 0
 
 	// insertion point for other decls
 

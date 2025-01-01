@@ -9,10 +9,8 @@ import (
 	phyllotaxymusic_stack "github.com/thomaspeugeot/phyllotaxymusic/go/stack"
 	phyllotaxymusic_static "github.com/thomaspeugeot/phyllotaxymusic/go/static"
 
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongsvg_stack "github.com/fullstack-lang/gongsvg/go/stack"
 
-	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 	gongtone_stack "github.com/fullstack-lang/gongtone/go/stack"
 
 	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
@@ -62,17 +60,6 @@ func main() {
 		log.Fatal("no Reference parameter on stage")
 	}
 
-	f4 := new(gongtone_models.Freqency).Stage(gongtone_stack.Stage)
-	f4.Name = "F4"
-
-	notef4 := new(gongtone_models.Note).Stage(gongtone_stack.Stage)
-	notef4.Frequencies = append(notef4.Frequencies, f4)
-	notef4.Start = 0
-	notef4.Duration = 1
-	notef4.Velocity = 1
-
-	gongtone_stack.Stage.Commit()
-
 	// parameter is used for coordinating all updates to the
 	// phyllotaxy stage and compute all updates to the all stages
 	parameter.SetGongsvgStage(gongsvg_stack.Stage)
@@ -81,20 +68,6 @@ func main() {
 	parameter.SetSubstackcursorStage(cursorStack.Stage)
 	parameter.SetGongtreeStage(gongtree_stack.Stage)
 	parameter.SetTreeProxy()
-
-	treeProxy := new(phyllotaxymusic_models.TreeProxy)
-	treeProxy.SetGongtreeStage(gongtree_stack.Stage)
-	treeProxy.PhyllotaxyStage = phyllotaxymusic_stack.Stage
-
-	parameterImpl := new(ParameterImpl)
-	parameterImpl.parameter = parameter
-	parameterImpl.gongsvgStage = gongsvg_stack.Stage
-	parameterImpl.gongtoneStage = gongtone_stack.Stage
-	parameterImpl.phyllotaxymusicStage = phyllotaxymusic_stack.Stage
-	parameterImpl.TreeProxy = treeProxy
-	parameterImpl.substackcursorStage = cursorStack.Stage
-
-	phyllotaxymusic_models.GeneratorSingloton.Impl = parameterImpl
 
 	cursor := new(substackcursor_models.Cursor).Stage(cursorStack.Stage)
 	_ = cursor
@@ -108,11 +81,14 @@ func main() {
 
 	// wait loop in cursor. Will commit once it receive a notification.
 	cursor.WaitForPlayNotifications(cursorStack.Stage)
-
-	// generate other stacks
-	parameterImpl.Generate()
-
 	cursorStack.Stage.Commit()
+
+	parameter.UpdatePhyllotaxyStage()
+	parameter.UpdateAndCommitCursorStage()
+	parameter.UpdateAndCommitSVGStage()
+	parameter.UpdateAndCommitToneStage()
+	parameter.UpdateAndCommitTreeStage()
+	parameter.CommitPhyllotaxymusicStage()
 
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
@@ -120,25 +96,4 @@ func main() {
 		log.Fatalln(err.Error())
 	}
 
-}
-
-type ParameterImpl struct {
-	gongsvgStage         *gongsvg_models.StageStruct
-	gongtoneStage        *gongtone_models.StageStruct
-	phyllotaxymusicStage *phyllotaxymusic_models.StageStruct
-	parameter            *phyllotaxymusic_models.Parameter
-	TreeProxy            *phyllotaxymusic_models.TreeProxy
-	substackcursorStage  *substackcursor_models.StageStruct
-}
-
-// Generate implements models.GeneratorInterface.
-func (parameterImpl *ParameterImpl) Generate() {
-	p := parameterImpl.parameter
-
-	p.UpdatePhyllotaxyStage()
-	p.UpdateAndCommitCursorStage()
-	p.UpdateAndCommitSVGStage()
-	p.UpdateAndCommitToneStage()
-	p.TreeProxy.UpdateAndCommitTreeStage()
-	p.PhyllotaxymusicStage.Commit()
 }

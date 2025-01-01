@@ -193,13 +193,13 @@ type Parameter struct {
 
 	cursor *substackcursor_models.Cursor
 
+	phyllotaxymusicStage *StageStruct
 	gongsvgStage         *gongsvg_models.StageStruct
 	gongtoneStage        *gongtone_models.StageStruct
-	PhyllotaxymusicStage *StageStruct
 	gongtreeStage        *gongtree_models.StageStruct
-	SubstackcursorStage  *substackcursor_models.StageStruct
+	substackcursorStage  *substackcursor_models.StageStruct
 
-	TreeProxy *TreeProxy
+	treeProxy *TreeProxy
 }
 
 func (parameter *Parameter) SetNotifyChannel(notifyCh chan bool) {
@@ -211,7 +211,7 @@ func (parameter *Parameter) SetCursor(cursor *substackcursor_models.Cursor) {
 }
 
 func (parameter *Parameter) SetSubstackcursorStage(substackCursorStage *substackcursor_models.StageStruct) {
-	parameter.SubstackcursorStage = substackCursorStage
+	parameter.substackcursorStage = substackCursorStage
 }
 
 func (parameter *Parameter) SetGongsvgStage(gongsvgStage *gongsvg_models.StageStruct) {
@@ -223,20 +223,23 @@ func (parameter *Parameter) SetGongtoneStage(gongtoneStage *gongtone_models.Stag
 }
 
 func (parameter *Parameter) SetPhyllotaxymusicStage(phyllotaxymusicStage *StageStruct) {
-	parameter.PhyllotaxymusicStage = phyllotaxymusicStage
+	parameter.phyllotaxymusicStage = phyllotaxymusicStage
+}
+func (parameter *Parameter) CommitPhyllotaxymusicStage() {
+	parameter.phyllotaxymusicStage.Commit()
 }
 
 func (parameter *Parameter) SetTreeProxy() {
-	if parameter.PhyllotaxymusicStage == nil ||
-		parameter.gongsvgStage == nil {
+	if parameter.phyllotaxymusicStage == nil ||
+		parameter.gongtreeStage == nil {
 		log.Fatalln("SetTreeProxy, stages not set")
 	}
 
 	treeProxy := new(TreeProxy)
 	treeProxy.SetGongtreeStage(parameter.gongtreeStage)
-	treeProxy.PhyllotaxyStage = parameter.PhyllotaxymusicStage
+	treeProxy.PhyllotaxyStage = parameter.phyllotaxymusicStage
 
-	parameter.TreeProxy = treeProxy
+	parameter.treeProxy = treeProxy
 }
 
 func (parameter *Parameter) OnAfterUpdate(phyllotaxyStage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
@@ -259,7 +262,7 @@ func (parameter *Parameter) OnAfterUpdate(phyllotaxyStage *StageStruct, stagedPa
 	parameter.UpdateAndCommitCursorStage()
 	parameter.UpdateAndCommitSVGStage()
 	parameter.UpdateAndCommitToneStage()
-	parameter.TreeProxy.UpdateAndCommitTreeStage()
+	parameter.treeProxy.UpdateAndCommitTreeStage()
 }
 
 type ParameterImplInterface interface {
@@ -304,4 +307,11 @@ func (parameter *Parameter) ToggleNotePlayed(beatNb int) {
 
 func (parameter *Parameter) SetGongtreeStage(gongtreeStage *gongtree_models.StageStruct) {
 	parameter.gongtreeStage = gongtreeStage
+}
+
+func (parameter *Parameter) UpdateAndCommitTreeStage() {
+	if parameter.gongtreeStage == nil || parameter.treeProxy == nil {
+		log.Fatalln("UpdateAndCommitTreeStage, missing fields to parameters")
+	}
+	parameter.treeProxy.UpdateAndCommitTreeStage()
 }

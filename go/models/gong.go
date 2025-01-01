@@ -2559,7 +2559,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Axis:
 		return any(&Axis{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case AxisGrid:
@@ -2569,13 +2569,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Axis{Name: "Reference"},
 			// field is initialized with an instance of Axis with the name of the field
 			Axiss: []*Axis{{Name: "Axiss"}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case Bezier:
 		return any(&Bezier{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case BezierGrid:
@@ -2585,7 +2585,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Bezier{Name: "Reference"},
 			// field is initialized with an instance of Bezier with the name of the field
 			Beziers: []*Bezier{{Name: "Beziers"}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case BezierGridStack:
@@ -2593,13 +2593,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of BezierGrid with the name of the field
 			BezierGrids: []*BezierGrid{{Name: "BezierGrids"}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case Circle:
 		return any(&Circle{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case CircleGrid:
@@ -2609,7 +2609,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Circle{Name: "Reference"},
 			// field is initialized with an instance of Circle with the name of the field
 			Circles: []*Circle{{Name: "Circles"}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case FrontCurve:
@@ -2623,19 +2623,19 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			FrontCurves: []*FrontCurve{{Name: "FrontCurves"}},
 			// field is initialized with an instance of SpiralCircle with the name of the field
 			SpiralCircles: []*SpiralCircle{{Circle: Circle{Name: "SpiralCircles"}}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case HorizontalAxis:
 		return any(&HorizontalAxis{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case Key:
 		return any(&Key{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case Parameter:
@@ -2763,7 +2763,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Rhombus:
 		return any(&Rhombus{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case RhombusGrid:
@@ -2773,7 +2773,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Reference: &Rhombus{Name: "Reference"},
 			// field is initialized with an instance of Rhombus with the name of the field
 			Rhombuses: []*Rhombus{{Name: "Rhombuses"}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case ShapeCategory:
@@ -2783,7 +2783,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case SpiralBezier:
 		return any(&SpiralBezier{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case SpiralBezierGrid:
@@ -2791,13 +2791,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of SpiralBezier with the name of the field
 			SpiralBeziers: []*SpiralBezier{{Name: "SpiralBeziers"}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case SpiralCircle:
 		return any(&SpiralCircle{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case SpiralCircleGrid:
@@ -2807,13 +2807,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			SpiralRhombusGrid: &SpiralRhombusGrid{Name: "SpiralRhombusGrid"},
 			// field is initialized with an instance of SpiralCircle with the name of the field
 			SpiralCircles: []*SpiralCircle{{Circle: Circle{Name: "SpiralCircles"}}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case SpiralLine:
 		return any(&SpiralLine{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case SpiralLineGrid:
@@ -2821,19 +2821,19 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of SpiralLine with the name of the field
 			SpiralLines: []*SpiralLine{{Name: "SpiralLines"}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case SpiralOrigin:
 		return any(&SpiralOrigin{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case SpiralRhombus:
 		return any(&SpiralRhombus{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case SpiralRhombusGrid:
@@ -2841,13 +2841,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// Initialisation of associations
 			// field is initialized with an instance of SpiralRhombus with the name of the field
 			SpiralRhombuses: []*SpiralRhombus{{Name: "SpiralRhombuses"}},
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	case VerticalAxis:
 		return any(&VerticalAxis{
 			// Initialisation of associations
-			// field is initialized with AbstractShape problem with composites
+			// field is initialized with Shape problem with composites
 			
 		}).(*Type)
 	default:
@@ -4830,7 +4830,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case BezierGridStack:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "BezierGrids"}
 	case Circle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName", "BeatNb"}
 	case CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
 	case FrontCurve:
@@ -4854,7 +4854,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case SpiralBezierGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralBeziers"}
 	case SpiralCircle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName", "Path"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName", "BeatNb", "Path"}
 	case SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case SpiralLine:
@@ -5017,7 +5017,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *BezierGridStack:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "BezierGrids"}
 	case *Circle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName", "BeatNb"}
 	case *CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
 	case *FrontCurve:
@@ -5041,7 +5041,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *SpiralBezierGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralBeziers"}
 	case *SpiralCircle:
-		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName", "Path"}
+		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Pitch", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "ShowName", "BeatNb", "Path"}
 	case *SpiralCircleGrid:
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "SpiralRhombusGrid", "SpiralCircles"}
 	case *SpiralLine:
@@ -5355,6 +5355,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowName)
 			res.valueBool = inferedInstance.ShowName
 			res.GongFieldValueType = GongFieldValueTypeBool
+		case "BeatNb":
+			res.valueString = fmt.Sprintf("%d", inferedInstance.BeatNb)
+			res.valueInt = inferedInstance.BeatNb
+			res.GongFieldValueType = GongFieldValueTypeInt
 		}
 	case *CircleGrid:
 		switch fieldName {
@@ -6152,6 +6156,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowName)
 			res.valueBool = inferedInstance.ShowName
 			res.GongFieldValueType = GongFieldValueTypeBool
+		case "BeatNb":
+			res.valueString = fmt.Sprintf("%d", inferedInstance.BeatNb)
+			res.valueInt = inferedInstance.BeatNb
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Path":
 			res.valueString = inferedInstance.Path
 		}
@@ -6690,6 +6698,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowName)
 			res.valueBool = inferedInstance.ShowName
 			res.GongFieldValueType = GongFieldValueTypeBool
+		case "BeatNb":
+			res.valueString = fmt.Sprintf("%d", inferedInstance.BeatNb)
+			res.valueInt = inferedInstance.BeatNb
+			res.GongFieldValueType = GongFieldValueTypeInt
 		}
 	case CircleGrid:
 		switch fieldName {
@@ -7487,6 +7499,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowName)
 			res.valueBool = inferedInstance.ShowName
 			res.GongFieldValueType = GongFieldValueTypeBool
+		case "BeatNb":
+			res.valueString = fmt.Sprintf("%d", inferedInstance.BeatNb)
+			res.valueInt = inferedInstance.BeatNb
+			res.GongFieldValueType = GongFieldValueTypeInt
 		case "Path":
 			res.valueString = inferedInstance.Path
 		}

@@ -115,6 +115,9 @@ type SpiralCircleDB struct {
 	// provide the sql storage for the boolan
 	ShowName_Data sql.NullBool
 
+	// Declation for basic field spiralcircleDB.BeatNb
+	BeatNb_Data sql.NullInt64
+
 	// Declation for basic field spiralcircleDB.Path
 	Path_Data sql.NullString
 
@@ -172,7 +175,9 @@ type SpiralCircleWOP struct {
 
 	ShowName bool `xlsx:"16"`
 
-	Path string `xlsx:"17"`
+	BeatNb int `xlsx:"17"`
+
+	Path string `xlsx:"18"`
 	// insertion for WOP pointer fields
 }
 
@@ -195,6 +200,7 @@ var SpiralCircle_Fields = []string{
 	"StrokeDashArrayWhenSelected",
 	"Transform",
 	"ShowName",
+	"BeatNb",
 	"Path",
 }
 
@@ -542,6 +548,9 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsFromSpiralCircle(spiralcirc
 	spiralcircleDB.ShowName_Data.Bool = spiralcircle.ShowName
 	spiralcircleDB.ShowName_Data.Valid = true
 
+	spiralcircleDB.BeatNb_Data.Int64 = int64(spiralcircle.BeatNb)
+	spiralcircleDB.BeatNb_Data.Valid = true
+
 	spiralcircleDB.Path_Data.String = spiralcircle.Path
 	spiralcircleDB.Path_Data.Valid = true
 }
@@ -597,6 +606,9 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsFromSpiralCircle_WOP(spiral
 
 	spiralcircleDB.ShowName_Data.Bool = spiralcircle.ShowName
 	spiralcircleDB.ShowName_Data.Valid = true
+
+	spiralcircleDB.BeatNb_Data.Int64 = int64(spiralcircle.BeatNb)
+	spiralcircleDB.BeatNb_Data.Valid = true
 
 	spiralcircleDB.Path_Data.String = spiralcircle.Path
 	spiralcircleDB.Path_Data.Valid = true
@@ -654,6 +666,9 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsFromSpiralCircleWOP(spiralc
 	spiralcircleDB.ShowName_Data.Bool = spiralcircle.ShowName
 	spiralcircleDB.ShowName_Data.Valid = true
 
+	spiralcircleDB.BeatNb_Data.Int64 = int64(spiralcircle.BeatNb)
+	spiralcircleDB.BeatNb_Data.Valid = true
+
 	spiralcircleDB.Path_Data.String = spiralcircle.Path
 	spiralcircleDB.Path_Data.Valid = true
 }
@@ -677,6 +692,7 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsToSpiralCircle(spiralcircle
 	spiralcircle.StrokeDashArrayWhenSelected = spiralcircleDB.StrokeDashArrayWhenSelected_Data.String
 	spiralcircle.Transform = spiralcircleDB.Transform_Data.String
 	spiralcircle.ShowName = spiralcircleDB.ShowName_Data.Bool
+	spiralcircle.BeatNb = int(spiralcircleDB.BeatNb_Data.Int64)
 	spiralcircle.Path = spiralcircleDB.Path_Data.String
 }
 
@@ -699,6 +715,7 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsToSpiralCircle_WOP(spiralci
 	spiralcircle.StrokeDashArrayWhenSelected = spiralcircleDB.StrokeDashArrayWhenSelected_Data.String
 	spiralcircle.Transform = spiralcircleDB.Transform_Data.String
 	spiralcircle.ShowName = spiralcircleDB.ShowName_Data.Bool
+	spiralcircle.BeatNb = int(spiralcircleDB.BeatNb_Data.Int64)
 	spiralcircle.Path = spiralcircleDB.Path_Data.String
 }
 
@@ -722,6 +739,7 @@ func (spiralcircleDB *SpiralCircleDB) CopyBasicFieldsToSpiralCircleWOP(spiralcir
 	spiralcircle.StrokeDashArrayWhenSelected = spiralcircleDB.StrokeDashArrayWhenSelected_Data.String
 	spiralcircle.Transform = spiralcircleDB.Transform_Data.String
 	spiralcircle.ShowName = spiralcircleDB.ShowName_Data.Bool
+	spiralcircle.BeatNb = int(spiralcircleDB.BeatNb_Data.Int64)
 	spiralcircle.Path = spiralcircleDB.Path_Data.String
 }
 
