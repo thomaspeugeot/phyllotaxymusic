@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
 
@@ -38,8 +36,7 @@ func (p *Parameter) UpdateAndCommitToneStage() {
 
 		// notify the cursor
 		value := player.Status == gongtone_models.PLAYING
-		log.Println("put the value into the channel", value)
-		p.notifyCh <- value
+		p.cursor.PlayCursor(p.substackcursorStage, value)
 		return nil
 	}
 

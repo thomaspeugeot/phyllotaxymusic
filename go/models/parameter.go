@@ -189,8 +189,6 @@ type Parameter struct {
 	ActualBeatsTemporalShift int
 
 	// not persisted fields
-	notifyCh chan bool
-
 	cursor *substackcursor_models.Cursor
 
 	phyllotaxymusicStage *StageStruct
@@ -200,10 +198,6 @@ type Parameter struct {
 	substackcursorStage  *substackcursor_models.StageStruct
 
 	treeProxy *TreeProxy
-}
-
-func (parameter *Parameter) SetNotifyChannel(notifyCh chan bool) {
-	parameter.notifyCh = notifyCh
 }
 
 func (parameter *Parameter) SetCursor(cursor *substackcursor_models.Cursor) {
