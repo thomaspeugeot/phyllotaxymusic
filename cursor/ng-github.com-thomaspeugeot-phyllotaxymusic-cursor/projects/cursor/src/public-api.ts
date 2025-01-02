@@ -1,9 +1,9 @@
 // generated from ng_file_public_api_ts.go
 /*
-* Public API Surface of substackcursor
+* Public API Surface of cursor
 */
 
-export * from './lib/substackcursor.module'
+export * from './lib/cursor.module'
 
 export * from './lib/front-repo.service'
 export * from './lib/null-int64'

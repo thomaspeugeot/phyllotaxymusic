@@ -2,7 +2,7 @@
 package dbgorm
 
 import (
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/db"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"

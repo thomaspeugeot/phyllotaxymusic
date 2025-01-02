@@ -1,4 +1,4 @@
-package substackcursor
+package cursor
 
 import "embed"
 

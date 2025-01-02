@@ -1,8 +1,8 @@
 # -depth ensures that find processes a directory's contents before the directory itself
 # This helps avoid issues when renaming directories that are still being traversed.
-find . -depth -name '*substackcursor*' | while IFS= read -r old_path; do
+find . -depth -name '*cursor*' | while IFS= read -r old_path; do
   # Generate the new path by replacing the substring
-  new_path="${old_path//substackcursor/cursor}"
+  new_path="${old_path//cursor/cursor}"
 
   echo "Renaming:"
   echo "  $old_path"

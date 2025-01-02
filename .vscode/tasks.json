@@ -221,10 +221,10 @@
 			"command": "GOOS=js GOARCH=wasm go build -o wasmworkbench.wasm"
 		},
 		{
-			"label": "01 - gongc substackcursor -skipGoModCommands -skipNpmInstall",
+			"label": "01 - gongc cursor -skipGoModCommands -skipNpmInstall",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/substackcursor/go/models"
+				"cwd": "${workspaceFolder}/cursor/go/models"
 			},
 			"command": "gongc",
 			"group": "build",
@@ -234,10 +234,10 @@
 			]
 		},
 		{
-			"label": "02 - run substackcursor -unmarshallFromCode=stage.go -marshallOnCommit=stage",
+			"label": "02 - run cursor -unmarshallFromCode=stage.go -marshallOnCommit=stage",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/substackcursor/go/cmd/substackcursor"
+				"cwd": "${workspaceFolder}/cursor/go/cmd/cursor"
 			},
 			"command": "go",
 			"args": [

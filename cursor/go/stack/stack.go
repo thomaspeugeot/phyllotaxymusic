@@ -6,12 +6,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/fullstack"
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm"
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/probe"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/fullstack"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/probe"
 
-	substackcursor_go "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go"
+	cursor_go "github.com/thomaspeugeot/phyllotaxymusic/cursor/go"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +29,7 @@ func (impl *BeforeCommitImplementation) BeforeCommit(stage *models.StageStruct) 
 	defer file.Close()
 
 	stage.Checkout()
-	stage.Marshall(file, "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models", "main")
+	stage.Marshall(file, "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models", "main")
 }
 
 type Stack struct {
@@ -122,7 +122,7 @@ func NewStack(
 	}
 
 	if withProbe {
-		stack.Probe = probe.NewProbe(r, substackcursor_go.GoModelsDir, substackcursor_go.GoDiagramsDir,
+		stack.Probe = probe.NewProbe(r, cursor_go.GoModelsDir, cursor_go.GoDiagramsDir,
 			embeddedDiagrams, stackPath, stage, backRepo)
 	}
 

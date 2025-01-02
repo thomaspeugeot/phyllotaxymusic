@@ -10,7 +10,7 @@ import (
 	form "github.com/fullstack-lang/gongtable/go/models"
 	gongtable_models "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 )
 
 // AssociationSliceToForm add a form div with 2 buttons

@@ -16,7 +16,7 @@ import { AngularSplitModule } from 'angular-split';
 import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
 import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
 import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtonespecific/src/lib/gongtone/gongtone.component'
-import { SubstackcursorspecificComponent } from '../../../../../substackcursor/ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor/projects/substackcursorspecific/src/public-api'
+import { CursorspecificComponent } from '../../../../../cursor/ng-github.com-thomaspeugeot-phyllotaxymusic-cursor/projects/cursorspecific/src/public-api'
 
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
@@ -38,7 +38,7 @@ import { Observable } from 'rxjs';
     GongsvgDiagrammingComponent,
     TreeComponent,
     GongtoneComponent,
-    SubstackcursorspecificComponent
+    CursorspecificComponent
   ],
   templateUrl: './phyllotaxymusicspecific.component.html',
   styleUrls: ['./phyllotaxymusicspecific.component.css'],

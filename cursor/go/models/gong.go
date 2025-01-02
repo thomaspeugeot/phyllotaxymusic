@@ -81,7 +81,7 @@ type StageStruct struct {
 }
 
 func (stage *StageStruct) GetType() string {
-	return "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	return "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 }
 
 type GONG__Identifier struct {

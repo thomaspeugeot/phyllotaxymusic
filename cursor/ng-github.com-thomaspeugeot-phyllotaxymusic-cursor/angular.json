@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "newProjectRoot": "projects",
   "projects": {
-    "ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor": {
+    "ng-github.com-thomaspeugeot-phyllotaxymusic-cursor": {
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -36,7 +36,7 @@
             ],
             "browser": "src/main.ts",
             "index": "src/index.html",
-            "outputPath": "dist/ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor",
+            "outputPath": "dist/ng-github.com-thomaspeugeot-phyllotaxymusic-cursor",
             "polyfills": [
               "zone.js"
             ],
@@ -51,17 +51,17 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor:build"
+            "buildTarget": "ng-github.com-thomaspeugeot-phyllotaxymusic-cursor:build"
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "development": {
-              "buildTarget": "ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor:build:development"
+              "buildTarget": "ng-github.com-thomaspeugeot-phyllotaxymusic-cursor:build:development"
             },
             "production": {
-              "buildTarget": "ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor:build:production"
+              "buildTarget": "ng-github.com-thomaspeugeot-phyllotaxymusic-cursor:build:production"
             }
           },
           "defaultConfiguration": "development"
@@ -100,23 +100,23 @@
       },
       "sourceRoot": "src"
     },
-    "substackcursor": {
+    "cursor": {
       "projectType": "library",
-      "root": "projects/substackcursor",
-      "sourceRoot": "projects/substackcursor/src",
+      "root": "projects/cursor",
+      "sourceRoot": "projects/cursor/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/substackcursor/ng-package.json"
+            "project": "projects/cursor/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/substackcursor/tsconfig.lib.prod.json"
+              "tsConfig": "projects/cursor/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/substackcursor/tsconfig.lib.json"
+              "tsConfig": "projects/cursor/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -124,7 +124,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "projects/substackcursor/tsconfig.spec.json",
+            "tsConfig": "projects/cursor/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"
@@ -133,23 +133,23 @@
         }
       }
     },
-    "substackcursorspecific": {
+    "cursorspecific": {
       "projectType": "library",
-      "root": "projects/substackcursorspecific",
-      "sourceRoot": "projects/substackcursorspecific/src",
+      "root": "projects/cursorspecific",
+      "sourceRoot": "projects/cursorspecific/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/substackcursorspecific/ng-package.json"
+            "project": "projects/cursorspecific/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/substackcursorspecific/tsconfig.lib.prod.json"
+              "tsConfig": "projects/cursorspecific/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/substackcursorspecific/tsconfig.lib.json"
+              "tsConfig": "projects/cursorspecific/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -157,7 +157,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "projects/substackcursorspecific/tsconfig.spec.json",
+            "tsConfig": "projects/cursorspecific/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"

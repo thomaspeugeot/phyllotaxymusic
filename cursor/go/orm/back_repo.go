@@ -11,11 +11,11 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/db"
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 
 	/* THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm/dbgorm"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/orm/dbgorm"
 	THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm */
 
 	"github.com/tealeg/xlsx/v3"
@@ -46,7 +46,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 	db = NewDBLite()
 
 	/* THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm
-	db = dbgorm.NewDBWrapper(filename, "github_com_thomaspeugeot_phyllotaxymusic_substackcursor_go",
+	db = dbgorm.NewDBWrapper(filename, "github_com_thomaspeugeot_phyllotaxymusic_cursor_go",
 		&CursorDB{},
 	)
 	THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm */

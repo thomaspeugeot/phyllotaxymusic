@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/orm"
 
 	"github.com/gin-gonic/gin"
 )
@@ -66,7 +66,7 @@ func (controller *Controller) GetCursors(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 
@@ -129,7 +129,7 @@ func (controller *Controller) PostCursor(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 
@@ -199,7 +199,7 @@ func (controller *Controller) GetCursor(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 
@@ -248,7 +248,7 @@ func (controller *Controller) UpdateCursor(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 
@@ -338,7 +338,7 @@ func (controller *Controller) DeleteCursor(c *gin.Context) {
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models, Unkown stack", stackPath)
+		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 

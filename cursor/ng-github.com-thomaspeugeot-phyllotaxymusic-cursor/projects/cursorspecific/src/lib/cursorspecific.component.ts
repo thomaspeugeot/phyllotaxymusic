@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import * as substackcursor from '../../../substackcursor/src/public-api'
+import * as cursor from '../../../cursor/src/public-api'
 
 @Component({
-  selector: 'lib-substackcursorspecific',
+  selector: 'lib-cursorspecific',
   standalone: true,
   imports: [],
   template: `
@@ -31,27 +31,27 @@ import * as substackcursor from '../../../substackcursor/src/public-api'
   `,
   styles: ``
 })
-export class SubstackcursorspecificComponent implements OnInit {
+export class CursorspecificComponent implements OnInit {
   x = 0;
   xe = 500
   private animationFrameId: number | null = null;  // Store animation frame ID
 
-  StacksNames = substackcursor.StacksNames;
-  public frontRepo?: substackcursor.FrontRepo;
-  public cursor: substackcursor.Cursor | undefined
+  StacksNames = cursor.StacksNames;
+  public frontRepo?: cursor.FrontRepo;
+  public cursor: cursor.Cursor | undefined
 
   constructor(
-    private frontRepoService: substackcursor.FrontRepoService,
+    private frontRepoService: cursor.FrontRepoService,
   ) { }
 
   ngOnInit(): void {
     console.log("ngOnInit");
 
-    this.frontRepoService.connectToWebSocket(this.StacksNames.Substackcursor).subscribe({
+    this.frontRepoService.connectToWebSocket(this.StacksNames.Cursor).subscribe({
       next: (gongtablesFrontRepo) => {
         this.frontRepo = gongtablesFrontRepo;
 
-        let cursors = this.frontRepo.getFrontArray<substackcursor.Cursor>(substackcursor.Cursor.GONGSTRUCT_NAME);
+        let cursors = this.frontRepo.getFrontArray<cursor.Cursor>(cursor.Cursor.GONGSTRUCT_NAME);
 
         console.assert(cursors.length == 1);
         this.cursor = cursors[0];

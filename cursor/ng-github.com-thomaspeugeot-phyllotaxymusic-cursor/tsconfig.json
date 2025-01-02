@@ -23,11 +23,11 @@
         "../vendor/*",
         "../../vendor/*",
       ],
-      "substackcursor": [
-        "./dist/substackcursor"
+      "cursor": [
+        "./dist/cursor"
       ],
-      "substackcursorspecific": [
-        "./dist/substackcursorspecific"
+      "cursorspecific": [
+        "./dist/cursorspecific"
       ]
     },
     "useDefineForClassFields": false,

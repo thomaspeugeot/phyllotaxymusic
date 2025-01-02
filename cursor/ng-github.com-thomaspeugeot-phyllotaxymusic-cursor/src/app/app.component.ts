@@ -11,9 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { AngularSplitModule } from 'angular-split';
 
-import * as substackcursor from '../../projects/substackcursor/src/public-api'
+import * as cursor from '../../projects/cursor/src/public-api'
 
-import { SubstackcursorspecificComponent } from '../../projects/substackcursorspecific/src/public-api'
+import { CursorspecificComponent } from '../../projects/cursorspecific/src/public-api'
 
 import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
 import { MaterialTableComponent } from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtablespecific/src/lib/material-table/material-table.component';
@@ -42,7 +42,7 @@ import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/ful
     MaterialFormComponent,
     PanelComponent,
 
-    SubstackcursorspecificComponent
+    CursorspecificComponent
 
   ],
 
@@ -50,19 +50,19 @@ import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/ful
 })
 export class AppComponent implements OnInit {
 
-  substackcursor = 'Substackcursor'
-  probe = 'Substackcursor Data/Model'
-  view = this.substackcursor
+  cursor = 'Cursor'
+  probe = 'Cursor Data/Model'
+  view = this.cursor
 
-  views: string[] = [this.substackcursor, this.probe];
+  views: string[] = [this.cursor, this.probe];
 
   scrollStyle = {
     'overflow- x': 'auto',
     'width': '100%',  // Ensure the div takes the full width of its parent container
   }
 
-  StackName = "substackcursor"
-  StackType = substackcursor.StackType
+  StackName = "cursor"
+  StackType = cursor.StackType
 
   TableExtraPathEnum = gongtable.TableExtraPathEnum
 

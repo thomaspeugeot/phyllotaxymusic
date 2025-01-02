@@ -7,7 +7,7 @@ import (
 
 	form "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 )
 
 func BasicFieldtoForm[T models.PointerToGongstruct, TF models.GongtructBasicField](

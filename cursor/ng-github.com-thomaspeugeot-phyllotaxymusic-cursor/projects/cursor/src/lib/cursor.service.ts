@@ -41,7 +41,7 @@ export class CursorService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.cursorsUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/v1/cursors';
+    this.cursorsUrl = origin + '/api/github.com/thomaspeugeot/phyllotaxymusic/cursor/go/v1/cursors';
   }
 
   /** GET cursors from the server */

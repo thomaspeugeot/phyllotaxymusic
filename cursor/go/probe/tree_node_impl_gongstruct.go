@@ -7,7 +7,7 @@ import (
 	gong_models "github.com/fullstack-lang/gong/go/models"
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 )
 
 type TreeNodeImplGongstruct struct {

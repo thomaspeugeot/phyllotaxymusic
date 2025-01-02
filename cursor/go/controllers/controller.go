@@ -4,7 +4,7 @@ package controllers
 import (
 	"sync"
 
-	substackcursor_orm "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm"
+	cursor_orm "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/orm"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +15,7 @@ import (
 type Controller struct {
 
 	// Map_BackRepos is the map to the backRepo instance according to the stack instance path
-	Map_BackRepos map[string]*substackcursor_orm.BackRepoStruct
+	Map_BackRepos map[string]*cursor_orm.BackRepoStruct
 
 	listenerIndex int // Counter to track the number of listeners
 }
@@ -34,12 +34,12 @@ var doControllerInitOnce sync.Once
 func GetController() *Controller {
 	doControllerInitOnce.Do(func() {
 		_controllerSingloton = &Controller{
-			Map_BackRepos: make(map[string]*substackcursor_orm.BackRepoStruct),
+			Map_BackRepos: make(map[string]*cursor_orm.BackRepoStruct),
 		}
 	})
 	return _controllerSingloton
 }
 
-func (controller *Controller) AddBackRepo(backRepo *substackcursor_orm.BackRepoStruct, stackPath string) {
+func (controller *Controller) AddBackRepo(backRepo *cursor_orm.BackRepoStruct, stackPath string) {
 	GetController().Map_BackRepos[stackPath] = backRepo
 }

@@ -15,8 +15,8 @@ import (
 
 	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
 
-	substackcursor_models "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
-	substackcursor_stack "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/stack"
+	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
+	cursor_stack "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/stack"
 )
 
 var (
@@ -51,7 +51,7 @@ func main() {
 	gongsvg_stack := gongsvg_stack.NewStack(r, phyllotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
 	gongtree_stack := gongtree_stack.NewStack(r, phyllotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
 	gongtone_stack := gongtone_stack.NewStack(r, phyllotaxymusic_models.GongtoneStackName.ToString(), "", "", "", true, true)
-	cursorStack := substackcursor_stack.NewStack(r, substackcursor_models.Substackcursor.ToString(), "", "", "", false, false)
+	cursorStack := cursor_stack.NewStack(r, cursor_models.Cursor.ToString(), "", "", "", false, false)
 
 	// get the only diagram
 	parameters := phyllotaxymusic_models.GetGongstructInstancesMap[phyllotaxymusic_models.Parameter](phyllotaxymusic_stack.Stage)
@@ -65,12 +65,12 @@ func main() {
 	parameter.SetGongsvgStage(gongsvg_stack.Stage)
 	parameter.SetPhyllotaxymusicStage(phyllotaxymusic_stack.Stage)
 	parameter.SetGongtoneStage(gongtone_stack.Stage)
-	parameter.SetSubstackcursorStage(cursorStack.Stage)
+	parameter.SetCursorStage(cursorStack.Stage)
 	parameter.SetGongtreeStage(gongtree_stack.Stage)
 	parameter.SetTreeProxy()
 
 	// connect parameter to cursor for start playing notification
-	cursor := new(substackcursor_models.Cursor).Stage(cursorStack.Stage)
+	cursor := new(cursor_models.Cursor).Stage(cursorStack.Stage)
 	cursorStack.Stage.Commit()
 	parameter.SetCursor(cursor)
 

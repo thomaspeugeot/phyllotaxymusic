@@ -3,5 +3,5 @@ package models
 type StacksNames string
 
 const (
-	Substackcursor StacksNames = "substackcursor"
+	Cursor StacksNames = "cursor"
 )

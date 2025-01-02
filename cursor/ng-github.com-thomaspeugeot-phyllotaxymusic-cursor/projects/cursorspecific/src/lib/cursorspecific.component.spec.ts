@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubstackcursorspecificComponent } from './substackcursorspecific.component';
+import { CursorspecificComponent } from './cursorspecific.component';
 
-describe('SubstackcursorspecificComponent', () => {
-  let component: SubstackcursorspecificComponent;
-  let fixture: ComponentFixture<SubstackcursorspecificComponent>;
+describe('CursorspecificComponent', () => {
+  let component: CursorspecificComponent;
+  let fixture: ComponentFixture<CursorspecificComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubstackcursorspecificComponent]
+      imports: [CursorspecificComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(SubstackcursorspecificComponent);
+    fixture = TestBed.createComponent(CursorspecificComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

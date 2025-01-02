@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/db"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/db"
 )
 
 // Ensure DBLite implements DBInterface
@@ -37,7 +37,7 @@ func NewDBLite() *DBLite {
 // Create inserts a new record into the database
 func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 	if instanceDB == nil {
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, instanceDB cannot be nil")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, instanceDB cannot be nil")
 	}
 
 	db.mu.Lock()
@@ -50,7 +50,7 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		v.ID = db.nextIDCursorDB
 		db.cursorDBs[v.ID] = v
 	default:
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, unsupported type in Create")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, unsupported type in Create")
 	}
 	return db, nil
 }
@@ -69,7 +69,7 @@ func (db *DBLite) Model(instanceDB any) (db.DBInterface, error) {
 // Delete removes a record from the database
 func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 	if instanceDB == nil {
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, instanceDB cannot be nil")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, instanceDB cannot be nil")
 	}
 
 	db.mu.Lock()
@@ -80,7 +80,7 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 	case *CursorDB:
 		delete(db.cursorDBs, v.ID)
 	default:
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, unsupported type in Delete")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, unsupported type in Delete")
 	}
 	return db, nil
 }
@@ -89,7 +89,7 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 
 	if instanceDB == nil {
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, instanceDB cannot be nil")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, instanceDB cannot be nil")
 	}
 
 	db.mu.Lock()
@@ -101,14 +101,14 @@ func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 		db.cursorDBs[v.ID] = v
 		return db, nil
 	default:
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, Save: unsupported type")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Save: unsupported type")
 	}
 }
 
 // Updates modifies an existing record in the database
 func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 	if instanceDB == nil {
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, instanceDB cannot be nil")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, instanceDB cannot be nil")
 	}
 
 	db.mu.Lock()
@@ -120,10 +120,10 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 		if existing, ok := db.cursorDBs[v.ID]; ok {
 			*existing = *v
 		} else {
-			return nil, errors.New("db Cursor github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, record not found")
+			return nil, errors.New("db Cursor github.com/thomaspeugeot/phyllotaxymusic/cursor/go, record not found")
 		}
 	default:
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, unsupported type in Updates")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, unsupported type in Updates")
 	}
 	return db, nil
 }
@@ -143,14 +143,14 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 		}
 		return db, nil
 	default:
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, Find: unsupported type")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Find: unsupported type")
 	}
 }
 
 // First retrieves the first record of a type from the database
 func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 	if len(conds) != 1 {
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, Do not process when conds is not a single parameter")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Do not process when conds is not a single parameter")
 	}
 
 	var i uint64
@@ -160,14 +160,14 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 	case string:
 		i, err = strconv.ParseUint(cond, 10, 32) // Base 10, 32-bit unsigned int
 		if err != nil {
-			return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, conds[0] is not a string number")
+			return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, conds[0] is not a string number")
 		}
 	case uint64:
 		i = cond
 	case uint:
 		i = uint64(cond)
 	default:
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, conds[0] is not a string or uint64")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, conds[0] is not a string or uint64")
 	}
 
 	db.mu.RLock()
@@ -186,7 +186,7 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 		*cursorDB = *tmp
 		
 	default:
-		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go, Unkown type")
+		return nil, errors.New("github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown type")
 	}
 	
 	return db, nil

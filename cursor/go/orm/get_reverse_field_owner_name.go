@@ -2,7 +2,7 @@
 package orm
 
 import (
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 )
 
 func GetReverseFieldOwnerName[T models.Gongstruct](

@@ -6,7 +6,7 @@ import (
 
 	gongtable "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 )
 
 func NewCellDeleteIconImpl[T models.Gongstruct](

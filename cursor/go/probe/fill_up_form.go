@@ -4,8 +4,8 @@ package probe
 import (
 	form "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/orm"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/orm"
 )
 
 var __dummy_orm_fillup_form = orm.BackRepoStruct{}

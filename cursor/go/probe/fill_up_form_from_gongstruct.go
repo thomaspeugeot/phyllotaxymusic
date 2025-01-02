@@ -4,7 +4,7 @@ package probe
 import (
 	gongtable "github.com/fullstack-lang/gongtable/go/models"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 )
 
 func FillUpFormFromGongstruct[T models.Gongstruct](instance *T, probe *Probe) {

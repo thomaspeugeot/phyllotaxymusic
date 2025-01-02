@@ -1,4 +1,4 @@
 /*
- * Public API Surface of substackcursorspecific
+ * Public API Surface of cursorspecific
  */
-export * from './lib/substackcursorspecific.component';
+export * from './lib/cursorspecific.component';

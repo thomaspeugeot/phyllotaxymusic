@@ -1,9 +1,9 @@
-// Package substackcursor substackcursor backend API
+// Package cursor cursor backend API
 //
-// substackcursor exposes types of a package.
+// cursor exposes types of a package.
 //
 //	Schemes: http
-//	BasePath: /api/github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/v1
+//	BasePath: /api/github.com/thomaspeugeot/phyllotaxymusic/cursor/go/v1
 //	Version: 0.1
 //	Host: localhost:8080
 //
@@ -22,4 +22,4 @@
 //	type: basic
 //
 // swagger:meta
-package substackcursor
+package cursor

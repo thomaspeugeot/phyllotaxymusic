@@ -1,5 +1,5 @@
 node_modules
 
-go/cmd/substackcursor/substackcursor
-go/cmd/substackcursor/substackcursor.exe
-go/cmd/substackcursor/__debug_bin*
+go/cmd/cursor/cursor
+go/cmd/cursor/cursor.exe
+go/cmd/cursor/__debug_bin*

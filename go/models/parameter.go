@@ -3,7 +3,7 @@ package models
 import (
 	"log"
 
-	substackcursor_models "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
@@ -189,23 +189,23 @@ type Parameter struct {
 	ActualBeatsTemporalShift int
 
 	// not persisted fields
-	cursor *substackcursor_models.Cursor
+	cursor *cursor_models.Cursor
 
 	phyllotaxymusicStage *StageStruct
 	gongsvgStage         *gongsvg_models.StageStruct
 	gongtoneStage        *gongtone_models.StageStruct
 	gongtreeStage        *gongtree_models.StageStruct
-	substackcursorStage  *substackcursor_models.StageStruct
+	cursorStage  *cursor_models.StageStruct
 
 	treeProxy *TreeProxy
 }
 
-func (parameter *Parameter) SetCursor(cursor *substackcursor_models.Cursor) {
+func (parameter *Parameter) SetCursor(cursor *cursor_models.Cursor) {
 	parameter.cursor = cursor
 }
 
-func (parameter *Parameter) SetSubstackcursorStage(substackCursorStage *substackcursor_models.StageStruct) {
-	parameter.substackcursorStage = substackCursorStage
+func (parameter *Parameter) SetCursorStage(cursorStage *cursor_models.StageStruct) {
+	parameter.cursorStage = cursorStage
 }
 
 func (parameter *Parameter) SetGongsvgStage(gongsvgStage *gongsvg_models.StageStruct) {

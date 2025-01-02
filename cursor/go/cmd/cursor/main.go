@@ -5,8 +5,8 @@ import (
 	"log"
 	"strconv"
 
-	substackcursor_stack "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/stack"
-	substackcursor_static "github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/static"
+	cursor_stack "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/stack"
+	cursor_static "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/static"
 )
 
 var (
@@ -23,17 +23,17 @@ var (
 
 func main() {
 
-	log.SetPrefix("substackcursor: ")
+	log.SetPrefix("cursor: ")
 	log.SetFlags(0)
 
 	// parse program arguments
 	flag.Parse()
 
 	// setup the static file server and get the controller
-	r := substackcursor_static.ServeStaticFiles(*logGINFlag)
+	r := cursor_static.ServeStaticFiles(*logGINFlag)
 
 	// setup stack
-	stack := substackcursor_stack.NewStack(r, "substackcursor", *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+	stack := cursor_stack.NewStack(r, "cursor", *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
 	stack.Probe.Refresh()
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))

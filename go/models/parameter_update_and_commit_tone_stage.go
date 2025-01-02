@@ -38,7 +38,7 @@ func (p *Parameter) UpdateAndCommitToneStage() {
 
 		// notify the cursor
 		value := player.Status == gongtone_models.PLAYING
-		p.cursor.PlayCursor(p.substackcursorStage, value)
+		p.cursor.PlayCursor(p.cursorStage, value)
 		return nil
 	}
 

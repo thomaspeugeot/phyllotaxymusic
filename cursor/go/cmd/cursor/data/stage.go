@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/thomaspeugeot/phyllotaxymusic/substackcursor/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 
 	// injection point for ident package import declaration{{ImportPackageDeclaration}}
 )

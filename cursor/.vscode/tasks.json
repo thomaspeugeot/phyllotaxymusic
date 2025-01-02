@@ -2,10 +2,10 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "02 - run substackcursor -unmarshallFromCode=stage.go -marshallOnCommit=stage",
+			"label": "02 - run cursor -unmarshallFromCode=stage.go -marshallOnCommit=stage",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/go/cmd/substackcursor"
+				"cwd": "${workspaceFolder}/go/cmd/cursor"
 			},
 			"command": "go",
 			"args": [
@@ -18,10 +18,10 @@
 			"group": "build"
 		},
 		{
-			"label": "02 - run substackcursor w/o diagrams",
+			"label": "02 - run cursor w/o diagrams",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/go/cmd/substackcursor"
+				"cwd": "${workspaceFolder}/go/cmd/cursor"
 			},
 			"command": "go",
 			"args": [
@@ -42,19 +42,19 @@
 		{
 			"label": "03 - ng build",
 			"type": "shell",
-			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor; ng build",
+			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic-cursor; ng build",
 			"group": "build",
 			"problemMatcher": []
 		},
 		{
 			"label": "04 - ng serve --host=127.0.0.1",
 			"type": "shell",
-			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic-substackcursor; ng serve --host=127.0.0.1",
+			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic-cursor; ng serve --host=127.0.0.1",
 			"group": "build",
 			"problemMatcher": []
 		},
 		{
-			"label": "01 - gongc substackcursor",
+			"label": "01 - gongc cursor",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -64,7 +64,7 @@
 			"args": []
 		},
 		{
-			"label": "01 - gongc substackcursor -skipNg",
+			"label": "01 - gongc cursor -skipNg",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -76,7 +76,7 @@
 			]
 		},
 		{
-			"label": "01 - gongc substackcursor -skipGoModCommands",
+			"label": "01 - gongc cursor -skipGoModCommands",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -88,7 +88,7 @@
 			]
 		},
 		{
-			"label": "01 - gongc substackcursor -skipNg -skipGoModCommands",
+			"label": "01 - gongc cursor -skipNg -skipGoModCommands",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -138,7 +138,7 @@
 			"label": "00 - go build",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}/go/cmd/substackcursor"
+				"cwd": "${workspaceFolder}/go/cmd/cursor"
 			},
 			"command": "go",
 			"args": [
