@@ -1324,10 +1324,10 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.M), formDiv)
 		case "Z":
 			FormDivBasicFieldToField(&(parameter_.Z), formDiv)
-		case "ShiftToNearestCircle":
-			FormDivBasicFieldToField(&(parameter_.ShiftToNearestCircle), formDiv)
 		case "InsideAngle":
 			FormDivBasicFieldToField(&(parameter_.InsideAngle), formDiv)
+		case "ShiftToNearestCircle":
+			FormDivBasicFieldToField(&(parameter_.ShiftToNearestCircle), formDiv)
 		case "SideLength":
 			FormDivBasicFieldToField(&(parameter_.SideLength), formDiv)
 		case "InitialRhombus":

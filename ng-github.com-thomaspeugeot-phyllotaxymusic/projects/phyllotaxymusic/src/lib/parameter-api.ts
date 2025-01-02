@@ -41,8 +41,8 @@ export class ParameterAPI {
 	N: number = 0
 	M: number = 0
 	Z: number = 0
-	ShiftToNearestCircle: number = 0
 	InsideAngle: number = 0
+	ShiftToNearestCircle: number = 0
 	SideLength: number = 0
 	StackWidth: number = 0
 	NbShitRight: number = 0

@@ -1,0 +1,5 @@
+node_modules
+
+go/cmd/cursor/cursor
+go/cmd/cursor/cursor.exe
+go/cmd/cursor/__debug_bin*
