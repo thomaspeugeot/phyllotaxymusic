@@ -46,8 +46,8 @@ export class Parameter {
 	N: number = 0
 	M: number = 0
 	Z: number = 0
-	ShiftToNearestCircle: number = 0
 	InsideAngle: number = 0
+	ShiftToNearestCircle: number = 0
 	SideLength: number = 0
 	StackWidth: number = 0
 	NbShitRight: number = 0
@@ -215,8 +215,8 @@ export function CopyParameterToParameterAPI(parameter: Parameter, parameterAPI: 
 	parameterAPI.N = parameter.N
 	parameterAPI.M = parameter.M
 	parameterAPI.Z = parameter.Z
-	parameterAPI.ShiftToNearestCircle = parameter.ShiftToNearestCircle
 	parameterAPI.InsideAngle = parameter.InsideAngle
+	parameterAPI.ShiftToNearestCircle = parameter.ShiftToNearestCircle
 	parameterAPI.SideLength = parameter.SideLength
 	parameterAPI.StackWidth = parameter.StackWidth
 	parameterAPI.NbShitRight = parameter.NbShitRight
@@ -685,8 +685,8 @@ export function CopyParameterAPIToParameter(parameterAPI: ParameterAPI, paramete
 	parameter.N = parameterAPI.N
 	parameter.M = parameterAPI.M
 	parameter.Z = parameterAPI.Z
-	parameter.ShiftToNearestCircle = parameterAPI.ShiftToNearestCircle
 	parameter.InsideAngle = parameterAPI.InsideAngle
+	parameter.ShiftToNearestCircle = parameterAPI.ShiftToNearestCircle
 	parameter.SideLength = parameterAPI.SideLength
 	parameter.StackWidth = parameterAPI.StackWidth
 	parameter.NbShitRight = parameterAPI.NbShitRight

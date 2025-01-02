@@ -317,11 +317,11 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.Z
 	Z_Data sql.NullInt64
 
-	// Declation for basic field parameterDB.ShiftToNearestCircle
-	ShiftToNearestCircle_Data sql.NullInt64
-
 	// Declation for basic field parameterDB.InsideAngle
 	InsideAngle_Data sql.NullFloat64
+
+	// Declation for basic field parameterDB.ShiftToNearestCircle
+	ShiftToNearestCircle_Data sql.NullInt64
 
 	// Declation for basic field parameterDB.SideLength
 	SideLength_Data sql.NullFloat64
@@ -455,9 +455,9 @@ type ParameterWOP struct {
 
 	Z int `xlsx:"7"`
 
-	ShiftToNearestCircle int `xlsx:"8"`
+	InsideAngle float64 `xlsx:"8"`
 
-	InsideAngle float64 `xlsx:"9"`
+	ShiftToNearestCircle int `xlsx:"9"`
 
 	SideLength float64 `xlsx:"10"`
 
@@ -533,8 +533,8 @@ var Parameter_Fields = []string{
 	"N",
 	"M",
 	"Z",
-	"ShiftToNearestCircle",
 	"InsideAngle",
+	"ShiftToNearestCircle",
 	"SideLength",
 	"StackWidth",
 	"NbShitRight",
@@ -2683,11 +2683,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 	parameterDB.Z_Data.Int64 = int64(parameter.Z)
 	parameterDB.Z_Data.Valid = true
 
-	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
-	parameterDB.ShiftToNearestCircle_Data.Valid = true
-
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
+
+	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
+	parameterDB.ShiftToNearestCircle_Data.Valid = true
 
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
@@ -2808,11 +2808,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 	parameterDB.Z_Data.Int64 = int64(parameter.Z)
 	parameterDB.Z_Data.Valid = true
 
-	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
-	parameterDB.ShiftToNearestCircle_Data.Valid = true
-
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
+
+	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
+	parameterDB.ShiftToNearestCircle_Data.Valid = true
 
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
@@ -2933,11 +2933,11 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 	parameterDB.Z_Data.Int64 = int64(parameter.Z)
 	parameterDB.Z_Data.Valid = true
 
-	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
-	parameterDB.ShiftToNearestCircle_Data.Valid = true
-
 	parameterDB.InsideAngle_Data.Float64 = parameter.InsideAngle
 	parameterDB.InsideAngle_Data.Valid = true
+
+	parameterDB.ShiftToNearestCircle_Data.Int64 = int64(parameter.ShiftToNearestCircle)
+	parameterDB.ShiftToNearestCircle_Data.Valid = true
 
 	parameterDB.SideLength_Data.Float64 = parameter.SideLength
 	parameterDB.SideLength_Data.Valid = true
@@ -3043,8 +3043,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Z = int(parameterDB.Z_Data.Int64)
-	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
+	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
@@ -3088,8 +3088,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Z = int(parameterDB.Z_Data.Int64)
-	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
+	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)
@@ -3134,8 +3134,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.N = int(parameterDB.N_Data.Int64)
 	parameter.M = int(parameterDB.M_Data.Int64)
 	parameter.Z = int(parameterDB.Z_Data.Int64)
-	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.InsideAngle = parameterDB.InsideAngle_Data.Float64
+	parameter.ShiftToNearestCircle = int(parameterDB.ShiftToNearestCircle_Data.Int64)
 	parameter.SideLength = parameterDB.SideLength_Data.Float64
 	parameter.StackWidth = int(parameterDB.StackWidth_Data.Int64)
 	parameter.NbShitRight = int(parameterDB.NbShitRight_Data.Int64)

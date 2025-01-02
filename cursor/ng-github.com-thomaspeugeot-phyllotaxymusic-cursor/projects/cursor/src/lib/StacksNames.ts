@@ -1,7 +1,7 @@
 // generated from ng_file_enum.ts.go
 export enum StacksNames {
 	// insertion point	
-	Cursor = "cursor",
+	Cursorstakcname = "cursor",
 }
 
 export interface StacksNamesSelect {
@@ -10,5 +10,5 @@ export interface StacksNamesSelect {
 }
 
 export const StacksNamesList: StacksNamesSelect[] = [ // insertion point	
-	{ value: StacksNames.Cursor, viewValue: "cursor" },
+	{ value: StacksNames.Cursorstakcname, viewValue: "cursor" },
 ];

@@ -10,7 +10,7 @@ func (stacksnames StacksNames) ToString() (res string) {
 	// migration of former implementation of enum
 	switch stacksnames {
 	// insertion code per enum code
-	case Cursor:
+	case Cursorstakcname:
 		res = "cursor"
 	}
 	return
@@ -21,7 +21,7 @@ func (stacksnames *StacksNames) FromString(input string) (err error) {
 	switch input {
 	// insertion code per enum code
 	case "cursor":
-		*stacksnames = Cursor
+		*stacksnames = Cursorstakcname
 		return
 	default:
 		return errUnkownEnum
@@ -32,8 +32,8 @@ func (stacksnames *StacksNames) FromCodeString(input string) (err error) {
 
 	switch input {
 	// insertion code per enum code
-	case "Cursor":
-		*stacksnames = Cursor
+	case "Cursorstakcname":
+		*stacksnames = Cursorstakcname
 	default:
 		return errUnkownEnum
 	}
@@ -44,8 +44,8 @@ func (stacksnames *StacksNames) ToCodeString() (res string) {
 
 	switch *stacksnames {
 	// insertion code per enum code
-	case Cursor:
-		res = "Cursor"
+	case Cursorstakcname:
+		res = "Cursorstakcname"
 	}
 	return
 }
@@ -55,7 +55,7 @@ func (stacksnames StacksNames) Codes() (res []string) {
 	res = make([]string, 0)
 
 	// insertion code per enum code
-	res = append(res, "Cursor")
+	res = append(res, "Cursorstakcname")
 
 	return
 }

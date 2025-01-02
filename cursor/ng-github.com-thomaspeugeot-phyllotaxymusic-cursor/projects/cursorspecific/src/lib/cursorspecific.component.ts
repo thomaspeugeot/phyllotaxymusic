@@ -47,7 +47,7 @@ export class CursorspecificComponent implements OnInit {
   ngOnInit(): void {
     console.log("ngOnInit");
 
-    this.frontRepoService.connectToWebSocket(this.StacksNames.Cursor).subscribe({
+    this.frontRepoService.connectToWebSocket(this.StacksNames.Cursorstakcname).subscribe({
       next: (gongtablesFrontRepo) => {
         this.frontRepo = gongtablesFrontRepo;
 

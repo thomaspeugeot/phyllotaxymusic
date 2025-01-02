@@ -51,7 +51,7 @@ func main() {
 	gongsvg_stack := gongsvg_stack.NewStack(r, phyllotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
 	gongtree_stack := gongtree_stack.NewStack(r, phyllotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
 	gongtone_stack := gongtone_stack.NewStack(r, phyllotaxymusic_models.GongtoneStackName.ToString(), "", "", "", true, true)
-	cursorStack := cursor_stack.NewStack(r, cursor_models.Cursor.ToString(), "", "", "", false, false)
+	cursorStack := cursor_stack.NewStack(r, cursor_models.Cursorstakcname.ToString(), "", "", "", false, false)
 
 	// get the only diagram
 	parameters := phyllotaxymusic_models.GetGongstructInstancesMap[phyllotaxymusic_models.Parameter](phyllotaxymusic_stack.Stage)

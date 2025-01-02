@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 
+	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 	cursor_stack "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/stack"
 	cursor_static "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/static"
 )
@@ -33,7 +34,7 @@ func main() {
 	r := cursor_static.ServeStaticFiles(*logGINFlag)
 
 	// setup stack
-	stack := cursor_stack.NewStack(r, "cursor", *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+	stack := cursor_stack.NewStack(r, cursor_models.Cursorstakcname.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
 	stack.Probe.Refresh()
 
 	log.Printf("Server ready serve on localhost:" + strconv.Itoa(*port))

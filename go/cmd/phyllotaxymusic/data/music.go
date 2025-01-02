@@ -572,8 +572,8 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.N = 3
 	__Parameter__000000_Reference.M = 2
 	__Parameter__000000_Reference.Z = 16
-	__Parameter__000000_Reference.ShiftToNearestCircle = 3
 	__Parameter__000000_Reference.InsideAngle = 112.000000
+	__Parameter__000000_Reference.ShiftToNearestCircle = 3
 	__Parameter__000000_Reference.SideLength = 110.000000
 	__Parameter__000000_Reference.StackWidth = 1
 	__Parameter__000000_Reference.NbShitRight = 2
@@ -595,7 +595,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.BeatsPerSecond = 3.200000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 57409
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 57475
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000
