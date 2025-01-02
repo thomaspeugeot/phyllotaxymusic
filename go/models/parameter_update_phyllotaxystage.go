@@ -173,13 +173,14 @@ func (p *Parameter) UpdatePhyllotaxyStage() {
 		p.RotatedAxis.Length, 0)
 	p.Shapes = append(p.Shapes, p.SecondVoiceShiftedRight)
 
-	p.computeThemeNotesShapes(p.FirstVoice, p.FirstVoiceNotes)
+	nbMeasureToJumpForFirstVoice := p.computeThemeNotesShapes(p.FirstVoice, p.FirstVoiceNotes)
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotes)
 
 	p.computeThemeNotesShapes(p.FirstVoiceShiftedRigth, p.FirstVoiceNotesShiftedRight)
 	p.Shapes = append(p.Shapes, p.FirstVoiceNotesShiftedRight)
 
-	p.computeThemeNotesShapes(p.SecondVoice, p.SecondVoiceNotes)
+	nbMeasureToJumpForSecondVoice := p.computeThemeNotesShapes(p.SecondVoice, p.SecondVoiceNotes)
+	p.ActualBeatsTemporalShift = nbMeasureToJumpForSecondVoice - nbMeasureToJumpForFirstVoice
 	p.Shapes = append(p.Shapes, p.SecondVoiceNotes)
 
 	p.computeThemeNotesShapes(p.SecondVoiceShiftedRight, p.SecondVoiceNotesShiftedRight)

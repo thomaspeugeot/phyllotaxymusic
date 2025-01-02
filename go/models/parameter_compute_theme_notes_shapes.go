@@ -1,28 +1,31 @@
 package models
 
-import "log"
+import (
+	"log"
+	"math"
+)
 
-func (p *Parameter) computeThemeNotesShapes(bezierGrid *BezierGrid, g *CircleGrid) {
+func (p *Parameter) computeThemeNotesShapes(bezierGrid *BezierGrid, circleGrid *CircleGrid) (nbMeasureToJump int) {
 
-	g.Circles = g.Circles[:0]
-
+	circleGrid.Circles = circleGrid.Circles[:0]
 	beatWidth := p.RotatedAxis.Length / float64(p.NbOfBeatsInTheme)
 
 	//
 	// nb of measures to jump before the first bezier
 	//
-	nbMeasureToJump := int(bezierGrid.Beziers[0].StartX/beatWidth + 0.5)
+	rawDistanceInBeats := bezierGrid.Beziers[0].StartX / beatWidth
+	nbMeasureToJump = int(math.Floor(rawDistanceInBeats + 0.5))
 
 	for beatNb := range p.NbOfBeatsInTheme {
 
 		c := new(Circle)
-		*c = *g.Reference
+		*c = *circleGrid.Reference
 
 		c.isANote = true
 		c.BeatNb = beatNb
 		c.isKept = p.IsNotePlayed(beatNb)
 
-		g.Circles = append(g.Circles, c)
+		circleGrid.Circles = append(circleGrid.Circles, c)
 
 		c.CenterX = float64(beatNb+nbMeasureToJump) * beatWidth
 
@@ -77,4 +80,6 @@ func (p *Parameter) computeThemeNotesShapes(bezierGrid *BezierGrid, g *CircleGri
 
 		c.CenterY = float64(c.Pitch) * pitchHeight
 	}
+
+	return
 }

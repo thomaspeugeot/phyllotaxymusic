@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"log"
 
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )
@@ -101,6 +100,5 @@ func (p *Parameter) generateNotesFromCircleGrid(
 			}
 			c.note.Duration += 1 / p.BeatsPerSecond
 		}
-		log.Println(c.note.Name, c.note.Duration)
 	}
 }
