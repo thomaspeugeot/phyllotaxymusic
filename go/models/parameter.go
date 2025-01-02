@@ -243,7 +243,14 @@ func (parameter *Parameter) OnAfterUpdate(phyllotaxyStage *StageStruct, stagedPa
 		log.Println("Main hypothesis is OK: the parameter in OnUpdate is the stage parameter")
 	}
 
-	newPhyllotaxyStageCommit := stagedParameter.NbOfBeatsInTheme != backRepoParameter.NbOfBeatsInTheme
+	newPhyllotaxyStageCommit :=
+		stagedParameter.NbOfBeatsInTheme != backRepoParameter.NbOfBeatsInTheme ||
+			stagedParameter.N != backRepoParameter.N ||
+			stagedParameter.M != backRepoParameter.M ||
+			stagedParameter.SpiralBezierStrength != backRepoParameter.SpiralBezierStrength ||
+			stagedParameter.NbInterpolationPoints != backRepoParameter.NbInterpolationPoints ||
+			stagedParameter.InsideAngle != backRepoParameter.InsideAngle ||
+			stagedParameter.BezierControlLengthRatio != backRepoParameter.BezierControlLengthRatio
 
 	phyllotaxyStage.Checkout()
 	parameters := GetGongstructInstancesMap[Parameter](phyllotaxyStage)
