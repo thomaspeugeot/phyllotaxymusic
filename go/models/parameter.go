@@ -22,12 +22,12 @@ type Parameter struct {
 	M int
 	Z int // number of rhombus
 
+	// InsideAngle is the angle in degree of the diamond at the origin 0,0
+	InsideAngle float64
+
 	// how many circle to go around for the front curve
 	// the front curve goes from one circle to the nearest
 	ShiftToNearestCircle int
-
-	// InsideAngle is the angle in degree of the diamond at the origin 0,0
-	InsideAngle float64
 
 	SideLength float64
 
@@ -243,6 +243,8 @@ func (parameter *Parameter) OnAfterUpdate(phyllotaxyStage *StageStruct, stagedPa
 		log.Println("Main hypothesis is OK: the parameter in OnUpdate is the stage parameter")
 	}
 
+	newPhyllotaxyStageCommit := stagedParameter.NbOfBeatsInTheme != backRepoParameter.NbOfBeatsInTheme
+
 	phyllotaxyStage.Checkout()
 	parameters := GetGongstructInstancesMap[Parameter](phyllotaxyStage)
 	parameter_ := (*parameters)["Reference"]
@@ -257,6 +259,10 @@ func (parameter *Parameter) OnAfterUpdate(phyllotaxyStage *StageStruct, stagedPa
 	parameter.UpdateAndCommitSVGStage()
 	parameter.UpdateAndCommitToneStage()
 	parameter.treeProxy.UpdateAndCommitTreeStage()
+
+	if newPhyllotaxyStageCommit {
+		parameter.CommitPhyllotaxymusicStage()
+	}
 }
 
 type ParameterImplInterface interface {
