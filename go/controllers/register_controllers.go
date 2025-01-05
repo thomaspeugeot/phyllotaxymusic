@@ -98,6 +98,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/circlegrids/:id", GetController().UpdateCircleGrid)
 		v1.DELETE("/v1/circlegrids/:id", GetController().DeleteCircleGrid)
 
+		v1.GET("/v1/exporttomusicxmls", GetController().GetExportToMusicxmls)
+		v1.GET("/v1/exporttomusicxmls/:id", GetController().GetExportToMusicxml)
+		v1.POST("/v1/exporttomusicxmls", GetController().PostExportToMusicxml)
+		v1.PATCH("/v1/exporttomusicxmls/:id", GetController().UpdateExportToMusicxml)
+		v1.PUT("/v1/exporttomusicxmls/:id", GetController().UpdateExportToMusicxml)
+		v1.DELETE("/v1/exporttomusicxmls/:id", GetController().DeleteExportToMusicxml)
+
 		v1.GET("/v1/frontcurves", GetController().GetFrontCurves)
 		v1.GET("/v1/frontcurves/:id", GetController().GetFrontCurve)
 		v1.POST("/v1/frontcurves", GetController().PostFrontCurve)

@@ -48,6 +48,10 @@ type DBLite struct {
 
 	nextIDCircleGridDB uint
 
+	exporttomusicxmlDBs map[uint]*ExportToMusicxmlDB
+
+	nextIDExportToMusicxmlDB uint
+
 	frontcurveDBs map[uint]*FrontCurveDB
 
 	nextIDFrontCurveDB uint
@@ -140,6 +144,8 @@ func NewDBLite() *DBLite {
 
 		circlegridDBs: make(map[uint]*CircleGridDB),
 
+		exporttomusicxmlDBs: make(map[uint]*ExportToMusicxmlDB),
+
 		frontcurveDBs: make(map[uint]*FrontCurveDB),
 
 		frontcurvestackDBs: make(map[uint]*FrontCurveStackDB),
@@ -217,6 +223,10 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		db.nextIDCircleGridDB++
 		v.ID = db.nextIDCircleGridDB
 		db.circlegridDBs[v.ID] = v
+	case *ExportToMusicxmlDB:
+		db.nextIDExportToMusicxmlDB++
+		v.ID = db.nextIDExportToMusicxmlDB
+		db.exporttomusicxmlDBs[v.ID] = v
 	case *FrontCurveDB:
 		db.nextIDFrontCurveDB++
 		v.ID = db.nextIDFrontCurveDB
@@ -331,6 +341,8 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 		delete(db.circleDBs, v.ID)
 	case *CircleGridDB:
 		delete(db.circlegridDBs, v.ID)
+	case *ExportToMusicxmlDB:
+		delete(db.exporttomusicxmlDBs, v.ID)
 	case *FrontCurveDB:
 		delete(db.frontcurveDBs, v.ID)
 	case *FrontCurveStackDB:
@@ -405,6 +417,9 @@ func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 		return db, nil
 	case *CircleGridDB:
 		db.circlegridDBs[v.ID] = v
+		return db, nil
+	case *ExportToMusicxmlDB:
+		db.exporttomusicxmlDBs[v.ID] = v
 		return db, nil
 	case *FrontCurveDB:
 		db.frontcurveDBs[v.ID] = v
@@ -517,6 +532,12 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 			*existing = *v
 		} else {
 			return nil, errors.New("db CircleGrid github.com/thomaspeugeot/phyllotaxymusic/go, record not found")
+		}
+	case *ExportToMusicxmlDB:
+		if existing, ok := db.exporttomusicxmlDBs[v.ID]; ok {
+			*existing = *v
+		} else {
+			return nil, errors.New("db ExportToMusicxml github.com/thomaspeugeot/phyllotaxymusic/go, record not found")
 		}
 	case *FrontCurveDB:
 		if existing, ok := db.frontcurveDBs[v.ID]; ok {
@@ -679,6 +700,12 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 	case *[]CircleGridDB:
 		*ptr = make([]CircleGridDB, 0, len(db.circlegridDBs))
 		for _, v := range db.circlegridDBs {
+			*ptr = append(*ptr, *v)
+		}
+		return db, nil
+	case *[]ExportToMusicxmlDB:
+		*ptr = make([]ExportToMusicxmlDB, 0, len(db.exporttomusicxmlDBs))
+		for _, v := range db.exporttomusicxmlDBs {
 			*ptr = append(*ptr, *v)
 		}
 		return db, nil
@@ -892,6 +919,16 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		circlegridDB, _ := instanceDB.(*CircleGridDB)
 		*circlegridDB = *tmp
+		
+	case *ExportToMusicxmlDB:
+		tmp, ok := db.exporttomusicxmlDBs[uint(i)]
+
+		if !ok {
+			return nil, errors.New(fmt.Sprintf("db.First ExportToMusicxml Unkown entry %d", i))
+		}
+
+		exporttomusicxmlDB, _ := instanceDB.(*ExportToMusicxmlDB)
+		*exporttomusicxmlDB = *tmp
 		
 	case *FrontCurveDB:
 		tmp, ok := db.frontcurveDBs[uint(i)]

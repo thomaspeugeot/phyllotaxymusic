@@ -132,6 +132,16 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "ExportToMusicxml":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.ExportToMusicxml](probe.stageOfInterest)
+			for _exporttomusicxml := range set {
+				nodeInstance := (&tree.Node{Name: _exporttomusicxml.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_exporttomusicxml, "ExportToMusicxml", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "FrontCurve":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.FrontCurve](probe.stageOfInterest)

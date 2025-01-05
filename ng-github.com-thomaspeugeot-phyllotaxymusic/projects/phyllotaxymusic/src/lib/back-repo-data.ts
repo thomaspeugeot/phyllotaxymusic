@@ -15,6 +15,8 @@ import { CircleAPI } from './circle-api'
 
 import { CircleGridAPI } from './circlegrid-api'
 
+import { ExportToMusicxmlAPI } from './exporttomusicxml-api'
+
 import { FrontCurveAPI } from './frontcurve-api'
 
 import { FrontCurveStackAPI } from './frontcurvestack-api'
@@ -67,6 +69,8 @@ export class BackRepoData {
 	CircleAPIs = new Array<CircleAPI>()
 
 	CircleGridAPIs = new Array<CircleGridAPI>()
+
+	ExportToMusicxmlAPIs = new Array<ExportToMusicxmlAPI>()
 
 	FrontCurveAPIs = new Array<FrontCurveAPI>()
 
@@ -121,6 +125,8 @@ export class BackRepoData {
 		this.CircleAPIs = data?.CircleAPIs || [];
 
 		this.CircleGridAPIs = data?.CircleGridAPIs || [];
+
+		this.ExportToMusicxmlAPIs = data?.ExportToMusicxmlAPIs || [];
 
 		this.FrontCurveAPIs = data?.FrontCurveAPIs || [];
 

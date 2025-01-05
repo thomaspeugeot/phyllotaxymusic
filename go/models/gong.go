@@ -118,6 +118,15 @@ type StageStruct struct {
 	OnAfterCircleGridDeleteCallback OnAfterDeleteInterface[CircleGrid]
 	OnAfterCircleGridReadCallback   OnAfterReadInterface[CircleGrid]
 
+	ExportToMusicxmls           map[*ExportToMusicxml]any
+	ExportToMusicxmls_mapString map[string]*ExportToMusicxml
+
+	// insertion point for slice of pointers maps
+	OnAfterExportToMusicxmlCreateCallback OnAfterCreateInterface[ExportToMusicxml]
+	OnAfterExportToMusicxmlUpdateCallback OnAfterUpdateInterface[ExportToMusicxml]
+	OnAfterExportToMusicxmlDeleteCallback OnAfterDeleteInterface[ExportToMusicxml]
+	OnAfterExportToMusicxmlReadCallback   OnAfterReadInterface[ExportToMusicxml]
+
 	FrontCurves           map[*FrontCurve]any
 	FrontCurves_mapString map[string]*FrontCurve
 
@@ -376,6 +385,8 @@ type BackRepoInterface interface {
 	CheckoutCircle(circle *Circle)
 	CommitCircleGrid(circlegrid *CircleGrid)
 	CheckoutCircleGrid(circlegrid *CircleGrid)
+	CommitExportToMusicxml(exporttomusicxml *ExportToMusicxml)
+	CheckoutExportToMusicxml(exporttomusicxml *ExportToMusicxml)
 	CommitFrontCurve(frontcurve *FrontCurve)
 	CheckoutFrontCurve(frontcurve *FrontCurve)
 	CommitFrontCurveStack(frontcurvestack *FrontCurveStack)
@@ -439,6 +450,9 @@ func NewStage(path string) (stage *StageStruct) {
 
 		CircleGrids:           make(map[*CircleGrid]any),
 		CircleGrids_mapString: make(map[string]*CircleGrid),
+
+		ExportToMusicxmls:           make(map[*ExportToMusicxml]any),
+		ExportToMusicxmls_mapString: make(map[string]*ExportToMusicxml),
 
 		FrontCurves:           make(map[*FrontCurve]any),
 		FrontCurves_mapString: make(map[string]*FrontCurve),
@@ -534,6 +548,7 @@ func (stage *StageStruct) Commit() {
 	stage.Map_GongStructName_InstancesNb["BezierGridStack"] = len(stage.BezierGridStacks)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
+	stage.Map_GongStructName_InstancesNb["ExportToMusicxml"] = len(stage.ExportToMusicxmls)
 	stage.Map_GongStructName_InstancesNb["FrontCurve"] = len(stage.FrontCurves)
 	stage.Map_GongStructName_InstancesNb["FrontCurveStack"] = len(stage.FrontCurveStacks)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
@@ -569,6 +584,7 @@ func (stage *StageStruct) Checkout() {
 	stage.Map_GongStructName_InstancesNb["BezierGridStack"] = len(stage.BezierGridStacks)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
 	stage.Map_GongStructName_InstancesNb["CircleGrid"] = len(stage.CircleGrids)
+	stage.Map_GongStructName_InstancesNb["ExportToMusicxml"] = len(stage.ExportToMusicxmls)
 	stage.Map_GongStructName_InstancesNb["FrontCurve"] = len(stage.FrontCurves)
 	stage.Map_GongStructName_InstancesNb["FrontCurveStack"] = len(stage.FrontCurveStacks)
 	stage.Map_GongStructName_InstancesNb["HorizontalAxis"] = len(stage.HorizontalAxiss)
@@ -967,6 +983,56 @@ func (circlegrid *CircleGrid) Checkout(stage *StageStruct) *CircleGrid {
 // for satisfaction of GongStruct interface
 func (circlegrid *CircleGrid) GetName() (res string) {
 	return circlegrid.Name
+}
+
+// Stage puts exporttomusicxml to the model stage
+func (exporttomusicxml *ExportToMusicxml) Stage(stage *StageStruct) *ExportToMusicxml {
+	stage.ExportToMusicxmls[exporttomusicxml] = __member
+	stage.ExportToMusicxmls_mapString[exporttomusicxml.Name] = exporttomusicxml
+
+	return exporttomusicxml
+}
+
+// Unstage removes exporttomusicxml off the model stage
+func (exporttomusicxml *ExportToMusicxml) Unstage(stage *StageStruct) *ExportToMusicxml {
+	delete(stage.ExportToMusicxmls, exporttomusicxml)
+	delete(stage.ExportToMusicxmls_mapString, exporttomusicxml.Name)
+	return exporttomusicxml
+}
+
+// UnstageVoid removes exporttomusicxml off the model stage
+func (exporttomusicxml *ExportToMusicxml) UnstageVoid(stage *StageStruct) {
+	delete(stage.ExportToMusicxmls, exporttomusicxml)
+	delete(stage.ExportToMusicxmls_mapString, exporttomusicxml.Name)
+}
+
+// commit exporttomusicxml to the back repo (if it is already staged)
+func (exporttomusicxml *ExportToMusicxml) Commit(stage *StageStruct) *ExportToMusicxml {
+	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitExportToMusicxml(exporttomusicxml)
+		}
+	}
+	return exporttomusicxml
+}
+
+func (exporttomusicxml *ExportToMusicxml) CommitVoid(stage *StageStruct) {
+	exporttomusicxml.Commit(stage)
+}
+
+// Checkout exporttomusicxml to the back repo (if it is already staged)
+func (exporttomusicxml *ExportToMusicxml) Checkout(stage *StageStruct) *ExportToMusicxml {
+	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutExportToMusicxml(exporttomusicxml)
+		}
+	}
+	return exporttomusicxml
+}
+
+// for satisfaction of GongStruct interface
+func (exporttomusicxml *ExportToMusicxml) GetName() (res string) {
+	return exporttomusicxml.Name
 }
 
 // Stage puts frontcurve to the model stage
@@ -1878,6 +1944,7 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 	CreateORMBezierGridStack(BezierGridStack *BezierGridStack)
 	CreateORMCircle(Circle *Circle)
 	CreateORMCircleGrid(CircleGrid *CircleGrid)
+	CreateORMExportToMusicxml(ExportToMusicxml *ExportToMusicxml)
 	CreateORMFrontCurve(FrontCurve *FrontCurve)
 	CreateORMFrontCurveStack(FrontCurveStack *FrontCurveStack)
 	CreateORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
@@ -1906,6 +1973,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMBezierGridStack(BezierGridStack *BezierGridStack)
 	DeleteORMCircle(Circle *Circle)
 	DeleteORMCircleGrid(CircleGrid *CircleGrid)
+	DeleteORMExportToMusicxml(ExportToMusicxml *ExportToMusicxml)
 	DeleteORMFrontCurve(FrontCurve *FrontCurve)
 	DeleteORMFrontCurveStack(FrontCurveStack *FrontCurveStack)
 	DeleteORMHorizontalAxis(HorizontalAxis *HorizontalAxis)
@@ -1947,6 +2015,9 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 	stage.CircleGrids = make(map[*CircleGrid]any)
 	stage.CircleGrids_mapString = make(map[string]*CircleGrid)
+
+	stage.ExportToMusicxmls = make(map[*ExportToMusicxml]any)
+	stage.ExportToMusicxmls_mapString = make(map[string]*ExportToMusicxml)
 
 	stage.FrontCurves = make(map[*FrontCurve]any)
 	stage.FrontCurves_mapString = make(map[string]*FrontCurve)
@@ -2025,6 +2096,9 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 	stage.CircleGrids = nil
 	stage.CircleGrids_mapString = nil
+
+	stage.ExportToMusicxmls = nil
+	stage.ExportToMusicxmls_mapString = nil
 
 	stage.FrontCurves = nil
 	stage.FrontCurves_mapString = nil
@@ -2109,6 +2183,10 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 
 	for circlegrid := range stage.CircleGrids {
 		circlegrid.Unstage(stage)
+	}
+
+	for exporttomusicxml := range stage.ExportToMusicxmls {
+		exporttomusicxml.Unstage(stage)
 	}
 
 	for frontcurve := range stage.FrontCurves {
@@ -2258,6 +2336,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 		return any(&stage.Circles).(*Type)
 	case map[*CircleGrid]any:
 		return any(&stage.CircleGrids).(*Type)
+	case map[*ExportToMusicxml]any:
+		return any(&stage.ExportToMusicxmls).(*Type)
 	case map[*FrontCurve]any:
 		return any(&stage.FrontCurves).(*Type)
 	case map[*FrontCurveStack]any:
@@ -2320,6 +2400,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 		return any(&stage.Circles_mapString).(*Type)
 	case map[string]*CircleGrid:
 		return any(&stage.CircleGrids_mapString).(*Type)
+	case map[string]*ExportToMusicxml:
+		return any(&stage.ExportToMusicxmls_mapString).(*Type)
 	case map[string]*FrontCurve:
 		return any(&stage.FrontCurves_mapString).(*Type)
 	case map[string]*FrontCurveStack:
@@ -2382,6 +2464,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 		return any(&stage.Circles).(*map[*Type]any)
 	case CircleGrid:
 		return any(&stage.CircleGrids).(*map[*Type]any)
+	case ExportToMusicxml:
+		return any(&stage.ExportToMusicxmls).(*map[*Type]any)
 	case FrontCurve:
 		return any(&stage.FrontCurves).(*map[*Type]any)
 	case FrontCurveStack:
@@ -2444,6 +2528,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.Circles).(*map[Type]any)
 	case *CircleGrid:
 		return any(&stage.CircleGrids).(*map[Type]any)
+	case *ExportToMusicxml:
+		return any(&stage.ExportToMusicxmls).(*map[Type]any)
 	case *FrontCurve:
 		return any(&stage.FrontCurves).(*map[Type]any)
 	case *FrontCurveStack:
@@ -2506,6 +2592,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 		return any(&stage.Circles_mapString).(*map[string]*Type)
 	case CircleGrid:
 		return any(&stage.CircleGrids_mapString).(*map[string]*Type)
+	case ExportToMusicxml:
+		return any(&stage.ExportToMusicxmls_mapString).(*map[string]*Type)
 	case FrontCurve:
 		return any(&stage.FrontCurves_mapString).(*map[string]*Type)
 	case FrontCurveStack:
@@ -2611,6 +2699,10 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			Circles: []*Circle{{Name: "Circles"}},
 			// field is initialized with Shape problem with composites
 			
+		}).(*Type)
+	case ExportToMusicxml:
+		return any(&ExportToMusicxml{
+			// Initialisation of associations
 		}).(*Type)
 	case FrontCurve:
 		return any(&FrontCurve{
@@ -3072,6 +3164,11 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 				}
 			}
 			return any(res).(map[*End][]*Start)
+		}
+	// reverse maps of direct associations of ExportToMusicxml
+	case ExportToMusicxml:
+		switch fieldname {
+		// insertion point for per direct association field
 		}
 	// reverse maps of direct associations of FrontCurve
 	case FrontCurve:
@@ -4538,6 +4635,11 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			}
 			return any(res).(map[*End]*Start)
 		}
+	// reverse maps of direct associations of ExportToMusicxml
+	case ExportToMusicxml:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	// reverse maps of direct associations of FrontCurve
 	case FrontCurve:
 		switch fieldname {
@@ -4710,6 +4812,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 		res = "Circle"
 	case CircleGrid:
 		res = "CircleGrid"
+	case ExportToMusicxml:
+		res = "ExportToMusicxml"
 	case FrontCurve:
 		res = "FrontCurve"
 	case FrontCurveStack:
@@ -4772,6 +4876,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "Circle"
 	case *CircleGrid:
 		res = "CircleGrid"
+	case *ExportToMusicxml:
+		res = "ExportToMusicxml"
 	case *FrontCurve:
 		res = "FrontCurve"
 	case *FrontCurveStack:
@@ -4833,6 +4939,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Pitch", "ShowName", "BeatNb"}
 	case CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
+	case ExportToMusicxml:
+		res = []string{"Name"}
 	case FrontCurve:
 		res = []string{"Name", "Path"}
 	case FrontCurveStack:
@@ -4918,6 +5026,9 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 		rf.Fieldname = "Circles"
 		res = append(res, rf)
 	case CircleGrid:
+		var rf ReverseField
+		_ = rf
+	case ExportToMusicxml:
 		var rf ReverseField
 		_ = rf
 	case FrontCurve:
@@ -5020,6 +5131,8 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 		res = []string{"Name", "IsDisplayed", "ShapeCategory", "CenterX", "CenterY", "HasBespokeRadius", "BespopkeRadius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Pitch", "ShowName", "BeatNb"}
 	case *CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
+	case *ExportToMusicxml:
+		res = []string{"Name"}
 	case *FrontCurve:
 		res = []string{"Name", "Path"}
 	case *FrontCurveStack:
@@ -5384,6 +5497,12 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 				}
 				res.valueString += __instance__.Name
 			}
+		}
+	case *ExportToMusicxml:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res.valueString = inferedInstance.Name
 		}
 	case *FrontCurve:
 		switch fieldName {
@@ -6727,6 +6846,12 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 				}
 				res.valueString += __instance__.Name
 			}
+		}
+	case ExportToMusicxml:
+		switch fieldName {
+		// string value of fields
+		case "Name":
+			res.valueString = inferedInstance.Name
 		}
 	case FrontCurve:
 		switch fieldName {

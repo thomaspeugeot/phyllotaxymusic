@@ -849,6 +849,83 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 
 	fillUpTree(circlegridFormCallback.probe)
 }
+func __gong__New__ExportToMusicxmlFormCallback(
+	exporttomusicxml *models.ExportToMusicxml,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (exporttomusicxmlFormCallback *ExportToMusicxmlFormCallback) {
+	exporttomusicxmlFormCallback = new(ExportToMusicxmlFormCallback)
+	exporttomusicxmlFormCallback.probe = probe
+	exporttomusicxmlFormCallback.exporttomusicxml = exporttomusicxml
+	exporttomusicxmlFormCallback.formGroup = formGroup
+
+	exporttomusicxmlFormCallback.CreationMode = (exporttomusicxml == nil)
+
+	return
+}
+
+type ExportToMusicxmlFormCallback struct {
+	exporttomusicxml *models.ExportToMusicxml
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (exporttomusicxmlFormCallback *ExportToMusicxmlFormCallback) OnSave() {
+
+	log.Println("ExportToMusicxmlFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	exporttomusicxmlFormCallback.probe.formStage.Checkout()
+
+	if exporttomusicxmlFormCallback.exporttomusicxml == nil {
+		exporttomusicxmlFormCallback.exporttomusicxml = new(models.ExportToMusicxml).Stage(exporttomusicxmlFormCallback.probe.stageOfInterest)
+	}
+	exporttomusicxml_ := exporttomusicxmlFormCallback.exporttomusicxml
+	_ = exporttomusicxml_
+
+	for _, formDiv := range exporttomusicxmlFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(exporttomusicxml_.Name), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if exporttomusicxmlFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		exporttomusicxml_.Unstage(exporttomusicxmlFormCallback.probe.stageOfInterest)
+	}
+
+	exporttomusicxmlFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.ExportToMusicxml](
+		exporttomusicxmlFormCallback.probe,
+	)
+	exporttomusicxmlFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if exporttomusicxmlFormCallback.CreationMode || exporttomusicxmlFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		exporttomusicxmlFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(exporttomusicxmlFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__ExportToMusicxmlFormCallback(
+			nil,
+			exporttomusicxmlFormCallback.probe,
+			newFormGroup,
+		)
+		exporttomusicxml := new(models.ExportToMusicxml)
+		FillUpForm(exporttomusicxml, newFormGroup, exporttomusicxmlFormCallback.probe)
+		exporttomusicxmlFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(exporttomusicxmlFormCallback.probe)
+}
 func __gong__New__FrontCurveFormCallback(
 	frontcurve *models.FrontCurve,
 	probe *Probe,

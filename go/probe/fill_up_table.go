@@ -34,6 +34,8 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.Circle](probe)
 	case *models.CircleGrid:
 		fillUpTable[models.CircleGrid](probe)
+	case *models.ExportToMusicxml:
+		fillUpTable[models.ExportToMusicxml](probe)
 	case *models.FrontCurve:
 		fillUpTable[models.FrontCurve](probe)
 	case *models.FrontCurveStack:

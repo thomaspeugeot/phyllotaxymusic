@@ -104,6 +104,18 @@ func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Prob
 		)
 		formGroup.HasSuppressButton = true
 		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.ExportToMusicxml:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "ExportToMusicxml Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__ExportToMusicxmlFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
 	case *models.FrontCurve:
 		formGroup := (&gongtable.FormGroup{
 			Name:  formName,
