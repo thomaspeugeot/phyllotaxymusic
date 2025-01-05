@@ -10,6 +10,7 @@ import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon'
 
 import { AngularSplitModule } from 'angular-split';
 
@@ -26,13 +27,17 @@ import { Observable } from 'rxjs';
   selector: 'lib-phyllotaxymusicspecific',
   standalone: true,
   imports: [
+
     CommonModule,
+
     MatSliderModule,
     MatRadioModule,
     MatCardModule,
     MatCheckboxModule,
     FormsModule,
     MatFormFieldModule,
+    MatIconModule,
+
     AngularSplitModule,
     MatGridListModule,
     GongsvgDiagrammingComponent,
@@ -44,6 +49,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./phyllotaxymusicspecific.component.css'],
 })
 export class PhyllotaxymusicspecificComponent implements OnInit {
+  exportToMusicXML() {
+    throw new Error('Method not implemented.');
+  }
 
   private socket: WebSocket | undefined
 

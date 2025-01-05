@@ -35,7 +35,19 @@
           "
         >
         </lib-cursorspecific>
+
+          <!-- Floating Action Button (z-index: 3) -->
+        <button
+        mat-fab
+        color="primary"
+        class="export-button"
+        (click)="exportToMusicXML()"
+        aria-label="Export to MusicXML"
+        >
+        <mat-icon>music_note</mat-icon>
+</button>
       </div>
+
     </as-split-area>
     
     <as-split-area [size]="20">
