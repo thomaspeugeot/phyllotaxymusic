@@ -2525,6 +2525,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		map_ExportToMusicxml_Identifiers[exporttomusicxml] = id
 
 		// Initialisation of values
+		if exporttomusicxml.Parameter != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Parameter")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Parameter_Identifiers[exporttomusicxml.Parameter])
+			pointersInitializesStatements += setPointerField
+		}
+
 	}
 
 	for idx, frontcurve := range frontcurveOrdered {

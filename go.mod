@@ -9,6 +9,7 @@ require (
 	github.com/fullstack-lang/gongtable v0.0.0-20241118055028-9c52bae3338d
 	github.com/fullstack-lang/gongtone v0.0.0-20241226210739-b9d21e3a2ed0
 	github.com/fullstack-lang/gongtree v0.0.0-20241130070052-003d6e0482ce
+	github.com/fullstack-lang/gongxsd v0.0.0-20241118055029-a0af7a8b8cdd
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-contrib/static v1.1.2

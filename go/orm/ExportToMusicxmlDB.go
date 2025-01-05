@@ -47,6 +47,10 @@ type ExportToMusicxmlAPI struct {
 // reverse pointers of slice of poitners to Struct
 type ExportToMusicxmlPointersEncoding struct {
 	// insertion for pointer fields encoding declaration
+
+	// field Parameter is a pointer to another Struct (optional or 0..1)
+	// This field is generated into another field to enable AS ONE association
+	ParameterID sql.NullInt64
 }
 
 // ExportToMusicxmlDB describes a exporttomusicxml in the database
@@ -213,6 +217,18 @@ func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) CommitPhaseTwoIn
 		exporttomusicxmlDB.CopyBasicFieldsFromExportToMusicxml(exporttomusicxml)
 
 		// insertion point for translating pointers encodings into actual pointers
+		// commit pointer value exporttomusicxml.Parameter translates to updating the exporttomusicxml.ParameterID
+		exporttomusicxmlDB.ParameterID.Valid = true // allow for a 0 value (nil association)
+		if exporttomusicxml.Parameter != nil {
+			if ParameterId, ok := backRepo.BackRepoParameter.Map_ParameterPtr_ParameterDBID[exporttomusicxml.Parameter]; ok {
+				exporttomusicxmlDB.ParameterID.Int64 = int64(ParameterId)
+				exporttomusicxmlDB.ParameterID.Valid = true
+			}
+		} else {
+			exporttomusicxmlDB.ParameterID.Int64 = 0
+			exporttomusicxmlDB.ParameterID.Valid = true
+		}
+
 		_, err := backRepoExportToMusicxml.db.Save(exporttomusicxmlDB)
 		if err != nil {
 			log.Fatal(err)
@@ -326,6 +342,25 @@ func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) CheckoutPhaseTwo
 func (exporttomusicxmlDB *ExportToMusicxmlDB) DecodePointers(backRepo *BackRepoStruct, exporttomusicxml *models.ExportToMusicxml) {
 
 	// insertion point for checkout of pointer encoding
+	// Parameter field	
+	{
+		id := exporttomusicxmlDB.ParameterID.Int64
+		if id != 0 {
+			tmp, ok := backRepo.BackRepoParameter.Map_ParameterDBID_ParameterPtr[uint(id)]
+
+			if !ok {
+				log.Fatalln("DecodePointers: exporttomusicxml.Parameter, unknown pointer id", id)
+			}
+
+			// updates only if field has changed
+			if exporttomusicxml.Parameter == nil || exporttomusicxml.Parameter != tmp {
+				exporttomusicxml.Parameter = tmp
+			}
+		} else {
+			exporttomusicxml.Parameter = nil
+		}
+	}
+	
 	return
 }
 
@@ -554,6 +589,12 @@ func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) RestorePhaseTwo(
 		_ = exporttomusicxmlDB
 
 		// insertion point for reindexing pointers encoding
+		// reindexing Parameter field
+		if exporttomusicxmlDB.ParameterID.Int64 != 0 {
+			exporttomusicxmlDB.ParameterID.Int64 = int64(BackRepoParameterid_atBckpTime_newID[uint(exporttomusicxmlDB.ParameterID.Int64)])
+			exporttomusicxmlDB.ParameterID.Valid = true
+		}
+
 		// update databse with new index encoding
 		db, _ := backRepoExportToMusicxml.db.Model(exporttomusicxmlDB)
 		_, err := db.Updates(*exporttomusicxmlDB)

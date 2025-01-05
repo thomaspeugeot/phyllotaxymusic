@@ -4,3 +4,4 @@ __debug_bin*
 .DS_Store
 node_modules
 go/cmd/phyllotaxymusic/wasmworkbench.wasm
+go/cmd/phyllotaxymusic/musicxml/export*

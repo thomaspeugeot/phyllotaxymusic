@@ -894,6 +894,8 @@ func (exporttomusicxmlFormCallback *ExportToMusicxmlFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(exporttomusicxml_.Name), formDiv)
+		case "Parameter":
+			FormDivSelectFieldToField(&(exporttomusicxml_.Parameter), exporttomusicxmlFormCallback.probe.stageOfInterest, formDiv)
 		}
 	}
 

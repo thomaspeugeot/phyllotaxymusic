@@ -521,6 +521,9 @@ func (stage *StageStruct) StageBranchExportToMusicxml(exporttomusicxml *ExportTo
 	exporttomusicxml.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if exporttomusicxml.Parameter != nil {
+		StageBranch(stage, exporttomusicxml.Parameter)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -1355,6 +1358,9 @@ func CopyBranchExportToMusicxml(mapOrigCopy map[any]any, exporttomusicxmlFrom *E
 	exporttomusicxmlFrom.CopyBasicFields(exporttomusicxmlTo)
 
 	//insertion point for the staging of instances referenced by pointers
+	if exporttomusicxmlFrom.Parameter != nil {
+		exporttomusicxmlTo.Parameter = CopyBranchParameter(mapOrigCopy, exporttomusicxmlFrom.Parameter)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 
@@ -2201,6 +2207,9 @@ func (stage *StageStruct) UnstageBranchExportToMusicxml(exporttomusicxml *Export
 	exporttomusicxml.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
+	if exporttomusicxml.Parameter != nil {
+		UnstageBranch(stage, exporttomusicxml.Parameter)
+	}
 
 	//insertion point for the staging of instances referenced by slice of pointers
 

@@ -17,6 +17,7 @@ import { ExportToMusicxml, CopyExportToMusicxmlToExportToMusicxmlAPI } from './e
 import { FrontRepo, FrontRepoService } from './front-repo.service';
 
 // insertion point for imports
+import { ParameterAPI } from './parameter-api'
 
 @Injectable({
   providedIn: 'root'

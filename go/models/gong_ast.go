@@ -2557,6 +2557,9 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			case "ExportToMusicxml":
 				switch fieldName {
 				// insertion point for field dependant code
+				case "Parameter":
+					targetIdentifier := ident.Name
+					__gong__map_ExportToMusicxml[identifier].Parameter = __gong__map_Parameter[targetIdentifier]
 				}
 			case "FrontCurve":
 				switch fieldName {

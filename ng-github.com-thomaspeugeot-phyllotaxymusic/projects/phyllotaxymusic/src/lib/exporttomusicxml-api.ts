@@ -1,4 +1,5 @@
 // insertion point for imports
+import { ParameterAPI } from './parameter-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -21,4 +22,6 @@ export class ExportToMusicxmlAPI {
 
 export class ExportToMusicxmlPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	ParameterID: NullInt64 = new NullInt64 // if pointer is null, Parameter.ID = 0
+
 }

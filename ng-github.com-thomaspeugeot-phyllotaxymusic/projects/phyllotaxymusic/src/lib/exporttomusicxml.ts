@@ -4,6 +4,7 @@ import { ExportToMusicxmlAPI } from './exporttomusicxml-api'
 import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
+import { Parameter } from './parameter'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -20,6 +21,8 @@ export class ExportToMusicxml {
 	Name: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+	Parameter?: Parameter
+
 }
 
 export function CopyExportToMusicxmlToExportToMusicxmlAPI(exporttomusicxml: ExportToMusicxml, exporttomusicxmlAPI: ExportToMusicxmlAPI) {
@@ -32,6 +35,13 @@ export function CopyExportToMusicxmlToExportToMusicxmlAPI(exporttomusicxml: Expo
 	exporttomusicxmlAPI.Name = exporttomusicxml.Name
 
 	// insertion point for pointer fields encoding
+	exporttomusicxmlAPI.ExportToMusicxmlPointersEncoding.ParameterID.Valid = true
+	if (exporttomusicxml.Parameter != undefined) {
+		exporttomusicxmlAPI.ExportToMusicxmlPointersEncoding.ParameterID.Int64 = exporttomusicxml.Parameter.ID  
+	} else {
+		exporttomusicxmlAPI.ExportToMusicxmlPointersEncoding.ParameterID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 }
@@ -50,6 +60,7 @@ export function CopyExportToMusicxmlAPIToExportToMusicxml(exporttomusicxmlAPI: E
 	exporttomusicxml.Name = exporttomusicxmlAPI.Name
 
 	// insertion point for pointer fields encoding
+	exporttomusicxml.Parameter = frontRepo.map_ID_Parameter.get(exporttomusicxmlAPI.ExportToMusicxmlPointersEncoding.ParameterID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 }

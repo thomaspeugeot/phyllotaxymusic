@@ -263,6 +263,7 @@ func FillUpForm[T models.Gongstruct](
 		// insertion point
 		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		AssociationFieldToForm("Parameter", instanceWithInferedType.Parameter, formGroup, probe)
 
 	case *models.FrontCurve:
 		// insertion point

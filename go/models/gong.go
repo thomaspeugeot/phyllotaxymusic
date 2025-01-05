@@ -2703,6 +2703,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case ExportToMusicxml:
 		return any(&ExportToMusicxml{
 			// Initialisation of associations
+			// field is initialized with an instance of Parameter with the name of the field
+			Parameter: &Parameter{Name: "Parameter"},
 		}).(*Type)
 	case FrontCurve:
 		return any(&FrontCurve{
@@ -3169,6 +3171,23 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 	case ExportToMusicxml:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "Parameter":
+			res := make(map[*Parameter][]*ExportToMusicxml)
+			for exporttomusicxml := range stage.ExportToMusicxmls {
+				if exporttomusicxml.Parameter != nil {
+					parameter_ := exporttomusicxml.Parameter
+					var exporttomusicxmls []*ExportToMusicxml
+					_, ok := res[parameter_]
+					if ok {
+						exporttomusicxmls = res[parameter_]
+					} else {
+						exporttomusicxmls = make([]*ExportToMusicxml, 0)
+					}
+					exporttomusicxmls = append(exporttomusicxmls, exporttomusicxml)
+					res[parameter_] = exporttomusicxmls
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of FrontCurve
 	case FrontCurve:
@@ -4940,7 +4959,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
 	case ExportToMusicxml:
-		res = []string{"Name"}
+		res = []string{"Name", "Parameter"}
 	case FrontCurve:
 		res = []string{"Name", "Path"}
 	case FrontCurveStack:
@@ -5132,7 +5151,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *CircleGrid:
 		res = []string{"Name", "Reference", "IsDisplayed", "ShapeCategory", "Circles"}
 	case *ExportToMusicxml:
-		res = []string{"Name"}
+		res = []string{"Name", "Parameter"}
 	case *FrontCurve:
 		res = []string{"Name", "Path"}
 	case *FrontCurveStack:
@@ -5503,6 +5522,10 @@ func GetFieldStringValueFromPointer[Type PointerToGongstruct](instance Type, fie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "Parameter":
+			if inferedInstance.Parameter != nil {
+				res.valueString = inferedInstance.Parameter.Name
+			}
 		}
 	case *FrontCurve:
 		switch fieldName {
@@ -6852,6 +6875,10 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "Parameter":
+			if inferedInstance.Parameter != nil {
+				res.valueString = inferedInstance.Parameter.Name
+			}
 		}
 	case FrontCurve:
 		switch fieldName {
