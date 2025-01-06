@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	phyllotaxymusic_models "github.com/thomaspeugeot/phyllotaxymusic/go/models"
+	"github.com/thomaspeugeot/phyllotaxymusic/go/models/musicxml"
 	phyllotaxymusic_stack "github.com/thomaspeugeot/phyllotaxymusic/go/stack"
 	phyllotaxymusic_static "github.com/thomaspeugeot/phyllotaxymusic/go/static"
 
@@ -29,6 +30,8 @@ var (
 	embeddedDiagrams = flag.Bool("embeddedDiagrams", false, "parse/analysis go/models and go/embeddedDiagrams")
 
 	port = flag.Int("port", 8080, "port server")
+
+	genmusicxml = flag.Bool("genmusicxml", true, "parse/analysis go/models and go/diagrams")
 )
 
 func main() {
@@ -80,6 +83,10 @@ func main() {
 	parameter.UpdateAndCommitToneStage()
 	parameter.UpdateAndCommitTreeStage()
 	parameter.CommitPhyllotaxymusicStage()
+
+	if *genmusicxml {
+		musicxml.GenerateMusicXMLFile()
+	}
 
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
