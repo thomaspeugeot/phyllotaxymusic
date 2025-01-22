@@ -445,13 +445,15 @@ func (frontcurvestackDB *FrontCurveStackDB) DecodePointers(backRepo *BackRepoStr
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: frontcurvestack.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if frontcurvestack.ShapeCategory == nil || frontcurvestack.ShapeCategory != tmp {
-				frontcurvestack.ShapeCategory = tmp
+				log.Println("DecodePointers: frontcurvestack.ShapeCategory, unknown pointer id", id)
+				frontcurvestack.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if frontcurvestack.ShapeCategory == nil || frontcurvestack.ShapeCategory != tmp {
+					frontcurvestack.ShapeCategory = tmp
+				}
 			}
 		} else {
 			frontcurvestack.ShapeCategory = nil

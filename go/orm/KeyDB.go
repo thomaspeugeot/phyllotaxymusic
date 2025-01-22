@@ -409,13 +409,15 @@ func (keyDB *KeyDB) DecodePointers(backRepo *BackRepoStruct, key *models.Key) {
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: key.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if key.ShapeCategory == nil || key.ShapeCategory != tmp {
-				key.ShapeCategory = tmp
+				log.Println("DecodePointers: key.ShapeCategory, unknown pointer id", id)
+				key.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if key.ShapeCategory == nil || key.ShapeCategory != tmp {
+					key.ShapeCategory = tmp
+				}
 			}
 		} else {
 			key.ShapeCategory = nil

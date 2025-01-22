@@ -415,13 +415,15 @@ func (verticalaxisDB *VerticalAxisDB) DecodePointers(backRepo *BackRepoStruct, v
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: verticalaxis.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if verticalaxis.ShapeCategory == nil || verticalaxis.ShapeCategory != tmp {
-				verticalaxis.ShapeCategory = tmp
+				log.Println("DecodePointers: verticalaxis.ShapeCategory, unknown pointer id", id)
+				verticalaxis.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if verticalaxis.ShapeCategory == nil || verticalaxis.ShapeCategory != tmp {
+					verticalaxis.ShapeCategory = tmp
+				}
 			}
 		} else {
 			verticalaxis.ShapeCategory = nil

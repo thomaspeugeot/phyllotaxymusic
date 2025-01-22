@@ -439,13 +439,15 @@ func (axisDB *AxisDB) DecodePointers(backRepo *BackRepoStruct, axis *models.Axis
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: axis.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if axis.ShapeCategory == nil || axis.ShapeCategory != tmp {
-				axis.ShapeCategory = tmp
+				log.Println("DecodePointers: axis.ShapeCategory, unknown pointer id", id)
+				axis.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if axis.ShapeCategory == nil || axis.ShapeCategory != tmp {
+					axis.ShapeCategory = tmp
+				}
 			}
 		} else {
 			axis.ShapeCategory = nil

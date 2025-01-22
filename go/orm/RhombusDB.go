@@ -433,13 +433,15 @@ func (rhombusDB *RhombusDB) DecodePointers(backRepo *BackRepoStruct, rhombus *mo
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: rhombus.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if rhombus.ShapeCategory == nil || rhombus.ShapeCategory != tmp {
-				rhombus.ShapeCategory = tmp
+				log.Println("DecodePointers: rhombus.ShapeCategory, unknown pointer id", id)
+				rhombus.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if rhombus.ShapeCategory == nil || rhombus.ShapeCategory != tmp {
+					rhombus.ShapeCategory = tmp
+				}
 			}
 		} else {
 			rhombus.ShapeCategory = nil

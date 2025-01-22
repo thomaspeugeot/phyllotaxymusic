@@ -392,13 +392,15 @@ func (spiralcirclegridDB *SpiralCircleGridDB) DecodePointers(backRepo *BackRepoS
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: spiralcirclegrid.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if spiralcirclegrid.ShapeCategory == nil || spiralcirclegrid.ShapeCategory != tmp {
-				spiralcirclegrid.ShapeCategory = tmp
+				log.Println("DecodePointers: spiralcirclegrid.ShapeCategory, unknown pointer id", id)
+				spiralcirclegrid.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if spiralcirclegrid.ShapeCategory == nil || spiralcirclegrid.ShapeCategory != tmp {
+					spiralcirclegrid.ShapeCategory = tmp
+				}
 			}
 		} else {
 			spiralcirclegrid.ShapeCategory = nil
@@ -411,13 +413,15 @@ func (spiralcirclegridDB *SpiralCircleGridDB) DecodePointers(backRepo *BackRepoS
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: spiralcirclegrid.SpiralRhombusGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if spiralcirclegrid.SpiralRhombusGrid == nil || spiralcirclegrid.SpiralRhombusGrid != tmp {
-				spiralcirclegrid.SpiralRhombusGrid = tmp
+				log.Println("DecodePointers: spiralcirclegrid.SpiralRhombusGrid, unknown pointer id", id)
+				spiralcirclegrid.SpiralRhombusGrid = nil
+			} else {
+				// updates only if field has changed
+				if spiralcirclegrid.SpiralRhombusGrid == nil || spiralcirclegrid.SpiralRhombusGrid != tmp {
+					spiralcirclegrid.SpiralRhombusGrid = tmp
+				}
 			}
 		} else {
 			spiralcirclegrid.SpiralRhombusGrid = nil

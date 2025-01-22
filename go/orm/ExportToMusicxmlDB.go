@@ -348,13 +348,15 @@ func (exporttomusicxmlDB *ExportToMusicxmlDB) DecodePointers(backRepo *BackRepoS
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoParameter.Map_ParameterDBID_ParameterPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: exporttomusicxml.Parameter, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if exporttomusicxml.Parameter == nil || exporttomusicxml.Parameter != tmp {
-				exporttomusicxml.Parameter = tmp
+				log.Println("DecodePointers: exporttomusicxml.Parameter, unknown pointer id", id)
+				exporttomusicxml.Parameter = nil
+			} else {
+				// updates only if field has changed
+				if exporttomusicxml.Parameter == nil || exporttomusicxml.Parameter != tmp {
+					exporttomusicxml.Parameter = tmp
+				}
 			}
 		} else {
 			exporttomusicxml.Parameter = nil

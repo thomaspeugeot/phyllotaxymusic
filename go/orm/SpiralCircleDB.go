@@ -453,13 +453,15 @@ func (spiralcircleDB *SpiralCircleDB) DecodePointers(backRepo *BackRepoStruct, s
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: spiralcircle.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if spiralcircle.ShapeCategory == nil || spiralcircle.ShapeCategory != tmp {
-				spiralcircle.ShapeCategory = tmp
+				log.Println("DecodePointers: spiralcircle.ShapeCategory, unknown pointer id", id)
+				spiralcircle.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if spiralcircle.ShapeCategory == nil || spiralcircle.ShapeCategory != tmp {
+					spiralcircle.ShapeCategory = tmp
+				}
 			}
 		} else {
 			spiralcircle.ShapeCategory = nil

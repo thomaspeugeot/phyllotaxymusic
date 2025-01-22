@@ -451,13 +451,15 @@ func (spiralrhombusDB *SpiralRhombusDB) DecodePointers(backRepo *BackRepoStruct,
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: spiralrhombus.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if spiralrhombus.ShapeCategory == nil || spiralrhombus.ShapeCategory != tmp {
-				spiralrhombus.ShapeCategory = tmp
+				log.Println("DecodePointers: spiralrhombus.ShapeCategory, unknown pointer id", id)
+				spiralrhombus.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if spiralrhombus.ShapeCategory == nil || spiralrhombus.ShapeCategory != tmp {
+					spiralrhombus.ShapeCategory = tmp
+				}
 			}
 		} else {
 			spiralrhombus.ShapeCategory = nil
