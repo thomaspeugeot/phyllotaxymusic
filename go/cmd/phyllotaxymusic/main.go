@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	phyllotaxymusic_models "github.com/thomaspeugeot/phyllotaxymusic/go/models"
-	"github.com/thomaspeugeot/phyllotaxymusic/go/models/musicxml"
 	phyllotaxymusic_stack "github.com/thomaspeugeot/phyllotaxymusic/go/stack"
 	phyllotaxymusic_static "github.com/thomaspeugeot/phyllotaxymusic/go/static"
 
@@ -85,7 +84,7 @@ func main() {
 	parameter.CommitPhyllotaxymusicStage()
 
 	if *genmusicxml {
-		musicxml.GenerateMusicXMLFile()
+		parameter.GenerateMusicXMLFile()
 	}
 
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))

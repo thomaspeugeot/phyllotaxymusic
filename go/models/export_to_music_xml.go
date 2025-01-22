@@ -1,7 +1,5 @@
 package models
 
-import "github.com/thomaspeugeot/phyllotaxymusic/go/models/musicxml"
-
 // ExportToMusicxml is for catching user interactions with the export button
 // gong will forward any update to an instance of the object
 //
@@ -16,7 +14,7 @@ func (exportToMusicxml *ExportToMusicxml) OnAfterUpdate(
 	phyllotaxyStage *StageStruct,
 	stagedExportToMusicxml, backRepoExportToMusicxml *ExportToMusicxml) {
 
-	shouldReturn := musicxml.GenerateMusicXMLFile()
+	shouldReturn := exportToMusicxml.Parameter.GenerateMusicXMLFile()
 	if shouldReturn {
 		return
 	}
