@@ -57,6 +57,12 @@ func (parameter *Parameter) addMeasure(part *m.A_part) {
 	measure.Width = "269.19"
 
 	{
+		firstVoiceNotes := parameter.FirstVoiceNotes
+		notes := firstVoiceNotes.Circles
+		for _, note := range notes {
+			log.Println(note.Pitch)
+		}
+
 		parameter.addNote(&measure, m.Enum_Step_A)
 		parameter.addNote(&measure, m.Enum_Step_B)
 	}
