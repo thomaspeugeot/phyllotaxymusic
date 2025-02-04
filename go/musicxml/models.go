@@ -1865,6 +1865,9 @@ type Accidental_text struct {
 	// generated from attribute "smufl
 	Smufl string `xml:"smufl,attr,omitempty"`
 
+	// generated from attribute group "text-formatting
+	AttributeGroup_text_formatting
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText Enum_Accidental_value `xml:",chardata"`
 }
@@ -1923,85 +1926,85 @@ type Dynamics struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "p" of type empty order 229 depth 1
+	// generated from element "p" of type empty order 230 depth 1
 	P string `xml:"p,omitempty"`
 
-	// generated from element "pp" of type empty order 230 depth 1
+	// generated from element "pp" of type empty order 231 depth 1
 	Pp string `xml:"pp,omitempty"`
 
-	// generated from element "ppp" of type empty order 231 depth 1
+	// generated from element "ppp" of type empty order 232 depth 1
 	Ppp string `xml:"ppp,omitempty"`
 
-	// generated from element "pppp" of type empty order 232 depth 1
+	// generated from element "pppp" of type empty order 233 depth 1
 	Pppp string `xml:"pppp,omitempty"`
 
-	// generated from element "ppppp" of type empty order 233 depth 1
+	// generated from element "ppppp" of type empty order 234 depth 1
 	Ppppp string `xml:"ppppp,omitempty"`
 
-	// generated from element "pppppp" of type empty order 234 depth 1
+	// generated from element "pppppp" of type empty order 235 depth 1
 	Pppppp string `xml:"pppppp,omitempty"`
 
-	// generated from element "f" of type empty order 235 depth 1
+	// generated from element "f" of type empty order 236 depth 1
 	F string `xml:"f,omitempty"`
 
-	// generated from element "ff" of type empty order 236 depth 1
+	// generated from element "ff" of type empty order 237 depth 1
 	Ff string `xml:"ff,omitempty"`
 
-	// generated from element "fff" of type empty order 237 depth 1
+	// generated from element "fff" of type empty order 238 depth 1
 	Fff string `xml:"fff,omitempty"`
 
-	// generated from element "ffff" of type empty order 238 depth 1
+	// generated from element "ffff" of type empty order 239 depth 1
 	Ffff string `xml:"ffff,omitempty"`
 
-	// generated from element "fffff" of type empty order 239 depth 1
+	// generated from element "fffff" of type empty order 240 depth 1
 	Fffff string `xml:"fffff,omitempty"`
 
-	// generated from element "ffffff" of type empty order 240 depth 1
+	// generated from element "ffffff" of type empty order 241 depth 1
 	Ffffff string `xml:"ffffff,omitempty"`
 
-	// generated from element "mp" of type empty order 241 depth 1
+	// generated from element "mp" of type empty order 242 depth 1
 	Mp string `xml:"mp,omitempty"`
 
-	// generated from element "mf" of type empty order 242 depth 1
+	// generated from element "mf" of type empty order 243 depth 1
 	Mf string `xml:"mf,omitempty"`
 
-	// generated from element "sf" of type empty order 243 depth 1
+	// generated from element "sf" of type empty order 244 depth 1
 	Sf string `xml:"sf,omitempty"`
 
-	// generated from element "sfp" of type empty order 244 depth 1
+	// generated from element "sfp" of type empty order 245 depth 1
 	Sfp string `xml:"sfp,omitempty"`
 
-	// generated from element "sfpp" of type empty order 245 depth 1
+	// generated from element "sfpp" of type empty order 246 depth 1
 	Sfpp string `xml:"sfpp,omitempty"`
 
-	// generated from element "fp" of type empty order 246 depth 1
+	// generated from element "fp" of type empty order 247 depth 1
 	Fp string `xml:"fp,omitempty"`
 
-	// generated from element "rf" of type empty order 247 depth 1
+	// generated from element "rf" of type empty order 248 depth 1
 	Rf string `xml:"rf,omitempty"`
 
-	// generated from element "rfz" of type empty order 248 depth 1
+	// generated from element "rfz" of type empty order 249 depth 1
 	Rfz string `xml:"rfz,omitempty"`
 
-	// generated from element "sfz" of type empty order 249 depth 1
+	// generated from element "sfz" of type empty order 250 depth 1
 	Sfz string `xml:"sfz,omitempty"`
 
-	// generated from element "sffz" of type empty order 250 depth 1
+	// generated from element "sffz" of type empty order 251 depth 1
 	Sffz string `xml:"sffz,omitempty"`
 
-	// generated from element "fz" of type empty order 251 depth 1
+	// generated from element "fz" of type empty order 252 depth 1
 	Fz string `xml:"fz,omitempty"`
 
-	// generated from element "n" of type empty order 252 depth 1
+	// generated from element "n" of type empty order 253 depth 1
 	N string `xml:"n,omitempty"`
 
-	// generated from element "pf" of type empty order 253 depth 1
+	// generated from element "pf" of type empty order 254 depth 1
 	Pf string `xml:"pf,omitempty"`
 
-	// generated from element "sfzp" of type empty order 254 depth 1
+	// generated from element "sfzp" of type empty order 255 depth 1
 	Sfzp string `xml:"sfzp,omitempty"`
 
-	// generated from element "other-dynamics" of type other-text order 255 depth 1
+	// generated from element "other-dynamics" of type other-text order 256 depth 1
 	Other_dynamics []*Other_text `xml:"other-dynamics,omitempty"`
 }
 
@@ -2153,6 +2156,12 @@ type Fermata struct {
 	// generated from attribute "type
 	Type string `xml:"type,attr,omitempty"`
 
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -2174,6 +2183,12 @@ type Fingering struct {
 	// generated from attribute "alternate
 	Alternate Enum_Yes_no `xml:"alternate,attr,omitempty"`
 
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -2185,6 +2200,9 @@ type Formatted_symbol struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "symbol-formatting
+	AttributeGroup_symbol_formatting
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -2198,6 +2216,12 @@ type Formatted_symbol_id struct {
 
 	// insertion point for fields
 
+	// generated from attribute group "symbol-formatting
+	AttributeGroup_symbol_formatting
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -2209,6 +2233,9 @@ type Formatted_text struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "text-formatting
+	AttributeGroup_text_formatting
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -2222,6 +2249,12 @@ type Formatted_text_id struct {
 
 	// insertion point for fields
 
+	// generated from attribute group "text-formatting
+	AttributeGroup_text_formatting
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -2233,6 +2266,12 @@ type Fret struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "font
+	AttributeGroup_font
+
+	// generated from attribute group "color
+	AttributeGroup_color
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText int `xml:",chardata"`
@@ -2259,6 +2298,9 @@ type Level struct {
 
 	// generated from attribute "type
 	Type Enum_Start_stop_single `xml:"type,attr,omitempty"`
+
+	// generated from attribute group "level-display
+	AttributeGroup_level_display
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -2300,28 +2342,28 @@ type Midi_instrument struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
-	// generated from element "midi-channel" of type midi-16 order 297 depth 1
+	// generated from element "midi-channel" of type midi-16 order 311 depth 1
 	Midi_channel int `xml:"midi-channel,omitempty"`
 
-	// generated from element "midi-name" of type string order 298 depth 1
+	// generated from element "midi-name" of type string order 312 depth 1
 	Midi_name string `xml:"midi-name,omitempty"`
 
-	// generated from element "midi-bank" of type midi-16384 order 299 depth 1
+	// generated from element "midi-bank" of type midi-16384 order 313 depth 1
 	Midi_bank int `xml:"midi-bank,omitempty"`
 
-	// generated from element "midi-program" of type midi-128 order 300 depth 1
+	// generated from element "midi-program" of type midi-128 order 314 depth 1
 	Midi_program int `xml:"midi-program,omitempty"`
 
-	// generated from element "midi-unpitched" of type midi-128 order 301 depth 1
+	// generated from element "midi-unpitched" of type midi-128 order 315 depth 1
 	Midi_unpitched int `xml:"midi-unpitched,omitempty"`
 
-	// generated from element "volume" of type percent order 302 depth 1
+	// generated from element "volume" of type percent order 316 depth 1
 	Volume string `xml:"volume,omitempty"`
 
-	// generated from element "pan" of type rotation-degrees order 303 depth 1
+	// generated from element "pan" of type rotation-degrees order 317 depth 1
 	Pan string `xml:"pan,omitempty"`
 
-	// generated from element "elevation" of type rotation-degrees order 304 depth 1
+	// generated from element "elevation" of type rotation-degrees order 318 depth 1
 	Elevation string `xml:"elevation,omitempty"`
 }
 
@@ -2339,10 +2381,10 @@ type Name_display struct {
 	// generated from attribute group "print-object
 	AttributeGroup_print_object
 
-	// generated from element "display-text" of type formatted-text order 306 depth 1
+	// generated from element "display-text" of type formatted-text order 320 depth 1
 	Display_text []*Formatted_text `xml:"display-text,omitempty"`
 
-	// generated from element "accidental-text" of type accidental-text order 307 depth 1
+	// generated from element "accidental-text" of type accidental-text order 321 depth 1
 	Accidental_text []*Accidental_text `xml:"accidental-text,omitempty"`
 }
 
@@ -2376,16 +2418,16 @@ type Play struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
-	// generated from element "ipa" of type string order 311 depth 1
+	// generated from element "ipa" of type string order 325 depth 1
 	Ipa string `xml:"ipa,omitempty"`
 
-	// generated from element "mute" of type mute order 312 depth 1
+	// generated from element "mute" of type mute order 326 depth 1
 	Mute string `xml:"mute,omitempty"`
 
-	// generated from element "semi-pitched" of type semi-pitched order 313 depth 1
+	// generated from element "semi-pitched" of type semi-pitched order 327 depth 1
 	Semi_pitched string `xml:"semi-pitched,omitempty"`
 
-	// generated from element "other-play" of type other-play order 314 depth 1
+	// generated from element "other-play" of type other-play order 328 depth 1
 	Other_play []*Other_play `xml:"other-play,omitempty"`
 }
 
@@ -2416,6 +2458,12 @@ type String_type struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText int `xml:",chardata"`
@@ -2476,43 +2524,43 @@ type Attributes struct {
 
 	// insertion point for fields
 
-	// generated from group with order 326 depth 1
+	// generated from group with order 342 depth 1
 	Group_editorial
 
-	// generated from element "divisions" of type positive-divisions order 327 depth 1
+	// generated from element "divisions" of type positive-divisions order 343 depth 1
 	Divisions string `xml:"divisions,omitempty"`
 
-	// generated from element "key" of type key order 328 depth 1
+	// generated from element "key" of type key order 344 depth 1
 	Key []*Key `xml:"key,omitempty"`
 
-	// generated from element "time" of type time order 329 depth 1
+	// generated from element "time" of type time order 345 depth 1
 	Time []*Time `xml:"time,omitempty"`
 
-	// generated from element "staves" of type nonNegativeInteger order 330 depth 1
+	// generated from element "staves" of type nonNegativeInteger order 346 depth 1
 	Staves int `xml:"staves,omitempty"`
 
-	// generated from element "part-symbol" of type part-symbol order 331 depth 1
+	// generated from element "part-symbol" of type part-symbol order 347 depth 1
 	Part_symbol *Part_symbol `xml:"part-symbol,omitempty"`
 
-	// generated from element "instruments" of type nonNegativeInteger order 332 depth 1
+	// generated from element "instruments" of type nonNegativeInteger order 348 depth 1
 	Instruments int `xml:"instruments,omitempty"`
 
-	// generated from element "clef" of type clef order 333 depth 1
+	// generated from element "clef" of type clef order 349 depth 1
 	Clef []*Clef `xml:"clef,omitempty"`
 
-	// generated from element "staff-details" of type staff-details order 334 depth 1
+	// generated from element "staff-details" of type staff-details order 350 depth 1
 	Staff_details []*Staff_details `xml:"staff-details,omitempty"`
 
-	// generated from element "transpose" of type transpose order 335 depth 1
+	// generated from element "transpose" of type transpose order 351 depth 1
 	Transpose []*Transpose `xml:"transpose,omitempty"`
 
-	// generated from element "for-part" of type for-part order 336 depth 1
+	// generated from element "for-part" of type for-part order 352 depth 1
 	For_part []*For_part `xml:"for-part,omitempty"`
 
 	// generated from anonymous type within outer element "directive" of type A_directive.
 	Directive []*A_directive `xml:"directive,omitempty"`
 
-	// generated from element "measure-style" of type measure-style order 339 depth 1
+	// generated from element "measure-style" of type measure-style order 356 depth 1
 	Measure_style []*Measure_style `xml:"measure-style,omitempty"`
 }
 
@@ -2524,6 +2572,9 @@ type A_directive struct {
 
 	// generated from attribute "http://www.w3.org/XML/1998/namespace lang
 	Lang string `xml:"http://www.w3.org/XML/1998/namespace lang,attr,omitempty"`
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -2554,7 +2605,7 @@ type Beat_repeat struct {
 	// generated from attribute "use-dots
 	Use_dots Enum_Yes_no `xml:"use-dots,attr,omitempty"`
 
-	// generated from group with order 341 depth 1
+	// generated from group with order 358 depth 1
 	Group_slash
 }
 
@@ -2618,7 +2669,7 @@ type Clef struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from group with order 344 depth 1
+	// generated from group with order 361 depth 1
 	Group_clef
 }
 
@@ -2656,10 +2707,10 @@ type For_part struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "part-clef" of type part-clef order 350 depth 1
+	// generated from element "part-clef" of type part-clef order 367 depth 1
 	Part_clef *Part_clef `xml:"part-clef,omitempty"`
 
-	// generated from element "part-transpose" of type part-transpose order 351 depth 1
+	// generated from element "part-transpose" of type part-transpose order 368 depth 1
 	Part_transpose *Part_transpose `xml:"part-transpose,omitempty"`
 }
 
@@ -2679,10 +2730,10 @@ type Interchangeable struct {
 	// generated from attribute "separator
 	Separator string `xml:"separator,attr,omitempty"`
 
-	// generated from element "time-relation" of type time-relation order 354 depth 1
+	// generated from element "time-relation" of type time-relation order 371 depth 1
 	Time_relation string `xml:"time-relation,omitempty"`
 
-	// generated from group with order 355 depth 1
+	// generated from group with order 372 depth 1
 	Group_time_signature
 }
 
@@ -2709,13 +2760,13 @@ type Key struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from group with order 357 depth 1
+	// generated from group with order 374 depth 1
 	Group_traditional_key
 
-	// generated from group with order 358 depth 1
+	// generated from group with order 375 depth 1
 	Group_non_traditional_key
 
-	// generated from element "key-octave" of type key-octave order 359 depth 1
+	// generated from element "key-octave" of type key-octave order 376 depth 1
 	Key_octave []*Key_octave `xml:"key-octave,omitempty"`
 }
 
@@ -2841,16 +2892,16 @@ type Measure_style struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "multiple-rest" of type multiple-rest order 371 depth 1
+	// generated from element "multiple-rest" of type multiple-rest order 388 depth 1
 	Multiple_rest *Multiple_rest `xml:"multiple-rest,omitempty"`
 
-	// generated from element "measure-repeat" of type measure-repeat order 372 depth 1
+	// generated from element "measure-repeat" of type measure-repeat order 389 depth 1
 	Measure_repeat *Measure_repeat `xml:"measure-repeat,omitempty"`
 
-	// generated from element "beat-repeat" of type beat-repeat order 373 depth 1
+	// generated from element "beat-repeat" of type beat-repeat order 390 depth 1
 	Beat_repeat *Beat_repeat `xml:"beat-repeat,omitempty"`
 
-	// generated from element "slash" of type slash order 374 depth 1
+	// generated from element "slash" of type slash order 391 depth 1
 	Slash *Slash `xml:"slash,omitempty"`
 }
 
@@ -2880,7 +2931,7 @@ type Part_clef struct {
 
 	// insertion point for fields
 
-	// generated from group with order 380 depth 1
+	// generated from group with order 397 depth 1
 	Group_clef
 }
 
@@ -2904,6 +2955,12 @@ type Part_symbol struct {
 	// generated from attribute "bottom-staff
 	Bottom_staff int `xml:"bottom-staff,attr,omitempty"`
 
+	// generated from attribute group "position
+	AttributeGroup_position
+
+	// generated from attribute group "color
+	AttributeGroup_color
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText Enum_Group_symbol_value `xml:",chardata"`
 }
@@ -2917,7 +2974,7 @@ type Part_transpose struct {
 
 	// insertion point for fields
 
-	// generated from group with order 383 depth 1
+	// generated from group with order 402 depth 1
 	Group_transpose
 }
 
@@ -2941,7 +2998,7 @@ type Slash struct {
 	// generated from attribute "use-stems
 	Use_stems Enum_Yes_no `xml:"use-stems,attr,omitempty"`
 
-	// generated from group with order 385 depth 1
+	// generated from group with order 404 depth 1
 	Group_slash
 }
 
@@ -2969,22 +3026,22 @@ type Staff_details struct {
 	// generated from attribute group "print-spacing
 	AttributeGroup_print_spacing
 
-	// generated from element "staff-type" of type staff-type order 387 depth 1
+	// generated from element "staff-type" of type staff-type order 406 depth 1
 	Staff_type string `xml:"staff-type,omitempty"`
 
-	// generated from element "staff-lines" of type nonNegativeInteger order 388 depth 1
+	// generated from element "staff-lines" of type nonNegativeInteger order 407 depth 1
 	Staff_lines int `xml:"staff-lines,omitempty"`
 
-	// generated from element "line-detail" of type line-detail order 389 depth 1
+	// generated from element "line-detail" of type line-detail order 408 depth 1
 	Line_detail []*Line_detail `xml:"line-detail,omitempty"`
 
-	// generated from element "staff-tuning" of type staff-tuning order 390 depth 1
+	// generated from element "staff-tuning" of type staff-tuning order 409 depth 1
 	Staff_tuning []*Staff_tuning `xml:"staff-tuning,omitempty"`
 
-	// generated from element "capo" of type nonNegativeInteger order 391 depth 1
+	// generated from element "capo" of type nonNegativeInteger order 410 depth 1
 	Capo int `xml:"capo,omitempty"`
 
-	// generated from element "staff-size" of type staff-size order 392 depth 1
+	// generated from element "staff-size" of type staff-size order 411 depth 1
 	Staff_size *Staff_size `xml:"staff-size,omitempty"`
 }
 
@@ -3025,7 +3082,7 @@ type Staff_tuning struct {
 	// generated from attribute "line
 	Line int `xml:"line,attr,omitempty"`
 
-	// generated from group with order 397 depth 1
+	// generated from group with order 416 depth 1
 	Group_tuning
 }
 
@@ -3063,13 +3120,13 @@ type Time struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from group with order 399 depth 1
+	// generated from group with order 418 depth 1
 	Group_time_signature
 
-	// generated from element "interchangeable" of type interchangeable order 400 depth 1
+	// generated from element "interchangeable" of type interchangeable order 419 depth 1
 	Interchangeable *Interchangeable `xml:"interchangeable,omitempty"`
 
-	// generated from element "senza-misura" of type string order 401 depth 1
+	// generated from element "senza-misura" of type string order 420 depth 1
 	Senza_misura string `xml:"senza-misura,omitempty"`
 }
 
@@ -3090,7 +3147,7 @@ type Transpose struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from group with order 406 depth 1
+	// generated from group with order 425 depth 1
 	Group_transpose
 }
 
@@ -3100,6 +3157,9 @@ type Bar_style_color struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "color
+	AttributeGroup_color
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -3143,28 +3203,28 @@ type Barline struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "bar-style" of type bar-style-color order 410 depth 1
+	// generated from element "bar-style" of type bar-style-color order 430 depth 1
 	Bar_style *Bar_style_color `xml:"bar-style,omitempty"`
 
-	// generated from group with order 411 depth 1
+	// generated from group with order 431 depth 1
 	Group_editorial
 
-	// generated from element "wavy-line" of type wavy-line order 412 depth 1
+	// generated from element "wavy-line" of type wavy-line order 432 depth 1
 	Wavy_line *Wavy_line `xml:"wavy-line,omitempty"`
 
-	// generated from element "segno" of type segno order 413 depth 1
+	// generated from element "segno" of type segno order 433 depth 1
 	Segno_1 *Segno `xml:"segno,omitempty"`
 
-	// generated from element "coda" of type coda order 414 depth 1
+	// generated from element "coda" of type coda order 434 depth 1
 	Coda_1 *Coda `xml:"coda,omitempty"`
 
-	// generated from element "fermata" of type fermata order 415 depth 1
+	// generated from element "fermata" of type fermata order 435 depth 1
 	Fermata *Fermata `xml:"fermata,omitempty"`
 
-	// generated from element "ending" of type ending order 416 depth 1
+	// generated from element "ending" of type ending order 436 depth 1
 	Ending *Ending `xml:"ending,omitempty"`
 
-	// generated from element "repeat" of type repeat order 417 depth 1
+	// generated from element "repeat" of type repeat order 437 depth 1
 	Repeat *Repeat `xml:"repeat,omitempty"`
 }
 
@@ -3205,6 +3265,15 @@ type Ending struct {
 
 	// generated from attribute "text-y
 	Text_y string `xml:"text-y,attr,omitempty"`
+
+	// generated from attribute group "print-object
+	AttributeGroup_print_object
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "system-relation
+	AttributeGroup_system_relation
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -3247,7 +3316,7 @@ type Accord struct {
 	// generated from attribute "string
 	String int `xml:"string,attr,omitempty"`
 
-	// generated from group with order 422 depth 1
+	// generated from group with order 445 depth 1
 	Group_tuning
 }
 
@@ -3269,13 +3338,13 @@ type Accordion_registration struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "accordion-high" of type empty order 424 depth 1
+	// generated from element "accordion-high" of type empty order 447 depth 1
 	Accordion_high string `xml:"accordion-high,omitempty"`
 
-	// generated from element "accordion-middle" of type accordion-middle order 425 depth 1
+	// generated from element "accordion-middle" of type accordion-middle order 448 depth 1
 	Accordion_middle int `xml:"accordion-middle,omitempty"`
 
-	// generated from element "accordion-low" of type empty order 426 depth 1
+	// generated from element "accordion-low" of type empty order 449 depth 1
 	Accordion_low string `xml:"accordion-low,omitempty"`
 }
 
@@ -3309,13 +3378,13 @@ type Bass struct {
 	// generated from attribute "arrangement
 	Arrangement string `xml:"arrangement,attr,omitempty"`
 
-	// generated from element "bass-separator" of type style-text order 432 depth 1
+	// generated from element "bass-separator" of type style-text order 455 depth 1
 	Bass_separator *Style_text `xml:"bass-separator,omitempty"`
 
-	// generated from element "bass-step" of type bass-step order 433 depth 1
+	// generated from element "bass-step" of type bass-step order 456 depth 1
 	Bass_step *Bass_step `xml:"bass-step,omitempty"`
 
-	// generated from element "bass-alter" of type harmony-alter order 434 depth 1
+	// generated from element "bass-alter" of type harmony-alter order 457 depth 1
 	Bass_alter *Harmony_alter `xml:"bass-alter,omitempty"`
 }
 
@@ -3334,6 +3403,12 @@ type Harmony_alter struct {
 	// generated from attribute "location
 	Location Enum_Left_right `xml:"location,attr,omitempty"`
 
+	// generated from attribute group "print-object
+	AttributeGroup_print_object
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -3349,6 +3424,9 @@ type Bass_step struct {
 
 	// generated from attribute "text
 	Text string `xml:"text,attr,omitempty"`
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -3379,7 +3457,7 @@ type Beat_unit_tied struct {
 
 	// insertion point for fields
 
-	// generated from group with order 439 depth 1
+	// generated from group with order 465 depth 1
 	Group_beat_unit
 }
 
@@ -3464,13 +3542,13 @@ type Degree struct {
 	// generated from attribute group "print-object
 	AttributeGroup_print_object
 
-	// generated from element "degree-value" of type degree-value order 452 depth 1
+	// generated from element "degree-value" of type degree-value order 478 depth 1
 	Degree_value *Degree_value `xml:"degree-value,omitempty"`
 
-	// generated from element "degree-alter" of type degree-alter order 453 depth 1
+	// generated from element "degree-alter" of type degree-alter order 479 depth 1
 	Degree_alter *Degree_alter `xml:"degree-alter,omitempty"`
 
-	// generated from element "degree-type" of type degree-type order 454 depth 1
+	// generated from element "degree-type" of type degree-type order 480 depth 1
 	Degree_type *Degree_type `xml:"degree-type,omitempty"`
 }
 
@@ -3490,6 +3568,9 @@ type Degree_alter struct {
 	// generated from attribute "plus-minus
 	Plus_minus Enum_Yes_no `xml:"plus-minus,attr,omitempty"`
 
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -3507,6 +3588,9 @@ type Degree_type struct {
 
 	// generated from attribute "text
 	Text string `xml:"text,attr,omitempty"`
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -3528,6 +3612,9 @@ type Degree_value struct {
 
 	// generated from attribute "text
 	Text string `xml:"text,attr,omitempty"`
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText int `xml:",chardata"`
@@ -3561,22 +3648,22 @@ type Direction struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "direction-type" of type direction-type order 460 depth 1
+	// generated from element "direction-type" of type direction-type order 489 depth 1
 	Direction_type []*Direction_type `xml:"direction-type,omitempty"`
 
-	// generated from element "offset" of type offset order 461 depth 1
+	// generated from element "offset" of type offset order 490 depth 1
 	Offset *Offset `xml:"offset,omitempty"`
 
-	// generated from group with order 462 depth 1
+	// generated from group with order 491 depth 1
 	Group_editorial_voice_direction
 
-	// generated from group with order 463 depth 1
+	// generated from group with order 492 depth 1
 	Group_staff
 
-	// generated from element "sound" of type sound order 464 depth 1
+	// generated from element "sound" of type sound order 493 depth 1
 	Sound *Sound `xml:"sound,omitempty"`
 
-	// generated from element "listening" of type listening order 465 depth 1
+	// generated from element "listening" of type listening order 494 depth 1
 	Listening *Listening `xml:"listening,omitempty"`
 }
 
@@ -3593,76 +3680,76 @@ type Direction_type struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "rehearsal" of type formatted-text-id order 471 depth 1
+	// generated from element "rehearsal" of type formatted-text-id order 500 depth 1
 	Rehearsal []*Formatted_text_id `xml:"rehearsal,omitempty"`
 
-	// generated from element "segno" of type segno order 472 depth 1
+	// generated from element "segno" of type segno order 501 depth 1
 	Segno []*Segno `xml:"segno,omitempty"`
 
-	// generated from element "coda" of type coda order 473 depth 1
+	// generated from element "coda" of type coda order 502 depth 1
 	Coda []*Coda `xml:"coda,omitempty"`
 
-	// generated from element "words" of type formatted-text-id order 474 depth 1
+	// generated from element "words" of type formatted-text-id order 503 depth 1
 	Words []*Formatted_text_id `xml:"words,omitempty"`
 
-	// generated from element "symbol" of type formatted-symbol-id order 475 depth 1
+	// generated from element "symbol" of type formatted-symbol-id order 504 depth 1
 	Symbol []*Formatted_symbol_id `xml:"symbol,omitempty"`
 
-	// generated from element "wedge" of type wedge order 476 depth 1
+	// generated from element "wedge" of type wedge order 505 depth 1
 	Wedge *Wedge `xml:"wedge,omitempty"`
 
-	// generated from element "dynamics" of type dynamics order 477 depth 1
+	// generated from element "dynamics" of type dynamics order 506 depth 1
 	Dynamics []*Dynamics `xml:"dynamics,omitempty"`
 
-	// generated from element "dashes" of type dashes order 478 depth 1
+	// generated from element "dashes" of type dashes order 507 depth 1
 	Dashes *Dashes `xml:"dashes,omitempty"`
 
-	// generated from element "bracket" of type bracket order 479 depth 1
+	// generated from element "bracket" of type bracket order 508 depth 1
 	Bracket *Bracket `xml:"bracket,omitempty"`
 
-	// generated from element "pedal" of type pedal order 480 depth 1
+	// generated from element "pedal" of type pedal order 509 depth 1
 	Pedal *Pedal `xml:"pedal,omitempty"`
 
-	// generated from element "metronome" of type metronome order 481 depth 1
+	// generated from element "metronome" of type metronome order 510 depth 1
 	Metronome *Metronome `xml:"metronome,omitempty"`
 
-	// generated from element "octave-shift" of type octave-shift order 482 depth 1
+	// generated from element "octave-shift" of type octave-shift order 511 depth 1
 	Octave_shift *Octave_shift `xml:"octave-shift,omitempty"`
 
-	// generated from element "harp-pedals" of type harp-pedals order 483 depth 1
+	// generated from element "harp-pedals" of type harp-pedals order 512 depth 1
 	Harp_pedals *Harp_pedals `xml:"harp-pedals,omitempty"`
 
-	// generated from element "damp" of type empty-print-style-align-id order 484 depth 1
+	// generated from element "damp" of type empty-print-style-align-id order 513 depth 1
 	Damp *Empty_print_style_align_id `xml:"damp,omitempty"`
 
-	// generated from element "damp-all" of type empty-print-style-align-id order 485 depth 1
+	// generated from element "damp-all" of type empty-print-style-align-id order 514 depth 1
 	Damp_all *Empty_print_style_align_id `xml:"damp-all,omitempty"`
 
-	// generated from element "eyeglasses" of type empty-print-style-align-id order 486 depth 1
+	// generated from element "eyeglasses" of type empty-print-style-align-id order 515 depth 1
 	Eyeglasses *Empty_print_style_align_id `xml:"eyeglasses,omitempty"`
 
-	// generated from element "string-mute" of type string-mute order 487 depth 1
+	// generated from element "string-mute" of type string-mute order 516 depth 1
 	String_mute *String_mute `xml:"string-mute,omitempty"`
 
-	// generated from element "scordatura" of type scordatura order 488 depth 1
+	// generated from element "scordatura" of type scordatura order 517 depth 1
 	Scordatura *Scordatura `xml:"scordatura,omitempty"`
 
-	// generated from element "image" of type image order 489 depth 1
+	// generated from element "image" of type image order 518 depth 1
 	Image *Image `xml:"image,omitempty"`
 
-	// generated from element "principal-voice" of type principal-voice order 490 depth 1
+	// generated from element "principal-voice" of type principal-voice order 519 depth 1
 	Principal_voice *Principal_voice `xml:"principal-voice,omitempty"`
 
-	// generated from element "percussion" of type percussion order 491 depth 1
+	// generated from element "percussion" of type percussion order 520 depth 1
 	Percussion []*Percussion `xml:"percussion,omitempty"`
 
-	// generated from element "accordion-registration" of type accordion-registration order 492 depth 1
+	// generated from element "accordion-registration" of type accordion-registration order 521 depth 1
 	Accordion_registration *Accordion_registration `xml:"accordion-registration,omitempty"`
 
-	// generated from element "staff-divide" of type staff-divide order 493 depth 1
+	// generated from element "staff-divide" of type staff-divide order 522 depth 1
 	Staff_divide *Staff_divide `xml:"staff-divide,omitempty"`
 
-	// generated from element "other-direction" of type other-direction order 494 depth 1
+	// generated from element "other-direction" of type other-direction order 523 depth 1
 	Other_direction *Other_direction `xml:"other-direction,omitempty"`
 }
 
@@ -3754,16 +3841,16 @@ type Frame struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "frame-strings" of type positiveInteger order 500 depth 1
+	// generated from element "frame-strings" of type positiveInteger order 529 depth 1
 	Frame_strings int `xml:"frame-strings,omitempty"`
 
-	// generated from element "frame-frets" of type positiveInteger order 501 depth 1
+	// generated from element "frame-frets" of type positiveInteger order 530 depth 1
 	Frame_frets int `xml:"frame-frets,omitempty"`
 
-	// generated from element "first-fret" of type first-fret order 502 depth 1
+	// generated from element "first-fret" of type first-fret order 531 depth 1
 	First_fret *First_fret `xml:"first-fret,omitempty"`
 
-	// generated from element "frame-note" of type frame-note order 503 depth 1
+	// generated from element "frame-note" of type frame-note order 532 depth 1
 	Frame_note []*Frame_note `xml:"frame-note,omitempty"`
 }
 
@@ -3776,16 +3863,16 @@ type Frame_note struct {
 
 	// insertion point for fields
 
-	// generated from element "string" of type string-type order 510 depth 1
+	// generated from element "string" of type string-type order 539 depth 1
 	String *String_type `xml:"string,omitempty"`
 
-	// generated from element "fret" of type fret order 511 depth 1
+	// generated from element "fret" of type fret order 540 depth 1
 	Fret *Fret `xml:"fret,omitempty"`
 
-	// generated from element "fingering" of type fingering order 512 depth 1
+	// generated from element "fingering" of type fingering order 541 depth 1
 	Fingering *Fingering `xml:"fingering,omitempty"`
 
-	// generated from element "barre" of type barre order 513 depth 1
+	// generated from element "barre" of type barre order 542 depth 1
 	Barre *Barre `xml:"barre,omitempty"`
 }
 
@@ -3831,7 +3918,7 @@ type Grouping struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "feature" of type feature order 516 depth 1
+	// generated from element "feature" of type feature order 545 depth 1
 	Feature []*Feature `xml:"feature,omitempty"`
 }
 
@@ -3878,19 +3965,19 @@ type Harmony struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from group with order 519 depth 1
+	// generated from group with order 548 depth 1
 	Group_harmony_chord
 
-	// generated from element "frame" of type frame order 520 depth 1
+	// generated from element "frame" of type frame order 549 depth 1
 	Frame *Frame `xml:"frame,omitempty"`
 
-	// generated from element "offset" of type offset order 521 depth 1
+	// generated from element "offset" of type offset order 550 depth 1
 	Offset *Offset `xml:"offset,omitempty"`
 
-	// generated from group with order 522 depth 1
+	// generated from group with order 551 depth 1
 	Group_editorial
 
-	// generated from group with order 523 depth 1
+	// generated from group with order 552 depth 1
 	Group_staff
 }
 
@@ -3910,7 +3997,7 @@ type Harp_pedals struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "pedal-tuning" of type pedal-tuning order 530 depth 1
+	// generated from element "pedal-tuning" of type pedal-tuning order 559 depth 1
 	Pedal_tuning []*Pedal_tuning `xml:"pedal-tuning,omitempty"`
 }
 
@@ -3941,7 +4028,7 @@ type Instrument_change struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
-	// generated from group with order 537 depth 1
+	// generated from group with order 566 depth 1
 	Group_virtual_instrument_data
 }
 
@@ -3957,6 +4044,9 @@ type Inversion struct {
 
 	// generated from attribute "text
 	Text string `xml:"text,attr,omitempty"`
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText int `xml:",chardata"`
@@ -4005,6 +4095,15 @@ type Kind struct {
 	// generated from attribute "bracket-degrees
 	Bracket_degrees Enum_Yes_no `xml:"bracket-degrees,attr,omitempty"`
 
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "halign
+	AttributeGroup_halign
+
+	// generated from attribute group "valign
+	AttributeGroup_valign
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -4026,13 +4125,13 @@ type Listening struct {
 
 	// insertion point for fields
 
-	// generated from element "sync" of type sync order 541 depth 1
+	// generated from element "sync" of type sync order 574 depth 1
 	Sync []*Sync `xml:"sync,omitempty"`
 
-	// generated from element "other-listening" of type other-listening order 542 depth 1
+	// generated from element "other-listening" of type other-listening order 575 depth 1
 	Other_listening []*Other_listening `xml:"other-listening,omitempty"`
 
-	// generated from element "offset" of type offset order 543 depth 1
+	// generated from element "offset" of type offset order 576 depth 1
 	Offset *Offset `xml:"offset,omitempty"`
 }
 
@@ -4068,6 +4167,9 @@ type Measure_numbering struct {
 
 	// generated from attribute "multiple-rest-range
 	Multiple_rest_range Enum_Yes_no `xml:"multiple-rest-range,attr,omitempty"`
+
+	// generated from attribute group "print-style-align
+	AttributeGroup_print_style_align
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -4136,22 +4238,22 @@ type Metronome struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from group with order 548 depth 1
+	// generated from group with order 582 depth 1
 	Group_beat_unit
 
-	// generated from element "per-minute" of type per-minute order 550 depth 1
+	// generated from element "per-minute" of type per-minute order 584 depth 1
 	Per_minute *Per_minute `xml:"per-minute,omitempty"`
 
-	// generated from element "beat-unit-tied" of type beat-unit-tied order 552 depth 1
+	// generated from element "beat-unit-tied" of type beat-unit-tied order 586 depth 1
 	Beat_unit_tied []*Beat_unit_tied `xml:"beat-unit-tied,omitempty"`
 
-	// generated from element "metronome-arrows" of type empty order 553 depth 1
+	// generated from element "metronome-arrows" of type empty order 587 depth 1
 	Metronome_arrows string `xml:"metronome-arrows,omitempty"`
 
-	// generated from element "metronome-relation" of type string order 555 depth 1
+	// generated from element "metronome-relation" of type string order 589 depth 1
 	Metronome_relation string `xml:"metronome-relation,omitempty"`
 
-	// generated from element "metronome-note" of type metronome-note order 556 depth 1
+	// generated from element "metronome-note" of type metronome-note order 590 depth 1
 	Metronome_note []*Metronome_note `xml:"metronome-note,omitempty"`
 }
 
@@ -4178,19 +4280,19 @@ type Metronome_note struct {
 
 	// insertion point for fields
 
-	// generated from element "metronome-type" of type note-type-value order 563 depth 1
+	// generated from element "metronome-type" of type note-type-value order 597 depth 1
 	Metronome_type string `xml:"metronome-type,omitempty"`
 
-	// generated from element "metronome-dot" of type empty order 564 depth 1
+	// generated from element "metronome-dot" of type empty order 598 depth 1
 	Metronome_dot string `xml:"metronome-dot,omitempty"`
 
-	// generated from element "metronome-beam" of type metronome-beam order 565 depth 1
+	// generated from element "metronome-beam" of type metronome-beam order 599 depth 1
 	Metronome_beam []*Metronome_beam `xml:"metronome-beam,omitempty"`
 
-	// generated from element "metronome-tied" of type metronome-tied order 566 depth 1
+	// generated from element "metronome-tied" of type metronome-tied order 600 depth 1
 	Metronome_tied *Metronome_tied `xml:"metronome-tied,omitempty"`
 
-	// generated from element "metronome-tuplet" of type metronome-tuplet order 567 depth 1
+	// generated from element "metronome-tuplet" of type metronome-tuplet order 601 depth 1
 	Metronome_tuplet *Metronome_tuplet `xml:"metronome-tuplet,omitempty"`
 }
 
@@ -4225,13 +4327,13 @@ type Numeral struct {
 
 	// insertion point for fields
 
-	// generated from element "numeral-root" of type numeral-root order 571 depth 1
+	// generated from element "numeral-root" of type numeral-root order 605 depth 1
 	Numeral_root *Numeral_root `xml:"numeral-root,omitempty"`
 
-	// generated from element "numeral-alter" of type harmony-alter order 572 depth 1
+	// generated from element "numeral-alter" of type harmony-alter order 606 depth 1
 	Numeral_alter *Harmony_alter `xml:"numeral-alter,omitempty"`
 
-	// generated from element "numeral-key" of type numeral-key order 573 depth 1
+	// generated from element "numeral-key" of type numeral-key order 607 depth 1
 	Numeral_key *Numeral_key `xml:"numeral-key,omitempty"`
 }
 
@@ -4248,10 +4350,10 @@ type Numeral_key struct {
 	// generated from attribute group "print-object
 	AttributeGroup_print_object
 
-	// generated from element "numeral-fifths" of type fifths order 575 depth 1
+	// generated from element "numeral-fifths" of type fifths order 609 depth 1
 	Numeral_fifths int `xml:"numeral-fifths,omitempty"`
 
-	// generated from element "numeral-mode" of type numeral-mode order 576 depth 1
+	// generated from element "numeral-mode" of type numeral-mode order 610 depth 1
 	Numeral_mode string `xml:"numeral-mode,omitempty"`
 }
 
@@ -4269,6 +4371,9 @@ type Numeral_root struct {
 
 	// generated from attribute "text
 	Text string `xml:"text,attr,omitempty"`
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText int `xml:",chardata"`
@@ -4338,6 +4443,18 @@ type Other_direction struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "print-object
+	AttributeGroup_print_object
+
+	// generated from attribute group "print-style-align
+	AttributeGroup_print_style_align
+
+	// generated from attribute group "smufl
+	AttributeGroup_smufl
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -4411,10 +4528,10 @@ type Pedal_tuning struct {
 
 	// insertion point for fields
 
-	// generated from element "pedal-step" of type step order 590 depth 1
+	// generated from element "pedal-step" of type step order 629 depth 1
 	Pedal_step Enum_Step `xml:"pedal-step,omitempty"`
 
-	// generated from element "pedal-alter" of type semitones order 591 depth 1
+	// generated from element "pedal-alter" of type semitones order 630 depth 1
 	Pedal_alter string `xml:"pedal-alter,omitempty"`
 }
 
@@ -4428,6 +4545,9 @@ type Per_minute struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "font
+	AttributeGroup_font
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -4452,37 +4572,37 @@ type Percussion struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "glass" of type glass order 594 depth 1
+	// generated from element "glass" of type glass order 634 depth 1
 	Glass *Glass `xml:"glass,omitempty"`
 
-	// generated from element "metal" of type metal order 595 depth 1
+	// generated from element "metal" of type metal order 635 depth 1
 	Metal *Metal `xml:"metal,omitempty"`
 
-	// generated from element "wood" of type wood order 596 depth 1
+	// generated from element "wood" of type wood order 636 depth 1
 	Wood *Wood `xml:"wood,omitempty"`
 
-	// generated from element "pitched" of type pitched order 597 depth 1
+	// generated from element "pitched" of type pitched order 637 depth 1
 	Pitched *Pitched `xml:"pitched,omitempty"`
 
-	// generated from element "membrane" of type membrane order 598 depth 1
+	// generated from element "membrane" of type membrane order 638 depth 1
 	Membrane *Membrane `xml:"membrane,omitempty"`
 
-	// generated from element "effect" of type effect order 599 depth 1
+	// generated from element "effect" of type effect order 639 depth 1
 	Effect *Effect `xml:"effect,omitempty"`
 
-	// generated from element "timpani" of type timpani order 600 depth 1
+	// generated from element "timpani" of type timpani order 640 depth 1
 	Timpani *Timpani `xml:"timpani,omitempty"`
 
-	// generated from element "beater" of type beater order 601 depth 1
+	// generated from element "beater" of type beater order 641 depth 1
 	Beater *Beater `xml:"beater,omitempty"`
 
-	// generated from element "stick" of type stick order 602 depth 1
+	// generated from element "stick" of type stick order 642 depth 1
 	Stick *Stick `xml:"stick,omitempty"`
 
-	// generated from element "stick-location" of type stick-location order 603 depth 1
+	// generated from element "stick-location" of type stick-location order 643 depth 1
 	Stick_location string `xml:"stick-location,omitempty"`
 
-	// generated from element "other-percussion" of type other-text order 604 depth 1
+	// generated from element "other-percussion" of type other-text order 644 depth 1
 	Other_percussion *Other_text `xml:"other-percussion,omitempty"`
 }
 
@@ -4520,6 +4640,12 @@ type Principal_voice struct {
 	// generated from attribute "symbol
 	Symbol string `xml:"symbol,attr,omitempty"`
 
+	// generated from attribute group "print-style-align
+	AttributeGroup_print_style_align
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -4543,19 +4669,19 @@ type Print struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from group with order 611 depth 1
+	// generated from group with order 653 depth 1
 	Group_layout
 
-	// generated from element "measure-layout" of type measure-layout order 612 depth 1
+	// generated from element "measure-layout" of type measure-layout order 654 depth 1
 	Measure_layout *Measure_layout `xml:"measure-layout,omitempty"`
 
-	// generated from element "measure-numbering" of type measure-numbering order 613 depth 1
+	// generated from element "measure-numbering" of type measure-numbering order 655 depth 1
 	Measure_numbering *Measure_numbering `xml:"measure-numbering,omitempty"`
 
-	// generated from element "part-name-display" of type name-display order 614 depth 1
+	// generated from element "part-name-display" of type name-display order 656 depth 1
 	Part_name_display *Name_display `xml:"part-name-display,omitempty"`
 
-	// generated from element "part-abbreviation-display" of type name-display order 615 depth 1
+	// generated from element "part-abbreviation-display" of type name-display order 657 depth 1
 	Part_abbreviation_display *Name_display `xml:"part-abbreviation-display,omitempty"`
 }
 
@@ -4569,10 +4695,10 @@ type Root struct {
 
 	// insertion point for fields
 
-	// generated from element "root-step" of type root-step order 619 depth 1
+	// generated from element "root-step" of type root-step order 661 depth 1
 	Root_step *Root_step `xml:"root-step,omitempty"`
 
-	// generated from element "root-alter" of type harmony-alter order 620 depth 1
+	// generated from element "root-alter" of type harmony-alter order 662 depth 1
 	Root_alter *Harmony_alter `xml:"root-alter,omitempty"`
 }
 
@@ -4587,6 +4713,9 @@ type Root_step struct {
 
 	// generated from attribute "text
 	Text string `xml:"text,attr,omitempty"`
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText Enum_Step `xml:",chardata"`
@@ -4604,7 +4733,7 @@ type Scordatura struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "accord" of type accord order 623 depth 1
+	// generated from element "accord" of type accord order 666 depth 1
 	Accord []*Accord `xml:"accord,omitempty"`
 }
 
@@ -4712,22 +4841,22 @@ type Sound struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "instrument-change" of type instrument-change order 626 depth 1
+	// generated from element "instrument-change" of type instrument-change order 669 depth 1
 	Instrument_change []*Instrument_change `xml:"instrument-change,omitempty"`
 
-	// generated from element "midi-device" of type midi-device order 627 depth 1
+	// generated from element "midi-device" of type midi-device order 670 depth 1
 	Midi_device []*Midi_device `xml:"midi-device,omitempty"`
 
-	// generated from element "midi-instrument" of type midi-instrument order 628 depth 1
+	// generated from element "midi-instrument" of type midi-instrument order 671 depth 1
 	Midi_instrument []*Midi_instrument `xml:"midi-instrument,omitempty"`
 
-	// generated from element "play" of type play order 629 depth 1
+	// generated from element "play" of type play order 672 depth 1
 	Play []*Play `xml:"play,omitempty"`
 
-	// generated from element "swing" of type swing order 630 depth 1
+	// generated from element "swing" of type swing order 673 depth 1
 	Swing *Swing `xml:"swing,omitempty"`
 
-	// generated from element "offset" of type offset order 631 depth 1
+	// generated from element "offset" of type offset order 674 depth 1
 	Offset *Offset `xml:"offset,omitempty"`
 }
 
@@ -4768,10 +4897,10 @@ type Stick struct {
 	// generated from attribute "dashed-circle
 	Dashed_circle Enum_Yes_no `xml:"dashed-circle,attr,omitempty"`
 
-	// generated from element "stick-type" of type stick-type order 637 depth 1
+	// generated from element "stick-type" of type stick-type order 680 depth 1
 	Stick_type string `xml:"stick-type,omitempty"`
 
-	// generated from element "stick-material" of type stick-material order 638 depth 1
+	// generated from element "stick-material" of type stick-material order 681 depth 1
 	Stick_material string `xml:"stick-material,omitempty"`
 }
 
@@ -4814,19 +4943,19 @@ type Swing struct {
 
 	// insertion point for fields
 
-	// generated from element "straight" of type empty order 643 depth 1
+	// generated from element "straight" of type empty order 686 depth 1
 	Straight string `xml:"straight,omitempty"`
 
-	// generated from element "first" of type positiveInteger order 644 depth 1
+	// generated from element "first" of type positiveInteger order 687 depth 1
 	First int `xml:"first,omitempty"`
 
-	// generated from element "second" of type positiveInteger order 645 depth 1
+	// generated from element "second" of type positiveInteger order 688 depth 1
 	Second int `xml:"second,omitempty"`
 
-	// generated from element "swing-type" of type swing-type-value order 646 depth 1
+	// generated from element "swing-type" of type swing-type-value order 689 depth 1
 	Swing_type Enum_Note_type_value `xml:"swing-type,omitempty"`
 
-	// generated from element "swing-style" of type string order 647 depth 1
+	// generated from element "swing-style" of type string order 690 depth 1
 	Swing_style string `xml:"swing-style,omitempty"`
 }
 
@@ -4936,16 +5065,16 @@ type Encoding struct {
 
 	// insertion point for fields
 
-	// generated from element "encoder" of type typed-text order 659 depth 1
+	// generated from element "encoder" of type typed-text order 702 depth 1
 	Encoder []*Typed_text `xml:"encoder,omitempty"`
 
-	// generated from element "software" of type string order 660 depth 1
+	// generated from element "software" of type string order 703 depth 1
 	Software string `xml:"software,omitempty"`
 
-	// generated from element "encoding-description" of type string order 661 depth 1
+	// generated from element "encoding-description" of type string order 704 depth 1
 	Encoding_description string `xml:"encoding-description,omitempty"`
 
-	// generated from element "supports" of type supports order 662 depth 1
+	// generated from element "supports" of type supports order 705 depth 1
 	Supports []*Supports `xml:"supports,omitempty"`
 }
 
@@ -4958,22 +5087,22 @@ type Identification struct {
 
 	// insertion point for fields
 
-	// generated from element "creator" of type typed-text order 664 depth 1
+	// generated from element "creator" of type typed-text order 707 depth 1
 	Creator []*Typed_text `xml:"creator,omitempty"`
 
-	// generated from element "rights" of type typed-text order 665 depth 1
+	// generated from element "rights" of type typed-text order 708 depth 1
 	Rights []*Typed_text `xml:"rights,omitempty"`
 
-	// generated from element "encoding" of type encoding order 666 depth 1
+	// generated from element "encoding" of type encoding order 709 depth 1
 	Encoding *Encoding `xml:"encoding,omitempty"`
 
-	// generated from element "source" of type string order 667 depth 1
+	// generated from element "source" of type string order 710 depth 1
 	Source string `xml:"source,omitempty"`
 
-	// generated from element "relation" of type typed-text order 668 depth 1
+	// generated from element "relation" of type typed-text order 711 depth 1
 	Relation []*Typed_text `xml:"relation,omitempty"`
 
-	// generated from element "miscellaneous" of type miscellaneous order 669 depth 1
+	// generated from element "miscellaneous" of type miscellaneous order 712 depth 1
 	Miscellaneous *Miscellaneous `xml:"miscellaneous,omitempty"`
 }
 
@@ -4986,7 +5115,7 @@ type Miscellaneous struct {
 
 	// insertion point for fields
 
-	// generated from element "miscellaneous-field" of type miscellaneous-field order 671 depth 1
+	// generated from element "miscellaneous-field" of type miscellaneous-field order 714 depth 1
 	Miscellaneous_field []*Miscellaneous_field `xml:"miscellaneous-field,omitempty"`
 }
 
@@ -5042,19 +5171,19 @@ type Appearance struct {
 
 	// insertion point for fields
 
-	// generated from element "line-width" of type line-width order 675 depth 1
+	// generated from element "line-width" of type line-width order 718 depth 1
 	Line_width []*Line_width `xml:"line-width,omitempty"`
 
-	// generated from element "note-size" of type note-size order 676 depth 1
+	// generated from element "note-size" of type note-size order 719 depth 1
 	Note_size []*Note_size `xml:"note-size,omitempty"`
 
-	// generated from element "distance" of type distance order 677 depth 1
+	// generated from element "distance" of type distance order 720 depth 1
 	Distance []*Distance `xml:"distance,omitempty"`
 
-	// generated from element "glyph" of type glyph order 678 depth 1
+	// generated from element "glyph" of type glyph order 721 depth 1
 	Glyph []*Glyph `xml:"glyph,omitempty"`
 
-	// generated from element "other-appearance" of type other-appearance order 679 depth 1
+	// generated from element "other-appearance" of type other-appearance order 722 depth 1
 	Other_appearance []*Other_appearance `xml:"other-appearance,omitempty"`
 }
 
@@ -5121,7 +5250,7 @@ type Measure_layout struct {
 
 	// insertion point for fields
 
-	// generated from element "measure-distance" of type tenths order 684 depth 1
+	// generated from element "measure-distance" of type tenths order 727 depth 1
 	Measure_distance string `xml:"measure-distance,omitempty"`
 }
 
@@ -5177,13 +5306,13 @@ type Page_layout struct {
 
 	// insertion point for fields
 
-	// generated from element "page-height" of type tenths order 688 depth 1
+	// generated from element "page-height" of type tenths order 731 depth 1
 	Page_height string `xml:"page-height,omitempty"`
 
-	// generated from element "page-width" of type tenths order 689 depth 1
+	// generated from element "page-width" of type tenths order 732 depth 1
 	Page_width string `xml:"page-width,omitempty"`
 
-	// generated from element "page-margins" of type page-margins order 690 depth 1
+	// generated from element "page-margins" of type page-margins order 733 depth 1
 	Page_margins *Page_margins `xml:"page-margins,omitempty"`
 }
 
@@ -5200,7 +5329,7 @@ type Page_margins struct {
 	// generated from attribute "type
 	Type string `xml:"type,attr,omitempty"`
 
-	// generated from group with order 692 depth 1
+	// generated from group with order 735 depth 1
 	Group_all_margins
 }
 
@@ -5216,10 +5345,10 @@ type Scaling struct {
 
 	// insertion point for fields
 
-	// generated from element "millimeters" of type millimeters order 694 depth 1
+	// generated from element "millimeters" of type millimeters order 737 depth 1
 	Millimeters string `xml:"millimeters,omitempty"`
 
-	// generated from element "tenths" of type tenths order 695 depth 1
+	// generated from element "tenths" of type tenths order 738 depth 1
 	Tenths string `xml:"tenths,omitempty"`
 }
 
@@ -5239,7 +5368,7 @@ type Staff_layout struct {
 	// generated from attribute "number
 	Number int `xml:"number,attr,omitempty"`
 
-	// generated from element "staff-distance" of type tenths order 697 depth 1
+	// generated from element "staff-distance" of type tenths order 740 depth 1
 	Staff_distance string `xml:"staff-distance,omitempty"`
 }
 
@@ -5257,10 +5386,10 @@ type System_dividers struct {
 
 	// insertion point for fields
 
-	// generated from element "left-divider" of type empty-print-object-style-align order 699 depth 1
+	// generated from element "left-divider" of type empty-print-object-style-align order 742 depth 1
 	Left_divider *Empty_print_object_style_align `xml:"left-divider,omitempty"`
 
-	// generated from element "right-divider" of type empty-print-object-style-align order 700 depth 1
+	// generated from element "right-divider" of type empty-print-object-style-align order 743 depth 1
 	Right_divider *Empty_print_object_style_align `xml:"right-divider,omitempty"`
 }
 
@@ -5290,16 +5419,16 @@ type System_layout struct {
 
 	// insertion point for fields
 
-	// generated from element "system-margins" of type system-margins order 702 depth 1
+	// generated from element "system-margins" of type system-margins order 745 depth 1
 	System_margins *System_margins `xml:"system-margins,omitempty"`
 
-	// generated from element "system-distance" of type tenths order 703 depth 1
+	// generated from element "system-distance" of type tenths order 746 depth 1
 	System_distance string `xml:"system-distance,omitempty"`
 
-	// generated from element "top-system-distance" of type tenths order 704 depth 1
+	// generated from element "top-system-distance" of type tenths order 747 depth 1
 	Top_system_distance string `xml:"top-system-distance,omitempty"`
 
-	// generated from element "system-dividers" of type system-dividers order 705 depth 1
+	// generated from element "system-dividers" of type system-dividers order 748 depth 1
 	System_dividers *System_dividers `xml:"system-dividers,omitempty"`
 }
 
@@ -5311,7 +5440,7 @@ type System_margins struct {
 
 	// insertion point for fields
 
-	// generated from group with order 707 depth 1
+	// generated from group with order 750 depth 1
 	Group_left_right_margins
 }
 
@@ -5374,6 +5503,12 @@ type Accidental struct {
 	// generated from attribute "smufl
 	Smufl string `xml:"smufl,attr,omitempty"`
 
+	// generated from attribute group "level-display
+	AttributeGroup_level_display
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -5389,6 +5524,18 @@ type Accidental_mark struct {
 
 	// generated from attribute "smufl
 	Smufl string `xml:"smufl,attr,omitempty"`
+
+	// generated from attribute group "level-display
+	AttributeGroup_level_display
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText Enum_Accidental_value `xml:",chardata"`
@@ -5441,55 +5588,55 @@ type Articulations struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "accent" of type empty-placement order 722 depth 1
+	// generated from element "accent" of type empty-placement order 771 depth 1
 	Accent []*Empty_placement `xml:"accent,omitempty"`
 
-	// generated from element "strong-accent" of type strong-accent order 723 depth 1
+	// generated from element "strong-accent" of type strong-accent order 772 depth 1
 	Strong_accent []*Strong_accent `xml:"strong-accent,omitempty"`
 
-	// generated from element "staccato" of type empty-placement order 724 depth 1
+	// generated from element "staccato" of type empty-placement order 773 depth 1
 	Staccato []*Empty_placement `xml:"staccato,omitempty"`
 
-	// generated from element "tenuto" of type empty-placement order 725 depth 1
+	// generated from element "tenuto" of type empty-placement order 774 depth 1
 	Tenuto []*Empty_placement `xml:"tenuto,omitempty"`
 
-	// generated from element "detached-legato" of type empty-placement order 726 depth 1
+	// generated from element "detached-legato" of type empty-placement order 775 depth 1
 	Detached_legato []*Empty_placement `xml:"detached-legato,omitempty"`
 
-	// generated from element "staccatissimo" of type empty-placement order 727 depth 1
+	// generated from element "staccatissimo" of type empty-placement order 776 depth 1
 	Staccatissimo []*Empty_placement `xml:"staccatissimo,omitempty"`
 
-	// generated from element "spiccato" of type empty-placement order 728 depth 1
+	// generated from element "spiccato" of type empty-placement order 777 depth 1
 	Spiccato []*Empty_placement `xml:"spiccato,omitempty"`
 
-	// generated from element "scoop" of type empty-line order 729 depth 1
+	// generated from element "scoop" of type empty-line order 778 depth 1
 	Scoop []*Empty_line `xml:"scoop,omitempty"`
 
-	// generated from element "plop" of type empty-line order 730 depth 1
+	// generated from element "plop" of type empty-line order 779 depth 1
 	Plop []*Empty_line `xml:"plop,omitempty"`
 
-	// generated from element "doit" of type empty-line order 731 depth 1
+	// generated from element "doit" of type empty-line order 780 depth 1
 	Doit []*Empty_line `xml:"doit,omitempty"`
 
-	// generated from element "falloff" of type empty-line order 732 depth 1
+	// generated from element "falloff" of type empty-line order 781 depth 1
 	Falloff []*Empty_line `xml:"falloff,omitempty"`
 
-	// generated from element "breath-mark" of type breath-mark order 733 depth 1
+	// generated from element "breath-mark" of type breath-mark order 782 depth 1
 	Breath_mark []*Breath_mark `xml:"breath-mark,omitempty"`
 
-	// generated from element "caesura" of type caesura order 734 depth 1
+	// generated from element "caesura" of type caesura order 783 depth 1
 	Caesura []*Caesura `xml:"caesura,omitempty"`
 
-	// generated from element "stress" of type empty-placement order 735 depth 1
+	// generated from element "stress" of type empty-placement order 784 depth 1
 	Stress []*Empty_placement `xml:"stress,omitempty"`
 
-	// generated from element "unstress" of type empty-placement order 736 depth 1
+	// generated from element "unstress" of type empty-placement order 785 depth 1
 	Unstress []*Empty_placement `xml:"unstress,omitempty"`
 
-	// generated from element "soft-accent" of type empty-placement order 737 depth 1
+	// generated from element "soft-accent" of type empty-placement order 786 depth 1
 	Soft_accent []*Empty_placement `xml:"soft-accent,omitempty"`
 
-	// generated from element "other-articulation" of type other-placement-text order 738 depth 1
+	// generated from element "other-articulation" of type other-placement-text order 787 depth 1
 	Other_articulation []*Other_placement_text `xml:"other-articulation,omitempty"`
 }
 
@@ -5514,16 +5661,16 @@ type Arrow struct {
 	// generated from attribute group "smufl
 	AttributeGroup_smufl
 
-	// generated from element "arrow-direction" of type arrow-direction order 741 depth 1
+	// generated from element "arrow-direction" of type arrow-direction order 790 depth 1
 	Arrow_direction string `xml:"arrow-direction,omitempty"`
 
-	// generated from element "arrow-style" of type arrow-style order 742 depth 1
+	// generated from element "arrow-style" of type arrow-style order 791 depth 1
 	Arrow_style string `xml:"arrow-style,omitempty"`
 
-	// generated from element "arrowhead" of type empty order 743 depth 1
+	// generated from element "arrowhead" of type empty order 792 depth 1
 	Arrowhead string `xml:"arrowhead,omitempty"`
 
-	// generated from element "circular-arrow" of type circular-arrow order 744 depth 1
+	// generated from element "circular-arrow" of type circular-arrow order 793 depth 1
 	Circular_arrow string `xml:"circular-arrow,omitempty"`
 }
 
@@ -5562,10 +5709,10 @@ type Backup struct {
 
 	// insertion point for fields
 
-	// generated from group with order 750 depth 1
+	// generated from group with order 799 depth 1
 	Group_duration
 
-	// generated from group with order 751 depth 1
+	// generated from group with order 800 depth 1
 	Group_editorial
 }
 
@@ -5596,6 +5743,12 @@ type Beam struct {
 	// generated from attribute "fan
 	Fan string `xml:"fan,attr,omitempty"`
 
+	// generated from attribute group "color
+	AttributeGroup_color
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -5620,16 +5773,16 @@ type Bend struct {
 	// generated from attribute group "bend-sound
 	AttributeGroup_bend_sound
 
-	// generated from element "bend-alter" of type semitones order 754 depth 1
+	// generated from element "bend-alter" of type semitones order 805 depth 1
 	Bend_alter string `xml:"bend-alter,omitempty"`
 
-	// generated from element "pre-bend" of type empty order 755 depth 1
+	// generated from element "pre-bend" of type empty order 806 depth 1
 	Pre_bend string `xml:"pre-bend,omitempty"`
 
-	// generated from element "release" of type release order 756 depth 1
+	// generated from element "release" of type release order 807 depth 1
 	Release *Release `xml:"release,omitempty"`
 
-	// generated from element "with-bar" of type placement-text order 757 depth 1
+	// generated from element "with-bar" of type placement-text order 808 depth 1
 	With_bar *Placement_text `xml:"with-bar,omitempty"`
 }
 
@@ -5639,6 +5792,12 @@ type Breath_mark struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -5651,6 +5810,12 @@ type Caesura struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -5672,6 +5837,12 @@ type Elision struct {
 
 	// generated from attribute "smufl
 	Smufl string `xml:"smufl,attr,omitempty"`
+
+	// generated from attribute group "font
+	AttributeGroup_font
+
+	// generated from attribute group "color
+	AttributeGroup_color
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -5731,19 +5902,19 @@ type Figure struct {
 
 	// insertion point for fields
 
-	// generated from element "prefix" of type style-text order 774 depth 1
+	// generated from element "prefix" of type style-text order 831 depth 1
 	Prefix *Style_text `xml:"prefix,omitempty"`
 
-	// generated from element "figure-number" of type style-text order 775 depth 1
+	// generated from element "figure-number" of type style-text order 832 depth 1
 	Figure_number *Style_text `xml:"figure-number,omitempty"`
 
-	// generated from element "suffix" of type style-text order 776 depth 1
+	// generated from element "suffix" of type style-text order 833 depth 1
 	Suffix *Style_text `xml:"suffix,omitempty"`
 
-	// generated from element "extend" of type extend order 777 depth 1
+	// generated from element "extend" of type extend order 834 depth 1
 	Extend *Extend `xml:"extend,omitempty"`
 
-	// generated from group with order 778 depth 1
+	// generated from group with order 835 depth 1
 	Group_editorial
 }
 
@@ -5773,13 +5944,13 @@ type Figured_bass struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "figure" of type figure order 780 depth 1
+	// generated from element "figure" of type figure order 837 depth 1
 	Figure []*Figure `xml:"figure,omitempty"`
 
-	// generated from group with order 781 depth 1
+	// generated from group with order 838 depth 1
 	Group_duration
 
-	// generated from group with order 782 depth 1
+	// generated from group with order 839 depth 1
 	Group_editorial
 }
 
@@ -5794,13 +5965,13 @@ type Forward struct {
 
 	// insertion point for fields
 
-	// generated from group with order 788 depth 1
+	// generated from group with order 845 depth 1
 	Group_duration
 
-	// generated from group with order 789 depth 1
+	// generated from group with order 846 depth 1
 	Group_editorial_voice
 
-	// generated from group with order 790 depth 1
+	// generated from group with order 847 depth 1
 	Group_staff
 }
 
@@ -5819,6 +5990,18 @@ type Glissando struct {
 
 	// generated from attribute "number
 	Number int `xml:"number,attr,omitempty"`
+
+	// generated from attribute group "line-type
+	AttributeGroup_line_type
+
+	// generated from attribute group "dashed-formatting
+	AttributeGroup_dashed_formatting
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -5867,6 +6050,12 @@ type Hammer_on_pull_off struct {
 	// generated from attribute "number
 	Number int `xml:"number,attr,omitempty"`
 
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -5878,6 +6067,12 @@ type Handbell struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -5913,7 +6108,7 @@ type Harmon_mute struct {
 	// generated from attribute group "placement
 	AttributeGroup_placement
 
-	// generated from element "harmon-closed" of type harmon-closed order 797 depth 1
+	// generated from element "harmon-closed" of type harmon-closed order 862 depth 1
 	Harmon_closed *Harmon_closed `xml:"harmon-closed,omitempty"`
 }
 
@@ -5939,19 +6134,19 @@ type Harmonic struct {
 	// generated from attribute group "placement
 	AttributeGroup_placement
 
-	// generated from element "natural" of type empty order 801 depth 1
+	// generated from element "natural" of type empty order 866 depth 1
 	Natural string `xml:"natural,omitempty"`
 
-	// generated from element "artificial" of type empty order 802 depth 1
+	// generated from element "artificial" of type empty order 867 depth 1
 	Artificial string `xml:"artificial,omitempty"`
 
-	// generated from element "base-pitch" of type empty order 803 depth 1
+	// generated from element "base-pitch" of type empty order 868 depth 1
 	Base_pitch string `xml:"base-pitch,omitempty"`
 
-	// generated from element "touching-pitch" of type empty order 804 depth 1
+	// generated from element "touching-pitch" of type empty order 869 depth 1
 	Touching_pitch string `xml:"touching-pitch,omitempty"`
 
-	// generated from element "sounding-pitch" of type empty order 805 depth 1
+	// generated from element "sounding-pitch" of type empty order 870 depth 1
 	Sounding_pitch string `xml:"sounding-pitch,omitempty"`
 }
 
@@ -5978,13 +6173,13 @@ type Hole struct {
 	// generated from attribute group "placement
 	AttributeGroup_placement
 
-	// generated from element "hole-type" of type string order 811 depth 1
+	// generated from element "hole-type" of type string order 876 depth 1
 	Hole_type string `xml:"hole-type,omitempty"`
 
-	// generated from element "hole-closed" of type hole-closed order 812 depth 1
+	// generated from element "hole-closed" of type hole-closed order 877 depth 1
 	Hole_closed *Hole_closed `xml:"hole-closed,omitempty"`
 
-	// generated from element "hole-shape" of type string order 813 depth 1
+	// generated from element "hole-shape" of type string order 878 depth 1
 	Hole_shape string `xml:"hole-shape,omitempty"`
 }
 
@@ -6030,13 +6225,13 @@ type Listen struct {
 
 	// insertion point for fields
 
-	// generated from element "assess" of type assess order 819 depth 1
+	// generated from element "assess" of type assess order 884 depth 1
 	Assess []*Assess `xml:"assess,omitempty"`
 
-	// generated from element "wait" of type wait order 820 depth 1
+	// generated from element "wait" of type wait order 885 depth 1
 	Wait []*Wait `xml:"wait,omitempty"`
 
-	// generated from element "other-listen" of type other-listening order 821 depth 1
+	// generated from element "other-listen" of type other-listening order 886 depth 1
 	Other_listen []*Other_listening `xml:"other-listen,omitempty"`
 }
 
@@ -6085,31 +6280,31 @@ type Lyric struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "elision" of type elision order 825 depth 1
+	// generated from element "elision" of type elision order 890 depth 1
 	Elision []*Elision `xml:"elision,omitempty"`
 
-	// generated from element "syllabic" of type syllabic order 826 depth 1
+	// generated from element "syllabic" of type syllabic order 891 depth 1
 	Syllabic string `xml:"syllabic,omitempty"`
 
-	// generated from element "text" of type text-element-data order 827 depth 1
+	// generated from element "text" of type text-element-data order 892 depth 1
 	Text []*Text_element_data `xml:"text,omitempty"`
 
-	// generated from element "extend" of type extend order 828 depth 1
+	// generated from element "extend" of type extend order 893 depth 1
 	Extend *Extend `xml:"extend,omitempty"`
 
-	// generated from element "laughing" of type empty order 830 depth 1
+	// generated from element "laughing" of type empty order 895 depth 1
 	Laughing string `xml:"laughing,omitempty"`
 
-	// generated from element "humming" of type empty order 831 depth 1
+	// generated from element "humming" of type empty order 896 depth 1
 	Humming string `xml:"humming,omitempty"`
 
-	// generated from element "end-line" of type empty order 832 depth 1
+	// generated from element "end-line" of type empty order 897 depth 1
 	End_line string `xml:"end-line,omitempty"`
 
-	// generated from element "end-paragraph" of type empty order 833 depth 1
+	// generated from element "end-paragraph" of type empty order 898 depth 1
 	End_paragraph string `xml:"end-paragraph,omitempty"`
 
-	// generated from group with order 834 depth 1
+	// generated from group with order 899 depth 1
 	Group_editorial
 }
 
@@ -6171,49 +6366,49 @@ type Notations struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from group with order 848 depth 1
+	// generated from group with order 913 depth 1
 	Group_editorial
 
-	// generated from element "tied" of type tied order 849 depth 1
+	// generated from element "tied" of type tied order 914 depth 1
 	Tied []*Tied `xml:"tied,omitempty"`
 
-	// generated from element "slur" of type slur order 850 depth 1
+	// generated from element "slur" of type slur order 915 depth 1
 	Slur []*Slur `xml:"slur,omitempty"`
 
-	// generated from element "tuplet" of type tuplet order 851 depth 1
+	// generated from element "tuplet" of type tuplet order 916 depth 1
 	Tuplet []*Tuplet `xml:"tuplet,omitempty"`
 
-	// generated from element "glissando" of type glissando order 852 depth 1
+	// generated from element "glissando" of type glissando order 917 depth 1
 	Glissando []*Glissando `xml:"glissando,omitempty"`
 
-	// generated from element "slide" of type slide order 853 depth 1
+	// generated from element "slide" of type slide order 918 depth 1
 	Slide []*Slide `xml:"slide,omitempty"`
 
-	// generated from element "ornaments" of type ornaments order 854 depth 1
+	// generated from element "ornaments" of type ornaments order 919 depth 1
 	Ornaments []*Ornaments `xml:"ornaments,omitempty"`
 
-	// generated from element "technical" of type technical order 855 depth 1
+	// generated from element "technical" of type technical order 920 depth 1
 	Technical []*Technical `xml:"technical,omitempty"`
 
-	// generated from element "articulations" of type articulations order 856 depth 1
+	// generated from element "articulations" of type articulations order 921 depth 1
 	Articulations []*Articulations `xml:"articulations,omitempty"`
 
-	// generated from element "dynamics" of type dynamics order 857 depth 1
+	// generated from element "dynamics" of type dynamics order 922 depth 1
 	Dynamics []*Dynamics `xml:"dynamics,omitempty"`
 
-	// generated from element "fermata" of type fermata order 858 depth 1
+	// generated from element "fermata" of type fermata order 923 depth 1
 	Fermata []*Fermata `xml:"fermata,omitempty"`
 
-	// generated from element "arpeggiate" of type arpeggiate order 859 depth 1
+	// generated from element "arpeggiate" of type arpeggiate order 924 depth 1
 	Arpeggiate []*Arpeggiate `xml:"arpeggiate,omitempty"`
 
-	// generated from element "non-arpeggiate" of type non-arpeggiate order 860 depth 1
+	// generated from element "non-arpeggiate" of type non-arpeggiate order 925 depth 1
 	Non_arpeggiate []*Non_arpeggiate `xml:"non-arpeggiate,omitempty"`
 
-	// generated from element "accidental-mark" of type accidental-mark order 861 depth 1
+	// generated from element "accidental-mark" of type accidental-mark order 926 depth 1
 	Accidental_mark []*Accidental_mark `xml:"accidental-mark,omitempty"`
 
-	// generated from element "other-notation" of type other-notation order 862 depth 1
+	// generated from element "other-notation" of type other-notation order 927 depth 1
 	Other_notation []*Other_notation `xml:"other-notation,omitempty"`
 }
 
@@ -6283,64 +6478,64 @@ type Note struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "grace" of type grace order 866 depth 1
+	// generated from element "grace" of type grace order 931 depth 1
 	Grace *Grace `xml:"grace,omitempty"`
 
-	// generated from group with order 867 depth 1
+	// generated from group with order 932 depth 1
 	Group_full_note
 
-	// generated from element "tie" of type tie order 868 depth 1
+	// generated from element "tie" of type tie order 933 depth 1
 	Tie *Tie `xml:"tie,omitempty"`
 
-	// generated from element "cue" of type empty order 869 depth 1
+	// generated from element "cue" of type empty order 934 depth 1
 	Cue string `xml:"cue,omitempty"`
 
-	// generated from group with order 873 depth 1
+	// generated from group with order 938 depth 1
 	Group_duration
 
-	// generated from element "instrument" of type instrument order 877 depth 1
+	// generated from element "instrument" of type instrument order 942 depth 1
 	Instrument []*Instrument `xml:"instrument,omitempty"`
 
-	// generated from group with order 878 depth 1
+	// generated from group with order 943 depth 1
 	Group_editorial_voice
 
-	// generated from element "type" of type note-type order 879 depth 1
+	// generated from element "type" of type note-type order 944 depth 1
 	Type *Note_type `xml:"type,omitempty"`
 
-	// generated from element "dot" of type empty-placement order 880 depth 1
+	// generated from element "dot" of type empty-placement order 945 depth 1
 	Dot []*Empty_placement `xml:"dot,omitempty"`
 
-	// generated from element "accidental" of type accidental order 881 depth 1
+	// generated from element "accidental" of type accidental order 946 depth 1
 	Accidental *Accidental `xml:"accidental,omitempty"`
 
-	// generated from element "time-modification" of type time-modification order 882 depth 1
+	// generated from element "time-modification" of type time-modification order 947 depth 1
 	Time_modification *Time_modification `xml:"time-modification,omitempty"`
 
-	// generated from element "stem" of type stem order 883 depth 1
+	// generated from element "stem" of type stem order 948 depth 1
 	Stem *Stem `xml:"stem,omitempty"`
 
-	// generated from element "notehead" of type notehead order 884 depth 1
+	// generated from element "notehead" of type notehead order 949 depth 1
 	Notehead *Notehead `xml:"notehead,omitempty"`
 
-	// generated from element "notehead-text" of type notehead-text order 885 depth 1
+	// generated from element "notehead-text" of type notehead-text order 950 depth 1
 	Notehead_text *Notehead_text `xml:"notehead-text,omitempty"`
 
-	// generated from group with order 886 depth 1
+	// generated from group with order 951 depth 1
 	Group_staff
 
-	// generated from element "beam" of type beam order 887 depth 1
+	// generated from element "beam" of type beam order 952 depth 1
 	Beam *Beam `xml:"beam,omitempty"`
 
-	// generated from element "notations" of type notations order 888 depth 1
+	// generated from element "notations" of type notations order 953 depth 1
 	Notations []*Notations `xml:"notations,omitempty"`
 
-	// generated from element "lyric" of type lyric order 889 depth 1
+	// generated from element "lyric" of type lyric order 954 depth 1
 	Lyric []*Lyric `xml:"lyric,omitempty"`
 
-	// generated from element "play" of type play order 890 depth 1
+	// generated from element "play" of type play order 955 depth 1
 	Play *Play `xml:"play,omitempty"`
 
-	// generated from element "listen" of type listen order 891 depth 1
+	// generated from element "listen" of type listen order 956 depth 1
 	Listen *Listen `xml:"listen,omitempty"`
 }
 
@@ -6385,6 +6580,15 @@ type Notehead struct {
 	// generated from attribute "parentheses
 	Parentheses Enum_Yes_no `xml:"parentheses,attr,omitempty"`
 
+	// generated from attribute group "font
+	AttributeGroup_font
+
+	// generated from attribute group "color
+	AttributeGroup_color
+
+	// generated from attribute group "smufl
+	AttributeGroup_smufl
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -6400,10 +6604,10 @@ type Notehead_text struct {
 
 	// insertion point for fields
 
-	// generated from element "display-text" of type formatted-text order 900 depth 1
+	// generated from element "display-text" of type formatted-text order 968 depth 1
 	Display_text []*Formatted_text `xml:"display-text,omitempty"`
 
-	// generated from element "accidental-text" of type accidental-text order 901 depth 1
+	// generated from element "accidental-text" of type accidental-text order 969 depth 1
 	Accidental_text []*Accidental_text `xml:"accidental-text,omitempty"`
 }
 
@@ -6420,52 +6624,52 @@ type Ornaments struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "trill-mark" of type empty-trill-sound order 903 depth 1
+	// generated from element "trill-mark" of type empty-trill-sound order 971 depth 1
 	Trill_mark []*Empty_trill_sound `xml:"trill-mark,omitempty"`
 
-	// generated from element "turn" of type horizontal-turn order 904 depth 1
+	// generated from element "turn" of type horizontal-turn order 972 depth 1
 	Turn []*Horizontal_turn `xml:"turn,omitempty"`
 
-	// generated from element "delayed-turn" of type horizontal-turn order 905 depth 1
+	// generated from element "delayed-turn" of type horizontal-turn order 973 depth 1
 	Delayed_turn []*Horizontal_turn `xml:"delayed-turn,omitempty"`
 
-	// generated from element "inverted-turn" of type horizontal-turn order 906 depth 1
+	// generated from element "inverted-turn" of type horizontal-turn order 974 depth 1
 	Inverted_turn []*Horizontal_turn `xml:"inverted-turn,omitempty"`
 
-	// generated from element "delayed-inverted-turn" of type horizontal-turn order 907 depth 1
+	// generated from element "delayed-inverted-turn" of type horizontal-turn order 975 depth 1
 	Delayed_inverted_turn []*Horizontal_turn `xml:"delayed-inverted-turn,omitempty"`
 
-	// generated from element "vertical-turn" of type empty-trill-sound order 908 depth 1
+	// generated from element "vertical-turn" of type empty-trill-sound order 976 depth 1
 	Vertical_turn []*Empty_trill_sound `xml:"vertical-turn,omitempty"`
 
-	// generated from element "inverted-vertical-turn" of type empty-trill-sound order 909 depth 1
+	// generated from element "inverted-vertical-turn" of type empty-trill-sound order 977 depth 1
 	Inverted_vertical_turn []*Empty_trill_sound `xml:"inverted-vertical-turn,omitempty"`
 
-	// generated from element "shake" of type empty-trill-sound order 910 depth 1
+	// generated from element "shake" of type empty-trill-sound order 978 depth 1
 	Shake []*Empty_trill_sound `xml:"shake,omitempty"`
 
-	// generated from element "wavy-line" of type wavy-line order 911 depth 1
+	// generated from element "wavy-line" of type wavy-line order 979 depth 1
 	Wavy_line []*Wavy_line `xml:"wavy-line,omitempty"`
 
-	// generated from element "mordent" of type mordent order 912 depth 1
+	// generated from element "mordent" of type mordent order 980 depth 1
 	Mordent []*Mordent `xml:"mordent,omitempty"`
 
-	// generated from element "inverted-mordent" of type mordent order 913 depth 1
+	// generated from element "inverted-mordent" of type mordent order 981 depth 1
 	Inverted_mordent []*Mordent `xml:"inverted-mordent,omitempty"`
 
-	// generated from element "schleifer" of type empty-placement order 914 depth 1
+	// generated from element "schleifer" of type empty-placement order 982 depth 1
 	Schleifer []*Empty_placement `xml:"schleifer,omitempty"`
 
-	// generated from element "tremolo" of type tremolo order 915 depth 1
+	// generated from element "tremolo" of type tremolo order 983 depth 1
 	Tremolo []*Tremolo `xml:"tremolo,omitempty"`
 
-	// generated from element "haydn" of type empty-trill-sound order 916 depth 1
+	// generated from element "haydn" of type empty-trill-sound order 984 depth 1
 	Haydn []*Empty_trill_sound `xml:"haydn,omitempty"`
 
-	// generated from element "other-ornament" of type other-placement-text order 917 depth 1
+	// generated from element "other-ornament" of type other-placement-text order 985 depth 1
 	Other_ornament []*Other_placement_text `xml:"other-ornament,omitempty"`
 
-	// generated from element "accidental-mark" of type accidental-mark order 918 depth 1
+	// generated from element "accidental-mark" of type accidental-mark order 986 depth 1
 	Accidental_mark []*Accidental_mark `xml:"accidental-mark,omitempty"`
 }
 
@@ -6488,6 +6692,21 @@ type Other_notation struct {
 	// generated from attribute "number
 	Number int `xml:"number,attr,omitempty"`
 
+	// generated from attribute group "print-object
+	AttributeGroup_print_object
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
+
+	// generated from attribute group "smufl
+	AttributeGroup_smufl
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -6501,6 +6720,15 @@ type Other_placement_text struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
+
+	// generated from attribute group "smufl
+	AttributeGroup_smufl
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -6516,6 +6744,9 @@ type Other_text struct {
 
 	// insertion point for fields
 
+	// generated from attribute group "smufl
+	AttributeGroup_smufl
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -6528,13 +6759,13 @@ type Pitch struct {
 
 	// insertion point for fields
 
-	// generated from element "step" of type step order 924 depth 1
+	// generated from element "step" of type step order 1001 depth 1
 	Step Enum_Step `xml:"step,omitempty"`
 
-	// generated from element "alter" of type semitones order 925 depth 1
+	// generated from element "alter" of type semitones order 1002 depth 1
 	Alter string `xml:"alter,omitempty"`
 
-	// generated from element "octave" of type octave order 926 depth 1
+	// generated from element "octave" of type octave order 1003 depth 1
 	Octave int `xml:"octave,omitempty"`
 }
 
@@ -6545,6 +6776,12 @@ type Placement_text struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -6575,7 +6812,7 @@ type Rest struct {
 	// generated from attribute "measure
 	Measure Enum_Yes_no `xml:"measure,attr,omitempty"`
 
-	// generated from group with order 930 depth 1
+	// generated from group with order 1009 depth 1
 	Group_display_step_octave
 }
 
@@ -6594,6 +6831,21 @@ type Slide struct {
 
 	// generated from attribute "number
 	Number int `xml:"number,attr,omitempty"`
+
+	// generated from attribute group "line-type
+	AttributeGroup_line_type
+
+	// generated from attribute group "dashed-formatting
+	AttributeGroup_dashed_formatting
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "bend-sound
+	AttributeGroup_bend_sound
+
+	// generated from attribute group "optional-unique-id
+	AttributeGroup_optional_unique_id
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -6652,6 +6904,12 @@ type Stem struct {
 
 	// insertion point for fields
 
+	// generated from attribute group "y-position
+	AttributeGroup_y_position
+
+	// generated from attribute group "color
+	AttributeGroup_color
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -6673,6 +6931,9 @@ type Style_text struct {
 
 	// insertion point for fields
 
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -6691,6 +6952,12 @@ type Tap struct {
 	// generated from attribute "hand
 	Hand string `xml:"hand,attr,omitempty"`
 
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -6706,97 +6973,97 @@ type Technical struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "up-bow" of type empty-placement order 946 depth 1
+	// generated from element "up-bow" of type empty-placement order 1035 depth 1
 	Up_bow []*Empty_placement `xml:"up-bow,omitempty"`
 
-	// generated from element "down-bow" of type empty-placement order 947 depth 1
+	// generated from element "down-bow" of type empty-placement order 1036 depth 1
 	Down_bow []*Empty_placement `xml:"down-bow,omitempty"`
 
-	// generated from element "harmonic" of type harmonic order 948 depth 1
+	// generated from element "harmonic" of type harmonic order 1037 depth 1
 	Harmonic []*Harmonic `xml:"harmonic,omitempty"`
 
-	// generated from element "open-string" of type empty-placement order 949 depth 1
+	// generated from element "open-string" of type empty-placement order 1038 depth 1
 	Open_string []*Empty_placement `xml:"open-string,omitempty"`
 
-	// generated from element "thumb-position" of type empty-placement order 950 depth 1
+	// generated from element "thumb-position" of type empty-placement order 1039 depth 1
 	Thumb_position []*Empty_placement `xml:"thumb-position,omitempty"`
 
-	// generated from element "fingering" of type fingering order 951 depth 1
+	// generated from element "fingering" of type fingering order 1040 depth 1
 	Fingering []*Fingering `xml:"fingering,omitempty"`
 
-	// generated from element "pluck" of type placement-text order 952 depth 1
+	// generated from element "pluck" of type placement-text order 1041 depth 1
 	Pluck []*Placement_text `xml:"pluck,omitempty"`
 
-	// generated from element "double-tongue" of type empty-placement order 953 depth 1
+	// generated from element "double-tongue" of type empty-placement order 1042 depth 1
 	Double_tongue []*Empty_placement `xml:"double-tongue,omitempty"`
 
-	// generated from element "triple-tongue" of type empty-placement order 954 depth 1
+	// generated from element "triple-tongue" of type empty-placement order 1043 depth 1
 	Triple_tongue []*Empty_placement `xml:"triple-tongue,omitempty"`
 
-	// generated from element "stopped" of type empty-placement-smufl order 955 depth 1
+	// generated from element "stopped" of type empty-placement-smufl order 1044 depth 1
 	Stopped []*Empty_placement_smufl `xml:"stopped,omitempty"`
 
-	// generated from element "snap-pizzicato" of type empty-placement order 956 depth 1
+	// generated from element "snap-pizzicato" of type empty-placement order 1045 depth 1
 	Snap_pizzicato []*Empty_placement `xml:"snap-pizzicato,omitempty"`
 
-	// generated from element "fret" of type fret order 957 depth 1
+	// generated from element "fret" of type fret order 1046 depth 1
 	Fret []*Fret `xml:"fret,omitempty"`
 
-	// generated from element "string" of type string-type order 958 depth 1
+	// generated from element "string" of type string-type order 1047 depth 1
 	String []*String_type `xml:"string,omitempty"`
 
-	// generated from element "hammer-on" of type hammer-on-pull-off order 959 depth 1
+	// generated from element "hammer-on" of type hammer-on-pull-off order 1048 depth 1
 	Hammer_on []*Hammer_on_pull_off `xml:"hammer-on,omitempty"`
 
-	// generated from element "pull-off" of type hammer-on-pull-off order 960 depth 1
+	// generated from element "pull-off" of type hammer-on-pull-off order 1049 depth 1
 	Pull_off []*Hammer_on_pull_off `xml:"pull-off,omitempty"`
 
-	// generated from element "bend" of type bend order 961 depth 1
+	// generated from element "bend" of type bend order 1050 depth 1
 	Bend []*Bend `xml:"bend,omitempty"`
 
-	// generated from element "tap" of type tap order 962 depth 1
+	// generated from element "tap" of type tap order 1051 depth 1
 	Tap []*Tap `xml:"tap,omitempty"`
 
-	// generated from element "heel" of type heel-toe order 963 depth 1
+	// generated from element "heel" of type heel-toe order 1052 depth 1
 	Heel []*Heel_toe `xml:"heel,omitempty"`
 
-	// generated from element "toe" of type heel-toe order 964 depth 1
+	// generated from element "toe" of type heel-toe order 1053 depth 1
 	Toe []*Heel_toe `xml:"toe,omitempty"`
 
-	// generated from element "fingernails" of type empty-placement order 965 depth 1
+	// generated from element "fingernails" of type empty-placement order 1054 depth 1
 	Fingernails []*Empty_placement `xml:"fingernails,omitempty"`
 
-	// generated from element "hole" of type hole order 966 depth 1
+	// generated from element "hole" of type hole order 1055 depth 1
 	Hole []*Hole `xml:"hole,omitempty"`
 
-	// generated from element "arrow" of type arrow order 967 depth 1
+	// generated from element "arrow" of type arrow order 1056 depth 1
 	Arrow []*Arrow `xml:"arrow,omitempty"`
 
-	// generated from element "handbell" of type handbell order 968 depth 1
+	// generated from element "handbell" of type handbell order 1057 depth 1
 	Handbell []*Handbell `xml:"handbell,omitempty"`
 
-	// generated from element "brass-bend" of type empty-placement order 969 depth 1
+	// generated from element "brass-bend" of type empty-placement order 1058 depth 1
 	Brass_bend []*Empty_placement `xml:"brass-bend,omitempty"`
 
-	// generated from element "flip" of type empty-placement order 970 depth 1
+	// generated from element "flip" of type empty-placement order 1059 depth 1
 	Flip []*Empty_placement `xml:"flip,omitempty"`
 
-	// generated from element "smear" of type empty-placement order 971 depth 1
+	// generated from element "smear" of type empty-placement order 1060 depth 1
 	Smear []*Empty_placement `xml:"smear,omitempty"`
 
-	// generated from element "open" of type empty-placement-smufl order 972 depth 1
+	// generated from element "open" of type empty-placement-smufl order 1061 depth 1
 	Open []*Empty_placement_smufl `xml:"open,omitempty"`
 
-	// generated from element "half-muted" of type empty-placement-smufl order 973 depth 1
+	// generated from element "half-muted" of type empty-placement-smufl order 1062 depth 1
 	Half_muted []*Empty_placement_smufl `xml:"half-muted,omitempty"`
 
-	// generated from element "harmon-mute" of type harmon-mute order 974 depth 1
+	// generated from element "harmon-mute" of type harmon-mute order 1063 depth 1
 	Harmon_mute []*Harmon_mute `xml:"harmon-mute,omitempty"`
 
-	// generated from element "golpe" of type empty-placement order 975 depth 1
+	// generated from element "golpe" of type empty-placement order 1064 depth 1
 	Golpe []*Empty_placement `xml:"golpe,omitempty"`
 
-	// generated from element "other-technical" of type other-placement-text order 976 depth 1
+	// generated from element "other-technical" of type other-placement-text order 1065 depth 1
 	Other_technical []*Other_placement_text `xml:"other-technical,omitempty"`
 }
 
@@ -6812,6 +7079,24 @@ type Text_element_data struct {
 
 	// generated from attribute "http://www.w3.org/XML/1998/namespace lang
 	Lang string `xml:"http://www.w3.org/XML/1998/namespace lang,attr,omitempty"`
+
+	// generated from attribute group "font
+	AttributeGroup_font
+
+	// generated from attribute group "color
+	AttributeGroup_color
+
+	// generated from attribute group "text-decoration
+	AttributeGroup_text_decoration
+
+	// generated from attribute group "text-rotation
+	AttributeGroup_text_rotation
+
+	// generated from attribute group "letter-spacing
+	AttributeGroup_letter_spacing
+
+	// generated from attribute group "text-direction
+	AttributeGroup_text_direction
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -6897,16 +7182,16 @@ type Time_modification struct {
 
 	// insertion point for fields
 
-	// generated from element "actual-notes" of type nonNegativeInteger order 990 depth 1
+	// generated from element "actual-notes" of type nonNegativeInteger order 1085 depth 1
 	Actual_notes int `xml:"actual-notes,omitempty"`
 
-	// generated from element "normal-notes" of type nonNegativeInteger order 991 depth 1
+	// generated from element "normal-notes" of type nonNegativeInteger order 1086 depth 1
 	Normal_notes int `xml:"normal-notes,omitempty"`
 
-	// generated from element "normal-type" of type note-type-value order 992 depth 1
+	// generated from element "normal-type" of type note-type-value order 1087 depth 1
 	Normal_type Enum_Note_type_value `xml:"normal-type,omitempty"`
 
-	// generated from element "normal-dot" of type empty order 993 depth 1
+	// generated from element "normal-dot" of type empty order 1088 depth 1
 	Normal_dot string `xml:"normal-dot,omitempty"`
 }
 
@@ -6933,6 +7218,15 @@ type Tremolo struct {
 
 	// generated from attribute "type
 	Type string `xml:"type,attr,omitempty"`
+
+	// generated from attribute group "print-style
+	AttributeGroup_print_style
+
+	// generated from attribute group "placement
+	AttributeGroup_placement
+
+	// generated from attribute group "smufl
+	AttributeGroup_smufl
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText int `xml:",chardata"`
@@ -6986,10 +7280,10 @@ type Tuplet struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "tuplet-actual" of type tuplet-portion order 996 depth 1
+	// generated from element "tuplet-actual" of type tuplet-portion order 1094 depth 1
 	Tuplet_actual *Tuplet_portion `xml:"tuplet-actual,omitempty"`
 
-	// generated from element "tuplet-normal" of type tuplet-portion order 997 depth 1
+	// generated from element "tuplet-normal" of type tuplet-portion order 1095 depth 1
 	Tuplet_normal *Tuplet_portion `xml:"tuplet-normal,omitempty"`
 }
 
@@ -7015,6 +7309,12 @@ type Tuplet_number struct {
 
 	// insertion point for fields
 
+	// generated from attribute group "font
+	AttributeGroup_font
+
+	// generated from attribute group "color
+	AttributeGroup_color
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText int `xml:",chardata"`
 }
@@ -7029,13 +7329,13 @@ type Tuplet_portion struct {
 
 	// insertion point for fields
 
-	// generated from element "tuplet-number" of type tuplet-number order 1007 depth 1
+	// generated from element "tuplet-number" of type tuplet-number order 1107 depth 1
 	Tuplet_number *Tuplet_number `xml:"tuplet-number,omitempty"`
 
-	// generated from element "tuplet-type" of type tuplet-type order 1008 depth 1
+	// generated from element "tuplet-type" of type tuplet-type order 1108 depth 1
 	Tuplet_type *Tuplet_type `xml:"tuplet-type,omitempty"`
 
-	// generated from element "tuplet-dot" of type tuplet-dot order 1009 depth 1
+	// generated from element "tuplet-dot" of type tuplet-dot order 1109 depth 1
 	Tuplet_dot []*Tuplet_dot `xml:"tuplet-dot,omitempty"`
 }
 
@@ -7046,6 +7346,12 @@ type Tuplet_type struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "font
+	AttributeGroup_font
+
+	// generated from attribute group "color
+	AttributeGroup_color
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText Enum_Note_type_value `xml:",chardata"`
@@ -7062,7 +7368,7 @@ type Unpitched struct {
 
 	// insertion point for fields
 
-	// generated from group with order 1012 depth 1
+	// generated from group with order 1114 depth 1
 	Group_display_step_octave
 }
 
@@ -7115,22 +7421,22 @@ type Credit struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
-	// generated from element "credit-type" of type string order 1015 depth 1
+	// generated from element "credit-type" of type string order 1117 depth 1
 	Credit_type string `xml:"credit-type,omitempty"`
 
-	// generated from element "credit-image" of type image order 1018 depth 1
+	// generated from element "credit-image" of type image order 1120 depth 1
 	Credit_image *Image `xml:"credit-image,omitempty"`
 
-	// generated from element "link" of type link order 1021 depth 1
+	// generated from element "link" of type link order 1123 depth 1
 	Link []*Link `xml:"link,omitempty"`
 
-	// generated from element "bookmark" of type bookmark order 1022 depth 1
+	// generated from element "bookmark" of type bookmark order 1124 depth 1
 	Bookmark []*Bookmark `xml:"bookmark,omitempty"`
 
-	// generated from element "credit-words" of type formatted-text-id order 1023 depth 1
+	// generated from element "credit-words" of type formatted-text-id order 1125 depth 1
 	Credit_words []*Formatted_text_id `xml:"credit-words,omitempty"`
 
-	// generated from element "credit-symbol" of type formatted-symbol-id order 1024 depth 1
+	// generated from element "credit-symbol" of type formatted-symbol-id order 1126 depth 1
 	Credit_symbol []*Formatted_symbol_id `xml:"credit-symbol,omitempty"`
 }
 
@@ -7145,28 +7451,28 @@ type Defaults struct {
 
 	// insertion point for fields
 
-	// generated from element "scaling" of type scaling order 1027 depth 1
+	// generated from element "scaling" of type scaling order 1129 depth 1
 	Scaling *Scaling `xml:"scaling,omitempty"`
 
-	// generated from element "concert-score" of type empty order 1028 depth 1
+	// generated from element "concert-score" of type empty order 1130 depth 1
 	Concert_score string `xml:"concert-score,omitempty"`
 
-	// generated from group with order 1029 depth 1
+	// generated from group with order 1131 depth 1
 	Group_layout
 
-	// generated from element "appearance" of type appearance order 1030 depth 1
+	// generated from element "appearance" of type appearance order 1132 depth 1
 	Appearance *Appearance `xml:"appearance,omitempty"`
 
-	// generated from element "music-font" of type empty-font order 1031 depth 1
+	// generated from element "music-font" of type empty-font order 1133 depth 1
 	Music_font *Empty_font `xml:"music-font,omitempty"`
 
-	// generated from element "word-font" of type empty-font order 1032 depth 1
+	// generated from element "word-font" of type empty-font order 1134 depth 1
 	Word_font *Empty_font `xml:"word-font,omitempty"`
 
-	// generated from element "lyric-font" of type lyric-font order 1033 depth 1
+	// generated from element "lyric-font" of type lyric-font order 1135 depth 1
 	Lyric_font []*Lyric_font `xml:"lyric-font,omitempty"`
 
-	// generated from element "lyric-language" of type lyric-language order 1034 depth 1
+	// generated from element "lyric-language" of type lyric-language order 1136 depth 1
 	Lyric_language []*Lyric_language `xml:"lyric-language,omitempty"`
 }
 
@@ -7189,6 +7495,9 @@ type Group_barline struct {
 
 	// insertion point for fields
 
+	// generated from attribute group "color
+	AttributeGroup_color
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -7202,6 +7511,9 @@ type Group_name struct {
 
 	// insertion point for fields
 
+	// generated from attribute group "group-name-text
+	AttributeGroup_group_name_text
+
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
 }
@@ -7213,6 +7525,12 @@ type Group_symbol struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "position
+	AttributeGroup_position
+
+	// generated from attribute group "color
+	AttributeGroup_color
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -7305,28 +7623,28 @@ type Part_group struct {
 	// generated from attribute "number
 	Number string `xml:"number,attr,omitempty"`
 
-	// generated from element "group-name" of type group-name order 1047 depth 1
+	// generated from element "group-name" of type group-name order 1153 depth 1
 	Group_name *Group_name `xml:"group-name,omitempty"`
 
-	// generated from element "group-name-display" of type name-display order 1048 depth 1
+	// generated from element "group-name-display" of type name-display order 1154 depth 1
 	Group_name_display *Name_display `xml:"group-name-display,omitempty"`
 
-	// generated from element "group-abbreviation" of type group-name order 1049 depth 1
+	// generated from element "group-abbreviation" of type group-name order 1155 depth 1
 	Group_abbreviation *Group_name `xml:"group-abbreviation,omitempty"`
 
-	// generated from element "group-abbreviation-display" of type name-display order 1050 depth 1
+	// generated from element "group-abbreviation-display" of type name-display order 1156 depth 1
 	Group_abbreviation_display *Name_display `xml:"group-abbreviation-display,omitempty"`
 
-	// generated from element "group-symbol" of type group-symbol order 1051 depth 1
+	// generated from element "group-symbol" of type group-symbol order 1157 depth 1
 	Group_symbol *Group_symbol `xml:"group-symbol,omitempty"`
 
-	// generated from element "group-barline" of type group-barline order 1052 depth 1
+	// generated from element "group-barline" of type group-barline order 1158 depth 1
 	Group_barline *Group_barline `xml:"group-barline,omitempty"`
 
-	// generated from element "group-time" of type empty order 1053 depth 1
+	// generated from element "group-time" of type empty order 1159 depth 1
 	Group_time string `xml:"group-time,omitempty"`
 
-	// generated from group with order 1054 depth 1
+	// generated from group with order 1160 depth 1
 	Group_editorial
 }
 
@@ -7344,10 +7662,10 @@ type Part_link struct {
 	// generated from attribute group "link-attributes
 	AttributeGroup_link_attributes
 
-	// generated from element "instrument-link" of type instrument-link order 1056 depth 1
+	// generated from element "instrument-link" of type instrument-link order 1162 depth 1
 	Instrument_link []*Instrument_link `xml:"instrument-link,omitempty"`
 
-	// generated from element "group-link" of type string order 1057 depth 1
+	// generated from element "group-link" of type string order 1163 depth 1
 	Group_link string `xml:"group-link,omitempty"`
 }
 
@@ -7364,10 +7682,10 @@ type Part_list struct {
 
 	// insertion point for fields
 
-	// generated from group with order 1060 depth 1
+	// generated from group with order 1166 depth 1
 	Group_part_group
 
-	// generated from group with order 1061 depth 1
+	// generated from group with order 1167 depth 1
 	Group_score_part
 }
 
@@ -7379,6 +7697,9 @@ type Part_name struct {
 	Name string `xml:"-"`
 
 	// insertion point for fields
+
+	// generated from attribute group "part-name-text
+	AttributeGroup_part_name_text
 
 	// in case the extension has base type xs:string, one has to had the chardata stuff
 	EnclosedText string `xml:",chardata"`
@@ -7396,7 +7717,7 @@ type Player struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
-	// generated from element "player-name" of type string order 1066 depth 1
+	// generated from element "player-name" of type string order 1173 depth 1
 	Player_name string `xml:"player-name,omitempty"`
 }
 
@@ -7419,13 +7740,13 @@ type Score_instrument struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
-	// generated from element "instrument-name" of type string order 1068 depth 1
+	// generated from element "instrument-name" of type string order 1175 depth 1
 	Instrument_name string `xml:"instrument-name,omitempty"`
 
-	// generated from element "instrument-abbreviation" of type string order 1069 depth 1
+	// generated from element "instrument-abbreviation" of type string order 1176 depth 1
 	Instrument_abbreviation string `xml:"instrument-abbreviation,omitempty"`
 
-	// generated from group with order 1070 depth 1
+	// generated from group with order 1177 depth 1
 	Group_virtual_instrument_data
 }
 
@@ -7444,37 +7765,37 @@ type Score_part struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
-	// generated from element "identification" of type identification order 1072 depth 1
+	// generated from element "identification" of type identification order 1179 depth 1
 	Identification *Identification `xml:"identification,omitempty"`
 
-	// generated from element "part-link" of type part-link order 1073 depth 1
+	// generated from element "part-link" of type part-link order 1180 depth 1
 	Part_link []*Part_link `xml:"part-link,omitempty"`
 
-	// generated from element "part-name" of type part-name order 1074 depth 1
+	// generated from element "part-name" of type part-name order 1181 depth 1
 	Part_name *Part_name `xml:"part-name,omitempty"`
 
-	// generated from element "part-name-display" of type name-display order 1075 depth 1
+	// generated from element "part-name-display" of type name-display order 1182 depth 1
 	Part_name_display *Name_display `xml:"part-name-display,omitempty"`
 
-	// generated from element "part-abbreviation" of type part-name order 1076 depth 1
+	// generated from element "part-abbreviation" of type part-name order 1183 depth 1
 	Part_abbreviation *Part_name `xml:"part-abbreviation,omitempty"`
 
-	// generated from element "part-abbreviation-display" of type name-display order 1077 depth 1
+	// generated from element "part-abbreviation-display" of type name-display order 1184 depth 1
 	Part_abbreviation_display *Name_display `xml:"part-abbreviation-display,omitempty"`
 
-	// generated from element "group" of type string order 1078 depth 1
+	// generated from element "group" of type string order 1185 depth 1
 	Group string `xml:"group,omitempty"`
 
-	// generated from element "score-instrument" of type score-instrument order 1079 depth 1
+	// generated from element "score-instrument" of type score-instrument order 1186 depth 1
 	Score_instrument []*Score_instrument `xml:"score-instrument,omitempty"`
 
-	// generated from element "player" of type player order 1080 depth 1
+	// generated from element "player" of type player order 1187 depth 1
 	Player []*Player `xml:"player,omitempty"`
 
-	// generated from element "midi-device" of type midi-device order 1081 depth 1
+	// generated from element "midi-device" of type midi-device order 1188 depth 1
 	Midi_device []*Midi_device `xml:"midi-device,omitempty"`
 
-	// generated from element "midi-instrument" of type midi-instrument order 1082 depth 1
+	// generated from element "midi-instrument" of type midi-instrument order 1189 depth 1
 	Midi_instrument []*Midi_instrument `xml:"midi-instrument,omitempty"`
 }
 
@@ -7486,10 +7807,10 @@ type Virtual_instrument struct {
 
 	// insertion point for fields
 
-	// generated from element "virtual-library" of type string order 1084 depth 1
+	// generated from element "virtual-library" of type string order 1191 depth 1
 	Virtual_library string `xml:"virtual-library,omitempty"`
 
-	// generated from element "virtual-name" of type string order 1085 depth 1
+	// generated from element "virtual-name" of type string order 1192 depth 1
 	Virtual_name string `xml:"virtual-name,omitempty"`
 }
 
@@ -7502,13 +7823,13 @@ type Work struct {
 
 	// insertion point for fields
 
-	// generated from element "work-number" of type string order 1087 depth 1
+	// generated from element "work-number" of type string order 1194 depth 1
 	Work_number string `xml:"work-number,omitempty"`
 
-	// generated from element "work-title" of type string order 1088 depth 1
+	// generated from element "work-title" of type string order 1195 depth 1
 	Work_title string `xml:"work-title,omitempty"`
 
-	// generated from element "opus" of type opus order 1089 depth 1
+	// generated from element "opus" of type opus order 1196 depth 1
 	Opus *Opus `xml:"opus,omitempty"`
 }
 
@@ -7517,10 +7838,10 @@ type Group_editorial struct {
 
 	// insertion point for fields
 
-	// generated from group with order 1091 depth 1
+	// generated from group with order 1198 depth 1
 	Group_footnote
 
-	// generated from group with order 1092 depth 1
+	// generated from group with order 1199 depth 1
 	Group_level
 }
 
@@ -7529,13 +7850,13 @@ type Group_editorial_voice struct {
 
 	// insertion point for fields
 
-	// generated from group with order 1094 depth 1
+	// generated from group with order 1201 depth 1
 	Group_footnote
 
-	// generated from group with order 1095 depth 1
+	// generated from group with order 1202 depth 1
 	Group_level
 
-	// generated from group with order 1096 depth 1
+	// generated from group with order 1203 depth 1
 	Group_voice
 }
 
@@ -7544,13 +7865,13 @@ type Group_editorial_voice_direction struct {
 
 	// insertion point for fields
 
-	// generated from group with order 1098 depth 1
+	// generated from group with order 1205 depth 1
 	Group_footnote
 
-	// generated from group with order 1099 depth 1
+	// generated from group with order 1206 depth 1
 	Group_level
 
-	// generated from group with order 1100 depth 1
+	// generated from group with order 1207 depth 1
 	Group_voice
 }
 
@@ -7559,7 +7880,7 @@ type Group_footnote struct {
 
 	// insertion point for fields
 
-	// generated from element "footnote" of type formatted-text order 1102 depth 1
+	// generated from element "footnote" of type formatted-text order 1209 depth 1
 	Footnote *Formatted_text `xml:"footnote,omitempty"`
 }
 
@@ -7568,7 +7889,7 @@ type Group_level struct {
 
 	// insertion point for fields
 
-	// generated from element "level" of type level order 1104 depth 1
+	// generated from element "level" of type level order 1211 depth 1
 	Level *Level `xml:"level,omitempty"`
 }
 
@@ -7577,7 +7898,7 @@ type Group_staff struct {
 
 	// insertion point for fields
 
-	// generated from element "staff" of type positiveInteger order 1106 depth 1
+	// generated from element "staff" of type positiveInteger order 1213 depth 1
 	Staff int `xml:"staff,omitempty"`
 }
 
@@ -7586,13 +7907,13 @@ type Group_tuning struct {
 
 	// insertion point for fields
 
-	// generated from element "tuning-step" of type step order 1108 depth 1
+	// generated from element "tuning-step" of type step order 1215 depth 1
 	Tuning_step Enum_Step `xml:"tuning-step,omitempty"`
 
-	// generated from element "tuning-alter" of type semitones order 1109 depth 1
+	// generated from element "tuning-alter" of type semitones order 1216 depth 1
 	Tuning_alter string `xml:"tuning-alter,omitempty"`
 
-	// generated from element "tuning-octave" of type octave order 1110 depth 1
+	// generated from element "tuning-octave" of type octave order 1217 depth 1
 	Tuning_octave int `xml:"tuning-octave,omitempty"`
 }
 
@@ -7601,16 +7922,16 @@ type Group_virtual_instrument_data struct {
 
 	// insertion point for fields
 
-	// generated from element "instrument-sound" of type string order 1112 depth 1
+	// generated from element "instrument-sound" of type string order 1219 depth 1
 	Instrument_sound string `xml:"instrument-sound,omitempty"`
 
-	// generated from element "solo" of type empty order 1113 depth 1
+	// generated from element "solo" of type empty order 1220 depth 1
 	Solo string `xml:"solo,omitempty"`
 
-	// generated from element "ensemble" of type positive-integer-or-empty order 1114 depth 1
+	// generated from element "ensemble" of type positive-integer-or-empty order 1221 depth 1
 	Ensemble string `xml:"ensemble,omitempty"`
 
-	// generated from element "virtual-instrument" of type virtual-instrument order 1115 depth 1
+	// generated from element "virtual-instrument" of type virtual-instrument order 1222 depth 1
 	Virtual_instrument *Virtual_instrument `xml:"virtual-instrument,omitempty"`
 }
 
@@ -7619,7 +7940,7 @@ type Group_voice struct {
 
 	// insertion point for fields
 
-	// generated from element "voice" of type string order 1117 depth 1
+	// generated from element "voice" of type string order 1224 depth 1
 	Voice string `xml:"voice,omitempty"`
 }
 
@@ -7628,13 +7949,13 @@ type Group_clef struct {
 
 	// insertion point for fields
 
-	// generated from element "sign" of type clef-sign order 1119 depth 1
+	// generated from element "sign" of type clef-sign order 1226 depth 1
 	Sign string `xml:"sign,omitempty"`
 
-	// generated from element "line" of type staff-line-position order 1120 depth 1
+	// generated from element "line" of type staff-line-position order 1227 depth 1
 	Line int `xml:"line,omitempty"`
 
-	// generated from element "clef-octave-change" of type integer order 1121 depth 1
+	// generated from element "clef-octave-change" of type integer order 1228 depth 1
 	Clef_octave_change int `xml:"clef-octave-change,omitempty"`
 }
 
@@ -7643,13 +7964,13 @@ type Group_non_traditional_key struct {
 
 	// insertion point for fields
 
-	// generated from element "key-step" of type step order 1123 depth 1
+	// generated from element "key-step" of type step order 1230 depth 1
 	Key_step Enum_Step `xml:"key-step,omitempty"`
 
-	// generated from element "key-alter" of type semitones order 1124 depth 1
+	// generated from element "key-alter" of type semitones order 1231 depth 1
 	Key_alter string `xml:"key-alter,omitempty"`
 
-	// generated from element "key-accidental" of type key-accidental order 1125 depth 1
+	// generated from element "key-accidental" of type key-accidental order 1232 depth 1
 	Key_accidental *Key_accidental `xml:"key-accidental,omitempty"`
 }
 
@@ -7658,13 +7979,13 @@ type Group_slash struct {
 
 	// insertion point for fields
 
-	// generated from element "slash-type" of type note-type-value order 1127 depth 1
+	// generated from element "slash-type" of type note-type-value order 1234 depth 1
 	Slash_type Enum_Note_type_value `xml:"slash-type,omitempty"`
 
-	// generated from element "slash-dot" of type empty order 1128 depth 1
+	// generated from element "slash-dot" of type empty order 1235 depth 1
 	Slash_dot string `xml:"slash-dot,omitempty"`
 
-	// generated from element "except-voice" of type string order 1129 depth 1
+	// generated from element "except-voice" of type string order 1236 depth 1
 	Except_voice string `xml:"except-voice,omitempty"`
 }
 
@@ -7673,10 +7994,10 @@ type Group_time_signature struct {
 
 	// insertion point for fields
 
-	// generated from element "beats" of type string order 1131 depth 1
+	// generated from element "beats" of type string order 1238 depth 1
 	Beats string `xml:"beats,omitempty"`
 
-	// generated from element "beat-type" of type string order 1132 depth 1
+	// generated from element "beat-type" of type string order 1239 depth 1
 	Beat_type string `xml:"beat-type,omitempty"`
 }
 
@@ -7685,13 +8006,13 @@ type Group_traditional_key struct {
 
 	// insertion point for fields
 
-	// generated from element "cancel" of type cancel order 1134 depth 1
+	// generated from element "cancel" of type cancel order 1241 depth 1
 	Cancel *Cancel `xml:"cancel,omitempty"`
 
-	// generated from element "fifths" of type fifths order 1135 depth 1
+	// generated from element "fifths" of type fifths order 1242 depth 1
 	Fifths int `xml:"fifths,omitempty"`
 
-	// generated from element "mode" of type mode order 1136 depth 1
+	// generated from element "mode" of type mode order 1243 depth 1
 	Mode string `xml:"mode,omitempty"`
 }
 
@@ -7700,16 +8021,16 @@ type Group_transpose struct {
 
 	// insertion point for fields
 
-	// generated from element "diatonic" of type integer order 1138 depth 1
+	// generated from element "diatonic" of type integer order 1245 depth 1
 	Diatonic int `xml:"diatonic,omitempty"`
 
-	// generated from element "chromatic" of type semitones order 1139 depth 1
+	// generated from element "chromatic" of type semitones order 1246 depth 1
 	Chromatic string `xml:"chromatic,omitempty"`
 
-	// generated from element "octave-change" of type integer order 1140 depth 1
+	// generated from element "octave-change" of type integer order 1247 depth 1
 	Octave_change int `xml:"octave-change,omitempty"`
 
-	// generated from element "double" of type double order 1141 depth 1
+	// generated from element "double" of type double order 1248 depth 1
 	Double float64 `xml:"double,omitempty"`
 }
 
@@ -7718,10 +8039,10 @@ type Group_beat_unit struct {
 
 	// insertion point for fields
 
-	// generated from element "beat-unit" of type note-type-value order 1143 depth 1
+	// generated from element "beat-unit" of type note-type-value order 1250 depth 1
 	Beat_unit Enum_Note_type_value `xml:"beat-unit,omitempty"`
 
-	// generated from element "beat-unit-dot" of type empty order 1144 depth 1
+	// generated from element "beat-unit-dot" of type empty order 1251 depth 1
 	Beat_unit_dot string `xml:"beat-unit-dot,omitempty"`
 }
 
@@ -7730,25 +8051,25 @@ type Group_harmony_chord struct {
 
 	// insertion point for fields
 
-	// generated from element "root" of type root order 1146 depth 1
+	// generated from element "root" of type root order 1253 depth 1
 	Root *Root `xml:"root,omitempty"`
 
-	// generated from element "numeral" of type numeral order 1147 depth 1
+	// generated from element "numeral" of type numeral order 1254 depth 1
 	Numeral *Numeral `xml:"numeral,omitempty"`
 
-	// generated from element "function" of type style-text order 1148 depth 1
+	// generated from element "function" of type style-text order 1255 depth 1
 	Function *Style_text `xml:"function,omitempty"`
 
-	// generated from element "kind" of type kind order 1149 depth 1
+	// generated from element "kind" of type kind order 1256 depth 1
 	Kind *Kind `xml:"kind,omitempty"`
 
-	// generated from element "inversion" of type inversion order 1150 depth 1
+	// generated from element "inversion" of type inversion order 1257 depth 1
 	Inversion *Inversion `xml:"inversion,omitempty"`
 
-	// generated from element "bass" of type bass order 1151 depth 1
+	// generated from element "bass" of type bass order 1258 depth 1
 	Bass *Bass `xml:"bass,omitempty"`
 
-	// generated from element "degree" of type degree order 1152 depth 1
+	// generated from element "degree" of type degree order 1259 depth 1
 	Degree []*Degree `xml:"degree,omitempty"`
 }
 
@@ -7757,13 +8078,13 @@ type Group_all_margins struct {
 
 	// insertion point for fields
 
-	// generated from group with order 1154 depth 1
+	// generated from group with order 1261 depth 1
 	Group_left_right_margins
 
-	// generated from element "top-margin" of type tenths order 1155 depth 1
+	// generated from element "top-margin" of type tenths order 1262 depth 1
 	Top_margin string `xml:"top-margin,omitempty"`
 
-	// generated from element "bottom-margin" of type tenths order 1156 depth 1
+	// generated from element "bottom-margin" of type tenths order 1263 depth 1
 	Bottom_margin string `xml:"bottom-margin,omitempty"`
 }
 
@@ -7772,13 +8093,13 @@ type Group_layout struct {
 
 	// insertion point for fields
 
-	// generated from element "page-layout" of type page-layout order 1158 depth 1
+	// generated from element "page-layout" of type page-layout order 1265 depth 1
 	Page_layout *Page_layout `xml:"page-layout,omitempty"`
 
-	// generated from element "system-layout" of type system-layout order 1159 depth 1
+	// generated from element "system-layout" of type system-layout order 1266 depth 1
 	System_layout *System_layout `xml:"system-layout,omitempty"`
 
-	// generated from element "staff-layout" of type staff-layout order 1160 depth 1
+	// generated from element "staff-layout" of type staff-layout order 1267 depth 1
 	Staff_layout []*Staff_layout `xml:"staff-layout,omitempty"`
 }
 
@@ -7787,10 +8108,10 @@ type Group_left_right_margins struct {
 
 	// insertion point for fields
 
-	// generated from element "left-margin" of type tenths order 1162 depth 1
+	// generated from element "left-margin" of type tenths order 1269 depth 1
 	Left_margin string `xml:"left-margin,omitempty"`
 
-	// generated from element "right-margin" of type tenths order 1163 depth 1
+	// generated from element "right-margin" of type tenths order 1270 depth 1
 	Right_margin string `xml:"right-margin,omitempty"`
 }
 
@@ -7799,7 +8120,7 @@ type Group_duration struct {
 
 	// insertion point for fields
 
-	// generated from element "duration" of type positive-divisions order 1165 depth 1
+	// generated from element "duration" of type positive-divisions order 1272 depth 1
 	Duration string `xml:"duration,omitempty"`
 }
 
@@ -7808,10 +8129,10 @@ type Group_display_step_octave struct {
 
 	// insertion point for fields
 
-	// generated from element "display-step" of type step order 1167 depth 1
+	// generated from element "display-step" of type step order 1274 depth 1
 	Display_step Enum_Step `xml:"display-step,omitempty"`
 
-	// generated from element "display-octave" of type octave order 1168 depth 1
+	// generated from element "display-octave" of type octave order 1275 depth 1
 	Display_octave int `xml:"display-octave,omitempty"`
 }
 
@@ -7820,16 +8141,16 @@ type Group_full_note struct {
 
 	// insertion point for fields
 
-	// generated from element "chord" of type empty order 1170 depth 1
+	// generated from element "chord" of type empty order 1277 depth 1
 	Chord string `xml:"chord,omitempty"`
 
-	// generated from element "pitch" of type pitch order 1171 depth 1
+	// generated from element "pitch" of type pitch order 1278 depth 1
 	Pitch *Pitch `xml:"pitch,omitempty"`
 
-	// generated from element "unpitched" of type unpitched order 1172 depth 1
+	// generated from element "unpitched" of type unpitched order 1279 depth 1
 	Unpitched *Unpitched `xml:"unpitched,omitempty"`
 
-	// generated from element "rest" of type rest order 1173 depth 1
+	// generated from element "rest" of type rest order 1280 depth 1
 	Rest *Rest `xml:"rest,omitempty"`
 }
 
@@ -7838,46 +8159,46 @@ type Group_music_data struct {
 
 	// insertion point for fields
 
-	// generated from element "note" of type note order 1175 depth 1
+	// generated from element "note" of type note order 1282 depth 1
 	Note []*Note `xml:"note,omitempty"`
 
-	// generated from element "backup" of type backup order 1176 depth 1
+	// generated from element "backup" of type backup order 1283 depth 1
 	Backup []*Backup `xml:"backup,omitempty"`
 
-	// generated from element "forward" of type forward order 1177 depth 1
+	// generated from element "forward" of type forward order 1284 depth 1
 	Forward []*Forward `xml:"forward,omitempty"`
 
-	// generated from element "direction" of type direction order 1178 depth 1
+	// generated from element "direction" of type direction order 1285 depth 1
 	Direction []*Direction `xml:"direction,omitempty"`
 
-	// generated from element "attributes" of type attributes order 1179 depth 1
+	// generated from element "attributes" of type attributes order 1286 depth 1
 	Attributes []*Attributes `xml:"attributes,omitempty"`
 
-	// generated from element "harmony" of type harmony order 1180 depth 1
+	// generated from element "harmony" of type harmony order 1287 depth 1
 	Harmony []*Harmony `xml:"harmony,omitempty"`
 
-	// generated from element "figured-bass" of type figured-bass order 1181 depth 1
+	// generated from element "figured-bass" of type figured-bass order 1288 depth 1
 	Figured_bass []*Figured_bass `xml:"figured-bass,omitempty"`
 
-	// generated from element "print" of type print order 1182 depth 1
+	// generated from element "print" of type print order 1289 depth 1
 	Print []*Print `xml:"print,omitempty"`
 
-	// generated from element "sound" of type sound order 1183 depth 1
+	// generated from element "sound" of type sound order 1290 depth 1
 	Sound []*Sound `xml:"sound,omitempty"`
 
-	// generated from element "listening" of type listening order 1184 depth 1
+	// generated from element "listening" of type listening order 1291 depth 1
 	Listening []*Listening `xml:"listening,omitempty"`
 
-	// generated from element "barline" of type barline order 1185 depth 1
+	// generated from element "barline" of type barline order 1292 depth 1
 	Barline []*Barline `xml:"barline,omitempty"`
 
-	// generated from element "grouping" of type grouping order 1186 depth 1
+	// generated from element "grouping" of type grouping order 1293 depth 1
 	Grouping []*Grouping `xml:"grouping,omitempty"`
 
-	// generated from element "link" of type link order 1187 depth 1
+	// generated from element "link" of type link order 1294 depth 1
 	Link []*Link `xml:"link,omitempty"`
 
-	// generated from element "bookmark" of type bookmark order 1188 depth 1
+	// generated from element "bookmark" of type bookmark order 1295 depth 1
 	Bookmark []*Bookmark `xml:"bookmark,omitempty"`
 }
 
@@ -7886,7 +8207,7 @@ type Group_part_group struct {
 
 	// insertion point for fields
 
-	// generated from element "part-group" of type part-group order 1190 depth 1
+	// generated from element "part-group" of type part-group order 1297 depth 1
 	Part_group *Part_group `xml:"part-group,omitempty"`
 }
 
@@ -7895,25 +8216,25 @@ type Group_score_header struct {
 
 	// insertion point for fields
 
-	// generated from element "work" of type work order 1192 depth 1
+	// generated from element "work" of type work order 1299 depth 1
 	Work *Work `xml:"work,omitempty"`
 
-	// generated from element "movement-number" of type string order 1193 depth 1
+	// generated from element "movement-number" of type string order 1300 depth 1
 	Movement_number string `xml:"movement-number,omitempty"`
 
-	// generated from element "movement-title" of type string order 1194 depth 1
+	// generated from element "movement-title" of type string order 1301 depth 1
 	Movement_title string `xml:"movement-title,omitempty"`
 
-	// generated from element "identification" of type identification order 1195 depth 1
+	// generated from element "identification" of type identification order 1302 depth 1
 	Identification *Identification `xml:"identification,omitempty"`
 
-	// generated from element "defaults" of type defaults order 1196 depth 1
+	// generated from element "defaults" of type defaults order 1303 depth 1
 	Defaults *Defaults `xml:"defaults,omitempty"`
 
-	// generated from element "credit" of type credit order 1197 depth 1
+	// generated from element "credit" of type credit order 1304 depth 1
 	Credit []*Credit `xml:"credit,omitempty"`
 
-	// generated from element "part-list" of type part-list order 1198 depth 1
+	// generated from element "part-list" of type part-list order 1305 depth 1
 	Part_list *Part_list `xml:"part-list,omitempty"`
 }
 
@@ -7922,7 +8243,7 @@ type Group_score_part struct {
 
 	// insertion point for fields
 
-	// generated from element "score-part" of type score-part order 1200 depth 1
+	// generated from element "score-part" of type score-part order 1307 depth 1
 	Score_part *Score_part `xml:"score-part,omitempty"`
 }
 
@@ -7951,7 +8272,7 @@ type A_score_partwise struct {
 	// generated from attribute group "document-attributes
 	AttributeGroup_document_attributes
 
-	// generated from group with order 1203 depth 2
+	// generated from group with order 1310 depth 2
 	Group_score_header
 
 	// generated from anonymous type within outer element "part" of type A_part.
@@ -7980,7 +8301,7 @@ type A_measure struct {
 	// generated from attribute group "measure-attributes
 	AttributeGroup_measure_attributes
 
-	// generated from group with order 1208 depth 6
+	// generated from group with order 1315 depth 6
 	Group_music_data
 }
 
@@ -8009,7 +8330,7 @@ type A_score_timewise struct {
 	// generated from attribute group "document-attributes
 	AttributeGroup_document_attributes
 
-	// generated from group with order 1214 depth 2
+	// generated from group with order 1321 depth 2
 	Group_score_header
 
 	// generated from anonymous type within outer element "measure" of type A_measure.
@@ -8038,6 +8359,6 @@ type A_part_1 struct {
 	// generated from attribute group "part-attributes
 	AttributeGroup_part_attributes
 
-	// generated from group with order 1219 depth 6
+	// generated from group with order 1326 depth 6
 	Group_music_data
 }

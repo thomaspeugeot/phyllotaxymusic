@@ -113,9 +113,6 @@ github.com/fullstack-lang/gongtree/go/orm
 github.com/fullstack-lang/gongtree/go/probe
 github.com/fullstack-lang/gongtree/go/stack
 github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects
-# github.com/fullstack-lang/gongxsd v0.0.0-20241118055029-a0af7a8b8cdd
-## explicit; go 1.23.1
-github.com/fullstack-lang/gongxsd/test/musicxml/go/models
 # github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 ## explicit; go 1.23.1
 github.com/fullstack-lang/maticons/maticons

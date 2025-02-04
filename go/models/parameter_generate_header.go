@@ -2,26 +2,25 @@ package models
 
 import (
 	"fmt"
-	"time"
 
-	m "github.com/fullstack-lang/gongxsd/test/musicxml/go/models"
+	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
 
 func (*Parameter) generateHeaders(scorePartwise *m.Score_partwise) {
 	scorePartwise.XMLName.Local = "score-partwise"
 	scorePartwise.A_score_partwise.Version = "4.0"
 
-	timestamp := time.Now().Format("20060102_150405")
-	scorePartwise.Work =
-		&m.Work{
+	// timestamp := time.Now().Format("20060102_150405")
+	// scorePartwise.Work =
+	// 	&m.Work{
 
-			Name:        "Phyllotaxy music",
-			Work_number: "",
-			Work_title:  "Phyllotaxy music " + timestamp,
-			Opus: &m.Opus{
-				Name: "",
-			},
-		}
+	// 		Name:        "Phyllotaxy music",
+	// 		Work_number: "",
+	// 		Work_title:  "Phyllotaxy music " + timestamp,
+	// 		Opus: &m.Opus{
+	// 			Name: "",
+	// 		},
+	// 	}
 	{
 		var identification m.Identification
 		scorePartwise.Identification = &identification
@@ -76,7 +75,6 @@ func (*Parameter) generateHeaders(scorePartwise *m.Score_partwise) {
 			supports.Type = m.Enum_Yes_no_Yes
 			supports.Element = "stem"
 		}
-
 	}
 
 	{
@@ -120,51 +118,66 @@ func (*Parameter) generateHeaders(scorePartwise *m.Score_partwise) {
 			}
 
 		}
-		{
-			var appearance m.Appearance
-			defaults.Appearance = &appearance
+		// {
+		// 	var appearance m.Appearance
+		// 	defaults.Appearance = &appearance
 
-			appearance.Line_width = append(appearance.Line_width,
-				&m.Line_width{Type: "heavy barline", EnclosedText: "5.5"},
-				&m.Line_width{Type: "beam", EnclosedText: "5"},
-				&m.Line_width{Type: "bracket", EnclosedText: "4.5"},
-				&m.Line_width{Type: "dashes", EnclosedText: "1"},
-				&m.Line_width{Type: "enclosure", EnclosedText: "1"},
-				&m.Line_width{Type: "ending", EnclosedText: "1.1"},
-				&m.Line_width{Type: "extend", EnclosedText: "1"},
-				&m.Line_width{Type: "leger", EnclosedText: "1.6"},
-				&m.Line_width{Type: "pedal", EnclosedText: "1.1"},
-				&m.Line_width{Type: "octave shift", EnclosedText: "1.1"},
-				&m.Line_width{Type: "slur middle", EnclosedText: "2.1"},
-				&m.Line_width{Type: "slur tip", EnclosedText: "0.5"},
-				&m.Line_width{Type: "staff", EnclosedText: "1.1"},
-				&m.Line_width{Type: "stem", EnclosedText: "1"},
-				&m.Line_width{Type: "tie middle", EnclosedText: "2.1"},
-				&m.Line_width{Type: "tie tip", EnclosedText: "0.5"},
-				&m.Line_width{Type: "tuplet bracket", EnclosedText: "1"},
-				&m.Line_width{Type: "wedge", EnclosedText: "1.2"},
-			)
+		// 	appearance.Line_width = append(appearance.Line_width,
+		// 		&m.Line_width{Type: "heavy barline", EnclosedText: "5.5"},
+		// 		&m.Line_width{Type: "beam", EnclosedText: "5"},
+		// 		&m.Line_width{Type: "bracket", EnclosedText: "4.5"},
+		// 		&m.Line_width{Type: "dashes", EnclosedText: "1"},
+		// 		&m.Line_width{Type: "enclosure", EnclosedText: "1"},
+		// 		&m.Line_width{Type: "ending", EnclosedText: "1.1"},
+		// 		&m.Line_width{Type: "extend", EnclosedText: "1"},
+		// 		&m.Line_width{Type: "leger", EnclosedText: "1.6"},
+		// 		&m.Line_width{Type: "pedal", EnclosedText: "1.1"},
+		// 		&m.Line_width{Type: "octave shift", EnclosedText: "1.1"},
+		// 		&m.Line_width{Type: "slur middle", EnclosedText: "2.1"},
+		// 		&m.Line_width{Type: "slur tip", EnclosedText: "0.5"},
+		// 		&m.Line_width{Type: "staff", EnclosedText: "1.1"},
+		// 		&m.Line_width{Type: "stem", EnclosedText: "1"},
+		// 		&m.Line_width{Type: "tie middle", EnclosedText: "2.1"},
+		// 		&m.Line_width{Type: "tie tip", EnclosedText: "0.5"},
+		// 		&m.Line_width{Type: "tuplet bracket", EnclosedText: "1"},
+		// 		&m.Line_width{Type: "wedge", EnclosedText: "1.2"},
+		// 	)
 
-			appearance.Note_size = append(appearance.Note_size,
-				&m.Note_size{Type: "cue", EnclosedText: "70"},
-				&m.Note_size{Type: "grace", EnclosedText: "70"},
-				&m.Note_size{Type: "grace-cue", EnclosedText: "49"},
-			)
-		}
+		// 	appearance.Note_size = append(appearance.Note_size,
+		// 		&m.Note_size{Type: "cue", EnclosedText: "70"},
+		// 		&m.Note_size{Type: "grace", EnclosedText: "70"},
+		// 		&m.Note_size{Type: "grace-cue", EnclosedText: "49"},
+		// 	)
+		// }
 		defaults.Music_font = &m.Empty_font{
 			AttributeGroup_font: m.AttributeGroup_font{
-				Font_family: "Leland",
+				Font_family: "Times New Roman",
 			},
 		}
 
 		defaults.Word_font = &m.Empty_font{
 			AttributeGroup_font: m.AttributeGroup_font{
-				Font_family: "Edwin",
+				Font_family: "Times New Roman",
 			},
 		}
 
 	}
 
+	{
+		var credit m.Credit
+		credit.Page = 1
+
+		var formatedText m.Formatted_text_id
+		formatedText.EnclosedText = "Phyllotaxie music"
+		formatedText.Default_x = "595.44"
+		formatedText.Default_y = "1626.67"
+		formatedText.Justify = m.Enum_Left_center_right_Center
+		formatedText.Font_size = "24"
+		formatedText.Valign = "top"
+
+		credit.Credit_words = append(credit.Credit_words, &formatedText)
+		scorePartwise.Credit = append(scorePartwise.Credit, &credit)
+	}
 	{
 		var part_list m.Part_list
 		scorePartwise.Part_list = &part_list

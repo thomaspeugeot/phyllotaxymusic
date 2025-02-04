@@ -81,11 +81,15 @@ func main() {
 	parameter.UpdateAndCommitSVGStage()
 	parameter.UpdateAndCommitToneStage()
 	parameter.UpdateAndCommitTreeStage()
-	parameter.CommitPhyllotaxymusicStage()
 
+	// generates the music xml stage (before the commit because
+	// the commit will remove the FirstVoice link to the CircleGrid)
+	// via computeThemeNotesShapes which is called during
+	// parameter.UpdatePhyllotaxyStage()
 	if *genmusicxml {
 		parameter.GenerateMusicXMLFile()
 	}
+	parameter.CommitPhyllotaxymusicStage()
 
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))

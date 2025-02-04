@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
-	m "github.com/fullstack-lang/gongxsd/test/musicxml/go/models"
+	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
 
 func (parameter *Parameter) GenerateMusicXMLFile() bool {
@@ -59,12 +59,43 @@ func (parameter *Parameter) addMeasure(part *m.A_part) {
 	{
 		firstVoiceNotes := parameter.FirstVoiceNotes
 		notes := firstVoiceNotes.Circles
-		for _, note := range notes {
-			log.Println(note.Pitch)
+		for _, noteIn := range notes {
+			log.Println(noteIn.Pitch)
+
+			if !noteIn.isKept {
+				continue
+			}
+
+			var note m.Note
+			measure.Note = append(measure.Note, &note)
+
+			pitch := generateNote(noteIn.Pitch)
+			note.Pitch = pitch
+
+			note.Default_x = "82.98"
+			note.Default_y = "-25"
+
+			note.Duration = "1"
+			note.Voice = "1"
+
+			var type_ m.Note_type
+			note.Type = &type_
+
+			type_.EnclosedText = "eighth"
+
+			var stem m.Stem
+			note.Stem = &stem
+			stem.EnclosedText = "down"
+
+			var beam m.Beam
+			note.Beam = &beam
+
+			beam.Number = 1
+			beam.EnclosedText = "begin"
 		}
 
-		parameter.addNote(&measure, m.Enum_Step_A)
-		parameter.addNote(&measure, m.Enum_Step_B)
+		// parameter.addNote(&measure, m.Enum_Step_A)
+		// parameter.addNote(&measure, m.Enum_Step_B)
 	}
 }
 
@@ -79,6 +110,7 @@ func (parameter *Parameter) addNote(measure *m.A_measure, step m.Enum_Step) {
 	note.Pitch = &pitch
 
 	pitch.Step = step
+	pitch.Alter = "-1"
 	pitch.Octave = 4
 
 	note.Duration = "1"
