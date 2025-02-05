@@ -8159,9 +8159,6 @@ type Group_music_data struct {
 
 	// insertion point for fields
 
-	// generated from element "note" of type note order 1282 depth 1
-	Note []*Note `xml:"note,omitempty"`
-
 	// generated from element "backup" of type backup order 1283 depth 1
 	Backup []*Backup `xml:"backup,omitempty"`
 
@@ -8173,6 +8170,9 @@ type Group_music_data struct {
 
 	// generated from element "attributes" of type attributes order 1286 depth 1
 	Attributes []*Attributes `xml:"attributes,omitempty"`
+
+	// generated from element "note" of type note order 1282 depth 1
+	Note []*Note `xml:"note,omitempty"`
 
 	// generated from element "harmony" of type harmony order 1287 depth 1
 	Harmony []*Harmony `xml:"harmony,omitempty"`

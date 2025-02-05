@@ -4,13 +4,13 @@ import (
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
 
-// generateNote takes
+// generatePitch takes
 //
 // nbHalfTone: the number of half tone of the note above C0
 //
 // Pitch is represented as a combination of the step of the diatonic
 // scale, the chromatic alteration, and the octave.
-func generateNote(nbHalfTone int) *m.Pitch {
+func generatePitch(nbHalfTone int) *m.Pitch {
 	pitch := &m.Pitch{}
 
 	// Which octave are we in?
