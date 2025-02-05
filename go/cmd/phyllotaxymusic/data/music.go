@@ -594,12 +594,12 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbBeatLines = 300
 	__Parameter__000000_Reference.NbOfBeatsInTheme = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.050000
-	__Parameter__000000_Reference.FirstVoiceShiftY = 1.830000
+	__Parameter__000000_Reference.FirstVoiceShiftY = 1.600000
 	__Parameter__000000_Reference.PitchDifference = 12
-	__Parameter__000000_Reference.BeatsPerSecond = 3.200000
+	__Parameter__000000_Reference.BeatsPerSecond = 4.000000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 60093
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 22359
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000
