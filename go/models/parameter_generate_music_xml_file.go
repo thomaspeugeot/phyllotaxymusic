@@ -25,8 +25,8 @@ func (parameter *Parameter) GenerateMusicXMLFile() bool {
 		part.Id = "P1"
 
 		{
-			parameter.addMeasure(&part, parameter.FirstVoiceNotes, true)
-			parameter.addMeasure(&part, parameter.FirstVoiceNotes, false)
+			parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, true)
+			// parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, false)
 		}
 
 	}

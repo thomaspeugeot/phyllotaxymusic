@@ -2342,27 +2342,51 @@ type Midi_instrument struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
+	// The midi-channel element specifies a MIDI 1.0 channel numbers
+	// ranging from 1 to 16.
 	// generated from element "midi-channel" of type midi-16 order 311 depth 1
 	Midi_channel int `xml:"midi-channel,omitempty"`
 
+	// The midi-name element corresponds to a ProgramName meta-event
+	// within a Standard MIDI File.
 	// generated from element "midi-name" of type string order 312 depth 1
 	Midi_name string `xml:"midi-name,omitempty"`
 
+	// The midi-bank element specifies a MIDI 1.0 bank number ranging
+	// from 1 to 16,384.
 	// generated from element "midi-bank" of type midi-16384 order 313 depth 1
 	Midi_bank int `xml:"midi-bank,omitempty"`
 
+	// The midi-program element specifies a MIDI 1.0 program number
+	// ranging from 1 to 128.
 	// generated from element "midi-program" of type midi-128 order 314 depth 1
 	Midi_program int `xml:"midi-program,omitempty"`
 
+	// For unpitched instruments, the midi-unpitched element
+	// specifies a MIDI 1.0 note number ranging from 1 to 128. It is usually used
+	// with MIDI banks for percussion. Note that MIDI 1.0 note numbers are
+	// generally specified from 0 to 127 rather than the 1 to 128 numbering used in
+	// this element.
 	// generated from element "midi-unpitched" of type midi-128 order 315 depth 1
 	Midi_unpitched int `xml:"midi-unpitched,omitempty"`
 
+	// The volume element value is a percentage of the maximum
+	// ranging from 0 to 100, with decimal values allowed. This corresponds to a
+	// scaling value for the MIDI 1.0 channel volume controller.
 	// generated from element "volume" of type percent order 316 depth 1
 	Volume string `xml:"volume,omitempty"`
 
+	// The pan and elevation elements allow placing of sound in a 3-D
+	// space relative to the listener. Both are expressed in degrees ranging from
+	// -180 to 180. For pan, 0 is straight ahead, -90 is hard left, 90 is hard
+	// right, and -180 and 180 are directly behind the listener.
 	// generated from element "pan" of type rotation-degrees order 317 depth 1
 	Pan string `xml:"pan,omitempty"`
 
+	// The elevation and pan elements allow placing of sound in a 3-D
+	// space relative to the listener. Both are expressed in degrees ranging from
+	// -180 to 180. For elevation, 0 is level with the listener, 90 is directly
+	// above, and -90 is directly below.
 	// generated from element "elevation" of type rotation-degrees order 318 depth 1
 	Elevation string `xml:"elevation,omitempty"`
 }
@@ -2418,6 +2442,9 @@ type Play struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
+	// The ipa element represents International Phonetic Alphabet
+	//     (IPA) sounds for vocal music. String content is limited to IPA 2015
+	//     symbols represented in Unicode 13.0.
 	// generated from element "ipa" of type string order 325 depth 1
 	Ipa string `xml:"ipa,omitempty"`
 
@@ -2527,39 +2554,85 @@ type Attributes struct {
 	// generated from group with order 342 depth 1
 	Group_editorial
 
+	// Musical notation duration is commonly represented as
+	// fractions. The divisions element indicates how many divisions per quarter
+	// note are used to indicate a note's duration. For example, if duration = 1
+	// and divisions = 2, this is an eighth note duration. Duration and divisions
+	// are used directly for generating sound output, so they must be chosen to
+	// take tuplets into account. Using a divisions element lets us use just one
+	// number to represent a duration for each note in the score, while retaining
+	// the full power of a fractional representation. If maximum compatibility with
+	// Standard MIDI 1.0 files is important, do not have the divisions value exceed
+	// 16383.
 	// generated from element "divisions" of type positive-divisions order 343 depth 1
 	Divisions string `xml:"divisions,omitempty"`
 
+	// The key element represents a key signature. Both traditional
+	// and non-traditional key signatures are supported. The optional number
+	// attribute refers to staff numbers. If absent, the key signature applies to
+	// all staves in the part.
 	// generated from element "key" of type key order 344 depth 1
 	Key []*Key `xml:"key,omitempty"`
 
+	// Time signatures are represented by the beats element for the
+	// numerator and the beat-type element for the denominator.
 	// generated from element "time" of type time order 345 depth 1
 	Time []*Time `xml:"time,omitempty"`
 
+	// The staves element is used if there is more than one staff
+	// represented in the given part (e.g., 2 staves for typical piano parts). If
+	// absent, a value of 1 is assumed. Staves are ordered from top to bottom in a
+	// part in numerical order, with staff 1 above staff 2.
 	// generated from element "staves" of type nonNegativeInteger order 346 depth 1
 	Staves int `xml:"staves,omitempty"`
 
+	// The part-symbol element indicates how a symbol for a
+	// multi-staff part is indicated in the score.
 	// generated from element "part-symbol" of type part-symbol order 347 depth 1
 	Part_symbol *Part_symbol `xml:"part-symbol,omitempty"`
 
+	// The instruments element is only used if more than one
+	// instrument is represented in the part (e.g., oboe I and II where they play
+	// together most of the time). If absent, a value of 1 is assumed.
 	// generated from element "instruments" of type nonNegativeInteger order 348 depth 1
 	Instruments int `xml:"instruments,omitempty"`
 
+	// Clefs are represented by a combination of sign, line, and
+	// clef-octave-change elements.
 	// generated from element "clef" of type clef order 349 depth 1
 	Clef []*Clef `xml:"clef,omitempty"`
 
+	// The staff-details element is used to indicate different types
+	// of staves.
 	// generated from element "staff-details" of type staff-details order 350 depth 1
 	Staff_details []*Staff_details `xml:"staff-details,omitempty"`
 
+	// If the part is being encoded for a transposing instrument
+	//     in written vs. concert pitch, the transposition must be encoded in the
+	//     transpose element using the transpose type.
 	// generated from element "transpose" of type transpose order 351 depth 1
 	Transpose []*Transpose `xml:"transpose,omitempty"`
 
+	// The for-part element is used in a concert score to
+	//     indicate the transposition for a transposed part created from that
+	//     score. It is only used in score files that contain a concert-score
+	//     element in the defaults. This allows concert scores with transposed
+	//     parts to be represented in a single uncompressed MusicXML file.
 	// generated from element "for-part" of type for-part order 352 depth 1
 	For_part []*For_part `xml:"for-part,omitempty"`
 
+	// Directives are like directions, but can be grouped together
+	// with attributes for convenience. This is typically used for tempo markings
+	// at the beginning of a piece of music. This element was deprecated in Version
+	// 2.0 in favor of the direction element's directive attribute. Language names
+	// come from ISO 639, with optional country subcodes from ISO 3166.
 	// generated from anonymous type within outer element "directive" of type A_directive.
 	Directive []*A_directive `xml:"directive,omitempty"`
 
+	// A measure-style indicates a special way to print partial to
+	// multiple measures within a part. This includes multiple rests over several
+	// measures, repeats of beats, single, or multiple measures, and use of slash
+	// notation.
 	// generated from element "measure-style" of type measure-style order 356 depth 1
 	Measure_style []*Measure_style `xml:"measure-style,omitempty"`
 }
@@ -2707,9 +2780,14 @@ type For_part struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
+	// The part-clef element is used for transpositions that also
+	// include a change of clef, as for instruments such as bass clarinet.
 	// generated from element "part-clef" of type part-clef order 367 depth 1
 	Part_clef *Part_clef `xml:"part-clef,omitempty"`
 
+	// The chromatic element in a part-transpose element will usually
+	// have a non-zero value, since octave transpositions can be represented in
+	// concert scores using the transpose element.
 	// generated from element "part-transpose" of type part-transpose order 368 depth 1
 	Part_transpose *Part_transpose `xml:"part-transpose,omitempty"`
 }
@@ -2766,6 +2844,8 @@ type Key struct {
 	// generated from group with order 375 depth 1
 	Group_non_traditional_key
 
+	// The optional list of key-octave elements is used to specify in
+	// which octave each element of the key signature appears.
 	// generated from element "key-octave" of type key-octave order 376 depth 1
 	Key_octave []*Key_octave `xml:"key-octave,omitempty"`
 }
@@ -3029,6 +3109,10 @@ type Staff_details struct {
 	// generated from element "staff-type" of type staff-type order 406 depth 1
 	Staff_type string `xml:"staff-type,omitempty"`
 
+	// The staff-lines element specifies the number of lines and
+	//     is usually used for a non 5-line staff. If the staff-lines element is
+	//     present, the appearance of each line may be individually specified with
+	//     a line-detail element.
 	// generated from element "staff-lines" of type nonNegativeInteger order 407 depth 1
 	Staff_lines int `xml:"staff-lines,omitempty"`
 
@@ -3038,6 +3122,9 @@ type Staff_details struct {
 	// generated from element "staff-tuning" of type staff-tuning order 409 depth 1
 	Staff_tuning []*Staff_tuning `xml:"staff-tuning,omitempty"`
 
+	// The capo element indicates at which fret a capo should be
+	// placed on a fretted instrument. This changes the open tuning of the strings
+	// specified by staff-tuning by the specified number of half-steps.
 	// generated from element "capo" of type nonNegativeInteger order 410 depth 1
 	Capo int `xml:"capo,omitempty"`
 
@@ -3126,6 +3213,10 @@ type Time struct {
 	// generated from element "interchangeable" of type interchangeable order 419 depth 1
 	Interchangeable *Interchangeable `xml:"interchangeable,omitempty"`
 
+	// A senza-misura element explicitly indicates that no time
+	// signature is present. The optional element content indicates the symbol to
+	// be used, if any, such as an X. The time element's symbol attribute is not
+	// used when a senza-misura element is present.
 	// generated from element "senza-misura" of type string order 420 depth 1
 	Senza_misura string `xml:"senza-misura,omitempty"`
 }
@@ -3338,12 +3429,21 @@ type Accordion_registration struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
+	// The accordion-high element indicates the presence of a dot in
+	// the high (4') section of the registration symbol. This element is omitted if
+	// no dot is present.
 	// generated from element "accordion-high" of type empty order 447 depth 1
 	Accordion_high string `xml:"accordion-high,omitempty"`
 
+	// The accordion-middle element indicates the presence of 1 to 3
+	// dots in the middle (8') section of the registration symbol. This element is
+	// omitted if no dots are present.
 	// generated from element "accordion-middle" of type accordion-middle order 448 depth 1
 	Accordion_middle int `xml:"accordion-middle,omitempty"`
 
+	// The accordion-low element indicates the presence of a dot in
+	// the low (16') section of the registration symbol. This element is omitted if
+	// no dot is present.
 	// generated from element "accordion-low" of type empty order 449 depth 1
 	Accordion_low string `xml:"accordion-low,omitempty"`
 }
@@ -3378,12 +3478,21 @@ type Bass struct {
 	// generated from attribute "arrangement
 	Arrangement string `xml:"arrangement,attr,omitempty"`
 
+	// The optional bass-separator element indicates that text,
+	// rather than a line or slash, separates the bass from what precedes it.
 	// generated from element "bass-separator" of type style-text order 455 depth 1
 	Bass_separator *Style_text `xml:"bass-separator,omitempty"`
 
 	// generated from element "bass-step" of type bass-step order 456 depth 1
 	Bass_step *Bass_step `xml:"bass-step,omitempty"`
 
+	// The bass-alter element represents the chromatic alteration of
+	// the bass of the current chord within the harmony element. In some chord
+	// styles, the text for the bass-step element may include bass-alter
+	// information. In that case, the print-object attribute of the bass-alter
+	// element can be set to no. The location attribute indicates whether the
+	// alteration should appear to the left or the right of the bass-step; it is
+	// right if not specified.
 	// generated from element "bass-alter" of type harmony-alter order 457 depth 1
 	Bass_alter *Harmony_alter `xml:"bass-alter,omitempty"`
 }
@@ -3680,6 +3789,10 @@ type Direction_type struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
+	// The rehearsal element specifies letters, numbers, and section
+	// names that are notated in the score for reference during rehearsal. The
+	// enclosure is square if not specified. The language is Italian ("it") if not
+	// specified. Left justification is used if not specified.
 	// generated from element "rehearsal" of type formatted-text-id order 500 depth 1
 	Rehearsal []*Formatted_text_id `xml:"rehearsal,omitempty"`
 
@@ -3689,9 +3802,18 @@ type Direction_type struct {
 	// generated from element "coda" of type coda order 502 depth 1
 	Coda []*Coda `xml:"coda,omitempty"`
 
+	// The words element specifies a standard text direction. The
+	//     enclosure is none if not specified. The language is Italian ("it") if
+	//     not specified. Left justification is used if not specified.
 	// generated from element "words" of type formatted-text-id order 503 depth 1
 	Words []*Formatted_text_id `xml:"words,omitempty"`
 
+	// The symbol element specifies a musical symbol using a
+	//     canonical SMuFL glyph name. It is used when an occasional musical symbol
+	//     is interspersed into text. It should not be used in place of semantic
+	//     markup, such as metronome marks that mix text and symbols. Left
+	//     justification is used if not specified. Enclosure is none if not
+	//     specified.
 	// generated from element "symbol" of type formatted-symbol-id order 504 depth 1
 	Symbol []*Formatted_symbol_id `xml:"symbol,omitempty"`
 
@@ -3719,12 +3841,17 @@ type Direction_type struct {
 	// generated from element "harp-pedals" of type harp-pedals order 512 depth 1
 	Harp_pedals *Harp_pedals `xml:"harp-pedals,omitempty"`
 
+	// The damp element specifies a harp damping mark.
 	// generated from element "damp" of type empty-print-style-align-id order 513 depth 1
 	Damp *Empty_print_style_align_id `xml:"damp,omitempty"`
 
+	// The damp-all element specifies a harp damping mark for all
+	// strings.
 	// generated from element "damp-all" of type empty-print-style-align-id order 514 depth 1
 	Damp_all *Empty_print_style_align_id `xml:"damp-all,omitempty"`
 
+	// The eyeglasses element represents the eyeglasses symbol,
+	// common in commercial music.
 	// generated from element "eyeglasses" of type empty-print-style-align-id order 515 depth 1
 	Eyeglasses *Empty_print_style_align_id `xml:"eyeglasses,omitempty"`
 
@@ -3841,9 +3968,13 @@ type Frame struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
+	// The frame-strings element gives the overall size of the frame
+	// in vertical lines (strings).
 	// generated from element "frame-strings" of type positiveInteger order 529 depth 1
 	Frame_strings int `xml:"frame-strings,omitempty"`
 
+	// The frame-frets element gives the overall size of the frame in
+	// horizontal spaces (frets).
 	// generated from element "frame-frets" of type positiveInteger order 530 depth 1
 	Frame_frets int `xml:"frame-frets,omitempty"`
 
@@ -4247,9 +4378,17 @@ type Metronome struct {
 	// generated from element "beat-unit-tied" of type beat-unit-tied order 586 depth 1
 	Beat_unit_tied []*Beat_unit_tied `xml:"beat-unit-tied,omitempty"`
 
+	// If the metronome-arrows element is present, it indicates
+	//     that metric modulation arrows are displayed on both sides of the
+	//     metronome mark.
 	// generated from element "metronome-arrows" of type empty order 587 depth 1
 	Metronome_arrows string `xml:"metronome-arrows,omitempty"`
 
+	// The metronome-relation element describes the
+	// relationship symbol that goes between the two sets of metronome-note
+	// elements. The currently allowed value is equals, but this may expand
+	// in future versions. If the element is empty, the equals value is
+	// used.
 	// generated from element "metronome-relation" of type string order 589 depth 1
 	Metronome_relation string `xml:"metronome-relation,omitempty"`
 
@@ -4280,9 +4419,13 @@ type Metronome_note struct {
 
 	// insertion point for fields
 
+	// The metronome-type element works like the type element in
+	// defining metric relationships.
 	// generated from element "metronome-type" of type note-type-value order 597 depth 1
 	Metronome_type string `xml:"metronome-type,omitempty"`
 
+	// The metronome-dot element works like the dot element in
+	// defining metric relationships.
 	// generated from element "metronome-dot" of type empty order 598 depth 1
 	Metronome_dot string `xml:"metronome-dot,omitempty"`
 
@@ -4330,6 +4473,13 @@ type Numeral struct {
 	// generated from element "numeral-root" of type numeral-root order 605 depth 1
 	Numeral_root *Numeral_root `xml:"numeral-root,omitempty"`
 
+	// The numeral-alter element represents an alteration to the
+	// numeral-root, similar to the alter element for a pitch. The print-object
+	// attribute can be used to hide an alteration in cases such as when the
+	// MusicXML encoding of a 6 or 7 numeral-root in a minor key requires an
+	// alteration that is not displayed. The location attribute indicates whether
+	// the alteration should appear to the left or the right of the numeral-root.
+	// It is left by default.
 	// generated from element "numeral-alter" of type harmony-alter order 606 depth 1
 	Numeral_alter *Harmony_alter `xml:"numeral-alter,omitempty"`
 
@@ -4528,9 +4678,13 @@ type Pedal_tuning struct {
 
 	// insertion point for fields
 
+	// The pedal-step element defines the pitch step for a single
+	// harp pedal.
 	// generated from element "pedal-step" of type step order 629 depth 1
 	Pedal_step Enum_Step `xml:"pedal-step,omitempty"`
 
+	// The pedal-alter element defines the chromatic alteration for a
+	// single harp pedal.
 	// generated from element "pedal-alter" of type semitones order 630 depth 1
 	Pedal_alter string `xml:"pedal-alter,omitempty"`
 }
@@ -4602,6 +4756,8 @@ type Percussion struct {
 	// generated from element "stick-location" of type stick-location order 643 depth 1
 	Stick_location string `xml:"stick-location,omitempty"`
 
+	// The other-percussion element represents percussion pictograms
+	// not defined elsewhere.
 	// generated from element "other-percussion" of type other-text order 644 depth 1
 	Other_percussion *Other_text `xml:"other-percussion,omitempty"`
 }
@@ -4698,6 +4854,13 @@ type Root struct {
 	// generated from element "root-step" of type root-step order 661 depth 1
 	Root_step *Root_step `xml:"root-step,omitempty"`
 
+	// The root-alter element represents the chromatic alteration of
+	// the root of the current chord within the harmony element. In some chord
+	// styles, the text for the root-step element may include root-alter
+	// information. In that case, the print-object attribute of the root-alter
+	// element can be set to no. The location attribute indicates whether the
+	// alteration should appear to the left or the right of the root-step; it is
+	// right by default.
 	// generated from element "root-alter" of type harmony-alter order 662 depth 1
 	Root_alter *Harmony_alter `xml:"root-alter,omitempty"`
 }
@@ -5087,18 +5250,37 @@ type Identification struct {
 
 	// insertion point for fields
 
+	// The creator element is borrowed from Dublin Core. It is used
+	// for the creators of the score. The type attribute is used to distinguish
+	// different creative contributions. Thus, there can be multiple creators
+	// within an identification. Standard type values are composer, lyricist, and
+	// arranger. Other type values may be used for different types of creative
+	// roles. The type attribute should usually be used even if there is just a
+	// single creator element. The MusicXML format does not use the creator /
+	// contributor distinction from Dublin Core.
 	// generated from element "creator" of type typed-text order 707 depth 1
 	Creator []*Typed_text `xml:"creator,omitempty"`
 
+	// The rights element is borrowed from Dublin Core. It contains
+	// copyright and other intellectual property notices. Words, music, and
+	// derivatives can have different types, so multiple rights elements with
+	// different type attributes are supported. Standard type values are music,
+	// words, and arrangement, but other types may be used. The type attribute is
+	// only needed when there are multiple rights elements.
 	// generated from element "rights" of type typed-text order 708 depth 1
 	Rights []*Typed_text `xml:"rights,omitempty"`
 
 	// generated from element "encoding" of type encoding order 709 depth 1
 	Encoding *Encoding `xml:"encoding,omitempty"`
 
+	// The source for the music that is encoded. This is similar to
+	// the Dublin Core source element.
 	// generated from element "source" of type string order 710 depth 1
 	Source string `xml:"source,omitempty"`
 
+	// A related resource for the music that is encoded. This is
+	// similar to the Dublin Core relation element. Standard type values are music,
+	// words, and arrangement, but other types may be used.
 	// generated from element "relation" of type typed-text order 711 depth 1
 	Relation []*Typed_text `xml:"relation,omitempty"`
 
@@ -5250,6 +5432,11 @@ type Measure_layout struct {
 
 	// insertion point for fields
 
+	// The measure-distance element specifies the horizontal distance
+	// from the previous measure. This value is only used for systems where there
+	// is horizontal whitespace in the middle of a system, as in systems with
+	// codas. To specify the measure width, use the width attribute of the measure
+	// element.
 	// generated from element "measure-distance" of type tenths order 727 depth 1
 	Measure_distance string `xml:"measure-distance,omitempty"`
 }
@@ -5588,36 +5775,59 @@ type Articulations struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
+	// The accent element indicates a regular horizontal accent mark.
 	// generated from element "accent" of type empty-placement order 771 depth 1
 	Accent []*Empty_placement `xml:"accent,omitempty"`
 
+	// The strong-accent element indicates a vertical accent mark.
 	// generated from element "strong-accent" of type strong-accent order 772 depth 1
 	Strong_accent []*Strong_accent `xml:"strong-accent,omitempty"`
 
+	// The staccato element is used for a dot articulation, as
+	// opposed to a stroke or a wedge.
 	// generated from element "staccato" of type empty-placement order 773 depth 1
 	Staccato []*Empty_placement `xml:"staccato,omitempty"`
 
+	// The tenuto element indicates a tenuto line symbol.
 	// generated from element "tenuto" of type empty-placement order 774 depth 1
 	Tenuto []*Empty_placement `xml:"tenuto,omitempty"`
 
+	// The detached-legato element indicates the combination of a
+	// tenuto line and staccato dot symbol.
 	// generated from element "detached-legato" of type empty-placement order 775 depth 1
 	Detached_legato []*Empty_placement `xml:"detached-legato,omitempty"`
 
+	// The staccatissimo element is used for a wedge articulation, as
+	// opposed to a dot or a stroke.
 	// generated from element "staccatissimo" of type empty-placement order 776 depth 1
 	Staccatissimo []*Empty_placement `xml:"staccatissimo,omitempty"`
 
+	// The spiccato element is used for a stroke articulation, as
+	// opposed to a dot or a wedge.
 	// generated from element "spiccato" of type empty-placement order 777 depth 1
 	Spiccato []*Empty_placement `xml:"spiccato,omitempty"`
 
+	// The scoop element is an indeterminate slide attached to a
+	// single note. The scoop appears before the main note and comes from below the
+	// main pitch.
 	// generated from element "scoop" of type empty-line order 778 depth 1
 	Scoop []*Empty_line `xml:"scoop,omitempty"`
 
+	// The plop element is an indeterminate slide attached to a
+	// single note. The plop appears before the main note and comes from above the
+	// main pitch.
 	// generated from element "plop" of type empty-line order 779 depth 1
 	Plop []*Empty_line `xml:"plop,omitempty"`
 
+	// The doit element is an indeterminate slide attached to a
+	// single note. The doit appears after the main note and goes above the main
+	// pitch.
 	// generated from element "doit" of type empty-line order 780 depth 1
 	Doit []*Empty_line `xml:"doit,omitempty"`
 
+	// The falloff element is an indeterminate slide attached to a
+	// single note. The falloff appears after the main note and goes below the main
+	// pitch.
 	// generated from element "falloff" of type empty-line order 781 depth 1
 	Falloff []*Empty_line `xml:"falloff,omitempty"`
 
@@ -5627,15 +5837,29 @@ type Articulations struct {
 	// generated from element "caesura" of type caesura order 783 depth 1
 	Caesura []*Caesura `xml:"caesura,omitempty"`
 
+	// The stress element indicates a stressed note.
 	// generated from element "stress" of type empty-placement order 784 depth 1
 	Stress []*Empty_placement `xml:"stress,omitempty"`
 
+	// The unstress element indicates an unstressed note. It is often
+	// notated using a u-shaped symbol.
 	// generated from element "unstress" of type empty-placement order 785 depth 1
 	Unstress []*Empty_placement `xml:"unstress,omitempty"`
 
+	// The soft-accent element indicates a soft accent that is not as
+	// heavy as a normal accent. It is often notated as <>. It can be
+	// combined with other articulations to implement the first eight symbols in
+	// the SMuFL Articulation supplement range.
 	// generated from element "soft-accent" of type empty-placement order 786 depth 1
 	Soft_accent []*Empty_placement `xml:"soft-accent,omitempty"`
 
+	// The other-articulation element is used to define any
+	// articulations not yet in the MusicXML format. The smufl attribute can be
+	// used to specify a particular articulation, allowing application
+	// interoperability without requiring every SMuFL articulation to have a
+	// MusicXML element equivalent. Using the other-articulation element without
+	// the smufl attribute allows for extended representation, though without
+	// application interoperability.
 	// generated from element "other-articulation" of type other-placement-text order 787 depth 1
 	Other_articulation []*Other_placement_text `xml:"other-articulation,omitempty"`
 }
@@ -5773,15 +5997,28 @@ type Bend struct {
 	// generated from attribute group "bend-sound
 	AttributeGroup_bend_sound
 
+	// The bend-alter element indicates the number of semitones in
+	// the bend, similar to the alter element. As with the alter element, numbers
+	// like 0.5 can be used to indicate microtones. Negative values indicate
+	// pre-bends or releases. The pre-bend and release elements are used to
+	// distinguish what is intended. Because the bend-alter element represents the
+	// number of steps in the bend, a release after a bend has a negative
+	// bend-alter value, not a zero value.
 	// generated from element "bend-alter" of type semitones order 805 depth 1
 	Bend_alter string `xml:"bend-alter,omitempty"`
 
+	// The pre-bend element indicates that a bend is a pre-bend
+	//     rather than a normal bend or a release.
 	// generated from element "pre-bend" of type empty order 806 depth 1
 	Pre_bend string `xml:"pre-bend,omitempty"`
 
 	// generated from element "release" of type release order 807 depth 1
 	Release *Release `xml:"release,omitempty"`
 
+	// The with-bar element indicates that the bend is to be done at
+	// the bridge with a whammy or vibrato bar. The content of the element
+	// indicates how this should be notated. Content values of "scoop" and "dip"
+	// refer to the SMuFL guitarVibratoBarScoop and guitarVibratoBarDip glyphs.
 	// generated from element "with-bar" of type placement-text order 808 depth 1
 	With_bar *Placement_text `xml:"with-bar,omitempty"`
 }
@@ -5902,12 +6139,26 @@ type Figure struct {
 
 	// insertion point for fields
 
+	// Values for the prefix element include plus and the accidental
+	// values sharp, flat, natural, double-sharp, flat-flat, and sharp-sharp. The
+	// prefix element may contain additional values for symbols specific to
+	// particular figured bass styles.
 	// generated from element "prefix" of type style-text order 831 depth 1
 	Prefix *Style_text `xml:"prefix,omitempty"`
 
+	// A figure-number is a number. Overstrikes of the figure number
+	// are represented in the suffix element.
 	// generated from element "figure-number" of type style-text order 832 depth 1
 	Figure_number *Style_text `xml:"figure-number,omitempty"`
 
+	// Values for the suffix element include plus and the accidental
+	// values sharp, flat, natural, double-sharp, flat-flat, and sharp-sharp.
+	// Suffixes include both symbols that come after the figure number and those
+	// that overstrike the figure number. The suffix values slash, back-slash, and
+	// vertical are used for slashed numbers indicating chromatic alteration. The
+	// orientation and display of the slash usually depends on the figure number.
+	// The suffix element may contain additional values for symbols specific to
+	// particular figured bass styles.
 	// generated from element "suffix" of type style-text order 833 depth 1
 	Suffix *Style_text `xml:"suffix,omitempty"`
 
@@ -6134,18 +6385,29 @@ type Harmonic struct {
 	// generated from attribute group "placement
 	AttributeGroup_placement
 
+	// The natural element indicates that this is a natural
+	//     harmonic. These are usually notated at base pitch rather than sounding
+	//     pitch.
 	// generated from element "natural" of type empty order 866 depth 1
 	Natural string `xml:"natural,omitempty"`
 
+	// The artificial element indicates that this is an
+	//     artificial harmonic.
 	// generated from element "artificial" of type empty order 867 depth 1
 	Artificial string `xml:"artificial,omitempty"`
 
+	// The base pitch is the pitch at which the string is played
+	//     before touching to create the harmonic.
 	// generated from element "base-pitch" of type empty order 868 depth 1
 	Base_pitch string `xml:"base-pitch,omitempty"`
 
+	// The touching-pitch is the pitch at which the string is
+	//     touched lightly to produce the harmonic.
 	// generated from element "touching-pitch" of type empty order 869 depth 1
 	Touching_pitch string `xml:"touching-pitch,omitempty"`
 
+	// The sounding-pitch is the pitch which is heard when
+	//     playing the harmonic.
 	// generated from element "sounding-pitch" of type empty order 870 depth 1
 	Sounding_pitch string `xml:"sounding-pitch,omitempty"`
 }
@@ -6173,12 +6435,17 @@ type Hole struct {
 	// generated from attribute group "placement
 	AttributeGroup_placement
 
+	// The content of the optional hole-type element indicates what
+	// the hole symbol represents in terms of instrument fingering or other
+	// techniques.
 	// generated from element "hole-type" of type string order 876 depth 1
 	Hole_type string `xml:"hole-type,omitempty"`
 
 	// generated from element "hole-closed" of type hole-closed order 877 depth 1
 	Hole_closed *Hole_closed `xml:"hole-closed,omitempty"`
 
+	// The optional hole-shape element indicates the shape of the
+	// hole symbol; the default is a circle.
 	// generated from element "hole-shape" of type string order 878 depth 1
 	Hole_shape string `xml:"hole-shape,omitempty"`
 }
@@ -6292,15 +6559,23 @@ type Lyric struct {
 	// generated from element "extend" of type extend order 893 depth 1
 	Extend *Extend `xml:"extend,omitempty"`
 
+	// The laughing element represents a laughing voice.
 	// generated from element "laughing" of type empty order 895 depth 1
 	Laughing string `xml:"laughing,omitempty"`
 
+	// The humming element represents a humming voice.
 	// generated from element "humming" of type empty order 896 depth 1
 	Humming string `xml:"humming,omitempty"`
 
+	// The end-line element comes from RP-017 for Standard MIDI File
+	// Lyric meta-events. It facilitates lyric display for Karaoke and similar
+	// applications.
 	// generated from element "end-line" of type empty order 897 depth 1
 	End_line string `xml:"end-line,omitempty"`
 
+	// The end-paragraph element comes from RP-017 for Standard MIDI
+	// File Lyric meta-events. It facilitates lyric display for Karaoke and similar
+	// applications.
 	// generated from element "end-paragraph" of type empty order 898 depth 1
 	End_paragraph string `xml:"end-paragraph,omitempty"`
 
@@ -6502,6 +6777,10 @@ type Note struct {
 	// generated from element "type" of type note-type order 944 depth 1
 	Type *Note_type `xml:"type,omitempty"`
 
+	// One dot element is used for each dot of prolongation. The
+	// placement attribute is used to specify whether the dot should appear above
+	// or below the staff line. It is ignored for notes that appear on a staff
+	// space.
 	// generated from element "dot" of type empty-placement order 945 depth 1
 	Dot []*Empty_placement `xml:"dot,omitempty"`
 
@@ -6624,48 +6903,80 @@ type Ornaments struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
+	// The trill-mark element represents the trill-mark symbol.
 	// generated from element "trill-mark" of type empty-trill-sound order 971 depth 1
 	Trill_mark []*Empty_trill_sound `xml:"trill-mark,omitempty"`
 
+	// The turn element is the normal turn shape which goes up
+	//     then down.
 	// generated from element "turn" of type horizontal-turn order 972 depth 1
 	Turn []*Horizontal_turn `xml:"turn,omitempty"`
 
+	// The delayed-turn element indicates a normal turn that is
+	//     delayed until the end of the current note.
 	// generated from element "delayed-turn" of type horizontal-turn order 973 depth 1
 	Delayed_turn []*Horizontal_turn `xml:"delayed-turn,omitempty"`
 
+	// The inverted-turn element has the shape which goes down
+	//     and then up.
 	// generated from element "inverted-turn" of type horizontal-turn order 974 depth 1
 	Inverted_turn []*Horizontal_turn `xml:"inverted-turn,omitempty"`
 
+	// The delayed-inverted-turn element indicates an inverted
+	//     turn that is delayed until the end of the current note.
 	// generated from element "delayed-inverted-turn" of type horizontal-turn order 975 depth 1
 	Delayed_inverted_turn []*Horizontal_turn `xml:"delayed-inverted-turn,omitempty"`
 
+	// The vertical-turn element has the turn symbol shape
+	//     arranged vertically going from upper left to lower right.
 	// generated from element "vertical-turn" of type empty-trill-sound order 976 depth 1
 	Vertical_turn []*Empty_trill_sound `xml:"vertical-turn,omitempty"`
 
+	// The inverted-vertical-turn element has the turn symbol
+	//     shape arranged vertically going from upper right to lower left.
 	// generated from element "inverted-vertical-turn" of type empty-trill-sound order 977 depth 1
 	Inverted_vertical_turn []*Empty_trill_sound `xml:"inverted-vertical-turn,omitempty"`
 
+	// The shake element has a similar appearance to an
+	//     inverted-mordent element.
 	// generated from element "shake" of type empty-trill-sound order 978 depth 1
 	Shake []*Empty_trill_sound `xml:"shake,omitempty"`
 
 	// generated from element "wavy-line" of type wavy-line order 979 depth 1
 	Wavy_line []*Wavy_line `xml:"wavy-line,omitempty"`
 
+	// The mordent element represents the sign with the vertical
+	//     line. The choice of which mordent sign is inverted differs between
+	//     MusicXML and SMuFL. The long attribute is "no" by default.
 	// generated from element "mordent" of type mordent order 980 depth 1
 	Mordent []*Mordent `xml:"mordent,omitempty"`
 
+	// The inverted-mordent element represents the sign without
+	//     the vertical line. The choice of which mordent is inverted differs
+	//     between MusicXML and SMuFL. The long attribute is "no" by default.
 	// generated from element "inverted-mordent" of type mordent order 981 depth 1
 	Inverted_mordent []*Mordent `xml:"inverted-mordent,omitempty"`
 
+	// The name for this ornament is based on the German, to
+	//     avoid confusion with the more common slide element defined earlier.
 	// generated from element "schleifer" of type empty-placement order 982 depth 1
 	Schleifer []*Empty_placement `xml:"schleifer,omitempty"`
 
 	// generated from element "tremolo" of type tremolo order 983 depth 1
 	Tremolo []*Tremolo `xml:"tremolo,omitempty"`
 
+	// The haydn element represents the Haydn ornament. This is
+	//     defined in SMuFL as ornamentHaydn.
 	// generated from element "haydn" of type empty-trill-sound order 984 depth 1
 	Haydn []*Empty_trill_sound `xml:"haydn,omitempty"`
 
+	// The other-ornament element is used to define any ornaments
+	//     not yet in the MusicXML format. The smufl attribute can be used to
+	//     specify a particular ornament, allowing application interoperability
+	//     without requiring every SMuFL ornament to have a MusicXML element
+	//     equivalent. Using the other-ornament element without the smufl attribute
+	//     allows for extended representation, though without application
+	//     interoperability.
 	// generated from element "other-ornament" of type other-placement-text order 985 depth 1
 	Other_ornament []*Other_placement_text `xml:"other-ornament,omitempty"`
 
@@ -6973,36 +7284,63 @@ type Technical struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
+	// The up-bow element represents the symbol that is used both for
+	// up-bowing on bowed instruments, and up-stroke on plucked instruments.
 	// generated from element "up-bow" of type empty-placement order 1035 depth 1
 	Up_bow []*Empty_placement `xml:"up-bow,omitempty"`
 
+	// The down-bow element represents the symbol that is used both
+	// for down-bowing on bowed instruments, and down-stroke on plucked
+	// instruments.
 	// generated from element "down-bow" of type empty-placement order 1036 depth 1
 	Down_bow []*Empty_placement `xml:"down-bow,omitempty"`
 
 	// generated from element "harmonic" of type harmonic order 1037 depth 1
 	Harmonic []*Harmonic `xml:"harmonic,omitempty"`
 
+	// The open-string element represents the zero-shaped open string
+	// symbol.
 	// generated from element "open-string" of type empty-placement order 1038 depth 1
 	Open_string []*Empty_placement `xml:"open-string,omitempty"`
 
+	// The thumb-position element represents the thumb position
+	// symbol. This is a circle with a line, where the line does not come within
+	// the circle. It is distinct from the snap pizzicato symbol, where the line
+	// comes inside the circle.
 	// generated from element "thumb-position" of type empty-placement order 1039 depth 1
 	Thumb_position []*Empty_placement `xml:"thumb-position,omitempty"`
 
 	// generated from element "fingering" of type fingering order 1040 depth 1
 	Fingering []*Fingering `xml:"fingering,omitempty"`
 
+	// The pluck element is used to specify the plucking fingering on
+	// a fretted instrument, where the fingering element refers to the fretting
+	// fingering. Typical values are p, i, m, a for pulgar/thumb, indicio/index,
+	// medio/middle, and anular/ring fingers.
 	// generated from element "pluck" of type placement-text order 1041 depth 1
 	Pluck []*Placement_text `xml:"pluck,omitempty"`
 
+	// The double-tongue element represents the double tongue symbol
+	// (two dots arranged horizontally).
 	// generated from element "double-tongue" of type empty-placement order 1042 depth 1
 	Double_tongue []*Empty_placement `xml:"double-tongue,omitempty"`
 
+	// The triple-tongue element represents the triple tongue symbol
+	// (three dots arranged horizontally).
 	// generated from element "triple-tongue" of type empty-placement order 1043 depth 1
 	Triple_tongue []*Empty_placement `xml:"triple-tongue,omitempty"`
 
+	// The stopped element represents the stopped symbol, which looks
+	// like a plus sign. The smufl attribute distinguishes different SMuFL glyphs
+	// that have a similar appearance such as handbellsMalletBellSuspended and
+	// guitarClosePedal. If not present, the default glyph is brassMuteClosed.
 	// generated from element "stopped" of type empty-placement-smufl order 1044 depth 1
 	Stopped []*Empty_placement_smufl `xml:"stopped,omitempty"`
 
+	// The snap-pizzicato element represents the snap pizzicato
+	// symbol. This is a circle with a line, where the line comes inside the
+	// circle. It is distinct from the thumb-position symbol, where the line does
+	// not come inside the circle.
 	// generated from element "snap-pizzicato" of type empty-placement order 1045 depth 1
 	Snap_pizzicato []*Empty_placement `xml:"snap-pizzicato,omitempty"`
 
@@ -7030,6 +7368,8 @@ type Technical struct {
 	// generated from element "toe" of type heel-toe order 1053 depth 1
 	Toe []*Heel_toe `xml:"toe,omitempty"`
 
+	// The fingernails element is used in notation for harp and other
+	// plucked string instruments.
 	// generated from element "fingernails" of type empty-placement order 1054 depth 1
 	Fingernails []*Empty_placement `xml:"fingernails,omitempty"`
 
@@ -7042,27 +7382,51 @@ type Technical struct {
 	// generated from element "handbell" of type handbell order 1057 depth 1
 	Handbell []*Handbell `xml:"handbell,omitempty"`
 
+	// The brass-bend element represents the u-shaped bend symbol
+	// used in brass notation, distinct from the bend element used in guitar music.
 	// generated from element "brass-bend" of type empty-placement order 1058 depth 1
 	Brass_bend []*Empty_placement `xml:"brass-bend,omitempty"`
 
+	// The flip element represents the flip symbol used in brass
+	// notation.
 	// generated from element "flip" of type empty-placement order 1059 depth 1
 	Flip []*Empty_placement `xml:"flip,omitempty"`
 
+	// The smear element represents the tilde-shaped smear symbol
+	// used in brass notation.
 	// generated from element "smear" of type empty-placement order 1060 depth 1
 	Smear []*Empty_placement `xml:"smear,omitempty"`
 
+	// The open element represents the open symbol, which looks like
+	// a circle. The smufl attribute can be used to distinguish different SMuFL
+	// glyphs that have a similar appearance such as brassMuteOpen and
+	// guitarOpenPedal. If not present, the default glyph is brassMuteOpen.
 	// generated from element "open" of type empty-placement-smufl order 1061 depth 1
 	Open []*Empty_placement_smufl `xml:"open,omitempty"`
 
+	// The half-muted element represents the half-muted symbol, which
+	// looks like a circle with a plus sign inside. The smufl attribute can be used
+	// to distinguish different SMuFL glyphs that have a similar appearance such as
+	// brassMuteHalfClosed and guitarHalfOpenPedal. If not present, the default
+	// glyph is brassMuteHalfClosed.
 	// generated from element "half-muted" of type empty-placement-smufl order 1062 depth 1
 	Half_muted []*Empty_placement_smufl `xml:"half-muted,omitempty"`
 
 	// generated from element "harmon-mute" of type harmon-mute order 1063 depth 1
 	Harmon_mute []*Harmon_mute `xml:"harmon-mute,omitempty"`
 
+	// The golpe element represents the golpe symbol that is used for
+	// tapping the pick guard in guitar music.
 	// generated from element "golpe" of type empty-placement order 1064 depth 1
 	Golpe []*Empty_placement `xml:"golpe,omitempty"`
 
+	// The other-technical element is used to define any technical
+	// indications not yet in the MusicXML format. The smufl attribute can be used
+	// to specify a particular glyph, allowing application interoperability without
+	// requiring every SMuFL technical indication to have a MusicXML element
+	// equivalent. Using the other-technical element without the smufl attribute
+	// allows for extended representation, though without application
+	// interoperability.
 	// generated from element "other-technical" of type other-placement-text order 1065 depth 1
 	Other_technical []*Other_placement_text `xml:"other-technical,omitempty"`
 }
@@ -7182,15 +7546,25 @@ type Time_modification struct {
 
 	// insertion point for fields
 
+	// The actual-notes element describes how many notes are played
+	// in the time usually occupied by the number in the normal-notes element.
 	// generated from element "actual-notes" of type nonNegativeInteger order 1085 depth 1
 	Actual_notes int `xml:"actual-notes,omitempty"`
 
+	// The normal-notes element describes how many notes are usually
+	// played in the time occupied by the number in the actual-notes element.
 	// generated from element "normal-notes" of type nonNegativeInteger order 1086 depth 1
 	Normal_notes int `xml:"normal-notes,omitempty"`
 
+	// If the type associated with the number in the normal-notes
+	//     element is different than the current note type (e.g., a quarter note
+	//     within an eighth note triplet), then the normal-notes type (e.g. eighth)
+	//     is specified in the normal-type and normal-dot elements.
 	// generated from element "normal-type" of type note-type-value order 1087 depth 1
 	Normal_type Enum_Note_type_value `xml:"normal-type,omitempty"`
 
+	// The normal-dot element is used to specify dotted normal
+	//     tuplet types.
 	// generated from element "normal-dot" of type empty order 1088 depth 1
 	Normal_dot string `xml:"normal-dot,omitempty"`
 }
@@ -7280,9 +7654,17 @@ type Tuplet struct {
 	// generated from attribute group "optional-unique-id
 	AttributeGroup_optional_unique_id
 
+	// The tuplet-actual element provide optional full control over
+	// how the actual part of the tuplet is displayed, including number and note
+	// type (with dots). If any of these elements are absent, their values are
+	// based on the time-modification element.
 	// generated from element "tuplet-actual" of type tuplet-portion order 1094 depth 1
 	Tuplet_actual *Tuplet_portion `xml:"tuplet-actual,omitempty"`
 
+	// The tuplet-normal element provide optional full control over
+	// how the normal part of the tuplet is displayed, including number and note
+	// type (with dots). If any of these elements are absent, their values are
+	// based on the time-modification element.
 	// generated from element "tuplet-normal" of type tuplet-portion order 1095 depth 1
 	Tuplet_normal *Tuplet_portion `xml:"tuplet-normal,omitempty"`
 }
@@ -7454,6 +7836,13 @@ type Defaults struct {
 	// generated from element "scaling" of type scaling order 1129 depth 1
 	Scaling *Scaling `xml:"scaling,omitempty"`
 
+	// The presence of a concert-score element indicates that a score
+	// is displayed in concert pitch. It is used for scores that contain parts for
+	// transposing instruments. A document with a concert-score element may not
+	// contain any transpose elements that have non-zero values for either the
+	// diatonic or chromatic elements. Concert scores may include octave
+	// transpositions, so transpose elements with a double element or a non-zero
+	// octave-change element value are permitted.
 	// generated from element "concert-score" of type empty order 1130 depth 1
 	Concert_score string `xml:"concert-score,omitempty"`
 
@@ -7626,12 +8015,16 @@ type Part_group struct {
 	// generated from element "group-name" of type group-name order 1153 depth 1
 	Group_name *Group_name `xml:"group-name,omitempty"`
 
+	// Formatting specified in the group-name-display element
+	// overrides formatting specified in the group-name element.
 	// generated from element "group-name-display" of type name-display order 1154 depth 1
 	Group_name_display *Name_display `xml:"group-name-display,omitempty"`
 
 	// generated from element "group-abbreviation" of type group-name order 1155 depth 1
 	Group_abbreviation *Group_name `xml:"group-abbreviation,omitempty"`
 
+	// Formatting specified in the group-abbreviation-display element
+	// overrides formatting specified in the group-abbreviation element.
 	// generated from element "group-abbreviation-display" of type name-display order 1156 depth 1
 	Group_abbreviation_display *Name_display `xml:"group-abbreviation-display,omitempty"`
 
@@ -7641,6 +8034,8 @@ type Part_group struct {
 	// generated from element "group-barline" of type group-barline order 1158 depth 1
 	Group_barline *Group_barline `xml:"group-barline,omitempty"`
 
+	// The group-time element indicates that the displayed time
+	// signatures should stretch across all parts and staves in the group.
 	// generated from element "group-time" of type empty order 1159 depth 1
 	Group_time string `xml:"group-time,omitempty"`
 
@@ -7665,6 +8060,11 @@ type Part_link struct {
 	// generated from element "instrument-link" of type instrument-link order 1162 depth 1
 	Instrument_link []*Instrument_link `xml:"instrument-link,omitempty"`
 
+	// Multiple part-link elements can reference different types of
+	// linked documents, such as parts and condensed score. The optional group-link
+	// elements identify the groups used in the linked document. The content of a
+	// group-link element should match the content of a group element in the linked
+	// document.
 	// generated from element "group-link" of type string order 1163 depth 1
 	Group_link string `xml:"group-link,omitempty"`
 }
@@ -7717,6 +8117,8 @@ type Player struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
+	// The player-name element is typically used within a software
+	// application, rather than appearing on the printed page of a score.
 	// generated from element "player-name" of type string order 1173 depth 1
 	Player_name string `xml:"player-name,omitempty"`
 }
@@ -7740,9 +8142,14 @@ type Score_instrument struct {
 	// generated from attribute "id
 	Id string `xml:"id,attr,omitempty"`
 
+	// The instrument-name element is typically used within a
+	// software application, rather than appearing on the printed page of a score.
 	// generated from element "instrument-name" of type string order 1175 depth 1
 	Instrument_name string `xml:"instrument-name,omitempty"`
 
+	// The optional instrument-abbreviation element is typically used
+	// within a software application, rather than appearing on the printed page of
+	// a score.
 	// generated from element "instrument-abbreviation" of type string order 1176 depth 1
 	Instrument_abbreviation string `xml:"instrument-abbreviation,omitempty"`
 
@@ -7783,6 +8190,10 @@ type Score_part struct {
 	// generated from element "part-abbreviation-display" of type name-display order 1184 depth 1
 	Part_abbreviation_display *Name_display `xml:"part-abbreviation-display,omitempty"`
 
+	// The group element allows the use of different versions of the
+	// part for different purposes. Typical values include score, parts, sound, and
+	// data. Ordering information can be derived from the ordering within a
+	// MusicXML score or opus.
 	// generated from element "group" of type string order 1185 depth 1
 	Group string `xml:"group,omitempty"`
 
@@ -7807,9 +8218,13 @@ type Virtual_instrument struct {
 
 	// insertion point for fields
 
+	// The virtual-library element indicates the virtual instrument
+	// library name.
 	// generated from element "virtual-library" of type string order 1191 depth 1
 	Virtual_library string `xml:"virtual-library,omitempty"`
 
+	// The virtual-name element indicates the library-specific name
+	// for the virtual instrument.
 	// generated from element "virtual-name" of type string order 1192 depth 1
 	Virtual_name string `xml:"virtual-name,omitempty"`
 }
@@ -7823,9 +8238,13 @@ type Work struct {
 
 	// insertion point for fields
 
+	// The work-number element specifies the number of a work, such
+	// as its opus number.
 	// generated from element "work-number" of type string order 1194 depth 1
 	Work_number string `xml:"work-number,omitempty"`
 
+	// The work-title element specifies the title of a work, not
+	// including its opus or other work number.
 	// generated from element "work-title" of type string order 1195 depth 1
 	Work_title string `xml:"work-title,omitempty"`
 
@@ -7898,6 +8317,9 @@ type Group_staff struct {
 
 	// insertion point for fields
 
+	// Staff assignment is only needed for music notated on multiple
+	// staves. Used by both notes and directions. Staff values are numbers, with 1
+	// referring to the top-most staff in a part.
 	// generated from element "staff" of type positiveInteger order 1213 depth 1
 	Staff int `xml:"staff,omitempty"`
 }
@@ -7907,12 +8329,20 @@ type Group_tuning struct {
 
 	// insertion point for fields
 
+	// The tuning-step element is represented like the step element,
+	// with a different name to reflect its different function in string tuning.
 	// generated from element "tuning-step" of type step order 1215 depth 1
 	Tuning_step Enum_Step `xml:"tuning-step,omitempty"`
 
+	// The tuning-alter element is represented like the alter
+	// element, with a different name to reflect its different function in string
+	// tuning.
 	// generated from element "tuning-alter" of type semitones order 1216 depth 1
 	Tuning_alter string `xml:"tuning-alter,omitempty"`
 
+	// The tuning-octave element is represented like the octave
+	// element, with a different name to reflect its different function in string
+	// tuning.
 	// generated from element "tuning-octave" of type octave order 1217 depth 1
 	Tuning_octave int `xml:"tuning-octave,omitempty"`
 }
@@ -7922,12 +8352,22 @@ type Group_virtual_instrument_data struct {
 
 	// insertion point for fields
 
+	// The instrument-sound element describes the default timbre of
+	// the score-instrument. This description is independent of a particular
+	// virtual or MIDI instrument specification and allows playback to be shared
+	// more easily between applications and libraries.
 	// generated from element "instrument-sound" of type string order 1219 depth 1
 	Instrument_sound string `xml:"instrument-sound,omitempty"`
 
+	// The solo element is present if performance is intended by
+	//     a solo instrument.
 	// generated from element "solo" of type empty order 1220 depth 1
 	Solo string `xml:"solo,omitempty"`
 
+	// The ensemble element is present if performance is intended
+	//     by an ensemble such as an orchestral section. The text of the ensemble
+	//     element contains the size of the section, or is empty if the ensemble
+	//     size is not specified.
 	// generated from element "ensemble" of type positive-integer-or-empty order 1221 depth 1
 	Ensemble string `xml:"ensemble,omitempty"`
 
@@ -7949,12 +8389,21 @@ type Group_clef struct {
 
 	// insertion point for fields
 
+	// The sign element represents the clef symbol.
 	// generated from element "sign" of type clef-sign order 1226 depth 1
 	Sign string `xml:"sign,omitempty"`
 
+	// Line numbers are counted from the bottom of the staff. They
+	// are only needed with the G, F, and C signs in order to position a pitch
+	// correctly on the staff. Standard values are 2 for the G sign (treble clef),
+	// 4 for the F sign (bass clef), and 3 for the C sign (alto clef). Line values
+	// can be used to specify positions outside the staff, such as a C clef
+	// positioned in the middle of a grand staff.
 	// generated from element "line" of type staff-line-position order 1227 depth 1
 	Line int `xml:"line,omitempty"`
 
+	// The clef-octave-change element is used for transposing clefs.
+	// A treble clef for tenors would have a value of -1.
 	// generated from element "clef-octave-change" of type integer order 1228 depth 1
 	Clef_octave_change int `xml:"clef-octave-change,omitempty"`
 }
@@ -7964,12 +8413,23 @@ type Group_non_traditional_key struct {
 
 	// insertion point for fields
 
+	// Non-traditional key signatures are represented using a list of
+	// altered tones. The key-step element indicates the pitch step to be altered,
+	// represented using the same names as in the step element.
 	// generated from element "key-step" of type step order 1230 depth 1
 	Key_step Enum_Step `xml:"key-step,omitempty"`
 
+	// Non-traditional key signatures are represented using a list of
+	// altered tones. The key-alter element represents the alteration for a given
+	// pitch step, represented with semitones in the same manner as the alter
+	// element.
 	// generated from element "key-alter" of type semitones order 1231 depth 1
 	Key_alter string `xml:"key-alter,omitempty"`
 
+	// Non-traditional key signatures are represented using a list of
+	// altered tones. The key-accidental element indicates the accidental to be
+	// displayed in the key signature, represented in the same manner as the
+	// accidental element. It is used for disambiguating microtonal accidentals.
 	// generated from element "key-accidental" of type key-accidental order 1232 depth 1
 	Key_accidental *Key_accidental `xml:"key-accidental,omitempty"`
 }
@@ -7979,12 +8439,20 @@ type Group_slash struct {
 
 	// insertion point for fields
 
+	// The slash-type element indicates the graphical note type
+	//     to use for the display of repetition marks.
 	// generated from element "slash-type" of type note-type-value order 1234 depth 1
 	Slash_type Enum_Note_type_value `xml:"slash-type,omitempty"`
 
+	// The slash-dot element is used to specify any augmentation
+	//     dots in the note type used to display repetition marks.
 	// generated from element "slash-dot" of type empty order 1235 depth 1
 	Slash_dot string `xml:"slash-dot,omitempty"`
 
+	// The except-voice element is used to specify a combination of
+	// slash notation and regular notation. Any note elements that are in voices
+	// specified by the except-voice elements are displayed in normal notation, in
+	// addition to the slash notation that is always displayed.
 	// generated from element "except-voice" of type string order 1236 depth 1
 	Except_voice string `xml:"except-voice,omitempty"`
 }
@@ -7994,9 +8462,13 @@ type Group_time_signature struct {
 
 	// insertion point for fields
 
+	// The beats element indicates the number of beats, as found in
+	// the numerator of a time signature.
 	// generated from element "beats" of type string order 1238 depth 1
 	Beats string `xml:"beats,omitempty"`
 
+	// The beat-type element indicates the beat unit, as found in the
+	// denominator of a time signature.
 	// generated from element "beat-type" of type string order 1239 depth 1
 	Beat_type string `xml:"beat-type,omitempty"`
 }
@@ -8021,15 +8493,30 @@ type Group_transpose struct {
 
 	// insertion point for fields
 
+	// The diatonic element specifies the number of pitch steps
+	// needed to go from written to sounding pitch. This allows for correct
+	// spelling of enharmonic transpositions. This value does not include
+	// octave-change values; the values for both elements need to be added to the
+	// written pitch to get the correct sounding pitch.
 	// generated from element "diatonic" of type integer order 1245 depth 1
 	Diatonic int `xml:"diatonic,omitempty"`
 
+	// The chromatic element represents the number of semitones
+	// needed to get from written to sounding pitch. This value does not include
+	// octave-change values; the values for both elements need to be added to the
+	// written pitch to get the correct sounding pitch.
 	// generated from element "chromatic" of type semitones order 1246 depth 1
 	Chromatic string `xml:"chromatic,omitempty"`
 
+	// The octave-change element indicates how many octaves to add to
+	// get from written pitch to sounding pitch. The octave-change element should
+	// be included when using transposition intervals of an octave or more, and
+	// should not be present for intervals of less than an octave.
 	// generated from element "octave-change" of type integer order 1247 depth 1
 	Octave_change int `xml:"octave-change,omitempty"`
 
+	// If the double element is present, it indicates that the music
+	// is doubled one octave from what is currently written.
 	// generated from element "double" of type double order 1248 depth 1
 	Double float64 `xml:"double,omitempty"`
 }
@@ -8039,9 +8526,13 @@ type Group_beat_unit struct {
 
 	// insertion point for fields
 
+	// The beat-unit element indicates the graphical note type to use
+	// in a metronome mark.
 	// generated from element "beat-unit" of type note-type-value order 1250 depth 1
 	Beat_unit Enum_Note_type_value `xml:"beat-unit,omitempty"`
 
+	// The beat-unit-dot element is used to specify any augmentation
+	// dots for a metronome mark note.
 	// generated from element "beat-unit-dot" of type empty order 1251 depth 1
 	Beat_unit_dot string `xml:"beat-unit-dot,omitempty"`
 }
@@ -8057,6 +8548,11 @@ type Group_harmony_chord struct {
 	// generated from element "numeral" of type numeral order 1254 depth 1
 	Numeral *Numeral `xml:"numeral,omitempty"`
 
+	// The function element represents classical functional
+	//     harmony with an indication like I, II, III rather than C, D, E. It
+	//     represents the Roman numeral part of a functional harmony rather than
+	//     the complete function itself. It has been deprecated as of MusicXML 4.0
+	//     in favor of the numeral element.
 	// generated from element "function" of type style-text order 1255 depth 1
 	Function *Style_text `xml:"function,omitempty"`
 
@@ -8120,6 +8616,13 @@ type Group_duration struct {
 
 	// insertion point for fields
 
+	// Duration is a positive number specified in division units.
+	// This is the intended duration vs. notated duration (for instance,
+	// differences in dotted notes in Baroque-era music). Differences in duration
+	// specific to an interpretation or performance should be represented using the
+	// note element's attack and release attributes. The duration element moves the
+	// musical position when used in backup elements, forward elements, and note
+	// elements that do not contain a chord child element.
 	// generated from element "duration" of type positive-divisions order 1272 depth 1
 	Duration string `xml:"duration,omitempty"`
 }
@@ -8141,6 +8644,13 @@ type Group_full_note struct {
 
 	// insertion point for fields
 
+	// The chord element indicates that this note is an additional
+	// chord tone with the preceding note. The duration of a chord note does not
+	// move the musical position within a measure. That is done by the duration of
+	// the first preceding note without a chord element. Thus the duration of a
+	// chord note cannot be longer than the preceding note. In most cases the
+	// duration will be the same as the preceding note. However it can be shorter
+	// in situations such as multiple stops for string instruments.
 	// generated from element "chord" of type empty order 1277 depth 1
 	Chord string `xml:"chord,omitempty"`
 
@@ -8159,20 +8669,22 @@ type Group_music_data struct {
 
 	// insertion point for fields
 
+	// manualy modified
+
+	// generated from element "attributes" of type attributes order 1286 depth 1
+	Attributes []*Attributes `xml:"attributes,omitempty"`
+
+	// generated from element "direction" of type direction order 1285 depth 1
+	Direction []*Direction `xml:"direction,omitempty"`
+
+	// generated from element "note" of type note order 1282 depth 1
+	Note []*Note `xml:"note,omitempty"`
+
 	// generated from element "backup" of type backup order 1283 depth 1
 	Backup []*Backup `xml:"backup,omitempty"`
 
 	// generated from element "forward" of type forward order 1284 depth 1
 	Forward []*Forward `xml:"forward,omitempty"`
-
-	// generated from element "direction" of type direction order 1285 depth 1
-	Direction []*Direction `xml:"direction,omitempty"`
-
-	// generated from element "attributes" of type attributes order 1286 depth 1
-	Attributes []*Attributes `xml:"attributes,omitempty"`
-
-	// generated from element "note" of type note order 1282 depth 1
-	Note []*Note `xml:"note,omitempty"`
 
 	// generated from element "harmony" of type harmony order 1287 depth 1
 	Harmony []*Harmony `xml:"harmony,omitempty"`
@@ -8219,9 +8731,13 @@ type Group_score_header struct {
 	// generated from element "work" of type work order 1299 depth 1
 	Work *Work `xml:"work,omitempty"`
 
+	// The movement-number element specifies the number of a
+	// movement.
 	// generated from element "movement-number" of type string order 1300 depth 1
 	Movement_number string `xml:"movement-number,omitempty"`
 
+	// The movement-title element specifies the title of a movement,
+	// not including its number.
 	// generated from element "movement-title" of type string order 1301 depth 1
 	Movement_title string `xml:"movement-title,omitempty"`
 
@@ -8243,6 +8759,11 @@ type Group_score_part struct {
 
 	// insertion point for fields
 
+	// Each MusicXML part corresponds to a track in a Standard MIDI
+	// Format 1 file. The score-instrument elements are used when there are
+	// multiple instruments per track. The midi-device element is used to make a
+	// MIDI device or port assignment for the given track. Initial midi-instrument
+	// assignments may be made here as well.
 	// generated from element "score-part" of type score-part order 1307 depth 1
 	Score_part *Score_part `xml:"score-part,omitempty"`
 }

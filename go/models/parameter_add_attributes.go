@@ -104,8 +104,8 @@ func (parameter *Parameter) addAttribute(measure *m.A_measure) {
 	var direction m.Direction
 	measure.Direction = append(measure.Direction, &direction)
 
-	var sound m.Sound
-	direction.Sound = &sound
+	// var sound m.Sound
+	// direction.Sound = &sound
 
 	// the number of beats in theme
 
@@ -119,6 +119,19 @@ func (parameter *Parameter) addAttribute(measure *m.A_measure) {
 	nbBeatsPerScoreBeat := parameter.NbOfBeatsInTheme / 4.0
 	tempoOfScoreBeatPerSecond := parameter.BeatsPerSecond / float64(nbBeatsPerScoreBeat)
 	tempoOfScoreBeatPerMinute := 60 * tempoOfScoreBeatPerSecond
-	sound.Tempo = fmt.Sprintf("%d", int(tempoOfScoreBeatPerMinute))
+	// sound.Tempo = fmt.Sprintf("%d", int(tempoOfScoreBeatPerMinute))
+
+	var directionType m.Direction_type
+	direction.Direction_type = append(direction.Direction_type, &directionType)
+
+	var metronome m.Metronome
+	directionType.Metronome = &metronome
+
+	metronome.Beat_unit = m.Enum_Note_type_value_Quarter
+
+	var perMinute m.Per_minute
+	metronome.Per_minute = &perMinute
+
+	perMinute.EnclosedText = fmt.Sprintf("%d", int(tempoOfScoreBeatPerMinute))
 
 }
