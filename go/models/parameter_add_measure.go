@@ -22,7 +22,6 @@ func (parameter *Parameter) addMeasure(part *m.A_part, firstVoiceNotes *CircleGr
 
 	circleNotes := firstVoiceNotes.Circles
 	for i, circleNote := range circleNotes {
-		log.Println(circleNote.Pitch)
 
 		if !circleNote.isKept {
 			continue
@@ -51,7 +50,7 @@ func (parameter *Parameter) addMeasure(part *m.A_part, firstVoiceNotes *CircleGr
 		note.Duration = fmt.Sprintf("%d", duration)
 
 		// not need for the moment.
-		// note.Voice = "1"
+		note.Voice = "1"
 
 		// Note_type Named source named complex type "note-type"
 		// The note-type type indicates the graphic note type. Values range from
@@ -64,8 +63,14 @@ func (parameter *Parameter) addMeasure(part *m.A_part, firstVoiceNotes *CircleGr
 		var type_ m.Note_type
 		note.Type = &type_
 
-		type_.EnclosedText, _ = generateNoteType(duration)
+		var dot *m.Empty_placement
+		type_.EnclosedText, dot, _ = generateNoteType(duration)
 
+		if dot != nil {
+			note.Dot = append(note.Dot, dot)
+		} else {
+			log.Println("empty dot", i)
+		}
 		// Stems can be down, up, none, or double. For down and up stems, the
 		// position attributes can be used to specify stem length. The relative values specify
 		// the end of the stem relative to the program default. Default values specify an
