@@ -13,6 +13,7 @@ func (parameter *Parameter) addMeasure(
 	firstVoiceNotes *CircleGrid,
 	secondVoiceNotes *CircleGrid,
 	isFirstMeasure bool) {
+
 	var measure m.A_measure
 	part.Measure = append(part.Measure, &measure)
 
