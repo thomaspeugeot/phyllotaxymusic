@@ -7,7 +7,11 @@ import (
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
 
-func (*Parameter) add_note(measure *m.A_measure, circleNote *Circle, circleNotes []*Circle, i int) {
+func (*Parameter) add_note(measure *m.A_measure,
+	circleNote *Circle,
+	circleNotes []*Circle,
+	i int,
+	voice int) {
 	var note m.Note
 
 	var group_music_data m.Group_music_data
@@ -35,7 +39,7 @@ func (*Parameter) add_note(measure *m.A_measure, circleNote *Circle, circleNotes
 	note.Duration = fmt.Sprintf("%d", duration)
 
 	// not need for the moment.
-	note.Voice = "1"
+	note.Voice = fmt.Sprintf("%d", voice)
 
 	// Note_type Named source named complex type "note-type"
 	// The note-type type indicates the graphic note type. Values range from

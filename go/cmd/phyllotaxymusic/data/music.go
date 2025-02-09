@@ -484,7 +484,7 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_First_Voice_note_shifted_right.Name = `First Voice note shifted right`
-	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = false
+	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = true
 
 	__CircleGrid__000002_First_Voice_notes.Name = `First Voice notes`
 	__CircleGrid__000002_First_Voice_notes.IsDisplayed = true
@@ -502,10 +502,10 @@ func _(stage *models.StageStruct) {
 	__CircleGrid__000006_Rotated_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Name = `Second Voice Notes Shift Right`
-	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = true
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
-	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
+	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
 
 	__ExportToMusicxml__000000_Singloton.Name = `Singloton`
 
@@ -599,7 +599,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.BeatsPerSecond = 4.000000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 29959
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 30039
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000

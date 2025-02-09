@@ -5931,7 +5931,8 @@ type Assess struct {
 // voice or staff elements. Duration values should always be positive, and should not
 // cross measure boundaries or mid-measure changes in the divisions value.
 type Backup struct {
-	Name string `xml:"-"`
+	XMLName xml.Name `xml:"backup"`
+	Name    string   `xml:"-"`
 
 	// insertion point for fields
 
@@ -8871,6 +8872,11 @@ func (g *Group_music_data) MarshalXML(enc *xml.Encoder, _ xml.StartElement) erro
 	// If there's a <note> child, encode it:
 	if g.Note != nil {
 		if err := enc.Encode(g.Note); err != nil {
+			return err
+		}
+	}
+	if g.Backup != nil {
+		if err := enc.Encode(g.Backup); err != nil {
 			return err
 		}
 	}
