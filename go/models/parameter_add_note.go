@@ -9,7 +9,11 @@ import (
 
 func (*Parameter) add_note(measure *m.A_measure, circleNote *Circle, circleNotes []*Circle, i int) {
 	var note m.Note
-	measure.Note = append(measure.Note, &note)
+
+	var group_music_data m.Group_music_data
+	group_music_data.Note = &note
+
+	measure.Group_music_data = append(measure.Group_music_data, &group_music_data)
 
 	pitch := generatePitch(circleNote.Pitch + nbHalfToneAboveC0)
 	note.Pitch = pitch

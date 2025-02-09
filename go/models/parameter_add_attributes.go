@@ -8,7 +8,13 @@ import (
 
 func (parameter *Parameter) addAttribute(measure *m.A_measure) {
 	var attributes m.Attributes
-	measure.Attributes = append(measure.Attributes, &attributes)
+
+	{
+		var group_music_data m.Group_music_data
+		group_music_data.Attributes = &attributes
+
+		measure.Group_music_data = append(measure.Group_music_data, &group_music_data)
+	}
 
 	// Musical notation duration is commonly represented as
 	// fractions. The divisions element indicates how many divisions per quarter
@@ -102,8 +108,13 @@ func (parameter *Parameter) addAttribute(measure *m.A_measure) {
 	// direction-type children, non-positional formatting attributes are carried over from
 	// the previous element by default.
 	var direction m.Direction
-	measure.Direction = append(measure.Direction, &direction)
 
+	{
+		var group_music_data m.Group_music_data
+		group_music_data.Direction = &direction
+
+		measure.Group_music_data = append(measure.Group_music_data, &group_music_data)
+	}
 	// var sound m.Sound
 	// direction.Sound = &sound
 

@@ -2547,7 +2547,8 @@ type Wavy_line struct {
 // transpositions, and staving. When attributes are changed mid-measure, it affects the
 // music in score order, not in MusicXML document order.
 type Attributes struct {
-	Name string `xml:"-"`
+	XMLName xml.Name `xml:"attributes"`
+	Name    string
 
 	// insertion point for fields
 
@@ -3741,7 +3742,8 @@ type Degree_value struct {
 // direction-type children, non-positional formatting attributes are carried over from
 // the previous element by default.
 type Direction struct {
-	Name string `xml:"-"`
+	XMLName xml.Name `xml:"direction"`
+	Name    string
 
 	// insertion point for fields
 
@@ -6713,7 +6715,8 @@ type Notations struct {
 // pizzicato attribute is used when just this note is sounded pizzicato, vs. the
 // pizzicato element which changes overall playback between pizzicato and arco.
 type Note struct {
-	Name string `xml:"-"`
+	XMLName xml.Name `xml:"note"`
+	Name    string
 
 	// insertion point for fields
 
@@ -8672,46 +8675,46 @@ type Group_music_data struct {
 	// manualy modified
 
 	// generated from element "attributes" of type attributes order 1286 depth 1
-	Attributes []*Attributes `xml:"attributes,omitempty"`
+	Attributes *Attributes `xml:"attributes,omitempty"`
 
 	// generated from element "direction" of type direction order 1285 depth 1
-	Direction []*Direction `xml:"direction,omitempty"`
+	Direction *Direction `xml:"direction,omitempty"`
 
 	// generated from element "note" of type note order 1282 depth 1
-	Note []*Note `xml:"note,omitempty"`
+	Note *Note `xml:"note,omitempty"`
 
 	// generated from element "backup" of type backup order 1283 depth 1
-	Backup []*Backup `xml:"backup,omitempty"`
+	Backup *Backup `xml:"backup,omitempty"`
 
 	// generated from element "forward" of type forward order 1284 depth 1
-	Forward []*Forward `xml:"forward,omitempty"`
+	Forward *Forward `xml:"forward,omitempty"`
 
 	// generated from element "harmony" of type harmony order 1287 depth 1
-	Harmony []*Harmony `xml:"harmony,omitempty"`
+	Harmony *Harmony `xml:"harmony,omitempty"`
 
 	// generated from element "figured-bass" of type figured-bass order 1288 depth 1
-	Figured_bass []*Figured_bass `xml:"figured-bass,omitempty"`
+	Figured_bass *Figured_bass `xml:"figured-bass,omitempty"`
 
 	// generated from element "print" of type print order 1289 depth 1
-	Print []*Print `xml:"print,omitempty"`
+	Print *Print `xml:"print,omitempty"`
 
 	// generated from element "sound" of type sound order 1290 depth 1
-	Sound []*Sound `xml:"sound,omitempty"`
+	Sound *Sound `xml:"sound,omitempty"`
 
 	// generated from element "listening" of type listening order 1291 depth 1
-	Listening []*Listening `xml:"listening,omitempty"`
+	Listening *Listening `xml:"listening,omitempty"`
 
 	// generated from element "barline" of type barline order 1292 depth 1
-	Barline []*Barline `xml:"barline,omitempty"`
+	Barline *Barline `xml:"barline,omitempty"`
 
 	// generated from element "grouping" of type grouping order 1293 depth 1
-	Grouping []*Grouping `xml:"grouping,omitempty"`
+	Grouping *Grouping `xml:"grouping,omitempty"`
 
 	// generated from element "link" of type link order 1294 depth 1
-	Link []*Link `xml:"link,omitempty"`
+	Link *Link `xml:"link,omitempty"`
 
 	// generated from element "bookmark" of type bookmark order 1295 depth 1
-	Bookmark []*Bookmark `xml:"bookmark,omitempty"`
+	Bookmark *Bookmark `xml:"bookmark,omitempty"`
 }
 
 // Group_part_group UnNamed source named group "part-group"
@@ -8823,7 +8826,58 @@ type A_measure struct {
 	AttributeGroup_measure_attributes
 
 	// generated from group with order 1315 depth 6
-	Group_music_data
+	// All child elements inlined here:
+	Group_music_data []*Group_music_data `xml:"-"`
+}
+
+// Custom marshaller for A_measure that flattens everything.
+func (m *A_measure) MarshalXML(enc *xml.Encoder, start xml.StartElement) error {
+	// 1) Write the <measure> start element with its attributes
+	if err := enc.EncodeToken(start); err != nil {
+		return err
+	}
+
+	// 2) Marshal each item in m.Group_music_data (flattened, no <Group_music_data> tag!)
+	for _, child := range m.Group_music_data {
+		if child == nil {
+			continue
+		}
+		// Delegate to *Group_music_data's MarshalXML (defined below)
+		if err := child.MarshalXML(enc, start); err != nil {
+			return err
+		}
+	}
+
+	// 3) Write the closing </measure> element
+	return enc.EncodeToken(xml.EndElement{Name: start.Name})
+}
+
+// MarshalXML flattens the child elements by encoding them directly.
+func (g *Group_music_data) MarshalXML(enc *xml.Encoder, _ xml.StartElement) error {
+	// If this Group_music_data represents <attributes>, encode it:
+	if g.Attributes != nil {
+		if err := enc.Encode(g.Attributes); err != nil {
+			return err
+		}
+	}
+
+	// If there's a <direction> child, encode it:
+	if g.Direction != nil {
+		if err := enc.Encode(g.Direction); err != nil {
+			return err
+		}
+	}
+
+	// If there's a <note> child, encode it:
+	if g.Note != nil {
+		if err := enc.Encode(g.Note); err != nil {
+			return err
+		}
+	}
+
+	// ...and so on for each possible child type.
+
+	return nil
 }
 
 // Score_timewise Named source element score-timewise within root schema

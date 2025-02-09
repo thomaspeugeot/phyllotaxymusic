@@ -35,21 +35,27 @@ func (parameter *Parameter) addMeasure(
 		parameter.add_note(&measure, circleNote, circleNotes, i)
 	}
 
-	// for the second voice
-	// start with a rest
-	for range parameter.ActualBeatsTemporalShift {
-		var noteRest m.Note
-		// measure.Note = append(measure.Note, &noteRest)
+	// // backup is used for separating voice 1 and 2
+	// var backup m.Backup
+	// measure.Backup = append(measure.Backup, &backup)
 
-		noteRest.Voice = "2"
-		noteRest.Rest = new(m.Rest)
-		noteRest.Rest.Measure = m.Enum_Yes_no_Yes
-		noteRest.Duration = "1"
-		noteRest.Staff = 1
+	// backup.Duration = fmt.Sprintf("%d", parameter.NbOfBeatsInTheme)
 
-		var noteType m.Note_type
-		noteType.EnclosedText = m.Enum_Note_type_value_16th
-		noteRest.Type = &noteType
-	}
+	// // for the second voice
+	// // start with a rest
+	// for range parameter.ActualBeatsTemporalShift {
+	// 	var noteRest m.Note
+	// 	measure.Note = append(measure.Note, &noteRest)
+
+	// 	noteRest.Voice = "2"
+	// 	noteRest.Rest = new(m.Rest)
+	// 	noteRest.Rest.Measure = m.Enum_Yes_no_Yes
+	// 	noteRest.Duration = "1"
+	// 	noteRest.Staff = 1
+
+	// 	var noteType m.Note_type
+	// 	noteType.EnclosedText = m.Enum_Note_type_value_16th
+	// 	noteRest.Type = &noteType
+	// }
 
 }
