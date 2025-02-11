@@ -599,7 +599,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.BeatsPerSecond = 4.000000
 	__Parameter__000000_Reference.Level = 2.200000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 30557
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 65535
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000

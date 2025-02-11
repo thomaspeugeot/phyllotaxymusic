@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"slices"
 
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
@@ -12,30 +13,28 @@ func (parameter *Parameter) addMeasure(
 	part *m.A_part,
 	firstVoiceNotes *CircleGrid,
 	secondVoiceNotes *CircleGrid,
-	isFirstMeasure bool) {
+	measureNb int) {
 
 	var measure m.A_measure
 	part.Measure = append(part.Measure, &measure)
 
-	if isFirstMeasure {
-		measure.Number = "1"
-	} else {
-		measure.Number = "2"
-	}
+	measure.Number = fmt.Sprintf("%d", measureNb+1)
+
 	measure.Width = "269.19"
 
-	if isFirstMeasure {
+	if measureNb == 0 {
 		parameter.addAttribute(&measure)
 	}
 
 	circleNotes := firstVoiceNotes.Circles
-	for i, circleNote := range circleNotes {
+	if measureNb < 2 {
+		for i, circleNote := range circleNotes {
 
-		if !circleNote.isKept {
-			continue
+			if !circleNote.isKept {
+				continue
+			}
+			parameter.add_note(&measure, circleNote, circleNotes, i, 1)
 		}
-
-		parameter.add_note(&measure, circleNote, circleNotes, i, 1)
 	}
 
 	// backup is used for separating voice 1 and 2
@@ -50,25 +49,35 @@ func (parameter *Parameter) addMeasure(
 
 	// for the second voice
 	// start with a rest
-	for range parameter.ActualBeatsTemporalShift {
-		var group_music_data m.Group_music_data
-		measure.Group_music_data = append(measure.Group_music_data, &group_music_data)
+	if measureNb == 0 {
+		for range parameter.ActualBeatsTemporalShift {
+			var group_music_data m.Group_music_data
+			measure.Group_music_data = append(measure.Group_music_data, &group_music_data)
 
-		var noteRest m.Note
-		group_music_data.Note = &noteRest
+			var noteRest m.Note
+			group_music_data.Note = &noteRest
 
-		noteRest.Voice = "2"
-		noteRest.Rest = new(m.Rest)
-		noteRest.Rest.Measure = m.Enum_Yes_no_Yes
-		noteRest.Duration = "1"
-		noteRest.Staff = 1
+			noteRest.Voice = "2"
+			noteRest.Rest = new(m.Rest)
+			noteRest.Rest.Measure = m.Enum_Yes_no_Yes
+			noteRest.Duration = "1"
+			noteRest.Staff = 1
 
-		var noteType m.Note_type
-		noteType.EnclosedText = m.Enum_Note_type_value_16th
-		noteRest.Type = &noteType
+			var noteType m.Note_type
+			noteType.EnclosedText = m.Enum_Note_type_value_16th
+			noteRest.Type = &noteType
+		}
 	}
 
-	circleNotes = secondVoiceNotes.Circles[parameter.ActualBeatsTemporalShift:]
+	switch measureNb {
+	case 0:
+		circleNotes = slices.Clone(secondVoiceNotes.Circles[parameter.ActualBeatsTemporalShift:])
+	case 1:
+		circleNotes = slices.Clone(secondVoiceNotes.Circles[:parameter.ActualBeatsTemporalShift])
+		circleNotes = append(circleNotes, slices.Clone(secondVoiceNotes.Circles[parameter.ActualBeatsTemporalShift:])...)
+	case 2:
+		circleNotes = slices.Clone(secondVoiceNotes.Circles[:parameter.ActualBeatsTemporalShift])
+	}
 	for i, circleNote := range circleNotes {
 
 		if !circleNote.isKept {
