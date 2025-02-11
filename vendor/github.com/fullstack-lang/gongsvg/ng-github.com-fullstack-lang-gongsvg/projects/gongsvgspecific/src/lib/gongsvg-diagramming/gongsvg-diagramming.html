@@ -6,6 +6,8 @@
             (dragover)="backgroundDragOver($event)" -->
             <lib-text-width-calculator #textWidthCalculator></lib-text-width-calculator>
 
+            <button mat-raised-button color="primary" (click)="downloadSVG()" style="transform: scale(0.5);">Save</button>
+            
 <svg #svgContainer [attr.width]="svgWidth" [attr.height]="svgHeight" >
     <g>
 
