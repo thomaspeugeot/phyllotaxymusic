@@ -36,12 +36,12 @@ func (parameter *Parameter) GenerateMusicXMLFile() bool {
 		secondVoiceCircleNotes := parameter.SecondVoiceNotes.Circles
 		_ = secondVoiceCircleNotes
 
-		for i, note := range firstVoiceCircleNotes {
-			if note.isKept {
-				log.Println("rank", i, "isKept")
-			}
-		}
-		parameter.recomputeSecondVoicePitch(parameter.FirstVoiceNotes.Circles, parameter.SecondVoiceNotes.Circles)
+		// for i, note := range firstVoiceCircleNotes {
+		// 	if note.isKept {
+		// 		log.Println("rank", i, "isKept")
+		// 	}
+		// }
+		// parameter.recomputeSecondVoicePitch(parameter.FirstVoiceNotes.Circles, parameter.SecondVoiceNotes.Circles)
 		{
 			parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 0)
 			parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 1)

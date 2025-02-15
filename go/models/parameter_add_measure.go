@@ -23,11 +23,11 @@ func (parameter *Parameter) addMeasure(
 	firstVoiceCircleNotes := firstVoiceNotes.Circles
 	secondVoiceCircleNotes := slices.Clone(secondVoiceNotes.Circles)
 
-	for i, note := range firstVoiceCircleNotes {
-		if note.isKept {
-			log.Println("rank", i, "isKept")
-		}
-	}
+	// for i, note := range firstVoiceCircleNotes {
+	// 	if note.isKept {
+	// 		log.Println("rank", i, "isKept")
+	// 	}
+	// }
 
 	var measure m.A_measure
 	part.Measure = append(part.Measure, &measure)
@@ -83,13 +83,24 @@ func (parameter *Parameter) addMeasure(
 	}
 
 	_ = secondVoiceCircleNotes
-	secondVoiceCircleNotes = shiftRight(secondVoiceCircleNotes, -shift)
+	// secondVoiceCircleNotes = shiftRight(slices.Clone(secondVoiceCircleNotes), -shift)
+
+	// split second in 2
+	firstPart := slices.Clone(secondVoiceNotes.Circles[0 : len(secondVoiceCircleNotes)-shift])
+	secondPart := slices.Clone(secondVoiceNotes.Circles[len(secondVoiceCircleNotes)-shift:])
+
 	switch measureNb {
 	case 0:
-		secondVoiceCircleNotes = slices.Clone(secondVoiceNotes.Circles[:len(secondVoiceCircleNotes)-shift])
+		// uses the note from shift to the end
+		secondVoiceCircleNotes = firstPart
+		log.Println(measureNb, len(secondVoiceCircleNotes))
 	case 1:
+		secondVoiceCircleNotes = slices.Clone(secondPart)
+		secondVoiceCircleNotes = append(secondVoiceCircleNotes, slices.Clone(firstPart)...)
+		log.Println(measureNb, len(secondVoiceCircleNotes))
 	case 2:
-		secondVoiceCircleNotes = slices.Clone(secondVoiceNotes.Circles[shift:])
+		secondVoiceCircleNotes = slices.Clone(secondPart)
+		log.Println(measureNb, len(secondVoiceCircleNotes))
 	}
 	for i, circleNote := range secondVoiceCircleNotes {
 
