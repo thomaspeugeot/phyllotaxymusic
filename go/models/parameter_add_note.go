@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"log"
 
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
@@ -58,7 +57,7 @@ func (*Parameter) add_note(measure *m.A_measure,
 	if dot != nil {
 		note.Dot = append(note.Dot, dot)
 	} else {
-		log.Println("empty dot", i)
+		// log.Println("empty dot", i)
 	}
 	// Stems can be down, up, none, or double. For down and up stems, the
 	// position attributes can be used to specify stem length. The relative values specify

@@ -24,6 +24,24 @@ func (parameter *Parameter) GenerateMusicXMLFile() bool {
 
 		part.Id = "P1"
 
+		// the pitch computation is based on the geometry of the curve interpolated with the pitch grid
+		// the interpolation is not perfect, therefore, one recompute the pitch of the
+		// second voice
+		shift := parameter.ActualBeatsTemporalShift
+		_ = shift
+		pitchDiff := parameter.PitchDifference
+		_ = pitchDiff
+		firstVoiceCircleNotes := parameter.FirstVoiceNotes.Circles
+		_ = firstVoiceCircleNotes
+		secondVoiceCircleNotes := parameter.SecondVoiceNotes.Circles
+		_ = secondVoiceCircleNotes
+
+		for i, note := range firstVoiceCircleNotes {
+			if note.isKept {
+				log.Println("rank", i, "isKept")
+			}
+		}
+		parameter.recomputeSecondVoicePitch(parameter.FirstVoiceNotes.Circles, parameter.SecondVoiceNotes.Circles)
 		{
 			parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 0)
 			parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 1)

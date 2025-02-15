@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"log"
 	"slices"
 
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
@@ -15,6 +16,19 @@ func (parameter *Parameter) addMeasure(
 	secondVoiceNotes *CircleGrid,
 	measureNb int) {
 
+	shift := parameter.ActualBeatsTemporalShift
+	_ = shift
+	pitchDiff := parameter.PitchDifference
+	_ = pitchDiff
+	firstVoiceCircleNotes := firstVoiceNotes.Circles
+	secondVoiceCircleNotes := slices.Clone(secondVoiceNotes.Circles)
+
+	for i, note := range firstVoiceCircleNotes {
+		if note.isKept {
+			log.Println("rank", i, "isKept")
+		}
+	}
+
 	var measure m.A_measure
 	part.Measure = append(part.Measure, &measure)
 
@@ -26,14 +40,13 @@ func (parameter *Parameter) addMeasure(
 		parameter.addAttribute(&measure)
 	}
 
-	circleNotes := firstVoiceNotes.Circles
 	if measureNb < 2 {
-		for i, circleNote := range circleNotes {
+		for i, circleNote := range firstVoiceCircleNotes {
 
 			if !circleNote.isKept {
 				continue
 			}
-			parameter.add_note(&measure, circleNote, circleNotes, i, 1)
+			parameter.add_note(&measure, circleNote, firstVoiceCircleNotes, i, 1)
 		}
 	}
 
@@ -50,7 +63,7 @@ func (parameter *Parameter) addMeasure(
 	// for the second voice
 	// start with a rest
 	if measureNb == 0 {
-		for range parameter.ActualBeatsTemporalShift {
+		for range shift {
 			var group_music_data m.Group_music_data
 			measure.Group_music_data = append(measure.Group_music_data, &group_music_data)
 
@@ -69,22 +82,22 @@ func (parameter *Parameter) addMeasure(
 		}
 	}
 
+	_ = secondVoiceCircleNotes
+	secondVoiceCircleNotes = shiftRight(secondVoiceCircleNotes, -shift)
 	switch measureNb {
 	case 0:
-		circleNotes = slices.Clone(secondVoiceNotes.Circles[parameter.ActualBeatsTemporalShift:])
+		secondVoiceCircleNotes = slices.Clone(secondVoiceNotes.Circles[:len(secondVoiceCircleNotes)-shift])
 	case 1:
-		circleNotes = slices.Clone(secondVoiceNotes.Circles[:parameter.ActualBeatsTemporalShift])
-		circleNotes = append(circleNotes, slices.Clone(secondVoiceNotes.Circles[parameter.ActualBeatsTemporalShift:])...)
 	case 2:
-		circleNotes = slices.Clone(secondVoiceNotes.Circles[:parameter.ActualBeatsTemporalShift])
+		secondVoiceCircleNotes = slices.Clone(secondVoiceNotes.Circles[shift:])
 	}
-	for i, circleNote := range circleNotes {
+	for i, circleNote := range secondVoiceCircleNotes {
 
 		if !circleNote.isKept {
 			continue
 		}
 
-		parameter.add_note(&measure, circleNote, circleNotes, i, 2)
+		parameter.add_note(&measure, circleNote, secondVoiceCircleNotes, i, 2)
 	}
 
 }
