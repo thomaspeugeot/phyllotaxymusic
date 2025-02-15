@@ -234,10 +234,39 @@
 			]
 		},
 		{
+			"label": "01 - gongc sliders -skipGoModCommands -skipNpmInstall",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/sliders/go/models"
+			},
+			"command": "gongc",
+			"group": "build",
+			"args": [
+				"-skipGoModCommands",
+				"-skipNpmInstall"
+			]
+		},
+		{
 			"label": "02 - run cursor -unmarshallFromCode=stage.go -marshallOnCommit=stage",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/cursor/go/cmd/cursor"
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-diagrams",
+				"-unmarshallFromCode=data/stage.go",
+				"-marshallOnCommit=data/stage"
+			],
+			"group": "build"
+		},
+		{
+			"label": "02 - run sliders -unmarshallFromCode=stage.go -marshallOnCommit=stage",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/sliders/go/cmd/sliders"
 			},
 			"command": "go",
 			"args": [
