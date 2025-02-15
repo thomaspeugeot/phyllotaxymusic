@@ -18,6 +18,8 @@ type BackRepoData struct {
 
 	CircleGridAPIs []*CircleGridAPI
 
+	ExportToMusicxmlAPIs []*ExportToMusicxmlAPI
+
 	FrontCurveAPIs []*FrontCurveAPI
 
 	FrontCurveStackAPIs []*FrontCurveStackAPI
@@ -130,6 +132,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		circlegridDB.CopyBasicFieldsToCircleGrid_WOP(&circlegridAPI.CircleGrid_WOP)
 
 		backRepoData.CircleGridAPIs = append(backRepoData.CircleGridAPIs, &circlegridAPI)
+	}
+
+	for _, exporttomusicxmlDB := range backRepo.BackRepoExportToMusicxml.Map_ExportToMusicxmlDBID_ExportToMusicxmlDB {
+
+		var exporttomusicxmlAPI ExportToMusicxmlAPI
+		exporttomusicxmlAPI.ID = exporttomusicxmlDB.ID
+		exporttomusicxmlAPI.ExportToMusicxmlPointersEncoding = exporttomusicxmlDB.ExportToMusicxmlPointersEncoding
+		exporttomusicxmlDB.CopyBasicFieldsToExportToMusicxml_WOP(&exporttomusicxmlAPI.ExportToMusicxml_WOP)
+
+		backRepoData.ExportToMusicxmlAPIs = append(backRepoData.ExportToMusicxmlAPIs, &exporttomusicxmlAPI)
 	}
 
 	for _, frontcurveDB := range backRepo.BackRepoFrontCurve.Map_FrontCurveDBID_FrontCurveDB {

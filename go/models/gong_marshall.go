@@ -644,6 +644,40 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_ExportToMusicxml_Identifiers := make(map[*ExportToMusicxml]string)
+	_ = map_ExportToMusicxml_Identifiers
+
+	exporttomusicxmlOrdered := []*ExportToMusicxml{}
+	for exporttomusicxml := range stage.ExportToMusicxmls {
+		exporttomusicxmlOrdered = append(exporttomusicxmlOrdered, exporttomusicxml)
+	}
+	sort.Slice(exporttomusicxmlOrdered[:], func(i, j int) bool {
+		return exporttomusicxmlOrdered[i].Name < exporttomusicxmlOrdered[j].Name
+	})
+	if len(exporttomusicxmlOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, exporttomusicxml := range exporttomusicxmlOrdered {
+
+		id = generatesIdentifier("ExportToMusicxml", idx, exporttomusicxml.Name)
+		map_ExportToMusicxml_Identifiers[exporttomusicxml] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "ExportToMusicxml")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", exporttomusicxml.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(exporttomusicxml.Name))
+		initializerStatements += setValueField
+
+	}
+
 	map_FrontCurve_Identifiers := make(map[*FrontCurve]string)
 	_ = map_FrontCurve_Identifiers
 
@@ -2478,6 +2512,24 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Circles")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[_circle])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
+	for idx, exporttomusicxml := range exporttomusicxmlOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("ExportToMusicxml", idx, exporttomusicxml.Name)
+		map_ExportToMusicxml_Identifiers[exporttomusicxml] = id
+
+		// Initialisation of values
+		if exporttomusicxml.Parameter != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Parameter")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Parameter_Identifiers[exporttomusicxml.Parameter])
 			pointersInitializesStatements += setPointerField
 		}
 

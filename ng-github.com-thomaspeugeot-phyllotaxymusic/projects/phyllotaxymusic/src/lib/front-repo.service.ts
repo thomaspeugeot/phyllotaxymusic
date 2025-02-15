@@ -32,6 +32,10 @@ import { CircleGridAPI } from './circlegrid-api'
 import { CircleGrid, CopyCircleGridAPIToCircleGrid } from './circlegrid'
 import { CircleGridService } from './circlegrid.service'
 
+import { ExportToMusicxmlAPI } from './exporttomusicxml-api'
+import { ExportToMusicxml, CopyExportToMusicxmlAPIToExportToMusicxml } from './exporttomusicxml'
+import { ExportToMusicxmlService } from './exporttomusicxml.service'
+
 import { FrontCurveAPI } from './frontcurve-api'
 import { FrontCurve, CopyFrontCurveAPIToFrontCurve } from './frontcurve'
 import { FrontCurveService } from './frontcurve.service'
@@ -132,6 +136,9 @@ export class FrontRepo { // insertion point sub template
 	array_CircleGrids = new Array<CircleGrid>() // array of front instances
 	map_ID_CircleGrid = new Map<number, CircleGrid>() // map of front instances
 
+	array_ExportToMusicxmls = new Array<ExportToMusicxml>() // array of front instances
+	map_ID_ExportToMusicxml = new Map<number, ExportToMusicxml>() // map of front instances
+
 	array_FrontCurves = new Array<FrontCurve>() // array of front instances
 	map_ID_FrontCurve = new Map<number, FrontCurve>() // map of front instances
 
@@ -207,6 +214,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Circles as unknown as Array<Type>
 			case 'CircleGrid':
 				return this.array_CircleGrids as unknown as Array<Type>
+			case 'ExportToMusicxml':
+				return this.array_ExportToMusicxmls as unknown as Array<Type>
 			case 'FrontCurve':
 				return this.array_FrontCurves as unknown as Array<Type>
 			case 'FrontCurveStack':
@@ -265,6 +274,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Circle as unknown as Map<number, Type>
 			case 'CircleGrid':
 				return this.map_ID_CircleGrid as unknown as Map<number, Type>
+			case 'ExportToMusicxml':
+				return this.map_ID_ExportToMusicxml as unknown as Map<number, Type>
 			case 'FrontCurve':
 				return this.map_ID_FrontCurve as unknown as Map<number, Type>
 			case 'FrontCurveStack':
@@ -375,6 +386,7 @@ export class FrontRepoService {
 		private beziergridstackService: BezierGridStackService,
 		private circleService: CircleService,
 		private circlegridService: CircleGridService,
+		private exporttomusicxmlService: ExportToMusicxmlService,
 		private frontcurveService: FrontCurveService,
 		private frontcurvestackService: FrontCurveStackService,
 		private horizontalaxisService: HorizontalAxisService,
@@ -432,6 +444,7 @@ export class FrontRepoService {
 		Observable<BezierGridStackAPI[]>,
 		Observable<CircleAPI[]>,
 		Observable<CircleGridAPI[]>,
+		Observable<ExportToMusicxmlAPI[]>,
 		Observable<FrontCurveAPI[]>,
 		Observable<FrontCurveStackAPI[]>,
 		Observable<HorizontalAxisAPI[]>,
@@ -467,6 +480,7 @@ export class FrontRepoService {
 			this.beziergridstackService.getBezierGridStacks(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.exporttomusicxmlService.getExportToMusicxmls(this.GONG__StackPath, this.frontRepo),
 			this.frontcurveService.getFrontCurves(this.GONG__StackPath, this.frontRepo),
 			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
@@ -507,6 +521,7 @@ export class FrontRepoService {
 			this.beziergridstackService.getBezierGridStacks(this.GONG__StackPath, this.frontRepo),
 			this.circleService.getCircles(this.GONG__StackPath, this.frontRepo),
 			this.circlegridService.getCircleGrids(this.GONG__StackPath, this.frontRepo),
+			this.exporttomusicxmlService.getExportToMusicxmls(this.GONG__StackPath, this.frontRepo),
 			this.frontcurveService.getFrontCurves(this.GONG__StackPath, this.frontRepo),
 			this.frontcurvestackService.getFrontCurveStacks(this.GONG__StackPath, this.frontRepo),
 			this.horizontalaxisService.getHorizontalAxiss(this.GONG__StackPath, this.frontRepo),
@@ -542,6 +557,7 @@ export class FrontRepoService {
 						beziergridstacks_,
 						circles_,
 						circlegrids_,
+						exporttomusicxmls_,
 						frontcurves_,
 						frontcurvestacks_,
 						horizontalaxiss_,
@@ -578,6 +594,8 @@ export class FrontRepoService {
 						circles = circles_ as CircleAPI[]
 						var circlegrids: CircleGridAPI[]
 						circlegrids = circlegrids_ as CircleGridAPI[]
+						var exporttomusicxmls: ExportToMusicxmlAPI[]
+						exporttomusicxmls = exporttomusicxmls_ as ExportToMusicxmlAPI[]
 						var frontcurves: FrontCurveAPI[]
 						frontcurves = frontcurves_ as FrontCurveAPI[]
 						var frontcurvestacks: FrontCurveStackAPI[]
@@ -699,6 +717,18 @@ export class FrontRepoService {
 								let circlegrid = new CircleGrid
 								this.frontRepo.array_CircleGrids.push(circlegrid)
 								this.frontRepo.map_ID_CircleGrid.set(circlegridAPI.ID, circlegrid)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_ExportToMusicxmls = []
+						this.frontRepo.map_ID_ExportToMusicxml.clear()
+
+						exporttomusicxmls.forEach(
+							exporttomusicxmlAPI => {
+								let exporttomusicxml = new ExportToMusicxml
+								this.frontRepo.array_ExportToMusicxmls.push(exporttomusicxml)
+								this.frontRepo.map_ID_ExportToMusicxml.set(exporttomusicxmlAPI.ID, exporttomusicxml)
 							}
 						)
 
@@ -979,6 +1009,14 @@ export class FrontRepoService {
 						)
 
 						// fill up front objects
+						exporttomusicxmls.forEach(
+							exporttomusicxmlAPI => {
+								let exporttomusicxml = this.frontRepo.map_ID_ExportToMusicxml.get(exporttomusicxmlAPI.ID)
+								CopyExportToMusicxmlAPIToExportToMusicxml(exporttomusicxmlAPI, exporttomusicxml!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
 						frontcurves.forEach(
 							frontcurveAPI => {
 								let frontcurve = this.frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
@@ -1236,6 +1274,18 @@ export class FrontRepoService {
 						let circlegrid = new CircleGrid
 						frontRepo.array_CircleGrids.push(circlegrid)
 						frontRepo.map_ID_CircleGrid.set(circlegridAPI.ID, circlegrid)
+					}
+				)
+
+				// init the arrays
+				frontRepo.array_ExportToMusicxmls = []
+				frontRepo.map_ID_ExportToMusicxml.clear()
+
+				backRepoData.ExportToMusicxmlAPIs.forEach(
+					exporttomusicxmlAPI => {
+						let exporttomusicxml = new ExportToMusicxml
+						frontRepo.array_ExportToMusicxmls.push(exporttomusicxml)
+						frontRepo.map_ID_ExportToMusicxml.set(exporttomusicxmlAPI.ID, exporttomusicxml)
 					}
 				)
 
@@ -1518,6 +1568,14 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.ExportToMusicxmlAPIs.forEach(
+					exporttomusicxmlAPI => {
+						let exporttomusicxml = frontRepo.map_ID_ExportToMusicxml.get(exporttomusicxmlAPI.ID)
+						CopyExportToMusicxmlAPIToExportToMusicxml(exporttomusicxmlAPI, exporttomusicxml!, frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.FrontCurveAPIs.forEach(
 					frontcurveAPI => {
 						let frontcurve = frontRepo.map_ID_FrontCurve.get(frontcurveAPI.ID)
@@ -1701,57 +1759,60 @@ export function getCircleUniqueID(id: number): number {
 export function getCircleGridUniqueID(id: number): number {
 	return 59 * id
 }
-export function getFrontCurveUniqueID(id: number): number {
+export function getExportToMusicxmlUniqueID(id: number): number {
 	return 61 * id
 }
-export function getFrontCurveStackUniqueID(id: number): number {
+export function getFrontCurveUniqueID(id: number): number {
 	return 67 * id
 }
-export function getHorizontalAxisUniqueID(id: number): number {
+export function getFrontCurveStackUniqueID(id: number): number {
 	return 71 * id
 }
-export function getKeyUniqueID(id: number): number {
+export function getHorizontalAxisUniqueID(id: number): number {
 	return 73 * id
 }
-export function getParameterUniqueID(id: number): number {
+export function getKeyUniqueID(id: number): number {
 	return 79 * id
 }
-export function getRhombusUniqueID(id: number): number {
+export function getParameterUniqueID(id: number): number {
 	return 83 * id
 }
-export function getRhombusGridUniqueID(id: number): number {
+export function getRhombusUniqueID(id: number): number {
 	return 89 * id
 }
-export function getShapeCategoryUniqueID(id: number): number {
+export function getRhombusGridUniqueID(id: number): number {
 	return 97 * id
 }
-export function getSpiralBezierUniqueID(id: number): number {
+export function getShapeCategoryUniqueID(id: number): number {
 	return 101 * id
 }
-export function getSpiralBezierGridUniqueID(id: number): number {
+export function getSpiralBezierUniqueID(id: number): number {
 	return 103 * id
 }
-export function getSpiralCircleUniqueID(id: number): number {
+export function getSpiralBezierGridUniqueID(id: number): number {
 	return 107 * id
 }
-export function getSpiralCircleGridUniqueID(id: number): number {
+export function getSpiralCircleUniqueID(id: number): number {
 	return 109 * id
 }
-export function getSpiralLineUniqueID(id: number): number {
+export function getSpiralCircleGridUniqueID(id: number): number {
 	return 113 * id
 }
-export function getSpiralLineGridUniqueID(id: number): number {
+export function getSpiralLineUniqueID(id: number): number {
 	return 127 * id
 }
-export function getSpiralOriginUniqueID(id: number): number {
+export function getSpiralLineGridUniqueID(id: number): number {
 	return 131 * id
 }
-export function getSpiralRhombusUniqueID(id: number): number {
+export function getSpiralOriginUniqueID(id: number): number {
 	return 137 * id
 }
-export function getSpiralRhombusGridUniqueID(id: number): number {
+export function getSpiralRhombusUniqueID(id: number): number {
 	return 139 * id
 }
-export function getVerticalAxisUniqueID(id: number): number {
+export function getSpiralRhombusGridUniqueID(id: number): number {
 	return 149 * id
+}
+export function getVerticalAxisUniqueID(id: number): number {
+	return 151 * id
 }

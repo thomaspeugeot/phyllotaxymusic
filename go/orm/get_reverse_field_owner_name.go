@@ -5,10 +5,10 @@ import (
 	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
-func GetReverseFieldOwnerName[T models.Gongstruct](
+func GetReverseFieldOwnerName(
 	stage *models.StageStruct,
 	backRepo *BackRepoStruct,
-	instance *T,
+	instance any,
 	reverseField *models.ReverseField) (res string) {
 
 	res = ""
@@ -73,6 +73,11 @@ func GetReverseFieldOwnerName[T models.Gongstruct](
 		}
 
 	case *models.CircleGrid:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
+	case *models.ExportToMusicxml:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
@@ -282,6 +287,11 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		}
 
 	case *models.CircleGrid:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
+	case *models.ExportToMusicxml:
 		switch reverseField.GongstructName {
 		// insertion point
 		}

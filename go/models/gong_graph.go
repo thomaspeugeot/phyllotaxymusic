@@ -26,6 +26,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *CircleGrid:
 		ok = stage.IsStagedCircleGrid(target)
 
+	case *ExportToMusicxml:
+		ok = stage.IsStagedExportToMusicxml(target)
+
 	case *FrontCurve:
 		ok = stage.IsStagedFrontCurve(target)
 
@@ -132,6 +135,13 @@ func (stage *StageStruct) IsStagedCircle(circle *Circle) (ok bool) {
 func (stage *StageStruct) IsStagedCircleGrid(circlegrid *CircleGrid) (ok bool) {
 
 	_, ok = stage.CircleGrids[circlegrid]
+
+	return
+}
+
+func (stage *StageStruct) IsStagedExportToMusicxml(exporttomusicxml *ExportToMusicxml) (ok bool) {
+
+	_, ok = stage.ExportToMusicxmls[exporttomusicxml]
 
 	return
 }
@@ -290,6 +300,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *CircleGrid:
 		stage.StageBranchCircleGrid(target)
+
+	case *ExportToMusicxml:
+		stage.StageBranchExportToMusicxml(target)
 
 	case *FrontCurve:
 		stage.StageBranchFrontCurve(target)
@@ -495,6 +508,24 @@ func (stage *StageStruct) StageBranchCircleGrid(circlegrid *CircleGrid) {
 	for _, _circle := range circlegrid.Circles {
 		StageBranch(stage, _circle)
 	}
+
+}
+
+func (stage *StageStruct) StageBranchExportToMusicxml(exporttomusicxml *ExportToMusicxml) {
+
+	// check if instance is already staged
+	if IsStaged(stage, exporttomusicxml) {
+		return
+	}
+
+	exporttomusicxml.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if exporttomusicxml.Parameter != nil {
+		StageBranch(stage, exporttomusicxml.Parameter)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -1056,6 +1087,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchCircleGrid(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
+	case *ExportToMusicxml:
+		toT := CopyBranchExportToMusicxml(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *FrontCurve:
 		toT := CopyBranchFrontCurve(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -1306,6 +1341,28 @@ func CopyBranchCircleGrid(mapOrigCopy map[any]any, circlegridFrom *CircleGrid) (
 	for _, _circle := range circlegridFrom.Circles {
 		circlegridTo.Circles = append(circlegridTo.Circles, CopyBranchCircle(mapOrigCopy, _circle))
 	}
+
+	return
+}
+
+func CopyBranchExportToMusicxml(mapOrigCopy map[any]any, exporttomusicxmlFrom *ExportToMusicxml) (exporttomusicxmlTo *ExportToMusicxml) {
+
+	// exporttomusicxmlFrom has already been copied
+	if _exporttomusicxmlTo, ok := mapOrigCopy[exporttomusicxmlFrom]; ok {
+		exporttomusicxmlTo = _exporttomusicxmlTo.(*ExportToMusicxml)
+		return
+	}
+
+	exporttomusicxmlTo = new(ExportToMusicxml)
+	mapOrigCopy[exporttomusicxmlFrom] = exporttomusicxmlTo
+	exporttomusicxmlFrom.CopyBasicFields(exporttomusicxmlTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if exporttomusicxmlFrom.Parameter != nil {
+		exporttomusicxmlTo.Parameter = CopyBranchParameter(mapOrigCopy, exporttomusicxmlFrom.Parameter)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 	return
 }
@@ -1930,6 +1987,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 	case *CircleGrid:
 		stage.UnstageBranchCircleGrid(target)
 
+	case *ExportToMusicxml:
+		stage.UnstageBranchExportToMusicxml(target)
+
 	case *FrontCurve:
 		stage.UnstageBranchFrontCurve(target)
 
@@ -2134,6 +2194,24 @@ func (stage *StageStruct) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
 	for _, _circle := range circlegrid.Circles {
 		UnstageBranch(stage, _circle)
 	}
+
+}
+
+func (stage *StageStruct) UnstageBranchExportToMusicxml(exporttomusicxml *ExportToMusicxml) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, exporttomusicxml) {
+		return
+	}
+
+	exporttomusicxml.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if exporttomusicxml.Parameter != nil {
+		UnstageBranch(stage, exporttomusicxml.Parameter)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 

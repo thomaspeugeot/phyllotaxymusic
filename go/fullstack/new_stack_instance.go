@@ -51,6 +51,7 @@ func NewStackInstance(
 	models.SetOrchestratorOnAfterUpdate[models.BezierGridStack](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Circle](stage)
 	models.SetOrchestratorOnAfterUpdate[models.CircleGrid](stage)
+	models.SetOrchestratorOnAfterUpdate[models.ExportToMusicxml](stage)
 	models.SetOrchestratorOnAfterUpdate[models.FrontCurve](stage)
 	models.SetOrchestratorOnAfterUpdate[models.FrontCurveStack](stage)
 	models.SetOrchestratorOnAfterUpdate[models.HorizontalAxis](stage)

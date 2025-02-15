@@ -10,6 +10,7 @@ import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon'
 
 import { AngularSplitModule } from 'angular-split';
 
@@ -26,13 +27,17 @@ import { Observable } from 'rxjs';
   selector: 'lib-phyllotaxymusicspecific',
   standalone: true,
   imports: [
+
     CommonModule,
+
     MatSliderModule,
     MatRadioModule,
     MatCardModule,
     MatCheckboxModule,
     FormsModule,
     MatFormFieldModule,
+    MatIconModule,
+
     AngularSplitModule,
     MatGridListModule,
     GongsvgDiagrammingComponent,
@@ -44,6 +49,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./phyllotaxymusicspecific.component.css'],
 })
 export class PhyllotaxymusicspecificComponent implements OnInit {
+
 
   private socket: WebSocket | undefined
 
@@ -79,6 +85,7 @@ export class PhyllotaxymusicspecificComponent implements OnInit {
     private frontRepoService: phyllotaxymusic.FrontRepoService,
 
     private parameterService: phyllotaxymusic.ParameterService,
+    private exportToXmlService: phyllotaxymusic.ExportToMusicxmlService,
   ) {
 
   }
@@ -138,5 +145,29 @@ export class PhyllotaxymusicspecificComponent implements OnInit {
         }
       )
     }
+  }
+
+  exportToMusicXML() {
+
+    console.assert(this.frontRepo != undefined)
+    if (this.frontRepo == undefined) {
+      return
+    }
+
+
+    let array = this.frontRepo.getFrontArray<phyllotaxymusic.ExportToMusicxml>(phyllotaxymusic.ExportToMusicxml.GONGSTRUCT_NAME);
+
+    console.assert(array.length == 1)
+    if (array.length != 1) {
+      return
+    }
+
+    let exportToMusicXML = array[0]
+    this.exportToXmlService.updateFront(exportToMusicXML, this.StacksNames.Phylotaxy).subscribe(
+      () => {
+        console.log("Export to music xml requested")
+      }
+    )
+
   }
 }

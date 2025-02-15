@@ -33,6 +33,7 @@ import { auto_Y_offset } from './auto-y-offset';
 import { drawLineFromRectToB } from '../draw.line.from.rect.to.point';
 import { LinkSegmentsPipe } from '../link-segments.pipe'
 
+import { processSVG } from '../cleanandresizesvg'
 
 @Component({
   selector: 'lib-gongsvg-diagramming',
@@ -946,4 +947,33 @@ export class GongsvgDiagrammingComponent implements OnInit, OnDestroy, AfterView
 
     return coordinate
   }
+
+  downloadSVG() {
+    const svgElement = this.svgContainer.nativeElement;
+    const serializer = new XMLSerializer();
+    const svgData = serializer.serializeToString(svgElement);
+
+
+
+    let withoutComments = svgData.replace(/<!--[\s\S]*?-->/g, '')
+
+    let res = withoutComments.replace(/<!--[\s\S]*?-->/g, '')
+    // Remove Angular generated attributes (including the equals and quotes)
+    .replace(/\s+_ngcontent-[^="]*=""/g, '')
+    .replace(/\s+_nghost-[^="]*=""/g, '');
+
+
+    let svgData2 = processSVG(res)
+    const blob = new Blob([svgData2], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = this.svg.Name + ".svg";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
 }

@@ -7,16 +7,16 @@ import (
 	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
-func FillUpFormFromGongstruct[T models.Gongstruct](instance *T, probe *Probe) {
+func FillUpFormFromGongstruct(instance any, probe *Probe) {
 	formStage := probe.formStage
 	formStage.Reset()
 	formStage.Commit()
 
-	FillUpNamedFormFromGongstruct[T](instance, probe, formStage, gongtable.FormGroupDefaultName.ToString())
+	FillUpNamedFormFromGongstruct(instance, probe, formStage, gongtable.FormGroupDefaultName.ToString())
 
 }
 
-func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Probe, formStage *gongtable.StageStruct, formName string) {
+func FillUpNamedFormFromGongstruct(instance any, probe *Probe, formStage *gongtable.StageStruct, formName string) {
 
 	switch instancesTyped := any(instance).(type) {
 	// insertion point
@@ -98,6 +98,18 @@ func FillUpNamedFormFromGongstruct[T models.Gongstruct](instance *T, probe *Prob
 			Label: "CircleGrid Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__CircleGridFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.ExportToMusicxml:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "ExportToMusicxml Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__ExportToMusicxmlFormCallback(
 			instancesTyped,
 			probe,
 			formGroup,

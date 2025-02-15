@@ -34,6 +34,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterCircleGridCreateCallback != nil {
 			stage.OnAfterCircleGridCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *ExportToMusicxml:
+		if stage.OnAfterExportToMusicxmlCreateCallback != nil {
+			stage.OnAfterExportToMusicxmlCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *FrontCurve:
 		if stage.OnAfterFrontCurveCreateCallback != nil {
 			stage.OnAfterFrontCurveCreateCallback.OnAfterCreate(stage, target)
@@ -150,6 +154,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*CircleGrid)
 		if stage.OnAfterCircleGridUpdateCallback != nil {
 			stage.OnAfterCircleGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *ExportToMusicxml:
+		newTarget := any(new).(*ExportToMusicxml)
+		if stage.OnAfterExportToMusicxmlUpdateCallback != nil {
+			stage.OnAfterExportToMusicxmlUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *FrontCurve:
 		newTarget := any(new).(*FrontCurve)
@@ -286,6 +295,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*CircleGrid)
 			stage.OnAfterCircleGridDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *ExportToMusicxml:
+		if stage.OnAfterExportToMusicxmlDeleteCallback != nil {
+			staged := any(staged).(*ExportToMusicxml)
+			stage.OnAfterExportToMusicxmlDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *FrontCurve:
 		if stage.OnAfterFrontCurveDeleteCallback != nil {
 			staged := any(staged).(*FrontCurve)
@@ -414,6 +428,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterCircleGridReadCallback != nil {
 			stage.OnAfterCircleGridReadCallback.OnAfterRead(stage, target)
 		}
+	case *ExportToMusicxml:
+		if stage.OnAfterExportToMusicxmlReadCallback != nil {
+			stage.OnAfterExportToMusicxmlReadCallback.OnAfterRead(stage, target)
+		}
 	case *FrontCurve:
 		if stage.OnAfterFrontCurveReadCallback != nil {
 			stage.OnAfterFrontCurveReadCallback.OnAfterRead(stage, target)
@@ -518,6 +536,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *CircleGrid:
 		stage.OnAfterCircleGridUpdateCallback = any(callback).(OnAfterUpdateInterface[CircleGrid])
 	
+	case *ExportToMusicxml:
+		stage.OnAfterExportToMusicxmlUpdateCallback = any(callback).(OnAfterUpdateInterface[ExportToMusicxml])
+	
 	case *FrontCurve:
 		stage.OnAfterFrontCurveUpdateCallback = any(callback).(OnAfterUpdateInterface[FrontCurve])
 	
@@ -599,6 +620,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *CircleGrid:
 		stage.OnAfterCircleGridCreateCallback = any(callback).(OnAfterCreateInterface[CircleGrid])
+	
+	case *ExportToMusicxml:
+		stage.OnAfterExportToMusicxmlCreateCallback = any(callback).(OnAfterCreateInterface[ExportToMusicxml])
 	
 	case *FrontCurve:
 		stage.OnAfterFrontCurveCreateCallback = any(callback).(OnAfterCreateInterface[FrontCurve])
@@ -682,6 +706,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *CircleGrid:
 		stage.OnAfterCircleGridDeleteCallback = any(callback).(OnAfterDeleteInterface[CircleGrid])
 	
+	case *ExportToMusicxml:
+		stage.OnAfterExportToMusicxmlDeleteCallback = any(callback).(OnAfterDeleteInterface[ExportToMusicxml])
+	
 	case *FrontCurve:
 		stage.OnAfterFrontCurveDeleteCallback = any(callback).(OnAfterDeleteInterface[FrontCurve])
 	
@@ -763,6 +790,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *CircleGrid:
 		stage.OnAfterCircleGridReadCallback = any(callback).(OnAfterReadInterface[CircleGrid])
+	
+	case *ExportToMusicxml:
+		stage.OnAfterExportToMusicxmlReadCallback = any(callback).(OnAfterReadInterface[ExportToMusicxml])
 	
 	case *FrontCurve:
 		stage.OnAfterFrontCurveReadCallback = any(callback).(OnAfterReadInterface[FrontCurve])

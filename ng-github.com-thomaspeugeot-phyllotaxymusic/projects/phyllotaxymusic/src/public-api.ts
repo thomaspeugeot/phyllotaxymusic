@@ -41,6 +41,10 @@ export * from './lib/circlegrid-api'
 export * from './lib/circlegrid'
 export * from './lib/circlegrid.service'
 
+export * from './lib/exporttomusicxml-api'
+export * from './lib/exporttomusicxml'
+export * from './lib/exporttomusicxml.service'
+
 export * from './lib/frontcurve-api'
 export * from './lib/frontcurve'
 export * from './lib/frontcurve.service'

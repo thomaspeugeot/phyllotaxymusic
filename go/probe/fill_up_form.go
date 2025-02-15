@@ -10,8 +10,8 @@ import (
 
 var __dummy_orm_fillup_form = orm.BackRepoStruct{}
 
-func FillUpForm[T models.Gongstruct](
-	instance *T,
+func FillUpForm(
+	instance any,
 	formGroup *form.FormGroup,
 	probe *Probe,
 ) {
@@ -258,6 +258,12 @@ func FillUpForm[T models.Gongstruct](
 			false, false, 0, false, 0)
 		AssociationFieldToForm("ShapeCategory", instanceWithInferedType.ShapeCategory, formGroup, probe)
 		AssociationSliceToForm("Circles", instanceWithInferedType, &instanceWithInferedType.Circles, formGroup, probe)
+
+	case *models.ExportToMusicxml:
+		// insertion point
+		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		AssociationFieldToForm("Parameter", instanceWithInferedType.Parameter, formGroup, probe)
 
 	case *models.FrontCurve:
 		// insertion point

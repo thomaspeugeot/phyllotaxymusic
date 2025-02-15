@@ -2,6 +2,16 @@
 package models
 
 // insertion point
+// ExportToMusicxmlOrchestrator
+type ExportToMusicxmlOrchestrator struct {
+}
+
+func (orchestrator *ExportToMusicxmlOrchestrator) OnAfterUpdate(
+	gongsvgStage *StageStruct,
+	stagedExportToMusicxml, backRepoExportToMusicxml *ExportToMusicxml) {
+
+	stagedExportToMusicxml.OnAfterUpdate(gongsvgStage, stagedExportToMusicxml, backRepoExportToMusicxml)
+}
 // ParameterOrchestrator
 type ParameterOrchestrator struct {
 }
@@ -19,6 +29,8 @@ func SetOrchestratorOnAfterUpdate[Type Gongstruct](stage *StageStruct) {
 
 	switch any(ret).(type) {
 	// insertion point
+	case ExportToMusicxml:
+		stage.OnAfterExportToMusicxmlUpdateCallback = new(ExportToMusicxmlOrchestrator)
 	case Parameter:
 		stage.OnAfterParameterUpdateCallback = new(ParameterOrchestrator)
 

@@ -321,6 +321,7 @@ var __gong__map_BezierGrid = make(map[string]*BezierGrid)
 var __gong__map_BezierGridStack = make(map[string]*BezierGridStack)
 var __gong__map_Circle = make(map[string]*Circle)
 var __gong__map_CircleGrid = make(map[string]*CircleGrid)
+var __gong__map_ExportToMusicxml = make(map[string]*ExportToMusicxml)
 var __gong__map_FrontCurve = make(map[string]*FrontCurve)
 var __gong__map_FrontCurveStack = make(map[string]*FrontCurveStack)
 var __gong__map_HorizontalAxis = make(map[string]*HorizontalAxis)
@@ -553,6 +554,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceCircleGrid.Stage(stage)
 										instance = any(instanceCircleGrid)
 										__gong__map_CircleGrid[identifier] = instanceCircleGrid
+									case "ExportToMusicxml":
+										instanceExportToMusicxml := new(ExportToMusicxml)
+										instanceExportToMusicxml.Name = instanceName
+										instanceExportToMusicxml.Stage(stage)
+										instance = any(instanceExportToMusicxml)
+										__gong__map_ExportToMusicxml[identifier] = instanceExportToMusicxml
 									case "FrontCurve":
 										instanceFrontCurve := new(FrontCurve)
 										instanceFrontCurve.Name = instanceName
@@ -725,6 +732,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "ExportToMusicxml":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "FrontCurve":
 							switch fieldName {
 							// insertion point for date assign code
@@ -873,6 +884,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Circle[targetIdentifier]
 							__gong__map_CircleGrid[identifier].Circles =
 								append(__gong__map_CircleGrid[identifier].Circles, target)
+						}
+					case "ExportToMusicxml":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
 						}
 					case "FrontCurve":
 						switch fieldName {
@@ -1348,6 +1363,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_CircleGrid[identifier].Name = fielValue
+				}
+			case "ExportToMusicxml":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_ExportToMusicxml[identifier].Name = fielValue
 				}
 			case "FrontCurve":
 				switch fieldName {
@@ -2531,6 +2554,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					targetIdentifier := ident.Name
 					__gong__map_CircleGrid[identifier].ShapeCategory = __gong__map_ShapeCategory[targetIdentifier]
 				}
+			case "ExportToMusicxml":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Parameter":
+					targetIdentifier := ident.Name
+					__gong__map_ExportToMusicxml[identifier].Parameter = __gong__map_Parameter[targetIdentifier]
+				}
 			case "FrontCurve":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -3031,6 +3061,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "CircleGrid":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "ExportToMusicxml":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

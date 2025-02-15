@@ -392,13 +392,15 @@ func (rhombusgridDB *RhombusGridDB) DecodePointers(backRepo *BackRepoStruct, rho
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: rhombusgrid.Reference, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if rhombusgrid.Reference == nil || rhombusgrid.Reference != tmp {
-				rhombusgrid.Reference = tmp
+				log.Println("DecodePointers: rhombusgrid.Reference, unknown pointer id", id)
+				rhombusgrid.Reference = nil
+			} else {
+				// updates only if field has changed
+				if rhombusgrid.Reference == nil || rhombusgrid.Reference != tmp {
+					rhombusgrid.Reference = tmp
+				}
 			}
 		} else {
 			rhombusgrid.Reference = nil
@@ -411,13 +413,15 @@ func (rhombusgridDB *RhombusGridDB) DecodePointers(backRepo *BackRepoStruct, rho
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: rhombusgrid.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if rhombusgrid.ShapeCategory == nil || rhombusgrid.ShapeCategory != tmp {
-				rhombusgrid.ShapeCategory = tmp
+				log.Println("DecodePointers: rhombusgrid.ShapeCategory, unknown pointer id", id)
+				rhombusgrid.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if rhombusgrid.ShapeCategory == nil || rhombusgrid.ShapeCategory != tmp {
+					rhombusgrid.ShapeCategory = tmp
+				}
 			}
 		} else {
 			rhombusgrid.ShapeCategory = nil

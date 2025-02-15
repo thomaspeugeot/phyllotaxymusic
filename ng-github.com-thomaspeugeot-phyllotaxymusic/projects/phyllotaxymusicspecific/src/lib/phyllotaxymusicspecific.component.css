@@ -23,3 +23,14 @@ mat-slider {
 .example-section {
     margin: 12px 0;
 }
+
+.export-button {
+    position: absolute;
+    /* Position along the right edge */
+    right: 16px;
+    /* Start at 50% of the container's height */
+    top: 90%;
+    /* Move up by half of the button’s own height to center vertically */
+    transform: translateY(-50%);
+    z-index: 3;
+}

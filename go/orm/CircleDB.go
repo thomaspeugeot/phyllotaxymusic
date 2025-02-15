@@ -447,13 +447,15 @@ func (circleDB *CircleDB) DecodePointers(backRepo *BackRepoStruct, circle *model
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: circle.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if circle.ShapeCategory == nil || circle.ShapeCategory != tmp {
-				circle.ShapeCategory = tmp
+				log.Println("DecodePointers: circle.ShapeCategory, unknown pointer id", id)
+				circle.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if circle.ShapeCategory == nil || circle.ShapeCategory != tmp {
+					circle.ShapeCategory = tmp
+				}
 			}
 		} else {
 			circle.ShapeCategory = nil

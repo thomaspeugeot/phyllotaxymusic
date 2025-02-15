@@ -1513,13 +1513,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.InitialRhombus, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.InitialRhombus == nil || parameter.InitialRhombus != tmp {
-				parameter.InitialRhombus = tmp
+				log.Println("DecodePointers: parameter.InitialRhombus, unknown pointer id", id)
+				parameter.InitialRhombus = nil
+			} else {
+				// updates only if field has changed
+				if parameter.InitialRhombus == nil || parameter.InitialRhombus != tmp {
+					parameter.InitialRhombus = tmp
+				}
 			}
 		} else {
 			parameter.InitialRhombus = nil
@@ -1532,13 +1534,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.InitialCircle, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.InitialCircle == nil || parameter.InitialCircle != tmp {
-				parameter.InitialCircle = tmp
+				log.Println("DecodePointers: parameter.InitialCircle, unknown pointer id", id)
+				parameter.InitialCircle = nil
+			} else {
+				// updates only if field has changed
+				if parameter.InitialCircle == nil || parameter.InitialCircle != tmp {
+					parameter.InitialCircle = tmp
+				}
 			}
 		} else {
 			parameter.InitialCircle = nil
@@ -1551,13 +1555,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.InitialRhombusGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.InitialRhombusGrid == nil || parameter.InitialRhombusGrid != tmp {
-				parameter.InitialRhombusGrid = tmp
+				log.Println("DecodePointers: parameter.InitialRhombusGrid, unknown pointer id", id)
+				parameter.InitialRhombusGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.InitialRhombusGrid == nil || parameter.InitialRhombusGrid != tmp {
+					parameter.InitialRhombusGrid = tmp
+				}
 			}
 		} else {
 			parameter.InitialRhombusGrid = nil
@@ -1570,13 +1576,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.InitialCircleGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.InitialCircleGrid == nil || parameter.InitialCircleGrid != tmp {
-				parameter.InitialCircleGrid = tmp
+				log.Println("DecodePointers: parameter.InitialCircleGrid, unknown pointer id", id)
+				parameter.InitialCircleGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.InitialCircleGrid == nil || parameter.InitialCircleGrid != tmp {
+					parameter.InitialCircleGrid = tmp
+				}
 			}
 		} else {
 			parameter.InitialCircleGrid = nil
@@ -1589,13 +1597,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.InitialAxis, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.InitialAxis == nil || parameter.InitialAxis != tmp {
-				parameter.InitialAxis = tmp
+				log.Println("DecodePointers: parameter.InitialAxis, unknown pointer id", id)
+				parameter.InitialAxis = nil
+			} else {
+				// updates only if field has changed
+				if parameter.InitialAxis == nil || parameter.InitialAxis != tmp {
+					parameter.InitialAxis = tmp
+				}
 			}
 		} else {
 			parameter.InitialAxis = nil
@@ -1608,13 +1618,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.RotatedAxis, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.RotatedAxis == nil || parameter.RotatedAxis != tmp {
-				parameter.RotatedAxis = tmp
+				log.Println("DecodePointers: parameter.RotatedAxis, unknown pointer id", id)
+				parameter.RotatedAxis = nil
+			} else {
+				// updates only if field has changed
+				if parameter.RotatedAxis == nil || parameter.RotatedAxis != tmp {
+					parameter.RotatedAxis = tmp
+				}
 			}
 		} else {
 			parameter.RotatedAxis = nil
@@ -1627,13 +1639,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.RotatedRhombus, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.RotatedRhombus == nil || parameter.RotatedRhombus != tmp {
-				parameter.RotatedRhombus = tmp
+				log.Println("DecodePointers: parameter.RotatedRhombus, unknown pointer id", id)
+				parameter.RotatedRhombus = nil
+			} else {
+				// updates only if field has changed
+				if parameter.RotatedRhombus == nil || parameter.RotatedRhombus != tmp {
+					parameter.RotatedRhombus = tmp
+				}
 			}
 		} else {
 			parameter.RotatedRhombus = nil
@@ -1646,13 +1660,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.RotatedRhombusGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.RotatedRhombusGrid == nil || parameter.RotatedRhombusGrid != tmp {
-				parameter.RotatedRhombusGrid = tmp
+				log.Println("DecodePointers: parameter.RotatedRhombusGrid, unknown pointer id", id)
+				parameter.RotatedRhombusGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.RotatedRhombusGrid == nil || parameter.RotatedRhombusGrid != tmp {
+					parameter.RotatedRhombusGrid = tmp
+				}
 			}
 		} else {
 			parameter.RotatedRhombusGrid = nil
@@ -1665,13 +1681,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.RotatedCircleGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.RotatedCircleGrid == nil || parameter.RotatedCircleGrid != tmp {
-				parameter.RotatedCircleGrid = tmp
+				log.Println("DecodePointers: parameter.RotatedCircleGrid, unknown pointer id", id)
+				parameter.RotatedCircleGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.RotatedCircleGrid == nil || parameter.RotatedCircleGrid != tmp {
+					parameter.RotatedCircleGrid = tmp
+				}
 			}
 		} else {
 			parameter.RotatedCircleGrid = nil
@@ -1684,13 +1702,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.NextRhombus, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.NextRhombus == nil || parameter.NextRhombus != tmp {
-				parameter.NextRhombus = tmp
+				log.Println("DecodePointers: parameter.NextRhombus, unknown pointer id", id)
+				parameter.NextRhombus = nil
+			} else {
+				// updates only if field has changed
+				if parameter.NextRhombus == nil || parameter.NextRhombus != tmp {
+					parameter.NextRhombus = tmp
+				}
 			}
 		} else {
 			parameter.NextRhombus = nil
@@ -1703,13 +1723,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.NextCircle, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.NextCircle == nil || parameter.NextCircle != tmp {
-				parameter.NextCircle = tmp
+				log.Println("DecodePointers: parameter.NextCircle, unknown pointer id", id)
+				parameter.NextCircle = nil
+			} else {
+				// updates only if field has changed
+				if parameter.NextCircle == nil || parameter.NextCircle != tmp {
+					parameter.NextCircle = tmp
+				}
 			}
 		} else {
 			parameter.NextCircle = nil
@@ -1722,13 +1744,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoRhombus.Map_RhombusDBID_RhombusPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowingRhombusGridSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowingRhombusGridSeed == nil || parameter.GrowingRhombusGridSeed != tmp {
-				parameter.GrowingRhombusGridSeed = tmp
+				log.Println("DecodePointers: parameter.GrowingRhombusGridSeed, unknown pointer id", id)
+				parameter.GrowingRhombusGridSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowingRhombusGridSeed == nil || parameter.GrowingRhombusGridSeed != tmp {
+					parameter.GrowingRhombusGridSeed = tmp
+				}
 			}
 		} else {
 			parameter.GrowingRhombusGridSeed = nil
@@ -1741,13 +1765,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoRhombusGrid.Map_RhombusGridDBID_RhombusGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowingRhombusGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowingRhombusGrid == nil || parameter.GrowingRhombusGrid != tmp {
-				parameter.GrowingRhombusGrid = tmp
+				log.Println("DecodePointers: parameter.GrowingRhombusGrid, unknown pointer id", id)
+				parameter.GrowingRhombusGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowingRhombusGrid == nil || parameter.GrowingRhombusGrid != tmp {
+					parameter.GrowingRhombusGrid = tmp
+				}
 			}
 		} else {
 			parameter.GrowingRhombusGrid = nil
@@ -1760,13 +1786,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowingCircleGridSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowingCircleGridSeed == nil || parameter.GrowingCircleGridSeed != tmp {
-				parameter.GrowingCircleGridSeed = tmp
+				log.Println("DecodePointers: parameter.GrowingCircleGridSeed, unknown pointer id", id)
+				parameter.GrowingCircleGridSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowingCircleGridSeed == nil || parameter.GrowingCircleGridSeed != tmp {
+					parameter.GrowingCircleGridSeed = tmp
+				}
 			}
 		} else {
 			parameter.GrowingCircleGridSeed = nil
@@ -1779,13 +1807,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowingCircleGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowingCircleGrid == nil || parameter.GrowingCircleGrid != tmp {
-				parameter.GrowingCircleGrid = tmp
+				log.Println("DecodePointers: parameter.GrowingCircleGrid, unknown pointer id", id)
+				parameter.GrowingCircleGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowingCircleGrid == nil || parameter.GrowingCircleGrid != tmp {
+					parameter.GrowingCircleGrid = tmp
+				}
 			}
 		} else {
 			parameter.GrowingCircleGrid = nil
@@ -1798,13 +1828,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowingCircleGridLeftSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowingCircleGridLeftSeed == nil || parameter.GrowingCircleGridLeftSeed != tmp {
-				parameter.GrowingCircleGridLeftSeed = tmp
+				log.Println("DecodePointers: parameter.GrowingCircleGridLeftSeed, unknown pointer id", id)
+				parameter.GrowingCircleGridLeftSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowingCircleGridLeftSeed == nil || parameter.GrowingCircleGridLeftSeed != tmp {
+					parameter.GrowingCircleGridLeftSeed = tmp
+				}
 			}
 		} else {
 			parameter.GrowingCircleGridLeftSeed = nil
@@ -1817,13 +1849,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowingCircleGridLeft, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowingCircleGridLeft == nil || parameter.GrowingCircleGridLeft != tmp {
-				parameter.GrowingCircleGridLeft = tmp
+				log.Println("DecodePointers: parameter.GrowingCircleGridLeft, unknown pointer id", id)
+				parameter.GrowingCircleGridLeft = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowingCircleGridLeft == nil || parameter.GrowingCircleGridLeft != tmp {
+					parameter.GrowingCircleGridLeft = tmp
+				}
 			}
 		} else {
 			parameter.GrowingCircleGridLeft = nil
@@ -1836,13 +1870,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.ConstructionAxis, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.ConstructionAxis == nil || parameter.ConstructionAxis != tmp {
-				parameter.ConstructionAxis = tmp
+				log.Println("DecodePointers: parameter.ConstructionAxis, unknown pointer id", id)
+				parameter.ConstructionAxis = nil
+			} else {
+				// updates only if field has changed
+				if parameter.ConstructionAxis == nil || parameter.ConstructionAxis != tmp {
+					parameter.ConstructionAxis = tmp
+				}
 			}
 		} else {
 			parameter.ConstructionAxis = nil
@@ -1855,13 +1891,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.ConstructionAxisGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.ConstructionAxisGrid == nil || parameter.ConstructionAxisGrid != tmp {
-				parameter.ConstructionAxisGrid = tmp
+				log.Println("DecodePointers: parameter.ConstructionAxisGrid, unknown pointer id", id)
+				parameter.ConstructionAxisGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.ConstructionAxisGrid == nil || parameter.ConstructionAxisGrid != tmp {
+					parameter.ConstructionAxisGrid = tmp
+				}
 			}
 		} else {
 			parameter.ConstructionAxisGrid = nil
@@ -1874,13 +1912,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.ConstructionCircle, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.ConstructionCircle == nil || parameter.ConstructionCircle != tmp {
-				parameter.ConstructionCircle = tmp
+				log.Println("DecodePointers: parameter.ConstructionCircle, unknown pointer id", id)
+				parameter.ConstructionCircle = nil
+			} else {
+				// updates only if field has changed
+				if parameter.ConstructionCircle == nil || parameter.ConstructionCircle != tmp {
+					parameter.ConstructionCircle = tmp
+				}
 			}
 		} else {
 			parameter.ConstructionCircle = nil
@@ -1893,13 +1933,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.ConstructionCircleGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.ConstructionCircleGrid == nil || parameter.ConstructionCircleGrid != tmp {
-				parameter.ConstructionCircleGrid = tmp
+				log.Println("DecodePointers: parameter.ConstructionCircleGrid, unknown pointer id", id)
+				parameter.ConstructionCircleGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.ConstructionCircleGrid == nil || parameter.ConstructionCircleGrid != tmp {
+					parameter.ConstructionCircleGrid = tmp
+				}
 			}
 		} else {
 			parameter.ConstructionCircleGrid = nil
@@ -1912,13 +1954,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowthCurveSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowthCurveSeed == nil || parameter.GrowthCurveSeed != tmp {
-				parameter.GrowthCurveSeed = tmp
+				log.Println("DecodePointers: parameter.GrowthCurveSeed, unknown pointer id", id)
+				parameter.GrowthCurveSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowthCurveSeed == nil || parameter.GrowthCurveSeed != tmp {
+					parameter.GrowthCurveSeed = tmp
+				}
 			}
 		} else {
 			parameter.GrowthCurveSeed = nil
@@ -1931,13 +1975,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowthCurve, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowthCurve == nil || parameter.GrowthCurve != tmp {
-				parameter.GrowthCurve = tmp
+				log.Println("DecodePointers: parameter.GrowthCurve, unknown pointer id", id)
+				parameter.GrowthCurve = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowthCurve == nil || parameter.GrowthCurve != tmp {
+					parameter.GrowthCurve = tmp
+				}
 			}
 		} else {
 			parameter.GrowthCurve = nil
@@ -1950,13 +1996,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowthCurveShiftedRightSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowthCurveShiftedRightSeed == nil || parameter.GrowthCurveShiftedRightSeed != tmp {
-				parameter.GrowthCurveShiftedRightSeed = tmp
+				log.Println("DecodePointers: parameter.GrowthCurveShiftedRightSeed, unknown pointer id", id)
+				parameter.GrowthCurveShiftedRightSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowthCurveShiftedRightSeed == nil || parameter.GrowthCurveShiftedRightSeed != tmp {
+					parameter.GrowthCurveShiftedRightSeed = tmp
+				}
 			}
 		} else {
 			parameter.GrowthCurveShiftedRightSeed = nil
@@ -1969,13 +2017,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowthCurveShiftedRight, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowthCurveShiftedRight == nil || parameter.GrowthCurveShiftedRight != tmp {
-				parameter.GrowthCurveShiftedRight = tmp
+				log.Println("DecodePointers: parameter.GrowthCurveShiftedRight, unknown pointer id", id)
+				parameter.GrowthCurveShiftedRight = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowthCurveShiftedRight == nil || parameter.GrowthCurveShiftedRight != tmp {
+					parameter.GrowthCurveShiftedRight = tmp
+				}
 			}
 		} else {
 			parameter.GrowthCurveShiftedRight = nil
@@ -1988,13 +2038,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowthCurveNextSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowthCurveNextSeed == nil || parameter.GrowthCurveNextSeed != tmp {
-				parameter.GrowthCurveNextSeed = tmp
+				log.Println("DecodePointers: parameter.GrowthCurveNextSeed, unknown pointer id", id)
+				parameter.GrowthCurveNextSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowthCurveNextSeed == nil || parameter.GrowthCurveNextSeed != tmp {
+					parameter.GrowthCurveNextSeed = tmp
+				}
 			}
 		} else {
 			parameter.GrowthCurveNextSeed = nil
@@ -2007,13 +2059,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowthCurveNext, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowthCurveNext == nil || parameter.GrowthCurveNext != tmp {
-				parameter.GrowthCurveNext = tmp
+				log.Println("DecodePointers: parameter.GrowthCurveNext, unknown pointer id", id)
+				parameter.GrowthCurveNext = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowthCurveNext == nil || parameter.GrowthCurveNext != tmp {
+					parameter.GrowthCurveNext = tmp
+				}
 			}
 		} else {
 			parameter.GrowthCurveNext = nil
@@ -2026,13 +2080,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowthCurveNextShiftedRightSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowthCurveNextShiftedRightSeed == nil || parameter.GrowthCurveNextShiftedRightSeed != tmp {
-				parameter.GrowthCurveNextShiftedRightSeed = tmp
+				log.Println("DecodePointers: parameter.GrowthCurveNextShiftedRightSeed, unknown pointer id", id)
+				parameter.GrowthCurveNextShiftedRightSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowthCurveNextShiftedRightSeed == nil || parameter.GrowthCurveNextShiftedRightSeed != tmp {
+					parameter.GrowthCurveNextShiftedRightSeed = tmp
+				}
 			}
 		} else {
 			parameter.GrowthCurveNextShiftedRightSeed = nil
@@ -2045,13 +2101,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowthCurveNextShiftedRight, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowthCurveNextShiftedRight == nil || parameter.GrowthCurveNextShiftedRight != tmp {
-				parameter.GrowthCurveNextShiftedRight = tmp
+				log.Println("DecodePointers: parameter.GrowthCurveNextShiftedRight, unknown pointer id", id)
+				parameter.GrowthCurveNextShiftedRight = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowthCurveNextShiftedRight == nil || parameter.GrowthCurveNextShiftedRight != tmp {
+					parameter.GrowthCurveNextShiftedRight = tmp
+				}
 			}
 		} else {
 			parameter.GrowthCurveNextShiftedRight = nil
@@ -2064,13 +2122,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezierGridStack.Map_BezierGridStackDBID_BezierGridStackPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.GrowthCurveStack, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.GrowthCurveStack == nil || parameter.GrowthCurveStack != tmp {
-				parameter.GrowthCurveStack = tmp
+				log.Println("DecodePointers: parameter.GrowthCurveStack, unknown pointer id", id)
+				parameter.GrowthCurveStack = nil
+			} else {
+				// updates only if field has changed
+				if parameter.GrowthCurveStack == nil || parameter.GrowthCurveStack != tmp {
+					parameter.GrowthCurveStack = tmp
+				}
 			}
 		} else {
 			parameter.GrowthCurveStack = nil
@@ -2083,13 +2143,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralRhombus.Map_SpiralRhombusDBID_SpiralRhombusPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralRhombusGridSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralRhombusGridSeed == nil || parameter.SpiralRhombusGridSeed != tmp {
-				parameter.SpiralRhombusGridSeed = tmp
+				log.Println("DecodePointers: parameter.SpiralRhombusGridSeed, unknown pointer id", id)
+				parameter.SpiralRhombusGridSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralRhombusGridSeed == nil || parameter.SpiralRhombusGridSeed != tmp {
+					parameter.SpiralRhombusGridSeed = tmp
+				}
 			}
 		} else {
 			parameter.SpiralRhombusGridSeed = nil
@@ -2102,13 +2164,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralRhombusGrid.Map_SpiralRhombusGridDBID_SpiralRhombusGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralRhombusGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralRhombusGrid == nil || parameter.SpiralRhombusGrid != tmp {
-				parameter.SpiralRhombusGrid = tmp
+				log.Println("DecodePointers: parameter.SpiralRhombusGrid, unknown pointer id", id)
+				parameter.SpiralRhombusGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralRhombusGrid == nil || parameter.SpiralRhombusGrid != tmp {
+					parameter.SpiralRhombusGrid = tmp
+				}
 			}
 		} else {
 			parameter.SpiralRhombusGrid = nil
@@ -2121,13 +2185,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralCircle.Map_SpiralCircleDBID_SpiralCirclePtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralCircleSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralCircleSeed == nil || parameter.SpiralCircleSeed != tmp {
-				parameter.SpiralCircleSeed = tmp
+				log.Println("DecodePointers: parameter.SpiralCircleSeed, unknown pointer id", id)
+				parameter.SpiralCircleSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralCircleSeed == nil || parameter.SpiralCircleSeed != tmp {
+					parameter.SpiralCircleSeed = tmp
+				}
 			}
 		} else {
 			parameter.SpiralCircleSeed = nil
@@ -2140,13 +2206,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralCircleGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralCircleGrid == nil || parameter.SpiralCircleGrid != tmp {
-				parameter.SpiralCircleGrid = tmp
+				log.Println("DecodePointers: parameter.SpiralCircleGrid, unknown pointer id", id)
+				parameter.SpiralCircleGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralCircleGrid == nil || parameter.SpiralCircleGrid != tmp {
+					parameter.SpiralCircleGrid = tmp
+				}
 			}
 		} else {
 			parameter.SpiralCircleGrid = nil
@@ -2159,13 +2227,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralCircleFullGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralCircleFullGrid == nil || parameter.SpiralCircleFullGrid != tmp {
-				parameter.SpiralCircleFullGrid = tmp
+				log.Println("DecodePointers: parameter.SpiralCircleFullGrid, unknown pointer id", id)
+				parameter.SpiralCircleFullGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralCircleFullGrid == nil || parameter.SpiralCircleFullGrid != tmp {
+					parameter.SpiralCircleFullGrid = tmp
+				}
 			}
 		} else {
 			parameter.SpiralCircleFullGrid = nil
@@ -2178,13 +2248,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralConstructionOuterLineSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralConstructionOuterLineSeed == nil || parameter.SpiralConstructionOuterLineSeed != tmp {
-				parameter.SpiralConstructionOuterLineSeed = tmp
+				log.Println("DecodePointers: parameter.SpiralConstructionOuterLineSeed, unknown pointer id", id)
+				parameter.SpiralConstructionOuterLineSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralConstructionOuterLineSeed == nil || parameter.SpiralConstructionOuterLineSeed != tmp {
+					parameter.SpiralConstructionOuterLineSeed = tmp
+				}
 			}
 		} else {
 			parameter.SpiralConstructionOuterLineSeed = nil
@@ -2197,13 +2269,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralLine.Map_SpiralLineDBID_SpiralLinePtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralConstructionInnerLineSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralConstructionInnerLineSeed == nil || parameter.SpiralConstructionInnerLineSeed != tmp {
-				parameter.SpiralConstructionInnerLineSeed = tmp
+				log.Println("DecodePointers: parameter.SpiralConstructionInnerLineSeed, unknown pointer id", id)
+				parameter.SpiralConstructionInnerLineSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralConstructionInnerLineSeed == nil || parameter.SpiralConstructionInnerLineSeed != tmp {
+					parameter.SpiralConstructionInnerLineSeed = tmp
+				}
 			}
 		} else {
 			parameter.SpiralConstructionInnerLineSeed = nil
@@ -2216,13 +2290,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralConstructionOuterLineGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralConstructionOuterLineGrid == nil || parameter.SpiralConstructionOuterLineGrid != tmp {
-				parameter.SpiralConstructionOuterLineGrid = tmp
+				log.Println("DecodePointers: parameter.SpiralConstructionOuterLineGrid, unknown pointer id", id)
+				parameter.SpiralConstructionOuterLineGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralConstructionOuterLineGrid == nil || parameter.SpiralConstructionOuterLineGrid != tmp {
+					parameter.SpiralConstructionOuterLineGrid = tmp
+				}
 			}
 		} else {
 			parameter.SpiralConstructionOuterLineGrid = nil
@@ -2235,13 +2311,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralConstructionInnerLineGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralConstructionInnerLineGrid == nil || parameter.SpiralConstructionInnerLineGrid != tmp {
-				parameter.SpiralConstructionInnerLineGrid = tmp
+				log.Println("DecodePointers: parameter.SpiralConstructionInnerLineGrid, unknown pointer id", id)
+				parameter.SpiralConstructionInnerLineGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralConstructionInnerLineGrid == nil || parameter.SpiralConstructionInnerLineGrid != tmp {
+					parameter.SpiralConstructionInnerLineGrid = tmp
+				}
 			}
 		} else {
 			parameter.SpiralConstructionInnerLineGrid = nil
@@ -2254,13 +2332,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralCircleGrid.Map_SpiralCircleGridDBID_SpiralCircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralConstructionCircleGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralConstructionCircleGrid == nil || parameter.SpiralConstructionCircleGrid != tmp {
-				parameter.SpiralConstructionCircleGrid = tmp
+				log.Println("DecodePointers: parameter.SpiralConstructionCircleGrid, unknown pointer id", id)
+				parameter.SpiralConstructionCircleGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralConstructionCircleGrid == nil || parameter.SpiralConstructionCircleGrid != tmp {
+					parameter.SpiralConstructionCircleGrid = tmp
+				}
 			}
 		} else {
 			parameter.SpiralConstructionCircleGrid = nil
@@ -2273,13 +2353,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralLineGrid.Map_SpiralLineGridDBID_SpiralLineGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralConstructionOuterLineFullGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralConstructionOuterLineFullGrid == nil || parameter.SpiralConstructionOuterLineFullGrid != tmp {
-				parameter.SpiralConstructionOuterLineFullGrid = tmp
+				log.Println("DecodePointers: parameter.SpiralConstructionOuterLineFullGrid, unknown pointer id", id)
+				parameter.SpiralConstructionOuterLineFullGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralConstructionOuterLineFullGrid == nil || parameter.SpiralConstructionOuterLineFullGrid != tmp {
+					parameter.SpiralConstructionOuterLineFullGrid = tmp
+				}
 			}
 		} else {
 			parameter.SpiralConstructionOuterLineFullGrid = nil
@@ -2292,13 +2374,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralBezier.Map_SpiralBezierDBID_SpiralBezierPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralBezierSeed, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralBezierSeed == nil || parameter.SpiralBezierSeed != tmp {
-				parameter.SpiralBezierSeed = tmp
+				log.Println("DecodePointers: parameter.SpiralBezierSeed, unknown pointer id", id)
+				parameter.SpiralBezierSeed = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralBezierSeed == nil || parameter.SpiralBezierSeed != tmp {
+					parameter.SpiralBezierSeed = tmp
+				}
 			}
 		} else {
 			parameter.SpiralBezierSeed = nil
@@ -2311,13 +2395,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralBezierGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralBezierGrid == nil || parameter.SpiralBezierGrid != tmp {
-				parameter.SpiralBezierGrid = tmp
+				log.Println("DecodePointers: parameter.SpiralBezierGrid, unknown pointer id", id)
+				parameter.SpiralBezierGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralBezierGrid == nil || parameter.SpiralBezierGrid != tmp {
+					parameter.SpiralBezierGrid = tmp
+				}
 			}
 		} else {
 			parameter.SpiralBezierGrid = nil
@@ -2330,13 +2416,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralBezierGrid.Map_SpiralBezierGridDBID_SpiralBezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralBezierFullGrid, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralBezierFullGrid == nil || parameter.SpiralBezierFullGrid != tmp {
-				parameter.SpiralBezierFullGrid = tmp
+				log.Println("DecodePointers: parameter.SpiralBezierFullGrid, unknown pointer id", id)
+				parameter.SpiralBezierFullGrid = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralBezierFullGrid == nil || parameter.SpiralBezierFullGrid != tmp {
+					parameter.SpiralBezierFullGrid = tmp
+				}
 			}
 		} else {
 			parameter.SpiralBezierFullGrid = nil
@@ -2349,13 +2437,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoFrontCurveStack.Map_FrontCurveStackDBID_FrontCurveStackPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.FrontCurveStack, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.FrontCurveStack == nil || parameter.FrontCurveStack != tmp {
-				parameter.FrontCurveStack = tmp
+				log.Println("DecodePointers: parameter.FrontCurveStack, unknown pointer id", id)
+				parameter.FrontCurveStack = nil
+			} else {
+				// updates only if field has changed
+				if parameter.FrontCurveStack == nil || parameter.FrontCurveStack != tmp {
+					parameter.FrontCurveStack = tmp
+				}
 			}
 		} else {
 			parameter.FrontCurveStack = nil
@@ -2368,13 +2458,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoKey.Map_KeyDBID_KeyPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.Fkey, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.Fkey == nil || parameter.Fkey != tmp {
-				parameter.Fkey = tmp
+				log.Println("DecodePointers: parameter.Fkey, unknown pointer id", id)
+				parameter.Fkey = nil
+			} else {
+				// updates only if field has changed
+				if parameter.Fkey == nil || parameter.Fkey != tmp {
+					parameter.Fkey = tmp
+				}
 			}
 		} else {
 			parameter.Fkey = nil
@@ -2387,13 +2479,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.PitchLines, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.PitchLines == nil || parameter.PitchLines != tmp {
-				parameter.PitchLines = tmp
+				log.Println("DecodePointers: parameter.PitchLines, unknown pointer id", id)
+				parameter.PitchLines = nil
+			} else {
+				// updates only if field has changed
+				if parameter.PitchLines == nil || parameter.PitchLines != tmp {
+					parameter.PitchLines = tmp
+				}
 			}
 		} else {
 			parameter.PitchLines = nil
@@ -2406,13 +2500,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.BeatLines, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.BeatLines == nil || parameter.BeatLines != tmp {
-				parameter.BeatLines = tmp
+				log.Println("DecodePointers: parameter.BeatLines, unknown pointer id", id)
+				parameter.BeatLines = nil
+			} else {
+				// updates only if field has changed
+				if parameter.BeatLines == nil || parameter.BeatLines != tmp {
+					parameter.BeatLines = tmp
+				}
 			}
 		} else {
 			parameter.BeatLines = nil
@@ -2425,13 +2521,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.FirstVoice, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.FirstVoice == nil || parameter.FirstVoice != tmp {
-				parameter.FirstVoice = tmp
+				log.Println("DecodePointers: parameter.FirstVoice, unknown pointer id", id)
+				parameter.FirstVoice = nil
+			} else {
+				// updates only if field has changed
+				if parameter.FirstVoice == nil || parameter.FirstVoice != tmp {
+					parameter.FirstVoice = tmp
+				}
 			}
 		} else {
 			parameter.FirstVoice = nil
@@ -2444,13 +2542,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.FirstVoiceShiftedRigth, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.FirstVoiceShiftedRigth == nil || parameter.FirstVoiceShiftedRigth != tmp {
-				parameter.FirstVoiceShiftedRigth = tmp
+				log.Println("DecodePointers: parameter.FirstVoiceShiftedRigth, unknown pointer id", id)
+				parameter.FirstVoiceShiftedRigth = nil
+			} else {
+				// updates only if field has changed
+				if parameter.FirstVoiceShiftedRigth == nil || parameter.FirstVoiceShiftedRigth != tmp {
+					parameter.FirstVoiceShiftedRigth = tmp
+				}
 			}
 		} else {
 			parameter.FirstVoiceShiftedRigth = nil
@@ -2463,13 +2563,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SecondVoice, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SecondVoice == nil || parameter.SecondVoice != tmp {
-				parameter.SecondVoice = tmp
+				log.Println("DecodePointers: parameter.SecondVoice, unknown pointer id", id)
+				parameter.SecondVoice = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SecondVoice == nil || parameter.SecondVoice != tmp {
+					parameter.SecondVoice = tmp
+				}
 			}
 		} else {
 			parameter.SecondVoice = nil
@@ -2482,13 +2584,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezierGrid.Map_BezierGridDBID_BezierGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SecondVoiceShiftedRight, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SecondVoiceShiftedRight == nil || parameter.SecondVoiceShiftedRight != tmp {
-				parameter.SecondVoiceShiftedRight = tmp
+				log.Println("DecodePointers: parameter.SecondVoiceShiftedRight, unknown pointer id", id)
+				parameter.SecondVoiceShiftedRight = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SecondVoiceShiftedRight == nil || parameter.SecondVoiceShiftedRight != tmp {
+					parameter.SecondVoiceShiftedRight = tmp
+				}
 			}
 		} else {
 			parameter.SecondVoiceShiftedRight = nil
@@ -2501,13 +2605,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.FirstVoiceNotes, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.FirstVoiceNotes == nil || parameter.FirstVoiceNotes != tmp {
-				parameter.FirstVoiceNotes = tmp
+				log.Println("DecodePointers: parameter.FirstVoiceNotes, unknown pointer id", id)
+				parameter.FirstVoiceNotes = nil
+			} else {
+				// updates only if field has changed
+				if parameter.FirstVoiceNotes == nil || parameter.FirstVoiceNotes != tmp {
+					parameter.FirstVoiceNotes = tmp
+				}
 			}
 		} else {
 			parameter.FirstVoiceNotes = nil
@@ -2520,13 +2626,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.FirstVoiceNotesShiftedRight, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.FirstVoiceNotesShiftedRight == nil || parameter.FirstVoiceNotesShiftedRight != tmp {
-				parameter.FirstVoiceNotesShiftedRight = tmp
+				log.Println("DecodePointers: parameter.FirstVoiceNotesShiftedRight, unknown pointer id", id)
+				parameter.FirstVoiceNotesShiftedRight = nil
+			} else {
+				// updates only if field has changed
+				if parameter.FirstVoiceNotesShiftedRight == nil || parameter.FirstVoiceNotesShiftedRight != tmp {
+					parameter.FirstVoiceNotesShiftedRight = tmp
+				}
 			}
 		} else {
 			parameter.FirstVoiceNotesShiftedRight = nil
@@ -2539,13 +2647,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SecondVoiceNotes, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SecondVoiceNotes == nil || parameter.SecondVoiceNotes != tmp {
-				parameter.SecondVoiceNotes = tmp
+				log.Println("DecodePointers: parameter.SecondVoiceNotes, unknown pointer id", id)
+				parameter.SecondVoiceNotes = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SecondVoiceNotes == nil || parameter.SecondVoiceNotes != tmp {
+					parameter.SecondVoiceNotes = tmp
+				}
 			}
 		} else {
 			parameter.SecondVoiceNotes = nil
@@ -2558,13 +2668,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircleGrid.Map_CircleGridDBID_CircleGridPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SecondVoiceNotesShiftedRight, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SecondVoiceNotesShiftedRight == nil || parameter.SecondVoiceNotesShiftedRight != tmp {
-				parameter.SecondVoiceNotesShiftedRight = tmp
+				log.Println("DecodePointers: parameter.SecondVoiceNotesShiftedRight, unknown pointer id", id)
+				parameter.SecondVoiceNotesShiftedRight = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SecondVoiceNotesShiftedRight == nil || parameter.SecondVoiceNotesShiftedRight != tmp {
+					parameter.SecondVoiceNotesShiftedRight = tmp
+				}
 			}
 		} else {
 			parameter.SecondVoiceNotesShiftedRight = nil
@@ -2577,13 +2689,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoHorizontalAxis.Map_HorizontalAxisDBID_HorizontalAxisPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.HorizontalAxis, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.HorizontalAxis == nil || parameter.HorizontalAxis != tmp {
-				parameter.HorizontalAxis = tmp
+				log.Println("DecodePointers: parameter.HorizontalAxis, unknown pointer id", id)
+				parameter.HorizontalAxis = nil
+			} else {
+				// updates only if field has changed
+				if parameter.HorizontalAxis == nil || parameter.HorizontalAxis != tmp {
+					parameter.HorizontalAxis = tmp
+				}
 			}
 		} else {
 			parameter.HorizontalAxis = nil
@@ -2596,13 +2710,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoVerticalAxis.Map_VerticalAxisDBID_VerticalAxisPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.VerticalAxis, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.VerticalAxis == nil || parameter.VerticalAxis != tmp {
-				parameter.VerticalAxis = tmp
+				log.Println("DecodePointers: parameter.VerticalAxis, unknown pointer id", id)
+				parameter.VerticalAxis = nil
+			} else {
+				// updates only if field has changed
+				if parameter.VerticalAxis == nil || parameter.VerticalAxis != tmp {
+					parameter.VerticalAxis = tmp
+				}
 			}
 		} else {
 			parameter.VerticalAxis = nil
@@ -2615,13 +2731,15 @@ func (parameterDB *ParameterDB) DecodePointers(backRepo *BackRepoStruct, paramet
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoSpiralOrigin.Map_SpiralOriginDBID_SpiralOriginPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: parameter.SpiralOrigin, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if parameter.SpiralOrigin == nil || parameter.SpiralOrigin != tmp {
-				parameter.SpiralOrigin = tmp
+				log.Println("DecodePointers: parameter.SpiralOrigin, unknown pointer id", id)
+				parameter.SpiralOrigin = nil
+			} else {
+				// updates only if field has changed
+				if parameter.SpiralOrigin == nil || parameter.SpiralOrigin != tmp {
+					parameter.SpiralOrigin = tmp
+				}
 			}
 		} else {
 			parameter.SpiralOrigin = nil

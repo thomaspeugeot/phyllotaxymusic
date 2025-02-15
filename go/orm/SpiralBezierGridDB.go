@@ -376,13 +376,15 @@ func (spiralbeziergridDB *SpiralBezierGridDB) DecodePointers(backRepo *BackRepoS
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: spiralbeziergrid.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if spiralbeziergrid.ShapeCategory == nil || spiralbeziergrid.ShapeCategory != tmp {
-				spiralbeziergrid.ShapeCategory = tmp
+				log.Println("DecodePointers: spiralbeziergrid.ShapeCategory, unknown pointer id", id)
+				spiralbeziergrid.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if spiralbeziergrid.ShapeCategory == nil || spiralbeziergrid.ShapeCategory != tmp {
+					spiralbeziergrid.ShapeCategory = tmp
+				}
 			}
 		} else {
 			spiralbeziergrid.ShapeCategory = nil

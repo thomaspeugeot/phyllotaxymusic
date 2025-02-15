@@ -392,13 +392,15 @@ func (circlegridDB *CircleGridDB) DecodePointers(backRepo *BackRepoStruct, circl
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: circlegrid.Reference, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if circlegrid.Reference == nil || circlegrid.Reference != tmp {
-				circlegrid.Reference = tmp
+				log.Println("DecodePointers: circlegrid.Reference, unknown pointer id", id)
+				circlegrid.Reference = nil
+			} else {
+				// updates only if field has changed
+				if circlegrid.Reference == nil || circlegrid.Reference != tmp {
+					circlegrid.Reference = tmp
+				}
 			}
 		} else {
 			circlegrid.Reference = nil
@@ -411,13 +413,15 @@ func (circlegridDB *CircleGridDB) DecodePointers(backRepo *BackRepoStruct, circl
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: circlegrid.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if circlegrid.ShapeCategory == nil || circlegrid.ShapeCategory != tmp {
-				circlegrid.ShapeCategory = tmp
+				log.Println("DecodePointers: circlegrid.ShapeCategory, unknown pointer id", id)
+				circlegrid.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if circlegrid.ShapeCategory == nil || circlegrid.ShapeCategory != tmp {
+					circlegrid.ShapeCategory = tmp
+				}
 			}
 		} else {
 			circlegrid.ShapeCategory = nil

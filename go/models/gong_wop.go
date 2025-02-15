@@ -181,6 +181,16 @@ func (from *CircleGrid) CopyBasicFields(to *CircleGrid) {
 	to.IsDisplayed = from.IsDisplayed
 }
 
+type ExportToMusicxml_WOP struct {
+	// insertion point
+	Name string
+}
+
+func (from *ExportToMusicxml) CopyBasicFields(to *ExportToMusicxml) {
+	// insertion point
+	to.Name = from.Name
+}
+
 type FrontCurve_WOP struct {
 	// insertion point
 	Name string

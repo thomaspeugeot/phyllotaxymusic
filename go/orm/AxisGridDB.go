@@ -392,13 +392,15 @@ func (axisgridDB *AxisGridDB) DecodePointers(backRepo *BackRepoStruct, axisgrid 
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoAxis.Map_AxisDBID_AxisPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: axisgrid.Reference, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if axisgrid.Reference == nil || axisgrid.Reference != tmp {
-				axisgrid.Reference = tmp
+				log.Println("DecodePointers: axisgrid.Reference, unknown pointer id", id)
+				axisgrid.Reference = nil
+			} else {
+				// updates only if field has changed
+				if axisgrid.Reference == nil || axisgrid.Reference != tmp {
+					axisgrid.Reference = tmp
+				}
 			}
 		} else {
 			axisgrid.Reference = nil
@@ -411,13 +413,15 @@ func (axisgridDB *AxisGridDB) DecodePointers(backRepo *BackRepoStruct, axisgrid 
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: axisgrid.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if axisgrid.ShapeCategory == nil || axisgrid.ShapeCategory != tmp {
-				axisgrid.ShapeCategory = tmp
+				log.Println("DecodePointers: axisgrid.ShapeCategory, unknown pointer id", id)
+				axisgrid.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if axisgrid.ShapeCategory == nil || axisgrid.ShapeCategory != tmp {
+					axisgrid.ShapeCategory = tmp
+				}
 			}
 		} else {
 			axisgrid.ShapeCategory = nil

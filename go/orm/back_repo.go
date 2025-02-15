@@ -38,6 +38,8 @@ type BackRepoStruct struct {
 
 	BackRepoCircleGrid BackRepoCircleGridStruct
 
+	BackRepoExportToMusicxml BackRepoExportToMusicxmlStruct
+
 	BackRepoFrontCurve BackRepoFrontCurveStruct
 
 	BackRepoFrontCurveStack BackRepoFrontCurveStackStruct
@@ -102,6 +104,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		&BezierGridStackDB{},
 		&CircleDB{},
 		&CircleGridDB{},
+		&ExportToMusicxmlDB{},
 		&FrontCurveDB{},
 		&FrontCurveStackDB{},
 		&HorizontalAxisDB{},
@@ -178,6 +181,14 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		Map_CircleGridDBID_CircleGridPtr: make(map[uint]*models.CircleGrid, 0),
 		Map_CircleGridDBID_CircleGridDB:  make(map[uint]*CircleGridDB, 0),
 		Map_CircleGridPtr_CircleGridDBID: make(map[*models.CircleGrid]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoExportToMusicxml = BackRepoExportToMusicxmlStruct{
+		Map_ExportToMusicxmlDBID_ExportToMusicxmlPtr: make(map[uint]*models.ExportToMusicxml, 0),
+		Map_ExportToMusicxmlDBID_ExportToMusicxmlDB:  make(map[uint]*ExportToMusicxmlDB, 0),
+		Map_ExportToMusicxmlPtr_ExportToMusicxmlDBID: make(map[*models.ExportToMusicxml]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -386,6 +397,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoBezierGridStack.CommitPhaseOne(stage)
 	backRepo.BackRepoCircle.CommitPhaseOne(stage)
 	backRepo.BackRepoCircleGrid.CommitPhaseOne(stage)
+	backRepo.BackRepoExportToMusicxml.CommitPhaseOne(stage)
 	backRepo.BackRepoFrontCurve.CommitPhaseOne(stage)
 	backRepo.BackRepoFrontCurveStack.CommitPhaseOne(stage)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseOne(stage)
@@ -413,6 +425,7 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	backRepo.BackRepoBezierGridStack.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoCircle.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoCircleGrid.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoExportToMusicxml.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoFrontCurve.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoFrontCurveStack.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CommitPhaseTwo(backRepo)
@@ -445,6 +458,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoBezierGridStack.CheckoutPhaseOne()
 	backRepo.BackRepoCircle.CheckoutPhaseOne()
 	backRepo.BackRepoCircleGrid.CheckoutPhaseOne()
+	backRepo.BackRepoExportToMusicxml.CheckoutPhaseOne()
 	backRepo.BackRepoFrontCurve.CheckoutPhaseOne()
 	backRepo.BackRepoFrontCurveStack.CheckoutPhaseOne()
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseOne()
@@ -472,6 +486,7 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	backRepo.BackRepoBezierGridStack.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoCircle.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoCircleGrid.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoExportToMusicxml.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoFrontCurve.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoFrontCurveStack.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoHorizontalAxis.CheckoutPhaseTwo(backRepo)
@@ -504,6 +519,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	backRepo.BackRepoBezierGridStack.Backup(dirPath)
 	backRepo.BackRepoCircle.Backup(dirPath)
 	backRepo.BackRepoCircleGrid.Backup(dirPath)
+	backRepo.BackRepoExportToMusicxml.Backup(dirPath)
 	backRepo.BackRepoFrontCurve.Backup(dirPath)
 	backRepo.BackRepoFrontCurveStack.Backup(dirPath)
 	backRepo.BackRepoHorizontalAxis.Backup(dirPath)
@@ -539,6 +555,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	backRepo.BackRepoBezierGridStack.BackupXL(file)
 	backRepo.BackRepoCircle.BackupXL(file)
 	backRepo.BackRepoCircleGrid.BackupXL(file)
+	backRepo.BackRepoExportToMusicxml.BackupXL(file)
 	backRepo.BackRepoFrontCurve.BackupXL(file)
 	backRepo.BackRepoFrontCurveStack.BackupXL(file)
 	backRepo.BackRepoHorizontalAxis.BackupXL(file)
@@ -588,6 +605,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoBezierGridStack.RestorePhaseOne(dirPath)
 	backRepo.BackRepoCircle.RestorePhaseOne(dirPath)
 	backRepo.BackRepoCircleGrid.RestorePhaseOne(dirPath)
+	backRepo.BackRepoExportToMusicxml.RestorePhaseOne(dirPath)
 	backRepo.BackRepoFrontCurve.RestorePhaseOne(dirPath)
 	backRepo.BackRepoFrontCurveStack.RestorePhaseOne(dirPath)
 	backRepo.BackRepoHorizontalAxis.RestorePhaseOne(dirPath)
@@ -619,6 +637,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	backRepo.BackRepoBezierGridStack.RestorePhaseTwo()
 	backRepo.BackRepoCircle.RestorePhaseTwo()
 	backRepo.BackRepoCircleGrid.RestorePhaseTwo()
+	backRepo.BackRepoExportToMusicxml.RestorePhaseTwo()
 	backRepo.BackRepoFrontCurve.RestorePhaseTwo()
 	backRepo.BackRepoFrontCurveStack.RestorePhaseTwo()
 	backRepo.BackRepoHorizontalAxis.RestorePhaseTwo()
@@ -671,6 +690,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	backRepo.BackRepoBezierGridStack.RestoreXLPhaseOne(file)
 	backRepo.BackRepoCircle.RestoreXLPhaseOne(file)
 	backRepo.BackRepoCircleGrid.RestoreXLPhaseOne(file)
+	backRepo.BackRepoExportToMusicxml.RestoreXLPhaseOne(file)
 	backRepo.BackRepoFrontCurve.RestoreXLPhaseOne(file)
 	backRepo.BackRepoFrontCurveStack.RestoreXLPhaseOne(file)
 	backRepo.BackRepoHorizontalAxis.RestoreXLPhaseOne(file)

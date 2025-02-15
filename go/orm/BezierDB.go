@@ -451,13 +451,15 @@ func (bezierDB *BezierDB) DecodePointers(backRepo *BackRepoStruct, bezier *model
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: bezier.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if bezier.ShapeCategory == nil || bezier.ShapeCategory != tmp {
-				bezier.ShapeCategory = tmp
+				log.Println("DecodePointers: bezier.ShapeCategory, unknown pointer id", id)
+				bezier.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if bezier.ShapeCategory == nil || bezier.ShapeCategory != tmp {
+					bezier.ShapeCategory = tmp
+				}
 			}
 		} else {
 			bezier.ShapeCategory = nil

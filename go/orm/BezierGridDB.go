@@ -392,13 +392,15 @@ func (beziergridDB *BezierGridDB) DecodePointers(backRepo *BackRepoStruct, bezie
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoBezier.Map_BezierDBID_BezierPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: beziergrid.Reference, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if beziergrid.Reference == nil || beziergrid.Reference != tmp {
-				beziergrid.Reference = tmp
+				log.Println("DecodePointers: beziergrid.Reference, unknown pointer id", id)
+				beziergrid.Reference = nil
+			} else {
+				// updates only if field has changed
+				if beziergrid.Reference == nil || beziergrid.Reference != tmp {
+					beziergrid.Reference = tmp
+				}
 			}
 		} else {
 			beziergrid.Reference = nil
@@ -411,13 +413,15 @@ func (beziergridDB *BezierGridDB) DecodePointers(backRepo *BackRepoStruct, bezie
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: beziergrid.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if beziergrid.ShapeCategory == nil || beziergrid.ShapeCategory != tmp {
-				beziergrid.ShapeCategory = tmp
+				log.Println("DecodePointers: beziergrid.ShapeCategory, unknown pointer id", id)
+				beziergrid.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if beziergrid.ShapeCategory == nil || beziergrid.ShapeCategory != tmp {
+					beziergrid.ShapeCategory = tmp
+				}
 			}
 		} else {
 			beziergrid.ShapeCategory = nil

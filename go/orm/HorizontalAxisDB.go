@@ -415,13 +415,15 @@ func (horizontalaxisDB *HorizontalAxisDB) DecodePointers(backRepo *BackRepoStruc
 		if id != 0 {
 			tmp, ok := backRepo.BackRepoShapeCategory.Map_ShapeCategoryDBID_ShapeCategoryPtr[uint(id)]
 
+			// if the pointer id is unknown, it is not a problem, maybe the target was removed from the front
 			if !ok {
-				log.Fatalln("DecodePointers: horizontalaxis.ShapeCategory, unknown pointer id", id)
-			}
-
-			// updates only if field has changed
-			if horizontalaxis.ShapeCategory == nil || horizontalaxis.ShapeCategory != tmp {
-				horizontalaxis.ShapeCategory = tmp
+				log.Println("DecodePointers: horizontalaxis.ShapeCategory, unknown pointer id", id)
+				horizontalaxis.ShapeCategory = nil
+			} else {
+				// updates only if field has changed
+				if horizontalaxis.ShapeCategory == nil || horizontalaxis.ShapeCategory != tmp {
+					horizontalaxis.ShapeCategory = tmp
+				}
 			}
 		} else {
 			horizontalaxis.ShapeCategory = nil

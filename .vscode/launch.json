@@ -16,7 +16,8 @@
             "program": "${workspaceFolder}/go/cmd/phyllotaxymusic/main.go",
             "args": [
                 "-unmarshallFromCode=data/music.go",
-                "-marshallOnCommit=data/music"
+                "-marshallOnCommit=data/music",
+                "-genmusicxml"
             ]
         },
     ]

@@ -29,6 +29,8 @@ var (
 	embeddedDiagrams = flag.Bool("embeddedDiagrams", false, "parse/analysis go/models and go/embeddedDiagrams")
 
 	port = flag.Int("port", 8080, "port server")
+
+	genmusicxml = flag.Bool("genmusicxml", true, "parse/analysis go/models and go/diagrams")
 )
 
 func main() {
@@ -79,6 +81,14 @@ func main() {
 	parameter.UpdateAndCommitSVGStage()
 	parameter.UpdateAndCommitToneStage()
 	parameter.UpdateAndCommitTreeStage()
+
+	// generates the music xml stage (before the commit because
+	// the commit will remove the FirstVoice link to the CircleGrid)
+	// via computeThemeNotesShapes which is called during
+	// parameter.UpdatePhyllotaxyStage()
+	if *genmusicxml {
+		parameter.GenerateMusicXMLFile()
+	}
 	parameter.CommitPhyllotaxymusicStage()
 
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
