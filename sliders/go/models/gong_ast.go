@@ -681,6 +681,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Checkbox[identifier].Name = fielValue
+				case "LabelForTrue":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Checkbox[identifier].LabelForTrue = fielValue
+				case "LabelForFalse":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Checkbox[identifier].LabelForFalse = fielValue
 				}
 			case "Group":
 				switch fieldName {
@@ -779,6 +787,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			case "Checkbox":
 				switch fieldName {
 				// insertion point for field dependant code
+				case "ValueBool":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Checkbox[identifier].ValueBool = fielValue
 				}
 			case "Group":
 				switch fieldName {

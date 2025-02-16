@@ -864,7 +864,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Checkbox:
-		res = []string{"Name"}
+		res = []string{"Name", "ValueBool", "LabelForTrue", "LabelForFalse"}
 	case Group:
 		res = []string{"Name", "Sliders", "Checkboxes"}
 	case Layout:
@@ -922,7 +922,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *Checkbox:
-		res = []string{"Name"}
+		res = []string{"Name", "ValueBool", "LabelForTrue", "LabelForFalse"}
 	case *Group:
 		res = []string{"Name", "Sliders", "Checkboxes"}
 	case *Layout:
@@ -975,6 +975,14 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "ValueBool":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ValueBool)
+			res.valueBool = inferedInstance.ValueBool
+			res.GongFieldValueType = GongFieldValueTypeBool
+		case "LabelForTrue":
+			res.valueString = inferedInstance.LabelForTrue
+		case "LabelForFalse":
+			res.valueString = inferedInstance.LabelForFalse
 		}
 	case *Group:
 		switch fieldName {
@@ -1070,6 +1078,14 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "ValueBool":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ValueBool)
+			res.valueBool = inferedInstance.ValueBool
+			res.GongFieldValueType = GongFieldValueTypeBool
+		case "LabelForTrue":
+			res.valueString = inferedInstance.LabelForTrue
+		case "LabelForFalse":
+			res.valueString = inferedInstance.LabelForFalse
 		}
 	case Group:
 		switch fieldName {

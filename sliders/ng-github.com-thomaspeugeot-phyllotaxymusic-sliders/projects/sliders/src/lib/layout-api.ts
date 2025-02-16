@@ -1,11 +1,12 @@
 // insertion point for imports
+import { GroupAPI } from './group-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
 
-export class CheckboxAPI {
+export class LayoutAPI {
 
-	static GONGSTRUCT_NAME = "Checkbox"
+	static GONGSTRUCT_NAME = "Layout"
 
 	CreatedAt?: string
 	DeletedAt?: string
@@ -13,15 +14,13 @@ export class CheckboxAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	ValueBool: boolean = false
-	LabelForTrue: string = ""
-	LabelForFalse: string = ""
 
 	// insertion point for other decls
 
-	CheckboxPointersEncoding: CheckboxPointersEncoding = new CheckboxPointersEncoding
+	LayoutPointersEncoding: LayoutPointersEncoding = new LayoutPointersEncoding
 }
 
-export class CheckboxPointersEncoding {
+export class LayoutPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	Groups: number[] = []
 }

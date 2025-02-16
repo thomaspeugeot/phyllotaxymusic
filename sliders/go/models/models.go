@@ -27,8 +27,44 @@ type Slider struct {
 	MaxFloat64   float64
 	StepFloat64  float64
 	ValueFloat64 float64
+
+	Proxy SliderProxyInterface
 }
 
+type SliderProxyInterface interface {
+	Updated()
+}
+
+func (slider *Slider) OnAfterUpdate(
+	stage *StageStruct,
+	stagedNode, frontNode *Slider) {
+
+	if slider.Proxy != nil {
+		slider.Proxy.Updated()
+	}
+}
+
+// for instance is minor / is major
 type Checkbox struct {
 	Name string
+
+	ValueBool bool
+
+	LabelForTrue  string
+	LabelForFalse string
+
+	Proxy CheckboxProxyInterface
+}
+
+type CheckboxProxyInterface interface {
+	Updated()
+}
+
+func (checkbox *Checkbox) OnAfterUpdate(
+	stage *StageStruct,
+	stagedNode, frontNode *Checkbox) {
+
+	if checkbox.Proxy != nil {
+		checkbox.Proxy.Updated()
+	}
 }

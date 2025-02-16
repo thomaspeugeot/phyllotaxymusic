@@ -8,7 +8,7 @@ import { MatSliderModule } from '@angular/material/slider'
 import { FormsModule } from '@angular/forms';  // Import FormsModule
 import { MatGridListModule } from '@angular/material/grid-list';
 
-import { MatRadioModule } from '@angular/material/radio';
+import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -38,6 +38,7 @@ import { MatIconModule } from '@angular/material/icon'
 export class SlidersspecificComponent {
 
 
+
   rowHeight: string = "30px"
 
   StacksNames = sliders.StacksNames;
@@ -49,6 +50,7 @@ export class SlidersspecificComponent {
   constructor(
     private frontRepoService: sliders.FrontRepoService,
     private sliderService: sliders.SliderService,
+    private checkboxService: sliders.CheckboxService,
   ) { }
 
   formatLabel(value: number): string {
@@ -66,8 +68,6 @@ export class SlidersspecificComponent {
       next: (frontRepo) => {
         this.frontRepo = frontRepo;
 
-        console.log("hello")
-
         for (let layout_ of this.frontRepo.array_Layouts) {
           this.layout = layout_
         }
@@ -82,6 +82,14 @@ export class SlidersspecificComponent {
     this.sliderService.updateFront(slider, this.StacksNames.SliderStackName).subscribe(
       () => {
         console.log("slider updated")
+      }
+    )
+  }
+
+  inputMatRadio($event: MatRadioChange, checkbox: sliders.Checkbox) {
+    this.checkboxService.updateFront(checkbox, this.StacksNames.SliderStackName).subscribe(
+      () => {
+        console.log("checkbox updated")
       }
     )
   }

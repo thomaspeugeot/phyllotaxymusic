@@ -18,6 +18,9 @@ export class Checkbox {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	ValueBool: boolean = false
+	LabelForTrue: string = ""
+	LabelForFalse: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -30,6 +33,9 @@ export function CopyCheckboxToCheckboxAPI(checkbox: Checkbox, checkboxAPI: Check
 
 	// insertion point for basic fields copy operations
 	checkboxAPI.Name = checkbox.Name
+	checkboxAPI.ValueBool = checkbox.ValueBool
+	checkboxAPI.LabelForTrue = checkbox.LabelForTrue
+	checkboxAPI.LabelForFalse = checkbox.LabelForFalse
 
 	// insertion point for pointer fields encoding
 
@@ -48,6 +54,9 @@ export function CopyCheckboxAPIToCheckbox(checkboxAPI: CheckboxAPI, checkbox: Ch
 
 	// insertion point for basic fields copy operations
 	checkbox.Name = checkboxAPI.Name
+	checkbox.ValueBool = checkboxAPI.ValueBool
+	checkbox.LabelForTrue = checkboxAPI.LabelForTrue
+	checkbox.LabelForFalse = checkboxAPI.LabelForFalse
 
 	// insertion point for pointer fields encoding
 

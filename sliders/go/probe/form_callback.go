@@ -63,6 +63,12 @@ func (checkboxFormCallback *CheckboxFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(checkbox_.Name), formDiv)
+		case "ValueBool":
+			FormDivBasicFieldToField(&(checkbox_.ValueBool), formDiv)
+		case "LabelForTrue":
+			FormDivBasicFieldToField(&(checkbox_.LabelForTrue), formDiv)
+		case "LabelForFalse":
+			FormDivBasicFieldToField(&(checkbox_.LabelForFalse), formDiv)
 		case "Group:Checkboxes":
 			// we need to retrieve the field owner before the change
 			var pastGroupOwner *models.Group

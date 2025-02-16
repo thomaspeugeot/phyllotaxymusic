@@ -10,11 +10,17 @@ var __GONG_time_The_fool_doth_think_he_is_wise__ = time.Hour
 type Checkbox_WOP struct {
 	// insertion point
 	Name string
+	ValueBool bool
+	LabelForTrue string
+	LabelForFalse string
 }
 
 func (from *Checkbox) CopyBasicFields(to *Checkbox) {
 	// insertion point
 	to.Name = from.Name
+	to.ValueBool = from.ValueBool
+	to.LabelForTrue = from.LabelForTrue
+	to.LabelForFalse = from.LabelForFalse
 }
 
 type Group_WOP struct {
