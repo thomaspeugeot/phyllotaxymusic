@@ -2,6 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "chrome",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}/ng-github.com-thomaspeugeot-phyllotaxymusic"
+        },
+        {
             "name": "Launch Edge",
             "request": "launch",
             "type": "msedge",
@@ -30,6 +37,13 @@
                 "-unmarshallFromCode=data/stage.go",
                 "-marshallOnCommit=data/stage",
             ]
+        },
+        {
+            "name": "Launch Chrome on sliders",
+            "request": "launch",
+            "type": "chrome",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}/sliders/ng-github.com-thomaspeugeot-phyllotaxymusic-sliders"
         },
         
     ]

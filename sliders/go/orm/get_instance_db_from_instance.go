@@ -23,6 +23,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 		groupInstance := any(concreteInstance).(*models.Group)
 		ret2 := backRepo.BackRepoGroup.GetGroupDBFromGroupPtr(groupInstance)
 		ret = any(ret2).(*T2)
+	case *models.Layout:
+		layoutInstance := any(concreteInstance).(*models.Layout)
+		ret2 := backRepo.BackRepoLayout.GetLayoutDBFromLayoutPtr(layoutInstance)
+		ret = any(ret2).(*T2)
 	case *models.Slider:
 		sliderInstance := any(concreteInstance).(*models.Slider)
 		ret2 := backRepo.BackRepoSlider.GetSliderDBFromSliderPtr(sliderInstance)
@@ -47,6 +51,11 @@ func GetID[T models.Gongstruct](
 		id = int(tmp.ID)
 	case *models.Group:
 		tmp := GetInstanceDBFromInstance[models.Group, GroupDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Layout:
+		tmp := GetInstanceDBFromInstance[models.Layout, LayoutDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -75,6 +84,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.Group:
 		tmp := GetInstanceDBFromInstance[models.Group, GroupDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Layout:
+		tmp := GetInstanceDBFromInstance[models.Layout, LayoutDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

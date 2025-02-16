@@ -27,6 +27,17 @@ func (stage *StageStruct) ComputeReverseMaps() {
 		}
 	}
 
+	// Compute reverse map for named struct Layout
+	// insertion point per field
+	clear(stage.Layout_Groups_reverseMap)
+	stage.Layout_Groups_reverseMap = make(map[*Group]*Layout)
+	for layout := range stage.Layouts {
+		_ = layout
+		for _, _group := range layout.Groups {
+			stage.Layout_Groups_reverseMap[_group] = layout
+		}
+	}
+
 	// Compute reverse map for named struct Slider
 	// insertion point per field
 

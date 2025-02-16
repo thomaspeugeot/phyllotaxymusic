@@ -24,6 +24,8 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 		fillUpTable[models.Checkbox](probe)
 	case *models.Group:
 		fillUpTable[models.Group](probe)
+	case *models.Layout:
+		fillUpTable[models.Layout](probe)
 	case *models.Slider:
 		fillUpTable[models.Slider](probe)
 	default:

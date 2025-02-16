@@ -8,6 +8,8 @@ type BackRepoData struct {
 
 	GroupAPIs []*GroupAPI
 
+	LayoutAPIs []*LayoutAPI
+
 	SliderAPIs []*SliderAPI
 
 	// index of the web socket for this stack type (unique among all stack instances)
@@ -39,6 +41,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		groupDB.CopyBasicFieldsToGroup_WOP(&groupAPI.Group_WOP)
 
 		backRepoData.GroupAPIs = append(backRepoData.GroupAPIs, &groupAPI)
+	}
+
+	for _, layoutDB := range backRepo.BackRepoLayout.Map_LayoutDBID_LayoutDB {
+
+		var layoutAPI LayoutAPI
+		layoutAPI.ID = layoutDB.ID
+		layoutAPI.LayoutPointersEncoding = layoutDB.LayoutPointersEncoding
+		layoutDB.CopyBasicFieldsToLayout_WOP(&layoutAPI.Layout_WOP)
+
+		backRepoData.LayoutAPIs = append(backRepoData.LayoutAPIs, &layoutAPI)
 	}
 
 	for _, sliderDB := range backRepo.BackRepoSlider.Map_SliderDBID_SliderDB {

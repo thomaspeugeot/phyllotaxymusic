@@ -182,6 +182,48 @@ func (groupFormCallback *GroupFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(group_.Name), formDiv)
+		case "Layout:Groups":
+			// we need to retrieve the field owner before the change
+			var pastLayoutOwner *models.Layout
+			var rf models.ReverseField
+			_ = rf
+			rf.GongstructName = "Layout"
+			rf.Fieldname = "Groups"
+			reverseFieldOwner := orm.GetReverseFieldOwner(
+				groupFormCallback.probe.stageOfInterest,
+				groupFormCallback.probe.backRepoOfInterest,
+				group_,
+				&rf)
+
+			if reverseFieldOwner != nil {
+				pastLayoutOwner = reverseFieldOwner.(*models.Layout)
+			}
+			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
+				if pastLayoutOwner != nil {
+					idx := slices.Index(pastLayoutOwner.Groups, group_)
+					pastLayoutOwner.Groups = slices.Delete(pastLayoutOwner.Groups, idx, idx+1)
+				}
+			} else {
+				// we need to retrieve the field owner after the change
+				// parse all astrcut and get the one with the name in the
+				// div
+				for _layout := range *models.GetGongstructInstancesSet[models.Layout](groupFormCallback.probe.stageOfInterest) {
+
+					// the match is base on the name
+					if _layout.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
+						newLayoutOwner := _layout // we have a match
+						if pastLayoutOwner != nil {
+							if newLayoutOwner != pastLayoutOwner {
+								idx := slices.Index(pastLayoutOwner.Groups, group_)
+								pastLayoutOwner.Groups = slices.Delete(pastLayoutOwner.Groups, idx, idx+1)
+								newLayoutOwner.Groups = append(newLayoutOwner.Groups, group_)
+							}
+						} else {
+							newLayoutOwner.Groups = append(newLayoutOwner.Groups, group_)
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -213,6 +255,83 @@ func (groupFormCallback *GroupFormCallback) OnSave() {
 	}
 
 	fillUpTree(groupFormCallback.probe)
+}
+func __gong__New__LayoutFormCallback(
+	layout *models.Layout,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (layoutFormCallback *LayoutFormCallback) {
+	layoutFormCallback = new(LayoutFormCallback)
+	layoutFormCallback.probe = probe
+	layoutFormCallback.layout = layout
+	layoutFormCallback.formGroup = formGroup
+
+	layoutFormCallback.CreationMode = (layout == nil)
+
+	return
+}
+
+type LayoutFormCallback struct {
+	layout *models.Layout
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (layoutFormCallback *LayoutFormCallback) OnSave() {
+
+	log.Println("LayoutFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	layoutFormCallback.probe.formStage.Checkout()
+
+	if layoutFormCallback.layout == nil {
+		layoutFormCallback.layout = new(models.Layout).Stage(layoutFormCallback.probe.stageOfInterest)
+	}
+	layout_ := layoutFormCallback.layout
+	_ = layout_
+
+	for _, formDiv := range layoutFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(layout_.Name), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if layoutFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		layout_.Unstage(layoutFormCallback.probe.stageOfInterest)
+	}
+
+	layoutFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.Layout](
+		layoutFormCallback.probe,
+	)
+	layoutFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if layoutFormCallback.CreationMode || layoutFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		layoutFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(layoutFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__LayoutFormCallback(
+			nil,
+			layoutFormCallback.probe,
+			newFormGroup,
+		)
+		layout := new(models.Layout)
+		FillUpForm(layout, newFormGroup, layoutFormCallback.probe)
+		layoutFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(layoutFormCallback.probe)
 }
 func __gong__New__SliderFormCallback(
 	slider *models.Slider,
@@ -259,6 +378,26 @@ func (sliderFormCallback *SliderFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(slider_.Name), formDiv)
+		case "IsFloat64":
+			FormDivBasicFieldToField(&(slider_.IsFloat64), formDiv)
+		case "IsInt":
+			FormDivBasicFieldToField(&(slider_.IsInt), formDiv)
+		case "MinInt":
+			FormDivBasicFieldToField(&(slider_.MinInt), formDiv)
+		case "MaxInt":
+			FormDivBasicFieldToField(&(slider_.MaxInt), formDiv)
+		case "StepInt":
+			FormDivBasicFieldToField(&(slider_.StepInt), formDiv)
+		case "ValueInt":
+			FormDivBasicFieldToField(&(slider_.ValueInt), formDiv)
+		case "MinFloat64":
+			FormDivBasicFieldToField(&(slider_.MinFloat64), formDiv)
+		case "MaxFloat64":
+			FormDivBasicFieldToField(&(slider_.MaxFloat64), formDiv)
+		case "StepFloat64":
+			FormDivBasicFieldToField(&(slider_.StepFloat64), formDiv)
+		case "ValueFloat64":
+			FormDivBasicFieldToField(&(slider_.ValueFloat64), formDiv)
 		case "Group:Sliders":
 			// we need to retrieve the field owner before the change
 			var pastGroupOwner *models.Group

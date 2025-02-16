@@ -11,6 +11,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 	case *Group:
 		ok = stage.IsStagedGroup(target)
 
+	case *Layout:
+		ok = stage.IsStagedLayout(target)
+
 	case *Slider:
 		ok = stage.IsStagedSlider(target)
 
@@ -35,6 +38,13 @@ func (stage *StageStruct) IsStagedGroup(group *Group) (ok bool) {
 	return
 }
 
+func (stage *StageStruct) IsStagedLayout(layout *Layout) (ok bool) {
+
+	_, ok = stage.Layouts[layout]
+
+	return
+}
+
 func (stage *StageStruct) IsStagedSlider(slider *Slider) (ok bool) {
 
 	_, ok = stage.Sliders[slider]
@@ -55,6 +65,9 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Group:
 		stage.StageBranchGroup(target)
+
+	case *Layout:
+		stage.StageBranchLayout(target)
 
 	case *Slider:
 		stage.StageBranchSlider(target)
@@ -101,6 +114,24 @@ func (stage *StageStruct) StageBranchGroup(group *Group) {
 
 }
 
+func (stage *StageStruct) StageBranchLayout(layout *Layout) {
+
+	// check if instance is already staged
+	if IsStaged(stage, layout) {
+		return
+	}
+
+	layout.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _group := range layout.Groups {
+		StageBranch(stage, _group)
+	}
+
+}
+
 func (stage *StageStruct) StageBranchSlider(slider *Slider) {
 
 	// check if instance is already staged
@@ -133,6 +164,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *Group:
 		toT := CopyBranchGroup(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *Layout:
+		toT := CopyBranchLayout(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *Slider:
@@ -190,6 +225,28 @@ func CopyBranchGroup(mapOrigCopy map[any]any, groupFrom *Group) (groupTo *Group)
 	return
 }
 
+func CopyBranchLayout(mapOrigCopy map[any]any, layoutFrom *Layout) (layoutTo *Layout) {
+
+	// layoutFrom has already been copied
+	if _layoutTo, ok := mapOrigCopy[layoutFrom]; ok {
+		layoutTo = _layoutTo.(*Layout)
+		return
+	}
+
+	layoutTo = new(Layout)
+	mapOrigCopy[layoutFrom] = layoutTo
+	layoutFrom.CopyBasicFields(layoutTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _group := range layoutFrom.Groups {
+		layoutTo.Groups = append(layoutTo.Groups, CopyBranchGroup(mapOrigCopy, _group))
+	}
+
+	return
+}
+
 func CopyBranchSlider(mapOrigCopy map[any]any, sliderFrom *Slider) (sliderTo *Slider) {
 
 	// sliderFrom has already been copied
@@ -222,6 +279,9 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	case *Group:
 		stage.UnstageBranchGroup(target)
+
+	case *Layout:
+		stage.UnstageBranchLayout(target)
 
 	case *Slider:
 		stage.UnstageBranchSlider(target)
@@ -264,6 +324,24 @@ func (stage *StageStruct) UnstageBranchGroup(group *Group) {
 	}
 	for _, _checkbox := range group.Checkboxes {
 		UnstageBranch(stage, _checkbox)
+	}
+
+}
+
+func (stage *StageStruct) UnstageBranchLayout(layout *Layout) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, layout) {
+		return
+	}
+
+	layout.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _group := range layout.Groups {
+		UnstageBranch(stage, _group)
 	}
 
 }

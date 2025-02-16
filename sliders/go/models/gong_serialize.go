@@ -16,6 +16,7 @@ func SerializeStage(stage *StageStruct, filename string) {
 		// insertion point
 		SerializeExcelize[Checkbox](stage, f)
 		SerializeExcelize[Group](stage, f)
+		SerializeExcelize[Layout](stage, f)
 		SerializeExcelize[Slider](stage, f)
 	}
 

@@ -5,6 +5,8 @@ import { CheckboxAPI } from './checkbox-api'
 
 import { GroupAPI } from './group-api'
 
+import { LayoutAPI } from './layout-api'
+
 import { SliderAPI } from './slider-api'
 
 
@@ -13,6 +15,8 @@ export class BackRepoData {
 	CheckboxAPIs = new Array<CheckboxAPI>()
 
 	GroupAPIs = new Array<GroupAPI>()
+
+	LayoutAPIs = new Array<LayoutAPI>()
 
 	SliderAPIs = new Array<SliderAPI>()
 
@@ -25,6 +29,8 @@ export class BackRepoData {
 		this.CheckboxAPIs = data?.CheckboxAPIs || [];
 
 		this.GroupAPIs = data?.GroupAPIs || [];
+
+		this.LayoutAPIs = data?.LayoutAPIs || [];
 
 		this.SliderAPIs = data?.SliderAPIs || [];
 

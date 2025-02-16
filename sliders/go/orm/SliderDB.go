@@ -63,6 +63,38 @@ type SliderDB struct {
 	// Declation for basic field sliderDB.Name
 	Name_Data sql.NullString
 
+	// Declation for basic field sliderDB.IsFloat64
+	// provide the sql storage for the boolan
+	IsFloat64_Data sql.NullBool
+
+	// Declation for basic field sliderDB.IsInt
+	// provide the sql storage for the boolan
+	IsInt_Data sql.NullBool
+
+	// Declation for basic field sliderDB.MinInt
+	MinInt_Data sql.NullInt64
+
+	// Declation for basic field sliderDB.MaxInt
+	MaxInt_Data sql.NullInt64
+
+	// Declation for basic field sliderDB.StepInt
+	StepInt_Data sql.NullInt64
+
+	// Declation for basic field sliderDB.ValueInt
+	ValueInt_Data sql.NullInt64
+
+	// Declation for basic field sliderDB.MinFloat64
+	MinFloat64_Data sql.NullFloat64
+
+	// Declation for basic field sliderDB.MaxFloat64
+	MaxFloat64_Data sql.NullFloat64
+
+	// Declation for basic field sliderDB.StepFloat64
+	StepFloat64_Data sql.NullFloat64
+
+	// Declation for basic field sliderDB.ValueFloat64
+	ValueFloat64_Data sql.NullFloat64
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	SliderPointersEncoding
@@ -86,6 +118,26 @@ type SliderWOP struct {
 	// insertion for WOP basic fields
 
 	Name string `xlsx:"1"`
+
+	IsFloat64 bool `xlsx:"2"`
+
+	IsInt bool `xlsx:"3"`
+
+	MinInt int `xlsx:"4"`
+
+	MaxInt int `xlsx:"5"`
+
+	StepInt int `xlsx:"6"`
+
+	ValueInt int `xlsx:"7"`
+
+	MinFloat64 float64 `xlsx:"8"`
+
+	MaxFloat64 float64 `xlsx:"9"`
+
+	StepFloat64 float64 `xlsx:"10"`
+
+	ValueFloat64 float64 `xlsx:"11"`
 	// insertion for WOP pointer fields
 }
 
@@ -93,6 +145,16 @@ var Slider_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
+	"IsFloat64",
+	"IsInt",
+	"MinInt",
+	"MaxInt",
+	"StepInt",
+	"ValueInt",
+	"MinFloat64",
+	"MaxFloat64",
+	"StepFloat64",
+	"ValueFloat64",
 }
 
 type BackRepoSliderStruct struct {
@@ -362,6 +424,36 @@ func (sliderDB *SliderDB) CopyBasicFieldsFromSlider(slider *models.Slider) {
 
 	sliderDB.Name_Data.String = slider.Name
 	sliderDB.Name_Data.Valid = true
+
+	sliderDB.IsFloat64_Data.Bool = slider.IsFloat64
+	sliderDB.IsFloat64_Data.Valid = true
+
+	sliderDB.IsInt_Data.Bool = slider.IsInt
+	sliderDB.IsInt_Data.Valid = true
+
+	sliderDB.MinInt_Data.Int64 = int64(slider.MinInt)
+	sliderDB.MinInt_Data.Valid = true
+
+	sliderDB.MaxInt_Data.Int64 = int64(slider.MaxInt)
+	sliderDB.MaxInt_Data.Valid = true
+
+	sliderDB.StepInt_Data.Int64 = int64(slider.StepInt)
+	sliderDB.StepInt_Data.Valid = true
+
+	sliderDB.ValueInt_Data.Int64 = int64(slider.ValueInt)
+	sliderDB.ValueInt_Data.Valid = true
+
+	sliderDB.MinFloat64_Data.Float64 = slider.MinFloat64
+	sliderDB.MinFloat64_Data.Valid = true
+
+	sliderDB.MaxFloat64_Data.Float64 = slider.MaxFloat64
+	sliderDB.MaxFloat64_Data.Valid = true
+
+	sliderDB.StepFloat64_Data.Float64 = slider.StepFloat64
+	sliderDB.StepFloat64_Data.Valid = true
+
+	sliderDB.ValueFloat64_Data.Float64 = slider.ValueFloat64
+	sliderDB.ValueFloat64_Data.Valid = true
 }
 
 // CopyBasicFieldsFromSlider_WOP
@@ -370,6 +462,36 @@ func (sliderDB *SliderDB) CopyBasicFieldsFromSlider_WOP(slider *models.Slider_WO
 
 	sliderDB.Name_Data.String = slider.Name
 	sliderDB.Name_Data.Valid = true
+
+	sliderDB.IsFloat64_Data.Bool = slider.IsFloat64
+	sliderDB.IsFloat64_Data.Valid = true
+
+	sliderDB.IsInt_Data.Bool = slider.IsInt
+	sliderDB.IsInt_Data.Valid = true
+
+	sliderDB.MinInt_Data.Int64 = int64(slider.MinInt)
+	sliderDB.MinInt_Data.Valid = true
+
+	sliderDB.MaxInt_Data.Int64 = int64(slider.MaxInt)
+	sliderDB.MaxInt_Data.Valid = true
+
+	sliderDB.StepInt_Data.Int64 = int64(slider.StepInt)
+	sliderDB.StepInt_Data.Valid = true
+
+	sliderDB.ValueInt_Data.Int64 = int64(slider.ValueInt)
+	sliderDB.ValueInt_Data.Valid = true
+
+	sliderDB.MinFloat64_Data.Float64 = slider.MinFloat64
+	sliderDB.MinFloat64_Data.Valid = true
+
+	sliderDB.MaxFloat64_Data.Float64 = slider.MaxFloat64
+	sliderDB.MaxFloat64_Data.Valid = true
+
+	sliderDB.StepFloat64_Data.Float64 = slider.StepFloat64
+	sliderDB.StepFloat64_Data.Valid = true
+
+	sliderDB.ValueFloat64_Data.Float64 = slider.ValueFloat64
+	sliderDB.ValueFloat64_Data.Valid = true
 }
 
 // CopyBasicFieldsFromSliderWOP
@@ -378,18 +500,68 @@ func (sliderDB *SliderDB) CopyBasicFieldsFromSliderWOP(slider *SliderWOP) {
 
 	sliderDB.Name_Data.String = slider.Name
 	sliderDB.Name_Data.Valid = true
+
+	sliderDB.IsFloat64_Data.Bool = slider.IsFloat64
+	sliderDB.IsFloat64_Data.Valid = true
+
+	sliderDB.IsInt_Data.Bool = slider.IsInt
+	sliderDB.IsInt_Data.Valid = true
+
+	sliderDB.MinInt_Data.Int64 = int64(slider.MinInt)
+	sliderDB.MinInt_Data.Valid = true
+
+	sliderDB.MaxInt_Data.Int64 = int64(slider.MaxInt)
+	sliderDB.MaxInt_Data.Valid = true
+
+	sliderDB.StepInt_Data.Int64 = int64(slider.StepInt)
+	sliderDB.StepInt_Data.Valid = true
+
+	sliderDB.ValueInt_Data.Int64 = int64(slider.ValueInt)
+	sliderDB.ValueInt_Data.Valid = true
+
+	sliderDB.MinFloat64_Data.Float64 = slider.MinFloat64
+	sliderDB.MinFloat64_Data.Valid = true
+
+	sliderDB.MaxFloat64_Data.Float64 = slider.MaxFloat64
+	sliderDB.MaxFloat64_Data.Valid = true
+
+	sliderDB.StepFloat64_Data.Float64 = slider.StepFloat64
+	sliderDB.StepFloat64_Data.Valid = true
+
+	sliderDB.ValueFloat64_Data.Float64 = slider.ValueFloat64
+	sliderDB.ValueFloat64_Data.Valid = true
 }
 
 // CopyBasicFieldsToSlider
 func (sliderDB *SliderDB) CopyBasicFieldsToSlider(slider *models.Slider) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	slider.Name = sliderDB.Name_Data.String
+	slider.IsFloat64 = sliderDB.IsFloat64_Data.Bool
+	slider.IsInt = sliderDB.IsInt_Data.Bool
+	slider.MinInt = int(sliderDB.MinInt_Data.Int64)
+	slider.MaxInt = int(sliderDB.MaxInt_Data.Int64)
+	slider.StepInt = int(sliderDB.StepInt_Data.Int64)
+	slider.ValueInt = int(sliderDB.ValueInt_Data.Int64)
+	slider.MinFloat64 = sliderDB.MinFloat64_Data.Float64
+	slider.MaxFloat64 = sliderDB.MaxFloat64_Data.Float64
+	slider.StepFloat64 = sliderDB.StepFloat64_Data.Float64
+	slider.ValueFloat64 = sliderDB.ValueFloat64_Data.Float64
 }
 
 // CopyBasicFieldsToSlider_WOP
 func (sliderDB *SliderDB) CopyBasicFieldsToSlider_WOP(slider *models.Slider_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	slider.Name = sliderDB.Name_Data.String
+	slider.IsFloat64 = sliderDB.IsFloat64_Data.Bool
+	slider.IsInt = sliderDB.IsInt_Data.Bool
+	slider.MinInt = int(sliderDB.MinInt_Data.Int64)
+	slider.MaxInt = int(sliderDB.MaxInt_Data.Int64)
+	slider.StepInt = int(sliderDB.StepInt_Data.Int64)
+	slider.ValueInt = int(sliderDB.ValueInt_Data.Int64)
+	slider.MinFloat64 = sliderDB.MinFloat64_Data.Float64
+	slider.MaxFloat64 = sliderDB.MaxFloat64_Data.Float64
+	slider.StepFloat64 = sliderDB.StepFloat64_Data.Float64
+	slider.ValueFloat64 = sliderDB.ValueFloat64_Data.Float64
 }
 
 // CopyBasicFieldsToSliderWOP
@@ -397,6 +569,16 @@ func (sliderDB *SliderDB) CopyBasicFieldsToSliderWOP(slider *SliderWOP) {
 	slider.ID = int(sliderDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	slider.Name = sliderDB.Name_Data.String
+	slider.IsFloat64 = sliderDB.IsFloat64_Data.Bool
+	slider.IsInt = sliderDB.IsInt_Data.Bool
+	slider.MinInt = int(sliderDB.MinInt_Data.Int64)
+	slider.MaxInt = int(sliderDB.MaxInt_Data.Int64)
+	slider.StepInt = int(sliderDB.StepInt_Data.Int64)
+	slider.ValueInt = int(sliderDB.ValueInt_Data.Int64)
+	slider.MinFloat64 = sliderDB.MinFloat64_Data.Float64
+	slider.MaxFloat64 = sliderDB.MaxFloat64_Data.Float64
+	slider.StepFloat64 = sliderDB.StepFloat64_Data.Float64
+	slider.ValueFloat64 = sliderDB.ValueFloat64_Data.Float64
 }
 
 // Backup generates a json file from a slice of all SliderDB instances in the backrepo

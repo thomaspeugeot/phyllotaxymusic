@@ -29,6 +29,18 @@ func GetReverseFieldOwnerName(
 	case *models.Group:
 		switch reverseField.GongstructName {
 		// insertion point
+		case "Layout":
+			switch reverseField.Fieldname {
+			case "Groups":
+				if _layout, ok := stage.Layout_Groups_reverseMap[inst]; ok {
+					res = _layout.Name
+				}
+			}
+		}
+
+	case *models.Layout:
+		switch reverseField.GongstructName {
+		// insertion point
 		}
 
 	case *models.Slider:
@@ -69,6 +81,16 @@ func GetReverseFieldOwner[T models.Gongstruct](
 		}
 
 	case *models.Group:
+		switch reverseField.GongstructName {
+		// insertion point
+		case "Layout":
+			switch reverseField.Fieldname {
+			case "Groups":
+				res = stage.Layout_Groups_reverseMap[inst]
+			}
+		}
+
+	case *models.Layout:
 		switch reverseField.GongstructName {
 		// insertion point
 		}

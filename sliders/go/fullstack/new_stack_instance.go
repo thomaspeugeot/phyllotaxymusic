@@ -46,6 +46,7 @@ func NewStackInstance(
 	// insertion point
 	models.SetOrchestratorOnAfterUpdate[models.Checkbox](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Group](stage)
+	models.SetOrchestratorOnAfterUpdate[models.Layout](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Slider](stage)
 
 	return

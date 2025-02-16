@@ -31,21 +31,24 @@ import { MatIconModule } from '@angular/material/icon'
 
   ],
   templateUrl: './slidersspecific.component.html',
-  styles: ``
+  styleUrls: [
+    './slidersspecific.component.css'
+  ]
 })
 export class SlidersspecificComponent {
-input($event: Event) {
-throw new Error('Method not implemented.');
-}
 
-  rowHeight: string = "50px"
+
+  rowHeight: string = "30px"
 
   StacksNames = sliders.StacksNames;
   public frontRepo?: sliders.FrontRepo;
   splitAreaSize = 0
 
+  layout : sliders.Layout | undefined
+
   constructor(
     private frontRepoService: sliders.FrontRepoService,
+    private sliderService: sliders.SliderService,
   ) { }
 
   formatLabel(value: number): string {
@@ -63,9 +66,23 @@ throw new Error('Method not implemented.');
       next: (frontRepo) => {
         this.frontRepo = frontRepo;
 
+        console.log("hello")
+
+        for (let layout_ of this.frontRepo.array_Layouts) {
+          this.layout = layout_
+        }
+
         this.splitAreaSize = 100.0 / this.frontRepo.array_Groups.length
       }
     }
+    )
+  }
+
+  input($event: Event, slider: sliders.Slider) {
+    this.sliderService.updateFront(slider, this.StacksNames.SliderStackName).subscribe(
+      () => {
+        console.log("slider updated")
+      }
     )
   }
 

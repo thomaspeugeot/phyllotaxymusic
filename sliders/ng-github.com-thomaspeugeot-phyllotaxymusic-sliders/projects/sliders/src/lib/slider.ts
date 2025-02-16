@@ -18,6 +18,16 @@ export class Slider {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	IsFloat64: boolean = false
+	IsInt: boolean = false
+	MinInt: number = 0
+	MaxInt: number = 0
+	StepInt: number = 0
+	ValueInt: number = 0
+	MinFloat64: number = 0
+	MaxFloat64: number = 0
+	StepFloat64: number = 0
+	ValueFloat64: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 }
@@ -30,6 +40,16 @@ export function CopySliderToSliderAPI(slider: Slider, sliderAPI: SliderAPI) {
 
 	// insertion point for basic fields copy operations
 	sliderAPI.Name = slider.Name
+	sliderAPI.IsFloat64 = slider.IsFloat64
+	sliderAPI.IsInt = slider.IsInt
+	sliderAPI.MinInt = slider.MinInt
+	sliderAPI.MaxInt = slider.MaxInt
+	sliderAPI.StepInt = slider.StepInt
+	sliderAPI.ValueInt = slider.ValueInt
+	sliderAPI.MinFloat64 = slider.MinFloat64
+	sliderAPI.MaxFloat64 = slider.MaxFloat64
+	sliderAPI.StepFloat64 = slider.StepFloat64
+	sliderAPI.ValueFloat64 = slider.ValueFloat64
 
 	// insertion point for pointer fields encoding
 
@@ -48,6 +68,16 @@ export function CopySliderAPIToSlider(sliderAPI: SliderAPI, slider: Slider, fron
 
 	// insertion point for basic fields copy operations
 	slider.Name = sliderAPI.Name
+	slider.IsFloat64 = sliderAPI.IsFloat64
+	slider.IsInt = sliderAPI.IsInt
+	slider.MinInt = sliderAPI.MinInt
+	slider.MaxInt = sliderAPI.MaxInt
+	slider.StepInt = sliderAPI.StepInt
+	slider.ValueInt = sliderAPI.ValueInt
+	slider.MinFloat64 = sliderAPI.MinFloat64
+	slider.MaxFloat64 = sliderAPI.MaxFloat64
+	slider.StepFloat64 = sliderAPI.StepFloat64
+	slider.ValueFloat64 = sliderAPI.ValueFloat64
 
 	// insertion point for pointer fields encoding
 

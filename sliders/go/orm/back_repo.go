@@ -28,6 +28,8 @@ type BackRepoStruct struct {
 
 	BackRepoGroup BackRepoGroupStruct
 
+	BackRepoLayout BackRepoLayoutStruct
+
 	BackRepoSlider BackRepoSliderStruct
 
 	CommitFromBackNb uint // records commit increments when performed by the back
@@ -53,6 +55,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 	db = dbgorm.NewDBWrapper(filename, "github_com_thomaspeugeot_phyllotaxymusic_sliders_go",
 		&CheckboxDB{},
 		&GroupDB{},
+		&LayoutDB{},
 		&SliderDB{},
 	)
 	THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm */
@@ -72,6 +75,14 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		Map_GroupDBID_GroupPtr: make(map[uint]*models.Group, 0),
 		Map_GroupDBID_GroupDB:  make(map[uint]*GroupDB, 0),
 		Map_GroupPtr_GroupDBID: make(map[*models.Group]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoLayout = BackRepoLayoutStruct{
+		Map_LayoutDBID_LayoutPtr: make(map[uint]*models.Layout, 0),
+		Map_LayoutDBID_LayoutDB:  make(map[uint]*LayoutDB, 0),
+		Map_LayoutPtr_LayoutDBID: make(map[*models.Layout]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -139,11 +150,13 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
 	backRepo.BackRepoCheckbox.CommitPhaseOne(stage)
 	backRepo.BackRepoGroup.CommitPhaseOne(stage)
+	backRepo.BackRepoLayout.CommitPhaseOne(stage)
 	backRepo.BackRepoSlider.CommitPhaseOne(stage)
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoCheckbox.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoGroup.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoLayout.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoSlider.CommitPhaseTwo(backRepo)
 
 	backRepo.IncrementCommitFromBackNb()
@@ -154,11 +167,13 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
 	backRepo.BackRepoCheckbox.CheckoutPhaseOne()
 	backRepo.BackRepoGroup.CheckoutPhaseOne()
+	backRepo.BackRepoLayout.CheckoutPhaseOne()
 	backRepo.BackRepoSlider.CheckoutPhaseOne()
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoCheckbox.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoGroup.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoLayout.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoSlider.CheckoutPhaseTwo(backRepo)
 }
 
@@ -169,6 +184,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	// insertion point for per struct backup
 	backRepo.BackRepoCheckbox.Backup(dirPath)
 	backRepo.BackRepoGroup.Backup(dirPath)
+	backRepo.BackRepoLayout.Backup(dirPath)
 	backRepo.BackRepoSlider.Backup(dirPath)
 }
 
@@ -182,6 +198,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	// insertion point for per struct backup
 	backRepo.BackRepoCheckbox.BackupXL(file)
 	backRepo.BackRepoGroup.BackupXL(file)
+	backRepo.BackRepoLayout.BackupXL(file)
 	backRepo.BackRepoSlider.BackupXL(file)
 
 	var b bytes.Buffer
@@ -209,6 +226,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	// insertion point for per struct backup
 	backRepo.BackRepoCheckbox.RestorePhaseOne(dirPath)
 	backRepo.BackRepoGroup.RestorePhaseOne(dirPath)
+	backRepo.BackRepoLayout.RestorePhaseOne(dirPath)
 	backRepo.BackRepoSlider.RestorePhaseOne(dirPath)
 
 	//
@@ -218,6 +236,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	// insertion point for per struct backup
 	backRepo.BackRepoCheckbox.RestorePhaseTwo()
 	backRepo.BackRepoGroup.RestorePhaseTwo()
+	backRepo.BackRepoLayout.RestorePhaseTwo()
 	backRepo.BackRepoSlider.RestorePhaseTwo()
 
 	backRepo.stage.Checkout()
@@ -248,6 +267,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	// insertion point for per struct backup
 	backRepo.BackRepoCheckbox.RestoreXLPhaseOne(file)
 	backRepo.BackRepoGroup.RestoreXLPhaseOne(file)
+	backRepo.BackRepoLayout.RestoreXLPhaseOne(file)
 	backRepo.BackRepoSlider.RestoreXLPhaseOne(file)
 
 	// commit the restored stage

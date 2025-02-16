@@ -12,6 +12,10 @@ import { GroupAPI } from './group-api'
 import { Group, CopyGroupAPIToGroup } from './group'
 import { GroupService } from './group.service'
 
+import { LayoutAPI } from './layout-api'
+import { Layout, CopyLayoutAPIToLayout } from './layout'
+import { LayoutService } from './layout.service'
+
 import { SliderAPI } from './slider-api'
 import { Slider, CopySliderAPIToSlider } from './slider'
 import { SliderService } from './slider.service'
@@ -29,6 +33,9 @@ export class FrontRepo { // insertion point sub template
 	array_Groups = new Array<Group>() // array of front instances
 	map_ID_Group = new Map<number, Group>() // map of front instances
 
+	array_Layouts = new Array<Layout>() // array of front instances
+	map_ID_Layout = new Map<number, Layout>() // map of front instances
+
 	array_Sliders = new Array<Slider>() // array of front instances
 	map_ID_Slider = new Map<number, Slider>() // map of front instances
 
@@ -45,6 +52,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Checkboxs as unknown as Array<Type>
 			case 'Group':
 				return this.array_Groups as unknown as Array<Type>
+			case 'Layout':
+				return this.array_Layouts as unknown as Array<Type>
 			case 'Slider':
 				return this.array_Sliders as unknown as Array<Type>
 			default:
@@ -59,6 +68,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Checkbox as unknown as Map<number, Type>
 			case 'Group':
 				return this.map_ID_Group as unknown as Map<number, Type>
+			case 'Layout':
+				return this.map_ID_Layout as unknown as Map<number, Type>
 			case 'Slider':
 				return this.map_ID_Slider as unknown as Map<number, Type>
 			default:
@@ -130,6 +141,7 @@ export class FrontRepoService {
 		private http: HttpClient, // insertion point sub template 
 		private checkboxService: CheckboxService,
 		private groupService: GroupService,
+		private layoutService: LayoutService,
 		private sliderService: SliderService,
 	) { }
 
@@ -165,6 +177,7 @@ export class FrontRepoService {
 		// insertion point sub template 
 		Observable<CheckboxAPI[]>,
 		Observable<GroupAPI[]>,
+		Observable<LayoutAPI[]>,
 		Observable<SliderAPI[]>,
 	] = [
 			// Using "combineLatest" with a placeholder observable.
@@ -178,6 +191,7 @@ export class FrontRepoService {
 			// insertion point sub template
 			this.checkboxService.getCheckboxs(this.GONG__StackPath, this.frontRepo),
 			this.groupService.getGroups(this.GONG__StackPath, this.frontRepo),
+			this.layoutService.getLayouts(this.GONG__StackPath, this.frontRepo),
 			this.sliderService.getSliders(this.GONG__StackPath, this.frontRepo),
 		];
 
@@ -196,6 +210,7 @@ export class FrontRepoService {
 			// insertion point sub template
 			this.checkboxService.getCheckboxs(this.GONG__StackPath, this.frontRepo),
 			this.groupService.getGroups(this.GONG__StackPath, this.frontRepo),
+			this.layoutService.getLayouts(this.GONG__StackPath, this.frontRepo),
 			this.sliderService.getSliders(this.GONG__StackPath, this.frontRepo),
 		]
 
@@ -209,6 +224,7 @@ export class FrontRepoService {
 						// insertion point sub template for declarations 
 						checkboxs_,
 						groups_,
+						layouts_,
 						sliders_,
 					]) => {
 						let _this = this
@@ -218,6 +234,8 @@ export class FrontRepoService {
 						checkboxs = checkboxs_ as CheckboxAPI[]
 						var groups: GroupAPI[]
 						groups = groups_ as GroupAPI[]
+						var layouts: LayoutAPI[]
+						layouts = layouts_ as LayoutAPI[]
 						var sliders: SliderAPI[]
 						sliders = sliders_ as SliderAPI[]
 
@@ -245,6 +263,18 @@ export class FrontRepoService {
 								let group = new Group
 								this.frontRepo.array_Groups.push(group)
 								this.frontRepo.map_ID_Group.set(groupAPI.ID, group)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_Layouts = []
+						this.frontRepo.map_ID_Layout.clear()
+
+						layouts.forEach(
+							layoutAPI => {
+								let layout = new Layout
+								this.frontRepo.array_Layouts.push(layout)
+								this.frontRepo.map_ID_Layout.set(layoutAPI.ID, layout)
 							}
 						)
 
@@ -277,6 +307,14 @@ export class FrontRepoService {
 							groupAPI => {
 								let group = this.frontRepo.map_ID_Group.get(groupAPI.ID)
 								CopyGroupAPIToGroup(groupAPI, group!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						layouts.forEach(
+							layoutAPI => {
+								let layout = this.frontRepo.map_ID_Layout.get(layoutAPI.ID)
+								CopyLayoutAPIToLayout(layoutAPI, layout!, this.frontRepo)
 							}
 						)
 
@@ -347,6 +385,18 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				frontRepo.array_Layouts = []
+				frontRepo.map_ID_Layout.clear()
+
+				backRepoData.LayoutAPIs.forEach(
+					layoutAPI => {
+						let layout = new Layout
+						frontRepo.array_Layouts.push(layout)
+						frontRepo.map_ID_Layout.set(layoutAPI.ID, layout)
+					}
+				)
+
+				// init the arrays
 				frontRepo.array_Sliders = []
 				frontRepo.map_ID_Slider.clear()
 
@@ -377,6 +427,14 @@ export class FrontRepoService {
 					groupAPI => {
 						let group = frontRepo.map_ID_Group.get(groupAPI.ID)
 						CopyGroupAPIToGroup(groupAPI, group!, frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.LayoutAPIs.forEach(
+					layoutAPI => {
+						let layout = frontRepo.map_ID_Layout.get(layoutAPI.ID)
+						CopyLayoutAPIToLayout(layoutAPI, layout!, frontRepo)
 					}
 				)
 
@@ -413,6 +471,9 @@ export function getCheckboxUniqueID(id: number): number {
 export function getGroupUniqueID(id: number): number {
 	return 37 * id
 }
-export function getSliderUniqueID(id: number): number {
+export function getLayoutUniqueID(id: number): number {
 	return 41 * id
+}
+export function getSliderUniqueID(id: number): number {
+	return 43 * id
 }

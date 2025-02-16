@@ -28,6 +28,10 @@ type DBLite struct {
 
 	nextIDGroupDB uint
 
+	layoutDBs map[uint]*LayoutDB
+
+	nextIDLayoutDB uint
+
 	sliderDBs map[uint]*SliderDB
 
 	nextIDSliderDB uint
@@ -41,6 +45,8 @@ func NewDBLite() *DBLite {
 		checkboxDBs: make(map[uint]*CheckboxDB),
 
 		groupDBs: make(map[uint]*GroupDB),
+
+		layoutDBs: make(map[uint]*LayoutDB),
 
 		sliderDBs: make(map[uint]*SliderDB),
 	}
@@ -65,6 +71,10 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		db.nextIDGroupDB++
 		v.ID = db.nextIDGroupDB
 		db.groupDBs[v.ID] = v
+	case *LayoutDB:
+		db.nextIDLayoutDB++
+		v.ID = db.nextIDLayoutDB
+		db.layoutDBs[v.ID] = v
 	case *SliderDB:
 		db.nextIDSliderDB++
 		v.ID = db.nextIDSliderDB
@@ -101,6 +111,8 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 		delete(db.checkboxDBs, v.ID)
 	case *GroupDB:
 		delete(db.groupDBs, v.ID)
+	case *LayoutDB:
+		delete(db.layoutDBs, v.ID)
 	case *SliderDB:
 		delete(db.sliderDBs, v.ID)
 	default:
@@ -126,6 +138,9 @@ func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 		return db, nil
 	case *GroupDB:
 		db.groupDBs[v.ID] = v
+		return db, nil
+	case *LayoutDB:
+		db.layoutDBs[v.ID] = v
 		return db, nil
 	case *SliderDB:
 		db.sliderDBs[v.ID] = v
@@ -158,6 +173,12 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 		} else {
 			return nil, errors.New("db Group github.com/thomaspeugeot/phyllotaxymusic/sliders/go, record not found")
 		}
+	case *LayoutDB:
+		if existing, ok := db.layoutDBs[v.ID]; ok {
+			*existing = *v
+		} else {
+			return nil, errors.New("db Layout github.com/thomaspeugeot/phyllotaxymusic/sliders/go, record not found")
+		}
 	case *SliderDB:
 		if existing, ok := db.sliderDBs[v.ID]; ok {
 			*existing = *v
@@ -187,6 +208,12 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 	case *[]GroupDB:
 		*ptr = make([]GroupDB, 0, len(db.groupDBs))
 		for _, v := range db.groupDBs {
+			*ptr = append(*ptr, *v)
+		}
+		return db, nil
+	case *[]LayoutDB:
+		*ptr = make([]LayoutDB, 0, len(db.layoutDBs))
+		for _, v := range db.layoutDBs {
 			*ptr = append(*ptr, *v)
 		}
 		return db, nil
@@ -248,6 +275,16 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		groupDB, _ := instanceDB.(*GroupDB)
 		*groupDB = *tmp
+		
+	case *LayoutDB:
+		tmp, ok := db.layoutDBs[uint(i)]
+
+		if !ok {
+			return nil, errors.New(fmt.Sprintf("db.First Layout Unkown entry %d", i))
+		}
+
+		layoutDB, _ := instanceDB.(*LayoutDB)
+		*layoutDB = *tmp
 		
 	case *SliderDB:
 		tmp, ok := db.sliderDBs[uint(i)]

@@ -14,6 +14,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterGroupCreateCallback != nil {
 			stage.OnAfterGroupCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *Layout:
+		if stage.OnAfterLayoutCreateCallback != nil {
+			stage.OnAfterLayoutCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *Slider:
 		if stage.OnAfterSliderCreateCallback != nil {
 			stage.OnAfterSliderCreateCallback.OnAfterCreate(stage, target)
@@ -37,6 +41,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*Group)
 		if stage.OnAfterGroupUpdateCallback != nil {
 			stage.OnAfterGroupUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *Layout:
+		newTarget := any(new).(*Layout)
+		if stage.OnAfterLayoutUpdateCallback != nil {
+			stage.OnAfterLayoutUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *Slider:
 		newTarget := any(new).(*Slider)
@@ -63,6 +72,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*Group)
 			stage.OnAfterGroupDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *Layout:
+		if stage.OnAfterLayoutDeleteCallback != nil {
+			staged := any(staged).(*Layout)
+			stage.OnAfterLayoutDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *Slider:
 		if stage.OnAfterSliderDeleteCallback != nil {
 			staged := any(staged).(*Slider)
@@ -86,6 +100,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterGroupReadCallback != nil {
 			stage.OnAfterGroupReadCallback.OnAfterRead(stage, target)
 		}
+	case *Layout:
+		if stage.OnAfterLayoutReadCallback != nil {
+			stage.OnAfterLayoutReadCallback.OnAfterRead(stage, target)
+		}
 	case *Slider:
 		if stage.OnAfterSliderReadCallback != nil {
 			stage.OnAfterSliderReadCallback.OnAfterRead(stage, target)
@@ -107,6 +125,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Group:
 		stage.OnAfterGroupUpdateCallback = any(callback).(OnAfterUpdateInterface[Group])
 	
+	case *Layout:
+		stage.OnAfterLayoutUpdateCallback = any(callback).(OnAfterUpdateInterface[Layout])
+	
 	case *Slider:
 		stage.OnAfterSliderUpdateCallback = any(callback).(OnAfterUpdateInterface[Slider])
 	
@@ -122,6 +143,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	
 	case *Group:
 		stage.OnAfterGroupCreateCallback = any(callback).(OnAfterCreateInterface[Group])
+	
+	case *Layout:
+		stage.OnAfterLayoutCreateCallback = any(callback).(OnAfterCreateInterface[Layout])
 	
 	case *Slider:
 		stage.OnAfterSliderCreateCallback = any(callback).(OnAfterCreateInterface[Slider])
@@ -139,6 +163,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *Group:
 		stage.OnAfterGroupDeleteCallback = any(callback).(OnAfterDeleteInterface[Group])
 	
+	case *Layout:
+		stage.OnAfterLayoutDeleteCallback = any(callback).(OnAfterDeleteInterface[Layout])
+	
 	case *Slider:
 		stage.OnAfterSliderDeleteCallback = any(callback).(OnAfterDeleteInterface[Slider])
 	
@@ -154,6 +181,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	
 	case *Group:
 		stage.OnAfterGroupReadCallback = any(callback).(OnAfterReadInterface[Group])
+	
+	case *Layout:
+		stage.OnAfterLayoutReadCallback = any(callback).(OnAfterReadInterface[Layout])
 	
 	case *Slider:
 		stage.OnAfterSliderReadCallback = any(callback).(OnAfterReadInterface[Slider])

@@ -21,6 +21,10 @@ export * from './lib/group-api'
 export * from './lib/group'
 export * from './lib/group.service'
 
+export * from './lib/layout-api'
+export * from './lib/layout'
+export * from './lib/layout.service'
+
 export * from './lib/slider-api'
 export * from './lib/slider'
 export * from './lib/slider.service'

@@ -52,6 +52,19 @@ func FillUpFormFromGongstructName(
 		group := new(models.Group)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(group, formGroup, probe)
+	case "Layout":
+		formGroup := (&form.FormGroup{
+			Name:  form.FormGroupDefaultName.ToString(),
+			Label: prefix + "Layout Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__LayoutFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		layout := new(models.Layout)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(layout, formGroup, probe)
 	case "Slider":
 		formGroup := (&form.FormGroup{
 			Name:  form.FormGroupDefaultName.ToString(),

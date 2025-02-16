@@ -316,6 +316,7 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 // insertion point for identifiers maps
 var __gong__map_Checkbox = make(map[string]*Checkbox)
 var __gong__map_Group = make(map[string]*Group)
+var __gong__map_Layout = make(map[string]*Layout)
 var __gong__map_Slider = make(map[string]*Slider)
 
 // Parser needs to be configured for having the [Name1.Name2] or [pkg.Name1] ...
@@ -501,6 +502,12 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 										instanceGroup.Stage(stage)
 										instance = any(instanceGroup)
 										__gong__map_Group[identifier] = instanceGroup
+									case "Layout":
+										instanceLayout := new(Layout)
+										instanceLayout.Name = instanceName
+										instanceLayout.Stage(stage)
+										instance = any(instanceLayout)
+										__gong__map_Layout[identifier] = instanceLayout
 									case "Slider":
 										instanceSlider := new(Slider)
 										instanceSlider.Name = instanceName
@@ -548,6 +555,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							// insertion point for date assign code
 							}
 						case "Group":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "Layout":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -599,6 +610,16 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 							target := __gong__map_Checkbox[targetIdentifier]
 							__gong__map_Group[identifier].Checkboxes =
 								append(__gong__map_Group[identifier].Checkboxes, target)
+						}
+					case "Layout":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "Groups":
+							// remove first and last char
+							targetIdentifier := ident.Name
+							target := __gong__map_Group[targetIdentifier]
+							__gong__map_Layout[identifier].Groups =
+								append(__gong__map_Layout[identifier].Groups, target)
 						}
 					case "Slider":
 						switch fieldName {
@@ -669,6 +690,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Group[identifier].Name = fielValue
 				}
+			case "Layout":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Layout[identifier].Name = fielValue
+				}
 			case "Slider":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -676,6 +705,62 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Slider[identifier].Name = fielValue
+				case "MinInt":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].MinInt = int(exprSign) * int(fielValue)
+				case "MaxInt":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].MaxInt = int(exprSign) * int(fielValue)
+				case "StepInt":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].StepInt = int(exprSign) * int(fielValue)
+				case "ValueInt":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].ValueInt = int(exprSign) * int(fielValue)
+				case "MinFloat64":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].MinFloat64 = exprSign * fielValue
+				case "MaxFloat64":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].MaxFloat64 = exprSign * fielValue
+				case "StepFloat64":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].StepFloat64 = exprSign * fielValue
+				case "ValueFloat64":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].ValueFloat64 = exprSign * fielValue
 				}
 			}
 		case *ast.Ident:
@@ -699,9 +784,27 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				switch fieldName {
 				// insertion point for field dependant code
 				}
+			case "Layout":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
 			case "Slider":
 				switch fieldName {
 				// insertion point for field dependant code
+				case "IsFloat64":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].IsFloat64 = fielValue
+				case "IsInt":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Slider[identifier].IsInt = fielValue
 				}
 			}
 		case *ast.SelectorExpr:
@@ -736,6 +839,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// insertion point for enum assign code
 					}
 				case "Group":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
+				case "Layout":
 					switch fieldName {
 					// insertion point for enum assign code
 					}
