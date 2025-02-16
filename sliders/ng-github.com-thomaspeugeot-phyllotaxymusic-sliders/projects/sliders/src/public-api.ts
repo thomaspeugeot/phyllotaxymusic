@@ -26,3 +26,4 @@ export * from './lib/slider'
 export * from './lib/slider.service'
 
 
+export * from './lib/StacksNames'

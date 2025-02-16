@@ -20,5 +20,17 @@
                 "-genmusicxml"
             ]
         },
+        {
+            "name": "go server on sliders",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/sliders/go/cmd/sliders/main.go",
+            "args": [
+                "-unmarshallFromCode=data/stage.go",
+                "-marshallOnCommit=data/stage",
+            ]
+        },
+        
     ]
 }

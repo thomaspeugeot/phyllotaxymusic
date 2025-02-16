@@ -277,6 +277,13 @@
 				"-marshallOnCommit=data/stage"
 			],
 			"group": "build"
-		}
+		},
+		{
+			"label": "04 - ng serve  sliders",
+			"type": "shell",
+			"command": "cd sliders/ng-github.com-thomaspeugeot-phyllotaxymusic-sliders; ng serve",
+			"group": "build",
+			"problemMatcher": []
+		},
 	]
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 
+	sliders_models "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
 	sliders_stack "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/stack"
 	sliders_static "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/static"
 )
@@ -33,7 +34,7 @@ func main() {
 	r := sliders_static.ServeStaticFiles(*logGINFlag)
 
 	// setup stack
-	stack := sliders_stack.NewStack(r, "sliders", *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+	stack := sliders_stack.NewStack(r, sliders_models.SliderStackName.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
 	stack.Probe.Refresh()
 
 	log.Println("Server ready serve on localhost:" + strconv.Itoa(*port))

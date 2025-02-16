@@ -61,7 +61,7 @@ export class AppComponent implements OnInit {
     'width': '100%',  // Ensure the div takes the full width of its parent container
   }
 
-  StackName = "sliders"
+  StackName = sliders.StacksNames.SliderStackName
   StackType = sliders.StackType
 
   TableExtraPathEnum = gongtable.TableExtraPathEnum
