@@ -40,6 +40,7 @@ func (shape *Shape) OnAfterUpdate(stage *gongtree_models.StageStruct, stagedNode
 		stagedNode.IsChecked = frontNode.IsChecked
 		p.UpdatePhyllotaxyStage()
 		p.UpdateAndCommitCursorStage()
+		p.UpdateAndCommitSlidersStage()
 		p.UpdateAndCommitSVGStage()
 		p.UpdateAndCommitToneStage()
 		p.treeProxy.UpdateAndCommitTreeStage()
@@ -50,6 +51,7 @@ func (shape *Shape) OnAfterUpdate(stage *gongtree_models.StageStruct, stagedNode
 		stagedNode.IsChecked = frontNode.IsChecked
 		p.UpdatePhyllotaxyStage()
 		p.UpdateAndCommitCursorStage()
+		p.UpdateAndCommitSlidersStage()
 		p.UpdateAndCommitSVGStage()
 		p.UpdateAndCommitToneStage()
 		p.treeProxy.UpdateAndCommitTreeStage()
