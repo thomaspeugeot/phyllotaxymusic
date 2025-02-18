@@ -12,7 +12,7 @@ import (
 // if there are no elements in the stage to marshall
 var _ time.Time
 
-// _ point for meta package dummy declaration{{ImportPackageDummyDeclaration}}
+// Injection point for meta package dummy declaration{{ImportPackageDummyDeclaration}}
 
 // When parsed, those maps will help with the renaming process
 var _ map[string]any = map[string]any{
@@ -24,7 +24,7 @@ func _(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
-	__Checkbox__000000_Orientation := (&models.Checkbox{}).Stage(stage)
+	__Checkbox__000000_Scale := (&models.Checkbox{}).Stage(stage)
 
 	__Group__000000_Group_1 := (&models.Group{}).Stage(stage)
 	__Group__000001_Group_2 := (&models.Group{}).Stage(stage)
@@ -37,14 +37,16 @@ func _(stage *models.StageStruct) {
 
 	// Setup of values
 
-	__Checkbox__000000_Orientation.Name = `Orientation`
-	__Checkbox__000000_Orientation.ValueBool = false
-	__Checkbox__000000_Orientation.LabelForTrue = `Is Minor`
-	__Checkbox__000000_Orientation.LabelForFalse = `Is Major`
+	__Checkbox__000000_Scale.Name = `Scale`
+	__Checkbox__000000_Scale.ValueBool = true
+	__Checkbox__000000_Scale.LabelForTrue = `Is Minor`
+	__Checkbox__000000_Scale.LabelForFalse = `Is Major`
 
 	__Group__000000_Group_1.Name = `Group 1`
+	__Group__000000_Group_1.Percentage = 0.000000
 
 	__Group__000001_Group_2.Name = `Group 2`
+	__Group__000001_Group_2.Percentage = 0.000000
 
 	__Layout__000000_Layout.Name = `Layout`
 
@@ -88,7 +90,7 @@ func _(stage *models.StageStruct) {
 	__Group__000000_Group_1.Sliders = append(__Group__000000_Group_1.Sliders, __Slider__000000_Value_1_with_int_type)
 	__Group__000000_Group_1.Sliders = append(__Group__000000_Group_1.Sliders, __Slider__000001_Value_2_int_type)
 	__Group__000000_Group_1.Sliders = append(__Group__000000_Group_1.Sliders, __Slider__000002_Value_3_Float)
-	__Group__000000_Group_1.Checkboxes = append(__Group__000000_Group_1.Checkboxes, __Checkbox__000000_Orientation)
+	__Group__000000_Group_1.Checkboxes = append(__Group__000000_Group_1.Checkboxes, __Checkbox__000000_Scale)
 	__Layout__000000_Layout.Groups = append(__Layout__000000_Layout.Groups, __Group__000000_Group_1)
 	__Layout__000000_Layout.Groups = append(__Layout__000000_Layout.Groups, __Group__000001_Group_2)
 }

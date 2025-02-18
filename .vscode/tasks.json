@@ -247,6 +247,19 @@
 			]
 		},
 		{
+			"label": "01 - gongc sliders -skipGoModCommands -skipNg",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/sliders/go/models"
+			},
+			"command": "gongc",
+			"group": "build",
+			"args": [
+				"-skipGoModCommands",
+				"-skipNg"
+			]
+		},
+		{
 			"label": "02 - run cursor -unmarshallFromCode=stage.go -marshallOnCommit=stage",
 			"type": "shell",
 			"options": {
@@ -284,6 +297,18 @@
 			"command": "cd sliders/ng-github.com-thomaspeugeot-phyllotaxymusic-sliders; ng serve",
 			"group": "build",
 			"problemMatcher": []
+		},
+		{
+			"label": "01 - gongc sliders -clean",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/sliders/go/models"
+			},
+			"command": "gongc",
+			"group": "build",
+			"args": [
+				"-clean"
+			]
 		},
 	]
 }

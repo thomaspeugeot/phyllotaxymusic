@@ -63,12 +63,3 @@ type Checkbox struct {
 type CheckboxProxyInterface interface {
 	Updated()
 }
-
-func (checkbox *Checkbox) OnAfterUpdate(
-	stage *StageStruct,
-	stagedNode, frontNode *Checkbox) {
-
-	if checkbox.Proxy != nil {
-		checkbox.Proxy.Updated()
-	}
-}

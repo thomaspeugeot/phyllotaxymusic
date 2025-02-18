@@ -2,6 +2,16 @@
 package models
 
 // insertion point
+// CheckboxOrchestrator
+type CheckboxOrchestrator struct {
+}
+
+func (orchestrator *CheckboxOrchestrator) OnAfterUpdate(
+	gongsvgStage *StageStruct,
+	stagedCheckbox, backRepoCheckbox *Checkbox) {
+
+	stagedCheckbox.OnAfterUpdate(gongsvgStage, stagedCheckbox, backRepoCheckbox)
+}
 // SliderOrchestrator
 type SliderOrchestrator struct {
 }
@@ -19,6 +29,8 @@ func SetOrchestratorOnAfterUpdate[Type Gongstruct](stage *StageStruct) {
 
 	switch any(ret).(type) {
 	// insertion point
+	case Checkbox:
+		stage.OnAfterCheckboxUpdateCallback = new(CheckboxOrchestrator)
 	case Slider:
 		stage.OnAfterSliderUpdateCallback = new(SliderOrchestrator)
 

@@ -59,20 +59,6 @@ export class PhyllotaxymusicspecificComponent implements OnInit {
   readonly checked = model(false);
   readonly indeterminate = model(false);
 
-  inputMatRadio($event: MatRadioChange) {
-    let event2: Event = new Event('input');
-    this.input(event2)
-  }
-
-  input($event: Event) {
-    let parameter = this.frontRepo!.array_Parameters[0]
-
-    this.parameterService.updateFront(parameter, this.StacksNames.Phylotaxy).subscribe(
-      () => {
-
-      }
-    )
-  }
 
   StacksNames = phyllotaxymusic.StacksNames
   StackName = phyllotaxymusic.StacksNames.Phylotaxy

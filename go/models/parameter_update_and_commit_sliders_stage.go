@@ -267,6 +267,17 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 			),
 		)
 
+		group3.Checkboxes = append(
+			group3.Checkboxes,
+			NewCheckbox(
+				parameter,
+				"Scale",
+				"Minor",
+				"Major",
+				&parameter.IsMinor,
+			),
+		)
+
 	}
 
 	parameter.slidersStage.Commit()
