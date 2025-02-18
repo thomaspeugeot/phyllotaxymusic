@@ -40,8 +40,6 @@ export class FrontRepo { // insertion point sub template
 	map_ID_Slider = new Map<number, Slider>() // map of front instances
 
 
-	public GONG__Index = -1
-
 	// getFrontArray allows for a get function that is robust to refactoring of the named struct name
 	// for instance frontRepo.getArray<Astruct>( Astruct.GONGSTRUCT_NAME), is robust to a refactoring of Astruct identifier
 	// contrary to frontRepo.Astructs_array which is not refactored when Astruct identifier is modified
@@ -353,7 +351,6 @@ export class FrontRepoService {
 				const backRepoData = new BackRepoData(JSON.parse(event.data))
 
 				let frontRepo = new (FrontRepo)
-				frontRepo.GONG__Index = backRepoData.GONG__Index
 
 				// 
 				// First Step: init map of instances

@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	m "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
 )
 
@@ -11,113 +9,245 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 	layout := new(m.Layout).Stage(parameter.slidersStage)
 
-	groupSideLength := new(m.Group).Stage(parameter.slidersStage)
-	groupSideLength.Size = 60
-	layout.Groups = append(layout.Groups, groupSideLength)
+	group1 := new(m.Group).Stage(parameter.slidersStage)
+	group1.Percentage = 25
+	layout.Groups = append(layout.Groups, group1)
 
-	groupSideLength.Sliders = append(
-		groupSideLength.Sliders,
-		parameter.newFloat64Slider(
-			"Side Length",
-			5,
-			200,
-			5,
-			&parameter.SideLength,
-		),
-	)
+	group2 := new(m.Group).Stage(parameter.slidersStage)
+	group2.Percentage = 25
+	layout.Groups = append(layout.Groups, group2)
 
-	groupSideLength.Sliders = append(
-		groupSideLength.Sliders,
-		parameter.newFloat64Slider(
-			"Origin X",
-			-100,
-			600,
-			10,
-			&parameter.OriginX,
-		),
-	)
+	group3 := new(m.Group).Stage(parameter.slidersStage)
+	group3.Percentage = 50
+	layout.Groups = append(layout.Groups, group3)
 
-	groupSideLength.Sliders = append(
-		groupSideLength.Sliders,
-		parameter.newFloat64Slider(
-			"Origin Y",
-			0,
-			3000,
-			50,
-			&parameter.OriginY,
-		),
-	)
+	{
+		group1.Sliders = append(
+			group1.Sliders,
+			parameter.newFloat64Slider(
+				"Side Length",
+				5,
+				200,
+				5,
+				&parameter.SideLength,
+			),
+		)
 
-	groupSideLength.Sliders = append(
-		groupSideLength.Sliders,
-		parameter.newFloat64Slider(
-			"Spiral Initial Radius",
-			0.0,
-			5.0,
-			0.015,
-			&parameter.SpiralRadiusRatio,
-		),
-	)
+		group1.Sliders = append(
+			group1.Sliders,
+			parameter.newFloat64Slider(
+				"Origin X",
+				-100,
+				600,
+				10,
+				&parameter.OriginX,
+			),
+		)
 
-	groupInsideAngle := new(m.Group).Stage(parameter.slidersStage)
-	groupInsideAngle.Size = 60
-	layout.Groups = append(layout.Groups, groupInsideAngle)
+		group1.Sliders = append(
+			group1.Sliders,
+			parameter.newFloat64Slider(
+				"Origin Y",
+				0,
+				3000,
+				50,
+				&parameter.OriginY,
+			),
+		)
+
+		group1.Sliders = append(
+			group1.Sliders,
+			parameter.newFloat64Slider(
+				"Spiral Initial Radius",
+				0.0,
+				5.0,
+				0.015,
+				&parameter.SpiralRadiusRatio,
+			),
+		)
+	}
+
+	{
+
+		group2.Sliders = append(
+			group2.Sliders,
+			parameter.newFloat64Slider(
+				"Inside Angle",
+				60,
+				120,
+				1,
+				&parameter.InsideAngle,
+			),
+		)
+
+		group2.Sliders = append(
+			group2.Sliders,
+			parameter.newFloat64Slider(
+				"Bezier Strength",
+				0,
+				4,
+				0.01,
+				&parameter.BezierControlLengthRatio,
+			),
+		)
+
+		group2.Sliders = append(
+			group2.Sliders,
+			parameter.newIntSlider(
+				"M",
+				1,
+				20,
+				1,
+				&parameter.M,
+			),
+		)
+
+		group2.Sliders = append(
+			group2.Sliders,
+			parameter.newIntSlider(
+				"N",
+				1,
+				20,
+				1,
+				&parameter.N,
+			),
+		)
+
+		group2.Sliders = append(
+			group2.Sliders,
+			parameter.newIntSlider(
+				"Z",
+				1,
+				120,
+				1,
+				&parameter.Z,
+			),
+		)
+
+		group2.Sliders = append(
+			group2.Sliders,
+			parameter.newFloat64Slider(
+				"S Bezier Strength",
+				0,
+				10,
+				0.1,
+				&parameter.SpiralBezierStrength,
+			),
+		)
+
+		group2.Sliders = append(
+			group2.Sliders,
+			parameter.newIntSlider(
+				"Nb Interpol Points",
+				1,
+				50,
+				1,
+				&parameter.NbInterpolationPoints,
+			),
+		)
+
+		group2.Sliders = append(
+			group2.Sliders,
+			parameter.newIntSlider(
+				"Stack Height",
+				1,
+				8,
+				1,
+				&parameter.StackHeight,
+			),
+		)
+	}
+	{
+
+		group3.Sliders = append(
+			group3.Sliders,
+			parameter.newFloat64Slider(
+				"Pitch Height",
+				0,
+				0.1,
+				0.001,
+				&parameter.PitchHeight,
+			),
+		)
+
+		group3.Sliders = append(
+			group3.Sliders,
+			parameter.newIntSlider(
+				"Nb Beats in Theme",
+				1,
+				64,
+				1,
+				&parameter.NbOfBeatsInTheme,
+			),
+		)
+
+		group3.Sliders = append(
+			group3.Sliders,
+			parameter.newFloat64Slider(
+				"BeatsPerSecond",
+				0,
+				20,
+				0.05,
+				&parameter.BeatsPerSecond,
+			),
+		)
+
+		group3.Sliders = append(
+			group3.Sliders,
+			parameter.newFloat64Slider(
+				"1st voice X",
+				-1,
+				1,
+				0.01,
+				&parameter.FirstVoiceShiftX,
+			),
+		)
+
+		group3.Sliders = append(
+			group3.Sliders,
+			parameter.newFloat64Slider(
+				"1st voice Y",
+				-1,
+				4,
+				0.01,
+				&parameter.FirstVoiceShiftY,
+			),
+		)
+
+		group3.Sliders = append(
+			group3.Sliders,
+			parameter.newIntSlider(
+				"2nd voice pitch diff",
+				-12,
+				24,
+				1,
+				&parameter.PitchDifference,
+			),
+		)
+
+		group3.Sliders = append(
+			group3.Sliders,
+			parameter.newFloat64Slider(
+				"Level",
+				0,
+				20,
+				0.1,
+				&parameter.Level,
+			),
+		)
+
+		group3.Sliders = append(
+			group3.Sliders,
+			parameter.newIntSlider(
+				"Actual Beats Shift",
+				0,
+				20,
+				1,
+				&parameter.ActualBeatsTemporalShift,
+			),
+		)
+
+	}
 
 	parameter.slidersStage.Commit()
-}
-
-func (parameter *Parameter) newFloat64Slider(
-	name string, // The label for the slider
-	min float64,
-	max float64,
-	step float64,
-	valueRef *float64,
-) *m.Slider {
-
-	slider := new(m.Slider).Stage(parameter.slidersStage)
-	slider.Name = name
-	slider.IsFloat64 = true
-	slider.MinFloat64 = min
-	slider.MaxFloat64 = max
-	slider.StepFloat64 = step
-	slider.ValueFloat64 = *valueRef
-
-	slider.Proxy = NewSliderProxy(
-		slider,
-		valueRef,
-		parameter,
-	)
-
-	return slider
-}
-
-type SliderProxy struct {
-	slider    *m.Slider
-	Value     *float64
-	parameter *Parameter
-}
-
-func NewSliderProxy(
-	slider *m.Slider,
-	value *float64,
-	parameter *Parameter,
-) (proxy *SliderProxy) {
-	proxy = new(SliderProxy)
-	proxy.slider = slider
-	proxy.Value = value
-	proxy.parameter = parameter
-	return
-}
-
-func (proxy *SliderProxy) Updated() {
-	*proxy.Value = proxy.slider.ValueFloat64
-
-	log.Println(proxy.parameter.SideLength)
-
-	proxy.parameter.UpdatePhyllotaxyStage()
-	proxy.parameter.UpdateAndCommitCursorStage()
-	proxy.parameter.UpdateAndCommitSVGStage()
-	proxy.parameter.UpdateAndCommitToneStage()
-	proxy.parameter.treeProxy.UpdateAndCommitTreeStage()
-	proxy.parameter.CommitPhyllotaxymusicStage()
 }

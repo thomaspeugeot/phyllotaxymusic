@@ -188,8 +188,8 @@ func (groupFormCallback *GroupFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(group_.Name), formDiv)
-		case "Size":
-			FormDivBasicFieldToField(&(group_.Size), formDiv)
+		case "Percentage":
+			FormDivBasicFieldToField(&(group_.Percentage), formDiv)
 		case "Layout:Groups":
 			// we need to retrieve the field owner before the change
 			var pastLayoutOwner *models.Layout

@@ -8,7 +8,7 @@ type Layout struct {
 
 type Group struct {
 	Name       string
-	Size       float64
+	Percentage float64
 	Sliders    []*Slider
 	Checkboxes []*Checkbox
 }

@@ -69,8 +69,8 @@ type GroupDB struct {
 	// Declation for basic field groupDB.Name
 	Name_Data sql.NullString
 
-	// Declation for basic field groupDB.Size
-	Size_Data sql.NullFloat64
+	// Declation for basic field groupDB.Percentage
+	Percentage_Data sql.NullFloat64
 
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -96,7 +96,7 @@ type GroupWOP struct {
 
 	Name string `xlsx:"1"`
 
-	Size float64 `xlsx:"2"`
+	Percentage float64 `xlsx:"2"`
 	// insertion for WOP pointer fields
 }
 
@@ -104,7 +104,7 @@ var Group_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
-	"Size",
+	"Percentage",
 }
 
 type BackRepoGroupStruct struct {
@@ -429,8 +429,8 @@ func (groupDB *GroupDB) CopyBasicFieldsFromGroup(group *models.Group) {
 	groupDB.Name_Data.String = group.Name
 	groupDB.Name_Data.Valid = true
 
-	groupDB.Size_Data.Float64 = group.Size
-	groupDB.Size_Data.Valid = true
+	groupDB.Percentage_Data.Float64 = group.Percentage
+	groupDB.Percentage_Data.Valid = true
 }
 
 // CopyBasicFieldsFromGroup_WOP
@@ -440,8 +440,8 @@ func (groupDB *GroupDB) CopyBasicFieldsFromGroup_WOP(group *models.Group_WOP) {
 	groupDB.Name_Data.String = group.Name
 	groupDB.Name_Data.Valid = true
 
-	groupDB.Size_Data.Float64 = group.Size
-	groupDB.Size_Data.Valid = true
+	groupDB.Percentage_Data.Float64 = group.Percentage
+	groupDB.Percentage_Data.Valid = true
 }
 
 // CopyBasicFieldsFromGroupWOP
@@ -451,22 +451,22 @@ func (groupDB *GroupDB) CopyBasicFieldsFromGroupWOP(group *GroupWOP) {
 	groupDB.Name_Data.String = group.Name
 	groupDB.Name_Data.Valid = true
 
-	groupDB.Size_Data.Float64 = group.Size
-	groupDB.Size_Data.Valid = true
+	groupDB.Percentage_Data.Float64 = group.Percentage
+	groupDB.Percentage_Data.Valid = true
 }
 
 // CopyBasicFieldsToGroup
 func (groupDB *GroupDB) CopyBasicFieldsToGroup(group *models.Group) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	group.Name = groupDB.Name_Data.String
-	group.Size = groupDB.Size_Data.Float64
+	group.Percentage = groupDB.Percentage_Data.Float64
 }
 
 // CopyBasicFieldsToGroup_WOP
 func (groupDB *GroupDB) CopyBasicFieldsToGroup_WOP(group *models.Group_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	group.Name = groupDB.Name_Data.String
-	group.Size = groupDB.Size_Data.Float64
+	group.Percentage = groupDB.Percentage_Data.Float64
 }
 
 // CopyBasicFieldsToGroupWOP
@@ -474,7 +474,7 @@ func (groupDB *GroupDB) CopyBasicFieldsToGroupWOP(group *GroupWOP) {
 	group.ID = int(groupDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	group.Name = groupDB.Name_Data.String
-	group.Size = groupDB.Size_Data.Float64
+	group.Percentage = groupDB.Percentage_Data.Float64
 }
 
 // Backup generates a json file from a slice of all GroupDB instances in the backrepo

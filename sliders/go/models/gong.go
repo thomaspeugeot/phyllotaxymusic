@@ -866,7 +866,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Checkbox:
 		res = []string{"Name", "ValueBool", "LabelForTrue", "LabelForFalse"}
 	case Group:
-		res = []string{"Name", "Size", "Sliders", "Checkboxes"}
+		res = []string{"Name", "Percentage", "Sliders", "Checkboxes"}
 	case Layout:
 		res = []string{"Name", "Groups"}
 	case Slider:
@@ -924,7 +924,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Checkbox:
 		res = []string{"Name", "ValueBool", "LabelForTrue", "LabelForFalse"}
 	case *Group:
-		res = []string{"Name", "Size", "Sliders", "Checkboxes"}
+		res = []string{"Name", "Percentage", "Sliders", "Checkboxes"}
 	case *Layout:
 		res = []string{"Name", "Groups"}
 	case *Slider:
@@ -989,9 +989,9 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Size":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Size)
-			res.valueFloat = inferedInstance.Size
+		case "Percentage":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Percentage)
+			res.valueFloat = inferedInstance.Percentage
 			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Sliders":
 			for idx, __instance__ := range inferedInstance.Sliders {
@@ -1096,9 +1096,9 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Size":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Size)
-			res.valueFloat = inferedInstance.Size
+		case "Percentage":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Percentage)
+			res.valueFloat = inferedInstance.Percentage
 			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Sliders":
 			for idx, __instance__ := range inferedInstance.Sliders {

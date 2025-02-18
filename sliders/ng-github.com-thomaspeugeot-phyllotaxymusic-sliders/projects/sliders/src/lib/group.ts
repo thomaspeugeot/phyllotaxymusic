@@ -20,7 +20,7 @@ export class Group {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
-	Size: number = 0
+	Percentage: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 	Sliders: Array<Slider> = []
@@ -35,7 +35,7 @@ export function CopyGroupToGroupAPI(group: Group, groupAPI: GroupAPI) {
 
 	// insertion point for basic fields copy operations
 	groupAPI.Name = group.Name
-	groupAPI.Size = group.Size
+	groupAPI.Percentage = group.Percentage
 
 	// insertion point for pointer fields encoding
 
@@ -64,7 +64,7 @@ export function CopyGroupAPIToGroup(groupAPI: GroupAPI, group: Group, frontRepo:
 
 	// insertion point for basic fields copy operations
 	group.Name = groupAPI.Name
-	group.Size = groupAPI.Size
+	group.Percentage = groupAPI.Percentage
 
 	// insertion point for pointer fields encoding
 
