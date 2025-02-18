@@ -15,6 +15,7 @@ export class GroupAPI {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	Size: number = 0
 
 	// insertion point for other decls
 

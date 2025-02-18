@@ -1,6 +1,6 @@
 <as-split direction="vertical">
     @for (group of layout?.Groups; track group) {
-        <as-split-area [size]="splitAreaSize">
+        <as-split-area unit="pixel" [size]="group.Size">
             <p>{{group.Name}}</p>
             <mat-grid-list cols="12" [rowHeight]="rowHeight" gutterSize="16px">
             @for (slider of group.Sliders; track slider) {
