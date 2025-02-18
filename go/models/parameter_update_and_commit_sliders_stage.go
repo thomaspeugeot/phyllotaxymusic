@@ -19,9 +19,9 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 		groupSideLength.Sliders,
 		parameter.newFloat64Slider(
 			"Side Length",
-			5,   // Min
-			200, // Max
-			5,   // Step
+			5,
+			200,
+			5,
 			&parameter.SideLength,
 		),
 	)
@@ -30,10 +30,32 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 		groupSideLength.Sliders,
 		parameter.newFloat64Slider(
 			"Origin X",
-			-100, // Min
-			600,  // Max
-			10,   // Step
+			-100,
+			600,
+			10,
 			&parameter.OriginX,
+		),
+	)
+
+	groupSideLength.Sliders = append(
+		groupSideLength.Sliders,
+		parameter.newFloat64Slider(
+			"Origin Y",
+			0,
+			3000,
+			50,
+			&parameter.OriginY,
+		),
+	)
+
+	groupSideLength.Sliders = append(
+		groupSideLength.Sliders,
+		parameter.newFloat64Slider(
+			"Spiral Initial Radius",
+			0.0,
+			5.0,
+			0.015,
+			&parameter.SpiralRadiusRatio,
 		),
 	)
 

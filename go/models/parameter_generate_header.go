@@ -10,24 +10,13 @@ func (*Parameter) generateHeaders(scorePartwise *m.Score_partwise) {
 	scorePartwise.XMLName.Local = "score-partwise"
 	scorePartwise.A_score_partwise.Version = "4.0"
 
-	// timestamp := time.Now().Format("20060102_150405")
-	// scorePartwise.Work =
-	// 	&m.Work{
-
-	// 		Name:        "Phyllotaxy music",
-	// 		Work_number: "",
-	// 		Work_title:  "Phyllotaxy music " + timestamp,
-	// 		Opus: &m.Opus{
-	// 			Name: "",
-	// 		},
-	// 	}
 	{
 		var identification m.Identification
 		scorePartwise.Identification = &identification
 
 		var creator m.Typed_text
 		identification.Creator = append(identification.Creator, &creator)
-		creator.EnclosedText = "phyllotaxy music"
+		creator.EnclosedText = "phyllotaxy growth curve music"
 		creator.Type = "composer"
 
 		var encoding m.Encoding
