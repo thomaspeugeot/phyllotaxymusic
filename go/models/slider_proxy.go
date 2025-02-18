@@ -6,51 +6,66 @@ import (
 	m "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
 )
 
-func (parameter *Parameter) newFloat64Slider(
-	name string, // The label for the slider
-	min float64,
-	max float64,
-	step float64,
-	valueRef *float64,
-) *m.Slider {
+// Define a Number constraint for our generic types
+type Number interface {
+	~int | ~float64
+}
 
+// Generic slider creation function
+func NewSlider[T Number](
+	parameter *Parameter,
+	name string,
+	min T,
+	max T,
+	step T,
+	valueRef *T,
+) *m.Slider {
 	slider := new(m.Slider).Stage(parameter.slidersStage)
 	slider.Name = name
-	slider.IsFloat64 = true
-	slider.MinFloat64 = min
-	slider.MaxFloat64 = max
-	slider.StepFloat64 = step
-	slider.ValueFloat64 = *valueRef
 
-	slider.Proxy = NewSliderFloat64Proxy(
+	// Set appropriate values based on type
+	switch any(min).(type) {
+	case float64:
+		slider.IsFloat64 = true
+		slider.MinFloat64 = any(min).(float64)
+		slider.MaxFloat64 = any(max).(float64)
+		slider.StepFloat64 = any(step).(float64)
+		slider.ValueFloat64 = any(*valueRef).(float64)
+	case int:
+		slider.IsInt = true
+		slider.MinInt = any(min).(int)
+		slider.MaxInt = any(max).(int)
+		slider.StepInt = any(step).(int)
+		slider.ValueInt = any(*valueRef).(int)
+	}
+
+	proxy := NewSliderProxy(
 		slider,
 		valueRef,
 		parameter,
 	)
 
+	slider.Proxy = proxy
+
 	return slider
 }
 
-type SliderFloat64Proxy struct {
+// SliderProxy is a generic proxy for both int and float64
+type SliderProxy[T Number] struct {
 	slider    *m.Slider
-	Value     *float64
+	Value     *T
 	parameter *Parameter
 }
 
-func NewSliderFloat64Proxy(
-	slider *m.Slider,
-	value *float64,
-	parameter *Parameter,
-) (proxy *SliderFloat64Proxy) {
-	proxy = new(SliderFloat64Proxy)
-	proxy.slider = slider
-	proxy.Value = value
-	proxy.parameter = parameter
-	return
-}
-
-func (proxy *SliderFloat64Proxy) Updated() {
-	*proxy.Value = proxy.slider.ValueFloat64
+// Updated handles updating values when the slider changes
+func (proxy *SliderProxy[T]) Updated() {
+	// Update the value based on its type
+	switch value := any(proxy.Value).(type) {
+	case *float64:
+		*value = proxy.slider.ValueFloat64
+	case *int:
+		*value = proxy.slider.ValueInt
+	}
 
 	log.Println(proxy.parameter.SideLength)
 
@@ -62,58 +77,15 @@ func (proxy *SliderFloat64Proxy) Updated() {
 	proxy.parameter.CommitPhyllotaxymusicStage()
 }
 
-func (parameter *Parameter) newIntSlider(
-	name string, // The label for the slider
-	min int,
-	max int,
-	step int,
-	valueRef *int,
-) *m.Slider {
-
-	slider := new(m.Slider).Stage(parameter.slidersStage)
-	slider.Name = name
-	slider.IsInt = true
-	slider.MinInt = min
-	slider.MaxInt = max
-	slider.StepInt = step
-	slider.ValueInt = *valueRef
-
-	slider.Proxy = NewSliderIntProxy(
-		slider,
-		valueRef,
-		parameter,
-	)
-
-	return slider
-}
-
-type SliderIntProxy struct {
-	slider    *m.Slider
-	Value     *int
-	parameter *Parameter
-}
-
-func NewSliderIntProxy(
+// NewSliderProxy creates a new proxy for a slider
+func NewSliderProxy[T Number](
 	slider *m.Slider,
-	value *int,
+	value *T,
 	parameter *Parameter,
-) (proxy *SliderIntProxy) {
-	proxy = new(SliderIntProxy)
+) *SliderProxy[T] {
+	proxy := new(SliderProxy[T])
 	proxy.slider = slider
 	proxy.Value = value
 	proxy.parameter = parameter
-	return
-}
-
-func (proxy *SliderIntProxy) Updated() {
-	*proxy.Value = proxy.slider.ValueInt
-
-	log.Println(proxy.parameter.SideLength)
-
-	proxy.parameter.UpdatePhyllotaxyStage()
-	proxy.parameter.UpdateAndCommitCursorStage()
-	proxy.parameter.UpdateAndCommitSVGStage()
-	proxy.parameter.UpdateAndCommitToneStage()
-	proxy.parameter.treeProxy.UpdateAndCommitTreeStage()
-	proxy.parameter.CommitPhyllotaxymusicStage()
+	return proxy
 }

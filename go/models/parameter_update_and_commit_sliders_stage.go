@@ -24,7 +24,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 	{
 		group1.Sliders = append(
 			group1.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"Side Length",
 				5,
 				200,
@@ -35,7 +36,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group1.Sliders = append(
 			group1.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"Origin X",
 				-100,
 				600,
@@ -46,7 +48,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group1.Sliders = append(
 			group1.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"Origin Y",
 				0,
 				3000,
@@ -57,7 +60,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group1.Sliders = append(
 			group1.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"Spiral Initial Radius",
 				0.0,
 				5.0,
@@ -71,7 +75,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"Inside Angle",
 				60,
 				120,
@@ -82,7 +87,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"Bezier Strength",
 				0,
 				4,
@@ -93,7 +99,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			parameter.newIntSlider(
+			NewSlider(
+				parameter,
 				"M",
 				1,
 				20,
@@ -104,7 +111,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			parameter.newIntSlider(
+			NewSlider(
+				parameter,
 				"N",
 				1,
 				20,
@@ -115,7 +123,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			parameter.newIntSlider(
+			NewSlider(
+				parameter,
 				"Z",
 				1,
 				120,
@@ -126,7 +135,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"S Bezier Strength",
 				0,
 				10,
@@ -137,7 +147,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			parameter.newIntSlider(
+			NewSlider(
+				parameter,
 				"Nb Interpol Points",
 				1,
 				50,
@@ -148,7 +159,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			parameter.newIntSlider(
+			NewSlider(
+				parameter,
 				"Stack Height",
 				1,
 				8,
@@ -161,7 +173,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"Pitch Height",
 				0,
 				0.1,
@@ -172,7 +185,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			parameter.newIntSlider(
+			NewSlider(
+				parameter,
 				"Nb Beats in Theme",
 				1,
 				64,
@@ -183,7 +197,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"BeatsPerSecond",
 				0,
 				20,
@@ -194,7 +209,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"1st voice X",
 				-1,
 				1,
@@ -205,7 +221,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"1st voice Y",
 				-1,
 				4,
@@ -216,7 +233,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			parameter.newIntSlider(
+			NewSlider(
+				parameter,
 				"2nd voice pitch diff",
 				-12,
 				24,
@@ -227,7 +245,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			parameter.newFloat64Slider(
+			NewSlider(
+				parameter,
 				"Level",
 				0,
 				20,
@@ -238,7 +257,8 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			parameter.newIntSlider(
+			NewSlider(
+				parameter,
 				"Actual Beats Shift",
 				0,
 				20,
