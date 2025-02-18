@@ -17,6 +17,9 @@ import (
 
 	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 	cursor_stack "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/stack"
+
+	sliders_models "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
+	sliders_stack "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/stack"
 )
 
 var (
@@ -53,7 +56,8 @@ func main() {
 	gongsvg_stack := gongsvg_stack.NewStack(r, phyllotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
 	gongtree_stack := gongtree_stack.NewStack(r, phyllotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
 	gongtone_stack := gongtone_stack.NewStack(r, phyllotaxymusic_models.GongtoneStackName.ToString(), "", "", "", true, true)
-	cursorStack := cursor_stack.NewStack(r, cursor_models.Cursorstakcname.ToString(), "", "", "", false, false)
+	cursor_stack := cursor_stack.NewStack(r, cursor_models.Cursorstakcname.ToString(), "", "", "", false, false)
+	sliders_stack := sliders_stack.NewStack(r, sliders_models.SliderStackName.ToString(), "", "", "", false, false)
 
 	// get the only diagram
 	parameters := phyllotaxymusic_models.GetGongstructInstancesMap[phyllotaxymusic_models.Parameter](phyllotaxymusic_stack.Stage)
@@ -67,17 +71,19 @@ func main() {
 	parameter.SetGongsvgStage(gongsvg_stack.Stage)
 	parameter.SetPhyllotaxymusicStage(phyllotaxymusic_stack.Stage)
 	parameter.SetGongtoneStage(gongtone_stack.Stage)
-	parameter.SetCursorStage(cursorStack.Stage)
+	parameter.SetCursorStage(cursor_stack.Stage)
+	parameter.SetSlidersStage(sliders_stack.Stage)
 	parameter.SetGongtreeStage(gongtree_stack.Stage)
 	parameter.SetTreeProxy()
 
 	// connect parameter to cursor for start playing notification
-	cursor := new(cursor_models.Cursor).Stage(cursorStack.Stage)
-	cursorStack.Stage.Commit()
+	cursor := new(cursor_models.Cursor).Stage(cursor_stack.Stage)
+	cursor_stack.Stage.Commit()
 	parameter.SetCursor(cursor)
 
 	parameter.UpdatePhyllotaxyStage()
 	parameter.UpdateAndCommitCursorStage()
+	parameter.UpdateAndCommitSlidersStage()
 	parameter.UpdateAndCommitSVGStage()
 	parameter.UpdateAndCommitToneStage()
 	parameter.UpdateAndCommitTreeStage()

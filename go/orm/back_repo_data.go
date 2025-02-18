@@ -55,6 +55,9 @@ type BackRepoData struct {
 	SpiralRhombusGridAPIs []*SpiralRhombusGridAPI
 
 	VerticalAxisAPIs []*VerticalAxisAPI
+
+	// index of the web socket for this stack type (unique among all stack instances)
+	GONG__Index int
 }
 
 func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepoData) {

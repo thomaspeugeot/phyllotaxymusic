@@ -26,11 +26,13 @@ func (from *Checkbox) CopyBasicFields(to *Checkbox) {
 type Group_WOP struct {
 	// insertion point
 	Name string
+	Percentage float64
 }
 
 func (from *Group) CopyBasicFields(to *Group) {
 	// insertion point
 	to.Name = from.Name
+	to.Percentage = from.Percentage
 }
 
 type Layout_WOP struct {

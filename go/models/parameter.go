@@ -4,6 +4,7 @@ import (
 	"log"
 
 	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
+	sliders_models "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
@@ -195,7 +196,8 @@ type Parameter struct {
 	gongsvgStage         *gongsvg_models.StageStruct
 	gongtoneStage        *gongtone_models.StageStruct
 	gongtreeStage        *gongtree_models.StageStruct
-	cursorStage  *cursor_models.StageStruct
+	cursorStage          *cursor_models.StageStruct
+	slidersStage         *sliders_models.StageStruct
 
 	treeProxy *TreeProxy
 }
@@ -206,6 +208,10 @@ func (parameter *Parameter) SetCursor(cursor *cursor_models.Cursor) {
 
 func (parameter *Parameter) SetCursorStage(cursorStage *cursor_models.StageStruct) {
 	parameter.cursorStage = cursorStage
+}
+
+func (parameter *Parameter) SetSlidersStage(slidersStage *sliders_models.StageStruct) {
+	parameter.slidersStage = slidersStage
 }
 
 func (parameter *Parameter) SetGongsvgStage(gongsvgStage *gongsvg_models.StageStruct) {
@@ -263,6 +269,7 @@ func (parameter *Parameter) OnAfterUpdate(phyllotaxyStage *StageStruct, stagedPa
 
 	parameter.UpdatePhyllotaxyStage()
 	parameter.UpdateAndCommitCursorStage()
+	parameter.UpdateAndCommitSlidersStage()
 	parameter.UpdateAndCommitSVGStage()
 	parameter.UpdateAndCommitToneStage()
 	parameter.treeProxy.UpdateAndCommitTreeStage()

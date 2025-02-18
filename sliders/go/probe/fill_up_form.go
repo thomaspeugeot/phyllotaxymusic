@@ -55,6 +55,8 @@ func FillUpForm(
 		// insertion point
 		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("Percentage", instanceWithInferedType.Percentage, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		AssociationSliceToForm("Sliders", instanceWithInferedType, &instanceWithInferedType.Sliders, formGroup, probe)
 		AssociationSliceToForm("Checkboxes", instanceWithInferedType, &instanceWithInferedType.Checkboxes, formGroup, probe)
 		{

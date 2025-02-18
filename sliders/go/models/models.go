@@ -8,6 +8,7 @@ type Layout struct {
 
 type Group struct {
 	Name       string
+	Percentage float64
 	Sliders    []*Slider
 	Checkboxes []*Checkbox
 }
@@ -37,7 +38,10 @@ type SliderProxyInterface interface {
 
 func (slider *Slider) OnAfterUpdate(
 	stage *StageStruct,
-	stagedNode, frontNode *Slider) {
+	stageSlider, frontSlider *Slider) {
+
+	slider.ValueFloat64 = frontSlider.ValueFloat64
+	slider.ValueInt = frontSlider.ValueInt
 
 	if slider.Proxy != nil {
 		slider.Proxy.Updated()
@@ -62,7 +66,9 @@ type CheckboxProxyInterface interface {
 
 func (checkbox *Checkbox) OnAfterUpdate(
 	stage *StageStruct,
-	stagedNode, frontNode *Checkbox) {
+	stageCheckbox, frontCheckbox *Checkbox) {
+
+	checkbox.ValueBool = frontCheckbox.ValueBool
 
 	if checkbox.Proxy != nil {
 		checkbox.Proxy.Updated()
