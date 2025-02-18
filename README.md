@@ -1,9 +1,5 @@
 # Phylotaxy music
 
-![Phylotaxy music](image.png)
-
-ONLY WORKS WITH EDGE (bug !)
-
 ## Compiling & running the application
 
 git, go version => 1.23 and npm version >= 18 are needed
@@ -34,7 +30,7 @@ of music notes, a melodic material.
  A wellknown theme is at the start of Bach's 2nd 
  fugue in C minor.
 
- ![Bach's 2nd fugue in C minor](image-1.png)
+ ![Bach's 2nd fugue in C minor](images/image-1.png)
 
 By turning 
 knobs in the webapp, you generates 
@@ -95,7 +91,7 @@ newer leave cells, you end up drawing
 the "front curve"
 of the plant growth.
 
-![The front curve, in blue, separates leaves](image-2.png)
+![The front curve, in blue, separates leaves](images/image-2.png)
 
 Stephane then compared a new leave cell 
 to the last one.
@@ -116,11 +112,11 @@ and a rotation. Let's demonstrate this.
 Use a grey pen and draw the unfolded the front curve on a piece 
 of paper.
 
-![alt text](image-9.png)
+![alt text](images/image-9.png)
 
 Use a green pen and draw the same curve at the right of the first.
 
-![alt text](image-8.png)
+![alt text](images/image-8.png)
 
 Draw it again
 on a tracing paper with a red pen and put the tracing 
@@ -128,7 +124,7 @@ paper above and
 shift it a bit to the right and 
 a bit to the top.
 
-![alt text](image-10.png)
+![alt text](images/image-10.png)
 
 We did it ! The overlapping 
 is perfect 
@@ -146,17 +142,17 @@ follows the scale of your choice. If you
 choose a C minor scale, the tone differences between
 notes are 1, 1/2, 1, 1, 1/2, 1 and 3/2.
 
-![alt text](image-3.png)
+![alt text](images/image-3.png)
 
 Now, along the front curve, when it intersect the 
 measure lines, 
 draw some notes of your choosing.
 
-![alt text](image-4.png)
+![alt text](images/image-4.png)
 
 You now have created a musical theme.
 
-![alt text](image-5.png)
+![alt text](images/image-5.png)
 
 ### Polyphonic music
 
@@ -171,13 +167,13 @@ shift in time and a shift in pitch
 (a fifth for instance). 
 The whole is harmonious.
 
-![alt text](image-7.png)
+![alt text](images/image-7.png)
 
 ### From phylotaxy to polyphony
 
 TBC
 
-![alt text](image-11.png)
+![alt text](images/image-11.png)
 
 The idea of phylotaxy music is to 
 generate a front curve from botanical 
