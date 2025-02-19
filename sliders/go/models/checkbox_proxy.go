@@ -49,5 +49,5 @@ type CheckboxProxy struct {
 func (proxy *CheckboxProxy) Updated() {
 	*proxy.Value = proxy.checkbox.ValueBool
 
-	proxy.target.UpdateAllStages()
+	proxy.target.OnAfterUpdateSliderElement()
 }

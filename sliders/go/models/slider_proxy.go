@@ -6,7 +6,7 @@ type Number interface {
 }
 
 type Target interface {
-	UpdateAllStages()
+	OnAfterUpdateSliderElement()
 	GetSliderStage() *StageStruct
 }
 
@@ -79,5 +79,5 @@ func (proxy *SliderProxy[T]) Updated() {
 		*value = proxy.slider.ValueInt
 	}
 
-	proxy.target.UpdateAllStages()
+	proxy.target.OnAfterUpdateSliderElement()
 }

@@ -4,7 +4,7 @@ import (
 	m "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
 )
 
-func (parameter *Parameter) UpdateAllStages() {
+func (parameter *Parameter) OnAfterUpdateSliderElement() {
 
 	parameter.UpdatePhyllotaxyStage()
 	parameter.UpdateAndCommitCursorStage()
