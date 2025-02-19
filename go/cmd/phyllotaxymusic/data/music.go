@@ -705,10 +705,10 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000006_6_Spiral_growth.IsExpanded = false
 
 	__ShapeCategory__000007_7_Spiral_Growth_Bezier.Name = `7. Spiral Growth Bezier`
-	__ShapeCategory__000007_7_Spiral_Growth_Bezier.IsExpanded = true
+	__ShapeCategory__000007_7_Spiral_Growth_Bezier.IsExpanded = false
 
 	__ShapeCategory__000008_8_Score_notation.Name = `8. Score notation`
-	__ShapeCategory__000008_8_Score_notation.IsExpanded = true
+	__ShapeCategory__000008_8_Score_notation.IsExpanded = false
 
 	__ShapeCategory__000009_9_Composer.Name = `9. Composer`
 	__ShapeCategory__000009_9_Composer.IsExpanded = true
@@ -774,7 +774,7 @@ func _(stage *models.StageStruct) {
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartX = 218.181434
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndX = 143.100000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartY = -26.497081
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndY = -0.000000
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndY = 0.000000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Color = ``
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.FillOpacity = 0.000000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Stroke = `blue`

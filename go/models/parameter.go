@@ -325,6 +325,19 @@ func (parameter *Parameter) SetGongtreeStage(gongtreeStage *gongtree_models.Stag
 	parameter.gongtreeStage = gongtreeStage
 }
 
+func (parameter *Parameter) GetGongtreeStage() *gongtree_models.StageStruct {
+	return parameter.gongtreeStage
+}
+
+func (parameter *Parameter) OnAfterUpdateNode() {
+	parameter.UpdatePhyllotaxyStage()
+	parameter.UpdateAndCommitCursorStage()
+	parameter.UpdateAndCommitSVGStage()
+	parameter.UpdateAndCommitToneStage()
+	parameter.treeProxy.UpdateAndCommitTreeStage()
+	parameter.CommitPhyllotaxymusicStage()
+}
+
 func (parameter *Parameter) UpdateAndCommitTreeStage() {
 	if parameter.gongtreeStage == nil || parameter.treeProxy == nil {
 		log.Fatalln("UpdateAndCommitTreeStage, missing fields to parameters")

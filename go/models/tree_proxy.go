@@ -77,21 +77,22 @@ func (treeProxy *TreeProxy) UpdateAndCommitTreeStage() {
 		return cmp.Compare(sc1.Name, sc2.Name)
 	})
 
-	for _, shapeCategories := range shapeCategories {
-		shapes := map_ShapeCategory_Shapes[shapeCategories]
+	for _, shapeCategory := range shapeCategories {
+		shapes := map_ShapeCategory_Shapes[shapeCategory]
 		node := new(gongtree_models.Node).Stage(treeProxy.gongtreeStage)
-		node.Name = shapeCategories.GetName()
+		node.Name = shapeCategory.GetName()
 
-		if shapeCategories.IsExpanded {
+		if shapeCategory.IsExpanded {
 			node.IsExpanded = true
 		} else {
 			node.IsExpanded = false
 		}
 
-		node.Impl = &shapeCategoryNodeImpl{
-			shapeCategory:   shapeCategories,
-			phyllotaxyStage: treeProxy.PhyllotaxyStage,
-		}
+		node.Impl = NewNodeProxy(
+			node,
+			&shapeCategory.IsExpanded,
+			parameter,
+		)
 
 		treeProxy.Tree.RootNodes = append(treeProxy.Tree.RootNodes, node)
 		for _, s := range shapes {

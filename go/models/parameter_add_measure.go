@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"log"
 	"slices"
 
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
@@ -93,14 +92,14 @@ func (parameter *Parameter) addMeasure(
 	case 0:
 		// uses the note from shift to the end
 		secondVoiceCircleNotes = firstPart
-		log.Println(measureNb, len(secondVoiceCircleNotes))
+		// log.Println(measureNb, len(secondVoiceCircleNotes))
 	case 1:
 		secondVoiceCircleNotes = slices.Clone(secondPart)
 		secondVoiceCircleNotes = append(secondVoiceCircleNotes, slices.Clone(firstPart)...)
-		log.Println(measureNb, len(secondVoiceCircleNotes))
+		// log.Println(measureNb, len(secondVoiceCircleNotes))
 	case 2:
 		secondVoiceCircleNotes = slices.Clone(secondPart)
-		log.Println(measureNb, len(secondVoiceCircleNotes))
+		// log.Println(measureNb, len(secondVoiceCircleNotes))
 	}
 	for i, circleNote := range secondVoiceCircleNotes {
 
