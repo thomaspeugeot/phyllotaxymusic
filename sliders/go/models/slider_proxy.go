@@ -1,9 +1,5 @@
 package models
 
-import (
-	m "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
-)
-
 // Define a Number constraint for our generic types
 type Number interface {
 	~int | ~float64
@@ -11,7 +7,7 @@ type Number interface {
 
 type Target interface {
 	UpdateAllStages()
-	GetSliderStage() *m.StageStruct
+	GetSliderStage() *StageStruct
 }
 
 // Generic slider creation function
@@ -22,8 +18,8 @@ func NewSlider[T Number](
 	max T,
 	step T,
 	valueRef *T,
-) *m.Slider {
-	slider := new(m.Slider).Stage(target.GetSliderStage())
+) *Slider {
+	slider := new(Slider).Stage(target.GetSliderStage())
 	slider.Name = name
 
 	// Set appropriate values based on type
@@ -55,7 +51,7 @@ func NewSlider[T Number](
 
 // NewSliderProxy creates a new proxy for a slider
 func NewSliderProxy[T Number](
-	slider *m.Slider,
+	slider *Slider,
 	value *T,
 	target Target,
 ) *SliderProxy[T] {
@@ -68,7 +64,7 @@ func NewSliderProxy[T Number](
 
 // SliderProxy is a generic proxy for both int and float64
 type SliderProxy[T Number] struct {
-	slider *m.Slider
+	slider *Slider
 	Value  *T
 	target Target
 }

@@ -24,7 +24,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 	{
 		group1.Sliders = append(
 			group1.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Side Length",
 				5,
@@ -36,7 +36,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group1.Sliders = append(
 			group1.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Origin X",
 				-100,
@@ -48,7 +48,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group1.Sliders = append(
 			group1.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Origin Y",
 				0,
@@ -60,7 +60,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group1.Sliders = append(
 			group1.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Spiral Initial Radius",
 				0.0,
@@ -75,7 +75,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Inside Angle",
 				60,
@@ -87,7 +87,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Bezier Strength",
 				0,
@@ -99,7 +99,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"M",
 				1,
@@ -111,7 +111,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"N",
 				1,
@@ -123,7 +123,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Z",
 				1,
@@ -135,7 +135,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"S Bezier Strength",
 				0,
@@ -147,7 +147,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Nb Interpol Points",
 				1,
@@ -159,7 +159,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group2.Sliders = append(
 			group2.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Stack Height",
 				1,
@@ -173,7 +173,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Pitch Height",
 				0,
@@ -185,7 +185,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Nb Beats in Theme",
 				1,
@@ -197,7 +197,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"BeatsPerSecond",
 				0,
@@ -209,7 +209,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"1st voice X",
 				-1,
@@ -221,7 +221,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"1st voice Y",
 				-1,
@@ -233,7 +233,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"2nd voice pitch diff",
 				-12,
@@ -245,7 +245,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Level",
 				0,
@@ -257,7 +257,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Sliders = append(
 			group3.Sliders,
-			NewSlider(
+			m.NewSlider(
 				parameter,
 				"Actual Beats Shift",
 				0,
@@ -269,7 +269,7 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 		group3.Checkboxes = append(
 			group3.Checkboxes,
-			NewCheckbox(
+			m.NewCheckbox(
 				parameter,
 				"Scale",
 				"Minor",

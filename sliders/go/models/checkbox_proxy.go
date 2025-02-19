@@ -1,9 +1,5 @@
 package models
 
-import (
-	m "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
-)
-
 // Generic checkbox creation function
 func NewCheckbox(
 	target Target,
@@ -11,8 +7,8 @@ func NewCheckbox(
 	labelForTrue string,
 	labelForFalse string,
 	valueRef *bool,
-) *m.Checkbox {
-	checkbox := new(m.Checkbox).Stage(target.GetSliderStage())
+) *Checkbox {
+	checkbox := new(Checkbox).Stage(target.GetSliderStage())
 	checkbox.Name = name
 	checkbox.LabelForTrue = labelForTrue
 	checkbox.LabelForFalse = labelForFalse
@@ -31,7 +27,7 @@ func NewCheckbox(
 
 // NewCheckboxProxy creates a new proxy for a checkbox
 func NewCheckboxProxy(
-	checkbox *m.Checkbox,
+	checkbox *Checkbox,
 	value *bool,
 	target Target,
 ) *CheckboxProxy {
@@ -44,7 +40,7 @@ func NewCheckboxProxy(
 
 // CheckboxProxy is a generic proxy for both int and float64
 type CheckboxProxy struct {
-	checkbox *m.Checkbox
+	checkbox *Checkbox
 	Value    *bool
 	target   Target
 }
