@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	m "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
 )
 
@@ -11,16 +9,21 @@ type Number interface {
 	~int | ~float64
 }
 
+type Target interface {
+	UpdateAllStages()
+	GetSliderStage() *m.StageStruct
+}
+
 // Generic slider creation function
 func NewSlider[T Number](
-	parameter *Parameter,
+	target Target,
 	name string,
 	min T,
 	max T,
 	step T,
 	valueRef *T,
 ) *m.Slider {
-	slider := new(m.Slider).Stage(parameter.slidersStage)
+	slider := new(m.Slider).Stage(target.GetSliderStage())
 	slider.Name = name
 
 	// Set appropriate values based on type
@@ -42,7 +45,7 @@ func NewSlider[T Number](
 	proxy := NewSliderProxy(
 		slider,
 		valueRef,
-		parameter,
+		target,
 	)
 
 	slider.Proxy = proxy
@@ -50,11 +53,24 @@ func NewSlider[T Number](
 	return slider
 }
 
+// NewSliderProxy creates a new proxy for a slider
+func NewSliderProxy[T Number](
+	slider *m.Slider,
+	value *T,
+	target Target,
+) *SliderProxy[T] {
+	proxy := new(SliderProxy[T])
+	proxy.slider = slider
+	proxy.Value = value
+	proxy.target = target
+	return proxy
+}
+
 // SliderProxy is a generic proxy for both int and float64
 type SliderProxy[T Number] struct {
-	slider    *m.Slider
-	Value     *T
-	parameter *Parameter
+	slider *m.Slider
+	Value  *T
+	target Target
 }
 
 // Updated handles updating values when the slider changes
@@ -67,25 +83,5 @@ func (proxy *SliderProxy[T]) Updated() {
 		*value = proxy.slider.ValueInt
 	}
 
-	log.Println(proxy.parameter.SideLength)
-
-	proxy.parameter.UpdatePhyllotaxyStage()
-	proxy.parameter.UpdateAndCommitCursorStage()
-	proxy.parameter.UpdateAndCommitSVGStage()
-	proxy.parameter.UpdateAndCommitToneStage()
-	proxy.parameter.treeProxy.UpdateAndCommitTreeStage()
-	proxy.parameter.CommitPhyllotaxymusicStage()
-}
-
-// NewSliderProxy creates a new proxy for a slider
-func NewSliderProxy[T Number](
-	slider *m.Slider,
-	value *T,
-	parameter *Parameter,
-) *SliderProxy[T] {
-	proxy := new(SliderProxy[T])
-	proxy.slider = slider
-	proxy.Value = value
-	proxy.parameter = parameter
-	return proxy
+	proxy.target.UpdateAllStages()
 }
