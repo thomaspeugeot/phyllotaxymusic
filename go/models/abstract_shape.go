@@ -20,6 +20,10 @@ func (abstractShape *Shape) GetIsDisplayed() bool {
 	return abstractShape.IsDisplayed
 }
 
+func (abstractShape *Shape) GetIsDisplayedPointer() *bool {
+	return &abstractShape.IsDisplayed
+}
+
 func (abstractShape *Shape) GetShapeCategory() *ShapeCategory {
 	return abstractShape.ShapeCategory
 }

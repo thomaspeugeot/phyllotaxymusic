@@ -91,6 +91,7 @@ func (treeProxy *TreeProxy) UpdateAndCommitTreeStage() {
 		node.Impl = NewNodeProxy(
 			node,
 			&shapeCategory.IsExpanded,
+			nil,
 			parameter,
 		)
 
@@ -141,7 +142,12 @@ func (treeProxy *TreeProxy) addShapeNode(
 	node.HasCheckboxButton = true
 	node.IsChecked = isChecked
 
-	shape.SetCallbackOn(node, parameter)
+	// shape.SetCallbackOn(node, parameter)
+
+	node.Impl = NewNodeProxy(node,
+		nil,
+		shape.GetIsDisplayedPointer(),
+		parameter)
 
 	if shapeCategoryNode != nil {
 		shapeCategoryNode.Children = append(shapeCategoryNode.Children, node)

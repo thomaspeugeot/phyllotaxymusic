@@ -15,6 +15,7 @@ type ShapeInterface interface {
 
 	GetName() string
 	GetIsDisplayed() bool
+	GetIsDisplayedPointer() *bool
 	GetShapeCategory() *ShapeCategory
 	Draw(gongsvgStage *gongsvg_models.StageStruct,
 		layer *gongsvg_models.Layer,

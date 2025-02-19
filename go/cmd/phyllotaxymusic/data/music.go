@@ -346,7 +346,7 @@ func _(stage *models.StageStruct) {
 	__Bezier__000005_Growth_Curve_Seed.Transform = ``
 
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
-	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
+	__BezierGrid__000000_2nb_Voice.IsDisplayed = false
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
 	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
@@ -594,7 +594,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbBeatLines = 300
 	__Parameter__000000_Reference.NbOfBeatsInTheme = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.060000
-	__Parameter__000000_Reference.FirstVoiceShiftY = 0.610000
+	__Parameter__000000_Reference.FirstVoiceShiftY = 1.370000
 	__Parameter__000000_Reference.PitchDifference = 12
 	__Parameter__000000_Reference.BeatsPerSecond = 4.000000
 	__Parameter__000000_Reference.Level = 2.200000
