@@ -4,9 +4,13 @@ package models
 func NewButton(
 	target Target,
 	name string,
+	icon string,
+	label string,
 ) *Button {
-	button := new(Button).Stage(target.GetSliderStage())
+	button := new(Button).Stage(target.GetButtonsStage())
 	button.Name = name
+	button.Icon = icon
+	button.Label = label
 
 	proxy := NewButtonProxy(
 		button,
@@ -39,5 +43,5 @@ type ButtonProxy struct {
 // Updated handles updating values when the button changes
 func (proxy *ButtonProxy) Updated() {
 
-	proxy.target.OnAfterUpdateSliderElement()
+	proxy.target.OnAfterUpdateButton()
 }

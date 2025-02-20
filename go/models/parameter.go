@@ -202,6 +202,17 @@ type Parameter struct {
 	treeProxy *TreeProxy
 }
 
+// GetButtonsStage implements models.Target.
+func (parameter *Parameter) GetButtonsStage() *buttons_models.StageStruct {
+	return parameter.buttonsStage
+}
+
+// OnAfterUpdateButton implements models.Target.
+func (parameter *Parameter) OnAfterUpdateButton() {
+	parameter.UpdatePhyllotaxyStage()
+	parameter.GenerateMusicXMLFile()
+}
+
 func (parameter *Parameter) SetCursor(cursor *cursor_models.Cursor) {
 	parameter.cursor = cursor
 }

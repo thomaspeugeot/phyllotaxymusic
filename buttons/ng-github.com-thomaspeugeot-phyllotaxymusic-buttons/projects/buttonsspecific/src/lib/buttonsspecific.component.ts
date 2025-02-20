@@ -33,15 +33,13 @@ import { MatIconModule } from '@angular/material/icon'
   styleUrls: ['./buttonsspecific.component.css'],
 })
 export class ButtonsspecificComponent {
-onClick() {
-throw new Error('Method not implemented.');
-}
+
 
   StacksNames = buttons.StacksNames;
   public frontRepo?: buttons.FrontRepo;
   splitAreaSize = 0
 
-  layout : buttons.Layout | undefined
+  layout: buttons.Layout | undefined
 
   constructor(
     private frontRepoService: buttons.FrontRepoService,
@@ -70,6 +68,14 @@ throw new Error('Method not implemented.');
         this.splitAreaSize = 100.0 / this.frontRepo.array_Groups.length
       }
     }
+    )
+  }
+
+  onClick(button: buttons.Button) {
+    this.buttonService.updateFront(button, this.StacksNames.ButtonsStackName).subscribe(
+      () => {
+        console.log("checkbox updated")
+      }
     )
   }
 }

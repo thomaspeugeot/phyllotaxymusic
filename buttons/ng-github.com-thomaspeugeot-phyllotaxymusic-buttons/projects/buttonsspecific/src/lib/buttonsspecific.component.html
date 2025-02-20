@@ -5,7 +5,7 @@
           @for (button of group.Buttons; track button) {
             <button
             color="primary"
-            (click)="onClick()"
+            (click)="onClick(button)"
             >
             <mat-icon>{{button.Icon}}</mat-icon>{{button.Label}}
     </button>
