@@ -13,17 +13,23 @@ type Target interface {
 func NewNode(
 	target Target,
 	name string,
-	isExpanderPointer *bool,
+	isExpandedPointer *bool,
+	isCheckedPointer *bool,
 ) *tree.Node {
 	node := new(tree.Node).Stage(target.GetGongtreeStage())
 	node.Name = name
-	if isExpanderPointer != nil {
-		node.IsExpanded = *isExpanderPointer
+
+	if isExpandedPointer != nil {
+		node.IsExpanded = *isExpandedPointer
+	}
+	if isCheckedPointer != nil {
+		node.IsChecked = *isCheckedPointer
 	}
 
 	proxy := NewNodeProxy(
 		node,
-		isExpanderPointer,
+		isExpandedPointer,
+		isCheckedPointer,
 		target,
 	)
 
@@ -36,11 +42,13 @@ func NewNode(
 func NewNodeProxy(
 	node *tree.Node,
 	isExpandedPointer *bool,
+	isCheckedPointer *bool,
 	target Target,
 ) *NodeProxy {
 	proxy := new(NodeProxy)
 	proxy.node = node
 	proxy.isExpandedPointer = isExpandedPointer
+	proxy.isCheckedPointer = isCheckedPointer
 	proxy.target = target
 	return proxy
 }
@@ -49,6 +57,7 @@ func NewNodeProxy(
 type NodeProxy struct {
 	node              *tree.Node
 	isExpandedPointer *bool
+	isCheckedPointer  *bool
 	target            Target
 }
 
@@ -57,6 +66,9 @@ func (proxy *NodeProxy) OnAfterUpdate(treeStage *tree.StageStruct, stageNode, fr
 
 	if proxy.isExpandedPointer != nil {
 		*proxy.isExpandedPointer = frontNode.IsExpanded
+	}
+	if proxy.isCheckedPointer != nil {
+		*proxy.isCheckedPointer = frontNode.IsChecked
 	}
 	proxy.target.OnAfterUpdateNode()
 }
