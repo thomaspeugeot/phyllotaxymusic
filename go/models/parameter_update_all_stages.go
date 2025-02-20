@@ -6,9 +6,9 @@ import (
 
 func (parameter *Parameter) OnAfterUpdateSliderElement() {
 
-	parameter.UpdateAllStages()
+	parameter.UpdateAllStagesButSliders()
 }
 
 func (parameter *Parameter) GetSliderStage() *m.StageStruct {
-	return parameter.slidersStage
+	return parameter.slidersStage	
 }

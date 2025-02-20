@@ -302,6 +302,18 @@ func (parameter *Parameter) UpdateAllStages() {
 	parameter.UpdateAndCommitSVGStage()
 	parameter.UpdateAndCommitToneStage()
 	parameter.UpdateAndCommitTreeStage()
+	parameter.UpdateAndCommitSlidersStage()
+	parameter.UpdateAndCommitButtonsStage()
+	parameter.CommitPhyllotaxymusicStage()
+}
+
+func (parameter *Parameter) UpdateAllStagesButSliders() {
+	parameter.UpdatePhyllotaxyStage()
+	parameter.UpdateAndCommitCursorStage()
+	parameter.UpdateAndCommitSVGStage()
+	parameter.UpdateAndCommitToneStage()
+	parameter.UpdateAndCommitTreeStage()
+	parameter.UpdateAndCommitButtonsStage()
 	parameter.CommitPhyllotaxymusicStage()
 }
 
