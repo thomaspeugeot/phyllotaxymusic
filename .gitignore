@@ -7,3 +7,4 @@ go/cmd/phyllotaxymusic/wasmworkbench.wasm
 go/cmd/phyllotaxymusic/musicxml/export*
 
 sliders/go/cmd/sliders/sliders*
+buttons/go/cmd/buttons/buttons*

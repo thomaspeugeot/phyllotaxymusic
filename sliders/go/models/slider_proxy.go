@@ -5,11 +5,6 @@ type Number interface {
 	~int | ~float64
 }
 
-type Target interface {
-	OnAfterUpdateSliderElement()
-	GetSliderStage() *StageStruct
-}
-
 // Generic slider creation function
 func NewSlider[T Number](
 	target Target,
