@@ -19,6 +19,8 @@ import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/go
 import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtonespecific/src/lib/gongtone/gongtone.component'
 import { CursorspecificComponent } from '../../../../../cursor/ng-github.com-thomaspeugeot-phyllotaxymusic-cursor/projects/cursorspecific/src/public-api'
 import { SlidersspecificComponent } from '../../../../../sliders/ng-github.com-thomaspeugeot-phyllotaxymusic-sliders/projects/slidersspecific/src/public-api'
+import { ButtonsspecificComponent } from '../../../../../buttons/ng-github.com-thomaspeugeot-phyllotaxymusic-buttons/projects/buttonsspecific/src/public-api'
+
 
 
 import { CommonModule } from '@angular/common';
@@ -46,7 +48,8 @@ import { Observable } from 'rxjs';
     TreeComponent,
     GongtoneComponent,
     CursorspecificComponent,
-    SlidersspecificComponent
+    SlidersspecificComponent,
+    ButtonsspecificComponent
   ],
   templateUrl: './phyllotaxymusicspecific.component.html',
   styleUrls: ['./phyllotaxymusicspecific.component.css'],
