@@ -136,9 +136,6 @@ func (treeProxy *TreeProxy) addShapeNode(
 	node := new(gongtree_models.Node).Stage(treeProxy.gongtreeStage)
 	node.Name = name
 
-	node.IsNodeClickable = true
-	node.IsCheckboxDisabled = false
-
 	node.HasCheckboxButton = true
 	node.IsChecked = isChecked
 
