@@ -6,12 +6,7 @@ import (
 
 func (parameter *Parameter) OnAfterUpdateSliderElement() {
 
-	parameter.UpdatePhyllotaxyStage()
-	parameter.UpdateAndCommitCursorStage()
-	parameter.UpdateAndCommitSVGStage()
-	parameter.UpdateAndCommitToneStage()
-	parameter.treeProxy.UpdateAndCommitTreeStage()
-	parameter.CommitPhyllotaxymusicStage()
+	parameter.UpdateAllStages()
 }
 
 func (parameter *Parameter) GetSliderStage() *m.StageStruct {

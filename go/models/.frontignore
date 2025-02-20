@@ -1,2 +1,3 @@
-
+*.go
+!export_to_music.go
 

@@ -4,13 +4,6 @@ import (
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 )
 
-func (parameter *Parameter) GenerateSvgShape(layer *gongsvg_models.Layer, shape ShapeInterface) {
-
-	if shape.GetIsDisplayed() {
-		shape.Draw(parameter.gongsvgStage, layer, parameter)
-	}
-}
-
 func (parameter *Parameter) UpdateAndCommitSVGStage() {
 
 	parameter.gongsvgStage.Reset()
@@ -21,7 +14,9 @@ func (parameter *Parameter) UpdateAndCommitSVGStage() {
 	svg.Layers = append(svg.Layers, layer)
 
 	for _, shape := range parameter.Shapes {
-		parameter.GenerateSvgShape(layer, shape)
+		if shape.GetIsDisplayed() {
+			shape.Draw(parameter.gongsvgStage, layer, parameter)
+		}
 	}
 
 	parameter.gongsvgStage.Commit()

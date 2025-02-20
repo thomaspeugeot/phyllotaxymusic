@@ -81,12 +81,7 @@ func main() {
 	cursor_stack.Stage.Commit()
 	parameter.SetCursor(cursor)
 
-	parameter.UpdatePhyllotaxyStage()
-	parameter.UpdateAndCommitCursorStage()
-	parameter.UpdateAndCommitSlidersStage()
-	parameter.UpdateAndCommitSVGStage()
-	parameter.UpdateAndCommitToneStage()
-	parameter.UpdateAndCommitTreeStage()
+	parameter.UpdateAllStages()
 
 	// generates the music xml stage (before the commit because
 	// the commit will remove the FirstVoice link to the CircleGrid)

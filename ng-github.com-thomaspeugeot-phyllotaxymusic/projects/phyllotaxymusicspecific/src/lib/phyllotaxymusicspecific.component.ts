@@ -72,8 +72,6 @@ export class PhyllotaxymusicspecificComponent implements OnInit {
 
   constructor(
     private frontRepoService: phyllotaxymusic.FrontRepoService,
-
-    private parameterService: phyllotaxymusic.ParameterService,
     private exportToXmlService: phyllotaxymusic.ExportToMusicxmlService,
   ) {
 
@@ -110,30 +108,6 @@ export class PhyllotaxymusicspecificComponent implements OnInit {
 
     const offsetIndex = bruteOffsetIndex % nbBeatsInTheme
     return (encoding & (1 << offsetIndex)) !== 0;
-  }
-
-
-
-  // Toggle the state of a specific note
-  toggleNote(rank: number): void {
-    const parameter = this.frontRepo!.array_Parameters[0];
-    if (this.isNotePlayed(parameter.ThemeBinaryEncoding, rank)) {
-      // Turn off the note
-      parameter.ThemeBinaryEncoding &= ~(1 << rank);
-      this.parameterService.updateFront(parameter, this.StacksNames.Phylotaxy).subscribe(
-        () => {
-
-        }
-      )
-    } else {
-      // Turn on the note
-      parameter.ThemeBinaryEncoding |= (1 << rank);
-      this.parameterService.updateFront(parameter, this.StacksNames.Phylotaxy).subscribe(
-        () => {
-
-        }
-      )
-    }
   }
 
   exportToMusicXML() {

@@ -32,8 +32,6 @@ type Parameter struct {
 
 	SideLength float64
 
-	Impl ParameterImplInterface
-
 	//
 	// Shapes
 	//
@@ -242,47 +240,6 @@ func (parameter *Parameter) SetTreeProxy() {
 	parameter.treeProxy = treeProxy
 }
 
-func (parameter *Parameter) OnAfterUpdate(phyllotaxyStage *StageStruct, stagedParameter, backRepoParameter *Parameter) {
-
-	// Check if `parameter` and `stagedParameter` point to the same memory
-	if parameter == stagedParameter {
-		log.Println("Main hypothesis is OK: the parameter in OnUpdate is the stage parameter")
-	}
-
-	newPhyllotaxyStageCommit :=
-		stagedParameter.NbOfBeatsInTheme != backRepoParameter.NbOfBeatsInTheme ||
-			stagedParameter.N != backRepoParameter.N ||
-			stagedParameter.M != backRepoParameter.M ||
-			stagedParameter.SpiralBezierStrength != backRepoParameter.SpiralBezierStrength ||
-			stagedParameter.NbInterpolationPoints != backRepoParameter.NbInterpolationPoints ||
-			stagedParameter.InsideAngle != backRepoParameter.InsideAngle ||
-			stagedParameter.BezierControlLengthRatio != backRepoParameter.BezierControlLengthRatio
-
-	phyllotaxyStage.Checkout()
-	parameters := GetGongstructInstancesMap[Parameter](phyllotaxyStage)
-	parameter_ := (*parameters)["Reference"]
-	if parameter_ == parameter {
-		log.Println("Main hypothesis is OK: The checkout only copy the values")
-	}
-
-	log.Println("Diagram, OnAfterUpdate", parameter.Name)
-
-	parameter.UpdatePhyllotaxyStage()
-	parameter.UpdateAndCommitCursorStage()
-	parameter.UpdateAndCommitSlidersStage()
-	parameter.UpdateAndCommitSVGStage()
-	parameter.UpdateAndCommitToneStage()
-	parameter.treeProxy.UpdateAndCommitTreeStage()
-
-	if newPhyllotaxyStageCommit {
-		parameter.CommitPhyllotaxymusicStage()
-	}
-}
-
-type ParameterImplInterface interface {
-	OnUpdated(updatedDiagram *Parameter)
-}
-
 // IsNotePlayed checks whether the note at the specified rank is played.
 //
 // The notes are represented using a 64-bit integer where each bit corresponds
@@ -330,11 +287,15 @@ func (parameter *Parameter) GetGongtreeStage() *gongtree_models.StageStruct {
 }
 
 func (parameter *Parameter) OnAfterUpdateNode() {
+	parameter.UpdateAllStages()
+}
+
+func (parameter *Parameter) UpdateAllStages() {
 	parameter.UpdatePhyllotaxyStage()
 	parameter.UpdateAndCommitCursorStage()
 	parameter.UpdateAndCommitSVGStage()
 	parameter.UpdateAndCommitToneStage()
-	parameter.treeProxy.UpdateAndCommitTreeStage()
+	parameter.UpdateAndCommitTreeStage()
 	parameter.CommitPhyllotaxymusicStage()
 }
 
