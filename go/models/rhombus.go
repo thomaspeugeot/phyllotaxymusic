@@ -90,7 +90,7 @@ func (r *Rhombus) getCoordinates() ([4]float64, [4]float64) {
 func (r Rhombus) Copy() Rhombus {
 	return Rhombus{
 		Name:         r.Name,
-		Shape:        r.Shape, // Assuming AbstractShape is a copyable struct
+		Shape:        r.Shape, // Assuming is a copyable struct
 		CenterX:      r.CenterX,
 		CenterY:      r.CenterY,
 		SideLength:   r.SideLength,

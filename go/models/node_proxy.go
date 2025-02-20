@@ -23,7 +23,7 @@ func NewNode(
 		node.IsExpanded = *isExpandedPointer
 	}
 	if isCheckedPointer != nil {
-		node.IsExpanded = *isCheckedPointer
+		node.IsChecked = *isCheckedPointer
 	}
 
 	proxy := NewNodeProxy(
@@ -68,7 +68,7 @@ func (proxy *NodeProxy) OnAfterUpdate(treeStage *tree.StageStruct, stageNode, fr
 		*proxy.isExpandedPointer = frontNode.IsExpanded
 	}
 	if proxy.isCheckedPointer != nil {
-		*proxy.isCheckedPointer = frontNode.IsExpanded
+		*proxy.isCheckedPointer = frontNode.IsChecked
 	}
 	proxy.target.OnAfterUpdateNode()
 }
