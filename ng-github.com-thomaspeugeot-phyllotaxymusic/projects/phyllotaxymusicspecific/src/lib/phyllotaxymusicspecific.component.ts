@@ -75,65 +75,11 @@ export class PhyllotaxymusicspecificComponent implements OnInit {
 
   constructor(
     private frontRepoService: phyllotaxymusic.FrontRepoService,
-    private exportToXmlService: phyllotaxymusic.ExportToMusicxmlService,
   ) {
 
   }
 
   ngOnInit(): void {
-
-    console.log("ngOnInit")
-
-    this.frontRepoService.connectToWebSocket(this.StacksNames.Phylotaxy).subscribe(
-      gongtablesFrontRepo => {
-        this.frontRepo = gongtablesFrontRepo
-      }
-    )
-  }
-
-  formatLabel(value: number): string {
-    if (value >= 1000) {
-      return Math.round(value / 1000) + 'k';
-    }
-
-    return `${value}`;
-  }
-
-  // Check if a specific note is played
-  isNotePlayed(encoding: number, rank: number): boolean {
-    return (encoding & (1 << rank)) !== 0;
-  }
-
-  // Check if a specific note is played
-  isNotePlayedWithOffset(encoding: number, rank: number): boolean {
-    const nbBeatsInTheme = this.frontRepo!.array_Parameters[0].NbOfBeatsInTheme
-    const bruteOffsetIndex = rank - this.frontRepo!.array_Parameters[0].ActualBeatsTemporalShift + nbBeatsInTheme
-
-    const offsetIndex = bruteOffsetIndex % nbBeatsInTheme
-    return (encoding & (1 << offsetIndex)) !== 0;
-  }
-
-  exportToMusicXML() {
-
-    console.assert(this.frontRepo != undefined)
-    if (this.frontRepo == undefined) {
-      return
-    }
-
-
-    let array = this.frontRepo.getFrontArray<phyllotaxymusic.ExportToMusicxml>(phyllotaxymusic.ExportToMusicxml.GONGSTRUCT_NAME);
-
-    console.assert(array.length == 1)
-    if (array.length != 1) {
-      return
-    }
-
-    let exportToMusicXML = array[0]
-    this.exportToXmlService.updateFront(exportToMusicXML, this.StacksNames.Phylotaxy).subscribe(
-      () => {
-        console.log("Export to music xml requested")
-      }
-    )
 
   }
 }
