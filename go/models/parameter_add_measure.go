@@ -49,6 +49,10 @@ func (parameter *Parameter) addMeasure(
 		}
 	}
 
+	if !parameter.SecondVoiceNotes.IsDisplayed {
+		return
+	}
+
 	// backup is used for separating voice 1 and 2
 	var group_music_data m.Group_music_data
 	measure.Group_music_data = append(measure.Group_music_data, &group_music_data)

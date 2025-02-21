@@ -6,10 +6,11 @@ import (
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
 
-func generateNoteType(duration int) (v m.Enum_Note_type_value, dot *m.Empty_placement, err error) {
+func generateNoteType(duration int) (v m.Enum_Note_type_value, dot *m.Empty_placement, remainder int, err error) {
 
-	pow2, remainder := highestPowerOf2LE(duration)
-	switch pow2 {
+	var powerOfTwo int
+	powerOfTwo, remainder = highestPowerTwoOfLessOrEqualToDuration(duration)
+	switch powerOfTwo {
 	case 1:
 		v = m.Enum_Note_type_value_16th
 	case 2:
@@ -29,20 +30,21 @@ func generateNoteType(duration int) (v m.Enum_Note_type_value, dot *m.Empty_plac
 	default:
 	}
 
-	if remainder == pow2/2 && remainder != 0 {
+	if remainder == powerOfTwo/2 && remainder != 0 {
 		dot = new(m.Empty_placement)
+		remainder = 0
 	}
 
-	if remainder+pow2 < duration {
+	if remainder > 0 {
 		log.Println("more complex stuff")
 	}
 
 	return
 }
 
-// highestPowerOf2LE returns the greatest power of 2 <= n.
+// highestPowerTwoOfLessOrEqualToDuration returns the greatest power of 2 <= n.
 // If n < 1, returns 0.
-func highestPowerOf2LE(n int) (powOf2 int, remainder int) {
+func highestPowerTwoOfLessOrEqualToDuration(n int) (powOf2 int, remainder int) {
 	if n < 1 {
 		return 0, 0
 	}

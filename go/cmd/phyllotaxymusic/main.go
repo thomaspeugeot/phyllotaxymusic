@@ -87,6 +87,11 @@ func main() {
 	parameter.SetCursor(cursor)
 
 	parameter.UpdateAllStages()
+
+	if *genmusicxml {
+		parameter.UpdatePhyllotaxyStage()
+		parameter.GenerateMusicXMLFile()
+	}
 	parameter.CommitPhyllotaxymusicStage()
 
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))

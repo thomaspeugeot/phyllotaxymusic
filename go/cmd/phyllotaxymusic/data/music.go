@@ -346,7 +346,7 @@ func _(stage *models.StageStruct) {
 	__Bezier__000005_Growth_Curve_Seed.Transform = ``
 
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
-	__BezierGrid__000000_2nb_Voice.IsDisplayed = false
+	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
 	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
@@ -545,7 +545,7 @@ func _(stage *models.StageStruct) {
 	__FrontCurveStack__000000_Front_Curve_Stack.Transform = ``
 
 	__HorizontalAxis__000000_Horizontal_Axis.Name = `Horizontal Axis`
-	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = false
+	__HorizontalAxis__000000_Horizontal_Axis.IsDisplayed = true
 	__HorizontalAxis__000000_Horizontal_Axis.AxisHandleBorderLength = 0.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Axis_Length = 600.000000
 	__HorizontalAxis__000000_Horizontal_Axis.Color = ``
@@ -596,10 +596,10 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.060000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 1.370000
 	__Parameter__000000_Reference.PitchDifference = 12
-	__Parameter__000000_Reference.BeatsPerSecond = 9.250000
+	__Parameter__000000_Reference.BeatsPerSecond = 10.000000
 	__Parameter__000000_Reference.Level = 11.100000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 4100
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 4101
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000
