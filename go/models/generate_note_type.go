@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
 
@@ -33,10 +31,6 @@ func generateNoteType(duration int) (v m.Enum_Note_type_value, dot *m.Empty_plac
 	if remainder == powerOfTwo/2 && remainder != 0 {
 		dot = new(m.Empty_placement)
 		remainder = 0
-	}
-
-	if remainder > 0 {
-		log.Println("more complex stuff")
 	}
 
 	return

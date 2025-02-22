@@ -157,7 +157,7 @@ func (*Parameter) generateHeaders(scorePartwise *m.Score_partwise) {
 		credit.Page = 1
 
 		var formatedText m.Formatted_text_id
-		formatedText.EnclosedText = "Phyllotaxy music"
+		formatedText.EnclosedText = "Phyllotaxy growth curve music"
 		formatedText.Default_x = "595.44"
 		formatedText.Default_y = "1626.67"
 		formatedText.Justify = m.Enum_Left_center_right_Center

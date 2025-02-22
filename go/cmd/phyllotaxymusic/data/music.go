@@ -594,7 +594,7 @@ func _(stage *models.StageStruct) {
 	__Parameter__000000_Reference.NbBeatLines = 300
 	__Parameter__000000_Reference.NbOfBeatsInTheme = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.060000
-	__Parameter__000000_Reference.FirstVoiceShiftY = 1.370000
+	__Parameter__000000_Reference.FirstVoiceShiftY = 0.650000
 	__Parameter__000000_Reference.PitchDifference = 12
 	__Parameter__000000_Reference.BeatsPerSecond = 10.000000
 	__Parameter__000000_Reference.Level = 11.100000

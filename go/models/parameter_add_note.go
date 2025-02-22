@@ -10,7 +10,7 @@ func (*Parameter) add_note(measure *m.A_measure,
 	circleNote *Circle,
 	circleNotes []*Circle,
 	i int,
-	voice int) {
+	voice int) (note *m.Note) {
 
 	// Compute duration
 	duration := 1
@@ -26,7 +26,7 @@ func (*Parameter) add_note(measure *m.A_measure,
 	m_pitch := generatePitch(circleNote.Pitch + nbHalfToneAboveC0)
 
 	// Build the note and append it to the measure
-	note := buildAndAppendNote(measure, duration, m_pitch, circleNote.Pitch, voice)
+	note = buildAndAppendNote(measure, duration, m_pitch, circleNote.Pitch, voice)
 
 	remainder := setNoteType(note, duration)
 
@@ -35,15 +35,17 @@ func (*Parameter) add_note(measure *m.A_measure,
 		tieStart.Type = m.Enum_Start_stop_Start
 		note.Tie = &tieStart
 
+		// Build the note and append it to the measure
+		note = buildAndAppendNote(measure, remainder, m_pitch, circleNote.Pitch, voice)
+
 		var tieStop m.Tie
 		tieStop.Type = m.Enum_Start_stop_Stop
+		note.Tie = &tieStop
 
-		// Build the tiedNote and append it to the measure
-		tiedNote := buildAndAppendNote(measure, remainder, m_pitch, circleNote.Pitch, voice)
-		tiedNote.Tie = &tieStop
-
-		setNoteType(tiedNote, remainder)
+		setNoteType(note, remainder)
 	}
+
+	return
 }
 
 func setNoteType(note *m.Note, duration int) int {

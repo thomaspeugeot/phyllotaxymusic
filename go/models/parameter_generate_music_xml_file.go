@@ -36,12 +36,21 @@ func (parameter *Parameter) GenerateMusicXMLFile() bool {
 		secondVoiceCircleNotes := parameter.SecondVoiceNotes.Circles
 		_ = secondVoiceCircleNotes
 
+		nbFullMesaures := 10
+		var lastCirclePartSecondVoiceNote *Circle
+		var lastFirstPartSecondVoiceNote *m.Note
 		{
-			parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 0)
-			for range 4 {
-				parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 1)
+			lastCirclePartSecondVoiceNote,
+				lastFirstPartSecondVoiceNote =
+				parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 0, nil, nil)
+			for range nbFullMesaures {
+				lastCirclePartSecondVoiceNote,
+					lastFirstPartSecondVoiceNote =
+					parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 1,
+						lastCirclePartSecondVoiceNote, lastFirstPartSecondVoiceNote)
 			}
-			parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 2)
+			parameter.addMeasure(&part, parameter.FirstVoiceNotes, parameter.SecondVoiceNotes, 2,
+				lastCirclePartSecondVoiceNote, lastFirstPartSecondVoiceNote)
 		}
 
 	}
