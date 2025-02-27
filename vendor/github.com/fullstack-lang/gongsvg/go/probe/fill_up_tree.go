@@ -232,6 +232,16 @@ func fillUpTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
+		case "SvgText":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.SvgText](probe.stageOfInterest)
+			for _svgtext := range set {
+				nodeInstance := (&tree.Node{Name: _svgtext.GetName()}).Stage(probe.treeStage)
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_svgtext, "SvgText", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
 		case "Text":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.Text](probe.stageOfInterest)

@@ -103,6 +103,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "SVG" {
 		fillUpTable[models.SVG](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "SvgText" {
+		fillUpTable[models.SvgText](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Text" {
 		fillUpTable[models.Text](nodeImplGongstruct.probe)
 	}

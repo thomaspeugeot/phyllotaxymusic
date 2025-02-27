@@ -2791,6 +2791,8 @@ func (svgFormCallback *SVGFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(svg_.EndRect), svgFormCallback.probe.stageOfInterest, formDiv)
 		case "IsEditable":
 			FormDivBasicFieldToField(&(svg_.IsEditable), formDiv)
+		case "IsSVGFileGenerated":
+			FormDivBasicFieldToField(&(svg_.IsSVGFileGenerated), formDiv)
 		}
 	}
 
@@ -2822,6 +2824,85 @@ func (svgFormCallback *SVGFormCallback) OnSave() {
 	}
 
 	fillUpTree(svgFormCallback.probe)
+}
+func __gong__New__SvgTextFormCallback(
+	svgtext *models.SvgText,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (svgtextFormCallback *SvgTextFormCallback) {
+	svgtextFormCallback = new(SvgTextFormCallback)
+	svgtextFormCallback.probe = probe
+	svgtextFormCallback.svgtext = svgtext
+	svgtextFormCallback.formGroup = formGroup
+
+	svgtextFormCallback.CreationMode = (svgtext == nil)
+
+	return
+}
+
+type SvgTextFormCallback struct {
+	svgtext *models.SvgText
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (svgtextFormCallback *SvgTextFormCallback) OnSave() {
+
+	log.Println("SvgTextFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	svgtextFormCallback.probe.formStage.Checkout()
+
+	if svgtextFormCallback.svgtext == nil {
+		svgtextFormCallback.svgtext = new(models.SvgText).Stage(svgtextFormCallback.probe.stageOfInterest)
+	}
+	svgtext_ := svgtextFormCallback.svgtext
+	_ = svgtext_
+
+	for _, formDiv := range svgtextFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(svgtext_.Name), formDiv)
+		case "Text":
+			FormDivBasicFieldToField(&(svgtext_.Text), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if svgtextFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		svgtext_.Unstage(svgtextFormCallback.probe.stageOfInterest)
+	}
+
+	svgtextFormCallback.probe.stageOfInterest.Commit()
+	fillUpTable[models.SvgText](
+		svgtextFormCallback.probe,
+	)
+	svgtextFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if svgtextFormCallback.CreationMode || svgtextFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		svgtextFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: table.FormGroupDefaultName.ToString(),
+		}).Stage(svgtextFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__SvgTextFormCallback(
+			nil,
+			svgtextFormCallback.probe,
+			newFormGroup,
+		)
+		svgtext := new(models.SvgText)
+		FillUpForm(svgtext, newFormGroup, svgtextFormCallback.probe)
+		svgtextFormCallback.probe.formStage.Commit()
+	}
+
+	fillUpTree(svgtextFormCallback.probe)
 }
 func __gong__New__TextFormCallback(
 	text *models.Text,
