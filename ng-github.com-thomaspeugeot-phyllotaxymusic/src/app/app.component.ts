@@ -27,29 +27,21 @@ import * as gongtree from '@vendored_components/github.com/fullstack-lang/gongtr
 import * as gongtone from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtone/src/public-api';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-
-    CommonModule,
-    FormsModule,
-
-    MatRadioModule,
-    MatButtonModule,
-    MatIconModule,
-
-    AngularSplitModule,
-
-    TreeComponent,
-    MaterialTableComponent,
-    MaterialFormComponent,
-    PanelComponent,
-
-    PhyllotaxymusicspecificComponent
-
-  ],
-
-  templateUrl: './app.component.html',
+    selector: 'app-root',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatRadioModule,
+        MatButtonModule,
+        MatIconModule,
+        AngularSplitModule,
+        TreeComponent,
+        MaterialTableComponent,
+        MaterialFormComponent,
+        PanelComponent,
+        PhyllotaxymusicspecificComponent
+    ],
+    templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
 

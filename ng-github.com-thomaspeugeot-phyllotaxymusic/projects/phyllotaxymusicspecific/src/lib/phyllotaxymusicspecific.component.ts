@@ -28,31 +28,27 @@ import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'lib-phyllotaxymusicspecific',
-  standalone: true,
-  imports: [
-
-    CommonModule,
-
-    MatSliderModule,
-    MatRadioModule,
-    MatCardModule,
-    MatCheckboxModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatIconModule,
-
-    AngularSplitModule,
-    MatGridListModule,
-    GongsvgDiagrammingComponent,
-    TreeComponent,
-    GongtoneComponent,
-    CursorspecificComponent,
-    SlidersspecificComponent,
-    ButtonsspecificComponent
-  ],
-  templateUrl: './phyllotaxymusicspecific.component.html',
-  styleUrls: ['./phyllotaxymusicspecific.component.css'],
+    selector: 'lib-phyllotaxymusicspecific',
+    imports: [
+        CommonModule,
+        MatSliderModule,
+        MatRadioModule,
+        MatCardModule,
+        MatCheckboxModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        AngularSplitModule,
+        MatGridListModule,
+        GongsvgDiagrammingComponent,
+        TreeComponent,
+        GongtoneComponent,
+        CursorspecificComponent,
+        SlidersspecificComponent,
+        ButtonsspecificComponent
+    ],
+    templateUrl: './phyllotaxymusicspecific.component.html',
+    styleUrls: ['./phyllotaxymusicspecific.component.css']
 })
 export class PhyllotaxymusicspecificComponent implements OnInit {
 
