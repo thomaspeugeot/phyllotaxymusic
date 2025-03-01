@@ -25,8 +25,6 @@ import { CursorspecificComponent } from '../../../../../cursor/ng-github.com-tho
 import { SlidersspecificComponent } from '../../../../../sliders/ng-github.com-thomaspeugeot-phyllotaxymusic-sliders/projects/slidersspecific/src/public-api'
 
 import { CommonModule } from '@angular/common';
-import { HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 @Component({
     selector: 'lib-phyllotaxymusicspecific',
