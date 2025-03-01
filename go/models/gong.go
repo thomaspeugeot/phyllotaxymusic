@@ -325,6 +325,11 @@ type StageStruct struct {
 	// map to enable docLink renaming when an identifier is renamed
 	Map_DocLink_Renaming map[string]GONG__Identifier
 	// the to be removed stops here
+	
+	// store the stage order of each instance in order to
+	// preserve this order when serializing them
+	Order            uint
+	Map_Staged_Order map[any]uint
 }
 
 func (stage *StageStruct) GetType() string {
@@ -516,6 +521,8 @@ func NewStage(path string) (stage *StageStruct) {
 		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
 		// the to be removed stops here
+
+		Map_Staged_Order: make(map[any]uint),
 	}
 
 	return
@@ -637,7 +644,12 @@ func (stage *StageStruct) RestoreXL(dirPath string) {
 // insertion point for cumulative sub template with model space calls
 // Stage puts axis to the model stage
 func (axis *Axis) Stage(stage *StageStruct) *Axis {
-	stage.Axiss[axis] = __member
+
+	if _, ok := stage.Axiss[axis]; !ok {
+		stage.Axiss[axis] = __member
+		stage.Map_Staged_Order[axis] = stage.Order
+		stage.Order++
+	}
 	stage.Axiss_mapString[axis.Name] = axis
 
 	return axis
@@ -687,7 +699,12 @@ func (axis *Axis) GetName() (res string) {
 
 // Stage puts axisgrid to the model stage
 func (axisgrid *AxisGrid) Stage(stage *StageStruct) *AxisGrid {
-	stage.AxisGrids[axisgrid] = __member
+
+	if _, ok := stage.AxisGrids[axisgrid]; !ok {
+		stage.AxisGrids[axisgrid] = __member
+		stage.Map_Staged_Order[axisgrid] = stage.Order
+		stage.Order++
+	}
 	stage.AxisGrids_mapString[axisgrid.Name] = axisgrid
 
 	return axisgrid
@@ -737,7 +754,12 @@ func (axisgrid *AxisGrid) GetName() (res string) {
 
 // Stage puts bezier to the model stage
 func (bezier *Bezier) Stage(stage *StageStruct) *Bezier {
-	stage.Beziers[bezier] = __member
+
+	if _, ok := stage.Beziers[bezier]; !ok {
+		stage.Beziers[bezier] = __member
+		stage.Map_Staged_Order[bezier] = stage.Order
+		stage.Order++
+	}
 	stage.Beziers_mapString[bezier.Name] = bezier
 
 	return bezier
@@ -787,7 +809,12 @@ func (bezier *Bezier) GetName() (res string) {
 
 // Stage puts beziergrid to the model stage
 func (beziergrid *BezierGrid) Stage(stage *StageStruct) *BezierGrid {
-	stage.BezierGrids[beziergrid] = __member
+
+	if _, ok := stage.BezierGrids[beziergrid]; !ok {
+		stage.BezierGrids[beziergrid] = __member
+		stage.Map_Staged_Order[beziergrid] = stage.Order
+		stage.Order++
+	}
 	stage.BezierGrids_mapString[beziergrid.Name] = beziergrid
 
 	return beziergrid
@@ -837,7 +864,12 @@ func (beziergrid *BezierGrid) GetName() (res string) {
 
 // Stage puts beziergridstack to the model stage
 func (beziergridstack *BezierGridStack) Stage(stage *StageStruct) *BezierGridStack {
-	stage.BezierGridStacks[beziergridstack] = __member
+
+	if _, ok := stage.BezierGridStacks[beziergridstack]; !ok {
+		stage.BezierGridStacks[beziergridstack] = __member
+		stage.Map_Staged_Order[beziergridstack] = stage.Order
+		stage.Order++
+	}
 	stage.BezierGridStacks_mapString[beziergridstack.Name] = beziergridstack
 
 	return beziergridstack
@@ -887,7 +919,12 @@ func (beziergridstack *BezierGridStack) GetName() (res string) {
 
 // Stage puts circle to the model stage
 func (circle *Circle) Stage(stage *StageStruct) *Circle {
-	stage.Circles[circle] = __member
+
+	if _, ok := stage.Circles[circle]; !ok {
+		stage.Circles[circle] = __member
+		stage.Map_Staged_Order[circle] = stage.Order
+		stage.Order++
+	}
 	stage.Circles_mapString[circle.Name] = circle
 
 	return circle
@@ -937,7 +974,12 @@ func (circle *Circle) GetName() (res string) {
 
 // Stage puts circlegrid to the model stage
 func (circlegrid *CircleGrid) Stage(stage *StageStruct) *CircleGrid {
-	stage.CircleGrids[circlegrid] = __member
+
+	if _, ok := stage.CircleGrids[circlegrid]; !ok {
+		stage.CircleGrids[circlegrid] = __member
+		stage.Map_Staged_Order[circlegrid] = stage.Order
+		stage.Order++
+	}
 	stage.CircleGrids_mapString[circlegrid.Name] = circlegrid
 
 	return circlegrid
@@ -987,7 +1029,12 @@ func (circlegrid *CircleGrid) GetName() (res string) {
 
 // Stage puts exporttomusicxml to the model stage
 func (exporttomusicxml *ExportToMusicxml) Stage(stage *StageStruct) *ExportToMusicxml {
-	stage.ExportToMusicxmls[exporttomusicxml] = __member
+
+	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; !ok {
+		stage.ExportToMusicxmls[exporttomusicxml] = __member
+		stage.Map_Staged_Order[exporttomusicxml] = stage.Order
+		stage.Order++
+	}
 	stage.ExportToMusicxmls_mapString[exporttomusicxml.Name] = exporttomusicxml
 
 	return exporttomusicxml
@@ -1037,7 +1084,12 @@ func (exporttomusicxml *ExportToMusicxml) GetName() (res string) {
 
 // Stage puts frontcurve to the model stage
 func (frontcurve *FrontCurve) Stage(stage *StageStruct) *FrontCurve {
-	stage.FrontCurves[frontcurve] = __member
+
+	if _, ok := stage.FrontCurves[frontcurve]; !ok {
+		stage.FrontCurves[frontcurve] = __member
+		stage.Map_Staged_Order[frontcurve] = stage.Order
+		stage.Order++
+	}
 	stage.FrontCurves_mapString[frontcurve.Name] = frontcurve
 
 	return frontcurve
@@ -1087,7 +1139,12 @@ func (frontcurve *FrontCurve) GetName() (res string) {
 
 // Stage puts frontcurvestack to the model stage
 func (frontcurvestack *FrontCurveStack) Stage(stage *StageStruct) *FrontCurveStack {
-	stage.FrontCurveStacks[frontcurvestack] = __member
+
+	if _, ok := stage.FrontCurveStacks[frontcurvestack]; !ok {
+		stage.FrontCurveStacks[frontcurvestack] = __member
+		stage.Map_Staged_Order[frontcurvestack] = stage.Order
+		stage.Order++
+	}
 	stage.FrontCurveStacks_mapString[frontcurvestack.Name] = frontcurvestack
 
 	return frontcurvestack
@@ -1137,7 +1194,12 @@ func (frontcurvestack *FrontCurveStack) GetName() (res string) {
 
 // Stage puts horizontalaxis to the model stage
 func (horizontalaxis *HorizontalAxis) Stage(stage *StageStruct) *HorizontalAxis {
-	stage.HorizontalAxiss[horizontalaxis] = __member
+
+	if _, ok := stage.HorizontalAxiss[horizontalaxis]; !ok {
+		stage.HorizontalAxiss[horizontalaxis] = __member
+		stage.Map_Staged_Order[horizontalaxis] = stage.Order
+		stage.Order++
+	}
 	stage.HorizontalAxiss_mapString[horizontalaxis.Name] = horizontalaxis
 
 	return horizontalaxis
@@ -1187,7 +1249,12 @@ func (horizontalaxis *HorizontalAxis) GetName() (res string) {
 
 // Stage puts key to the model stage
 func (key *Key) Stage(stage *StageStruct) *Key {
-	stage.Keys[key] = __member
+
+	if _, ok := stage.Keys[key]; !ok {
+		stage.Keys[key] = __member
+		stage.Map_Staged_Order[key] = stage.Order
+		stage.Order++
+	}
 	stage.Keys_mapString[key.Name] = key
 
 	return key
@@ -1237,7 +1304,12 @@ func (key *Key) GetName() (res string) {
 
 // Stage puts parameter to the model stage
 func (parameter *Parameter) Stage(stage *StageStruct) *Parameter {
-	stage.Parameters[parameter] = __member
+
+	if _, ok := stage.Parameters[parameter]; !ok {
+		stage.Parameters[parameter] = __member
+		stage.Map_Staged_Order[parameter] = stage.Order
+		stage.Order++
+	}
 	stage.Parameters_mapString[parameter.Name] = parameter
 
 	return parameter
@@ -1287,7 +1359,12 @@ func (parameter *Parameter) GetName() (res string) {
 
 // Stage puts rhombus to the model stage
 func (rhombus *Rhombus) Stage(stage *StageStruct) *Rhombus {
-	stage.Rhombuss[rhombus] = __member
+
+	if _, ok := stage.Rhombuss[rhombus]; !ok {
+		stage.Rhombuss[rhombus] = __member
+		stage.Map_Staged_Order[rhombus] = stage.Order
+		stage.Order++
+	}
 	stage.Rhombuss_mapString[rhombus.Name] = rhombus
 
 	return rhombus
@@ -1337,7 +1414,12 @@ func (rhombus *Rhombus) GetName() (res string) {
 
 // Stage puts rhombusgrid to the model stage
 func (rhombusgrid *RhombusGrid) Stage(stage *StageStruct) *RhombusGrid {
-	stage.RhombusGrids[rhombusgrid] = __member
+
+	if _, ok := stage.RhombusGrids[rhombusgrid]; !ok {
+		stage.RhombusGrids[rhombusgrid] = __member
+		stage.Map_Staged_Order[rhombusgrid] = stage.Order
+		stage.Order++
+	}
 	stage.RhombusGrids_mapString[rhombusgrid.Name] = rhombusgrid
 
 	return rhombusgrid
@@ -1387,7 +1469,12 @@ func (rhombusgrid *RhombusGrid) GetName() (res string) {
 
 // Stage puts shapecategory to the model stage
 func (shapecategory *ShapeCategory) Stage(stage *StageStruct) *ShapeCategory {
-	stage.ShapeCategorys[shapecategory] = __member
+
+	if _, ok := stage.ShapeCategorys[shapecategory]; !ok {
+		stage.ShapeCategorys[shapecategory] = __member
+		stage.Map_Staged_Order[shapecategory] = stage.Order
+		stage.Order++
+	}
 	stage.ShapeCategorys_mapString[shapecategory.Name] = shapecategory
 
 	return shapecategory
@@ -1437,7 +1524,12 @@ func (shapecategory *ShapeCategory) GetName() (res string) {
 
 // Stage puts spiralbezier to the model stage
 func (spiralbezier *SpiralBezier) Stage(stage *StageStruct) *SpiralBezier {
-	stage.SpiralBeziers[spiralbezier] = __member
+
+	if _, ok := stage.SpiralBeziers[spiralbezier]; !ok {
+		stage.SpiralBeziers[spiralbezier] = __member
+		stage.Map_Staged_Order[spiralbezier] = stage.Order
+		stage.Order++
+	}
 	stage.SpiralBeziers_mapString[spiralbezier.Name] = spiralbezier
 
 	return spiralbezier
@@ -1487,7 +1579,12 @@ func (spiralbezier *SpiralBezier) GetName() (res string) {
 
 // Stage puts spiralbeziergrid to the model stage
 func (spiralbeziergrid *SpiralBezierGrid) Stage(stage *StageStruct) *SpiralBezierGrid {
-	stage.SpiralBezierGrids[spiralbeziergrid] = __member
+
+	if _, ok := stage.SpiralBezierGrids[spiralbeziergrid]; !ok {
+		stage.SpiralBezierGrids[spiralbeziergrid] = __member
+		stage.Map_Staged_Order[spiralbeziergrid] = stage.Order
+		stage.Order++
+	}
 	stage.SpiralBezierGrids_mapString[spiralbeziergrid.Name] = spiralbeziergrid
 
 	return spiralbeziergrid
@@ -1537,7 +1634,12 @@ func (spiralbeziergrid *SpiralBezierGrid) GetName() (res string) {
 
 // Stage puts spiralcircle to the model stage
 func (spiralcircle *SpiralCircle) Stage(stage *StageStruct) *SpiralCircle {
-	stage.SpiralCircles[spiralcircle] = __member
+
+	if _, ok := stage.SpiralCircles[spiralcircle]; !ok {
+		stage.SpiralCircles[spiralcircle] = __member
+		stage.Map_Staged_Order[spiralcircle] = stage.Order
+		stage.Order++
+	}
 	stage.SpiralCircles_mapString[spiralcircle.Name] = spiralcircle
 
 	return spiralcircle
@@ -1587,7 +1689,12 @@ func (spiralcircle *SpiralCircle) GetName() (res string) {
 
 // Stage puts spiralcirclegrid to the model stage
 func (spiralcirclegrid *SpiralCircleGrid) Stage(stage *StageStruct) *SpiralCircleGrid {
-	stage.SpiralCircleGrids[spiralcirclegrid] = __member
+
+	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; !ok {
+		stage.SpiralCircleGrids[spiralcirclegrid] = __member
+		stage.Map_Staged_Order[spiralcirclegrid] = stage.Order
+		stage.Order++
+	}
 	stage.SpiralCircleGrids_mapString[spiralcirclegrid.Name] = spiralcirclegrid
 
 	return spiralcirclegrid
@@ -1637,7 +1744,12 @@ func (spiralcirclegrid *SpiralCircleGrid) GetName() (res string) {
 
 // Stage puts spiralline to the model stage
 func (spiralline *SpiralLine) Stage(stage *StageStruct) *SpiralLine {
-	stage.SpiralLines[spiralline] = __member
+
+	if _, ok := stage.SpiralLines[spiralline]; !ok {
+		stage.SpiralLines[spiralline] = __member
+		stage.Map_Staged_Order[spiralline] = stage.Order
+		stage.Order++
+	}
 	stage.SpiralLines_mapString[spiralline.Name] = spiralline
 
 	return spiralline
@@ -1687,7 +1799,12 @@ func (spiralline *SpiralLine) GetName() (res string) {
 
 // Stage puts spirallinegrid to the model stage
 func (spirallinegrid *SpiralLineGrid) Stage(stage *StageStruct) *SpiralLineGrid {
-	stage.SpiralLineGrids[spirallinegrid] = __member
+
+	if _, ok := stage.SpiralLineGrids[spirallinegrid]; !ok {
+		stage.SpiralLineGrids[spirallinegrid] = __member
+		stage.Map_Staged_Order[spirallinegrid] = stage.Order
+		stage.Order++
+	}
 	stage.SpiralLineGrids_mapString[spirallinegrid.Name] = spirallinegrid
 
 	return spirallinegrid
@@ -1737,7 +1854,12 @@ func (spirallinegrid *SpiralLineGrid) GetName() (res string) {
 
 // Stage puts spiralorigin to the model stage
 func (spiralorigin *SpiralOrigin) Stage(stage *StageStruct) *SpiralOrigin {
-	stage.SpiralOrigins[spiralorigin] = __member
+
+	if _, ok := stage.SpiralOrigins[spiralorigin]; !ok {
+		stage.SpiralOrigins[spiralorigin] = __member
+		stage.Map_Staged_Order[spiralorigin] = stage.Order
+		stage.Order++
+	}
 	stage.SpiralOrigins_mapString[spiralorigin.Name] = spiralorigin
 
 	return spiralorigin
@@ -1787,7 +1909,12 @@ func (spiralorigin *SpiralOrigin) GetName() (res string) {
 
 // Stage puts spiralrhombus to the model stage
 func (spiralrhombus *SpiralRhombus) Stage(stage *StageStruct) *SpiralRhombus {
-	stage.SpiralRhombuss[spiralrhombus] = __member
+
+	if _, ok := stage.SpiralRhombuss[spiralrhombus]; !ok {
+		stage.SpiralRhombuss[spiralrhombus] = __member
+		stage.Map_Staged_Order[spiralrhombus] = stage.Order
+		stage.Order++
+	}
 	stage.SpiralRhombuss_mapString[spiralrhombus.Name] = spiralrhombus
 
 	return spiralrhombus
@@ -1837,7 +1964,12 @@ func (spiralrhombus *SpiralRhombus) GetName() (res string) {
 
 // Stage puts spiralrhombusgrid to the model stage
 func (spiralrhombusgrid *SpiralRhombusGrid) Stage(stage *StageStruct) *SpiralRhombusGrid {
-	stage.SpiralRhombusGrids[spiralrhombusgrid] = __member
+
+	if _, ok := stage.SpiralRhombusGrids[spiralrhombusgrid]; !ok {
+		stage.SpiralRhombusGrids[spiralrhombusgrid] = __member
+		stage.Map_Staged_Order[spiralrhombusgrid] = stage.Order
+		stage.Order++
+	}
 	stage.SpiralRhombusGrids_mapString[spiralrhombusgrid.Name] = spiralrhombusgrid
 
 	return spiralrhombusgrid
@@ -1887,7 +2019,12 @@ func (spiralrhombusgrid *SpiralRhombusGrid) GetName() (res string) {
 
 // Stage puts verticalaxis to the model stage
 func (verticalaxis *VerticalAxis) Stage(stage *StageStruct) *VerticalAxis {
-	stage.VerticalAxiss[verticalaxis] = __member
+
+	if _, ok := stage.VerticalAxiss[verticalaxis]; !ok {
+		stage.VerticalAxiss[verticalaxis] = __member
+		stage.Map_Staged_Order[verticalaxis] = stage.Order
+		stage.Order++
+	}
 	stage.VerticalAxiss_mapString[verticalaxis.Name] = verticalaxis
 
 	return verticalaxis
@@ -5195,10 +5332,10 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt     GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat   GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool    GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers  GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
 )
 
 type GongFieldValue struct {

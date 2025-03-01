@@ -3,12 +3,12 @@ module github.com/thomaspeugeot/phyllotaxymusic
 go 1.23.1
 
 require (
-	github.com/fullstack-lang/gong v0.0.0-20250228015728-c81eed3e9613
-	github.com/fullstack-lang/gongdoc v0.0.0-20250228015737-2b85c5f57bb8
-	github.com/fullstack-lang/gongsvg v0.0.0-20250228015811-ca84f5f68f48
-	github.com/fullstack-lang/gongtable v0.0.0-20250228022720-0542a383ba94
-	github.com/fullstack-lang/gongtone v0.0.0-20250228015829-bf35f373c9cf
-	github.com/fullstack-lang/gongtree v0.0.0-20250228022722-ff4a6e5e77e6
+	github.com/fullstack-lang/gong v0.0.0-20250301205707-c6c7b06685a6
+	github.com/fullstack-lang/gongdoc v0.0.0-20250228023044-07930fd17979
+	github.com/fullstack-lang/gongsvg v0.0.0-20250228023049-bb49bd65c7c6
+	github.com/fullstack-lang/gongtable v0.0.0-20250228023050-cc13aa50af79
+	github.com/fullstack-lang/gongtone v0.0.0-20250228023051-fa560f17b64b
+	github.com/fullstack-lang/gongtree v0.0.0-20250228023052-f51b21501fb7
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-contrib/static v1.1.3
@@ -62,7 +62,7 @@ require (
 	github.com/xuri/nfp v0.0.0-20250226145837-86d5fc24b2ba // indirect
 	golang.org/x/arch v0.14.0 // indirect
 	golang.org/x/crypto v0.35.0 // indirect
-	golang.org/x/exp v0.0.0-20250218142911-aa4b98e5adaa // indirect
+	golang.org/x/exp v0.0.0-20250228200357-dead58393ab7 // indirect
 	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect

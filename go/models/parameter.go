@@ -3,7 +3,7 @@ package models
 import (
 	"log"
 
-	buttons_models "github.com/thomaspeugeot/phyllotaxymusic/buttons/go/models"
+	button_models "github.com/fullstack-lang/gong/lib/button/go/models"
 	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 	sliders_models "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
 
@@ -197,13 +197,13 @@ type Parameter struct {
 	gongtreeStage        *gongtree_models.StageStruct
 	cursorStage          *cursor_models.StageStruct
 	slidersStage         *sliders_models.StageStruct
-	buttonsStage         *buttons_models.StageStruct
+	buttonsStage         *button_models.StageStruct
 
 	treeProxy *TreeProxy
 }
 
 // GetButtonsStage implements models.Target.
-func (parameter *Parameter) GetButtonsStage() *buttons_models.StageStruct {
+func (parameter *Parameter) GetButtonsStage() *button_models.StageStruct {
 	return parameter.buttonsStage
 }
 
@@ -225,7 +225,7 @@ func (parameter *Parameter) SetSlidersStage(slidersStage *sliders_models.StageSt
 	parameter.slidersStage = slidersStage
 }
 
-func (parameter *Parameter) SetButtonsStage(buttonsStage *buttons_models.StageStruct) {
+func (parameter *Parameter) SetButtonsStage(buttonsStage *button_models.StageStruct) {
 	parameter.buttonsStage = buttonsStage
 }
 

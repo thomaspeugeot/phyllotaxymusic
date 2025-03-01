@@ -21,8 +21,8 @@ import (
 	sliders_models "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
 	sliders_stack "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/stack"
 
-	buttons_models "github.com/thomaspeugeot/phyllotaxymusic/buttons/go/models"
-	buttons_stack "github.com/thomaspeugeot/phyllotaxymusic/buttons/go/stack"
+	button_models "github.com/fullstack-lang/gong/lib/button/go/models"
+	button_stack "github.com/fullstack-lang/gong/lib/button/go/stack"
 )
 
 var (
@@ -61,7 +61,7 @@ func main() {
 	gongtone_stack := gongtone_stack.NewStack(r, phyllotaxymusic_models.GongtoneStackName.ToString(), "", "", "", true, true)
 	cursor_stack := cursor_stack.NewStack(r, cursor_models.Cursorstakcname.ToString(), "", "", "", false, false)
 	sliders_stack := sliders_stack.NewStack(r, sliders_models.SliderStackName.ToString(), "", "", "", false, false)
-	buttons_stack := buttons_stack.NewStack(r, buttons_models.ButtonsStackName.ToString(), "", "", "", false, false)
+	button_stack := button_stack.NewStack(r, button_models.ButtonStackName.ToString(), "", "", "", false, false)
 
 	// get the only diagram
 	parameters := phyllotaxymusic_models.GetGongstructInstancesMap[phyllotaxymusic_models.Parameter](phyllotaxymusic_stack.Stage)
@@ -77,7 +77,7 @@ func main() {
 	parameter.SetGongtoneStage(gongtone_stack.Stage)
 	parameter.SetCursorStage(cursor_stack.Stage)
 	parameter.SetSlidersStage(sliders_stack.Stage)
-	parameter.SetButtonsStage(buttons_stack.Stage)
+	parameter.SetButtonsStage(button_stack.Stage)
 	parameter.SetGongtreeStage(gongtree_stack.Stage)
 	parameter.SetTreeProxy()
 

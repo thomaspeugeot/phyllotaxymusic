@@ -15,25 +15,22 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon'
 
 @Component({
-  selector: 'lib-slidersspecific',
-  standalone: true,
-  imports: [
-    AngularSplitModule,
-
-    MatSliderModule,
-    MatRadioModule,
-    MatCardModule,
-    MatCheckboxModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatGridListModule,
-
-  ],
-  templateUrl: './slidersspecific.component.html',
-  styleUrls: [
-    './slidersspecific.component.css'
-  ]
+    selector: 'lib-slidersspecific',
+    imports: [
+        AngularSplitModule,
+        MatSliderModule,
+        MatRadioModule,
+        MatCardModule,
+        MatCheckboxModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatGridListModule,
+    ],
+    templateUrl: './slidersspecific.component.html',
+    styleUrls: [
+        './slidersspecific.component.css'
+    ]
 })
 export class SlidersspecificComponent {
 

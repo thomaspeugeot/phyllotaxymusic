@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import * as cursor from '../../../cursor/src/public-api'
 
 @Component({
-  selector: 'lib-cursorspecific',
-  standalone: true,
-  imports: [],
-  template: `
+    selector: 'lib-cursorspecific',
+    imports: [],
+    template: `
     <svg [attr.width]="xe" height="1000">
      <line
         [attr.x1]="x"
@@ -29,7 +28,7 @@ import * as cursor from '../../../cursor/src/public-api'
       
     </svg>
   `,
-  styles: ``
+    styles: ``
 })
 export class CursorspecificComponent implements OnInit {
   x = 0;

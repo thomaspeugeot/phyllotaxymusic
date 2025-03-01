@@ -18,6 +18,8 @@ func (stacksnames StacksNames) ToString() (res string) {
 		res = "sidebar tree"
 	case GongtoneStackName:
 		res = "gongtone"
+	case GongLibButtonStackName:
+		res = "button"
 	case GongtreeStackName:
 		res = "gongtree"
 	case GongtableStackName:
@@ -43,6 +45,9 @@ func (stacksnames *StacksNames) FromString(input string) (err error) {
 		return
 	case "gongtone":
 		*stacksnames = GongtoneStackName
+		return
+	case "button":
+		*stacksnames = GongLibButtonStackName
 		return
 	case "gongtree":
 		*stacksnames = GongtreeStackName
@@ -70,6 +75,8 @@ func (stacksnames *StacksNames) FromCodeString(input string) (err error) {
 		*stacksnames = SidebarTree
 	case "GongtoneStackName":
 		*stacksnames = GongtoneStackName
+	case "GongLibButtonStackName":
+		*stacksnames = GongLibButtonStackName
 	case "GongtreeStackName":
 		*stacksnames = GongtreeStackName
 	case "GongtableStackName":
@@ -94,6 +101,8 @@ func (stacksnames *StacksNames) ToCodeString() (res string) {
 		res = "SidebarTree"
 	case GongtoneStackName:
 		res = "GongtoneStackName"
+	case GongLibButtonStackName:
+		res = "GongLibButtonStackName"
 	case GongtreeStackName:
 		res = "GongtreeStackName"
 	case GongtableStackName:
@@ -113,6 +122,7 @@ func (stacksnames StacksNames) Codes() (res []string) {
 	res = append(res, "GongsvgStackName")
 	res = append(res, "SidebarTree")
 	res = append(res, "GongtoneStackName")
+	res = append(res, "GongLibButtonStackName")
 	res = append(res, "GongtreeStackName")
 	res = append(res, "GongtableStackName")
 	res = append(res, "GongsimStackName")
@@ -129,6 +139,7 @@ func (stacksnames StacksNames) CodeValues() (res []string) {
 	res = append(res, "gongsvg")
 	res = append(res, "sidebar tree")
 	res = append(res, "gongtone")
+	res = append(res, "button")
 	res = append(res, "gongtree")
 	res = append(res, "gongtable")
 	res = append(res, "gongsim")

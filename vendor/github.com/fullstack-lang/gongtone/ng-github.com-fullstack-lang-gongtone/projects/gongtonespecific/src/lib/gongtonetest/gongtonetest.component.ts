@@ -8,13 +8,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'lib-gongtonetest',
-  standalone: true,
-  imports: [
-    MatButtonModule, MatDividerModule, MatIconModule
-  ],
-  templateUrl: './gongtonetest.component.html',
-  styleUrl: './gongtonetest.component.css'
+    selector: 'lib-gongtonetest',
+    imports: [
+        MatButtonModule, MatDividerModule, MatIconModule
+    ],
+    templateUrl: './gongtonetest.component.html',
+    styleUrl: './gongtonetest.component.css'
 })
 export class GongtonetestComponent {
 

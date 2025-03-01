@@ -1,7 +1,7 @@
 package models
 
 import (
-	buttons "github.com/thomaspeugeot/phyllotaxymusic/buttons/go/models"
+	buttons "github.com/fullstack-lang/gong/lib/button/go/models"
 )
 
 func (parameter *Parameter) UpdateAndCommitButtonsStage() {

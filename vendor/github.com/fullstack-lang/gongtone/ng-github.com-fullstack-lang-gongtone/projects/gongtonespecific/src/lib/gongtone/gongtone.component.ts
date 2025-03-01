@@ -11,15 +11,14 @@ import { Subject } from 'rxjs';
 import { takeUntil, catchError } from 'rxjs/operators';
 
 @Component({
-  selector: 'lib-gongtone',
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatDividerModule,
-    MatIconModule
-  ],
-  templateUrl: './gongtone.component.html',
-  styleUrl: './gongtone.component.css'
+    selector: 'lib-gongtone',
+    imports: [
+        MatButtonModule,
+        MatDividerModule,
+        MatIconModule
+    ],
+    templateUrl: './gongtone.component.html',
+    styleUrl: './gongtone.component.css'
 })
 export class GongtoneComponent implements OnInit, OnDestroy {
   private synth: Tone.PolySynth | undefined;
