@@ -1,7 +1,7 @@
 package models
 
 import (
-	m "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
+	m "github.com/fullstack-lang/gong/lib/slider/go/models"
 )
 
 func (parameter *Parameter) OnAfterUpdateSliderElement() {
@@ -10,5 +10,5 @@ func (parameter *Parameter) OnAfterUpdateSliderElement() {
 }
 
 func (parameter *Parameter) GetSliderStage() *m.StageStruct {
-	return parameter.slidersStage	
+	return parameter.slidersStage
 }

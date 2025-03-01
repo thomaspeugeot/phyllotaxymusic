@@ -19,10 +19,10 @@ import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/go
 import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtonespecific/src/lib/gongtone/gongtone.component'
 
 import { ButtonSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/button/ng-github.com-fullstack-lang-gong-lib-button/projects/buttonspecific/src/lib/button-specific/button-specific.component' 
+import { SliderSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/slider/ng-github.com-fullstack-lang-gong-lib-slider/projects/sliderspecific/src/lib/slider-specific/slider-specific.component' 
 
 
 import { CursorspecificComponent } from '../../../../../cursor/ng-github.com-thomaspeugeot-phyllotaxymusic-cursor/projects/cursorspecific/src/public-api'
-import { SlidersspecificComponent } from '../../../../../sliders/ng-github.com-thomaspeugeot-phyllotaxymusic-sliders/projects/slidersspecific/src/public-api'
 
 import { CommonModule } from '@angular/common';
 
@@ -43,7 +43,7 @@ import { CommonModule } from '@angular/common';
         TreeComponent,
         GongtoneComponent,
         CursorspecificComponent,
-        SlidersspecificComponent,
+        SliderSpecificComponent,
         ButtonSpecificComponent
     ],
     templateUrl: './phyllotaxymusicspecific.component.html',

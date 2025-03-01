@@ -1,8 +1,0 @@
-.bottom-tile {
-    /* Make the tile a flex container */
-    display: flex;
-    /* Push child content to the bottom */
-    align-items: flex-end;
-    /* Optional: control horizontal alignment */
-    justify-content: flex-start;
-  }

@@ -1,7 +1,7 @@
 package models
 
 import (
-	m "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
+	m "github.com/fullstack-lang/gong/lib/slider/go/models"
 )
 
 func (parameter *Parameter) UpdateAndCommitSlidersStage() {

@@ -4,8 +4,8 @@ import (
 	"log"
 
 	button_models "github.com/fullstack-lang/gong/lib/button/go/models"
+	slider_models "github.com/fullstack-lang/gong/lib/slider/go/models"
 	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
-	sliders_models "github.com/thomaspeugeot/phyllotaxymusic/sliders/go/models"
 
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
 	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
@@ -196,7 +196,7 @@ type Parameter struct {
 	gongtoneStage        *gongtone_models.StageStruct
 	gongtreeStage        *gongtree_models.StageStruct
 	cursorStage          *cursor_models.StageStruct
-	slidersStage         *sliders_models.StageStruct
+	slidersStage         *slider_models.StageStruct
 	buttonsStage         *button_models.StageStruct
 
 	treeProxy *TreeProxy
@@ -221,7 +221,7 @@ func (parameter *Parameter) SetCursorStage(cursorStage *cursor_models.StageStruc
 	parameter.cursorStage = cursorStage
 }
 
-func (parameter *Parameter) SetSlidersStage(slidersStage *sliders_models.StageStruct) {
+func (parameter *Parameter) SetSlidersStage(slidersStage *slider_models.StageStruct) {
 	parameter.slidersStage = slidersStage
 }
 
