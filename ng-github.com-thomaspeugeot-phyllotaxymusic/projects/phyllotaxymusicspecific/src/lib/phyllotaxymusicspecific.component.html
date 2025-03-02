@@ -9,7 +9,7 @@
       <div style="position: relative; width: 100%; height: 100%;">
         
         <!-- Diagram behind (z-index: 1) -->
-        <lib-gongsvg-diagramming
+        <lib-svg-specific
           [GONG__StackPath]="StacksNames.GongsvgStackName"
           style="
             position: absolute;
@@ -20,7 +20,7 @@
             z-index: 1;
           "
         >
-        </lib-gongsvg-diagramming>
+        </lib-svg-specific>
     
         <!-- Moving line in front (z-index: 2) -->
         <lib-cursorspecific

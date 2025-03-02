@@ -9,7 +9,7 @@ import (
 	phyllotaxymusic_stack "github.com/thomaspeugeot/phyllotaxymusic/go/stack"
 	phyllotaxymusic_static "github.com/thomaspeugeot/phyllotaxymusic/go/static"
 
-	gongsvg_stack "github.com/fullstack-lang/gongsvg/go/stack"
+	gongsvg_stack "github.com/fullstack-lang/gong/lib/svg/go/stack"
 
 	gongtone_stack "github.com/fullstack-lang/gongtone/go/stack"
 

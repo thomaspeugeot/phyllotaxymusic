@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	svg "github.com/fullstack-lang/gongsvg/go/models"
+	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
 type Key struct {

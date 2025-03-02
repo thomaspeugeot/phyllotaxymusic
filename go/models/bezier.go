@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+	gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
 type Bezier struct {

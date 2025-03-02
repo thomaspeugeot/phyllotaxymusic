@@ -3,7 +3,7 @@ package models
 import (
 	"math"
 
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+	gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
 // Rhombus is defined by its center, a side length, a direction (with an angle)

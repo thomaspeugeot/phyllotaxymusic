@@ -6,7 +6,7 @@ import (
 	"math"
 	"slices"
 
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+	gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
 func (p *Parameter) ComputeInitialRhombus() {

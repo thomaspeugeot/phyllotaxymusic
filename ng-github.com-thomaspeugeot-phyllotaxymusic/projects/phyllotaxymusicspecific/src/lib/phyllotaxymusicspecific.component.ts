@@ -14,12 +14,12 @@ import { MatIconModule } from '@angular/material/icon'
 
 import { AngularSplitModule } from 'angular-split';
 
-import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
 import { GongtoneComponent } from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtonespecific/src/lib/gongtone/gongtone.component'
 
 import { ButtonSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/button/ng-github.com-fullstack-lang-gong-lib-button/projects/buttonspecific/src/lib/button-specific/button-specific.component' 
 import { SliderSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/slider/ng-github.com-fullstack-lang-gong-lib-slider/projects/sliderspecific/src/lib/slider-specific/slider-specific.component' 
 import { TreeSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/tree/ng-github.com-fullstack-lang-gong-lib-tree/projects/treespecific/src/lib/tree-specific/tree-specific.component'
+import { SvgSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/svg/ng-github.com-fullstack-lang-gong-lib-svg/projects/svgspecific/src/lib/svg-specific/svg-specific.component'
 
 import { CursorspecificComponent } from '../../../../../cursor/ng-github.com-thomaspeugeot-phyllotaxymusic-cursor/projects/cursorspecific/src/public-api'
 
@@ -38,12 +38,16 @@ import { CommonModule } from '@angular/common';
         MatIconModule,
         AngularSplitModule,
         MatGridListModule,
-        GongsvgDiagrammingComponent,
+
+        
+        
         TreeSpecificComponent,
         GongtoneComponent,
         CursorspecificComponent,
+
         SliderSpecificComponent,
-        ButtonSpecificComponent
+        ButtonSpecificComponent,
+        SvgSpecificComponent
     ],
     templateUrl: './phyllotaxymusicspecific.component.html',
     styleUrls: ['./phyllotaxymusicspecific.component.css']

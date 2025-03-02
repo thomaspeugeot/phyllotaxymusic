@@ -1,6 +1,6 @@
 package models
 
-import gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+import gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 
 type SpiralRhombusGrid struct {
 	Name string

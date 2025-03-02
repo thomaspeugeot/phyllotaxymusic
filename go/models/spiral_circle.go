@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
+	gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
 type SpiralCircle struct {
