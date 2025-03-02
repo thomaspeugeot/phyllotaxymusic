@@ -7,8 +7,8 @@ import (
 	slider_models "github.com/fullstack-lang/gong/lib/slider/go/models"
 	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 
+	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
 	gongsvg_models "github.com/fullstack-lang/gongsvg/go/models"
-	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
 
 	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
 )

@@ -1,7 +1,7 @@
 package models
 
 import (
-	tree "github.com/fullstack-lang/gongtree/go/models"
+	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
 )
 
 type Target interface {

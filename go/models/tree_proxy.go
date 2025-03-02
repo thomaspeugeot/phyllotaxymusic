@@ -5,7 +5,7 @@ import (
 	"log"
 	"slices"
 
-	gongtree_models "github.com/fullstack-lang/gongtree/go/models"
+	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
 )
 
 // TreeProxy, is for construing the gongtree Tree

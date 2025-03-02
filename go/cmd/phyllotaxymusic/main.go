@@ -13,7 +13,7 @@ import (
 
 	gongtone_stack "github.com/fullstack-lang/gongtone/go/stack"
 
-	gongtree_stack "github.com/fullstack-lang/gongtree/go/stack"
+	gongtree_stack "github.com/fullstack-lang/gong/lib/tree/go/stack"
 
 	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 	cursor_stack "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/stack"

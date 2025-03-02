@@ -52,7 +52,7 @@ github.com/dustin/go-humanize
 # github.com/frankban/quicktest v1.14.6
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20250301214749-fcd3ff02b818
+# github.com/fullstack-lang/gong v0.0.0-20250302095600-60b13c1baa65
 ## explicit; go 1.23.1
 github.com/fullstack-lang/gong/go/controllers
 github.com/fullstack-lang/gong/go/db
@@ -78,6 +78,15 @@ github.com/fullstack-lang/gong/lib/slider/go/orm
 github.com/fullstack-lang/gong/lib/slider/go/probe
 github.com/fullstack-lang/gong/lib/slider/go/stack
 github.com/fullstack-lang/gong/lib/slider/ng-github.com-fullstack-lang-gong-lib-slider
+github.com/fullstack-lang/gong/lib/tree/go
+github.com/fullstack-lang/gong/lib/tree/go/controllers
+github.com/fullstack-lang/gong/lib/tree/go/db
+github.com/fullstack-lang/gong/lib/tree/go/fullstack
+github.com/fullstack-lang/gong/lib/tree/go/models
+github.com/fullstack-lang/gong/lib/tree/go/orm
+github.com/fullstack-lang/gong/lib/tree/go/probe
+github.com/fullstack-lang/gong/lib/tree/go/stack
+github.com/fullstack-lang/gong/lib/tree/ng-github.com-fullstack-lang-gong-lib-tree
 github.com/fullstack-lang/gong/ng-github.com-fullstack-lang-gong
 # github.com/fullstack-lang/gongdoc v0.0.0-20250228023044-07930fd17979
 ## explicit; go 1.23.1
@@ -123,15 +132,12 @@ github.com/fullstack-lang/gongtone/go/stack
 github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone
 # github.com/fullstack-lang/gongtree v0.0.0-20250228023052-f51b21501fb7
 ## explicit; go 1.23.1
-github.com/fullstack-lang/gongtree/go
 github.com/fullstack-lang/gongtree/go/buttons
 github.com/fullstack-lang/gongtree/go/controllers
 github.com/fullstack-lang/gongtree/go/db
 github.com/fullstack-lang/gongtree/go/fullstack
 github.com/fullstack-lang/gongtree/go/models
 github.com/fullstack-lang/gongtree/go/orm
-github.com/fullstack-lang/gongtree/go/probe
-github.com/fullstack-lang/gongtree/go/stack
 github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree
 # github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 ## explicit; go 1.23.1
