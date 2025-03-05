@@ -3,8 +3,6 @@
     "workspaces": [
         "ng-github.com-thomaspeugeot-phyllotaxymusic",
         "cursor/ng-github.com-thomaspeugeot-phyllotaxymusic-cursor",
-        "sliders/ng-github.com-thomaspeugeot-phyllotaxymusic-sliders",
-        "buttons/ng-github.com-thomaspeugeot-phyllotaxymusic-buttons",
         "vendor/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree",
         "vendor/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg",
         "vendor/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone",

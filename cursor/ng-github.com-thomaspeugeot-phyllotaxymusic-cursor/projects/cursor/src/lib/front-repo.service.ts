@@ -136,22 +136,11 @@ export class FrontRepoService {
 	}
 
 	// typing of observable can be messy in typescript. Therefore, one force the type
-	observableFrontRepo: [
+	observableFrontRepo!: [
 		Observable<null>, // see below for the of(null) observable
 		// insertion point sub template 
 		Observable<CursorAPI[]>,
-	] = [
-			// Using "combineLatest" with a placeholder observable.
-			//
-			// This allows the typescript compiler to pass when no GongStruct is present in the front API
-			//
-			// The "of(null)" is a "meaningless" observable that emits a single value (null) and completes.
-			// This is used as a workaround to satisfy TypeScript requirements and the "combineLatest" 
-			// expectation for a non-empty array of observables.
-			of(null), // 
-			// insertion point sub template
-			this.cursorService.getCursors(this.GONG__StackPath, this.frontRepo),
-		];
+	];
 
 	//
 	// pull performs a GET on all struct of the stack and redeem association pointers 

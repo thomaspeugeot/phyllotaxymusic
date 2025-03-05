@@ -233,32 +233,7 @@
 				"-skipNpmInstall"
 			]
 		},
-		{
-			"label": "01 - gongc sliders -skipGoModCommands -skipNpmInstall",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/sliders/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-skipGoModCommands",
-				"-skipNpmInstall"
-			]
-		},
-		{
-			"label": "01 - gongc sliders -skipGoModCommands -skipNg",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/sliders/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-skipGoModCommands",
-				"-skipNg"
-			]
-		},
+		
 		{
 			"label": "02 - run cursor -unmarshallFromCode=stage.go -marshallOnCommit=stage",
 			"type": "shell",
@@ -310,55 +285,7 @@
 				"-clean"
 			]
 		},
-		{
-			"label": "01 - gongc buttons -skipGoModCommands -skipNpmInstall",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/buttons/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-skipGoModCommands",
-				"-skipNpmInstall"
-			]
-		},
-		{
-			"label": "01 - gongc buttons -skipGoModCommands -skipNg",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/buttons/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-skipGoModCommands",
-				"-skipNg"
-			]
-		},
-		{
-			"label": "02 - run buttons -unmarshallFromCode=stage.go -marshallOnCommit=stage",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/buttons/go/cmd/buttons"
-			},
-			"command": "go",
-			"args": [
-				"run",
-				"main.go",
-				"-diagrams",
-				"-unmarshallFromCode=data/stage.go",
-				"-marshallOnCommit=data/stage"
-			],
-			"group": "build"
-		},
-		{
-			"label": "04 - ng serve  buttons",
-			"type": "shell",
-			"command": "cd buttons/ng-github.com-thomaspeugeot-phyllotaxymusic-buttons; ng serve",
-			"group": "build",
-			"problemMatcher": []
-		},
+		
 		{
 			"label": "01 - gongc buttons -clean",
 			"type": "shell",

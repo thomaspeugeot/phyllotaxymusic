@@ -52,7 +52,7 @@ github.com/dustin/go-humanize
 # github.com/frankban/quicktest v1.14.6
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20250302152822-974032e3350b
+# github.com/fullstack-lang/gong v0.0.0-20250305110056-90304a10f5f3
 ## explicit; go 1.23.1
 github.com/fullstack-lang/gong/go/controllers
 github.com/fullstack-lang/gong/go/db
@@ -69,6 +69,16 @@ github.com/fullstack-lang/gong/lib/button/go/orm
 github.com/fullstack-lang/gong/lib/button/go/probe
 github.com/fullstack-lang/gong/lib/button/go/stack
 github.com/fullstack-lang/gong/lib/button/ng-github.com-fullstack-lang-gong-lib-button
+github.com/fullstack-lang/gong/lib/doc/go/adapter
+github.com/fullstack-lang/gong/lib/doc/go/controllers
+github.com/fullstack-lang/gong/lib/doc/go/db
+github.com/fullstack-lang/gong/lib/doc/go/diagrammer
+github.com/fullstack-lang/gong/lib/doc/go/doc2svg
+github.com/fullstack-lang/gong/lib/doc/go/fullstack
+github.com/fullstack-lang/gong/lib/doc/go/load
+github.com/fullstack-lang/gong/lib/doc/go/models
+github.com/fullstack-lang/gong/lib/doc/go/orm
+github.com/fullstack-lang/gong/lib/doc/ng-github.com-fullstack-lang-gong-lib-doc
 github.com/fullstack-lang/gong/lib/slider/go
 github.com/fullstack-lang/gong/lib/slider/go/controllers
 github.com/fullstack-lang/gong/lib/slider/go/db
@@ -87,7 +97,14 @@ github.com/fullstack-lang/gong/lib/svg/go/orm
 github.com/fullstack-lang/gong/lib/svg/go/probe
 github.com/fullstack-lang/gong/lib/svg/go/stack
 github.com/fullstack-lang/gong/lib/svg/ng-github.com-fullstack-lang-gong-lib-svg
+github.com/fullstack-lang/gong/lib/table/go/controllers
+github.com/fullstack-lang/gong/lib/table/go/db
+github.com/fullstack-lang/gong/lib/table/go/fullstack
+github.com/fullstack-lang/gong/lib/table/go/models
+github.com/fullstack-lang/gong/lib/table/go/orm
+github.com/fullstack-lang/gong/lib/table/ng-github.com-fullstack-lang-gong-lib-table
 github.com/fullstack-lang/gong/lib/tree/go
+github.com/fullstack-lang/gong/lib/tree/go/buttons
 github.com/fullstack-lang/gong/lib/tree/go/controllers
 github.com/fullstack-lang/gong/lib/tree/go/db
 github.com/fullstack-lang/gong/lib/tree/go/fullstack

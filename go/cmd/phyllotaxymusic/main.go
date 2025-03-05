@@ -5,7 +5,7 @@ import (
 	"log"
 	"strconv"
 
-	phyllotaxymusic_models "github.com/thomaspeugeot/phyllotaxymusic/go/models"
+	m "github.com/thomaspeugeot/phyllotaxymusic/go/models"
 	phyllotaxymusic_stack "github.com/thomaspeugeot/phyllotaxymusic/go/stack"
 	phyllotaxymusic_static "github.com/thomaspeugeot/phyllotaxymusic/go/static"
 
@@ -50,20 +50,20 @@ func main() {
 
 	// setup phyllotaxymusic_stack
 	phyllotaxymusic_stack := phyllotaxymusic_stack.NewStack(r,
-		phyllotaxymusic_models.Phylotaxy.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+		m.Phylotaxy.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
 	phyllotaxymusic_stack.Probe.Refresh()
 	phyllotaxymusic_stack.Stage.Checkout()
 
-	gongsvg_stack := gongsvg_stack.NewStack(r, phyllotaxymusic_models.GongsvgStackName.ToString(), "", "", "", true, true)
-	gongtree_stack := gongtree_stack.NewStack(r, phyllotaxymusic_models.SidebarTree.ToString(), "", "", "", true, true)
-	gongtone_stack := gongtone_stack.NewStack(r, phyllotaxymusic_models.GongtoneStackName.ToString(), "", "", "", true, true)
+	gongsvg_stack := gongsvg_stack.NewStack(r, m.GongsvgStackName.ToString(), "", "", "", true, true)
+	gongtree_stack := gongtree_stack.NewStack(r, m.SidebarTree.ToString(), "", "", "", true, true)
+	gongtone_stack := gongtone_stack.NewStack(r, m.GongtoneStackName.ToString(), "", "", "", true, true)
 	cursor_stack := cursor_stack.NewStack(r, cursor_models.Cursorstakcname.ToString(), "", "", "", false, false)
 
-	sliders_stack := slider_stack.NewStack(r, phyllotaxymusic_models.GongLibSliderStackName.ToString(), "", "", "", false, false)
-	button_stack := button_stack.NewStack(r, phyllotaxymusic_models.GongLibButtonStackName.ToString(), "", "", "", false, false)
+	sliders_stack := slider_stack.NewStack(r, m.GongLibSliderStackName.ToString(), "", "", "", false, false)
+	button_stack := button_stack.NewStack(r, m.GongLibButtonStackName.ToString(), "", "", "", false, false)
 
 	// get the only diagram
-	parameters := phyllotaxymusic_models.GetGongstructInstancesMap[phyllotaxymusic_models.Parameter](phyllotaxymusic_stack.Stage)
+	parameters := m.GetGongstructInstancesMap[m.Parameter](phyllotaxymusic_stack.Stage)
 	parameter, ok := (*parameters)["Reference"]
 	if !ok {
 		log.Fatal("no Reference parameter on stage")

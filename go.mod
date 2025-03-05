@@ -3,12 +3,8 @@ module github.com/thomaspeugeot/phyllotaxymusic
 go 1.23.1
 
 require (
-	github.com/fullstack-lang/gong v0.0.0-20250302152822-974032e3350b
-	github.com/fullstack-lang/gongdoc v0.0.0-20250228023044-07930fd17979
-	github.com/fullstack-lang/gongsvg v0.0.0-20250228023049-bb49bd65c7c6
-	github.com/fullstack-lang/gongtable v0.0.0-20250228023050-cc13aa50af79
+	github.com/fullstack-lang/gong v0.0.0-20250305110056-90304a10f5f3
 	github.com/fullstack-lang/gongtone v0.0.0-20250228023051-fa560f17b64b
-	github.com/fullstack-lang/gongtree v0.0.0-20250228023052-f51b21501fb7
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-contrib/static v1.1.3
@@ -26,6 +22,10 @@ require (
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
+	github.com/fullstack-lang/gongdoc v0.0.0-20250228023044-07930fd17979 // indirect
+	github.com/fullstack-lang/gongsvg v0.0.0-20250228023049-bb49bd65c7c6 // indirect
+	github.com/fullstack-lang/gongtable v0.0.0-20250228023050-cc13aa50af79 // indirect
+	github.com/fullstack-lang/gongtree v0.0.0-20250228023052-f51b21501fb7 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/gin-contrib/sse v1.0.0 // indirect
 	github.com/glebarez/go-sqlite v1.22.0 // indirect

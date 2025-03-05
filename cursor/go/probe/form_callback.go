@@ -6,7 +6,7 @@ import (
 	"slices"
 	"time"
 
-	table "github.com/fullstack-lang/gongtable/go/models"
+	table "github.com/fullstack-lang/gong/lib/table/go/models"
 
 	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/orm"

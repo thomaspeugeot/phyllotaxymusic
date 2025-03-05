@@ -15,16 +15,18 @@ import * as phyllotaxymusic from '../../projects/phyllotaxymusic/src/public-api'
 
 import { PhyllotaxymusicspecificComponent } from '../../projects/phyllotaxymusicspecific/src/public-api'
 
-import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
-import { MaterialTableComponent } from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtablespecific/src/lib/material-table/material-table.component';
-import { MaterialFormComponent } from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtablespecific/src/lib/material-form/material-form.component';
-import * as gongtable from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtable/src/public-api';
-import { PanelComponent } from '@vendored_components/github.com/fullstack-lang/gongdoc/ng-github.com-fullstack-lang-gongdoc/projects/gongdocspecific/src/public-api'
-import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
-
-import * as gongsvg from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvg/src/public-api';
-import * as gongtree from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtree/src/public-api';
 import * as gongtone from '@vendored_components/github.com/fullstack-lang/gongtone/ng-github.com-fullstack-lang-gongtone/projects/gongtone/src/public-api';
+
+import { TreeSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/tree/ng-github.com-fullstack-lang-gong-lib-tree/projects/treespecific/src/lib/tree-specific/tree-specific.component'
+import { TableSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/table/ng-github.com-fullstack-lang-gong-lib-table/projects/tablespecific/src/lib/table-specific/table-specific.component'
+import { FormSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/table/ng-github.com-fullstack-lang-gong-lib-table/projects/tablespecific/src/lib/form-specific/form-specific.component'
+import { SvgSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/svg/ng-github.com-fullstack-lang-gong-lib-svg/projects/svgspecific/src/lib/svg-specific/svg-specific.component'
+import { DocSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/doc/ng-github.com-fullstack-lang-gong-lib-doc/projects/docspecific/src/lib/doc-specific/doc-specific.component'
+
+import * as svg from '@vendored_components/github.com/fullstack-lang/gong/lib/svg/ng-github.com-fullstack-lang-gong-lib-svg/projects/svg/src/public-api'
+import * as tree from '@vendored_components/github.com/fullstack-lang/gong/lib/tree/ng-github.com-fullstack-lang-gong-lib-tree/projects/tree/src/public-api'
+import * as table from '@vendored_components/github.com/fullstack-lang/gong/lib/table/ng-github.com-fullstack-lang-gong-lib-table/projects/table/src/public-api'
+
 
 @Component({
     selector: 'app-root',
@@ -35,10 +37,13 @@ import * as gongtone from '@vendored_components/github.com/fullstack-lang/gongto
         MatButtonModule,
         MatIconModule,
         AngularSplitModule,
-        TreeComponent,
-        MaterialTableComponent,
-        MaterialFormComponent,
-        PanelComponent,
+
+        TreeSpecificComponent,
+        TableSpecificComponent,
+        FormSpecificComponent,
+        SvgSpecificComponent,
+        DocSpecificComponent,
+
         PhyllotaxymusicspecificComponent
     ],
     templateUrl: './app.component.html'
@@ -62,11 +67,11 @@ export class AppComponent implements OnInit {
   StackName = "phyllotaxymusic"
   StackType = phyllotaxymusic.StackType
 
-  TableExtraPathEnum = gongtable.TableExtraPathEnum
+  TableExtraPathEnum = table.TableExtraPathEnum
 
   StacksNames = phyllotaxymusic.StacksNames
-  SVGStackType = gongsvg.StackType
-  TreeStackType = gongtree.StackType
+  SVGStackType = svg.StackType
+  TreeStackType = tree.StackType
   ToneStackType = gongtone.StackType
 
 

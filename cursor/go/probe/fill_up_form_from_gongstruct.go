@@ -2,7 +2,7 @@
 package probe
 
 import (
-	gongtable "github.com/fullstack-lang/gongtable/go/models"
+	gongtable "github.com/fullstack-lang/gong/lib/table/go/models"
 
 	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 )
@@ -10,7 +10,6 @@ import (
 func FillUpFormFromGongstruct(instance any, probe *Probe) {
 	formStage := probe.formStage
 	formStage.Reset()
-	formStage.Commit()
 
 	FillUpNamedFormFromGongstruct(instance, probe, formStage, gongtable.FormGroupDefaultName.ToString())
 

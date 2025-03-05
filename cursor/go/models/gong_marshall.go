@@ -25,7 +25,7 @@ import (
 // if there are no elements in the stage to marshall
 var _ time.Time
 
-// Injection point for meta package dummy declaration{{ImportPackageDummyDeclaration}}
+// _ point for meta package dummy declaration{{ImportPackageDummyDeclaration}}
 
 // When parsed, those maps will help with the renaming process
 var _ map[string]any = map[string]any{
@@ -102,7 +102,14 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 		cursorOrdered = append(cursorOrdered, cursor)
 	}
 	sort.Slice(cursorOrdered[:], func(i, j int) bool {
-		return cursorOrdered[i].Name < cursorOrdered[j].Name
+		cursori := cursorOrdered[i]
+		cursorj := cursorOrdered[j]
+		cursori_order, oki := stage.Map_Staged_Order[cursori]
+		cursorj_order, okj := stage.Map_Staged_Order[cursorj]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return cursori_order < cursorj_order
 	})
 	if len(cursorOrdered) > 0 {
 		identifiersDecl += "\n"
@@ -213,6 +220,9 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	}
 
 	// insertion initialization of objects to stage
+	if len(cursorOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of Cursor instances pointers"
+	}
 	for idx, cursor := range cursorOrdered {
 		var setPointerField string
 		_ = setPointerField

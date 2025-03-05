@@ -13,30 +13,40 @@ import { AngularSplitModule } from 'angular-split';
 
 import * as cursor from '../../projects/cursor/src/public-api'
 
-import { CursorspecificComponent } from '../../projects/cursorspecific/src/public-api'
+import { CursorSpecificComponent } from '../../projects/cursorspecific/src/lib/cursor-specific/cursor-specific.component'
 
 import { TreeComponent } from '@vendored_components/github.com/fullstack-lang/gongtree/ng-github.com-fullstack-lang-gongtree/projects/gongtreespecific/src/public-api'
 import { MaterialTableComponent } from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtablespecific/src/lib/material-table/material-table.component';
 import { MaterialFormComponent } from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtablespecific/src/lib/material-form/material-form.component';
 import * as gongtable from '@vendored_components/github.com/fullstack-lang/gongtable/ng-github.com-fullstack-lang-gongtable/projects/gongtable/src/public-api';
 import { PanelComponent } from '@vendored_components/github.com/fullstack-lang/gongdoc/ng-github.com-fullstack-lang-gongdoc/projects/gongdocspecific/src/public-api'
+import { GongsvgDiagrammingComponent } from '@vendored_components/github.com/fullstack-lang/gongsvg/ng-github.com-fullstack-lang-gongsvg/projects/gongsvgspecific/src/lib/gongsvg-diagramming/gongsvg-diagramming'
+
 
 @Component({
-    selector: 'app-root',
-    imports: [
-        CommonModule,
-        FormsModule,
-        MatRadioModule,
-        MatButtonModule,
-        MatIconModule,
-        AngularSplitModule,
-        TreeComponent,
-        MaterialTableComponent,
-        MaterialFormComponent,
-        PanelComponent,
-        CursorspecificComponent
-    ],
-    templateUrl: './app.component.html'
+  selector: 'app-root',
+  standalone: true,
+  imports: [
+
+    CommonModule,
+    FormsModule,
+
+    MatRadioModule,
+    MatButtonModule,
+    MatIconModule,
+
+    AngularSplitModule,
+
+    TreeComponent,
+    MaterialTableComponent,
+    MaterialFormComponent,
+    PanelComponent,
+
+    CursorSpecificComponent
+
+  ],
+
+  templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
 

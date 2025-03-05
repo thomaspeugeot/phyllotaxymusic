@@ -21,7 +21,7 @@ import { SliderSpecificComponent } from '@vendored_components/github.com/fullsta
 import { TreeSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/tree/ng-github.com-fullstack-lang-gong-lib-tree/projects/treespecific/src/lib/tree-specific/tree-specific.component'
 import { SvgSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/svg/ng-github.com-fullstack-lang-gong-lib-svg/projects/svgspecific/src/lib/svg-specific/svg-specific.component'
 
-import { CursorspecificComponent } from '../../../../../cursor/ng-github.com-thomaspeugeot-phyllotaxymusic-cursor/projects/cursorspecific/src/public-api'
+import { CursorSpecificComponent } from '../../../../../cursor/ng-github.com-thomaspeugeot-phyllotaxymusic-cursor/projects/cursorspecific/src/lib/cursor-specific/cursor-specific.component'
 
 import { CommonModule } from '@angular/common';
 
@@ -43,7 +43,7 @@ import { CommonModule } from '@angular/common';
         
         TreeSpecificComponent,
         GongtoneComponent,
-        CursorspecificComponent,
+        CursorSpecificComponent,
 
         SliderSpecificComponent,
         ButtonSpecificComponent,

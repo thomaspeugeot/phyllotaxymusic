@@ -27,20 +27,20 @@
             <as-split-area [size]=50>
                 <as-split direction="horizontal">
                     <as-split-area [size]="20">
-                        <lib-tree [GONG__StackPath]="StackName+TableExtraPathEnum.StackNamePostFixForTableForMainTree" name="gong"></lib-tree>
+                        <lib-tree-specific [GONG__StackPath]="StackName+TableExtraPathEnum.StackNamePostFixForTableForMainTree" name="gong"></lib-tree-specific>
                     </as-split-area>
                     <as-split-area [size]="50">
                         <div [ngStyle]="scrollStyle">
-                            <lib-material-table TableName="Table" [DataStack]="StackName+TableExtraPathEnum.StackNamePostFixForTableForMainTable"></lib-material-table>
+                            <lib-table-specific TableName="Table" [DataStack]="StackName+TableExtraPathEnum.StackNamePostFixForTableForMainTable"></lib-table-specific>
                         </div>
                     </as-split-area>
                     <as-split-area [size]="30">
-                        <lib-material-form FormName="Form" [DataStack]="StackName+TableExtraPathEnum.StackNamePostFixForTableForMainForm"></lib-material-form>
+                        <lib-form-specific FormName="Form" [DataStack]="StackName+TableExtraPathEnum.StackNamePostFixForTableForMainForm"></lib-form-specific>
                     </as-split-area>
                 </as-split>
             </as-split-area>
             <as-split-area [size]=50>
-                <lib-panel [GONG__StackPath]="StackType"></lib-panel>
+                <lib-doc-specific [GONG__StackPath]="StackType"></lib-doc-specific>
             </as-split-area>
         </as-split>
 
@@ -57,23 +57,23 @@
             <as-split-area [size]=50>
                 <as-split direction="horizontal">
                     <as-split-area [size]="20">
-                        <lib-tree [GONG__StackPath]="StacksNames.GongsvgStackName+
-                        TableExtraPathEnum.StackNamePostFixForTableForMainTree" name="gong"></lib-tree>
+                        <lib-tree-specific [GONG__StackPath]="StacksNames.GongsvgStackName+
+                        TableExtraPathEnum.StackNamePostFixForTableForMainTree" name="gong"></lib-tree-specific>
                     </as-split-area>
                     <as-split-area [size]="50">
                         <div [ngStyle]="scrollStyle">
-                            <lib-material-table TableName="Table" [DataStack]="StacksNames.GongsvgStackName+
-                            TableExtraPathEnum.StackNamePostFixForTableForMainTable"></lib-material-table>
+                            <lib-table-specific TableName="Table" [DataStack]="StacksNames.GongsvgStackName+
+                            TableExtraPathEnum.StackNamePostFixForTableForMainTable"></lib-table-specific>
                         </div>
                     </as-split-area>
                     <as-split-area [size]="30">
-                        <lib-material-form FormName="Form" [DataStack]="StacksNames.GongsvgStackName+
-                            TableExtraPathEnum.StackNamePostFixForTableForMainForm"></lib-material-form>
+                        <lib-form-specific FormName="Form" [DataStack]="StacksNames.GongsvgStackName+
+                            TableExtraPathEnum.StackNamePostFixForTableForMainForm"></lib-form-specific>
                     </as-split-area>
                 </as-split>
             </as-split-area>
             <as-split-area [size]=50>
-                <lib-panel [GONG__StackPath]="SVGStackType"></lib-panel>
+                <lib-doc-specific [GONG__StackPath]="SVGStackType"></lib-doc-specific>
             </as-split-area>
         </as-split>
     </as-split-area>
@@ -88,23 +88,23 @@
             <as-split-area [size]=50>
                 <as-split direction="horizontal">
                     <as-split-area [size]="20">
-                        <lib-tree [GONG__StackPath]="StacksNames.SidebarTree+
-                        TableExtraPathEnum.StackNamePostFixForTableForMainTree" name="gong"></lib-tree>
+                        <lib-tree-specific [GONG__StackPath]="StacksNames.SidebarTree+
+                        TableExtraPathEnum.StackNamePostFixForTableForMainTree" name="gong"></lib-tree-specific>
                     </as-split-area>
                     <as-split-area [size]="50">
                         <div [ngStyle]="scrollStyle">
-                            <lib-material-table TableName="Table" [DataStack]="StacksNames.SidebarTree+
-                            TableExtraPathEnum.StackNamePostFixForTableForMainTable"></lib-material-table>
+                            <lib-table-specific TableName="Table" [DataStack]="StacksNames.SidebarTree+
+                            TableExtraPathEnum.StackNamePostFixForTableForMainTable"></lib-table-specific>
                         </div>
                     </as-split-area>
                     <as-split-area [size]="30">
-                        <lib-material-form FormName="Form" [DataStack]="StacksNames.SidebarTree+
-                         TableExtraPathEnum.StackNamePostFixForTableForMainForm"></lib-material-form>
+                        <lib-form-specific FormName="Form" [DataStack]="StacksNames.SidebarTree+
+                         TableExtraPathEnum.StackNamePostFixForTableForMainForm"></lib-form-specific>
                     </as-split-area>
                 </as-split>
             </as-split-area>
             <as-split-area [size]=50>
-                <lib-panel [GONG__StackPath]="TreeStackType"></lib-panel>
+                <lib-doc-specific [GONG__StackPath]="TreeStackType"></lib-doc-specific>
             </as-split-area>
         </as-split>
     </as-split-area>
@@ -120,23 +120,23 @@
             <as-split-area [size]=50>
                 <as-split direction="horizontal">
                     <as-split-area [size]="20">
-                        <lib-tree [GONG__StackPath]="StacksNames.GongtoneStackName+
-                        TableExtraPathEnum.StackNamePostFixForTableForMainTree" name="gong"></lib-tree>
+                        <lib-tree-specific [GONG__StackPath]="StacksNames.GongtoneStackName+
+                        TableExtraPathEnum.StackNamePostFixForTableForMainTree" name="gong"></lib-tree-specific>
                     </as-split-area>
                     <as-split-area [size]="50">
                         <div [ngStyle]="scrollStyle">
-                            <lib-material-table TableName="Table" [DataStack]="StacksNames.GongtoneStackName+
-                            TableExtraPathEnum.StackNamePostFixForTableForMainTable"></lib-material-table>
+                            <lib-table-specific TableName="Table" [DataStack]="StacksNames.GongtoneStackName+
+                            TableExtraPathEnum.StackNamePostFixForTableForMainTable"></lib-table-specific>
                         </div>
                     </as-split-area>
                     <as-split-area [size]="30">
-                        <lib-material-form FormName="Form" [DataStack]="StacksNames.GongtoneStackName+
-                         TableExtraPathEnum.StackNamePostFixForTableForMainForm"></lib-material-form>
+                        <lib-form-specific FormName="Form" [DataStack]="StacksNames.GongtoneStackName+
+                         TableExtraPathEnum.StackNamePostFixForTableForMainForm"></lib-form-specific>
                     </as-split-area>
                 </as-split>
             </as-split-area>
             <as-split-area [size]=50>
-                <lib-panel [GONG__StackPath]="ToneStackType"></lib-panel>
+                <lib-doc-specific [GONG__StackPath]="ToneStackType"></lib-doc-specific>
             </as-split-area>
         </as-split>
     </as-split-area>

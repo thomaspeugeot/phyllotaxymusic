@@ -2,7 +2,7 @@
 package probe
 
 import (
-	form "github.com/fullstack-lang/gongtable/go/models"
+	form "github.com/fullstack-lang/gong/lib/table/go/models"
 
 	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 	"github.com/thomaspeugeot/phyllotaxymusic/cursor/go/orm"

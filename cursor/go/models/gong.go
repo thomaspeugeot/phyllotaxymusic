@@ -78,6 +78,11 @@ type StageStruct struct {
 	// map to enable docLink renaming when an identifier is renamed
 	Map_DocLink_Renaming map[string]GONG__Identifier
 	// the to be removed stops here
+	
+	// store the stage order of each instance in order to
+	// preserve this order when serializing them
+	Order            uint
+	Map_Staged_Order map[any]uint
 }
 
 func (stage *StageStruct) GetType() string {
@@ -144,6 +149,8 @@ func NewStage(path string) (stage *StageStruct) {
 		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
 		// the to be removed stops here
+
+		Map_Staged_Order: make(map[any]uint),
 	}
 
 	return
@@ -215,7 +222,12 @@ func (stage *StageStruct) RestoreXL(dirPath string) {
 // insertion point for cumulative sub template with model space calls
 // Stage puts cursor to the model stage
 func (cursor *Cursor) Stage(stage *StageStruct) *Cursor {
-	stage.Cursors[cursor] = __member
+
+	if _, ok := stage.Cursors[cursor]; !ok {
+		stage.Cursors[cursor] = __member
+		stage.Map_Staged_Order[cursor] = stage.Order
+		stage.Order++
+	}
 	stage.Cursors_mapString[cursor.Name] = cursor
 
 	return cursor
@@ -552,10 +564,10 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt     GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat   GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool    GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers  GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
 )
 
 type GongFieldValue struct {
