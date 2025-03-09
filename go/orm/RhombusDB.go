@@ -219,7 +219,17 @@ func (backRepoRhombus *BackRepoRhombusStruct) GetRhombusDBFromRhombusPtr(rhombus
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoRhombus *BackRepoRhombusStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var rhombuss []*models.Rhombus
 	for rhombus := range stage.Rhombuss {
+		rhombuss = append(rhombuss, rhombus)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(rhombuss, func(i, j int) bool {
+		return stage.Map_Staged_Order[rhombuss[i]] < stage.Map_Staged_Order[rhombuss[j]]
+	})
+
+	for _, rhombus := range rhombuss {
 		backRepoRhombus.CommitPhaseOneInstance(rhombus)
 	}
 

@@ -5,7 +5,7 @@ import (
 
 	gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 
-	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
+	gongtone_models "github.com/fullstack-lang/gong/lib/tone/go/models"
 )
 
 type Circle struct {

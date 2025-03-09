@@ -148,7 +148,17 @@ func (backRepoSpiralCircleGrid *BackRepoSpiralCircleGridStruct) GetSpiralCircleG
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoSpiralCircleGrid *BackRepoSpiralCircleGridStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var spiralcirclegrids []*models.SpiralCircleGrid
 	for spiralcirclegrid := range stage.SpiralCircleGrids {
+		spiralcirclegrids = append(spiralcirclegrids, spiralcirclegrid)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(spiralcirclegrids, func(i, j int) bool {
+		return stage.Map_Staged_Order[spiralcirclegrids[i]] < stage.Map_Staged_Order[spiralcirclegrids[j]]
+	})
+
+	for _, spiralcirclegrid := range spiralcirclegrids {
 		backRepoSpiralCircleGrid.CommitPhaseOneInstance(spiralcirclegrid)
 	}
 

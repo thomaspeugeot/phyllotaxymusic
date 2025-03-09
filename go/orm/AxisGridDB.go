@@ -148,7 +148,17 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) GetAxisGridDBFromAxisGridPtr(axi
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var axisgrids []*models.AxisGrid
 	for axisgrid := range stage.AxisGrids {
+		axisgrids = append(axisgrids, axisgrid)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(axisgrids, func(i, j int) bool {
+		return stage.Map_Staged_Order[axisgrids[i]] < stage.Map_Staged_Order[axisgrids[j]]
+	})
+
+	for _, axisgrid := range axisgrids {
 		backRepoAxisGrid.CommitPhaseOneInstance(axisgrid)
 	}
 

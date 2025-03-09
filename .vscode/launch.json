@@ -27,24 +27,5 @@
                 "-genmusicxml"
             ]
         },
-        {
-            "name": "go server on sliders",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/sliders/go/cmd/sliders/main.go",
-            "args": [
-                "-unmarshallFromCode=data/stage.go",
-                "-marshallOnCommit=data/stage",
-            ]
-        },
-        {
-            "name": "Launch Chrome on sliders",
-            "request": "launch",
-            "type": "chrome",
-            "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}/sliders/ng-github.com-thomaspeugeot-phyllotaxymusic-sliders"
-        },
-        
     ]
 }

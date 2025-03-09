@@ -155,7 +155,7 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 	if axisFormCallback.CreationMode || axisFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		axisFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(axisFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__AxisFormCallback(
 			nil,
@@ -238,7 +238,7 @@ func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
 	if axisgridFormCallback.CreationMode || axisgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		axisgridFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(axisgridFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__AxisGridFormCallback(
 			nil,
@@ -393,7 +393,7 @@ func (bezierFormCallback *BezierFormCallback) OnSave() {
 	if bezierFormCallback.CreationMode || bezierFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		bezierFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(bezierFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__BezierFormCallback(
 			nil,
@@ -518,7 +518,7 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 	if beziergridFormCallback.CreationMode || beziergridFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		beziergridFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(beziergridFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__BezierGridFormCallback(
 			nil,
@@ -599,7 +599,7 @@ func (beziergridstackFormCallback *BezierGridStackFormCallback) OnSave() {
 	if beziergridstackFormCallback.CreationMode || beziergridstackFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		beziergridstackFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(beziergridstackFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__BezierGridStackFormCallback(
 			nil,
@@ -752,7 +752,7 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 	if circleFormCallback.CreationMode || circleFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		circleFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(circleFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__CircleFormCallback(
 			nil,
@@ -835,7 +835,7 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 	if circlegridFormCallback.CreationMode || circlegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		circlegridFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(circlegridFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__CircleGridFormCallback(
 			nil,
@@ -914,7 +914,7 @@ func (exporttomusicxmlFormCallback *ExportToMusicxmlFormCallback) OnSave() {
 	if exporttomusicxmlFormCallback.CreationMode || exporttomusicxmlFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		exporttomusicxmlFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(exporttomusicxmlFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__ExportToMusicxmlFormCallback(
 			nil,
@@ -1035,7 +1035,7 @@ func (frontcurveFormCallback *FrontCurveFormCallback) OnSave() {
 	if frontcurveFormCallback.CreationMode || frontcurveFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		frontcurveFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(frontcurveFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__FrontCurveFormCallback(
 			nil,
@@ -1132,7 +1132,7 @@ func (frontcurvestackFormCallback *FrontCurveStackFormCallback) OnSave() {
 	if frontcurvestackFormCallback.CreationMode || frontcurvestackFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		frontcurvestackFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(frontcurvestackFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__FrontCurveStackFormCallback(
 			nil,
@@ -1233,7 +1233,7 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 	if horizontalaxisFormCallback.CreationMode || horizontalaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		horizontalaxisFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(horizontalaxisFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__HorizontalAxisFormCallback(
 			nil,
@@ -1332,7 +1332,7 @@ func (keyFormCallback *KeyFormCallback) OnSave() {
 	if keyFormCallback.CreationMode || keyFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		keyFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(keyFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__KeyFormCallback(
 			nil,
@@ -1605,7 +1605,7 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 	if parameterFormCallback.CreationMode || parameterFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		parameterFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(parameterFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__ParameterFormCallback(
 			nil,
@@ -1754,7 +1754,7 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 	if rhombusFormCallback.CreationMode || rhombusFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		rhombusFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(rhombusFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__RhombusFormCallback(
 			nil,
@@ -1837,7 +1837,7 @@ func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 	if rhombusgridFormCallback.CreationMode || rhombusgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		rhombusgridFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(rhombusgridFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__RhombusGridFormCallback(
 			nil,
@@ -1916,7 +1916,7 @@ func (shapecategoryFormCallback *ShapeCategoryFormCallback) OnSave() {
 	if shapecategoryFormCallback.CreationMode || shapecategoryFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		shapecategoryFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(shapecategoryFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__ShapeCategoryFormCallback(
 			nil,
@@ -2071,7 +2071,7 @@ func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
 	if spiralbezierFormCallback.CreationMode || spiralbezierFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		spiralbezierFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(spiralbezierFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__SpiralBezierFormCallback(
 			nil,
@@ -2152,7 +2152,7 @@ func (spiralbeziergridFormCallback *SpiralBezierGridFormCallback) OnSave() {
 	if spiralbeziergridFormCallback.CreationMode || spiralbeziergridFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		spiralbeziergridFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(spiralbeziergridFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__SpiralBezierGridFormCallback(
 			nil,
@@ -2349,7 +2349,7 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 	if spiralcircleFormCallback.CreationMode || spiralcircleFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		spiralcircleFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(spiralcircleFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__SpiralCircleFormCallback(
 			nil,
@@ -2432,7 +2432,7 @@ func (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) OnSave() {
 	if spiralcirclegridFormCallback.CreationMode || spiralcirclegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		spiralcirclegridFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(spiralcirclegridFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__SpiralCircleGridFormCallback(
 			nil,
@@ -2579,7 +2579,7 @@ func (spirallineFormCallback *SpiralLineFormCallback) OnSave() {
 	if spirallineFormCallback.CreationMode || spirallineFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		spirallineFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(spirallineFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__SpiralLineFormCallback(
 			nil,
@@ -2660,7 +2660,7 @@ func (spirallinegridFormCallback *SpiralLineGridFormCallback) OnSave() {
 	if spirallinegridFormCallback.CreationMode || spirallinegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		spirallinegridFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(spirallinegridFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__SpiralLineGridFormCallback(
 			nil,
@@ -2757,7 +2757,7 @@ func (spiraloriginFormCallback *SpiralOriginFormCallback) OnSave() {
 	if spiraloriginFormCallback.CreationMode || spiraloriginFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		spiraloriginFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(spiraloriginFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__SpiralOriginFormCallback(
 			nil,
@@ -2912,7 +2912,7 @@ func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 	if spiralrhombusFormCallback.CreationMode || spiralrhombusFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		spiralrhombusFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(spiralrhombusFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__SpiralRhombusFormCallback(
 			nil,
@@ -2993,7 +2993,7 @@ func (spiralrhombusgridFormCallback *SpiralRhombusGridFormCallback) OnSave() {
 	if spiralrhombusgridFormCallback.CreationMode || spiralrhombusgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		spiralrhombusgridFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(spiralrhombusgridFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__SpiralRhombusGridFormCallback(
 			nil,
@@ -3094,7 +3094,7 @@ func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
 	if verticalaxisFormCallback.CreationMode || verticalaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		verticalaxisFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(verticalaxisFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__VerticalAxisFormCallback(
 			nil,

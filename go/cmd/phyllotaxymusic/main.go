@@ -11,7 +11,7 @@ import (
 
 	gongsvg_stack "github.com/fullstack-lang/gong/lib/svg/go/stack"
 
-	gongtone_stack "github.com/fullstack-lang/gongtone/go/stack"
+	gongtone_stack "github.com/fullstack-lang/gong/lib/tone/go/stack"
 
 	gongtree_stack "github.com/fullstack-lang/gong/lib/tree/go/stack"
 

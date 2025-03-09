@@ -201,7 +201,17 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) GetVerticalAxisDBFromVer
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var verticalaxiss []*models.VerticalAxis
 	for verticalaxis := range stage.VerticalAxiss {
+		verticalaxiss = append(verticalaxiss, verticalaxis)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(verticalaxiss, func(i, j int) bool {
+		return stage.Map_Staged_Order[verticalaxiss[i]] < stage.Map_Staged_Order[verticalaxiss[j]]
+	})
+
+	for _, verticalaxis := range verticalaxiss {
 		backRepoVerticalAxis.CommitPhaseOneInstance(verticalaxis)
 	}
 

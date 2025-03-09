@@ -225,7 +225,17 @@ func (backRepoAxis *BackRepoAxisStruct) GetAxisDBFromAxisPtr(axis *models.Axis) 
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoAxis *BackRepoAxisStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var axiss []*models.Axis
 	for axis := range stage.Axiss {
+		axiss = append(axiss, axis)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(axiss, func(i, j int) bool {
+		return stage.Map_Staged_Order[axiss[i]] < stage.Map_Staged_Order[axiss[j]]
+	})
+
+	for _, axis := range axiss {
 		backRepoAxis.CommitPhaseOneInstance(axis)
 	}
 

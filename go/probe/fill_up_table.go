@@ -77,6 +77,8 @@ func fillUpTablePointerToGongstruct[T models.PointerToGongstruct](
 	}
 }
 
+const TableName = "Table"
+
 func fillUpTable[T models.Gongstruct](
 	probe *Probe,
 ) {
@@ -84,7 +86,7 @@ func fillUpTable[T models.Gongstruct](
 	probe.tableStage.Reset()
 
 	table := new(gongtable.Table).Stage(probe.tableStage)
-	table.Name = "Table"
+	table.Name = TableName
 	table.HasColumnSorting = true
 	table.HasFiltering = true
 	table.HasPaginator = true

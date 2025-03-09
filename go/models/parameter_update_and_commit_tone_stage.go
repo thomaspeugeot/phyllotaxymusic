@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	gongtone_models "github.com/fullstack-lang/gongtone/go/models"
+	gongtone_models "github.com/fullstack-lang/gong/lib/tone/go/models"
 )
 
 func (p *Parameter) UpdateAndCommitToneStage() {

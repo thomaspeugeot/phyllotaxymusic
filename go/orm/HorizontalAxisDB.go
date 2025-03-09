@@ -201,7 +201,17 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) GetHorizontalAxisDBF
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var horizontalaxiss []*models.HorizontalAxis
 	for horizontalaxis := range stage.HorizontalAxiss {
+		horizontalaxiss = append(horizontalaxiss, horizontalaxis)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(horizontalaxiss, func(i, j int) bool {
+		return stage.Map_Staged_Order[horizontalaxiss[i]] < stage.Map_Staged_Order[horizontalaxiss[j]]
+	})
+
+	for _, horizontalaxis := range horizontalaxiss {
 		backRepoHorizontalAxis.CommitPhaseOneInstance(horizontalaxis)
 	}
 

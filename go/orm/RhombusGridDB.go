@@ -148,7 +148,17 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) GetRhombusGridDBFromRhombu
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var rhombusgrids []*models.RhombusGrid
 	for rhombusgrid := range stage.RhombusGrids {
+		rhombusgrids = append(rhombusgrids, rhombusgrid)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(rhombusgrids, func(i, j int) bool {
+		return stage.Map_Staged_Order[rhombusgrids[i]] < stage.Map_Staged_Order[rhombusgrids[j]]
+	})
+
+	for _, rhombusgrid := range rhombusgrids {
 		backRepoRhombusGrid.CommitPhaseOneInstance(rhombusgrid)
 	}
 

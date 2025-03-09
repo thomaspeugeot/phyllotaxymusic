@@ -237,7 +237,17 @@ func (backRepoBezier *BackRepoBezierStruct) GetBezierDBFromBezierPtr(bezier *mod
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoBezier *BackRepoBezierStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var beziers []*models.Bezier
 	for bezier := range stage.Beziers {
+		beziers = append(beziers, bezier)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(beziers, func(i, j int) bool {
+		return stage.Map_Staged_Order[beziers[i]] < stage.Map_Staged_Order[beziers[j]]
+	})
+
+	for _, bezier := range beziers {
 		backRepoBezier.CommitPhaseOneInstance(bezier)
 	}
 

@@ -144,7 +144,17 @@ func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) GetSpiralLineGridDBF
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoSpiralLineGrid *BackRepoSpiralLineGridStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var spirallinegrids []*models.SpiralLineGrid
 	for spirallinegrid := range stage.SpiralLineGrids {
+		spirallinegrids = append(spirallinegrids, spirallinegrid)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(spirallinegrids, func(i, j int) bool {
+		return stage.Map_Staged_Order[spirallinegrids[i]] < stage.Map_Staged_Order[spirallinegrids[j]]
+	})
+
+	for _, spirallinegrid := range spirallinegrids {
 		backRepoSpiralLineGrid.CommitPhaseOneInstance(spirallinegrid)
 	}
 

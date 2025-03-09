@@ -195,7 +195,17 @@ func (backRepoKey *BackRepoKeyStruct) GetKeyDBFromKeyPtr(key *models.Key) (keyDB
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoKey *BackRepoKeyStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var keys []*models.Key
 	for key := range stage.Keys {
+		keys = append(keys, key)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(keys, func(i, j int) bool {
+		return stage.Map_Staged_Order[keys[i]] < stage.Map_Staged_Order[keys[j]]
+	})
+
+	for _, key := range keys {
 		backRepoKey.CommitPhaseOneInstance(key)
 	}
 

@@ -144,7 +144,17 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) GetSpiralRhomb
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var spiralrhombusgrids []*models.SpiralRhombusGrid
 	for spiralrhombusgrid := range stage.SpiralRhombusGrids {
+		spiralrhombusgrids = append(spiralrhombusgrids, spiralrhombusgrid)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(spiralrhombusgrids, func(i, j int) bool {
+		return stage.Map_Staged_Order[spiralrhombusgrids[i]] < stage.Map_Staged_Order[spiralrhombusgrids[j]]
+	})
+
+	for _, spiralrhombusgrid := range spiralrhombusgrids {
 		backRepoSpiralRhombusGrid.CommitPhaseOneInstance(spiralrhombusgrid)
 	}
 

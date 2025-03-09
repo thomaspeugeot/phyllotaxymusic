@@ -27,7 +27,7 @@ func FillUpFormFromGongstructName(
 	// insertion point
 	case "Axis":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "Axis Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__AxisFormCallback(
@@ -40,7 +40,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(axis, formGroup, probe)
 	case "AxisGrid":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "AxisGrid Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__AxisGridFormCallback(
@@ -53,7 +53,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(axisgrid, formGroup, probe)
 	case "Bezier":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "Bezier Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__BezierFormCallback(
@@ -66,7 +66,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(bezier, formGroup, probe)
 	case "BezierGrid":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "BezierGrid Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__BezierGridFormCallback(
@@ -79,7 +79,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(beziergrid, formGroup, probe)
 	case "BezierGridStack":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "BezierGridStack Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__BezierGridStackFormCallback(
@@ -92,7 +92,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(beziergridstack, formGroup, probe)
 	case "Circle":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "Circle Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__CircleFormCallback(
@@ -105,7 +105,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(circle, formGroup, probe)
 	case "CircleGrid":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "CircleGrid Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__CircleGridFormCallback(
@@ -118,7 +118,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(circlegrid, formGroup, probe)
 	case "ExportToMusicxml":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "ExportToMusicxml Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__ExportToMusicxmlFormCallback(
@@ -131,7 +131,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(exporttomusicxml, formGroup, probe)
 	case "FrontCurve":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "FrontCurve Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__FrontCurveFormCallback(
@@ -144,7 +144,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(frontcurve, formGroup, probe)
 	case "FrontCurveStack":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "FrontCurveStack Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__FrontCurveStackFormCallback(
@@ -157,7 +157,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(frontcurvestack, formGroup, probe)
 	case "HorizontalAxis":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "HorizontalAxis Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__HorizontalAxisFormCallback(
@@ -170,7 +170,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(horizontalaxis, formGroup, probe)
 	case "Key":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "Key Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__KeyFormCallback(
@@ -183,7 +183,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(key, formGroup, probe)
 	case "Parameter":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "Parameter Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__ParameterFormCallback(
@@ -196,7 +196,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(parameter, formGroup, probe)
 	case "Rhombus":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "Rhombus Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__RhombusFormCallback(
@@ -209,7 +209,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(rhombus, formGroup, probe)
 	case "RhombusGrid":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "RhombusGrid Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__RhombusGridFormCallback(
@@ -222,7 +222,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(rhombusgrid, formGroup, probe)
 	case "ShapeCategory":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "ShapeCategory Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__ShapeCategoryFormCallback(
@@ -235,7 +235,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(shapecategory, formGroup, probe)
 	case "SpiralBezier":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "SpiralBezier Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__SpiralBezierFormCallback(
@@ -248,7 +248,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(spiralbezier, formGroup, probe)
 	case "SpiralBezierGrid":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "SpiralBezierGrid Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__SpiralBezierGridFormCallback(
@@ -261,7 +261,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(spiralbeziergrid, formGroup, probe)
 	case "SpiralCircle":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "SpiralCircle Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__SpiralCircleFormCallback(
@@ -274,7 +274,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(spiralcircle, formGroup, probe)
 	case "SpiralCircleGrid":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "SpiralCircleGrid Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__SpiralCircleGridFormCallback(
@@ -287,7 +287,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(spiralcirclegrid, formGroup, probe)
 	case "SpiralLine":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "SpiralLine Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__SpiralLineFormCallback(
@@ -300,7 +300,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(spiralline, formGroup, probe)
 	case "SpiralLineGrid":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "SpiralLineGrid Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__SpiralLineGridFormCallback(
@@ -313,7 +313,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(spirallinegrid, formGroup, probe)
 	case "SpiralOrigin":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "SpiralOrigin Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__SpiralOriginFormCallback(
@@ -326,7 +326,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(spiralorigin, formGroup, probe)
 	case "SpiralRhombus":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "SpiralRhombus Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__SpiralRhombusFormCallback(
@@ -339,7 +339,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(spiralrhombus, formGroup, probe)
 	case "SpiralRhombusGrid":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "SpiralRhombusGrid Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__SpiralRhombusGridFormCallback(
@@ -352,7 +352,7 @@ func FillUpFormFromGongstructName(
 		FillUpForm(spiralrhombusgrid, formGroup, probe)
 	case "VerticalAxis":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "VerticalAxis Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__VerticalAxisFormCallback(

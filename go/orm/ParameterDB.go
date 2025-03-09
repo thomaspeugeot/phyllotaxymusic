@@ -603,7 +603,17 @@ func (backRepoParameter *BackRepoParameterStruct) GetParameterDBFromParameterPtr
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoParameter *BackRepoParameterStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var parameters []*models.Parameter
 	for parameter := range stage.Parameters {
+		parameters = append(parameters, parameter)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(parameters, func(i, j int) bool {
+		return stage.Map_Staged_Order[parameters[i]] < stage.Map_Staged_Order[parameters[j]]
+	})
+
+	for _, parameter := range parameters {
 		backRepoParameter.CommitPhaseOneInstance(parameter)
 	}
 

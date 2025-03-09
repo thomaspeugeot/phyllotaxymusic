@@ -144,7 +144,17 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) GetSpiralBezierG
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var spiralbeziergrids []*models.SpiralBezierGrid
 	for spiralbeziergrid := range stage.SpiralBezierGrids {
+		spiralbeziergrids = append(spiralbeziergrids, spiralbeziergrid)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(spiralbeziergrids, func(i, j int) bool {
+		return stage.Map_Staged_Order[spiralbeziergrids[i]] < stage.Map_Staged_Order[spiralbeziergrids[j]]
+	})
+
+	for _, spiralbeziergrid := range spiralbeziergrids {
 		backRepoSpiralBezierGrid.CommitPhaseOneInstance(spiralbeziergrid)
 	}
 

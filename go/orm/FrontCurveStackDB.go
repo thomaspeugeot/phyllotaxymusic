@@ -195,7 +195,17 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) GetFrontCurveStack
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var frontcurvestacks []*models.FrontCurveStack
 	for frontcurvestack := range stage.FrontCurveStacks {
+		frontcurvestacks = append(frontcurvestacks, frontcurvestack)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(frontcurvestacks, func(i, j int) bool {
+		return stage.Map_Staged_Order[frontcurvestacks[i]] < stage.Map_Staged_Order[frontcurvestacks[j]]
+	})
+
+	for _, frontcurvestack := range frontcurvestacks {
 		backRepoFrontCurveStack.CommitPhaseOneInstance(frontcurvestack)
 	}
 

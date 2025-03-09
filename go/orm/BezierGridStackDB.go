@@ -144,7 +144,17 @@ func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) GetBezierGridStack
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var beziergridstacks []*models.BezierGridStack
 	for beziergridstack := range stage.BezierGridStacks {
+		beziergridstacks = append(beziergridstacks, beziergridstack)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(beziergridstacks, func(i, j int) bool {
+		return stage.Map_Staged_Order[beziergridstacks[i]] < stage.Map_Staged_Order[beziergridstacks[j]]
+	})
+
+	for _, beziergridstack := range beziergridstacks {
 		backRepoBezierGridStack.CommitPhaseOneInstance(beziergridstack)
 	}
 

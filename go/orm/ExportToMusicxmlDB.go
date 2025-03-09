@@ -134,7 +134,17 @@ func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) GetExportToMusic
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var exporttomusicxmls []*models.ExportToMusicxml
 	for exporttomusicxml := range stage.ExportToMusicxmls {
+		exporttomusicxmls = append(exporttomusicxmls, exporttomusicxml)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(exporttomusicxmls, func(i, j int) bool {
+		return stage.Map_Staged_Order[exporttomusicxmls[i]] < stage.Map_Staged_Order[exporttomusicxmls[j]]
+	})
+
+	for _, exporttomusicxml := range exporttomusicxmls {
 		backRepoExportToMusicxml.CommitPhaseOneInstance(exporttomusicxml)
 	}
 

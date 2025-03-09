@@ -136,7 +136,17 @@ func (backRepoFrontCurve *BackRepoFrontCurveStruct) GetFrontCurveDBFromFrontCurv
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoFrontCurve *BackRepoFrontCurveStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var frontcurves []*models.FrontCurve
 	for frontcurve := range stage.FrontCurves {
+		frontcurves = append(frontcurves, frontcurve)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(frontcurves, func(i, j int) bool {
+		return stage.Map_Staged_Order[frontcurves[i]] < stage.Map_Staged_Order[frontcurves[j]]
+	})
+
+	for _, frontcurve := range frontcurves {
 		backRepoFrontCurve.CommitPhaseOneInstance(frontcurve)
 	}
 
