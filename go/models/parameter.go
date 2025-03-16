@@ -5,6 +5,7 @@ import (
 
 	button_models "github.com/fullstack-lang/gong/lib/button/go/models"
 	slider_models "github.com/fullstack-lang/gong/lib/slider/go/models"
+	split_models "github.com/fullstack-lang/gong/lib/split/go/models"
 	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 
 	gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
@@ -197,14 +198,15 @@ type Parameter struct {
 	gongtreeStage        *gongtree_models.StageStruct
 	cursorStage          *cursor_models.StageStruct
 	slidersStage         *slider_models.StageStruct
-	buttonsStage         *button_models.StageStruct
+	buttonStage          *button_models.StageStruct
+	splitStage           *split_models.StageStruct
 
 	treeProxy *TreeProxy
 }
 
 // GetButtonsStage implements models.Target.
 func (parameter *Parameter) GetButtonsStage() *button_models.StageStruct {
-	return parameter.buttonsStage
+	return parameter.buttonStage
 }
 
 // OnAfterUpdateButton implements models.Target.
@@ -226,7 +228,11 @@ func (parameter *Parameter) SetSlidersStage(slidersStage *slider_models.StageStr
 }
 
 func (parameter *Parameter) SetButtonsStage(buttonsStage *button_models.StageStruct) {
-	parameter.buttonsStage = buttonsStage
+	parameter.buttonStage = buttonsStage
+}
+
+func (parameter *Parameter) SetSplitsStage(splitsStage *split_models.StageStruct) {
+	parameter.splitStage = splitsStage
 }
 
 func (parameter *Parameter) SetGongsvgStage(gongsvgStage *gongsvg_models.StageStruct) {
@@ -314,7 +320,7 @@ func (parameter *Parameter) UpdateAllStages() {
 	parameter.UpdateAndCommitToneStage()
 	parameter.UpdateAndCommitTreeStage()
 	parameter.UpdateAndCommitSlidersStage()
-	parameter.UpdateAndCommitButtonsStage()
+	parameter.UpdateAndCommitButtonStage()
 	parameter.CommitPhyllotaxymusicStage()
 }
 
@@ -324,7 +330,7 @@ func (parameter *Parameter) UpdateAllStagesButSliders() {
 	parameter.UpdateAndCommitSVGStage()
 	parameter.UpdateAndCommitToneStage()
 	parameter.UpdateAndCommitTreeStage()
-	parameter.UpdateAndCommitButtonsStage()
+	parameter.UpdateAndCommitButtonStage()
 	parameter.CommitPhyllotaxymusicStage()
 }
 

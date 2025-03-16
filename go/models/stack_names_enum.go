@@ -14,6 +14,7 @@ const (
 	GongtoneStackName StacksNames = "gongtone"
 
 	GongLibButtonStackName StacksNames = "button"
+	GongLibSplitStackName  StacksNames = "root"
 	GongLibSliderStackName StacksNames = "slider"
 
 	GongtreeStackName  StacksNames = "gongtree"

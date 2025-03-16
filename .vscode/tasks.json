@@ -63,9 +63,9 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "04 - ng serve --host=127.0.0.1",
+			"label": "04 - ng serve",
 			"type": "shell",
-			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic; ng serve --host=127.0.0.1",
+			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic; ng serve",
 			"group": "build",
 			"problemMatcher": []
 		},

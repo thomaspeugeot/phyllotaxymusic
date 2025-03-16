@@ -4,12 +4,12 @@ import (
 	buttons "github.com/fullstack-lang/gong/lib/button/go/models"
 )
 
-func (parameter *Parameter) UpdateAndCommitButtonsStage() {
-	parameter.buttonsStage.Reset()
+func (parameter *Parameter) UpdateAndCommitButtonStage() {
+	parameter.buttonStage.Reset()
 
-	layout := new(buttons.Layout).Stage(parameter.buttonsStage)
+	layout := new(buttons.Layout).Stage(parameter.buttonStage)
 
-	group1 := new(buttons.Group).Stage(parameter.buttonsStage)
+	group1 := new(buttons.Group).Stage(parameter.buttonStage)
 	group1.Percentage = 100
 	layout.Groups = append(layout.Groups, group1)
 
@@ -21,5 +21,5 @@ func (parameter *Parameter) UpdateAndCommitButtonsStage() {
 
 	group1.Buttons = append(group1.Buttons, button)
 
-	parameter.buttonsStage.Commit()
+	parameter.buttonStage.Commit()
 }

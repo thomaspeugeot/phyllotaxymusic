@@ -146,10 +146,12 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 	}
 
 	axisFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.Axis](
-		axisFormCallback.probe,
-	)
-	axisFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.Axis](
+	// 	axisFormCallback.probe,
+	// )
+	// axisFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if axisFormCallback.CreationMode || axisFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -229,10 +231,12 @@ func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
 	}
 
 	axisgridFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.AxisGrid](
-		axisgridFormCallback.probe,
-	)
-	axisgridFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.AxisGrid](
+	// 	axisgridFormCallback.probe,
+	// )
+	// axisgridFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if axisgridFormCallback.CreationMode || axisgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -384,10 +388,12 @@ func (bezierFormCallback *BezierFormCallback) OnSave() {
 	}
 
 	bezierFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.Bezier](
-		bezierFormCallback.probe,
-	)
-	bezierFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.Bezier](
+	// 	bezierFormCallback.probe,
+	// )
+	// bezierFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if bezierFormCallback.CreationMode || bezierFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -509,10 +515,12 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 	}
 
 	beziergridFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.BezierGrid](
-		beziergridFormCallback.probe,
-	)
-	beziergridFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.BezierGrid](
+	// 	beziergridFormCallback.probe,
+	// )
+	// beziergridFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if beziergridFormCallback.CreationMode || beziergridFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -590,10 +598,12 @@ func (beziergridstackFormCallback *BezierGridStackFormCallback) OnSave() {
 	}
 
 	beziergridstackFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.BezierGridStack](
-		beziergridstackFormCallback.probe,
-	)
-	beziergridstackFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.BezierGridStack](
+	// 	beziergridstackFormCallback.probe,
+	// )
+	// beziergridstackFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if beziergridstackFormCallback.CreationMode || beziergridstackFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -743,10 +753,12 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 	}
 
 	circleFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.Circle](
-		circleFormCallback.probe,
-	)
-	circleFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.Circle](
+	// 	circleFormCallback.probe,
+	// )
+	// circleFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if circleFormCallback.CreationMode || circleFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -826,10 +838,12 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 	}
 
 	circlegridFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.CircleGrid](
-		circlegridFormCallback.probe,
-	)
-	circlegridFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.CircleGrid](
+	// 	circlegridFormCallback.probe,
+	// )
+	// circlegridFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if circlegridFormCallback.CreationMode || circlegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -905,10 +919,12 @@ func (exporttomusicxmlFormCallback *ExportToMusicxmlFormCallback) OnSave() {
 	}
 
 	exporttomusicxmlFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.ExportToMusicxml](
-		exporttomusicxmlFormCallback.probe,
-	)
-	exporttomusicxmlFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.ExportToMusicxml](
+	// 	exporttomusicxmlFormCallback.probe,
+	// )
+	// exporttomusicxmlFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if exporttomusicxmlFormCallback.CreationMode || exporttomusicxmlFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1026,10 +1042,12 @@ func (frontcurveFormCallback *FrontCurveFormCallback) OnSave() {
 	}
 
 	frontcurveFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.FrontCurve](
-		frontcurveFormCallback.probe,
-	)
-	frontcurveFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.FrontCurve](
+	// 	frontcurveFormCallback.probe,
+	// )
+	// frontcurveFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if frontcurveFormCallback.CreationMode || frontcurveFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1123,10 +1141,12 @@ func (frontcurvestackFormCallback *FrontCurveStackFormCallback) OnSave() {
 	}
 
 	frontcurvestackFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.FrontCurveStack](
-		frontcurvestackFormCallback.probe,
-	)
-	frontcurvestackFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.FrontCurveStack](
+	// 	frontcurvestackFormCallback.probe,
+	// )
+	// frontcurvestackFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if frontcurvestackFormCallback.CreationMode || frontcurvestackFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1224,10 +1244,12 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 	}
 
 	horizontalaxisFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.HorizontalAxis](
-		horizontalaxisFormCallback.probe,
-	)
-	horizontalaxisFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.HorizontalAxis](
+	// 	horizontalaxisFormCallback.probe,
+	// )
+	// horizontalaxisFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if horizontalaxisFormCallback.CreationMode || horizontalaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1323,10 +1345,12 @@ func (keyFormCallback *KeyFormCallback) OnSave() {
 	}
 
 	keyFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.Key](
-		keyFormCallback.probe,
-	)
-	keyFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.Key](
+	// 	keyFormCallback.probe,
+	// )
+	// keyFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if keyFormCallback.CreationMode || keyFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1596,10 +1620,12 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 	}
 
 	parameterFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.Parameter](
-		parameterFormCallback.probe,
-	)
-	parameterFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.Parameter](
+	// 	parameterFormCallback.probe,
+	// )
+	// parameterFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if parameterFormCallback.CreationMode || parameterFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1745,10 +1771,12 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 	}
 
 	rhombusFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.Rhombus](
-		rhombusFormCallback.probe,
-	)
-	rhombusFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.Rhombus](
+	// 	rhombusFormCallback.probe,
+	// )
+	// rhombusFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if rhombusFormCallback.CreationMode || rhombusFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1828,10 +1856,12 @@ func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 	}
 
 	rhombusgridFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.RhombusGrid](
-		rhombusgridFormCallback.probe,
-	)
-	rhombusgridFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.RhombusGrid](
+	// 	rhombusgridFormCallback.probe,
+	// )
+	// rhombusgridFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if rhombusgridFormCallback.CreationMode || rhombusgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1907,10 +1937,12 @@ func (shapecategoryFormCallback *ShapeCategoryFormCallback) OnSave() {
 	}
 
 	shapecategoryFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.ShapeCategory](
-		shapecategoryFormCallback.probe,
-	)
-	shapecategoryFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.ShapeCategory](
+	// 	shapecategoryFormCallback.probe,
+	// )
+	// shapecategoryFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if shapecategoryFormCallback.CreationMode || shapecategoryFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2062,10 +2094,12 @@ func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
 	}
 
 	spiralbezierFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralBezier](
-		spiralbezierFormCallback.probe,
-	)
-	spiralbezierFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.SpiralBezier](
+	// 	spiralbezierFormCallback.probe,
+	// )
+	// spiralbezierFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if spiralbezierFormCallback.CreationMode || spiralbezierFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2143,10 +2177,12 @@ func (spiralbeziergridFormCallback *SpiralBezierGridFormCallback) OnSave() {
 	}
 
 	spiralbeziergridFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralBezierGrid](
-		spiralbeziergridFormCallback.probe,
-	)
-	spiralbeziergridFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.SpiralBezierGrid](
+	// 	spiralbeziergridFormCallback.probe,
+	// )
+	// spiralbeziergridFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if spiralbeziergridFormCallback.CreationMode || spiralbeziergridFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2340,10 +2376,12 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 	}
 
 	spiralcircleFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralCircle](
-		spiralcircleFormCallback.probe,
-	)
-	spiralcircleFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.SpiralCircle](
+	// 	spiralcircleFormCallback.probe,
+	// )
+	// spiralcircleFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if spiralcircleFormCallback.CreationMode || spiralcircleFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2423,10 +2461,12 @@ func (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) OnSave() {
 	}
 
 	spiralcirclegridFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralCircleGrid](
-		spiralcirclegridFormCallback.probe,
-	)
-	spiralcirclegridFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.SpiralCircleGrid](
+	// 	spiralcirclegridFormCallback.probe,
+	// )
+	// spiralcirclegridFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if spiralcirclegridFormCallback.CreationMode || spiralcirclegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2570,10 +2610,12 @@ func (spirallineFormCallback *SpiralLineFormCallback) OnSave() {
 	}
 
 	spirallineFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralLine](
-		spirallineFormCallback.probe,
-	)
-	spirallineFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.SpiralLine](
+	// 	spirallineFormCallback.probe,
+	// )
+	// spirallineFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if spirallineFormCallback.CreationMode || spirallineFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2651,10 +2693,12 @@ func (spirallinegridFormCallback *SpiralLineGridFormCallback) OnSave() {
 	}
 
 	spirallinegridFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralLineGrid](
-		spirallinegridFormCallback.probe,
-	)
-	spirallinegridFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.SpiralLineGrid](
+	// 	spirallinegridFormCallback.probe,
+	// )
+	// spirallinegridFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if spirallinegridFormCallback.CreationMode || spirallinegridFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2748,10 +2792,12 @@ func (spiraloriginFormCallback *SpiralOriginFormCallback) OnSave() {
 	}
 
 	spiraloriginFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralOrigin](
-		spiraloriginFormCallback.probe,
-	)
-	spiraloriginFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.SpiralOrigin](
+	// 	spiraloriginFormCallback.probe,
+	// )
+	// spiraloriginFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if spiraloriginFormCallback.CreationMode || spiraloriginFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2903,10 +2949,12 @@ func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 	}
 
 	spiralrhombusFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralRhombus](
-		spiralrhombusFormCallback.probe,
-	)
-	spiralrhombusFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.SpiralRhombus](
+	// 	spiralrhombusFormCallback.probe,
+	// )
+	// spiralrhombusFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if spiralrhombusFormCallback.CreationMode || spiralrhombusFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2984,10 +3032,12 @@ func (spiralrhombusgridFormCallback *SpiralRhombusGridFormCallback) OnSave() {
 	}
 
 	spiralrhombusgridFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.SpiralRhombusGrid](
-		spiralrhombusgridFormCallback.probe,
-	)
-	spiralrhombusgridFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.SpiralRhombusGrid](
+	// 	spiralrhombusgridFormCallback.probe,
+	// )
+	// spiralrhombusgridFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if spiralrhombusgridFormCallback.CreationMode || spiralrhombusgridFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -3085,10 +3135,12 @@ func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
 	}
 
 	verticalaxisFormCallback.probe.stageOfInterest.Commit()
-	fillUpTable[models.VerticalAxis](
-		verticalaxisFormCallback.probe,
-	)
-	verticalaxisFormCallback.probe.tableStage.Commit()
+	// the following code is producing a amp concurrent read/write
+	// so it is commented for the moment
+	// fillUpTable[models.VerticalAxis](
+	// 	verticalaxisFormCallback.probe,
+	// )
+	// verticalaxisFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if verticalaxisFormCallback.CreationMode || verticalaxisFormCallback.formGroup.HasSuppressButtonBeenPressed {

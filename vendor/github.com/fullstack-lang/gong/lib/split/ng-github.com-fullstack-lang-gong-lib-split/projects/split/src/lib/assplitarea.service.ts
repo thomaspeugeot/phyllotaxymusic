@@ -23,6 +23,11 @@ import { TableAPI } from './table-api'
 import { FormAPI } from './form-api'
 import { SvgAPI } from './svg-api'
 import { DocAPI } from './doc-api'
+import { SplitAPI } from './split-api'
+import { SliderAPI } from './slider-api'
+import { ToneAPI } from './tone-api'
+import { ButtonAPI } from './button-api'
+import { CursorAPI } from './cursor-api'
 
 @Injectable({
   providedIn: 'root'

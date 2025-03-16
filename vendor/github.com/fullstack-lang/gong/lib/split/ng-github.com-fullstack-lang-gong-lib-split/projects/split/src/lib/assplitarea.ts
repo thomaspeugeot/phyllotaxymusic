@@ -10,6 +10,11 @@ import { Table } from './table'
 import { Form } from './form'
 import { Svg } from './svg'
 import { Doc } from './doc'
+import { Split } from './split'
+import { Slider } from './slider'
+import { Tone } from './tone'
+import { Button } from './button'
+import { Cursor } from './cursor'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -24,6 +29,7 @@ export class AsSplitArea {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	ShowNameInHeader: boolean = false
 	Size: number = 0
 	IsAny: boolean = false
 
@@ -39,6 +45,16 @@ export class AsSplitArea {
 
 	Doc?: Doc
 
+	Split?: Split
+
+	Slider?: Slider
+
+	Tone?: Tone
+
+	Button?: Button
+
+	Cursor?: Cursor
+
 }
 
 export function CopyAsSplitAreaToAsSplitAreaAPI(assplitarea: AsSplitArea, assplitareaAPI: AsSplitAreaAPI) {
@@ -49,6 +65,7 @@ export function CopyAsSplitAreaToAsSplitAreaAPI(assplitarea: AsSplitArea, asspli
 
 	// insertion point for basic fields copy operations
 	assplitareaAPI.Name = assplitarea.Name
+	assplitareaAPI.ShowNameInHeader = assplitarea.ShowNameInHeader
 	assplitareaAPI.Size = assplitarea.Size
 	assplitareaAPI.IsAny = assplitarea.IsAny
 
@@ -88,6 +105,41 @@ export function CopyAsSplitAreaToAsSplitAreaAPI(assplitarea: AsSplitArea, asspli
 		assplitareaAPI.AsSplitAreaPointersEncoding.DocID.Int64 = 0 		
 	}
 
+	assplitareaAPI.AsSplitAreaPointersEncoding.SplitID.Valid = true
+	if (assplitarea.Split != undefined) {
+		assplitareaAPI.AsSplitAreaPointersEncoding.SplitID.Int64 = assplitarea.Split.ID  
+	} else {
+		assplitareaAPI.AsSplitAreaPointersEncoding.SplitID.Int64 = 0 		
+	}
+
+	assplitareaAPI.AsSplitAreaPointersEncoding.SliderID.Valid = true
+	if (assplitarea.Slider != undefined) {
+		assplitareaAPI.AsSplitAreaPointersEncoding.SliderID.Int64 = assplitarea.Slider.ID  
+	} else {
+		assplitareaAPI.AsSplitAreaPointersEncoding.SliderID.Int64 = 0 		
+	}
+
+	assplitareaAPI.AsSplitAreaPointersEncoding.ToneID.Valid = true
+	if (assplitarea.Tone != undefined) {
+		assplitareaAPI.AsSplitAreaPointersEncoding.ToneID.Int64 = assplitarea.Tone.ID  
+	} else {
+		assplitareaAPI.AsSplitAreaPointersEncoding.ToneID.Int64 = 0 		
+	}
+
+	assplitareaAPI.AsSplitAreaPointersEncoding.ButtonID.Valid = true
+	if (assplitarea.Button != undefined) {
+		assplitareaAPI.AsSplitAreaPointersEncoding.ButtonID.Int64 = assplitarea.Button.ID  
+	} else {
+		assplitareaAPI.AsSplitAreaPointersEncoding.ButtonID.Int64 = 0 		
+	}
+
+	assplitareaAPI.AsSplitAreaPointersEncoding.CursorID.Valid = true
+	if (assplitarea.Cursor != undefined) {
+		assplitareaAPI.AsSplitAreaPointersEncoding.CursorID.Int64 = assplitarea.Cursor.ID  
+	} else {
+		assplitareaAPI.AsSplitAreaPointersEncoding.CursorID.Int64 = 0 		
+	}
+
 
 	// insertion point for slice of pointers fields encoding
 	assplitareaAPI.AsSplitAreaPointersEncoding.AsSplits = []
@@ -109,6 +161,7 @@ export function CopyAsSplitAreaAPIToAsSplitArea(assplitareaAPI: AsSplitAreaAPI, 
 
 	// insertion point for basic fields copy operations
 	assplitarea.Name = assplitareaAPI.Name
+	assplitarea.ShowNameInHeader = assplitareaAPI.ShowNameInHeader
 	assplitarea.Size = assplitareaAPI.Size
 	assplitarea.IsAny = assplitareaAPI.IsAny
 
@@ -118,6 +171,11 @@ export function CopyAsSplitAreaAPIToAsSplitArea(assplitareaAPI: AsSplitAreaAPI, 
 	assplitarea.Form = frontRepo.map_ID_Form.get(assplitareaAPI.AsSplitAreaPointersEncoding.FormID.Int64)
 	assplitarea.Svg = frontRepo.map_ID_Svg.get(assplitareaAPI.AsSplitAreaPointersEncoding.SvgID.Int64)
 	assplitarea.Doc = frontRepo.map_ID_Doc.get(assplitareaAPI.AsSplitAreaPointersEncoding.DocID.Int64)
+	assplitarea.Split = frontRepo.map_ID_Split.get(assplitareaAPI.AsSplitAreaPointersEncoding.SplitID.Int64)
+	assplitarea.Slider = frontRepo.map_ID_Slider.get(assplitareaAPI.AsSplitAreaPointersEncoding.SliderID.Int64)
+	assplitarea.Tone = frontRepo.map_ID_Tone.get(assplitareaAPI.AsSplitAreaPointersEncoding.ToneID.Int64)
+	assplitarea.Button = frontRepo.map_ID_Button.get(assplitareaAPI.AsSplitAreaPointersEncoding.ButtonID.Int64)
+	assplitarea.Cursor = frontRepo.map_ID_Cursor.get(assplitareaAPI.AsSplitAreaPointersEncoding.CursorID.Int64)
 
 	// insertion point for slice of pointers fields encoding
 	if (!Array.isArray(assplitareaAPI.AsSplitAreaPointersEncoding.AsSplits)) {

@@ -21,6 +21,8 @@ import (
 	slider_stack "github.com/fullstack-lang/gong/lib/slider/go/stack"
 
 	button_stack "github.com/fullstack-lang/gong/lib/button/go/stack"
+
+	split_stack "github.com/fullstack-lang/gong/lib/split/go/stack"
 )
 
 var (
@@ -58,9 +60,9 @@ func main() {
 	gongtree_stack := gongtree_stack.NewStack(r, m.SidebarTree.ToString(), "", "", "", true, true)
 	gongtone_stack := gongtone_stack.NewStack(r, m.GongtoneStackName.ToString(), "", "", "", true, true)
 	cursor_stack := cursor_stack.NewStack(r, cursor_models.Cursorstakcname.ToString(), "", "", "", false, false)
-
 	sliders_stack := slider_stack.NewStack(r, m.GongLibSliderStackName.ToString(), "", "", "", false, false)
 	button_stack := button_stack.NewStack(r, m.GongLibButtonStackName.ToString(), "", "", "", false, false)
+	split_stack := split_stack.NewStack(r, m.GongLibSplitStackName.ToString(), "", "", "", false, false)
 
 	// get the only diagram
 	parameters := m.GetGongstructInstancesMap[m.Parameter](phyllotaxymusic_stack.Stage)
@@ -77,6 +79,7 @@ func main() {
 	parameter.SetCursorStage(cursor_stack.Stage)
 	parameter.SetSlidersStage(sliders_stack.Stage)
 	parameter.SetButtonsStage(button_stack.Stage)
+	parameter.SetSplitsStage(split_stack.Stage)
 	parameter.SetGongtreeStage(gongtree_stack.Stage)
 	parameter.SetTreeProxy()
 
@@ -85,6 +88,7 @@ func main() {
 	cursor_stack.Stage.Commit()
 	parameter.SetCursor(cursor)
 
+	parameter.UpdateAndCommitSplitStage()
 	parameter.UpdateAllStages()
 
 	if *genmusicxml {
