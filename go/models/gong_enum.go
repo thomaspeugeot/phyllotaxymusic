@@ -21,7 +21,7 @@ func (stacksnames StacksNames) ToString() (res string) {
 	case GongLibButtonStackName:
 		res = "button"
 	case GongLibSplitStackName:
-		res = "root"
+		res = ""
 	case GongLibSliderStackName:
 		res = "slider"
 	case GongtreeStackName:
@@ -53,7 +53,7 @@ func (stacksnames *StacksNames) FromString(input string) (err error) {
 	case "button":
 		*stacksnames = GongLibButtonStackName
 		return
-	case "root":
+	case "":
 		*stacksnames = GongLibSplitStackName
 		return
 	case "slider":
@@ -160,7 +160,7 @@ func (stacksnames StacksNames) CodeValues() (res []string) {
 	res = append(res, "sidebar tree")
 	res = append(res, "gongtone")
 	res = append(res, "button")
-	res = append(res, "root")
+	res = append(res, "")
 	res = append(res, "slider")
 	res = append(res, "gongtree")
 	res = append(res, "gongtable")
