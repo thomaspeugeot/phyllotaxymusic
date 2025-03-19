@@ -5,19 +5,19 @@ import (
 )
 
 func (parameter *Parameter) UpdateAndCommitSlidersStage() {
-	parameter.slidersStage.Reset()
+	parameter.sliderStage.Reset()
 
-	layout := new(m.Layout).Stage(parameter.slidersStage)
+	layout := new(m.Layout).Stage(parameter.sliderStage)
 
-	group1 := new(m.Group).Stage(parameter.slidersStage)
+	group1 := new(m.Group).Stage(parameter.sliderStage)
 	group1.Percentage = 25
 	layout.Groups = append(layout.Groups, group1)
 
-	group2 := new(m.Group).Stage(parameter.slidersStage)
+	group2 := new(m.Group).Stage(parameter.sliderStage)
 	group2.Percentage = 25
 	layout.Groups = append(layout.Groups, group2)
 
-	group3 := new(m.Group).Stage(parameter.slidersStage)
+	group3 := new(m.Group).Stage(parameter.sliderStage)
 	group3.Percentage = 50
 	layout.Groups = append(layout.Groups, group3)
 
@@ -280,5 +280,5 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 
 	}
 
-	parameter.slidersStage.Commit()
+	parameter.sliderStage.Commit()
 }

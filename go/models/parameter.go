@@ -3,15 +3,13 @@ package models
 import (
 	"log"
 
-	button_models "github.com/fullstack-lang/gong/lib/button/go/models"
-	slider_models "github.com/fullstack-lang/gong/lib/slider/go/models"
-	split_models "github.com/fullstack-lang/gong/lib/split/go/models"
-	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
-
-	gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
-	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
-
-	gongtone_models "github.com/fullstack-lang/gong/lib/tone/go/models"
+	button "github.com/fullstack-lang/gong/lib/button/go/models"
+	slider "github.com/fullstack-lang/gong/lib/slider/go/models"
+	split "github.com/fullstack-lang/gong/lib/split/go/models"
+	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
+	tone "github.com/fullstack-lang/gong/lib/tone/go/models"
+	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
+	cursor "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 )
 
 type Parameter struct {
@@ -190,22 +188,22 @@ type Parameter struct {
 	ActualBeatsTemporalShift int
 
 	// not persisted fields
-	cursor *cursor_models.Cursor
+	cursor *cursor.Cursor
 
 	phyllotaxymusicStage *StageStruct
-	gongsvgStage         *gongsvg_models.StageStruct
-	gongtoneStage        *gongtone_models.StageStruct
-	gongtreeStage        *gongtree_models.StageStruct
-	cursorStage          *cursor_models.StageStruct
-	slidersStage         *slider_models.StageStruct
-	buttonStage          *button_models.StageStruct
-	splitStage           *split_models.StageStruct
+	svgStage             *svg.StageStruct
+	toneStage            *tone.StageStruct
+	treeStage            *tree.StageStruct
+	cursorStage          *cursor.StageStruct
+	sliderStage          *slider.StageStruct
+	buttonStage          *button.StageStruct
+	splitStage           *split.StageStruct
 
 	treeProxy *TreeProxy
 }
 
 // GetButtonsStage implements models.Target.
-func (parameter *Parameter) GetButtonsStage() *button_models.StageStruct {
+func (parameter *Parameter) GetButtonsStage() *button.StageStruct {
 	return parameter.buttonStage
 }
 
@@ -215,32 +213,32 @@ func (parameter *Parameter) OnAfterUpdateButton() {
 	parameter.GenerateMusicXMLFile()
 }
 
-func (parameter *Parameter) SetCursor(cursor *cursor_models.Cursor) {
+func (parameter *Parameter) SetCursor(cursor *cursor.Cursor) {
 	parameter.cursor = cursor
 }
 
-func (parameter *Parameter) SetCursorStage(cursorStage *cursor_models.StageStruct) {
+func (parameter *Parameter) SetCursorStage(cursorStage *cursor.StageStruct) {
 	parameter.cursorStage = cursorStage
 }
 
-func (parameter *Parameter) SetSlidersStage(slidersStage *slider_models.StageStruct) {
-	parameter.slidersStage = slidersStage
+func (parameter *Parameter) SetSlidersStage(slidersStage *slider.StageStruct) {
+	parameter.sliderStage = slidersStage
 }
 
-func (parameter *Parameter) SetButtonsStage(buttonsStage *button_models.StageStruct) {
+func (parameter *Parameter) SetButtonsStage(buttonsStage *button.StageStruct) {
 	parameter.buttonStage = buttonsStage
 }
 
-func (parameter *Parameter) SetSplitsStage(splitsStage *split_models.StageStruct) {
+func (parameter *Parameter) SetSplitsStage(splitsStage *split.StageStruct) {
 	parameter.splitStage = splitsStage
 }
 
-func (parameter *Parameter) SetGongsvgStage(gongsvgStage *gongsvg_models.StageStruct) {
-	parameter.gongsvgStage = gongsvgStage
+func (parameter *Parameter) SetSvgStage(gongsvgStage *svg.StageStruct) {
+	parameter.svgStage = gongsvgStage
 }
 
-func (parameter *Parameter) SetGongtoneStage(gongtoneStage *gongtone_models.StageStruct) {
-	parameter.gongtoneStage = gongtoneStage
+func (parameter *Parameter) SetToneStage(gongtoneStage *tone.StageStruct) {
+	parameter.toneStage = gongtoneStage
 }
 
 func (parameter *Parameter) SetPhyllotaxymusicStage(phyllotaxymusicStage *StageStruct) {
@@ -252,12 +250,12 @@ func (parameter *Parameter) CommitPhyllotaxymusicStage() {
 
 func (parameter *Parameter) SetTreeProxy() {
 	if parameter.phyllotaxymusicStage == nil ||
-		parameter.gongtreeStage == nil {
+		parameter.treeStage == nil {
 		log.Fatalln("SetTreeProxy, stages not set")
 	}
 
 	treeProxy := new(TreeProxy)
-	treeProxy.SetGongtreeStage(parameter.gongtreeStage)
+	treeProxy.SetGongtreeStage(parameter.treeStage)
 	treeProxy.PhyllotaxyStage = parameter.phyllotaxymusicStage
 
 	parameter.treeProxy = treeProxy
@@ -301,12 +299,12 @@ func (parameter *Parameter) ToggleNotePlayed(beatNb int) {
 	// log.Println("parameter.ThemeBinaryEncoding, after flip at beat", beatNb, parameter.ThemeBinaryEncoding)
 }
 
-func (parameter *Parameter) SetGongtreeStage(gongtreeStage *gongtree_models.StageStruct) {
-	parameter.gongtreeStage = gongtreeStage
+func (parameter *Parameter) SetGongtreeStage(gongtreeStage *tree.StageStruct) {
+	parameter.treeStage = gongtreeStage
 }
 
-func (parameter *Parameter) GetGongtreeStage() *gongtree_models.StageStruct {
-	return parameter.gongtreeStage
+func (parameter *Parameter) GetGongtreeStage() *tree.StageStruct {
+	return parameter.treeStage
 }
 
 func (parameter *Parameter) OnAfterUpdateNode() {
@@ -335,7 +333,7 @@ func (parameter *Parameter) UpdateAllStagesButSliders() {
 }
 
 func (parameter *Parameter) UpdateAndCommitTreeStage() {
-	if parameter.gongtreeStage == nil || parameter.treeProxy == nil {
+	if parameter.treeStage == nil || parameter.treeProxy == nil {
 		log.Fatalln("UpdateAndCommitTreeStage, missing fields to parameters")
 	}
 	parameter.treeProxy.UpdateAndCommitTreeStage()

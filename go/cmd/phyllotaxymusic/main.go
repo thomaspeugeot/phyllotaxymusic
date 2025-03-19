@@ -60,9 +60,9 @@ func main() {
 	gongtree_stack := gongtree_stack.NewStack(r, m.SidebarTree.ToString(), "", "", "", true, true)
 	gongtone_stack := gongtone_stack.NewStack(r, m.GongtoneStackName.ToString(), "", "", "", true, true)
 	cursor_stack := cursor_stack.NewStack(r, cursor_models.Cursorstakcname.ToString(), "", "", "", false, false)
-	sliders_stack := slider_stack.NewStack(r, m.GongLibSliderStackName.ToString(), "", "", "", false, false)
-	button_stack := button_stack.NewStack(r, m.GongLibButtonStackName.ToString(), "", "", "", false, false)
-	split_stack := split_stack.NewStack(r, m.GongLibSplitStackName.ToString(), "", "", "", false, false)
+	sliders_stack := slider_stack.NewStack(r, m.GongLibSliderStackName.ToString(), "", "", "", false, true)
+	button_stack := button_stack.NewStack(r, m.GongLibButtonStackName.ToString(), "", "", "", false, true)
+	split_stack := split_stack.NewStack(r, m.GongLibSplitStackName.ToString(), "", "", "", false, true)
 
 	// get the only diagram
 	parameters := m.GetGongstructInstancesMap[m.Parameter](phyllotaxymusic_stack.Stage)
@@ -73,9 +73,9 @@ func main() {
 
 	// parameter is used for coordinating all updates to the
 	// phyllotaxy stage and compute all updates to the all stages
-	parameter.SetGongsvgStage(gongsvg_stack.Stage)
+	parameter.SetSvgStage(gongsvg_stack.Stage)
 	parameter.SetPhyllotaxymusicStage(phyllotaxymusic_stack.Stage)
-	parameter.SetGongtoneStage(gongtone_stack.Stage)
+	parameter.SetToneStage(gongtone_stack.Stage)
 	parameter.SetCursorStage(cursor_stack.Stage)
 	parameter.SetSlidersStage(sliders_stack.Stage)
 	parameter.SetButtonsStage(button_stack.Stage)
