@@ -5,118 +5,113 @@ import (
 )
 
 func (parameter *Parameter) UpdateAndCommitSplitStage() {
+
 	parameter.splitStage.Reset()
 
-	mainView := (&split.View{
+	// Main View & Its Entire Layout
+	(&split.View{
 		Name: "Main view",
+		RootAsSplitAreas: []*split.AsSplitArea{
+			(&split.AsSplitArea{
+				Name:             "Top",
+				Size:             50,
+				ShowNameInHeader: false,
+				AsSplits: []*split.AsSplit{
+					(&split.AsSplit{
+						Name:      "Top, sidebar, table & form",
+						Direction: split.Horizontal,
+						AsSplitAreas: []*split.AsSplitArea{
+
+							// Sidebar
+							(&split.AsSplitArea{
+								Name:             "sidebar tree",
+								ShowNameInHeader: false,
+								Size:             15,
+								Tree: (&split.Tree{
+									Name:      "Sidebar",
+									StackName: SidebarTree.ToString(),
+									TreeName:  Sidebar.ToString(),
+								}).Stage(parameter.splitStage),
+							}).Stage(parameter.splitStage),
+
+							// SVG area
+							(&split.AsSplitArea{
+								Name:             "svg area",
+								ShowNameInHeader: false,
+								Size:             65,
+								Svg: (&split.Svg{
+									Name:      "svg",
+									StackName: GongsvgStackName.ToString(),
+								}).Stage(parameter.splitStage),
+							}).Stage(parameter.splitStage),
+
+							// Right area
+							(&split.AsSplitArea{
+								Name:             "right area",
+								ShowNameInHeader: false,
+								Size:             20,
+								AsSplits: []*split.AsSplit{
+									(&split.AsSplit{
+										Name:      "vertical",
+										Direction: split.Vertical,
+										AsSplitAreas: []*split.AsSplitArea{
+
+											// Slider area
+											(&split.AsSplitArea{
+												Name:             "slider area",
+												ShowNameInHeader: false,
+												Size:             60,
+												Slider: (&split.Slider{
+													Name:      "slider",
+													StackName: GongLibSliderStackName.ToString(),
+												}).Stage(parameter.splitStage),
+											}).Stage(parameter.splitStage),
+
+											// Button area
+											(&split.AsSplitArea{
+												Name:             "button area",
+												ShowNameInHeader: false,
+												Size:             20,
+												Button: (&split.Button{
+													Name:      "button",
+													StackName: GongLibButtonStackName.ToString(),
+												}).Stage(parameter.splitStage),
+											}).Stage(parameter.splitStage),
+
+											// Tone area
+											(&split.AsSplitArea{
+												Name:             "tone area",
+												ShowNameInHeader: false,
+												Size:             20,
+												Tone: (&split.Tone{
+													Name:      "tone",
+													StackName: GongtoneStackName.ToString(),
+												}).Stage(parameter.splitStage),
+											}).Stage(parameter.splitStage),
+										},
+									}).Stage(parameter.splitStage),
+								},
+							}).Stage(parameter.splitStage),
+						},
+					}).Stage(parameter.splitStage),
+				},
+			}).Stage(parameter.splitStage),
+		},
 	}).Stage(parameter.splitStage)
 
-	phyllotaxtProbeView := (&split.View{
+	// Probe View & Its Root Split
+	(&split.View{
 		Name: "Probe view",
+		RootAsSplitAreas: []*split.AsSplitArea{
+			(&split.AsSplitArea{
+				Name: "Probe area",
+				Split: (&split.Split{
+					Name:      "Probe area",
+					StackName: "phyllotaxymusic-probe",
+				}).Stage(parameter.splitStage),
+			}).Stage(parameter.splitStage),
+		},
 	}).Stage(parameter.splitStage)
-
-	splitProbeArea := (&split.AsSplitArea{
-		Name: "Probe area",
-	}).Stage(parameter.splitStage)
-	phyllotaxtProbeView.RootAsSplitAreas = append(phyllotaxtProbeView.RootAsSplitAreas, splitProbeArea)
-
-	splitProbe := (&split.Split{
-		Name:      "Probe area",
-		StackName: "phyllotaxymusic-probe",
-	}).Stage(parameter.splitStage)
-	splitProbeArea.Split = splitProbe
-
-	topSplitArea := (&split.AsSplitArea{
-		Name:             "Top",
-		Size:             50,
-		ShowNameInHeader: false,
-	}).Stage(parameter.splitStage)
-	mainView.RootAsSplitAreas = append(mainView.RootAsSplitAreas, topSplitArea)
-
-	horizontalSplit := (&split.AsSplit{
-		Name:      "Top, sidebar, table & form",
-		Direction: split.Horizontal,
-	}).Stage(parameter.splitStage)
-	topSplitArea.AsSplits = append(topSplitArea.AsSplits, horizontalSplit)
-
-	sidebarArea := (&split.AsSplitArea{
-		Name:             "sidebar tree",
-		ShowNameInHeader: false,
-		Size:             15,
-	}).Stage(parameter.splitStage)
-	horizontalSplit.AsSplitAreas = append(horizontalSplit.AsSplitAreas, sidebarArea)
-
-	tree := (&split.Tree{
-		Name:      "Sidebar",
-		StackName: SidebarTree.ToString(),
-		TreeName:  Sidebar.ToString(),
-	}).Stage(parameter.splitStage)
-	sidebarArea.Tree = tree
-
-	svgArea := (&split.AsSplitArea{
-		Name:             "svg area",
-		ShowNameInHeader: false,
-		Size:             65,
-	}).Stage(parameter.splitStage)
-	horizontalSplit.AsSplitAreas = append(horizontalSplit.AsSplitAreas, svgArea)
-
-	svg := (&split.Svg{
-		Name:      "svg",
-		StackName: GongsvgStackName.ToString(),
-	}).Stage(parameter.splitStage)
-	svgArea.Svg = svg
-
-	rightArea := (&split.AsSplitArea{
-		Name:             "right area",
-		ShowNameInHeader: false,
-		Size:             20,
-	}).Stage(parameter.splitStage)
-	horizontalSplit.AsSplitAreas = append(horizontalSplit.AsSplitAreas, rightArea)
-
-	verticalAsSplit := (&split.AsSplit{
-		Name:      "vertical",
-		Direction: split.Vertical,
-	}).Stage(parameter.splitStage)
-	rightArea.AsSplits = append(rightArea.AsSplits, verticalAsSplit)
-
-	sliderArea := (&split.AsSplitArea{
-		Name:             "slider area",
-		ShowNameInHeader: false,
-		Size:             60,
-	}).Stage(parameter.splitStage)
-	verticalAsSplit.AsSplitAreas = append(verticalAsSplit.AsSplitAreas, sliderArea)
-
-	slider := (&split.Slider{
-		Name:      "slider",
-		StackName: GongLibSliderStackName.ToString(),
-	}).Stage(parameter.splitStage)
-	sliderArea.Slider = slider
-
-	buttonArea := (&split.AsSplitArea{
-		Name:             "button area",
-		ShowNameInHeader: false,
-		Size:             20,
-	}).Stage(parameter.splitStage)
-	verticalAsSplit.AsSplitAreas = append(verticalAsSplit.AsSplitAreas, buttonArea)
-
-	button := (&split.Button{
-		Name:      "button",
-		StackName: GongLibButtonStackName.ToString(),
-	}).Stage(parameter.splitStage)
-	buttonArea.Button = button
-
-	toneArea := (&split.AsSplitArea{
-		Name:             "tone area",
-		ShowNameInHeader: false,
-		Size:             20,
-	}).Stage(parameter.splitStage)
-	verticalAsSplit.AsSplitAreas = append(verticalAsSplit.AsSplitAreas, toneArea)
-
-	tone := (&split.Tone{
-		Name:      "tone",
-		StackName: GongtoneStackName.ToString(),
-	}).Stage(parameter.splitStage)
-	toneArea.Tone = tone
 
 	parameter.splitStage.Commit()
 }
