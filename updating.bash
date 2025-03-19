@@ -18,5 +18,4 @@ go get github.com/fullstack-lang/gong@"$LATEST_COMMIT"
 
 # Optional: Run go mod tidy to clean up dependencies
 go mod tidy
-
-echo "Module updated successfully!"
+go mod vendor

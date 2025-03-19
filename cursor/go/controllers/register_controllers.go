@@ -110,10 +110,10 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 	values := c.Request.URL.Query()
 	stackPath := ""
 	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+		value := values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetLastCommitFromBackNb", "GONG__StackPath", stackPath)
+			// log.Println("GetLastCommitFromBackNb", "Name", stackPath)
 		}
 	}
 
@@ -125,7 +125,8 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown stack", stackPath)
+		message := "Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown stack: \"" + stackPath + "\""
+		log.Panic(message)
 	}
 	updateCommitBackRepoNbChannel := backRepo.SubscribeToCommitNb(ctx)
 
@@ -192,15 +193,16 @@ func (controller *Controller) GetLastCommitFromBackNb(c *gin.Context) {
 	values := c.Request.URL.Query()
 	stackPath := ""
 	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+		value := values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetLastCommitFromBackNb", "GONG__StackPath", stackPath)
+			// log.Println("GetLastCommitFromBackNb", "Name", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
+		message := "Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown stack: \"" + stackPath + "\""
+		log.Panic(message)
 	}
 	res := backRepo.GetLastCommitFromBackNb()
 
@@ -212,15 +214,16 @@ func (controller *Controller) GetLastPushFromFrontNb(c *gin.Context) {
 	values := c.Request.URL.Query()
 	stackPath := ""
 	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+		value := values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetLastPushFromFrontNb", "GONG__StackPath", stackPath)
+			// log.Println("GetLastPushFromFrontNb", "Name", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
+		message := "Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown stack: \"" + stackPath + "\""
+		log.Panic(message)
 	}
 	res := backRepo.GetLastPushFromFrontNb()
 

@@ -27,7 +27,7 @@ func FillUpFormFromGongstructName(
 	// insertion point
 	case "Cursor":
 		formGroup := (&form.FormGroup{
-			Name:  form.FormGroupDefaultName.ToString(),
+			Name:  FormName,
 			Label: prefix + "Cursor Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__CursorFormCallback(

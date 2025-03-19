@@ -58,15 +58,16 @@ func (controller *Controller) GetCursors(c *gin.Context) {
 	_values := c.Request.URL.Query()
 	stackPath := ""
 	if len(_values) == 1 {
-		value := _values["GONG__StackPath"]
+		value := _values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetCursors", "GONG__StackPath", stackPath)
+			// log.Println("GetCursors", "Name", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
+		message := "Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown stack: \"" + stackPath + "\""
+		log.Panic(message)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 
@@ -121,15 +122,16 @@ func (controller *Controller) PostCursor(c *gin.Context) {
 	_values := c.Request.URL.Query()
 	stackPath := ""
 	if len(_values) == 1 {
-		value := _values["GONG__StackPath"]
+		value := _values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("PostCursors", "GONG__StackPath", stackPath)
+			// log.Println("PostCursors", "Name", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
+		message := "Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown stack: \"" + stackPath + "\""
+		log.Panic(message)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 
@@ -191,15 +193,16 @@ func (controller *Controller) GetCursor(c *gin.Context) {
 	_values := c.Request.URL.Query()
 	stackPath := ""
 	if len(_values) == 1 {
-		value := _values["GONG__StackPath"]
+		value := _values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetCursor", "GONG__StackPath", stackPath)
+			// log.Println("GetCursor", "Name", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
+		message := "Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown stack: \"" + stackPath + "\""
+		log.Panic(message)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 
@@ -240,15 +243,16 @@ func (controller *Controller) UpdateCursor(c *gin.Context) {
 	_values := c.Request.URL.Query()
 	stackPath := ""
 	if len(_values) == 1 {
-		value := _values["GONG__StackPath"]
+		value := _values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("UpdateCursor", "GONG__StackPath", stackPath)
+			// log.Println("UpdateCursor", "Name", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
+		message := "Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown stack: \"" + stackPath + "\""
+		log.Panic(message)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 
@@ -330,15 +334,16 @@ func (controller *Controller) DeleteCursor(c *gin.Context) {
 	_values := c.Request.URL.Query()
 	stackPath := ""
 	if len(_values) == 1 {
-		value := _values["GONG__StackPath"]
+		value := _values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("DeleteCursor", "GONG__StackPath", stackPath)
+			// log.Println("DeleteCursor", "Name", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
-		log.Panic("Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models, Unkown stack", stackPath)
+		message := "Stack github.com/thomaspeugeot/phyllotaxymusic/cursor/go, Unkown stack: \"" + stackPath + "\""
+		log.Panic(message)
 	}
 	db := backRepo.BackRepoCursor.GetDB()
 

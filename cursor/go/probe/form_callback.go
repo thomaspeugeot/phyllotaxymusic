@@ -109,7 +109,7 @@ func (cursorFormCallback *CursorFormCallback) OnSave() {
 	if cursorFormCallback.CreationMode || cursorFormCallback.formGroup.HasSuppressButtonBeenPressed {
 		cursorFormCallback.probe.formStage.Reset()
 		newFormGroup := (&table.FormGroup{
-			Name: table.FormGroupDefaultName.ToString(),
+			Name: FormName,
 		}).Stage(cursorFormCallback.probe.formStage)
 		newFormGroup.OnSave = __gong__New__CursorFormCallback(
 			nil,

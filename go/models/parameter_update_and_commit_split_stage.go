@@ -29,7 +29,7 @@ func (parameter *Parameter) UpdateAndCommitSplitStage() {
 								Size:             15,
 								Tree: (&split.Tree{
 									Name:      "Sidebar",
-									StackName: SidebarTree.ToString(),
+									StackName: parameter.gongtreeStage.GetName(),
 									TreeName:  Sidebar.ToString(),
 								}).Stage(parameter.splitStage),
 							}).Stage(parameter.splitStage),
@@ -41,7 +41,7 @@ func (parameter *Parameter) UpdateAndCommitSplitStage() {
 								Size:             65,
 								Svg: (&split.Svg{
 									Name:      "svg",
-									StackName: GongsvgStackName.ToString(),
+									StackName: parameter.gongsvgStage.GetName(),
 								}).Stage(parameter.splitStage),
 							}).Stage(parameter.splitStage),
 
@@ -63,7 +63,7 @@ func (parameter *Parameter) UpdateAndCommitSplitStage() {
 												Size:             60,
 												Slider: (&split.Slider{
 													Name:      "slider",
-													StackName: GongLibSliderStackName.ToString(),
+													StackName: parameter.slidersStage.GetName(),
 												}).Stage(parameter.splitStage),
 											}).Stage(parameter.splitStage),
 
@@ -74,7 +74,7 @@ func (parameter *Parameter) UpdateAndCommitSplitStage() {
 												Size:             20,
 												Button: (&split.Button{
 													Name:      "button",
-													StackName: GongLibButtonStackName.ToString(),
+													StackName: parameter.buttonStage.GetName(),
 												}).Stage(parameter.splitStage),
 											}).Stage(parameter.splitStage),
 
@@ -85,7 +85,7 @@ func (parameter *Parameter) UpdateAndCommitSplitStage() {
 												Size:             20,
 												Tone: (&split.Tone{
 													Name:      "tone",
-													StackName: GongtoneStackName.ToString(),
+													StackName: parameter.gongtoneStage.GetName(),
 												}).Stage(parameter.splitStage),
 											}).Stage(parameter.splitStage),
 										},
@@ -107,7 +107,7 @@ func (parameter *Parameter) UpdateAndCommitSplitStage() {
 				Name: "Probe area",
 				Split: (&split.Split{
 					Name:      "Probe area",
-					StackName: "phyllotaxymusic-probe",
+					StackName: parameter.phyllotaxymusicStage.GetName() + ProbeSplitSuffix,
 				}).Stage(parameter.splitStage),
 			}).Stage(parameter.splitStage),
 		},

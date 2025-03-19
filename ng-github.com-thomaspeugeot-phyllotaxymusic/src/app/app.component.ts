@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-
-import * as phyllotaxymusic from '../../projects/phyllotaxymusic/src/public-api'
-
 import { PhyllotaxymusicspecificComponent } from '../../projects/phyllotaxymusicspecific/src/public-api'
 
 @Component({
