@@ -1,4 +1,4 @@
-import { Component, Input, model, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { SplitSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/split/ng-github.com-fullstack-lang-gong-lib-split/projects/splitspecific/src/lib/split-specific/split-specific.component';
 
@@ -11,5 +11,5 @@ import { SplitSpecificComponent } from '@vendored_components/github.com/fullstac
     styleUrls: ['./phyllotaxymusicspecific.component.css']
 })
 export class PhyllotaxymusicspecificComponent {
-
+    @Input() Name: string = ""
 }
