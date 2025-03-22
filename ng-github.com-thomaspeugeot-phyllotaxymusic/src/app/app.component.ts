@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PhyllotaxymusicspecificComponent } from '../../projects/phyllotaxymusicspecific/src/public-api'
+import { SplitSpecificComponent } from '@vendored_components/github.com/fullstack-lang/gong/lib/split/ng-github.com-fullstack-lang-gong-lib-split/projects/splitspecific/src/lib/split-specific/split-specific.component';
 
 @Component({
     selector: 'app-root',
     imports: [
-        PhyllotaxymusicspecificComponent
+        SplitSpecificComponent
     ],
     templateUrl: './app.component.html'
 })
