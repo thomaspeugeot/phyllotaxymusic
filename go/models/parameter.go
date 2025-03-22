@@ -4,12 +4,12 @@ import (
 	"log"
 
 	button "github.com/fullstack-lang/gong/lib/button/go/models"
+	cursor "github.com/fullstack-lang/gong/lib/cursor/go/models"
 	slider "github.com/fullstack-lang/gong/lib/slider/go/models"
 	split "github.com/fullstack-lang/gong/lib/split/go/models"
 	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
 	tone "github.com/fullstack-lang/gong/lib/tone/go/models"
 	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
-	cursor "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
 )
 
 type Parameter struct {

@@ -2,6 +2,7 @@ package models
 
 import (
 	button "github.com/fullstack-lang/gong/lib/button/go/models"
+	cursor "github.com/fullstack-lang/gong/lib/cursor/go/models"
 	slider "github.com/fullstack-lang/gong/lib/slider/go/models"
 	split "github.com/fullstack-lang/gong/lib/split/go/models"
 	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
@@ -39,8 +40,15 @@ func (parameter *Parameter) UpdateAndCommitSplitStage() {
 							(&split.AsSplitArea{
 								ShowNameInHeader: false,
 								Size:             65,
+								HasDiv:           true,
+								DivStyle:         "position: relative; width: 100%; height: 100%;",
 								Svg: (&split.Svg{
 									StackName: parameter.svgStage.GetName(),
+									Style:     "position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 1;",
+								}).Stage(parameter.splitStage),
+								Cursor: (&split.Cursor{
+									StackName: parameter.cursorStage.GetName(),
+									Style:     "position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 2;pointer-events: none;",
 								}).Stage(parameter.splitStage),
 							}).Stage(parameter.splitStage),
 
@@ -151,6 +159,17 @@ func (parameter *Parameter) UpdateAndCommitSplitStage() {
 			(&split.AsSplitArea{
 				Split: (&split.Split{
 					StackName: parameter.toneStage.GetName() + tone.ProbeSplitSuffix,
+				}).Stage(parameter.splitStage),
+			}).Stage(parameter.splitStage),
+		},
+	}).Stage(parameter.splitStage)
+
+	(&split.View{
+		Name: "cursor probe",
+		RootAsSplitAreas: []*split.AsSplitArea{
+			(&split.AsSplitArea{
+				Split: (&split.Split{
+					StackName: parameter.cursorStage.GetName() + cursor.ProbeSplitSuffix,
 				}).Stage(parameter.splitStage),
 			}).Stage(parameter.splitStage),
 		},
