@@ -17,6 +17,11 @@ func __Gong__Abs(x int) int {
 	return x
 }
 
+const ProbeTreeSidebarSuffix = "-sidebar"
+const ProbeTableSuffix = "-table"
+const ProbeFormSuffix = "-form"
+const ProbeSplitSuffix = "-probe"
+
 // errUnkownEnum is returns when a value cannot match enum values
 var errUnkownEnum = errors.New("unkown enum")
 
@@ -44,7 +49,7 @@ type GongStructInterface interface {
 // StageStruct enables storage of staged instances
 // swagger:ignore
 type StageStruct struct {
-	path string
+	name string
 
 	// insertion point for definition of arrays registering instances
 	Classdiagrams           map[*Classdiagram]any
@@ -206,7 +211,7 @@ type StageStruct struct {
 	// map to enable docLink renaming when an identifier is renamed
 	Map_DocLink_Renaming map[string]GONG__Identifier
 	// the to be removed stops here
-	
+
 	// store the stage order of each instance in order to
 	// preserve this order when serializing them
 	Order            uint
@@ -287,7 +292,7 @@ type BackRepoInterface interface {
 	GetLastPushFromFrontNb() uint
 }
 
-func NewStage(path string) (stage *StageStruct) {
+func NewStage(name string) (stage *StageStruct) {
 
 	stage = &StageStruct{ // insertion point for array initiatialisation
 		Classdiagrams:           make(map[*Classdiagram]any),
@@ -332,7 +337,7 @@ func NewStage(path string) (stage *StageStruct) {
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
 
-		path: path,
+		name: name,
 
 		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
@@ -344,8 +349,8 @@ func NewStage(path string) (stage *StageStruct) {
 	return
 }
 
-func (stage *StageStruct) GetPath() string {
-	return stage.path
+func (stage *StageStruct) GetName() string {
+	return stage.name
 }
 
 func (stage *StageStruct) CommitWithSuspendedCallbacks() {
@@ -2227,11 +2232,11 @@ func (gongValueField *GongFieldValue) GetValueString() string {
 func (gongValueField *GongFieldValue) GetValueInt() int {
 	return gongValueField.valueInt
 }
-	
+
 func (gongValueField *GongFieldValue) GetValueFloat() float64 {
 	return gongValueField.valueFloat
 }
-	
+
 func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }

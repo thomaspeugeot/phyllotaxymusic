@@ -8,11 +8,16 @@ import { CommonModule } from '@angular/common';
 
 import { AngularSplitModule } from 'angular-split';
 
-import { TreeSpecificComponent } from '../../../../../../../tree/ng-github.com-fullstack-lang-gong-lib-tree/projects/treespecific/src/lib/tree-specific/tree-specific.component'
-import { TableSpecificComponent } from '../../../../../../../table/ng-github.com-fullstack-lang-gong-lib-table/projects/tablespecific/src/lib/table-specific/table-specific.component'
-import { FormSpecificComponent } from '../../../../../../../table/ng-github.com-fullstack-lang-gong-lib-table/projects/tablespecific/src/lib/form-specific/form-specific.component'
+import { ButtonSpecificComponent } from '../../../../../../../button/ng-github.com-fullstack-lang-gong-lib-button/projects/buttonspecific/src/lib/button-specific/button-specific.component'
+import { CursorSpecificComponent } from '../../../../../../../cursor/ng-github.com-fullstack-lang-gong-lib-cursor/projects/cursorspecific/src/lib/cursor-specific/cursor-specific.component'
 import { DocSpecificComponent } from '../../../../../../../doc/ng-github.com-fullstack-lang-gong-lib-doc/projects/docspecific/src/lib/doc-specific/doc-specific.component'
+import { FormSpecificComponent } from '../../../../../../../table/ng-github.com-fullstack-lang-gong-lib-table/projects/tablespecific/src/lib/form-specific/form-specific.component'
+import { SliderSpecificComponent } from '../../../../../../../slider/ng-github.com-fullstack-lang-gong-lib-slider/projects/sliderspecific/src/lib/slider-specific/slider-specific.component'
 import { SvgSpecificComponent } from '../../../../../../../svg/ng-github.com-fullstack-lang-gong-lib-svg/projects/svgspecific/src/lib/svg-specific/svg-specific.component'
+import { TableSpecificComponent } from '../../../../../../../table/ng-github.com-fullstack-lang-gong-lib-table/projects/tablespecific/src/lib/table-specific/table-specific.component'
+import { ToneSpecificComponent } from '../../../../../../../tone/ng-github.com-fullstack-lang-gong-lib-tone/projects/tonespecific/src/lib/tone-specific/tone-specific.component'
+import { TreeSpecificComponent } from '../../../../../../../tree/ng-github.com-fullstack-lang-gong-lib-tree/projects/treespecific/src/lib/tree-specific/tree-specific.component'
+
 
 
 @Component({
@@ -24,18 +29,23 @@ import { SvgSpecificComponent } from '../../../../../../../svg/ng-github.com-ful
 
     AngularSplitModule,
 
-    TreeSpecificComponent,
-    TableSpecificComponent,
-    FormSpecificComponent,
-    SvgSpecificComponent,
+    ButtonSpecificComponent,
+    CursorSpecificComponent,
     DocSpecificComponent,
+    FormSpecificComponent,
+    SliderSpecificComponent,
+    SvgSpecificComponent,
+    TableSpecificComponent,
+    ToneSpecificComponent,
+    TreeSpecificComponent,
+
   
   ],
   templateUrl: './split-specific.component.html',
   styleUrl: './split-specific.component.css'
 })
 export class SplitSpecificComponent implements OnInit {
-    @Input() GONG__StackPath: string = ""
+    @Input() Name: string = ""
 
     public frontRepo?: split.FrontRepo;
 
@@ -48,7 +58,7 @@ export class SplitSpecificComponent implements OnInit {
     ngOnInit(): void {
       console.log("ngOnInit");
   
-      this.frontRepoService.connectToWebSocket(this.GONG__StackPath).subscribe({
+      this.frontRepoService.connectToWebSocket(this.Name).subscribe({
         next: (frontRepo) => {
           this.frontRepo = frontRepo;
   

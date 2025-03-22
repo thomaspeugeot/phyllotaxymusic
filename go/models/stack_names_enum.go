@@ -9,11 +9,13 @@ const (
 	// we have three application stacks. All have the same name
 	Phylotaxy StacksNames = "phyllotaxymusic"
 
-	GongsvgStackName  StacksNames = "gongsvg"
-	SidebarTree       StacksNames = "sidebar tree"
-	GongtoneStackName StacksNames = "gongtone"
+	GongsvgStackName StacksNames = "gongsvg"
+	SidebarTree      StacksNames = "sidebar tree"
+	ToneStackName    StacksNames = "gongtone"
+	CursorStackName  StacksNames = "cursor"
 
-	GongLibButtonStackName StacksNames = "button"
+	ButtonStackName        StacksNames = "button"
+	RootSplitStackName     StacksNames = ""
 	GongLibSliderStackName StacksNames = "slider"
 
 	GongtreeStackName  StacksNames = "gongtree"

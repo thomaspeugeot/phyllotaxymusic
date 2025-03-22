@@ -18,11 +18,16 @@ import { FrontRepo, FrontRepoService } from './front-repo.service';
 
 // insertion point for imports
 import { AsSplitAPI } from './assplit-api'
-import { TreeAPI } from './tree-api'
-import { TableAPI } from './table-api'
-import { FormAPI } from './form-api'
-import { SvgAPI } from './svg-api'
+import { ButtonAPI } from './button-api'
+import { CursorAPI } from './cursor-api'
 import { DocAPI } from './doc-api'
+import { FormAPI } from './form-api'
+import { SliderAPI } from './slider-api'
+import { SplitAPI } from './split-api'
+import { SvgAPI } from './svg-api'
+import { TableAPI } from './table-api'
+import { ToneAPI } from './tone-api'
+import { TreeAPI } from './tree-api'
 
 @Injectable({
   providedIn: 'root'
@@ -52,12 +57,12 @@ export class AsSplitAreaService {
 
   /** GET assplitareas from the server */
   // gets is more robust to refactoring
-  gets(GONG__StackPath: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI[]> {
-    return this.getAsSplitAreas(GONG__StackPath, frontRepo)
+  gets(Name: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI[]> {
+    return this.getAsSplitAreas(Name, frontRepo)
   }
-  getAsSplitAreas(GONG__StackPath: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI[]> {
+  getAsSplitAreas(Name: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI[]> {
 
-    let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
+    let params = new HttpParams().set("Name", Name)
 
     return this.http.get<AsSplitAreaAPI[]>(this.assplitareasUrl, { params: params })
       .pipe(
@@ -68,12 +73,12 @@ export class AsSplitAreaService {
 
   /** GET assplitarea by id. Will 404 if id not found */
   // more robust API to refactoring
-  get(id: number, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
-    return this.getAsSplitArea(id, GONG__StackPath, frontRepo)
+  get(id: number, Name: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
+    return this.getAsSplitArea(id, Name, frontRepo)
   }
-  getAsSplitArea(id: number, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
+  getAsSplitArea(id: number, Name: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
 
-    let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
+    let params = new HttpParams().set("Name", Name)
 
     const url = `${this.assplitareasUrl}/${id}`;
     return this.http.get<AsSplitAreaAPI>(url, { params: params }).pipe(
@@ -83,12 +88,12 @@ export class AsSplitAreaService {
   }
 
   // postFront copy assplitarea to a version with encoded pointers and post to the back
-  postFront(assplitarea: AsSplitArea, GONG__StackPath: string): Observable<AsSplitAreaAPI> {
+  postFront(assplitarea: AsSplitArea, Name: string): Observable<AsSplitAreaAPI> {
     let assplitareaAPI = new AsSplitAreaAPI
     CopyAsSplitAreaToAsSplitAreaAPI(assplitarea, assplitareaAPI)
     const id = typeof assplitareaAPI === 'number' ? assplitareaAPI : assplitareaAPI.ID
     const url = `${this.assplitareasUrl}/${id}`;
-    let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
+    let params = new HttpParams().set("Name", Name)
     let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       params: params
@@ -102,12 +107,12 @@ export class AsSplitAreaService {
   }
   
   /** POST: add a new assplitarea to the server */
-  post(assplitareadb: AsSplitAreaAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
-    return this.postAsSplitArea(assplitareadb, GONG__StackPath, frontRepo)
+  post(assplitareadb: AsSplitAreaAPI, Name: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
+    return this.postAsSplitArea(assplitareadb, Name, frontRepo)
   }
-  postAsSplitArea(assplitareadb: AsSplitAreaAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
+  postAsSplitArea(assplitareadb: AsSplitAreaAPI, Name: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
 
-    let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
+    let params = new HttpParams().set("Name", Name)
     let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       params: params
@@ -122,14 +127,14 @@ export class AsSplitAreaService {
   }
 
   /** DELETE: delete the assplitareadb from the server */
-  delete(assplitareadb: AsSplitAreaAPI | number, GONG__StackPath: string): Observable<AsSplitAreaAPI> {
-    return this.deleteAsSplitArea(assplitareadb, GONG__StackPath)
+  delete(assplitareadb: AsSplitAreaAPI | number, Name: string): Observable<AsSplitAreaAPI> {
+    return this.deleteAsSplitArea(assplitareadb, Name)
   }
-  deleteAsSplitArea(assplitareadb: AsSplitAreaAPI | number, GONG__StackPath: string): Observable<AsSplitAreaAPI> {
+  deleteAsSplitArea(assplitareadb: AsSplitAreaAPI | number, Name: string): Observable<AsSplitAreaAPI> {
     const id = typeof assplitareadb === 'number' ? assplitareadb : assplitareadb.ID;
     const url = `${this.assplitareasUrl}/${id}`;
 
-    let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
+    let params = new HttpParams().set("Name", Name)
     let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       params: params
@@ -142,12 +147,12 @@ export class AsSplitAreaService {
   }
 
   // updateFront copy assplitarea to a version with encoded pointers and update to the back
-  updateFront(assplitarea: AsSplitArea, GONG__StackPath: string): Observable<AsSplitAreaAPI> {
+  updateFront(assplitarea: AsSplitArea, Name: string): Observable<AsSplitAreaAPI> {
     let assplitareaAPI = new AsSplitAreaAPI
     CopyAsSplitAreaToAsSplitAreaAPI(assplitarea, assplitareaAPI)
     const id = typeof assplitareaAPI === 'number' ? assplitareaAPI : assplitareaAPI.ID
     const url = `${this.assplitareasUrl}/${id}`;
-    let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
+    let params = new HttpParams().set("Name", Name)
     let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       params: params
@@ -161,15 +166,15 @@ export class AsSplitAreaService {
   }
 
   /** PUT: update the assplitareadb on the server */
-  update(assplitareadb: AsSplitAreaAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
-    return this.updateAsSplitArea(assplitareadb, GONG__StackPath, frontRepo)
+  update(assplitareadb: AsSplitAreaAPI, Name: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
+    return this.updateAsSplitArea(assplitareadb, Name, frontRepo)
   }
-  updateAsSplitArea(assplitareadb: AsSplitAreaAPI, GONG__StackPath: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
+  updateAsSplitArea(assplitareadb: AsSplitAreaAPI, Name: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
     const id = typeof assplitareadb === 'number' ? assplitareadb : assplitareadb.ID;
     const url = `${this.assplitareasUrl}/${id}`;
 
 
-    let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
+    let params = new HttpParams().set("Name", Name)
     let httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       params: params

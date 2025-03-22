@@ -17,6 +17,11 @@ func __Gong__Abs(x int) int {
 	return x
 }
 
+const ProbeTreeSidebarSuffix = "-sidebar"
+const ProbeTableSuffix = "-table"
+const ProbeFormSuffix = "-form"
+const ProbeSplitSuffix = "-probe"
+
 // errUnkownEnum is returns when a value cannot match enum values
 var errUnkownEnum = errors.New("unkown enum")
 
@@ -44,7 +49,7 @@ type GongStructInterface interface {
 // StageStruct enables storage of staged instances
 // swagger:ignore
 type StageStruct struct {
-	path string
+	name string
 
 	// insertion point for definition of arrays registering instances
 	Axiss           map[*Axis]any
@@ -325,7 +330,7 @@ type StageStruct struct {
 	// map to enable docLink renaming when an identifier is renamed
 	Map_DocLink_Renaming map[string]GONG__Identifier
 	// the to be removed stops here
-	
+
 	// store the stage order of each instance in order to
 	// preserve this order when serializing them
 	Order            uint
@@ -432,7 +437,7 @@ type BackRepoInterface interface {
 	GetLastPushFromFrontNb() uint
 }
 
-func NewStage(path string) (stage *StageStruct) {
+func NewStage(name string) (stage *StageStruct) {
 
 	stage = &StageStruct{ // insertion point for array initiatialisation
 		Axiss:           make(map[*Axis]any),
@@ -516,7 +521,7 @@ func NewStage(path string) (stage *StageStruct) {
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
 
-		path: path,
+		name: name,
 
 		// to be removed after fix of [issue](https://github.com/golang/go/issues/57559)
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
@@ -528,8 +533,8 @@ func NewStage(path string) (stage *StageStruct) {
 	return
 }
 
-func (stage *StageStruct) GetPath() string {
-	return stage.path
+func (stage *StageStruct) GetName() string {
+	return stage.name
 }
 
 func (stage *StageStruct) CommitWithSuspendedCallbacks() {
@@ -2785,7 +2790,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 		return any(&Axis{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case AxisGrid:
 		return any(&AxisGrid{
@@ -2795,13 +2800,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of Axis with the name of the field
 			Axiss: []*Axis{{Name: "Axiss"}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case Bezier:
 		return any(&Bezier{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case BezierGrid:
 		return any(&BezierGrid{
@@ -2811,7 +2816,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of Bezier with the name of the field
 			Beziers: []*Bezier{{Name: "Beziers"}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case BezierGridStack:
 		return any(&BezierGridStack{
@@ -2819,13 +2824,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of BezierGrid with the name of the field
 			BezierGrids: []*BezierGrid{{Name: "BezierGrids"}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case Circle:
 		return any(&Circle{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case CircleGrid:
 		return any(&CircleGrid{
@@ -2835,7 +2840,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of Circle with the name of the field
 			Circles: []*Circle{{Name: "Circles"}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case ExportToMusicxml:
 		return any(&ExportToMusicxml{
@@ -2855,19 +2860,19 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralCircle with the name of the field
 			SpiralCircles: []*SpiralCircle{{Circle: Circle{Name: "SpiralCircles"}}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case HorizontalAxis:
 		return any(&HorizontalAxis{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case Key:
 		return any(&Key{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case Parameter:
 		return any(&Parameter{
@@ -2995,7 +3000,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 		return any(&Rhombus{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case RhombusGrid:
 		return any(&RhombusGrid{
@@ -3005,7 +3010,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of Rhombus with the name of the field
 			Rhombuses: []*Rhombus{{Name: "Rhombuses"}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case ShapeCategory:
 		return any(&ShapeCategory{
@@ -3015,7 +3020,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 		return any(&SpiralBezier{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case SpiralBezierGrid:
 		return any(&SpiralBezierGrid{
@@ -3023,13 +3028,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralBezier with the name of the field
 			SpiralBeziers: []*SpiralBezier{{Name: "SpiralBeziers"}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case SpiralCircle:
 		return any(&SpiralCircle{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case SpiralCircleGrid:
 		return any(&SpiralCircleGrid{
@@ -3039,13 +3044,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralCircle with the name of the field
 			SpiralCircles: []*SpiralCircle{{Circle: Circle{Name: "SpiralCircles"}}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case SpiralLine:
 		return any(&SpiralLine{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case SpiralLineGrid:
 		return any(&SpiralLineGrid{
@@ -3053,19 +3058,19 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralLine with the name of the field
 			SpiralLines: []*SpiralLine{{Name: "SpiralLines"}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case SpiralOrigin:
 		return any(&SpiralOrigin{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case SpiralRhombus:
 		return any(&SpiralRhombus{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case SpiralRhombusGrid:
 		return any(&SpiralRhombusGrid{
@@ -3073,13 +3078,13 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of SpiralRhombus with the name of the field
 			SpiralRhombuses: []*SpiralRhombus{{Name: "SpiralRhombuses"}},
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	case VerticalAxis:
 		return any(&VerticalAxis{
 			// Initialisation of associations
 			// field is initialized with Shape problem with composites
-			
+
 		}).(*Type)
 	default:
 		return nil
@@ -5353,11 +5358,11 @@ func (gongValueField *GongFieldValue) GetValueString() string {
 func (gongValueField *GongFieldValue) GetValueInt() int {
 	return gongValueField.valueInt
 }
-	
+
 func (gongValueField *GongFieldValue) GetValueFloat() float64 {
 	return gongValueField.valueFloat
 }
-	
+
 func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }

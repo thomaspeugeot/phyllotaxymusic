@@ -215,7 +215,17 @@ func (backRepoCursor *BackRepoCursorStruct) GetCursorDBFromCursorPtr(cursor *mod
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
 func (backRepoCursor *BackRepoCursorStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
 
+	var cursors []*models.Cursor
 	for cursor := range stage.Cursors {
+		cursors = append(cursors, cursor)
+	}
+
+	// Sort by the order stored in Map_Staged_Order.
+	sort.Slice(cursors, func(i, j int) bool {
+		return stage.Map_Staged_Order[cursors[i]] < stage.Map_Staged_Order[cursors[j]]
+	})
+
+	for _, cursor := range cursors {
 		backRepoCursor.CommitPhaseOneInstance(cursor)
 	}
 

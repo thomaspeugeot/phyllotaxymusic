@@ -8,7 +8,7 @@ import (
 
 func (p *Parameter) UpdateAndCommitToneStage() {
 
-	p.gongtoneStage.Reset()
+	p.toneStage.Reset()
 
 	// we consider that the scale start at C3
 	keyboard := gongtone_models.GeneratePianoNotes()
@@ -21,19 +21,19 @@ func (p *Parameter) UpdateAndCommitToneStage() {
 
 	// note.Info = fmt.Sprintf("%40d", i)
 	if p.FirstVoiceNotes.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotes, p.gongtoneStage)
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotes, p.toneStage)
 	}
 	if p.FirstVoiceNotesShiftedRight.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotesShiftedRight, p.gongtoneStage)
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotesShiftedRight, p.toneStage)
 	}
 	if p.SecondVoiceNotes.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotes, p.gongtoneStage)
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotes, p.toneStage)
 	}
 	if p.SecondVoiceNotesShiftedRight.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, p.gongtoneStage)
+		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, p.toneStage)
 	}
 
-	player := new(gongtone_models.Player).Stage(p.gongtoneStage)
+	player := new(gongtone_models.Player).Stage(p.toneStage)
 	player.OnDI = func(player *gongtone_models.Player) error {
 
 		// notify the cursor
@@ -42,7 +42,7 @@ func (p *Parameter) UpdateAndCommitToneStage() {
 		return nil
 	}
 
-	p.gongtoneStage.Commit()
+	p.toneStage.Commit()
 
 }
 

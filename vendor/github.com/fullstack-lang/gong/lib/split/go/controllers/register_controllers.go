@@ -63,6 +63,20 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/assplitareas/:id", GetController().UpdateAsSplitArea)
 		v1.DELETE("/v1/assplitareas/:id", GetController().DeleteAsSplitArea)
 
+		v1.GET("/v1/buttons", GetController().GetButtons)
+		v1.GET("/v1/buttons/:id", GetController().GetButton)
+		v1.POST("/v1/buttons", GetController().PostButton)
+		v1.PATCH("/v1/buttons/:id", GetController().UpdateButton)
+		v1.PUT("/v1/buttons/:id", GetController().UpdateButton)
+		v1.DELETE("/v1/buttons/:id", GetController().DeleteButton)
+
+		v1.GET("/v1/cursors", GetController().GetCursors)
+		v1.GET("/v1/cursors/:id", GetController().GetCursor)
+		v1.POST("/v1/cursors", GetController().PostCursor)
+		v1.PATCH("/v1/cursors/:id", GetController().UpdateCursor)
+		v1.PUT("/v1/cursors/:id", GetController().UpdateCursor)
+		v1.DELETE("/v1/cursors/:id", GetController().DeleteCursor)
+
 		v1.GET("/v1/docs", GetController().GetDocs)
 		v1.GET("/v1/docs/:id", GetController().GetDoc)
 		v1.POST("/v1/docs", GetController().PostDoc)
@@ -77,6 +91,20 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/forms/:id", GetController().UpdateForm)
 		v1.DELETE("/v1/forms/:id", GetController().DeleteForm)
 
+		v1.GET("/v1/sliders", GetController().GetSliders)
+		v1.GET("/v1/sliders/:id", GetController().GetSlider)
+		v1.POST("/v1/sliders", GetController().PostSlider)
+		v1.PATCH("/v1/sliders/:id", GetController().UpdateSlider)
+		v1.PUT("/v1/sliders/:id", GetController().UpdateSlider)
+		v1.DELETE("/v1/sliders/:id", GetController().DeleteSlider)
+
+		v1.GET("/v1/splits", GetController().GetSplits)
+		v1.GET("/v1/splits/:id", GetController().GetSplit)
+		v1.POST("/v1/splits", GetController().PostSplit)
+		v1.PATCH("/v1/splits/:id", GetController().UpdateSplit)
+		v1.PUT("/v1/splits/:id", GetController().UpdateSplit)
+		v1.DELETE("/v1/splits/:id", GetController().DeleteSplit)
+
 		v1.GET("/v1/svgs", GetController().GetSvgs)
 		v1.GET("/v1/svgs/:id", GetController().GetSvg)
 		v1.POST("/v1/svgs", GetController().PostSvg)
@@ -90,6 +118,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PATCH("/v1/tables/:id", GetController().UpdateTable)
 		v1.PUT("/v1/tables/:id", GetController().UpdateTable)
 		v1.DELETE("/v1/tables/:id", GetController().DeleteTable)
+
+		v1.GET("/v1/tones", GetController().GetTones)
+		v1.GET("/v1/tones/:id", GetController().GetTone)
+		v1.POST("/v1/tones", GetController().PostTone)
+		v1.PATCH("/v1/tones/:id", GetController().UpdateTone)
+		v1.PUT("/v1/tones/:id", GetController().UpdateTone)
+		v1.DELETE("/v1/tones/:id", GetController().DeleteTone)
 
 		v1.GET("/v1/trees", GetController().GetTrees)
 		v1.GET("/v1/trees/:id", GetController().GetTree)
@@ -159,10 +194,10 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 	values := c.Request.URL.Query()
 	stackPath := ""
 	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+		value := values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetLastCommitFromBackNb", "GONG__StackPath", stackPath)
+			// log.Println("GetLastCommitFromBackNb", "Name", stackPath)
 		}
 	}
 
@@ -242,10 +277,10 @@ func (controller *Controller) GetLastCommitFromBackNb(c *gin.Context) {
 	values := c.Request.URL.Query()
 	stackPath := ""
 	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+		value := values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetLastCommitFromBackNb", "GONG__StackPath", stackPath)
+			// log.Println("GetLastCommitFromBackNb", "Name", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
@@ -263,10 +298,10 @@ func (controller *Controller) GetLastPushFromFrontNb(c *gin.Context) {
 	values := c.Request.URL.Query()
 	stackPath := ""
 	if len(values) == 1 {
-		value := values["GONG__StackPath"]
+		value := values["Name"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetLastPushFromFrontNb", "GONG__StackPath", stackPath)
+			// log.Println("GetLastPushFromFrontNb", "Name", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]

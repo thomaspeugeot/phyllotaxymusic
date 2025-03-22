@@ -10,5 +10,5 @@ func (parameter *Parameter) OnAfterUpdateSliderElement() {
 }
 
 func (parameter *Parameter) GetSliderStage() *m.StageStruct {
-	return parameter.slidersStage
+	return parameter.sliderStage
 }

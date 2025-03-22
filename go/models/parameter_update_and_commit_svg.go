@@ -6,19 +6,19 @@ import (
 
 func (parameter *Parameter) UpdateAndCommitSVGStage() {
 
-	parameter.gongsvgStage.Reset()
+	parameter.svgStage.Reset()
 
-	svg := (&gongsvg_models.SVG{Name: `SVG`}).Stage(parameter.gongsvgStage)
-	layer := (&gongsvg_models.Layer{Name: "Layer 1"}).Stage(parameter.gongsvgStage)
+	svg := (&gongsvg_models.SVG{Name: `SVG`}).Stage(parameter.svgStage)
+	layer := (&gongsvg_models.Layer{Name: "Layer 1"}).Stage(parameter.svgStage)
 	layer.Display = true
 	svg.Layers = append(svg.Layers, layer)
 
 	for _, shape := range parameter.Shapes {
 		if shape.GetIsDisplayed() {
-			shape.Draw(parameter.gongsvgStage, layer, parameter)
+			shape.Draw(parameter.svgStage, layer, parameter)
 		}
 	}
 
-	parameter.gongsvgStage.Commit()
+	parameter.svgStage.Commit()
 
 }

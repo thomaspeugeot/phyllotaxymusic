@@ -63,9 +63,9 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "04 - ng serve --host=127.0.0.1",
+			"label": "04 - ng serve",
 			"type": "shell",
-			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic; ng serve --host=127.0.0.1",
+			"command": "cd ng-github.com-thomaspeugeot-phyllotaxymusic; ng serve",
 			"group": "build",
 			"problemMatcher": []
 		},
@@ -249,54 +249,6 @@
 				"-marshallOnCommit=data/stage"
 			],
 			"group": "build"
-		},
-		{
-			"label": "02 - run sliders -unmarshallFromCode=stage.go -marshallOnCommit=stage",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/sliders/go/cmd/sliders"
-			},
-			"command": "go",
-			"args": [
-				"run",
-				"main.go",
-				"-diagrams",
-				"-unmarshallFromCode=data/stage.go",
-				"-marshallOnCommit=data/stage"
-			],
-			"group": "build"
-		},
-		{
-			"label": "04 - ng serve  sliders",
-			"type": "shell",
-			"command": "cd sliders/ng-github.com-thomaspeugeot-phyllotaxymusic-sliders; ng serve",
-			"group": "build",
-			"problemMatcher": []
-		},
-		{
-			"label": "01 - gongc sliders -clean",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/sliders/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-clean"
-			]
-		},
-		
-		{
-			"label": "01 - gongc buttons -clean",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/buttons/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-clean"
-			]
 		},
 	]
 }

@@ -15,12 +15,14 @@ import (
 
 	gongtree_stack "github.com/fullstack-lang/gong/lib/tree/go/stack"
 
-	cursor_models "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/models"
-	cursor_stack "github.com/thomaspeugeot/phyllotaxymusic/cursor/go/stack"
+	cursor_models "github.com/fullstack-lang/gong/lib/cursor/go/models"
+	cursor_stack "github.com/fullstack-lang/gong/lib/cursor/go/stack"
 
 	slider_stack "github.com/fullstack-lang/gong/lib/slider/go/stack"
 
 	button_stack "github.com/fullstack-lang/gong/lib/button/go/stack"
+
+	split_stack "github.com/fullstack-lang/gong/lib/split/go/stack"
 )
 
 var (
@@ -56,11 +58,11 @@ func main() {
 
 	gongsvg_stack := gongsvg_stack.NewStack(r, m.GongsvgStackName.ToString(), "", "", "", true, true)
 	gongtree_stack := gongtree_stack.NewStack(r, m.SidebarTree.ToString(), "", "", "", true, true)
-	gongtone_stack := gongtone_stack.NewStack(r, m.GongtoneStackName.ToString(), "", "", "", true, true)
-	cursor_stack := cursor_stack.NewStack(r, cursor_models.Cursorstakcname.ToString(), "", "", "", false, false)
-
-	sliders_stack := slider_stack.NewStack(r, m.GongLibSliderStackName.ToString(), "", "", "", false, false)
-	button_stack := button_stack.NewStack(r, m.GongLibButtonStackName.ToString(), "", "", "", false, false)
+	gongtone_stack := gongtone_stack.NewStack(r, m.ToneStackName.ToString(), "", "", "", true, true)
+	cursor_stack := cursor_stack.NewStack(r, m.CursorStackName.ToString(), "", "", "", false, true)
+	sliders_stack := slider_stack.NewStack(r, m.GongLibSliderStackName.ToString(), "", "", "", false, true)
+	button_stack := button_stack.NewStack(r, m.ButtonStackName.ToString(), "", "", "", false, true)
+	split_stack := split_stack.NewStack(r, m.RootSplitStackName.ToString(), "", "", "", false, true)
 
 	// get the only diagram
 	parameters := m.GetGongstructInstancesMap[m.Parameter](phyllotaxymusic_stack.Stage)
@@ -71,12 +73,13 @@ func main() {
 
 	// parameter is used for coordinating all updates to the
 	// phyllotaxy stage and compute all updates to the all stages
-	parameter.SetGongsvgStage(gongsvg_stack.Stage)
+	parameter.SetSvgStage(gongsvg_stack.Stage)
 	parameter.SetPhyllotaxymusicStage(phyllotaxymusic_stack.Stage)
-	parameter.SetGongtoneStage(gongtone_stack.Stage)
+	parameter.SetToneStage(gongtone_stack.Stage)
 	parameter.SetCursorStage(cursor_stack.Stage)
 	parameter.SetSlidersStage(sliders_stack.Stage)
 	parameter.SetButtonsStage(button_stack.Stage)
+	parameter.SetSplitsStage(split_stack.Stage)
 	parameter.SetGongtreeStage(gongtree_stack.Stage)
 	parameter.SetTreeProxy()
 
@@ -85,6 +88,7 @@ func main() {
 	cursor_stack.Stage.Commit()
 	parameter.SetCursor(cursor)
 
+	parameter.UpdateAndCommitSplitStage()
 	parameter.UpdateAllStages()
 
 	if *genmusicxml {

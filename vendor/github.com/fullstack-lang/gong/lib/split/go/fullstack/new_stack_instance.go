@@ -36,9 +36,7 @@ func NewStackInstance(
 
 	backRepo = orm.NewBackRepo(stage, filenames[0])
 
-	if stackPath != "" {
-		controllers.GetController().AddBackRepo(backRepo, stackPath)
-	}
+	controllers.GetController().AddBackRepo(backRepo, stackPath)
 
 	controllers.Register(r)
 
@@ -46,10 +44,15 @@ func NewStackInstance(
 	// insertion point
 	models.SetOrchestratorOnAfterUpdate[models.AsSplit](stage)
 	models.SetOrchestratorOnAfterUpdate[models.AsSplitArea](stage)
+	models.SetOrchestratorOnAfterUpdate[models.Button](stage)
+	models.SetOrchestratorOnAfterUpdate[models.Cursor](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Doc](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Form](stage)
+	models.SetOrchestratorOnAfterUpdate[models.Slider](stage)
+	models.SetOrchestratorOnAfterUpdate[models.Split](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Svg](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Table](stage)
+	models.SetOrchestratorOnAfterUpdate[models.Tone](stage)
 	models.SetOrchestratorOnAfterUpdate[models.Tree](stage)
 	models.SetOrchestratorOnAfterUpdate[models.View](stage)
 
