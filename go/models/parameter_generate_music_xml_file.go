@@ -4,10 +4,9 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 	"time"
 
+	load "github.com/fullstack-lang/gong/lib/load/go/models"
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
 
@@ -64,13 +63,20 @@ func (parameter *Parameter) GenerateMusicXMLFile() bool {
 
 	// Write the XML to a new file
 	filename := generateTimestampedFilename("export", ".musicxml")
-	err = os.WriteFile(
-		filepath.Join("musicxml", filename),
-		[]byte(xml.Header+string(output)), 0644)
-	if err != nil {
-		fmt.Println("Error writing to file:", err)
-		return true
-	}
+
+	downloadStage := parameter.loadStage
+	downloadStage.Reset()
+	fileToDownlad := (&load.FileToDownload{Name: filename}).Stage(downloadStage)
+	fileToDownlad.Content = string(output)
+	downloadStage.Commit()
+
+	// err = os.WriteFile(
+	// 	filepath.Join("musicxml", filename),
+	// 	[]byte(xml.Header+string(output)), 0644)
+	// if err != nil {
+	// 	fmt.Println("Error writing to file:", err)
+	// 	return true
+	// }
 	return false
 }
 

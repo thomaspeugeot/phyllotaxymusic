@@ -37,7 +37,7 @@ var (
 
 	port = flag.Int("port", 8080, "port server")
 
-	genmusicxml = flag.Bool("genmusicxml", true, "parse/analysis go/models and go/diagrams")
+	genmusicxml = flag.Bool("genmusicxml", false, "parse/analysis go/models and go/diagrams")
 )
 
 func main() {

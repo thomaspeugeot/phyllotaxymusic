@@ -24,7 +24,6 @@
             "args": [
                 "-unmarshallFromCode=data/music.go",
                 "-marshallOnCommit=data/music",
-                "-genmusicxml"
             ]
         },
     ]
