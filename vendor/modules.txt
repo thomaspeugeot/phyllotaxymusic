@@ -52,7 +52,7 @@ github.com/dustin/go-humanize
 # github.com/frankban/quicktest v1.14.6
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20250322112213-770f3f128121
+# github.com/fullstack-lang/gong v0.0.0-20250323102359-72cdfda6795d
 ## explicit; go 1.23.1
 github.com/fullstack-lang/gong/go/controllers
 github.com/fullstack-lang/gong/go/db
@@ -88,6 +88,15 @@ github.com/fullstack-lang/gong/lib/doc/go/load
 github.com/fullstack-lang/gong/lib/doc/go/models
 github.com/fullstack-lang/gong/lib/doc/go/orm
 github.com/fullstack-lang/gong/lib/doc/ng-github.com-fullstack-lang-gong-lib-doc
+github.com/fullstack-lang/gong/lib/load/go
+github.com/fullstack-lang/gong/lib/load/go/controllers
+github.com/fullstack-lang/gong/lib/load/go/db
+github.com/fullstack-lang/gong/lib/load/go/fullstack
+github.com/fullstack-lang/gong/lib/load/go/models
+github.com/fullstack-lang/gong/lib/load/go/orm
+github.com/fullstack-lang/gong/lib/load/go/probe
+github.com/fullstack-lang/gong/lib/load/go/stack
+github.com/fullstack-lang/gong/lib/load/ng-github.com-fullstack-lang-gong-lib-load
 github.com/fullstack-lang/gong/lib/slider/go
 github.com/fullstack-lang/gong/lib/slider/go/controllers
 github.com/fullstack-lang/gong/lib/slider/go/db

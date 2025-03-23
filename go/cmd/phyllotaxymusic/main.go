@@ -18,6 +18,8 @@ import (
 	cursor_models "github.com/fullstack-lang/gong/lib/cursor/go/models"
 	cursor_stack "github.com/fullstack-lang/gong/lib/cursor/go/stack"
 
+	load_stack "github.com/fullstack-lang/gong/lib/load/go/stack"
+
 	slider_stack "github.com/fullstack-lang/gong/lib/slider/go/stack"
 
 	button_stack "github.com/fullstack-lang/gong/lib/button/go/stack"
@@ -31,7 +33,6 @@ var (
 	unmarshallFromCode = flag.String("unmarshallFromCode", "", "unmarshall data from go file and '.go' (must be lowercased without spaces), If unmarshallFromCode arg is '', no unmarshalling")
 	marshallOnCommit   = flag.String("marshallOnCommit", "", "on all commits, marshall staged data to a go file with the marshall name and '.go' (must be lowercased without spaces). If marshall arg is '', no marshalling")
 
-	diagrams         = flag.Bool("diagrams", true, "parse/analysis go/models and go/diagrams")
 	embeddedDiagrams = flag.Bool("embeddedDiagrams", false, "parse/analysis go/models and go/embeddedDiagrams")
 
 	port = flag.Int("port", 8080, "port server")
@@ -56,12 +57,13 @@ func main() {
 	phyllotaxymusic_stack.Probe.Refresh()
 	phyllotaxymusic_stack.Stage.Checkout()
 
-	gongsvg_stack := gongsvg_stack.NewStack(r, m.GongsvgStackName.ToString(), "", "", "", true, true)
-	gongtree_stack := gongtree_stack.NewStack(r, m.SidebarTree.ToString(), "", "", "", true, true)
-	gongtone_stack := gongtone_stack.NewStack(r, m.ToneStackName.ToString(), "", "", "", true, true)
-	cursor_stack := cursor_stack.NewStack(r, m.CursorStackName.ToString(), "", "", "", false, true)
-	sliders_stack := slider_stack.NewStack(r, m.GongLibSliderStackName.ToString(), "", "", "", false, true)
 	button_stack := button_stack.NewStack(r, m.ButtonStackName.ToString(), "", "", "", false, true)
+	cursor_stack := cursor_stack.NewStack(r, m.CursorStackName.ToString(), "", "", "", false, true)
+	load_stack := load_stack.NewStack(r, m.LoadStackName.ToString(), "", "", "", false, true)
+	gongsvg_stack := gongsvg_stack.NewStack(r, m.GongsvgStackName.ToString(), "", "", "", true, true)
+	gongtone_stack := gongtone_stack.NewStack(r, m.ToneStackName.ToString(), "", "", "", true, true)
+	gongtree_stack := gongtree_stack.NewStack(r, m.SidebarTree.ToString(), "", "", "", true, true)
+	sliders_stack := slider_stack.NewStack(r, m.GongLibSliderStackName.ToString(), "", "", "", false, true)
 	split_stack := split_stack.NewStack(r, m.RootSplitStackName.ToString(), "", "", "", false, true)
 
 	// get the only diagram
@@ -77,6 +79,7 @@ func main() {
 	parameter.SetPhyllotaxymusicStage(phyllotaxymusic_stack.Stage)
 	parameter.SetToneStage(gongtone_stack.Stage)
 	parameter.SetCursorStage(cursor_stack.Stage)
+	parameter.SetLoadStage(load_stack.Stage)
 	parameter.SetSlidersStage(sliders_stack.Stage)
 	parameter.SetButtonsStage(button_stack.Stage)
 	parameter.SetSplitsStage(split_stack.Stage)

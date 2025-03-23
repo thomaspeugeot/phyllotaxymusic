@@ -87,6 +87,16 @@ func (parameter *Parameter) UpdateAndCommitSplitStage() {
 													StackName: parameter.toneStage.GetName(),
 												}).Stage(parameter.splitStage),
 											}).Stage(parameter.splitStage),
+
+											// load stage is load but invisible (Size =0). It
+											// is used to download generated Musescore files
+											(&split.AsSplitArea{
+												ShowNameInHeader: false,
+												Size:             0,
+												Load: (&split.Load{
+													StackName: parameter.loadStage.GetName(),
+												}).Stage(parameter.splitStage),
+											}).Stage(parameter.splitStage),
 										},
 									}).Stage(parameter.splitStage),
 								},

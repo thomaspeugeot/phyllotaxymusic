@@ -13,6 +13,7 @@ const (
 	SidebarTree      StacksNames = "sidebar tree"
 	ToneStackName    StacksNames = "gongtone"
 	CursorStackName  StacksNames = "cursor"
+	LoadStackName    StacksNames = "load"
 
 	ButtonStackName        StacksNames = "button"
 	RootSplitStackName     StacksNames = ""

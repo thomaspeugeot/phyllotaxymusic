@@ -5,6 +5,7 @@ import (
 
 	button "github.com/fullstack-lang/gong/lib/button/go/models"
 	cursor "github.com/fullstack-lang/gong/lib/cursor/go/models"
+	load "github.com/fullstack-lang/gong/lib/load/go/models"
 	slider "github.com/fullstack-lang/gong/lib/slider/go/models"
 	split "github.com/fullstack-lang/gong/lib/split/go/models"
 	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
@@ -195,6 +196,7 @@ type Parameter struct {
 	toneStage            *tone.StageStruct
 	treeStage            *tree.StageStruct
 	cursorStage          *cursor.StageStruct
+	loadStage            *load.StageStruct
 	sliderStage          *slider.StageStruct
 	buttonStage          *button.StageStruct
 	splitStage           *split.StageStruct
@@ -219,6 +221,10 @@ func (parameter *Parameter) SetCursor(cursor *cursor.Cursor) {
 
 func (parameter *Parameter) SetCursorStage(cursorStage *cursor.StageStruct) {
 	parameter.cursorStage = cursorStage
+}
+
+func (parameter *Parameter) SetLoadStage(loadStage *load.StageStruct) {
+	parameter.loadStage = loadStage
 }
 
 func (parameter *Parameter) SetSlidersStage(slidersStage *slider.StageStruct) {
