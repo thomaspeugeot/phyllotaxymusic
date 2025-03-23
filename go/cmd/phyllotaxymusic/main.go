@@ -72,6 +72,7 @@ func main() {
 	if !ok {
 		log.Fatal("no Reference parameter on stage")
 	}
+	m.NewStager(r, phyllotaxymusic_stack.Stage)
 
 	// parameter is used for coordinating all updates to the
 	// phyllotaxy stage and compute all updates to the all stages
