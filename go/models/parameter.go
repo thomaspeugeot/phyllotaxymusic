@@ -1,16 +1,5 @@
 package models
 
-import (
-	button "github.com/fullstack-lang/gong/lib/button/go/models"
-	cursor "github.com/fullstack-lang/gong/lib/cursor/go/models"
-	load "github.com/fullstack-lang/gong/lib/load/go/models"
-	slider "github.com/fullstack-lang/gong/lib/slider/go/models"
-	split "github.com/fullstack-lang/gong/lib/split/go/models"
-	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
-	tone "github.com/fullstack-lang/gong/lib/tone/go/models"
-	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
-)
-
 type Parameter struct {
 	Name string
 
@@ -188,70 +177,6 @@ type Parameter struct {
 
 	// not persisted fields
 	stager *Stager
-
-	cursor *cursor.Cursor
-
-	phyllotaxymusicStage *StageStruct
-	svgStage             *svg.StageStruct
-	toneStage            *tone.StageStruct
-	treeStage            *tree.StageStruct
-	cursorStage          *cursor.StageStruct
-	loadStage            *load.StageStruct
-	sliderStage          *slider.StageStruct
-	buttonStage          *button.StageStruct
-	splitStage           *split.StageStruct
-
-	Tree *tree.Tree
-}
-
-// GetButtonsStage implements models.Target.
-func (parameter *Parameter) GetButtonsStage() *button.StageStruct {
-	return parameter.buttonStage
-}
-
-// OnAfterUpdateButton implements models.Target.
-func (parameter *Parameter) OnAfterUpdateButton() {
-	parameter.UpdatePhyllotaxyStage()
-	parameter.GenerateMusicXMLFile()
-}
-
-func (parameter *Parameter) SetCursor(cursor *cursor.Cursor) {
-	parameter.cursor = cursor
-}
-
-func (parameter *Parameter) SetCursorStage(cursorStage *cursor.StageStruct) {
-	parameter.cursorStage = cursorStage
-}
-
-func (parameter *Parameter) SetLoadStage(loadStage *load.StageStruct) {
-	parameter.loadStage = loadStage
-}
-
-func (parameter *Parameter) SetSlidersStage(slidersStage *slider.StageStruct) {
-	parameter.sliderStage = slidersStage
-}
-
-func (parameter *Parameter) SetButtonsStage(buttonsStage *button.StageStruct) {
-	parameter.buttonStage = buttonsStage
-}
-
-func (parameter *Parameter) SetSplitsStage(splitsStage *split.StageStruct) {
-	parameter.splitStage = splitsStage
-}
-
-func (parameter *Parameter) SetSvgStage(gongsvgStage *svg.StageStruct) {
-	parameter.svgStage = gongsvgStage
-}
-
-func (parameter *Parameter) SetToneStage(gongtoneStage *tone.StageStruct) {
-	parameter.toneStage = gongtoneStage
-}
-
-func (parameter *Parameter) SetPhyllotaxymusicStage(phyllotaxymusicStage *StageStruct) {
-	parameter.phyllotaxymusicStage = phyllotaxymusicStage
-}
-func (parameter *Parameter) CommitPhyllotaxymusicStage() {
-	parameter.phyllotaxymusicStage.Commit()
 }
 
 // IsNotePlayed checks whether the note at the specified rank is played.
@@ -290,37 +215,4 @@ func (parameter *Parameter) ToggleNotePlayed(beatNb int) {
 	// log.Println("parameter.ThemeBinaryEncoding, before flip at beat", beatNb, parameter.ThemeBinaryEncoding)
 	parameter.ThemeBinaryEncoding ^= 1 << beatNb
 	// log.Println("parameter.ThemeBinaryEncoding, after flip at beat", beatNb, parameter.ThemeBinaryEncoding)
-}
-
-func (parameter *Parameter) SetGongtreeStage(gongtreeStage *tree.StageStruct) {
-	parameter.treeStage = gongtreeStage
-}
-
-func (parameter *Parameter) GetGongtreeStage() *tree.StageStruct {
-	return parameter.treeStage
-}
-
-func (parameter *Parameter) OnAfterUpdateNode() {
-	parameter.UpdateAllStages()
-}
-
-func (parameter *Parameter) UpdateAllStages() {
-	parameter.UpdatePhyllotaxyStage()
-	parameter.UpdateAndCommitCursorStage()
-	parameter.UpdateAndCommitSVGStage()
-	parameter.UpdateAndCommitToneStage()
-	parameter.UpdateAndCommitTreeStage()
-	parameter.UpdateAndCommitSlidersStage()
-	parameter.UpdateAndCommitButtonStage()
-	parameter.CommitPhyllotaxymusicStage()
-}
-
-func (parameter *Parameter) UpdateAllStagesButSliders() {
-	parameter.UpdatePhyllotaxyStage()
-	parameter.UpdateAndCommitCursorStage()
-	parameter.UpdateAndCommitSVGStage()
-	parameter.UpdateAndCommitToneStage()
-	parameter.UpdateAndCommitTreeStage()
-	parameter.UpdateAndCommitButtonStage()
-	parameter.CommitPhyllotaxymusicStage()
 }

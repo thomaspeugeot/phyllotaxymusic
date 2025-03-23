@@ -64,7 +64,7 @@ func (parameter *Parameter) GenerateMusicXMLFile() bool {
 	// Write the XML to a new file
 	filename := generateTimestampedFilename("export", ".musicxml")
 
-	downloadStage := parameter.loadStage
+	downloadStage := parameter.stager.loadStage
 	downloadStage.Reset()
 	fileToDownlad := (&load.FileToDownload{Name: filename}).Stage(downloadStage)
 	fileToDownlad.Content = string(output)

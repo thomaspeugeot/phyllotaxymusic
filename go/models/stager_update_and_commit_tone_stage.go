@@ -6,9 +6,10 @@ import (
 	gongtone_models "github.com/fullstack-lang/gong/lib/tone/go/models"
 )
 
-func (p *Parameter) UpdateAndCommitToneStage() {
+func (stager *Stager) UpdateAndCommitToneStage() {
 
-	p.toneStage.Reset()
+	stager.toneStage.Reset()
+	parameter := stager.parameter
 
 	// we consider that the scale start at C3
 	keyboard := gongtone_models.GeneratePianoNotes()
@@ -17,32 +18,32 @@ func (p *Parameter) UpdateAndCommitToneStage() {
 
 	map_Freqs := make(map[string]*gongtone_models.Freqency)
 
-	// log.Println("speed", parameter.Speed)
+	// log.Println("speed", stager.Speed)
 
 	// note.Info = fmt.Sprintf("%40d", i)
-	if p.FirstVoiceNotes.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotes, p.toneStage)
+	if parameter.FirstVoiceNotes.IsDisplayed {
+		stager.generateNotesFromCircleGrid(keyboard, map_Freqs, parameter.FirstVoiceNotes, stager.toneStage)
 	}
-	if p.FirstVoiceNotesShiftedRight.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.FirstVoiceNotesShiftedRight, p.toneStage)
+	if parameter.FirstVoiceNotesShiftedRight.IsDisplayed {
+		stager.generateNotesFromCircleGrid(keyboard, map_Freqs, parameter.FirstVoiceNotesShiftedRight, stager.toneStage)
 	}
-	if p.SecondVoiceNotes.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotes, p.toneStage)
+	if parameter.SecondVoiceNotes.IsDisplayed {
+		stager.generateNotesFromCircleGrid(keyboard, map_Freqs, parameter.SecondVoiceNotes, stager.toneStage)
 	}
-	if p.SecondVoiceNotesShiftedRight.IsDisplayed {
-		p.generateNotesFromCircleGrid(keyboard, map_Freqs, p.SecondVoiceNotesShiftedRight, p.toneStage)
+	if parameter.SecondVoiceNotesShiftedRight.IsDisplayed {
+		stager.generateNotesFromCircleGrid(keyboard, map_Freqs, parameter.SecondVoiceNotesShiftedRight, stager.toneStage)
 	}
 
-	player := new(gongtone_models.Player).Stage(p.toneStage)
+	player := new(gongtone_models.Player).Stage(stager.toneStage)
 	player.OnDI = func(player *gongtone_models.Player) error {
 
 		// notify the cursor
 		value := player.Status == gongtone_models.PLAYING
-		p.cursor.PlayCursor(p.cursorStage, value)
+		stager.cursor.PlayCursor(stager.cursorStage, value)
 		return nil
 	}
 
-	p.toneStage.Commit()
+	stager.toneStage.Commit()
 
 }
 
@@ -50,13 +51,15 @@ func (p *Parameter) UpdateAndCommitToneStage() {
 // assigning frequencies and computing their durations. It uses information from the given
 // keyboard mapping, frequency map, and circle grid. Newly created Freqency and Note
 // objects are staged in the provided gongtoneStage.
-func (p *Parameter) generateNotesFromCircleGrid(
+func (stager *Stager) generateNotesFromCircleGrid(
 	keyboard []string,
 	map_Freqs map[string]*gongtone_models.Freqency,
 	circleGrid *CircleGrid,
 	gongtoneStage *gongtone_models.StageStruct) {
 
-	beatLength := p.RotatedAxis.Length / float64(p.NbOfBeatsInTheme)
+	parameter := stager.parameter
+
+	beatLength := parameter.RotatedAxis.Length / float64(parameter.NbOfBeatsInTheme)
 
 	for idx, c := range circleGrid.Circles {
 
@@ -78,9 +81,9 @@ func (p *Parameter) generateNotesFromCircleGrid(
 		c.note = note
 		note.Frequencies = append(note.Frequencies, freq)
 
-		note.Start = (c.CenterX / beatLength) / p.BeatsPerSecond
+		note.Start = (c.CenterX / beatLength) / parameter.BeatsPerSecond
 
-		note.Velocity = p.Level
+		note.Velocity = parameter.Level
 	}
 
 	// compute duration according to skipped notes
@@ -90,7 +93,7 @@ func (p *Parameter) generateNotesFromCircleGrid(
 			continue
 		}
 
-		c.note.Duration = 1 / p.BeatsPerSecond
+		c.note.Duration = 1 / parameter.BeatsPerSecond
 
 		remainingCircles := circleGrid.Circles[i+1:]
 
@@ -98,7 +101,7 @@ func (p *Parameter) generateNotesFromCircleGrid(
 			if _c.isKept {
 				break
 			}
-			c.note.Duration += 1 / p.BeatsPerSecond
+			c.note.Duration += 1 / parameter.BeatsPerSecond
 		}
 	}
 }
