@@ -29,6 +29,9 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 	}
 	stager.parameter = parameter
 
+	// temporary
+	parameter.stager = stager
+
 	stager.stage = stage
 	stager.splitStage = split_stack.NewStack(r, "", "", "", "", false, false).Stage
 

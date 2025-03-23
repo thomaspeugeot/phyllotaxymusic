@@ -90,24 +90,23 @@ func addShapeNode(
 	shapeCategoryNode *gongtree_models.Node,
 	parameter *Parameter,
 ) {
-	parameter.addShapeNode(shape.GetName(), shape, shapeCategoryNode, shape.GetIsDisplayed(), parameter)
+	parameter.addShapeNode(shape.GetName(), shape, shapeCategoryNode, shape.GetIsDisplayed())
 }
 
-// addShapeNode is an internal helper method of TreeProxy that creates a GONG Tree node
+// addShapeNode is an internal helper method of paramater that creates a GONG Tree node
 // with the specified configuration and attaches it to the given parent node.
 //
 //   - name:  The display name of the node.
 //   - impl:  The node implementation, which must implement NodeImplInterface.
 //   - sc:    The parent node (or nil if attaching to the Tree root).
 //   - isChecked: Whether the node’s checkbox should be initially checked.
-func (treeProxy *Parameter) addShapeNode(
+func (parameter *Parameter) addShapeNode(
 	name string,
 	shape ShapeInterface,
 	shapeCategoryNode *gongtree_models.Node,
-	isChecked bool,
-	parameter *Parameter) {
+	isChecked bool) {
 
-	node := new(gongtree_models.Node).Stage(treeProxy.treeStage)
+	node := new(gongtree_models.Node).Stage(parameter.treeStage)
 	node.Name = name
 
 	node.HasCheckboxButton = true
@@ -121,6 +120,6 @@ func (treeProxy *Parameter) addShapeNode(
 	if shapeCategoryNode != nil {
 		shapeCategoryNode.Children = append(shapeCategoryNode.Children, node)
 	} else {
-		treeProxy.Tree.RootNodes = append(treeProxy.Tree.RootNodes, node)
+		parameter.Tree.RootNodes = append(parameter.Tree.RootNodes, node)
 	}
 }

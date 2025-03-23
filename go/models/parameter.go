@@ -187,6 +187,8 @@ type Parameter struct {
 	ActualBeatsTemporalShift int
 
 	// not persisted fields
+	stager *Stager
+
 	cursor *cursor.Cursor
 
 	phyllotaxymusicStage *StageStruct
