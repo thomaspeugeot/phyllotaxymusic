@@ -84,7 +84,6 @@ func main() {
 	parameter.SetButtonsStage(button_stack.Stage)
 	parameter.SetSplitsStage(split_stack.Stage)
 	parameter.SetGongtreeStage(gongtree_stack.Stage)
-	parameter.SetTreeProxy()
 
 	// connect parameter to cursor for start playing notification
 	cursor := new(cursor_models.Cursor).Stage(cursor_stack.Stage)

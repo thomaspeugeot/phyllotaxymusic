@@ -2,27 +2,14 @@ package models
 
 import (
 	"cmp"
-	"log"
 	"slices"
 
 	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
 )
 
-// TreeProxy, is for construing the gongtree Tree
-type TreeProxy struct {
-	PhyllotaxyStage *StageStruct
-
-	gongtreeStage *gongtree_models.StageStruct
-	Tree          *gongtree_models.Tree
-}
-
-func (tree *TreeProxy) SetGongtreeStage(gongtreeStage *gongtree_models.StageStruct) {
-	tree.gongtreeStage = gongtreeStage
-}
-
 // UpdateAndCommitTreeStage gathers shapes from the provided Parameter, organizes
 // them under their shape categories (if any), and commits the resulting tree
-// structure to the gongtreeStage.
+// structure to the treeStage.
 //
 //   - parameter: The Parameter struct containing a list of shapes to display.
 //
@@ -34,23 +21,11 @@ func (tree *TreeProxy) SetGongtreeStage(gongtreeStage *gongtree_models.StageStru
 //  5. For each shape category, create a Node, mark expansion state, and attach child shapes.
 //  6. Any shapes without a category are attached at the root level.
 //  7. Commit the updated tree to the stage, making it persistent.
-func (treeProxy *TreeProxy) UpdateAndCommitTreeStage() {
+func (parameter *Parameter) UpdateAndCommitTreeStage() {
 
-	// get the only diagram
-	parameters := GetGongstructInstancesMap[Parameter](treeProxy.PhyllotaxyStage)
-	parameter, ok := (*parameters)["Reference"]
-	if !ok {
-		log.Fatal("no Reference parameter on stage")
-	}
-
-	if len(*parameters) == 0 {
-		log.Println("")
-		// log.Fatalln("")
-	}
-
-	treeProxy.gongtreeStage.Reset()
-	treeProxy.Tree = new(gongtree_models.Tree).Stage(treeProxy.gongtreeStage)
-	treeProxy.Tree.Name = string(Sidebar)
+	parameter.treeStage.Reset()
+	parameter.Tree = new(gongtree_models.Tree).Stage(parameter.treeStage)
+	parameter.Tree.Name = string(Sidebar)
 
 	//
 	// collect all shape categories and creates the map of shapes
@@ -79,7 +54,7 @@ func (treeProxy *TreeProxy) UpdateAndCommitTreeStage() {
 
 	for _, shapeCategory := range shapeCategories {
 		shapes := map_ShapeCategory_Shapes[shapeCategory]
-		node := new(gongtree_models.Node).Stage(treeProxy.gongtreeStage)
+		node := new(gongtree_models.Node).Stage(parameter.treeStage)
 		node.Name = shapeCategory.GetName()
 
 		if shapeCategory.IsExpanded {
@@ -95,28 +70,27 @@ func (treeProxy *TreeProxy) UpdateAndCommitTreeStage() {
 			parameter,
 		)
 
-		treeProxy.Tree.RootNodes = append(treeProxy.Tree.RootNodes, node)
+		parameter.Tree.RootNodes = append(parameter.Tree.RootNodes, node)
 		for _, s := range shapes {
-			addShapeNode(treeProxy, s, node, parameter)
+			addShapeNode(s, node, parameter)
 		}
 	}
 
 	for _, shape := range parameter.Shapes {
 		if shape.GetShapeCategory() == nil {
-			addShapeNode(treeProxy, shape, nil, parameter)
+			addShapeNode(shape, nil, parameter)
 		}
 	}
 
-	treeProxy.gongtreeStage.Commit()
+	parameter.treeStage.Commit()
 }
 
 func addShapeNode(
-	treeProxy *TreeProxy,
 	shape ShapeInterface,
 	shapeCategoryNode *gongtree_models.Node,
 	parameter *Parameter,
 ) {
-	treeProxy.addShapeNode(shape.GetName(), shape, shapeCategoryNode, shape.GetIsDisplayed(), parameter)
+	parameter.addShapeNode(shape.GetName(), shape, shapeCategoryNode, shape.GetIsDisplayed(), parameter)
 }
 
 // addShapeNode is an internal helper method of TreeProxy that creates a GONG Tree node
@@ -126,14 +100,14 @@ func addShapeNode(
 //   - impl:  The node implementation, which must implement NodeImplInterface.
 //   - sc:    The parent node (or nil if attaching to the Tree root).
 //   - isChecked: Whether the node’s checkbox should be initially checked.
-func (treeProxy *TreeProxy) addShapeNode(
+func (treeProxy *Parameter) addShapeNode(
 	name string,
 	shape ShapeInterface,
 	shapeCategoryNode *gongtree_models.Node,
 	isChecked bool,
 	parameter *Parameter) {
 
-	node := new(gongtree_models.Node).Stage(treeProxy.gongtreeStage)
+	node := new(gongtree_models.Node).Stage(treeProxy.treeStage)
 	node.Name = name
 
 	node.HasCheckboxButton = true

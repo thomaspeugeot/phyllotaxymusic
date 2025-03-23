@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	button "github.com/fullstack-lang/gong/lib/button/go/models"
 	cursor "github.com/fullstack-lang/gong/lib/cursor/go/models"
 	load "github.com/fullstack-lang/gong/lib/load/go/models"
@@ -201,7 +199,7 @@ type Parameter struct {
 	buttonStage          *button.StageStruct
 	splitStage           *split.StageStruct
 
-	treeProxy *TreeProxy
+	Tree *tree.Tree
 }
 
 // GetButtonsStage implements models.Target.
@@ -252,19 +250,6 @@ func (parameter *Parameter) SetPhyllotaxymusicStage(phyllotaxymusicStage *StageS
 }
 func (parameter *Parameter) CommitPhyllotaxymusicStage() {
 	parameter.phyllotaxymusicStage.Commit()
-}
-
-func (parameter *Parameter) SetTreeProxy() {
-	if parameter.phyllotaxymusicStage == nil ||
-		parameter.treeStage == nil {
-		log.Fatalln("SetTreeProxy, stages not set")
-	}
-
-	treeProxy := new(TreeProxy)
-	treeProxy.SetGongtreeStage(parameter.treeStage)
-	treeProxy.PhyllotaxyStage = parameter.phyllotaxymusicStage
-
-	parameter.treeProxy = treeProxy
 }
 
 // IsNotePlayed checks whether the note at the specified rank is played.
@@ -336,11 +321,4 @@ func (parameter *Parameter) UpdateAllStagesButSliders() {
 	parameter.UpdateAndCommitTreeStage()
 	parameter.UpdateAndCommitButtonStage()
 	parameter.CommitPhyllotaxymusicStage()
-}
-
-func (parameter *Parameter) UpdateAndCommitTreeStage() {
-	if parameter.treeStage == nil || parameter.treeProxy == nil {
-		log.Fatalln("UpdateAndCommitTreeStage, missing fields to parameters")
-	}
-	parameter.treeProxy.UpdateAndCommitTreeStage()
 }
