@@ -13,35 +13,36 @@ import (
 // SecondVoiceNotes,
 // FirstVoiceNotesShiftedRight
 // SecondVoiceNotesShiftedRight
-func (p *Parameter) UpdateAndCommitCursorStage() {
+func (stager *Stager) UpdateAndCommitCursorStage() {
 
-	if p.cursor == nil {
+	if stager.cursor == nil {
 		log.Fatal("no cursor")
 	}
+	parameter := stager.parameter
 
-	themeDuration := float64(p.NbOfBeatsInTheme) / p.BeatsPerSecond
-	themVisualLenght := p.RotatedAxis.Length
+	themeDuration := float64(parameter.NbOfBeatsInTheme) / parameter.BeatsPerSecond
+	themVisualLenght := parameter.RotatedAxis.Length
 
 	var voices []*CircleGrid
 	voices = append(voices,
-		p.FirstVoiceNotes,
-		p.FirstVoiceNotesShiftedRight,
-		p.SecondVoiceNotes,
-		p.SecondVoiceNotesShiftedRight)
+		parameter.FirstVoiceNotes,
+		parameter.FirstVoiceNotesShiftedRight,
+		parameter.SecondVoiceNotes,
+		parameter.SecondVoiceNotesShiftedRight)
 
-	pitchLines := p.PitchLines.Axiss
-	p.cursor.Y1 = p.OriginY - pitchLines[0].CenterY
-	p.cursor.Y2 = p.OriginY - pitchLines[len(pitchLines)-1].CenterY
+	pitchLines := parameter.PitchLines.Axiss
+	stager.cursor.Y1 = parameter.OriginY - pitchLines[0].CenterY
+	stager.cursor.Y2 = parameter.OriginY - pitchLines[len(pitchLines)-1].CenterY
 
 	_, x2 := computeStartEnd(voices)
 
-	p.cursor.StartX,
-		p.cursor.EndX =
-		p.OriginX,
-		x2+p.OriginX+(themVisualLenght)/float64(p.NbOfBeatsInTheme)
-	p.cursor.DurationSeconds = ((p.cursor.EndX - p.cursor.StartX) / themVisualLenght) * themeDuration
+	stager.cursor.StartX,
+		stager.cursor.EndX =
+		parameter.OriginX,
+		x2+parameter.OriginX+(themVisualLenght)/float64(parameter.NbOfBeatsInTheme)
+	stager.cursor.DurationSeconds = ((stager.cursor.EndX - stager.cursor.StartX) / themVisualLenght) * themeDuration
 
-	p.cursorStage.Commit()
+	stager.cursorStage.Commit()
 }
 
 // computeStartEnd inspects each displayed CircleGrid and returns two values:

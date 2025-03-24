@@ -7,11 +7,11 @@ import (
 	gongtree_models "github.com/fullstack-lang/gong/lib/tree/go/models"
 )
 
-// UpdateAndCommitTreeStage gathers shapes from the provided Parameter, organizes
+// UpdateAndCommitTreeStage gathers shapes from the provided Stager, organizes
 // them under their shape categories (if any), and commits the resulting tree
 // structure to the treeStage.
 //
-//   - parameter: The Parameter struct containing a list of shapes to display.
+//   - stager: The Stager struct containing a list of shapes to display.
 //
 // The workflow is as follows:
 //  1. Reset the current GONG Tree stage to start from a clean state.
@@ -21,18 +21,18 @@ import (
 //  5. For each shape category, create a Node, mark expansion state, and attach child shapes.
 //  6. Any shapes without a category are attached at the root level.
 //  7. Commit the updated tree to the stage, making it persistent.
-func (parameter *Parameter) UpdateAndCommitTreeStage() {
+func (stager *Stager) UpdateAndCommitTreeStage() {
 
-	parameter.treeStage.Reset()
-	parameter.Tree = new(gongtree_models.Tree).Stage(parameter.treeStage)
-	parameter.Tree.Name = string(Sidebar)
+	stager.treeStage.Reset()
+	stager.tree = new(gongtree_models.Tree).Stage(stager.treeStage)
+	stager.tree.Name = string(Sidebar)
 
 	//
 	// collect all shape categories and creates the map of shapes
 	// by shape cateories
 	//
 	map_ShapeCategory_Shapes := make(map[*ShapeCategory][]ShapeInterface, 0)
-	for _, shape := range parameter.Shapes {
+	for _, shape := range stager.parameter.Shapes {
 		shapeCategory := shape.GetShapeCategory()
 		if shapeCategory == nil {
 			continue
@@ -54,7 +54,7 @@ func (parameter *Parameter) UpdateAndCommitTreeStage() {
 
 	for _, shapeCategory := range shapeCategories {
 		shapes := map_ShapeCategory_Shapes[shapeCategory]
-		node := new(gongtree_models.Node).Stage(parameter.treeStage)
+		node := new(gongtree_models.Node).Stage(stager.treeStage)
 		node.Name = shapeCategory.GetName()
 
 		if shapeCategory.IsExpanded {
@@ -67,47 +67,46 @@ func (parameter *Parameter) UpdateAndCommitTreeStage() {
 			node,
 			&shapeCategory.IsExpanded,
 			nil,
-			parameter,
+			stager,
 		)
 
-		parameter.Tree.RootNodes = append(parameter.Tree.RootNodes, node)
+		stager.tree.RootNodes = append(stager.tree.RootNodes, node)
 		for _, s := range shapes {
-			addShapeNode(s, node, parameter)
+			addShapeNode(s, node, stager)
 		}
 	}
 
-	for _, shape := range parameter.Shapes {
+	for _, shape := range stager.parameter.Shapes {
 		if shape.GetShapeCategory() == nil {
-			addShapeNode(shape, nil, parameter)
+			addShapeNode(shape, nil, stager)
 		}
 	}
 
-	parameter.treeStage.Commit()
+	stager.treeStage.Commit()
 }
 
 func addShapeNode(
 	shape ShapeInterface,
 	shapeCategoryNode *gongtree_models.Node,
-	parameter *Parameter,
+	stager *Stager,
 ) {
-	parameter.addShapeNode(shape.GetName(), shape, shapeCategoryNode, shape.GetIsDisplayed(), parameter)
+	stager.addShapeNode(shape.GetName(), shape, shapeCategoryNode, shape.GetIsDisplayed())
 }
 
-// addShapeNode is an internal helper method of TreeProxy that creates a GONG Tree node
+// addShapeNode is an internal helper method of paramater that creates a GONG Tree node
 // with the specified configuration and attaches it to the given parent node.
 //
 //   - name:  The display name of the node.
 //   - impl:  The node implementation, which must implement NodeImplInterface.
 //   - sc:    The parent node (or nil if attaching to the Tree root).
 //   - isChecked: Whether the node’s checkbox should be initially checked.
-func (treeProxy *Parameter) addShapeNode(
+func (stager *Stager) addShapeNode(
 	name string,
 	shape ShapeInterface,
 	shapeCategoryNode *gongtree_models.Node,
-	isChecked bool,
-	parameter *Parameter) {
+	isChecked bool) {
 
-	node := new(gongtree_models.Node).Stage(treeProxy.treeStage)
+	node := new(gongtree_models.Node).Stage(stager.treeStage)
 	node.Name = name
 
 	node.HasCheckboxButton = true
@@ -116,11 +115,11 @@ func (treeProxy *Parameter) addShapeNode(
 	node.Impl = NewNodeProxy(node,
 		nil,
 		shape.GetIsDisplayedPointer(),
-		parameter)
+		stager)
 
 	if shapeCategoryNode != nil {
 		shapeCategoryNode.Children = append(shapeCategoryNode.Children, node)
 	} else {
-		treeProxy.Tree.RootNodes = append(treeProxy.Tree.RootNodes, node)
+		stager.tree.RootNodes = append(stager.tree.RootNodes, node)
 	}
 }

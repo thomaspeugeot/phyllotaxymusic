@@ -1,7 +1,7 @@
 package models
 
 import (
-	gongsvg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
+	svg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
 // ShapeInterface
@@ -10,7 +10,7 @@ type ShapeInterface interface {
 	GetIsDisplayed() bool
 	GetIsDisplayedPointer() *bool
 	GetShapeCategory() *ShapeCategory
-	Draw(gongsvgStage *gongsvg_models.StageStruct,
-		layer *gongsvg_models.Layer,
+	Draw(svgStage *svg_models.StageStruct,
+		layer *svg_models.Layer,
 		parameter *Parameter)
 }

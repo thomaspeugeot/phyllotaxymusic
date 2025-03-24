@@ -4,20 +4,20 @@ import (
 	m "github.com/fullstack-lang/gong/lib/slider/go/models"
 )
 
-func (parameter *Parameter) UpdateAndCommitSlidersStage() {
-	parameter.sliderStage.Reset()
+func (stager *Stager) UpdateAndCommitSlidersStage() {
+	stager.sliderStage.Reset()
 
-	layout := new(m.Layout).Stage(parameter.sliderStage)
+	layout := new(m.Layout).Stage(stager.sliderStage)
 
-	group1 := new(m.Group).Stage(parameter.sliderStage)
+	group1 := new(m.Group).Stage(stager.sliderStage)
 	group1.Percentage = 25
 	layout.Groups = append(layout.Groups, group1)
 
-	group2 := new(m.Group).Stage(parameter.sliderStage)
+	group2 := new(m.Group).Stage(stager.sliderStage)
 	group2.Percentage = 25
 	layout.Groups = append(layout.Groups, group2)
 
-	group3 := new(m.Group).Stage(parameter.sliderStage)
+	group3 := new(m.Group).Stage(stager.sliderStage)
 	group3.Percentage = 50
 	layout.Groups = append(layout.Groups, group3)
 
@@ -25,48 +25,48 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 		group1.Sliders = append(
 			group1.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Side Length",
 				5,
 				200,
 				5,
-				&parameter.SideLength,
+				&stager.parameter.SideLength,
 			),
 		)
 
 		group1.Sliders = append(
 			group1.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Origin X",
 				-100,
 				600,
 				10,
-				&parameter.OriginX,
+				&stager.parameter.OriginX,
 			),
 		)
 
 		group1.Sliders = append(
 			group1.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Origin Y",
 				0,
 				3000,
 				50,
-				&parameter.OriginY,
+				&stager.parameter.OriginY,
 			),
 		)
 
 		group1.Sliders = append(
 			group1.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Spiral Initial Radius",
 				0.0,
 				5.0,
 				0.015,
-				&parameter.SpiralRadiusRatio,
+				&stager.parameter.SpiralRadiusRatio,
 			),
 		)
 	}
@@ -76,96 +76,96 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 		group2.Sliders = append(
 			group2.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Inside Angle",
 				60,
 				120,
 				1,
-				&parameter.InsideAngle,
+				&stager.parameter.InsideAngle,
 			),
 		)
 
 		group2.Sliders = append(
 			group2.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Bezier Strength",
 				0,
 				4,
 				0.01,
-				&parameter.BezierControlLengthRatio,
+				&stager.parameter.BezierControlLengthRatio,
 			),
 		)
 
 		group2.Sliders = append(
 			group2.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"M",
 				1,
 				20,
 				1,
-				&parameter.M,
+				&stager.parameter.M,
 			),
 		)
 
 		group2.Sliders = append(
 			group2.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"N",
 				1,
 				20,
 				1,
-				&parameter.N,
+				&stager.parameter.N,
 			),
 		)
 
 		group2.Sliders = append(
 			group2.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Z",
 				1,
 				120,
 				1,
-				&parameter.Z,
+				&stager.parameter.Z,
 			),
 		)
 
 		group2.Sliders = append(
 			group2.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"S Bezier Strength",
 				0,
 				10,
 				0.1,
-				&parameter.SpiralBezierStrength,
+				&stager.parameter.SpiralBezierStrength,
 			),
 		)
 
 		group2.Sliders = append(
 			group2.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Nb Interpol Points",
 				1,
 				50,
 				1,
-				&parameter.NbInterpolationPoints,
+				&stager.parameter.NbInterpolationPoints,
 			),
 		)
 
 		group2.Sliders = append(
 			group2.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Stack Height",
 				1,
 				8,
 				1,
-				&parameter.StackHeight,
+				&stager.parameter.StackHeight,
 			),
 		)
 	}
@@ -174,111 +174,111 @@ func (parameter *Parameter) UpdateAndCommitSlidersStage() {
 		group3.Sliders = append(
 			group3.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Pitch Height",
 				0,
 				0.1,
 				0.001,
-				&parameter.PitchHeight,
+				&stager.parameter.PitchHeight,
 			),
 		)
 
 		group3.Sliders = append(
 			group3.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Nb Beats in Theme",
 				1,
 				64,
 				1,
-				&parameter.NbOfBeatsInTheme,
+				&stager.parameter.NbOfBeatsInTheme,
 			),
 		)
 
 		group3.Sliders = append(
 			group3.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"BeatsPerSecond",
 				0,
 				20,
 				0.05,
-				&parameter.BeatsPerSecond,
+				&stager.parameter.BeatsPerSecond,
 			),
 		)
 
 		group3.Sliders = append(
 			group3.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"1st voice X",
 				-1,
 				1,
 				0.01,
-				&parameter.FirstVoiceShiftX,
+				&stager.parameter.FirstVoiceShiftX,
 			),
 		)
 
 		group3.Sliders = append(
 			group3.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"1st voice Y",
 				-1,
 				4,
 				0.01,
-				&parameter.FirstVoiceShiftY,
+				&stager.parameter.FirstVoiceShiftY,
 			),
 		)
 
 		group3.Sliders = append(
 			group3.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"2nd voice pitch diff",
 				-12,
 				24,
 				1,
-				&parameter.PitchDifference,
+				&stager.parameter.PitchDifference,
 			),
 		)
 
 		group3.Sliders = append(
 			group3.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Level",
 				0,
 				20,
 				0.1,
-				&parameter.Level,
+				&stager.parameter.Level,
 			),
 		)
 
 		group3.Sliders = append(
 			group3.Sliders,
 			m.NewSlider(
-				parameter,
+				stager,
 				"Actual Beats Shift",
 				0,
 				20,
 				1,
-				&parameter.ActualBeatsTemporalShift,
+				&stager.parameter.ActualBeatsTemporalShift,
 			),
 		)
 
 		group3.Checkboxes = append(
 			group3.Checkboxes,
 			m.NewCheckbox(
-				parameter,
+				stager,
 				"Scale",
 				"Minor",
 				"Major",
-				&parameter.IsMinor,
+				&stager.parameter.IsMinor,
 			),
 		)
 
 	}
 
-	parameter.sliderStage.Commit()
+	stager.sliderStage.Commit()
 }

@@ -20,6 +20,8 @@ func (stacksnames StacksNames) ToString() (res string) {
 		res = "gongtone"
 	case CursorStackName:
 		res = "cursor"
+	case LoadStackName:
+		res = "load"
 	case ButtonStackName:
 		res = "button"
 	case RootSplitStackName:
@@ -54,6 +56,9 @@ func (stacksnames *StacksNames) FromString(input string) (err error) {
 		return
 	case "cursor":
 		*stacksnames = CursorStackName
+		return
+	case "load":
+		*stacksnames = LoadStackName
 		return
 	case "button":
 		*stacksnames = ButtonStackName
@@ -92,6 +97,8 @@ func (stacksnames *StacksNames) FromCodeString(input string) (err error) {
 		*stacksnames = ToneStackName
 	case "CursorStackName":
 		*stacksnames = CursorStackName
+	case "LoadStackName":
+		*stacksnames = LoadStackName
 	case "ButtonStackName":
 		*stacksnames = ButtonStackName
 	case "RootSplitStackName":
@@ -124,6 +131,8 @@ func (stacksnames *StacksNames) ToCodeString() (res string) {
 		res = "ToneStackName"
 	case CursorStackName:
 		res = "CursorStackName"
+	case LoadStackName:
+		res = "LoadStackName"
 	case ButtonStackName:
 		res = "ButtonStackName"
 	case RootSplitStackName:
@@ -150,6 +159,7 @@ func (stacksnames StacksNames) Codes() (res []string) {
 	res = append(res, "SidebarTree")
 	res = append(res, "ToneStackName")
 	res = append(res, "CursorStackName")
+	res = append(res, "LoadStackName")
 	res = append(res, "ButtonStackName")
 	res = append(res, "RootSplitStackName")
 	res = append(res, "GongLibSliderStackName")
@@ -170,6 +180,7 @@ func (stacksnames StacksNames) CodeValues() (res []string) {
 	res = append(res, "sidebar tree")
 	res = append(res, "gongtone")
 	res = append(res, "cursor")
+	res = append(res, "load")
 	res = append(res, "button")
 	res = append(res, "")
 	res = append(res, "slider")

@@ -55,7 +55,7 @@ type CircleUpdaterImpl struct {
 func (circleUpdaterImpl *CircleUpdaterImpl) Updated() {
 
 	circleUpdaterImpl.parameter.ToggleNotePlayed(circleUpdaterImpl.beatNb)
-	circleUpdaterImpl.parameter.UpdateAllStages()
+	circleUpdaterImpl.parameter.stager.UpdateAllStages()
 }
 
 // RectUpdated implements models.RectImplInterface.
