@@ -144,25 +144,9 @@
 			]
 		},
 		{
-			"label": "00 - go mod vendor",
-			"type": "shell",
-			"group": "build",
-			"command": "go mod vendor"
-		},
-		{
 			"label": "00 - update gong dep",
 			"type": "shell",
 			"command": "./updating.bash; gongc go/models",
-			"group": "build"
-		},
-		{
-			"label": "00 - go mod tidy",
-			"type": "shell",
-			"command": "go",
-			"args": [
-				"mod",
-				"tidy"
-			],
 			"group": "build"
 		},
 		{
@@ -185,36 +169,6 @@
 				"cwd": "${workspaceFolder}/go/cmd/phyllotaxymusic"
 			},
 			"command": "GOOS=js GOARCH=wasm go build -o wasmworkbench.wasm"
-		},
-		{
-			"label": "01 - gongc cursor -skipGoModCommands -skipNpmInstall",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/cursor/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-skipGoModCommands",
-				"-skipNpmInstall"
-			]
-		},
-		
-		{
-			"label": "02 - run cursor -unmarshallFromCode=stage.go -marshallOnCommit=stage",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/cursor/go/cmd/cursor"
-			},
-			"command": "go",
-			"args": [
-				"run",
-				"main.go",
-				"-diagrams",
-				"-unmarshallFromCode=data/stage.go",
-				"-marshallOnCommit=data/stage"
-			],
-			"group": "build"
 		},
 	]
 }
