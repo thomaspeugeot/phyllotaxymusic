@@ -60,14 +60,14 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 	parameter.stager = stager
 
 	stager.phyllotaxymusicStage = stage
-	stager.buttonStage = button_stack.NewStack(r, ButtonStackName.ToString(), "", "", "", false, true).Stage
-	stager.cursorStage = cursor_stack.NewStack(r, CursorStackName.ToString(), "", "", "", false, true).Stage
-	stager.loadStage = load_stack.NewStack(r, LoadStackName.ToString(), "", "", "", false, true).Stage
-	stager.svgStage = gongsvg_stack.NewStack(r, GongsvgStackName.ToString(), "", "", "", true, true).Stage
-	stager.toneStage = gongtone_stack.NewStack(r, ToneStackName.ToString(), "", "", "", true, true).Stage
-	stager.treeStage = gongtree_stack.NewStack(r, SidebarTree.ToString(), "", "", "", true, true).Stage
-	stager.sliderStage = slider_stack.NewStack(r, GongLibSliderStackName.ToString(), "", "", "", false, true).Stage
-	stager.splitStage = split_stack.NewStack(r, RootSplitStackName.ToString(), "", "", "", false, true).Stage
+	stager.buttonStage = button_stack.NewStack(r, "", "", "", "", false, true).Stage
+	stager.cursorStage = cursor_stack.NewStack(r, "", "", "", "", false, true).Stage
+	stager.loadStage = load_stack.NewStack(r, "", "", "", "", false, true).Stage
+	stager.svgStage = gongsvg_stack.NewStack(r, "", "", "", "", true, true).Stage
+	stager.toneStage = gongtone_stack.NewStack(r, "", "", "", "", true, true).Stage
+	stager.treeStage = gongtree_stack.NewStack(r, "", "", "", "", true, true).Stage
+	stager.sliderStage = slider_stack.NewStack(r, "", "", "", "", false, true).Stage
+	stager.splitStage = split_stack.NewStack(r, "", "", "", "", false, true).Stage
 
 	// connect parameter to cursor for start playing notification
 	stager.cursor = new(cursor.Cursor).Stage(stager.cursorStage)
@@ -172,7 +172,7 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
-					StackName: stager.phyllotaxymusicStage.GetName() + ProbeSplitSuffix,
+					StackName: stager.phyllotaxymusicStage.GetProbeSplitStageName(),
 				}).Stage(stager.splitStage),
 			}).Stage(stager.splitStage),
 		},
@@ -183,7 +183,7 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
-					StackName: stager.svgStage.GetName() + svg.ProbeSplitSuffix,
+					StackName: stager.svgStage.GetProbeSplitStageName(),
 				}).Stage(stager.splitStage),
 			}).Stage(stager.splitStage),
 		},
@@ -194,7 +194,7 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
-					StackName: stager.treeStage.GetName() + tree.ProbeSplitSuffix,
+					StackName: stager.treeStage.GetProbeSplitStageName(),
 				}).Stage(stager.splitStage),
 			}).Stage(stager.splitStage),
 		},
@@ -205,7 +205,7 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
-					StackName: stager.sliderStage.GetName() + slider.ProbeSplitSuffix,
+					StackName: stager.sliderStage.GetProbeSplitStageName(),
 				}).Stage(stager.splitStage),
 			}).Stage(stager.splitStage),
 		},
@@ -216,7 +216,7 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
-					StackName: stager.buttonStage.GetName() + button.ProbeSplitSuffix,
+					StackName: stager.buttonStage.GetProbeSplitStageName(),
 				}).Stage(stager.splitStage),
 			}).Stage(stager.splitStage),
 		},
@@ -227,7 +227,7 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
-					StackName: stager.toneStage.GetName() + tone.ProbeSplitSuffix,
+					StackName: stager.toneStage.GetProbeSplitStageName(),
 				}).Stage(stager.splitStage),
 			}).Stage(stager.splitStage),
 		},
@@ -238,7 +238,7 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
-					StackName: stager.cursorStage.GetName() + cursor.ProbeSplitSuffix,
+					StackName: stager.cursorStage.GetProbeSplitStageName(),
 				}).Stage(stager.splitStage),
 			}).Stage(stager.splitStage),
 		},
@@ -249,7 +249,7 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
-					StackName: stager.splitStage.GetName() + split.ProbeSplitSuffix,
+					StackName: stager.splitStage.GetProbeSplitStageName(),
 				}).Stage(stager.splitStage),
 			}).Stage(stager.splitStage),
 		},

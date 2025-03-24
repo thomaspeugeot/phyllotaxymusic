@@ -150,43 +150,9 @@
 			"command": "go mod vendor"
 		},
 		{
-			"label": "00 - update dependencies",
+			"label": "00 - update gong dep",
 			"type": "shell",
-			"command": "go",
-			"args": [
-				"get",
-				"-u",
-				"github.com/fullstack-lang/gong@HEAD",
-				"github.com/fullstack-lang/gongdoc@HEAD",
-				"github.com/fullstack-lang/gongsvg@HEAD",
-				"github.com/fullstack-lang/gongtone@HEAD",
-			],
-			"group": "build"
-		},
-		{
-			"label": "00 - go get -d github.com/fullstack-lang/gong@HEAD",
-			"type": "shell",
-			"command": "go",
-			"args": [
-				"get",
-				"-d",
-				"github.com/fullstack-lang/gong@HEAD",
-				"github.com/fullstack-lang/gongdoc@HEAD",
-				"github.com/fullstack-lang/gongrouter@HEAD",
-				"github.com/fullstack-lang/gongsvg@HEAD",
-				"github.com/fullstack-lang/gongtree@HEAD",
-			],
-			"group": "build"
-		},
-		{
-			"label": "00 - go get -d github.com/fullstack-lang/gongdoc@HEAD",
-			"type": "shell",
-			"command": "go",
-			"args": [
-				"get",
-				"-d",
-				"github.com/fullstack-lang/gongdoc@HEAD",
-			],
+			"command": "./updating.bash; gongc go/models",
 			"group": "build"
 		},
 		{

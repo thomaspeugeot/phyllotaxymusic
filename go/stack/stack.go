@@ -123,7 +123,7 @@ func NewStack(
 
 	if withProbe {
 		stack.Probe = probe.NewProbe(r, phyllotaxymusic_go.GoModelsDir, phyllotaxymusic_go.GoDiagramsDir,
-			embeddedDiagrams, stackPath, stage, backRepo)
+			embeddedDiagrams, stage, backRepo)
 	}
 
 	return
