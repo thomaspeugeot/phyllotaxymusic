@@ -2347,81 +2347,133 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 func (stage *StageStruct) Reset() { // insertion point for array reset
 	stage.Axiss = make(map[*Axis]any)
 	stage.Axiss_mapString = make(map[string]*Axis)
+	stage.AxisMap_Staged_Order = make(map[*Axis]uint)
+	stage.AxisOrder = 0
 
 	stage.AxisGrids = make(map[*AxisGrid]any)
 	stage.AxisGrids_mapString = make(map[string]*AxisGrid)
+	stage.AxisGridMap_Staged_Order = make(map[*AxisGrid]uint)
+	stage.AxisGridOrder = 0
 
 	stage.Beziers = make(map[*Bezier]any)
 	stage.Beziers_mapString = make(map[string]*Bezier)
+	stage.BezierMap_Staged_Order = make(map[*Bezier]uint)
+	stage.BezierOrder = 0
 
 	stage.BezierGrids = make(map[*BezierGrid]any)
 	stage.BezierGrids_mapString = make(map[string]*BezierGrid)
+	stage.BezierGridMap_Staged_Order = make(map[*BezierGrid]uint)
+	stage.BezierGridOrder = 0
 
 	stage.BezierGridStacks = make(map[*BezierGridStack]any)
 	stage.BezierGridStacks_mapString = make(map[string]*BezierGridStack)
+	stage.BezierGridStackMap_Staged_Order = make(map[*BezierGridStack]uint)
+	stage.BezierGridStackOrder = 0
 
 	stage.Circles = make(map[*Circle]any)
 	stage.Circles_mapString = make(map[string]*Circle)
+	stage.CircleMap_Staged_Order = make(map[*Circle]uint)
+	stage.CircleOrder = 0
 
 	stage.CircleGrids = make(map[*CircleGrid]any)
 	stage.CircleGrids_mapString = make(map[string]*CircleGrid)
+	stage.CircleGridMap_Staged_Order = make(map[*CircleGrid]uint)
+	stage.CircleGridOrder = 0
 
 	stage.ExportToMusicxmls = make(map[*ExportToMusicxml]any)
 	stage.ExportToMusicxmls_mapString = make(map[string]*ExportToMusicxml)
+	stage.ExportToMusicxmlMap_Staged_Order = make(map[*ExportToMusicxml]uint)
+	stage.ExportToMusicxmlOrder = 0
 
 	stage.FrontCurves = make(map[*FrontCurve]any)
 	stage.FrontCurves_mapString = make(map[string]*FrontCurve)
+	stage.FrontCurveMap_Staged_Order = make(map[*FrontCurve]uint)
+	stage.FrontCurveOrder = 0
 
 	stage.FrontCurveStacks = make(map[*FrontCurveStack]any)
 	stage.FrontCurveStacks_mapString = make(map[string]*FrontCurveStack)
+	stage.FrontCurveStackMap_Staged_Order = make(map[*FrontCurveStack]uint)
+	stage.FrontCurveStackOrder = 0
 
 	stage.HorizontalAxiss = make(map[*HorizontalAxis]any)
 	stage.HorizontalAxiss_mapString = make(map[string]*HorizontalAxis)
+	stage.HorizontalAxisMap_Staged_Order = make(map[*HorizontalAxis]uint)
+	stage.HorizontalAxisOrder = 0
 
 	stage.Keys = make(map[*Key]any)
 	stage.Keys_mapString = make(map[string]*Key)
+	stage.KeyMap_Staged_Order = make(map[*Key]uint)
+	stage.KeyOrder = 0
 
 	stage.Parameters = make(map[*Parameter]any)
 	stage.Parameters_mapString = make(map[string]*Parameter)
+	stage.ParameterMap_Staged_Order = make(map[*Parameter]uint)
+	stage.ParameterOrder = 0
 
 	stage.Rhombuss = make(map[*Rhombus]any)
 	stage.Rhombuss_mapString = make(map[string]*Rhombus)
+	stage.RhombusMap_Staged_Order = make(map[*Rhombus]uint)
+	stage.RhombusOrder = 0
 
 	stage.RhombusGrids = make(map[*RhombusGrid]any)
 	stage.RhombusGrids_mapString = make(map[string]*RhombusGrid)
+	stage.RhombusGridMap_Staged_Order = make(map[*RhombusGrid]uint)
+	stage.RhombusGridOrder = 0
 
 	stage.ShapeCategorys = make(map[*ShapeCategory]any)
 	stage.ShapeCategorys_mapString = make(map[string]*ShapeCategory)
+	stage.ShapeCategoryMap_Staged_Order = make(map[*ShapeCategory]uint)
+	stage.ShapeCategoryOrder = 0
 
 	stage.SpiralBeziers = make(map[*SpiralBezier]any)
 	stage.SpiralBeziers_mapString = make(map[string]*SpiralBezier)
+	stage.SpiralBezierMap_Staged_Order = make(map[*SpiralBezier]uint)
+	stage.SpiralBezierOrder = 0
 
 	stage.SpiralBezierGrids = make(map[*SpiralBezierGrid]any)
 	stage.SpiralBezierGrids_mapString = make(map[string]*SpiralBezierGrid)
+	stage.SpiralBezierGridMap_Staged_Order = make(map[*SpiralBezierGrid]uint)
+	stage.SpiralBezierGridOrder = 0
 
 	stage.SpiralCircles = make(map[*SpiralCircle]any)
 	stage.SpiralCircles_mapString = make(map[string]*SpiralCircle)
+	stage.SpiralCircleMap_Staged_Order = make(map[*SpiralCircle]uint)
+	stage.SpiralCircleOrder = 0
 
 	stage.SpiralCircleGrids = make(map[*SpiralCircleGrid]any)
 	stage.SpiralCircleGrids_mapString = make(map[string]*SpiralCircleGrid)
+	stage.SpiralCircleGridMap_Staged_Order = make(map[*SpiralCircleGrid]uint)
+	stage.SpiralCircleGridOrder = 0
 
 	stage.SpiralLines = make(map[*SpiralLine]any)
 	stage.SpiralLines_mapString = make(map[string]*SpiralLine)
+	stage.SpiralLineMap_Staged_Order = make(map[*SpiralLine]uint)
+	stage.SpiralLineOrder = 0
 
 	stage.SpiralLineGrids = make(map[*SpiralLineGrid]any)
 	stage.SpiralLineGrids_mapString = make(map[string]*SpiralLineGrid)
+	stage.SpiralLineGridMap_Staged_Order = make(map[*SpiralLineGrid]uint)
+	stage.SpiralLineGridOrder = 0
 
 	stage.SpiralOrigins = make(map[*SpiralOrigin]any)
 	stage.SpiralOrigins_mapString = make(map[string]*SpiralOrigin)
+	stage.SpiralOriginMap_Staged_Order = make(map[*SpiralOrigin]uint)
+	stage.SpiralOriginOrder = 0
 
 	stage.SpiralRhombuss = make(map[*SpiralRhombus]any)
 	stage.SpiralRhombuss_mapString = make(map[string]*SpiralRhombus)
+	stage.SpiralRhombusMap_Staged_Order = make(map[*SpiralRhombus]uint)
+	stage.SpiralRhombusOrder = 0
 
 	stage.SpiralRhombusGrids = make(map[*SpiralRhombusGrid]any)
 	stage.SpiralRhombusGrids_mapString = make(map[string]*SpiralRhombusGrid)
+	stage.SpiralRhombusGridMap_Staged_Order = make(map[*SpiralRhombusGrid]uint)
+	stage.SpiralRhombusGridOrder = 0
 
 	stage.VerticalAxiss = make(map[*VerticalAxis]any)
 	stage.VerticalAxiss_mapString = make(map[string]*VerticalAxis)
+	stage.VerticalAxisMap_Staged_Order = make(map[*VerticalAxis]uint)
+	stage.VerticalAxisOrder = 0
 
 }
 

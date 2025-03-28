@@ -708,7 +708,7 @@ func _(stage *models.StageStruct) {
 	__ShapeCategory__000007_7_Spiral_Growth_Bezier.IsExpanded = false
 
 	__ShapeCategory__000008_8_Score_notation.Name = `8. Score notation`
-	__ShapeCategory__000008_8_Score_notation.IsExpanded = false
+	__ShapeCategory__000008_8_Score_notation.IsExpanded = true
 
 	__ShapeCategory__000009_9_Composer.Name = `9. Composer`
 	__ShapeCategory__000009_9_Composer.IsExpanded = true
