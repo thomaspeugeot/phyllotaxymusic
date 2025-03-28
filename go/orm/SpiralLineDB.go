@@ -220,7 +220,7 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) CommitPhaseOne(stage *models
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(spirallines, func(i, j int) bool {
-		return stage.Map_Staged_Order[spirallines[i]] < stage.Map_Staged_Order[spirallines[j]]
+		return stage.SpiralLineMap_Staged_Order[spirallines[i]] < stage.SpiralLineMap_Staged_Order[spirallines[j]]
 	})
 
 	for _, spiralline := range spirallines {

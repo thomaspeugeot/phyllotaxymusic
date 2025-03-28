@@ -151,7 +151,7 @@ func (backRepoSpiralBezierGrid *BackRepoSpiralBezierGridStruct) CommitPhaseOne(s
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(spiralbeziergrids, func(i, j int) bool {
-		return stage.Map_Staged_Order[spiralbeziergrids[i]] < stage.Map_Staged_Order[spiralbeziergrids[j]]
+		return stage.SpiralBezierGridMap_Staged_Order[spiralbeziergrids[i]] < stage.SpiralBezierGridMap_Staged_Order[spiralbeziergrids[j]]
 	})
 
 	for _, spiralbeziergrid := range spiralbeziergrids {

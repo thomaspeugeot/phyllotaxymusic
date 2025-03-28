@@ -141,7 +141,7 @@ func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) CommitPhaseOne(s
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(exporttomusicxmls, func(i, j int) bool {
-		return stage.Map_Staged_Order[exporttomusicxmls[i]] < stage.Map_Staged_Order[exporttomusicxmls[j]]
+		return stage.ExportToMusicxmlMap_Staged_Order[exporttomusicxmls[i]] < stage.ExportToMusicxmlMap_Staged_Order[exporttomusicxmls[j]]
 	})
 
 	for _, exporttomusicxml := range exporttomusicxmls {

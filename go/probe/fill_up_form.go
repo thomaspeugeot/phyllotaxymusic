@@ -5,10 +5,7 @@ import (
 	form "github.com/fullstack-lang/gong/lib/table/go/models"
 
 	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
-	"github.com/thomaspeugeot/phyllotaxymusic/go/orm"
 )
-
-var __dummy_orm_fillup_form = orm.BackRepoStruct{}
 
 const FormName = "Form"
 
@@ -60,7 +57,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "AxisGrid"
 			rf.Fieldname = "Axiss"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.AxisGrid),
@@ -132,7 +129,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "BezierGrid"
 			rf.Fieldname = "Beziers"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.BezierGrid),
@@ -164,7 +161,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "BezierGridStack"
 			rf.Fieldname = "BezierGrids"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.BezierGridStack),
@@ -233,7 +230,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "CircleGrid"
 			rf.Fieldname = "Circles"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.CircleGrid),
@@ -278,7 +275,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "FrontCurveStack"
 			rf.Fieldname = "FrontCurves"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.FrontCurveStack),
@@ -556,7 +553,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "RhombusGrid"
 			rf.Fieldname = "Rhombuses"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.RhombusGrid),
@@ -635,7 +632,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "SpiralBezierGrid"
 			rf.Fieldname = "SpiralBeziers"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.SpiralBezierGrid),
@@ -706,7 +703,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "FrontCurveStack"
 			rf.Fieldname = "SpiralCircles"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.FrontCurveStack),
@@ -728,7 +725,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "SpiralCircleGrid"
 			rf.Fieldname = "SpiralCircles"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.SpiralCircleGrid),
@@ -792,7 +789,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "SpiralLineGrid"
 			rf.Fieldname = "SpiralLines"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.SpiralLineGrid),
@@ -887,7 +884,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "SpiralRhombusGrid"
 			rf.Fieldname = "SpiralRhombuses"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.SpiralRhombusGrid),

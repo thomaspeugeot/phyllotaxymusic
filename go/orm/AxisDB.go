@@ -232,7 +232,7 @@ func (backRepoAxis *BackRepoAxisStruct) CommitPhaseOne(stage *models.StageStruct
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(axiss, func(i, j int) bool {
-		return stage.Map_Staged_Order[axiss[i]] < stage.Map_Staged_Order[axiss[j]]
+		return stage.AxisMap_Staged_Order[axiss[i]] < stage.AxisMap_Staged_Order[axiss[j]]
 	})
 
 	for _, axis := range axiss {

@@ -144,7 +144,7 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CommitPhaseOne(stage *
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(shapecategorys, func(i, j int) bool {
-		return stage.Map_Staged_Order[shapecategorys[i]] < stage.Map_Staged_Order[shapecategorys[j]]
+		return stage.ShapeCategoryMap_Staged_Order[shapecategorys[i]] < stage.ShapeCategoryMap_Staged_Order[shapecategorys[j]]
 	})
 
 	for _, shapecategory := range shapecategorys {

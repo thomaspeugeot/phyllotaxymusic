@@ -244,7 +244,7 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CommitPhaseOne(stage *mo
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(spiralbeziers, func(i, j int) bool {
-		return stage.Map_Staged_Order[spiralbeziers[i]] < stage.Map_Staged_Order[spiralbeziers[j]]
+		return stage.SpiralBezierMap_Staged_Order[spiralbeziers[i]] < stage.SpiralBezierMap_Staged_Order[spiralbeziers[j]]
 	})
 
 	for _, spiralbezier := range spiralbeziers {

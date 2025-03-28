@@ -202,7 +202,7 @@ func (backRepoFrontCurveStack *BackRepoFrontCurveStackStruct) CommitPhaseOne(sta
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(frontcurvestacks, func(i, j int) bool {
-		return stage.Map_Staged_Order[frontcurvestacks[i]] < stage.Map_Staged_Order[frontcurvestacks[j]]
+		return stage.FrontCurveStackMap_Staged_Order[frontcurvestacks[i]] < stage.FrontCurveStackMap_Staged_Order[frontcurvestacks[j]]
 	})
 
 	for _, frontcurvestack := range frontcurvestacks {

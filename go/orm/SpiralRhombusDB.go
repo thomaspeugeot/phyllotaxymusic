@@ -244,7 +244,7 @@ func (backRepoSpiralRhombus *BackRepoSpiralRhombusStruct) CommitPhaseOne(stage *
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(spiralrhombuss, func(i, j int) bool {
-		return stage.Map_Staged_Order[spiralrhombuss[i]] < stage.Map_Staged_Order[spiralrhombuss[j]]
+		return stage.SpiralRhombusMap_Staged_Order[spiralrhombuss[i]] < stage.SpiralRhombusMap_Staged_Order[spiralrhombuss[j]]
 	})
 
 	for _, spiralrhombus := range spiralrhombuss {

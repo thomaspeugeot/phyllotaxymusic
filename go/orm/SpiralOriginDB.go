@@ -196,7 +196,7 @@ func (backRepoSpiralOrigin *BackRepoSpiralOriginStruct) CommitPhaseOne(stage *mo
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(spiralorigins, func(i, j int) bool {
-		return stage.Map_Staged_Order[spiralorigins[i]] < stage.Map_Staged_Order[spiralorigins[j]]
+		return stage.SpiralOriginMap_Staged_Order[spiralorigins[i]] < stage.SpiralOriginMap_Staged_Order[spiralorigins[j]]
 	})
 
 	for _, spiralorigin := range spiralorigins {

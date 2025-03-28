@@ -122,8 +122,17 @@ type StageStruct struct {
 
 	// store the stage order of each instance in order to
 	// preserve this order when serializing them
-	Order            uint
-	Map_Staged_Order map[any]uint
+	// insertion point for order fields declaration
+	FreqencyOrder            uint
+	FreqencyMap_Staged_Order map[*Freqency]uint
+
+	NoteOrder            uint
+	NoteMap_Staged_Order map[*Note]uint
+
+	PlayerOrder            uint
+	PlayerMap_Staged_Order map[*Player]uint
+
+	// end of insertion point
 }
 
 func (stage *StageStruct) GetType() string {
@@ -201,10 +210,32 @@ func NewStage(name string) (stage *StageStruct) {
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
 		// the to be removed stops here
 
-		Map_Staged_Order: make(map[any]uint),
+		// insertion point for order map initialisations
+		FreqencyMap_Staged_Order: make(map[*Freqency]uint),
+
+		NoteMap_Staged_Order: make(map[*Note]uint),
+
+		PlayerMap_Staged_Order: make(map[*Player]uint),
+
+		// end of insertion point
 	}
 
 	return
+}
+
+func GetOrder[Type Gongstruct](stage *StageStruct, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *Freqency:
+		return stage.FreqencyMap_Staged_Order[instance]
+	case *Note:
+		return stage.NoteMap_Staged_Order[instance]
+	case *Player:
+		return stage.PlayerMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
 }
 
 func (stage *StageStruct) GetName() string {
@@ -280,8 +311,8 @@ func (freqency *Freqency) Stage(stage *StageStruct) *Freqency {
 
 	if _, ok := stage.Freqencys[freqency]; !ok {
 		stage.Freqencys[freqency] = __member
-		stage.Map_Staged_Order[freqency] = stage.Order
-		stage.Order++
+		stage.FreqencyMap_Staged_Order[freqency] = stage.FreqencyOrder
+		stage.FreqencyOrder++
 	}
 	stage.Freqencys_mapString[freqency.Name] = freqency
 
@@ -335,8 +366,8 @@ func (note *Note) Stage(stage *StageStruct) *Note {
 
 	if _, ok := stage.Notes[note]; !ok {
 		stage.Notes[note] = __member
-		stage.Map_Staged_Order[note] = stage.Order
-		stage.Order++
+		stage.NoteMap_Staged_Order[note] = stage.NoteOrder
+		stage.NoteOrder++
 	}
 	stage.Notes_mapString[note.Name] = note
 
@@ -390,8 +421,8 @@ func (player *Player) Stage(stage *StageStruct) *Player {
 
 	if _, ok := stage.Players[player]; !ok {
 		stage.Players[player] = __member
-		stage.Map_Staged_Order[player] = stage.Order
-		stage.Order++
+		stage.PlayerMap_Staged_Order[player] = stage.PlayerOrder
+		stage.PlayerOrder++
 	}
 	stage.Players_mapString[player.Name] = player
 

@@ -244,7 +244,7 @@ func (backRepoBezier *BackRepoBezierStruct) CommitPhaseOne(stage *models.StageSt
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(beziers, func(i, j int) bool {
-		return stage.Map_Staged_Order[beziers[i]] < stage.Map_Staged_Order[beziers[j]]
+		return stage.BezierMap_Staged_Order[beziers[i]] < stage.BezierMap_Staged_Order[beziers[j]]
 	})
 
 	for _, bezier := range beziers {

@@ -102,8 +102,11 @@ type StageStruct struct {
 
 	// store the stage order of each instance in order to
 	// preserve this order when serializing them
-	Order            uint
-	Map_Staged_Order map[any]uint
+	// insertion point for order fields declaration
+	FileToDownloadOrder            uint
+	FileToDownloadMap_Staged_Order map[*FileToDownload]uint
+
+	// end of insertion point
 }
 
 func (stage *StageStruct) GetType() string {
@@ -171,10 +174,24 @@ func NewStage(name string) (stage *StageStruct) {
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
 		// the to be removed stops here
 
-		Map_Staged_Order: make(map[any]uint),
+		// insertion point for order map initialisations
+		FileToDownloadMap_Staged_Order: make(map[*FileToDownload]uint),
+
+		// end of insertion point
 	}
 
 	return
+}
+
+func GetOrder[Type Gongstruct](stage *StageStruct, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *FileToDownload:
+		return stage.FileToDownloadMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
 }
 
 func (stage *StageStruct) GetName() string {
@@ -246,8 +263,8 @@ func (filetodownload *FileToDownload) Stage(stage *StageStruct) *FileToDownload 
 
 	if _, ok := stage.FileToDownloads[filetodownload]; !ok {
 		stage.FileToDownloads[filetodownload] = __member
-		stage.Map_Staged_Order[filetodownload] = stage.Order
-		stage.Order++
+		stage.FileToDownloadMap_Staged_Order[filetodownload] = stage.FileToDownloadOrder
+		stage.FileToDownloadOrder++
 	}
 	stage.FileToDownloads_mapString[filetodownload.Name] = filetodownload
 

@@ -155,7 +155,7 @@ func (backRepoSpiralCircleGrid *BackRepoSpiralCircleGridStruct) CommitPhaseOne(s
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(spiralcirclegrids, func(i, j int) bool {
-		return stage.Map_Staged_Order[spiralcirclegrids[i]] < stage.Map_Staged_Order[spiralcirclegrids[j]]
+		return stage.SpiralCircleGridMap_Staged_Order[spiralcirclegrids[i]] < stage.SpiralCircleGridMap_Staged_Order[spiralcirclegrids[j]]
 	})
 
 	for _, spiralcirclegrid := range spiralcirclegrids {

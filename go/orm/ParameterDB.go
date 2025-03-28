@@ -610,7 +610,7 @@ func (backRepoParameter *BackRepoParameterStruct) CommitPhaseOne(stage *models.S
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(parameters, func(i, j int) bool {
-		return stage.Map_Staged_Order[parameters[i]] < stage.Map_Staged_Order[parameters[j]]
+		return stage.ParameterMap_Staged_Order[parameters[i]] < stage.ParameterMap_Staged_Order[parameters[j]]
 	})
 
 	for _, parameter := range parameters {

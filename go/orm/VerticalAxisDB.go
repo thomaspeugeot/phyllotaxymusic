@@ -208,7 +208,7 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitPhaseOne(stage *mo
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(verticalaxiss, func(i, j int) bool {
-		return stage.Map_Staged_Order[verticalaxiss[i]] < stage.Map_Staged_Order[verticalaxiss[j]]
+		return stage.VerticalAxisMap_Staged_Order[verticalaxiss[i]] < stage.VerticalAxisMap_Staged_Order[verticalaxiss[j]]
 	})
 
 	for _, verticalaxis := range verticalaxiss {

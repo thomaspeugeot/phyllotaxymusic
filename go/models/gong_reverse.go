@@ -1,20 +1,15 @@
 // generated code - do not edit
-package orm
-
-import (
-	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
-)
+package models
 
 func GetReverseFieldOwnerName(
-	stage *models.StageStruct,
-	backRepo *BackRepoStruct,
+	stage *StageStruct,
 	instance any,
-	reverseField *models.ReverseField) (res string) {
+	reverseField *ReverseField) (res string) {
 
 	res = ""
 	switch inst := any(instance).(type) {
 	// insertion point
-	case *models.Axis:
+	case *Axis:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "AxisGrid":
@@ -26,12 +21,12 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.AxisGrid:
+	case *AxisGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Bezier:
+	case *Bezier:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "BezierGrid":
@@ -43,7 +38,7 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.BezierGrid:
+	case *BezierGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "BezierGridStack":
@@ -55,12 +50,12 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.BezierGridStack:
+	case *BezierGridStack:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Circle:
+	case *Circle:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "CircleGrid":
@@ -72,17 +67,17 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.CircleGrid:
+	case *CircleGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.ExportToMusicxml:
+	case *ExportToMusicxml:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.FrontCurve:
+	case *FrontCurve:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "FrontCurveStack":
@@ -94,27 +89,27 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.FrontCurveStack:
+	case *FrontCurveStack:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.HorizontalAxis:
+	case *HorizontalAxis:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Key:
+	case *Key:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Parameter:
+	case *Parameter:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Rhombus:
+	case *Rhombus:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "RhombusGrid":
@@ -126,17 +121,17 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.RhombusGrid:
+	case *RhombusGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.ShapeCategory:
+	case *ShapeCategory:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralBezier:
+	case *SpiralBezier:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "SpiralBezierGrid":
@@ -148,12 +143,12 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.SpiralBezierGrid:
+	case *SpiralBezierGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralCircle:
+	case *SpiralCircle:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "FrontCurveStack":
@@ -172,12 +167,12 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.SpiralCircleGrid:
+	case *SpiralCircleGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralLine:
+	case *SpiralLine:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "SpiralLineGrid":
@@ -189,17 +184,17 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.SpiralLineGrid:
+	case *SpiralLineGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralOrigin:
+	case *SpiralOrigin:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralRhombus:
+	case *SpiralRhombus:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "SpiralRhombusGrid":
@@ -211,12 +206,12 @@ func GetReverseFieldOwnerName(
 			}
 		}
 
-	case *models.SpiralRhombusGrid:
+	case *SpiralRhombusGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.VerticalAxis:
+	case *VerticalAxis:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
@@ -227,16 +222,15 @@ func GetReverseFieldOwnerName(
 	return
 }
 
-func GetReverseFieldOwner[T models.Gongstruct](
-	stage *models.StageStruct,
-	backRepo *BackRepoStruct,
+func GetReverseFieldOwner[T Gongstruct](
+	stage *StageStruct,
 	instance *T,
-	reverseField *models.ReverseField) (res any) {
+	reverseField *ReverseField) (res any) {
 
 	res = nil
 	switch inst := any(instance).(type) {
 	// insertion point
-	case *models.Axis:
+	case *Axis:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "AxisGrid":
@@ -246,12 +240,12 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.AxisGrid:
+	case *AxisGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Bezier:
+	case *Bezier:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "BezierGrid":
@@ -261,7 +255,7 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.BezierGrid:
+	case *BezierGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "BezierGridStack":
@@ -271,12 +265,12 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.BezierGridStack:
+	case *BezierGridStack:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Circle:
+	case *Circle:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "CircleGrid":
@@ -286,17 +280,17 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.CircleGrid:
+	case *CircleGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.ExportToMusicxml:
+	case *ExportToMusicxml:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.FrontCurve:
+	case *FrontCurve:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "FrontCurveStack":
@@ -306,27 +300,27 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.FrontCurveStack:
+	case *FrontCurveStack:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.HorizontalAxis:
+	case *HorizontalAxis:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Key:
+	case *Key:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Parameter:
+	case *Parameter:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.Rhombus:
+	case *Rhombus:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "RhombusGrid":
@@ -336,17 +330,17 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.RhombusGrid:
+	case *RhombusGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.ShapeCategory:
+	case *ShapeCategory:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralBezier:
+	case *SpiralBezier:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "SpiralBezierGrid":
@@ -356,12 +350,12 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.SpiralBezierGrid:
+	case *SpiralBezierGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralCircle:
+	case *SpiralCircle:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "FrontCurveStack":
@@ -376,12 +370,12 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.SpiralCircleGrid:
+	case *SpiralCircleGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralLine:
+	case *SpiralLine:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "SpiralLineGrid":
@@ -391,17 +385,17 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.SpiralLineGrid:
+	case *SpiralLineGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralOrigin:
+	case *SpiralOrigin:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.SpiralRhombus:
+	case *SpiralRhombus:
 		switch reverseField.GongstructName {
 		// insertion point
 		case "SpiralRhombusGrid":
@@ -411,12 +405,12 @@ func GetReverseFieldOwner[T models.Gongstruct](
 			}
 		}
 
-	case *models.SpiralRhombusGrid:
+	case *SpiralRhombusGrid:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
 
-	case *models.VerticalAxis:
+	case *VerticalAxis:
 		switch reverseField.GongstructName {
 		// insertion point
 		}

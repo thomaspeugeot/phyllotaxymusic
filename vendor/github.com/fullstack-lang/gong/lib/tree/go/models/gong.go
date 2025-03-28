@@ -135,8 +135,20 @@ type StageStruct struct {
 
 	// store the stage order of each instance in order to
 	// preserve this order when serializing them
-	Order            uint
-	Map_Staged_Order map[any]uint
+	// insertion point for order fields declaration
+	ButtonOrder            uint
+	ButtonMap_Staged_Order map[*Button]uint
+
+	NodeOrder            uint
+	NodeMap_Staged_Order map[*Node]uint
+
+	SVGIconOrder            uint
+	SVGIconMap_Staged_Order map[*SVGIcon]uint
+
+	TreeOrder            uint
+	TreeMap_Staged_Order map[*Tree]uint
+
+	// end of insertion point
 }
 
 func (stage *StageStruct) GetType() string {
@@ -219,10 +231,36 @@ func NewStage(name string) (stage *StageStruct) {
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
 		// the to be removed stops here
 
-		Map_Staged_Order: make(map[any]uint),
+		// insertion point for order map initialisations
+		ButtonMap_Staged_Order: make(map[*Button]uint),
+
+		NodeMap_Staged_Order: make(map[*Node]uint),
+
+		SVGIconMap_Staged_Order: make(map[*SVGIcon]uint),
+
+		TreeMap_Staged_Order: make(map[*Tree]uint),
+
+		// end of insertion point
 	}
 
 	return
+}
+
+func GetOrder[Type Gongstruct](stage *StageStruct, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *Button:
+		return stage.ButtonMap_Staged_Order[instance]
+	case *Node:
+		return stage.NodeMap_Staged_Order[instance]
+	case *SVGIcon:
+		return stage.SVGIconMap_Staged_Order[instance]
+	case *Tree:
+		return stage.TreeMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
 }
 
 func (stage *StageStruct) GetName() string {
@@ -300,8 +338,8 @@ func (button *Button) Stage(stage *StageStruct) *Button {
 
 	if _, ok := stage.Buttons[button]; !ok {
 		stage.Buttons[button] = __member
-		stage.Map_Staged_Order[button] = stage.Order
-		stage.Order++
+		stage.ButtonMap_Staged_Order[button] = stage.ButtonOrder
+		stage.ButtonOrder++
 	}
 	stage.Buttons_mapString[button.Name] = button
 
@@ -355,8 +393,8 @@ func (node *Node) Stage(stage *StageStruct) *Node {
 
 	if _, ok := stage.Nodes[node]; !ok {
 		stage.Nodes[node] = __member
-		stage.Map_Staged_Order[node] = stage.Order
-		stage.Order++
+		stage.NodeMap_Staged_Order[node] = stage.NodeOrder
+		stage.NodeOrder++
 	}
 	stage.Nodes_mapString[node.Name] = node
 
@@ -410,8 +448,8 @@ func (svgicon *SVGIcon) Stage(stage *StageStruct) *SVGIcon {
 
 	if _, ok := stage.SVGIcons[svgicon]; !ok {
 		stage.SVGIcons[svgicon] = __member
-		stage.Map_Staged_Order[svgicon] = stage.Order
-		stage.Order++
+		stage.SVGIconMap_Staged_Order[svgicon] = stage.SVGIconOrder
+		stage.SVGIconOrder++
 	}
 	stage.SVGIcons_mapString[svgicon.Name] = svgicon
 
@@ -465,8 +503,8 @@ func (tree *Tree) Stage(stage *StageStruct) *Tree {
 
 	if _, ok := stage.Trees[tree]; !ok {
 		stage.Trees[tree] = __member
-		stage.Map_Staged_Order[tree] = stage.Order
-		stage.Order++
+		stage.TreeMap_Staged_Order[tree] = stage.TreeOrder
+		stage.TreeOrder++
 	}
 	stage.Trees_mapString[tree.Name] = tree
 

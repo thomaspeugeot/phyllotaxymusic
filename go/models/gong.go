@@ -349,8 +349,86 @@ type StageStruct struct {
 
 	// store the stage order of each instance in order to
 	// preserve this order when serializing them
-	Order            uint
-	Map_Staged_Order map[any]uint
+	// insertion point for order fields declaration
+	AxisOrder            uint
+	AxisMap_Staged_Order map[*Axis]uint
+
+	AxisGridOrder            uint
+	AxisGridMap_Staged_Order map[*AxisGrid]uint
+
+	BezierOrder            uint
+	BezierMap_Staged_Order map[*Bezier]uint
+
+	BezierGridOrder            uint
+	BezierGridMap_Staged_Order map[*BezierGrid]uint
+
+	BezierGridStackOrder            uint
+	BezierGridStackMap_Staged_Order map[*BezierGridStack]uint
+
+	CircleOrder            uint
+	CircleMap_Staged_Order map[*Circle]uint
+
+	CircleGridOrder            uint
+	CircleGridMap_Staged_Order map[*CircleGrid]uint
+
+	ExportToMusicxmlOrder            uint
+	ExportToMusicxmlMap_Staged_Order map[*ExportToMusicxml]uint
+
+	FrontCurveOrder            uint
+	FrontCurveMap_Staged_Order map[*FrontCurve]uint
+
+	FrontCurveStackOrder            uint
+	FrontCurveStackMap_Staged_Order map[*FrontCurveStack]uint
+
+	HorizontalAxisOrder            uint
+	HorizontalAxisMap_Staged_Order map[*HorizontalAxis]uint
+
+	KeyOrder            uint
+	KeyMap_Staged_Order map[*Key]uint
+
+	ParameterOrder            uint
+	ParameterMap_Staged_Order map[*Parameter]uint
+
+	RhombusOrder            uint
+	RhombusMap_Staged_Order map[*Rhombus]uint
+
+	RhombusGridOrder            uint
+	RhombusGridMap_Staged_Order map[*RhombusGrid]uint
+
+	ShapeCategoryOrder            uint
+	ShapeCategoryMap_Staged_Order map[*ShapeCategory]uint
+
+	SpiralBezierOrder            uint
+	SpiralBezierMap_Staged_Order map[*SpiralBezier]uint
+
+	SpiralBezierGridOrder            uint
+	SpiralBezierGridMap_Staged_Order map[*SpiralBezierGrid]uint
+
+	SpiralCircleOrder            uint
+	SpiralCircleMap_Staged_Order map[*SpiralCircle]uint
+
+	SpiralCircleGridOrder            uint
+	SpiralCircleGridMap_Staged_Order map[*SpiralCircleGrid]uint
+
+	SpiralLineOrder            uint
+	SpiralLineMap_Staged_Order map[*SpiralLine]uint
+
+	SpiralLineGridOrder            uint
+	SpiralLineGridMap_Staged_Order map[*SpiralLineGrid]uint
+
+	SpiralOriginOrder            uint
+	SpiralOriginMap_Staged_Order map[*SpiralOrigin]uint
+
+	SpiralRhombusOrder            uint
+	SpiralRhombusMap_Staged_Order map[*SpiralRhombus]uint
+
+	SpiralRhombusGridOrder            uint
+	SpiralRhombusGridMap_Staged_Order map[*SpiralRhombusGrid]uint
+
+	VerticalAxisOrder            uint
+	VerticalAxisMap_Staged_Order map[*VerticalAxis]uint
+
+	// end of insertion point
 }
 
 func (stage *StageStruct) GetType() string {
@@ -543,10 +621,124 @@ func NewStage(name string) (stage *StageStruct) {
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
 		// the to be removed stops here
 
-		Map_Staged_Order: make(map[any]uint),
+		// insertion point for order map initialisations
+		AxisMap_Staged_Order: make(map[*Axis]uint),
+
+		AxisGridMap_Staged_Order: make(map[*AxisGrid]uint),
+
+		BezierMap_Staged_Order: make(map[*Bezier]uint),
+
+		BezierGridMap_Staged_Order: make(map[*BezierGrid]uint),
+
+		BezierGridStackMap_Staged_Order: make(map[*BezierGridStack]uint),
+
+		CircleMap_Staged_Order: make(map[*Circle]uint),
+
+		CircleGridMap_Staged_Order: make(map[*CircleGrid]uint),
+
+		ExportToMusicxmlMap_Staged_Order: make(map[*ExportToMusicxml]uint),
+
+		FrontCurveMap_Staged_Order: make(map[*FrontCurve]uint),
+
+		FrontCurveStackMap_Staged_Order: make(map[*FrontCurveStack]uint),
+
+		HorizontalAxisMap_Staged_Order: make(map[*HorizontalAxis]uint),
+
+		KeyMap_Staged_Order: make(map[*Key]uint),
+
+		ParameterMap_Staged_Order: make(map[*Parameter]uint),
+
+		RhombusMap_Staged_Order: make(map[*Rhombus]uint),
+
+		RhombusGridMap_Staged_Order: make(map[*RhombusGrid]uint),
+
+		ShapeCategoryMap_Staged_Order: make(map[*ShapeCategory]uint),
+
+		SpiralBezierMap_Staged_Order: make(map[*SpiralBezier]uint),
+
+		SpiralBezierGridMap_Staged_Order: make(map[*SpiralBezierGrid]uint),
+
+		SpiralCircleMap_Staged_Order: make(map[*SpiralCircle]uint),
+
+		SpiralCircleGridMap_Staged_Order: make(map[*SpiralCircleGrid]uint),
+
+		SpiralLineMap_Staged_Order: make(map[*SpiralLine]uint),
+
+		SpiralLineGridMap_Staged_Order: make(map[*SpiralLineGrid]uint),
+
+		SpiralOriginMap_Staged_Order: make(map[*SpiralOrigin]uint),
+
+		SpiralRhombusMap_Staged_Order: make(map[*SpiralRhombus]uint),
+
+		SpiralRhombusGridMap_Staged_Order: make(map[*SpiralRhombusGrid]uint),
+
+		VerticalAxisMap_Staged_Order: make(map[*VerticalAxis]uint),
+
+		// end of insertion point
 	}
 
 	return
+}
+
+func GetOrder[Type Gongstruct](stage *StageStruct, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *Axis:
+		return stage.AxisMap_Staged_Order[instance]
+	case *AxisGrid:
+		return stage.AxisGridMap_Staged_Order[instance]
+	case *Bezier:
+		return stage.BezierMap_Staged_Order[instance]
+	case *BezierGrid:
+		return stage.BezierGridMap_Staged_Order[instance]
+	case *BezierGridStack:
+		return stage.BezierGridStackMap_Staged_Order[instance]
+	case *Circle:
+		return stage.CircleMap_Staged_Order[instance]
+	case *CircleGrid:
+		return stage.CircleGridMap_Staged_Order[instance]
+	case *ExportToMusicxml:
+		return stage.ExportToMusicxmlMap_Staged_Order[instance]
+	case *FrontCurve:
+		return stage.FrontCurveMap_Staged_Order[instance]
+	case *FrontCurveStack:
+		return stage.FrontCurveStackMap_Staged_Order[instance]
+	case *HorizontalAxis:
+		return stage.HorizontalAxisMap_Staged_Order[instance]
+	case *Key:
+		return stage.KeyMap_Staged_Order[instance]
+	case *Parameter:
+		return stage.ParameterMap_Staged_Order[instance]
+	case *Rhombus:
+		return stage.RhombusMap_Staged_Order[instance]
+	case *RhombusGrid:
+		return stage.RhombusGridMap_Staged_Order[instance]
+	case *ShapeCategory:
+		return stage.ShapeCategoryMap_Staged_Order[instance]
+	case *SpiralBezier:
+		return stage.SpiralBezierMap_Staged_Order[instance]
+	case *SpiralBezierGrid:
+		return stage.SpiralBezierGridMap_Staged_Order[instance]
+	case *SpiralCircle:
+		return stage.SpiralCircleMap_Staged_Order[instance]
+	case *SpiralCircleGrid:
+		return stage.SpiralCircleGridMap_Staged_Order[instance]
+	case *SpiralLine:
+		return stage.SpiralLineMap_Staged_Order[instance]
+	case *SpiralLineGrid:
+		return stage.SpiralLineGridMap_Staged_Order[instance]
+	case *SpiralOrigin:
+		return stage.SpiralOriginMap_Staged_Order[instance]
+	case *SpiralRhombus:
+		return stage.SpiralRhombusMap_Staged_Order[instance]
+	case *SpiralRhombusGrid:
+		return stage.SpiralRhombusGridMap_Staged_Order[instance]
+	case *VerticalAxis:
+		return stage.VerticalAxisMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
 }
 
 func (stage *StageStruct) GetName() string {
@@ -668,8 +860,8 @@ func (axis *Axis) Stage(stage *StageStruct) *Axis {
 
 	if _, ok := stage.Axiss[axis]; !ok {
 		stage.Axiss[axis] = __member
-		stage.Map_Staged_Order[axis] = stage.Order
-		stage.Order++
+		stage.AxisMap_Staged_Order[axis] = stage.AxisOrder
+		stage.AxisOrder++
 	}
 	stage.Axiss_mapString[axis.Name] = axis
 
@@ -723,8 +915,8 @@ func (axisgrid *AxisGrid) Stage(stage *StageStruct) *AxisGrid {
 
 	if _, ok := stage.AxisGrids[axisgrid]; !ok {
 		stage.AxisGrids[axisgrid] = __member
-		stage.Map_Staged_Order[axisgrid] = stage.Order
-		stage.Order++
+		stage.AxisGridMap_Staged_Order[axisgrid] = stage.AxisGridOrder
+		stage.AxisGridOrder++
 	}
 	stage.AxisGrids_mapString[axisgrid.Name] = axisgrid
 
@@ -778,8 +970,8 @@ func (bezier *Bezier) Stage(stage *StageStruct) *Bezier {
 
 	if _, ok := stage.Beziers[bezier]; !ok {
 		stage.Beziers[bezier] = __member
-		stage.Map_Staged_Order[bezier] = stage.Order
-		stage.Order++
+		stage.BezierMap_Staged_Order[bezier] = stage.BezierOrder
+		stage.BezierOrder++
 	}
 	stage.Beziers_mapString[bezier.Name] = bezier
 
@@ -833,8 +1025,8 @@ func (beziergrid *BezierGrid) Stage(stage *StageStruct) *BezierGrid {
 
 	if _, ok := stage.BezierGrids[beziergrid]; !ok {
 		stage.BezierGrids[beziergrid] = __member
-		stage.Map_Staged_Order[beziergrid] = stage.Order
-		stage.Order++
+		stage.BezierGridMap_Staged_Order[beziergrid] = stage.BezierGridOrder
+		stage.BezierGridOrder++
 	}
 	stage.BezierGrids_mapString[beziergrid.Name] = beziergrid
 
@@ -888,8 +1080,8 @@ func (beziergridstack *BezierGridStack) Stage(stage *StageStruct) *BezierGridSta
 
 	if _, ok := stage.BezierGridStacks[beziergridstack]; !ok {
 		stage.BezierGridStacks[beziergridstack] = __member
-		stage.Map_Staged_Order[beziergridstack] = stage.Order
-		stage.Order++
+		stage.BezierGridStackMap_Staged_Order[beziergridstack] = stage.BezierGridStackOrder
+		stage.BezierGridStackOrder++
 	}
 	stage.BezierGridStacks_mapString[beziergridstack.Name] = beziergridstack
 
@@ -943,8 +1135,8 @@ func (circle *Circle) Stage(stage *StageStruct) *Circle {
 
 	if _, ok := stage.Circles[circle]; !ok {
 		stage.Circles[circle] = __member
-		stage.Map_Staged_Order[circle] = stage.Order
-		stage.Order++
+		stage.CircleMap_Staged_Order[circle] = stage.CircleOrder
+		stage.CircleOrder++
 	}
 	stage.Circles_mapString[circle.Name] = circle
 
@@ -998,8 +1190,8 @@ func (circlegrid *CircleGrid) Stage(stage *StageStruct) *CircleGrid {
 
 	if _, ok := stage.CircleGrids[circlegrid]; !ok {
 		stage.CircleGrids[circlegrid] = __member
-		stage.Map_Staged_Order[circlegrid] = stage.Order
-		stage.Order++
+		stage.CircleGridMap_Staged_Order[circlegrid] = stage.CircleGridOrder
+		stage.CircleGridOrder++
 	}
 	stage.CircleGrids_mapString[circlegrid.Name] = circlegrid
 
@@ -1053,8 +1245,8 @@ func (exporttomusicxml *ExportToMusicxml) Stage(stage *StageStruct) *ExportToMus
 
 	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; !ok {
 		stage.ExportToMusicxmls[exporttomusicxml] = __member
-		stage.Map_Staged_Order[exporttomusicxml] = stage.Order
-		stage.Order++
+		stage.ExportToMusicxmlMap_Staged_Order[exporttomusicxml] = stage.ExportToMusicxmlOrder
+		stage.ExportToMusicxmlOrder++
 	}
 	stage.ExportToMusicxmls_mapString[exporttomusicxml.Name] = exporttomusicxml
 
@@ -1108,8 +1300,8 @@ func (frontcurve *FrontCurve) Stage(stage *StageStruct) *FrontCurve {
 
 	if _, ok := stage.FrontCurves[frontcurve]; !ok {
 		stage.FrontCurves[frontcurve] = __member
-		stage.Map_Staged_Order[frontcurve] = stage.Order
-		stage.Order++
+		stage.FrontCurveMap_Staged_Order[frontcurve] = stage.FrontCurveOrder
+		stage.FrontCurveOrder++
 	}
 	stage.FrontCurves_mapString[frontcurve.Name] = frontcurve
 
@@ -1163,8 +1355,8 @@ func (frontcurvestack *FrontCurveStack) Stage(stage *StageStruct) *FrontCurveSta
 
 	if _, ok := stage.FrontCurveStacks[frontcurvestack]; !ok {
 		stage.FrontCurveStacks[frontcurvestack] = __member
-		stage.Map_Staged_Order[frontcurvestack] = stage.Order
-		stage.Order++
+		stage.FrontCurveStackMap_Staged_Order[frontcurvestack] = stage.FrontCurveStackOrder
+		stage.FrontCurveStackOrder++
 	}
 	stage.FrontCurveStacks_mapString[frontcurvestack.Name] = frontcurvestack
 
@@ -1218,8 +1410,8 @@ func (horizontalaxis *HorizontalAxis) Stage(stage *StageStruct) *HorizontalAxis 
 
 	if _, ok := stage.HorizontalAxiss[horizontalaxis]; !ok {
 		stage.HorizontalAxiss[horizontalaxis] = __member
-		stage.Map_Staged_Order[horizontalaxis] = stage.Order
-		stage.Order++
+		stage.HorizontalAxisMap_Staged_Order[horizontalaxis] = stage.HorizontalAxisOrder
+		stage.HorizontalAxisOrder++
 	}
 	stage.HorizontalAxiss_mapString[horizontalaxis.Name] = horizontalaxis
 
@@ -1273,8 +1465,8 @@ func (key *Key) Stage(stage *StageStruct) *Key {
 
 	if _, ok := stage.Keys[key]; !ok {
 		stage.Keys[key] = __member
-		stage.Map_Staged_Order[key] = stage.Order
-		stage.Order++
+		stage.KeyMap_Staged_Order[key] = stage.KeyOrder
+		stage.KeyOrder++
 	}
 	stage.Keys_mapString[key.Name] = key
 
@@ -1328,8 +1520,8 @@ func (parameter *Parameter) Stage(stage *StageStruct) *Parameter {
 
 	if _, ok := stage.Parameters[parameter]; !ok {
 		stage.Parameters[parameter] = __member
-		stage.Map_Staged_Order[parameter] = stage.Order
-		stage.Order++
+		stage.ParameterMap_Staged_Order[parameter] = stage.ParameterOrder
+		stage.ParameterOrder++
 	}
 	stage.Parameters_mapString[parameter.Name] = parameter
 
@@ -1383,8 +1575,8 @@ func (rhombus *Rhombus) Stage(stage *StageStruct) *Rhombus {
 
 	if _, ok := stage.Rhombuss[rhombus]; !ok {
 		stage.Rhombuss[rhombus] = __member
-		stage.Map_Staged_Order[rhombus] = stage.Order
-		stage.Order++
+		stage.RhombusMap_Staged_Order[rhombus] = stage.RhombusOrder
+		stage.RhombusOrder++
 	}
 	stage.Rhombuss_mapString[rhombus.Name] = rhombus
 
@@ -1438,8 +1630,8 @@ func (rhombusgrid *RhombusGrid) Stage(stage *StageStruct) *RhombusGrid {
 
 	if _, ok := stage.RhombusGrids[rhombusgrid]; !ok {
 		stage.RhombusGrids[rhombusgrid] = __member
-		stage.Map_Staged_Order[rhombusgrid] = stage.Order
-		stage.Order++
+		stage.RhombusGridMap_Staged_Order[rhombusgrid] = stage.RhombusGridOrder
+		stage.RhombusGridOrder++
 	}
 	stage.RhombusGrids_mapString[rhombusgrid.Name] = rhombusgrid
 
@@ -1493,8 +1685,8 @@ func (shapecategory *ShapeCategory) Stage(stage *StageStruct) *ShapeCategory {
 
 	if _, ok := stage.ShapeCategorys[shapecategory]; !ok {
 		stage.ShapeCategorys[shapecategory] = __member
-		stage.Map_Staged_Order[shapecategory] = stage.Order
-		stage.Order++
+		stage.ShapeCategoryMap_Staged_Order[shapecategory] = stage.ShapeCategoryOrder
+		stage.ShapeCategoryOrder++
 	}
 	stage.ShapeCategorys_mapString[shapecategory.Name] = shapecategory
 
@@ -1548,8 +1740,8 @@ func (spiralbezier *SpiralBezier) Stage(stage *StageStruct) *SpiralBezier {
 
 	if _, ok := stage.SpiralBeziers[spiralbezier]; !ok {
 		stage.SpiralBeziers[spiralbezier] = __member
-		stage.Map_Staged_Order[spiralbezier] = stage.Order
-		stage.Order++
+		stage.SpiralBezierMap_Staged_Order[spiralbezier] = stage.SpiralBezierOrder
+		stage.SpiralBezierOrder++
 	}
 	stage.SpiralBeziers_mapString[spiralbezier.Name] = spiralbezier
 
@@ -1603,8 +1795,8 @@ func (spiralbeziergrid *SpiralBezierGrid) Stage(stage *StageStruct) *SpiralBezie
 
 	if _, ok := stage.SpiralBezierGrids[spiralbeziergrid]; !ok {
 		stage.SpiralBezierGrids[spiralbeziergrid] = __member
-		stage.Map_Staged_Order[spiralbeziergrid] = stage.Order
-		stage.Order++
+		stage.SpiralBezierGridMap_Staged_Order[spiralbeziergrid] = stage.SpiralBezierGridOrder
+		stage.SpiralBezierGridOrder++
 	}
 	stage.SpiralBezierGrids_mapString[spiralbeziergrid.Name] = spiralbeziergrid
 
@@ -1658,8 +1850,8 @@ func (spiralcircle *SpiralCircle) Stage(stage *StageStruct) *SpiralCircle {
 
 	if _, ok := stage.SpiralCircles[spiralcircle]; !ok {
 		stage.SpiralCircles[spiralcircle] = __member
-		stage.Map_Staged_Order[spiralcircle] = stage.Order
-		stage.Order++
+		stage.SpiralCircleMap_Staged_Order[spiralcircle] = stage.SpiralCircleOrder
+		stage.SpiralCircleOrder++
 	}
 	stage.SpiralCircles_mapString[spiralcircle.Name] = spiralcircle
 
@@ -1713,8 +1905,8 @@ func (spiralcirclegrid *SpiralCircleGrid) Stage(stage *StageStruct) *SpiralCircl
 
 	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; !ok {
 		stage.SpiralCircleGrids[spiralcirclegrid] = __member
-		stage.Map_Staged_Order[spiralcirclegrid] = stage.Order
-		stage.Order++
+		stage.SpiralCircleGridMap_Staged_Order[spiralcirclegrid] = stage.SpiralCircleGridOrder
+		stage.SpiralCircleGridOrder++
 	}
 	stage.SpiralCircleGrids_mapString[spiralcirclegrid.Name] = spiralcirclegrid
 
@@ -1768,8 +1960,8 @@ func (spiralline *SpiralLine) Stage(stage *StageStruct) *SpiralLine {
 
 	if _, ok := stage.SpiralLines[spiralline]; !ok {
 		stage.SpiralLines[spiralline] = __member
-		stage.Map_Staged_Order[spiralline] = stage.Order
-		stage.Order++
+		stage.SpiralLineMap_Staged_Order[spiralline] = stage.SpiralLineOrder
+		stage.SpiralLineOrder++
 	}
 	stage.SpiralLines_mapString[spiralline.Name] = spiralline
 
@@ -1823,8 +2015,8 @@ func (spirallinegrid *SpiralLineGrid) Stage(stage *StageStruct) *SpiralLineGrid 
 
 	if _, ok := stage.SpiralLineGrids[spirallinegrid]; !ok {
 		stage.SpiralLineGrids[spirallinegrid] = __member
-		stage.Map_Staged_Order[spirallinegrid] = stage.Order
-		stage.Order++
+		stage.SpiralLineGridMap_Staged_Order[spirallinegrid] = stage.SpiralLineGridOrder
+		stage.SpiralLineGridOrder++
 	}
 	stage.SpiralLineGrids_mapString[spirallinegrid.Name] = spirallinegrid
 
@@ -1878,8 +2070,8 @@ func (spiralorigin *SpiralOrigin) Stage(stage *StageStruct) *SpiralOrigin {
 
 	if _, ok := stage.SpiralOrigins[spiralorigin]; !ok {
 		stage.SpiralOrigins[spiralorigin] = __member
-		stage.Map_Staged_Order[spiralorigin] = stage.Order
-		stage.Order++
+		stage.SpiralOriginMap_Staged_Order[spiralorigin] = stage.SpiralOriginOrder
+		stage.SpiralOriginOrder++
 	}
 	stage.SpiralOrigins_mapString[spiralorigin.Name] = spiralorigin
 
@@ -1933,8 +2125,8 @@ func (spiralrhombus *SpiralRhombus) Stage(stage *StageStruct) *SpiralRhombus {
 
 	if _, ok := stage.SpiralRhombuss[spiralrhombus]; !ok {
 		stage.SpiralRhombuss[spiralrhombus] = __member
-		stage.Map_Staged_Order[spiralrhombus] = stage.Order
-		stage.Order++
+		stage.SpiralRhombusMap_Staged_Order[spiralrhombus] = stage.SpiralRhombusOrder
+		stage.SpiralRhombusOrder++
 	}
 	stage.SpiralRhombuss_mapString[spiralrhombus.Name] = spiralrhombus
 
@@ -1988,8 +2180,8 @@ func (spiralrhombusgrid *SpiralRhombusGrid) Stage(stage *StageStruct) *SpiralRho
 
 	if _, ok := stage.SpiralRhombusGrids[spiralrhombusgrid]; !ok {
 		stage.SpiralRhombusGrids[spiralrhombusgrid] = __member
-		stage.Map_Staged_Order[spiralrhombusgrid] = stage.Order
-		stage.Order++
+		stage.SpiralRhombusGridMap_Staged_Order[spiralrhombusgrid] = stage.SpiralRhombusGridOrder
+		stage.SpiralRhombusGridOrder++
 	}
 	stage.SpiralRhombusGrids_mapString[spiralrhombusgrid.Name] = spiralrhombusgrid
 
@@ -2043,8 +2235,8 @@ func (verticalaxis *VerticalAxis) Stage(stage *StageStruct) *VerticalAxis {
 
 	if _, ok := stage.VerticalAxiss[verticalaxis]; !ok {
 		stage.VerticalAxiss[verticalaxis] = __member
-		stage.Map_Staged_Order[verticalaxis] = stage.Order
-		stage.Order++
+		stage.VerticalAxisMap_Staged_Order[verticalaxis] = stage.VerticalAxisOrder
+		stage.VerticalAxisOrder++
 	}
 	stage.VerticalAxiss_mapString[verticalaxis.Name] = verticalaxis
 

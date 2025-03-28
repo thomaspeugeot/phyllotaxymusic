@@ -102,8 +102,11 @@ type StageStruct struct {
 
 	// store the stage order of each instance in order to
 	// preserve this order when serializing them
-	Order            uint
-	Map_Staged_Order map[any]uint
+	// insertion point for order fields declaration
+	CursorOrder            uint
+	CursorMap_Staged_Order map[*Cursor]uint
+
+	// end of insertion point
 }
 
 func (stage *StageStruct) GetType() string {
@@ -171,10 +174,24 @@ func NewStage(name string) (stage *StageStruct) {
 		Map_DocLink_Renaming: make(map[string]GONG__Identifier),
 		// the to be removed stops here
 
-		Map_Staged_Order: make(map[any]uint),
+		// insertion point for order map initialisations
+		CursorMap_Staged_Order: make(map[*Cursor]uint),
+
+		// end of insertion point
 	}
 
 	return
+}
+
+func GetOrder[Type Gongstruct](stage *StageStruct, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *Cursor:
+		return stage.CursorMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
 }
 
 func (stage *StageStruct) GetName() string {
@@ -246,8 +263,8 @@ func (cursor *Cursor) Stage(stage *StageStruct) *Cursor {
 
 	if _, ok := stage.Cursors[cursor]; !ok {
 		stage.Cursors[cursor] = __member
-		stage.Map_Staged_Order[cursor] = stage.Order
-		stage.Order++
+		stage.CursorMap_Staged_Order[cursor] = stage.CursorOrder
+		stage.CursorOrder++
 	}
 	stage.Cursors_mapString[cursor.Name] = cursor
 

@@ -202,7 +202,7 @@ func (backRepoKey *BackRepoKeyStruct) CommitPhaseOne(stage *models.StageStruct) 
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(keys, func(i, j int) bool {
-		return stage.Map_Staged_Order[keys[i]] < stage.Map_Staged_Order[keys[j]]
+		return stage.KeyMap_Staged_Order[keys[i]] < stage.KeyMap_Staged_Order[keys[j]]
 	})
 
 	for _, key := range keys {

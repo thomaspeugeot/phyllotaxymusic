@@ -5,10 +5,7 @@ import (
 	form "github.com/fullstack-lang/gong/lib/table/go/models"
 
 	"github.com/fullstack-lang/gong/lib/slider/go/models"
-	"github.com/fullstack-lang/gong/lib/slider/go/orm"
 )
-
-var __dummy_orm_fillup_form = orm.BackRepoStruct{}
 
 const FormName = "Form"
 
@@ -35,7 +32,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "Group"
 			rf.Fieldname = "Checkboxes"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.Group),
@@ -66,7 +63,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "Layout"
 			rf.Fieldname = "Groups"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.Layout),
@@ -119,7 +116,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "Group"
 			rf.Fieldname = "Sliders"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.Group),

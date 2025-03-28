@@ -155,7 +155,7 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseOne(stage *mode
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(rhombusgrids, func(i, j int) bool {
-		return stage.Map_Staged_Order[rhombusgrids[i]] < stage.Map_Staged_Order[rhombusgrids[j]]
+		return stage.RhombusGridMap_Staged_Order[rhombusgrids[i]] < stage.RhombusGridMap_Staged_Order[rhombusgrids[j]]
 	})
 
 	for _, rhombusgrid := range rhombusgrids {

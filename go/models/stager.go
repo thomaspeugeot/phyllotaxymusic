@@ -49,14 +49,18 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 	stager = new(Stager)
 
 	// get the only diagram
-	parameters := GetGongstructInstancesMap[Parameter](stage)
-	parameter, ok := (*parameters)["Reference"]
-	if !ok {
-		log.Fatal("no Reference parameter on stage")
+	parameters := GetGongstructInstancesSet[Parameter](stage)
+	var parameter *Parameter
+	for parameter_ := range *parameters {
+		if parameter_.Name == "Reference" {
+			parameter = parameter_
+		} else {
+			log.Fatal("no Reference parameter on stage")
+		}
 	}
-	stager.parameter = parameter
 
 	// temporary
+	stager.parameter = parameter
 	parameter.stager = stager
 
 	// the root split name is "" by convention

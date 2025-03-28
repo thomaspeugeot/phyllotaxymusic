@@ -5,10 +5,7 @@ import (
 	form "github.com/fullstack-lang/gong/lib/table/go/models"
 
 	"github.com/fullstack-lang/gong/lib/tree/go/models"
-	"github.com/fullstack-lang/gong/lib/tree/go/orm"
 )
-
-var __dummy_orm_fillup_form = orm.BackRepoStruct{}
 
 const FormName = "Form"
 
@@ -32,7 +29,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "Node"
 			rf.Fieldname = "Buttons"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.Node),
@@ -89,7 +86,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "Node"
 			rf.Fieldname = "Children"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.Node),
@@ -111,7 +108,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "Tree"
 			rf.Fieldname = "RootNodes"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.Tree),

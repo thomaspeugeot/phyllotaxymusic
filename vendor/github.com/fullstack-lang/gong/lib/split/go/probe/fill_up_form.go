@@ -5,10 +5,7 @@ import (
 	form "github.com/fullstack-lang/gong/lib/table/go/models"
 
 	"github.com/fullstack-lang/gong/lib/split/go/models"
-	"github.com/fullstack-lang/gong/lib/split/go/orm"
 )
-
-var __dummy_orm_fillup_form = orm.BackRepoStruct{}
 
 const FormName = "Form"
 
@@ -58,7 +55,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "AsSplit"
 			rf.Fieldname = "AsSplitAreas"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.AsSplit),
@@ -80,7 +77,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "View"
 			rf.Fieldname = "RootAsSplitAreas"
-			reverseFieldOwner := orm.GetReverseFieldOwner(probe.stageOfInterest, probe.backRepoOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.View),

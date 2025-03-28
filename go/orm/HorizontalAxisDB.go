@@ -208,7 +208,7 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitPhaseOne(stage
 
 	// Sort by the order stored in Map_Staged_Order.
 	sort.Slice(horizontalaxiss, func(i, j int) bool {
-		return stage.Map_Staged_Order[horizontalaxiss[i]] < stage.Map_Staged_Order[horizontalaxiss[j]]
+		return stage.HorizontalAxisMap_Staged_Order[horizontalaxiss[i]] < stage.HorizontalAxisMap_Staged_Order[horizontalaxiss[j]]
 	})
 
 	for _, horizontalaxis := range horizontalaxiss {
