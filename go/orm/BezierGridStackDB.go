@@ -121,10 +121,10 @@ type BackRepoBezierGridStackStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoBezierGridStack.stage
 	return
 }
@@ -142,7 +142,7 @@ func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) GetBezierGridStack
 
 // BackRepoBezierGridStack.CommitPhaseOne commits all staged instances of BezierGridStack to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoBezierGridStack *BackRepoBezierGridStackStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var beziergridstacks []*models.BezierGridStack
 	for beziergridstack := range stage.BezierGridStacks {

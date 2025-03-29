@@ -15,7 +15,7 @@ type HorizontalAxis struct {
 }
 
 func (horizontalAxis *HorizontalAxis) Draw(
-	gongsvgStage *gongsvg_models.StageStruct,
+	gongsvgStage *gongsvg_models.Stage,
 	layer *gongsvg_models.Layer,
 	parameter *Parameter,
 ) {

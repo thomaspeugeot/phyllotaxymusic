@@ -67,7 +67,7 @@ func (circle *Circle) RectUpdated(updatedRect *gongsvg_models.Rect) {
 }
 
 func (circle *Circle) Draw(
-	gongsvgStage *gongsvg_models.StageStruct,
+	gongsvgStage *gongsvg_models.Stage,
 	layer *gongsvg_models.Layer,
 	p *Parameter,
 ) {

@@ -7,13 +7,13 @@ type ExportToMusicxmlOrchestrator struct {
 }
 
 func (orchestrator *ExportToMusicxmlOrchestrator) OnAfterUpdate(
-	gongsvgStage *StageStruct,
+	gongsvgStage *Stage,
 	stagedExportToMusicxml, backRepoExportToMusicxml *ExportToMusicxml) {
 
 	stagedExportToMusicxml.OnAfterUpdate(gongsvgStage, stagedExportToMusicxml, backRepoExportToMusicxml)
 }
 
-func SetOrchestratorOnAfterUpdate[Type Gongstruct](stage *StageStruct) {
+func SetOrchestratorOnAfterUpdate[Type Gongstruct](stage *Stage) {
 
 	var ret Type
 

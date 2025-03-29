@@ -114,10 +114,10 @@ type BackRepoShapeCategoryStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoShapeCategory *BackRepoShapeCategoryStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoShapeCategory *BackRepoShapeCategoryStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoShapeCategory.stage
 	return
 }
@@ -135,7 +135,7 @@ func (backRepoShapeCategory *BackRepoShapeCategoryStruct) GetShapeCategoryDBFrom
 
 // BackRepoShapeCategory.CommitPhaseOne commits all staged instances of ShapeCategory to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoShapeCategory *BackRepoShapeCategoryStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var shapecategorys []*models.ShapeCategory
 	for shapecategory := range stage.ShapeCategorys {

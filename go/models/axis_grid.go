@@ -15,7 +15,7 @@ type AxisGrid struct {
 }
 
 func (g *AxisGrid) Draw(
-	gongsvgStage *gongsvg_models.StageStruct,
+	gongsvgStage *gongsvg_models.Stage,
 	layer *gongsvg_models.Layer,
 	p *Parameter,
 

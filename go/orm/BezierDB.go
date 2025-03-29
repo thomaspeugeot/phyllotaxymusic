@@ -214,10 +214,10 @@ type BackRepoBezierStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoBezier *BackRepoBezierStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoBezier *BackRepoBezierStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoBezier.stage
 	return
 }
@@ -235,7 +235,7 @@ func (backRepoBezier *BackRepoBezierStruct) GetBezierDBFromBezierPtr(bezier *mod
 
 // BackRepoBezier.CommitPhaseOne commits all staged instances of Bezier to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoBezier *BackRepoBezierStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoBezier *BackRepoBezierStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var beziers []*models.Bezier
 	for bezier := range stage.Beziers {

@@ -178,10 +178,10 @@ type BackRepoHorizontalAxisStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoHorizontalAxis.stage
 	return
 }
@@ -199,7 +199,7 @@ func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) GetHorizontalAxisDBF
 
 // BackRepoHorizontalAxis.CommitPhaseOne commits all staged instances of HorizontalAxis to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoHorizontalAxis *BackRepoHorizontalAxisStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var horizontalaxiss []*models.HorizontalAxis
 	for horizontalaxis := range stage.HorizontalAxiss {

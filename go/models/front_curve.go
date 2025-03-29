@@ -22,7 +22,7 @@ type FrontCurveStack struct {
 }
 
 // Draw implements Shape.
-func (frontCurveStack *FrontCurveStack) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_models.Layer, p *Parameter) {
+func (frontCurveStack *FrontCurveStack) Draw(gongsvgStage *gongsvg_models.Stage, layer *gongsvg_models.Layer, p *Parameter) {
 
 	for _, frontCurve := range frontCurveStack.FrontCurves {
 

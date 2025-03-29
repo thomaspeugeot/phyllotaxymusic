@@ -55,7 +55,7 @@ func (stager *Stager) generateNotesFromCircleGrid(
 	keyboard []string,
 	map_Freqs map[string]*gongtone_models.Freqency,
 	circleGrid *CircleGrid,
-	gongtoneStage *gongtone_models.StageStruct) {
+	gongtoneStage *gongtone_models.Stage) {
 
 	parameter := stager.parameter
 

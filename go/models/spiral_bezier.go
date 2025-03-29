@@ -20,7 +20,7 @@ type SpiralBezier struct {
 }
 
 // Draw implements Shape.
-func (b *SpiralBezier) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_models.Layer, p *Parameter) {
+func (b *SpiralBezier) Draw(gongsvgStage *gongsvg_models.Stage, layer *gongsvg_models.Layer, p *Parameter) {
 
 	path := new(gongsvg_models.Path).Stage(gongsvgStage)
 	path.Name = "Initial SpiralBezier"

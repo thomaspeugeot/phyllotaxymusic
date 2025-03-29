@@ -20,18 +20,16 @@ import (
 	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
 
 	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
-	"github.com/thomaspeugeot/phyllotaxymusic/go/orm"
 )
 
 type Probe struct {
 	r                  *gin.Engine
-	stageOfInterest    *models.StageStruct
-	backRepoOfInterest *orm.BackRepoStruct
-	gongStage          *gong_models.StageStruct
-	treeStage          *tree.StageStruct
-	formStage          *form.StageStruct
-	tableStage         *form.StageStruct
-	splitStage         *split.StageStruct
+	stageOfInterest    *models.Stage
+	gongStage          *gong_models.Stage
+	treeStage          *tree.Stage
+	formStage          *form.Stage
+	tableStage         *form.Stage
+	splitStage         *split.Stage
 }
 
 func NewProbe(
@@ -39,8 +37,7 @@ func NewProbe(
 	goModelsDir embed.FS,
 	goDiagramsDir embed.FS,
 	embeddedDiagrams bool,
-	stageOfInterest *models.StageStruct,
-	backRepoOfInterest *orm.BackRepoStruct) (probe *Probe) {
+	stageOfInterest *models.Stage) (probe *Probe) {
 
 	gongStage, _ := gong_fullstack.NewStackInstance(r, stageOfInterest.GetName())
 
@@ -63,7 +60,6 @@ func NewProbe(
 	probe = new(Probe)
 	probe.r = r
 	probe.stageOfInterest = stageOfInterest
-	probe.backRepoOfInterest = backRepoOfInterest
 	probe.gongStage = gongStage
 	probe.treeStage = treeStage
 	probe.formStage = formStage
@@ -89,7 +85,7 @@ func (probe *Probe) Refresh() {
 	fillUpTree(probe)
 }
 
-func (probe *Probe) GetFormStage() *form.StageStruct {
+func (probe *Probe) GetFormStage() *form.Stage {
 	return probe.formStage
 }
 

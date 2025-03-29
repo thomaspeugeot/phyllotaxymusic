@@ -14,7 +14,7 @@ type SpiralLine struct {
 	Presentation
 }
 
-func (sl *SpiralLine) Draw(gongsvgStage *gongsvg_models.StageStruct,
+func (sl *SpiralLine) Draw(gongsvgStage *gongsvg_models.Stage,
 	layer *gongsvg_models.Layer,
 	parameter *Parameter,
 ) {

@@ -17,7 +17,7 @@ type Key struct {
 }
 
 // Draw implements Shape.
-func (key *Key) Draw(gongsvgStage *svg.StageStruct, layer *svg.Layer, p *Parameter) {
+func (key *Key) Draw(gongsvgStage *svg.Stage, layer *svg.Layer, p *Parameter) {
 
 	path := new(svg.Path).Stage(gongsvgStage)
 	path.Name = "F Key"

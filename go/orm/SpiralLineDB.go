@@ -190,10 +190,10 @@ type BackRepoSpiralLineStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoSpiralLine *BackRepoSpiralLineStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoSpiralLine *BackRepoSpiralLineStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoSpiralLine.stage
 	return
 }
@@ -211,7 +211,7 @@ func (backRepoSpiralLine *BackRepoSpiralLineStruct) GetSpiralLineDBFromSpiralLin
 
 // BackRepoSpiralLine.CommitPhaseOne commits all staged instances of SpiralLine to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoSpiralLine *BackRepoSpiralLineStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoSpiralLine *BackRepoSpiralLineStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var spirallines []*models.SpiralLine
 	for spiralline := range stage.SpiralLines {

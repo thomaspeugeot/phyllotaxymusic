@@ -21,7 +21,7 @@ func (p *Parameter) ComputeInitialCircle() {
 	p.InitialCircle.CenterY = 0
 }
 
-func (p *Parameter) ComputeInitialRhombusGrid(stage *StageStruct) {
+func (p *Parameter) ComputeInitialRhombusGrid(stage *Stage) {
 
 	// remove the attached rhombus
 	for _, r := range p.InitialRhombusGrid.Rhombuses {
@@ -53,7 +53,7 @@ func (p *Parameter) ComputeInitialRhombusGrid(stage *StageStruct) {
 	}
 }
 
-func (p *Parameter) ComputeInitialCircleGrid(stage *StageStruct) {
+func (p *Parameter) ComputeInitialCircleGrid(stage *Stage) {
 
 	// remove the attached rhombus
 	for _, c := range p.InitialCircleGrid.Circles {
@@ -109,7 +109,7 @@ func (p *Parameter) computeRotatedRhombus() {
 	p.RotatedRhombus.AngleDegree = -p.InitialAxis.AngleDegree
 }
 
-func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
+func (p *Parameter) computeRotatedRhombusGrid(stage *Stage) {
 	g := p.RotatedRhombusGrid
 
 	// remove the attached rhombus
@@ -144,7 +144,7 @@ func (p *Parameter) computeRotatedRhombusGrid(stage *StageStruct) {
 	}
 }
 
-func (p *Parameter) computeRotatedCircleGrid(stage *StageStruct) {
+func (p *Parameter) computeRotatedCircleGrid(stage *Stage) {
 	g := p.RotatedCircleGrid
 
 	// remove the attached Circle

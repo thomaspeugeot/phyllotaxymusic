@@ -178,10 +178,10 @@ type BackRepoVerticalAxisStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoVerticalAxis.stage
 	return
 }
@@ -199,7 +199,7 @@ func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) GetVerticalAxisDBFromVer
 
 // BackRepoVerticalAxis.CommitPhaseOne commits all staged instances of VerticalAxis to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoVerticalAxis *BackRepoVerticalAxisStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var verticalaxiss []*models.VerticalAxis
 	for verticalaxis := range stage.VerticalAxiss {

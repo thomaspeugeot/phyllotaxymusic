@@ -111,10 +111,10 @@ type BackRepoExportToMusicxmlStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoExportToMusicxml.stage
 	return
 }
@@ -132,7 +132,7 @@ func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) GetExportToMusic
 
 // BackRepoExportToMusicxml.CommitPhaseOne commits all staged instances of ExportToMusicxml to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoExportToMusicxml *BackRepoExportToMusicxmlStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var exporttomusicxmls []*models.ExportToMusicxml
 	for exporttomusicxml := range stage.ExportToMusicxmls {

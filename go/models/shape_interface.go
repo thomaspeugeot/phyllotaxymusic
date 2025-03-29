@@ -10,7 +10,7 @@ type ShapeInterface interface {
 	GetIsDisplayed() bool
 	GetIsDisplayedPointer() *bool
 	GetShapeCategory() *ShapeCategory
-	Draw(svgStage *svg_models.StageStruct,
+	Draw(svgStage *svg_models.Stage,
 		layer *svg_models.Layer,
 		parameter *Parameter)
 }

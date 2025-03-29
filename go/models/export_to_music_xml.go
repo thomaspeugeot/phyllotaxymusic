@@ -11,7 +11,7 @@ type ExportToMusicxml struct {
 }
 
 func (exportToMusicxml *ExportToMusicxml) OnAfterUpdate(
-	phyllotaxyStage *StageStruct,
+	phyllotaxyStage *Stage,
 	stagedExportToMusicxml, backRepoExportToMusicxml *ExportToMusicxml) {
 
 	exportToMusicxml.Parameter.stager.UpdatePhyllotaxyStage()

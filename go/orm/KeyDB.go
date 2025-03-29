@@ -172,10 +172,10 @@ type BackRepoKeyStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoKey *BackRepoKeyStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoKey *BackRepoKeyStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoKey.stage
 	return
 }
@@ -193,7 +193,7 @@ func (backRepoKey *BackRepoKeyStruct) GetKeyDBFromKeyPtr(key *models.Key) (keyDB
 
 // BackRepoKey.CommitPhaseOne commits all staged instances of Key to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoKey *BackRepoKeyStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoKey *BackRepoKeyStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var keys []*models.Key
 	for key := range stage.Keys {

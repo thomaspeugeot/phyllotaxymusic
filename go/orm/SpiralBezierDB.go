@@ -214,10 +214,10 @@ type BackRepoSpiralBezierStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoSpiralBezier.stage
 	return
 }
@@ -235,7 +235,7 @@ func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) GetSpiralBezierDBFromSpi
 
 // BackRepoSpiralBezier.CommitPhaseOne commits all staged instances of SpiralBezier to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoSpiralBezier *BackRepoSpiralBezierStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var spiralbeziers []*models.SpiralBezier
 	for spiralbezier := range stage.SpiralBeziers {

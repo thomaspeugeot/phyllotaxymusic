@@ -125,10 +125,10 @@ type BackRepoRhombusGridStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoRhombusGrid *BackRepoRhombusGridStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoRhombusGrid *BackRepoRhombusGridStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoRhombusGrid.stage
 	return
 }
@@ -146,7 +146,7 @@ func (backRepoRhombusGrid *BackRepoRhombusGridStruct) GetRhombusGridDBFromRhombu
 
 // BackRepoRhombusGrid.CommitPhaseOne commits all staged instances of RhombusGrid to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoRhombusGrid *BackRepoRhombusGridStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var rhombusgrids []*models.RhombusGrid
 	for rhombusgrid := range stage.RhombusGrids {

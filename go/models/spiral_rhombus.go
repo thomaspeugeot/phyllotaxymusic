@@ -19,7 +19,7 @@ type SpiralRhombus struct {
 }
 
 // Draw implements Shape.
-func (sr *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.StageStruct, layer *gongsvg_models.Layer, p *Parameter) {
+func (sr *SpiralRhombus) Draw(gongsvgStage *gongsvg_models.Stage, layer *gongsvg_models.Layer, p *Parameter) {
 
 	x_r, y_r := sr.GenerateCoordinatesFromStruct()
 	for i := range 4 {

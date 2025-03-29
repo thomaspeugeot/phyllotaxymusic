@@ -121,10 +121,10 @@ type BackRepoSpiralRhombusGridStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoSpiralRhombusGrid.stage
 	return
 }
@@ -142,7 +142,7 @@ func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) GetSpiralRhomb
 
 // BackRepoSpiralRhombusGrid.CommitPhaseOne commits all staged instances of SpiralRhombusGrid to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoSpiralRhombusGrid *BackRepoSpiralRhombusGridStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var spiralrhombusgrids []*models.SpiralRhombusGrid
 	for spiralrhombusgrid := range stage.SpiralRhombusGrids {

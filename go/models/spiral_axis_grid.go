@@ -12,7 +12,7 @@ type SpiralLineGrid struct {
 	SpiralLines []*SpiralLine
 }
 
-func (spiralLineGrid *SpiralLineGrid) Draw(gongsvgStage *gongsvg_models.StageStruct,
+func (spiralLineGrid *SpiralLineGrid) Draw(gongsvgStage *gongsvg_models.Stage,
 	layer *gongsvg_models.Layer,
 	parameter *Parameter,
 ) {

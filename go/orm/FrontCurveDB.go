@@ -113,10 +113,10 @@ type BackRepoFrontCurveStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoFrontCurve *BackRepoFrontCurveStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoFrontCurve *BackRepoFrontCurveStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoFrontCurve.stage
 	return
 }
@@ -134,7 +134,7 @@ func (backRepoFrontCurve *BackRepoFrontCurveStruct) GetFrontCurveDBFromFrontCurv
 
 // BackRepoFrontCurve.CommitPhaseOne commits all staged instances of FrontCurve to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoFrontCurve *BackRepoFrontCurveStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoFrontCurve *BackRepoFrontCurveStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var frontcurves []*models.FrontCurve
 	for frontcurve := range stage.FrontCurves {

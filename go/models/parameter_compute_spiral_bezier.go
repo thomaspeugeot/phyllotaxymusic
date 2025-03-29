@@ -104,7 +104,7 @@ func (p *Parameter) ComputeSpiralBezierFullGrid() {
 	}
 }
 
-func (p *Parameter) ComputeFrontCurveStacks(stage *StageStruct) {
+func (p *Parameter) ComputeFrontCurveStacks(stage *Stage) {
 
 	for frontCurve := range *GetGongstructInstancesSet[FrontCurve](stage) {
 		frontCurve.Unstage(stage)

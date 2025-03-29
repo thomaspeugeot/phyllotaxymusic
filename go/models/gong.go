@@ -22,19 +22,19 @@ const ProbeTableSuffix = "-table"
 const ProbeFormSuffix = "-form"
 const ProbeSplitSuffix = "-probe"
 
-func (stage *StageStruct) GetProbeTreeSidebarStageName() string {
+func (stage *Stage) GetProbeTreeSidebarStageName() string {
 	return stage.GetType() + ":" + stage.GetName() + ProbeTreeSidebarSuffix
 }
 
-func (stage *StageStruct) GetProbeFormStageName() string {
+func (stage *Stage) GetProbeFormStageName() string {
 	return stage.GetType() + ":" + stage.GetName() + ProbeFormSuffix
 }
 
-func (stage *StageStruct) GetProbeTableStageName() string {
+func (stage *Stage) GetProbeTableStageName() string {
 	return stage.GetType() + ":" + stage.GetName() + ProbeTableSuffix
 }
 
-func (stage *StageStruct) GetProbeSplitStageName() string {
+func (stage *Stage) GetProbeSplitStageName() string {
 	return stage.GetType() + ":" + stage.GetName() + ProbeSplitSuffix
 }
 
@@ -62,9 +62,9 @@ type GongStructInterface interface {
 	// GetFieldStringValue(fieldName string) (res string)
 }
 
-// StageStruct enables storage of staged instances
+// Stage enables storage of staged instances
 // swagger:ignore
-type StageStruct struct {
+type Stage struct {
 	name string
 
 	// insertion point for definition of arrays registering instances
@@ -431,7 +431,7 @@ type StageStruct struct {
 	// end of insertion point
 }
 
-func (stage *StageStruct) GetType() string {
+func (stage *Stage) GetType() string {
 	return "github.com/thomaspeugeot/phyllotaxymusic/go/models"
 }
 
@@ -441,39 +441,39 @@ type GONG__Identifier struct {
 }
 
 type OnInitCommitInterface interface {
-	BeforeCommit(stage *StageStruct)
+	BeforeCommit(stage *Stage)
 }
 
 // OnAfterCreateInterface callback when an instance is updated from the front
 type OnAfterCreateInterface[Type Gongstruct] interface {
-	OnAfterCreate(stage *StageStruct,
+	OnAfterCreate(stage *Stage,
 		instance *Type)
 }
 
 // OnAfterReadInterface callback when an instance is updated from the front
 type OnAfterReadInterface[Type Gongstruct] interface {
-	OnAfterRead(stage *StageStruct,
+	OnAfterRead(stage *Stage,
 		instance *Type)
 }
 
 // OnAfterUpdateInterface callback when an instance is updated from the front
 type OnAfterUpdateInterface[Type Gongstruct] interface {
-	OnAfterUpdate(stage *StageStruct, old, new *Type)
+	OnAfterUpdate(stage *Stage, old, new *Type)
 }
 
 // OnAfterDeleteInterface callback when an instance is updated from the front
 type OnAfterDeleteInterface[Type Gongstruct] interface {
-	OnAfterDelete(stage *StageStruct,
+	OnAfterDelete(stage *Stage,
 		staged, front *Type)
 }
 
 type BackRepoInterface interface {
-	Commit(stage *StageStruct)
-	Checkout(stage *StageStruct)
-	Backup(stage *StageStruct, dirPath string)
-	Restore(stage *StageStruct, dirPath string)
-	BackupXL(stage *StageStruct, dirPath string)
-	RestoreXL(stage *StageStruct, dirPath string)
+	Commit(stage *Stage)
+	Checkout(stage *Stage)
+	Backup(stage *Stage, dirPath string)
+	Restore(stage *Stage, dirPath string)
+	BackupXL(stage *Stage, dirPath string)
+	RestoreXL(stage *Stage, dirPath string)
 	// insertion point for Commit and Checkout signatures
 	CommitAxis(axis *Axis)
 	CheckoutAxis(axis *Axis)
@@ -531,9 +531,9 @@ type BackRepoInterface interface {
 	GetLastPushFromFrontNb() uint
 }
 
-func NewStage(name string) (stage *StageStruct) {
+func NewStage(name string) (stage *Stage) {
 
-	stage = &StageStruct{ // insertion point for array initiatialisation
+	stage = &Stage{ // insertion point for array initiatialisation
 		Axiss:           make(map[*Axis]any),
 		Axiss_mapString: make(map[string]*Axis),
 
@@ -680,7 +680,7 @@ func NewStage(name string) (stage *StageStruct) {
 	return
 }
 
-func GetOrder[Type Gongstruct](stage *StageStruct, instance *Type) uint {
+func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
 
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
@@ -741,11 +741,11 @@ func GetOrder[Type Gongstruct](stage *StageStruct, instance *Type) uint {
 	}
 }
 
-func (stage *StageStruct) GetName() string {
+func (stage *Stage) GetName() string {
 	return stage.name
 }
 
-func (stage *StageStruct) CommitWithSuspendedCallbacks() {
+func (stage *Stage) CommitWithSuspendedCallbacks() {
 
 	tmp := stage.OnInitCommitFromBackCallback
 	stage.OnInitCommitFromBackCallback = nil
@@ -753,7 +753,7 @@ func (stage *StageStruct) CommitWithSuspendedCallbacks() {
 	stage.OnInitCommitFromBackCallback = tmp
 }
 
-func (stage *StageStruct) Commit() {
+func (stage *Stage) Commit() {
 	stage.ComputeReverseMaps()
 
 	if stage.BackRepo != nil {
@@ -790,7 +790,7 @@ func (stage *StageStruct) Commit() {
 
 }
 
-func (stage *StageStruct) Checkout() {
+func (stage *Stage) Checkout() {
 	if stage.BackRepo != nil {
 		stage.BackRepo.Checkout(stage)
 	}
@@ -827,28 +827,28 @@ func (stage *StageStruct) Checkout() {
 }
 
 // backup generates backup files in the dirPath
-func (stage *StageStruct) Backup(dirPath string) {
+func (stage *Stage) Backup(dirPath string) {
 	if stage.BackRepo != nil {
 		stage.BackRepo.Backup(stage, dirPath)
 	}
 }
 
 // Restore resets Stage & BackRepo and restores their content from the restore files in dirPath
-func (stage *StageStruct) Restore(dirPath string) {
+func (stage *Stage) Restore(dirPath string) {
 	if stage.BackRepo != nil {
 		stage.BackRepo.Restore(stage, dirPath)
 	}
 }
 
 // backup generates backup files in the dirPath
-func (stage *StageStruct) BackupXL(dirPath string) {
+func (stage *Stage) BackupXL(dirPath string) {
 	if stage.BackRepo != nil {
 		stage.BackRepo.BackupXL(stage, dirPath)
 	}
 }
 
 // Restore resets Stage & BackRepo and restores their content from the restore files in dirPath
-func (stage *StageStruct) RestoreXL(dirPath string) {
+func (stage *Stage) RestoreXL(dirPath string) {
 	if stage.BackRepo != nil {
 		stage.BackRepo.RestoreXL(stage, dirPath)
 	}
@@ -856,7 +856,7 @@ func (stage *StageStruct) RestoreXL(dirPath string) {
 
 // insertion point for cumulative sub template with model space calls
 // Stage puts axis to the model stage
-func (axis *Axis) Stage(stage *StageStruct) *Axis {
+func (axis *Axis) Stage(stage *Stage) *Axis {
 
 	if _, ok := stage.Axiss[axis]; !ok {
 		stage.Axiss[axis] = __member
@@ -869,20 +869,20 @@ func (axis *Axis) Stage(stage *StageStruct) *Axis {
 }
 
 // Unstage removes axis off the model stage
-func (axis *Axis) Unstage(stage *StageStruct) *Axis {
+func (axis *Axis) Unstage(stage *Stage) *Axis {
 	delete(stage.Axiss, axis)
 	delete(stage.Axiss_mapString, axis.Name)
 	return axis
 }
 
 // UnstageVoid removes axis off the model stage
-func (axis *Axis) UnstageVoid(stage *StageStruct) {
+func (axis *Axis) UnstageVoid(stage *Stage) {
 	delete(stage.Axiss, axis)
 	delete(stage.Axiss_mapString, axis.Name)
 }
 
 // commit axis to the back repo (if it is already staged)
-func (axis *Axis) Commit(stage *StageStruct) *Axis {
+func (axis *Axis) Commit(stage *Stage) *Axis {
 	if _, ok := stage.Axiss[axis]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitAxis(axis)
@@ -891,12 +891,12 @@ func (axis *Axis) Commit(stage *StageStruct) *Axis {
 	return axis
 }
 
-func (axis *Axis) CommitVoid(stage *StageStruct) {
+func (axis *Axis) CommitVoid(stage *Stage) {
 	axis.Commit(stage)
 }
 
 // Checkout axis to the back repo (if it is already staged)
-func (axis *Axis) Checkout(stage *StageStruct) *Axis {
+func (axis *Axis) Checkout(stage *Stage) *Axis {
 	if _, ok := stage.Axiss[axis]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutAxis(axis)
@@ -911,7 +911,7 @@ func (axis *Axis) GetName() (res string) {
 }
 
 // Stage puts axisgrid to the model stage
-func (axisgrid *AxisGrid) Stage(stage *StageStruct) *AxisGrid {
+func (axisgrid *AxisGrid) Stage(stage *Stage) *AxisGrid {
 
 	if _, ok := stage.AxisGrids[axisgrid]; !ok {
 		stage.AxisGrids[axisgrid] = __member
@@ -924,20 +924,20 @@ func (axisgrid *AxisGrid) Stage(stage *StageStruct) *AxisGrid {
 }
 
 // Unstage removes axisgrid off the model stage
-func (axisgrid *AxisGrid) Unstage(stage *StageStruct) *AxisGrid {
+func (axisgrid *AxisGrid) Unstage(stage *Stage) *AxisGrid {
 	delete(stage.AxisGrids, axisgrid)
 	delete(stage.AxisGrids_mapString, axisgrid.Name)
 	return axisgrid
 }
 
 // UnstageVoid removes axisgrid off the model stage
-func (axisgrid *AxisGrid) UnstageVoid(stage *StageStruct) {
+func (axisgrid *AxisGrid) UnstageVoid(stage *Stage) {
 	delete(stage.AxisGrids, axisgrid)
 	delete(stage.AxisGrids_mapString, axisgrid.Name)
 }
 
 // commit axisgrid to the back repo (if it is already staged)
-func (axisgrid *AxisGrid) Commit(stage *StageStruct) *AxisGrid {
+func (axisgrid *AxisGrid) Commit(stage *Stage) *AxisGrid {
 	if _, ok := stage.AxisGrids[axisgrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitAxisGrid(axisgrid)
@@ -946,12 +946,12 @@ func (axisgrid *AxisGrid) Commit(stage *StageStruct) *AxisGrid {
 	return axisgrid
 }
 
-func (axisgrid *AxisGrid) CommitVoid(stage *StageStruct) {
+func (axisgrid *AxisGrid) CommitVoid(stage *Stage) {
 	axisgrid.Commit(stage)
 }
 
 // Checkout axisgrid to the back repo (if it is already staged)
-func (axisgrid *AxisGrid) Checkout(stage *StageStruct) *AxisGrid {
+func (axisgrid *AxisGrid) Checkout(stage *Stage) *AxisGrid {
 	if _, ok := stage.AxisGrids[axisgrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutAxisGrid(axisgrid)
@@ -966,7 +966,7 @@ func (axisgrid *AxisGrid) GetName() (res string) {
 }
 
 // Stage puts bezier to the model stage
-func (bezier *Bezier) Stage(stage *StageStruct) *Bezier {
+func (bezier *Bezier) Stage(stage *Stage) *Bezier {
 
 	if _, ok := stage.Beziers[bezier]; !ok {
 		stage.Beziers[bezier] = __member
@@ -979,20 +979,20 @@ func (bezier *Bezier) Stage(stage *StageStruct) *Bezier {
 }
 
 // Unstage removes bezier off the model stage
-func (bezier *Bezier) Unstage(stage *StageStruct) *Bezier {
+func (bezier *Bezier) Unstage(stage *Stage) *Bezier {
 	delete(stage.Beziers, bezier)
 	delete(stage.Beziers_mapString, bezier.Name)
 	return bezier
 }
 
 // UnstageVoid removes bezier off the model stage
-func (bezier *Bezier) UnstageVoid(stage *StageStruct) {
+func (bezier *Bezier) UnstageVoid(stage *Stage) {
 	delete(stage.Beziers, bezier)
 	delete(stage.Beziers_mapString, bezier.Name)
 }
 
 // commit bezier to the back repo (if it is already staged)
-func (bezier *Bezier) Commit(stage *StageStruct) *Bezier {
+func (bezier *Bezier) Commit(stage *Stage) *Bezier {
 	if _, ok := stage.Beziers[bezier]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitBezier(bezier)
@@ -1001,12 +1001,12 @@ func (bezier *Bezier) Commit(stage *StageStruct) *Bezier {
 	return bezier
 }
 
-func (bezier *Bezier) CommitVoid(stage *StageStruct) {
+func (bezier *Bezier) CommitVoid(stage *Stage) {
 	bezier.Commit(stage)
 }
 
 // Checkout bezier to the back repo (if it is already staged)
-func (bezier *Bezier) Checkout(stage *StageStruct) *Bezier {
+func (bezier *Bezier) Checkout(stage *Stage) *Bezier {
 	if _, ok := stage.Beziers[bezier]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutBezier(bezier)
@@ -1021,7 +1021,7 @@ func (bezier *Bezier) GetName() (res string) {
 }
 
 // Stage puts beziergrid to the model stage
-func (beziergrid *BezierGrid) Stage(stage *StageStruct) *BezierGrid {
+func (beziergrid *BezierGrid) Stage(stage *Stage) *BezierGrid {
 
 	if _, ok := stage.BezierGrids[beziergrid]; !ok {
 		stage.BezierGrids[beziergrid] = __member
@@ -1034,20 +1034,20 @@ func (beziergrid *BezierGrid) Stage(stage *StageStruct) *BezierGrid {
 }
 
 // Unstage removes beziergrid off the model stage
-func (beziergrid *BezierGrid) Unstage(stage *StageStruct) *BezierGrid {
+func (beziergrid *BezierGrid) Unstage(stage *Stage) *BezierGrid {
 	delete(stage.BezierGrids, beziergrid)
 	delete(stage.BezierGrids_mapString, beziergrid.Name)
 	return beziergrid
 }
 
 // UnstageVoid removes beziergrid off the model stage
-func (beziergrid *BezierGrid) UnstageVoid(stage *StageStruct) {
+func (beziergrid *BezierGrid) UnstageVoid(stage *Stage) {
 	delete(stage.BezierGrids, beziergrid)
 	delete(stage.BezierGrids_mapString, beziergrid.Name)
 }
 
 // commit beziergrid to the back repo (if it is already staged)
-func (beziergrid *BezierGrid) Commit(stage *StageStruct) *BezierGrid {
+func (beziergrid *BezierGrid) Commit(stage *Stage) *BezierGrid {
 	if _, ok := stage.BezierGrids[beziergrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitBezierGrid(beziergrid)
@@ -1056,12 +1056,12 @@ func (beziergrid *BezierGrid) Commit(stage *StageStruct) *BezierGrid {
 	return beziergrid
 }
 
-func (beziergrid *BezierGrid) CommitVoid(stage *StageStruct) {
+func (beziergrid *BezierGrid) CommitVoid(stage *Stage) {
 	beziergrid.Commit(stage)
 }
 
 // Checkout beziergrid to the back repo (if it is already staged)
-func (beziergrid *BezierGrid) Checkout(stage *StageStruct) *BezierGrid {
+func (beziergrid *BezierGrid) Checkout(stage *Stage) *BezierGrid {
 	if _, ok := stage.BezierGrids[beziergrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutBezierGrid(beziergrid)
@@ -1076,7 +1076,7 @@ func (beziergrid *BezierGrid) GetName() (res string) {
 }
 
 // Stage puts beziergridstack to the model stage
-func (beziergridstack *BezierGridStack) Stage(stage *StageStruct) *BezierGridStack {
+func (beziergridstack *BezierGridStack) Stage(stage *Stage) *BezierGridStack {
 
 	if _, ok := stage.BezierGridStacks[beziergridstack]; !ok {
 		stage.BezierGridStacks[beziergridstack] = __member
@@ -1089,20 +1089,20 @@ func (beziergridstack *BezierGridStack) Stage(stage *StageStruct) *BezierGridSta
 }
 
 // Unstage removes beziergridstack off the model stage
-func (beziergridstack *BezierGridStack) Unstage(stage *StageStruct) *BezierGridStack {
+func (beziergridstack *BezierGridStack) Unstage(stage *Stage) *BezierGridStack {
 	delete(stage.BezierGridStacks, beziergridstack)
 	delete(stage.BezierGridStacks_mapString, beziergridstack.Name)
 	return beziergridstack
 }
 
 // UnstageVoid removes beziergridstack off the model stage
-func (beziergridstack *BezierGridStack) UnstageVoid(stage *StageStruct) {
+func (beziergridstack *BezierGridStack) UnstageVoid(stage *Stage) {
 	delete(stage.BezierGridStacks, beziergridstack)
 	delete(stage.BezierGridStacks_mapString, beziergridstack.Name)
 }
 
 // commit beziergridstack to the back repo (if it is already staged)
-func (beziergridstack *BezierGridStack) Commit(stage *StageStruct) *BezierGridStack {
+func (beziergridstack *BezierGridStack) Commit(stage *Stage) *BezierGridStack {
 	if _, ok := stage.BezierGridStacks[beziergridstack]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitBezierGridStack(beziergridstack)
@@ -1111,12 +1111,12 @@ func (beziergridstack *BezierGridStack) Commit(stage *StageStruct) *BezierGridSt
 	return beziergridstack
 }
 
-func (beziergridstack *BezierGridStack) CommitVoid(stage *StageStruct) {
+func (beziergridstack *BezierGridStack) CommitVoid(stage *Stage) {
 	beziergridstack.Commit(stage)
 }
 
 // Checkout beziergridstack to the back repo (if it is already staged)
-func (beziergridstack *BezierGridStack) Checkout(stage *StageStruct) *BezierGridStack {
+func (beziergridstack *BezierGridStack) Checkout(stage *Stage) *BezierGridStack {
 	if _, ok := stage.BezierGridStacks[beziergridstack]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutBezierGridStack(beziergridstack)
@@ -1131,7 +1131,7 @@ func (beziergridstack *BezierGridStack) GetName() (res string) {
 }
 
 // Stage puts circle to the model stage
-func (circle *Circle) Stage(stage *StageStruct) *Circle {
+func (circle *Circle) Stage(stage *Stage) *Circle {
 
 	if _, ok := stage.Circles[circle]; !ok {
 		stage.Circles[circle] = __member
@@ -1144,20 +1144,20 @@ func (circle *Circle) Stage(stage *StageStruct) *Circle {
 }
 
 // Unstage removes circle off the model stage
-func (circle *Circle) Unstage(stage *StageStruct) *Circle {
+func (circle *Circle) Unstage(stage *Stage) *Circle {
 	delete(stage.Circles, circle)
 	delete(stage.Circles_mapString, circle.Name)
 	return circle
 }
 
 // UnstageVoid removes circle off the model stage
-func (circle *Circle) UnstageVoid(stage *StageStruct) {
+func (circle *Circle) UnstageVoid(stage *Stage) {
 	delete(stage.Circles, circle)
 	delete(stage.Circles_mapString, circle.Name)
 }
 
 // commit circle to the back repo (if it is already staged)
-func (circle *Circle) Commit(stage *StageStruct) *Circle {
+func (circle *Circle) Commit(stage *Stage) *Circle {
 	if _, ok := stage.Circles[circle]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitCircle(circle)
@@ -1166,12 +1166,12 @@ func (circle *Circle) Commit(stage *StageStruct) *Circle {
 	return circle
 }
 
-func (circle *Circle) CommitVoid(stage *StageStruct) {
+func (circle *Circle) CommitVoid(stage *Stage) {
 	circle.Commit(stage)
 }
 
 // Checkout circle to the back repo (if it is already staged)
-func (circle *Circle) Checkout(stage *StageStruct) *Circle {
+func (circle *Circle) Checkout(stage *Stage) *Circle {
 	if _, ok := stage.Circles[circle]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutCircle(circle)
@@ -1186,7 +1186,7 @@ func (circle *Circle) GetName() (res string) {
 }
 
 // Stage puts circlegrid to the model stage
-func (circlegrid *CircleGrid) Stage(stage *StageStruct) *CircleGrid {
+func (circlegrid *CircleGrid) Stage(stage *Stage) *CircleGrid {
 
 	if _, ok := stage.CircleGrids[circlegrid]; !ok {
 		stage.CircleGrids[circlegrid] = __member
@@ -1199,20 +1199,20 @@ func (circlegrid *CircleGrid) Stage(stage *StageStruct) *CircleGrid {
 }
 
 // Unstage removes circlegrid off the model stage
-func (circlegrid *CircleGrid) Unstage(stage *StageStruct) *CircleGrid {
+func (circlegrid *CircleGrid) Unstage(stage *Stage) *CircleGrid {
 	delete(stage.CircleGrids, circlegrid)
 	delete(stage.CircleGrids_mapString, circlegrid.Name)
 	return circlegrid
 }
 
 // UnstageVoid removes circlegrid off the model stage
-func (circlegrid *CircleGrid) UnstageVoid(stage *StageStruct) {
+func (circlegrid *CircleGrid) UnstageVoid(stage *Stage) {
 	delete(stage.CircleGrids, circlegrid)
 	delete(stage.CircleGrids_mapString, circlegrid.Name)
 }
 
 // commit circlegrid to the back repo (if it is already staged)
-func (circlegrid *CircleGrid) Commit(stage *StageStruct) *CircleGrid {
+func (circlegrid *CircleGrid) Commit(stage *Stage) *CircleGrid {
 	if _, ok := stage.CircleGrids[circlegrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitCircleGrid(circlegrid)
@@ -1221,12 +1221,12 @@ func (circlegrid *CircleGrid) Commit(stage *StageStruct) *CircleGrid {
 	return circlegrid
 }
 
-func (circlegrid *CircleGrid) CommitVoid(stage *StageStruct) {
+func (circlegrid *CircleGrid) CommitVoid(stage *Stage) {
 	circlegrid.Commit(stage)
 }
 
 // Checkout circlegrid to the back repo (if it is already staged)
-func (circlegrid *CircleGrid) Checkout(stage *StageStruct) *CircleGrid {
+func (circlegrid *CircleGrid) Checkout(stage *Stage) *CircleGrid {
 	if _, ok := stage.CircleGrids[circlegrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutCircleGrid(circlegrid)
@@ -1241,7 +1241,7 @@ func (circlegrid *CircleGrid) GetName() (res string) {
 }
 
 // Stage puts exporttomusicxml to the model stage
-func (exporttomusicxml *ExportToMusicxml) Stage(stage *StageStruct) *ExportToMusicxml {
+func (exporttomusicxml *ExportToMusicxml) Stage(stage *Stage) *ExportToMusicxml {
 
 	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; !ok {
 		stage.ExportToMusicxmls[exporttomusicxml] = __member
@@ -1254,20 +1254,20 @@ func (exporttomusicxml *ExportToMusicxml) Stage(stage *StageStruct) *ExportToMus
 }
 
 // Unstage removes exporttomusicxml off the model stage
-func (exporttomusicxml *ExportToMusicxml) Unstage(stage *StageStruct) *ExportToMusicxml {
+func (exporttomusicxml *ExportToMusicxml) Unstage(stage *Stage) *ExportToMusicxml {
 	delete(stage.ExportToMusicxmls, exporttomusicxml)
 	delete(stage.ExportToMusicxmls_mapString, exporttomusicxml.Name)
 	return exporttomusicxml
 }
 
 // UnstageVoid removes exporttomusicxml off the model stage
-func (exporttomusicxml *ExportToMusicxml) UnstageVoid(stage *StageStruct) {
+func (exporttomusicxml *ExportToMusicxml) UnstageVoid(stage *Stage) {
 	delete(stage.ExportToMusicxmls, exporttomusicxml)
 	delete(stage.ExportToMusicxmls_mapString, exporttomusicxml.Name)
 }
 
 // commit exporttomusicxml to the back repo (if it is already staged)
-func (exporttomusicxml *ExportToMusicxml) Commit(stage *StageStruct) *ExportToMusicxml {
+func (exporttomusicxml *ExportToMusicxml) Commit(stage *Stage) *ExportToMusicxml {
 	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitExportToMusicxml(exporttomusicxml)
@@ -1276,12 +1276,12 @@ func (exporttomusicxml *ExportToMusicxml) Commit(stage *StageStruct) *ExportToMu
 	return exporttomusicxml
 }
 
-func (exporttomusicxml *ExportToMusicxml) CommitVoid(stage *StageStruct) {
+func (exporttomusicxml *ExportToMusicxml) CommitVoid(stage *Stage) {
 	exporttomusicxml.Commit(stage)
 }
 
 // Checkout exporttomusicxml to the back repo (if it is already staged)
-func (exporttomusicxml *ExportToMusicxml) Checkout(stage *StageStruct) *ExportToMusicxml {
+func (exporttomusicxml *ExportToMusicxml) Checkout(stage *Stage) *ExportToMusicxml {
 	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutExportToMusicxml(exporttomusicxml)
@@ -1296,7 +1296,7 @@ func (exporttomusicxml *ExportToMusicxml) GetName() (res string) {
 }
 
 // Stage puts frontcurve to the model stage
-func (frontcurve *FrontCurve) Stage(stage *StageStruct) *FrontCurve {
+func (frontcurve *FrontCurve) Stage(stage *Stage) *FrontCurve {
 
 	if _, ok := stage.FrontCurves[frontcurve]; !ok {
 		stage.FrontCurves[frontcurve] = __member
@@ -1309,20 +1309,20 @@ func (frontcurve *FrontCurve) Stage(stage *StageStruct) *FrontCurve {
 }
 
 // Unstage removes frontcurve off the model stage
-func (frontcurve *FrontCurve) Unstage(stage *StageStruct) *FrontCurve {
+func (frontcurve *FrontCurve) Unstage(stage *Stage) *FrontCurve {
 	delete(stage.FrontCurves, frontcurve)
 	delete(stage.FrontCurves_mapString, frontcurve.Name)
 	return frontcurve
 }
 
 // UnstageVoid removes frontcurve off the model stage
-func (frontcurve *FrontCurve) UnstageVoid(stage *StageStruct) {
+func (frontcurve *FrontCurve) UnstageVoid(stage *Stage) {
 	delete(stage.FrontCurves, frontcurve)
 	delete(stage.FrontCurves_mapString, frontcurve.Name)
 }
 
 // commit frontcurve to the back repo (if it is already staged)
-func (frontcurve *FrontCurve) Commit(stage *StageStruct) *FrontCurve {
+func (frontcurve *FrontCurve) Commit(stage *Stage) *FrontCurve {
 	if _, ok := stage.FrontCurves[frontcurve]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitFrontCurve(frontcurve)
@@ -1331,12 +1331,12 @@ func (frontcurve *FrontCurve) Commit(stage *StageStruct) *FrontCurve {
 	return frontcurve
 }
 
-func (frontcurve *FrontCurve) CommitVoid(stage *StageStruct) {
+func (frontcurve *FrontCurve) CommitVoid(stage *Stage) {
 	frontcurve.Commit(stage)
 }
 
 // Checkout frontcurve to the back repo (if it is already staged)
-func (frontcurve *FrontCurve) Checkout(stage *StageStruct) *FrontCurve {
+func (frontcurve *FrontCurve) Checkout(stage *Stage) *FrontCurve {
 	if _, ok := stage.FrontCurves[frontcurve]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutFrontCurve(frontcurve)
@@ -1351,7 +1351,7 @@ func (frontcurve *FrontCurve) GetName() (res string) {
 }
 
 // Stage puts frontcurvestack to the model stage
-func (frontcurvestack *FrontCurveStack) Stage(stage *StageStruct) *FrontCurveStack {
+func (frontcurvestack *FrontCurveStack) Stage(stage *Stage) *FrontCurveStack {
 
 	if _, ok := stage.FrontCurveStacks[frontcurvestack]; !ok {
 		stage.FrontCurveStacks[frontcurvestack] = __member
@@ -1364,20 +1364,20 @@ func (frontcurvestack *FrontCurveStack) Stage(stage *StageStruct) *FrontCurveSta
 }
 
 // Unstage removes frontcurvestack off the model stage
-func (frontcurvestack *FrontCurveStack) Unstage(stage *StageStruct) *FrontCurveStack {
+func (frontcurvestack *FrontCurveStack) Unstage(stage *Stage) *FrontCurveStack {
 	delete(stage.FrontCurveStacks, frontcurvestack)
 	delete(stage.FrontCurveStacks_mapString, frontcurvestack.Name)
 	return frontcurvestack
 }
 
 // UnstageVoid removes frontcurvestack off the model stage
-func (frontcurvestack *FrontCurveStack) UnstageVoid(stage *StageStruct) {
+func (frontcurvestack *FrontCurveStack) UnstageVoid(stage *Stage) {
 	delete(stage.FrontCurveStacks, frontcurvestack)
 	delete(stage.FrontCurveStacks_mapString, frontcurvestack.Name)
 }
 
 // commit frontcurvestack to the back repo (if it is already staged)
-func (frontcurvestack *FrontCurveStack) Commit(stage *StageStruct) *FrontCurveStack {
+func (frontcurvestack *FrontCurveStack) Commit(stage *Stage) *FrontCurveStack {
 	if _, ok := stage.FrontCurveStacks[frontcurvestack]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitFrontCurveStack(frontcurvestack)
@@ -1386,12 +1386,12 @@ func (frontcurvestack *FrontCurveStack) Commit(stage *StageStruct) *FrontCurveSt
 	return frontcurvestack
 }
 
-func (frontcurvestack *FrontCurveStack) CommitVoid(stage *StageStruct) {
+func (frontcurvestack *FrontCurveStack) CommitVoid(stage *Stage) {
 	frontcurvestack.Commit(stage)
 }
 
 // Checkout frontcurvestack to the back repo (if it is already staged)
-func (frontcurvestack *FrontCurveStack) Checkout(stage *StageStruct) *FrontCurveStack {
+func (frontcurvestack *FrontCurveStack) Checkout(stage *Stage) *FrontCurveStack {
 	if _, ok := stage.FrontCurveStacks[frontcurvestack]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutFrontCurveStack(frontcurvestack)
@@ -1406,7 +1406,7 @@ func (frontcurvestack *FrontCurveStack) GetName() (res string) {
 }
 
 // Stage puts horizontalaxis to the model stage
-func (horizontalaxis *HorizontalAxis) Stage(stage *StageStruct) *HorizontalAxis {
+func (horizontalaxis *HorizontalAxis) Stage(stage *Stage) *HorizontalAxis {
 
 	if _, ok := stage.HorizontalAxiss[horizontalaxis]; !ok {
 		stage.HorizontalAxiss[horizontalaxis] = __member
@@ -1419,20 +1419,20 @@ func (horizontalaxis *HorizontalAxis) Stage(stage *StageStruct) *HorizontalAxis 
 }
 
 // Unstage removes horizontalaxis off the model stage
-func (horizontalaxis *HorizontalAxis) Unstage(stage *StageStruct) *HorizontalAxis {
+func (horizontalaxis *HorizontalAxis) Unstage(stage *Stage) *HorizontalAxis {
 	delete(stage.HorizontalAxiss, horizontalaxis)
 	delete(stage.HorizontalAxiss_mapString, horizontalaxis.Name)
 	return horizontalaxis
 }
 
 // UnstageVoid removes horizontalaxis off the model stage
-func (horizontalaxis *HorizontalAxis) UnstageVoid(stage *StageStruct) {
+func (horizontalaxis *HorizontalAxis) UnstageVoid(stage *Stage) {
 	delete(stage.HorizontalAxiss, horizontalaxis)
 	delete(stage.HorizontalAxiss_mapString, horizontalaxis.Name)
 }
 
 // commit horizontalaxis to the back repo (if it is already staged)
-func (horizontalaxis *HorizontalAxis) Commit(stage *StageStruct) *HorizontalAxis {
+func (horizontalaxis *HorizontalAxis) Commit(stage *Stage) *HorizontalAxis {
 	if _, ok := stage.HorizontalAxiss[horizontalaxis]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitHorizontalAxis(horizontalaxis)
@@ -1441,12 +1441,12 @@ func (horizontalaxis *HorizontalAxis) Commit(stage *StageStruct) *HorizontalAxis
 	return horizontalaxis
 }
 
-func (horizontalaxis *HorizontalAxis) CommitVoid(stage *StageStruct) {
+func (horizontalaxis *HorizontalAxis) CommitVoid(stage *Stage) {
 	horizontalaxis.Commit(stage)
 }
 
 // Checkout horizontalaxis to the back repo (if it is already staged)
-func (horizontalaxis *HorizontalAxis) Checkout(stage *StageStruct) *HorizontalAxis {
+func (horizontalaxis *HorizontalAxis) Checkout(stage *Stage) *HorizontalAxis {
 	if _, ok := stage.HorizontalAxiss[horizontalaxis]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutHorizontalAxis(horizontalaxis)
@@ -1461,7 +1461,7 @@ func (horizontalaxis *HorizontalAxis) GetName() (res string) {
 }
 
 // Stage puts key to the model stage
-func (key *Key) Stage(stage *StageStruct) *Key {
+func (key *Key) Stage(stage *Stage) *Key {
 
 	if _, ok := stage.Keys[key]; !ok {
 		stage.Keys[key] = __member
@@ -1474,20 +1474,20 @@ func (key *Key) Stage(stage *StageStruct) *Key {
 }
 
 // Unstage removes key off the model stage
-func (key *Key) Unstage(stage *StageStruct) *Key {
+func (key *Key) Unstage(stage *Stage) *Key {
 	delete(stage.Keys, key)
 	delete(stage.Keys_mapString, key.Name)
 	return key
 }
 
 // UnstageVoid removes key off the model stage
-func (key *Key) UnstageVoid(stage *StageStruct) {
+func (key *Key) UnstageVoid(stage *Stage) {
 	delete(stage.Keys, key)
 	delete(stage.Keys_mapString, key.Name)
 }
 
 // commit key to the back repo (if it is already staged)
-func (key *Key) Commit(stage *StageStruct) *Key {
+func (key *Key) Commit(stage *Stage) *Key {
 	if _, ok := stage.Keys[key]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitKey(key)
@@ -1496,12 +1496,12 @@ func (key *Key) Commit(stage *StageStruct) *Key {
 	return key
 }
 
-func (key *Key) CommitVoid(stage *StageStruct) {
+func (key *Key) CommitVoid(stage *Stage) {
 	key.Commit(stage)
 }
 
 // Checkout key to the back repo (if it is already staged)
-func (key *Key) Checkout(stage *StageStruct) *Key {
+func (key *Key) Checkout(stage *Stage) *Key {
 	if _, ok := stage.Keys[key]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutKey(key)
@@ -1516,7 +1516,7 @@ func (key *Key) GetName() (res string) {
 }
 
 // Stage puts parameter to the model stage
-func (parameter *Parameter) Stage(stage *StageStruct) *Parameter {
+func (parameter *Parameter) Stage(stage *Stage) *Parameter {
 
 	if _, ok := stage.Parameters[parameter]; !ok {
 		stage.Parameters[parameter] = __member
@@ -1529,20 +1529,20 @@ func (parameter *Parameter) Stage(stage *StageStruct) *Parameter {
 }
 
 // Unstage removes parameter off the model stage
-func (parameter *Parameter) Unstage(stage *StageStruct) *Parameter {
+func (parameter *Parameter) Unstage(stage *Stage) *Parameter {
 	delete(stage.Parameters, parameter)
 	delete(stage.Parameters_mapString, parameter.Name)
 	return parameter
 }
 
 // UnstageVoid removes parameter off the model stage
-func (parameter *Parameter) UnstageVoid(stage *StageStruct) {
+func (parameter *Parameter) UnstageVoid(stage *Stage) {
 	delete(stage.Parameters, parameter)
 	delete(stage.Parameters_mapString, parameter.Name)
 }
 
 // commit parameter to the back repo (if it is already staged)
-func (parameter *Parameter) Commit(stage *StageStruct) *Parameter {
+func (parameter *Parameter) Commit(stage *Stage) *Parameter {
 	if _, ok := stage.Parameters[parameter]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitParameter(parameter)
@@ -1551,12 +1551,12 @@ func (parameter *Parameter) Commit(stage *StageStruct) *Parameter {
 	return parameter
 }
 
-func (parameter *Parameter) CommitVoid(stage *StageStruct) {
+func (parameter *Parameter) CommitVoid(stage *Stage) {
 	parameter.Commit(stage)
 }
 
 // Checkout parameter to the back repo (if it is already staged)
-func (parameter *Parameter) Checkout(stage *StageStruct) *Parameter {
+func (parameter *Parameter) Checkout(stage *Stage) *Parameter {
 	if _, ok := stage.Parameters[parameter]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutParameter(parameter)
@@ -1571,7 +1571,7 @@ func (parameter *Parameter) GetName() (res string) {
 }
 
 // Stage puts rhombus to the model stage
-func (rhombus *Rhombus) Stage(stage *StageStruct) *Rhombus {
+func (rhombus *Rhombus) Stage(stage *Stage) *Rhombus {
 
 	if _, ok := stage.Rhombuss[rhombus]; !ok {
 		stage.Rhombuss[rhombus] = __member
@@ -1584,20 +1584,20 @@ func (rhombus *Rhombus) Stage(stage *StageStruct) *Rhombus {
 }
 
 // Unstage removes rhombus off the model stage
-func (rhombus *Rhombus) Unstage(stage *StageStruct) *Rhombus {
+func (rhombus *Rhombus) Unstage(stage *Stage) *Rhombus {
 	delete(stage.Rhombuss, rhombus)
 	delete(stage.Rhombuss_mapString, rhombus.Name)
 	return rhombus
 }
 
 // UnstageVoid removes rhombus off the model stage
-func (rhombus *Rhombus) UnstageVoid(stage *StageStruct) {
+func (rhombus *Rhombus) UnstageVoid(stage *Stage) {
 	delete(stage.Rhombuss, rhombus)
 	delete(stage.Rhombuss_mapString, rhombus.Name)
 }
 
 // commit rhombus to the back repo (if it is already staged)
-func (rhombus *Rhombus) Commit(stage *StageStruct) *Rhombus {
+func (rhombus *Rhombus) Commit(stage *Stage) *Rhombus {
 	if _, ok := stage.Rhombuss[rhombus]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitRhombus(rhombus)
@@ -1606,12 +1606,12 @@ func (rhombus *Rhombus) Commit(stage *StageStruct) *Rhombus {
 	return rhombus
 }
 
-func (rhombus *Rhombus) CommitVoid(stage *StageStruct) {
+func (rhombus *Rhombus) CommitVoid(stage *Stage) {
 	rhombus.Commit(stage)
 }
 
 // Checkout rhombus to the back repo (if it is already staged)
-func (rhombus *Rhombus) Checkout(stage *StageStruct) *Rhombus {
+func (rhombus *Rhombus) Checkout(stage *Stage) *Rhombus {
 	if _, ok := stage.Rhombuss[rhombus]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutRhombus(rhombus)
@@ -1626,7 +1626,7 @@ func (rhombus *Rhombus) GetName() (res string) {
 }
 
 // Stage puts rhombusgrid to the model stage
-func (rhombusgrid *RhombusGrid) Stage(stage *StageStruct) *RhombusGrid {
+func (rhombusgrid *RhombusGrid) Stage(stage *Stage) *RhombusGrid {
 
 	if _, ok := stage.RhombusGrids[rhombusgrid]; !ok {
 		stage.RhombusGrids[rhombusgrid] = __member
@@ -1639,20 +1639,20 @@ func (rhombusgrid *RhombusGrid) Stage(stage *StageStruct) *RhombusGrid {
 }
 
 // Unstage removes rhombusgrid off the model stage
-func (rhombusgrid *RhombusGrid) Unstage(stage *StageStruct) *RhombusGrid {
+func (rhombusgrid *RhombusGrid) Unstage(stage *Stage) *RhombusGrid {
 	delete(stage.RhombusGrids, rhombusgrid)
 	delete(stage.RhombusGrids_mapString, rhombusgrid.Name)
 	return rhombusgrid
 }
 
 // UnstageVoid removes rhombusgrid off the model stage
-func (rhombusgrid *RhombusGrid) UnstageVoid(stage *StageStruct) {
+func (rhombusgrid *RhombusGrid) UnstageVoid(stage *Stage) {
 	delete(stage.RhombusGrids, rhombusgrid)
 	delete(stage.RhombusGrids_mapString, rhombusgrid.Name)
 }
 
 // commit rhombusgrid to the back repo (if it is already staged)
-func (rhombusgrid *RhombusGrid) Commit(stage *StageStruct) *RhombusGrid {
+func (rhombusgrid *RhombusGrid) Commit(stage *Stage) *RhombusGrid {
 	if _, ok := stage.RhombusGrids[rhombusgrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitRhombusGrid(rhombusgrid)
@@ -1661,12 +1661,12 @@ func (rhombusgrid *RhombusGrid) Commit(stage *StageStruct) *RhombusGrid {
 	return rhombusgrid
 }
 
-func (rhombusgrid *RhombusGrid) CommitVoid(stage *StageStruct) {
+func (rhombusgrid *RhombusGrid) CommitVoid(stage *Stage) {
 	rhombusgrid.Commit(stage)
 }
 
 // Checkout rhombusgrid to the back repo (if it is already staged)
-func (rhombusgrid *RhombusGrid) Checkout(stage *StageStruct) *RhombusGrid {
+func (rhombusgrid *RhombusGrid) Checkout(stage *Stage) *RhombusGrid {
 	if _, ok := stage.RhombusGrids[rhombusgrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutRhombusGrid(rhombusgrid)
@@ -1681,7 +1681,7 @@ func (rhombusgrid *RhombusGrid) GetName() (res string) {
 }
 
 // Stage puts shapecategory to the model stage
-func (shapecategory *ShapeCategory) Stage(stage *StageStruct) *ShapeCategory {
+func (shapecategory *ShapeCategory) Stage(stage *Stage) *ShapeCategory {
 
 	if _, ok := stage.ShapeCategorys[shapecategory]; !ok {
 		stage.ShapeCategorys[shapecategory] = __member
@@ -1694,20 +1694,20 @@ func (shapecategory *ShapeCategory) Stage(stage *StageStruct) *ShapeCategory {
 }
 
 // Unstage removes shapecategory off the model stage
-func (shapecategory *ShapeCategory) Unstage(stage *StageStruct) *ShapeCategory {
+func (shapecategory *ShapeCategory) Unstage(stage *Stage) *ShapeCategory {
 	delete(stage.ShapeCategorys, shapecategory)
 	delete(stage.ShapeCategorys_mapString, shapecategory.Name)
 	return shapecategory
 }
 
 // UnstageVoid removes shapecategory off the model stage
-func (shapecategory *ShapeCategory) UnstageVoid(stage *StageStruct) {
+func (shapecategory *ShapeCategory) UnstageVoid(stage *Stage) {
 	delete(stage.ShapeCategorys, shapecategory)
 	delete(stage.ShapeCategorys_mapString, shapecategory.Name)
 }
 
 // commit shapecategory to the back repo (if it is already staged)
-func (shapecategory *ShapeCategory) Commit(stage *StageStruct) *ShapeCategory {
+func (shapecategory *ShapeCategory) Commit(stage *Stage) *ShapeCategory {
 	if _, ok := stage.ShapeCategorys[shapecategory]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitShapeCategory(shapecategory)
@@ -1716,12 +1716,12 @@ func (shapecategory *ShapeCategory) Commit(stage *StageStruct) *ShapeCategory {
 	return shapecategory
 }
 
-func (shapecategory *ShapeCategory) CommitVoid(stage *StageStruct) {
+func (shapecategory *ShapeCategory) CommitVoid(stage *Stage) {
 	shapecategory.Commit(stage)
 }
 
 // Checkout shapecategory to the back repo (if it is already staged)
-func (shapecategory *ShapeCategory) Checkout(stage *StageStruct) *ShapeCategory {
+func (shapecategory *ShapeCategory) Checkout(stage *Stage) *ShapeCategory {
 	if _, ok := stage.ShapeCategorys[shapecategory]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutShapeCategory(shapecategory)
@@ -1736,7 +1736,7 @@ func (shapecategory *ShapeCategory) GetName() (res string) {
 }
 
 // Stage puts spiralbezier to the model stage
-func (spiralbezier *SpiralBezier) Stage(stage *StageStruct) *SpiralBezier {
+func (spiralbezier *SpiralBezier) Stage(stage *Stage) *SpiralBezier {
 
 	if _, ok := stage.SpiralBeziers[spiralbezier]; !ok {
 		stage.SpiralBeziers[spiralbezier] = __member
@@ -1749,20 +1749,20 @@ func (spiralbezier *SpiralBezier) Stage(stage *StageStruct) *SpiralBezier {
 }
 
 // Unstage removes spiralbezier off the model stage
-func (spiralbezier *SpiralBezier) Unstage(stage *StageStruct) *SpiralBezier {
+func (spiralbezier *SpiralBezier) Unstage(stage *Stage) *SpiralBezier {
 	delete(stage.SpiralBeziers, spiralbezier)
 	delete(stage.SpiralBeziers_mapString, spiralbezier.Name)
 	return spiralbezier
 }
 
 // UnstageVoid removes spiralbezier off the model stage
-func (spiralbezier *SpiralBezier) UnstageVoid(stage *StageStruct) {
+func (spiralbezier *SpiralBezier) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralBeziers, spiralbezier)
 	delete(stage.SpiralBeziers_mapString, spiralbezier.Name)
 }
 
 // commit spiralbezier to the back repo (if it is already staged)
-func (spiralbezier *SpiralBezier) Commit(stage *StageStruct) *SpiralBezier {
+func (spiralbezier *SpiralBezier) Commit(stage *Stage) *SpiralBezier {
 	if _, ok := stage.SpiralBeziers[spiralbezier]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitSpiralBezier(spiralbezier)
@@ -1771,12 +1771,12 @@ func (spiralbezier *SpiralBezier) Commit(stage *StageStruct) *SpiralBezier {
 	return spiralbezier
 }
 
-func (spiralbezier *SpiralBezier) CommitVoid(stage *StageStruct) {
+func (spiralbezier *SpiralBezier) CommitVoid(stage *Stage) {
 	spiralbezier.Commit(stage)
 }
 
 // Checkout spiralbezier to the back repo (if it is already staged)
-func (spiralbezier *SpiralBezier) Checkout(stage *StageStruct) *SpiralBezier {
+func (spiralbezier *SpiralBezier) Checkout(stage *Stage) *SpiralBezier {
 	if _, ok := stage.SpiralBeziers[spiralbezier]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutSpiralBezier(spiralbezier)
@@ -1791,7 +1791,7 @@ func (spiralbezier *SpiralBezier) GetName() (res string) {
 }
 
 // Stage puts spiralbeziergrid to the model stage
-func (spiralbeziergrid *SpiralBezierGrid) Stage(stage *StageStruct) *SpiralBezierGrid {
+func (spiralbeziergrid *SpiralBezierGrid) Stage(stage *Stage) *SpiralBezierGrid {
 
 	if _, ok := stage.SpiralBezierGrids[spiralbeziergrid]; !ok {
 		stage.SpiralBezierGrids[spiralbeziergrid] = __member
@@ -1804,20 +1804,20 @@ func (spiralbeziergrid *SpiralBezierGrid) Stage(stage *StageStruct) *SpiralBezie
 }
 
 // Unstage removes spiralbeziergrid off the model stage
-func (spiralbeziergrid *SpiralBezierGrid) Unstage(stage *StageStruct) *SpiralBezierGrid {
+func (spiralbeziergrid *SpiralBezierGrid) Unstage(stage *Stage) *SpiralBezierGrid {
 	delete(stage.SpiralBezierGrids, spiralbeziergrid)
 	delete(stage.SpiralBezierGrids_mapString, spiralbeziergrid.Name)
 	return spiralbeziergrid
 }
 
 // UnstageVoid removes spiralbeziergrid off the model stage
-func (spiralbeziergrid *SpiralBezierGrid) UnstageVoid(stage *StageStruct) {
+func (spiralbeziergrid *SpiralBezierGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralBezierGrids, spiralbeziergrid)
 	delete(stage.SpiralBezierGrids_mapString, spiralbeziergrid.Name)
 }
 
 // commit spiralbeziergrid to the back repo (if it is already staged)
-func (spiralbeziergrid *SpiralBezierGrid) Commit(stage *StageStruct) *SpiralBezierGrid {
+func (spiralbeziergrid *SpiralBezierGrid) Commit(stage *Stage) *SpiralBezierGrid {
 	if _, ok := stage.SpiralBezierGrids[spiralbeziergrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitSpiralBezierGrid(spiralbeziergrid)
@@ -1826,12 +1826,12 @@ func (spiralbeziergrid *SpiralBezierGrid) Commit(stage *StageStruct) *SpiralBezi
 	return spiralbeziergrid
 }
 
-func (spiralbeziergrid *SpiralBezierGrid) CommitVoid(stage *StageStruct) {
+func (spiralbeziergrid *SpiralBezierGrid) CommitVoid(stage *Stage) {
 	spiralbeziergrid.Commit(stage)
 }
 
 // Checkout spiralbeziergrid to the back repo (if it is already staged)
-func (spiralbeziergrid *SpiralBezierGrid) Checkout(stage *StageStruct) *SpiralBezierGrid {
+func (spiralbeziergrid *SpiralBezierGrid) Checkout(stage *Stage) *SpiralBezierGrid {
 	if _, ok := stage.SpiralBezierGrids[spiralbeziergrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutSpiralBezierGrid(spiralbeziergrid)
@@ -1846,7 +1846,7 @@ func (spiralbeziergrid *SpiralBezierGrid) GetName() (res string) {
 }
 
 // Stage puts spiralcircle to the model stage
-func (spiralcircle *SpiralCircle) Stage(stage *StageStruct) *SpiralCircle {
+func (spiralcircle *SpiralCircle) Stage(stage *Stage) *SpiralCircle {
 
 	if _, ok := stage.SpiralCircles[spiralcircle]; !ok {
 		stage.SpiralCircles[spiralcircle] = __member
@@ -1859,20 +1859,20 @@ func (spiralcircle *SpiralCircle) Stage(stage *StageStruct) *SpiralCircle {
 }
 
 // Unstage removes spiralcircle off the model stage
-func (spiralcircle *SpiralCircle) Unstage(stage *StageStruct) *SpiralCircle {
+func (spiralcircle *SpiralCircle) Unstage(stage *Stage) *SpiralCircle {
 	delete(stage.SpiralCircles, spiralcircle)
 	delete(stage.SpiralCircles_mapString, spiralcircle.Name)
 	return spiralcircle
 }
 
 // UnstageVoid removes spiralcircle off the model stage
-func (spiralcircle *SpiralCircle) UnstageVoid(stage *StageStruct) {
+func (spiralcircle *SpiralCircle) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralCircles, spiralcircle)
 	delete(stage.SpiralCircles_mapString, spiralcircle.Name)
 }
 
 // commit spiralcircle to the back repo (if it is already staged)
-func (spiralcircle *SpiralCircle) Commit(stage *StageStruct) *SpiralCircle {
+func (spiralcircle *SpiralCircle) Commit(stage *Stage) *SpiralCircle {
 	if _, ok := stage.SpiralCircles[spiralcircle]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitSpiralCircle(spiralcircle)
@@ -1881,12 +1881,12 @@ func (spiralcircle *SpiralCircle) Commit(stage *StageStruct) *SpiralCircle {
 	return spiralcircle
 }
 
-func (spiralcircle *SpiralCircle) CommitVoid(stage *StageStruct) {
+func (spiralcircle *SpiralCircle) CommitVoid(stage *Stage) {
 	spiralcircle.Commit(stage)
 }
 
 // Checkout spiralcircle to the back repo (if it is already staged)
-func (spiralcircle *SpiralCircle) Checkout(stage *StageStruct) *SpiralCircle {
+func (spiralcircle *SpiralCircle) Checkout(stage *Stage) *SpiralCircle {
 	if _, ok := stage.SpiralCircles[spiralcircle]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutSpiralCircle(spiralcircle)
@@ -1901,7 +1901,7 @@ func (spiralcircle *SpiralCircle) GetName() (res string) {
 }
 
 // Stage puts spiralcirclegrid to the model stage
-func (spiralcirclegrid *SpiralCircleGrid) Stage(stage *StageStruct) *SpiralCircleGrid {
+func (spiralcirclegrid *SpiralCircleGrid) Stage(stage *Stage) *SpiralCircleGrid {
 
 	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; !ok {
 		stage.SpiralCircleGrids[spiralcirclegrid] = __member
@@ -1914,20 +1914,20 @@ func (spiralcirclegrid *SpiralCircleGrid) Stage(stage *StageStruct) *SpiralCircl
 }
 
 // Unstage removes spiralcirclegrid off the model stage
-func (spiralcirclegrid *SpiralCircleGrid) Unstage(stage *StageStruct) *SpiralCircleGrid {
+func (spiralcirclegrid *SpiralCircleGrid) Unstage(stage *Stage) *SpiralCircleGrid {
 	delete(stage.SpiralCircleGrids, spiralcirclegrid)
 	delete(stage.SpiralCircleGrids_mapString, spiralcirclegrid.Name)
 	return spiralcirclegrid
 }
 
 // UnstageVoid removes spiralcirclegrid off the model stage
-func (spiralcirclegrid *SpiralCircleGrid) UnstageVoid(stage *StageStruct) {
+func (spiralcirclegrid *SpiralCircleGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralCircleGrids, spiralcirclegrid)
 	delete(stage.SpiralCircleGrids_mapString, spiralcirclegrid.Name)
 }
 
 // commit spiralcirclegrid to the back repo (if it is already staged)
-func (spiralcirclegrid *SpiralCircleGrid) Commit(stage *StageStruct) *SpiralCircleGrid {
+func (spiralcirclegrid *SpiralCircleGrid) Commit(stage *Stage) *SpiralCircleGrid {
 	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitSpiralCircleGrid(spiralcirclegrid)
@@ -1936,12 +1936,12 @@ func (spiralcirclegrid *SpiralCircleGrid) Commit(stage *StageStruct) *SpiralCirc
 	return spiralcirclegrid
 }
 
-func (spiralcirclegrid *SpiralCircleGrid) CommitVoid(stage *StageStruct) {
+func (spiralcirclegrid *SpiralCircleGrid) CommitVoid(stage *Stage) {
 	spiralcirclegrid.Commit(stage)
 }
 
 // Checkout spiralcirclegrid to the back repo (if it is already staged)
-func (spiralcirclegrid *SpiralCircleGrid) Checkout(stage *StageStruct) *SpiralCircleGrid {
+func (spiralcirclegrid *SpiralCircleGrid) Checkout(stage *Stage) *SpiralCircleGrid {
 	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutSpiralCircleGrid(spiralcirclegrid)
@@ -1956,7 +1956,7 @@ func (spiralcirclegrid *SpiralCircleGrid) GetName() (res string) {
 }
 
 // Stage puts spiralline to the model stage
-func (spiralline *SpiralLine) Stage(stage *StageStruct) *SpiralLine {
+func (spiralline *SpiralLine) Stage(stage *Stage) *SpiralLine {
 
 	if _, ok := stage.SpiralLines[spiralline]; !ok {
 		stage.SpiralLines[spiralline] = __member
@@ -1969,20 +1969,20 @@ func (spiralline *SpiralLine) Stage(stage *StageStruct) *SpiralLine {
 }
 
 // Unstage removes spiralline off the model stage
-func (spiralline *SpiralLine) Unstage(stage *StageStruct) *SpiralLine {
+func (spiralline *SpiralLine) Unstage(stage *Stage) *SpiralLine {
 	delete(stage.SpiralLines, spiralline)
 	delete(stage.SpiralLines_mapString, spiralline.Name)
 	return spiralline
 }
 
 // UnstageVoid removes spiralline off the model stage
-func (spiralline *SpiralLine) UnstageVoid(stage *StageStruct) {
+func (spiralline *SpiralLine) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralLines, spiralline)
 	delete(stage.SpiralLines_mapString, spiralline.Name)
 }
 
 // commit spiralline to the back repo (if it is already staged)
-func (spiralline *SpiralLine) Commit(stage *StageStruct) *SpiralLine {
+func (spiralline *SpiralLine) Commit(stage *Stage) *SpiralLine {
 	if _, ok := stage.SpiralLines[spiralline]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitSpiralLine(spiralline)
@@ -1991,12 +1991,12 @@ func (spiralline *SpiralLine) Commit(stage *StageStruct) *SpiralLine {
 	return spiralline
 }
 
-func (spiralline *SpiralLine) CommitVoid(stage *StageStruct) {
+func (spiralline *SpiralLine) CommitVoid(stage *Stage) {
 	spiralline.Commit(stage)
 }
 
 // Checkout spiralline to the back repo (if it is already staged)
-func (spiralline *SpiralLine) Checkout(stage *StageStruct) *SpiralLine {
+func (spiralline *SpiralLine) Checkout(stage *Stage) *SpiralLine {
 	if _, ok := stage.SpiralLines[spiralline]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutSpiralLine(spiralline)
@@ -2011,7 +2011,7 @@ func (spiralline *SpiralLine) GetName() (res string) {
 }
 
 // Stage puts spirallinegrid to the model stage
-func (spirallinegrid *SpiralLineGrid) Stage(stage *StageStruct) *SpiralLineGrid {
+func (spirallinegrid *SpiralLineGrid) Stage(stage *Stage) *SpiralLineGrid {
 
 	if _, ok := stage.SpiralLineGrids[spirallinegrid]; !ok {
 		stage.SpiralLineGrids[spirallinegrid] = __member
@@ -2024,20 +2024,20 @@ func (spirallinegrid *SpiralLineGrid) Stage(stage *StageStruct) *SpiralLineGrid 
 }
 
 // Unstage removes spirallinegrid off the model stage
-func (spirallinegrid *SpiralLineGrid) Unstage(stage *StageStruct) *SpiralLineGrid {
+func (spirallinegrid *SpiralLineGrid) Unstage(stage *Stage) *SpiralLineGrid {
 	delete(stage.SpiralLineGrids, spirallinegrid)
 	delete(stage.SpiralLineGrids_mapString, spirallinegrid.Name)
 	return spirallinegrid
 }
 
 // UnstageVoid removes spirallinegrid off the model stage
-func (spirallinegrid *SpiralLineGrid) UnstageVoid(stage *StageStruct) {
+func (spirallinegrid *SpiralLineGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralLineGrids, spirallinegrid)
 	delete(stage.SpiralLineGrids_mapString, spirallinegrid.Name)
 }
 
 // commit spirallinegrid to the back repo (if it is already staged)
-func (spirallinegrid *SpiralLineGrid) Commit(stage *StageStruct) *SpiralLineGrid {
+func (spirallinegrid *SpiralLineGrid) Commit(stage *Stage) *SpiralLineGrid {
 	if _, ok := stage.SpiralLineGrids[spirallinegrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitSpiralLineGrid(spirallinegrid)
@@ -2046,12 +2046,12 @@ func (spirallinegrid *SpiralLineGrid) Commit(stage *StageStruct) *SpiralLineGrid
 	return spirallinegrid
 }
 
-func (spirallinegrid *SpiralLineGrid) CommitVoid(stage *StageStruct) {
+func (spirallinegrid *SpiralLineGrid) CommitVoid(stage *Stage) {
 	spirallinegrid.Commit(stage)
 }
 
 // Checkout spirallinegrid to the back repo (if it is already staged)
-func (spirallinegrid *SpiralLineGrid) Checkout(stage *StageStruct) *SpiralLineGrid {
+func (spirallinegrid *SpiralLineGrid) Checkout(stage *Stage) *SpiralLineGrid {
 	if _, ok := stage.SpiralLineGrids[spirallinegrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutSpiralLineGrid(spirallinegrid)
@@ -2066,7 +2066,7 @@ func (spirallinegrid *SpiralLineGrid) GetName() (res string) {
 }
 
 // Stage puts spiralorigin to the model stage
-func (spiralorigin *SpiralOrigin) Stage(stage *StageStruct) *SpiralOrigin {
+func (spiralorigin *SpiralOrigin) Stage(stage *Stage) *SpiralOrigin {
 
 	if _, ok := stage.SpiralOrigins[spiralorigin]; !ok {
 		stage.SpiralOrigins[spiralorigin] = __member
@@ -2079,20 +2079,20 @@ func (spiralorigin *SpiralOrigin) Stage(stage *StageStruct) *SpiralOrigin {
 }
 
 // Unstage removes spiralorigin off the model stage
-func (spiralorigin *SpiralOrigin) Unstage(stage *StageStruct) *SpiralOrigin {
+func (spiralorigin *SpiralOrigin) Unstage(stage *Stage) *SpiralOrigin {
 	delete(stage.SpiralOrigins, spiralorigin)
 	delete(stage.SpiralOrigins_mapString, spiralorigin.Name)
 	return spiralorigin
 }
 
 // UnstageVoid removes spiralorigin off the model stage
-func (spiralorigin *SpiralOrigin) UnstageVoid(stage *StageStruct) {
+func (spiralorigin *SpiralOrigin) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralOrigins, spiralorigin)
 	delete(stage.SpiralOrigins_mapString, spiralorigin.Name)
 }
 
 // commit spiralorigin to the back repo (if it is already staged)
-func (spiralorigin *SpiralOrigin) Commit(stage *StageStruct) *SpiralOrigin {
+func (spiralorigin *SpiralOrigin) Commit(stage *Stage) *SpiralOrigin {
 	if _, ok := stage.SpiralOrigins[spiralorigin]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitSpiralOrigin(spiralorigin)
@@ -2101,12 +2101,12 @@ func (spiralorigin *SpiralOrigin) Commit(stage *StageStruct) *SpiralOrigin {
 	return spiralorigin
 }
 
-func (spiralorigin *SpiralOrigin) CommitVoid(stage *StageStruct) {
+func (spiralorigin *SpiralOrigin) CommitVoid(stage *Stage) {
 	spiralorigin.Commit(stage)
 }
 
 // Checkout spiralorigin to the back repo (if it is already staged)
-func (spiralorigin *SpiralOrigin) Checkout(stage *StageStruct) *SpiralOrigin {
+func (spiralorigin *SpiralOrigin) Checkout(stage *Stage) *SpiralOrigin {
 	if _, ok := stage.SpiralOrigins[spiralorigin]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutSpiralOrigin(spiralorigin)
@@ -2121,7 +2121,7 @@ func (spiralorigin *SpiralOrigin) GetName() (res string) {
 }
 
 // Stage puts spiralrhombus to the model stage
-func (spiralrhombus *SpiralRhombus) Stage(stage *StageStruct) *SpiralRhombus {
+func (spiralrhombus *SpiralRhombus) Stage(stage *Stage) *SpiralRhombus {
 
 	if _, ok := stage.SpiralRhombuss[spiralrhombus]; !ok {
 		stage.SpiralRhombuss[spiralrhombus] = __member
@@ -2134,20 +2134,20 @@ func (spiralrhombus *SpiralRhombus) Stage(stage *StageStruct) *SpiralRhombus {
 }
 
 // Unstage removes spiralrhombus off the model stage
-func (spiralrhombus *SpiralRhombus) Unstage(stage *StageStruct) *SpiralRhombus {
+func (spiralrhombus *SpiralRhombus) Unstage(stage *Stage) *SpiralRhombus {
 	delete(stage.SpiralRhombuss, spiralrhombus)
 	delete(stage.SpiralRhombuss_mapString, spiralrhombus.Name)
 	return spiralrhombus
 }
 
 // UnstageVoid removes spiralrhombus off the model stage
-func (spiralrhombus *SpiralRhombus) UnstageVoid(stage *StageStruct) {
+func (spiralrhombus *SpiralRhombus) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralRhombuss, spiralrhombus)
 	delete(stage.SpiralRhombuss_mapString, spiralrhombus.Name)
 }
 
 // commit spiralrhombus to the back repo (if it is already staged)
-func (spiralrhombus *SpiralRhombus) Commit(stage *StageStruct) *SpiralRhombus {
+func (spiralrhombus *SpiralRhombus) Commit(stage *Stage) *SpiralRhombus {
 	if _, ok := stage.SpiralRhombuss[spiralrhombus]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitSpiralRhombus(spiralrhombus)
@@ -2156,12 +2156,12 @@ func (spiralrhombus *SpiralRhombus) Commit(stage *StageStruct) *SpiralRhombus {
 	return spiralrhombus
 }
 
-func (spiralrhombus *SpiralRhombus) CommitVoid(stage *StageStruct) {
+func (spiralrhombus *SpiralRhombus) CommitVoid(stage *Stage) {
 	spiralrhombus.Commit(stage)
 }
 
 // Checkout spiralrhombus to the back repo (if it is already staged)
-func (spiralrhombus *SpiralRhombus) Checkout(stage *StageStruct) *SpiralRhombus {
+func (spiralrhombus *SpiralRhombus) Checkout(stage *Stage) *SpiralRhombus {
 	if _, ok := stage.SpiralRhombuss[spiralrhombus]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutSpiralRhombus(spiralrhombus)
@@ -2176,7 +2176,7 @@ func (spiralrhombus *SpiralRhombus) GetName() (res string) {
 }
 
 // Stage puts spiralrhombusgrid to the model stage
-func (spiralrhombusgrid *SpiralRhombusGrid) Stage(stage *StageStruct) *SpiralRhombusGrid {
+func (spiralrhombusgrid *SpiralRhombusGrid) Stage(stage *Stage) *SpiralRhombusGrid {
 
 	if _, ok := stage.SpiralRhombusGrids[spiralrhombusgrid]; !ok {
 		stage.SpiralRhombusGrids[spiralrhombusgrid] = __member
@@ -2189,20 +2189,20 @@ func (spiralrhombusgrid *SpiralRhombusGrid) Stage(stage *StageStruct) *SpiralRho
 }
 
 // Unstage removes spiralrhombusgrid off the model stage
-func (spiralrhombusgrid *SpiralRhombusGrid) Unstage(stage *StageStruct) *SpiralRhombusGrid {
+func (spiralrhombusgrid *SpiralRhombusGrid) Unstage(stage *Stage) *SpiralRhombusGrid {
 	delete(stage.SpiralRhombusGrids, spiralrhombusgrid)
 	delete(stage.SpiralRhombusGrids_mapString, spiralrhombusgrid.Name)
 	return spiralrhombusgrid
 }
 
 // UnstageVoid removes spiralrhombusgrid off the model stage
-func (spiralrhombusgrid *SpiralRhombusGrid) UnstageVoid(stage *StageStruct) {
+func (spiralrhombusgrid *SpiralRhombusGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralRhombusGrids, spiralrhombusgrid)
 	delete(stage.SpiralRhombusGrids_mapString, spiralrhombusgrid.Name)
 }
 
 // commit spiralrhombusgrid to the back repo (if it is already staged)
-func (spiralrhombusgrid *SpiralRhombusGrid) Commit(stage *StageStruct) *SpiralRhombusGrid {
+func (spiralrhombusgrid *SpiralRhombusGrid) Commit(stage *Stage) *SpiralRhombusGrid {
 	if _, ok := stage.SpiralRhombusGrids[spiralrhombusgrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitSpiralRhombusGrid(spiralrhombusgrid)
@@ -2211,12 +2211,12 @@ func (spiralrhombusgrid *SpiralRhombusGrid) Commit(stage *StageStruct) *SpiralRh
 	return spiralrhombusgrid
 }
 
-func (spiralrhombusgrid *SpiralRhombusGrid) CommitVoid(stage *StageStruct) {
+func (spiralrhombusgrid *SpiralRhombusGrid) CommitVoid(stage *Stage) {
 	spiralrhombusgrid.Commit(stage)
 }
 
 // Checkout spiralrhombusgrid to the back repo (if it is already staged)
-func (spiralrhombusgrid *SpiralRhombusGrid) Checkout(stage *StageStruct) *SpiralRhombusGrid {
+func (spiralrhombusgrid *SpiralRhombusGrid) Checkout(stage *Stage) *SpiralRhombusGrid {
 	if _, ok := stage.SpiralRhombusGrids[spiralrhombusgrid]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutSpiralRhombusGrid(spiralrhombusgrid)
@@ -2231,7 +2231,7 @@ func (spiralrhombusgrid *SpiralRhombusGrid) GetName() (res string) {
 }
 
 // Stage puts verticalaxis to the model stage
-func (verticalaxis *VerticalAxis) Stage(stage *StageStruct) *VerticalAxis {
+func (verticalaxis *VerticalAxis) Stage(stage *Stage) *VerticalAxis {
 
 	if _, ok := stage.VerticalAxiss[verticalaxis]; !ok {
 		stage.VerticalAxiss[verticalaxis] = __member
@@ -2244,20 +2244,20 @@ func (verticalaxis *VerticalAxis) Stage(stage *StageStruct) *VerticalAxis {
 }
 
 // Unstage removes verticalaxis off the model stage
-func (verticalaxis *VerticalAxis) Unstage(stage *StageStruct) *VerticalAxis {
+func (verticalaxis *VerticalAxis) Unstage(stage *Stage) *VerticalAxis {
 	delete(stage.VerticalAxiss, verticalaxis)
 	delete(stage.VerticalAxiss_mapString, verticalaxis.Name)
 	return verticalaxis
 }
 
 // UnstageVoid removes verticalaxis off the model stage
-func (verticalaxis *VerticalAxis) UnstageVoid(stage *StageStruct) {
+func (verticalaxis *VerticalAxis) UnstageVoid(stage *Stage) {
 	delete(stage.VerticalAxiss, verticalaxis)
 	delete(stage.VerticalAxiss_mapString, verticalaxis.Name)
 }
 
 // commit verticalaxis to the back repo (if it is already staged)
-func (verticalaxis *VerticalAxis) Commit(stage *StageStruct) *VerticalAxis {
+func (verticalaxis *VerticalAxis) Commit(stage *Stage) *VerticalAxis {
 	if _, ok := stage.VerticalAxiss[verticalaxis]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CommitVerticalAxis(verticalaxis)
@@ -2266,12 +2266,12 @@ func (verticalaxis *VerticalAxis) Commit(stage *StageStruct) *VerticalAxis {
 	return verticalaxis
 }
 
-func (verticalaxis *VerticalAxis) CommitVoid(stage *StageStruct) {
+func (verticalaxis *VerticalAxis) CommitVoid(stage *Stage) {
 	verticalaxis.Commit(stage)
 }
 
 // Checkout verticalaxis to the back repo (if it is already staged)
-func (verticalaxis *VerticalAxis) Checkout(stage *StageStruct) *VerticalAxis {
+func (verticalaxis *VerticalAxis) Checkout(stage *Stage) *VerticalAxis {
 	if _, ok := stage.VerticalAxiss[verticalaxis]; ok {
 		if stage.BackRepo != nil {
 			stage.BackRepo.CheckoutVerticalAxis(verticalaxis)
@@ -2344,7 +2344,7 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 	DeleteORMVerticalAxis(VerticalAxis *VerticalAxis)
 }
 
-func (stage *StageStruct) Reset() { // insertion point for array reset
+func (stage *Stage) Reset() { // insertion point for array reset
 	stage.Axiss = make(map[*Axis]any)
 	stage.Axiss_mapString = make(map[string]*Axis)
 	stage.AxisMap_Staged_Order = make(map[*Axis]uint)
@@ -2477,7 +2477,7 @@ func (stage *StageStruct) Reset() { // insertion point for array reset
 
 }
 
-func (stage *StageStruct) Nil() { // insertion point for array nil
+func (stage *Stage) Nil() { // insertion point for array nil
 	stage.Axiss = nil
 	stage.Axiss_mapString = nil
 
@@ -2558,7 +2558,7 @@ func (stage *StageStruct) Nil() { // insertion point for array nil
 
 }
 
-func (stage *StageStruct) Unstage() { // insertion point for array nil
+func (stage *Stage) Unstage() { // insertion point for array nil
 	for axis := range stage.Axiss {
 		axis.Unstage(stage)
 	}
@@ -2682,8 +2682,8 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	GetName() string
-	CommitVoid(*StageStruct)
-	UnstageVoid(stage *StageStruct)
+	CommitVoid(*Stage)
+	UnstageVoid(stage *Stage)
 	comparable
 }
 
@@ -2701,7 +2701,7 @@ func SortGongstructSetByName[T PointerToGongstruct](set map[T]any) (sortedSlice 
 	return
 }
 
-func GetGongstrucsSorted[T PointerToGongstruct](stage *StageStruct) (sortedSlice []T) {
+func GetGongstrucsSorted[T PointerToGongstruct](stage *Stage) (sortedSlice []T) {
 
 	set := GetGongstructInstancesSetFromPointerType[T](stage)
 	sortedSlice = SortGongstructSetByName(*set)
@@ -2719,7 +2719,7 @@ type GongstructMapString interface {
 
 // GongGetSet returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gong struct identifier
-func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
+func GongGetSet[Type GongstructSet](stage *Stage) *Type {
 	var ret Type
 
 	switch any(ret).(type) {
@@ -2783,7 +2783,7 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 
 // GongGetMap returns the map of staged GongstructType instances
 // it is usefull because it allows refactoring of gong struct identifier
-func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
+func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
 	var ret Type
 
 	switch any(ret).(type) {
@@ -2847,7 +2847,7 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 
 // GetGongstructInstancesSet returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]any {
+func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
 	var ret Type
 
 	switch any(ret).(type) {
@@ -2911,7 +2911,7 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 
 // GetGongstructInstancesSetFromPointerType returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *StageStruct) *map[Type]any {
+func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *Stage) *map[Type]any {
 	var ret Type
 
 	switch any(ret).(type) {
@@ -2975,7 +2975,7 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 
 // GetGongstructInstancesMap returns the map of staged GongstructType instances
 // it is usefull because it allows refactoring of gong struct identifier
-func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]*Type {
+func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type {
 	var ret Type
 
 	switch any(ret).(type) {
@@ -3358,7 +3358,7 @@ func GetAssociationName[Type Gongstruct]() *Type {
 // The function provides a map with keys as instances of End and values to arrays of *Start
 // the map is construed by iterating over all Start instances and populationg keys with End instances
 // and values with slice of Start instances
-func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageStruct) map[*End][]*Start {
+func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
 
 	var ret Start
 
@@ -4983,7 +4983,7 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 // The function provides a map with keys as instances of End and values to *Start instances
 // the map is construed by iterating over all Start instances and populating keys with End instances
 // and values with the Start instances
-func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *StageStruct) map[*End]*Start {
+func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End]*Start {
 
 	var ret Start
 

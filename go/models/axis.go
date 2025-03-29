@@ -21,7 +21,7 @@ type Axis struct {
 	Presentation
 }
 
-func (axis *Axis) Draw(gongsvgStage *gongsvg_models.StageStruct,
+func (axis *Axis) Draw(gongsvgStage *gongsvg_models.Stage,
 	layer *gongsvg_models.Layer,
 	parameter *Parameter,
 ) {

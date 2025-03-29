@@ -6,7 +6,7 @@ import (
 
 type Target interface {
 	OnAfterUpdateNode()
-	GetGongtreeStage() *tree.StageStruct
+	GetGongtreeStage() *tree.Stage
 }
 
 // Generic node creation function
@@ -62,7 +62,7 @@ type NodeProxy struct {
 }
 
 // Updated handles updating values when the node changes
-func (proxy *NodeProxy) OnAfterUpdate(treeStage *tree.StageStruct, stageNode, frontNode *tree.Node) {
+func (proxy *NodeProxy) OnAfterUpdate(treeStage *tree.Stage, stageNode, frontNode *tree.Node) {
 
 	if proxy.isExpandedPointer != nil {
 		*proxy.isExpandedPointer = frontNode.IsExpanded

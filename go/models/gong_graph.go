@@ -1,7 +1,7 @@
 // generated code - do not edit
 package models
 
-func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
+func IsStaged[Type Gongstruct](stage *Stage, instance *Type) (ok bool) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage
@@ -90,182 +90,182 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 }
 
 // insertion point for stage per struct
-func (stage *StageStruct) IsStagedAxis(axis *Axis) (ok bool) {
+func (stage *Stage) IsStagedAxis(axis *Axis) (ok bool) {
 
 	_, ok = stage.Axiss[axis]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedAxisGrid(axisgrid *AxisGrid) (ok bool) {
+func (stage *Stage) IsStagedAxisGrid(axisgrid *AxisGrid) (ok bool) {
 
 	_, ok = stage.AxisGrids[axisgrid]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedBezier(bezier *Bezier) (ok bool) {
+func (stage *Stage) IsStagedBezier(bezier *Bezier) (ok bool) {
 
 	_, ok = stage.Beziers[bezier]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedBezierGrid(beziergrid *BezierGrid) (ok bool) {
+func (stage *Stage) IsStagedBezierGrid(beziergrid *BezierGrid) (ok bool) {
 
 	_, ok = stage.BezierGrids[beziergrid]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedBezierGridStack(beziergridstack *BezierGridStack) (ok bool) {
+func (stage *Stage) IsStagedBezierGridStack(beziergridstack *BezierGridStack) (ok bool) {
 
 	_, ok = stage.BezierGridStacks[beziergridstack]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedCircle(circle *Circle) (ok bool) {
+func (stage *Stage) IsStagedCircle(circle *Circle) (ok bool) {
 
 	_, ok = stage.Circles[circle]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedCircleGrid(circlegrid *CircleGrid) (ok bool) {
+func (stage *Stage) IsStagedCircleGrid(circlegrid *CircleGrid) (ok bool) {
 
 	_, ok = stage.CircleGrids[circlegrid]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedExportToMusicxml(exporttomusicxml *ExportToMusicxml) (ok bool) {
+func (stage *Stage) IsStagedExportToMusicxml(exporttomusicxml *ExportToMusicxml) (ok bool) {
 
 	_, ok = stage.ExportToMusicxmls[exporttomusicxml]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedFrontCurve(frontcurve *FrontCurve) (ok bool) {
+func (stage *Stage) IsStagedFrontCurve(frontcurve *FrontCurve) (ok bool) {
 
 	_, ok = stage.FrontCurves[frontcurve]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedFrontCurveStack(frontcurvestack *FrontCurveStack) (ok bool) {
+func (stage *Stage) IsStagedFrontCurveStack(frontcurvestack *FrontCurveStack) (ok bool) {
 
 	_, ok = stage.FrontCurveStacks[frontcurvestack]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedHorizontalAxis(horizontalaxis *HorizontalAxis) (ok bool) {
+func (stage *Stage) IsStagedHorizontalAxis(horizontalaxis *HorizontalAxis) (ok bool) {
 
 	_, ok = stage.HorizontalAxiss[horizontalaxis]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedKey(key *Key) (ok bool) {
+func (stage *Stage) IsStagedKey(key *Key) (ok bool) {
 
 	_, ok = stage.Keys[key]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedParameter(parameter *Parameter) (ok bool) {
+func (stage *Stage) IsStagedParameter(parameter *Parameter) (ok bool) {
 
 	_, ok = stage.Parameters[parameter]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedRhombus(rhombus *Rhombus) (ok bool) {
+func (stage *Stage) IsStagedRhombus(rhombus *Rhombus) (ok bool) {
 
 	_, ok = stage.Rhombuss[rhombus]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedRhombusGrid(rhombusgrid *RhombusGrid) (ok bool) {
+func (stage *Stage) IsStagedRhombusGrid(rhombusgrid *RhombusGrid) (ok bool) {
 
 	_, ok = stage.RhombusGrids[rhombusgrid]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedShapeCategory(shapecategory *ShapeCategory) (ok bool) {
+func (stage *Stage) IsStagedShapeCategory(shapecategory *ShapeCategory) (ok bool) {
 
 	_, ok = stage.ShapeCategorys[shapecategory]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedSpiralBezier(spiralbezier *SpiralBezier) (ok bool) {
+func (stage *Stage) IsStagedSpiralBezier(spiralbezier *SpiralBezier) (ok bool) {
 
 	_, ok = stage.SpiralBeziers[spiralbezier]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedSpiralBezierGrid(spiralbeziergrid *SpiralBezierGrid) (ok bool) {
+func (stage *Stage) IsStagedSpiralBezierGrid(spiralbeziergrid *SpiralBezierGrid) (ok bool) {
 
 	_, ok = stage.SpiralBezierGrids[spiralbeziergrid]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedSpiralCircle(spiralcircle *SpiralCircle) (ok bool) {
+func (stage *Stage) IsStagedSpiralCircle(spiralcircle *SpiralCircle) (ok bool) {
 
 	_, ok = stage.SpiralCircles[spiralcircle]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedSpiralCircleGrid(spiralcirclegrid *SpiralCircleGrid) (ok bool) {
+func (stage *Stage) IsStagedSpiralCircleGrid(spiralcirclegrid *SpiralCircleGrid) (ok bool) {
 
 	_, ok = stage.SpiralCircleGrids[spiralcirclegrid]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedSpiralLine(spiralline *SpiralLine) (ok bool) {
+func (stage *Stage) IsStagedSpiralLine(spiralline *SpiralLine) (ok bool) {
 
 	_, ok = stage.SpiralLines[spiralline]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedSpiralLineGrid(spirallinegrid *SpiralLineGrid) (ok bool) {
+func (stage *Stage) IsStagedSpiralLineGrid(spirallinegrid *SpiralLineGrid) (ok bool) {
 
 	_, ok = stage.SpiralLineGrids[spirallinegrid]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedSpiralOrigin(spiralorigin *SpiralOrigin) (ok bool) {
+func (stage *Stage) IsStagedSpiralOrigin(spiralorigin *SpiralOrigin) (ok bool) {
 
 	_, ok = stage.SpiralOrigins[spiralorigin]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedSpiralRhombus(spiralrhombus *SpiralRhombus) (ok bool) {
+func (stage *Stage) IsStagedSpiralRhombus(spiralrhombus *SpiralRhombus) (ok bool) {
 
 	_, ok = stage.SpiralRhombuss[spiralrhombus]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedSpiralRhombusGrid(spiralrhombusgrid *SpiralRhombusGrid) (ok bool) {
+func (stage *Stage) IsStagedSpiralRhombusGrid(spiralrhombusgrid *SpiralRhombusGrid) (ok bool) {
 
 	_, ok = stage.SpiralRhombusGrids[spiralrhombusgrid]
 
 	return
 }
 
-func (stage *StageStruct) IsStagedVerticalAxis(verticalaxis *VerticalAxis) (ok bool) {
+func (stage *Stage) IsStagedVerticalAxis(verticalaxis *VerticalAxis) (ok bool) {
 
 	_, ok = stage.VerticalAxiss[verticalaxis]
 
@@ -276,7 +276,7 @@ func (stage *StageStruct) IsStagedVerticalAxis(verticalaxis *VerticalAxis) (ok b
 // referenced by pointers or slices of pointers of the instance
 //
 // the algorithm stops along the course of graph if a vertex is already staged
-func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
+func StageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage branch
@@ -364,7 +364,7 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for stage branch per struct
-func (stage *StageStruct) StageBranchAxis(axis *Axis) {
+func (stage *Stage) StageBranchAxis(axis *Axis) {
 
 	// check if instance is already staged
 	if IsStaged(stage, axis) {
@@ -382,7 +382,7 @@ func (stage *StageStruct) StageBranchAxis(axis *Axis) {
 
 }
 
-func (stage *StageStruct) StageBranchAxisGrid(axisgrid *AxisGrid) {
+func (stage *Stage) StageBranchAxisGrid(axisgrid *AxisGrid) {
 
 	// check if instance is already staged
 	if IsStaged(stage, axisgrid) {
@@ -406,7 +406,7 @@ func (stage *StageStruct) StageBranchAxisGrid(axisgrid *AxisGrid) {
 
 }
 
-func (stage *StageStruct) StageBranchBezier(bezier *Bezier) {
+func (stage *Stage) StageBranchBezier(bezier *Bezier) {
 
 	// check if instance is already staged
 	if IsStaged(stage, bezier) {
@@ -424,7 +424,7 @@ func (stage *StageStruct) StageBranchBezier(bezier *Bezier) {
 
 }
 
-func (stage *StageStruct) StageBranchBezierGrid(beziergrid *BezierGrid) {
+func (stage *Stage) StageBranchBezierGrid(beziergrid *BezierGrid) {
 
 	// check if instance is already staged
 	if IsStaged(stage, beziergrid) {
@@ -448,7 +448,7 @@ func (stage *StageStruct) StageBranchBezierGrid(beziergrid *BezierGrid) {
 
 }
 
-func (stage *StageStruct) StageBranchBezierGridStack(beziergridstack *BezierGridStack) {
+func (stage *Stage) StageBranchBezierGridStack(beziergridstack *BezierGridStack) {
 
 	// check if instance is already staged
 	if IsStaged(stage, beziergridstack) {
@@ -469,7 +469,7 @@ func (stage *StageStruct) StageBranchBezierGridStack(beziergridstack *BezierGrid
 
 }
 
-func (stage *StageStruct) StageBranchCircle(circle *Circle) {
+func (stage *Stage) StageBranchCircle(circle *Circle) {
 
 	// check if instance is already staged
 	if IsStaged(stage, circle) {
@@ -487,7 +487,7 @@ func (stage *StageStruct) StageBranchCircle(circle *Circle) {
 
 }
 
-func (stage *StageStruct) StageBranchCircleGrid(circlegrid *CircleGrid) {
+func (stage *Stage) StageBranchCircleGrid(circlegrid *CircleGrid) {
 
 	// check if instance is already staged
 	if IsStaged(stage, circlegrid) {
@@ -511,7 +511,7 @@ func (stage *StageStruct) StageBranchCircleGrid(circlegrid *CircleGrid) {
 
 }
 
-func (stage *StageStruct) StageBranchExportToMusicxml(exporttomusicxml *ExportToMusicxml) {
+func (stage *Stage) StageBranchExportToMusicxml(exporttomusicxml *ExportToMusicxml) {
 
 	// check if instance is already staged
 	if IsStaged(stage, exporttomusicxml) {
@@ -529,7 +529,7 @@ func (stage *StageStruct) StageBranchExportToMusicxml(exporttomusicxml *ExportTo
 
 }
 
-func (stage *StageStruct) StageBranchFrontCurve(frontcurve *FrontCurve) {
+func (stage *Stage) StageBranchFrontCurve(frontcurve *FrontCurve) {
 
 	// check if instance is already staged
 	if IsStaged(stage, frontcurve) {
@@ -544,7 +544,7 @@ func (stage *StageStruct) StageBranchFrontCurve(frontcurve *FrontCurve) {
 
 }
 
-func (stage *StageStruct) StageBranchFrontCurveStack(frontcurvestack *FrontCurveStack) {
+func (stage *Stage) StageBranchFrontCurveStack(frontcurvestack *FrontCurveStack) {
 
 	// check if instance is already staged
 	if IsStaged(stage, frontcurvestack) {
@@ -568,7 +568,7 @@ func (stage *StageStruct) StageBranchFrontCurveStack(frontcurvestack *FrontCurve
 
 }
 
-func (stage *StageStruct) StageBranchHorizontalAxis(horizontalaxis *HorizontalAxis) {
+func (stage *Stage) StageBranchHorizontalAxis(horizontalaxis *HorizontalAxis) {
 
 	// check if instance is already staged
 	if IsStaged(stage, horizontalaxis) {
@@ -586,7 +586,7 @@ func (stage *StageStruct) StageBranchHorizontalAxis(horizontalaxis *HorizontalAx
 
 }
 
-func (stage *StageStruct) StageBranchKey(key *Key) {
+func (stage *Stage) StageBranchKey(key *Key) {
 
 	// check if instance is already staged
 	if IsStaged(stage, key) {
@@ -604,7 +604,7 @@ func (stage *StageStruct) StageBranchKey(key *Key) {
 
 }
 
-func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
+func (stage *Stage) StageBranchParameter(parameter *Parameter) {
 
 	// check if instance is already staged
 	if IsStaged(stage, parameter) {
@@ -796,7 +796,7 @@ func (stage *StageStruct) StageBranchParameter(parameter *Parameter) {
 
 }
 
-func (stage *StageStruct) StageBranchRhombus(rhombus *Rhombus) {
+func (stage *Stage) StageBranchRhombus(rhombus *Rhombus) {
 
 	// check if instance is already staged
 	if IsStaged(stage, rhombus) {
@@ -814,7 +814,7 @@ func (stage *StageStruct) StageBranchRhombus(rhombus *Rhombus) {
 
 }
 
-func (stage *StageStruct) StageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
+func (stage *Stage) StageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
 
 	// check if instance is already staged
 	if IsStaged(stage, rhombusgrid) {
@@ -838,7 +838,7 @@ func (stage *StageStruct) StageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
 
 }
 
-func (stage *StageStruct) StageBranchShapeCategory(shapecategory *ShapeCategory) {
+func (stage *Stage) StageBranchShapeCategory(shapecategory *ShapeCategory) {
 
 	// check if instance is already staged
 	if IsStaged(stage, shapecategory) {
@@ -853,7 +853,7 @@ func (stage *StageStruct) StageBranchShapeCategory(shapecategory *ShapeCategory)
 
 }
 
-func (stage *StageStruct) StageBranchSpiralBezier(spiralbezier *SpiralBezier) {
+func (stage *Stage) StageBranchSpiralBezier(spiralbezier *SpiralBezier) {
 
 	// check if instance is already staged
 	if IsStaged(stage, spiralbezier) {
@@ -871,7 +871,7 @@ func (stage *StageStruct) StageBranchSpiralBezier(spiralbezier *SpiralBezier) {
 
 }
 
-func (stage *StageStruct) StageBranchSpiralBezierGrid(spiralbeziergrid *SpiralBezierGrid) {
+func (stage *Stage) StageBranchSpiralBezierGrid(spiralbeziergrid *SpiralBezierGrid) {
 
 	// check if instance is already staged
 	if IsStaged(stage, spiralbeziergrid) {
@@ -892,7 +892,7 @@ func (stage *StageStruct) StageBranchSpiralBezierGrid(spiralbeziergrid *SpiralBe
 
 }
 
-func (stage *StageStruct) StageBranchSpiralCircle(spiralcircle *SpiralCircle) {
+func (stage *Stage) StageBranchSpiralCircle(spiralcircle *SpiralCircle) {
 
 	// check if instance is already staged
 	if IsStaged(stage, spiralcircle) {
@@ -910,7 +910,7 @@ func (stage *StageStruct) StageBranchSpiralCircle(spiralcircle *SpiralCircle) {
 
 }
 
-func (stage *StageStruct) StageBranchSpiralCircleGrid(spiralcirclegrid *SpiralCircleGrid) {
+func (stage *Stage) StageBranchSpiralCircleGrid(spiralcirclegrid *SpiralCircleGrid) {
 
 	// check if instance is already staged
 	if IsStaged(stage, spiralcirclegrid) {
@@ -934,7 +934,7 @@ func (stage *StageStruct) StageBranchSpiralCircleGrid(spiralcirclegrid *SpiralCi
 
 }
 
-func (stage *StageStruct) StageBranchSpiralLine(spiralline *SpiralLine) {
+func (stage *Stage) StageBranchSpiralLine(spiralline *SpiralLine) {
 
 	// check if instance is already staged
 	if IsStaged(stage, spiralline) {
@@ -952,7 +952,7 @@ func (stage *StageStruct) StageBranchSpiralLine(spiralline *SpiralLine) {
 
 }
 
-func (stage *StageStruct) StageBranchSpiralLineGrid(spirallinegrid *SpiralLineGrid) {
+func (stage *Stage) StageBranchSpiralLineGrid(spirallinegrid *SpiralLineGrid) {
 
 	// check if instance is already staged
 	if IsStaged(stage, spirallinegrid) {
@@ -973,7 +973,7 @@ func (stage *StageStruct) StageBranchSpiralLineGrid(spirallinegrid *SpiralLineGr
 
 }
 
-func (stage *StageStruct) StageBranchSpiralOrigin(spiralorigin *SpiralOrigin) {
+func (stage *Stage) StageBranchSpiralOrigin(spiralorigin *SpiralOrigin) {
 
 	// check if instance is already staged
 	if IsStaged(stage, spiralorigin) {
@@ -991,7 +991,7 @@ func (stage *StageStruct) StageBranchSpiralOrigin(spiralorigin *SpiralOrigin) {
 
 }
 
-func (stage *StageStruct) StageBranchSpiralRhombus(spiralrhombus *SpiralRhombus) {
+func (stage *Stage) StageBranchSpiralRhombus(spiralrhombus *SpiralRhombus) {
 
 	// check if instance is already staged
 	if IsStaged(stage, spiralrhombus) {
@@ -1009,7 +1009,7 @@ func (stage *StageStruct) StageBranchSpiralRhombus(spiralrhombus *SpiralRhombus)
 
 }
 
-func (stage *StageStruct) StageBranchSpiralRhombusGrid(spiralrhombusgrid *SpiralRhombusGrid) {
+func (stage *Stage) StageBranchSpiralRhombusGrid(spiralrhombusgrid *SpiralRhombusGrid) {
 
 	// check if instance is already staged
 	if IsStaged(stage, spiralrhombusgrid) {
@@ -1030,7 +1030,7 @@ func (stage *StageStruct) StageBranchSpiralRhombusGrid(spiralrhombusgrid *Spiral
 
 }
 
-func (stage *StageStruct) StageBranchVerticalAxis(verticalaxis *VerticalAxis) {
+func (stage *Stage) StageBranchVerticalAxis(verticalaxis *VerticalAxis) {
 
 	// check if instance is already staged
 	if IsStaged(stage, verticalaxis) {
@@ -1962,7 +1962,7 @@ func CopyBranchVerticalAxis(mapOrigCopy map[any]any, verticalaxisFrom *VerticalA
 // referenced by pointers or slices of pointers of the insance
 //
 // the algorithm stops along the course of graph if a vertex is already staged
-func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
+func UnstageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for unstage branch
@@ -2050,7 +2050,7 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for unstage branch per struct
-func (stage *StageStruct) UnstageBranchAxis(axis *Axis) {
+func (stage *Stage) UnstageBranchAxis(axis *Axis) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, axis) {
@@ -2068,7 +2068,7 @@ func (stage *StageStruct) UnstageBranchAxis(axis *Axis) {
 
 }
 
-func (stage *StageStruct) UnstageBranchAxisGrid(axisgrid *AxisGrid) {
+func (stage *Stage) UnstageBranchAxisGrid(axisgrid *AxisGrid) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, axisgrid) {
@@ -2092,7 +2092,7 @@ func (stage *StageStruct) UnstageBranchAxisGrid(axisgrid *AxisGrid) {
 
 }
 
-func (stage *StageStruct) UnstageBranchBezier(bezier *Bezier) {
+func (stage *Stage) UnstageBranchBezier(bezier *Bezier) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, bezier) {
@@ -2110,7 +2110,7 @@ func (stage *StageStruct) UnstageBranchBezier(bezier *Bezier) {
 
 }
 
-func (stage *StageStruct) UnstageBranchBezierGrid(beziergrid *BezierGrid) {
+func (stage *Stage) UnstageBranchBezierGrid(beziergrid *BezierGrid) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, beziergrid) {
@@ -2134,7 +2134,7 @@ func (stage *StageStruct) UnstageBranchBezierGrid(beziergrid *BezierGrid) {
 
 }
 
-func (stage *StageStruct) UnstageBranchBezierGridStack(beziergridstack *BezierGridStack) {
+func (stage *Stage) UnstageBranchBezierGridStack(beziergridstack *BezierGridStack) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, beziergridstack) {
@@ -2155,7 +2155,7 @@ func (stage *StageStruct) UnstageBranchBezierGridStack(beziergridstack *BezierGr
 
 }
 
-func (stage *StageStruct) UnstageBranchCircle(circle *Circle) {
+func (stage *Stage) UnstageBranchCircle(circle *Circle) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, circle) {
@@ -2173,7 +2173,7 @@ func (stage *StageStruct) UnstageBranchCircle(circle *Circle) {
 
 }
 
-func (stage *StageStruct) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
+func (stage *Stage) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, circlegrid) {
@@ -2197,7 +2197,7 @@ func (stage *StageStruct) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
 
 }
 
-func (stage *StageStruct) UnstageBranchExportToMusicxml(exporttomusicxml *ExportToMusicxml) {
+func (stage *Stage) UnstageBranchExportToMusicxml(exporttomusicxml *ExportToMusicxml) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, exporttomusicxml) {
@@ -2215,7 +2215,7 @@ func (stage *StageStruct) UnstageBranchExportToMusicxml(exporttomusicxml *Export
 
 }
 
-func (stage *StageStruct) UnstageBranchFrontCurve(frontcurve *FrontCurve) {
+func (stage *Stage) UnstageBranchFrontCurve(frontcurve *FrontCurve) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, frontcurve) {
@@ -2230,7 +2230,7 @@ func (stage *StageStruct) UnstageBranchFrontCurve(frontcurve *FrontCurve) {
 
 }
 
-func (stage *StageStruct) UnstageBranchFrontCurveStack(frontcurvestack *FrontCurveStack) {
+func (stage *Stage) UnstageBranchFrontCurveStack(frontcurvestack *FrontCurveStack) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, frontcurvestack) {
@@ -2254,7 +2254,7 @@ func (stage *StageStruct) UnstageBranchFrontCurveStack(frontcurvestack *FrontCur
 
 }
 
-func (stage *StageStruct) UnstageBranchHorizontalAxis(horizontalaxis *HorizontalAxis) {
+func (stage *Stage) UnstageBranchHorizontalAxis(horizontalaxis *HorizontalAxis) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, horizontalaxis) {
@@ -2272,7 +2272,7 @@ func (stage *StageStruct) UnstageBranchHorizontalAxis(horizontalaxis *Horizontal
 
 }
 
-func (stage *StageStruct) UnstageBranchKey(key *Key) {
+func (stage *Stage) UnstageBranchKey(key *Key) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, key) {
@@ -2290,7 +2290,7 @@ func (stage *StageStruct) UnstageBranchKey(key *Key) {
 
 }
 
-func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
+func (stage *Stage) UnstageBranchParameter(parameter *Parameter) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, parameter) {
@@ -2482,7 +2482,7 @@ func (stage *StageStruct) UnstageBranchParameter(parameter *Parameter) {
 
 }
 
-func (stage *StageStruct) UnstageBranchRhombus(rhombus *Rhombus) {
+func (stage *Stage) UnstageBranchRhombus(rhombus *Rhombus) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, rhombus) {
@@ -2500,7 +2500,7 @@ func (stage *StageStruct) UnstageBranchRhombus(rhombus *Rhombus) {
 
 }
 
-func (stage *StageStruct) UnstageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
+func (stage *Stage) UnstageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, rhombusgrid) {
@@ -2524,7 +2524,7 @@ func (stage *StageStruct) UnstageBranchRhombusGrid(rhombusgrid *RhombusGrid) {
 
 }
 
-func (stage *StageStruct) UnstageBranchShapeCategory(shapecategory *ShapeCategory) {
+func (stage *Stage) UnstageBranchShapeCategory(shapecategory *ShapeCategory) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, shapecategory) {
@@ -2539,7 +2539,7 @@ func (stage *StageStruct) UnstageBranchShapeCategory(shapecategory *ShapeCategor
 
 }
 
-func (stage *StageStruct) UnstageBranchSpiralBezier(spiralbezier *SpiralBezier) {
+func (stage *Stage) UnstageBranchSpiralBezier(spiralbezier *SpiralBezier) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, spiralbezier) {
@@ -2557,7 +2557,7 @@ func (stage *StageStruct) UnstageBranchSpiralBezier(spiralbezier *SpiralBezier) 
 
 }
 
-func (stage *StageStruct) UnstageBranchSpiralBezierGrid(spiralbeziergrid *SpiralBezierGrid) {
+func (stage *Stage) UnstageBranchSpiralBezierGrid(spiralbeziergrid *SpiralBezierGrid) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, spiralbeziergrid) {
@@ -2578,7 +2578,7 @@ func (stage *StageStruct) UnstageBranchSpiralBezierGrid(spiralbeziergrid *Spiral
 
 }
 
-func (stage *StageStruct) UnstageBranchSpiralCircle(spiralcircle *SpiralCircle) {
+func (stage *Stage) UnstageBranchSpiralCircle(spiralcircle *SpiralCircle) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, spiralcircle) {
@@ -2596,7 +2596,7 @@ func (stage *StageStruct) UnstageBranchSpiralCircle(spiralcircle *SpiralCircle) 
 
 }
 
-func (stage *StageStruct) UnstageBranchSpiralCircleGrid(spiralcirclegrid *SpiralCircleGrid) {
+func (stage *Stage) UnstageBranchSpiralCircleGrid(spiralcirclegrid *SpiralCircleGrid) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, spiralcirclegrid) {
@@ -2620,7 +2620,7 @@ func (stage *StageStruct) UnstageBranchSpiralCircleGrid(spiralcirclegrid *Spiral
 
 }
 
-func (stage *StageStruct) UnstageBranchSpiralLine(spiralline *SpiralLine) {
+func (stage *Stage) UnstageBranchSpiralLine(spiralline *SpiralLine) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, spiralline) {
@@ -2638,7 +2638,7 @@ func (stage *StageStruct) UnstageBranchSpiralLine(spiralline *SpiralLine) {
 
 }
 
-func (stage *StageStruct) UnstageBranchSpiralLineGrid(spirallinegrid *SpiralLineGrid) {
+func (stage *Stage) UnstageBranchSpiralLineGrid(spirallinegrid *SpiralLineGrid) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, spirallinegrid) {
@@ -2659,7 +2659,7 @@ func (stage *StageStruct) UnstageBranchSpiralLineGrid(spirallinegrid *SpiralLine
 
 }
 
-func (stage *StageStruct) UnstageBranchSpiralOrigin(spiralorigin *SpiralOrigin) {
+func (stage *Stage) UnstageBranchSpiralOrigin(spiralorigin *SpiralOrigin) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, spiralorigin) {
@@ -2677,7 +2677,7 @@ func (stage *StageStruct) UnstageBranchSpiralOrigin(spiralorigin *SpiralOrigin) 
 
 }
 
-func (stage *StageStruct) UnstageBranchSpiralRhombus(spiralrhombus *SpiralRhombus) {
+func (stage *Stage) UnstageBranchSpiralRhombus(spiralrhombus *SpiralRhombus) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, spiralrhombus) {
@@ -2695,7 +2695,7 @@ func (stage *StageStruct) UnstageBranchSpiralRhombus(spiralrhombus *SpiralRhombu
 
 }
 
-func (stage *StageStruct) UnstageBranchSpiralRhombusGrid(spiralrhombusgrid *SpiralRhombusGrid) {
+func (stage *Stage) UnstageBranchSpiralRhombusGrid(spiralrhombusgrid *SpiralRhombusGrid) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, spiralrhombusgrid) {
@@ -2716,7 +2716,7 @@ func (stage *StageStruct) UnstageBranchSpiralRhombusGrid(spiralrhombusgrid *Spir
 
 }
 
-func (stage *StageStruct) UnstageBranchVerticalAxis(verticalaxis *VerticalAxis) {
+func (stage *Stage) UnstageBranchVerticalAxis(verticalaxis *VerticalAxis) {
 
 	// check if instance is already staged
 	if !IsStaged(stage, verticalaxis) {

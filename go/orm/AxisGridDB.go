@@ -125,10 +125,10 @@ type BackRepoAxisGridStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoAxisGrid *BackRepoAxisGridStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoAxisGrid *BackRepoAxisGridStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoAxisGrid.stage
 	return
 }
@@ -146,7 +146,7 @@ func (backRepoAxisGrid *BackRepoAxisGridStruct) GetAxisGridDBFromAxisGridPtr(axi
 
 // BackRepoAxisGrid.CommitPhaseOne commits all staged instances of AxisGrid to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoAxisGrid *BackRepoAxisGridStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var axisgrids []*models.AxisGrid
 	for axisgrid := range stage.AxisGrids {

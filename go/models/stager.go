@@ -31,20 +31,20 @@ type Stager struct {
 
 	cursor *cursor.Cursor
 
-	phyllotaxymusicStage *StageStruct
-	svgStage             *svg.StageStruct
-	toneStage            *tone.StageStruct
-	treeStage            *tree.StageStruct
-	cursorStage          *cursor.StageStruct
-	loadStage            *load.StageStruct
-	sliderStage          *slider.StageStruct
-	buttonStage          *button.StageStruct
-	splitStage           *split.StageStruct
+	phyllotaxymusicStage *Stage
+	svgStage             *svg.Stage
+	toneStage            *tone.Stage
+	treeStage            *tree.Stage
+	cursorStage          *cursor.Stage
+	loadStage            *load.Stage
+	sliderStage          *slider.Stage
+	buttonStage          *button.Stage
+	splitStage           *split.Stage
 
 	tree *tree.Tree
 }
 
-func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
+func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 
 	stager = new(Stager)
 
@@ -264,15 +264,15 @@ func NewStager(r *gin.Engine, stage *StageStruct) (stager *Stager) {
 	return
 }
 
-func (stager *Stager) GetButtonsStage() (buttonStage *button.StageStruct) {
+func (stager *Stager) GetButtonsStage() (buttonStage *button.Stage) {
 	return stager.buttonStage
 }
 
-func (stager *Stager) GetSliderStage() (sliderStage *slider.StageStruct) {
+func (stager *Stager) GetSliderStage() (sliderStage *slider.Stage) {
 	return stager.sliderStage
 }
 
-func (stager *Stager) GetGongtreeStage() (treeStage *tree.StageStruct) {
+func (stager *Stager) GetGongtreeStage() (treeStage *tree.Stage) {
 	return stager.treeStage
 }
 

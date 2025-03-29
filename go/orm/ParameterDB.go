@@ -580,10 +580,10 @@ type BackRepoParameterStruct struct {
 
 	db db.DBInterface
 
-	stage *models.StageStruct
+	stage *models.Stage
 }
 
-func (backRepoParameter *BackRepoParameterStruct) GetStage() (stage *models.StageStruct) {
+func (backRepoParameter *BackRepoParameterStruct) GetStage() (stage *models.Stage) {
 	stage = backRepoParameter.stage
 	return
 }
@@ -601,7 +601,7 @@ func (backRepoParameter *BackRepoParameterStruct) GetParameterDBFromParameterPtr
 
 // BackRepoParameter.CommitPhaseOne commits all staged instances of Parameter to the BackRepo
 // Phase One is the creation of instance in the database if it is not yet done to get the unique ID for each staged instance
-func (backRepoParameter *BackRepoParameterStruct) CommitPhaseOne(stage *models.StageStruct) (Error error) {
+func (backRepoParameter *BackRepoParameterStruct) CommitPhaseOne(stage *models.Stage) (Error error) {
 
 	var parameters []*models.Parameter
 	for parameter := range stage.Parameters {
