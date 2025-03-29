@@ -63,19 +63,20 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 	stager.parameter = parameter
 	parameter.stager = stager
 
-	// the root split name is "" by convention
-	stager.splitStage = split_stack.NewStack(r, "", "", "", "", false, true).Stage
-
 	name := stage.GetName()
 
 	stager.phyllotaxymusicStage = stage
-	stager.buttonStage = button_stack.NewStack(r, name, "", "", "", false, true).Stage
-	stager.cursorStage = cursor_stack.NewStack(r, name, "", "", "", false, true).Stage
-	stager.loadStage = load_stack.NewStack(r, name, "", "", "", false, true).Stage
+
+	// the root split name is "" by convention
+	stager.splitStage = split_stack.NewStack(r, "", "", "", "", true, true).Stage
+
+	stager.buttonStage = button_stack.NewStack(r, name, "", "", "", true, true).Stage
+	stager.cursorStage = cursor_stack.NewStack(r, name, "", "", "", true, true).Stage
+	stager.loadStage = load_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.svgStage = gongsvg_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.toneStage = gongtone_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.treeStage = gongtree_stack.NewStack(r, name, "", "", "", true, true).Stage
-	stager.sliderStage = slider_stack.NewStack(r, name, "", "", "", false, true).Stage
+	stager.sliderStage = slider_stack.NewStack(r, name, "", "", "", true, true).Stage
 
 	// connect parameter to cursor for start playing notification
 	stager.cursor = new(cursor.Cursor).Stage(stager.cursorStage)
