@@ -774,7 +774,7 @@ func _(stage *models.Stage) {
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartX = 218.181434
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndX = 143.100000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.StartY = -26.497081
-	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndY = -0.000000
+	__SpiralLine__000000_Spiral_Contruction_Inner_Line.EndY = 0.000000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Color = ``
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.FillOpacity = 0.000000
 	__SpiralLine__000000_Spiral_Contruction_Inner_Line.Stroke = `blue`
