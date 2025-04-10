@@ -146,7 +146,7 @@
 		{
 			"label": "00 - update gong dep",
 			"type": "shell",
-			"command": "./updating.bash; gongc go/models",
+			"command": "go get github.com/fullstack-lang/gong@main",
 			"group": "build"
 		},
 		{
