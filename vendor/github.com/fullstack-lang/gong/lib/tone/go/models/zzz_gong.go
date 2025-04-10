@@ -3,11 +3,16 @@ package models
 
 import (
 	"cmp"
+	"embed"
 	"errors"
 	"fmt"
+	"log"
 	"math"
 	"slices"
+	"sort"
 	"time"
+
+	tone_go "github.com/fullstack-lang/gong/lib/tone/go"
 )
 
 func __Gong__Abs(x int) int {
@@ -133,10 +138,82 @@ type Stage struct {
 	PlayerMap_Staged_Order map[*Player]uint
 
 	// end of insertion point
+
+	NamedStructs []*NamedStruct
+}
+
+// GetNamedStructs implements models.ProbebStage.
+func (stage *Stage) GetNamedStructsNames() (res []string) {
+
+	for _, namedStruct := range stage.NamedStructs {
+		res = append(res, namedStruct.name)
+	}
+
+	return
+}
+
+func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
+
+	orderedSet := []T{}
+	for instance := range set {
+		orderedSet = append(orderedSet, instance)
+	}
+	sort.Slice(orderedSet[:], func(i, j int) bool {
+		instancei := orderedSet[i]
+		instancej := orderedSet[j]
+		i_order, oki := order[instancei]
+		j_order, okj := order[instancej]
+		if !oki || !okj {
+			log.Fatalf("GetNamedStructInstances: pointer not found")
+		}
+		return i_order < j_order
+	})
+
+	for _, instance := range orderedSet {
+		res = append(res, instance.GetName())
+	}
+
+	return
+}
+
+func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
+
+	switch namedStructName {
+	// insertion point for case 
+		case "Freqency":
+			res = GetNamedStructInstances(stage.Freqencys, stage.FreqencyMap_Staged_Order)
+		case "Note":
+			res = GetNamedStructInstances(stage.Notes, stage.NoteMap_Staged_Order)
+		case "Player":
+			res = GetNamedStructInstances(stage.Players, stage.PlayerMap_Staged_Order)
+	}
+
+	return
+}
+
+
+type NamedStruct struct {
+	name string
+}
+
+func (namedStruct *NamedStruct) GetName() string {
+	return namedStruct.name
 }
 
 func (stage *Stage) GetType() string {
 	return "github.com/fullstack-lang/gong/lib/tone/go/models"
+}
+
+func (stage *Stage) GetMap_GongStructName_InstancesNb() map[string]int {
+	return stage.Map_GongStructName_InstancesNb
+}
+
+func (stage *Stage) GetModelsEmbededDir() embed.FS {
+	return tone_go.GoModelsDir
+}
+
+func (stage *Stage) GetDigramsEmbededDir() embed.FS {
+	return tone_go.GoDiagramsDir
 }
 
 type GONG__Identifier struct {
@@ -218,6 +295,12 @@ func NewStage(name string) (stage *Stage) {
 		PlayerMap_Staged_Order: make(map[*Player]uint),
 
 		// end of insertion point
+
+		NamedStructs: []*NamedStruct{ // insertion point for order map initialisations
+			&NamedStruct{name: "Freqency"},
+			&NamedStruct{name: "Note"},
+			&NamedStruct{name: "Player"},
+		}, // end of insertion point
 	}
 
 	return

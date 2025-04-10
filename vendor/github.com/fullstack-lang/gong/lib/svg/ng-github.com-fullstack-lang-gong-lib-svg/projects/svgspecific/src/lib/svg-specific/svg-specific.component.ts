@@ -4,6 +4,11 @@ import * as svg from '../../../../svg/src/public-api'
 
 import { CommonModule } from '@angular/common';
 
+import { FormsModule } from '@angular/forms'; // <-- Import FormsModule
+import { MatSliderModule } from '@angular/material/slider'; // <-- Import MatSliderModule
+import { MatInputModule } from '@angular/material/input'; // <-- Might be needed for slider styling/labels
+import { MatDividerModule } from '@angular/material/divider'
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -41,6 +46,12 @@ import { formatSVG, processSVG } from '../cleanandresizesvg'
     CommonModule,
     MatIconModule,
     MatButtonModule,
+    FormsModule,
+    MatSliderModule,
+    MatInputModule,     // <-- Add if not present
+    MatDividerModule,
+
+
     TextWidthCalculatorComponent,
     LinkSegmentsPipe,
   ],
@@ -52,6 +63,9 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
   private svgContainer!: ElementRef<SVGSVGElement>
 
   @Input() Name: string = ""
+  zoom: number = 1;
+  shiftX: number = 0;
+  shiftY: number = 0;
 
   @ViewChild('textWidthCalculator') textWidthCalculator: TextWidthCalculatorComponent | undefined
   map_text_textWidth: Map<string, number> = new Map<string, number>
@@ -536,7 +550,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onmousemove(event: MouseEvent, source?: string): void {
-    this.PointAtMouseMove = mouseCoordInComponentRef(event)
+    this.PointAtMouseMove = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     let deltaX = this.PointAtMouseMove.X - this.PointAtMouseDown!.X
     let deltaY = this.PointAtMouseMove.Y - this.PointAtMouseDown!.Y
     // console.log(getFunctionName(), this.PointAtMouseMove)
@@ -692,7 +706,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   backgroundOnMouseDown(event: MouseEvent): void {
-    this.PointAtMouseDown = mouseCoordInComponentRef(event)
+    this.PointAtMouseDown = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
 
     if (this.State == StateEnumType.WAITING_FOR_USER_INPUT && event.shiftKey) {
 
@@ -706,35 +720,35 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   backgroundDragOver(event: MouseEvent): void {
-    this.PointAtMouseUp = mouseCoordInComponentRef(event)
+    this.PointAtMouseUp = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     console.log(getFunctionName(), "state at entry", this.State)
 
     this.processMouseUp(event)
   }
 
   backgroundOnClick(event: MouseEvent): void {
-    this.PointAtMouseUp = mouseCoordInComponentRef(event)
+    this.PointAtMouseUp = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     console.log(getFunctionName(), "state at entry", this.State)
 
     this.processMouseUp(event)
   }
 
   backgroundOnDragEnd(event: MouseEvent): void {
-    this.PointAtMouseUp = mouseCoordInComponentRef(event)
+    this.PointAtMouseUp = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     console.log(getFunctionName(), "state at entry", this.State)
 
     this.processMouseUp(event)
   }
 
   backgroundOnMouseUp(event: MouseEvent): void {
-    this.PointAtMouseUp = mouseCoordInComponentRef(event)
+    this.PointAtMouseUp = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     console.log(getFunctionName(), "state at entry", this.State)
 
     this.processMouseUp(event)
   }
 
   rectMouseDown(event: MouseEvent, rect: svg.Rect): void {
-    this.PointAtMouseDown = mouseCoordInComponentRef(event)
+    this.PointAtMouseDown = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     console.log(getFunctionName(), "state at entry", this.State)
 
     if (this.State == StateEnumType.WAITING_FOR_USER_INPUT && !event.altKey) {
@@ -770,7 +784,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   rectMouseUp(event: MouseEvent, rect: svg.Rect): void {
-    this.PointAtMouseUp = mouseCoordInComponentRef(event)
+    this.PointAtMouseUp = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     console.log(getFunctionName(), "state at entry", this.State)
 
     if (this.State == StateEnumType.LINK_DRAWING) {
@@ -780,7 +794,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   anchorMouseDown(event: MouseEvent, anchor: 'left' | 'right' | 'top' | 'bottom', rect: svg.Rect): void {
-    this.PointAtMouseDown = mouseCoordInComponentRef(event)
+    this.PointAtMouseDown = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     if (this.State == StateEnumType.WAITING_FOR_USER_INPUT && !event.altKey && !event.shiftKey) {
       this.State = StateEnumType.RECT_ANCHOR_DRAGGING
       console.log(getFunctionName(), "state at exit", this.State)
@@ -797,7 +811,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   anchorMouseUp(event: MouseEvent, rect: svg.Rect): void {
-    this.PointAtMouseUp = mouseCoordInComponentRef(event)
+    this.PointAtMouseUp = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     console.log(getFunctionName(), "state at entry", this.State)
 
     this.processMouseUp(event)
@@ -818,7 +832,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   linkMouseUp(event: MouseEvent, link: svg.Link, segmentNumber: number = 0): void {
-    this.PointAtMouseUp = mouseCoordInComponentRef(event)
+    this.PointAtMouseUp = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     console.log(getFunctionName(), "state at entry", this.State)
 
     this.processMouseUp(event)
@@ -829,7 +843,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
     event: MouseEvent,
     anchoredTextIndex: number,
     draggedSegmentPositionOnArrow: string): void {
-    this.PointAtMouseDown = mouseCoordInComponentRef(event)
+    this.PointAtMouseDown = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
 
     if (this.State == StateEnumType.WAITING_FOR_USER_INPUT && !event.altKey && !event.shiftKey) {
       this.State = StateEnumType.LINK_ANCHORED_TEXT_DRAGGING
@@ -850,7 +864,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   textAnchoredMouseUp(link: svg.Link, event: MouseEvent): void {
-    this.PointAtMouseUp = mouseCoordInComponentRef(event)
+    this.PointAtMouseUp = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
     console.log(getFunctionName(), "state at entry", this.State)
 
     this.processMouseUp(event)
@@ -950,64 +964,118 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
 
   downloadSVG() {
     // Retrieve the native SVG element through the ViewChild/ElementRef
-    const svgElement = this.svgContainer.nativeElement;
-  
+    const svgElement: SVGSVGElement = this.svgContainer.nativeElement;
+
+    // Find the main content group element (the first <g> inside the <svg>)
+    // This assumes your drawable content is within the first <g> tag directly under <svg>
+    const contentGroup = svgElement.querySelector('g');
+    if (!contentGroup) {
+        console.error("Could not find the main content group <g> element.");
+        return; // Exit if the group isn't found
+    }
+
+    // Calculate the bounding box of the content group
+    // Note: getBBox might not be perfectly accurate if elements have transforms applied.
+    // Consider iterating through elements if needed for complex cases.
+    const bbox = contentGroup.getBBox();
+
+    // Add some padding around the bounding box (optional, adjust as needed)
+    const padding = 20;
+    const viewBoxX = bbox.x - padding;
+    const viewBoxY = bbox.y - padding;
+    const viewBoxWidth = bbox.width + (padding * 2);
+    const viewBoxHeight = bbox.height + (padding * 2);
+
+    // --- Store original attributes ---
+    const originalWidth = svgElement.getAttribute('width');
+    const originalHeight = svgElement.getAttribute('height');
+    const originalViewBox = svgElement.getAttribute('viewBox');
+
+    // --- Set attributes for download ---
+    // Set viewBox to encompass the calculated bounding box
+    // Ensure width/height are positive, fallback if bbox is empty
+    const finalViewBoxWidth = viewBoxWidth > 0 ? viewBoxWidth : 100; // Min width 100
+    const finalViewBoxHeight = viewBoxHeight > 0 ? viewBoxHeight : 100; // Min height 100
+    svgElement.setAttribute('viewBox', `${viewBoxX} ${viewBoxY} ${finalViewBoxWidth} ${finalViewBoxHeight}`);
+
+    // Set width/height based on viewBox aspect ratio for clarity in downloaded file
+    // These attributes often help standalone SVG viewers determine initial size
+    svgElement.setAttribute('width', `${finalViewBoxWidth}`);
+    svgElement.setAttribute('height', `${finalViewBoxHeight}`);
+
     // Create a serializer to convert the SVG DOM node to a string
-    const serializer = new XMLSerializer();
-    
-    // Serialize the SVG element
-    const svgData = serializer.serializeToString(svgElement);
-  
-    // Remove any existing HTML comments in the serialized SVG
-    let withoutComments = svgData.replace(/<!--[\s\S]*?-->/g, '');
-  
-    // Remove remaining comments (if any) and Angular's auto-generated attributes used for styling/view encapsulation
-    let res = withoutComments
-      .replace(/<!--[\s\S]*?-->/g, '') // Remove HTML comments again if needed
-      .replace(/\s+_ngcontent-[^="]*=""/g, '') // Remove _ngcontent attributes
-      .replace(/\s+_nghost-[^="]*=""/g, '');    // Remove _nghost attributes
-  
-    // Perform any additional custom processing on the cleaned SVG string
-    let svg2 = processSVG(res);
-  
-    // Optionally format the processed SVG string for readability or standardization
-    let svg3 = formatSVG(svg2);
-  
-    // Create a new Blob object containing the final SVG string
-    const blob = new Blob([svg3], { type: 'image/svg+xml' });
+    const serializer: XMLSerializer = new XMLSerializer();
 
-    // get the current SvgText and update it
-    var svgText : svg.SvgText | undefined
-    for (let svtText_ of this.gongsvgFrontRepo!.array_SvgTexts) {
-      svgText = svtText_
+    // Serialize the SVG element (now with the correct viewBox/dimensions)
+    let svgData: string = serializer.serializeToString(svgElement);
+
+    // --- Restore original attributes (important!) ---
+    // Restore original width, height, and viewBox so the on-screen display isn't affected
+    if (originalWidth !== null) svgElement.setAttribute('width', originalWidth); else svgElement.removeAttribute('width');
+    if (originalHeight !== null) svgElement.setAttribute('height', originalHeight); else svgElement.removeAttribute('height');
+    if (originalViewBox !== null) svgElement.setAttribute('viewBox', originalViewBox); else svgElement.removeAttribute('viewBox');
+
+    // --- Continue with the rest of the processing ---
+
+    // Remove any existing HTML comments in the serialized SVG (if '//g' was intended for comments)
+    // This regex might need adjustment depending on actual comment format
+    // let withoutComments: string = svgData.replace(/\/\/g/g, ''); // Example regex for "//g" comment
+    let withoutComments: string = svgData; // Assuming no specific comment format "//g"
+
+    // Remove Angular's auto-generated attributes
+    let res: string = withoutComments
+      .replace(/\s*_ngcontent-[^="]*=""/g, '')
+      .replace(/\s+_nghost-[^="]*=""/g, '');
+
+    // Perform additional custom processing if these functions exist
+    let svg2: string = processSVG(res); // Ensure processSVG is defined and imported
+    let svg3: string = formatSVG(svg2); // Ensure formatSVG is defined and imported
+
+    // Inject Roboto Font Style
+    const fontStyle: string = '<style>text { font-family: Roboto, Arial, sans-serif !important; }</style>';
+    const svgTagEndIndex: number = svg3.indexOf('>');
+    if (svgTagEndIndex > -1) {
+      svg3 = svg3.slice(0, svgTagEndIndex + 1) + fontStyle + svg3.slice(svgTagEndIndex + 1);
     }
 
-    if (svgText != undefined) {
-      svgText.Text = svg3
-      this.svgTextService.updateFront( svgText, this.Name).subscribe(
+    // --- SvgText Update Logic (Keep if needed) ---
+    let svgText: svg.SvgText | undefined;
+    if (this.gongsvgFrontRepo?.array_SvgTexts) {
+        // Assuming only one SvgText exists or you want the last one
+        svgText = this.gongsvgFrontRepo.array_SvgTexts[this.gongsvgFrontRepo.array_SvgTexts.length - 1];
+    }
+
+    if (svgText !== undefined && this.svgTextService) { // Check if svgTextService is available
+      svgText.Text = svg3;
+      this.svgTextService.updateFront(svgText, this.Name).subscribe(
         () => {
-          console.log("svgText updated")
+          console.log("svgText updated with downloaded content");
         }
-      )
+      );
     }
-  
-    // Generate a temporary URL that points to the Blob
-    const url = URL.createObjectURL(blob);
-  
-    // Create a temporary link element
-    const link = document.createElement('a');
+    // --- End SvgText Update Logic ---
+
+
+    // Create Blob
+    const blob: Blob = new Blob([svg3], { type: 'image/svg+xml' });
+
+    // Create download link
+    const url: string = URL.createObjectURL(blob);
+    const link: HTMLAnchorElement = document.createElement('a');
     link.href = url;
-  
-    // Provide a default filename for the download
-    link.download = this.svg.Name + ".svg";
-  
-    // Append the link to the document body, trigger the download, and clean up
+    link.download = (this.svg?.Name || 'download') + ".svg"; // Use optional chaining for safety
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  
-    // Revoke the object URL to free up resources
     URL.revokeObjectURL(url);
   }
+  
+    /**
+   * Called when zoom, shiftX, or shiftY slider value changes.
+   * Manually triggers change detection because the detector is detached.
+   */
+    onTransformChange(): void {
+      this.changeDetectorRef.detectChanges();
+    }
   
 }

@@ -3,11 +3,16 @@ package models
 
 import (
 	"cmp"
+	"embed"
 	"errors"
 	"fmt"
+	"log"
 	"math"
 	"slices"
+	"sort"
 	"time"
+
+	button_go "github.com/fullstack-lang/gong/lib/button/go"
 )
 
 func __Gong__Abs(x int) int {
@@ -77,38 +82,27 @@ type Stage struct {
 	OnAfterButtonDeleteCallback OnAfterDeleteInterface[Button]
 	OnAfterButtonReadCallback   OnAfterReadInterface[Button]
 
-	Nodes           map[*Node]any
-	Nodes_mapString map[string]*Node
+	Groups           map[*Group]any
+	Groups_mapString map[string]*Group
 
 	// insertion point for slice of pointers maps
-	Node_Children_reverseMap map[*Node]*Node
+	Group_Buttons_reverseMap map[*Button]*Group
 
-	Node_Buttons_reverseMap map[*Button]*Node
+	OnAfterGroupCreateCallback OnAfterCreateInterface[Group]
+	OnAfterGroupUpdateCallback OnAfterUpdateInterface[Group]
+	OnAfterGroupDeleteCallback OnAfterDeleteInterface[Group]
+	OnAfterGroupReadCallback   OnAfterReadInterface[Group]
 
-	OnAfterNodeCreateCallback OnAfterCreateInterface[Node]
-	OnAfterNodeUpdateCallback OnAfterUpdateInterface[Node]
-	OnAfterNodeDeleteCallback OnAfterDeleteInterface[Node]
-	OnAfterNodeReadCallback   OnAfterReadInterface[Node]
-
-	SVGIcons           map[*SVGIcon]any
-	SVGIcons_mapString map[string]*SVGIcon
+	Layouts           map[*Layout]any
+	Layouts_mapString map[string]*Layout
 
 	// insertion point for slice of pointers maps
-	OnAfterSVGIconCreateCallback OnAfterCreateInterface[SVGIcon]
-	OnAfterSVGIconUpdateCallback OnAfterUpdateInterface[SVGIcon]
-	OnAfterSVGIconDeleteCallback OnAfterDeleteInterface[SVGIcon]
-	OnAfterSVGIconReadCallback   OnAfterReadInterface[SVGIcon]
+	Layout_Groups_reverseMap map[*Group]*Layout
 
-	Trees           map[*Tree]any
-	Trees_mapString map[string]*Tree
-
-	// insertion point for slice of pointers maps
-	Tree_RootNodes_reverseMap map[*Node]*Tree
-
-	OnAfterTreeCreateCallback OnAfterCreateInterface[Tree]
-	OnAfterTreeUpdateCallback OnAfterUpdateInterface[Tree]
-	OnAfterTreeDeleteCallback OnAfterDeleteInterface[Tree]
-	OnAfterTreeReadCallback   OnAfterReadInterface[Tree]
+	OnAfterLayoutCreateCallback OnAfterCreateInterface[Layout]
+	OnAfterLayoutUpdateCallback OnAfterUpdateInterface[Layout]
+	OnAfterLayoutDeleteCallback OnAfterDeleteInterface[Layout]
+	OnAfterLayoutReadCallback   OnAfterReadInterface[Layout]
 
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
@@ -139,20 +133,89 @@ type Stage struct {
 	ButtonOrder            uint
 	ButtonMap_Staged_Order map[*Button]uint
 
-	NodeOrder            uint
-	NodeMap_Staged_Order map[*Node]uint
+	GroupOrder            uint
+	GroupMap_Staged_Order map[*Group]uint
 
-	SVGIconOrder            uint
-	SVGIconMap_Staged_Order map[*SVGIcon]uint
-
-	TreeOrder            uint
-	TreeMap_Staged_Order map[*Tree]uint
+	LayoutOrder            uint
+	LayoutMap_Staged_Order map[*Layout]uint
 
 	// end of insertion point
+
+	NamedStructs []*NamedStruct
+}
+
+// GetNamedStructs implements models.ProbebStage.
+func (stage *Stage) GetNamedStructsNames() (res []string) {
+
+	for _, namedStruct := range stage.NamedStructs {
+		res = append(res, namedStruct.name)
+	}
+
+	return
+}
+
+func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
+
+	orderedSet := []T{}
+	for instance := range set {
+		orderedSet = append(orderedSet, instance)
+	}
+	sort.Slice(orderedSet[:], func(i, j int) bool {
+		instancei := orderedSet[i]
+		instancej := orderedSet[j]
+		i_order, oki := order[instancei]
+		j_order, okj := order[instancej]
+		if !oki || !okj {
+			log.Fatalf("GetNamedStructInstances: pointer not found")
+		}
+		return i_order < j_order
+	})
+
+	for _, instance := range orderedSet {
+		res = append(res, instance.GetName())
+	}
+
+	return
+}
+
+func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
+
+	switch namedStructName {
+	// insertion point for case 
+		case "Button":
+			res = GetNamedStructInstances(stage.Buttons, stage.ButtonMap_Staged_Order)
+		case "Group":
+			res = GetNamedStructInstances(stage.Groups, stage.GroupMap_Staged_Order)
+		case "Layout":
+			res = GetNamedStructInstances(stage.Layouts, stage.LayoutMap_Staged_Order)
+	}
+
+	return
+}
+
+
+type NamedStruct struct {
+	name string
+}
+
+func (namedStruct *NamedStruct) GetName() string {
+	return namedStruct.name
 }
 
 func (stage *Stage) GetType() string {
-	return "github.com/fullstack-lang/gong/lib/tree/go/models"
+	return "github.com/fullstack-lang/gong/lib/button/go/models"
+}
+
+func (stage *Stage) GetMap_GongStructName_InstancesNb() map[string]int {
+	return stage.Map_GongStructName_InstancesNb
+}
+
+func (stage *Stage) GetModelsEmbededDir() embed.FS {
+	return button_go.GoModelsDir
+}
+
+func (stage *Stage) GetDigramsEmbededDir() embed.FS {
+	return button_go.GoDiagramsDir
 }
 
 type GONG__Identifier struct {
@@ -197,12 +260,10 @@ type BackRepoInterface interface {
 	// insertion point for Commit and Checkout signatures
 	CommitButton(button *Button)
 	CheckoutButton(button *Button)
-	CommitNode(node *Node)
-	CheckoutNode(node *Node)
-	CommitSVGIcon(svgicon *SVGIcon)
-	CheckoutSVGIcon(svgicon *SVGIcon)
-	CommitTree(tree *Tree)
-	CheckoutTree(tree *Tree)
+	CommitGroup(group *Group)
+	CheckoutGroup(group *Group)
+	CommitLayout(layout *Layout)
+	CheckoutLayout(layout *Layout)
 	GetLastCommitFromBackNb() uint
 	GetLastPushFromFrontNb() uint
 }
@@ -213,14 +274,11 @@ func NewStage(name string) (stage *Stage) {
 		Buttons:           make(map[*Button]any),
 		Buttons_mapString: make(map[string]*Button),
 
-		Nodes:           make(map[*Node]any),
-		Nodes_mapString: make(map[string]*Node),
+		Groups:           make(map[*Group]any),
+		Groups_mapString: make(map[string]*Group),
 
-		SVGIcons:           make(map[*SVGIcon]any),
-		SVGIcons_mapString: make(map[string]*SVGIcon),
-
-		Trees:           make(map[*Tree]any),
-		Trees_mapString: make(map[string]*Tree),
+		Layouts:           make(map[*Layout]any),
+		Layouts_mapString: make(map[string]*Layout),
 
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
@@ -234,13 +292,17 @@ func NewStage(name string) (stage *Stage) {
 		// insertion point for order map initialisations
 		ButtonMap_Staged_Order: make(map[*Button]uint),
 
-		NodeMap_Staged_Order: make(map[*Node]uint),
+		GroupMap_Staged_Order: make(map[*Group]uint),
 
-		SVGIconMap_Staged_Order: make(map[*SVGIcon]uint),
-
-		TreeMap_Staged_Order: make(map[*Tree]uint),
+		LayoutMap_Staged_Order: make(map[*Layout]uint),
 
 		// end of insertion point
+
+		NamedStructs: []*NamedStruct{ // insertion point for order map initialisations
+			&NamedStruct{name: "Button"},
+			&NamedStruct{name: "Group"},
+			&NamedStruct{name: "Layout"},
+		}, // end of insertion point
 	}
 
 	return
@@ -252,12 +314,10 @@ func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
 	// insertion point for order map initialisations
 	case *Button:
 		return stage.ButtonMap_Staged_Order[instance]
-	case *Node:
-		return stage.NodeMap_Staged_Order[instance]
-	case *SVGIcon:
-		return stage.SVGIconMap_Staged_Order[instance]
-	case *Tree:
-		return stage.TreeMap_Staged_Order[instance]
+	case *Group:
+		return stage.GroupMap_Staged_Order[instance]
+	case *Layout:
+		return stage.LayoutMap_Staged_Order[instance]
 	default:
 		return 0 // should not happen
 	}
@@ -284,9 +344,8 @@ func (stage *Stage) Commit() {
 
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Button"] = len(stage.Buttons)
-	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
-	stage.Map_GongStructName_InstancesNb["SVGIcon"] = len(stage.SVGIcons)
-	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
+	stage.Map_GongStructName_InstancesNb["Group"] = len(stage.Groups)
+	stage.Map_GongStructName_InstancesNb["Layout"] = len(stage.Layouts)
 
 }
 
@@ -298,9 +357,8 @@ func (stage *Stage) Checkout() {
 	stage.ComputeReverseMaps()
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Button"] = len(stage.Buttons)
-	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
-	stage.Map_GongStructName_InstancesNb["SVGIcon"] = len(stage.SVGIcons)
-	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
+	stage.Map_GongStructName_InstancesNb["Group"] = len(stage.Groups)
+	stage.Map_GongStructName_InstancesNb["Layout"] = len(stage.Layouts)
 
 }
 
@@ -388,184 +446,127 @@ func (button *Button) GetName() (res string) {
 	return button.Name
 }
 
-// Stage puts node to the model stage
-func (node *Node) Stage(stage *Stage) *Node {
+// Stage puts group to the model stage
+func (group *Group) Stage(stage *Stage) *Group {
 
-	if _, ok := stage.Nodes[node]; !ok {
-		stage.Nodes[node] = __member
-		stage.NodeMap_Staged_Order[node] = stage.NodeOrder
-		stage.NodeOrder++
+	if _, ok := stage.Groups[group]; !ok {
+		stage.Groups[group] = __member
+		stage.GroupMap_Staged_Order[group] = stage.GroupOrder
+		stage.GroupOrder++
 	}
-	stage.Nodes_mapString[node.Name] = node
+	stage.Groups_mapString[group.Name] = group
 
-	return node
+	return group
 }
 
-// Unstage removes node off the model stage
-func (node *Node) Unstage(stage *Stage) *Node {
-	delete(stage.Nodes, node)
-	delete(stage.Nodes_mapString, node.Name)
-	return node
+// Unstage removes group off the model stage
+func (group *Group) Unstage(stage *Stage) *Group {
+	delete(stage.Groups, group)
+	delete(stage.Groups_mapString, group.Name)
+	return group
 }
 
-// UnstageVoid removes node off the model stage
-func (node *Node) UnstageVoid(stage *Stage) {
-	delete(stage.Nodes, node)
-	delete(stage.Nodes_mapString, node.Name)
+// UnstageVoid removes group off the model stage
+func (group *Group) UnstageVoid(stage *Stage) {
+	delete(stage.Groups, group)
+	delete(stage.Groups_mapString, group.Name)
 }
 
-// commit node to the back repo (if it is already staged)
-func (node *Node) Commit(stage *Stage) *Node {
-	if _, ok := stage.Nodes[node]; ok {
+// commit group to the back repo (if it is already staged)
+func (group *Group) Commit(stage *Stage) *Group {
+	if _, ok := stage.Groups[group]; ok {
 		if stage.BackRepo != nil {
-			stage.BackRepo.CommitNode(node)
+			stage.BackRepo.CommitGroup(group)
 		}
 	}
-	return node
+	return group
 }
 
-func (node *Node) CommitVoid(stage *Stage) {
-	node.Commit(stage)
+func (group *Group) CommitVoid(stage *Stage) {
+	group.Commit(stage)
 }
 
-// Checkout node to the back repo (if it is already staged)
-func (node *Node) Checkout(stage *Stage) *Node {
-	if _, ok := stage.Nodes[node]; ok {
+// Checkout group to the back repo (if it is already staged)
+func (group *Group) Checkout(stage *Stage) *Group {
+	if _, ok := stage.Groups[group]; ok {
 		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutNode(node)
+			stage.BackRepo.CheckoutGroup(group)
 		}
 	}
-	return node
+	return group
 }
 
 // for satisfaction of GongStruct interface
-func (node *Node) GetName() (res string) {
-	return node.Name
+func (group *Group) GetName() (res string) {
+	return group.Name
 }
 
-// Stage puts svgicon to the model stage
-func (svgicon *SVGIcon) Stage(stage *Stage) *SVGIcon {
+// Stage puts layout to the model stage
+func (layout *Layout) Stage(stage *Stage) *Layout {
 
-	if _, ok := stage.SVGIcons[svgicon]; !ok {
-		stage.SVGIcons[svgicon] = __member
-		stage.SVGIconMap_Staged_Order[svgicon] = stage.SVGIconOrder
-		stage.SVGIconOrder++
+	if _, ok := stage.Layouts[layout]; !ok {
+		stage.Layouts[layout] = __member
+		stage.LayoutMap_Staged_Order[layout] = stage.LayoutOrder
+		stage.LayoutOrder++
 	}
-	stage.SVGIcons_mapString[svgicon.Name] = svgicon
+	stage.Layouts_mapString[layout.Name] = layout
 
-	return svgicon
+	return layout
 }
 
-// Unstage removes svgicon off the model stage
-func (svgicon *SVGIcon) Unstage(stage *Stage) *SVGIcon {
-	delete(stage.SVGIcons, svgicon)
-	delete(stage.SVGIcons_mapString, svgicon.Name)
-	return svgicon
+// Unstage removes layout off the model stage
+func (layout *Layout) Unstage(stage *Stage) *Layout {
+	delete(stage.Layouts, layout)
+	delete(stage.Layouts_mapString, layout.Name)
+	return layout
 }
 
-// UnstageVoid removes svgicon off the model stage
-func (svgicon *SVGIcon) UnstageVoid(stage *Stage) {
-	delete(stage.SVGIcons, svgicon)
-	delete(stage.SVGIcons_mapString, svgicon.Name)
+// UnstageVoid removes layout off the model stage
+func (layout *Layout) UnstageVoid(stage *Stage) {
+	delete(stage.Layouts, layout)
+	delete(stage.Layouts_mapString, layout.Name)
 }
 
-// commit svgicon to the back repo (if it is already staged)
-func (svgicon *SVGIcon) Commit(stage *Stage) *SVGIcon {
-	if _, ok := stage.SVGIcons[svgicon]; ok {
+// commit layout to the back repo (if it is already staged)
+func (layout *Layout) Commit(stage *Stage) *Layout {
+	if _, ok := stage.Layouts[layout]; ok {
 		if stage.BackRepo != nil {
-			stage.BackRepo.CommitSVGIcon(svgicon)
+			stage.BackRepo.CommitLayout(layout)
 		}
 	}
-	return svgicon
+	return layout
 }
 
-func (svgicon *SVGIcon) CommitVoid(stage *Stage) {
-	svgicon.Commit(stage)
+func (layout *Layout) CommitVoid(stage *Stage) {
+	layout.Commit(stage)
 }
 
-// Checkout svgicon to the back repo (if it is already staged)
-func (svgicon *SVGIcon) Checkout(stage *Stage) *SVGIcon {
-	if _, ok := stage.SVGIcons[svgicon]; ok {
+// Checkout layout to the back repo (if it is already staged)
+func (layout *Layout) Checkout(stage *Stage) *Layout {
+	if _, ok := stage.Layouts[layout]; ok {
 		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutSVGIcon(svgicon)
+			stage.BackRepo.CheckoutLayout(layout)
 		}
 	}
-	return svgicon
+	return layout
 }
 
 // for satisfaction of GongStruct interface
-func (svgicon *SVGIcon) GetName() (res string) {
-	return svgicon.Name
-}
-
-// Stage puts tree to the model stage
-func (tree *Tree) Stage(stage *Stage) *Tree {
-
-	if _, ok := stage.Trees[tree]; !ok {
-		stage.Trees[tree] = __member
-		stage.TreeMap_Staged_Order[tree] = stage.TreeOrder
-		stage.TreeOrder++
-	}
-	stage.Trees_mapString[tree.Name] = tree
-
-	return tree
-}
-
-// Unstage removes tree off the model stage
-func (tree *Tree) Unstage(stage *Stage) *Tree {
-	delete(stage.Trees, tree)
-	delete(stage.Trees_mapString, tree.Name)
-	return tree
-}
-
-// UnstageVoid removes tree off the model stage
-func (tree *Tree) UnstageVoid(stage *Stage) {
-	delete(stage.Trees, tree)
-	delete(stage.Trees_mapString, tree.Name)
-}
-
-// commit tree to the back repo (if it is already staged)
-func (tree *Tree) Commit(stage *Stage) *Tree {
-	if _, ok := stage.Trees[tree]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CommitTree(tree)
-		}
-	}
-	return tree
-}
-
-func (tree *Tree) CommitVoid(stage *Stage) {
-	tree.Commit(stage)
-}
-
-// Checkout tree to the back repo (if it is already staged)
-func (tree *Tree) Checkout(stage *Stage) *Tree {
-	if _, ok := stage.Trees[tree]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutTree(tree)
-		}
-	}
-	return tree
-}
-
-// for satisfaction of GongStruct interface
-func (tree *Tree) GetName() (res string) {
-	return tree.Name
+func (layout *Layout) GetName() (res string) {
+	return layout.Name
 }
 
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMButton(Button *Button)
-	CreateORMNode(Node *Node)
-	CreateORMSVGIcon(SVGIcon *SVGIcon)
-	CreateORMTree(Tree *Tree)
+	CreateORMGroup(Group *Group)
+	CreateORMLayout(Layout *Layout)
 }
 
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
 	DeleteORMButton(Button *Button)
-	DeleteORMNode(Node *Node)
-	DeleteORMSVGIcon(SVGIcon *SVGIcon)
-	DeleteORMTree(Tree *Tree)
+	DeleteORMGroup(Group *Group)
+	DeleteORMLayout(Layout *Layout)
 }
 
 func (stage *Stage) Reset() { // insertion point for array reset
@@ -574,20 +575,15 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.ButtonMap_Staged_Order = make(map[*Button]uint)
 	stage.ButtonOrder = 0
 
-	stage.Nodes = make(map[*Node]any)
-	stage.Nodes_mapString = make(map[string]*Node)
-	stage.NodeMap_Staged_Order = make(map[*Node]uint)
-	stage.NodeOrder = 0
+	stage.Groups = make(map[*Group]any)
+	stage.Groups_mapString = make(map[string]*Group)
+	stage.GroupMap_Staged_Order = make(map[*Group]uint)
+	stage.GroupOrder = 0
 
-	stage.SVGIcons = make(map[*SVGIcon]any)
-	stage.SVGIcons_mapString = make(map[string]*SVGIcon)
-	stage.SVGIconMap_Staged_Order = make(map[*SVGIcon]uint)
-	stage.SVGIconOrder = 0
-
-	stage.Trees = make(map[*Tree]any)
-	stage.Trees_mapString = make(map[string]*Tree)
-	stage.TreeMap_Staged_Order = make(map[*Tree]uint)
-	stage.TreeOrder = 0
+	stage.Layouts = make(map[*Layout]any)
+	stage.Layouts_mapString = make(map[string]*Layout)
+	stage.LayoutMap_Staged_Order = make(map[*Layout]uint)
+	stage.LayoutOrder = 0
 
 }
 
@@ -595,14 +591,11 @@ func (stage *Stage) Nil() { // insertion point for array nil
 	stage.Buttons = nil
 	stage.Buttons_mapString = nil
 
-	stage.Nodes = nil
-	stage.Nodes_mapString = nil
+	stage.Groups = nil
+	stage.Groups_mapString = nil
 
-	stage.SVGIcons = nil
-	stage.SVGIcons_mapString = nil
-
-	stage.Trees = nil
-	stage.Trees_mapString = nil
+	stage.Layouts = nil
+	stage.Layouts_mapString = nil
 
 }
 
@@ -611,16 +604,12 @@ func (stage *Stage) Unstage() { // insertion point for array nil
 		button.Unstage(stage)
 	}
 
-	for node := range stage.Nodes {
-		node.Unstage(stage)
+	for group := range stage.Groups {
+		group.Unstage(stage)
 	}
 
-	for svgicon := range stage.SVGIcons {
-		svgicon.Unstage(stage)
-	}
-
-	for tree := range stage.Trees {
-		tree.Unstage(stage)
+	for layout := range stage.Layouts {
+		layout.Unstage(stage)
 	}
 
 }
@@ -686,12 +675,10 @@ func GongGetSet[Type GongstructSet](stage *Stage) *Type {
 	// insertion point for generic get functions
 	case map[*Button]any:
 		return any(&stage.Buttons).(*Type)
-	case map[*Node]any:
-		return any(&stage.Nodes).(*Type)
-	case map[*SVGIcon]any:
-		return any(&stage.SVGIcons).(*Type)
-	case map[*Tree]any:
-		return any(&stage.Trees).(*Type)
+	case map[*Group]any:
+		return any(&stage.Groups).(*Type)
+	case map[*Layout]any:
+		return any(&stage.Layouts).(*Type)
 	default:
 		return nil
 	}
@@ -706,12 +693,10 @@ func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
 	// insertion point for generic get functions
 	case map[string]*Button:
 		return any(&stage.Buttons_mapString).(*Type)
-	case map[string]*Node:
-		return any(&stage.Nodes_mapString).(*Type)
-	case map[string]*SVGIcon:
-		return any(&stage.SVGIcons_mapString).(*Type)
-	case map[string]*Tree:
-		return any(&stage.Trees_mapString).(*Type)
+	case map[string]*Group:
+		return any(&stage.Groups_mapString).(*Type)
+	case map[string]*Layout:
+		return any(&stage.Layouts_mapString).(*Type)
 	default:
 		return nil
 	}
@@ -726,12 +711,10 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
 	// insertion point for generic get functions
 	case Button:
 		return any(&stage.Buttons).(*map[*Type]any)
-	case Node:
-		return any(&stage.Nodes).(*map[*Type]any)
-	case SVGIcon:
-		return any(&stage.SVGIcons).(*map[*Type]any)
-	case Tree:
-		return any(&stage.Trees).(*map[*Type]any)
+	case Group:
+		return any(&stage.Groups).(*map[*Type]any)
+	case Layout:
+		return any(&stage.Layouts).(*map[*Type]any)
 	default:
 		return nil
 	}
@@ -746,12 +729,10 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 	// insertion point for generic get functions
 	case *Button:
 		return any(&stage.Buttons).(*map[Type]any)
-	case *Node:
-		return any(&stage.Nodes).(*map[Type]any)
-	case *SVGIcon:
-		return any(&stage.SVGIcons).(*map[Type]any)
-	case *Tree:
-		return any(&stage.Trees).(*map[Type]any)
+	case *Group:
+		return any(&stage.Groups).(*map[Type]any)
+	case *Layout:
+		return any(&stage.Layouts).(*map[Type]any)
 	default:
 		return nil
 	}
@@ -766,12 +747,10 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type 
 	// insertion point for generic get functions
 	case Button:
 		return any(&stage.Buttons_mapString).(*map[string]*Type)
-	case Node:
-		return any(&stage.Nodes_mapString).(*map[string]*Type)
-	case SVGIcon:
-		return any(&stage.SVGIcons_mapString).(*map[string]*Type)
-	case Tree:
-		return any(&stage.Trees_mapString).(*map[string]*Type)
+	case Group:
+		return any(&stage.Groups_mapString).(*map[string]*Type)
+	case Layout:
+		return any(&stage.Layouts_mapString).(*map[string]*Type)
 	default:
 		return nil
 	}
@@ -789,28 +768,18 @@ func GetAssociationName[Type Gongstruct]() *Type {
 	case Button:
 		return any(&Button{
 			// Initialisation of associations
-			// field is initialized with an instance of SVGIcon with the name of the field
-			SVGIcon: &SVGIcon{Name: "SVGIcon"},
 		}).(*Type)
-	case Node:
-		return any(&Node{
+	case Group:
+		return any(&Group{
 			// Initialisation of associations
-			// field is initialized with an instance of SVGIcon with the name of the field
-			PreceedingSVGIcon: &SVGIcon{Name: "PreceedingSVGIcon"},
-			// field is initialized with an instance of Node with the name of the field
-			Children: []*Node{{Name: "Children"}},
 			// field is initialized with an instance of Button with the name of the field
 			Buttons: []*Button{{Name: "Buttons"}},
 		}).(*Type)
-	case SVGIcon:
-		return any(&SVGIcon{
+	case Layout:
+		return any(&Layout{
 			// Initialisation of associations
-		}).(*Type)
-	case Tree:
-		return any(&Tree{
-			// Initialisation of associations
-			// field is initialized with an instance of Node with the name of the field
-			RootNodes: []*Node{{Name: "RootNodes"}},
+			// field is initialized with an instance of Group with the name of the field
+			Groups: []*Group{{Name: "Groups"}},
 		}).(*Type)
 	default:
 		return nil
@@ -834,53 +803,14 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 	case Button:
 		switch fieldname {
 		// insertion point for per direct association field
-		case "SVGIcon":
-			res := make(map[*SVGIcon][]*Button)
-			for button := range stage.Buttons {
-				if button.SVGIcon != nil {
-					svgicon_ := button.SVGIcon
-					var buttons []*Button
-					_, ok := res[svgicon_]
-					if ok {
-						buttons = res[svgicon_]
-					} else {
-						buttons = make([]*Button, 0)
-					}
-					buttons = append(buttons, button)
-					res[svgicon_] = buttons
-				}
-			}
-			return any(res).(map[*End][]*Start)
 		}
-	// reverse maps of direct associations of Node
-	case Node:
-		switch fieldname {
-		// insertion point for per direct association field
-		case "PreceedingSVGIcon":
-			res := make(map[*SVGIcon][]*Node)
-			for node := range stage.Nodes {
-				if node.PreceedingSVGIcon != nil {
-					svgicon_ := node.PreceedingSVGIcon
-					var nodes []*Node
-					_, ok := res[svgicon_]
-					if ok {
-						nodes = res[svgicon_]
-					} else {
-						nodes = make([]*Node, 0)
-					}
-					nodes = append(nodes, node)
-					res[svgicon_] = nodes
-				}
-			}
-			return any(res).(map[*End][]*Start)
-		}
-	// reverse maps of direct associations of SVGIcon
-	case SVGIcon:
+	// reverse maps of direct associations of Group
+	case Group:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
-	// reverse maps of direct associations of Tree
-	case Tree:
+	// reverse maps of direct associations of Layout
+	case Layout:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -905,41 +835,28 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		}
-	// reverse maps of direct associations of Node
-	case Node:
+	// reverse maps of direct associations of Group
+	case Group:
 		switch fieldname {
 		// insertion point for per direct association field
-		case "Children":
-			res := make(map[*Node]*Node)
-			for node := range stage.Nodes {
-				for _, node_ := range node.Children {
-					res[node_] = node
-				}
-			}
-			return any(res).(map[*End]*Start)
 		case "Buttons":
-			res := make(map[*Button]*Node)
-			for node := range stage.Nodes {
-				for _, button_ := range node.Buttons {
-					res[button_] = node
+			res := make(map[*Button]*Group)
+			for group := range stage.Groups {
+				for _, button_ := range group.Buttons {
+					res[button_] = group
 				}
 			}
 			return any(res).(map[*End]*Start)
 		}
-	// reverse maps of direct associations of SVGIcon
-	case SVGIcon:
+	// reverse maps of direct associations of Layout
+	case Layout:
 		switch fieldname {
 		// insertion point for per direct association field
-		}
-	// reverse maps of direct associations of Tree
-	case Tree:
-		switch fieldname {
-		// insertion point for per direct association field
-		case "RootNodes":
-			res := make(map[*Node]*Tree)
-			for tree := range stage.Trees {
-				for _, node_ := range tree.RootNodes {
-					res[node_] = tree
+		case "Groups":
+			res := make(map[*Group]*Layout)
+			for layout := range stage.Layouts {
+				for _, group_ := range layout.Groups {
+					res[group_] = layout
 				}
 			}
 			return any(res).(map[*End]*Start)
@@ -958,12 +875,10 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 	// insertion point for generic get gongstruct name
 	case Button:
 		res = "Button"
-	case Node:
-		res = "Node"
-	case SVGIcon:
-		res = "SVGIcon"
-	case Tree:
-		res = "Tree"
+	case Group:
+		res = "Group"
+	case Layout:
+		res = "Layout"
 	}
 	return res
 }
@@ -978,12 +893,10 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	// insertion point for generic get gongstruct name
 	case *Button:
 		res = "Button"
-	case *Node:
-		res = "Node"
-	case *SVGIcon:
-		res = "SVGIcon"
-	case *Tree:
-		res = "Tree"
+	case *Group:
+		res = "Group"
+	case *Layout:
+		res = "Layout"
 	}
 	return res
 }
@@ -996,13 +909,11 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case Button:
-		res = []string{"Name", "Icon", "SVGIcon"}
-	case Node:
-		res = []string{"Name", "FontStyle", "BackgroundColor", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasSecondCheckboxButton", "IsSecondCheckboxChecked", "IsSecondCheckboxDisabled", "TextAfterSecondCheckbox", "IsInEditMode", "IsNodeClickable", "IsWithPreceedingIcon", "PreceedingIcon", "PreceedingSVGIcon", "Children", "Buttons"}
-	case SVGIcon:
-		res = []string{"Name", "SVG"}
-	case Tree:
-		res = []string{"Name", "RootNodes"}
+		res = []string{"Name", "Label", "Icon"}
+	case Group:
+		res = []string{"Name", "Percentage", "Buttons"}
+	case Layout:
+		res = []string{"Name", "Groups"}
 	}
 	return
 }
@@ -1024,22 +935,16 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	case Button:
 		var rf ReverseField
 		_ = rf
-		rf.GongstructName = "Node"
+		rf.GongstructName = "Group"
 		rf.Fieldname = "Buttons"
 		res = append(res, rf)
-	case Node:
+	case Group:
 		var rf ReverseField
 		_ = rf
-		rf.GongstructName = "Node"
-		rf.Fieldname = "Children"
+		rf.GongstructName = "Layout"
+		rf.Fieldname = "Groups"
 		res = append(res, rf)
-		rf.GongstructName = "Tree"
-		rf.Fieldname = "RootNodes"
-		res = append(res, rf)
-	case SVGIcon:
-		var rf ReverseField
-		_ = rf
-	case Tree:
+	case Layout:
 		var rf ReverseField
 		_ = rf
 	}
@@ -1054,13 +959,11 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *Button:
-		res = []string{"Name", "Icon", "SVGIcon"}
-	case *Node:
-		res = []string{"Name", "FontStyle", "BackgroundColor", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "HasSecondCheckboxButton", "IsSecondCheckboxChecked", "IsSecondCheckboxDisabled", "TextAfterSecondCheckbox", "IsInEditMode", "IsNodeClickable", "IsWithPreceedingIcon", "PreceedingIcon", "PreceedingSVGIcon", "Children", "Buttons"}
-	case *SVGIcon:
-		res = []string{"Name", "SVG"}
-	case *Tree:
-		res = []string{"Name", "RootNodes"}
+		res = []string{"Name", "Label", "Icon"}
+	case *Group:
+		res = []string{"Name", "Percentage", "Buttons"}
+	case *Layout:
+		res = []string{"Name", "Groups"}
 	}
 	return
 }
@@ -1107,78 +1010,20 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "Label":
+			res.valueString = inferedInstance.Label
 		case "Icon":
 			res.valueString = inferedInstance.Icon
-		case "SVGIcon":
-			if inferedInstance.SVGIcon != nil {
-				res.valueString = inferedInstance.SVGIcon.Name
-			}
 		}
-	case *Node:
+	case *Group:
 		switch fieldName {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "FontStyle":
-			enum := inferedInstance.FontStyle
-			res.valueString = enum.ToCodeString()
-		case "BackgroundColor":
-			res.valueString = inferedInstance.BackgroundColor
-		case "IsExpanded":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsExpanded)
-			res.valueBool = inferedInstance.IsExpanded
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasCheckboxButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasCheckboxButton)
-			res.valueBool = inferedInstance.HasCheckboxButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsChecked)
-			res.valueBool = inferedInstance.IsChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsCheckboxDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsCheckboxDisabled)
-			res.valueBool = inferedInstance.IsCheckboxDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasSecondCheckboxButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSecondCheckboxButton)
-			res.valueBool = inferedInstance.HasSecondCheckboxButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSecondCheckboxChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxChecked)
-			res.valueBool = inferedInstance.IsSecondCheckboxChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSecondCheckboxDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxDisabled)
-			res.valueBool = inferedInstance.IsSecondCheckboxDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "TextAfterSecondCheckbox":
-			res.valueString = inferedInstance.TextAfterSecondCheckbox
-		case "IsInEditMode":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsInEditMode)
-			res.valueBool = inferedInstance.IsInEditMode
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsNodeClickable":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsNodeClickable)
-			res.valueBool = inferedInstance.IsNodeClickable
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsWithPreceedingIcon":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsWithPreceedingIcon)
-			res.valueBool = inferedInstance.IsWithPreceedingIcon
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "PreceedingIcon":
-			res.valueString = inferedInstance.PreceedingIcon
-		case "PreceedingSVGIcon":
-			if inferedInstance.PreceedingSVGIcon != nil {
-				res.valueString = inferedInstance.PreceedingSVGIcon.Name
-			}
-		case "Children":
-			for idx, __instance__ := range inferedInstance.Children {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
+		case "Percentage":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Percentage)
+			res.valueFloat = inferedInstance.Percentage
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Buttons":
 			for idx, __instance__ := range inferedInstance.Buttons {
 				if idx > 0 {
@@ -1187,21 +1032,13 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 				res.valueString += __instance__.Name
 			}
 		}
-	case *SVGIcon:
+	case *Layout:
 		switch fieldName {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "SVG":
-			res.valueString = inferedInstance.SVG
-		}
-	case *Tree:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "RootNodes":
-			for idx, __instance__ := range inferedInstance.RootNodes {
+		case "Groups":
+			for idx, __instance__ := range inferedInstance.Groups {
 				if idx > 0 {
 					res.valueString += "\n"
 				}
@@ -1223,78 +1060,20 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "Label":
+			res.valueString = inferedInstance.Label
 		case "Icon":
 			res.valueString = inferedInstance.Icon
-		case "SVGIcon":
-			if inferedInstance.SVGIcon != nil {
-				res.valueString = inferedInstance.SVGIcon.Name
-			}
 		}
-	case Node:
+	case Group:
 		switch fieldName {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "FontStyle":
-			enum := inferedInstance.FontStyle
-			res.valueString = enum.ToCodeString()
-		case "BackgroundColor":
-			res.valueString = inferedInstance.BackgroundColor
-		case "IsExpanded":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsExpanded)
-			res.valueBool = inferedInstance.IsExpanded
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasCheckboxButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasCheckboxButton)
-			res.valueBool = inferedInstance.HasCheckboxButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsChecked)
-			res.valueBool = inferedInstance.IsChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsCheckboxDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsCheckboxDisabled)
-			res.valueBool = inferedInstance.IsCheckboxDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasSecondCheckboxButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSecondCheckboxButton)
-			res.valueBool = inferedInstance.HasSecondCheckboxButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSecondCheckboxChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxChecked)
-			res.valueBool = inferedInstance.IsSecondCheckboxChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSecondCheckboxDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxDisabled)
-			res.valueBool = inferedInstance.IsSecondCheckboxDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "TextAfterSecondCheckbox":
-			res.valueString = inferedInstance.TextAfterSecondCheckbox
-		case "IsInEditMode":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsInEditMode)
-			res.valueBool = inferedInstance.IsInEditMode
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsNodeClickable":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsNodeClickable)
-			res.valueBool = inferedInstance.IsNodeClickable
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsWithPreceedingIcon":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsWithPreceedingIcon)
-			res.valueBool = inferedInstance.IsWithPreceedingIcon
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "PreceedingIcon":
-			res.valueString = inferedInstance.PreceedingIcon
-		case "PreceedingSVGIcon":
-			if inferedInstance.PreceedingSVGIcon != nil {
-				res.valueString = inferedInstance.PreceedingSVGIcon.Name
-			}
-		case "Children":
-			for idx, __instance__ := range inferedInstance.Children {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
+		case "Percentage":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Percentage)
+			res.valueFloat = inferedInstance.Percentage
+			res.GongFieldValueType = GongFieldValueTypeFloat
 		case "Buttons":
 			for idx, __instance__ := range inferedInstance.Buttons {
 				if idx > 0 {
@@ -1303,21 +1082,13 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 				res.valueString += __instance__.Name
 			}
 		}
-	case SVGIcon:
+	case Layout:
 		switch fieldName {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "SVG":
-			res.valueString = inferedInstance.SVG
-		}
-	case Tree:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "RootNodes":
-			for idx, __instance__ := range inferedInstance.RootNodes {
+		case "Groups":
+			for idx, __instance__ := range inferedInstance.Groups {
 				if idx > 0 {
 					res.valueString += "\n"
 				}

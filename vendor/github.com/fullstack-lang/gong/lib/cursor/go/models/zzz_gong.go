@@ -3,11 +3,16 @@ package models
 
 import (
 	"cmp"
+	"embed"
 	"errors"
 	"fmt"
+	"log"
 	"math"
 	"slices"
+	"sort"
 	"time"
+
+	cursor_go "github.com/fullstack-lang/gong/lib/cursor/go"
 )
 
 func __Gong__Abs(x int) int {
@@ -68,14 +73,14 @@ type Stage struct {
 	name string
 
 	// insertion point for definition of arrays registering instances
-	FileToDownloads           map[*FileToDownload]any
-	FileToDownloads_mapString map[string]*FileToDownload
+	Cursors           map[*Cursor]any
+	Cursors_mapString map[string]*Cursor
 
 	// insertion point for slice of pointers maps
-	OnAfterFileToDownloadCreateCallback OnAfterCreateInterface[FileToDownload]
-	OnAfterFileToDownloadUpdateCallback OnAfterUpdateInterface[FileToDownload]
-	OnAfterFileToDownloadDeleteCallback OnAfterDeleteInterface[FileToDownload]
-	OnAfterFileToDownloadReadCallback   OnAfterReadInterface[FileToDownload]
+	OnAfterCursorCreateCallback OnAfterCreateInterface[Cursor]
+	OnAfterCursorUpdateCallback OnAfterUpdateInterface[Cursor]
+	OnAfterCursorDeleteCallback OnAfterDeleteInterface[Cursor]
+	OnAfterCursorReadCallback   OnAfterReadInterface[Cursor]
 
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
@@ -103,14 +108,82 @@ type Stage struct {
 	// store the stage order of each instance in order to
 	// preserve this order when serializing them
 	// insertion point for order fields declaration
-	FileToDownloadOrder            uint
-	FileToDownloadMap_Staged_Order map[*FileToDownload]uint
+	CursorOrder            uint
+	CursorMap_Staged_Order map[*Cursor]uint
 
 	// end of insertion point
+
+	NamedStructs []*NamedStruct
+}
+
+// GetNamedStructs implements models.ProbebStage.
+func (stage *Stage) GetNamedStructsNames() (res []string) {
+
+	for _, namedStruct := range stage.NamedStructs {
+		res = append(res, namedStruct.name)
+	}
+
+	return
+}
+
+func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
+
+	orderedSet := []T{}
+	for instance := range set {
+		orderedSet = append(orderedSet, instance)
+	}
+	sort.Slice(orderedSet[:], func(i, j int) bool {
+		instancei := orderedSet[i]
+		instancej := orderedSet[j]
+		i_order, oki := order[instancei]
+		j_order, okj := order[instancej]
+		if !oki || !okj {
+			log.Fatalf("GetNamedStructInstances: pointer not found")
+		}
+		return i_order < j_order
+	})
+
+	for _, instance := range orderedSet {
+		res = append(res, instance.GetName())
+	}
+
+	return
+}
+
+func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
+
+	switch namedStructName {
+	// insertion point for case 
+		case "Cursor":
+			res = GetNamedStructInstances(stage.Cursors, stage.CursorMap_Staged_Order)
+	}
+
+	return
+}
+
+
+type NamedStruct struct {
+	name string
+}
+
+func (namedStruct *NamedStruct) GetName() string {
+	return namedStruct.name
 }
 
 func (stage *Stage) GetType() string {
-	return "github.com/fullstack-lang/gong/lib/load/go/models"
+	return "github.com/fullstack-lang/gong/lib/cursor/go/models"
+}
+
+func (stage *Stage) GetMap_GongStructName_InstancesNb() map[string]int {
+	return stage.Map_GongStructName_InstancesNb
+}
+
+func (stage *Stage) GetModelsEmbededDir() embed.FS {
+	return cursor_go.GoModelsDir
+}
+
+func (stage *Stage) GetDigramsEmbededDir() embed.FS {
+	return cursor_go.GoDiagramsDir
 }
 
 type GONG__Identifier struct {
@@ -153,8 +226,8 @@ type BackRepoInterface interface {
 	BackupXL(stage *Stage, dirPath string)
 	RestoreXL(stage *Stage, dirPath string)
 	// insertion point for Commit and Checkout signatures
-	CommitFileToDownload(filetodownload *FileToDownload)
-	CheckoutFileToDownload(filetodownload *FileToDownload)
+	CommitCursor(cursor *Cursor)
+	CheckoutCursor(cursor *Cursor)
 	GetLastCommitFromBackNb() uint
 	GetLastPushFromFrontNb() uint
 }
@@ -162,8 +235,8 @@ type BackRepoInterface interface {
 func NewStage(name string) (stage *Stage) {
 
 	stage = &Stage{ // insertion point for array initiatialisation
-		FileToDownloads:           make(map[*FileToDownload]any),
-		FileToDownloads_mapString: make(map[string]*FileToDownload),
+		Cursors:           make(map[*Cursor]any),
+		Cursors_mapString: make(map[string]*Cursor),
 
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
@@ -175,9 +248,13 @@ func NewStage(name string) (stage *Stage) {
 		// the to be removed stops here
 
 		// insertion point for order map initialisations
-		FileToDownloadMap_Staged_Order: make(map[*FileToDownload]uint),
+		CursorMap_Staged_Order: make(map[*Cursor]uint),
 
 		// end of insertion point
+
+		NamedStructs: []*NamedStruct{ // insertion point for order map initialisations
+			&NamedStruct{name: "Cursor"},
+		}, // end of insertion point
 	}
 
 	return
@@ -187,8 +264,8 @@ func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
 
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
-	case *FileToDownload:
-		return stage.FileToDownloadMap_Staged_Order[instance]
+	case *Cursor:
+		return stage.CursorMap_Staged_Order[instance]
 	default:
 		return 0 // should not happen
 	}
@@ -214,7 +291,7 @@ func (stage *Stage) Commit() {
 	}
 
 	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["FileToDownload"] = len(stage.FileToDownloads)
+	stage.Map_GongStructName_InstancesNb["Cursor"] = len(stage.Cursors)
 
 }
 
@@ -225,7 +302,7 @@ func (stage *Stage) Checkout() {
 
 	stage.ComputeReverseMaps()
 	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["FileToDownload"] = len(stage.FileToDownloads)
+	stage.Map_GongStructName_InstancesNb["Cursor"] = len(stage.Cursors)
 
 }
 
@@ -258,87 +335,87 @@ func (stage *Stage) RestoreXL(dirPath string) {
 }
 
 // insertion point for cumulative sub template with model space calls
-// Stage puts filetodownload to the model stage
-func (filetodownload *FileToDownload) Stage(stage *Stage) *FileToDownload {
+// Stage puts cursor to the model stage
+func (cursor *Cursor) Stage(stage *Stage) *Cursor {
 
-	if _, ok := stage.FileToDownloads[filetodownload]; !ok {
-		stage.FileToDownloads[filetodownload] = __member
-		stage.FileToDownloadMap_Staged_Order[filetodownload] = stage.FileToDownloadOrder
-		stage.FileToDownloadOrder++
+	if _, ok := stage.Cursors[cursor]; !ok {
+		stage.Cursors[cursor] = __member
+		stage.CursorMap_Staged_Order[cursor] = stage.CursorOrder
+		stage.CursorOrder++
 	}
-	stage.FileToDownloads_mapString[filetodownload.Name] = filetodownload
+	stage.Cursors_mapString[cursor.Name] = cursor
 
-	return filetodownload
+	return cursor
 }
 
-// Unstage removes filetodownload off the model stage
-func (filetodownload *FileToDownload) Unstage(stage *Stage) *FileToDownload {
-	delete(stage.FileToDownloads, filetodownload)
-	delete(stage.FileToDownloads_mapString, filetodownload.Name)
-	return filetodownload
+// Unstage removes cursor off the model stage
+func (cursor *Cursor) Unstage(stage *Stage) *Cursor {
+	delete(stage.Cursors, cursor)
+	delete(stage.Cursors_mapString, cursor.Name)
+	return cursor
 }
 
-// UnstageVoid removes filetodownload off the model stage
-func (filetodownload *FileToDownload) UnstageVoid(stage *Stage) {
-	delete(stage.FileToDownloads, filetodownload)
-	delete(stage.FileToDownloads_mapString, filetodownload.Name)
+// UnstageVoid removes cursor off the model stage
+func (cursor *Cursor) UnstageVoid(stage *Stage) {
+	delete(stage.Cursors, cursor)
+	delete(stage.Cursors_mapString, cursor.Name)
 }
 
-// commit filetodownload to the back repo (if it is already staged)
-func (filetodownload *FileToDownload) Commit(stage *Stage) *FileToDownload {
-	if _, ok := stage.FileToDownloads[filetodownload]; ok {
+// commit cursor to the back repo (if it is already staged)
+func (cursor *Cursor) Commit(stage *Stage) *Cursor {
+	if _, ok := stage.Cursors[cursor]; ok {
 		if stage.BackRepo != nil {
-			stage.BackRepo.CommitFileToDownload(filetodownload)
+			stage.BackRepo.CommitCursor(cursor)
 		}
 	}
-	return filetodownload
+	return cursor
 }
 
-func (filetodownload *FileToDownload) CommitVoid(stage *Stage) {
-	filetodownload.Commit(stage)
+func (cursor *Cursor) CommitVoid(stage *Stage) {
+	cursor.Commit(stage)
 }
 
-// Checkout filetodownload to the back repo (if it is already staged)
-func (filetodownload *FileToDownload) Checkout(stage *Stage) *FileToDownload {
-	if _, ok := stage.FileToDownloads[filetodownload]; ok {
+// Checkout cursor to the back repo (if it is already staged)
+func (cursor *Cursor) Checkout(stage *Stage) *Cursor {
+	if _, ok := stage.Cursors[cursor]; ok {
 		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutFileToDownload(filetodownload)
+			stage.BackRepo.CheckoutCursor(cursor)
 		}
 	}
-	return filetodownload
+	return cursor
 }
 
 // for satisfaction of GongStruct interface
-func (filetodownload *FileToDownload) GetName() (res string) {
-	return filetodownload.Name
+func (cursor *Cursor) GetName() (res string) {
+	return cursor.Name
 }
 
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
-	CreateORMFileToDownload(FileToDownload *FileToDownload)
+	CreateORMCursor(Cursor *Cursor)
 }
 
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
-	DeleteORMFileToDownload(FileToDownload *FileToDownload)
+	DeleteORMCursor(Cursor *Cursor)
 }
 
 func (stage *Stage) Reset() { // insertion point for array reset
-	stage.FileToDownloads = make(map[*FileToDownload]any)
-	stage.FileToDownloads_mapString = make(map[string]*FileToDownload)
-	stage.FileToDownloadMap_Staged_Order = make(map[*FileToDownload]uint)
-	stage.FileToDownloadOrder = 0
+	stage.Cursors = make(map[*Cursor]any)
+	stage.Cursors_mapString = make(map[string]*Cursor)
+	stage.CursorMap_Staged_Order = make(map[*Cursor]uint)
+	stage.CursorOrder = 0
 
 }
 
 func (stage *Stage) Nil() { // insertion point for array nil
-	stage.FileToDownloads = nil
-	stage.FileToDownloads_mapString = nil
+	stage.Cursors = nil
+	stage.Cursors_mapString = nil
 
 }
 
 func (stage *Stage) Unstage() { // insertion point for array nil
-	for filetodownload := range stage.FileToDownloads {
-		filetodownload.Unstage(stage)
+	for cursor := range stage.Cursors {
+		cursor.Unstage(stage)
 	}
 
 }
@@ -402,8 +479,8 @@ func GongGetSet[Type GongstructSet](stage *Stage) *Type {
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[*FileToDownload]any:
-		return any(&stage.FileToDownloads).(*Type)
+	case map[*Cursor]any:
+		return any(&stage.Cursors).(*Type)
 	default:
 		return nil
 	}
@@ -416,8 +493,8 @@ func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[string]*FileToDownload:
-		return any(&stage.FileToDownloads_mapString).(*Type)
+	case map[string]*Cursor:
+		return any(&stage.Cursors_mapString).(*Type)
 	default:
 		return nil
 	}
@@ -430,8 +507,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case FileToDownload:
-		return any(&stage.FileToDownloads).(*map[*Type]any)
+	case Cursor:
+		return any(&stage.Cursors).(*map[*Type]any)
 	default:
 		return nil
 	}
@@ -444,8 +521,8 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case *FileToDownload:
-		return any(&stage.FileToDownloads).(*map[Type]any)
+	case *Cursor:
+		return any(&stage.Cursors).(*map[Type]any)
 	default:
 		return nil
 	}
@@ -458,8 +535,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type 
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case FileToDownload:
-		return any(&stage.FileToDownloads_mapString).(*map[string]*Type)
+	case Cursor:
+		return any(&stage.Cursors_mapString).(*map[string]*Type)
 	default:
 		return nil
 	}
@@ -474,8 +551,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 
 	switch any(ret).(type) {
 	// insertion point for instance with special fields
-	case FileToDownload:
-		return any(&FileToDownload{
+	case Cursor:
+		return any(&Cursor{
 			// Initialisation of associations
 		}).(*Type)
 	default:
@@ -496,8 +573,8 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 
 	switch any(ret).(type) {
 	// insertion point of functions that provide maps for reverse associations
-	// reverse maps of direct associations of FileToDownload
-	case FileToDownload:
+	// reverse maps of direct associations of Cursor
+	case Cursor:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -517,8 +594,8 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 
 	switch any(ret).(type) {
 	// insertion point of functions that provide maps for reverse associations
-	// reverse maps of direct associations of FileToDownload
-	case FileToDownload:
+	// reverse maps of direct associations of Cursor
+	case Cursor:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -534,8 +611,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case FileToDownload:
-		res = "FileToDownload"
+	case Cursor:
+		res = "Cursor"
 	}
 	return res
 }
@@ -548,8 +625,8 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case *FileToDownload:
-		res = "FileToDownload"
+	case *Cursor:
+		res = "Cursor"
 	}
 	return res
 }
@@ -561,8 +638,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case FileToDownload:
-		res = []string{"Name", "Content"}
+	case Cursor:
+		res = []string{"Name", "StartX", "EndX", "Y1", "Y2", "DurationSeconds", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "IsPlaying"}
 	}
 	return
 }
@@ -581,7 +658,7 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	switch any(ret).(type) {
 
 	// insertion point for generic get gongstruct name
-	case FileToDownload:
+	case Cursor:
 		var rf ReverseField
 		_ = rf
 	}
@@ -595,8 +672,8 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case *FileToDownload:
-		res = []string{"Name", "Content"}
+	case *Cursor:
+		res = []string{"Name", "StartX", "EndX", "Y1", "Y2", "DurationSeconds", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "IsPlaying"}
 	}
 	return
 }
@@ -638,13 +715,57 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 
 	switch inferedInstance := any(instance).(type) {
 	// insertion point for generic get gongstruct field value
-	case *FileToDownload:
+	case *Cursor:
 		switch fieldName {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Content":
-			res.valueString = inferedInstance.Content
+		case "StartX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "EndX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Y1":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y1)
+			res.valueFloat = inferedInstance.Y1
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Y2":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y2)
+			res.valueFloat = inferedInstance.Y2
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "DurationSeconds":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
+			res.valueFloat = inferedInstance.DurationSeconds
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Color":
+			res.valueString = inferedInstance.Color
+		case "FillOpacity":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Stroke":
+			res.valueString = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StrokeWidth":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StrokeDashArray":
+			res.valueString = inferedInstance.StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
+		case "Transform":
+			res.valueString = inferedInstance.Transform
+		case "IsPlaying":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsPlaying)
+			res.valueBool = inferedInstance.IsPlaying
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	default:
 		_ = inferedInstance
@@ -656,13 +777,57 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 
 	switch inferedInstance := any(instance).(type) {
 	// insertion point for generic get gongstruct field value
-	case FileToDownload:
+	case Cursor:
 		switch fieldName {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Content":
-			res.valueString = inferedInstance.Content
+		case "StartX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StartX)
+			res.valueFloat = inferedInstance.StartX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "EndX":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.EndX)
+			res.valueFloat = inferedInstance.EndX
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Y1":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y1)
+			res.valueFloat = inferedInstance.Y1
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Y2":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.Y2)
+			res.valueFloat = inferedInstance.Y2
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "DurationSeconds":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.DurationSeconds)
+			res.valueFloat = inferedInstance.DurationSeconds
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Color":
+			res.valueString = inferedInstance.Color
+		case "FillOpacity":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
+			res.valueFloat = inferedInstance.FillOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "Stroke":
+			res.valueString = inferedInstance.Stroke
+		case "StrokeOpacity":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
+			res.valueFloat = inferedInstance.StrokeOpacity
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StrokeWidth":
+			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
+			res.valueFloat = inferedInstance.StrokeWidth
+			res.GongFieldValueType = GongFieldValueTypeFloat
+		case "StrokeDashArray":
+			res.valueString = inferedInstance.StrokeDashArray
+		case "StrokeDashArrayWhenSelected":
+			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
+		case "Transform":
+			res.valueString = inferedInstance.Transform
+		case "IsPlaying":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsPlaying)
+			res.valueBool = inferedInstance.IsPlaying
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	default:
 		_ = inferedInstance

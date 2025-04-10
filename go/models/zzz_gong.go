@@ -3,11 +3,16 @@ package models
 
 import (
 	"cmp"
+	"embed"
 	"errors"
 	"fmt"
+	"log"
 	"math"
 	"slices"
+	"sort"
 	"time"
+
+	phyllotaxymusic_go "github.com/thomaspeugeot/phyllotaxymusic/go"
 )
 
 func __Gong__Abs(x int) int {
@@ -429,10 +434,128 @@ type Stage struct {
 	VerticalAxisMap_Staged_Order map[*VerticalAxis]uint
 
 	// end of insertion point
+
+	NamedStructs []*NamedStruct
+}
+
+// GetNamedStructs implements models.ProbebStage.
+func (stage *Stage) GetNamedStructsNames() (res []string) {
+
+	for _, namedStruct := range stage.NamedStructs {
+		res = append(res, namedStruct.name)
+	}
+
+	return
+}
+
+func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
+
+	orderedSet := []T{}
+	for instance := range set {
+		orderedSet = append(orderedSet, instance)
+	}
+	sort.Slice(orderedSet[:], func(i, j int) bool {
+		instancei := orderedSet[i]
+		instancej := orderedSet[j]
+		i_order, oki := order[instancei]
+		j_order, okj := order[instancej]
+		if !oki || !okj {
+			log.Fatalf("GetNamedStructInstances: pointer not found")
+		}
+		return i_order < j_order
+	})
+
+	for _, instance := range orderedSet {
+		res = append(res, instance.GetName())
+	}
+
+	return
+}
+
+func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
+
+	switch namedStructName {
+	// insertion point for case 
+		case "Axis":
+			res = GetNamedStructInstances(stage.Axiss, stage.AxisMap_Staged_Order)
+		case "AxisGrid":
+			res = GetNamedStructInstances(stage.AxisGrids, stage.AxisGridMap_Staged_Order)
+		case "Bezier":
+			res = GetNamedStructInstances(stage.Beziers, stage.BezierMap_Staged_Order)
+		case "BezierGrid":
+			res = GetNamedStructInstances(stage.BezierGrids, stage.BezierGridMap_Staged_Order)
+		case "BezierGridStack":
+			res = GetNamedStructInstances(stage.BezierGridStacks, stage.BezierGridStackMap_Staged_Order)
+		case "Circle":
+			res = GetNamedStructInstances(stage.Circles, stage.CircleMap_Staged_Order)
+		case "CircleGrid":
+			res = GetNamedStructInstances(stage.CircleGrids, stage.CircleGridMap_Staged_Order)
+		case "ExportToMusicxml":
+			res = GetNamedStructInstances(stage.ExportToMusicxmls, stage.ExportToMusicxmlMap_Staged_Order)
+		case "FrontCurve":
+			res = GetNamedStructInstances(stage.FrontCurves, stage.FrontCurveMap_Staged_Order)
+		case "FrontCurveStack":
+			res = GetNamedStructInstances(stage.FrontCurveStacks, stage.FrontCurveStackMap_Staged_Order)
+		case "HorizontalAxis":
+			res = GetNamedStructInstances(stage.HorizontalAxiss, stage.HorizontalAxisMap_Staged_Order)
+		case "Key":
+			res = GetNamedStructInstances(stage.Keys, stage.KeyMap_Staged_Order)
+		case "Parameter":
+			res = GetNamedStructInstances(stage.Parameters, stage.ParameterMap_Staged_Order)
+		case "Rhombus":
+			res = GetNamedStructInstances(stage.Rhombuss, stage.RhombusMap_Staged_Order)
+		case "RhombusGrid":
+			res = GetNamedStructInstances(stage.RhombusGrids, stage.RhombusGridMap_Staged_Order)
+		case "ShapeCategory":
+			res = GetNamedStructInstances(stage.ShapeCategorys, stage.ShapeCategoryMap_Staged_Order)
+		case "SpiralBezier":
+			res = GetNamedStructInstances(stage.SpiralBeziers, stage.SpiralBezierMap_Staged_Order)
+		case "SpiralBezierGrid":
+			res = GetNamedStructInstances(stage.SpiralBezierGrids, stage.SpiralBezierGridMap_Staged_Order)
+		case "SpiralCircle":
+			res = GetNamedStructInstances(stage.SpiralCircles, stage.SpiralCircleMap_Staged_Order)
+		case "SpiralCircleGrid":
+			res = GetNamedStructInstances(stage.SpiralCircleGrids, stage.SpiralCircleGridMap_Staged_Order)
+		case "SpiralLine":
+			res = GetNamedStructInstances(stage.SpiralLines, stage.SpiralLineMap_Staged_Order)
+		case "SpiralLineGrid":
+			res = GetNamedStructInstances(stage.SpiralLineGrids, stage.SpiralLineGridMap_Staged_Order)
+		case "SpiralOrigin":
+			res = GetNamedStructInstances(stage.SpiralOrigins, stage.SpiralOriginMap_Staged_Order)
+		case "SpiralRhombus":
+			res = GetNamedStructInstances(stage.SpiralRhombuss, stage.SpiralRhombusMap_Staged_Order)
+		case "SpiralRhombusGrid":
+			res = GetNamedStructInstances(stage.SpiralRhombusGrids, stage.SpiralRhombusGridMap_Staged_Order)
+		case "VerticalAxis":
+			res = GetNamedStructInstances(stage.VerticalAxiss, stage.VerticalAxisMap_Staged_Order)
+	}
+
+	return
+}
+
+
+type NamedStruct struct {
+	name string
+}
+
+func (namedStruct *NamedStruct) GetName() string {
+	return namedStruct.name
 }
 
 func (stage *Stage) GetType() string {
 	return "github.com/thomaspeugeot/phyllotaxymusic/go/models"
+}
+
+func (stage *Stage) GetMap_GongStructName_InstancesNb() map[string]int {
+	return stage.Map_GongStructName_InstancesNb
+}
+
+func (stage *Stage) GetModelsEmbededDir() embed.FS {
+	return phyllotaxymusic_go.GoModelsDir
+}
+
+func (stage *Stage) GetDigramsEmbededDir() embed.FS {
+	return phyllotaxymusic_go.GoDiagramsDir
 }
 
 type GONG__Identifier struct {
@@ -675,6 +798,35 @@ func NewStage(name string) (stage *Stage) {
 		VerticalAxisMap_Staged_Order: make(map[*VerticalAxis]uint),
 
 		// end of insertion point
+
+		NamedStructs: []*NamedStruct{ // insertion point for order map initialisations
+			&NamedStruct{name: "Axis"},
+			&NamedStruct{name: "AxisGrid"},
+			&NamedStruct{name: "Bezier"},
+			&NamedStruct{name: "BezierGrid"},
+			&NamedStruct{name: "BezierGridStack"},
+			&NamedStruct{name: "Circle"},
+			&NamedStruct{name: "CircleGrid"},
+			&NamedStruct{name: "ExportToMusicxml"},
+			&NamedStruct{name: "FrontCurve"},
+			&NamedStruct{name: "FrontCurveStack"},
+			&NamedStruct{name: "HorizontalAxis"},
+			&NamedStruct{name: "Key"},
+			&NamedStruct{name: "Parameter"},
+			&NamedStruct{name: "Rhombus"},
+			&NamedStruct{name: "RhombusGrid"},
+			&NamedStruct{name: "ShapeCategory"},
+			&NamedStruct{name: "SpiralBezier"},
+			&NamedStruct{name: "SpiralBezierGrid"},
+			&NamedStruct{name: "SpiralCircle"},
+			&NamedStruct{name: "SpiralCircleGrid"},
+			&NamedStruct{name: "SpiralLine"},
+			&NamedStruct{name: "SpiralLineGrid"},
+			&NamedStruct{name: "SpiralOrigin"},
+			&NamedStruct{name: "SpiralRhombus"},
+			&NamedStruct{name: "SpiralRhombusGrid"},
+			&NamedStruct{name: "VerticalAxis"},
+		}, // end of insertion point
 	}
 
 	return

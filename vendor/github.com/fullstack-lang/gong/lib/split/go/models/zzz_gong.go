@@ -3,11 +3,16 @@ package models
 
 import (
 	"cmp"
+	"embed"
 	"errors"
 	"fmt"
+	"log"
 	"math"
 	"slices"
+	"sort"
 	"time"
+
+	split_go "github.com/fullstack-lang/gong/lib/split/go"
 )
 
 func __Gong__Abs(x int) int {
@@ -279,10 +284,106 @@ type Stage struct {
 	XlsxMap_Staged_Order map[*Xlsx]uint
 
 	// end of insertion point
+
+	NamedStructs []*NamedStruct
+}
+
+// GetNamedStructs implements models.ProbebStage.
+func (stage *Stage) GetNamedStructsNames() (res []string) {
+
+	for _, namedStruct := range stage.NamedStructs {
+		res = append(res, namedStruct.name)
+	}
+
+	return
+}
+
+func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
+
+	orderedSet := []T{}
+	for instance := range set {
+		orderedSet = append(orderedSet, instance)
+	}
+	sort.Slice(orderedSet[:], func(i, j int) bool {
+		instancei := orderedSet[i]
+		instancej := orderedSet[j]
+		i_order, oki := order[instancei]
+		j_order, okj := order[instancej]
+		if !oki || !okj {
+			log.Fatalf("GetNamedStructInstances: pointer not found")
+		}
+		return i_order < j_order
+	})
+
+	for _, instance := range orderedSet {
+		res = append(res, instance.GetName())
+	}
+
+	return
+}
+
+func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
+
+	switch namedStructName {
+	// insertion point for case 
+		case "AsSplit":
+			res = GetNamedStructInstances(stage.AsSplits, stage.AsSplitMap_Staged_Order)
+		case "AsSplitArea":
+			res = GetNamedStructInstances(stage.AsSplitAreas, stage.AsSplitAreaMap_Staged_Order)
+		case "Button":
+			res = GetNamedStructInstances(stage.Buttons, stage.ButtonMap_Staged_Order)
+		case "Cursor":
+			res = GetNamedStructInstances(stage.Cursors, stage.CursorMap_Staged_Order)
+		case "Doc":
+			res = GetNamedStructInstances(stage.Docs, stage.DocMap_Staged_Order)
+		case "Form":
+			res = GetNamedStructInstances(stage.Forms, stage.FormMap_Staged_Order)
+		case "Load":
+			res = GetNamedStructInstances(stage.Loads, stage.LoadMap_Staged_Order)
+		case "Slider":
+			res = GetNamedStructInstances(stage.Sliders, stage.SliderMap_Staged_Order)
+		case "Split":
+			res = GetNamedStructInstances(stage.Splits, stage.SplitMap_Staged_Order)
+		case "Svg":
+			res = GetNamedStructInstances(stage.Svgs, stage.SvgMap_Staged_Order)
+		case "Table":
+			res = GetNamedStructInstances(stage.Tables, stage.TableMap_Staged_Order)
+		case "Tone":
+			res = GetNamedStructInstances(stage.Tones, stage.ToneMap_Staged_Order)
+		case "Tree":
+			res = GetNamedStructInstances(stage.Trees, stage.TreeMap_Staged_Order)
+		case "View":
+			res = GetNamedStructInstances(stage.Views, stage.ViewMap_Staged_Order)
+		case "Xlsx":
+			res = GetNamedStructInstances(stage.Xlsxs, stage.XlsxMap_Staged_Order)
+	}
+
+	return
+}
+
+
+type NamedStruct struct {
+	name string
+}
+
+func (namedStruct *NamedStruct) GetName() string {
+	return namedStruct.name
 }
 
 func (stage *Stage) GetType() string {
 	return "github.com/fullstack-lang/gong/lib/split/go/models"
+}
+
+func (stage *Stage) GetMap_GongStructName_InstancesNb() map[string]int {
+	return stage.Map_GongStructName_InstancesNb
+}
+
+func (stage *Stage) GetModelsEmbededDir() embed.FS {
+	return split_go.GoModelsDir
+}
+
+func (stage *Stage) GetDigramsEmbededDir() embed.FS {
+	return split_go.GoDiagramsDir
 }
 
 type GONG__Identifier struct {
@@ -448,6 +549,24 @@ func NewStage(name string) (stage *Stage) {
 		XlsxMap_Staged_Order: make(map[*Xlsx]uint),
 
 		// end of insertion point
+
+		NamedStructs: []*NamedStruct{ // insertion point for order map initialisations
+			&NamedStruct{name: "AsSplit"},
+			&NamedStruct{name: "AsSplitArea"},
+			&NamedStruct{name: "Button"},
+			&NamedStruct{name: "Cursor"},
+			&NamedStruct{name: "Doc"},
+			&NamedStruct{name: "Form"},
+			&NamedStruct{name: "Load"},
+			&NamedStruct{name: "Slider"},
+			&NamedStruct{name: "Split"},
+			&NamedStruct{name: "Svg"},
+			&NamedStruct{name: "Table"},
+			&NamedStruct{name: "Tone"},
+			&NamedStruct{name: "Tree"},
+			&NamedStruct{name: "View"},
+			&NamedStruct{name: "Xlsx"},
+		}, // end of insertion point
 	}
 
 	return
@@ -2539,7 +2658,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Tree:
 		res = []string{"Name", "StackName", "TreeName"}
 	case View:
-		res = []string{"Name", "RootAsSplitAreas"}
+		res = []string{"Name", "ShowViewName", "RootAsSplitAreas"}
 	case Xlsx:
 		res = []string{"Name", "StackName"}
 	}
@@ -2649,7 +2768,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Tree:
 		res = []string{"Name", "StackName", "TreeName"}
 	case *View:
-		res = []string{"Name", "RootAsSplitAreas"}
+		res = []string{"Name", "ShowViewName", "RootAsSplitAreas"}
 	case *Xlsx:
 		res = []string{"Name", "StackName"}
 	}
@@ -2888,6 +3007,10 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "ShowViewName":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowViewName)
+			res.valueBool = inferedInstance.ShowViewName
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "RootAsSplitAreas":
 			for idx, __instance__ := range inferedInstance.RootAsSplitAreas {
 				if idx > 0 {
@@ -3109,6 +3232,10 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "ShowViewName":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowViewName)
+			res.valueBool = inferedInstance.ShowViewName
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "RootAsSplitAreas":
 			for idx, __instance__ := range inferedInstance.RootAsSplitAreas {
 				if idx > 0 {
