@@ -83,7 +83,7 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 	stager.cursorStage.Commit()
 
 	// Main View & Its Entire Layout
-	(&split.View{
+	split.StageBranch(stager.splitStage, &split.View{
 		Name: "Main view",
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
@@ -100,8 +100,8 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 							Tree: (&split.Tree{
 								StackName: stager.treeStage.GetName(),
 								TreeName:  Sidebar.ToString(),
-							}).Stage(stager.splitStage),
-						}).Stage(stager.splitStage),
+							}),
+						}),
 
 						// SVG area
 						(&split.AsSplitArea{
@@ -112,12 +112,12 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 							Svg: (&split.Svg{
 								StackName: stager.svgStage.GetName(),
 								Style:     "position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 1;",
-							}).Stage(stager.splitStage),
+							}),
 							Cursor: (&split.Cursor{
 								StackName: stager.cursorStage.GetName(),
 								Style:     "position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 2;pointer-events: none;",
-							}).Stage(stager.splitStage),
-						}).Stage(stager.splitStage),
+							}),
+						}),
 
 						// Right area
 						(&split.AsSplitArea{
@@ -133,8 +133,8 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 										Size:             60,
 										Slider: (&split.Slider{
 											StackName: stager.sliderStage.GetName(),
-										}).Stage(stager.splitStage),
-									}).Stage(stager.splitStage),
+										}),
+									}),
 
 									// Button area
 									(&split.AsSplitArea{
@@ -142,8 +142,8 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 										Size:             20,
 										Button: (&split.Button{
 											StackName: stager.buttonStage.GetName(),
-										}).Stage(stager.splitStage),
-									}).Stage(stager.splitStage),
+										}),
+									}),
 
 									// Tone area
 									(&split.AsSplitArea{
@@ -151,8 +151,8 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 										Size:             20,
 										Tone: (&split.Tone{
 											StackName: stager.toneStage.GetName(),
-										}).Stage(stager.splitStage),
-									}).Stage(stager.splitStage),
+										}),
+									}),
 
 									// load stage is load but invisible (Size =0). It
 									// is used to download generated Musescore files
@@ -161,104 +161,104 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 										Size:             0,
 										Load: (&split.Load{
 											StackName: stager.loadStage.GetName(),
-										}).Stage(stager.splitStage),
-									}).Stage(stager.splitStage),
+										}),
+									}),
 								},
-							}).Stage(stager.splitStage),
-						}).Stage(stager.splitStage),
+							}),
+						}),
 					},
-				}).Stage(stager.splitStage),
-			}).Stage(stager.splitStage),
+				}),
+			}),
 		},
-	}).Stage(stager.splitStage)
+	})
 
-	(&split.View{
+	split.StageBranch(stager.splitStage, &split.View{
 		Name: "Probe",
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
 					StackName: stager.phyllotaxymusicStage.GetProbeSplitStageName(),
-				}).Stage(stager.splitStage),
-			}).Stage(stager.splitStage),
+				}),
+			}),
 		},
-	}).Stage(stager.splitStage)
+	})
 
-	(&split.View{
+	split.StageBranch(stager.splitStage, &split.View{
 		Name: "svg probe",
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
 					StackName: stager.svgStage.GetProbeSplitStageName(),
-				}).Stage(stager.splitStage),
-			}).Stage(stager.splitStage),
+				}),
+			}),
 		},
-	}).Stage(stager.splitStage)
+	})
 
-	(&split.View{
+	split.StageBranch(stager.splitStage, &split.View{
 		Name: "tree probe",
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
 					StackName: stager.treeStage.GetProbeSplitStageName(),
-				}).Stage(stager.splitStage),
-			}).Stage(stager.splitStage),
+				}),
+			}),
 		},
-	}).Stage(stager.splitStage)
+	})
 
-	(&split.View{
+	split.StageBranch(stager.splitStage, &split.View{
 		Name: "slider probe",
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
 					StackName: stager.sliderStage.GetProbeSplitStageName(),
-				}).Stage(stager.splitStage),
-			}).Stage(stager.splitStage),
+				}),
+			}),
 		},
-	}).Stage(stager.splitStage)
+	})
 
-	(&split.View{
+	split.StageBranch(stager.splitStage, &split.View{
 		Name: "button probe",
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
 					StackName: stager.buttonStage.GetProbeSplitStageName(),
-				}).Stage(stager.splitStage),
-			}).Stage(stager.splitStage),
+				}),
+			}),
 		},
-	}).Stage(stager.splitStage)
+	})
 
-	(&split.View{
+	split.StageBranch(stager.splitStage, &split.View{
 		Name: "tone probe",
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
 					StackName: stager.toneStage.GetProbeSplitStageName(),
-				}).Stage(stager.splitStage),
-			}).Stage(stager.splitStage),
+				}),
+			}),
 		},
-	}).Stage(stager.splitStage)
+	})
 
-	(&split.View{
+	split.StageBranch(stager.splitStage, &split.View{
 		Name: "cursor probe",
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
 					StackName: stager.cursorStage.GetProbeSplitStageName(),
-				}).Stage(stager.splitStage),
-			}).Stage(stager.splitStage),
+				}),
+			}),
 		},
-	}).Stage(stager.splitStage)
+	})
 
-	(&split.View{
+	split.StageBranch(stager.splitStage, &split.View{
 		Name: "split probe",
 		RootAsSplitAreas: []*split.AsSplitArea{
 			(&split.AsSplitArea{
 				Split: (&split.Split{
 					StackName: stager.splitStage.GetProbeSplitStageName(),
-				}).Stage(stager.splitStage),
-			}).Stage(stager.splitStage),
+				}),
+			}),
 		},
-	}).Stage(stager.splitStage)
+	})
 
 	stager.splitStage.Commit()
 
