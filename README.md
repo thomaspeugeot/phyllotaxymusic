@@ -1,6 +1,6 @@
 # Phylotaxy music
 
-[Check out the generated web site from default parameter](https://thomaspeugeot.github.io/phyllotaxymusic/public)
+[Check out the generated web site from default parameter](https://thomaspeugeot.github.io/phyllotaxymusic)
 
 ## Compiling & running the application
 
