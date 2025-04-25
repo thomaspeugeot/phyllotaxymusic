@@ -12,6 +12,7 @@ func (stager *Stager) UpdateAllStages() {
 	stager.UpdateAndCommitTreeStage()
 	stager.UpdateAndCommitSlidersStage()
 	stager.UpdateAndCommitButtonStage()
+	stager.UpdateAndCommitSsgStage()
 	stager.phyllotaxymusicStage.Commit()
 }
 
@@ -22,5 +23,6 @@ func (stager *Stager) UpdateAllStagesButSliders() {
 	stager.UpdateAndCommitToneStage()
 	stager.UpdateAndCommitTreeStage()
 	stager.UpdateAndCommitButtonStage()
+	stager.UpdateAndCommitSsgStage()
 	stager.phyllotaxymusicStage.Commit()
 }

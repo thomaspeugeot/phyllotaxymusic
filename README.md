@@ -1,5 +1,7 @@
 # Phylotaxy music
 
+[Check out the interactive clock here!](https://thomaspeugeot.github.io/phyllotaxymusic/public)
+
 ## Compiling & running the application
 
 git, go version => 1.23 and npm version >= 18 are needed

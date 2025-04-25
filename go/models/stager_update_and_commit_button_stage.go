@@ -15,7 +15,7 @@ func (stager *Stager) UpdateAndCommitButtonStage() {
 	group1.Percentage = 100
 	layout.Groups = append(layout.Groups, group1)
 
-	button := button.NewButton(
+	buttonExportToMuseScore := button.NewButton(
 		// stager is the target of the button. stager implements interface method OnAfterUpdateButton()
 		&ExportToMuseScoreButtonProxy{
 			stager: stager,
@@ -25,7 +25,19 @@ func (stager *Stager) UpdateAndCommitButtonStage() {
 		"Export to Musescore",
 	)
 
-	group1.Buttons = append(group1.Buttons, button)
+	group1.Buttons = append(group1.Buttons, buttonExportToMuseScore)
+
+	buttonExportStaticSite := button.NewButton(
+		// stager is the target of the button. stager implements interface method OnAfterUpdateButton()
+		&ExportStaticSiteButtonProxy{
+			stager: stager,
+		},
+		"Export Static Web Site",
+		string(buttons.BUTTON_web),
+		"Export Static Web Site",
+	)
+
+	group1.Buttons = append(group1.Buttons, buttonExportStaticSite)
 
 	stager.buttonStage.Commit()
 }
@@ -43,4 +55,20 @@ func (e *ExportToMuseScoreButtonProxy) GetButtonsStage() *button.Stage {
 func (e *ExportToMuseScoreButtonProxy) OnAfterUpdateButton() {
 	e.stager.UpdatePhyllotaxyStage()
 	e.stager.parameter.GenerateMusicXMLFile()
+}
+
+type ExportStaticSiteButtonProxy struct {
+	stager *Stager
+}
+
+// GetButtonsStage implements models.Target.
+func (e *ExportStaticSiteButtonProxy) GetButtonsStage() *button.Stage {
+	return e.stager.buttonStage
+}
+
+// OnAfterUpdateButton implements models.Target.
+func (e *ExportStaticSiteButtonProxy) OnAfterUpdateButton() {
+	e.stager.UpdatePhyllotaxyStage()
+
+	e.stager.ssgStage.Generation()
 }
