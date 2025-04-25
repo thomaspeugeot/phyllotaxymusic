@@ -2,6 +2,8 @@ package models
 
 import (
 	button "github.com/fullstack-lang/gong/lib/button/go/models"
+
+	buttons "github.com/fullstack-lang/gong/lib/tree/go/buttons"
 )
 
 func (stager *Stager) UpdateAndCommitButtonStage() {
@@ -15,13 +17,30 @@ func (stager *Stager) UpdateAndCommitButtonStage() {
 
 	button := button.NewButton(
 		// stager is the target of the button. stager implements interface method OnAfterUpdateButton()
-		stager,
+		&ExportToMuseScoreButtonProxy{
+			stager: stager,
+		},
 		"Export to Musescore",
-		"music_note",
+		string(buttons.BUTTON_music_note),
 		"Export to Musescore",
 	)
 
 	group1.Buttons = append(group1.Buttons, button)
 
 	stager.buttonStage.Commit()
+}
+
+type ExportToMuseScoreButtonProxy struct {
+	stager *Stager
+}
+
+// GetButtonsStage implements models.Target.
+func (e *ExportToMuseScoreButtonProxy) GetButtonsStage() *button.Stage {
+	return e.stager.buttonStage
+}
+
+// OnAfterUpdateButton implements models.Target.
+func (e *ExportToMuseScoreButtonProxy) OnAfterUpdateButton() {
+	e.stager.UpdatePhyllotaxyStage()
+	e.stager.parameter.GenerateMusicXMLFile()
 }

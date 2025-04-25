@@ -12,15 +12,17 @@ import (
 	load_stack "github.com/fullstack-lang/gong/lib/load/go/stack"
 	slider_stack "github.com/fullstack-lang/gong/lib/slider/go/stack"
 	split_stack "github.com/fullstack-lang/gong/lib/split/go/stack"
-	gongsvg_stack "github.com/fullstack-lang/gong/lib/svg/go/stack"
-	gongtone_stack "github.com/fullstack-lang/gong/lib/tone/go/stack"
-	gongtree_stack "github.com/fullstack-lang/gong/lib/tree/go/stack"
+	ssg_stack "github.com/fullstack-lang/gong/lib/ssg/go/stack"
+	svg_stack "github.com/fullstack-lang/gong/lib/svg/go/stack"
+	tone_stack "github.com/fullstack-lang/gong/lib/tone/go/stack"
+	tree_stack "github.com/fullstack-lang/gong/lib/tree/go/stack"
 
 	button "github.com/fullstack-lang/gong/lib/button/go/models"
 	cursor "github.com/fullstack-lang/gong/lib/cursor/go/models"
 	load "github.com/fullstack-lang/gong/lib/load/go/models"
 	slider "github.com/fullstack-lang/gong/lib/slider/go/models"
 	split "github.com/fullstack-lang/gong/lib/split/go/models"
+	ssg "github.com/fullstack-lang/gong/lib/ssg/go/models"
 	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
 	tone "github.com/fullstack-lang/gong/lib/tone/go/models"
 	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
@@ -40,6 +42,7 @@ type Stager struct {
 	sliderStage          *slider.Stage
 	buttonStage          *button.Stage
 	splitStage           *split.Stage
+	ssgStage             *ssg.Stage
 
 	tree *tree.Tree
 }
@@ -73,9 +76,10 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 	stager.buttonStage = button_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.cursorStage = cursor_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.loadStage = load_stack.NewStack(r, name, "", "", "", true, true).Stage
-	stager.svgStage = gongsvg_stack.NewStack(r, name, "", "", "", true, true).Stage
-	stager.toneStage = gongtone_stack.NewStack(r, name, "", "", "", true, true).Stage
-	stager.treeStage = gongtree_stack.NewStack(r, name, "", "", "", true, true).Stage
+	stager.ssgStage = ssg_stack.NewStack(r, name, "", "", "", true, true).Stage
+	stager.svgStage = svg_stack.NewStack(r, name, "", "", "", true, true).Stage
+	stager.toneStage = tone_stack.NewStack(r, name, "", "", "", true, true).Stage
+	stager.treeStage = tree_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.sliderStage = slider_stack.NewStack(r, name, "", "", "", true, true).Stage
 
 	// connect parameter to cursor for start playing notification
@@ -260,6 +264,17 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 		},
 	})
 
+	split.StageBranch(stager.splitStage, &split.View{
+		Name: "ssg probe",
+		RootAsSplitAreas: []*split.AsSplitArea{
+			(&split.AsSplitArea{
+				Split: (&split.Split{
+					StackName: stager.ssgStage.GetProbeSplitStageName(),
+				}),
+			}),
+		},
+	})
+
 	stager.splitStage.Commit()
 
 	return
@@ -275,10 +290,4 @@ func (stager *Stager) GetSliderStage() (sliderStage *slider.Stage) {
 
 func (stager *Stager) GetGongtreeStage() (treeStage *tree.Stage) {
 	return stager.treeStage
-}
-
-// OnAfterUpdateButton implements models.Target.
-func (stager *Stager) OnAfterUpdateButton() {
-	stager.UpdatePhyllotaxyStage()
-	stager.parameter.GenerateMusicXMLFile()
 }
