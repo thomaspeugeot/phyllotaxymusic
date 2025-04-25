@@ -30,7 +30,7 @@ func (stager *Stager) UpdateAndCommitSsgStage() {
 			StaticPath: "../../../vendor/github.com/fullstack-lang/gong/lib/ssg/go/defaults/static",
 
 			ContentPath: "content",
-			OutputPath:  "../../../public",
+			OutputPath:  "../../../docs",
 
 			Target: ssg.FILE,
 
