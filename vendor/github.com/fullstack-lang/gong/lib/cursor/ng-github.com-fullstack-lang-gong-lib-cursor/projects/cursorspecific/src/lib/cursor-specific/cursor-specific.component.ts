@@ -1,30 +1,56 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import * as cursor from '../../../../cursor/src/public-api'
 
+import { LayoutService } from '../../../../../../../svg/ng-github.com-fullstack-lang-gong-lib-svg/projects/svgspecific/src/lib/layout.service'; // Adjust path if needed
+import { Subject, takeUntil } from 'rxjs';
+
+
 @Component({
   selector: 'lib-cursor-specific',
-  imports: [],
+  imports: [
+    
+  ],
   templateUrl: './cursor-specific.component.html',
   styleUrl: './cursor-specific.component.css'
 })
-export class CursorSpecificComponent implements OnInit {
+export class CursorSpecificComponent implements OnInit, OnDestroy {
 
   @Input() Name: string = ""
 
   x = 0;
   xe = 500
+  y = 0;
+  ye = 0;
   private animationFrameId: number | null = null;  // Store animation frame ID
 
   public frontRepo?: cursor.FrontRepo;
   public cursor: cursor.Cursor | undefined
 
+  controlsHeight: number = 0;
+  private destroy$ = new Subject<void>();
+
   constructor(
     private frontRepoService: cursor.FrontRepoService,
+
+    private layoutService: LayoutService
   ) { }
 
   ngOnInit(): void {
     console.log("ngOnInit");
+
+    // Subscribe to the height changes from the service
+    this.layoutService.controlsHeight$
+      .pipe(takeUntil(this.destroy$)) // Unsubscribe automatically on component destruction
+      .subscribe((height: number) => {
+        if (this.controlsHeight !== height) { // Optional: Check if value actually changed
+            this.controlsHeight = height;
+            console.log('SvgComponent: Controls height received', height);
+            // Use the height here to adjust layout, transforms, viewbox, etc.
+            // Example: setting margin-top (as shown in the template)
+        }
+      });
+
 
     this.frontRepoService.connectToWebSocket(this.Name).subscribe({
       next: (gongtablesFrontRepo) => {
@@ -36,6 +62,9 @@ export class CursorSpecificComponent implements OnInit {
         this.cursor = cursors[0];
         this.x = this.cursor.StartX
         this.xe = this.cursor.EndX
+
+        this.y = this.cursor.Y1  + this.controlsHeight
+        this.ye = this.cursor.Y2  + this.controlsHeight
 
         if (this.cursor.IsPlaying == true) {
           this.startEmittingPosition();
@@ -51,6 +80,11 @@ export class CursorSpecificComponent implements OnInit {
         console.log("WebSocket connection complete.");
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public startEmittingPosition(): void {

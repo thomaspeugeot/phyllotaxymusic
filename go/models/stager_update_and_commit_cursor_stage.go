@@ -30,9 +30,8 @@ func (stager *Stager) UpdateAndCommitCursorStage() {
 		parameter.SecondVoiceNotes,
 		parameter.SecondVoiceNotesShiftedRight)
 
-	pitchLines := parameter.PitchLines.Axiss
-	stager.cursor.Y1 = parameter.OriginY - pitchLines[0].CenterY
-	stager.cursor.Y2 = parameter.OriginY - pitchLines[len(pitchLines)-1].CenterY
+	stager.cursor.Y1 = parameter.OriginY
+	stager.cursor.Y2 = parameter.OriginY - parameter.BeatLines.Axiss[0].Length
 
 	_, x2 := computeStartEnd(voices)
 

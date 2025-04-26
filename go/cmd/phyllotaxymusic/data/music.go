@@ -223,13 +223,13 @@ func _(stage *models.Stage) {
 	__Axis__000004_Rotated_Axis.Transform = ``
 
 	__AxisGrid__000000_Beat_Lines.Name = `Beat Lines`
-	__AxisGrid__000000_Beat_Lines.IsDisplayed = true
+	__AxisGrid__000000_Beat_Lines.IsDisplayed = false
 
 	__AxisGrid__000001_Construction_Axis_Grid.Name = `Construction Axis Grid`
 	__AxisGrid__000001_Construction_Axis_Grid.IsDisplayed = false
 
 	__AxisGrid__000002_Pitch_Lines.Name = `Pitch Lines`
-	__AxisGrid__000002_Pitch_Lines.IsDisplayed = true
+	__AxisGrid__000002_Pitch_Lines.IsDisplayed = false
 
 	__Bezier__000000_2nd_voice_seed.Name = `2nd voice seed`
 	__Bezier__000000_2nd_voice_seed.IsDisplayed = false
@@ -349,7 +349,7 @@ func _(stage *models.Stage) {
 	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
-	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
+	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = true
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
 	__BezierGrid__000002_First_Voice.IsDisplayed = true
@@ -589,9 +589,9 @@ func _(stage *models.Stage) {
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
 	__Parameter__000000_Reference.PitchHeight = 0.100000
-	__Parameter__000000_Reference.NbPitchLines = 169
+	__Parameter__000000_Reference.NbPitchLines = 61
 	__Parameter__000000_Reference.BeatLinesHeightRatio = 0.170000
-	__Parameter__000000_Reference.NbBeatLines = 300
+	__Parameter__000000_Reference.NbBeatLines = 49
 	__Parameter__000000_Reference.NbOfBeatsInTheme = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.060000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 1.610000
@@ -601,7 +601,7 @@ func _(stage *models.Stage) {
 	__Parameter__000000_Reference.IsMinor = true
 	__Parameter__000000_Reference.ThemeBinaryEncoding = 28677
 	__Parameter__000000_Reference.OriginX = 40.000000
-	__Parameter__000000_Reference.OriginY = 950.000000
+	__Parameter__000000_Reference.OriginY = 850.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000
 	__Parameter__000000_Reference.SpiralOriginY = 500.000000
 	__Parameter__000000_Reference.OriginCrossWidth = 800.000000
@@ -684,7 +684,7 @@ func _(stage *models.Stage) {
 	__RhombusGrid__000002_Rotated_Rhombus_Grid.IsDisplayed = false
 
 	__ShapeCategory__000000_0_Axes.Name = `0. Axes`
-	__ShapeCategory__000000_0_Axes.IsExpanded = false
+	__ShapeCategory__000000_0_Axes.IsExpanded = true
 
 	__ShapeCategory__000001_1_Initial.Name = `1. Initial`
 	__ShapeCategory__000001_1_Initial.IsExpanded = false

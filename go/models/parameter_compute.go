@@ -479,6 +479,8 @@ func (p *Parameter) ComputePitchLines() {
 		a := new(Axis)
 		*a = *p.PitchLines.Reference
 
+		a.Length = float64(p.NbBeatLines-1) * p.RotatedAxis.Length / float64(p.NbOfBeatsInTheme)
+
 		g.Axiss = append(g.Axiss, a)
 
 		a.CenterY = float64(i) * p.PitchHeight * p.SideLength
@@ -497,6 +499,8 @@ func (p *Parameter) ComputeBeatLines() {
 	for i := range p.NbBeatLines {
 		a := new(Axis)
 		*a = *p.BeatLines.Reference
+
+		a.Length = float64(p.NbPitchLines-1) * p.PitchHeight * p.SideLength
 
 		g.Axiss = append(g.Axiss, a)
 
