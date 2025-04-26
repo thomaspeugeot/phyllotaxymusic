@@ -57,6 +57,10 @@ newer leave cells, you end up drawing
 the "front curve"
 of the plant growth.
 
-<img src="./images/image1.svg" style="height: 200px; width: auto;">
+<img src="./images/growthCurveOnPineCone.png" style="height: 300px; width: auto;">
+
+<img src="./images/fistVoiceSVGimage.svg" style="height: 200px; width: auto;">
+
+<img src="./images/fistVoiceAndSecondSVGimage.svg" style="height: 200px; width: auto;">
 
 			

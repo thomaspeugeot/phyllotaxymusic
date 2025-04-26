@@ -93,7 +93,7 @@ newer leave cells, you end up drawing
 the "front curve"
 of the plant growth.
 
-![The front curve, in blue, separates leaves](images/image-2.png)
+![The front curve, in blue, separates leaves](images/growthCurveOnPineCone.png)
 
 Stephane then compared a new leave cell 
 to the last one.

@@ -4,10 +4,15 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"time"
-
-	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
+
+const bach2ndFugue string = "bach2ndFugue.png"
+
+const growthCurveOnPineCone string = "growthCurveOnPineCone.png"
+
+const firstVoiceSVGimage string = "fistVoiceSVGimage.svg"
+
+const firstVoiceAndSecondSVGimage string = "fistVoiceAndSecondSVGimage.svg"
 
 func (stager *Stager) generateSSG() {
 	stager.UpdatePhyllotaxyStage()
@@ -37,57 +42,19 @@ func (stager *Stager) generateSSG() {
 	stager.UpdateAndCommitSVGStage()
 
 	// asks svg to generates an svg file
-	var svg_ *svg.SVG
-	for k := range *svg.GetGongstructInstancesSet[svg.SVG](stager.svgStage) {
-		svg_ = k
-		break
-	}
+	imageFilePath := filepath.Join(pathToGeneratedSVG, firstVoiceSVGimage)
+	stager.generateImage(imageFilePath, err)
 
-	var svgText_ *svg.SvgText
-	for k := range *svg.GetGongstructInstancesSet[svg.SvgText](stager.svgStage) {
-		svgText_ = k
-		break
-	}
-	_ = svgText_
+	// generates the second image
+	parameter.SecondVoice.IsDisplayed = true
+	stager.UpdateAndCommitSVGStage()
 
-	if svgText_ == nil {
-		svgText_ = new(svg.SvgText).Stage(stager.svgStage)
-	}
-
-	svg_.IsSVGFileGenerated = true
-	stager.svgStage.Commit()
-
-	// check out the svg stage that must contains the svg text
-	// after waiting for 500 ms
-	time.Sleep(500 * time.Millisecond)
-
-	stager.svgStage.Checkout()
-
-	for k := range *svg.GetGongstructInstancesSet[svg.SvgText](stager.svgStage) {
-		svgText_ = k
-		break
-	}
-	_ = svgText_
-
-	imageFilePath := filepath.Join(pathToGeneratedSVG, "image1.svg")
-
-	err = os.WriteFile(imageFilePath, []byte(svgText_.Text), 0644) // Use 0644 for standard file permissions
-	if err != nil {
-		log.Printf("Error writing root file '%s': %v\n", imageFilePath, err)
-		// Decide if this is fatal or if chapter generation should still proceed.
-		// For now, let's return if the root index file cannot be written.
-		return
-	}
-	log.Printf("iumage file created successfully: %s\n", imageFilePath)
-	// --- End: Generate iumage for the Content ---
-
-	svg_.IsSVGFileGenerated = false
-	stager.svgStage.Commit()
+	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndSecondSVGimage)
+	stager.generateImage(imageFilePath, err)
 
 	/*
 	 RESTORE SVG GENERATION
 	*/
-
 	parameter.OriginY = originY
 	for _, shape := range parameter.Shapes {
 		shape.SetIsDisplayed(memoryOfShapeIsDisplayed[shape])
@@ -127,7 +94,8 @@ func (*Stager) prepareStaticDic(pathToGeneratedSVG string) (error, bool) {
 	log.Printf("Root content directory created or already exists: %s\n", pathToGeneratedSVG)
 
 	/* copy necessary images for the geenration */
-	CopyFile("../../../images/bach2ndFugue.png", filepath.Join(pathToGeneratedSVG, "bach2ndFugue.png"))
+	CopyFile("../../../images/"+bach2ndFugue, filepath.Join(pathToGeneratedSVG, bach2ndFugue))
+	CopyFile("../../../images/"+growthCurveOnPineCone, filepath.Join(pathToGeneratedSVG, growthCurveOnPineCone))
 
 	return err, false
 }
