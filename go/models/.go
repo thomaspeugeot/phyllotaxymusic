@@ -68,7 +68,6 @@ func (e *ExportStaticSiteButtonProxy) GetButtonsStage() *button.Stage {
 
 // OnAfterUpdateButton implements models.Target.
 func (e *ExportStaticSiteButtonProxy) OnAfterUpdateButton() {
-	e.stager.UpdatePhyllotaxyStage()
 
 	e.stager.generateSSG()
 }

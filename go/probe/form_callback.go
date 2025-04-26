@@ -1580,6 +1580,10 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.ShowInterpolationPoints), formDiv)
 		case "ActualBeatsTemporalShift":
 			FormDivBasicFieldToField(&(parameter_.ActualBeatsTemporalShift), formDiv)
+		case "PathToStaticFiles":
+			FormDivBasicFieldToField(&(parameter_.PathToStaticFiles), formDiv)
+		case "PathToGeneratedSVG":
+			FormDivBasicFieldToField(&(parameter_.PathToGeneratedSVG), formDiv)
 		}
 	}
 

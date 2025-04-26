@@ -514,6 +514,10 @@ func FillUpForm(
 			false, false, 0, false, 0)
 		BasicFieldtoForm("ActualBeatsTemporalShift", instanceWithInferedType.ActualBeatsTemporalShift, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		BasicFieldtoForm("PathToStaticFiles", instanceWithInferedType.PathToStaticFiles, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("PathToGeneratedSVG", instanceWithInferedType.PathToGeneratedSVG, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 
 	case *models.Rhombus:
 		// insertion point

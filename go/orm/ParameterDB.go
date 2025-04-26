@@ -419,6 +419,12 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.ActualBeatsTemporalShift
 	ActualBeatsTemporalShift_Data sql.NullInt64
 
+	// Declation for basic field parameterDB.PathToStaticFiles
+	PathToStaticFiles_Data sql.NullString
+
+	// Declation for basic field parameterDB.PathToGeneratedSVG
+	PathToGeneratedSVG_Data sql.NullString
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	ParameterPointersEncoding
@@ -520,6 +526,10 @@ type ParameterWOP struct {
 	ShowInterpolationPoints bool `xlsx:"39"`
 
 	ActualBeatsTemporalShift int `xlsx:"40"`
+
+	PathToStaticFiles string `xlsx:"41"`
+
+	PathToGeneratedSVG string `xlsx:"42"`
 	// insertion for WOP pointer fields
 }
 
@@ -566,6 +576,8 @@ var Parameter_Fields = []string{
 	"ShowSpiralBezierConstruct",
 	"ShowInterpolationPoints",
 	"ActualBeatsTemporalShift",
+	"PathToStaticFiles",
+	"PathToGeneratedSVG",
 }
 
 type BackRepoParameterStruct struct {
@@ -2909,6 +2921,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.ActualBeatsTemporalShift_Data.Int64 = int64(parameter.ActualBeatsTemporalShift)
 	parameterDB.ActualBeatsTemporalShift_Data.Valid = true
+
+	parameterDB.PathToStaticFiles_Data.String = parameter.PathToStaticFiles
+	parameterDB.PathToStaticFiles_Data.Valid = true
+
+	parameterDB.PathToGeneratedSVG_Data.String = parameter.PathToGeneratedSVG
+	parameterDB.PathToGeneratedSVG_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -3034,6 +3052,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.ActualBeatsTemporalShift_Data.Int64 = int64(parameter.ActualBeatsTemporalShift)
 	parameterDB.ActualBeatsTemporalShift_Data.Valid = true
+
+	parameterDB.PathToStaticFiles_Data.String = parameter.PathToStaticFiles
+	parameterDB.PathToStaticFiles_Data.Valid = true
+
+	parameterDB.PathToGeneratedSVG_Data.String = parameter.PathToGeneratedSVG
+	parameterDB.PathToGeneratedSVG_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -3159,6 +3183,12 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.ActualBeatsTemporalShift_Data.Int64 = int64(parameter.ActualBeatsTemporalShift)
 	parameterDB.ActualBeatsTemporalShift_Data.Valid = true
+
+	parameterDB.PathToStaticFiles_Data.String = parameter.PathToStaticFiles
+	parameterDB.PathToStaticFiles_Data.Valid = true
+
+	parameterDB.PathToGeneratedSVG_Data.String = parameter.PathToGeneratedSVG
+	parameterDB.PathToGeneratedSVG_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -3204,6 +3234,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
 	parameter.ActualBeatsTemporalShift = int(parameterDB.ActualBeatsTemporalShift_Data.Int64)
+	parameter.PathToStaticFiles = parameterDB.PathToStaticFiles_Data.String
+	parameter.PathToGeneratedSVG = parameterDB.PathToGeneratedSVG_Data.String
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -3249,6 +3281,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
 	parameter.ActualBeatsTemporalShift = int(parameterDB.ActualBeatsTemporalShift_Data.Int64)
+	parameter.PathToStaticFiles = parameterDB.PathToStaticFiles_Data.String
+	parameter.PathToGeneratedSVG = parameterDB.PathToGeneratedSVG_Data.String
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -3295,6 +3329,8 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.ShowSpiralBezierConstruct = parameterDB.ShowSpiralBezierConstruct_Data.Bool
 	parameter.ShowInterpolationPoints = parameterDB.ShowInterpolationPoints_Data.Bool
 	parameter.ActualBeatsTemporalShift = int(parameterDB.ActualBeatsTemporalShift_Data.Int64)
+	parameter.PathToStaticFiles = parameterDB.PathToStaticFiles_Data.String
+	parameter.PathToGeneratedSVG = parameterDB.PathToGeneratedSVG_Data.String
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo

@@ -11,14 +11,13 @@
 			"args": [
 				"run",
 				"main.go",
-				"-diagrams",
 				"-unmarshallFromCode=data/stage.go",
 				"-marshallOnCommit=data/stage"
 			],
 			"group": "build"
 		},
 		{
-			"label": "02 - run phyllotaxymusic -unmarshallFromCode=music.go -marshallOnCommit=music",
+			"label": "02 - run phyllotaxymusic -unmarshallFromCode=data/music.go -marshallOnCommit=data/music",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/cmd/phyllotaxymusic"
@@ -27,7 +26,7 @@
 			"args": [
 				"run",
 				"main.go",
-				"-diagrams",
+				"--",
 				"-unmarshallFromCode=data/music.go",
 				"-marshallOnCommit=data/music"
 			],

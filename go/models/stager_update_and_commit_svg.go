@@ -20,5 +20,4 @@ func (stager *Stager) UpdateAndCommitSVGStage() {
 	}
 
 	stager.svgStage.Commit()
-
 }

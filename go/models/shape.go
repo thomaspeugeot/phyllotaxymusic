@@ -9,6 +9,10 @@ func (shape *Shape) GetIsDisplayed() bool {
 	return shape.IsDisplayed
 }
 
+func (shape *Shape) SetIsDisplayed(isDisplayed bool) {
+	shape.IsDisplayed = isDisplayed
+}
+
 func (shape *Shape) GetIsDisplayedPointer() *bool {
 	return &shape.IsDisplayed
 }

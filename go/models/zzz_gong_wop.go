@@ -335,6 +335,8 @@ type Parameter_WOP struct {
 	ShowSpiralBezierConstruct bool
 	ShowInterpolationPoints bool
 	ActualBeatsTemporalShift int
+	PathToStaticFiles string
+	PathToGeneratedSVG string
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -379,6 +381,8 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.ShowSpiralBezierConstruct = from.ShowSpiralBezierConstruct
 	to.ShowInterpolationPoints = from.ShowInterpolationPoints
 	to.ActualBeatsTemporalShift = from.ActualBeatsTemporalShift
+	to.PathToStaticFiles = from.PathToStaticFiles
+	to.PathToGeneratedSVG = from.PathToGeneratedSVG
 }
 
 type Rhombus_WOP struct {

@@ -175,6 +175,12 @@ type Parameter struct {
 	// number of "minimal" notes to the shift
 	ActualBeatsTemporalShift int
 
+	// where to store static files for site generation
+	PathToStaticFiles string
+
+	// where to store generated svg
+	PathToGeneratedSVG string
+
 	// not persisted fields
 	stager *Stager
 }

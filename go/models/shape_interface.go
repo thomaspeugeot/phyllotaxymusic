@@ -8,6 +8,7 @@ import (
 type ShapeInterface interface {
 	GetName() string
 	GetIsDisplayed() bool
+	SetIsDisplayed(bool)
 	GetIsDisplayedPointer() *bool
 	GetShapeCategory() *ShapeCategory
 	Draw(svgStage *svg_models.Stage,

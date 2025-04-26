@@ -1799,6 +1799,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						log.Fatalln(err)
 					}
 					__gong__map_Parameter[identifier].ActualBeatsTemporalShift = int(exprSign) * int(fielValue)
+				case "PathToStaticFiles":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Parameter[identifier].PathToStaticFiles = fielValue
+				case "PathToGeneratedSVG":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Parameter[identifier].PathToGeneratedSVG = fielValue
 				}
 			case "Rhombus":
 				switch fieldName {
