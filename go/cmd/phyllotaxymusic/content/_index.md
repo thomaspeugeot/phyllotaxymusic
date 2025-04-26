@@ -12,6 +12,8 @@ of music notes, a melodic material.
 A wellknown theme is at the start of Bach's 2nd 
 fugue in C minor.
 
+<img src="./images/bach2ndFugue.png" style="height: 200px; width: auto;">
+
 ### Phylotaxy
 
 Phylotaxy means "shape of leaves". 
@@ -55,6 +57,6 @@ newer leave cells, you end up drawing
 the "front curve"
 of the plant growth.
 
-<img src="../../images/image1.svg" alt="My Logo" style="height: 200px; width: auto;">
+<img src="./images/image1.svg" style="height: 200px; width: auto;">
 
 			

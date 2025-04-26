@@ -15,6 +15,12 @@ func (stager *Stager) generateSSG() {
 	// change the parameter
 	parameter := stager.parameter
 
+	/*
+		KEEP THE ORIGINAL SVG GENERATION CONFIGURATION
+	*/
+
+	originY := parameter.OriginY
+	parameter.OriginY = 450
 	memoryOfShapeIsDisplayed := make(map[ShapeInterface]bool)
 	for _, shape := range parameter.Shapes {
 		memoryOfShapeIsDisplayed[shape] = shape.GetIsDisplayed()
@@ -56,7 +62,7 @@ func (stager *Stager) generateSSG() {
 	}
 	_ = svgText_
 
-	// start by copying
+	// start by copying the static directory
 	CopyDirectory("../../../vendor/github.com/fullstack-lang/gong/lib/ssg/go/defaults/static",
 		"../../../static",
 	)
@@ -102,6 +108,14 @@ func (stager *Stager) generateSSG() {
 	svg_.IsSVGFileGenerated = false
 	stager.svgStage.Commit()
 
+	/* copy necessary images for the geenration */
+	CopyFile("../../../images/bach2ndFugue.png", filepath.Join(pathToGeneratedSVG, "bach2ndFugue.png"))
+
+	/*
+	 RESTORE SVG GENERATION
+	*/
+
+	parameter.OriginY = originY
 	for _, shape := range parameter.Shapes {
 		shape.SetIsDisplayed(memoryOfShapeIsDisplayed[shape])
 	}
