@@ -14,6 +14,13 @@ func (stager *Stager) generateSSG() {
 
 	// change the parameter
 	parameter := stager.parameter
+	pathToGeneratedSVG := parameter.PathToGeneratedSVG
+
+	// start by copying the static directory
+	err, shouldReturn := stager.prepareStaticDic(pathToGeneratedSVG)
+	if shouldReturn {
+		return
+	}
 
 	/*
 		KEEP THE ORIGINAL SVG GENERATION CONFIGURATION
@@ -62,12 +69,38 @@ func (stager *Stager) generateSSG() {
 	}
 	_ = svgText_
 
-	// start by copying the static directory
+	imageFilePath := filepath.Join(pathToGeneratedSVG, "image1.svg")
+
+	err = os.WriteFile(imageFilePath, []byte(svgText_.Text), 0644) // Use 0644 for standard file permissions
+	if err != nil {
+		log.Printf("Error writing root file '%s': %v\n", imageFilePath, err)
+		// Decide if this is fatal or if chapter generation should still proceed.
+		// For now, let's return if the root index file cannot be written.
+		return
+	}
+	log.Printf("iumage file created successfully: %s\n", imageFilePath)
+	// --- End: Generate iumage for the Content ---
+
+	svg_.IsSVGFileGenerated = false
+	stager.svgStage.Commit()
+
+	/*
+	 RESTORE SVG GENERATION
+	*/
+
+	parameter.OriginY = originY
+	for _, shape := range parameter.Shapes {
+		shape.SetIsDisplayed(memoryOfShapeIsDisplayed[shape])
+	}
+	stager.UpdateAndCommitSVGStage()
+
+	stager.ssgStage.Generation()
+}
+
+func (*Stager) prepareStaticDic(pathToGeneratedSVG string) (error, bool) {
 	CopyDirectory("../../../vendor/github.com/fullstack-lang/gong/lib/ssg/go/defaults/static",
 		"../../../static",
 	)
-
-	pathToGeneratedSVG := parameter.PathToGeneratedSVG
 
 	// --- Start: Remove existing pathToGeneratedSVG directory ---
 	log.Printf("Attempting to remove existing directory: %s", pathToGeneratedSVG)
@@ -89,37 +122,12 @@ func (stager *Stager) generateSSG() {
 		log.Printf("Error creating root content directory '%s': %v\n", pathToGeneratedSVG, err)
 		// Decide if this is fatal or if chapter generation should still proceed.
 		// For now, let's return if the root directory cannot be created.
-		return
+		return nil, true
 	}
 	log.Printf("Root content directory created or already exists: %s\n", pathToGeneratedSVG)
-
-	imageFilePath := filepath.Join(pathToGeneratedSVG, "image1.svg")
-
-	err = os.WriteFile(imageFilePath, []byte(svgText_.Text), 0644) // Use 0644 for standard file permissions
-	if err != nil {
-		log.Printf("Error writing root file '%s': %v\n", imageFilePath, err)
-		// Decide if this is fatal or if chapter generation should still proceed.
-		// For now, let's return if the root index file cannot be written.
-		return
-	}
-	log.Printf("iumage file created successfully: %s\n", imageFilePath)
-	// --- End: Generate iumage for the Content ---
-
-	svg_.IsSVGFileGenerated = false
-	stager.svgStage.Commit()
 
 	/* copy necessary images for the geenration */
 	CopyFile("../../../images/bach2ndFugue.png", filepath.Join(pathToGeneratedSVG, "bach2ndFugue.png"))
 
-	/*
-	 RESTORE SVG GENERATION
-	*/
-
-	parameter.OriginY = originY
-	for _, shape := range parameter.Shapes {
-		shape.SetIsDisplayed(memoryOfShapeIsDisplayed[shape])
-	}
-	stager.UpdateAndCommitSVGStage()
-
-	stager.ssgStage.Generation()
+	return err, false
 }

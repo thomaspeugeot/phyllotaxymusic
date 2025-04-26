@@ -35,7 +35,7 @@ of music notes, a melodic material.
 A wellknown theme is at the start of Bach's 2nd 
 fugue in C minor.
 
-<img src="./images/bach2ndFugue.png" style="height: 200px; width: auto;">
+<img src="./images/bach2ndFugue.png" style="height: 100px; width: auto;">
 
 ### Phylotaxy
 
