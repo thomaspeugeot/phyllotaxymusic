@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px; /* Adjust gap if needed */
+    gap: 16px;
     padding: 16px;
 }
 
@@ -12,11 +12,5 @@
 
 .gongtone-controls {
     display: flex;
-    gap: 16px; /* Adjust gap between buttons if needed */
-    align-items: center; /* Align items vertically */
-}
-
-/* Optional: Style for loading spinner */
-mat-progress-spinner {
-    margin-top: 10px;
+    gap: 16px;
 }

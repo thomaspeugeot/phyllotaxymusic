@@ -224,13 +224,13 @@ func _(stage *models.Stage) {
 	__Axis__000004_Rotated_Axis.Transform = ``
 
 	__AxisGrid__000000_Beat_Lines.Name = `Beat Lines`
-	__AxisGrid__000000_Beat_Lines.IsDisplayed = false
+	__AxisGrid__000000_Beat_Lines.IsDisplayed = true
 
 	__AxisGrid__000001_Construction_Axis_Grid.Name = `Construction Axis Grid`
 	__AxisGrid__000001_Construction_Axis_Grid.IsDisplayed = false
 
 	__AxisGrid__000002_Pitch_Lines.Name = `Pitch Lines`
-	__AxisGrid__000002_Pitch_Lines.IsDisplayed = false
+	__AxisGrid__000002_Pitch_Lines.IsDisplayed = true
 
 	__Bezier__000000_2nd_voice_seed.Name = `2nd voice seed`
 	__Bezier__000000_2nd_voice_seed.IsDisplayed = false
@@ -522,10 +522,10 @@ func _(stage *models.Stage) {
 	__CircleGrid__000006_Rotated_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.Name = `Second Voice Notes Shift Right`
-	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = false
+	__CircleGrid__000007_Second_Voice_Notes_Shift_Right.IsDisplayed = true
 
 	__CircleGrid__000008_Second_Voice_notes.Name = `Second Voice notes`
-	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = false
+	__CircleGrid__000008_Second_Voice_notes.IsDisplayed = true
 
 	__ExportToMusicxml__000000_Singloton.Name = `Singloton`
 
@@ -614,12 +614,12 @@ func _(stage *models.Stage) {
 	__Parameter__000000_Reference.NbBeatLines = 49
 	__Parameter__000000_Reference.NbOfBeatsInTheme = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.060000
-	__Parameter__000000_Reference.FirstVoiceShiftY = 1.610000
-	__Parameter__000000_Reference.PitchDifference = 3
-	__Parameter__000000_Reference.BeatsPerSecond = 10.000000
+	__Parameter__000000_Reference.FirstVoiceShiftY = 1.480000
+	__Parameter__000000_Reference.PitchDifference = 17
+	__Parameter__000000_Reference.BeatsPerSecond = 5.050000
 	__Parameter__000000_Reference.Level = 11.100000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 28677
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 28741
 	__Parameter__000000_Reference.OriginX = 40.000000
 	__Parameter__000000_Reference.OriginY = 850.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000

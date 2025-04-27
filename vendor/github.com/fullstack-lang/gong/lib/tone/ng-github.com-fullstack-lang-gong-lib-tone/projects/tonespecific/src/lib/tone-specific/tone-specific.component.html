@@ -1,32 +1,21 @@
 <div class="gongtone-container">
-  <div class="gongtone-controls">
-    <button
-      mat-fab
-      color="primary"
-      aria-label="Play"
-      (click)="play()"
-      [disabled]="isLoading || isPlaying || !frontRepo"> <mat-icon>play_circle</mat-icon>
-    </button>
-
-    <button
-      mat-fab
-      color="warn"
-      aria-label="Stop"
-      (click)="stopPlayback()" [disabled]="!isPlaying && !isRecording"> <mat-icon>stop_circle</mat-icon>
-    </button>
-
-    <button
-      mat-fab
-      color="accent"
-      aria-label="Stop and Download Recording"
-      (click)="stopAndDownload()"
-      [disabled]="!isPlaying && !isRecording"> <mat-icon>download</mat-icon>
-    </button>
-
+    <div class="gongtone-controls">
+      <button 
+        mat-fab 
+        color="primary" 
+        aria-label="Play" 
+        (click)="play()"
+        [disabled]="!frontRepo">
+        <mat-icon>play_circle</mat-icon>
+      </button>
+      
+      <button 
+        mat-fab 
+        color="warn" 
+        aria-label="Stop" 
+        (click)="stopPlayback()"
+        [disabled]="!frontRepo">
+        <mat-icon>stop_circle</mat-icon>
+      </button>
+    </div>
   </div>
-   <mat-progress-spinner
-      *ngIf="isLoading"
-      mode="indeterminate"
-      diameter="50">
-  </mat-progress-spinner>
-</div>
