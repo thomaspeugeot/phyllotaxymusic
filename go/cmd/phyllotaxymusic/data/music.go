@@ -366,7 +366,7 @@ func _(stage *models.Stage) {
 	__Bezier__000006_FirstVoiceShiftedRightSeed.Transform = ``
 
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
-	__BezierGrid__000000_2nb_Voice.IsDisplayed = false
+	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
 	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
@@ -615,7 +615,7 @@ func _(stage *models.Stage) {
 	__Parameter__000000_Reference.NbOfBeatsInTheme = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.060000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 1.610000
-	__Parameter__000000_Reference.PitchDifference = 12
+	__Parameter__000000_Reference.PitchDifference = 3
 	__Parameter__000000_Reference.BeatsPerSecond = 10.000000
 	__Parameter__000000_Reference.Level = 11.100000
 	__Parameter__000000_Reference.IsMinor = true

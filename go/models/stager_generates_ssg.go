@@ -15,7 +15,9 @@ const growthCurveOnPineCone string = "growthCurveOnPineCone.png"
 
 const firstVoiceSVGimage string = "fistVoiceSVGimage.svg"
 
-const firstVoiceAndSecondSVGimage string = "fistVoiceAndSecondSVGimage.svg"
+const firstVoiceAndFirstVoiceShiftedRightSVGimage string = "fistVoiceAndFirstVoiceShiftedRightSVGimage.svg"
+
+const firstVoiceAndFirstVoiceShiftedRightAndSecondVoiceSVGimage string = "firstVoiceAndFirstVoiceShiftedRightAndSecondVoiceSVGimage.svg"
 
 func (stager *Stager) GenerateSSG() {
 	stager.UpdatePhyllotaxyStage()
@@ -35,6 +37,7 @@ func (stager *Stager) GenerateSSG() {
 	*/
 
 	originY := parameter.OriginY
+	pitchDifference := parameter.PitchDifference
 	parameter.OriginY = 450
 	memoryOfShapeIsDisplayed := make(map[ShapeInterface]bool)
 	for _, shape := range parameter.Shapes {
@@ -46,21 +49,28 @@ func (stager *Stager) GenerateSSG() {
 
 	// asks svg to generates an svg file
 	imageFilePath := filepath.Join(pathToGeneratedSVG, firstVoiceSVGimage)
-	// stager.grabGeneratedSVGFile(imageFilePath, 5000*time.Millisecond)
 	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
 
 	// generates the second image
 	parameter.FirstVoiceShiftedRigth.IsDisplayed = true
 	stager.UpdateSVGStage()
 
-	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndSecondSVGimage)
-	// stager.grabGeneratedSVGFile(imageFilePath, 5000*time.Millisecond)
+	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndFirstVoiceShiftedRightSVGimage)
+	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
+
+	// generates the third image
+	parameter.SecondVoice.IsDisplayed = true
+	parameter.PitchDifference = 0
+	stager.UpdateSVGStage()
+
+	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndFirstVoiceShiftedRightAndSecondVoiceSVGimage)
 	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
 
 	/*
 	 RESTORE SVG GENERATION
 	*/
 	parameter.OriginY = originY
+	parameter.PitchDifference = pitchDifference
 	for _, shape := range parameter.Shapes {
 		shape.SetIsDisplayed(memoryOfShapeIsDisplayed[shape])
 	}

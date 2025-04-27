@@ -79,6 +79,15 @@ of paper.
 
 Use a green pen and draw the same curve at the right of the first.
 
-<img src="./images/fistVoiceAndSecondSVGimage.svg" style="height: 200px; width: auto;">
+<img src="./images/fistVoiceAndFirstVoiceShiftedRightSVGimage.svg" style="height: 200px; width: auto;">
+
+Draw it again
+on a tracing paper with a red pen and put the tracing 
+paper above and
+shift it a bit to the right and 
+a bit to the top.
+
+<img src="./images/firstVoiceAndFirstVoiceShiftedRightAndSecondVoiceSVGimage.svg" style="height: 260px; width: auto;">
+
 
 			
