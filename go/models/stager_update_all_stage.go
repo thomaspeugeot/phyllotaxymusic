@@ -13,6 +13,7 @@ func (stager *Stager) UpdateAllStages() {
 	stager.UpdateAndCommitSlidersStage()
 	stager.UpdateAndCommitButtonStage()
 	stager.UpdateAndCommitSsgStage()
+	// stager.GenerateSSG()
 	stager.phyllotaxymusicStage.Commit()
 }
 

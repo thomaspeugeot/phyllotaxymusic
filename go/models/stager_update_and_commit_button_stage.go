@@ -70,5 +70,5 @@ func (e *ExportStaticSiteButtonProxy) GetButtonsStage() *button.Stage {
 func (e *ExportStaticSiteButtonProxy) OnAfterUpdateButton() {
 	e.stager.UpdatePhyllotaxyStage()
 
-	e.stager.generateSSG()
+	e.stager.GenerateSSG()
 }

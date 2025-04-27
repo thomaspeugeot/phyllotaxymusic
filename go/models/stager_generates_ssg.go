@@ -14,7 +14,7 @@ const firstVoiceSVGimage string = "fistVoiceSVGimage.svg"
 
 const firstVoiceAndSecondSVGimage string = "fistVoiceAndSecondSVGimage.svg"
 
-func (stager *Stager) generateSSG() {
+func (stager *Stager) GenerateSSG() {
 	stager.UpdatePhyllotaxyStage()
 
 	// change the parameter
@@ -43,14 +43,14 @@ func (stager *Stager) generateSSG() {
 
 	// asks svg to generates an svg file
 	imageFilePath := filepath.Join(pathToGeneratedSVG, firstVoiceSVGimage)
-	stager.generateImage(imageFilePath, err)
+	stager.grabGeneratedSVGFile(imageFilePath, err)
 
 	// generates the second image
-	parameter.SecondVoice.IsDisplayed = true
+	parameter.FirstVoiceShiftedRigth.IsDisplayed = true
 	stager.UpdateAndCommitSVGStage()
 
 	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndSecondSVGimage)
-	stager.generateImage(imageFilePath, err)
+	stager.grabGeneratedSVGFile(imageFilePath, err)
 
 	/*
 	 RESTORE SVG GENERATION
@@ -70,7 +70,7 @@ func (*Stager) prepareStaticDic(pathToGeneratedSVG string) (error, bool) {
 	)
 
 	// --- Start: Remove existing pathToGeneratedSVG directory ---
-	log.Printf("Attempting to remove existing directory: %s", pathToGeneratedSVG)
+	// log.Printf("Attempting to remove existing directory: %s", pathToGeneratedSVG)
 	err := os.RemoveAll(pathToGeneratedSVG)
 	if err != nil {
 		// Log the error but continue, as MkdirAll below might still succeed if the path didn't exist
@@ -78,7 +78,7 @@ func (*Stager) prepareStaticDic(pathToGeneratedSVG string) (error, bool) {
 		// If MkdirAll fails later, that error will be caught.
 		log.Printf("Warning: Error removing directory '%s': %v. Attempting to continue.", pathToGeneratedSVG, err)
 	} else {
-		log.Printf("Successfully removed existing directory: %s", pathToGeneratedSVG)
+		// log.Printf("Successfully removed existing directory: %s", pathToGeneratedSVG)
 	}
 	// --- End: Remove existing pathToGeneratedSVG directory ---
 
@@ -91,7 +91,7 @@ func (*Stager) prepareStaticDic(pathToGeneratedSVG string) (error, bool) {
 		// For now, let's return if the root directory cannot be created.
 		return nil, true
 	}
-	log.Printf("Root content directory created or already exists: %s\n", pathToGeneratedSVG)
+	// log.Printf("Root content directory created or already exists: %s\n", pathToGeneratedSVG)
 
 	/* copy necessary images for the geenration */
 	CopyFile("../../../images/"+bach2ndFugue, filepath.Join(pathToGeneratedSVG, bach2ndFugue))
