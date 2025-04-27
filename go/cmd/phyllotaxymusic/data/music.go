@@ -40,6 +40,7 @@ func _(stage *models.Stage) {
 	__Bezier__000003_Growth_Curve_Next_Seed := (&models.Bezier{}).Stage(stage)
 	__Bezier__000004_Growth_Curve_Next_Shift_Right_Seed := (&models.Bezier{}).Stage(stage)
 	__Bezier__000005_Growth_Curve_Seed := (&models.Bezier{}).Stage(stage)
+	__Bezier__000006_FirstVoiceShiftedRightSeed := (&models.Bezier{}).Stage(stage)
 
 	__BezierGrid__000000_2nb_Voice := (&models.BezierGrid{}).Stage(stage)
 	__BezierGrid__000001_2nd_voice_shifted_right := (&models.BezierGrid{}).Stage(stage)
@@ -345,6 +346,25 @@ func _(stage *models.Stage) {
 	__Bezier__000005_Growth_Curve_Seed.StrokeDashArrayWhenSelected = ``
 	__Bezier__000005_Growth_Curve_Seed.Transform = ``
 
+	__Bezier__000006_FirstVoiceShiftedRightSeed.Name = `FirstVoiceShiftedRightSeed`
+	__Bezier__000006_FirstVoiceShiftedRightSeed.IsDisplayed = false
+	__Bezier__000006_FirstVoiceShiftedRightSeed.StartX = 0.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.StartY = 0.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.ControlPointStartX = 0.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.ControlPointStartY = 0.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.EndX = 0.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.EndY = 0.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.ControlPointEndX = 0.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.ControlPointEndY = 0.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.Color = ``
+	__Bezier__000006_FirstVoiceShiftedRightSeed.FillOpacity = 0.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.Stroke = `lightgreen`
+	__Bezier__000006_FirstVoiceShiftedRightSeed.StrokeOpacity = 0.800000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.StrokeWidth = 6.000000
+	__Bezier__000006_FirstVoiceShiftedRightSeed.StrokeDashArray = ``
+	__Bezier__000006_FirstVoiceShiftedRightSeed.StrokeDashArrayWhenSelected = ``
+	__Bezier__000006_FirstVoiceShiftedRightSeed.Transform = ``
+
 	__BezierGrid__000000_2nb_Voice.Name = `2nb Voice`
 	__BezierGrid__000000_2nb_Voice.IsDisplayed = false
 
@@ -355,7 +375,7 @@ func _(stage *models.Stage) {
 	__BezierGrid__000002_First_Voice.IsDisplayed = true
 
 	__BezierGrid__000003_First_Voice_Shift_Right.Name = `First Voice Shift Right`
-	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = false
+	__BezierGrid__000003_First_Voice_Shift_Right.IsDisplayed = true
 
 	__BezierGrid__000004_Growth_Curve.Name = `Growth Curve`
 	__BezierGrid__000004_Growth_Curve.IsDisplayed = false
@@ -880,7 +900,7 @@ func _(stage *models.Stage) {
 	__BezierGrid__000001_2nd_voice_shifted_right.ShapeCategory = __ShapeCategory__000009_9_Composer
 	__BezierGrid__000002_First_Voice.Reference = __Bezier__000001_First_Voice_seed
 	__BezierGrid__000002_First_Voice.ShapeCategory = __ShapeCategory__000009_9_Composer
-	__BezierGrid__000003_First_Voice_Shift_Right.Reference = __Bezier__000001_First_Voice_seed
+	__BezierGrid__000003_First_Voice_Shift_Right.Reference = __Bezier__000006_FirstVoiceShiftedRightSeed
 	__BezierGrid__000003_First_Voice_Shift_Right.ShapeCategory = __ShapeCategory__000009_9_Composer
 	__BezierGrid__000004_Growth_Curve.Reference = __Bezier__000005_Growth_Curve_Seed
 	__BezierGrid__000004_Growth_Curve.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth

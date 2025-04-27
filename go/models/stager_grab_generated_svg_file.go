@@ -58,6 +58,9 @@ func (stager *Stager) grabGeneratedSVGFile(imageFilePath string, timeout time.Du
 		// Consider error handling for Commit if necessary
 		stager.svgStage.Commit()
 		log.Println("SVG generation flag reset and final state committed.")
+
+		// to avoid successive svg commit
+		time.Sleep(500 * time.Millisecond)
 	}()
 
 	// Create a channel to receive the SvgText content
