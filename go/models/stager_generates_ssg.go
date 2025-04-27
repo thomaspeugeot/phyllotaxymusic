@@ -40,18 +40,18 @@ func (stager *Stager) GenerateSSG() {
 		shape.SetIsDisplayed(false)
 	}
 	parameter.FirstVoice.IsDisplayed = true
-	stager.UpdateSVGStage()
+	stager.UpdateSVGStage() // beware to not commit because the grabGeneratedSVGFile will commit the svg
 
 	// asks svg to generates an svg file
 	imageFilePath := filepath.Join(pathToGeneratedSVG, firstVoiceSVGimage)
-	stager.grabGeneratedSVGFile(imageFilePath, 15000*time.Millisecond)
+	stager.grabGeneratedSVGFile(imageFilePath, 5000*time.Millisecond)
 
-	// // generates the second image
-	// parameter.FirstVoiceShiftedRigth.IsDisplayed = true
-	// stager.UpdateAndCommitSVGStage()
+	// generates the second image
+	parameter.FirstVoiceShiftedRigth.IsDisplayed = true
+	stager.UpdateSVGStage()
 
-	// imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndSecondSVGimage)
-	// stager.grabGeneratedSVGFile(imageFilePath, 15000*time.Millisecond)
+	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndSecondSVGimage)
+	stager.grabGeneratedSVGFile(imageFilePath, 5000*time.Millisecond)
 
 	/*
 	 RESTORE SVG GENERATION

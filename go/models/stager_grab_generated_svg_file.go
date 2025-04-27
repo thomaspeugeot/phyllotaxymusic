@@ -146,6 +146,8 @@ func (p *SvgTextProxy) Updated() {
 		log.Println("SvgTextProxy.Updated: Proxy or its fields are nil, skipping.")
 		return
 	}
+	// get the value that has been updated
+	p.stager.svgStage.Checkout()
 
 	// Get the current text value from the proxied SvgText instance
 	textValue := p.svgText.Text // Read the value directly
