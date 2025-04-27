@@ -181,6 +181,9 @@ type Parameter struct {
 	// where to store generated svg
 	PathToGeneratedSVG string
 
+	// where to store generated score
+	PathToGeneratedScore string
+
 	// not persisted fields
 	stager *Stager
 }

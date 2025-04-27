@@ -1584,6 +1584,8 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(parameter_.PathToStaticFiles), formDiv)
 		case "PathToGeneratedSVG":
 			FormDivBasicFieldToField(&(parameter_.PathToGeneratedSVG), formDiv)
+		case "PathToGeneratedScore":
+			FormDivBasicFieldToField(&(parameter_.PathToGeneratedScore), formDiv)
 		}
 	}
 

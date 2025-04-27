@@ -15,5 +15,5 @@ func (exportToMusicxml *ExportToMusicxml) OnAfterUpdate(
 	stagedExportToMusicxml, backRepoExportToMusicxml *ExportToMusicxml) {
 
 	exportToMusicxml.Parameter.stager.UpdatePhyllotaxyStage()
-	exportToMusicxml.Parameter.GenerateMusicXMLFile()
+	exportToMusicxml.Parameter.GenerateMusicXMLFile(DOWNLOAD)
 }

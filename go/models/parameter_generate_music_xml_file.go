@@ -4,13 +4,22 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 	"time"
 
 	load "github.com/fullstack-lang/gong/lib/load/go/models"
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/musicxml"
 )
 
-func (parameter *Parameter) GenerateMusicXMLFile() bool {
+type GenerationMode string
+
+const (
+	DOWNLOAD        GenerationMode = "DOWNLOAD"
+	STATIC_WEB_SITE GenerationMode = "STATIC_WEB_SITE"
+)
+
+func (parameter *Parameter) GenerateMusicXMLFile(generationMode GenerationMode) bool {
 	log.Println("Export to Music xml requested")
 
 	var scorePartwise m.Score_partwise
@@ -61,14 +70,52 @@ func (parameter *Parameter) GenerateMusicXMLFile() bool {
 		return true
 	}
 
-	// Write the XML to a new file
-	filename := generateTimestampedFilename("export", ".musicxml")
+	if generationMode == DOWNLOAD {
 
-	downloadStage := parameter.stager.loadStage
-	downloadStage.Reset()
-	fileToDownlad := (&load.FileToDownload{Name: filename}).Stage(downloadStage)
-	fileToDownlad.Content = string(output)
-	downloadStage.Commit()
+		// Write the XML to a new file
+		filename := generateTimestampedFilename("export", ".musicxml")
+
+		downloadStage := parameter.stager.loadStage
+		downloadStage.Reset()
+		fileToDownlad := (&load.FileToDownload{Name: filename}).Stage(downloadStage)
+		fileToDownlad.Content = string(output)
+		downloadStage.Commit()
+
+	} else {
+
+		pathToGeneratedScore := parameter.PathToGeneratedScore
+
+		// --- Start: Remove existing pathToGeneratedScore directory ---
+		// log.Printf("Attempting to remove existing directory: %s", pathToGeneratedScore)
+		err := os.RemoveAll(pathToGeneratedScore)
+		if err != nil {
+			// Log the error but continue, as MkdirAll below might still succeed if the path didn't exist
+			// or if the error was related to something already gone.
+			// If MkdirAll fails later, that error will be caught.
+			log.Printf("Warning: Error removing directory '%s': %v. Attempting to continue.", pathToGeneratedScore, err)
+		} else {
+			// log.Printf("Successfully removed existing directory: %s", pathToGeneratedScore)
+		}
+		// --- End: Remove existing pathToGeneratedScore directory ---
+
+		// --- Start: Generate root _index.md for the Content ---
+		// 1. Create the root content directory (MkdirAll handles existing directories gracefully)
+		err = os.MkdirAll(pathToGeneratedScore, 0755) // Use 0755 for standard directory permissions
+		if err != nil {
+			log.Printf("Error creating root content directory '%s': %v\n", pathToGeneratedScore, err)
+			// Decide if this is fatal or if chapter generation should still proceed.
+			// For now, let's return if the root directory cannot be created.
+		}
+
+		filepath := filepath.Join(parameter.PathToGeneratedScore, MusicXMLFile)
+
+		writeErr := os.WriteFile(filepath, []byte(output), 0644)
+		if writeErr != nil {
+			log.Printf("Error writing score file '%s': %v\n", filepath, writeErr)
+			// Return the write error. The defer will handle cleanup.
+		}
+		log.Printf("Music file created successfully: %s\n", filepath)
+	}
 
 	// err = os.WriteFile(
 	// 	filepath.Join("musicxml", filename),

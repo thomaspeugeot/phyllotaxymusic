@@ -337,6 +337,7 @@ type Parameter_WOP struct {
 	ActualBeatsTemporalShift int
 	PathToStaticFiles string
 	PathToGeneratedSVG string
+	PathToGeneratedScore string
 }
 
 func (from *Parameter) CopyBasicFields(to *Parameter) {
@@ -383,6 +384,7 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 	to.ActualBeatsTemporalShift = from.ActualBeatsTemporalShift
 	to.PathToStaticFiles = from.PathToStaticFiles
 	to.PathToGeneratedSVG = from.PathToGeneratedSVG
+	to.PathToGeneratedScore = from.PathToGeneratedScore
 }
 
 type Rhombus_WOP struct {

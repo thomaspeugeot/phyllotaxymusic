@@ -54,7 +54,7 @@ func (e *ExportToMuseScoreButtonProxy) GetButtonsStage() *button.Stage {
 // OnAfterUpdateButton implements models.Target.
 func (e *ExportToMuseScoreButtonProxy) OnAfterUpdateButton() {
 	e.stager.UpdatePhyllotaxyStage()
-	e.stager.parameter.GenerateMusicXMLFile()
+	e.stager.parameter.GenerateMusicXMLFile(DOWNLOAD)
 }
 
 type ExportStaticSiteButtonProxy struct {

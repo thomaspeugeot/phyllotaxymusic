@@ -615,7 +615,7 @@ func _(stage *models.Stage) {
 	__Parameter__000000_Reference.NbOfBeatsInTheme = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.060000
 	__Parameter__000000_Reference.FirstVoiceShiftY = 1.480000
-	__Parameter__000000_Reference.PitchDifference = 17
+	__Parameter__000000_Reference.PitchDifference = 3
 	__Parameter__000000_Reference.BeatsPerSecond = 5.050000
 	__Parameter__000000_Reference.Level = 11.100000
 	__Parameter__000000_Reference.IsMinor = true
@@ -631,6 +631,7 @@ func _(stage *models.Stage) {
 	__Parameter__000000_Reference.ActualBeatsTemporalShift = 6
 	__Parameter__000000_Reference.PathToStaticFiles = `../../../static`
 	__Parameter__000000_Reference.PathToGeneratedSVG = `../../../static/images`
+	__Parameter__000000_Reference.PathToGeneratedScore = `../../../static/scores`
 
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.Name = `Growing Rhombus Grid Seed`
 	__Rhombus__000000_Growing_Rhombus_Grid_Seed.IsDisplayed = false

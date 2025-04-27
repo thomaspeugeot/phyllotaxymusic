@@ -114,5 +114,11 @@ draw some notes of your choosing.
 
 <img src="./images/SVGfirstVoiceAndFirstVoiceShiftedRightWithGridWithNotes.svg" style="height: 600px; width: auto;">
 
+With the second voice note, this gives
 
+<img src="./images/SVGfirstVoiceAndFirstVoiceShiftedRightWithSecondVoiceWithGridWithNotes.svg" style="height: 600px; width: auto;">
+
+<p>Download the generated music score:
+    <a href="./scores/score.musicxml" download="score.musicxml">Download MusicXML Score</a>
+ </p>
 			

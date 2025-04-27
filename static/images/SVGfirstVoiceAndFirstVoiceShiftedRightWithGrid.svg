@@ -534,6 +534,16 @@
     <!---->
     <path class="click-through" d="M 1033.8 112.2 C 1092.6 103.9, 1095.2 181.8, 1154.0 173.5" fill="" fill-opacity="0" stroke="lightgreen" stroke-opacity="0.8" stroke-width="6" stroke-dasharray="" transform=""/>
     <!---->
+    <path class="click-through" d="M 256.4 102.3 C 315.2 94.1, 296.3 18.6, 355.2 10.3" fill="" fill-opacity="0" stroke="red" stroke-opacity="0.8" stroke-width="5" stroke-dasharray="" transform=""/>
+    <!---->
+    <path class="click-through" d="M 355.2 10.3 C 414.0 2.1, 416.6 79.9, 475.4 71.7" fill="" fill-opacity="0" stroke="red" stroke-opacity="0.8" stroke-width="5" stroke-dasharray="" transform=""/>
+    <!---->
+    <path class="click-through" d="M 475.4 71.7 C 534.3 63.4, 515.4 -12.1, 574.2 -20.4" fill="" fill-opacity="0" stroke="red" stroke-opacity="0.8" stroke-width="5" stroke-dasharray="" transform=""/>
+    <!---->
+    <path class="click-through" d="M 574.2 -20.4 C 633.0 -28.6, 635.6 49.2, 694.5 41.0" fill="" fill-opacity="0" stroke="red" stroke-opacity="0.8" stroke-width="5" stroke-dasharray="" transform=""/>
+    <!---->
+    <path class="click-through" d="M 694.5 41.0 C 753.3 32.8, 755.9 110.6, 814.7 102.3" fill="" fill-opacity="0" stroke="red" stroke-opacity="0.8" stroke-width="5" stroke-dasharray="" transform=""/>
+    <!---->
     <!---->
     <!---->
     <!---->

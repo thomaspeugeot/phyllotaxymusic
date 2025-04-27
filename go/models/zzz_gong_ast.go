@@ -1807,6 +1807,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Parameter[identifier].PathToGeneratedSVG = fielValue
+				case "PathToGeneratedScore":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Parameter[identifier].PathToGeneratedScore = fielValue
 				}
 			case "Rhombus":
 				switch fieldName {

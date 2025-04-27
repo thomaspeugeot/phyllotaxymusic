@@ -2,6 +2,85 @@
 package models
 
 // insertion point of enum utility functions
+// Utility function for GenerationMode
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (generationmode GenerationMode) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch generationmode {
+	// insertion code per enum code
+	case DOWNLOAD:
+		res = "DOWNLOAD"
+	case STATIC_WEB_SITE:
+		res = "STATIC_WEB_SITE"
+	}
+	return
+}
+
+func (generationmode *GenerationMode) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "DOWNLOAD":
+		*generationmode = DOWNLOAD
+		return
+	case "STATIC_WEB_SITE":
+		*generationmode = STATIC_WEB_SITE
+		return
+	default:
+		return errUnkownEnum
+	}
+}
+
+func (generationmode *GenerationMode) FromCodeString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "DOWNLOAD":
+		*generationmode = DOWNLOAD
+	case "STATIC_WEB_SITE":
+		*generationmode = STATIC_WEB_SITE
+	default:
+		return errUnkownEnum
+	}
+	return
+}
+
+func (generationmode *GenerationMode) ToCodeString() (res string) {
+
+	switch *generationmode {
+	// insertion code per enum code
+	case DOWNLOAD:
+		res = "DOWNLOAD"
+	case STATIC_WEB_SITE:
+		res = "STATIC_WEB_SITE"
+	}
+	return
+}
+
+func (generationmode GenerationMode) Codes() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "DOWNLOAD")
+	res = append(res, "STATIC_WEB_SITE")
+
+	return
+}
+
+func (generationmode GenerationMode) CodeValues() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "DOWNLOAD")
+	res = append(res, "STATIC_WEB_SITE")
+
+	return
+}
+
 // Utility function for StacksNames
 // if enum values are string, it is stored with the value
 // if enum values are int, they are stored with the code of the value

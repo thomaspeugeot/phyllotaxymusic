@@ -425,6 +425,9 @@ type ParameterDB struct {
 	// Declation for basic field parameterDB.PathToGeneratedSVG
 	PathToGeneratedSVG_Data sql.NullString
 
+	// Declation for basic field parameterDB.PathToGeneratedScore
+	PathToGeneratedScore_Data sql.NullString
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	ParameterPointersEncoding
@@ -530,6 +533,8 @@ type ParameterWOP struct {
 	PathToStaticFiles string `xlsx:"41"`
 
 	PathToGeneratedSVG string `xlsx:"42"`
+
+	PathToGeneratedScore string `xlsx:"43"`
 	// insertion for WOP pointer fields
 }
 
@@ -578,6 +583,7 @@ var Parameter_Fields = []string{
 	"ActualBeatsTemporalShift",
 	"PathToStaticFiles",
 	"PathToGeneratedSVG",
+	"PathToGeneratedScore",
 }
 
 type BackRepoParameterStruct struct {
@@ -2927,6 +2933,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter(parameter *models.P
 
 	parameterDB.PathToGeneratedSVG_Data.String = parameter.PathToGeneratedSVG
 	parameterDB.PathToGeneratedSVG_Data.Valid = true
+
+	parameterDB.PathToGeneratedScore_Data.String = parameter.PathToGeneratedScore
+	parameterDB.PathToGeneratedScore_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameter_WOP
@@ -3058,6 +3067,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameter_WOP(parameter *mode
 
 	parameterDB.PathToGeneratedSVG_Data.String = parameter.PathToGeneratedSVG
 	parameterDB.PathToGeneratedSVG_Data.Valid = true
+
+	parameterDB.PathToGeneratedScore_Data.String = parameter.PathToGeneratedScore
+	parameterDB.PathToGeneratedScore_Data.Valid = true
 }
 
 // CopyBasicFieldsFromParameterWOP
@@ -3189,6 +3201,9 @@ func (parameterDB *ParameterDB) CopyBasicFieldsFromParameterWOP(parameter *Param
 
 	parameterDB.PathToGeneratedSVG_Data.String = parameter.PathToGeneratedSVG
 	parameterDB.PathToGeneratedSVG_Data.Valid = true
+
+	parameterDB.PathToGeneratedScore_Data.String = parameter.PathToGeneratedScore
+	parameterDB.PathToGeneratedScore_Data.Valid = true
 }
 
 // CopyBasicFieldsToParameter
@@ -3236,6 +3251,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter(parameter *models.Par
 	parameter.ActualBeatsTemporalShift = int(parameterDB.ActualBeatsTemporalShift_Data.Int64)
 	parameter.PathToStaticFiles = parameterDB.PathToStaticFiles_Data.String
 	parameter.PathToGeneratedSVG = parameterDB.PathToGeneratedSVG_Data.String
+	parameter.PathToGeneratedScore = parameterDB.PathToGeneratedScore_Data.String
 }
 
 // CopyBasicFieldsToParameter_WOP
@@ -3283,6 +3299,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameter_WOP(parameter *models
 	parameter.ActualBeatsTemporalShift = int(parameterDB.ActualBeatsTemporalShift_Data.Int64)
 	parameter.PathToStaticFiles = parameterDB.PathToStaticFiles_Data.String
 	parameter.PathToGeneratedSVG = parameterDB.PathToGeneratedSVG_Data.String
+	parameter.PathToGeneratedScore = parameterDB.PathToGeneratedScore_Data.String
 }
 
 // CopyBasicFieldsToParameterWOP
@@ -3331,6 +3348,7 @@ func (parameterDB *ParameterDB) CopyBasicFieldsToParameterWOP(parameter *Paramet
 	parameter.ActualBeatsTemporalShift = int(parameterDB.ActualBeatsTemporalShift_Data.Int64)
 	parameter.PathToStaticFiles = parameterDB.PathToStaticFiles_Data.String
 	parameter.PathToGeneratedSVG = parameterDB.PathToGeneratedSVG_Data.String
+	parameter.PathToGeneratedScore = parameterDB.PathToGeneratedScore_Data.String
 }
 
 // Backup generates a json file from a slice of all ParameterDB instances in the backrepo

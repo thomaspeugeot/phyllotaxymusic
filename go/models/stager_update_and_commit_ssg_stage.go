@@ -137,7 +137,13 @@ draw some notes of your choosing.
 
 <img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithGridWithNotes + `" style="height: 600px; width: auto;">
 
+With the second voice note, this gives
 
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithSecondVoiceWithGridWithNotes + `" style="height: 600px; width: auto;">
+
+<p>Download the generated music score:
+    <a href="./scores/` + MusicXMLFile + `" download="` + MusicXMLFile + `">Download MusicXML Score</a>
+ </p>
 			`,
 
 			LayoutPath: "../../../vendor/github.com/fullstack-lang/gong/lib/ssg/go/defaults/layouts",
