@@ -6,36 +6,34 @@ import (
 	"log"
 	"os"
 	"time"
-
-	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
-// grabGeneratedSVGFile waits for the SVG text content to be updated via the proxy,
+// GrabGeneratedSVGFile waits for the SVG text content to be updated via the proxy,
 // receives the text through a channel, writes it to a file, and handles timeouts/errors.
 // It returns the svg instance processed and an error if any step failed.
-func (stager *Stager) grabGeneratedSVGFile(imageFilePath string, timeout time.Duration) (*svg.SVG, error) {
+func GrabGeneratedSVGFile(stage *Stage, imageFilePath string, timeout time.Duration) (*SVG, error) {
 
-	var svgInstance *svg.SVG
+	var svgInstance *SVG
 	// Find the existing SVG instance
-	for inst := range *svg.GetGongstructInstancesSet[svg.SVG](stager.svgStage) {
+	for inst := range *GetGongstructInstancesSet[SVG](stage) {
 		svgInstance = inst
 		break // Assuming the first one is the target
 	}
 	// Handle case where no SVG instance exists
 	if svgInstance == nil {
-		return nil, errors.New("no svg.SVG instance found in the stage")
+		return nil, errors.New("no SVG instance found in the stage")
 	}
 
-	var svgTextInstance *svg.SvgText
+	var svgTextInstance *SvgText
 	// Find the existing SvgText instance
-	for inst := range *svg.GetGongstructInstancesSet[svg.SvgText](stager.svgStage) {
+	for inst := range *GetGongstructInstancesSet[SvgText](stage) {
 		svgTextInstance = inst
 		break // Assuming the first one is the target
 	}
 
 	// If no SvgText exists, create a new one
 	if svgTextInstance == nil {
-		svgTextInstance = new(svg.SvgText).Stage(stager.svgStage)
+		svgTextInstance = new(SvgText).Stage(stage)
 		// log.Println("Created new svg.SvgText instance.")
 	}
 
@@ -56,7 +54,7 @@ func (stager *Stager) grabGeneratedSVGFile(imageFilePath string, timeout time.Du
 
 		// Commit the final state (flag reset, potentially proxy cleared)
 		// Consider error handling for Commit if necessary
-		stager.svgStage.Commit()
+		stage.Commit()
 		log.Println("SVG generation flag reset and final state committed.")
 
 		// to avoid successive svg commit
@@ -72,16 +70,14 @@ func (stager *Stager) grabGeneratedSVGFile(imageFilePath string, timeout time.Du
 	// Ensure the SvgTextProxy implementation properly handles sending
 	// data and potentially closing the channel.
 	svgTextInstance.Proxy = &SvgTextProxy{
-		stager:     stager,
+		stage:      stage,
 		svgText:    svgTextInstance,
 		updateChan: updateChan, // Pass the channel to the proxy
 	}
 
 	// Commit the stage to trigger the frontend update and proxy interaction.
 	// Consider potential errors from Commit() if it can return them.
-	log.Println(time.Now().Format("2006-01-02 15:04:05.000000"), "Committing stage to request SVG text update...",
-		"IsSVGFileGenerated", stager.svgStage.SVGs_mapString[SVGName].IsSVGFileGenerated)
-	stager.svgStage.Commit() // Assuming this triggers the async update
+	stage.Commit() // Assuming this triggers the async update
 
 	var svgContent string
 	var err error // Declare error variable for the scope
@@ -136,8 +132,8 @@ func (stager *Stager) grabGeneratedSVGFile(imageFilePath string, timeout time.Du
 // SvgTextProxy implements the SvgTextProxyInterface to intercept updates
 // to the SvgText field and send the content through a channel.
 type SvgTextProxy struct {
-	stager     *Stager       // Assuming Stager has necessary methods/fields
-	svgText    *svg.SvgText  // Reference to the SvgText instance being proxied
+	stage      *Stage
+	svgText    *SvgText      // Reference to the SvgText instance being proxied
 	updateChan chan<- string // Use send-only channel type annotation
 }
 
@@ -150,7 +146,7 @@ func (p *SvgTextProxy) Updated() {
 		return
 	}
 	// get the value that has been updated
-	p.stager.svgStage.Checkout()
+	p.stage.Checkout()
 
 	// Get the current text value from the proxied SvgText instance
 	textValue := p.svgText.Text // Read the value directly
@@ -178,10 +174,4 @@ func (p *SvgTextProxy) Updated() {
 	close(p.updateChan)
 	log.Println("SvgTextProxy: Channel closed.")
 
-	// Optionally, detach the proxy if it's single-use?
-	// p.svgText.Proxy = nil // Be careful with lifecycle assumptions
-	// p.stager.svgStage.Commit() // Need to commit proxy detachment?
 }
-
-// Ensure SvgTextProxy still satisfies the interface (compile-time check)
-var _ svg.SvgTextProxyInterface = (*SvgTextProxy)(nil)

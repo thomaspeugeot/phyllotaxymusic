@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
 const bach2ndFugue string = "bach2ndFugue.png"
@@ -44,14 +46,16 @@ func (stager *Stager) GenerateSSG() {
 
 	// asks svg to generates an svg file
 	imageFilePath := filepath.Join(pathToGeneratedSVG, firstVoiceSVGimage)
-	stager.grabGeneratedSVGFile(imageFilePath, 5000*time.Millisecond)
+	// stager.grabGeneratedSVGFile(imageFilePath, 5000*time.Millisecond)
+	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
 
 	// generates the second image
 	parameter.FirstVoiceShiftedRigth.IsDisplayed = true
 	stager.UpdateSVGStage()
 
 	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndSecondSVGimage)
-	stager.grabGeneratedSVGFile(imageFilePath, 5000*time.Millisecond)
+	// stager.grabGeneratedSVGFile(imageFilePath, 5000*time.Millisecond)
+	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
 
 	/*
 	 RESTORE SVG GENERATION
