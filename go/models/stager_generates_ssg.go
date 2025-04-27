@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 const bach2ndFugue string = "bach2ndFugue.png"
@@ -22,7 +23,7 @@ func (stager *Stager) GenerateSSG() {
 	pathToGeneratedSVG := parameter.PathToGeneratedSVG
 
 	// start by copying the static directory
-	err, shouldReturn := stager.prepareStaticDic(pathToGeneratedSVG)
+	_, shouldReturn := stager.prepareStaticDic(pathToGeneratedSVG)
 	if shouldReturn {
 		return
 	}
@@ -39,18 +40,18 @@ func (stager *Stager) GenerateSSG() {
 		shape.SetIsDisplayed(false)
 	}
 	parameter.FirstVoice.IsDisplayed = true
-	stager.UpdateAndCommitSVGStage()
+	stager.UpdateSVGStage()
 
 	// asks svg to generates an svg file
 	imageFilePath := filepath.Join(pathToGeneratedSVG, firstVoiceSVGimage)
-	stager.grabGeneratedSVGFile(imageFilePath, err)
+	stager.grabGeneratedSVGFile(imageFilePath, 15000*time.Millisecond)
 
-	// generates the second image
-	parameter.FirstVoiceShiftedRigth.IsDisplayed = true
-	stager.UpdateAndCommitSVGStage()
+	// // generates the second image
+	// parameter.FirstVoiceShiftedRigth.IsDisplayed = true
+	// stager.UpdateAndCommitSVGStage()
 
-	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndSecondSVGimage)
-	stager.grabGeneratedSVGFile(imageFilePath, err)
+	// imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndSecondSVGimage)
+	// stager.grabGeneratedSVGFile(imageFilePath, 15000*time.Millisecond)
 
 	/*
 	 RESTORE SVG GENERATION

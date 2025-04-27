@@ -1,72 +1,182 @@
 package models
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"os"
+	"time"
 
 	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
-func (stager *Stager) grabGeneratedSVGFile(imageFilePath string, err error) (*svg.SVG, bool) {
-	var svg_ *svg.SVG
-	for k := range *svg.GetGongstructInstancesSet[svg.SVG](stager.svgStage) {
-		svg_ = k
-		break
+// grabGeneratedSVGFile waits for the SVG text content to be updated via the proxy,
+// receives the text through a channel, writes it to a file, and handles timeouts/errors.
+// It returns the svg instance processed and an error if any step failed.
+func (stager *Stager) grabGeneratedSVGFile(imageFilePath string, timeout time.Duration) (*svg.SVG, error) {
+
+	var svgInstance *svg.SVG
+	// Find the existing SVG instance
+	for inst := range *svg.GetGongstructInstancesSet[svg.SVG](stager.svgStage) {
+		svgInstance = inst
+		break // Assuming the first one is the target
+	}
+	// Handle case where no SVG instance exists
+	if svgInstance == nil {
+		return nil, errors.New("no svg.SVG instance found in the stage")
 	}
 
-	var svgText_ *svg.SvgText
-	svgTexts := *svg.GetGongstructInstancesSet[svg.SvgText](stager.svgStage)
-	log.Println("len of svgTexts", len(svgTexts))
-	for k := range svgTexts {
-		svgText_ = k
-		break
-	}
-	_ = svgText_
-
-	if svgText_ == nil {
-		svgText_ = new(svg.SvgText).Stage(stager.svgStage)
+	var svgTextInstance *svg.SvgText
+	// Find the existing SvgText instance
+	for inst := range *svg.GetGongstructInstancesSet[svg.SvgText](stager.svgStage) {
+		svgTextInstance = inst
+		break // Assuming the first one is the target
 	}
 
-	svg_.IsSVGFileGenerated = true
-	svgText_.Proxy = &SvgTextProxy{
-		stager:        stager,
-		svgText:       svgText_,
-		imageFilePath: imageFilePath,
+	// If no SvgText exists, create a new one
+	if svgTextInstance == nil {
+		svgTextInstance = new(svg.SvgText).Stage(stager.svgStage)
+		// log.Println("Created new svg.SvgText instance.")
 	}
 
-	// the front will update svgText with the content of the svg file
-	// the proxy will intercept the update
-	stager.svgStage.Commit()
+	// Ensure the proxy is cleaned up if it was temporarily set
+	// And reset the generation flag regardless of success/failure path
+	defer func() {
+		if svgInstance != nil { // Check svgInstance isn't nil before accessing
+			svgInstance.IsSVGFileGenerated = false
+		}
+		// Only clear the proxy if we temporarily set it for this operation.
+		// This assumes the proxy is *only* for this function's purpose.
+		// If the proxy has a longer lifecycle, this cleanup might be incorrect.
+		if svgTextInstance != nil {
+			// If we just created the SvgText instance, we might want to remove it
+			// Or if we are just setting the proxy temporarily:
+			// svgTextInstance.Proxy = nil // Be careful with this assumption
+		}
 
-	// code is needed here to wait for SvgTextProxy.Updated() to proceed
+		// Commit the final state (flag reset, potentially proxy cleared)
+		// Consider error handling for Commit if necessary
+		stager.svgStage.Commit()
+		log.Println("SVG generation flag reset and final state committed.")
+	}()
 
-	svg_.IsSVGFileGenerated = false
+	// Create a channel to receive the SvgText content
+	updateChan := make(chan string, 1) // Buffer of 1 might prevent blocking sender if receiver is slow
 
-	stager.svgStage.Commit()
+	svgInstance.IsSVGFileGenerated = true
 
-	return svg_, false
+	// Assign the proxy with the channel
+	// Ensure the SvgTextProxy implementation properly handles sending
+	// data and potentially closing the channel.
+	svgTextInstance.Proxy = &SvgTextProxy{
+		stager:     stager,
+		svgText:    svgTextInstance,
+		updateChan: updateChan, // Pass the channel to the proxy
+	}
+
+	// Commit the stage to trigger the frontend update and proxy interaction.
+	// Consider potential errors from Commit() if it can return them.
+	log.Println(time.Now().Format("2006-01-02 15:04:05.000000"), "Committing stage to request SVG text update...",
+		"IsSVGFileGenerated", stager.svgStage.SVGs_mapString[SVGName].IsSVGFileGenerated)
+	stager.svgStage.Commit() // Assuming this triggers the async update
+
+	var svgContent string
+	var err error // Declare error variable for the scope
+
+	// Wait for the SvgTextProxy.Updated() method to send the SVG text content OR timeout
+	log.Println("Waiting for SVG text content via channel...")
+	select {
+	case receivedContent, ok := <-updateChan:
+		if !ok {
+			// Channel was closed without sending data (unexpected if proxy should always send)
+			log.Println("Warning: SVG update channel closed unexpectedly.")
+			err = errors.New("SVG update channel closed without providing content")
+			// Reset flag and commit is handled by defer
+			return svgInstance, err
+		}
+		svgContent = receivedContent
+		log.Println("SVG text content received.")
+
+	case <-time.After(timeout):
+		log.Printf("Error: Timed out after %v waiting for SVG text content.\n", timeout)
+		err = fmt.Errorf("timed out waiting for SVG content after %v", timeout)
+		// Reset flag and commit is handled by defer.
+		// We might need to explicitly clean up the proxy or signal cancellation here.
+		// Potentially set svgTextInstance.Proxy = nil here if it's temporary?
+		return svgInstance, err
+	}
+
+	// Close the channel (if the sender doesn't). Best practice: sender closes.
+	// close(updateChan) // Typically sender closes, confirm SvgTextProxy.Updated does this.
+
+	// Now, write the received SVG content to the file
+	if svgContent == "" {
+		log.Println("Warning: Received empty SVG content from proxy. File will not be written.")
+		// Decide if empty content is an error or acceptable
+		// return svgInstance, errors.New("received empty SVG content") // Uncomment if empty is an error
+	} else {
+		// Use 0644 for standard file permissions
+		writeErr := os.WriteFile(imageFilePath, []byte(svgContent), 0644)
+		if writeErr != nil {
+			log.Printf("Error writing SVG file '%s': %v\n", imageFilePath, writeErr)
+			// Return the write error. The defer will handle cleanup.
+			return svgInstance, fmt.Errorf("failed to write SVG file '%s': %w", imageFilePath, writeErr)
+		}
+		log.Printf("SVG file created successfully: %s\n", imageFilePath)
+	}
+
+	// Cleanup (resetting flag, final commit) is handled by the defer statement.
+	// Return the svg instance and nil error on success
+	return svgInstance, nil
 }
 
+// SvgTextProxy implements the SvgTextProxyInterface to intercept updates
+// to the SvgText field and send the content through a channel.
 type SvgTextProxy struct {
-	stager        *Stager
-	svgText       *svg.SvgText
-	imageFilePath string
+	stager     *Stager       // Assuming Stager has necessary methods/fields
+	svgText    *svg.SvgText  // Reference to the SvgText instance being proxied
+	updateChan chan<- string // Use send-only channel type annotation
 }
 
-// Updated implements models.SvgTextProxyInterface.
-func (s *SvgTextProxy) Updated() {
-	svgText_ := s.svgText
-	imageFilePath := s.imageFilePath
-
-	if svgText_.Text == "" {
-		log.Fatalln("no image")
+// Updated is the method called by the gong framework when the SvgText instance might have changed.
+// It now matches the SvgTextProxyInterface signature: Updated().
+func (p *SvgTextProxy) Updated() {
+	// Check if the proxy and its fields are valid
+	if p == nil || p.svgText == nil || p.updateChan == nil {
+		log.Println("SvgTextProxy.Updated: Proxy or its fields are nil, skipping.")
+		return
 	}
 
-	err := os.WriteFile(imageFilePath, []byte(svgText_.Text), 0644) // Use 0644 for standard file permissions
-	if err != nil {
-		log.Printf("Error writing root file '%s': %v\n", imageFilePath, err)
-	}
-	log.Printf("iumage file created successfully: %s\n", imageFilePath)
+	// Get the current text value from the proxied SvgText instance
+	textValue := p.svgText.Text // Read the value directly
 
-	// inform the main thread
+	log.Printf("SvgTextProxy: Updated() called. Current SvgText.Text length: %d. Sending to channel.", len(textValue))
+
+	// Send the content through the channel.
+	// Use a select with a default case to prevent blocking if the channel is full
+	// or if the receiver has already timed out and is no longer listening.
+	select {
+	case p.updateChan <- textValue:
+		log.Println("SvgTextProxy: Content sent to channel.")
+	default:
+		// This case handles situations where the channel send would block.
+		// This might happen if the channel buffer is full (unlikely with buffer 1 unless called rapidly)
+		// or if the receiver in grabGeneratedSVGFile has already timed out and moved on.
+		log.Println("SvgTextProxy: Warning - Could not send text to channel (possibly buffer full or receiver timed out).")
+	}
+
+	// IMPORTANT: The sender should close the channel when it's done sending.
+	// Assuming only one update is expected per proxy instance lifecycle for this operation.
+	// Ensure this doesn't cause a "send on closed channel" panic if Updated can be called multiple times.
+	// Consider adding logic (e.g., a flag within the proxy) to ensure close(p.updateChan) is called only once.
+	// For now, we assume Updated is called effectively once for the desired value.
+	close(p.updateChan)
+	log.Println("SvgTextProxy: Channel closed.")
+
+	// Optionally, detach the proxy if it's single-use?
+	// p.svgText.Proxy = nil // Be careful with lifecycle assumptions
+	// p.stager.svgStage.Commit() // Need to commit proxy detachment?
 }
+
+// Ensure SvgTextProxy still satisfies the interface (compile-time check)
+var _ svg.SvgTextProxyInterface = (*SvgTextProxy)(nil)
