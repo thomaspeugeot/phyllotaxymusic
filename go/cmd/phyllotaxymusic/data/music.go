@@ -369,7 +369,7 @@ func _(stage *models.Stage) {
 	__BezierGrid__000000_2nb_Voice.IsDisplayed = true
 
 	__BezierGrid__000001_2nd_voice_shifted_right.Name = `2nd voice shifted right`
-	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = false
+	__BezierGrid__000001_2nd_voice_shifted_right.IsDisplayed = true
 
 	__BezierGrid__000002_First_Voice.Name = `First Voice`
 	__BezierGrid__000002_First_Voice.IsDisplayed = true
@@ -504,10 +504,10 @@ func _(stage *models.Stage) {
 	__CircleGrid__000000_Construction_Circle_Grid.IsDisplayed = false
 
 	__CircleGrid__000001_First_Voice_note_shifted_right.Name = `First Voice note shifted right`
-	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = false
+	__CircleGrid__000001_First_Voice_note_shifted_right.IsDisplayed = true
 
 	__CircleGrid__000002_First_Voice_notes.Name = `First Voice notes`
-	__CircleGrid__000002_First_Voice_notes.IsDisplayed = false
+	__CircleGrid__000002_First_Voice_notes.IsDisplayed = true
 
 	__CircleGrid__000003_Growing_Circle_Grid.Name = `Growing Circle Grid`
 	__CircleGrid__000003_Growing_Circle_Grid.IsDisplayed = false

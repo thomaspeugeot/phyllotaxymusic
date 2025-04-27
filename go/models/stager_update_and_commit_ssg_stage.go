@@ -130,6 +130,14 @@ notes are 1, 1/2, 1, 1, 1/2, 1 and 3/2.
 
 <img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid + `" style="height: 600px; width: auto;">
 
+Now, along the front curve, when it intersect the 
+measure lines, 
+draw some notes of your choosing.
+
+
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithGridWithNotes + `" style="height: 600px; width: auto;">
+
+
 			`,
 
 			LayoutPath: "../../../vendor/github.com/fullstack-lang/gong/lib/ssg/go/defaults/layouts",

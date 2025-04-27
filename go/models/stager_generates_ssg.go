@@ -21,6 +21,8 @@ const SVGfirstVoiceAndFirstVoiceShiftedRightAndSecondVoice string = "SVGfirstVoi
 
 const SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid string = "SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid.svg"
 
+const SVGfirstVoiceAndFirstVoiceShiftedRightWithGridWithNotes string = "SVGfirstVoiceAndFirstVoiceShiftedRightWithGridWithNotes.svg"
+
 func (stager *Stager) GenerateSSG() {
 	stager.UpdatePhyllotaxyStage()
 
@@ -76,6 +78,18 @@ func (stager *Stager) GenerateSSG() {
 	stager.UpdateSVGStage()
 
 	imageFilePath = filepath.Join(pathToGeneratedSVG, SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid)
+	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
+
+	// generates the fifth image
+	parameter.SecondVoice.IsDisplayed = false
+	parameter.PitchDifference = 0
+	parameter.PitchLines.IsDisplayed = true
+	parameter.BeatLines.IsDisplayed = true
+	parameter.FirstVoiceNotes.IsDisplayed = true
+	parameter.FirstVoiceNotesShiftedRight.IsDisplayed = true
+	stager.UpdateSVGStage()
+
+	imageFilePath = filepath.Join(pathToGeneratedSVG, SVGfirstVoiceAndFirstVoiceShiftedRightWithGridWithNotes)
 	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
 
 	/*

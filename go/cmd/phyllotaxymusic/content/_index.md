@@ -107,4 +107,12 @@ notes are 1, 1/2, 1, 1, 1/2, 1 and 3/2.
 
 <img src="./images/SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid.svg" style="height: 600px; width: auto;">
 
+Now, along the front curve, when it intersect the 
+measure lines, 
+draw some notes of your choosing.
+
+
+<img src="./images/SVGfirstVoiceAndFirstVoiceShiftedRightWithGridWithNotes.svg" style="height: 600px; width: auto;">
+
+
 			
