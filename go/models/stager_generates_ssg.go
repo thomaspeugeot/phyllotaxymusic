@@ -13,11 +13,13 @@ const bach2ndFugue string = "bach2ndFugue.png"
 
 const growthCurveOnPineCone string = "growthCurveOnPineCone.png"
 
-const firstVoiceSVGimage string = "fistVoiceSVGimage.svg"
+const SVGfirstVoice string = "fistVoiceSVGimage.svg"
 
-const firstVoiceAndFirstVoiceShiftedRightSVGimage string = "fistVoiceAndFirstVoiceShiftedRightSVGimage.svg"
+const SVGfirstVoiceAndFirstVoiceShiftedRight string = "SVGfirstVoiceAndFirstVoiceShiftedRight.svg"
 
-const firstVoiceAndFirstVoiceShiftedRightAndSecondVoiceSVGimage string = "firstVoiceAndFirstVoiceShiftedRightAndSecondVoiceSVGimage.svg"
+const SVGfirstVoiceAndFirstVoiceShiftedRightAndSecondVoice string = "SVGfirstVoiceAndFirstVoiceShiftedRightAndSecondVoice.svg"
+
+const SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid string = "SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid.svg"
 
 func (stager *Stager) GenerateSSG() {
 	stager.UpdatePhyllotaxyStage()
@@ -48,14 +50,14 @@ func (stager *Stager) GenerateSSG() {
 	stager.UpdateSVGStage() // beware to not commit because the grabGeneratedSVGFile will commit the svg
 
 	// asks svg to generates an svg file
-	imageFilePath := filepath.Join(pathToGeneratedSVG, firstVoiceSVGimage)
+	imageFilePath := filepath.Join(pathToGeneratedSVG, SVGfirstVoice)
 	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
 
 	// generates the second image
 	parameter.FirstVoiceShiftedRigth.IsDisplayed = true
 	stager.UpdateSVGStage()
 
-	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndFirstVoiceShiftedRightSVGimage)
+	imageFilePath = filepath.Join(pathToGeneratedSVG, SVGfirstVoiceAndFirstVoiceShiftedRight)
 	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
 
 	// generates the third image
@@ -63,7 +65,17 @@ func (stager *Stager) GenerateSSG() {
 	parameter.PitchDifference = 0
 	stager.UpdateSVGStage()
 
-	imageFilePath = filepath.Join(pathToGeneratedSVG, firstVoiceAndFirstVoiceShiftedRightAndSecondVoiceSVGimage)
+	imageFilePath = filepath.Join(pathToGeneratedSVG, SVGfirstVoiceAndFirstVoiceShiftedRightAndSecondVoice)
+	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
+
+	// generates the fourth image
+	parameter.SecondVoice.IsDisplayed = false
+	parameter.PitchDifference = 0
+	parameter.PitchLines.IsDisplayed = true
+	parameter.BeatLines.IsDisplayed = true
+	stager.UpdateSVGStage()
+
+	imageFilePath = filepath.Join(pathToGeneratedSVG, SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid)
 	svg.GrabGeneratedSVGFile(stager.svgStage, imageFilePath, 5000*time.Millisecond)
 
 	/*

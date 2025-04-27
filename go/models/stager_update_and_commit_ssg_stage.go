@@ -98,11 +98,11 @@ and a rotation. Let's demonstrate this.
 Use a grey pen and draw the unfolded the front curve on a piece 
 of paper.
 
-<img src="./images/` + firstVoiceSVGimage + `" style="height: 200px; width: auto;">
+<img src="./images/` + SVGfirstVoice + `" style="height: 200px; width: auto;">
 
 Use a green pen and draw the same curve at the right of the first.
 
-<img src="./images/` + firstVoiceAndFirstVoiceShiftedRightSVGimage + `" style="height: 200px; width: auto;">
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRight + `" style="height: 200px; width: auto;">
 
 Draw it again
 on a tracing paper with a red pen and put the tracing 
@@ -110,7 +110,7 @@ paper above and
 shift it a bit to the right and 
 a bit to the top.
 
-<img src="./images/` + firstVoiceAndFirstVoiceShiftedRightAndSecondVoiceSVGimage + `" style="height: 250px; width: auto;">
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightAndSecondVoice + `" style="height: 250px; width: auto;">
 
 We did it ! The overlapping 
 is perfect 
@@ -128,6 +128,7 @@ follows the scale of your choice. If you
 choose a C minor scale, the tone differences between
 notes are 1, 1/2, 1, 1, 1/2, 1 and 3/2.
 
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid + `" style="height: 600px; width: auto;">
 
 			`,
 

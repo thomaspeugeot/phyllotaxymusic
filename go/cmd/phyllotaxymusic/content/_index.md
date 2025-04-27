@@ -79,7 +79,7 @@ of paper.
 
 Use a green pen and draw the same curve at the right of the first.
 
-<img src="./images/fistVoiceAndFirstVoiceShiftedRightSVGimage.svg" style="height: 200px; width: auto;">
+<img src="./images/SVGfirstVoiceAndFirstVoiceShiftedRight.svg" style="height: 200px; width: auto;">
 
 Draw it again
 on a tracing paper with a red pen and put the tracing 
@@ -87,7 +87,24 @@ paper above and
 shift it a bit to the right and 
 a bit to the top.
 
-<img src="./images/firstVoiceAndFirstVoiceShiftedRightAndSecondVoiceSVGimage.svg" style="height: 260px; width: auto;">
+<img src="./images/SVGfirstVoiceAndFirstVoiceShiftedRightAndSecondVoice.svg" style="height: 250px; width: auto;">
 
+We did it ! The overlapping 
+is perfect 
+except for one space that have
+the shape of an eye (
+the place for the leave).
+
+### Generating a theme form the front curve 
+
+Now take take the first drawing and add a canevas
+of vertical measure lines and horizontal pitch lines.
+
+For the pitch lines, the spacing between pitch line
+follows the scale of your choice. If you
+choose a C minor scale, the tone differences between
+notes are 1, 1/2, 1, 1, 1/2, 1 and 3/2.
+
+<img src="./images/SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid.svg" style="height: 600px; width: auto;">
 
 			
