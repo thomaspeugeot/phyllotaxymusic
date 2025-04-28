@@ -6,10 +6,13 @@ import (
 	"path/filepath"
 	"time"
 
+	ssg "github.com/fullstack-lang/gong/lib/ssg/go/models"
 	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
 
 const bach2ndFugue string = "bach2ndFugue.png"
+
+const bach2ndFugueLarge string = "bach2ndFugue_large.png"
 
 const growthCurveOnPineCone string = "growthCurveOnPineCone.png"
 
@@ -118,7 +121,7 @@ func (stager *Stager) GenerateSSG() {
 }
 
 func (*Stager) prepareStaticDic(pathToGeneratedSVG string) (error, bool) {
-	CopyDirectory("../../../vendor/github.com/fullstack-lang/gong/lib/ssg/go/defaults/static",
+	ssg.CopyDirectory("../../../vendor/github.com/fullstack-lang/gong/lib/ssg/go/defaults/static",
 		"../../../static",
 	)
 
@@ -147,8 +150,9 @@ func (*Stager) prepareStaticDic(pathToGeneratedSVG string) (error, bool) {
 	// log.Printf("Root content directory created or already exists: %s\n", pathToGeneratedSVG)
 
 	/* copy necessary images for the geenration */
-	CopyFile("../../../images/"+bach2ndFugue, filepath.Join(pathToGeneratedSVG, bach2ndFugue))
-	CopyFile("../../../images/"+growthCurveOnPineCone, filepath.Join(pathToGeneratedSVG, growthCurveOnPineCone))
+	ssg.CopyFile("../../../images/"+bach2ndFugue, filepath.Join(pathToGeneratedSVG, bach2ndFugue))
+	ssg.CopyFile("../../../images/"+bach2ndFugueLarge, filepath.Join(pathToGeneratedSVG, bach2ndFugueLarge))
+	ssg.CopyFile("../../../images/"+growthCurveOnPineCone, filepath.Join(pathToGeneratedSVG, growthCurveOnPineCone))
 
 	return err, false
 }

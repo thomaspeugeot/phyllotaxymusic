@@ -27,18 +27,37 @@ func (stager *Stager) UpdateAndCommitSsgStage() {
 			MardownContent: `
 This site describes phyllotaxy generated music.
 
-Precisely, phyllotaxy helps to generates a music
-theme. A music theme is a small suite 
-of music notes, a melodic material.
+Phyllotaxy and music are two concepts far appart but they can be related.
+
+Precisely, phyllotaxy can help to generates a music
+theme, a suite of music notes, a melodic material.
+
+### Cannon
 
 A wellknown music theme is at the start of Bach's 2nd 
-fugue in C minor.
+fugue in C minor. It starts with the C note.
 
 <img src="./images/` + bach2ndFugue + `" style="height: 100px; width: auto;">
 
+This theme is repeated with different voices, sometimes overlapping. It is the composer's chore
+to have the theme well suited for supporting overlapping itself.
+
+<img src="./images/` + bach2ndFugueLarge + `" style="height: 400px; width: auto;">
+
+On the third measure, the theme starts again, but it starts with the note G, a 7 half tone higher.
+
+Having a theme that repeats itself harmonously with a shoft in beats and tone is called a cannon:
+
+- Pachelbel's Canon in D
+- "Row, Row, Row Your Boat"
+
+Phylotaxy will help us to compose theme that are suited for cannon with the following idea : 
+if a cannon theme is a curve on a plan, it must overlap with itself with an horizontal and a vertical shift. 
+
 ### Phylotaxy
 
-Phylotaxy means "shape of leaves". 
+Phylotaxy means "shape of leaves" 
+("phyllo" is greek for leave and "taxy" is greek for shape). 
 It is the 
 science developped by botanist, 
 mathematicians and physicists 
@@ -98,11 +117,11 @@ and a rotation. Let's demonstrate this.
 Use a grey pen and draw the unfolded the front curve on a piece 
 of paper.
 
-<img src="./images/` + SVGfirstVoice + `" style="height: 200px; width: auto;">
+<img src="./images/` + SVGfirstVoice + `" style="height: 100px; width: auto;">
 
 Use a green pen and draw the same curve at the right of the first.
 
-<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRight + `" style="height: 200px; width: auto;">
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRight + `" style="height: 100px; width: auto;">
 
 Draw it again
 on a tracing paper with a red pen and put the tracing 
@@ -110,7 +129,7 @@ paper above and
 shift it a bit to the right and 
 a bit to the top.
 
-<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightAndSecondVoice + `" style="height: 250px; width: auto;">
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightAndSecondVoice + `" style="height: 125px; width: auto;">
 
 We did it ! The overlapping 
 is perfect 
@@ -128,20 +147,20 @@ follows the scale of your choice. If you
 choose a C minor scale, the tone differences between
 notes are 1, 1/2, 1, 1, 1/2, 1 and 3/2.
 
-<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid + `" style="height: 600px; width: auto;">
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithGrid + `" style="height: 300px; width: auto;">
 
 Now, along the front curve, when it intersect the 
 measure lines, 
 draw some notes of your choosing.
 
 
-<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithGridWithNotes + `" style="height: 600px; width: auto;">
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithGridWithNotes + `" style="height: 300px; width: auto;">
 
 With the second voice note, this gives
 
-<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithSecondVoiceWithGridWithNotes + `" style="height: 600px; width: auto;">
+<img src="./images/` + SVGfirstVoiceAndFirstVoiceShiftedRightWithSecondVoiceWithGridWithNotes + `" style="height: 300px; width: auto;">
 
-<p>Download the generated music score:
+<p>Download the generated music score in the musescore musicxml format:
     <a href="./scores/` + MusicXMLFile + `" download="` + MusicXMLFile + `">Download MusicXML Score</a>
  </p>
 			`,
