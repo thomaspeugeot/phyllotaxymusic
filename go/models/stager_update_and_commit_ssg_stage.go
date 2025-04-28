@@ -46,7 +46,7 @@ to have the theme well suited for supporting overlapping itself.
 
 On the third measure, the theme starts again, but it starts with the note G, a 7 half tone higher.
 
-Having a theme that repeats itself harmonously with a shoft in beats and tone is called a cannon:
+Having a theme that repeats itself harmonously with a shift in beats and tone is called a cannon:
 
 - Pachelbel's Canon in D
 - "Row, Row, Row Your Boat"

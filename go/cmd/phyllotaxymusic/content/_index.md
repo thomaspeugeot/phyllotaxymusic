@@ -23,6 +23,14 @@ to have the theme well suited for supporting overlapping itself.
 
 On the third measure, the theme starts again, but it starts with the note G, a 7 half tone higher.
 
+Having a theme that repeats itself harmonously with a shift in beats and tone is called a cannon:
+
+- Pachelbel's Canon in D
+- "Row, Row, Row Your Boat"
+
+Phylotaxy will help us to compose theme that are suited for cannon with the following idea : 
+if a cannon theme is a curve on a plan, it must overlap with itself with an horizontal and a vertical shift. 
+
 ### Phylotaxy
 
 Phylotaxy means "shape of leaves" 
