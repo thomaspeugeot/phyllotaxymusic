@@ -509,6 +509,53 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 
 	}
 
+	map_Chapter_Identifiers := make(map[*Chapter]string)
+	_ = map_Chapter_Identifiers
+
+	chapterOrdered := []*Chapter{}
+	for chapter := range stage.Chapters {
+		chapterOrdered = append(chapterOrdered, chapter)
+	}
+	sort.Slice(chapterOrdered[:], func(i, j int) bool {
+		chapteri := chapterOrdered[i]
+		chapterj := chapterOrdered[j]
+		chapteri_order, oki := stage.ChapterMap_Staged_Order[chapteri]
+		chapterj_order, okj := stage.ChapterMap_Staged_Order[chapterj]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return chapteri_order < chapterj_order
+	})
+	if len(chapterOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, chapter := range chapterOrdered {
+
+		id = generatesIdentifier("Chapter", idx, chapter.Name)
+		map_Chapter_Identifiers[chapter] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Chapter")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", chapter.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(chapter.Name))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MardownContent")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(chapter.MardownContent))
+		initializerStatements += setValueField
+
+	}
+
 	map_Circle_Identifiers := make(map[*Circle]string)
 	_ = map_Circle_Identifiers
 
@@ -690,6 +737,85 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circlegrid.IsDisplayed))
 		initializerStatements += setValueField
+
+	}
+
+	map_Content_Identifiers := make(map[*Content]string)
+	_ = map_Content_Identifiers
+
+	contentOrdered := []*Content{}
+	for content := range stage.Contents {
+		contentOrdered = append(contentOrdered, content)
+	}
+	sort.Slice(contentOrdered[:], func(i, j int) bool {
+		contenti := contentOrdered[i]
+		contentj := contentOrdered[j]
+		contenti_order, oki := stage.ContentMap_Staged_Order[contenti]
+		contentj_order, okj := stage.ContentMap_Staged_Order[contentj]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return contenti_order < contentj_order
+	})
+	if len(contentOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, content := range contentOrdered {
+
+		id = generatesIdentifier("Content", idx, content.Name)
+		map_Content_Identifiers[content] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Content")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", content.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.Name))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MardownContent")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.MardownContent))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ContentPath")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.ContentPath))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "OutputPath")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.OutputPath))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "LayoutPath")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.LayoutPath))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StaticPath")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.StaticPath))
+		initializerStatements += setValueField
+
+		if content.Target != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Target")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+content.Target.ToCodeString())
+			initializerStatements += setValueField
+		}
 
 	}
 
@@ -2680,6 +2806,19 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 
 	}
 
+	if len(chapterOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of Chapter instances pointers"
+	}
+	for idx, chapter := range chapterOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Chapter", idx, chapter.Name)
+		map_Chapter_Identifiers[chapter] = id
+
+		// Initialisation of values
+	}
+
 	if len(circleOrdered) > 0 {
 		pointersInitializesStatements += "\n\t// setup of Circle instances pointers"
 	}
@@ -2733,6 +2872,27 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Circles")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[_circle])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
+	if len(contentOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of Content instances pointers"
+	}
+	for idx, content := range contentOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Content", idx, content.Name)
+		map_Content_Identifiers[content] = id
+
+		// Initialisation of values
+		for _, _chapter := range content.Chapters {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Chapters")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Chapter_Identifiers[_chapter])
 			pointersInitializesStatements += setPointerField
 		}
 

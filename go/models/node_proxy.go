@@ -4,14 +4,14 @@ import (
 	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
 )
 
-type Target interface {
+type NodeTarget interface {
 	OnAfterUpdateNode()
 	GetGongtreeStage() *tree.Stage
 }
 
 // Generic node creation function
 func NewNode(
-	target Target,
+	target NodeTarget,
 	name string,
 	isExpandedPointer *bool,
 	isCheckedPointer *bool,
@@ -43,7 +43,7 @@ func NewNodeProxy(
 	node *tree.Node,
 	isExpandedPointer *bool,
 	isCheckedPointer *bool,
-	target Target,
+	target NodeTarget,
 ) *NodeProxy {
 	proxy := new(NodeProxy)
 	proxy.node = node
@@ -58,7 +58,7 @@ type NodeProxy struct {
 	node              *tree.Node
 	isExpandedPointer *bool
 	isCheckedPointer  *bool
-	target            Target
+	target            NodeTarget
 }
 
 // Updated handles updating values when the node changes

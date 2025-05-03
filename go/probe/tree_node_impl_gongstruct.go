@@ -65,11 +65,17 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "BezierGridStack" {
 		fillUpTable[models.BezierGridStack](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "Chapter" {
+		fillUpTable[models.Chapter](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Circle" {
 		fillUpTable[models.Circle](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "CircleGrid" {
 		fillUpTable[models.CircleGrid](nodeImplGongstruct.probe)
+	}
+	if nodeImplGongstruct.gongStruct.GetName() == "Content" {
+		fillUpTable[models.Content](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "ExportToMusicxml" {
 		fillUpTable[models.ExportToMusicxml](nodeImplGongstruct.probe)

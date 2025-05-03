@@ -84,6 +84,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/beziergridstacks/:id", GetController().UpdateBezierGridStack)
 		v1.DELETE("/v1/beziergridstacks/:id", GetController().DeleteBezierGridStack)
 
+		v1.GET("/v1/chapters", GetController().GetChapters)
+		v1.GET("/v1/chapters/:id", GetController().GetChapter)
+		v1.POST("/v1/chapters", GetController().PostChapter)
+		v1.PATCH("/v1/chapters/:id", GetController().UpdateChapter)
+		v1.PUT("/v1/chapters/:id", GetController().UpdateChapter)
+		v1.DELETE("/v1/chapters/:id", GetController().DeleteChapter)
+
 		v1.GET("/v1/circles", GetController().GetCircles)
 		v1.GET("/v1/circles/:id", GetController().GetCircle)
 		v1.POST("/v1/circles", GetController().PostCircle)
@@ -97,6 +104,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PATCH("/v1/circlegrids/:id", GetController().UpdateCircleGrid)
 		v1.PUT("/v1/circlegrids/:id", GetController().UpdateCircleGrid)
 		v1.DELETE("/v1/circlegrids/:id", GetController().DeleteCircleGrid)
+
+		v1.GET("/v1/contents", GetController().GetContents)
+		v1.GET("/v1/contents/:id", GetController().GetContent)
+		v1.POST("/v1/contents", GetController().PostContent)
+		v1.PATCH("/v1/contents/:id", GetController().UpdateContent)
+		v1.PUT("/v1/contents/:id", GetController().UpdateContent)
+		v1.DELETE("/v1/contents/:id", GetController().DeleteContent)
 
 		v1.GET("/v1/exporttomusicxmls", GetController().GetExportToMusicxmls)
 		v1.GET("/v1/exporttomusicxmls/:id", GetController().GetExportToMusicxml)

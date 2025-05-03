@@ -40,6 +40,10 @@ type DBLite struct {
 
 	nextIDBezierGridStackDB uint
 
+	chapterDBs map[uint]*ChapterDB
+
+	nextIDChapterDB uint
+
 	circleDBs map[uint]*CircleDB
 
 	nextIDCircleDB uint
@@ -47,6 +51,10 @@ type DBLite struct {
 	circlegridDBs map[uint]*CircleGridDB
 
 	nextIDCircleGridDB uint
+
+	contentDBs map[uint]*ContentDB
+
+	nextIDContentDB uint
 
 	exporttomusicxmlDBs map[uint]*ExportToMusicxmlDB
 
@@ -140,9 +148,13 @@ func NewDBLite() *DBLite {
 
 		beziergridstackDBs: make(map[uint]*BezierGridStackDB),
 
+		chapterDBs: make(map[uint]*ChapterDB),
+
 		circleDBs: make(map[uint]*CircleDB),
 
 		circlegridDBs: make(map[uint]*CircleGridDB),
+
+		contentDBs: make(map[uint]*ContentDB),
 
 		exporttomusicxmlDBs: make(map[uint]*ExportToMusicxmlDB),
 
@@ -215,6 +227,10 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		db.nextIDBezierGridStackDB++
 		v.ID = db.nextIDBezierGridStackDB
 		db.beziergridstackDBs[v.ID] = v
+	case *ChapterDB:
+		db.nextIDChapterDB++
+		v.ID = db.nextIDChapterDB
+		db.chapterDBs[v.ID] = v
 	case *CircleDB:
 		db.nextIDCircleDB++
 		v.ID = db.nextIDCircleDB
@@ -223,6 +239,10 @@ func (db *DBLite) Create(instanceDB any) (db.DBInterface, error) {
 		db.nextIDCircleGridDB++
 		v.ID = db.nextIDCircleGridDB
 		db.circlegridDBs[v.ID] = v
+	case *ContentDB:
+		db.nextIDContentDB++
+		v.ID = db.nextIDContentDB
+		db.contentDBs[v.ID] = v
 	case *ExportToMusicxmlDB:
 		db.nextIDExportToMusicxmlDB++
 		v.ID = db.nextIDExportToMusicxmlDB
@@ -337,10 +357,14 @@ func (db *DBLite) Delete(instanceDB any) (db.DBInterface, error) {
 		delete(db.beziergridDBs, v.ID)
 	case *BezierGridStackDB:
 		delete(db.beziergridstackDBs, v.ID)
+	case *ChapterDB:
+		delete(db.chapterDBs, v.ID)
 	case *CircleDB:
 		delete(db.circleDBs, v.ID)
 	case *CircleGridDB:
 		delete(db.circlegridDBs, v.ID)
+	case *ContentDB:
+		delete(db.contentDBs, v.ID)
 	case *ExportToMusicxmlDB:
 		delete(db.exporttomusicxmlDBs, v.ID)
 	case *FrontCurveDB:
@@ -412,11 +436,17 @@ func (db *DBLite) Save(instanceDB any) (db.DBInterface, error) {
 	case *BezierGridStackDB:
 		db.beziergridstackDBs[v.ID] = v
 		return db, nil
+	case *ChapterDB:
+		db.chapterDBs[v.ID] = v
+		return db, nil
 	case *CircleDB:
 		db.circleDBs[v.ID] = v
 		return db, nil
 	case *CircleGridDB:
 		db.circlegridDBs[v.ID] = v
+		return db, nil
+	case *ContentDB:
+		db.contentDBs[v.ID] = v
 		return db, nil
 	case *ExportToMusicxmlDB:
 		db.exporttomusicxmlDBs[v.ID] = v
@@ -521,6 +551,12 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 		} else {
 			return nil, errors.New("db BezierGridStack github.com/thomaspeugeot/phyllotaxymusic/go, record not found")
 		}
+	case *ChapterDB:
+		if existing, ok := db.chapterDBs[v.ID]; ok {
+			*existing = *v
+		} else {
+			return nil, errors.New("db Chapter github.com/thomaspeugeot/phyllotaxymusic/go, record not found")
+		}
 	case *CircleDB:
 		if existing, ok := db.circleDBs[v.ID]; ok {
 			*existing = *v
@@ -532,6 +568,12 @@ func (db *DBLite) Updates(instanceDB any) (db.DBInterface, error) {
 			*existing = *v
 		} else {
 			return nil, errors.New("db CircleGrid github.com/thomaspeugeot/phyllotaxymusic/go, record not found")
+		}
+	case *ContentDB:
+		if existing, ok := db.contentDBs[v.ID]; ok {
+			*existing = *v
+		} else {
+			return nil, errors.New("db Content github.com/thomaspeugeot/phyllotaxymusic/go, record not found")
 		}
 	case *ExportToMusicxmlDB:
 		if existing, ok := db.exporttomusicxmlDBs[v.ID]; ok {
@@ -691,6 +733,12 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 			*ptr = append(*ptr, *v)
 		}
 		return db, nil
+	case *[]ChapterDB:
+		*ptr = make([]ChapterDB, 0, len(db.chapterDBs))
+		for _, v := range db.chapterDBs {
+			*ptr = append(*ptr, *v)
+		}
+		return db, nil
 	case *[]CircleDB:
 		*ptr = make([]CircleDB, 0, len(db.circleDBs))
 		for _, v := range db.circleDBs {
@@ -700,6 +748,12 @@ func (db *DBLite) Find(instanceDBs any) (db.DBInterface, error) {
 	case *[]CircleGridDB:
 		*ptr = make([]CircleGridDB, 0, len(db.circlegridDBs))
 		for _, v := range db.circlegridDBs {
+			*ptr = append(*ptr, *v)
+		}
+		return db, nil
+	case *[]ContentDB:
+		*ptr = make([]ContentDB, 0, len(db.contentDBs))
+		for _, v := range db.contentDBs {
 			*ptr = append(*ptr, *v)
 		}
 		return db, nil
@@ -900,6 +954,16 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 		beziergridstackDB, _ := instanceDB.(*BezierGridStackDB)
 		*beziergridstackDB = *tmp
 		
+	case *ChapterDB:
+		tmp, ok := db.chapterDBs[uint(i)]
+
+		if !ok {
+			return nil, errors.New(fmt.Sprintf("db.First Chapter Unkown entry %d", i))
+		}
+
+		chapterDB, _ := instanceDB.(*ChapterDB)
+		*chapterDB = *tmp
+		
 	case *CircleDB:
 		tmp, ok := db.circleDBs[uint(i)]
 
@@ -919,6 +983,16 @@ func (db *DBLite) First(instanceDB any, conds ...any) (db.DBInterface, error) {
 
 		circlegridDB, _ := instanceDB.(*CircleGridDB)
 		*circlegridDB = *tmp
+		
+	case *ContentDB:
+		tmp, ok := db.contentDBs[uint(i)]
+
+		if !ok {
+			return nil, errors.New(fmt.Sprintf("db.First Content Unkown entry %d", i))
+		}
+
+		contentDB, _ := instanceDB.(*ContentDB)
+		*contentDB = *tmp
 		
 	case *ExportToMusicxmlDB:
 		tmp, ok := db.exporttomusicxmlDBs[uint(i)]

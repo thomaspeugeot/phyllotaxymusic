@@ -30,6 +30,8 @@ const SVGfirstVoiceAndFirstVoiceShiftedRightWithSecondVoiceWithGridWithNotes str
 
 const MusicXMLFile string = "score.musicxml"
 
+const LogoFile string = "logo.svg"
+
 func (stager *Stager) GenerateSSG() {
 	stager.UpdatePhyllotaxyStage()
 
@@ -154,5 +156,6 @@ func (*Stager) prepareStaticDic(pathToGeneratedSVG string) (error, bool) {
 	ssg.CopyFile("../../../images/"+bach2ndFugueLarge, filepath.Join(pathToGeneratedSVG, bach2ndFugueLarge))
 	ssg.CopyFile("../../../images/"+growthCurveOnPineCone, filepath.Join(pathToGeneratedSVG, growthCurveOnPineCone))
 
+	ssg.CopyFile("../../../images/"+LogoFile, filepath.Join(pathToGeneratedSVG, LogoFile))
 	return err, false
 }

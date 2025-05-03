@@ -44,6 +44,9 @@ func (stage *Stage) ComputeReverseMaps() {
 		}
 	}
 
+	// Compute reverse map for named struct Chapter
+	// insertion point per field
+
 	// Compute reverse map for named struct Circle
 	// insertion point per field
 
@@ -55,6 +58,17 @@ func (stage *Stage) ComputeReverseMaps() {
 		_ = circlegrid
 		for _, _circle := range circlegrid.Circles {
 			stage.CircleGrid_Circles_reverseMap[_circle] = circlegrid
+		}
+	}
+
+	// Compute reverse map for named struct Content
+	// insertion point per field
+	clear(stage.Content_Chapters_reverseMap)
+	stage.Content_Chapters_reverseMap = make(map[*Chapter]*Content)
+	for content := range stage.Contents {
+		_ = content
+		for _, _chapter := range content.Chapters {
+			stage.Content_Chapters_reverseMap[_chapter] = content
 		}
 	}
 

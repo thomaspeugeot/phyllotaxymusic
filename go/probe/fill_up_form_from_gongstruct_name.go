@@ -90,6 +90,19 @@ func FillUpFormFromGongstructName(
 		beziergridstack := new(models.BezierGridStack)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(beziergridstack, formGroup, probe)
+	case "Chapter":
+		formGroup := (&form.FormGroup{
+			Name:  FormName,
+			Label: prefix + "Chapter Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__ChapterFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		chapter := new(models.Chapter)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(chapter, formGroup, probe)
 	case "Circle":
 		formGroup := (&form.FormGroup{
 			Name:  FormName,
@@ -116,6 +129,19 @@ func FillUpFormFromGongstructName(
 		circlegrid := new(models.CircleGrid)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(circlegrid, formGroup, probe)
+	case "Content":
+		formGroup := (&form.FormGroup{
+			Name:  FormName,
+			Label: prefix + "Content Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__ContentFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		content := new(models.Content)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(content, formGroup, probe)
 	case "ExportToMusicxml":
 		formGroup := (&form.FormGroup{
 			Name:  FormName,

@@ -1,7 +1,6 @@
 ---
 title: "Phyllotaxy Music"
 ---
-
 This site describes phyllotaxy generated music.
 
 Phyllotaxy and music are two concepts far appart but they can be related.
@@ -16,18 +15,16 @@ fugue in C minor. It starts with the C note.
 
 <img src="./images/bach2ndFugue.png" style="height: 100px; width: auto;">
 
-This theme is repeated with different voices, sometimes overlapping.
+In this piece, the theme is repeated with two voices that overlaps.
 
 <img src="./images/bach2ndFugue_large.png" style="height: 400px; width: auto;">
 
 Let's a have a look to this memorable piece. The first voice 
-starts with a C on the first measure. On the third measure, the theme starts again, but it starts with a G. A G
-is seven half tone higher, or a "quint" in music parlance, above a C. 
-Then, on this third measure, this second voice
-overlaps harmonuously the first voice. The G of the second voice is played with a B flat
-of the first voice, that is four half tone or a musical third. 
+starts with a C on the first measure. On the third measure, the theme starts again, but it starts with a G. 
+The G of the second voice is seven half tone higher, or a fifth in music parlance, above the
+ C of the first voice. A fifth is an a well suited gap between notes to sounds harmounuously. 
 The next note, a F# on the second voice, is played along a A on the first voice, also a
-third. And so one.
+third. A third,  And so one.
 
 It is the composer's chore
 to have the theme well suited for supporting overlapping itself.
@@ -149,4 +146,3 @@ With the second voice note, this gives
 <p>Download the generated music score in the musescore musicxml format:
     <a href="./scores/score.musicxml" download="score.musicxml">Download MusicXML Score</a>
  </p>
-			

@@ -26,6 +26,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *Stage, instance *Type) {
 		if stage.OnAfterBezierGridStackCreateCallback != nil {
 			stage.OnAfterBezierGridStackCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *Chapter:
+		if stage.OnAfterChapterCreateCallback != nil {
+			stage.OnAfterChapterCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *Circle:
 		if stage.OnAfterCircleCreateCallback != nil {
 			stage.OnAfterCircleCreateCallback.OnAfterCreate(stage, target)
@@ -33,6 +37,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *Stage, instance *Type) {
 	case *CircleGrid:
 		if stage.OnAfterCircleGridCreateCallback != nil {
 			stage.OnAfterCircleGridCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *Content:
+		if stage.OnAfterContentCreateCallback != nil {
+			stage.OnAfterContentCreateCallback.OnAfterCreate(stage, target)
 		}
 	case *ExportToMusicxml:
 		if stage.OnAfterExportToMusicxmlCreateCallback != nil {
@@ -145,6 +153,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *Stage, old, new *Type) {
 		if stage.OnAfterBezierGridStackUpdateCallback != nil {
 			stage.OnAfterBezierGridStackUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
+	case *Chapter:
+		newTarget := any(new).(*Chapter)
+		if stage.OnAfterChapterUpdateCallback != nil {
+			stage.OnAfterChapterUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
 	case *Circle:
 		newTarget := any(new).(*Circle)
 		if stage.OnAfterCircleUpdateCallback != nil {
@@ -154,6 +167,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *Stage, old, new *Type) {
 		newTarget := any(new).(*CircleGrid)
 		if stage.OnAfterCircleGridUpdateCallback != nil {
 			stage.OnAfterCircleGridUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *Content:
+		newTarget := any(new).(*Content)
+		if stage.OnAfterContentUpdateCallback != nil {
+			stage.OnAfterContentUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *ExportToMusicxml:
 		newTarget := any(new).(*ExportToMusicxml)
@@ -285,6 +303,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *Stage, staged, front *Type) {
 			staged := any(staged).(*BezierGridStack)
 			stage.OnAfterBezierGridStackDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *Chapter:
+		if stage.OnAfterChapterDeleteCallback != nil {
+			staged := any(staged).(*Chapter)
+			stage.OnAfterChapterDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *Circle:
 		if stage.OnAfterCircleDeleteCallback != nil {
 			staged := any(staged).(*Circle)
@@ -294,6 +317,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *Stage, staged, front *Type) {
 		if stage.OnAfterCircleGridDeleteCallback != nil {
 			staged := any(staged).(*CircleGrid)
 			stage.OnAfterCircleGridDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *Content:
+		if stage.OnAfterContentDeleteCallback != nil {
+			staged := any(staged).(*Content)
+			stage.OnAfterContentDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *ExportToMusicxml:
 		if stage.OnAfterExportToMusicxmlDeleteCallback != nil {
@@ -420,6 +448,10 @@ func AfterReadFromFront[Type Gongstruct](stage *Stage, instance *Type) {
 		if stage.OnAfterBezierGridStackReadCallback != nil {
 			stage.OnAfterBezierGridStackReadCallback.OnAfterRead(stage, target)
 		}
+	case *Chapter:
+		if stage.OnAfterChapterReadCallback != nil {
+			stage.OnAfterChapterReadCallback.OnAfterRead(stage, target)
+		}
 	case *Circle:
 		if stage.OnAfterCircleReadCallback != nil {
 			stage.OnAfterCircleReadCallback.OnAfterRead(stage, target)
@@ -427,6 +459,10 @@ func AfterReadFromFront[Type Gongstruct](stage *Stage, instance *Type) {
 	case *CircleGrid:
 		if stage.OnAfterCircleGridReadCallback != nil {
 			stage.OnAfterCircleGridReadCallback.OnAfterRead(stage, target)
+		}
+	case *Content:
+		if stage.OnAfterContentReadCallback != nil {
+			stage.OnAfterContentReadCallback.OnAfterRead(stage, target)
 		}
 	case *ExportToMusicxml:
 		if stage.OnAfterExportToMusicxmlReadCallback != nil {
@@ -530,11 +566,17 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *Stage, callback OnA
 	case *BezierGridStack:
 		stage.OnAfterBezierGridStackUpdateCallback = any(callback).(OnAfterUpdateInterface[BezierGridStack])
 	
+	case *Chapter:
+		stage.OnAfterChapterUpdateCallback = any(callback).(OnAfterUpdateInterface[Chapter])
+	
 	case *Circle:
 		stage.OnAfterCircleUpdateCallback = any(callback).(OnAfterUpdateInterface[Circle])
 	
 	case *CircleGrid:
 		stage.OnAfterCircleGridUpdateCallback = any(callback).(OnAfterUpdateInterface[CircleGrid])
+	
+	case *Content:
+		stage.OnAfterContentUpdateCallback = any(callback).(OnAfterUpdateInterface[Content])
 	
 	case *ExportToMusicxml:
 		stage.OnAfterExportToMusicxmlUpdateCallback = any(callback).(OnAfterUpdateInterface[ExportToMusicxml])
@@ -615,11 +657,17 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *Stage, callback OnA
 	case *BezierGridStack:
 		stage.OnAfterBezierGridStackCreateCallback = any(callback).(OnAfterCreateInterface[BezierGridStack])
 	
+	case *Chapter:
+		stage.OnAfterChapterCreateCallback = any(callback).(OnAfterCreateInterface[Chapter])
+	
 	case *Circle:
 		stage.OnAfterCircleCreateCallback = any(callback).(OnAfterCreateInterface[Circle])
 	
 	case *CircleGrid:
 		stage.OnAfterCircleGridCreateCallback = any(callback).(OnAfterCreateInterface[CircleGrid])
+	
+	case *Content:
+		stage.OnAfterContentCreateCallback = any(callback).(OnAfterCreateInterface[Content])
 	
 	case *ExportToMusicxml:
 		stage.OnAfterExportToMusicxmlCreateCallback = any(callback).(OnAfterCreateInterface[ExportToMusicxml])
@@ -700,11 +748,17 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *Stage, callback OnA
 	case *BezierGridStack:
 		stage.OnAfterBezierGridStackDeleteCallback = any(callback).(OnAfterDeleteInterface[BezierGridStack])
 	
+	case *Chapter:
+		stage.OnAfterChapterDeleteCallback = any(callback).(OnAfterDeleteInterface[Chapter])
+	
 	case *Circle:
 		stage.OnAfterCircleDeleteCallback = any(callback).(OnAfterDeleteInterface[Circle])
 	
 	case *CircleGrid:
 		stage.OnAfterCircleGridDeleteCallback = any(callback).(OnAfterDeleteInterface[CircleGrid])
+	
+	case *Content:
+		stage.OnAfterContentDeleteCallback = any(callback).(OnAfterDeleteInterface[Content])
 	
 	case *ExportToMusicxml:
 		stage.OnAfterExportToMusicxmlDeleteCallback = any(callback).(OnAfterDeleteInterface[ExportToMusicxml])
@@ -785,11 +839,17 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *Stage, callback OnAft
 	case *BezierGridStack:
 		stage.OnAfterBezierGridStackReadCallback = any(callback).(OnAfterReadInterface[BezierGridStack])
 	
+	case *Chapter:
+		stage.OnAfterChapterReadCallback = any(callback).(OnAfterReadInterface[Chapter])
+	
 	case *Circle:
 		stage.OnAfterCircleReadCallback = any(callback).(OnAfterReadInterface[Circle])
 	
 	case *CircleGrid:
 		stage.OnAfterCircleGridReadCallback = any(callback).(OnAfterReadInterface[CircleGrid])
+	
+	case *Content:
+		stage.OnAfterContentReadCallback = any(callback).(OnAfterReadInterface[Content])
 	
 	case *ExportToMusicxml:
 		stage.OnAfterExportToMusicxmlReadCallback = any(callback).(OnAfterReadInterface[ExportToMusicxml])

@@ -20,11 +20,17 @@ func IsStaged[Type Gongstruct](stage *Stage, instance *Type) (ok bool) {
 	case *BezierGridStack:
 		ok = stage.IsStagedBezierGridStack(target)
 
+	case *Chapter:
+		ok = stage.IsStagedChapter(target)
+
 	case *Circle:
 		ok = stage.IsStagedCircle(target)
 
 	case *CircleGrid:
 		ok = stage.IsStagedCircleGrid(target)
+
+	case *Content:
+		ok = stage.IsStagedContent(target)
 
 	case *ExportToMusicxml:
 		ok = stage.IsStagedExportToMusicxml(target)
@@ -125,6 +131,13 @@ func (stage *Stage) IsStagedBezierGridStack(beziergridstack *BezierGridStack) (o
 	return
 }
 
+func (stage *Stage) IsStagedChapter(chapter *Chapter) (ok bool) {
+
+	_, ok = stage.Chapters[chapter]
+
+	return
+}
+
 func (stage *Stage) IsStagedCircle(circle *Circle) (ok bool) {
 
 	_, ok = stage.Circles[circle]
@@ -135,6 +148,13 @@ func (stage *Stage) IsStagedCircle(circle *Circle) (ok bool) {
 func (stage *Stage) IsStagedCircleGrid(circlegrid *CircleGrid) (ok bool) {
 
 	_, ok = stage.CircleGrids[circlegrid]
+
+	return
+}
+
+func (stage *Stage) IsStagedContent(content *Content) (ok bool) {
+
+	_, ok = stage.Contents[content]
 
 	return
 }
@@ -295,11 +315,17 @@ func StageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 	case *BezierGridStack:
 		stage.StageBranchBezierGridStack(target)
 
+	case *Chapter:
+		stage.StageBranchChapter(target)
+
 	case *Circle:
 		stage.StageBranchCircle(target)
 
 	case *CircleGrid:
 		stage.StageBranchCircleGrid(target)
+
+	case *Content:
+		stage.StageBranchContent(target)
 
 	case *ExportToMusicxml:
 		stage.StageBranchExportToMusicxml(target)
@@ -469,6 +495,21 @@ func (stage *Stage) StageBranchBezierGridStack(beziergridstack *BezierGridStack)
 
 }
 
+func (stage *Stage) StageBranchChapter(chapter *Chapter) {
+
+	// check if instance is already staged
+	if IsStaged(stage, chapter) {
+		return
+	}
+
+	chapter.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *Stage) StageBranchCircle(circle *Circle) {
 
 	// check if instance is already staged
@@ -507,6 +548,24 @@ func (stage *Stage) StageBranchCircleGrid(circlegrid *CircleGrid) {
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _circle := range circlegrid.Circles {
 		StageBranch(stage, _circle)
+	}
+
+}
+
+func (stage *Stage) StageBranchContent(content *Content) {
+
+	// check if instance is already staged
+	if IsStaged(stage, content) {
+		return
+	}
+
+	content.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _chapter := range content.Chapters {
+		StageBranch(stage, _chapter)
 	}
 
 }
@@ -1079,12 +1138,20 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchBezierGridStack(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
+	case *Chapter:
+		toT := CopyBranchChapter(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *Circle:
 		toT := CopyBranchCircle(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *CircleGrid:
 		toT := CopyBranchCircleGrid(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *Content:
+		toT := CopyBranchContent(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *ExportToMusicxml:
@@ -1295,6 +1362,25 @@ func CopyBranchBezierGridStack(mapOrigCopy map[any]any, beziergridstackFrom *Bez
 	return
 }
 
+func CopyBranchChapter(mapOrigCopy map[any]any, chapterFrom *Chapter) (chapterTo *Chapter) {
+
+	// chapterFrom has already been copied
+	if _chapterTo, ok := mapOrigCopy[chapterFrom]; ok {
+		chapterTo = _chapterTo.(*Chapter)
+		return
+	}
+
+	chapterTo = new(Chapter)
+	mapOrigCopy[chapterFrom] = chapterTo
+	chapterFrom.CopyBasicFields(chapterTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
 func CopyBranchCircle(mapOrigCopy map[any]any, circleFrom *Circle) (circleTo *Circle) {
 
 	// circleFrom has already been copied
@@ -1340,6 +1426,28 @@ func CopyBranchCircleGrid(mapOrigCopy map[any]any, circlegridFrom *CircleGrid) (
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _circle := range circlegridFrom.Circles {
 		circlegridTo.Circles = append(circlegridTo.Circles, CopyBranchCircle(mapOrigCopy, _circle))
+	}
+
+	return
+}
+
+func CopyBranchContent(mapOrigCopy map[any]any, contentFrom *Content) (contentTo *Content) {
+
+	// contentFrom has already been copied
+	if _contentTo, ok := mapOrigCopy[contentFrom]; ok {
+		contentTo = _contentTo.(*Content)
+		return
+	}
+
+	contentTo = new(Content)
+	mapOrigCopy[contentFrom] = contentTo
+	contentFrom.CopyBasicFields(contentTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _chapter := range contentFrom.Chapters {
+		contentTo.Chapters = append(contentTo.Chapters, CopyBranchChapter(mapOrigCopy, _chapter))
 	}
 
 	return
@@ -1981,11 +2089,17 @@ func UnstageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 	case *BezierGridStack:
 		stage.UnstageBranchBezierGridStack(target)
 
+	case *Chapter:
+		stage.UnstageBranchChapter(target)
+
 	case *Circle:
 		stage.UnstageBranchCircle(target)
 
 	case *CircleGrid:
 		stage.UnstageBranchCircleGrid(target)
+
+	case *Content:
+		stage.UnstageBranchContent(target)
 
 	case *ExportToMusicxml:
 		stage.UnstageBranchExportToMusicxml(target)
@@ -2155,6 +2269,21 @@ func (stage *Stage) UnstageBranchBezierGridStack(beziergridstack *BezierGridStac
 
 }
 
+func (stage *Stage) UnstageBranchChapter(chapter *Chapter) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, chapter) {
+		return
+	}
+
+	chapter.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
 func (stage *Stage) UnstageBranchCircle(circle *Circle) {
 
 	// check if instance is already staged
@@ -2193,6 +2322,24 @@ func (stage *Stage) UnstageBranchCircleGrid(circlegrid *CircleGrid) {
 	//insertion point for the staging of instances referenced by slice of pointers
 	for _, _circle := range circlegrid.Circles {
 		UnstageBranch(stage, _circle)
+	}
+
+}
+
+func (stage *Stage) UnstageBranchContent(content *Content) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, content) {
+		return
+	}
+
+	content.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _chapter := range content.Chapters {
+		UnstageBranch(stage, _chapter)
 	}
 
 }

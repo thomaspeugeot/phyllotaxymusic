@@ -16,4 +16,5 @@ export * from './lib/web-socket-service'
 
 export * from './lib/GenerationMode'
 export * from './lib/StacksNames'
+export * from './lib/Target'
 export * from './lib/TreeNames'

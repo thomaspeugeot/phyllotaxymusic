@@ -14,9 +14,13 @@ type BackRepoData struct {
 
 	BezierGridStackAPIs []*BezierGridStackAPI
 
+	ChapterAPIs []*ChapterAPI
+
 	CircleAPIs []*CircleAPI
 
 	CircleGridAPIs []*CircleGridAPI
+
+	ContentAPIs []*ContentAPI
 
 	ExportToMusicxmlAPIs []*ExportToMusicxmlAPI
 
@@ -117,6 +121,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		backRepoData.BezierGridStackAPIs = append(backRepoData.BezierGridStackAPIs, &beziergridstackAPI)
 	}
 
+	for _, chapterDB := range backRepo.BackRepoChapter.Map_ChapterDBID_ChapterDB {
+
+		var chapterAPI ChapterAPI
+		chapterAPI.ID = chapterDB.ID
+		chapterAPI.ChapterPointersEncoding = chapterDB.ChapterPointersEncoding
+		chapterDB.CopyBasicFieldsToChapter_WOP(&chapterAPI.Chapter_WOP)
+
+		backRepoData.ChapterAPIs = append(backRepoData.ChapterAPIs, &chapterAPI)
+	}
+
 	for _, circleDB := range backRepo.BackRepoCircle.Map_CircleDBID_CircleDB {
 
 		var circleAPI CircleAPI
@@ -135,6 +149,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		circlegridDB.CopyBasicFieldsToCircleGrid_WOP(&circlegridAPI.CircleGrid_WOP)
 
 		backRepoData.CircleGridAPIs = append(backRepoData.CircleGridAPIs, &circlegridAPI)
+	}
+
+	for _, contentDB := range backRepo.BackRepoContent.Map_ContentDBID_ContentDB {
+
+		var contentAPI ContentAPI
+		contentAPI.ID = contentDB.ID
+		contentAPI.ContentPointersEncoding = contentDB.ContentPointersEncoding
+		contentDB.CopyBasicFieldsToContent_WOP(&contentAPI.Content_WOP)
+
+		backRepoData.ContentAPIs = append(backRepoData.ContentAPIs, &contentAPI)
 	}
 
 	for _, exporttomusicxmlDB := range backRepo.BackRepoExportToMusicxml.Map_ExportToMusicxmlDBID_ExportToMusicxmlDB {

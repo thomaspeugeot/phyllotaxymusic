@@ -35,6 +35,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 		beziergridstackInstance := any(concreteInstance).(*models.BezierGridStack)
 		ret2 := backRepo.BackRepoBezierGridStack.GetBezierGridStackDBFromBezierGridStackPtr(beziergridstackInstance)
 		ret = any(ret2).(*T2)
+	case *models.Chapter:
+		chapterInstance := any(concreteInstance).(*models.Chapter)
+		ret2 := backRepo.BackRepoChapter.GetChapterDBFromChapterPtr(chapterInstance)
+		ret = any(ret2).(*T2)
 	case *models.Circle:
 		circleInstance := any(concreteInstance).(*models.Circle)
 		ret2 := backRepo.BackRepoCircle.GetCircleDBFromCirclePtr(circleInstance)
@@ -42,6 +46,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 	case *models.CircleGrid:
 		circlegridInstance := any(concreteInstance).(*models.CircleGrid)
 		ret2 := backRepo.BackRepoCircleGrid.GetCircleGridDBFromCircleGridPtr(circlegridInstance)
+		ret = any(ret2).(*T2)
+	case *models.Content:
+		contentInstance := any(concreteInstance).(*models.Content)
+		ret2 := backRepo.BackRepoContent.GetContentDBFromContentPtr(contentInstance)
 		ret = any(ret2).(*T2)
 	case *models.ExportToMusicxml:
 		exporttomusicxmlInstance := any(concreteInstance).(*models.ExportToMusicxml)
@@ -157,6 +165,11 @@ func GetID[T models.Gongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.Chapter:
+		tmp := GetInstanceDBFromInstance[models.Chapter, ChapterDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.Circle:
 		tmp := GetInstanceDBFromInstance[models.Circle, CircleDB](
 			stage, backRepo, inst,
@@ -164,6 +177,11 @@ func GetID[T models.Gongstruct](
 		id = int(tmp.ID)
 	case *models.CircleGrid:
 		tmp := GetInstanceDBFromInstance[models.CircleGrid, CircleGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Content:
+		tmp := GetInstanceDBFromInstance[models.Content, ContentDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -300,6 +318,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.Chapter:
+		tmp := GetInstanceDBFromInstance[models.Chapter, ChapterDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	case *models.Circle:
 		tmp := GetInstanceDBFromInstance[models.Circle, CircleDB](
 			stage, backRepo, inst,
@@ -307,6 +330,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.CircleGrid:
 		tmp := GetInstanceDBFromInstance[models.CircleGrid, CircleGridDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Content:
+		tmp := GetInstanceDBFromInstance[models.Content, ContentDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

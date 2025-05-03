@@ -55,6 +55,18 @@ func GetReverseFieldOwnerName(
 		// insertion point
 		}
 
+	case *Chapter:
+		switch reverseField.GongstructName {
+		// insertion point
+		case "Content":
+			switch reverseField.Fieldname {
+			case "Chapters":
+				if _content, ok := stage.Content_Chapters_reverseMap[inst]; ok {
+					res = _content.Name
+				}
+			}
+		}
+
 	case *Circle:
 		switch reverseField.GongstructName {
 		// insertion point
@@ -68,6 +80,11 @@ func GetReverseFieldOwnerName(
 		}
 
 	case *CircleGrid:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
+	case *Content:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
@@ -270,6 +287,16 @@ func GetReverseFieldOwner[T Gongstruct](
 		// insertion point
 		}
 
+	case *Chapter:
+		switch reverseField.GongstructName {
+		// insertion point
+		case "Content":
+			switch reverseField.Fieldname {
+			case "Chapters":
+				res = stage.Content_Chapters_reverseMap[inst]
+			}
+		}
+
 	case *Circle:
 		switch reverseField.GongstructName {
 		// insertion point
@@ -281,6 +308,11 @@ func GetReverseFieldOwner[T Gongstruct](
 		}
 
 	case *CircleGrid:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
+	case *Content:
 		switch reverseField.GongstructName {
 		// insertion point
 		}
