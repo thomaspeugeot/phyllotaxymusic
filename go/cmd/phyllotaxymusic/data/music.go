@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
-
 	// injection point for ident package import declaration{{ImportPackageDeclaration}}
 )
 

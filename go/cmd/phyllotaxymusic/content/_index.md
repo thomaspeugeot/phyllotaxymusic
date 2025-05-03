@@ -16,12 +16,21 @@ fugue in C minor. It starts with the C note.
 
 <img src="./images/bach2ndFugue.png" style="height: 100px; width: auto;">
 
-This theme is repeated with different voices, sometimes overlapping. It is the composer's chore
-to have the theme well suited for supporting overlapping itself.
+This theme is repeated with different voices, sometimes overlapping.
 
 <img src="./images/bach2ndFugue_large.png" style="height: 400px; width: auto;">
 
-On the third measure, the theme starts again, but it starts with the note G, a 7 half tone higher.
+Let's a have a look to this memorable piece. The first voice 
+starts with a C on the first measure. On the third measure, the theme starts again, but it starts with a G. A G
+is seven half tone higher, or a "quint" in music parlance, above a C. 
+Then, on this third measure, this second voice
+overlaps harmonuously the first voice. The G of the second voice is played with a B flat
+of the first voice, that is four half tone or a musical third. 
+The next note, a F# on the second voice, is played along a A on the first voice, also a
+third. And so one.
+
+It is the composer's chore
+to have the theme well suited for supporting overlapping itself.
 
 Having a theme that repeats itself harmonously with a shift in beats and tone is called a cannon:
 
