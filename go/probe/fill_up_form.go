@@ -292,7 +292,7 @@ func FillUpForm(
 		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("MardownContent", instanceWithInferedType.MardownContent, instanceWithInferedType, probe.formStage, formGroup,
-			true, true, 600, true, 300)
+			true, true, 600, true, 900)
 		BasicFieldtoForm("ContentPath", instanceWithInferedType.ContentPath, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("OutputPath", instanceWithInferedType.OutputPath, instanceWithInferedType, probe.formStage, formGroup,

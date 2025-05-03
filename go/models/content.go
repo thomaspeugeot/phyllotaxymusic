@@ -4,7 +4,7 @@ type Content struct {
 	Name string
 
 	//gong:text
-	//gong:width 600 gong:height 300
+	//gong:width 600 gong:height 900
 	MardownContent string
 
 	// path to the content generation
