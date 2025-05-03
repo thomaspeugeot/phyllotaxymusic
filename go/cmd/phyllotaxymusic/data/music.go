@@ -52,6 +52,9 @@ func _(stage *models.Stage) {
 
 	__BezierGridStack__000000_The_GrowthCurveStack := (&models.BezierGridStack{}).Stage(stage)
 
+	__Chapter__000000_Deep_into_the_phyllotaxy_growth_curve := (&models.Chapter{}).Stage(stage)
+	__Chapter__000001_Composing_your_own_phyllotaxy_music := (&models.Chapter{}).Stage(stage)
+
 	__Circle__000000_0 := (&models.Circle{}).Stage(stage)
 	__Circle__000001_Construction_Circle := (&models.Circle{}).Stage(stage)
 	__Circle__000002_First_voice_notes_seed := (&models.Circle{}).Stage(stage)
@@ -392,6 +395,12 @@ func _(stage *models.Stage) {
 
 	__BezierGridStack__000000_The_GrowthCurveStack.Name = `The GrowthCurveStack`
 	__BezierGridStack__000000_The_GrowthCurveStack.IsDisplayed = false
+
+	__Chapter__000000_Deep_into_the_phyllotaxy_growth_curve.Name = `Deep into the phyllotaxy growth curve`
+	__Chapter__000000_Deep_into_the_phyllotaxy_growth_curve.MardownContent = `To be completed`
+
+	__Chapter__000001_Composing_your_own_phyllotaxy_music.Name = `Composing your own phyllotaxy music`
+	__Chapter__000001_Composing_your_own_phyllotaxy_music.MardownContent = `To be completed`
 
 	__Circle__000000_0.Name = `0`
 	__Circle__000000_0.IsDisplayed = false
@@ -1066,6 +1075,7 @@ With the second voice note, this gives
 	__BezierGrid__000007_Growth_Curve_Shift_Right.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
 	// setup of BezierGridStack instances pointers
 	__BezierGridStack__000000_The_GrowthCurveStack.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
+	// setup of Chapter instances pointers
 	// setup of Circle instances pointers
 	__Circle__000000_0.ShapeCategory = __ShapeCategory__000003_3_Growing
 	__Circle__000001_Construction_Circle.ShapeCategory = __ShapeCategory__000004_4_Construction
@@ -1089,6 +1099,8 @@ With the second voice note, this gives
 	__CircleGrid__000008_Second_Voice_notes.Reference = __Circle__000002_First_voice_notes_seed
 	__CircleGrid__000008_Second_Voice_notes.ShapeCategory = __ShapeCategory__000009_9_Composer
 	// setup of Content instances pointers
+	__Content__000000_Phyllotaxy_Music.Chapters = append(__Content__000000_Phyllotaxy_Music.Chapters, __Chapter__000000_Deep_into_the_phyllotaxy_growth_curve)
+	__Content__000000_Phyllotaxy_Music.Chapters = append(__Content__000000_Phyllotaxy_Music.Chapters, __Chapter__000001_Composing_your_own_phyllotaxy_music)
 	// setup of ExportToMusicxml instances pointers
 	__ExportToMusicxml__000000_Singloton.Parameter = __Parameter__000000_Reference
 	// setup of FrontCurve instances pointers

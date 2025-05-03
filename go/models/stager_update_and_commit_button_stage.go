@@ -71,4 +71,6 @@ func (e *ExportStaticSiteButtonProxy) OnAfterUpdateButton() {
 	e.stager.UpdatePhyllotaxyStage()
 
 	e.stager.GenerateSSG()
+
+	e.stager.UpdateAndCommitSsgStage()
 }
