@@ -10,7 +10,7 @@ import (
 
 type TreeNodeImplGongstruct struct {
 	gongStruct *gong_models.GongStruct
-	probe *Probe
+	probe      *Probe
 }
 
 func NewTreeNodeImplGongstruct(
@@ -51,88 +51,88 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 
 	// insertion point
 	if nodeImplGongstruct.gongStruct.GetName() == "Axis" {
-		fillUpTable[models.Axis](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.Axis](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "AxisGrid" {
-		fillUpTable[models.AxisGrid](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.AxisGrid](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Bezier" {
-		fillUpTable[models.Bezier](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.Bezier](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "BezierGrid" {
-		fillUpTable[models.BezierGrid](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.BezierGrid](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "BezierGridStack" {
-		fillUpTable[models.BezierGridStack](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.BezierGridStack](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Chapter" {
-		fillUpTable[models.Chapter](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.Chapter](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Circle" {
-		fillUpTable[models.Circle](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.Circle](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "CircleGrid" {
-		fillUpTable[models.CircleGrid](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.CircleGrid](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Content" {
-		fillUpTable[models.Content](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.Content](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "ExportToMusicxml" {
-		fillUpTable[models.ExportToMusicxml](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.ExportToMusicxml](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "FrontCurve" {
-		fillUpTable[models.FrontCurve](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.FrontCurve](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "FrontCurveStack" {
-		fillUpTable[models.FrontCurveStack](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.FrontCurveStack](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "HorizontalAxis" {
-		fillUpTable[models.HorizontalAxis](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.HorizontalAxis](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Key" {
-		fillUpTable[models.Key](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.Key](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Parameter" {
-		fillUpTable[models.Parameter](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.Parameter](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Rhombus" {
-		fillUpTable[models.Rhombus](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.Rhombus](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "RhombusGrid" {
-		fillUpTable[models.RhombusGrid](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.RhombusGrid](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "ShapeCategory" {
-		fillUpTable[models.ShapeCategory](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.ShapeCategory](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralBezier" {
-		fillUpTable[models.SpiralBezier](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.SpiralBezier](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralBezierGrid" {
-		fillUpTable[models.SpiralBezierGrid](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.SpiralBezierGrid](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralCircle" {
-		fillUpTable[models.SpiralCircle](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.SpiralCircle](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralCircleGrid" {
-		fillUpTable[models.SpiralCircleGrid](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.SpiralCircleGrid](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralLine" {
-		fillUpTable[models.SpiralLine](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.SpiralLine](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralLineGrid" {
-		fillUpTable[models.SpiralLineGrid](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.SpiralLineGrid](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralOrigin" {
-		fillUpTable[models.SpiralOrigin](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.SpiralOrigin](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralRhombus" {
-		fillUpTable[models.SpiralRhombus](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.SpiralRhombus](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "SpiralRhombusGrid" {
-		fillUpTable[models.SpiralRhombusGrid](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.SpiralRhombusGrid](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "VerticalAxis" {
-		fillUpTable[models.VerticalAxis](nodeImplGongstruct.probe)
+		updateAndCommitTable[models.VerticalAxis](nodeImplGongstruct.probe)
 	}
 
 	// set color for node and reset all other nodes color

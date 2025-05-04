@@ -35,8 +35,6 @@ func main() {
 	// setup phyllotaxymusic_stack
 	phyllotaxymusic_stack := phyllotaxymusic_stack.NewStack(r,
 		m.Phylotaxy.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
-	phyllotaxymusic_stack.Probe.Refresh()
-	phyllotaxymusic_stack.Stage.Checkout()
 
 	m.NewStager(r, phyllotaxymusic_stack.Stage).UpdateAllStages()
 
