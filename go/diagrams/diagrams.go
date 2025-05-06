@@ -136,10 +136,10 @@ for generating a musical theme
 around <a href="/models#Parameter">models.Parameter</a> which owns all the parameter
 for generating a musical theme
 `
-	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.X = 464.000000
-	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Y = 71.000000
-	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Width = 446.000000
-	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Height = 112.000000
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.X = 435.000000
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Y = 40.000000
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Width = 463.000000
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Height = 110.000000
 	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Matched = false
 	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.IsExpanded = false
 
