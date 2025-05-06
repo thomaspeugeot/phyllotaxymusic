@@ -162,7 +162,6 @@ for generating a musical theme
 	__Classdiagram__000000_Default.GongNoteShapes = append(__Classdiagram__000000_Default.GongNoteShapes, __GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel)
 	// setup of DiagramPackage instances pointers
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.Classdiagrams = append(__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.Classdiagrams, __Classdiagram__000000_Default)
-	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.SelectedClassdiagram = __Classdiagram__000000_Default
 	// setup of GongNoteShape instances pointers
 	// setup of GongStructShape instances pointers
 	__GongStructShape__000000_Default_Parameter.AttributeShapes = append(__GongStructShape__000000_Default_Parameter.AttributeShapes, __AttributeShape__000000_N)

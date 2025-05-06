@@ -23,11 +23,11 @@ func _(stage *models.Stage) {
 
 	// Declaration of instances to stage
 
-	__Axis__000000_Beat_Reference := (&models.Axis{}).Stage(stage)
-	__Axis__000001_Construction_Axis := (&models.Axis{}).Stage(stage)
-	__Axis__000002_Initial_Axis := (&models.Axis{}).Stage(stage)
-	__Axis__000003_Pitch_Line := (&models.Axis{}).Stage(stage)
-	__Axis__000004_Rotated_Axis := (&models.Axis{}).Stage(stage)
+	__Axis2__000000_Beat_Reference := (&models.Axis{}).Stage(stage)
+	__Axis2__000001_Construction_Axis := (&models.Axis{}).Stage(stage)
+	__Axis2__000002_Initial_Axis := (&models.Axis{}).Stage(stage)
+	__Axis2__000003_Pitch_Line := (&models.Axis{}).Stage(stage)
+	__Axis2__000004_Rotated_Axis := (&models.Axis{}).Stage(stage)
 
 	__AxisGrid__000000_Beat_Lines := (&models.AxisGrid{}).Stage(stage)
 	__AxisGrid__000001_Construction_Axis_Grid := (&models.AxisGrid{}).Stage(stage)
@@ -142,90 +142,90 @@ func _(stage *models.Stage) {
 
 	// Setup of values
 
-	__Axis__000000_Beat_Reference.Name = `Beat Reference`
-	__Axis__000000_Beat_Reference.IsDisplayed = false
-	__Axis__000000_Beat_Reference.AngleDegree = 90.000000
-	__Axis__000000_Beat_Reference.Length = 2000.000000
-	__Axis__000000_Beat_Reference.CenterX = 0.000000
-	__Axis__000000_Beat_Reference.CenterY = 0.000000
-	__Axis__000000_Beat_Reference.EndX = 0.000000
-	__Axis__000000_Beat_Reference.EndY = 0.000000
-	__Axis__000000_Beat_Reference.Color = ``
-	__Axis__000000_Beat_Reference.FillOpacity = 0.000000
-	__Axis__000000_Beat_Reference.Stroke = `grey`
-	__Axis__000000_Beat_Reference.StrokeOpacity = 0.800000
-	__Axis__000000_Beat_Reference.StrokeWidth = 1.000000
-	__Axis__000000_Beat_Reference.StrokeDashArray = ``
-	__Axis__000000_Beat_Reference.StrokeDashArrayWhenSelected = ``
-	__Axis__000000_Beat_Reference.Transform = ``
+	__Axis2__000000_Beat_Reference.Name = `Beat Reference`
+	__Axis2__000000_Beat_Reference.IsDisplayed = false
+	__Axis2__000000_Beat_Reference.AngleDegree = 90.000000
+	__Axis2__000000_Beat_Reference.Length = 2000.000000
+	__Axis2__000000_Beat_Reference.CenterX = 0.000000
+	__Axis2__000000_Beat_Reference.CenterY = 0.000000
+	__Axis2__000000_Beat_Reference.EndX = 0.000000
+	__Axis2__000000_Beat_Reference.EndY = 0.000000
+	__Axis2__000000_Beat_Reference.Color = ``
+	__Axis2__000000_Beat_Reference.FillOpacity = 0.000000
+	__Axis2__000000_Beat_Reference.Stroke = `grey`
+	__Axis2__000000_Beat_Reference.StrokeOpacity = 0.800000
+	__Axis2__000000_Beat_Reference.StrokeWidth = 1.000000
+	__Axis2__000000_Beat_Reference.StrokeDashArray = ``
+	__Axis2__000000_Beat_Reference.StrokeDashArrayWhenSelected = ``
+	__Axis2__000000_Beat_Reference.Transform = ``
 
-	__Axis__000001_Construction_Axis.Name = `Construction Axis`
-	__Axis__000001_Construction_Axis.IsDisplayed = false
-	__Axis__000001_Construction_Axis.AngleDegree = 97.971943
-	__Axis__000001_Construction_Axis.Length = 154.865638
-	__Axis__000001_Construction_Axis.CenterX = 0.000000
-	__Axis__000001_Construction_Axis.CenterY = 0.000000
-	__Axis__000001_Construction_Axis.EndX = -21.478030
-	__Axis__000001_Construction_Axis.EndY = 153.369032
-	__Axis__000001_Construction_Axis.Color = ``
-	__Axis__000001_Construction_Axis.FillOpacity = 0.000000
-	__Axis__000001_Construction_Axis.Stroke = `blue`
-	__Axis__000001_Construction_Axis.StrokeOpacity = 0.700000
-	__Axis__000001_Construction_Axis.StrokeWidth = 2.000000
-	__Axis__000001_Construction_Axis.StrokeDashArray = ``
-	__Axis__000001_Construction_Axis.StrokeDashArrayWhenSelected = ``
-	__Axis__000001_Construction_Axis.Transform = ``
+	__Axis2__000001_Construction_Axis.Name = `Construction Axis`
+	__Axis2__000001_Construction_Axis.IsDisplayed = false
+	__Axis2__000001_Construction_Axis.AngleDegree = 97.971943
+	__Axis2__000001_Construction_Axis.Length = 154.865638
+	__Axis2__000001_Construction_Axis.CenterX = 0.000000
+	__Axis2__000001_Construction_Axis.CenterY = 0.000000
+	__Axis2__000001_Construction_Axis.EndX = -21.478030
+	__Axis2__000001_Construction_Axis.EndY = 153.369032
+	__Axis2__000001_Construction_Axis.Color = ``
+	__Axis2__000001_Construction_Axis.FillOpacity = 0.000000
+	__Axis2__000001_Construction_Axis.Stroke = `blue`
+	__Axis2__000001_Construction_Axis.StrokeOpacity = 0.700000
+	__Axis2__000001_Construction_Axis.StrokeWidth = 2.000000
+	__Axis2__000001_Construction_Axis.StrokeDashArray = ``
+	__Axis2__000001_Construction_Axis.StrokeDashArrayWhenSelected = ``
+	__Axis2__000001_Construction_Axis.Transform = ``
 
-	__Axis__000002_Initial_Axis.Name = `Initial Axis`
-	__Axis__000002_Initial_Axis.IsDisplayed = false
-	__Axis__000002_Initial_Axis.AngleDegree = 82.028057
-	__Axis__000002_Initial_Axis.Length = 558.323209
-	__Axis__000002_Initial_Axis.CenterX = 0.000000
-	__Axis__000002_Initial_Axis.CenterY = 0.000000
-	__Axis__000002_Initial_Axis.EndX = 0.000000
-	__Axis__000002_Initial_Axis.EndY = 0.000000
-	__Axis__000002_Initial_Axis.Color = ``
-	__Axis__000002_Initial_Axis.FillOpacity = 0.000000
-	__Axis__000002_Initial_Axis.Stroke = `black`
-	__Axis__000002_Initial_Axis.StrokeOpacity = 1.000000
-	__Axis__000002_Initial_Axis.StrokeWidth = 2.000000
-	__Axis__000002_Initial_Axis.StrokeDashArray = ``
-	__Axis__000002_Initial_Axis.StrokeDashArrayWhenSelected = ``
-	__Axis__000002_Initial_Axis.Transform = ``
+	__Axis2__000002_Initial_Axis.Name = `Initial Axis`
+	__Axis2__000002_Initial_Axis.IsDisplayed = false
+	__Axis2__000002_Initial_Axis.AngleDegree = 82.028057
+	__Axis2__000002_Initial_Axis.Length = 558.323209
+	__Axis2__000002_Initial_Axis.CenterX = 0.000000
+	__Axis2__000002_Initial_Axis.CenterY = 0.000000
+	__Axis2__000002_Initial_Axis.EndX = 0.000000
+	__Axis2__000002_Initial_Axis.EndY = 0.000000
+	__Axis2__000002_Initial_Axis.Color = ``
+	__Axis2__000002_Initial_Axis.FillOpacity = 0.000000
+	__Axis2__000002_Initial_Axis.Stroke = `black`
+	__Axis2__000002_Initial_Axis.StrokeOpacity = 1.000000
+	__Axis2__000002_Initial_Axis.StrokeWidth = 2.000000
+	__Axis2__000002_Initial_Axis.StrokeDashArray = ``
+	__Axis2__000002_Initial_Axis.StrokeDashArrayWhenSelected = ``
+	__Axis2__000002_Initial_Axis.Transform = ``
 
-	__Axis__000003_Pitch_Line.Name = `Pitch Line`
-	__Axis__000003_Pitch_Line.IsDisplayed = false
-	__Axis__000003_Pitch_Line.AngleDegree = 0.000000
-	__Axis__000003_Pitch_Line.Length = 2000.000000
-	__Axis__000003_Pitch_Line.CenterX = 0.000000
-	__Axis__000003_Pitch_Line.CenterY = 0.000000
-	__Axis__000003_Pitch_Line.EndX = 0.000000
-	__Axis__000003_Pitch_Line.EndY = 0.000000
-	__Axis__000003_Pitch_Line.Color = ``
-	__Axis__000003_Pitch_Line.FillOpacity = 0.000000
-	__Axis__000003_Pitch_Line.Stroke = `grey`
-	__Axis__000003_Pitch_Line.StrokeOpacity = 0.800000
-	__Axis__000003_Pitch_Line.StrokeWidth = 1.000000
-	__Axis__000003_Pitch_Line.StrokeDashArray = ``
-	__Axis__000003_Pitch_Line.StrokeDashArrayWhenSelected = ``
-	__Axis__000003_Pitch_Line.Transform = ``
+	__Axis2__000003_Pitch_Line.Name = `Pitch Line`
+	__Axis2__000003_Pitch_Line.IsDisplayed = false
+	__Axis2__000003_Pitch_Line.AngleDegree = 0.000000
+	__Axis2__000003_Pitch_Line.Length = 2000.000000
+	__Axis2__000003_Pitch_Line.CenterX = 0.000000
+	__Axis2__000003_Pitch_Line.CenterY = 0.000000
+	__Axis2__000003_Pitch_Line.EndX = 0.000000
+	__Axis2__000003_Pitch_Line.EndY = 0.000000
+	__Axis2__000003_Pitch_Line.Color = ``
+	__Axis2__000003_Pitch_Line.FillOpacity = 0.000000
+	__Axis2__000003_Pitch_Line.Stroke = `grey`
+	__Axis2__000003_Pitch_Line.StrokeOpacity = 0.800000
+	__Axis2__000003_Pitch_Line.StrokeWidth = 1.000000
+	__Axis2__000003_Pitch_Line.StrokeDashArray = ``
+	__Axis2__000003_Pitch_Line.StrokeDashArrayWhenSelected = ``
+	__Axis2__000003_Pitch_Line.Transform = ``
 
-	__Axis__000004_Rotated_Axis.Name = `Rotated Axis`
-	__Axis__000004_Rotated_Axis.IsDisplayed = false
-	__Axis__000004_Rotated_Axis.AngleDegree = 0.000000
-	__Axis__000004_Rotated_Axis.Length = 558.323209
-	__Axis__000004_Rotated_Axis.CenterX = 0.000000
-	__Axis__000004_Rotated_Axis.CenterY = 0.000000
-	__Axis__000004_Rotated_Axis.EndX = -29.670211
-	__Axis__000004_Rotated_Axis.EndY = 154.170939
-	__Axis__000004_Rotated_Axis.Color = ``
-	__Axis__000004_Rotated_Axis.FillOpacity = 0.000000
-	__Axis__000004_Rotated_Axis.Stroke = `black`
-	__Axis__000004_Rotated_Axis.StrokeOpacity = 1.000000
-	__Axis__000004_Rotated_Axis.StrokeWidth = 2.000000
-	__Axis__000004_Rotated_Axis.StrokeDashArray = ``
-	__Axis__000004_Rotated_Axis.StrokeDashArrayWhenSelected = ``
-	__Axis__000004_Rotated_Axis.Transform = ``
+	__Axis2__000004_Rotated_Axis.Name = `Rotated Axis`
+	__Axis2__000004_Rotated_Axis.IsDisplayed = false
+	__Axis2__000004_Rotated_Axis.AngleDegree = 0.000000
+	__Axis2__000004_Rotated_Axis.Length = 558.323209
+	__Axis2__000004_Rotated_Axis.CenterX = 0.000000
+	__Axis2__000004_Rotated_Axis.CenterY = 0.000000
+	__Axis2__000004_Rotated_Axis.EndX = -29.670211
+	__Axis2__000004_Rotated_Axis.EndY = 154.170939
+	__Axis2__000004_Rotated_Axis.Color = ``
+	__Axis2__000004_Rotated_Axis.FillOpacity = 0.000000
+	__Axis2__000004_Rotated_Axis.Stroke = `black`
+	__Axis2__000004_Rotated_Axis.StrokeOpacity = 1.000000
+	__Axis2__000004_Rotated_Axis.StrokeWidth = 2.000000
+	__Axis2__000004_Rotated_Axis.StrokeDashArray = ``
+	__Axis2__000004_Rotated_Axis.StrokeDashArrayWhenSelected = ``
+	__Axis2__000004_Rotated_Axis.Transform = ``
 
 	__AxisGrid__000000_Beat_Lines.Name = `Beat Lines`
 	__AxisGrid__000000_Beat_Lines.IsDisplayed = true
@@ -1040,16 +1040,16 @@ With the second voice note, this gives
 	__VerticalAxis__000000_Vertical_Axis.Transform = ``
 
 	// Setup of pointers
-	// setup of Axis instances pointers
-	__Axis__000001_Construction_Axis.ShapeCategory = __ShapeCategory__000004_4_Construction
-	__Axis__000002_Initial_Axis.ShapeCategory = __ShapeCategory__000001_1_Initial
-	__Axis__000004_Rotated_Axis.ShapeCategory = __ShapeCategory__000002_2_Rotated
+	// setup of Axis2 instances pointers
+	__Axis2__000001_Construction_Axis.ShapeCategory = __ShapeCategory__000004_4_Construction
+	__Axis2__000002_Initial_Axis.ShapeCategory = __ShapeCategory__000001_1_Initial
+	__Axis2__000004_Rotated_Axis.ShapeCategory = __ShapeCategory__000002_2_Rotated
 	// setup of AxisGrid instances pointers
-	__AxisGrid__000000_Beat_Lines.Reference = __Axis__000000_Beat_Reference
+	__AxisGrid__000000_Beat_Lines.Reference = __Axis2__000000_Beat_Reference
 	__AxisGrid__000000_Beat_Lines.ShapeCategory = __ShapeCategory__000008_8_Score_notation
-	__AxisGrid__000001_Construction_Axis_Grid.Reference = __Axis__000001_Construction_Axis
+	__AxisGrid__000001_Construction_Axis_Grid.Reference = __Axis2__000001_Construction_Axis
 	__AxisGrid__000001_Construction_Axis_Grid.ShapeCategory = __ShapeCategory__000004_4_Construction
-	__AxisGrid__000002_Pitch_Lines.Reference = __Axis__000003_Pitch_Line
+	__AxisGrid__000002_Pitch_Lines.Reference = __Axis2__000003_Pitch_Line
 	__AxisGrid__000002_Pitch_Lines.ShapeCategory = __ShapeCategory__000008_8_Score_notation
 	// setup of Bezier instances pointers
 	__Bezier__000002_Growth_Bezier_Right_Seed.ShapeCategory = __ShapeCategory__000005_5_Vertical_growth
@@ -1123,8 +1123,8 @@ With the second voice note, this gives
 	__Parameter__000000_Reference.InitialCircle = __Circle__000004_Initial_Circle
 	__Parameter__000000_Reference.InitialRhombusGrid = __RhombusGrid__000001_Initial_Rhombus_Grid
 	__Parameter__000000_Reference.InitialCircleGrid = __CircleGrid__000005_Initial_Circle_Grid
-	__Parameter__000000_Reference.InitialAxis = __Axis__000002_Initial_Axis
-	__Parameter__000000_Reference.RotatedAxis = __Axis__000004_Rotated_Axis
+	__Parameter__000000_Reference.InitialAxis = __Axis2__000002_Initial_Axis
+	__Parameter__000000_Reference.RotatedAxis = __Axis2__000004_Rotated_Axis
 	__Parameter__000000_Reference.RotatedRhombus = __Rhombus__000003_Rotated_Rhombus
 	__Parameter__000000_Reference.RotatedRhombusGrid = __RhombusGrid__000002_Rotated_Rhombus_Grid
 	__Parameter__000000_Reference.RotatedCircleGrid = __CircleGrid__000006_Rotated_Circle_Grid
@@ -1136,7 +1136,7 @@ With the second voice note, this gives
 	__Parameter__000000_Reference.GrowingCircleGrid = __CircleGrid__000003_Growing_Circle_Grid
 	__Parameter__000000_Reference.GrowingCircleGridLeftSeed = __Circle__000003_Growing_Seed_Left
 	__Parameter__000000_Reference.GrowingCircleGridLeft = __CircleGrid__000004_Growing_Circle_Grid_Shifted_Left
-	__Parameter__000000_Reference.ConstructionAxis = __Axis__000001_Construction_Axis
+	__Parameter__000000_Reference.ConstructionAxis = __Axis2__000001_Construction_Axis
 	__Parameter__000000_Reference.ConstructionAxisGrid = __AxisGrid__000001_Construction_Axis_Grid
 	__Parameter__000000_Reference.ConstructionCircle = __Circle__000001_Construction_Circle
 	__Parameter__000000_Reference.ConstructionCircleGrid = __CircleGrid__000000_Construction_Circle_Grid
