@@ -36,6 +36,8 @@ func _(stage *models.Stage) {
 
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z := (&models.DiagramPackage{}).Stage(stage)
 
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel := (&models.GongNoteShape{}).Stage(stage)
+
 	__GongStructShape__000000_Default_Parameter := (&models.GongStructShape{}).Stage(stage)
 
 	// Setup of values
@@ -111,13 +113,35 @@ func _(stage *models.Stage) {
 	__Classdiagram__000000_Default.NodeGongStructNodeExpansionBinaryEncoding = 16384
 	__Classdiagram__000000_Default.NodeGongEnumsIsExpanded = false
 	__Classdiagram__000000_Default.NodeGongEnumNodeExpansionBinaryEncoding = 0
-	__Classdiagram__000000_Default.NodeGongNotesIsExpanded = false
-	__Classdiagram__000000_Default.NodeGongNoteNodeExpansionBinaryEncoding = 0
+	__Classdiagram__000000_Default.NodeGongNotesIsExpanded = true
+	__Classdiagram__000000_Default.NodeGongNoteNodeExpansionBinaryEncoding = 1
 
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.Name = `Diagram Package created the 2025-05-04T23:28:43Z`
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.Path = ``
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.GongModelPath = ``
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.AbsolutePathToDiagramPackage = ``
+
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Name = `Default-NoteOnPhyllotaxyDataModel`
+
+	//gong:ident [ref_models.NoteOnPhyllotaxyDataModel] comment added to overcome the problem with the comment map association
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Identifier = `ref_models.NoteOnPhyllotaxyDataModel`
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Body = `Note On the Data Model
+
+The Phyllotaxy Data Model centers
+around [models.Parameter] which owns all the parameter
+for generating a musical theme
+`
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.BodyHTML = `<p>Note On the Data Model
+<p>The Phyllotaxy Data Model centers
+around <a href="/models#Parameter">models.Parameter</a> which owns all the parameter
+for generating a musical theme
+`
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.X = 464.000000
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Y = 71.000000
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Width = 446.000000
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Height = 112.000000
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.Matched = false
+	__GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel.IsExpanded = false
 
 	__GongStructShape__000000_Default_Parameter.Name = `Default-Parameter`
 	__GongStructShape__000000_Default_Parameter.X = 108.000000
@@ -135,9 +159,11 @@ func _(stage *models.Stage) {
 	// setup of AttributeShape instances pointers
 	// setup of Classdiagram instances pointers
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000000_Default_Parameter)
+	__Classdiagram__000000_Default.GongNoteShapes = append(__Classdiagram__000000_Default.GongNoteShapes, __GongNoteShape__000000_Default_NoteOnPhyllotaxyDataModel)
 	// setup of DiagramPackage instances pointers
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.Classdiagrams = append(__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.Classdiagrams, __Classdiagram__000000_Default)
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.SelectedClassdiagram = __Classdiagram__000000_Default
+	// setup of GongNoteShape instances pointers
 	// setup of GongStructShape instances pointers
 	__GongStructShape__000000_Default_Parameter.AttributeShapes = append(__GongStructShape__000000_Default_Parameter.AttributeShapes, __AttributeShape__000000_N)
 	__GongStructShape__000000_Default_Parameter.AttributeShapes = append(__GongStructShape__000000_Default_Parameter.AttributeShapes, __AttributeShape__000001_M)
