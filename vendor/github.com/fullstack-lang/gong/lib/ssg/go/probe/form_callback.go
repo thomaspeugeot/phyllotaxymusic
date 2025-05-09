@@ -11,9 +11,20 @@ import (
 	"github.com/fullstack-lang/gong/lib/ssg/go/models"
 )
 
+// code to avoid error when generated code does not need to import packages
 const __dummmy__time = time.Nanosecond
 
+var _ = __dummmy__time
+
 var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
+
+var _ = __dummmy__letters
+
+const __dummy__log = log.Ldate
+
+var _ = __dummy__log
+
+// end of code to avoid error when generated code does not need to import packages
 
 // insertion point
 func __gong__New__ChapterFormCallback(
@@ -44,7 +55,7 @@ type ChapterFormCallback struct {
 
 func (chapterFormCallback *ChapterFormCallback) OnSave() {
 
-	log.Println("ChapterFormCallback, OnSave")
+	// log.Println("ChapterFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -64,46 +75,68 @@ func (chapterFormCallback *ChapterFormCallback) OnSave() {
 		case "MardownContent":
 			FormDivBasicFieldToField(&(chapter_.MardownContent), formDiv)
 		case "Content:Chapters":
-			// we need to retrieve the field owner before the change
-			var pastContentOwner *models.Content
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "Content"
-			rf.Fieldname = "Chapters"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				chapterFormCallback.probe.stageOfInterest,
-				chapter_,
-				&rf)
+			// WARNING : this form deals with the N-N association "Content.Chapters []*Chapter" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Chapter). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Content
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Content"
+				rf.Fieldname = "Chapters"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					chapterFormCallback.probe.stageOfInterest,
+					chapter_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastContentOwner = reverseFieldOwner.(*models.Content)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastContentOwner != nil {
-					idx := slices.Index(pastContentOwner.Chapters, chapter_)
-					pastContentOwner.Chapters = slices.Delete(pastContentOwner.Chapters, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _content := range *models.GetGongstructInstancesSet[models.Content](chapterFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _content.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newContentOwner := _content // we have a match
-						if pastContentOwner != nil {
-							if newContentOwner != pastContentOwner {
-								idx := slices.Index(pastContentOwner.Chapters, chapter_)
-								pastContentOwner.Chapters = slices.Delete(pastContentOwner.Chapters, idx, idx+1)
-								newContentOwner.Chapters = append(newContentOwner.Chapters, chapter_)
-							}
-						} else {
-							newContentOwner.Chapters = append(newContentOwner.Chapters, chapter_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Content)
+					if !ok {
+						log.Fatalln("Source of Content.Chapters []*Chapter, is not an Content instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Content
+			for _content := range *models.GetGongstructInstancesSet[models.Content](chapterFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _content.GetName() == newSourceName.GetName() {
+					newSource = _content // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Content.Chapters []*Chapter, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Chapters = append(newSource.Chapters, chapter_)
 		}
 	}
 
@@ -164,7 +197,7 @@ type ContentFormCallback struct {
 
 func (contentFormCallback *ContentFormCallback) OnSave() {
 
-	log.Println("ContentFormCallback, OnSave")
+	// log.Println("ContentFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -253,7 +286,7 @@ type PageFormCallback struct {
 
 func (pageFormCallback *PageFormCallback) OnSave() {
 
-	log.Println("PageFormCallback, OnSave")
+	// log.Println("PageFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -273,46 +306,68 @@ func (pageFormCallback *PageFormCallback) OnSave() {
 		case "MardownContent":
 			FormDivBasicFieldToField(&(page_.MardownContent), formDiv)
 		case "Chapter:Pages":
-			// we need to retrieve the field owner before the change
-			var pastChapterOwner *models.Chapter
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "Chapter"
-			rf.Fieldname = "Pages"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				pageFormCallback.probe.stageOfInterest,
-				page_,
-				&rf)
+			// WARNING : this form deals with the N-N association "Chapter.Pages []*Page" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Page). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Chapter
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Chapter"
+				rf.Fieldname = "Pages"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					pageFormCallback.probe.stageOfInterest,
+					page_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastChapterOwner = reverseFieldOwner.(*models.Chapter)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastChapterOwner != nil {
-					idx := slices.Index(pastChapterOwner.Pages, page_)
-					pastChapterOwner.Pages = slices.Delete(pastChapterOwner.Pages, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _chapter := range *models.GetGongstructInstancesSet[models.Chapter](pageFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _chapter.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newChapterOwner := _chapter // we have a match
-						if pastChapterOwner != nil {
-							if newChapterOwner != pastChapterOwner {
-								idx := slices.Index(pastChapterOwner.Pages, page_)
-								pastChapterOwner.Pages = slices.Delete(pastChapterOwner.Pages, idx, idx+1)
-								newChapterOwner.Pages = append(newChapterOwner.Pages, page_)
-							}
-						} else {
-							newChapterOwner.Pages = append(newChapterOwner.Pages, page_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Chapter)
+					if !ok {
+						log.Fatalln("Source of Chapter.Pages []*Page, is not an Chapter instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Chapter
+			for _chapter := range *models.GetGongstructInstancesSet[models.Chapter](pageFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _chapter.GetName() == newSourceName.GetName() {
+					newSource = _chapter // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Chapter.Pages []*Page, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Pages = append(newSource.Pages, page_)
 		}
 	}
 

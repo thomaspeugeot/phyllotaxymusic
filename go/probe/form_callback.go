@@ -11,9 +11,20 @@ import (
 	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
+// code to avoid error when generated code does not need to import packages
 const __dummmy__time = time.Nanosecond
 
+var _ = __dummmy__time
+
 var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
+
+var _ = __dummmy__letters
+
+const __dummy__log = log.Ldate
+
+var _ = __dummy__log
+
+// end of code to avoid error when generated code does not need to import packages
 
 // insertion point
 func __gong__New__AxisFormCallback(
@@ -44,7 +55,7 @@ type AxisFormCallback struct {
 
 func (axisFormCallback *AxisFormCallback) OnSave() {
 
-	log.Println("AxisFormCallback, OnSave")
+	// log.Println("AxisFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -94,46 +105,68 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 		case "Transform":
 			FormDivBasicFieldToField(&(axis_.Transform), formDiv)
 		case "AxisGrid:Axiss":
-			// we need to retrieve the field owner before the change
-			var pastAxisGridOwner *models.AxisGrid
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "AxisGrid"
-			rf.Fieldname = "Axiss"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				axisFormCallback.probe.stageOfInterest,
-				axis_,
-				&rf)
+			// WARNING : this form deals with the N-N association "AxisGrid.Axiss []*Axis" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Axis). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.AxisGrid
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "AxisGrid"
+				rf.Fieldname = "Axiss"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					axisFormCallback.probe.stageOfInterest,
+					axis_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastAxisGridOwner = reverseFieldOwner.(*models.AxisGrid)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastAxisGridOwner != nil {
-					idx := slices.Index(pastAxisGridOwner.Axiss, axis_)
-					pastAxisGridOwner.Axiss = slices.Delete(pastAxisGridOwner.Axiss, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _axisgrid := range *models.GetGongstructInstancesSet[models.AxisGrid](axisFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _axisgrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newAxisGridOwner := _axisgrid // we have a match
-						if pastAxisGridOwner != nil {
-							if newAxisGridOwner != pastAxisGridOwner {
-								idx := slices.Index(pastAxisGridOwner.Axiss, axis_)
-								pastAxisGridOwner.Axiss = slices.Delete(pastAxisGridOwner.Axiss, idx, idx+1)
-								newAxisGridOwner.Axiss = append(newAxisGridOwner.Axiss, axis_)
-							}
-						} else {
-							newAxisGridOwner.Axiss = append(newAxisGridOwner.Axiss, axis_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.AxisGrid)
+					if !ok {
+						log.Fatalln("Source of AxisGrid.Axiss []*Axis, is not an AxisGrid instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.AxisGrid
+			for _axisgrid := range *models.GetGongstructInstancesSet[models.AxisGrid](axisFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _axisgrid.GetName() == newSourceName.GetName() {
+					newSource = _axisgrid // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of AxisGrid.Axiss []*Axis, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Axiss = append(newSource.Axiss, axis_)
 		}
 	}
 
@@ -194,7 +227,7 @@ type AxisGridFormCallback struct {
 
 func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
 
-	log.Println("AxisGridFormCallback, OnSave")
+	// log.Println("AxisGridFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -277,7 +310,7 @@ type BezierFormCallback struct {
 
 func (bezierFormCallback *BezierFormCallback) OnSave() {
 
-	log.Println("BezierFormCallback, OnSave")
+	// log.Println("BezierFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -331,46 +364,68 @@ func (bezierFormCallback *BezierFormCallback) OnSave() {
 		case "Transform":
 			FormDivBasicFieldToField(&(bezier_.Transform), formDiv)
 		case "BezierGrid:Beziers":
-			// we need to retrieve the field owner before the change
-			var pastBezierGridOwner *models.BezierGrid
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "BezierGrid"
-			rf.Fieldname = "Beziers"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				bezierFormCallback.probe.stageOfInterest,
-				bezier_,
-				&rf)
+			// WARNING : this form deals with the N-N association "BezierGrid.Beziers []*Bezier" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Bezier). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.BezierGrid
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "BezierGrid"
+				rf.Fieldname = "Beziers"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					bezierFormCallback.probe.stageOfInterest,
+					bezier_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastBezierGridOwner = reverseFieldOwner.(*models.BezierGrid)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastBezierGridOwner != nil {
-					idx := slices.Index(pastBezierGridOwner.Beziers, bezier_)
-					pastBezierGridOwner.Beziers = slices.Delete(pastBezierGridOwner.Beziers, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _beziergrid := range *models.GetGongstructInstancesSet[models.BezierGrid](bezierFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _beziergrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newBezierGridOwner := _beziergrid // we have a match
-						if pastBezierGridOwner != nil {
-							if newBezierGridOwner != pastBezierGridOwner {
-								idx := slices.Index(pastBezierGridOwner.Beziers, bezier_)
-								pastBezierGridOwner.Beziers = slices.Delete(pastBezierGridOwner.Beziers, idx, idx+1)
-								newBezierGridOwner.Beziers = append(newBezierGridOwner.Beziers, bezier_)
-							}
-						} else {
-							newBezierGridOwner.Beziers = append(newBezierGridOwner.Beziers, bezier_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.BezierGrid)
+					if !ok {
+						log.Fatalln("Source of BezierGrid.Beziers []*Bezier, is not an BezierGrid instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.BezierGrid
+			for _beziergrid := range *models.GetGongstructInstancesSet[models.BezierGrid](bezierFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _beziergrid.GetName() == newSourceName.GetName() {
+					newSource = _beziergrid // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of BezierGrid.Beziers []*Bezier, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Beziers = append(newSource.Beziers, bezier_)
 		}
 	}
 
@@ -431,7 +486,7 @@ type BezierGridFormCallback struct {
 
 func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 
-	log.Println("BezierGridFormCallback, OnSave")
+	// log.Println("BezierGridFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -455,46 +510,68 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(beziergrid_.ShapeCategory), beziergridFormCallback.probe.stageOfInterest, formDiv)
 		case "BezierGridStack:BezierGrids":
-			// we need to retrieve the field owner before the change
-			var pastBezierGridStackOwner *models.BezierGridStack
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "BezierGridStack"
-			rf.Fieldname = "BezierGrids"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				beziergridFormCallback.probe.stageOfInterest,
-				beziergrid_,
-				&rf)
+			// WARNING : this form deals with the N-N association "BezierGridStack.BezierGrids []*BezierGrid" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of BezierGrid). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.BezierGridStack
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "BezierGridStack"
+				rf.Fieldname = "BezierGrids"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					beziergridFormCallback.probe.stageOfInterest,
+					beziergrid_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastBezierGridStackOwner = reverseFieldOwner.(*models.BezierGridStack)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastBezierGridStackOwner != nil {
-					idx := slices.Index(pastBezierGridStackOwner.BezierGrids, beziergrid_)
-					pastBezierGridStackOwner.BezierGrids = slices.Delete(pastBezierGridStackOwner.BezierGrids, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _beziergridstack := range *models.GetGongstructInstancesSet[models.BezierGridStack](beziergridFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _beziergridstack.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newBezierGridStackOwner := _beziergridstack // we have a match
-						if pastBezierGridStackOwner != nil {
-							if newBezierGridStackOwner != pastBezierGridStackOwner {
-								idx := slices.Index(pastBezierGridStackOwner.BezierGrids, beziergrid_)
-								pastBezierGridStackOwner.BezierGrids = slices.Delete(pastBezierGridStackOwner.BezierGrids, idx, idx+1)
-								newBezierGridStackOwner.BezierGrids = append(newBezierGridStackOwner.BezierGrids, beziergrid_)
-							}
-						} else {
-							newBezierGridStackOwner.BezierGrids = append(newBezierGridStackOwner.BezierGrids, beziergrid_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.BezierGridStack)
+					if !ok {
+						log.Fatalln("Source of BezierGridStack.BezierGrids []*BezierGrid, is not an BezierGridStack instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.BezierGridStack
+			for _beziergridstack := range *models.GetGongstructInstancesSet[models.BezierGridStack](beziergridFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _beziergridstack.GetName() == newSourceName.GetName() {
+					newSource = _beziergridstack // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of BezierGridStack.BezierGrids []*BezierGrid, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.BezierGrids = append(newSource.BezierGrids, beziergrid_)
 		}
 	}
 
@@ -555,7 +632,7 @@ type BezierGridStackFormCallback struct {
 
 func (beziergridstackFormCallback *BezierGridStackFormCallback) OnSave() {
 
-	log.Println("BezierGridStackFormCallback, OnSave")
+	// log.Println("BezierGridStackFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -636,7 +713,7 @@ type ChapterFormCallback struct {
 
 func (chapterFormCallback *ChapterFormCallback) OnSave() {
 
-	log.Println("ChapterFormCallback, OnSave")
+	// log.Println("ChapterFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -656,46 +733,68 @@ func (chapterFormCallback *ChapterFormCallback) OnSave() {
 		case "MardownContent":
 			FormDivBasicFieldToField(&(chapter_.MardownContent), formDiv)
 		case "Content:Chapters":
-			// we need to retrieve the field owner before the change
-			var pastContentOwner *models.Content
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "Content"
-			rf.Fieldname = "Chapters"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				chapterFormCallback.probe.stageOfInterest,
-				chapter_,
-				&rf)
+			// WARNING : this form deals with the N-N association "Content.Chapters []*Chapter" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Chapter). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Content
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Content"
+				rf.Fieldname = "Chapters"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					chapterFormCallback.probe.stageOfInterest,
+					chapter_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastContentOwner = reverseFieldOwner.(*models.Content)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastContentOwner != nil {
-					idx := slices.Index(pastContentOwner.Chapters, chapter_)
-					pastContentOwner.Chapters = slices.Delete(pastContentOwner.Chapters, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _content := range *models.GetGongstructInstancesSet[models.Content](chapterFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _content.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newContentOwner := _content // we have a match
-						if pastContentOwner != nil {
-							if newContentOwner != pastContentOwner {
-								idx := slices.Index(pastContentOwner.Chapters, chapter_)
-								pastContentOwner.Chapters = slices.Delete(pastContentOwner.Chapters, idx, idx+1)
-								newContentOwner.Chapters = append(newContentOwner.Chapters, chapter_)
-							}
-						} else {
-							newContentOwner.Chapters = append(newContentOwner.Chapters, chapter_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Content)
+					if !ok {
+						log.Fatalln("Source of Content.Chapters []*Chapter, is not an Content instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Content
+			for _content := range *models.GetGongstructInstancesSet[models.Content](chapterFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _content.GetName() == newSourceName.GetName() {
+					newSource = _content // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Content.Chapters []*Chapter, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Chapters = append(newSource.Chapters, chapter_)
 		}
 	}
 
@@ -756,7 +855,7 @@ type CircleFormCallback struct {
 
 func (circleFormCallback *CircleFormCallback) OnSave() {
 
-	log.Println("CircleFormCallback, OnSave")
+	// log.Println("CircleFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -808,46 +907,68 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 		case "BeatNb":
 			FormDivBasicFieldToField(&(circle_.BeatNb), formDiv)
 		case "CircleGrid:Circles":
-			// we need to retrieve the field owner before the change
-			var pastCircleGridOwner *models.CircleGrid
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "CircleGrid"
-			rf.Fieldname = "Circles"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				circleFormCallback.probe.stageOfInterest,
-				circle_,
-				&rf)
+			// WARNING : this form deals with the N-N association "CircleGrid.Circles []*Circle" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Circle). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.CircleGrid
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "CircleGrid"
+				rf.Fieldname = "Circles"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					circleFormCallback.probe.stageOfInterest,
+					circle_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastCircleGridOwner = reverseFieldOwner.(*models.CircleGrid)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastCircleGridOwner != nil {
-					idx := slices.Index(pastCircleGridOwner.Circles, circle_)
-					pastCircleGridOwner.Circles = slices.Delete(pastCircleGridOwner.Circles, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _circlegrid := range *models.GetGongstructInstancesSet[models.CircleGrid](circleFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _circlegrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newCircleGridOwner := _circlegrid // we have a match
-						if pastCircleGridOwner != nil {
-							if newCircleGridOwner != pastCircleGridOwner {
-								idx := slices.Index(pastCircleGridOwner.Circles, circle_)
-								pastCircleGridOwner.Circles = slices.Delete(pastCircleGridOwner.Circles, idx, idx+1)
-								newCircleGridOwner.Circles = append(newCircleGridOwner.Circles, circle_)
-							}
-						} else {
-							newCircleGridOwner.Circles = append(newCircleGridOwner.Circles, circle_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.CircleGrid)
+					if !ok {
+						log.Fatalln("Source of CircleGrid.Circles []*Circle, is not an CircleGrid instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.CircleGrid
+			for _circlegrid := range *models.GetGongstructInstancesSet[models.CircleGrid](circleFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _circlegrid.GetName() == newSourceName.GetName() {
+					newSource = _circlegrid // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of CircleGrid.Circles []*Circle, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Circles = append(newSource.Circles, circle_)
 		}
 	}
 
@@ -908,7 +1029,7 @@ type CircleGridFormCallback struct {
 
 func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 
-	log.Println("CircleGridFormCallback, OnSave")
+	// log.Println("CircleGridFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -991,7 +1112,7 @@ type ContentFormCallback struct {
 
 func (contentFormCallback *ContentFormCallback) OnSave() {
 
-	log.Println("ContentFormCallback, OnSave")
+	// log.Println("ContentFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -1080,7 +1201,7 @@ type ExportToMusicxmlFormCallback struct {
 
 func (exporttomusicxmlFormCallback *ExportToMusicxmlFormCallback) OnSave() {
 
-	log.Println("ExportToMusicxmlFormCallback, OnSave")
+	// log.Println("ExportToMusicxmlFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -1159,7 +1280,7 @@ type FrontCurveFormCallback struct {
 
 func (frontcurveFormCallback *FrontCurveFormCallback) OnSave() {
 
-	log.Println("FrontCurveFormCallback, OnSave")
+	// log.Println("FrontCurveFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -1179,46 +1300,68 @@ func (frontcurveFormCallback *FrontCurveFormCallback) OnSave() {
 		case "Path":
 			FormDivBasicFieldToField(&(frontcurve_.Path), formDiv)
 		case "FrontCurveStack:FrontCurves":
-			// we need to retrieve the field owner before the change
-			var pastFrontCurveStackOwner *models.FrontCurveStack
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "FrontCurveStack"
-			rf.Fieldname = "FrontCurves"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				frontcurveFormCallback.probe.stageOfInterest,
-				frontcurve_,
-				&rf)
+			// WARNING : this form deals with the N-N association "FrontCurveStack.FrontCurves []*FrontCurve" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of FrontCurve). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.FrontCurveStack
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "FrontCurveStack"
+				rf.Fieldname = "FrontCurves"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					frontcurveFormCallback.probe.stageOfInterest,
+					frontcurve_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastFrontCurveStackOwner = reverseFieldOwner.(*models.FrontCurveStack)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastFrontCurveStackOwner != nil {
-					idx := slices.Index(pastFrontCurveStackOwner.FrontCurves, frontcurve_)
-					pastFrontCurveStackOwner.FrontCurves = slices.Delete(pastFrontCurveStackOwner.FrontCurves, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _frontcurvestack := range *models.GetGongstructInstancesSet[models.FrontCurveStack](frontcurveFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _frontcurvestack.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newFrontCurveStackOwner := _frontcurvestack // we have a match
-						if pastFrontCurveStackOwner != nil {
-							if newFrontCurveStackOwner != pastFrontCurveStackOwner {
-								idx := slices.Index(pastFrontCurveStackOwner.FrontCurves, frontcurve_)
-								pastFrontCurveStackOwner.FrontCurves = slices.Delete(pastFrontCurveStackOwner.FrontCurves, idx, idx+1)
-								newFrontCurveStackOwner.FrontCurves = append(newFrontCurveStackOwner.FrontCurves, frontcurve_)
-							}
-						} else {
-							newFrontCurveStackOwner.FrontCurves = append(newFrontCurveStackOwner.FrontCurves, frontcurve_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.FrontCurveStack)
+					if !ok {
+						log.Fatalln("Source of FrontCurveStack.FrontCurves []*FrontCurve, is not an FrontCurveStack instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.FrontCurveStack
+			for _frontcurvestack := range *models.GetGongstructInstancesSet[models.FrontCurveStack](frontcurveFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _frontcurvestack.GetName() == newSourceName.GetName() {
+					newSource = _frontcurvestack // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of FrontCurveStack.FrontCurves []*FrontCurve, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.FrontCurves = append(newSource.FrontCurves, frontcurve_)
 		}
 	}
 
@@ -1279,7 +1422,7 @@ type FrontCurveStackFormCallback struct {
 
 func (frontcurvestackFormCallback *FrontCurveStackFormCallback) OnSave() {
 
-	log.Println("FrontCurveStackFormCallback, OnSave")
+	// log.Println("FrontCurveStackFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -1376,7 +1519,7 @@ type HorizontalAxisFormCallback struct {
 
 func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 
-	log.Println("HorizontalAxisFormCallback, OnSave")
+	// log.Println("HorizontalAxisFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -1477,7 +1620,7 @@ type KeyFormCallback struct {
 
 func (keyFormCallback *KeyFormCallback) OnSave() {
 
-	log.Println("KeyFormCallback, OnSave")
+	// log.Println("KeyFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -1576,7 +1719,7 @@ type ParameterFormCallback struct {
 
 func (parameterFormCallback *ParameterFormCallback) OnSave() {
 
-	log.Println("ParameterFormCallback, OnSave")
+	// log.Println("ParameterFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -1855,7 +1998,7 @@ type RhombusFormCallback struct {
 
 func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 
-	log.Println("RhombusFormCallback, OnSave")
+	// log.Println("RhombusFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -1903,46 +2046,68 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 		case "Transform":
 			FormDivBasicFieldToField(&(rhombus_.Transform), formDiv)
 		case "RhombusGrid:Rhombuses":
-			// we need to retrieve the field owner before the change
-			var pastRhombusGridOwner *models.RhombusGrid
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "RhombusGrid"
-			rf.Fieldname = "Rhombuses"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				rhombusFormCallback.probe.stageOfInterest,
-				rhombus_,
-				&rf)
+			// WARNING : this form deals with the N-N association "RhombusGrid.Rhombuses []*Rhombus" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Rhombus). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.RhombusGrid
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "RhombusGrid"
+				rf.Fieldname = "Rhombuses"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					rhombusFormCallback.probe.stageOfInterest,
+					rhombus_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastRhombusGridOwner = reverseFieldOwner.(*models.RhombusGrid)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastRhombusGridOwner != nil {
-					idx := slices.Index(pastRhombusGridOwner.Rhombuses, rhombus_)
-					pastRhombusGridOwner.Rhombuses = slices.Delete(pastRhombusGridOwner.Rhombuses, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _rhombusgrid := range *models.GetGongstructInstancesSet[models.RhombusGrid](rhombusFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _rhombusgrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newRhombusGridOwner := _rhombusgrid // we have a match
-						if pastRhombusGridOwner != nil {
-							if newRhombusGridOwner != pastRhombusGridOwner {
-								idx := slices.Index(pastRhombusGridOwner.Rhombuses, rhombus_)
-								pastRhombusGridOwner.Rhombuses = slices.Delete(pastRhombusGridOwner.Rhombuses, idx, idx+1)
-								newRhombusGridOwner.Rhombuses = append(newRhombusGridOwner.Rhombuses, rhombus_)
-							}
-						} else {
-							newRhombusGridOwner.Rhombuses = append(newRhombusGridOwner.Rhombuses, rhombus_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.RhombusGrid)
+					if !ok {
+						log.Fatalln("Source of RhombusGrid.Rhombuses []*Rhombus, is not an RhombusGrid instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.RhombusGrid
+			for _rhombusgrid := range *models.GetGongstructInstancesSet[models.RhombusGrid](rhombusFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _rhombusgrid.GetName() == newSourceName.GetName() {
+					newSource = _rhombusgrid // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of RhombusGrid.Rhombuses []*Rhombus, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Rhombuses = append(newSource.Rhombuses, rhombus_)
 		}
 	}
 
@@ -2003,7 +2168,7 @@ type RhombusGridFormCallback struct {
 
 func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 
-	log.Println("RhombusGridFormCallback, OnSave")
+	// log.Println("RhombusGridFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -2086,7 +2251,7 @@ type ShapeCategoryFormCallback struct {
 
 func (shapecategoryFormCallback *ShapeCategoryFormCallback) OnSave() {
 
-	log.Println("ShapeCategoryFormCallback, OnSave")
+	// log.Println("ShapeCategoryFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -2165,7 +2330,7 @@ type SpiralBezierFormCallback struct {
 
 func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
 
-	log.Println("SpiralBezierFormCallback, OnSave")
+	// log.Println("SpiralBezierFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -2219,46 +2384,68 @@ func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
 		case "Transform":
 			FormDivBasicFieldToField(&(spiralbezier_.Transform), formDiv)
 		case "SpiralBezierGrid:SpiralBeziers":
-			// we need to retrieve the field owner before the change
-			var pastSpiralBezierGridOwner *models.SpiralBezierGrid
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "SpiralBezierGrid"
-			rf.Fieldname = "SpiralBeziers"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				spiralbezierFormCallback.probe.stageOfInterest,
-				spiralbezier_,
-				&rf)
+			// WARNING : this form deals with the N-N association "SpiralBezierGrid.SpiralBeziers []*SpiralBezier" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of SpiralBezier). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.SpiralBezierGrid
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "SpiralBezierGrid"
+				rf.Fieldname = "SpiralBeziers"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					spiralbezierFormCallback.probe.stageOfInterest,
+					spiralbezier_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastSpiralBezierGridOwner = reverseFieldOwner.(*models.SpiralBezierGrid)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastSpiralBezierGridOwner != nil {
-					idx := slices.Index(pastSpiralBezierGridOwner.SpiralBeziers, spiralbezier_)
-					pastSpiralBezierGridOwner.SpiralBeziers = slices.Delete(pastSpiralBezierGridOwner.SpiralBeziers, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _spiralbeziergrid := range *models.GetGongstructInstancesSet[models.SpiralBezierGrid](spiralbezierFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _spiralbeziergrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newSpiralBezierGridOwner := _spiralbeziergrid // we have a match
-						if pastSpiralBezierGridOwner != nil {
-							if newSpiralBezierGridOwner != pastSpiralBezierGridOwner {
-								idx := slices.Index(pastSpiralBezierGridOwner.SpiralBeziers, spiralbezier_)
-								pastSpiralBezierGridOwner.SpiralBeziers = slices.Delete(pastSpiralBezierGridOwner.SpiralBeziers, idx, idx+1)
-								newSpiralBezierGridOwner.SpiralBeziers = append(newSpiralBezierGridOwner.SpiralBeziers, spiralbezier_)
-							}
-						} else {
-							newSpiralBezierGridOwner.SpiralBeziers = append(newSpiralBezierGridOwner.SpiralBeziers, spiralbezier_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.SpiralBezierGrid)
+					if !ok {
+						log.Fatalln("Source of SpiralBezierGrid.SpiralBeziers []*SpiralBezier, is not an SpiralBezierGrid instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.SpiralBezierGrid
+			for _spiralbeziergrid := range *models.GetGongstructInstancesSet[models.SpiralBezierGrid](spiralbezierFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _spiralbeziergrid.GetName() == newSourceName.GetName() {
+					newSource = _spiralbeziergrid // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of SpiralBezierGrid.SpiralBeziers []*SpiralBezier, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.SpiralBeziers = append(newSource.SpiralBeziers, spiralbezier_)
 		}
 	}
 
@@ -2319,7 +2506,7 @@ type SpiralBezierGridFormCallback struct {
 
 func (spiralbeziergridFormCallback *SpiralBezierGridFormCallback) OnSave() {
 
-	log.Println("SpiralBezierGridFormCallback, OnSave")
+	// log.Println("SpiralBezierGridFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -2400,7 +2587,7 @@ type SpiralCircleFormCallback struct {
 
 func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 
-	log.Println("SpiralCircleFormCallback, OnSave")
+	// log.Println("SpiralCircleFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -2454,87 +2641,131 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 		case "Path":
 			FormDivBasicFieldToField(&(spiralcircle_.Path), formDiv)
 		case "FrontCurveStack:SpiralCircles":
-			// we need to retrieve the field owner before the change
-			var pastFrontCurveStackOwner *models.FrontCurveStack
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "FrontCurveStack"
-			rf.Fieldname = "SpiralCircles"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				spiralcircleFormCallback.probe.stageOfInterest,
-				spiralcircle_,
-				&rf)
+			// WARNING : this form deals with the N-N association "FrontCurveStack.SpiralCircles []*SpiralCircle" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of SpiralCircle). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.FrontCurveStack
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "FrontCurveStack"
+				rf.Fieldname = "SpiralCircles"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					spiralcircleFormCallback.probe.stageOfInterest,
+					spiralcircle_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastFrontCurveStackOwner = reverseFieldOwner.(*models.FrontCurveStack)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastFrontCurveStackOwner != nil {
-					idx := slices.Index(pastFrontCurveStackOwner.SpiralCircles, spiralcircle_)
-					pastFrontCurveStackOwner.SpiralCircles = slices.Delete(pastFrontCurveStackOwner.SpiralCircles, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _frontcurvestack := range *models.GetGongstructInstancesSet[models.FrontCurveStack](spiralcircleFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _frontcurvestack.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newFrontCurveStackOwner := _frontcurvestack // we have a match
-						if pastFrontCurveStackOwner != nil {
-							if newFrontCurveStackOwner != pastFrontCurveStackOwner {
-								idx := slices.Index(pastFrontCurveStackOwner.SpiralCircles, spiralcircle_)
-								pastFrontCurveStackOwner.SpiralCircles = slices.Delete(pastFrontCurveStackOwner.SpiralCircles, idx, idx+1)
-								newFrontCurveStackOwner.SpiralCircles = append(newFrontCurveStackOwner.SpiralCircles, spiralcircle_)
-							}
-						} else {
-							newFrontCurveStackOwner.SpiralCircles = append(newFrontCurveStackOwner.SpiralCircles, spiralcircle_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.FrontCurveStack)
+					if !ok {
+						log.Fatalln("Source of FrontCurveStack.SpiralCircles []*SpiralCircle, is not an FrontCurveStack instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.FrontCurveStack
+			for _frontcurvestack := range *models.GetGongstructInstancesSet[models.FrontCurveStack](spiralcircleFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _frontcurvestack.GetName() == newSourceName.GetName() {
+					newSource = _frontcurvestack // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of FrontCurveStack.SpiralCircles []*SpiralCircle, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.SpiralCircles = append(newSource.SpiralCircles, spiralcircle_)
 		case "SpiralCircleGrid:SpiralCircles":
-			// we need to retrieve the field owner before the change
-			var pastSpiralCircleGridOwner *models.SpiralCircleGrid
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "SpiralCircleGrid"
-			rf.Fieldname = "SpiralCircles"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				spiralcircleFormCallback.probe.stageOfInterest,
-				spiralcircle_,
-				&rf)
+			// WARNING : this form deals with the N-N association "SpiralCircleGrid.SpiralCircles []*SpiralCircle" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of SpiralCircle). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.SpiralCircleGrid
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "SpiralCircleGrid"
+				rf.Fieldname = "SpiralCircles"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					spiralcircleFormCallback.probe.stageOfInterest,
+					spiralcircle_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastSpiralCircleGridOwner = reverseFieldOwner.(*models.SpiralCircleGrid)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastSpiralCircleGridOwner != nil {
-					idx := slices.Index(pastSpiralCircleGridOwner.SpiralCircles, spiralcircle_)
-					pastSpiralCircleGridOwner.SpiralCircles = slices.Delete(pastSpiralCircleGridOwner.SpiralCircles, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _spiralcirclegrid := range *models.GetGongstructInstancesSet[models.SpiralCircleGrid](spiralcircleFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _spiralcirclegrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newSpiralCircleGridOwner := _spiralcirclegrid // we have a match
-						if pastSpiralCircleGridOwner != nil {
-							if newSpiralCircleGridOwner != pastSpiralCircleGridOwner {
-								idx := slices.Index(pastSpiralCircleGridOwner.SpiralCircles, spiralcircle_)
-								pastSpiralCircleGridOwner.SpiralCircles = slices.Delete(pastSpiralCircleGridOwner.SpiralCircles, idx, idx+1)
-								newSpiralCircleGridOwner.SpiralCircles = append(newSpiralCircleGridOwner.SpiralCircles, spiralcircle_)
-							}
-						} else {
-							newSpiralCircleGridOwner.SpiralCircles = append(newSpiralCircleGridOwner.SpiralCircles, spiralcircle_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.SpiralCircleGrid)
+					if !ok {
+						log.Fatalln("Source of SpiralCircleGrid.SpiralCircles []*SpiralCircle, is not an SpiralCircleGrid instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.SpiralCircleGrid
+			for _spiralcirclegrid := range *models.GetGongstructInstancesSet[models.SpiralCircleGrid](spiralcircleFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _spiralcirclegrid.GetName() == newSourceName.GetName() {
+					newSource = _spiralcirclegrid // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of SpiralCircleGrid.SpiralCircles []*SpiralCircle, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.SpiralCircles = append(newSource.SpiralCircles, spiralcircle_)
 		}
 	}
 
@@ -2595,7 +2826,7 @@ type SpiralCircleGridFormCallback struct {
 
 func (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) OnSave() {
 
-	log.Println("SpiralCircleGridFormCallback, OnSave")
+	// log.Println("SpiralCircleGridFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -2678,7 +2909,7 @@ type SpiralLineFormCallback struct {
 
 func (spirallineFormCallback *SpiralLineFormCallback) OnSave() {
 
-	log.Println("SpiralLineFormCallback, OnSave")
+	// log.Println("SpiralLineFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -2724,46 +2955,68 @@ func (spirallineFormCallback *SpiralLineFormCallback) OnSave() {
 		case "Transform":
 			FormDivBasicFieldToField(&(spiralline_.Transform), formDiv)
 		case "SpiralLineGrid:SpiralLines":
-			// we need to retrieve the field owner before the change
-			var pastSpiralLineGridOwner *models.SpiralLineGrid
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "SpiralLineGrid"
-			rf.Fieldname = "SpiralLines"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				spirallineFormCallback.probe.stageOfInterest,
-				spiralline_,
-				&rf)
+			// WARNING : this form deals with the N-N association "SpiralLineGrid.SpiralLines []*SpiralLine" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of SpiralLine). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.SpiralLineGrid
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "SpiralLineGrid"
+				rf.Fieldname = "SpiralLines"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					spirallineFormCallback.probe.stageOfInterest,
+					spiralline_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastSpiralLineGridOwner = reverseFieldOwner.(*models.SpiralLineGrid)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastSpiralLineGridOwner != nil {
-					idx := slices.Index(pastSpiralLineGridOwner.SpiralLines, spiralline_)
-					pastSpiralLineGridOwner.SpiralLines = slices.Delete(pastSpiralLineGridOwner.SpiralLines, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _spirallinegrid := range *models.GetGongstructInstancesSet[models.SpiralLineGrid](spirallineFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _spirallinegrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newSpiralLineGridOwner := _spirallinegrid // we have a match
-						if pastSpiralLineGridOwner != nil {
-							if newSpiralLineGridOwner != pastSpiralLineGridOwner {
-								idx := slices.Index(pastSpiralLineGridOwner.SpiralLines, spiralline_)
-								pastSpiralLineGridOwner.SpiralLines = slices.Delete(pastSpiralLineGridOwner.SpiralLines, idx, idx+1)
-								newSpiralLineGridOwner.SpiralLines = append(newSpiralLineGridOwner.SpiralLines, spiralline_)
-							}
-						} else {
-							newSpiralLineGridOwner.SpiralLines = append(newSpiralLineGridOwner.SpiralLines, spiralline_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.SpiralLineGrid)
+					if !ok {
+						log.Fatalln("Source of SpiralLineGrid.SpiralLines []*SpiralLine, is not an SpiralLineGrid instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.SpiralLineGrid
+			for _spirallinegrid := range *models.GetGongstructInstancesSet[models.SpiralLineGrid](spirallineFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _spirallinegrid.GetName() == newSourceName.GetName() {
+					newSource = _spirallinegrid // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of SpiralLineGrid.SpiralLines []*SpiralLine, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.SpiralLines = append(newSource.SpiralLines, spiralline_)
 		}
 	}
 
@@ -2824,7 +3077,7 @@ type SpiralLineGridFormCallback struct {
 
 func (spirallinegridFormCallback *SpiralLineGridFormCallback) OnSave() {
 
-	log.Println("SpiralLineGridFormCallback, OnSave")
+	// log.Println("SpiralLineGridFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -2905,7 +3158,7 @@ type SpiralOriginFormCallback struct {
 
 func (spiraloriginFormCallback *SpiralOriginFormCallback) OnSave() {
 
-	log.Println("SpiralOriginFormCallback, OnSave")
+	// log.Println("SpiralOriginFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -3002,7 +3255,7 @@ type SpiralRhombusFormCallback struct {
 
 func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 
-	log.Println("SpiralRhombusFormCallback, OnSave")
+	// log.Println("SpiralRhombusFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -3056,46 +3309,68 @@ func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 		case "Transform":
 			FormDivBasicFieldToField(&(spiralrhombus_.Transform), formDiv)
 		case "SpiralRhombusGrid:SpiralRhombuses":
-			// we need to retrieve the field owner before the change
-			var pastSpiralRhombusGridOwner *models.SpiralRhombusGrid
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "SpiralRhombusGrid"
-			rf.Fieldname = "SpiralRhombuses"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				spiralrhombusFormCallback.probe.stageOfInterest,
-				spiralrhombus_,
-				&rf)
+			// WARNING : this form deals with the N-N association "SpiralRhombusGrid.SpiralRhombuses []*SpiralRhombus" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of SpiralRhombus). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.SpiralRhombusGrid
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "SpiralRhombusGrid"
+				rf.Fieldname = "SpiralRhombuses"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					spiralrhombusFormCallback.probe.stageOfInterest,
+					spiralrhombus_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastSpiralRhombusGridOwner = reverseFieldOwner.(*models.SpiralRhombusGrid)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastSpiralRhombusGridOwner != nil {
-					idx := slices.Index(pastSpiralRhombusGridOwner.SpiralRhombuses, spiralrhombus_)
-					pastSpiralRhombusGridOwner.SpiralRhombuses = slices.Delete(pastSpiralRhombusGridOwner.SpiralRhombuses, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _spiralrhombusgrid := range *models.GetGongstructInstancesSet[models.SpiralRhombusGrid](spiralrhombusFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _spiralrhombusgrid.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newSpiralRhombusGridOwner := _spiralrhombusgrid // we have a match
-						if pastSpiralRhombusGridOwner != nil {
-							if newSpiralRhombusGridOwner != pastSpiralRhombusGridOwner {
-								idx := slices.Index(pastSpiralRhombusGridOwner.SpiralRhombuses, spiralrhombus_)
-								pastSpiralRhombusGridOwner.SpiralRhombuses = slices.Delete(pastSpiralRhombusGridOwner.SpiralRhombuses, idx, idx+1)
-								newSpiralRhombusGridOwner.SpiralRhombuses = append(newSpiralRhombusGridOwner.SpiralRhombuses, spiralrhombus_)
-							}
-						} else {
-							newSpiralRhombusGridOwner.SpiralRhombuses = append(newSpiralRhombusGridOwner.SpiralRhombuses, spiralrhombus_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.SpiralRhombusGrid)
+					if !ok {
+						log.Fatalln("Source of SpiralRhombusGrid.SpiralRhombuses []*SpiralRhombus, is not an SpiralRhombusGrid instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.SpiralRhombusGrid
+			for _spiralrhombusgrid := range *models.GetGongstructInstancesSet[models.SpiralRhombusGrid](spiralrhombusFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _spiralrhombusgrid.GetName() == newSourceName.GetName() {
+					newSource = _spiralrhombusgrid // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of SpiralRhombusGrid.SpiralRhombuses []*SpiralRhombus, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.SpiralRhombuses = append(newSource.SpiralRhombuses, spiralrhombus_)
 		}
 	}
 
@@ -3156,7 +3431,7 @@ type SpiralRhombusGridFormCallback struct {
 
 func (spiralrhombusgridFormCallback *SpiralRhombusGridFormCallback) OnSave() {
 
-	log.Println("SpiralRhombusGridFormCallback, OnSave")
+	// log.Println("SpiralRhombusGridFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -3237,7 +3512,7 @@ type VerticalAxisFormCallback struct {
 
 func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
 
-	log.Println("VerticalAxisFormCallback, OnSave")
+	// log.Println("VerticalAxisFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)

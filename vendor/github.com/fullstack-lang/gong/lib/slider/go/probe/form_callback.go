@@ -11,9 +11,20 @@ import (
 	"github.com/fullstack-lang/gong/lib/slider/go/models"
 )
 
+// code to avoid error when generated code does not need to import packages
 const __dummmy__time = time.Nanosecond
 
+var _ = __dummmy__time
+
 var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
+
+var _ = __dummmy__letters
+
+const __dummy__log = log.Ldate
+
+var _ = __dummy__log
+
+// end of code to avoid error when generated code does not need to import packages
 
 // insertion point
 func __gong__New__CheckboxFormCallback(
@@ -44,7 +55,7 @@ type CheckboxFormCallback struct {
 
 func (checkboxFormCallback *CheckboxFormCallback) OnSave() {
 
-	log.Println("CheckboxFormCallback, OnSave")
+	// log.Println("CheckboxFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -68,46 +79,68 @@ func (checkboxFormCallback *CheckboxFormCallback) OnSave() {
 		case "LabelForFalse":
 			FormDivBasicFieldToField(&(checkbox_.LabelForFalse), formDiv)
 		case "Group:Checkboxes":
-			// we need to retrieve the field owner before the change
-			var pastGroupOwner *models.Group
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "Group"
-			rf.Fieldname = "Checkboxes"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				checkboxFormCallback.probe.stageOfInterest,
-				checkbox_,
-				&rf)
+			// WARNING : this form deals with the N-N association "Group.Checkboxes []*Checkbox" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Checkbox). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Group
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Group"
+				rf.Fieldname = "Checkboxes"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					checkboxFormCallback.probe.stageOfInterest,
+					checkbox_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastGroupOwner = reverseFieldOwner.(*models.Group)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastGroupOwner != nil {
-					idx := slices.Index(pastGroupOwner.Checkboxes, checkbox_)
-					pastGroupOwner.Checkboxes = slices.Delete(pastGroupOwner.Checkboxes, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _group := range *models.GetGongstructInstancesSet[models.Group](checkboxFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _group.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newGroupOwner := _group // we have a match
-						if pastGroupOwner != nil {
-							if newGroupOwner != pastGroupOwner {
-								idx := slices.Index(pastGroupOwner.Checkboxes, checkbox_)
-								pastGroupOwner.Checkboxes = slices.Delete(pastGroupOwner.Checkboxes, idx, idx+1)
-								newGroupOwner.Checkboxes = append(newGroupOwner.Checkboxes, checkbox_)
-							}
-						} else {
-							newGroupOwner.Checkboxes = append(newGroupOwner.Checkboxes, checkbox_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Group)
+					if !ok {
+						log.Fatalln("Source of Group.Checkboxes []*Checkbox, is not an Group instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Group
+			for _group := range *models.GetGongstructInstancesSet[models.Group](checkboxFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _group.GetName() == newSourceName.GetName() {
+					newSource = _group // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Group.Checkboxes []*Checkbox, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Checkboxes = append(newSource.Checkboxes, checkbox_)
 		}
 	}
 
@@ -168,7 +201,7 @@ type GroupFormCallback struct {
 
 func (groupFormCallback *GroupFormCallback) OnSave() {
 
-	log.Println("GroupFormCallback, OnSave")
+	// log.Println("GroupFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -188,46 +221,68 @@ func (groupFormCallback *GroupFormCallback) OnSave() {
 		case "Percentage":
 			FormDivBasicFieldToField(&(group_.Percentage), formDiv)
 		case "Layout:Groups":
-			// we need to retrieve the field owner before the change
-			var pastLayoutOwner *models.Layout
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "Layout"
-			rf.Fieldname = "Groups"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				groupFormCallback.probe.stageOfInterest,
-				group_,
-				&rf)
+			// WARNING : this form deals with the N-N association "Layout.Groups []*Group" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Group). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Layout
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Layout"
+				rf.Fieldname = "Groups"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					groupFormCallback.probe.stageOfInterest,
+					group_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastLayoutOwner = reverseFieldOwner.(*models.Layout)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastLayoutOwner != nil {
-					idx := slices.Index(pastLayoutOwner.Groups, group_)
-					pastLayoutOwner.Groups = slices.Delete(pastLayoutOwner.Groups, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _layout := range *models.GetGongstructInstancesSet[models.Layout](groupFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _layout.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newLayoutOwner := _layout // we have a match
-						if pastLayoutOwner != nil {
-							if newLayoutOwner != pastLayoutOwner {
-								idx := slices.Index(pastLayoutOwner.Groups, group_)
-								pastLayoutOwner.Groups = slices.Delete(pastLayoutOwner.Groups, idx, idx+1)
-								newLayoutOwner.Groups = append(newLayoutOwner.Groups, group_)
-							}
-						} else {
-							newLayoutOwner.Groups = append(newLayoutOwner.Groups, group_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Layout)
+					if !ok {
+						log.Fatalln("Source of Layout.Groups []*Group, is not an Layout instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Layout
+			for _layout := range *models.GetGongstructInstancesSet[models.Layout](groupFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _layout.GetName() == newSourceName.GetName() {
+					newSource = _layout // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Layout.Groups []*Group, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Groups = append(newSource.Groups, group_)
 		}
 	}
 
@@ -288,7 +343,7 @@ type LayoutFormCallback struct {
 
 func (layoutFormCallback *LayoutFormCallback) OnSave() {
 
-	log.Println("LayoutFormCallback, OnSave")
+	// log.Println("LayoutFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -365,7 +420,7 @@ type SliderFormCallback struct {
 
 func (sliderFormCallback *SliderFormCallback) OnSave() {
 
-	log.Println("SliderFormCallback, OnSave")
+	// log.Println("SliderFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -403,46 +458,68 @@ func (sliderFormCallback *SliderFormCallback) OnSave() {
 		case "ValueFloat64":
 			FormDivBasicFieldToField(&(slider_.ValueFloat64), formDiv)
 		case "Group:Sliders":
-			// we need to retrieve the field owner before the change
-			var pastGroupOwner *models.Group
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "Group"
-			rf.Fieldname = "Sliders"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				sliderFormCallback.probe.stageOfInterest,
-				slider_,
-				&rf)
+			// WARNING : this form deals with the N-N association "Group.Sliders []*Slider" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Slider). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Group
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Group"
+				rf.Fieldname = "Sliders"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					sliderFormCallback.probe.stageOfInterest,
+					slider_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastGroupOwner = reverseFieldOwner.(*models.Group)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastGroupOwner != nil {
-					idx := slices.Index(pastGroupOwner.Sliders, slider_)
-					pastGroupOwner.Sliders = slices.Delete(pastGroupOwner.Sliders, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _group := range *models.GetGongstructInstancesSet[models.Group](sliderFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _group.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newGroupOwner := _group // we have a match
-						if pastGroupOwner != nil {
-							if newGroupOwner != pastGroupOwner {
-								idx := slices.Index(pastGroupOwner.Sliders, slider_)
-								pastGroupOwner.Sliders = slices.Delete(pastGroupOwner.Sliders, idx, idx+1)
-								newGroupOwner.Sliders = append(newGroupOwner.Sliders, slider_)
-							}
-						} else {
-							newGroupOwner.Sliders = append(newGroupOwner.Sliders, slider_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Group)
+					if !ok {
+						log.Fatalln("Source of Group.Sliders []*Slider, is not an Group instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Group
+			for _group := range *models.GetGongstructInstancesSet[models.Group](sliderFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _group.GetName() == newSourceName.GetName() {
+					newSource = _group // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Group.Sliders []*Slider, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Sliders = append(newSource.Sliders, slider_)
 		}
 	}
 

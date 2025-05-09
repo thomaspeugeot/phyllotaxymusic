@@ -11,9 +11,20 @@ import (
 	"github.com/fullstack-lang/gong/lib/tone/go/models"
 )
 
+// code to avoid error when generated code does not need to import packages
 const __dummmy__time = time.Nanosecond
 
+var _ = __dummmy__time
+
 var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
+
+var _ = __dummmy__letters
+
+const __dummy__log = log.Ldate
+
+var _ = __dummy__log
+
+// end of code to avoid error when generated code does not need to import packages
 
 // insertion point
 func __gong__New__FreqencyFormCallback(
@@ -44,7 +55,7 @@ type FreqencyFormCallback struct {
 
 func (freqencyFormCallback *FreqencyFormCallback) OnSave() {
 
-	log.Println("FreqencyFormCallback, OnSave")
+	// log.Println("FreqencyFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -62,46 +73,68 @@ func (freqencyFormCallback *FreqencyFormCallback) OnSave() {
 		case "Name":
 			FormDivBasicFieldToField(&(freqency_.Name), formDiv)
 		case "Note:Frequencies":
-			// we need to retrieve the field owner before the change
-			var pastNoteOwner *models.Note
-			var rf models.ReverseField
-			_ = rf
-			rf.GongstructName = "Note"
-			rf.Fieldname = "Frequencies"
-			reverseFieldOwner := models.GetReverseFieldOwner(
-				freqencyFormCallback.probe.stageOfInterest,
-				freqency_,
-				&rf)
+			// WARNING : this form deals with the N-N association "Note.Frequencies []*Freqency" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Freqency). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Note
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Note"
+				rf.Fieldname = "Frequencies"
+				formerAssociationSource := models.GetReverseFieldOwner(
+					freqencyFormCallback.probe.stageOfInterest,
+					freqency_,
+					&rf)
 
-			if reverseFieldOwner != nil {
-				pastNoteOwner = reverseFieldOwner.(*models.Note)
-			}
-			if formDiv.FormFields[0].FormFieldSelect.Value == nil {
-				if pastNoteOwner != nil {
-					idx := slices.Index(pastNoteOwner.Frequencies, freqency_)
-					pastNoteOwner.Frequencies = slices.Delete(pastNoteOwner.Frequencies, idx, idx+1)
-				}
-			} else {
-				// we need to retrieve the field owner after the change
-				// parse all astrcut and get the one with the name in the
-				// div
-				for _note := range *models.GetGongstructInstancesSet[models.Note](freqencyFormCallback.probe.stageOfInterest) {
-
-					// the match is base on the name
-					if _note.GetName() == formDiv.FormFields[0].FormFieldSelect.Value.GetName() {
-						newNoteOwner := _note // we have a match
-						if pastNoteOwner != nil {
-							if newNoteOwner != pastNoteOwner {
-								idx := slices.Index(pastNoteOwner.Frequencies, freqency_)
-								pastNoteOwner.Frequencies = slices.Delete(pastNoteOwner.Frequencies, idx, idx+1)
-								newNoteOwner.Frequencies = append(newNoteOwner.Frequencies, freqency_)
-							}
-						} else {
-							newNoteOwner.Frequencies = append(newNoteOwner.Frequencies, freqency_)
-						}
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Note)
+					if !ok {
+						log.Fatalln("Source of Note.Frequencies []*Freqency, is not an Note instance")
 					}
 				}
 			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Note
+			for _note := range *models.GetGongstructInstancesSet[models.Note](freqencyFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _note.GetName() == newSourceName.GetName() {
+					newSource = _note // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Note.Frequencies []*Freqency, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// append the value to the new source field
+			newSource.Frequencies = append(newSource.Frequencies, freqency_)
 		}
 	}
 
@@ -162,7 +195,7 @@ type NoteFormCallback struct {
 
 func (noteFormCallback *NoteFormCallback) OnSave() {
 
-	log.Println("NoteFormCallback, OnSave")
+	// log.Println("NoteFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
@@ -247,7 +280,7 @@ type PlayerFormCallback struct {
 
 func (playerFormCallback *PlayerFormCallback) OnSave() {
 
-	log.Println("PlayerFormCallback, OnSave")
+	// log.Println("PlayerFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)

@@ -11,9 +11,20 @@ import (
 	"github.com/fullstack-lang/gong/lib/load/go/models"
 )
 
+// code to avoid error when generated code does not need to import packages
 const __dummmy__time = time.Nanosecond
 
+var _ = __dummmy__time
+
 var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
+
+var _ = __dummmy__letters
+
+const __dummy__log = log.Ldate
+
+var _ = __dummy__log
+
+// end of code to avoid error when generated code does not need to import packages
 
 // insertion point
 func __gong__New__FileToDownloadFormCallback(
@@ -44,7 +55,7 @@ type FileToDownloadFormCallback struct {
 
 func (filetodownloadFormCallback *FileToDownloadFormCallback) OnSave() {
 
-	log.Println("FileToDownloadFormCallback, OnSave")
+	// log.Println("FileToDownloadFormCallback, OnSave")
 
 	// checkout formStage to have the form group on the stage synchronized with the
 	// back repo (and front repo)
