@@ -20,6 +20,9 @@ type GongStructShape struct {
 	//gong:ident
 	Identifier string
 
+	//gong:meta
+	IdentifierMeta any
+
 	// gongdoc can be integrated in a runtime application
 	// the application can then set up the number of instances of Struct
 	ShowNbInstances bool
@@ -99,10 +102,10 @@ func (classdiagram *Classdiagram) RemoveGongStructShape(stage *Stage, gongstruct
 		if noteShapeLink.Name == gongstructName {
 
 			// get the note shape
-			noteShape := map_NoteShapeLink_NodeShape[noteShapeLink]
+			noteShapes := map_NoteShapeLink_NodeShape[noteShapeLink]
 
 			// remove it from the slice of links
-			noteShape.GongNoteLinkShapes = remove(noteShape.GongNoteLinkShapes, noteShapeLink)
+			noteShapes[0].GongNoteLinkShapes = remove(noteShapes[0].GongNoteLinkShapes, noteShapeLink)
 
 			noteShapeLink.Unstage(stage)
 		}
@@ -118,6 +121,9 @@ func (classdiagram *Classdiagram) AddGongStructShape(stage *Stage, diagramPackag
 	var gongstructshape GongStructShape
 	gongstructshape.Name = classdiagram.Name + "-" + gongstructshapeName
 	gongstructshape.Identifier = GongStructNameToIdentifier(gongstructshapeName)
+
+	// for instanciation of the struct ref_models.Astruct{}
+	gongstructshape.IdentifierMeta = gongstructshape.Identifier + "{}"
 	gongstructshape.Width = 240
 	gongstructshape.Height = 63
 

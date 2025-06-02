@@ -18,7 +18,6 @@ func (stager *Stager) UpdateSVGStage() {
 
 	svg := (&gongsvg_models.SVG{Name: SVGName}).Stage(stager.svgStage)
 	layer := (&gongsvg_models.Layer{Name: "Layer 1"}).Stage(stager.svgStage)
-	layer.Display = true
 	svg.Layers = append(svg.Layers, layer)
 
 	for _, shape := range stager.parameter.Shapes {

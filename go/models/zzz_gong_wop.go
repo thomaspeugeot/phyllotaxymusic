@@ -6,24 +6,42 @@ import "time"
 // to avoid compile error if no time field is present
 var __GONG_time_The_fool_doth_think_he_is_wise__ = time.Hour
 
+var _ = __GONG_time_The_fool_doth_think_he_is_wise__
+
 // insertion point
 type Axis_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	AngleDegree float64
+
 	Length float64
+
 	CenterX float64
+
 	CenterY float64
+
 	EndX float64
+
 	EndY float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -49,7 +67,9 @@ func (from *Axis) CopyBasicFields(to *Axis) {
 
 type AxisGrid_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
 }
 
@@ -61,23 +81,41 @@ func (from *AxisGrid) CopyBasicFields(to *AxisGrid) {
 
 type Bezier_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	StartX float64
+
 	StartY float64
+
 	ControlPointStartX float64
+
 	ControlPointStartY float64
+
 	EndX float64
+
 	EndY float64
+
 	ControlPointEndX float64
+
 	ControlPointEndY float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -105,7 +143,9 @@ func (from *Bezier) CopyBasicFields(to *Bezier) {
 
 type BezierGrid_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
 }
 
@@ -117,7 +157,9 @@ func (from *BezierGrid) CopyBasicFields(to *BezierGrid) {
 
 type BezierGridStack_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
 }
 
@@ -129,7 +171,9 @@ func (from *BezierGridStack) CopyBasicFields(to *BezierGridStack) {
 
 type Chapter_WOP struct {
 	// insertion point
+
 	Name string
+
 	MardownContent string
 }
 
@@ -141,22 +185,39 @@ func (from *Chapter) CopyBasicFields(to *Chapter) {
 
 type Circle_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	CenterX float64
+
 	CenterY float64
+
 	HasBespokeRadius bool
+
 	BespopkeRadius float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
+
 	Pitch int
+
 	ShowName bool
+
 	BeatNb int
 }
 
@@ -183,7 +244,9 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 
 type CircleGrid_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
 }
 
@@ -195,12 +258,19 @@ func (from *CircleGrid) CopyBasicFields(to *CircleGrid) {
 
 type Content_WOP struct {
 	// insertion point
+
 	Name string
+
 	MardownContent string
+
 	ContentPath string
+
 	OutputPath string
+
 	LayoutPath string
+
 	StaticPath string
+
 	Target Target
 }
 
@@ -217,6 +287,7 @@ func (from *Content) CopyBasicFields(to *Content) {
 
 type ExportToMusicxml_WOP struct {
 	// insertion point
+
 	Name string
 }
 
@@ -227,7 +298,9 @@ func (from *ExportToMusicxml) CopyBasicFields(to *ExportToMusicxml) {
 
 type FrontCurve_WOP struct {
 	// insertion point
+
 	Name string
+
 	Path string
 }
 
@@ -239,15 +312,25 @@ func (from *FrontCurve) CopyBasicFields(to *FrontCurve) {
 
 type FrontCurveStack_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -267,17 +350,29 @@ func (from *FrontCurveStack) CopyBasicFields(to *FrontCurveStack) {
 
 type HorizontalAxis_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	AxisHandleBorderLength float64
+
 	Axis_Length float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -299,16 +394,27 @@ func (from *HorizontalAxis) CopyBasicFields(to *HorizontalAxis) {
 
 type Key_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	Path string
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -329,48 +435,91 @@ func (from *Key) CopyBasicFields(to *Key) {
 
 type Parameter_WOP struct {
 	// insertion point
+
 	Name string
+
 	BackendColor string
+
 	MinuteColor string
+
 	HourColor string
+
 	N int
+
 	M int
+
 	Z int
+
 	InsideAngle float64
+
 	ShiftToNearestCircle int
+
 	SideLength float64
+
 	StackWidth int
+
 	NbShitRight int
+
 	StackHeight int
+
 	BezierControlLengthRatio float64
+
 	SpiralBezierStrength float64
+
 	NbInterpolationPoints int
+
 	FkeySizeRatio float64
+
 	FkeyOriginRelativeX float64
+
 	FkeyOriginRelativeY float64
+
 	PitchHeight float64
+
 	NbPitchLines int
+
 	BeatLinesHeightRatio float64
+
 	NbBeatLines int
+
 	NbOfBeatsInTheme int
+
 	FirstVoiceShiftX float64
+
 	FirstVoiceShiftY float64
+
 	PitchDifference int
+
 	BeatsPerSecond float64
+
 	Level float64
+
 	IsMinor bool
+
 	ThemeBinaryEncoding int
+
 	OriginX float64
+
 	OriginY float64
+
 	SpiralOriginX float64
+
 	SpiralOriginY float64
+
 	OriginCrossWidth float64
+
 	SpiralRadiusRatio float64
+
 	ShowSpiralBezierConstruct bool
+
 	ShowInterpolationPoints bool
+
 	ActualBeatsTemporalShift int
+
 	PathToStaticFiles string
+
 	PathToGeneratedSVG string
+
 	PathToGeneratedScore string
 }
 
@@ -423,20 +572,35 @@ func (from *Parameter) CopyBasicFields(to *Parameter) {
 
 type Rhombus_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	CenterX float64
+
 	CenterY float64
+
 	SideLength float64
+
 	AngleDegree float64
+
 	InsideAngle float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -461,7 +625,9 @@ func (from *Rhombus) CopyBasicFields(to *Rhombus) {
 
 type RhombusGrid_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
 }
 
@@ -473,7 +639,9 @@ func (from *RhombusGrid) CopyBasicFields(to *RhombusGrid) {
 
 type ShapeCategory_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsExpanded bool
 }
 
@@ -485,23 +653,41 @@ func (from *ShapeCategory) CopyBasicFields(to *ShapeCategory) {
 
 type SpiralBezier_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	StartX float64
+
 	StartY float64
+
 	ControlPointStartX float64
+
 	ControlPointStartY float64
+
 	EndX float64
+
 	EndY float64
+
 	ControlPointEndX float64
+
 	ControlPointEndY float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -529,7 +715,9 @@ func (from *SpiralBezier) CopyBasicFields(to *SpiralBezier) {
 
 type SpiralBezierGrid_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
 }
 
@@ -541,23 +729,41 @@ func (from *SpiralBezierGrid) CopyBasicFields(to *SpiralBezierGrid) {
 
 type SpiralCircle_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	CenterX float64
+
 	CenterY float64
+
 	HasBespokeRadius bool
+
 	BespopkeRadius float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
+
 	Pitch int
+
 	ShowName bool
+
 	BeatNb int
+
 	Path string
 }
 
@@ -585,7 +791,9 @@ func (from *SpiralCircle) CopyBasicFields(to *SpiralCircle) {
 
 type SpiralCircleGrid_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
 }
 
@@ -597,19 +805,33 @@ func (from *SpiralCircleGrid) CopyBasicFields(to *SpiralCircleGrid) {
 
 type SpiralLine_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	StartX float64
+
 	EndX float64
+
 	StartY float64
+
 	EndY float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -633,7 +855,9 @@ func (from *SpiralLine) CopyBasicFields(to *SpiralLine) {
 
 type SpiralLineGrid_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
 }
 
@@ -645,15 +869,25 @@ func (from *SpiralLineGrid) CopyBasicFields(to *SpiralLineGrid) {
 
 type SpiralOrigin_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -673,23 +907,41 @@ func (from *SpiralOrigin) CopyBasicFields(to *SpiralOrigin) {
 
 type SpiralRhombus_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	X_r0 float64
+
 	Y_r0 float64
+
 	X_r1 float64
+
 	Y_r1 float64
+
 	X_r2 float64
+
 	Y_r2 float64
+
 	X_r3 float64
+
 	Y_r3 float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 
@@ -717,7 +969,9 @@ func (from *SpiralRhombus) CopyBasicFields(to *SpiralRhombus) {
 
 type SpiralRhombusGrid_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
 }
 
@@ -729,17 +983,29 @@ func (from *SpiralRhombusGrid) CopyBasicFields(to *SpiralRhombusGrid) {
 
 type VerticalAxis_WOP struct {
 	// insertion point
+
 	Name string
+
 	IsDisplayed bool
+
 	AxisHandleBorderLength float64
+
 	Axis_Length float64
+
 	Color string
+
 	FillOpacity float64
+
 	Stroke string
+
 	StrokeOpacity float64
+
 	StrokeWidth float64
+
 	StrokeDashArray string
+
 	StrokeDashArrayWhenSelected string
+
 	Transform string
 }
 

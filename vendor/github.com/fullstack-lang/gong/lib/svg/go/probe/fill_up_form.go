@@ -47,7 +47,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Circle, *models.Animate](
+				AssociationReverseFieldToForm[*models.Circle](
 					nil,
 					"Animations",
 					instanceWithInferedType,
@@ -69,7 +69,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Ellipse, *models.Animate](
+				AssociationReverseFieldToForm[*models.Ellipse](
 					nil,
 					"Animates",
 					instanceWithInferedType,
@@ -91,7 +91,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Line, *models.Animate](
+				AssociationReverseFieldToForm[*models.Line](
 					nil,
 					"Animates",
 					instanceWithInferedType,
@@ -113,7 +113,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.LinkAnchoredText, *models.Animate](
+				AssociationReverseFieldToForm[*models.LinkAnchoredText](
 					nil,
 					"Animates",
 					instanceWithInferedType,
@@ -135,7 +135,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Path, *models.Animate](
+				AssociationReverseFieldToForm[*models.Path](
 					nil,
 					"Animates",
 					instanceWithInferedType,
@@ -157,7 +157,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Polygone, *models.Animate](
+				AssociationReverseFieldToForm[*models.Polygone](
 					nil,
 					"Animates",
 					instanceWithInferedType,
@@ -179,7 +179,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Polyline, *models.Animate](
+				AssociationReverseFieldToForm[*models.Polyline](
 					nil,
 					"Animates",
 					instanceWithInferedType,
@@ -201,7 +201,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Rect, *models.Animate](
+				AssociationReverseFieldToForm[*models.Rect](
 					nil,
 					"Animations",
 					instanceWithInferedType,
@@ -223,7 +223,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.RectAnchoredText, *models.Animate](
+				AssociationReverseFieldToForm[*models.RectAnchoredText](
 					nil,
 					"Animates",
 					instanceWithInferedType,
@@ -245,7 +245,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Text, *models.Animate](
+				AssociationReverseFieldToForm[*models.Text](
 					nil,
 					"Animates",
 					instanceWithInferedType,
@@ -295,7 +295,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.Circle](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"Circles",
 					instanceWithInferedType,
@@ -347,7 +347,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.Ellipse](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"Ellipses",
 					instanceWithInferedType,
@@ -358,8 +358,6 @@ func FillUpForm(
 
 	case *models.Layer:
 		// insertion point
-		BasicFieldtoForm("Display", instanceWithInferedType.Display, instanceWithInferedType, probe.formStage, formGroup,
-			false, false, 0, false, 0)
 		BasicFieldtoForm("Name", instanceWithInferedType.Name, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		AssociationSliceToForm("Rects", instanceWithInferedType, &instanceWithInferedType.Rects, formGroup, probe)
@@ -386,7 +384,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.SVG, *models.Layer](
+				AssociationReverseFieldToForm[*models.SVG](
 					nil,
 					"Layers",
 					instanceWithInferedType,
@@ -442,7 +440,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.Line](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"Lines",
 					instanceWithInferedType,
@@ -513,7 +511,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.Link](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"Links",
 					instanceWithInferedType,
@@ -538,6 +536,8 @@ func FillUpForm(
 		BasicFieldtoForm("FontWeight", instanceWithInferedType.FontWeight, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("FontSize", instanceWithInferedType.FontSize, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("FontStyle", instanceWithInferedType.FontStyle, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("LetterSpacing", instanceWithInferedType.LetterSpacing, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -572,7 +572,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Link, *models.LinkAnchoredText](
+				AssociationReverseFieldToForm[*models.Link](
 					nil,
 					"TextAtArrowStart",
 					instanceWithInferedType,
@@ -594,7 +594,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Link, *models.LinkAnchoredText](
+				AssociationReverseFieldToForm[*models.Link](
 					nil,
 					"TextAtArrowEnd",
 					instanceWithInferedType,
@@ -640,7 +640,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.Path](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"Paths",
 					instanceWithInferedType,
@@ -671,7 +671,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Link, *models.Point](
+				AssociationReverseFieldToForm[*models.Link](
 					nil,
 					"ControlPoints",
 					instanceWithInferedType,
@@ -717,7 +717,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.Polygone](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"Polygones",
 					instanceWithInferedType,
@@ -763,7 +763,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.Polyline](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"Polylines",
 					instanceWithInferedType,
@@ -846,7 +846,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.Rect](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"Rects",
 					instanceWithInferedType,
@@ -900,7 +900,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Rect, *models.RectAnchoredPath](
+				AssociationReverseFieldToForm[*models.Rect](
 					nil,
 					"RectAnchoredPaths",
 					instanceWithInferedType,
@@ -962,7 +962,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Rect, *models.RectAnchoredRect](
+				AssociationReverseFieldToForm[*models.Rect](
 					nil,
 					"RectAnchoredRects",
 					instanceWithInferedType,
@@ -982,6 +982,8 @@ func FillUpForm(
 		BasicFieldtoForm("FontSize", instanceWithInferedType.FontSize, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("FontStyle", instanceWithInferedType.FontStyle, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("LetterSpacing", instanceWithInferedType.LetterSpacing, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 		BasicFieldtoForm("X_Offset", instanceWithInferedType.X_Offset, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
@@ -1020,7 +1022,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Rect, *models.RectAnchoredText](
+				AssociationReverseFieldToForm[*models.Rect](
 					nil,
 					"RectAnchoredTexts",
 					instanceWithInferedType,
@@ -1067,7 +1069,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.RectLinkLink](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"RectLinkLinks",
 					instanceWithInferedType,
@@ -1086,7 +1088,11 @@ func FillUpForm(
 		AssociationFieldToForm("EndRect", instanceWithInferedType.EndRect, formGroup, probe)
 		BasicFieldtoForm("IsEditable", instanceWithInferedType.IsEditable, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
-		BasicFieldtoForm("IsSVGFileGenerated", instanceWithInferedType.IsSVGFileGenerated, instanceWithInferedType, probe.formStage, formGroup,
+		BasicFieldtoForm("IsSVGFrontEndFileGenerated", instanceWithInferedType.IsSVGFrontEndFileGenerated, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("IsSVGBackEndFileGenerated", instanceWithInferedType.IsSVGBackEndFileGenerated, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("DefaultDirectoryForGeneratedImages", instanceWithInferedType.DefaultDirectoryForGeneratedImages, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
 
 	case *models.SvgText:
@@ -1122,6 +1128,14 @@ func FillUpForm(
 			false, false, 0, false, 0)
 		BasicFieldtoForm("Transform", instanceWithInferedType.Transform, instanceWithInferedType, probe.formStage, formGroup,
 			true, true, 600, true, 400)
+		BasicFieldtoForm("FontWeight", instanceWithInferedType.FontWeight, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("FontSize", instanceWithInferedType.FontSize, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("FontStyle", instanceWithInferedType.FontStyle, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
+		BasicFieldtoForm("LetterSpacing", instanceWithInferedType.LetterSpacing, instanceWithInferedType, probe.formStage, formGroup,
+			false, false, 0, false, 0)
 		AssociationSliceToForm("Animates", instanceWithInferedType, &instanceWithInferedType.Animates, formGroup, probe)
 		{
 			var rf models.ReverseField
@@ -1137,7 +1151,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Layer, *models.Text](
+				AssociationReverseFieldToForm[*models.Layer](
 					nil,
 					"Texts",
 					instanceWithInferedType,

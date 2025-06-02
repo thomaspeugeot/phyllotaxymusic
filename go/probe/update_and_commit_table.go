@@ -141,7 +141,7 @@ func updateAndCommitTable[T models.Gongstruct](
 		value := models.GetFieldStringValue(*structInstance, "Name")
 		row.Name = value.GetValueString()
 
-		updater := NewRowUpdate[T](structInstance, probe)
+		updater := NewRowUpdate(structInstance, probe)
 		updater.Instance = structInstance
 		row.Impl = updater
 
@@ -170,8 +170,10 @@ func updateAndCommitTable[T models.Gongstruct](
 				structInstance,
 			)),
 			Icon: string(maticons.BUTTON_delete),
+			NeedsConfirmation:   true,
+			ConfirmationMessage: "Do you confirm tou want to delete this instance ?",
 		}).Stage(probe.tableStage)
-		cellIcon.Impl = NewCellDeleteIconImpl[T](structInstance, probe)
+		cellIcon.Impl = NewCellDeleteIconImpl(structInstance, probe)
 		cell.CellIcon = cellIcon
 
 		for _, fieldName := range fields {

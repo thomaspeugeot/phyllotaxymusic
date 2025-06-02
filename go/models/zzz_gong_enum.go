@@ -42,7 +42,7 @@ func (generationmode *GenerationMode) FromCodeString(input string) (err error) {
 	case "STATIC_WEB_SITE":
 		*generationmode = STATIC_WEB_SITE
 	default:
-		return errUnkownEnum
+		err = errUnkownEnum
 	}
 	return
 }
@@ -114,7 +114,7 @@ func (stacksnames *StacksNames) FromCodeString(input string) (err error) {
 	case "Phylotaxy":
 		*stacksnames = Phylotaxy
 	default:
-		return errUnkownEnum
+		err = errUnkownEnum
 	}
 	return
 }
@@ -189,7 +189,7 @@ func (target *Target) FromCodeString(input string) (err error) {
 	case "WEB":
 		*target = WEB
 	default:
-		return errUnkownEnum
+		err = errUnkownEnum
 	}
 	return
 }
@@ -261,7 +261,7 @@ func (treenames *TreeNames) FromCodeString(input string) (err error) {
 	case "Sidebar":
 		*treenames = Sidebar
 	default:
-		return errUnkownEnum
+		err = errUnkownEnum
 	}
 	return
 }

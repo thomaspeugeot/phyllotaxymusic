@@ -8,6 +8,14 @@ import { FileToDownloadAPI } from './filetodownload-api'
 import { FileToDownload, CopyFileToDownloadAPIToFileToDownload } from './filetodownload'
 import { FileToDownloadService } from './filetodownload.service'
 
+import { FileToUploadAPI } from './filetoupload-api'
+import { FileToUpload, CopyFileToUploadAPIToFileToUpload } from './filetoupload'
+import { FileToUploadService } from './filetoupload.service'
+
+import { MessageAPI } from './message-api'
+import { Message, CopyMessageAPIToMessage } from './message'
+import { MessageService } from './message.service'
+
 
 import { BackRepoData } from './back-repo-data'
 
@@ -17,6 +25,12 @@ export const StackType = "github.com/fullstack-lang/gong/lib/load/go/models"
 export class FrontRepo { // insertion point sub template
 	array_FileToDownloads = new Array<FileToDownload>() // array of front instances
 	map_ID_FileToDownload = new Map<number, FileToDownload>() // map of front instances
+
+	array_FileToUploads = new Array<FileToUpload>() // array of front instances
+	map_ID_FileToUpload = new Map<number, FileToUpload>() // map of front instances
+
+	array_Messages = new Array<Message>() // array of front instances
+	map_ID_Message = new Map<number, Message>() // map of front instances
 
 
 	public GONG__Index = -1
@@ -29,6 +43,10 @@ export class FrontRepo { // insertion point sub template
 			// insertion point
 			case 'FileToDownload':
 				return this.array_FileToDownloads as unknown as Array<Type>
+			case 'FileToUpload':
+				return this.array_FileToUploads as unknown as Array<Type>
+			case 'Message':
+				return this.array_Messages as unknown as Array<Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -39,6 +57,10 @@ export class FrontRepo { // insertion point sub template
 			// insertion point
 			case 'FileToDownload':
 				return this.map_ID_FileToDownload as unknown as Map<number, Type>
+			case 'FileToUpload':
+				return this.map_ID_FileToUpload as unknown as Map<number, Type>
+			case 'Message':
+				return this.map_ID_Message as unknown as Map<number, Type>
 			default:
 				throw new Error("Type not recognized");
 		}
@@ -107,6 +129,8 @@ export class FrontRepoService {
 	constructor(
 		private http: HttpClient, // insertion point sub template 
 		private filetodownloadService: FileToDownloadService,
+		private filetouploadService: FileToUploadService,
+		private messageService: MessageService,
 	) { }
 
 	// postService provides a post function for each struct name
@@ -140,6 +164,8 @@ export class FrontRepoService {
 		Observable<null>, // see below for the of(null) observable
 		// insertion point sub template 
 		Observable<FileToDownloadAPI[]>,
+		Observable<FileToUploadAPI[]>,
+		Observable<MessageAPI[]>,
 	];
 
 	//
@@ -156,6 +182,8 @@ export class FrontRepoService {
 			of(null), // see above for justification
 			// insertion point sub template
 			this.filetodownloadService.getFileToDownloads(this.Name, this.frontRepo),
+			this.filetouploadService.getFileToUploads(this.Name, this.frontRepo),
+			this.messageService.getMessages(this.Name, this.frontRepo),
 		]
 
 		return new Observable<FrontRepo>(
@@ -167,12 +195,18 @@ export class FrontRepoService {
 						___of_null, // see above for the explanation about of
 						// insertion point sub template for declarations 
 						filetodownloads_,
+						filetouploads_,
+						messages_,
 					]) => {
 						let _this = this
 						// Typing can be messy with many items. Therefore, type casting is necessary here
 						// insertion point sub template for type casting 
 						var filetodownloads: FileToDownloadAPI[]
 						filetodownloads = filetodownloads_ as FileToDownloadAPI[]
+						var filetouploads: FileToUploadAPI[]
+						filetouploads = filetouploads_ as FileToUploadAPI[]
+						var messages: MessageAPI[]
+						messages = messages_ as MessageAPI[]
 
 						// 
 						// First Step: init map of instances
@@ -189,6 +223,30 @@ export class FrontRepoService {
 							}
 						)
 
+						// init the arrays
+						this.frontRepo.array_FileToUploads = []
+						this.frontRepo.map_ID_FileToUpload.clear()
+
+						filetouploads.forEach(
+							filetouploadAPI => {
+								let filetoupload = new FileToUpload
+								this.frontRepo.array_FileToUploads.push(filetoupload)
+								this.frontRepo.map_ID_FileToUpload.set(filetouploadAPI.ID, filetoupload)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_Messages = []
+						this.frontRepo.map_ID_Message.clear()
+
+						messages.forEach(
+							messageAPI => {
+								let message = new Message
+								this.frontRepo.array_Messages.push(message)
+								this.frontRepo.map_ID_Message.set(messageAPI.ID, message)
+							}
+						)
+
 
 						// 
 						// Second Step: reddeem front objects
@@ -198,6 +256,22 @@ export class FrontRepoService {
 							filetodownloadAPI => {
 								let filetodownload = this.frontRepo.map_ID_FileToDownload.get(filetodownloadAPI.ID)
 								CopyFileToDownloadAPIToFileToDownload(filetodownloadAPI, filetodownload!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						filetouploads.forEach(
+							filetouploadAPI => {
+								let filetoupload = this.frontRepo.map_ID_FileToUpload.get(filetouploadAPI.ID)
+								CopyFileToUploadAPIToFileToUpload(filetouploadAPI, filetoupload!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						messages.forEach(
+							messageAPI => {
+								let message = this.frontRepo.map_ID_Message.get(messageAPI.ID)
+								CopyMessageAPIToMessage(messageAPI, message!, this.frontRepo)
 							}
 						)
 
@@ -215,8 +289,23 @@ export class FrontRepoService {
 		this.Name = Name
 
 
+		// Determine the base URL for the WebSocket connection dynamically
+		// window.location.host includes hostname and port (e.g., "localhost:8080" or "yourdomain.com:8090")
+		// If running on standard ports (80 for http, 443 for https), the port might not be explicitly in window.location.host
+		// but WebSocket constructor handles 'ws://' and 'wss://' correctly with host.
+		let host = window.location.host; // e.g., localhost:4200 or myapp.com
+		const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'; // Use wss for https, ws for http
+
+		// Check if the host is localhost:4200 and change it to localhost:8080 (when using ng serve)
+		if (host === 'localhost:4200') {
+			host = 'localhost:8080';
+		}
+
+		// Construct the base path using the dynamic host and protocol
+		// The API path remains the same.
+		let basePath = `${protocol}//${host}/api/github.com/fullstack-lang/gong/lib/load/go/v1/ws/stage`
+
 		let params = new HttpParams().set("Name", this.Name)
-		let basePath = 'ws://localhost:8080/api/github.com/fullstack-lang/gong/lib/load/go/v1/ws/stage'
 		let paramString = params.toString()
 		let url = `${basePath}?${paramString}`
 		this.socket = new WebSocket(url)
@@ -247,6 +336,30 @@ export class FrontRepoService {
 					}
 				)
 
+				// init the arrays
+				frontRepo.array_FileToUploads = []
+				frontRepo.map_ID_FileToUpload.clear()
+
+				backRepoData.FileToUploadAPIs.forEach(
+					filetouploadAPI => {
+						let filetoupload = new FileToUpload
+						frontRepo.array_FileToUploads.push(filetoupload)
+						frontRepo.map_ID_FileToUpload.set(filetouploadAPI.ID, filetoupload)
+					}
+				)
+
+				// init the arrays
+				frontRepo.array_Messages = []
+				frontRepo.map_ID_Message.clear()
+
+				backRepoData.MessageAPIs.forEach(
+					messageAPI => {
+						let message = new Message
+						frontRepo.array_Messages.push(message)
+						frontRepo.map_ID_Message.set(messageAPI.ID, message)
+					}
+				)
+
 
 				// 
 				// Second Step: reddeem front objects
@@ -258,6 +371,22 @@ export class FrontRepoService {
 					filetodownloadAPI => {
 						let filetodownload = frontRepo.map_ID_FileToDownload.get(filetodownloadAPI.ID)
 						CopyFileToDownloadAPIToFileToDownload(filetodownloadAPI, filetodownload!, frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.FileToUploadAPIs.forEach(
+					filetouploadAPI => {
+						let filetoupload = frontRepo.map_ID_FileToUpload.get(filetouploadAPI.ID)
+						CopyFileToUploadAPIToFileToUpload(filetouploadAPI, filetoupload!, frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.MessageAPIs.forEach(
+					messageAPI => {
+						let message = frontRepo.map_ID_Message.get(messageAPI.ID)
+						CopyMessageAPIToMessage(messageAPI, message!, frontRepo)
 					}
 				)
 
@@ -282,4 +411,10 @@ export class FrontRepoService {
 // insertion point for get unique ID per struct 
 export function getFileToDownloadUniqueID(id: number): number {
 	return 31 * id
+}
+export function getFileToUploadUniqueID(id: number): number {
+	return 37 * id
+}
+export function getMessageUniqueID(id: number): number {
+	return 41 * id
 }

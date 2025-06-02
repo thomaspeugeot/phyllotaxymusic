@@ -11,20 +11,12 @@ import (
 	"github.com/fullstack-lang/gong/lib/tone/go/models"
 )
 
-// code to avoid error when generated code does not need to import packages
-const __dummmy__time = time.Nanosecond
+// to avoid errors when time and slices packages are not used in the generated code
+const _ = time.Nanosecond
 
-var _ = __dummmy__time
+var _ = slices.Delete([]string{"a"}, 0, 1)
 
-var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
-
-var _ = __dummmy__letters
-
-const __dummy__log = log.Ldate
-
-var _ = __dummy__log
-
-// end of code to avoid error when generated code does not need to import packages
+var _ = log.Panicf
 
 // insertion point
 func __gong__New__FreqencyFormCallback(
@@ -108,6 +100,10 @@ func (freqencyFormCallback *FreqencyFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Frequencies, freqency_)
+					formerSource.Frequencies = slices.Delete(formerSource.Frequencies, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -133,7 +129,7 @@ func (freqencyFormCallback *FreqencyFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Frequencies = append(newSource.Frequencies, freqency_)
 		}
 	}
@@ -212,6 +208,31 @@ func (noteFormCallback *NoteFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(note_.Name), formDiv)
+		case "Frequencies":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Freqency](noteFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Freqency, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Freqency)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					noteFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			note_.Frequencies = instanceSlice
+
 		case "Start":
 			FormDivBasicFieldToField(&(note_.Start), formDiv)
 		case "Duration":

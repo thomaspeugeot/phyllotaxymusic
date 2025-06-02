@@ -377,11 +377,9 @@ var __gong__map_LinkShape = make(map[string]*LinkShape)
 func lookupPackage(name string) (importPath string, ok bool) {
 	return name, true
 }
-func lookupSym(recv, name string) (ok bool) {
-	if recv == "" {
-		return true
-	}
-	return false
+
+func lookupSym(recv, name string) bool {
+	return recv == ""
 }
 
 // UnmarshallGoStaging unmarshall a go assign statement
@@ -469,6 +467,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 		// astCoordinate := astCoordinate + "\tRhs"
 		switch expr := expr.(type) {
 		case *ast.CallExpr:
+			var basicLit *ast.BasicLit
+
 			callExpr := expr
 			// astCoordinate := astCoordinate + "\tFun"
 			switch fun := callExpr.Fun.(type) {
@@ -671,21 +671,51 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					}
 				}
 			case *ast.Ident:
-				// append function
-				ident := fun
-				_ = ident
-				// astCoordinate := astCoordinate + "\tIdent" + "." + ident.Name
-				// log.Println(astCoordinate)
+				// pick up the first arg
+				if len(callExpr.Args) != 1 {
+					break
+				}
+				arg0 := callExpr.Args[0]
+
+				var se *ast.SelectorExpr
+				var ok bool
+				if se, ok = arg0.(*ast.SelectorExpr); !ok {
+					break
+				}
+
+				var seXident *ast.Ident
+				if seXident = se.X.(*ast.Ident); !ok {
+					break
+				}
+
+				basicLit = new(ast.BasicLit)
+				// For a "fake" literal, Kind might be set to something like token.STRING or a custom indicator
+				basicLit.Kind = token.STRING // Or another appropriate token.Kind
+				basicLit.Value = "new(" + seXident.Name + "." + se.Sel.Name + ")"
+				// following lines are here to avoid warning "unused write to field..."
+				_ = basicLit.Kind
+				_ = basicLit.Value
+				_ = basicLit
 			}
 			for _, arg := range callExpr.Args {
 				// astCoordinate := astCoordinate + "\tArg"
 				switch arg := arg.(type) {
-				case *ast.Ident:
-					ident := arg
-					_ = ident
-					// astCoordinate := astCoordinate + "\tIdent" + "." + ident.Name
-					// log.Println(astCoordinate)
+				case *ast.Ident, *ast.SelectorExpr:
+					var ident *ast.Ident
 					var ok bool
+					_ = ok
+					if ident, ok = arg.(*ast.Ident); !ok {
+						// log.Println("we are in the case of new(....)")
+					}
+
+					var se *ast.SelectorExpr
+					if se, ok = arg.(*ast.SelectorExpr); ok {
+						if ident, ok = se.X.(*ast.Ident); !ok {
+							// log.Println("we are in the case of append(....)")
+						}
+					}
+					_ = ident
+
 					gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 					if !ok {
 						log.Fatalln("gongstructName not found for identifier", identifier)
@@ -695,6 +725,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					case "AttributeShape":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
+						case "IdentifierMeta":
+							__gong__map_AttributeShape[identifier].IdentifierMeta = basicLit.Value
 						}
 					case "Classdiagram":
 						switch fieldName {
@@ -702,21 +734,33 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "GongStructShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_GongStructShape[targetIdentifier]
-							__gong__map_Classdiagram[identifier].GongStructShapes =
-								append(__gong__map_Classdiagram[identifier].GongStructShapes, target)
+							// when parsing Classdiagram[identifier].GongStructShapes = append(Classdiagram[identifier].GongStructShapes, GongStructShape instance )
+							// the map will not find the GongStructShape instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_GongStructShape[targetIdentifier]; ok {
+								__gong__map_Classdiagram[identifier].GongStructShapes =
+									append(__gong__map_Classdiagram[identifier].GongStructShapes, target)
+							}
 						case "GongEnumShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_GongEnumShape[targetIdentifier]
-							__gong__map_Classdiagram[identifier].GongEnumShapes =
-								append(__gong__map_Classdiagram[identifier].GongEnumShapes, target)
+							// when parsing Classdiagram[identifier].GongEnumShapes = append(Classdiagram[identifier].GongEnumShapes, GongEnumShape instance )
+							// the map will not find the GongEnumShape instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_GongEnumShape[targetIdentifier]; ok {
+								__gong__map_Classdiagram[identifier].GongEnumShapes =
+									append(__gong__map_Classdiagram[identifier].GongEnumShapes, target)
+							}
 						case "GongNoteShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_GongNoteShape[targetIdentifier]
-							__gong__map_Classdiagram[identifier].GongNoteShapes =
-								append(__gong__map_Classdiagram[identifier].GongNoteShapes, target)
+							// when parsing Classdiagram[identifier].GongNoteShapes = append(Classdiagram[identifier].GongNoteShapes, GongNoteShape instance )
+							// the map will not find the GongNoteShape instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_GongNoteShape[targetIdentifier]; ok {
+								__gong__map_Classdiagram[identifier].GongNoteShapes =
+									append(__gong__map_Classdiagram[identifier].GongNoteShapes, target)
+							}
 						}
 					case "DiagramPackage":
 						switch fieldName {
@@ -724,19 +768,29 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "Classdiagrams":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_Classdiagram[targetIdentifier]
-							__gong__map_DiagramPackage[identifier].Classdiagrams =
-								append(__gong__map_DiagramPackage[identifier].Classdiagrams, target)
+							// when parsing DiagramPackage[identifier].Classdiagrams = append(DiagramPackage[identifier].Classdiagrams, Classdiagram instance )
+							// the map will not find the Classdiagram instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_Classdiagram[targetIdentifier]; ok {
+								__gong__map_DiagramPackage[identifier].Classdiagrams =
+									append(__gong__map_DiagramPackage[identifier].Classdiagrams, target)
+							}
 						}
 					case "GongEnumShape":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
+						case "IdentifierMeta":
+							__gong__map_GongEnumShape[identifier].IdentifierMeta = basicLit.Value
 						case "GongEnumValueShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_GongEnumValueShape[targetIdentifier]
-							__gong__map_GongEnumShape[identifier].GongEnumValueShapes =
-								append(__gong__map_GongEnumShape[identifier].GongEnumValueShapes, target)
+							// when parsing GongEnumShape[identifier].GongEnumValueShapes = append(GongEnumShape[identifier].GongEnumValueShapes, GongEnumValueShape instance )
+							// the map will not find the GongEnumValueShape instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_GongEnumValueShape[targetIdentifier]; ok {
+								__gong__map_GongEnumShape[identifier].GongEnumValueShapes =
+									append(__gong__map_GongEnumShape[identifier].GongEnumValueShapes, target)
+							}
 						}
 					case "GongEnumValueShape":
 						switch fieldName {
@@ -752,62 +806,87 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "GongNoteLinkShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_GongNoteLinkShape[targetIdentifier]
-							__gong__map_GongNoteShape[identifier].GongNoteLinkShapes =
-								append(__gong__map_GongNoteShape[identifier].GongNoteLinkShapes, target)
+							// when parsing GongNoteShape[identifier].GongNoteLinkShapes = append(GongNoteShape[identifier].GongNoteLinkShapes, GongNoteLinkShape instance )
+							// the map will not find the GongNoteLinkShape instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_GongNoteLinkShape[targetIdentifier]; ok {
+								__gong__map_GongNoteShape[identifier].GongNoteLinkShapes =
+									append(__gong__map_GongNoteShape[identifier].GongNoteLinkShapes, target)
+							}
 						}
 					case "GongStructShape":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
+						case "IdentifierMeta":
+							__gong__map_GongStructShape[identifier].IdentifierMeta = basicLit.Value
 						case "AttributeShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_AttributeShape[targetIdentifier]
-							__gong__map_GongStructShape[identifier].AttributeShapes =
-								append(__gong__map_GongStructShape[identifier].AttributeShapes, target)
+							// when parsing GongStructShape[identifier].AttributeShapes = append(GongStructShape[identifier].AttributeShapes, AttributeShape instance )
+							// the map will not find the AttributeShape instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_AttributeShape[targetIdentifier]; ok {
+								__gong__map_GongStructShape[identifier].AttributeShapes =
+									append(__gong__map_GongStructShape[identifier].AttributeShapes, target)
+							}
 						case "LinkShapes":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_LinkShape[targetIdentifier]
-							__gong__map_GongStructShape[identifier].LinkShapes =
-								append(__gong__map_GongStructShape[identifier].LinkShapes, target)
+							// when parsing GongStructShape[identifier].LinkShapes = append(GongStructShape[identifier].LinkShapes, LinkShape instance )
+							// the map will not find the LinkShape instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_LinkShape[targetIdentifier]; ok {
+								__gong__map_GongStructShape[identifier].LinkShapes =
+									append(__gong__map_GongStructShape[identifier].LinkShapes, target)
+							}
 						}
 					case "LinkShape":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
+						case "IdentifierMeta":
+							__gong__map_LinkShape[identifier].IdentifierMeta = basicLit.Value
 						}
-					}
-				case *ast.SelectorExpr:
-					slcExpr := arg
-					// astCoordinate := astCoordinate + "\tSelectorExpr"
-					switch X := slcExpr.X.(type) {
-					case *ast.Ident:
-						ident := X
-						_ = ident
-						// astCoordinate := astCoordinate + "\tX" + "." + ident.Name
-						// log.Println(astCoordinate)
-
-					}
-					if Sel := slcExpr.Sel; Sel != nil {
-						// astCoordinate := astCoordinate + "\tSel" + "." + Sel.Name
-						// log.Println(astCoordinate)
 					}
 				}
 			}
-		case *ast.BasicLit, *ast.UnaryExpr:
+		case *ast.BasicLit, *ast.UnaryExpr, *ast.CompositeLit:
 
 			var basicLit *ast.BasicLit
 			var exprSign = 1.0
 			_ = exprSign // in case this is not used
-
-			if bl, ok := expr.(*ast.BasicLit); ok {
-				// expression is  for instance ... = 18.000
-				basicLit = bl
-			} else if ue, ok := expr.(*ast.UnaryExpr); ok {
-				// expression is  for instance ... = -18.000
+			switch v := expr.(type) {
+			case *ast.BasicLit:
+				// expression is for instance ... = 18.000
+				basicLit = v
+			case *ast.UnaryExpr:
+				// expression is for instance ... = -18.000
 				// we want to extract a *ast.BasicLit from the *ast.UnaryExpr
-				basicLit = ue.X.(*ast.BasicLit)
-				exprSign = -1
+				if bl, ok := v.X.(*ast.BasicLit); ok {
+					basicLit = bl
+					// Check the operator to set the sign
+					if v.Op == token.SUB { // token.SUB is for '-'
+						exprSign = -1
+					} else if v.Op == token.ADD { // token.ADD is for '+'
+						exprSign = 1
+					}
+				}
+			case *ast.CompositeLit:
+				var sl *ast.SelectorExpr
+				var ident *ast.Ident
+				var ok bool
+
+				if sl, ok = v.Type.(*ast.SelectorExpr); !ok {
+					break // Exits the switch case
+				}
+
+				if ident, ok = sl.X.(*ast.Ident); !ok {
+					break // Exits the switch case
+				}
+
+				basicLit = new(ast.BasicLit)
+				// For a "fake" literal, Kind might be set to something like token.STRING or a custom indicator
+				basicLit.Kind = token.STRING // Or another appropriate token.Kind
+				basicLit.Value = ident.Name + "." + sl.Sel.Name + "{}"
 			}
 
 			// astCoordinate := astCoordinate + "\tBasicLit" + "." + basicLit.Value
@@ -836,6 +915,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_AttributeShape[identifier].Identifier = fielValue
+				case "IdentifierMeta":
+					__gong__map_AttributeShape[identifier].IdentifierMeta = basicLit.Value
 				case "FieldTypeAsString":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -856,27 +937,22 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Classdiagram[identifier].Name = fielValue
-				case "NodeGongStructNodeExpansionBinaryEncoding":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Classdiagram[identifier].NodeGongStructNodeExpansionBinaryEncoding = int(exprSign) * int(fielValue)
-				case "NodeGongEnumNodeExpansionBinaryEncoding":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Classdiagram[identifier].NodeGongEnumNodeExpansionBinaryEncoding = int(exprSign) * int(fielValue)
-				case "NodeGongNoteNodeExpansionBinaryEncoding":
-					// convert string to int
-					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
-					if err != nil {
-						log.Fatalln(err)
-					}
-					__gong__map_Classdiagram[identifier].NodeGongNoteNodeExpansionBinaryEncoding = int(exprSign) * int(fielValue)
+				case "Description":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Classdiagram[identifier].Description = fielValue
+				case "NodeGongStructNodeExpansion":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Classdiagram[identifier].NodeGongStructNodeExpansion = fielValue
+				case "NodeGongEnumNodeExpansion":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Classdiagram[identifier].NodeGongEnumNodeExpansion = fielValue
+				case "NodeGongNoteNodeExpansion":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Classdiagram[identifier].NodeGongNoteNodeExpansion = fielValue
 				}
 			case "DiagramPackage":
 				switch fieldName {
@@ -923,6 +999,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_GongEnumShape[identifier].Identifier = fielValue
+				case "IdentifierMeta":
+					__gong__map_GongEnumShape[identifier].IdentifierMeta = basicLit.Value
 				case "Width":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1035,6 +1113,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_GongStructShape[identifier].Identifier = fielValue
+				case "IdentifierMeta":
+					__gong__map_GongStructShape[identifier].IdentifierMeta = basicLit.Value
 				case "NbInstances":
 					// convert string to int
 					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
@@ -1068,6 +1148,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_LinkShape[identifier].Identifier = fielValue
+				case "IdentifierMeta":
+					__gong__map_LinkShape[identifier].IdentifierMeta = basicLit.Value
 				case "Fieldtypename":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1171,6 +1253,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			case "Classdiagram":
 				switch fieldName {
 				// insertion point for field dependant code
+				case "IsIncludedInStaticWebSite":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Classdiagram[identifier].IsIncludedInStaticWebSite = fielValue
 				case "IsInRenameMode":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)
@@ -1275,6 +1364,9 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				}
 			}
 		case *ast.SelectorExpr:
+			var basicLit *ast.BasicLit
+			var ident *ast.Ident
+
 			// assignment to enum field
 			selectorExpr := expr
 			// astCoordinate := astCoordinate + "\tSelectorExpr"
@@ -1284,7 +1376,24 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				_ = ident
 				// astCoordinate := astCoordinate + "\tX" + "." + ident.Name
 				// log.Println(astCoordinate)
+			case *ast.CompositeLit:
+				var ok bool
+				var sl *ast.SelectorExpr
+
+				if sl, ok = X.Type.(*ast.SelectorExpr); !ok {
+					break // Exits the switch case
+				}
+
+				if ident, ok = sl.X.(*ast.Ident); !ok {
+					break // Exits the switch case
+				}
+
+				basicLit = new(ast.BasicLit)
+				// For a "fake" literal, Kind might be set to something like token.STRING or a custom indicator
+				basicLit.Kind = token.STRING // Or another appropriate token.Kind
+				basicLit.Value = ident.Name + "." + sl.Sel.Name + "{}." + selectorExpr.Sel.Name
 			}
+
 			if Sel := selectorExpr.Sel; Sel != nil {
 				// astCoordinate := astCoordinate + "\tSel" + "." + Sel.Name
 				// log.Println(astCoordinate)
@@ -1300,30 +1409,34 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				enumValue := Sel.Name
 				_ = enumValue
 				switch gongstructName {
-				// insertion point for enums assignments
+				// insertion point for selector expr assignments
 				case "AttributeShape":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
+					case "IdentifierMeta":
+						__gong__map_AttributeShape[identifier].IdentifierMeta = basicLit.Value
 					}
 				case "Classdiagram":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "DiagramPackage":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "GongEnumShape":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
+					case "IdentifierMeta":
+						__gong__map_GongEnumShape[identifier].IdentifierMeta = basicLit.Value
 					}
 				case "GongEnumValueShape":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "GongNoteLinkShape":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					case "Type":
 						var val NoteShapeLinkType
 						err := (&val).FromCodeString(enumValue)
@@ -1334,15 +1447,19 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					}
 				case "GongNoteShape":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "GongStructShape":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
+					case "IdentifierMeta":
+						__gong__map_GongStructShape[identifier].IdentifierMeta = basicLit.Value
 					}
 				case "LinkShape":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
+					case "IdentifierMeta":
+						__gong__map_LinkShape[identifier].IdentifierMeta = basicLit.Value
 					case "TargetMultiplicity":
 						var val MultiplicityType
 						err := (&val).FromCodeString(enumValue)

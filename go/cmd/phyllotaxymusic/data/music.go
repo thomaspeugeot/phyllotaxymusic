@@ -776,9 +776,9 @@ With the second voice note, this gives
 	__Parameter__000000_Reference.NbBeatLines = 49
 	__Parameter__000000_Reference.NbOfBeatsInTheme = 16
 	__Parameter__000000_Reference.FirstVoiceShiftX = 0.060000
-	__Parameter__000000_Reference.FirstVoiceShiftY = 1.480000
-	__Parameter__000000_Reference.PitchDifference = 3
-	__Parameter__000000_Reference.BeatsPerSecond = 5.050000
+	__Parameter__000000_Reference.FirstVoiceShiftY = 1.770000
+	__Parameter__000000_Reference.PitchDifference = 5
+	__Parameter__000000_Reference.BeatsPerSecond = 6.850000
 	__Parameter__000000_Reference.Level = 11.100000
 	__Parameter__000000_Reference.IsMinor = true
 	__Parameter__000000_Reference.ThemeBinaryEncoding = 28741

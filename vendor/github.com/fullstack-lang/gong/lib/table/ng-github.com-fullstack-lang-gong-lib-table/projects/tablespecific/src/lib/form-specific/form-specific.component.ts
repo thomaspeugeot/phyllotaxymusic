@@ -24,6 +24,7 @@ import { TableDialogData } from '../table-dialog-data';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { encodeIntArrayToString_json } from '../association-storage';
 
 @Component({
   selector: 'lib-form-specific',
@@ -62,10 +63,13 @@ export class FormSpecificComponent {
   public gongtableFrontRepo?: table.FrontRepo
 
   // for selection
-  selectedFormGroup: table.FormGroup | undefined = undefined;
+  selectedFormGroup: table.FormGroup | undefined = undefined
 
   // generated form by getting info from the back
   angularFormGroup: FormGroup | undefined
+
+  currentFormEditAssocButton : table.FormEditAssocButton | undefined = undefined
+
 
   constructor(
     public dialog: MatDialog,
@@ -333,6 +337,10 @@ export class FormSpecificComponent {
           }
         }
       }
+      if (formDiv.FormEditAssocButton && formDiv.FormEditAssocButton.HasChanged) {
+        formDiv.FormEditAssocButton.IsForSavePurpose = true
+         promises.push(this.formEditAssocButtonService.updateFront(formDiv.FormEditAssocButton, this.Name))
+      }
     }
 
     // wait till all promises are completed to update the form group itself
@@ -340,7 +348,7 @@ export class FormSpecificComponent {
       () => {
         this.formGroupService.updateFront(this.selectedFormGroup!, this.Name).subscribe(
           () => {
-
+            console.log("Form refreshed",promises.length)
             // a refresh is necessary to redeem all associations
             // this.refresh()
           }
@@ -351,6 +359,8 @@ export class FormSpecificComponent {
     if (promises.length == 0) {
       this.formGroupService.updateFront(this.selectedFormGroup!, this.Name).subscribe(
         () => {
+            console.log("Form refreshed without updates")
+
           // a refresh is necessary to redeem all associations
           // this.refresh()
         }
@@ -379,17 +389,47 @@ export class FormSpecificComponent {
       if (formDiv.FormEditAssocButton) {
         if (formDiv.FormEditAssocButton.Name == fieldName) {
 
+          this.currentFormEditAssocButton = formDiv.FormEditAssocButton
+
+          // This update will have the back generates the table stack for selecting the associated fields
+          // this table stack front "-table-pick" will be fill with the storage for having
+          // the rows selected
+          formDiv.FormEditAssocButton.IsForSavePurpose = false
           this.formEditAssocButtonService.updateFront(formDiv.FormEditAssocButton, this.Name).subscribe(
             () => {
               console.log("assoc button updated")
 
               // when the association button is pressed
-              this.dialog.open(TableSpecificComponent, {
+              let dialogRef = this.dialog.open(TableSpecificComponent, {
                 data: {
                   Name: this.Name + table.TableExtraPathEnum.StackNamePostFixForTableForAssociation,
-                  TableName: table.TableExtraNameEnum.TableSelectExtraName
+                  TableName: table.TableExtraNameEnum.TableSelectExtraName,
+                  AssociationStorage: this.currentFormEditAssocButton?.AssociationStorage
                 },
               });
+
+              dialogRef.afterClosed().subscribe(result => {
+                console.log('The dialog was closed');
+                // 'result' will contain any data passed when closing the dialog
+                // For example, if you close the dialog like this: dialogRef.close('I am a result');
+                // then 'result' will be 'I am a result'
+                if (result) {
+
+
+                  let selectedIDs = new Array<number>()
+                  for (let row of result) {
+                    // fetch the first cell CellInt Value
+                    selectedIDs.push(row.Cells[0].CellInt.Value)
+                  }
+
+                  if (this.currentFormEditAssocButton) {
+                    this.currentFormEditAssocButton.AssociationStorage = encodeIntArrayToString_json(selectedIDs)
+                    this.currentFormEditAssocButton.HasChanged = true
+                    console.log('Result:', this.currentFormEditAssocButton.AssociationStorage)
+                  }                 
+                }
+              });
+
             }
           )
         }
@@ -456,12 +496,13 @@ export class FormSpecificComponent {
           return
         }
         this.selectedFormGroup.HasSuppressButtonBeenPressed = true
-        this.formGroupService.updateFront(
-          this.selectedFormGroup, this.Name).subscribe(
-            () => {
+        // #651 do not generate an update of the group !
+        // this.formGroupService.updateFront(
+        //   this.selectedFormGroup, this.Name).subscribe(
+        //     () => {
 
-            }
-          )
+        //     }
+        //   )
       }
     });
   }

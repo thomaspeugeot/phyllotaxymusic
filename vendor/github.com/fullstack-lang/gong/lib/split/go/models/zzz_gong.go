@@ -16,7 +16,8 @@ import (
 )
 
 // can be used for
-//     days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
+//
+//	days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
 func __Gong__Abs(x int) int {
 	if x < 0 {
 		return -x
@@ -53,8 +54,12 @@ var errUnkownEnum = errors.New("unkown enum")
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
 
+var _ = __dummy__fmt_variable
+
 // idem for math package when not need by generated code
 var __dummy_math_variable = math.E
+
+var _ = __dummy_math_variable
 
 // swagger:ignore
 type __void any
@@ -329,42 +334,41 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
 
 	switch namedStructName {
-	// insertion point for case 
-		case "AsSplit":
-			res = GetNamedStructInstances(stage.AsSplits, stage.AsSplitMap_Staged_Order)
-		case "AsSplitArea":
-			res = GetNamedStructInstances(stage.AsSplitAreas, stage.AsSplitAreaMap_Staged_Order)
-		case "Button":
-			res = GetNamedStructInstances(stage.Buttons, stage.ButtonMap_Staged_Order)
-		case "Cursor":
-			res = GetNamedStructInstances(stage.Cursors, stage.CursorMap_Staged_Order)
-		case "Doc":
-			res = GetNamedStructInstances(stage.Docs, stage.DocMap_Staged_Order)
-		case "Form":
-			res = GetNamedStructInstances(stage.Forms, stage.FormMap_Staged_Order)
-		case "Load":
-			res = GetNamedStructInstances(stage.Loads, stage.LoadMap_Staged_Order)
-		case "Slider":
-			res = GetNamedStructInstances(stage.Sliders, stage.SliderMap_Staged_Order)
-		case "Split":
-			res = GetNamedStructInstances(stage.Splits, stage.SplitMap_Staged_Order)
-		case "Svg":
-			res = GetNamedStructInstances(stage.Svgs, stage.SvgMap_Staged_Order)
-		case "Table":
-			res = GetNamedStructInstances(stage.Tables, stage.TableMap_Staged_Order)
-		case "Tone":
-			res = GetNamedStructInstances(stage.Tones, stage.ToneMap_Staged_Order)
-		case "Tree":
-			res = GetNamedStructInstances(stage.Trees, stage.TreeMap_Staged_Order)
-		case "View":
-			res = GetNamedStructInstances(stage.Views, stage.ViewMap_Staged_Order)
-		case "Xlsx":
-			res = GetNamedStructInstances(stage.Xlsxs, stage.XlsxMap_Staged_Order)
+	// insertion point for case
+	case "AsSplit":
+		res = GetNamedStructInstances(stage.AsSplits, stage.AsSplitMap_Staged_Order)
+	case "AsSplitArea":
+		res = GetNamedStructInstances(stage.AsSplitAreas, stage.AsSplitAreaMap_Staged_Order)
+	case "Button":
+		res = GetNamedStructInstances(stage.Buttons, stage.ButtonMap_Staged_Order)
+	case "Cursor":
+		res = GetNamedStructInstances(stage.Cursors, stage.CursorMap_Staged_Order)
+	case "Doc":
+		res = GetNamedStructInstances(stage.Docs, stage.DocMap_Staged_Order)
+	case "Form":
+		res = GetNamedStructInstances(stage.Forms, stage.FormMap_Staged_Order)
+	case "Load":
+		res = GetNamedStructInstances(stage.Loads, stage.LoadMap_Staged_Order)
+	case "Slider":
+		res = GetNamedStructInstances(stage.Sliders, stage.SliderMap_Staged_Order)
+	case "Split":
+		res = GetNamedStructInstances(stage.Splits, stage.SplitMap_Staged_Order)
+	case "Svg":
+		res = GetNamedStructInstances(stage.Svgs, stage.SvgMap_Staged_Order)
+	case "Table":
+		res = GetNamedStructInstances(stage.Tables, stage.TableMap_Staged_Order)
+	case "Tone":
+		res = GetNamedStructInstances(stage.Tones, stage.ToneMap_Staged_Order)
+	case "Tree":
+		res = GetNamedStructInstances(stage.Trees, stage.TreeMap_Staged_Order)
+	case "View":
+		res = GetNamedStructInstances(stage.Views, stage.ViewMap_Staged_Order)
+	case "Xlsx":
+		res = GetNamedStructInstances(stage.Xlsxs, stage.XlsxMap_Staged_Order)
 	}
 
 	return
 }
-
 
 type NamedStruct struct {
 	name string
@@ -577,6 +581,45 @@ func NewStage(name string) (stage *Stage) {
 }
 
 func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *AsSplit:
+		return stage.AsSplitMap_Staged_Order[instance]
+	case *AsSplitArea:
+		return stage.AsSplitAreaMap_Staged_Order[instance]
+	case *Button:
+		return stage.ButtonMap_Staged_Order[instance]
+	case *Cursor:
+		return stage.CursorMap_Staged_Order[instance]
+	case *Doc:
+		return stage.DocMap_Staged_Order[instance]
+	case *Form:
+		return stage.FormMap_Staged_Order[instance]
+	case *Load:
+		return stage.LoadMap_Staged_Order[instance]
+	case *Slider:
+		return stage.SliderMap_Staged_Order[instance]
+	case *Split:
+		return stage.SplitMap_Staged_Order[instance]
+	case *Svg:
+		return stage.SvgMap_Staged_Order[instance]
+	case *Table:
+		return stage.TableMap_Staged_Order[instance]
+	case *Tone:
+		return stage.ToneMap_Staged_Order[instance]
+	case *Tree:
+		return stage.TreeMap_Staged_Order[instance]
+	case *View:
+		return stage.ViewMap_Staged_Order[instance]
+	case *Xlsx:
+		return stage.XlsxMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
+}
+
+func GetOrderPointerGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) uint {
 
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
@@ -2443,7 +2486,7 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 // The function provides a map with keys as instances of End and values to *Start instances
 // the map is construed by iterating over all Start instances and populating keys with End instances
 // and values with the Start instances
-func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End]*Start {
+func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
 
 	var ret Start
 
@@ -2454,13 +2497,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "AsSplitAreas":
-			res := make(map[*AsSplitArea]*AsSplit)
+			res := make(map[*AsSplitArea][]*AsSplit)
 			for assplit := range stage.AsSplits {
 				for _, assplitarea_ := range assplit.AsSplitAreas {
-					res[assplitarea_] = assplit
+					res[assplitarea_] = append(res[assplitarea_], assplit)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of AsSplitArea
 	case AsSplitArea:
@@ -2527,13 +2570,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "RootAsSplitAreas":
-			res := make(map[*AsSplitArea]*View)
+			res := make(map[*AsSplitArea][]*View)
 			for view := range stage.Views {
 				for _, assplitarea_ := range view.RootAsSplitAreas {
-					res[assplitarea_] = view
+					res[assplitarea_] = append(res[assplitarea_], view)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Xlsx
 	case Xlsx:

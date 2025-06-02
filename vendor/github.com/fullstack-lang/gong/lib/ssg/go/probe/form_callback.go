@@ -11,20 +11,12 @@ import (
 	"github.com/fullstack-lang/gong/lib/ssg/go/models"
 )
 
-// code to avoid error when generated code does not need to import packages
-const __dummmy__time = time.Nanosecond
+// to avoid errors when time and slices packages are not used in the generated code
+const _ = time.Nanosecond
 
-var _ = __dummmy__time
+var _ = slices.Delete([]string{"a"}, 0, 1)
 
-var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
-
-var _ = __dummmy__letters
-
-const __dummy__log = log.Ldate
-
-var _ = __dummy__log
-
-// end of code to avoid error when generated code does not need to import packages
+var _ = log.Panicf
 
 // insertion point
 func __gong__New__ChapterFormCallback(
@@ -74,6 +66,31 @@ func (chapterFormCallback *ChapterFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(chapter_.Name), formDiv)
 		case "MardownContent":
 			FormDivBasicFieldToField(&(chapter_.MardownContent), formDiv)
+		case "Pages":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Page](chapterFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Page, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Page)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					chapterFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			chapter_.Pages = instanceSlice
+
 		case "Content:Chapters":
 			// WARNING : this form deals with the N-N association "Content.Chapters []*Chapter" but
 			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
@@ -110,6 +127,10 @@ func (chapterFormCallback *ChapterFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Chapters, chapter_)
+					formerSource.Chapters = slices.Delete(formerSource.Chapters, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -135,7 +156,7 @@ func (chapterFormCallback *ChapterFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Chapters = append(newSource.Chapters, chapter_)
 		}
 	}
@@ -226,6 +247,31 @@ func (contentFormCallback *ContentFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(content_.StaticPath), formDiv)
 		case "Target":
 			FormDivEnumStringFieldToField(&(content_.Target), formDiv)
+		case "Chapters":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Chapter](contentFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Chapter, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Chapter)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					contentFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			content_.Chapters = instanceSlice
+
 		}
 	}
 
@@ -341,6 +387,10 @@ func (pageFormCallback *PageFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Pages, page_)
+					formerSource.Pages = slices.Delete(formerSource.Pages, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -366,7 +416,7 @@ func (pageFormCallback *PageFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Pages = append(newSource.Pages, page_)
 		}
 	}

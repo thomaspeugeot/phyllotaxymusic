@@ -16,7 +16,8 @@ import (
 )
 
 // can be used for
-//     days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
+//
+//	days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
 func __Gong__Abs(x int) int {
 	if x < 0 {
 		return -x
@@ -53,8 +54,12 @@ var errUnkownEnum = errors.New("unkown enum")
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
 
+var _ = __dummy__fmt_variable
+
 // idem for math package when not need by generated code
 var __dummy_math_variable = math.E
+
+var _ = __dummy_math_variable
 
 // swagger:ignore
 type __void any
@@ -199,20 +204,19 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
 
 	switch namedStructName {
-	// insertion point for case 
-		case "Button":
-			res = GetNamedStructInstances(stage.Buttons, stage.ButtonMap_Staged_Order)
-		case "Node":
-			res = GetNamedStructInstances(stage.Nodes, stage.NodeMap_Staged_Order)
-		case "SVGIcon":
-			res = GetNamedStructInstances(stage.SVGIcons, stage.SVGIconMap_Staged_Order)
-		case "Tree":
-			res = GetNamedStructInstances(stage.Trees, stage.TreeMap_Staged_Order)
+	// insertion point for case
+	case "Button":
+		res = GetNamedStructInstances(stage.Buttons, stage.ButtonMap_Staged_Order)
+	case "Node":
+		res = GetNamedStructInstances(stage.Nodes, stage.NodeMap_Staged_Order)
+	case "SVGIcon":
+		res = GetNamedStructInstances(stage.SVGIcons, stage.SVGIconMap_Staged_Order)
+	case "Tree":
+		res = GetNamedStructInstances(stage.Trees, stage.TreeMap_Staged_Order)
 	}
 
 	return
 }
-
 
 type NamedStruct struct {
 	name string
@@ -337,6 +341,23 @@ func NewStage(name string) (stage *Stage) {
 }
 
 func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *Button:
+		return stage.ButtonMap_Staged_Order[instance]
+	case *Node:
+		return stage.NodeMap_Staged_Order[instance]
+	case *SVGIcon:
+		return stage.SVGIconMap_Staged_Order[instance]
+	case *Tree:
+		return stage.TreeMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
+}
+
+func GetOrderPointerGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) uint {
 
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
@@ -984,7 +1005,7 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 // The function provides a map with keys as instances of End and values to *Start instances
 // the map is construed by iterating over all Start instances and populating keys with End instances
 // and values with the Start instances
-func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End]*Start {
+func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
 
 	var ret Start
 
@@ -1000,21 +1021,21 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Children":
-			res := make(map[*Node]*Node)
+			res := make(map[*Node][]*Node)
 			for node := range stage.Nodes {
 				for _, node_ := range node.Children {
-					res[node_] = node
+					res[node_] = append(res[node_], node)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Buttons":
-			res := make(map[*Button]*Node)
+			res := make(map[*Button][]*Node)
 			for node := range stage.Nodes {
 				for _, button_ := range node.Buttons {
-					res[button_] = node
+					res[button_] = append(res[button_], node)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of SVGIcon
 	case SVGIcon:
@@ -1026,13 +1047,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "RootNodes":
-			res := make(map[*Node]*Tree)
+			res := make(map[*Node][]*Tree)
 			for tree := range stage.Trees {
 				for _, node_ := range tree.RootNodes {
-					res[node_] = tree
+					res[node_] = append(res[node_], tree)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	}
 	return nil

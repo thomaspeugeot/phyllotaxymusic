@@ -14,6 +14,16 @@ func GetReverseFieldOwnerName(
 		// insertion point
 		}
 
+	case *FileToUpload:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
+	case *Message:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
 	default:
 		_ = inst
 	}
@@ -29,6 +39,16 @@ func GetReverseFieldOwner[T Gongstruct](
 	switch inst := any(instance).(type) {
 	// insertion point
 	case *FileToDownload:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
+	case *FileToUpload:
+		switch reverseField.GongstructName {
+		// insertion point
+		}
+
+	case *Message:
 		switch reverseField.GongstructName {
 		// insertion point
 		}

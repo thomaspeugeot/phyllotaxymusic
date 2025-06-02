@@ -16,7 +16,8 @@ import (
 )
 
 // can be used for
-//     days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
+//
+//	days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
 func __Gong__Abs(x int) int {
 	if x < 0 {
 		return -x
@@ -53,8 +54,12 @@ var errUnkownEnum = errors.New("unkown enum")
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
 
+var _ = __dummy__fmt_variable
+
 // idem for math package when not need by generated code
 var __dummy_math_variable = math.E
+
+var _ = __dummy_math_variable
 
 // swagger:ignore
 type __void any
@@ -269,30 +274,29 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
 
 	switch namedStructName {
-	// insertion point for case 
-		case "AttributeShape":
-			res = GetNamedStructInstances(stage.AttributeShapes, stage.AttributeShapeMap_Staged_Order)
-		case "Classdiagram":
-			res = GetNamedStructInstances(stage.Classdiagrams, stage.ClassdiagramMap_Staged_Order)
-		case "DiagramPackage":
-			res = GetNamedStructInstances(stage.DiagramPackages, stage.DiagramPackageMap_Staged_Order)
-		case "GongEnumShape":
-			res = GetNamedStructInstances(stage.GongEnumShapes, stage.GongEnumShapeMap_Staged_Order)
-		case "GongEnumValueShape":
-			res = GetNamedStructInstances(stage.GongEnumValueShapes, stage.GongEnumValueShapeMap_Staged_Order)
-		case "GongNoteLinkShape":
-			res = GetNamedStructInstances(stage.GongNoteLinkShapes, stage.GongNoteLinkShapeMap_Staged_Order)
-		case "GongNoteShape":
-			res = GetNamedStructInstances(stage.GongNoteShapes, stage.GongNoteShapeMap_Staged_Order)
-		case "GongStructShape":
-			res = GetNamedStructInstances(stage.GongStructShapes, stage.GongStructShapeMap_Staged_Order)
-		case "LinkShape":
-			res = GetNamedStructInstances(stage.LinkShapes, stage.LinkShapeMap_Staged_Order)
+	// insertion point for case
+	case "AttributeShape":
+		res = GetNamedStructInstances(stage.AttributeShapes, stage.AttributeShapeMap_Staged_Order)
+	case "Classdiagram":
+		res = GetNamedStructInstances(stage.Classdiagrams, stage.ClassdiagramMap_Staged_Order)
+	case "DiagramPackage":
+		res = GetNamedStructInstances(stage.DiagramPackages, stage.DiagramPackageMap_Staged_Order)
+	case "GongEnumShape":
+		res = GetNamedStructInstances(stage.GongEnumShapes, stage.GongEnumShapeMap_Staged_Order)
+	case "GongEnumValueShape":
+		res = GetNamedStructInstances(stage.GongEnumValueShapes, stage.GongEnumValueShapeMap_Staged_Order)
+	case "GongNoteLinkShape":
+		res = GetNamedStructInstances(stage.GongNoteLinkShapes, stage.GongNoteLinkShapeMap_Staged_Order)
+	case "GongNoteShape":
+		res = GetNamedStructInstances(stage.GongNoteShapes, stage.GongNoteShapeMap_Staged_Order)
+	case "GongStructShape":
+		res = GetNamedStructInstances(stage.GongStructShapes, stage.GongStructShapeMap_Staged_Order)
+	case "LinkShape":
+		res = GetNamedStructInstances(stage.LinkShapes, stage.LinkShapeMap_Staged_Order)
 	}
 
 	return
 }
-
 
 type NamedStruct struct {
 	name string
@@ -457,6 +461,33 @@ func NewStage(name string) (stage *Stage) {
 }
 
 func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *AttributeShape:
+		return stage.AttributeShapeMap_Staged_Order[instance]
+	case *Classdiagram:
+		return stage.ClassdiagramMap_Staged_Order[instance]
+	case *DiagramPackage:
+		return stage.DiagramPackageMap_Staged_Order[instance]
+	case *GongEnumShape:
+		return stage.GongEnumShapeMap_Staged_Order[instance]
+	case *GongEnumValueShape:
+		return stage.GongEnumValueShapeMap_Staged_Order[instance]
+	case *GongNoteLinkShape:
+		return stage.GongNoteLinkShapeMap_Staged_Order[instance]
+	case *GongNoteShape:
+		return stage.GongNoteShapeMap_Staged_Order[instance]
+	case *GongStructShape:
+		return stage.GongStructShapeMap_Staged_Order[instance]
+	case *LinkShape:
+		return stage.LinkShapeMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
+}
+
+func GetOrderPointerGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) uint {
 
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
@@ -1555,7 +1586,7 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 // The function provides a map with keys as instances of End and values to *Start instances
 // the map is construed by iterating over all Start instances and populating keys with End instances
 // and values with the Start instances
-func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End]*Start {
+func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
 
 	var ret Start
 
@@ -1571,55 +1602,55 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "GongStructShapes":
-			res := make(map[*GongStructShape]*Classdiagram)
+			res := make(map[*GongStructShape][]*Classdiagram)
 			for classdiagram := range stage.Classdiagrams {
 				for _, gongstructshape_ := range classdiagram.GongStructShapes {
-					res[gongstructshape_] = classdiagram
+					res[gongstructshape_] = append(res[gongstructshape_], classdiagram)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "GongEnumShapes":
-			res := make(map[*GongEnumShape]*Classdiagram)
+			res := make(map[*GongEnumShape][]*Classdiagram)
 			for classdiagram := range stage.Classdiagrams {
 				for _, gongenumshape_ := range classdiagram.GongEnumShapes {
-					res[gongenumshape_] = classdiagram
+					res[gongenumshape_] = append(res[gongenumshape_], classdiagram)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "GongNoteShapes":
-			res := make(map[*GongNoteShape]*Classdiagram)
+			res := make(map[*GongNoteShape][]*Classdiagram)
 			for classdiagram := range stage.Classdiagrams {
 				for _, gongnoteshape_ := range classdiagram.GongNoteShapes {
-					res[gongnoteshape_] = classdiagram
+					res[gongnoteshape_] = append(res[gongnoteshape_], classdiagram)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of DiagramPackage
 	case DiagramPackage:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Classdiagrams":
-			res := make(map[*Classdiagram]*DiagramPackage)
+			res := make(map[*Classdiagram][]*DiagramPackage)
 			for diagrampackage := range stage.DiagramPackages {
 				for _, classdiagram_ := range diagrampackage.Classdiagrams {
-					res[classdiagram_] = diagrampackage
+					res[classdiagram_] = append(res[classdiagram_], diagrampackage)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of GongEnumShape
 	case GongEnumShape:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "GongEnumValueShapes":
-			res := make(map[*GongEnumValueShape]*GongEnumShape)
+			res := make(map[*GongEnumValueShape][]*GongEnumShape)
 			for gongenumshape := range stage.GongEnumShapes {
 				for _, gongenumvalueshape_ := range gongenumshape.GongEnumValueShapes {
-					res[gongenumvalueshape_] = gongenumshape
+					res[gongenumvalueshape_] = append(res[gongenumvalueshape_], gongenumshape)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of GongEnumValueShape
 	case GongEnumValueShape:
@@ -1636,34 +1667,34 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "GongNoteLinkShapes":
-			res := make(map[*GongNoteLinkShape]*GongNoteShape)
+			res := make(map[*GongNoteLinkShape][]*GongNoteShape)
 			for gongnoteshape := range stage.GongNoteShapes {
 				for _, gongnotelinkshape_ := range gongnoteshape.GongNoteLinkShapes {
-					res[gongnotelinkshape_] = gongnoteshape
+					res[gongnotelinkshape_] = append(res[gongnotelinkshape_], gongnoteshape)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of GongStructShape
 	case GongStructShape:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "AttributeShapes":
-			res := make(map[*AttributeShape]*GongStructShape)
+			res := make(map[*AttributeShape][]*GongStructShape)
 			for gongstructshape := range stage.GongStructShapes {
 				for _, attributeshape_ := range gongstructshape.AttributeShapes {
-					res[attributeshape_] = gongstructshape
+					res[attributeshape_] = append(res[attributeshape_], gongstructshape)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "LinkShapes":
-			res := make(map[*LinkShape]*GongStructShape)
+			res := make(map[*LinkShape][]*GongStructShape)
 			for gongstructshape := range stage.GongStructShapes {
 				for _, linkshape_ := range gongstructshape.LinkShapes {
-					res[linkshape_] = gongstructshape
+					res[linkshape_] = append(res[linkshape_], gongstructshape)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of LinkShape
 	case LinkShape:
@@ -1742,13 +1773,13 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case AttributeShape:
-		res = []string{"Name", "Identifier", "FieldTypeAsString", "Structname", "Fieldtypename"}
+		res = []string{"Name", "Identifier", "IdentifierMeta", "FieldTypeAsString", "Structname", "Fieldtypename"}
 	case Classdiagram:
-		res = []string{"Name", "GongStructShapes", "GongEnumShapes", "GongNoteShapes", "IsInRenameMode", "IsExpanded", "NodeGongStructsIsExpanded", "NodeGongStructNodeExpansionBinaryEncoding", "NodeGongEnumsIsExpanded", "NodeGongEnumNodeExpansionBinaryEncoding", "NodeGongNotesIsExpanded", "NodeGongNoteNodeExpansionBinaryEncoding"}
+		res = []string{"Name", "Description", "IsIncludedInStaticWebSite", "GongStructShapes", "GongEnumShapes", "GongNoteShapes", "IsInRenameMode", "IsExpanded", "NodeGongStructsIsExpanded", "NodeGongStructNodeExpansion", "NodeGongEnumsIsExpanded", "NodeGongEnumNodeExpansion", "NodeGongNotesIsExpanded", "NodeGongNoteNodeExpansion"}
 	case DiagramPackage:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "SelectedClassdiagram", "AbsolutePathToDiagramPackage"}
 	case GongEnumShape:
-		res = []string{"Name", "X", "Y", "Identifier", "GongEnumValueShapes", "Width", "Height", "IsExpanded"}
+		res = []string{"Name", "X", "Y", "Identifier", "IdentifierMeta", "GongEnumValueShapes", "Width", "Height", "IsExpanded"}
 	case GongEnumValueShape:
 		res = []string{"Name", "Identifier"}
 	case GongNoteLinkShape:
@@ -1756,9 +1787,9 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case GongNoteShape:
 		res = []string{"Name", "Identifier", "Body", "BodyHTML", "X", "Y", "Width", "Height", "Matched", "GongNoteLinkShapes", "IsExpanded"}
 	case GongStructShape:
-		res = []string{"Name", "X", "Y", "Identifier", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
+		res = []string{"Name", "X", "Y", "Identifier", "IdentifierMeta", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
 	case LinkShape:
-		res = []string{"Name", "Identifier", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
+		res = []string{"Name", "Identifier", "IdentifierMeta", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	}
 	return
 }
@@ -1840,13 +1871,13 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *AttributeShape:
-		res = []string{"Name", "Identifier", "FieldTypeAsString", "Structname", "Fieldtypename"}
+		res = []string{"Name", "Identifier", "IdentifierMeta", "FieldTypeAsString", "Structname", "Fieldtypename"}
 	case *Classdiagram:
-		res = []string{"Name", "GongStructShapes", "GongEnumShapes", "GongNoteShapes", "IsInRenameMode", "IsExpanded", "NodeGongStructsIsExpanded", "NodeGongStructNodeExpansionBinaryEncoding", "NodeGongEnumsIsExpanded", "NodeGongEnumNodeExpansionBinaryEncoding", "NodeGongNotesIsExpanded", "NodeGongNoteNodeExpansionBinaryEncoding"}
+		res = []string{"Name", "Description", "IsIncludedInStaticWebSite", "GongStructShapes", "GongEnumShapes", "GongNoteShapes", "IsInRenameMode", "IsExpanded", "NodeGongStructsIsExpanded", "NodeGongStructNodeExpansion", "NodeGongEnumsIsExpanded", "NodeGongEnumNodeExpansion", "NodeGongNotesIsExpanded", "NodeGongNoteNodeExpansion"}
 	case *DiagramPackage:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "SelectedClassdiagram", "AbsolutePathToDiagramPackage"}
 	case *GongEnumShape:
-		res = []string{"Name", "X", "Y", "Identifier", "GongEnumValueShapes", "Width", "Height", "IsExpanded"}
+		res = []string{"Name", "X", "Y", "Identifier", "IdentifierMeta", "GongEnumValueShapes", "Width", "Height", "IsExpanded"}
 	case *GongEnumValueShape:
 		res = []string{"Name", "Identifier"}
 	case *GongNoteLinkShape:
@@ -1854,9 +1885,9 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *GongNoteShape:
 		res = []string{"Name", "Identifier", "Body", "BodyHTML", "X", "Y", "Width", "Height", "Matched", "GongNoteLinkShapes", "IsExpanded"}
 	case *GongStructShape:
-		res = []string{"Name", "X", "Y", "Identifier", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
+		res = []string{"Name", "X", "Y", "Identifier", "IdentifierMeta", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
 	case *LinkShape:
-		res = []string{"Name", "Identifier", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
+		res = []string{"Name", "Identifier", "IdentifierMeta", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	}
 	return
 }
@@ -1917,6 +1948,12 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "Description":
+			res.valueString = inferedInstance.Description
+		case "IsIncludedInStaticWebSite":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsIncludedInStaticWebSite)
+			res.valueBool = inferedInstance.IsIncludedInStaticWebSite
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "GongStructShapes":
 			for idx, __instance__ := range inferedInstance.GongStructShapes {
 				if idx > 0 {
@@ -1950,26 +1987,20 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 			res.valueString = fmt.Sprintf("%t", inferedInstance.NodeGongStructsIsExpanded)
 			res.valueBool = inferedInstance.NodeGongStructsIsExpanded
 			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NodeGongStructNodeExpansionBinaryEncoding":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NodeGongStructNodeExpansionBinaryEncoding)
-			res.valueInt = inferedInstance.NodeGongStructNodeExpansionBinaryEncoding
-			res.GongFieldValueType = GongFieldValueTypeInt
+		case "NodeGongStructNodeExpansion":
+			res.valueString = inferedInstance.NodeGongStructNodeExpansion
 		case "NodeGongEnumsIsExpanded":
 			res.valueString = fmt.Sprintf("%t", inferedInstance.NodeGongEnumsIsExpanded)
 			res.valueBool = inferedInstance.NodeGongEnumsIsExpanded
 			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NodeGongEnumNodeExpansionBinaryEncoding":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NodeGongEnumNodeExpansionBinaryEncoding)
-			res.valueInt = inferedInstance.NodeGongEnumNodeExpansionBinaryEncoding
-			res.GongFieldValueType = GongFieldValueTypeInt
+		case "NodeGongEnumNodeExpansion":
+			res.valueString = inferedInstance.NodeGongEnumNodeExpansion
 		case "NodeGongNotesIsExpanded":
 			res.valueString = fmt.Sprintf("%t", inferedInstance.NodeGongNotesIsExpanded)
 			res.valueBool = inferedInstance.NodeGongNotesIsExpanded
 			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NodeGongNoteNodeExpansionBinaryEncoding":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NodeGongNoteNodeExpansionBinaryEncoding)
-			res.valueInt = inferedInstance.NodeGongNoteNodeExpansionBinaryEncoding
-			res.GongFieldValueType = GongFieldValueTypeInt
+		case "NodeGongNoteNodeExpansion":
+			res.valueString = inferedInstance.NodeGongNoteNodeExpansion
 		}
 	case *DiagramPackage:
 		switch fieldName {
@@ -2236,6 +2267,12 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
+		case "Description":
+			res.valueString = inferedInstance.Description
+		case "IsIncludedInStaticWebSite":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsIncludedInStaticWebSite)
+			res.valueBool = inferedInstance.IsIncludedInStaticWebSite
+			res.GongFieldValueType = GongFieldValueTypeBool
 		case "GongStructShapes":
 			for idx, __instance__ := range inferedInstance.GongStructShapes {
 				if idx > 0 {
@@ -2269,26 +2306,20 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 			res.valueString = fmt.Sprintf("%t", inferedInstance.NodeGongStructsIsExpanded)
 			res.valueBool = inferedInstance.NodeGongStructsIsExpanded
 			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NodeGongStructNodeExpansionBinaryEncoding":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NodeGongStructNodeExpansionBinaryEncoding)
-			res.valueInt = inferedInstance.NodeGongStructNodeExpansionBinaryEncoding
-			res.GongFieldValueType = GongFieldValueTypeInt
+		case "NodeGongStructNodeExpansion":
+			res.valueString = inferedInstance.NodeGongStructNodeExpansion
 		case "NodeGongEnumsIsExpanded":
 			res.valueString = fmt.Sprintf("%t", inferedInstance.NodeGongEnumsIsExpanded)
 			res.valueBool = inferedInstance.NodeGongEnumsIsExpanded
 			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NodeGongEnumNodeExpansionBinaryEncoding":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NodeGongEnumNodeExpansionBinaryEncoding)
-			res.valueInt = inferedInstance.NodeGongEnumNodeExpansionBinaryEncoding
-			res.GongFieldValueType = GongFieldValueTypeInt
+		case "NodeGongEnumNodeExpansion":
+			res.valueString = inferedInstance.NodeGongEnumNodeExpansion
 		case "NodeGongNotesIsExpanded":
 			res.valueString = fmt.Sprintf("%t", inferedInstance.NodeGongNotesIsExpanded)
 			res.valueBool = inferedInstance.NodeGongNotesIsExpanded
 			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NodeGongNoteNodeExpansionBinaryEncoding":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NodeGongNoteNodeExpansionBinaryEncoding)
-			res.valueInt = inferedInstance.NodeGongNoteNodeExpansionBinaryEncoding
-			res.GongFieldValueType = GongFieldValueTypeInt
+		case "NodeGongNoteNodeExpansion":
+			res.valueString = inferedInstance.NodeGongNoteNodeExpansion
 		}
 	case DiagramPackage:
 		switch fieldName {

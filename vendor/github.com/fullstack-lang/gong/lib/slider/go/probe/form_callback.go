@@ -11,20 +11,12 @@ import (
 	"github.com/fullstack-lang/gong/lib/slider/go/models"
 )
 
-// code to avoid error when generated code does not need to import packages
-const __dummmy__time = time.Nanosecond
+// to avoid errors when time and slices packages are not used in the generated code
+const _ = time.Nanosecond
 
-var _ = __dummmy__time
+var _ = slices.Delete([]string{"a"}, 0, 1)
 
-var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
-
-var _ = __dummmy__letters
-
-const __dummy__log = log.Ldate
-
-var _ = __dummy__log
-
-// end of code to avoid error when generated code does not need to import packages
+var _ = log.Panicf
 
 // insertion point
 func __gong__New__CheckboxFormCallback(
@@ -114,6 +106,10 @@ func (checkboxFormCallback *CheckboxFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Checkboxes, checkbox_)
+					formerSource.Checkboxes = slices.Delete(formerSource.Checkboxes, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -139,7 +135,7 @@ func (checkboxFormCallback *CheckboxFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Checkboxes = append(newSource.Checkboxes, checkbox_)
 		}
 	}
@@ -220,6 +216,56 @@ func (groupFormCallback *GroupFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(group_.Name), formDiv)
 		case "Percentage":
 			FormDivBasicFieldToField(&(group_.Percentage), formDiv)
+		case "Sliders":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Slider](groupFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Slider, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Slider)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					groupFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			group_.Sliders = instanceSlice
+
+		case "Checkboxes":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Checkbox](groupFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Checkbox, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Checkbox)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					groupFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			group_.Checkboxes = instanceSlice
+
 		case "Layout:Groups":
 			// WARNING : this form deals with the N-N association "Layout.Groups []*Group" but
 			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
@@ -256,6 +302,10 @@ func (groupFormCallback *GroupFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Groups, group_)
+					formerSource.Groups = slices.Delete(formerSource.Groups, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -281,7 +331,7 @@ func (groupFormCallback *GroupFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Groups = append(newSource.Groups, group_)
 		}
 	}
@@ -360,6 +410,31 @@ func (layoutFormCallback *LayoutFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(layout_.Name), formDiv)
+		case "Groups":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Group](layoutFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Group, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Group)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					layoutFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			layout_.Groups = instanceSlice
+
 		}
 	}
 
@@ -493,6 +568,10 @@ func (sliderFormCallback *SliderFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Sliders, slider_)
+					formerSource.Sliders = slices.Delete(formerSource.Sliders, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -518,7 +597,7 @@ func (sliderFormCallback *SliderFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Sliders = append(newSource.Sliders, slider_)
 		}
 	}

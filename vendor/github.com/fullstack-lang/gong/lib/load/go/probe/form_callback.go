@@ -11,20 +11,12 @@ import (
 	"github.com/fullstack-lang/gong/lib/load/go/models"
 )
 
-// code to avoid error when generated code does not need to import packages
-const __dummmy__time = time.Nanosecond
+// to avoid errors when time and slices packages are not used in the generated code
+const _ = time.Nanosecond
 
-var _ = __dummmy__time
+var _ = slices.Delete([]string{"a"}, 0, 1)
 
-var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
-
-var _ = __dummmy__letters
-
-const __dummy__log = log.Ldate
-
-var _ = __dummy__log
-
-// end of code to avoid error when generated code does not need to import packages
+var _ = log.Panicf
 
 // insertion point
 func __gong__New__FileToDownloadFormCallback(
@@ -105,4 +97,160 @@ func (filetodownloadFormCallback *FileToDownloadFormCallback) OnSave() {
 	}
 
 	updateAndCommitTree(filetodownloadFormCallback.probe)
+}
+func __gong__New__FileToUploadFormCallback(
+	filetoupload *models.FileToUpload,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (filetouploadFormCallback *FileToUploadFormCallback) {
+	filetouploadFormCallback = new(FileToUploadFormCallback)
+	filetouploadFormCallback.probe = probe
+	filetouploadFormCallback.filetoupload = filetoupload
+	filetouploadFormCallback.formGroup = formGroup
+
+	filetouploadFormCallback.CreationMode = (filetoupload == nil)
+
+	return
+}
+
+type FileToUploadFormCallback struct {
+	filetoupload *models.FileToUpload
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (filetouploadFormCallback *FileToUploadFormCallback) OnSave() {
+
+	// log.Println("FileToUploadFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	filetouploadFormCallback.probe.formStage.Checkout()
+
+	if filetouploadFormCallback.filetoupload == nil {
+		filetouploadFormCallback.filetoupload = new(models.FileToUpload).Stage(filetouploadFormCallback.probe.stageOfInterest)
+	}
+	filetoupload_ := filetouploadFormCallback.filetoupload
+	_ = filetoupload_
+
+	for _, formDiv := range filetouploadFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(filetoupload_.Name), formDiv)
+		case "Base64EncodedContent":
+			FormDivBasicFieldToField(&(filetoupload_.Base64EncodedContent), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if filetouploadFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		filetoupload_.Unstage(filetouploadFormCallback.probe.stageOfInterest)
+	}
+
+	filetouploadFormCallback.probe.stageOfInterest.Commit()
+	updateAndCommitTable[models.FileToUpload](
+		filetouploadFormCallback.probe,
+	)
+	filetouploadFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if filetouploadFormCallback.CreationMode || filetouploadFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		filetouploadFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: FormName,
+		}).Stage(filetouploadFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__FileToUploadFormCallback(
+			nil,
+			filetouploadFormCallback.probe,
+			newFormGroup,
+		)
+		filetoupload := new(models.FileToUpload)
+		FillUpForm(filetoupload, newFormGroup, filetouploadFormCallback.probe)
+		filetouploadFormCallback.probe.formStage.Commit()
+	}
+
+	updateAndCommitTree(filetouploadFormCallback.probe)
+}
+func __gong__New__MessageFormCallback(
+	message *models.Message,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (messageFormCallback *MessageFormCallback) {
+	messageFormCallback = new(MessageFormCallback)
+	messageFormCallback.probe = probe
+	messageFormCallback.message = message
+	messageFormCallback.formGroup = formGroup
+
+	messageFormCallback.CreationMode = (message == nil)
+
+	return
+}
+
+type MessageFormCallback struct {
+	message *models.Message
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (messageFormCallback *MessageFormCallback) OnSave() {
+
+	// log.Println("MessageFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	messageFormCallback.probe.formStage.Checkout()
+
+	if messageFormCallback.message == nil {
+		messageFormCallback.message = new(models.Message).Stage(messageFormCallback.probe.stageOfInterest)
+	}
+	message_ := messageFormCallback.message
+	_ = message_
+
+	for _, formDiv := range messageFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(message_.Name), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if messageFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		message_.Unstage(messageFormCallback.probe.stageOfInterest)
+	}
+
+	messageFormCallback.probe.stageOfInterest.Commit()
+	updateAndCommitTable[models.Message](
+		messageFormCallback.probe,
+	)
+	messageFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if messageFormCallback.CreationMode || messageFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		messageFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: FormName,
+		}).Stage(messageFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__MessageFormCallback(
+			nil,
+			messageFormCallback.probe,
+			newFormGroup,
+		)
+		message := new(models.Message)
+		FillUpForm(message, newFormGroup, messageFormCallback.probe)
+		messageFormCallback.probe.formStage.Commit()
+	}
+
+	updateAndCommitTree(messageFormCallback.probe)
 }

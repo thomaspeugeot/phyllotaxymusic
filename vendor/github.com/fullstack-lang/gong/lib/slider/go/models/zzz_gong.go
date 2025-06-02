@@ -16,7 +16,8 @@ import (
 )
 
 // can be used for
-//     days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
+//
+//	days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
 func __Gong__Abs(x int) int {
 	if x < 0 {
 		return -x
@@ -53,8 +54,12 @@ var errUnkownEnum = errors.New("unkown enum")
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
 
+var _ = __dummy__fmt_variable
+
 // idem for math package when not need by generated code
 var __dummy_math_variable = math.E
+
+var _ = __dummy_math_variable
 
 // swagger:ignore
 type __void any
@@ -199,20 +204,19 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
 
 	switch namedStructName {
-	// insertion point for case 
-		case "Checkbox":
-			res = GetNamedStructInstances(stage.Checkboxs, stage.CheckboxMap_Staged_Order)
-		case "Group":
-			res = GetNamedStructInstances(stage.Groups, stage.GroupMap_Staged_Order)
-		case "Layout":
-			res = GetNamedStructInstances(stage.Layouts, stage.LayoutMap_Staged_Order)
-		case "Slider":
-			res = GetNamedStructInstances(stage.Sliders, stage.SliderMap_Staged_Order)
+	// insertion point for case
+	case "Checkbox":
+		res = GetNamedStructInstances(stage.Checkboxs, stage.CheckboxMap_Staged_Order)
+	case "Group":
+		res = GetNamedStructInstances(stage.Groups, stage.GroupMap_Staged_Order)
+	case "Layout":
+		res = GetNamedStructInstances(stage.Layouts, stage.LayoutMap_Staged_Order)
+	case "Slider":
+		res = GetNamedStructInstances(stage.Sliders, stage.SliderMap_Staged_Order)
 	}
 
 	return
 }
-
 
 type NamedStruct struct {
 	name string
@@ -337,6 +341,23 @@ func NewStage(name string) (stage *Stage) {
 }
 
 func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *Checkbox:
+		return stage.CheckboxMap_Staged_Order[instance]
+	case *Group:
+		return stage.GroupMap_Staged_Order[instance]
+	case *Layout:
+		return stage.LayoutMap_Staged_Order[instance]
+	case *Slider:
+		return stage.SliderMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
+}
+
+func GetOrderPointerGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) uint {
 
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
@@ -946,7 +967,7 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 // The function provides a map with keys as instances of End and values to *Start instances
 // the map is construed by iterating over all Start instances and populating keys with End instances
 // and values with the Start instances
-func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End]*Start {
+func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
 
 	var ret Start
 
@@ -962,34 +983,34 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Sliders":
-			res := make(map[*Slider]*Group)
+			res := make(map[*Slider][]*Group)
 			for group := range stage.Groups {
 				for _, slider_ := range group.Sliders {
-					res[slider_] = group
+					res[slider_] = append(res[slider_], group)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Checkboxes":
-			res := make(map[*Checkbox]*Group)
+			res := make(map[*Checkbox][]*Group)
 			for group := range stage.Groups {
 				for _, checkbox_ := range group.Checkboxes {
-					res[checkbox_] = group
+					res[checkbox_] = append(res[checkbox_], group)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Layout
 	case Layout:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Groups":
-			res := make(map[*Group]*Layout)
+			res := make(map[*Group][]*Layout)
 			for layout := range stage.Layouts {
 				for _, group_ := range layout.Groups {
-					res[group_] = layout
+					res[group_] = append(res[group_], layout)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Slider
 	case Slider:

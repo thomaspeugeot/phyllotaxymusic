@@ -16,7 +16,8 @@ import (
 )
 
 // can be used for
-//     days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
+//
+//	days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
 func __Gong__Abs(x int) int {
 	if x < 0 {
 		return -x
@@ -53,8 +54,12 @@ var errUnkownEnum = errors.New("unkown enum")
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
 
+var _ = __dummy__fmt_variable
+
 // idem for math package when not need by generated code
 var __dummy_math_variable = math.E
+
+var _ = __dummy_math_variable
 
 // swagger:ignore
 type __void any
@@ -321,38 +326,37 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
 
 	switch namedStructName {
-	// insertion point for case 
-		case "Classdiagram":
-			res = GetNamedStructInstances(stage.Classdiagrams, stage.ClassdiagramMap_Staged_Order)
-		case "DiagramPackage":
-			res = GetNamedStructInstances(stage.DiagramPackages, stage.DiagramPackageMap_Staged_Order)
-		case "Field":
-			res = GetNamedStructInstances(stage.Fields, stage.FieldMap_Staged_Order)
-		case "GongEnumShape":
-			res = GetNamedStructInstances(stage.GongEnumShapes, stage.GongEnumShapeMap_Staged_Order)
-		case "GongEnumValueEntry":
-			res = GetNamedStructInstances(stage.GongEnumValueEntrys, stage.GongEnumValueEntryMap_Staged_Order)
-		case "GongStructShape":
-			res = GetNamedStructInstances(stage.GongStructShapes, stage.GongStructShapeMap_Staged_Order)
-		case "Link":
-			res = GetNamedStructInstances(stage.Links, stage.LinkMap_Staged_Order)
-		case "NoteShape":
-			res = GetNamedStructInstances(stage.NoteShapes, stage.NoteShapeMap_Staged_Order)
-		case "NoteShapeLink":
-			res = GetNamedStructInstances(stage.NoteShapeLinks, stage.NoteShapeLinkMap_Staged_Order)
-		case "Position":
-			res = GetNamedStructInstances(stage.Positions, stage.PositionMap_Staged_Order)
-		case "UmlState":
-			res = GetNamedStructInstances(stage.UmlStates, stage.UmlStateMap_Staged_Order)
-		case "Umlsc":
-			res = GetNamedStructInstances(stage.Umlscs, stage.UmlscMap_Staged_Order)
-		case "Vertice":
-			res = GetNamedStructInstances(stage.Vertices, stage.VerticeMap_Staged_Order)
+	// insertion point for case
+	case "Classdiagram":
+		res = GetNamedStructInstances(stage.Classdiagrams, stage.ClassdiagramMap_Staged_Order)
+	case "DiagramPackage":
+		res = GetNamedStructInstances(stage.DiagramPackages, stage.DiagramPackageMap_Staged_Order)
+	case "Field":
+		res = GetNamedStructInstances(stage.Fields, stage.FieldMap_Staged_Order)
+	case "GongEnumShape":
+		res = GetNamedStructInstances(stage.GongEnumShapes, stage.GongEnumShapeMap_Staged_Order)
+	case "GongEnumValueEntry":
+		res = GetNamedStructInstances(stage.GongEnumValueEntrys, stage.GongEnumValueEntryMap_Staged_Order)
+	case "GongStructShape":
+		res = GetNamedStructInstances(stage.GongStructShapes, stage.GongStructShapeMap_Staged_Order)
+	case "Link":
+		res = GetNamedStructInstances(stage.Links, stage.LinkMap_Staged_Order)
+	case "NoteShape":
+		res = GetNamedStructInstances(stage.NoteShapes, stage.NoteShapeMap_Staged_Order)
+	case "NoteShapeLink":
+		res = GetNamedStructInstances(stage.NoteShapeLinks, stage.NoteShapeLinkMap_Staged_Order)
+	case "Position":
+		res = GetNamedStructInstances(stage.Positions, stage.PositionMap_Staged_Order)
+	case "UmlState":
+		res = GetNamedStructInstances(stage.UmlStates, stage.UmlStateMap_Staged_Order)
+	case "Umlsc":
+		res = GetNamedStructInstances(stage.Umlscs, stage.UmlscMap_Staged_Order)
+	case "Vertice":
+		res = GetNamedStructInstances(stage.Vertices, stage.VerticeMap_Staged_Order)
 	}
 
 	return
 }
-
 
 type NamedStruct struct {
 	name string
@@ -549,6 +553,41 @@ func NewStage(name string) (stage *Stage) {
 }
 
 func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *Classdiagram:
+		return stage.ClassdiagramMap_Staged_Order[instance]
+	case *DiagramPackage:
+		return stage.DiagramPackageMap_Staged_Order[instance]
+	case *Field:
+		return stage.FieldMap_Staged_Order[instance]
+	case *GongEnumShape:
+		return stage.GongEnumShapeMap_Staged_Order[instance]
+	case *GongEnumValueEntry:
+		return stage.GongEnumValueEntryMap_Staged_Order[instance]
+	case *GongStructShape:
+		return stage.GongStructShapeMap_Staged_Order[instance]
+	case *Link:
+		return stage.LinkMap_Staged_Order[instance]
+	case *NoteShape:
+		return stage.NoteShapeMap_Staged_Order[instance]
+	case *NoteShapeLink:
+		return stage.NoteShapeLinkMap_Staged_Order[instance]
+	case *Position:
+		return stage.PositionMap_Staged_Order[instance]
+	case *UmlState:
+		return stage.UmlStateMap_Staged_Order[instance]
+	case *Umlsc:
+		return stage.UmlscMap_Staged_Order[instance]
+	case *Vertice:
+		return stage.VerticeMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
+}
+
+func GetOrderPointerGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) uint {
 
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
@@ -2076,7 +2115,7 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 // The function provides a map with keys as instances of End and values to *Start instances
 // the map is construed by iterating over all Start instances and populating keys with End instances
 // and values with the Start instances
-func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End]*Start {
+func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
 
 	var ret Start
 
@@ -2087,50 +2126,50 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "GongStructShapes":
-			res := make(map[*GongStructShape]*Classdiagram)
+			res := make(map[*GongStructShape][]*Classdiagram)
 			for classdiagram := range stage.Classdiagrams {
 				for _, gongstructshape_ := range classdiagram.GongStructShapes {
-					res[gongstructshape_] = classdiagram
+					res[gongstructshape_] = append(res[gongstructshape_], classdiagram)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "GongEnumShapes":
-			res := make(map[*GongEnumShape]*Classdiagram)
+			res := make(map[*GongEnumShape][]*Classdiagram)
 			for classdiagram := range stage.Classdiagrams {
 				for _, gongenumshape_ := range classdiagram.GongEnumShapes {
-					res[gongenumshape_] = classdiagram
+					res[gongenumshape_] = append(res[gongenumshape_], classdiagram)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "NoteShapes":
-			res := make(map[*NoteShape]*Classdiagram)
+			res := make(map[*NoteShape][]*Classdiagram)
 			for classdiagram := range stage.Classdiagrams {
 				for _, noteshape_ := range classdiagram.NoteShapes {
-					res[noteshape_] = classdiagram
+					res[noteshape_] = append(res[noteshape_], classdiagram)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of DiagramPackage
 	case DiagramPackage:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Classdiagrams":
-			res := make(map[*Classdiagram]*DiagramPackage)
+			res := make(map[*Classdiagram][]*DiagramPackage)
 			for diagrampackage := range stage.DiagramPackages {
 				for _, classdiagram_ := range diagrampackage.Classdiagrams {
-					res[classdiagram_] = diagrampackage
+					res[classdiagram_] = append(res[classdiagram_], diagrampackage)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Umlscs":
-			res := make(map[*Umlsc]*DiagramPackage)
+			res := make(map[*Umlsc][]*DiagramPackage)
 			for diagrampackage := range stage.DiagramPackages {
 				for _, umlsc_ := range diagrampackage.Umlscs {
-					res[umlsc_] = diagrampackage
+					res[umlsc_] = append(res[umlsc_], diagrampackage)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Field
 	case Field:
@@ -2142,13 +2181,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "GongEnumValueEntrys":
-			res := make(map[*GongEnumValueEntry]*GongEnumShape)
+			res := make(map[*GongEnumValueEntry][]*GongEnumShape)
 			for gongenumshape := range stage.GongEnumShapes {
 				for _, gongenumvalueentry_ := range gongenumshape.GongEnumValueEntrys {
-					res[gongenumvalueentry_] = gongenumshape
+					res[gongenumvalueentry_] = append(res[gongenumvalueentry_], gongenumshape)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of GongEnumValueEntry
 	case GongEnumValueEntry:
@@ -2160,21 +2199,21 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Fields":
-			res := make(map[*Field]*GongStructShape)
+			res := make(map[*Field][]*GongStructShape)
 			for gongstructshape := range stage.GongStructShapes {
 				for _, field_ := range gongstructshape.Fields {
-					res[field_] = gongstructshape
+					res[field_] = append(res[field_], gongstructshape)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Links":
-			res := make(map[*Link]*GongStructShape)
+			res := make(map[*Link][]*GongStructShape)
 			for gongstructshape := range stage.GongStructShapes {
 				for _, link_ := range gongstructshape.Links {
-					res[link_] = gongstructshape
+					res[link_] = append(res[link_], gongstructshape)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Link
 	case Link:
@@ -2186,13 +2225,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "NoteShapeLinks":
-			res := make(map[*NoteShapeLink]*NoteShape)
+			res := make(map[*NoteShapeLink][]*NoteShape)
 			for noteshape := range stage.NoteShapes {
 				for _, noteshapelink_ := range noteshape.NoteShapeLinks {
-					res[noteshapelink_] = noteshape
+					res[noteshapelink_] = append(res[noteshapelink_], noteshape)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of NoteShapeLink
 	case NoteShapeLink:
@@ -2214,13 +2253,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "States":
-			res := make(map[*UmlState]*Umlsc)
+			res := make(map[*UmlState][]*Umlsc)
 			for umlsc := range stage.Umlscs {
 				for _, umlstate_ := range umlsc.States {
-					res[umlstate_] = umlsc
+					res[umlstate_] = append(res[umlstate_], umlsc)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Vertice
 	case Vertice:

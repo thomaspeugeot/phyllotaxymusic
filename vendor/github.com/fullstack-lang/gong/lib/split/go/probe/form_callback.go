@@ -11,20 +11,12 @@ import (
 	"github.com/fullstack-lang/gong/lib/split/go/models"
 )
 
-// code to avoid error when generated code does not need to import packages
-const __dummmy__time = time.Nanosecond
+// to avoid errors when time and slices packages are not used in the generated code
+const _ = time.Nanosecond
 
-var _ = __dummmy__time
+var _ = slices.Delete([]string{"a"}, 0, 1)
 
-var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
-
-var _ = __dummmy__letters
-
-const __dummy__log = log.Ldate
-
-var _ = __dummy__log
-
-// end of code to avoid error when generated code does not need to import packages
+var _ = log.Panicf
 
 // insertion point
 func __gong__New__AsSplitFormCallback(
@@ -74,6 +66,31 @@ func (assplitFormCallback *AsSplitFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(assplit_.Name), formDiv)
 		case "Direction":
 			FormDivEnumStringFieldToField(&(assplit_.Direction), formDiv)
+		case "AsSplitAreas":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.AsSplitArea](assplitFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.AsSplitArea, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.AsSplitArea)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					assplitFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			assplit_.AsSplitAreas = instanceSlice
+
 		}
 	}
 
@@ -223,6 +240,10 @@ func (assplitareaFormCallback *AsSplitAreaFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.AsSplitAreas, assplitarea_)
+					formerSource.AsSplitAreas = slices.Delete(formerSource.AsSplitAreas, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -248,7 +269,7 @@ func (assplitareaFormCallback *AsSplitAreaFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.AsSplitAreas = append(newSource.AsSplitAreas, assplitarea_)
 		case "View:RootAsSplitAreas":
 			// WARNING : this form deals with the N-N association "View.RootAsSplitAreas []*AsSplitArea" but
@@ -286,6 +307,10 @@ func (assplitareaFormCallback *AsSplitAreaFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.RootAsSplitAreas, assplitarea_)
+					formerSource.RootAsSplitAreas = slices.Delete(formerSource.RootAsSplitAreas, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -311,7 +336,7 @@ func (assplitareaFormCallback *AsSplitAreaFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.RootAsSplitAreas = append(newSource.RootAsSplitAreas, assplitarea_)
 		}
 	}
@@ -1271,6 +1296,31 @@ func (viewFormCallback *ViewFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(view_.Name), formDiv)
 		case "ShowViewName":
 			FormDivBasicFieldToField(&(view_.ShowViewName), formDiv)
+		case "RootAsSplitAreas":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.AsSplitArea](viewFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.AsSplitArea, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.AsSplitArea)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					viewFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			view_.RootAsSplitAreas = instanceSlice
+
 		}
 	}
 

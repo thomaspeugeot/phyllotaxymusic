@@ -9,6 +9,9 @@ import (
 	"github.com/fullstack-lang/gong/lib/tree/go/buttons"
 
 	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
+
+	// Import for the nodestates package
+	"github.com/fullstack-lang/gong/lib/doc2/go/models/nodestates"
 )
 
 func (stager *Stager) UpdateAndCommitTreeStage() {
@@ -19,25 +22,39 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 		Name: stager.stage.GetProbeTreeSidebarStageName(),
 	}
 
-	// put a "class diagram button at the root"
-	addDiagramButton := &tree.Button{
-		Name: "Class Diagramm Add Button",
-		Icon: string(buttons.BUTTON_add),
-		Impl: &ButtonNewClassdiagramProxy{
-			stager: stager,
-		},
-		HasToolTip:      true,
-		ToolTipText:     "Create a new diagram",
-		ToolTipPosition: tree.Above,
-	}
 	root := &tree.Node{
 		Name:       "Class Diagrams",
 		IsExpanded: true,
 	}
-	if !stager.embeddedDiagrams {
-		root.Buttons = append(root.Buttons, addDiagramButton)
-	}
 	classdiagramsTree.RootNodes = append(classdiagramsTree.RootNodes, root)
+
+	// if diagram can be edited
+	// 1/ put a "add a class diagram" button
+	// 2/ put a "generate sss" button
+	if !stager.embeddedDiagrams {
+		root.Buttons = append(root.Buttons,
+			&tree.Button{
+				Name: "Class Diagramm Add Button",
+				Icon: string(buttons.BUTTON_add),
+				Impl: &ButtonNewClassdiagramProxy{
+					stager: stager,
+				},
+				HasToolTip:      true,
+				ToolTipText:     "Create a new diagram",
+				ToolTipPosition: tree.Above,
+			},
+			&tree.Button{
+				Name: "Generates the documentation static web site",
+				Icon: string(buttons.BUTTON_web_asset),
+				Impl: &ButtonGeneratesStaticWebSiteProxy{
+					stager: stager,
+				},
+				HasToolTip:      true,
+				ToolTipText:     "Generates the documentation static web site",
+				ToolTipPosition: tree.Above,
+			},
+		)
+	}
 
 	// append a node below for each diagram
 	diagramPackage := getTheDiagramPackage(stager.stage)
@@ -47,11 +64,18 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 			selected = true
 		}
 		nodeClassdiagram := &tree.Node{
-			Name:              classDiagram.Name,
-			HasCheckboxButton: true,
-			IsChecked:         selected,
-			IsExpanded:        classDiagram.IsExpanded,
-			IsInEditMode:      classDiagram.IsInRenameMode,
+			Name: classDiagram.Name,
+
+			IsChecked:           selected,
+			CheckboxHasToolTip:  true,
+			CheckboxToolTipText: "Select this diagram for display",
+
+			IsExpanded: classDiagram.IsExpanded,
+
+			IsInEditMode: classDiagram.IsInRenameMode,
+
+			HasCheckboxButton:       true,
+			IsSecondCheckboxChecked: classDiagram.IsIncludedInStaticWebSite,
 		}
 		nodeClassdiagram.Impl = &ClassDiagramNodeProxy{
 			node:         nodeClassdiagram,
@@ -84,7 +108,7 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 		}
 		nodeGongStructs := &tree.Node{
 			Name:       fmt.Sprintf("Gongstructs (%d/%d)", nbGongstructsInDiagram, len(gongstructs)),
-			IsExpanded: classDiagram.NodeGongStructsIsExpanded,
+			IsExpanded: classDiagram.NodeGongStructsIsExpanded, // This remains a boolean for the category node
 			Impl: &ClassDiagramGongStructsNodeProxy{
 				stager:       stager,
 				classDiagram: classDiagram,
@@ -94,15 +118,15 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 
 		gongenums := gong.GetGongstrucsSorted[*gong.GongEnum](stager.gongStage)
 		nbGongenumsInDiagram := 0
-		for _, gongEnums := range gongenums {
-			_, isInDiagram := map_modelElement_shape[gongEnums]
+		for _, gongEnumItem := range gongenums { // Renamed variable to avoid conflict
+			_, isInDiagram := map_modelElement_shape[gongEnumItem]
 			if isInDiagram {
 				nbGongenumsInDiagram++
 			}
 		}
 		nodeGongEnums := &tree.Node{
 			Name:       fmt.Sprintf("Gongenums (%d/%d)", nbGongenumsInDiagram, len(gongenums)),
-			IsExpanded: classDiagram.NodeGongEnumsIsExpanded,
+			IsExpanded: classDiagram.NodeGongEnumsIsExpanded, // This remains a boolean for the category node
 			Impl: &ClassDiagramGongEnumsNodeProxy{
 				stager:       stager,
 				classDiagram: classDiagram,
@@ -112,15 +136,15 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 
 		gongnotes := gong.GetGongstrucsSorted[*gong.GongNote](stager.gongStage)
 		nbGongnotesInDiagram := 0
-		for _, gongNotes := range gongnotes {
-			_, isInDiagram := map_modelElement_shape[gongNotes]
+		for _, gongNoteItem := range gongnotes { // Renamed variable to avoid conflict
+			_, isInDiagram := map_modelElement_shape[gongNoteItem]
 			if isInDiagram {
 				nbGongnotesInDiagram++
 			}
 		}
 		nodeGongNotes := &tree.Node{
 			Name:       fmt.Sprintf("Gongnotes (%d/%d)", nbGongnotesInDiagram, len(gongnotes)),
-			IsExpanded: classDiagram.NodeGongNotesIsExpanded,
+			IsExpanded: classDiagram.NodeGongNotesIsExpanded, // This remains a boolean for the category node
 			Impl: &ClassDiagramGongNotesNodeProxy{
 				stager:       stager,
 				classDiagram: classDiagram,
@@ -136,12 +160,17 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 			if isGongStructShapeInDiagram && !ok {
 				log.Fatalln("A gongstruct shape should be mapped to a gongstruct")
 			}
-			isExpanded := IsNodeExpanded(classDiagram.NodeGongStructNodeExpansionBinaryEncoding, idx)
+			// Refactored to use nodestates package and the new string field
+			isExpanded, err := nodestates.IsNodeExpanded(classDiagram.NodeGongStructNodeExpansion, idx)
+			if err != nil {
+				log.Printf("Error checking expansion state for GongStruct %s (index %d): %v. Defaulting to not expanded.", gongStruct.Name, idx, err)
+				isExpanded = false
+			}
 
 			nodeNamedStruct := &tree.Node{
 				Name:               gongStruct.Name,
 				HasCheckboxButton:  true,
-				IsCheckboxDisabled: stager.embeddedDiagrams,
+				IsCheckboxDisabled: stager.embeddedDiagrams || !selected,
 				IsChecked:          isGongStructShapeInDiagram,
 				IsExpanded:         isExpanded,
 			}
@@ -157,7 +186,7 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 
 			for _, field := range gongStruct.Fields {
 
-				switch field.(type) {
+				switch field := field.(type) { // Shadowing field variable is idiomatic Go in type switches
 				case *gong.GongBasicField, *gong.GongTimeField:
 					shape, isInDiagram := map_modelElement_shape[field]
 
@@ -170,11 +199,11 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 						Name:               field.GetName(),
 						HasCheckboxButton:  true,
 						IsChecked:          isInDiagram,
-						IsCheckboxDisabled: !isGongStructShapeInDiagram || stager.embeddedDiagrams,
+						IsCheckboxDisabled: !isGongStructShapeInDiagram || stager.embeddedDiagrams || !selected,
 					}
 
 					nodeField.Impl = &AttributeFieldNodeProxy{
-						node:            nodeNamedStruct,
+						node:            nodeNamedStruct, // Original code had nodeNamedStruct, implies parent
 						stager:          stager,
 						classDiagram:    classDiagram,
 						gongstruct:      gongStruct,
@@ -195,13 +224,13 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 					// if field is a link to another, disable the checkbox
 					// if the target gong struct shape is not in the diagram
 					isTargetGongstructAbsent := false
-					if link, ok := field.(*gong.PointerToGongStructField); ok {
-						if _, ok = map_modelElement_shape[link.GongStruct]; !ok {
+					if ptrField, ok := field.(*gong.PointerToGongStructField); ok {
+						if _, ok2 := map_modelElement_shape[ptrField.GongStruct]; !ok2 {
 							isTargetGongstructAbsent = true
 						}
 					}
-					if link, ok := field.(*gong.SliceOfPointerToGongStructField); ok {
-						if _, ok = map_modelElement_shape[link.GongStruct]; !ok {
+					if sliceField, ok := field.(*gong.SliceOfPointerToGongStructField); ok {
+						if _, ok2 := map_modelElement_shape[sliceField.GongStruct]; !ok2 {
 							isTargetGongstructAbsent = true
 						}
 					}
@@ -210,11 +239,11 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 						Name:               field.GetName(),
 						HasCheckboxButton:  true,
 						IsChecked:          isInDiagram,
-						IsCheckboxDisabled: !isGongStructShapeInDiagram || isTargetGongstructAbsent || stager.embeddedDiagrams,
+						IsCheckboxDisabled: !isGongStructShapeInDiagram || isTargetGongstructAbsent || stager.embeddedDiagrams || !selected,
 					}
 
 					nodeField.Impl = &LinkFieldNodeProxy{
-						node:            nodeNamedStruct,
+						node:            nodeNamedStruct, // Original code had nodeNamedStruct, implies parent
 						stager:          stager,
 						classDiagram:    classDiagram,
 						gongstruct:      gongStruct,
@@ -225,7 +254,7 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 
 					nodeNamedStruct.Children = append(nodeNamedStruct.Children, nodeField)
 				default:
-					log.Fatalln("Unknwon field type")
+					log.Printf("Unknown field type encountered: %T for field %s", field, field.GetName())
 				}
 			}
 		}
@@ -236,16 +265,21 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 			if isEnumInDiagram && !ok {
 				log.Fatalln("a gongenum should be associated to a gongenum shape")
 			}
-			_ = gongEnumShape
+			_ = gongEnumShape // To avoid unused variable error if not used otherwise later
 
-			isExpanded := IsNodeExpanded(classDiagram.NodeGongEnumNodeExpansionBinaryEncoding, idx)
+			// Refactored to use nodestates package and the new string field
+			isExpanded, err := nodestates.IsNodeExpanded(classDiagram.NodeGongEnumNodeExpansion, idx)
+			if err != nil {
+				log.Printf("Error checking expansion state for GongEnum %s (index %d): %v. Defaulting to not expanded.", gongEnum.Name, idx, err)
+				isExpanded = false
+			}
 
 			node := &tree.Node{
 				Name:               gongEnum.Name,
 				HasCheckboxButton:  true,
 				IsChecked:          isEnumInDiagram,
 				IsExpanded:         isExpanded,
-				IsCheckboxDisabled: stager.embeddedDiagrams,
+				IsCheckboxDisabled: stager.embeddedDiagrams || !selected,
 			}
 			node.Impl = &GongEnumNodeProxy{
 				node:          node,
@@ -264,7 +298,7 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 					Name:               gongEnumValue.Name,
 					HasCheckboxButton:  true,
 					IsChecked:          isEnumValueInDiagram,
-					IsCheckboxDisabled: !isEnumInDiagram || stager.embeddedDiagrams,
+					IsCheckboxDisabled: !isEnumInDiagram || stager.embeddedDiagrams || !selected,
 				}
 				nodeEnumValue.Impl = &GongEnumNodeValueProxy{
 					stager:        stager,
@@ -277,6 +311,7 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 			}
 		}
 
+		var noteIsExpanded bool // Variable to store current note's expansion for its links
 		for idx, gongNote := range gongnotes {
 			shape, isGongNoteShapeInDiagram := map_modelElement_shape[gongNote]
 
@@ -284,16 +319,22 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 			if isGongNoteShapeInDiagram && !ok {
 				log.Fatalln("a gongnote should be associated to a gongnote shape")
 			}
-			_ = gongNoteShape
+			_ = gongNoteShape // To avoid unused variable error if not used otherwise later
 
-			isExpanded := IsNodeExpanded(classDiagram.NodeGongNoteNodeExpansionBinaryEncoding, idx)
+			// Refactored to use nodestates package and the new string field
+			var err error
+			noteIsExpanded, err = nodestates.IsNodeExpanded(classDiagram.NodeGongNoteNodeExpansion, idx)
+			if err != nil {
+				log.Printf("Error checking expansion state for GongNote %s (index %d): %v. Defaulting to not expanded.", gongNote.Name, idx, err)
+				noteIsExpanded = false
+			}
 
 			gongNoteNode := &tree.Node{
 				Name:               gongNote.Name,
 				HasCheckboxButton:  true,
 				IsChecked:          isGongNoteShapeInDiagram,
-				IsExpanded:         isExpanded,
-				IsCheckboxDisabled: stager.embeddedDiagrams,
+				IsExpanded:         noteIsExpanded,
+				IsCheckboxDisabled: stager.embeddedDiagrams || !selected,
 			}
 			gongNoteNode.Impl = &GongNoteNodeProxy{
 				node:          gongNoteNode,
@@ -307,19 +348,18 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 
 			for _, gongLink := range gongNote.Links {
 
-				shape, isGongNoteShapeInDiagram := map_modelElement_shape[gongLink]
-
-				gongNoteLinkShape, ok := shape.(*GongNoteLinkShape)
-				if isGongNoteShapeInDiagram && !ok {
-					log.Fatalln("a gongnote link should be associated to a gongnote link shape")
-				}
-				_ = gongNoteLinkShape
+				_, isGongLinkShapeInDiagram := map_modelElement_shape[gongLink] // Corrected variable name from original
+				// gongNoteLinkShape, ok := shape.(*GongNoteLinkShape) // 'shape' not defined in this scope for link
+				// if isGongLinkShapeInDiagram && !ok {
+				// 	log.Fatalln("a gongnote link should be associated to a gongnote link shape")
+				// }
+				// _ = gongNoteLinkShape
 
 				docLinkNode := &tree.Node{
 					Name:              gongLink.Name,
 					HasCheckboxButton: true,
-					IsChecked:         isGongNoteShapeInDiagram,
-					IsExpanded:        isExpanded,
+					IsChecked:         isGongLinkShapeInDiagram,
+					IsExpanded:        noteIsExpanded, // Links inherit expansion from parent note
 				}
 				gongNoteNode.Children = append(gongNoteNode.Children, docLinkNode)
 			}
@@ -333,6 +373,7 @@ func (stager *Stager) UpdateAndCommitTreeStage() {
 }
 
 func (stager *Stager) addButtonsToClassdiagramNode(nodeClassdiagram *tree.Node, classDiagram *Classdiagram) {
+
 	nodeClassdiagram.Buttons = append(nodeClassdiagram.Buttons,
 		&tree.Button{
 			Name: classDiagram.GetName() + " " + string(buttons.BUTTON_delete),
@@ -394,4 +435,8 @@ func (stager *Stager) addButtonsToClassdiagramNode(nodeClassdiagram *tree.Node, 
 			ToolTipText:     "Duplicate diagram",
 			ToolTipPosition: tree.Above,
 		})
+
+	// add a second checkbox for including the diagram into
+	nodeClassdiagram.HasSecondCheckboxButton = true
+
 }

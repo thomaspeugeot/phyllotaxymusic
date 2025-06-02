@@ -19,6 +19,14 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 		filetodownloadInstance := any(concreteInstance).(*models.FileToDownload)
 		ret2 := backRepo.BackRepoFileToDownload.GetFileToDownloadDBFromFileToDownloadPtr(filetodownloadInstance)
 		ret = any(ret2).(*T2)
+	case *models.FileToUpload:
+		filetouploadInstance := any(concreteInstance).(*models.FileToUpload)
+		ret2 := backRepo.BackRepoFileToUpload.GetFileToUploadDBFromFileToUploadPtr(filetouploadInstance)
+		ret = any(ret2).(*T2)
+	case *models.Message:
+		messageInstance := any(concreteInstance).(*models.Message)
+		ret2 := backRepo.BackRepoMessage.GetMessageDBFromMessagePtr(messageInstance)
+		ret = any(ret2).(*T2)
 	default:
 		_ = concreteInstance
 	}
@@ -37,6 +45,16 @@ func GetID[T models.Gongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
+	case *models.FileToUpload:
+		tmp := GetInstanceDBFromInstance[models.FileToUpload, FileToUploadDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Message:
+		tmp := GetInstanceDBFromInstance[models.Message, MessageDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
 	default:
 		_ = inst
 	}
@@ -52,6 +70,16 @@ func GetIDPointer[T models.PointerToGongstruct](
 	// insertion point for per struct backup
 	case *models.FileToDownload:
 		tmp := GetInstanceDBFromInstance[models.FileToDownload, FileToDownloadDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.FileToUpload:
+		tmp := GetInstanceDBFromInstance[models.FileToUpload, FileToUploadDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Message:
+		tmp := GetInstanceDBFromInstance[models.Message, MessageDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

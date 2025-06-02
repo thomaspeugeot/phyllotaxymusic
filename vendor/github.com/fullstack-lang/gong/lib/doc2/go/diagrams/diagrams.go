@@ -33,6 +33,8 @@ func _(stage *models.Stage) {
 
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z := (&models.DiagramPackage{}).Stage(stage)
 
+	__GongEnumShape__000000_Default_ButtonType := (&models.GongEnumShape{}).Stage(stage)
+
 	__GongNoteShape__000000_Default_NoteOnGongdoc := (&models.GongNoteShape{}).Stage(stage)
 
 	__GongStructShape__000000_Default_AttributeShape := (&models.GongStructShape{}).Stage(stage)
@@ -90,29 +92,43 @@ func _(stage *models.Stage) {
 	__AttributeShape__000003_TargetMultiplicityOffsetY.Fieldtypename = `float64`
 
 	__Classdiagram__000000_Default.Name = `Default`
+	__Classdiagram__000000_Default.Description = `This diagram describes the model of the doc2 package. A DiagramPackage is composed of ClassDiagram and each ClassDiagram has shapes.`
+	__Classdiagram__000000_Default.IsIncludedInStaticWebSite = true
 	__Classdiagram__000000_Default.IsInRenameMode = false
-	__Classdiagram__000000_Default.IsExpanded = false
-	__Classdiagram__000000_Default.NodeGongStructsIsExpanded = false
-	__Classdiagram__000000_Default.NodeGongStructNodeExpansionBinaryEncoding = 32
-	__Classdiagram__000000_Default.NodeGongEnumsIsExpanded = false
-	__Classdiagram__000000_Default.NodeGongEnumNodeExpansionBinaryEncoding = 0
+	__Classdiagram__000000_Default.IsExpanded = true
+	__Classdiagram__000000_Default.NodeGongStructsIsExpanded = true
+	__Classdiagram__000000_Default.NodeGongStructNodeExpansion = `[false,false,false,true,false,false,false,true]`
+	__Classdiagram__000000_Default.NodeGongEnumsIsExpanded = true
+	__Classdiagram__000000_Default.NodeGongEnumNodeExpansion = ``
 	__Classdiagram__000000_Default.NodeGongNotesIsExpanded = true
-	__Classdiagram__000000_Default.NodeGongNoteNodeExpansionBinaryEncoding = 1
+	__Classdiagram__000000_Default.NodeGongNoteNodeExpansion = `[true]`
 
 	__Classdiagram__000001_spoil_diagram.Name = `spoil diagram`
+	__Classdiagram__000001_spoil_diagram.Description = `Spoil diagram`
+	__Classdiagram__000001_spoil_diagram.IsIncludedInStaticWebSite = false
 	__Classdiagram__000001_spoil_diagram.IsInRenameMode = false
 	__Classdiagram__000001_spoil_diagram.IsExpanded = true
 	__Classdiagram__000001_spoil_diagram.NodeGongStructsIsExpanded = true
-	__Classdiagram__000001_spoil_diagram.NodeGongStructNodeExpansionBinaryEncoding = 3
-	__Classdiagram__000001_spoil_diagram.NodeGongEnumsIsExpanded = false
-	__Classdiagram__000001_spoil_diagram.NodeGongEnumNodeExpansionBinaryEncoding = 0
+	__Classdiagram__000001_spoil_diagram.NodeGongStructNodeExpansion = ``
+	__Classdiagram__000001_spoil_diagram.NodeGongEnumsIsExpanded = true
+	__Classdiagram__000001_spoil_diagram.NodeGongEnumNodeExpansion = ``
 	__Classdiagram__000001_spoil_diagram.NodeGongNotesIsExpanded = false
-	__Classdiagram__000001_spoil_diagram.NodeGongNoteNodeExpansionBinaryEncoding = 0
+	__Classdiagram__000001_spoil_diagram.NodeGongNoteNodeExpansion = ``
 
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z.Name = `Diagram Package created the 2025-05-04T22:53:27Z`
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z.Path = ``
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z.GongModelPath = ``
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z.AbsolutePathToDiagramPackage = ``
+
+	__GongEnumShape__000000_Default_ButtonType.Name = `Default-ButtonType`
+	__GongEnumShape__000000_Default_ButtonType.X = 86.000000
+	__GongEnumShape__000000_Default_ButtonType.Y = 383.000000
+
+	//gong:ident [ref_models.ButtonType] comment added to overcome the problem with the comment map association
+	__GongEnumShape__000000_Default_ButtonType.Identifier = `ref_models.ButtonType`
+	__GongEnumShape__000000_Default_ButtonType.Width = 240.000000
+	__GongEnumShape__000000_Default_ButtonType.Height = 63.000000
+	__GongEnumShape__000000_Default_ButtonType.IsExpanded = false
 
 	__GongNoteShape__000000_Default_NoteOnGongdoc.Name = `Default-NoteOnGongdoc`
 
@@ -129,10 +145,10 @@ or to [models.OrientationType]
 or to <a href="/models#Classdiagram.GongNoteShapes">models.Classdiagram.GongNoteShapes</a>
 or to <a href="/models#OrientationType">models.OrientationType</a>
 `
-	__GongNoteShape__000000_Default_NoteOnGongdoc.X = 61.000000
-	__GongNoteShape__000000_Default_NoteOnGongdoc.Y = 196.000000
-	__GongNoteShape__000000_Default_NoteOnGongdoc.Width = 370.000000
-	__GongNoteShape__000000_Default_NoteOnGongdoc.Height = 112.000000
+	__GongNoteShape__000000_Default_NoteOnGongdoc.X = 176.000000
+	__GongNoteShape__000000_Default_NoteOnGongdoc.Y = 231.000000
+	__GongNoteShape__000000_Default_NoteOnGongdoc.Width = 497.999969
+	__GongNoteShape__000000_Default_NoteOnGongdoc.Height = 119.000000
 	__GongNoteShape__000000_Default_NoteOnGongdoc.Matched = false
 	__GongNoteShape__000000_Default_NoteOnGongdoc.IsExpanded = false
 
@@ -414,6 +430,7 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000001_Default_DiagramPackage)
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000002_Default_GongStructShape)
 	__Classdiagram__000000_Default.GongStructShapes = append(__Classdiagram__000000_Default.GongStructShapes, __GongStructShape__000003_Default_Classdiagram)
+	__Classdiagram__000000_Default.GongEnumShapes = append(__Classdiagram__000000_Default.GongEnumShapes, __GongEnumShape__000000_Default_ButtonType)
 	__Classdiagram__000000_Default.GongNoteShapes = append(__Classdiagram__000000_Default.GongNoteShapes, __GongNoteShape__000000_Default_NoteOnGongdoc)
 	__Classdiagram__000001_spoil_diagram.GongStructShapes = append(__Classdiagram__000001_spoil_diagram.GongStructShapes, __GongStructShape__000004_Default_1_AttributeShape)
 	__Classdiagram__000001_spoil_diagram.GongStructShapes = append(__Classdiagram__000001_spoil_diagram.GongStructShapes, __GongStructShape__000005_Default_1_Classdiagram)
@@ -428,6 +445,7 @@ or to <a href="/models#OrientationType">models.OrientationType</a>
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z.Classdiagrams = append(__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z.Classdiagrams, __Classdiagram__000000_Default)
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z.Classdiagrams = append(__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z.Classdiagrams, __Classdiagram__000001_spoil_diagram)
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T22_53_27Z.SelectedClassdiagram = __Classdiagram__000000_Default
+	// setup of GongEnumShape instances pointers
 	// setup of GongNoteShape instances pointers
 	// setup of GongStructShape instances pointers
 	__GongStructShape__000001_Default_DiagramPackage.LinkShapes = append(__GongStructShape__000001_Default_DiagramPackage.LinkShapes, __LinkShape__000000_Classdiagrams)

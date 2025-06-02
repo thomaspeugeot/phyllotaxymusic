@@ -66,7 +66,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.AxisGrid, *models.Axis](
+				AssociationReverseFieldToForm[*models.AxisGrid](
 					nil,
 					"Axiss",
 					instanceWithInferedType,
@@ -138,7 +138,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.BezierGrid, *models.Bezier](
+				AssociationReverseFieldToForm[*models.BezierGrid](
 					nil,
 					"Beziers",
 					instanceWithInferedType,
@@ -170,7 +170,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.BezierGridStack, *models.BezierGrid](
+				AssociationReverseFieldToForm[*models.BezierGridStack](
 					nil,
 					"BezierGrids",
 					instanceWithInferedType,
@@ -208,7 +208,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.Content, *models.Chapter](
+				AssociationReverseFieldToForm[*models.Content](
 					nil,
 					"Chapters",
 					instanceWithInferedType,
@@ -268,7 +268,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.CircleGrid, *models.Circle](
+				AssociationReverseFieldToForm[*models.CircleGrid](
 					nil,
 					"Circles",
 					instanceWithInferedType,
@@ -330,7 +330,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.FrontCurveStack, *models.FrontCurve](
+				AssociationReverseFieldToForm[*models.FrontCurveStack](
 					nil,
 					"FrontCurves",
 					instanceWithInferedType,
@@ -614,7 +614,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.RhombusGrid, *models.Rhombus](
+				AssociationReverseFieldToForm[*models.RhombusGrid](
 					nil,
 					"Rhombuses",
 					instanceWithInferedType,
@@ -693,7 +693,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.SpiralBezierGrid, *models.SpiralBezier](
+				AssociationReverseFieldToForm[*models.SpiralBezierGrid](
 					nil,
 					"SpiralBeziers",
 					instanceWithInferedType,
@@ -764,7 +764,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.FrontCurveStack, *models.SpiralCircle](
+				AssociationReverseFieldToForm[*models.FrontCurveStack](
 					nil,
 					"SpiralCircles",
 					instanceWithInferedType,
@@ -786,7 +786,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.SpiralCircleGrid, *models.SpiralCircle](
+				AssociationReverseFieldToForm[*models.SpiralCircleGrid](
 					nil,
 					"SpiralCircles",
 					instanceWithInferedType,
@@ -850,7 +850,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.SpiralLineGrid, *models.SpiralLine](
+				AssociationReverseFieldToForm[*models.SpiralLineGrid](
 					nil,
 					"SpiralLines",
 					instanceWithInferedType,
@@ -945,7 +945,7 @@ func FillUpForm(
 					formGroup,
 					probe)
 			} else {
-				AssociationReverseFieldToForm[*models.SpiralRhombusGrid, *models.SpiralRhombus](
+				AssociationReverseFieldToForm[*models.SpiralRhombusGrid](
 					nil,
 					"SpiralRhombuses",
 					instanceWithInferedType,

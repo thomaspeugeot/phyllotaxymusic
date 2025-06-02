@@ -16,7 +16,8 @@ import (
 )
 
 // can be used for
-//     days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
+//
+//	days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
 func __Gong__Abs(x int) int {
 	if x < 0 {
 		return -x
@@ -53,8 +54,12 @@ var errUnkownEnum = errors.New("unkown enum")
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
 
+var _ = __dummy__fmt_variable
+
 // idem for math package when not need by generated code
 var __dummy_math_variable = math.E
+
+var _ = __dummy_math_variable
 
 // swagger:ignore
 type __void any
@@ -505,68 +510,67 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
 
 	switch namedStructName {
-	// insertion point for case 
-		case "Axis":
-			res = GetNamedStructInstances(stage.Axiss, stage.AxisMap_Staged_Order)
-		case "AxisGrid":
-			res = GetNamedStructInstances(stage.AxisGrids, stage.AxisGridMap_Staged_Order)
-		case "Bezier":
-			res = GetNamedStructInstances(stage.Beziers, stage.BezierMap_Staged_Order)
-		case "BezierGrid":
-			res = GetNamedStructInstances(stage.BezierGrids, stage.BezierGridMap_Staged_Order)
-		case "BezierGridStack":
-			res = GetNamedStructInstances(stage.BezierGridStacks, stage.BezierGridStackMap_Staged_Order)
-		case "Chapter":
-			res = GetNamedStructInstances(stage.Chapters, stage.ChapterMap_Staged_Order)
-		case "Circle":
-			res = GetNamedStructInstances(stage.Circles, stage.CircleMap_Staged_Order)
-		case "CircleGrid":
-			res = GetNamedStructInstances(stage.CircleGrids, stage.CircleGridMap_Staged_Order)
-		case "Content":
-			res = GetNamedStructInstances(stage.Contents, stage.ContentMap_Staged_Order)
-		case "ExportToMusicxml":
-			res = GetNamedStructInstances(stage.ExportToMusicxmls, stage.ExportToMusicxmlMap_Staged_Order)
-		case "FrontCurve":
-			res = GetNamedStructInstances(stage.FrontCurves, stage.FrontCurveMap_Staged_Order)
-		case "FrontCurveStack":
-			res = GetNamedStructInstances(stage.FrontCurveStacks, stage.FrontCurveStackMap_Staged_Order)
-		case "HorizontalAxis":
-			res = GetNamedStructInstances(stage.HorizontalAxiss, stage.HorizontalAxisMap_Staged_Order)
-		case "Key":
-			res = GetNamedStructInstances(stage.Keys, stage.KeyMap_Staged_Order)
-		case "Parameter":
-			res = GetNamedStructInstances(stage.Parameters, stage.ParameterMap_Staged_Order)
-		case "Rhombus":
-			res = GetNamedStructInstances(stage.Rhombuss, stage.RhombusMap_Staged_Order)
-		case "RhombusGrid":
-			res = GetNamedStructInstances(stage.RhombusGrids, stage.RhombusGridMap_Staged_Order)
-		case "ShapeCategory":
-			res = GetNamedStructInstances(stage.ShapeCategorys, stage.ShapeCategoryMap_Staged_Order)
-		case "SpiralBezier":
-			res = GetNamedStructInstances(stage.SpiralBeziers, stage.SpiralBezierMap_Staged_Order)
-		case "SpiralBezierGrid":
-			res = GetNamedStructInstances(stage.SpiralBezierGrids, stage.SpiralBezierGridMap_Staged_Order)
-		case "SpiralCircle":
-			res = GetNamedStructInstances(stage.SpiralCircles, stage.SpiralCircleMap_Staged_Order)
-		case "SpiralCircleGrid":
-			res = GetNamedStructInstances(stage.SpiralCircleGrids, stage.SpiralCircleGridMap_Staged_Order)
-		case "SpiralLine":
-			res = GetNamedStructInstances(stage.SpiralLines, stage.SpiralLineMap_Staged_Order)
-		case "SpiralLineGrid":
-			res = GetNamedStructInstances(stage.SpiralLineGrids, stage.SpiralLineGridMap_Staged_Order)
-		case "SpiralOrigin":
-			res = GetNamedStructInstances(stage.SpiralOrigins, stage.SpiralOriginMap_Staged_Order)
-		case "SpiralRhombus":
-			res = GetNamedStructInstances(stage.SpiralRhombuss, stage.SpiralRhombusMap_Staged_Order)
-		case "SpiralRhombusGrid":
-			res = GetNamedStructInstances(stage.SpiralRhombusGrids, stage.SpiralRhombusGridMap_Staged_Order)
-		case "VerticalAxis":
-			res = GetNamedStructInstances(stage.VerticalAxiss, stage.VerticalAxisMap_Staged_Order)
+	// insertion point for case
+	case "Axis":
+		res = GetNamedStructInstances(stage.Axiss, stage.AxisMap_Staged_Order)
+	case "AxisGrid":
+		res = GetNamedStructInstances(stage.AxisGrids, stage.AxisGridMap_Staged_Order)
+	case "Bezier":
+		res = GetNamedStructInstances(stage.Beziers, stage.BezierMap_Staged_Order)
+	case "BezierGrid":
+		res = GetNamedStructInstances(stage.BezierGrids, stage.BezierGridMap_Staged_Order)
+	case "BezierGridStack":
+		res = GetNamedStructInstances(stage.BezierGridStacks, stage.BezierGridStackMap_Staged_Order)
+	case "Chapter":
+		res = GetNamedStructInstances(stage.Chapters, stage.ChapterMap_Staged_Order)
+	case "Circle":
+		res = GetNamedStructInstances(stage.Circles, stage.CircleMap_Staged_Order)
+	case "CircleGrid":
+		res = GetNamedStructInstances(stage.CircleGrids, stage.CircleGridMap_Staged_Order)
+	case "Content":
+		res = GetNamedStructInstances(stage.Contents, stage.ContentMap_Staged_Order)
+	case "ExportToMusicxml":
+		res = GetNamedStructInstances(stage.ExportToMusicxmls, stage.ExportToMusicxmlMap_Staged_Order)
+	case "FrontCurve":
+		res = GetNamedStructInstances(stage.FrontCurves, stage.FrontCurveMap_Staged_Order)
+	case "FrontCurveStack":
+		res = GetNamedStructInstances(stage.FrontCurveStacks, stage.FrontCurveStackMap_Staged_Order)
+	case "HorizontalAxis":
+		res = GetNamedStructInstances(stage.HorizontalAxiss, stage.HorizontalAxisMap_Staged_Order)
+	case "Key":
+		res = GetNamedStructInstances(stage.Keys, stage.KeyMap_Staged_Order)
+	case "Parameter":
+		res = GetNamedStructInstances(stage.Parameters, stage.ParameterMap_Staged_Order)
+	case "Rhombus":
+		res = GetNamedStructInstances(stage.Rhombuss, stage.RhombusMap_Staged_Order)
+	case "RhombusGrid":
+		res = GetNamedStructInstances(stage.RhombusGrids, stage.RhombusGridMap_Staged_Order)
+	case "ShapeCategory":
+		res = GetNamedStructInstances(stage.ShapeCategorys, stage.ShapeCategoryMap_Staged_Order)
+	case "SpiralBezier":
+		res = GetNamedStructInstances(stage.SpiralBeziers, stage.SpiralBezierMap_Staged_Order)
+	case "SpiralBezierGrid":
+		res = GetNamedStructInstances(stage.SpiralBezierGrids, stage.SpiralBezierGridMap_Staged_Order)
+	case "SpiralCircle":
+		res = GetNamedStructInstances(stage.SpiralCircles, stage.SpiralCircleMap_Staged_Order)
+	case "SpiralCircleGrid":
+		res = GetNamedStructInstances(stage.SpiralCircleGrids, stage.SpiralCircleGridMap_Staged_Order)
+	case "SpiralLine":
+		res = GetNamedStructInstances(stage.SpiralLines, stage.SpiralLineMap_Staged_Order)
+	case "SpiralLineGrid":
+		res = GetNamedStructInstances(stage.SpiralLineGrids, stage.SpiralLineGridMap_Staged_Order)
+	case "SpiralOrigin":
+		res = GetNamedStructInstances(stage.SpiralOrigins, stage.SpiralOriginMap_Staged_Order)
+	case "SpiralRhombus":
+		res = GetNamedStructInstances(stage.SpiralRhombuss, stage.SpiralRhombusMap_Staged_Order)
+	case "SpiralRhombusGrid":
+		res = GetNamedStructInstances(stage.SpiralRhombusGrids, stage.SpiralRhombusGridMap_Staged_Order)
+	case "VerticalAxis":
+		res = GetNamedStructInstances(stage.VerticalAxiss, stage.VerticalAxisMap_Staged_Order)
 	}
 
 	return
 }
-
 
 type NamedStruct struct {
 	name string
@@ -883,6 +887,71 @@ func NewStage(name string) (stage *Stage) {
 }
 
 func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *Axis:
+		return stage.AxisMap_Staged_Order[instance]
+	case *AxisGrid:
+		return stage.AxisGridMap_Staged_Order[instance]
+	case *Bezier:
+		return stage.BezierMap_Staged_Order[instance]
+	case *BezierGrid:
+		return stage.BezierGridMap_Staged_Order[instance]
+	case *BezierGridStack:
+		return stage.BezierGridStackMap_Staged_Order[instance]
+	case *Chapter:
+		return stage.ChapterMap_Staged_Order[instance]
+	case *Circle:
+		return stage.CircleMap_Staged_Order[instance]
+	case *CircleGrid:
+		return stage.CircleGridMap_Staged_Order[instance]
+	case *Content:
+		return stage.ContentMap_Staged_Order[instance]
+	case *ExportToMusicxml:
+		return stage.ExportToMusicxmlMap_Staged_Order[instance]
+	case *FrontCurve:
+		return stage.FrontCurveMap_Staged_Order[instance]
+	case *FrontCurveStack:
+		return stage.FrontCurveStackMap_Staged_Order[instance]
+	case *HorizontalAxis:
+		return stage.HorizontalAxisMap_Staged_Order[instance]
+	case *Key:
+		return stage.KeyMap_Staged_Order[instance]
+	case *Parameter:
+		return stage.ParameterMap_Staged_Order[instance]
+	case *Rhombus:
+		return stage.RhombusMap_Staged_Order[instance]
+	case *RhombusGrid:
+		return stage.RhombusGridMap_Staged_Order[instance]
+	case *ShapeCategory:
+		return stage.ShapeCategoryMap_Staged_Order[instance]
+	case *SpiralBezier:
+		return stage.SpiralBezierMap_Staged_Order[instance]
+	case *SpiralBezierGrid:
+		return stage.SpiralBezierGridMap_Staged_Order[instance]
+	case *SpiralCircle:
+		return stage.SpiralCircleMap_Staged_Order[instance]
+	case *SpiralCircleGrid:
+		return stage.SpiralCircleGridMap_Staged_Order[instance]
+	case *SpiralLine:
+		return stage.SpiralLineMap_Staged_Order[instance]
+	case *SpiralLineGrid:
+		return stage.SpiralLineGridMap_Staged_Order[instance]
+	case *SpiralOrigin:
+		return stage.SpiralOriginMap_Staged_Order[instance]
+	case *SpiralRhombus:
+		return stage.SpiralRhombusMap_Staged_Order[instance]
+	case *SpiralRhombusGrid:
+		return stage.SpiralRhombusGridMap_Staged_Order[instance]
+	case *VerticalAxis:
+		return stage.VerticalAxisMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
+}
+
+func GetOrderPointerGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) uint {
 
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
@@ -5371,7 +5440,7 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 // The function provides a map with keys as instances of End and values to *Start instances
 // the map is construed by iterating over all Start instances and populating keys with End instances
 // and values with the Start instances
-func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End]*Start {
+func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
 
 	var ret Start
 
@@ -5387,13 +5456,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Axiss":
-			res := make(map[*Axis]*AxisGrid)
+			res := make(map[*Axis][]*AxisGrid)
 			for axisgrid := range stage.AxisGrids {
 				for _, axis_ := range axisgrid.Axiss {
-					res[axis_] = axisgrid
+					res[axis_] = append(res[axis_], axisgrid)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Bezier
 	case Bezier:
@@ -5405,26 +5474,26 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Beziers":
-			res := make(map[*Bezier]*BezierGrid)
+			res := make(map[*Bezier][]*BezierGrid)
 			for beziergrid := range stage.BezierGrids {
 				for _, bezier_ := range beziergrid.Beziers {
-					res[bezier_] = beziergrid
+					res[bezier_] = append(res[bezier_], beziergrid)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of BezierGridStack
 	case BezierGridStack:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "BezierGrids":
-			res := make(map[*BezierGrid]*BezierGridStack)
+			res := make(map[*BezierGrid][]*BezierGridStack)
 			for beziergridstack := range stage.BezierGridStacks {
 				for _, beziergrid_ := range beziergridstack.BezierGrids {
-					res[beziergrid_] = beziergridstack
+					res[beziergrid_] = append(res[beziergrid_], beziergridstack)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Chapter
 	case Chapter:
@@ -5441,26 +5510,26 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Circles":
-			res := make(map[*Circle]*CircleGrid)
+			res := make(map[*Circle][]*CircleGrid)
 			for circlegrid := range stage.CircleGrids {
 				for _, circle_ := range circlegrid.Circles {
-					res[circle_] = circlegrid
+					res[circle_] = append(res[circle_], circlegrid)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Content
 	case Content:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Chapters":
-			res := make(map[*Chapter]*Content)
+			res := make(map[*Chapter][]*Content)
 			for content := range stage.Contents {
 				for _, chapter_ := range content.Chapters {
-					res[chapter_] = content
+					res[chapter_] = append(res[chapter_], content)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of ExportToMusicxml
 	case ExportToMusicxml:
@@ -5477,21 +5546,21 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "FrontCurves":
-			res := make(map[*FrontCurve]*FrontCurveStack)
+			res := make(map[*FrontCurve][]*FrontCurveStack)
 			for frontcurvestack := range stage.FrontCurveStacks {
 				for _, frontcurve_ := range frontcurvestack.FrontCurves {
-					res[frontcurve_] = frontcurvestack
+					res[frontcurve_] = append(res[frontcurve_], frontcurvestack)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "SpiralCircles":
-			res := make(map[*SpiralCircle]*FrontCurveStack)
+			res := make(map[*SpiralCircle][]*FrontCurveStack)
 			for frontcurvestack := range stage.FrontCurveStacks {
 				for _, spiralcircle_ := range frontcurvestack.SpiralCircles {
-					res[spiralcircle_] = frontcurvestack
+					res[spiralcircle_] = append(res[spiralcircle_], frontcurvestack)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of HorizontalAxis
 	case HorizontalAxis:
@@ -5518,13 +5587,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Rhombuses":
-			res := make(map[*Rhombus]*RhombusGrid)
+			res := make(map[*Rhombus][]*RhombusGrid)
 			for rhombusgrid := range stage.RhombusGrids {
 				for _, rhombus_ := range rhombusgrid.Rhombuses {
-					res[rhombus_] = rhombusgrid
+					res[rhombus_] = append(res[rhombus_], rhombusgrid)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of ShapeCategory
 	case ShapeCategory:
@@ -5541,13 +5610,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "SpiralBeziers":
-			res := make(map[*SpiralBezier]*SpiralBezierGrid)
+			res := make(map[*SpiralBezier][]*SpiralBezierGrid)
 			for spiralbeziergrid := range stage.SpiralBezierGrids {
 				for _, spiralbezier_ := range spiralbeziergrid.SpiralBeziers {
-					res[spiralbezier_] = spiralbeziergrid
+					res[spiralbezier_] = append(res[spiralbezier_], spiralbeziergrid)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of SpiralCircle
 	case SpiralCircle:
@@ -5559,13 +5628,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "SpiralCircles":
-			res := make(map[*SpiralCircle]*SpiralCircleGrid)
+			res := make(map[*SpiralCircle][]*SpiralCircleGrid)
 			for spiralcirclegrid := range stage.SpiralCircleGrids {
 				for _, spiralcircle_ := range spiralcirclegrid.SpiralCircles {
-					res[spiralcircle_] = spiralcirclegrid
+					res[spiralcircle_] = append(res[spiralcircle_], spiralcirclegrid)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of SpiralLine
 	case SpiralLine:
@@ -5577,13 +5646,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "SpiralLines":
-			res := make(map[*SpiralLine]*SpiralLineGrid)
+			res := make(map[*SpiralLine][]*SpiralLineGrid)
 			for spirallinegrid := range stage.SpiralLineGrids {
 				for _, spiralline_ := range spirallinegrid.SpiralLines {
-					res[spiralline_] = spirallinegrid
+					res[spiralline_] = append(res[spiralline_], spirallinegrid)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of SpiralOrigin
 	case SpiralOrigin:
@@ -5600,13 +5669,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "SpiralRhombuses":
-			res := make(map[*SpiralRhombus]*SpiralRhombusGrid)
+			res := make(map[*SpiralRhombus][]*SpiralRhombusGrid)
 			for spiralrhombusgrid := range stage.SpiralRhombusGrids {
 				for _, spiralrhombus_ := range spiralrhombusgrid.SpiralRhombuses {
-					res[spiralrhombus_] = spiralrhombusgrid
+					res[spiralrhombus_] = append(res[spiralrhombus_], spiralrhombusgrid)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of VerticalAxis
 	case VerticalAxis:

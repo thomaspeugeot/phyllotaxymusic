@@ -72,6 +72,13 @@ type ClassdiagramDB struct {
 	// Declation for basic field classdiagramDB.Name
 	Name_Data sql.NullString
 
+	// Declation for basic field classdiagramDB.Description
+	Description_Data sql.NullString
+
+	// Declation for basic field classdiagramDB.IsIncludedInStaticWebSite
+	// provide the sql storage for the boolan
+	IsIncludedInStaticWebSite_Data sql.NullBool
+
 	// Declation for basic field classdiagramDB.IsInRenameMode
 	// provide the sql storage for the boolan
 	IsInRenameMode_Data sql.NullBool
@@ -84,22 +91,22 @@ type ClassdiagramDB struct {
 	// provide the sql storage for the boolan
 	NodeGongStructsIsExpanded_Data sql.NullBool
 
-	// Declation for basic field classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding
-	NodeGongStructNodeExpansionBinaryEncoding_Data sql.NullInt64
+	// Declation for basic field classdiagramDB.NodeGongStructNodeExpansion
+	NodeGongStructNodeExpansion_Data sql.NullString
 
 	// Declation for basic field classdiagramDB.NodeGongEnumsIsExpanded
 	// provide the sql storage for the boolan
 	NodeGongEnumsIsExpanded_Data sql.NullBool
 
-	// Declation for basic field classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding
-	NodeGongEnumNodeExpansionBinaryEncoding_Data sql.NullInt64
+	// Declation for basic field classdiagramDB.NodeGongEnumNodeExpansion
+	NodeGongEnumNodeExpansion_Data sql.NullString
 
 	// Declation for basic field classdiagramDB.NodeGongNotesIsExpanded
 	// provide the sql storage for the boolan
 	NodeGongNotesIsExpanded_Data sql.NullBool
 
-	// Declation for basic field classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding
-	NodeGongNoteNodeExpansionBinaryEncoding_Data sql.NullInt64
+	// Declation for basic field classdiagramDB.NodeGongNoteNodeExpansion
+	NodeGongNoteNodeExpansion_Data sql.NullString
 
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -125,21 +132,25 @@ type ClassdiagramWOP struct {
 
 	Name string `xlsx:"1"`
 
-	IsInRenameMode bool `xlsx:"2"`
+	Description string `xlsx:"2"`
 
-	IsExpanded bool `xlsx:"3"`
+	IsIncludedInStaticWebSite bool `xlsx:"3"`
 
-	NodeGongStructsIsExpanded bool `xlsx:"4"`
+	IsInRenameMode bool `xlsx:"4"`
 
-	NodeGongStructNodeExpansionBinaryEncoding int `xlsx:"5"`
+	IsExpanded bool `xlsx:"5"`
 
-	NodeGongEnumsIsExpanded bool `xlsx:"6"`
+	NodeGongStructsIsExpanded bool `xlsx:"6"`
 
-	NodeGongEnumNodeExpansionBinaryEncoding int `xlsx:"7"`
+	NodeGongStructNodeExpansion string `xlsx:"7"`
 
-	NodeGongNotesIsExpanded bool `xlsx:"8"`
+	NodeGongEnumsIsExpanded bool `xlsx:"8"`
 
-	NodeGongNoteNodeExpansionBinaryEncoding int `xlsx:"9"`
+	NodeGongEnumNodeExpansion string `xlsx:"9"`
+
+	NodeGongNotesIsExpanded bool `xlsx:"10"`
+
+	NodeGongNoteNodeExpansion string `xlsx:"11"`
 	// insertion for WOP pointer fields
 }
 
@@ -147,14 +158,16 @@ var Classdiagram_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
+	"Description",
+	"IsIncludedInStaticWebSite",
 	"IsInRenameMode",
 	"IsExpanded",
 	"NodeGongStructsIsExpanded",
-	"NodeGongStructNodeExpansionBinaryEncoding",
+	"NodeGongStructNodeExpansion",
 	"NodeGongEnumsIsExpanded",
-	"NodeGongEnumNodeExpansionBinaryEncoding",
+	"NodeGongEnumNodeExpansion",
 	"NodeGongNotesIsExpanded",
-	"NodeGongNoteNodeExpansionBinaryEncoding",
+	"NodeGongNoteNodeExpansion",
 }
 
 type BackRepoClassdiagramStruct struct {
@@ -516,6 +529,12 @@ func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram(classdiagr
 	classdiagramDB.Name_Data.String = classdiagram.Name
 	classdiagramDB.Name_Data.Valid = true
 
+	classdiagramDB.Description_Data.String = classdiagram.Description
+	classdiagramDB.Description_Data.Valid = true
+
+	classdiagramDB.IsIncludedInStaticWebSite_Data.Bool = classdiagram.IsIncludedInStaticWebSite
+	classdiagramDB.IsIncludedInStaticWebSite_Data.Valid = true
+
 	classdiagramDB.IsInRenameMode_Data.Bool = classdiagram.IsInRenameMode
 	classdiagramDB.IsInRenameMode_Data.Valid = true
 
@@ -525,20 +544,20 @@ func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram(classdiagr
 	classdiagramDB.NodeGongStructsIsExpanded_Data.Bool = classdiagram.NodeGongStructsIsExpanded
 	classdiagramDB.NodeGongStructsIsExpanded_Data.Valid = true
 
-	classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding_Data.Int64 = int64(classdiagram.NodeGongStructNodeExpansionBinaryEncoding)
-	classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding_Data.Valid = true
+	classdiagramDB.NodeGongStructNodeExpansion_Data.String = classdiagram.NodeGongStructNodeExpansion
+	classdiagramDB.NodeGongStructNodeExpansion_Data.Valid = true
 
 	classdiagramDB.NodeGongEnumsIsExpanded_Data.Bool = classdiagram.NodeGongEnumsIsExpanded
 	classdiagramDB.NodeGongEnumsIsExpanded_Data.Valid = true
 
-	classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding_Data.Int64 = int64(classdiagram.NodeGongEnumNodeExpansionBinaryEncoding)
-	classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding_Data.Valid = true
+	classdiagramDB.NodeGongEnumNodeExpansion_Data.String = classdiagram.NodeGongEnumNodeExpansion
+	classdiagramDB.NodeGongEnumNodeExpansion_Data.Valid = true
 
 	classdiagramDB.NodeGongNotesIsExpanded_Data.Bool = classdiagram.NodeGongNotesIsExpanded
 	classdiagramDB.NodeGongNotesIsExpanded_Data.Valid = true
 
-	classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding_Data.Int64 = int64(classdiagram.NodeGongNoteNodeExpansionBinaryEncoding)
-	classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding_Data.Valid = true
+	classdiagramDB.NodeGongNoteNodeExpansion_Data.String = classdiagram.NodeGongNoteNodeExpansion
+	classdiagramDB.NodeGongNoteNodeExpansion_Data.Valid = true
 }
 
 // CopyBasicFieldsFromClassdiagram_WOP
@@ -548,6 +567,12 @@ func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram_WOP(classd
 	classdiagramDB.Name_Data.String = classdiagram.Name
 	classdiagramDB.Name_Data.Valid = true
 
+	classdiagramDB.Description_Data.String = classdiagram.Description
+	classdiagramDB.Description_Data.Valid = true
+
+	classdiagramDB.IsIncludedInStaticWebSite_Data.Bool = classdiagram.IsIncludedInStaticWebSite
+	classdiagramDB.IsIncludedInStaticWebSite_Data.Valid = true
+
 	classdiagramDB.IsInRenameMode_Data.Bool = classdiagram.IsInRenameMode
 	classdiagramDB.IsInRenameMode_Data.Valid = true
 
@@ -557,20 +582,20 @@ func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagram_WOP(classd
 	classdiagramDB.NodeGongStructsIsExpanded_Data.Bool = classdiagram.NodeGongStructsIsExpanded
 	classdiagramDB.NodeGongStructsIsExpanded_Data.Valid = true
 
-	classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding_Data.Int64 = int64(classdiagram.NodeGongStructNodeExpansionBinaryEncoding)
-	classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding_Data.Valid = true
+	classdiagramDB.NodeGongStructNodeExpansion_Data.String = classdiagram.NodeGongStructNodeExpansion
+	classdiagramDB.NodeGongStructNodeExpansion_Data.Valid = true
 
 	classdiagramDB.NodeGongEnumsIsExpanded_Data.Bool = classdiagram.NodeGongEnumsIsExpanded
 	classdiagramDB.NodeGongEnumsIsExpanded_Data.Valid = true
 
-	classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding_Data.Int64 = int64(classdiagram.NodeGongEnumNodeExpansionBinaryEncoding)
-	classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding_Data.Valid = true
+	classdiagramDB.NodeGongEnumNodeExpansion_Data.String = classdiagram.NodeGongEnumNodeExpansion
+	classdiagramDB.NodeGongEnumNodeExpansion_Data.Valid = true
 
 	classdiagramDB.NodeGongNotesIsExpanded_Data.Bool = classdiagram.NodeGongNotesIsExpanded
 	classdiagramDB.NodeGongNotesIsExpanded_Data.Valid = true
 
-	classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding_Data.Int64 = int64(classdiagram.NodeGongNoteNodeExpansionBinaryEncoding)
-	classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding_Data.Valid = true
+	classdiagramDB.NodeGongNoteNodeExpansion_Data.String = classdiagram.NodeGongNoteNodeExpansion
+	classdiagramDB.NodeGongNoteNodeExpansion_Data.Valid = true
 }
 
 // CopyBasicFieldsFromClassdiagramWOP
@@ -580,6 +605,12 @@ func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagramWOP(classdi
 	classdiagramDB.Name_Data.String = classdiagram.Name
 	classdiagramDB.Name_Data.Valid = true
 
+	classdiagramDB.Description_Data.String = classdiagram.Description
+	classdiagramDB.Description_Data.Valid = true
+
+	classdiagramDB.IsIncludedInStaticWebSite_Data.Bool = classdiagram.IsIncludedInStaticWebSite
+	classdiagramDB.IsIncludedInStaticWebSite_Data.Valid = true
+
 	classdiagramDB.IsInRenameMode_Data.Bool = classdiagram.IsInRenameMode
 	classdiagramDB.IsInRenameMode_Data.Valid = true
 
@@ -589,48 +620,52 @@ func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsFromClassdiagramWOP(classdi
 	classdiagramDB.NodeGongStructsIsExpanded_Data.Bool = classdiagram.NodeGongStructsIsExpanded
 	classdiagramDB.NodeGongStructsIsExpanded_Data.Valid = true
 
-	classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding_Data.Int64 = int64(classdiagram.NodeGongStructNodeExpansionBinaryEncoding)
-	classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding_Data.Valid = true
+	classdiagramDB.NodeGongStructNodeExpansion_Data.String = classdiagram.NodeGongStructNodeExpansion
+	classdiagramDB.NodeGongStructNodeExpansion_Data.Valid = true
 
 	classdiagramDB.NodeGongEnumsIsExpanded_Data.Bool = classdiagram.NodeGongEnumsIsExpanded
 	classdiagramDB.NodeGongEnumsIsExpanded_Data.Valid = true
 
-	classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding_Data.Int64 = int64(classdiagram.NodeGongEnumNodeExpansionBinaryEncoding)
-	classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding_Data.Valid = true
+	classdiagramDB.NodeGongEnumNodeExpansion_Data.String = classdiagram.NodeGongEnumNodeExpansion
+	classdiagramDB.NodeGongEnumNodeExpansion_Data.Valid = true
 
 	classdiagramDB.NodeGongNotesIsExpanded_Data.Bool = classdiagram.NodeGongNotesIsExpanded
 	classdiagramDB.NodeGongNotesIsExpanded_Data.Valid = true
 
-	classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding_Data.Int64 = int64(classdiagram.NodeGongNoteNodeExpansionBinaryEncoding)
-	classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding_Data.Valid = true
+	classdiagramDB.NodeGongNoteNodeExpansion_Data.String = classdiagram.NodeGongNoteNodeExpansion
+	classdiagramDB.NodeGongNoteNodeExpansion_Data.Valid = true
 }
 
 // CopyBasicFieldsToClassdiagram
 func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagram(classdiagram *models.Classdiagram) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	classdiagram.Name = classdiagramDB.Name_Data.String
+	classdiagram.Description = classdiagramDB.Description_Data.String
+	classdiagram.IsIncludedInStaticWebSite = classdiagramDB.IsIncludedInStaticWebSite_Data.Bool
 	classdiagram.IsInRenameMode = classdiagramDB.IsInRenameMode_Data.Bool
 	classdiagram.IsExpanded = classdiagramDB.IsExpanded_Data.Bool
 	classdiagram.NodeGongStructsIsExpanded = classdiagramDB.NodeGongStructsIsExpanded_Data.Bool
-	classdiagram.NodeGongStructNodeExpansionBinaryEncoding = int(classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding_Data.Int64)
+	classdiagram.NodeGongStructNodeExpansion = classdiagramDB.NodeGongStructNodeExpansion_Data.String
 	classdiagram.NodeGongEnumsIsExpanded = classdiagramDB.NodeGongEnumsIsExpanded_Data.Bool
-	classdiagram.NodeGongEnumNodeExpansionBinaryEncoding = int(classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding_Data.Int64)
+	classdiagram.NodeGongEnumNodeExpansion = classdiagramDB.NodeGongEnumNodeExpansion_Data.String
 	classdiagram.NodeGongNotesIsExpanded = classdiagramDB.NodeGongNotesIsExpanded_Data.Bool
-	classdiagram.NodeGongNoteNodeExpansionBinaryEncoding = int(classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding_Data.Int64)
+	classdiagram.NodeGongNoteNodeExpansion = classdiagramDB.NodeGongNoteNodeExpansion_Data.String
 }
 
 // CopyBasicFieldsToClassdiagram_WOP
 func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagram_WOP(classdiagram *models.Classdiagram_WOP) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	classdiagram.Name = classdiagramDB.Name_Data.String
+	classdiagram.Description = classdiagramDB.Description_Data.String
+	classdiagram.IsIncludedInStaticWebSite = classdiagramDB.IsIncludedInStaticWebSite_Data.Bool
 	classdiagram.IsInRenameMode = classdiagramDB.IsInRenameMode_Data.Bool
 	classdiagram.IsExpanded = classdiagramDB.IsExpanded_Data.Bool
 	classdiagram.NodeGongStructsIsExpanded = classdiagramDB.NodeGongStructsIsExpanded_Data.Bool
-	classdiagram.NodeGongStructNodeExpansionBinaryEncoding = int(classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding_Data.Int64)
+	classdiagram.NodeGongStructNodeExpansion = classdiagramDB.NodeGongStructNodeExpansion_Data.String
 	classdiagram.NodeGongEnumsIsExpanded = classdiagramDB.NodeGongEnumsIsExpanded_Data.Bool
-	classdiagram.NodeGongEnumNodeExpansionBinaryEncoding = int(classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding_Data.Int64)
+	classdiagram.NodeGongEnumNodeExpansion = classdiagramDB.NodeGongEnumNodeExpansion_Data.String
 	classdiagram.NodeGongNotesIsExpanded = classdiagramDB.NodeGongNotesIsExpanded_Data.Bool
-	classdiagram.NodeGongNoteNodeExpansionBinaryEncoding = int(classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding_Data.Int64)
+	classdiagram.NodeGongNoteNodeExpansion = classdiagramDB.NodeGongNoteNodeExpansion_Data.String
 }
 
 // CopyBasicFieldsToClassdiagramWOP
@@ -638,14 +673,16 @@ func (classdiagramDB *ClassdiagramDB) CopyBasicFieldsToClassdiagramWOP(classdiag
 	classdiagram.ID = int(classdiagramDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	classdiagram.Name = classdiagramDB.Name_Data.String
+	classdiagram.Description = classdiagramDB.Description_Data.String
+	classdiagram.IsIncludedInStaticWebSite = classdiagramDB.IsIncludedInStaticWebSite_Data.Bool
 	classdiagram.IsInRenameMode = classdiagramDB.IsInRenameMode_Data.Bool
 	classdiagram.IsExpanded = classdiagramDB.IsExpanded_Data.Bool
 	classdiagram.NodeGongStructsIsExpanded = classdiagramDB.NodeGongStructsIsExpanded_Data.Bool
-	classdiagram.NodeGongStructNodeExpansionBinaryEncoding = int(classdiagramDB.NodeGongStructNodeExpansionBinaryEncoding_Data.Int64)
+	classdiagram.NodeGongStructNodeExpansion = classdiagramDB.NodeGongStructNodeExpansion_Data.String
 	classdiagram.NodeGongEnumsIsExpanded = classdiagramDB.NodeGongEnumsIsExpanded_Data.Bool
-	classdiagram.NodeGongEnumNodeExpansionBinaryEncoding = int(classdiagramDB.NodeGongEnumNodeExpansionBinaryEncoding_Data.Int64)
+	classdiagram.NodeGongEnumNodeExpansion = classdiagramDB.NodeGongEnumNodeExpansion_Data.String
 	classdiagram.NodeGongNotesIsExpanded = classdiagramDB.NodeGongNotesIsExpanded_Data.Bool
-	classdiagram.NodeGongNoteNodeExpansionBinaryEncoding = int(classdiagramDB.NodeGongNoteNodeExpansionBinaryEncoding_Data.Int64)
+	classdiagram.NodeGongNoteNodeExpansion = classdiagramDB.NodeGongNoteNodeExpansion_Data.String
 }
 
 // Backup generates a json file from a slice of all ClassdiagramDB instances in the backrepo

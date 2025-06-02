@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
+	"strconv"
 	"time"
 
 	"github.com/fullstack-lang/gong/lib/load/go/orm"
@@ -56,6 +58,20 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/filetodownloads/:id", GetController().UpdateFileToDownload)
 		v1.DELETE("/v1/filetodownloads/:id", GetController().DeleteFileToDownload)
 
+		v1.GET("/v1/filetouploads", GetController().GetFileToUploads)
+		v1.GET("/v1/filetouploads/:id", GetController().GetFileToUpload)
+		v1.POST("/v1/filetouploads", GetController().PostFileToUpload)
+		v1.PATCH("/v1/filetouploads/:id", GetController().UpdateFileToUpload)
+		v1.PUT("/v1/filetouploads/:id", GetController().UpdateFileToUpload)
+		v1.DELETE("/v1/filetouploads/:id", GetController().DeleteFileToUpload)
+
+		v1.GET("/v1/messages", GetController().GetMessages)
+		v1.GET("/v1/messages/:id", GetController().GetMessage)
+		v1.POST("/v1/messages", GetController().PostMessage)
+		v1.PATCH("/v1/messages/:id", GetController().UpdateMessage)
+		v1.PUT("/v1/messages/:id", GetController().UpdateMessage)
+		v1.DELETE("/v1/messages/:id", GetController().DeleteMessage)
+
 		v1.GET("/v1/commitfrombacknb", GetController().GetLastCommitFromBackNb)
 		v1.GET("/v1/pushfromfrontnb", GetController().GetLastPushFromFrontNb)
 
@@ -89,10 +105,45 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 
 	// Upgrader specifies parameters for upgrading an HTTP connection to a
 	// WebSocket connection.
+
 	var upgrader = websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
 			origin := r.Header.Get("Origin")
-			return origin == "http://localhost:8080" || origin == "http://localhost:4200"
+			if origin == "" {
+				log.Printf("CheckOrigin: Rejected - Origin header is empty. Request from: %s", r.RemoteAddr)
+				return false // Or handle as per your security policy
+			}
+
+			u, err := url.Parse(origin)
+			if err != nil {
+				log.Printf("CheckOrigin: Rejected - Invalid Origin URL '%s'. Error: %v", origin, err)
+				return false // Invalid URL
+			}
+
+			portStr := u.Port()
+
+			if portStr == "" {
+				// If no port is specified, it might be using default HTTP/HTTPS ports.
+				// For this specific request, we'll assume a port must be present.
+				log.Printf("CheckOrigin: Rejected - No port specified in Origin URL '%s'", origin)
+				return false
+			}
+
+			port, err := strconv.Atoi(portStr)
+			if err != nil {
+				log.Printf("CheckOrigin: Rejected - Port '%s' in Origin URL '%s' is not a valid number. Error: %v", portStr, origin, err)
+				return false // Port is not a valid number
+			}
+
+			// Check if the port is 4200 OR in the range 8000-9000
+			allowed := port == 4200 || (port >= 8000 && port <= 9000)
+			if !allowed {
+				log.Printf("CheckOrigin: Rejected - Port %d from Origin '%s' is not in the allowed list (4200 or 8000-9000)", port, origin)
+				return false
+			}
+
+			log.Printf("CheckOrigin: Accepted - Origin '%s' with port %d", origin, port)
+			return true
 		},
 	}
 

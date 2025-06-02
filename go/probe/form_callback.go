@@ -11,20 +11,12 @@ import (
 	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
-// code to avoid error when generated code does not need to import packages
-const __dummmy__time = time.Nanosecond
+// to avoid errors when time and slices packages are not used in the generated code
+const _ = time.Nanosecond
 
-var _ = __dummmy__time
+var _ = slices.Delete([]string{"a"}, 0, 1)
 
-var __dummmy__letters = slices.Delete([]string{"a"}, 0, 1)
-
-var _ = __dummmy__letters
-
-const __dummy__log = log.Ldate
-
-var _ = __dummy__log
-
-// end of code to avoid error when generated code does not need to import packages
+var _ = log.Panicf
 
 // insertion point
 func __gong__New__AxisFormCallback(
@@ -140,6 +132,10 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Axiss, axis_)
+					formerSource.Axiss = slices.Delete(formerSource.Axiss, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -165,7 +161,7 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Axiss = append(newSource.Axiss, axis_)
 		}
 	}
@@ -250,6 +246,31 @@ func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(axisgrid_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(axisgrid_.ShapeCategory), axisgridFormCallback.probe.stageOfInterest, formDiv)
+		case "Axiss":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Axis](axisgridFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Axis, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Axis)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					axisgridFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			axisgrid_.Axiss = instanceSlice
+
 		}
 	}
 
@@ -399,6 +420,10 @@ func (bezierFormCallback *BezierFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Beziers, bezier_)
+					formerSource.Beziers = slices.Delete(formerSource.Beziers, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -424,7 +449,7 @@ func (bezierFormCallback *BezierFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Beziers = append(newSource.Beziers, bezier_)
 		}
 	}
@@ -509,6 +534,31 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(beziergrid_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(beziergrid_.ShapeCategory), beziergridFormCallback.probe.stageOfInterest, formDiv)
+		case "Beziers":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Bezier](beziergridFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Bezier, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Bezier)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					beziergridFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			beziergrid_.Beziers = instanceSlice
+
 		case "BezierGridStack:BezierGrids":
 			// WARNING : this form deals with the N-N association "BezierGridStack.BezierGrids []*BezierGrid" but
 			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
@@ -545,6 +595,10 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.BezierGrids, beziergrid_)
+					formerSource.BezierGrids = slices.Delete(formerSource.BezierGrids, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -570,7 +624,7 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.BezierGrids = append(newSource.BezierGrids, beziergrid_)
 		}
 	}
@@ -653,6 +707,31 @@ func (beziergridstackFormCallback *BezierGridStackFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(beziergridstack_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(beziergridstack_.ShapeCategory), beziergridstackFormCallback.probe.stageOfInterest, formDiv)
+		case "BezierGrids":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.BezierGrid](beziergridstackFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.BezierGrid, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.BezierGrid)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					beziergridstackFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			beziergridstack_.BezierGrids = instanceSlice
+
 		}
 	}
 
@@ -768,6 +847,10 @@ func (chapterFormCallback *ChapterFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Chapters, chapter_)
+					formerSource.Chapters = slices.Delete(formerSource.Chapters, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -793,7 +876,7 @@ func (chapterFormCallback *ChapterFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Chapters = append(newSource.Chapters, chapter_)
 		}
 	}
@@ -942,6 +1025,10 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Circles, circle_)
+					formerSource.Circles = slices.Delete(formerSource.Circles, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -967,7 +1054,7 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Circles = append(newSource.Circles, circle_)
 		}
 	}
@@ -1052,6 +1139,31 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(circlegrid_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(circlegrid_.ShapeCategory), circlegridFormCallback.probe.stageOfInterest, formDiv)
+		case "Circles":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Circle](circlegridFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Circle, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Circle)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					circlegridFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			circlegrid_.Circles = instanceSlice
+
 		}
 	}
 
@@ -1141,6 +1253,31 @@ func (contentFormCallback *ContentFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(content_.StaticPath), formDiv)
 		case "Target":
 			FormDivEnumStringFieldToField(&(content_.Target), formDiv)
+		case "Chapters":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Chapter](contentFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Chapter, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Chapter)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					contentFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			content_.Chapters = instanceSlice
+
 		}
 	}
 
@@ -1335,6 +1472,10 @@ func (frontcurveFormCallback *FrontCurveFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.FrontCurves, frontcurve_)
+					formerSource.FrontCurves = slices.Delete(formerSource.FrontCurves, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -1360,7 +1501,7 @@ func (frontcurveFormCallback *FrontCurveFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.FrontCurves = append(newSource.FrontCurves, frontcurve_)
 		}
 	}
@@ -1443,6 +1584,56 @@ func (frontcurvestackFormCallback *FrontCurveStackFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(frontcurvestack_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(frontcurvestack_.ShapeCategory), frontcurvestackFormCallback.probe.stageOfInterest, formDiv)
+		case "FrontCurves":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.FrontCurve](frontcurvestackFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.FrontCurve, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.FrontCurve)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					frontcurvestackFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			frontcurvestack_.FrontCurves = instanceSlice
+
+		case "SpiralCircles":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralCircle](frontcurvestackFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.SpiralCircle, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.SpiralCircle)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					frontcurvestackFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			frontcurvestack_.SpiralCircles = instanceSlice
+
 		case "Color":
 			FormDivBasicFieldToField(&(frontcurvestack_.Color), formDiv)
 		case "FillOpacity":
@@ -2081,6 +2272,10 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.Rhombuses, rhombus_)
+					formerSource.Rhombuses = slices.Delete(formerSource.Rhombuses, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -2106,7 +2301,7 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.Rhombuses = append(newSource.Rhombuses, rhombus_)
 		}
 	}
@@ -2191,6 +2386,31 @@ func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rhombusgrid_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(rhombusgrid_.ShapeCategory), rhombusgridFormCallback.probe.stageOfInterest, formDiv)
+		case "Rhombuses":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Rhombus](rhombusgridFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Rhombus, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Rhombus)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					rhombusgridFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			rhombusgrid_.Rhombuses = instanceSlice
+
 		}
 	}
 
@@ -2419,6 +2639,10 @@ func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.SpiralBeziers, spiralbezier_)
+					formerSource.SpiralBeziers = slices.Delete(formerSource.SpiralBeziers, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -2444,7 +2668,7 @@ func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.SpiralBeziers = append(newSource.SpiralBeziers, spiralbezier_)
 		}
 	}
@@ -2527,6 +2751,31 @@ func (spiralbeziergridFormCallback *SpiralBezierGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralbeziergrid_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(spiralbeziergrid_.ShapeCategory), spiralbeziergridFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralBeziers":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralBezier](spiralbeziergridFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.SpiralBezier, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.SpiralBezier)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					spiralbeziergridFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			spiralbeziergrid_.SpiralBeziers = instanceSlice
+
 		}
 	}
 
@@ -2676,6 +2925,10 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.SpiralCircles, spiralcircle_)
+					formerSource.SpiralCircles = slices.Delete(formerSource.SpiralCircles, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -2701,7 +2954,7 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.SpiralCircles = append(newSource.SpiralCircles, spiralcircle_)
 		case "SpiralCircleGrid:SpiralCircles":
 			// WARNING : this form deals with the N-N association "SpiralCircleGrid.SpiralCircles []*SpiralCircle" but
@@ -2739,6 +2992,10 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.SpiralCircles, spiralcircle_)
+					formerSource.SpiralCircles = slices.Delete(formerSource.SpiralCircles, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -2764,7 +3021,7 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.SpiralCircles = append(newSource.SpiralCircles, spiralcircle_)
 		}
 	}
@@ -2849,6 +3106,31 @@ func (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(spiralcirclegrid_.ShapeCategory), spiralcirclegridFormCallback.probe.stageOfInterest, formDiv)
 		case "SpiralRhombusGrid":
 			FormDivSelectFieldToField(&(spiralcirclegrid_.SpiralRhombusGrid), spiralcirclegridFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralCircles":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralCircle](spiralcirclegridFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.SpiralCircle, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.SpiralCircle)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					spiralcirclegridFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			spiralcirclegrid_.SpiralCircles = instanceSlice
+
 		}
 	}
 
@@ -2990,6 +3272,10 @@ func (spirallineFormCallback *SpiralLineFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.SpiralLines, spiralline_)
+					formerSource.SpiralLines = slices.Delete(formerSource.SpiralLines, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -3015,7 +3301,7 @@ func (spirallineFormCallback *SpiralLineFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.SpiralLines = append(newSource.SpiralLines, spiralline_)
 		}
 	}
@@ -3098,6 +3384,31 @@ func (spirallinegridFormCallback *SpiralLineGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spirallinegrid_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(spirallinegrid_.ShapeCategory), spirallinegridFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralLines":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralLine](spirallinegridFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.SpiralLine, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.SpiralLine)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					spirallinegridFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			spirallinegrid_.SpiralLines = instanceSlice
+
 		}
 	}
 
@@ -3344,6 +3655,10 @@ func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 			// case when the user set empty for the source value
 			if newSourceName == nil {
 				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.SpiralRhombuses, spiralrhombus_)
+					formerSource.SpiralRhombuses = slices.Delete(formerSource.SpiralRhombuses, idx, idx+1)
+				}
 				break // nothing else to do for this field
 			}
 
@@ -3369,7 +3684,7 @@ func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 				break
 			}
 
-			// append the value to the new source field
+			// (3) append the new value to the new source field
 			newSource.SpiralRhombuses = append(newSource.SpiralRhombuses, spiralrhombus_)
 		}
 	}
@@ -3452,6 +3767,31 @@ func (spiralrhombusgridFormCallback *SpiralRhombusGridFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(spiralrhombusgrid_.IsDisplayed), formDiv)
 		case "ShapeCategory":
 			FormDivSelectFieldToField(&(spiralrhombusgrid_.ShapeCategory), spiralrhombusgridFormCallback.probe.stageOfInterest, formDiv)
+		case "SpiralRhombuses":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralRhombus](spiralrhombusgridFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.SpiralRhombus, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.SpiralRhombus)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					spiralrhombusgridFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			spiralrhombusgrid_.SpiralRhombuses = instanceSlice
+
 		}
 	}
 

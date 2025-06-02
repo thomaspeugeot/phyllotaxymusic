@@ -396,11 +396,9 @@ var __gong__map_VerticalAxis = make(map[string]*VerticalAxis)
 func lookupPackage(name string) (importPath string, ok bool) {
 	return name, true
 }
-func lookupSym(recv, name string) (ok bool) {
-	if recv == "" {
-		return true
-	}
-	return false
+
+func lookupSym(recv, name string) bool {
+	return recv == ""
 }
 
 // UnmarshallGoStaging unmarshall a go assign statement
@@ -488,6 +486,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 		// astCoordinate := astCoordinate + "\tRhs"
 		switch expr := expr.(type) {
 		case *ast.CallExpr:
+			var basicLit *ast.BasicLit
+
 			callExpr := expr
 			// astCoordinate := astCoordinate + "\tFun"
 			switch fun := callExpr.Fun.(type) {
@@ -880,21 +880,51 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					}
 				}
 			case *ast.Ident:
-				// append function
-				ident := fun
-				_ = ident
-				// astCoordinate := astCoordinate + "\tIdent" + "." + ident.Name
-				// log.Println(astCoordinate)
+				// pick up the first arg
+				if len(callExpr.Args) != 1 {
+					break
+				}
+				arg0 := callExpr.Args[0]
+
+				var se *ast.SelectorExpr
+				var ok bool
+				if se, ok = arg0.(*ast.SelectorExpr); !ok {
+					break
+				}
+
+				var seXident *ast.Ident
+				if seXident = se.X.(*ast.Ident); !ok {
+					break
+				}
+
+				basicLit = new(ast.BasicLit)
+				// For a "fake" literal, Kind might be set to something like token.STRING or a custom indicator
+				basicLit.Kind = token.STRING // Or another appropriate token.Kind
+				basicLit.Value = "new(" + seXident.Name + "." + se.Sel.Name + ")"
+				// following lines are here to avoid warning "unused write to field..."
+				_ = basicLit.Kind
+				_ = basicLit.Value
+				_ = basicLit
 			}
 			for _, arg := range callExpr.Args {
 				// astCoordinate := astCoordinate + "\tArg"
 				switch arg := arg.(type) {
-				case *ast.Ident:
-					ident := arg
-					_ = ident
-					// astCoordinate := astCoordinate + "\tIdent" + "." + ident.Name
-					// log.Println(astCoordinate)
+				case *ast.Ident, *ast.SelectorExpr:
+					var ident *ast.Ident
 					var ok bool
+					_ = ok
+					if ident, ok = arg.(*ast.Ident); !ok {
+						// log.Println("we are in the case of new(....)")
+					}
+
+					var se *ast.SelectorExpr
+					if se, ok = arg.(*ast.SelectorExpr); ok {
+						if ident, ok = se.X.(*ast.Ident); !ok {
+							// log.Println("we are in the case of append(....)")
+						}
+					}
+					_ = ident
+
 					gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 					if !ok {
 						log.Fatalln("gongstructName not found for identifier", identifier)
@@ -911,9 +941,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "Axiss":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_Axis[targetIdentifier]
-							__gong__map_AxisGrid[identifier].Axiss =
-								append(__gong__map_AxisGrid[identifier].Axiss, target)
+							// when parsing AxisGrid[identifier].Axiss = append(AxisGrid[identifier].Axiss, Axis instance )
+							// the map will not find the Axis instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_Axis[targetIdentifier]; ok {
+								__gong__map_AxisGrid[identifier].Axiss =
+									append(__gong__map_AxisGrid[identifier].Axiss, target)
+							}
 						}
 					case "Bezier":
 						switch fieldName {
@@ -925,9 +959,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "Beziers":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_Bezier[targetIdentifier]
-							__gong__map_BezierGrid[identifier].Beziers =
-								append(__gong__map_BezierGrid[identifier].Beziers, target)
+							// when parsing BezierGrid[identifier].Beziers = append(BezierGrid[identifier].Beziers, Bezier instance )
+							// the map will not find the Bezier instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_Bezier[targetIdentifier]; ok {
+								__gong__map_BezierGrid[identifier].Beziers =
+									append(__gong__map_BezierGrid[identifier].Beziers, target)
+							}
 						}
 					case "BezierGridStack":
 						switch fieldName {
@@ -935,9 +973,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "BezierGrids":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_BezierGrid[targetIdentifier]
-							__gong__map_BezierGridStack[identifier].BezierGrids =
-								append(__gong__map_BezierGridStack[identifier].BezierGrids, target)
+							// when parsing BezierGridStack[identifier].BezierGrids = append(BezierGridStack[identifier].BezierGrids, BezierGrid instance )
+							// the map will not find the BezierGrid instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_BezierGrid[targetIdentifier]; ok {
+								__gong__map_BezierGridStack[identifier].BezierGrids =
+									append(__gong__map_BezierGridStack[identifier].BezierGrids, target)
+							}
 						}
 					case "Chapter":
 						switch fieldName {
@@ -953,9 +995,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "Circles":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_Circle[targetIdentifier]
-							__gong__map_CircleGrid[identifier].Circles =
-								append(__gong__map_CircleGrid[identifier].Circles, target)
+							// when parsing CircleGrid[identifier].Circles = append(CircleGrid[identifier].Circles, Circle instance )
+							// the map will not find the Circle instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_Circle[targetIdentifier]; ok {
+								__gong__map_CircleGrid[identifier].Circles =
+									append(__gong__map_CircleGrid[identifier].Circles, target)
+							}
 						}
 					case "Content":
 						switch fieldName {
@@ -963,9 +1009,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "Chapters":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_Chapter[targetIdentifier]
-							__gong__map_Content[identifier].Chapters =
-								append(__gong__map_Content[identifier].Chapters, target)
+							// when parsing Content[identifier].Chapters = append(Content[identifier].Chapters, Chapter instance )
+							// the map will not find the Chapter instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_Chapter[targetIdentifier]; ok {
+								__gong__map_Content[identifier].Chapters =
+									append(__gong__map_Content[identifier].Chapters, target)
+							}
 						}
 					case "ExportToMusicxml":
 						switch fieldName {
@@ -981,15 +1031,23 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "FrontCurves":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_FrontCurve[targetIdentifier]
-							__gong__map_FrontCurveStack[identifier].FrontCurves =
-								append(__gong__map_FrontCurveStack[identifier].FrontCurves, target)
+							// when parsing FrontCurveStack[identifier].FrontCurves = append(FrontCurveStack[identifier].FrontCurves, FrontCurve instance )
+							// the map will not find the FrontCurve instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_FrontCurve[targetIdentifier]; ok {
+								__gong__map_FrontCurveStack[identifier].FrontCurves =
+									append(__gong__map_FrontCurveStack[identifier].FrontCurves, target)
+							}
 						case "SpiralCircles":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_SpiralCircle[targetIdentifier]
-							__gong__map_FrontCurveStack[identifier].SpiralCircles =
-								append(__gong__map_FrontCurveStack[identifier].SpiralCircles, target)
+							// when parsing FrontCurveStack[identifier].SpiralCircles = append(FrontCurveStack[identifier].SpiralCircles, SpiralCircle instance )
+							// the map will not find the SpiralCircle instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_SpiralCircle[targetIdentifier]; ok {
+								__gong__map_FrontCurveStack[identifier].SpiralCircles =
+									append(__gong__map_FrontCurveStack[identifier].SpiralCircles, target)
+							}
 						}
 					case "HorizontalAxis":
 						switch fieldName {
@@ -1013,9 +1071,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "Rhombuses":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_Rhombus[targetIdentifier]
-							__gong__map_RhombusGrid[identifier].Rhombuses =
-								append(__gong__map_RhombusGrid[identifier].Rhombuses, target)
+							// when parsing RhombusGrid[identifier].Rhombuses = append(RhombusGrid[identifier].Rhombuses, Rhombus instance )
+							// the map will not find the Rhombus instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_Rhombus[targetIdentifier]; ok {
+								__gong__map_RhombusGrid[identifier].Rhombuses =
+									append(__gong__map_RhombusGrid[identifier].Rhombuses, target)
+							}
 						}
 					case "ShapeCategory":
 						switch fieldName {
@@ -1031,9 +1093,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "SpiralBeziers":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_SpiralBezier[targetIdentifier]
-							__gong__map_SpiralBezierGrid[identifier].SpiralBeziers =
-								append(__gong__map_SpiralBezierGrid[identifier].SpiralBeziers, target)
+							// when parsing SpiralBezierGrid[identifier].SpiralBeziers = append(SpiralBezierGrid[identifier].SpiralBeziers, SpiralBezier instance )
+							// the map will not find the SpiralBezier instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_SpiralBezier[targetIdentifier]; ok {
+								__gong__map_SpiralBezierGrid[identifier].SpiralBeziers =
+									append(__gong__map_SpiralBezierGrid[identifier].SpiralBeziers, target)
+							}
 						}
 					case "SpiralCircle":
 						switch fieldName {
@@ -1045,9 +1111,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "SpiralCircles":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_SpiralCircle[targetIdentifier]
-							__gong__map_SpiralCircleGrid[identifier].SpiralCircles =
-								append(__gong__map_SpiralCircleGrid[identifier].SpiralCircles, target)
+							// when parsing SpiralCircleGrid[identifier].SpiralCircles = append(SpiralCircleGrid[identifier].SpiralCircles, SpiralCircle instance )
+							// the map will not find the SpiralCircle instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_SpiralCircle[targetIdentifier]; ok {
+								__gong__map_SpiralCircleGrid[identifier].SpiralCircles =
+									append(__gong__map_SpiralCircleGrid[identifier].SpiralCircles, target)
+							}
 						}
 					case "SpiralLine":
 						switch fieldName {
@@ -1059,9 +1129,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "SpiralLines":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_SpiralLine[targetIdentifier]
-							__gong__map_SpiralLineGrid[identifier].SpiralLines =
-								append(__gong__map_SpiralLineGrid[identifier].SpiralLines, target)
+							// when parsing SpiralLineGrid[identifier].SpiralLines = append(SpiralLineGrid[identifier].SpiralLines, SpiralLine instance )
+							// the map will not find the SpiralLine instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_SpiralLine[targetIdentifier]; ok {
+								__gong__map_SpiralLineGrid[identifier].SpiralLines =
+									append(__gong__map_SpiralLineGrid[identifier].SpiralLines, target)
+							}
 						}
 					case "SpiralOrigin":
 						switch fieldName {
@@ -1077,46 +1151,59 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						case "SpiralRhombuses":
 							// remove first and last char
 							targetIdentifier := ident.Name
-							target := __gong__map_SpiralRhombus[targetIdentifier]
-							__gong__map_SpiralRhombusGrid[identifier].SpiralRhombuses =
-								append(__gong__map_SpiralRhombusGrid[identifier].SpiralRhombuses, target)
+							// when parsing SpiralRhombusGrid[identifier].SpiralRhombuses = append(SpiralRhombusGrid[identifier].SpiralRhombuses, SpiralRhombus instance )
+							// the map will not find the SpiralRhombus instance, when parsing the first arg
+							// therefore, the condition is necessary
+							if target, ok := __gong__map_SpiralRhombus[targetIdentifier]; ok {
+								__gong__map_SpiralRhombusGrid[identifier].SpiralRhombuses =
+									append(__gong__map_SpiralRhombusGrid[identifier].SpiralRhombuses, target)
+							}
 						}
 					case "VerticalAxis":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
 					}
-				case *ast.SelectorExpr:
-					slcExpr := arg
-					// astCoordinate := astCoordinate + "\tSelectorExpr"
-					switch X := slcExpr.X.(type) {
-					case *ast.Ident:
-						ident := X
-						_ = ident
-						// astCoordinate := astCoordinate + "\tX" + "." + ident.Name
-						// log.Println(astCoordinate)
-
-					}
-					if Sel := slcExpr.Sel; Sel != nil {
-						// astCoordinate := astCoordinate + "\tSel" + "." + Sel.Name
-						// log.Println(astCoordinate)
-					}
 				}
 			}
-		case *ast.BasicLit, *ast.UnaryExpr:
+		case *ast.BasicLit, *ast.UnaryExpr, *ast.CompositeLit:
 
 			var basicLit *ast.BasicLit
 			var exprSign = 1.0
 			_ = exprSign // in case this is not used
-
-			if bl, ok := expr.(*ast.BasicLit); ok {
-				// expression is  for instance ... = 18.000
-				basicLit = bl
-			} else if ue, ok := expr.(*ast.UnaryExpr); ok {
-				// expression is  for instance ... = -18.000
+			switch v := expr.(type) {
+			case *ast.BasicLit:
+				// expression is for instance ... = 18.000
+				basicLit = v
+			case *ast.UnaryExpr:
+				// expression is for instance ... = -18.000
 				// we want to extract a *ast.BasicLit from the *ast.UnaryExpr
-				basicLit = ue.X.(*ast.BasicLit)
-				exprSign = -1
+				if bl, ok := v.X.(*ast.BasicLit); ok {
+					basicLit = bl
+					// Check the operator to set the sign
+					if v.Op == token.SUB { // token.SUB is for '-'
+						exprSign = -1
+					} else if v.Op == token.ADD { // token.ADD is for '+'
+						exprSign = 1
+					}
+				}
+			case *ast.CompositeLit:
+				var sl *ast.SelectorExpr
+				var ident *ast.Ident
+				var ok bool
+
+				if sl, ok = v.Type.(*ast.SelectorExpr); !ok {
+					break // Exits the switch case
+				}
+
+				if ident, ok = sl.X.(*ast.Ident); !ok {
+					break // Exits the switch case
+				}
+
+				basicLit = new(ast.BasicLit)
+				// For a "fake" literal, Kind might be set to something like token.STRING or a custom indicator
+				basicLit.Kind = token.STRING // Or another appropriate token.Kind
+				basicLit.Value = ident.Name + "." + sl.Sel.Name + "{}"
 			}
 
 			// astCoordinate := astCoordinate + "\tBasicLit" + "." + basicLit.Value
@@ -3152,6 +3239,9 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				}
 			}
 		case *ast.SelectorExpr:
+			var basicLit *ast.BasicLit
+			var ident *ast.Ident
+
 			// assignment to enum field
 			selectorExpr := expr
 			// astCoordinate := astCoordinate + "\tSelectorExpr"
@@ -3161,7 +3251,24 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				_ = ident
 				// astCoordinate := astCoordinate + "\tX" + "." + ident.Name
 				// log.Println(astCoordinate)
+			case *ast.CompositeLit:
+				var ok bool
+				var sl *ast.SelectorExpr
+
+				if sl, ok = X.Type.(*ast.SelectorExpr); !ok {
+					break // Exits the switch case
+				}
+
+				if ident, ok = sl.X.(*ast.Ident); !ok {
+					break // Exits the switch case
+				}
+
+				basicLit = new(ast.BasicLit)
+				// For a "fake" literal, Kind might be set to something like token.STRING or a custom indicator
+				basicLit.Kind = token.STRING // Or another appropriate token.Kind
+				basicLit.Value = ident.Name + "." + sl.Sel.Name + "{}." + selectorExpr.Sel.Name
 			}
+
 			if Sel := selectorExpr.Sel; Sel != nil {
 				// astCoordinate := astCoordinate + "\tSel" + "." + Sel.Name
 				// log.Println(astCoordinate)
@@ -3177,42 +3284,42 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				enumValue := Sel.Name
 				_ = enumValue
 				switch gongstructName {
-				// insertion point for enums assignments
+				// insertion point for selector expr assignments
 				case "Axis":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "AxisGrid":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "Bezier":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "BezierGrid":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "BezierGridStack":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "Chapter":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "Circle":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "CircleGrid":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "Content":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					case "Target":
 						var val Target
 						err := (&val).FromCodeString(enumValue)
@@ -3223,79 +3330,79 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					}
 				case "ExportToMusicxml":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "FrontCurve":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "FrontCurveStack":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "HorizontalAxis":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "Key":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "Parameter":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "Rhombus":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "RhombusGrid":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "ShapeCategory":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "SpiralBezier":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "SpiralBezierGrid":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "SpiralCircle":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "SpiralCircleGrid":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "SpiralLine":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "SpiralLineGrid":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "SpiralOrigin":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "SpiralRhombus":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "SpiralRhombusGrid":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				case "VerticalAxis":
 					switch fieldName {
-					// insertion point for enum assign code
+					// insertion point for selector expr assign code
 					}
 				}
 			}

@@ -4,14 +4,16 @@ import (
 	"time"
 
 	"github.com/fullstack-lang/gong/lib/doc2/go/models"
-	// injection point for ident package import declaration{{ImportPackageDeclaration}}
+	// injection point for ident package import declaration
+	ref_models "github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
 
 // generated in order to avoid error in the package import
 // if there are no elements in the stage to marshall
 var _ time.Time
 
-// _ point for meta package dummy declaration{{ImportPackageDummyDeclaration}}
+// _ point for meta package dummy declaration
+var _ ref_models.Stage
 
 // When parsed, those maps will help with the renaming process
 var _ map[string]any = map[string]any{
@@ -107,14 +109,16 @@ func _(stage *models.Stage) {
 	__AttributeShape__000007_ThemeBinaryEncoding.Fieldtypename = `int`
 
 	__Classdiagram__000000_Default.Name = `Default`
+	__Classdiagram__000000_Default.Description = ``
+	__Classdiagram__000000_Default.IsIncludedInStaticWebSite = false
 	__Classdiagram__000000_Default.IsInRenameMode = false
 	__Classdiagram__000000_Default.IsExpanded = true
 	__Classdiagram__000000_Default.NodeGongStructsIsExpanded = false
-	__Classdiagram__000000_Default.NodeGongStructNodeExpansionBinaryEncoding = 16384
+	__Classdiagram__000000_Default.NodeGongStructNodeExpansion = ``
 	__Classdiagram__000000_Default.NodeGongEnumsIsExpanded = false
-	__Classdiagram__000000_Default.NodeGongEnumNodeExpansionBinaryEncoding = 0
+	__Classdiagram__000000_Default.NodeGongEnumNodeExpansion = ``
 	__Classdiagram__000000_Default.NodeGongNotesIsExpanded = true
-	__Classdiagram__000000_Default.NodeGongNoteNodeExpansionBinaryEncoding = 1
+	__Classdiagram__000000_Default.NodeGongNoteNodeExpansion = ``
 
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.Name = `Diagram Package created the 2025-05-04T23:28:43Z`
 	__DiagramPackage__000000_Diagram_Package_created_the_2025_05_04T23_28_43Z.Path = ``

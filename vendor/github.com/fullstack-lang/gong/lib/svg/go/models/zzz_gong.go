@@ -16,7 +16,8 @@ import (
 )
 
 // can be used for
-//     days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
+//
+//	days := __Gong__Abs(int(int(inferedInstance.ComputedDuration.Hours()) / 24))
 func __Gong__Abs(x int) int {
 	if x < 0 {
 		return -x
@@ -53,8 +54,12 @@ var errUnkownEnum = errors.New("unkown enum")
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
 
+var _ = __dummy__fmt_variable
+
 // idem for math package when not need by generated code
 var __dummy_math_variable = math.E
+
+var _ = __dummy_math_variable
 
 // swagger:ignore
 type __void any
@@ -427,50 +432,49 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
 
 	switch namedStructName {
-	// insertion point for case 
-		case "Animate":
-			res = GetNamedStructInstances(stage.Animates, stage.AnimateMap_Staged_Order)
-		case "Circle":
-			res = GetNamedStructInstances(stage.Circles, stage.CircleMap_Staged_Order)
-		case "Ellipse":
-			res = GetNamedStructInstances(stage.Ellipses, stage.EllipseMap_Staged_Order)
-		case "Layer":
-			res = GetNamedStructInstances(stage.Layers, stage.LayerMap_Staged_Order)
-		case "Line":
-			res = GetNamedStructInstances(stage.Lines, stage.LineMap_Staged_Order)
-		case "Link":
-			res = GetNamedStructInstances(stage.Links, stage.LinkMap_Staged_Order)
-		case "LinkAnchoredText":
-			res = GetNamedStructInstances(stage.LinkAnchoredTexts, stage.LinkAnchoredTextMap_Staged_Order)
-		case "Path":
-			res = GetNamedStructInstances(stage.Paths, stage.PathMap_Staged_Order)
-		case "Point":
-			res = GetNamedStructInstances(stage.Points, stage.PointMap_Staged_Order)
-		case "Polygone":
-			res = GetNamedStructInstances(stage.Polygones, stage.PolygoneMap_Staged_Order)
-		case "Polyline":
-			res = GetNamedStructInstances(stage.Polylines, stage.PolylineMap_Staged_Order)
-		case "Rect":
-			res = GetNamedStructInstances(stage.Rects, stage.RectMap_Staged_Order)
-		case "RectAnchoredPath":
-			res = GetNamedStructInstances(stage.RectAnchoredPaths, stage.RectAnchoredPathMap_Staged_Order)
-		case "RectAnchoredRect":
-			res = GetNamedStructInstances(stage.RectAnchoredRects, stage.RectAnchoredRectMap_Staged_Order)
-		case "RectAnchoredText":
-			res = GetNamedStructInstances(stage.RectAnchoredTexts, stage.RectAnchoredTextMap_Staged_Order)
-		case "RectLinkLink":
-			res = GetNamedStructInstances(stage.RectLinkLinks, stage.RectLinkLinkMap_Staged_Order)
-		case "SVG":
-			res = GetNamedStructInstances(stage.SVGs, stage.SVGMap_Staged_Order)
-		case "SvgText":
-			res = GetNamedStructInstances(stage.SvgTexts, stage.SvgTextMap_Staged_Order)
-		case "Text":
-			res = GetNamedStructInstances(stage.Texts, stage.TextMap_Staged_Order)
+	// insertion point for case
+	case "Animate":
+		res = GetNamedStructInstances(stage.Animates, stage.AnimateMap_Staged_Order)
+	case "Circle":
+		res = GetNamedStructInstances(stage.Circles, stage.CircleMap_Staged_Order)
+	case "Ellipse":
+		res = GetNamedStructInstances(stage.Ellipses, stage.EllipseMap_Staged_Order)
+	case "Layer":
+		res = GetNamedStructInstances(stage.Layers, stage.LayerMap_Staged_Order)
+	case "Line":
+		res = GetNamedStructInstances(stage.Lines, stage.LineMap_Staged_Order)
+	case "Link":
+		res = GetNamedStructInstances(stage.Links, stage.LinkMap_Staged_Order)
+	case "LinkAnchoredText":
+		res = GetNamedStructInstances(stage.LinkAnchoredTexts, stage.LinkAnchoredTextMap_Staged_Order)
+	case "Path":
+		res = GetNamedStructInstances(stage.Paths, stage.PathMap_Staged_Order)
+	case "Point":
+		res = GetNamedStructInstances(stage.Points, stage.PointMap_Staged_Order)
+	case "Polygone":
+		res = GetNamedStructInstances(stage.Polygones, stage.PolygoneMap_Staged_Order)
+	case "Polyline":
+		res = GetNamedStructInstances(stage.Polylines, stage.PolylineMap_Staged_Order)
+	case "Rect":
+		res = GetNamedStructInstances(stage.Rects, stage.RectMap_Staged_Order)
+	case "RectAnchoredPath":
+		res = GetNamedStructInstances(stage.RectAnchoredPaths, stage.RectAnchoredPathMap_Staged_Order)
+	case "RectAnchoredRect":
+		res = GetNamedStructInstances(stage.RectAnchoredRects, stage.RectAnchoredRectMap_Staged_Order)
+	case "RectAnchoredText":
+		res = GetNamedStructInstances(stage.RectAnchoredTexts, stage.RectAnchoredTextMap_Staged_Order)
+	case "RectLinkLink":
+		res = GetNamedStructInstances(stage.RectLinkLinks, stage.RectLinkLinkMap_Staged_Order)
+	case "SVG":
+		res = GetNamedStructInstances(stage.SVGs, stage.SVGMap_Staged_Order)
+	case "SvgText":
+		res = GetNamedStructInstances(stage.SvgTexts, stage.SvgTextMap_Staged_Order)
+	case "Text":
+		res = GetNamedStructInstances(stage.Texts, stage.TextMap_Staged_Order)
 	}
 
 	return
 }
-
 
 type NamedStruct struct {
 	name string
@@ -715,6 +719,53 @@ func NewStage(name string) (stage *Stage) {
 }
 
 func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
+
+	switch instance := any(instance).(type) {
+	// insertion point for order map initialisations
+	case *Animate:
+		return stage.AnimateMap_Staged_Order[instance]
+	case *Circle:
+		return stage.CircleMap_Staged_Order[instance]
+	case *Ellipse:
+		return stage.EllipseMap_Staged_Order[instance]
+	case *Layer:
+		return stage.LayerMap_Staged_Order[instance]
+	case *Line:
+		return stage.LineMap_Staged_Order[instance]
+	case *Link:
+		return stage.LinkMap_Staged_Order[instance]
+	case *LinkAnchoredText:
+		return stage.LinkAnchoredTextMap_Staged_Order[instance]
+	case *Path:
+		return stage.PathMap_Staged_Order[instance]
+	case *Point:
+		return stage.PointMap_Staged_Order[instance]
+	case *Polygone:
+		return stage.PolygoneMap_Staged_Order[instance]
+	case *Polyline:
+		return stage.PolylineMap_Staged_Order[instance]
+	case *Rect:
+		return stage.RectMap_Staged_Order[instance]
+	case *RectAnchoredPath:
+		return stage.RectAnchoredPathMap_Staged_Order[instance]
+	case *RectAnchoredRect:
+		return stage.RectAnchoredRectMap_Staged_Order[instance]
+	case *RectAnchoredText:
+		return stage.RectAnchoredTextMap_Staged_Order[instance]
+	case *RectLinkLink:
+		return stage.RectLinkLinkMap_Staged_Order[instance]
+	case *SVG:
+		return stage.SVGMap_Staged_Order[instance]
+	case *SvgText:
+		return stage.SvgTextMap_Staged_Order[instance]
+	case *Text:
+		return stage.TextMap_Staged_Order[instance]
+	default:
+		return 0 // should not happen
+	}
+}
+
+func GetOrderPointerGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) uint {
 
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
@@ -2866,7 +2917,7 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 // The function provides a map with keys as instances of End and values to *Start instances
 // the map is construed by iterating over all Start instances and populating keys with End instances
 // and values with the Start instances
-func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End]*Start {
+func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
 
 	var ret Start
 
@@ -2882,179 +2933,179 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animations":
-			res := make(map[*Animate]*Circle)
+			res := make(map[*Animate][]*Circle)
 			for circle := range stage.Circles {
 				for _, animate_ := range circle.Animations {
-					res[animate_] = circle
+					res[animate_] = append(res[animate_], circle)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Ellipse
 	case Ellipse:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animates":
-			res := make(map[*Animate]*Ellipse)
+			res := make(map[*Animate][]*Ellipse)
 			for ellipse := range stage.Ellipses {
 				for _, animate_ := range ellipse.Animates {
-					res[animate_] = ellipse
+					res[animate_] = append(res[animate_], ellipse)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Layer
 	case Layer:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Rects":
-			res := make(map[*Rect]*Layer)
+			res := make(map[*Rect][]*Layer)
 			for layer := range stage.Layers {
 				for _, rect_ := range layer.Rects {
-					res[rect_] = layer
+					res[rect_] = append(res[rect_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Texts":
-			res := make(map[*Text]*Layer)
+			res := make(map[*Text][]*Layer)
 			for layer := range stage.Layers {
 				for _, text_ := range layer.Texts {
-					res[text_] = layer
+					res[text_] = append(res[text_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Circles":
-			res := make(map[*Circle]*Layer)
+			res := make(map[*Circle][]*Layer)
 			for layer := range stage.Layers {
 				for _, circle_ := range layer.Circles {
-					res[circle_] = layer
+					res[circle_] = append(res[circle_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Lines":
-			res := make(map[*Line]*Layer)
+			res := make(map[*Line][]*Layer)
 			for layer := range stage.Layers {
 				for _, line_ := range layer.Lines {
-					res[line_] = layer
+					res[line_] = append(res[line_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Ellipses":
-			res := make(map[*Ellipse]*Layer)
+			res := make(map[*Ellipse][]*Layer)
 			for layer := range stage.Layers {
 				for _, ellipse_ := range layer.Ellipses {
-					res[ellipse_] = layer
+					res[ellipse_] = append(res[ellipse_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Polylines":
-			res := make(map[*Polyline]*Layer)
+			res := make(map[*Polyline][]*Layer)
 			for layer := range stage.Layers {
 				for _, polyline_ := range layer.Polylines {
-					res[polyline_] = layer
+					res[polyline_] = append(res[polyline_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Polygones":
-			res := make(map[*Polygone]*Layer)
+			res := make(map[*Polygone][]*Layer)
 			for layer := range stage.Layers {
 				for _, polygone_ := range layer.Polygones {
-					res[polygone_] = layer
+					res[polygone_] = append(res[polygone_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Paths":
-			res := make(map[*Path]*Layer)
+			res := make(map[*Path][]*Layer)
 			for layer := range stage.Layers {
 				for _, path_ := range layer.Paths {
-					res[path_] = layer
+					res[path_] = append(res[path_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "Links":
-			res := make(map[*Link]*Layer)
+			res := make(map[*Link][]*Layer)
 			for layer := range stage.Layers {
 				for _, link_ := range layer.Links {
-					res[link_] = layer
+					res[link_] = append(res[link_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "RectLinkLinks":
-			res := make(map[*RectLinkLink]*Layer)
+			res := make(map[*RectLinkLink][]*Layer)
 			for layer := range stage.Layers {
 				for _, rectlinklink_ := range layer.RectLinkLinks {
-					res[rectlinklink_] = layer
+					res[rectlinklink_] = append(res[rectlinklink_], layer)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Line
 	case Line:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animates":
-			res := make(map[*Animate]*Line)
+			res := make(map[*Animate][]*Line)
 			for line := range stage.Lines {
 				for _, animate_ := range line.Animates {
-					res[animate_] = line
+					res[animate_] = append(res[animate_], line)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Link
 	case Link:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "TextAtArrowStart":
-			res := make(map[*LinkAnchoredText]*Link)
+			res := make(map[*LinkAnchoredText][]*Link)
 			for link := range stage.Links {
 				for _, linkanchoredtext_ := range link.TextAtArrowStart {
-					res[linkanchoredtext_] = link
+					res[linkanchoredtext_] = append(res[linkanchoredtext_], link)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "TextAtArrowEnd":
-			res := make(map[*LinkAnchoredText]*Link)
+			res := make(map[*LinkAnchoredText][]*Link)
 			for link := range stage.Links {
 				for _, linkanchoredtext_ := range link.TextAtArrowEnd {
-					res[linkanchoredtext_] = link
+					res[linkanchoredtext_] = append(res[linkanchoredtext_], link)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "ControlPoints":
-			res := make(map[*Point]*Link)
+			res := make(map[*Point][]*Link)
 			for link := range stage.Links {
 				for _, point_ := range link.ControlPoints {
-					res[point_] = link
+					res[point_] = append(res[point_], link)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of LinkAnchoredText
 	case LinkAnchoredText:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animates":
-			res := make(map[*Animate]*LinkAnchoredText)
+			res := make(map[*Animate][]*LinkAnchoredText)
 			for linkanchoredtext := range stage.LinkAnchoredTexts {
 				for _, animate_ := range linkanchoredtext.Animates {
-					res[animate_] = linkanchoredtext
+					res[animate_] = append(res[animate_], linkanchoredtext)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Path
 	case Path:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animates":
-			res := make(map[*Animate]*Path)
+			res := make(map[*Animate][]*Path)
 			for path := range stage.Paths {
 				for _, animate_ := range path.Animates {
-					res[animate_] = path
+					res[animate_] = append(res[animate_], path)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Point
 	case Point:
@@ -3066,63 +3117,63 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animates":
-			res := make(map[*Animate]*Polygone)
+			res := make(map[*Animate][]*Polygone)
 			for polygone := range stage.Polygones {
 				for _, animate_ := range polygone.Animates {
-					res[animate_] = polygone
+					res[animate_] = append(res[animate_], polygone)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Polyline
 	case Polyline:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animates":
-			res := make(map[*Animate]*Polyline)
+			res := make(map[*Animate][]*Polyline)
 			for polyline := range stage.Polylines {
 				for _, animate_ := range polyline.Animates {
-					res[animate_] = polyline
+					res[animate_] = append(res[animate_], polyline)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Rect
 	case Rect:
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animations":
-			res := make(map[*Animate]*Rect)
+			res := make(map[*Animate][]*Rect)
 			for rect := range stage.Rects {
 				for _, animate_ := range rect.Animations {
-					res[animate_] = rect
+					res[animate_] = append(res[animate_], rect)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "RectAnchoredTexts":
-			res := make(map[*RectAnchoredText]*Rect)
+			res := make(map[*RectAnchoredText][]*Rect)
 			for rect := range stage.Rects {
 				for _, rectanchoredtext_ := range rect.RectAnchoredTexts {
-					res[rectanchoredtext_] = rect
+					res[rectanchoredtext_] = append(res[rectanchoredtext_], rect)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "RectAnchoredRects":
-			res := make(map[*RectAnchoredRect]*Rect)
+			res := make(map[*RectAnchoredRect][]*Rect)
 			for rect := range stage.Rects {
 				for _, rectanchoredrect_ := range rect.RectAnchoredRects {
-					res[rectanchoredrect_] = rect
+					res[rectanchoredrect_] = append(res[rectanchoredrect_], rect)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		case "RectAnchoredPaths":
-			res := make(map[*RectAnchoredPath]*Rect)
+			res := make(map[*RectAnchoredPath][]*Rect)
 			for rect := range stage.Rects {
 				for _, rectanchoredpath_ := range rect.RectAnchoredPaths {
-					res[rectanchoredpath_] = rect
+					res[rectanchoredpath_] = append(res[rectanchoredpath_], rect)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of RectAnchoredPath
 	case RectAnchoredPath:
@@ -3139,13 +3190,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animates":
-			res := make(map[*Animate]*RectAnchoredText)
+			res := make(map[*Animate][]*RectAnchoredText)
 			for rectanchoredtext := range stage.RectAnchoredTexts {
 				for _, animate_ := range rectanchoredtext.Animates {
-					res[animate_] = rectanchoredtext
+					res[animate_] = append(res[animate_], rectanchoredtext)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of RectLinkLink
 	case RectLinkLink:
@@ -3157,13 +3208,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Layers":
-			res := make(map[*Layer]*SVG)
+			res := make(map[*Layer][]*SVG)
 			for svg := range stage.SVGs {
 				for _, layer_ := range svg.Layers {
-					res[layer_] = svg
+					res[layer_] = append(res[layer_], svg)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of SvgText
 	case SvgText:
@@ -3175,13 +3226,13 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 		switch fieldname {
 		// insertion point for per direct association field
 		case "Animates":
-			res := make(map[*Animate]*Text)
+			res := make(map[*Animate][]*Text)
 			for text := range stage.Texts {
 				for _, animate_ := range text.Animates {
-					res[animate_] = text
+					res[animate_] = append(res[animate_], text)
 				}
 			}
-			return any(res).(map[*End]*Start)
+			return any(res).(map[*End][]*Start)
 		}
 	}
 	return nil
@@ -3301,13 +3352,13 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case Ellipse:
 		res = []string{"Name", "CX", "CY", "RX", "RY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Layer:
-		res = []string{"Display", "Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links", "RectLinkLinks"}
+		res = []string{"Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links", "RectLinkLinks"}
 	case Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
 	case Link:
 		res = []string{"Name", "Type", "IsBezierCurve", "Start", "StartAnchorType", "End", "EndAnchorType", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio", "CornerRadius", "HasEndArrow", "EndArrowSize", "HasStartArrow", "StartArrowSize", "TextAtArrowStart", "TextAtArrowEnd", "ControlPoints", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case LinkAnchoredText:
-		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "FontSize", "LetterSpacing", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Path:
 		res = []string{"Name", "Definition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case Point:
@@ -3323,15 +3374,15 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case RectAnchoredRect:
 		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case RectAnchoredText:
-		res = []string{"Name", "Content", "FontWeight", "FontSize", "FontStyle", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Content", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case RectLinkLink:
 		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case SVG:
-		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFileGenerated"}
+		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFrontEndFileGenerated", "IsSVGBackEndFileGenerated", "DefaultDirectoryForGeneratedImages"}
 	case SvgText:
 		res = []string{"Name", "Text"}
 	case Text:
-		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "Animates"}
 	}
 	return
 }
@@ -3506,13 +3557,13 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *Ellipse:
 		res = []string{"Name", "CX", "CY", "RX", "RY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *Layer:
-		res = []string{"Display", "Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links", "RectLinkLinks"}
+		res = []string{"Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links", "RectLinkLinks"}
 	case *Line:
 		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
 	case *Link:
 		res = []string{"Name", "Type", "IsBezierCurve", "Start", "StartAnchorType", "End", "EndAnchorType", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio", "CornerRadius", "HasEndArrow", "EndArrowSize", "HasStartArrow", "StartArrowSize", "TextAtArrowStart", "TextAtArrowEnd", "ControlPoints", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *LinkAnchoredText:
-		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "FontSize", "LetterSpacing", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *Path:
 		res = []string{"Name", "Definition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *Point:
@@ -3528,15 +3579,15 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *RectAnchoredRect:
 		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *RectAnchoredText:
-		res = []string{"Name", "Content", "FontWeight", "FontSize", "FontStyle", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "Content", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
 	case *RectLinkLink:
 		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *SVG:
-		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFileGenerated"}
+		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFrontEndFileGenerated", "IsSVGBackEndFileGenerated", "DefaultDirectoryForGeneratedImages"}
 	case *SvgText:
 		res = []string{"Name", "Text"}
 	case *Text:
-		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
+		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "Animates"}
 	}
 	return
 }
@@ -3697,10 +3748,6 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 	case *Layer:
 		switch fieldName {
 		// string value of fields
-		case "Display":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.Display)
-			res.valueBool = inferedInstance.Display
-			res.GongFieldValueType = GongFieldValueTypeBool
 		case "Name":
 			res.valueString = inferedInstance.Name
 		case "Rects":
@@ -3967,6 +4014,8 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 			res.valueString = inferedInstance.FontWeight
 		case "FontSize":
 			res.valueString = inferedInstance.FontSize
+		case "FontStyle":
+			res.valueString = inferedInstance.FontStyle
 		case "LetterSpacing":
 			res.valueString = inferedInstance.LetterSpacing
 		case "Color":
@@ -4378,11 +4427,11 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 		case "FontWeight":
 			res.valueString = inferedInstance.FontWeight
 		case "FontSize":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.FontSize)
-			res.valueInt = inferedInstance.FontSize
-			res.GongFieldValueType = GongFieldValueTypeInt
+			res.valueString = inferedInstance.FontSize
 		case "FontStyle":
 			res.valueString = inferedInstance.FontStyle
+		case "LetterSpacing":
+			res.valueString = inferedInstance.LetterSpacing
 		case "X_Offset":
 			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
 			res.valueFloat = inferedInstance.X_Offset
@@ -4494,10 +4543,16 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 			res.valueString = fmt.Sprintf("%t", inferedInstance.IsEditable)
 			res.valueBool = inferedInstance.IsEditable
 			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSVGFileGenerated":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGFileGenerated)
-			res.valueBool = inferedInstance.IsSVGFileGenerated
+		case "IsSVGFrontEndFileGenerated":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGFrontEndFileGenerated)
+			res.valueBool = inferedInstance.IsSVGFrontEndFileGenerated
 			res.GongFieldValueType = GongFieldValueTypeBool
+		case "IsSVGBackEndFileGenerated":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGBackEndFileGenerated)
+			res.valueBool = inferedInstance.IsSVGBackEndFileGenerated
+			res.GongFieldValueType = GongFieldValueTypeBool
+		case "DefaultDirectoryForGeneratedImages":
+			res.valueString = inferedInstance.DefaultDirectoryForGeneratedImages
 		}
 	case *SvgText:
 		switch fieldName {
@@ -4544,6 +4599,14 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
 			res.valueString = inferedInstance.Transform
+		case "FontWeight":
+			res.valueString = inferedInstance.FontWeight
+		case "FontSize":
+			res.valueString = inferedInstance.FontSize
+		case "FontStyle":
+			res.valueString = inferedInstance.FontStyle
+		case "LetterSpacing":
+			res.valueString = inferedInstance.LetterSpacing
 		case "Animates":
 			for idx, __instance__ := range inferedInstance.Animates {
 				if idx > 0 {
@@ -4681,10 +4744,6 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 	case Layer:
 		switch fieldName {
 		// string value of fields
-		case "Display":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.Display)
-			res.valueBool = inferedInstance.Display
-			res.GongFieldValueType = GongFieldValueTypeBool
 		case "Name":
 			res.valueString = inferedInstance.Name
 		case "Rects":
@@ -4951,6 +5010,8 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 			res.valueString = inferedInstance.FontWeight
 		case "FontSize":
 			res.valueString = inferedInstance.FontSize
+		case "FontStyle":
+			res.valueString = inferedInstance.FontStyle
 		case "LetterSpacing":
 			res.valueString = inferedInstance.LetterSpacing
 		case "Color":
@@ -5362,11 +5423,11 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 		case "FontWeight":
 			res.valueString = inferedInstance.FontWeight
 		case "FontSize":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.FontSize)
-			res.valueInt = inferedInstance.FontSize
-			res.GongFieldValueType = GongFieldValueTypeInt
+			res.valueString = inferedInstance.FontSize
 		case "FontStyle":
 			res.valueString = inferedInstance.FontStyle
+		case "LetterSpacing":
+			res.valueString = inferedInstance.LetterSpacing
 		case "X_Offset":
 			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
 			res.valueFloat = inferedInstance.X_Offset
@@ -5478,10 +5539,16 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 			res.valueString = fmt.Sprintf("%t", inferedInstance.IsEditable)
 			res.valueBool = inferedInstance.IsEditable
 			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSVGFileGenerated":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGFileGenerated)
-			res.valueBool = inferedInstance.IsSVGFileGenerated
+		case "IsSVGFrontEndFileGenerated":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGFrontEndFileGenerated)
+			res.valueBool = inferedInstance.IsSVGFrontEndFileGenerated
 			res.GongFieldValueType = GongFieldValueTypeBool
+		case "IsSVGBackEndFileGenerated":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGBackEndFileGenerated)
+			res.valueBool = inferedInstance.IsSVGBackEndFileGenerated
+			res.GongFieldValueType = GongFieldValueTypeBool
+		case "DefaultDirectoryForGeneratedImages":
+			res.valueString = inferedInstance.DefaultDirectoryForGeneratedImages
 		}
 	case SvgText:
 		switch fieldName {
@@ -5528,6 +5595,14 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
 		case "Transform":
 			res.valueString = inferedInstance.Transform
+		case "FontWeight":
+			res.valueString = inferedInstance.FontWeight
+		case "FontSize":
+			res.valueString = inferedInstance.FontSize
+		case "FontStyle":
+			res.valueString = inferedInstance.FontStyle
+		case "LetterSpacing":
+			res.valueString = inferedInstance.LetterSpacing
 		case "Animates":
 			for idx, __instance__ := range inferedInstance.Animates {
 				if idx > 0 {

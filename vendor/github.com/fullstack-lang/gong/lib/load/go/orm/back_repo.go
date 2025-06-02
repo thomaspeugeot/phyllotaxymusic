@@ -26,6 +26,10 @@ type BackRepoStruct struct {
 	// insertion point for per struct back repo declarations
 	BackRepoFileToDownload BackRepoFileToDownloadStruct
 
+	BackRepoFileToUpload BackRepoFileToUploadStruct
+
+	BackRepoMessage BackRepoMessageStruct
+
 	CommitFromBackNb uint // records commit increments when performed by the back
 
 	PushFromFrontNb uint // records commit increments when performed by the front
@@ -48,6 +52,8 @@ func NewBackRepo(stage *models.Stage, filename string) (backRepo *BackRepoStruct
 	/* THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm
 	db = dbgorm.NewDBWrapper(filename, "github_com_fullstack_lang_gong_lib_load_go",
 		&FileToDownloadDB{},
+		&FileToUploadDB{},
+		&MessageDB{},
 	)
 	THIS IS REMOVED BY GONG COMPILER IF TARGET IS gorm */
 
@@ -58,6 +64,22 @@ func NewBackRepo(stage *models.Stage, filename string) (backRepo *BackRepoStruct
 		Map_FileToDownloadDBID_FileToDownloadPtr: make(map[uint]*models.FileToDownload, 0),
 		Map_FileToDownloadDBID_FileToDownloadDB:  make(map[uint]*FileToDownloadDB, 0),
 		Map_FileToDownloadPtr_FileToDownloadDBID: make(map[*models.FileToDownload]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoFileToUpload = BackRepoFileToUploadStruct{
+		Map_FileToUploadDBID_FileToUploadPtr: make(map[uint]*models.FileToUpload, 0),
+		Map_FileToUploadDBID_FileToUploadDB:  make(map[uint]*FileToUploadDB, 0),
+		Map_FileToUploadPtr_FileToUploadDBID: make(map[*models.FileToUpload]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoMessage = BackRepoMessageStruct{
+		Map_MessageDBID_MessagePtr: make(map[uint]*models.Message, 0),
+		Map_MessageDBID_MessageDB:  make(map[uint]*MessageDB, 0),
+		Map_MessagePtr_MessageDBID: make(map[*models.Message]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -115,9 +137,13 @@ func (backRepo *BackRepoStruct) Commit(stage *models.Stage) {
 
 	// insertion point for per struct back repo phase one commit
 	backRepo.BackRepoFileToDownload.CommitPhaseOne(stage)
+	backRepo.BackRepoFileToUpload.CommitPhaseOne(stage)
+	backRepo.BackRepoMessage.CommitPhaseOne(stage)
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoFileToDownload.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoFileToUpload.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoMessage.CommitPhaseTwo(backRepo)
 
 	// important to release the mutex before calls to IncrementCommitFromBackNb
 	// because it will block otherwise
@@ -133,9 +159,13 @@ func (backRepo *BackRepoStruct) Checkout(stage *models.Stage) {
 	defer backRepo.rwMutex.Unlock()
 	// insertion point for per struct back repo phase one commit
 	backRepo.BackRepoFileToDownload.CheckoutPhaseOne()
+	backRepo.BackRepoFileToUpload.CheckoutPhaseOne()
+	backRepo.BackRepoMessage.CheckoutPhaseOne()
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoFileToDownload.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoFileToUpload.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoMessage.CheckoutPhaseTwo(backRepo)
 }
 
 // Backup the BackRepoStruct
@@ -144,6 +174,8 @@ func (backRepo *BackRepoStruct) Backup(stage *models.Stage, dirPath string) {
 
 	// insertion point for per struct backup
 	backRepo.BackRepoFileToDownload.Backup(dirPath)
+	backRepo.BackRepoFileToUpload.Backup(dirPath)
+	backRepo.BackRepoMessage.Backup(dirPath)
 }
 
 // Backup in XL the BackRepoStruct
@@ -155,6 +187,8 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.Stage, dirPath string) {
 
 	// insertion point for per struct backup
 	backRepo.BackRepoFileToDownload.BackupXL(file)
+	backRepo.BackRepoFileToUpload.BackupXL(file)
+	backRepo.BackRepoMessage.BackupXL(file)
 
 	var b bytes.Buffer
 	writer := bufio.NewWriter(&b)
@@ -180,6 +214,8 @@ func (backRepo *BackRepoStruct) Restore(stage *models.Stage, dirPath string) {
 
 	// insertion point for per struct backup
 	backRepo.BackRepoFileToDownload.RestorePhaseOne(dirPath)
+	backRepo.BackRepoFileToUpload.RestorePhaseOne(dirPath)
+	backRepo.BackRepoMessage.RestorePhaseOne(dirPath)
 
 	//
 	// restauration second phase (reindex pointers with the new ID)
@@ -187,6 +223,8 @@ func (backRepo *BackRepoStruct) Restore(stage *models.Stage, dirPath string) {
 
 	// insertion point for per struct backup
 	backRepo.BackRepoFileToDownload.RestorePhaseTwo()
+	backRepo.BackRepoFileToUpload.RestorePhaseTwo()
+	backRepo.BackRepoMessage.RestorePhaseTwo()
 
 	backRepo.stage.Checkout()
 }
@@ -215,6 +253,8 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.Stage, dirPath string) {
 
 	// insertion point for per struct backup
 	backRepo.BackRepoFileToDownload.RestoreXLPhaseOne(file)
+	backRepo.BackRepoFileToUpload.RestoreXLPhaseOne(file)
+	backRepo.BackRepoMessage.RestoreXLPhaseOne(file)
 
 	// commit the restored stage
 	backRepo.stage.Commit()
