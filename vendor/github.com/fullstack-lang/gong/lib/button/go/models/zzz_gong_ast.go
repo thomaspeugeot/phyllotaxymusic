@@ -46,6 +46,15 @@ func ParseAstFile(stage *Stage, pathToFile string) error {
 		return errors.New("Path does not exist %s ;" + fileOfInterest)
 	}
 
+	// Read the file content using os.ReadFile
+	content, err := os.ReadFile(fileOfInterest)
+	if err != nil {
+		return errors.New("Unable to read file " + err.Error())
+	}
+
+	// Assign the content to stage.contentWhenParsed
+	stage.contentWhenParsed = string(content)
+
 	fset := token.NewFileSet()
 	// startParser := time.Now()
 	inFile, errParser := parser.ParseFile(fset, fileOfInterest, nil, parser.ParseComments)
@@ -79,7 +88,7 @@ func ParseAstEmbeddedFile(stage *Stage, directory embed.FS, pathToFile string) e
 	fileContentBytes, err := directory.ReadFile(pathToFile)
 	if err != nil {
 		// Return a specific error if the file can't be read from the embed.FS
-		return errors.New("Unable to read embedded file '" + pathToFile + "': " + err.Error())
+		return errors.New(stage.GetName() + "; Unable to read embedded file " + err.Error())
 	}
 
 	// 2. Create a FileSet to manage position information.
@@ -139,6 +148,29 @@ func ParseAstFileFromAst(stage *Stage, inFile *ast.File, fset *token.FileSet) er
 				// astCoordinate := // astCoordinate + "\tBody: "
 				for _, stmt := range body.List {
 					switch stmt := stmt.(type) {
+					case *ast.DeclStmt:
+						if genDecl, ok := stmt.Decl.(*ast.GenDecl); ok && genDecl.Tok == token.CONST {
+							for _, spec := range genDecl.Specs {
+								if valueSpec, ok := spec.(*ast.ValueSpec); ok {
+									for i, name := range valueSpec.Names {
+										if i < len(valueSpec.Values) {
+											if basicLit, ok := valueSpec.Values[i].(*ast.BasicLit); ok && basicLit.Kind == token.STRING {
+												// Remove quotes from string literal
+												value := strings.Trim(basicLit.Value, `"`)
+
+												switch name.Name {
+												case "__commitId__":
+													if parsedUint, err := strconv.ParseUint(value, 10, 64); err == nil {
+														stage.commitId = uint(parsedUint)
+														stage.commitIdWhenParsed = stage.commitId
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
 					case *ast.ExprStmt:
 						exprStmt := stmt
 						// astCoordinate := // astCoordinate + "\tExprStmt: "
@@ -585,7 +617,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						var ok bool
 						gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 						if !ok {
-							log.Fatalln("gongstructName not found for identifier", identifier)
+							log.Println("gongstructName not found for identifier", identifier)
+							break
 						}
 						switch gongstructName {
 						// insertion point for basic lit assignments
@@ -631,7 +664,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				_ = basicLit.Value
 				_ = basicLit
 			}
-			for _, arg := range callExpr.Args {
+			for argNb, arg := range callExpr.Args {
+				_ = argNb
 				// astCoordinate := astCoordinate + "\tArg"
 				switch arg := arg.(type) {
 				case *ast.Ident, *ast.SelectorExpr:
@@ -652,7 +686,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 
 					gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 					if !ok {
-						log.Fatalln("gongstructName not found for identifier", identifier)
+						log.Println("gongstructName not found for identifier", identifier)
+						break
 					}
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
@@ -664,28 +699,28 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "Buttons":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing Group[identifier].Buttons = append(Group[identifier].Buttons, Button instance )
-							// the map will not find the Button instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Button[targetIdentifier]; ok {
-								__gong__map_Group[identifier].Buttons =
-									append(__gong__map_Group[identifier].Buttons, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Button[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_Group[identifier]
+								instanceWhoseFieldIsAppended.Buttons = append(instanceWhoseFieldIsAppended.Buttons, instanceToAppend)
 							}
 						}
 					case "Layout":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "Groups":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing Layout[identifier].Groups = append(Layout[identifier].Groups, Group instance )
-							// the map will not find the Group instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Group[targetIdentifier]; ok {
-								__gong__map_Layout[identifier].Groups =
-									append(__gong__map_Layout[identifier].Groups, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Group[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_Layout[identifier]
+								instanceWhoseFieldIsAppended.Groups = append(instanceWhoseFieldIsAppended.Groups, instanceToAppend)
 							}
 						}
 					}
@@ -736,7 +771,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			var ok bool
 			gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 			if !ok {
-				log.Fatalln("gongstructName not found for identifier", identifier)
+				log.Println("gongstructName not found for identifier", identifier)
+				break
 			}
 
 			// substitute the RHS part of the assignment if a //gong:ident directive is met
@@ -795,7 +831,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			var ok bool
 			gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 			if !ok {
-				log.Fatalln("gongstructName not found for identifier", identifier)
+				log.Println("gongstructName not found for identifier", identifier)
+				break
 			}
 			switch gongstructName {
 			// insertion point for bool & pointers assignments
@@ -851,7 +888,17 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				var ok bool
 				gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 				if !ok {
-					log.Fatalln("gongstructName not found for identifier", identifier)
+					log.Println("gongstructName not found for identifier", identifier)
+					break
+				}
+
+				if basicLit == nil {
+					// for the meta field written as ref_models.ENUM_VALUE1
+					basicLit = new(ast.BasicLit)
+					basicLit.Kind = token.STRING // Or another appropriate token.Kind
+					basicLit.Value = selectorExpr.X.(*ast.Ident).Name + "." + Sel.Name
+					_ = basicLit.Kind
+					_ = basicLit.Value
 				}
 
 				// remove first and last char

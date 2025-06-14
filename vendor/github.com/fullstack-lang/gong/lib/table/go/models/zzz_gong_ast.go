@@ -46,6 +46,15 @@ func ParseAstFile(stage *Stage, pathToFile string) error {
 		return errors.New("Path does not exist %s ;" + fileOfInterest)
 	}
 
+	// Read the file content using os.ReadFile
+	content, err := os.ReadFile(fileOfInterest)
+	if err != nil {
+		return errors.New("Unable to read file " + err.Error())
+	}
+
+	// Assign the content to stage.contentWhenParsed
+	stage.contentWhenParsed = string(content)
+
 	fset := token.NewFileSet()
 	// startParser := time.Now()
 	inFile, errParser := parser.ParseFile(fset, fileOfInterest, nil, parser.ParseComments)
@@ -79,7 +88,7 @@ func ParseAstEmbeddedFile(stage *Stage, directory embed.FS, pathToFile string) e
 	fileContentBytes, err := directory.ReadFile(pathToFile)
 	if err != nil {
 		// Return a specific error if the file can't be read from the embed.FS
-		return errors.New("Unable to read embedded file '" + pathToFile + "': " + err.Error())
+		return errors.New(stage.GetName() + "; Unable to read embedded file " + err.Error())
 	}
 
 	// 2. Create a FileSet to manage position information.
@@ -139,6 +148,29 @@ func ParseAstFileFromAst(stage *Stage, inFile *ast.File, fset *token.FileSet) er
 				// astCoordinate := // astCoordinate + "\tBody: "
 				for _, stmt := range body.List {
 					switch stmt := stmt.(type) {
+					case *ast.DeclStmt:
+						if genDecl, ok := stmt.Decl.(*ast.GenDecl); ok && genDecl.Tok == token.CONST {
+							for _, spec := range genDecl.Specs {
+								if valueSpec, ok := spec.(*ast.ValueSpec); ok {
+									for i, name := range valueSpec.Names {
+										if i < len(valueSpec.Values) {
+											if basicLit, ok := valueSpec.Values[i].(*ast.BasicLit); ok && basicLit.Kind == token.STRING {
+												// Remove quotes from string literal
+												value := strings.Trim(basicLit.Value, `"`)
+
+												switch name.Name {
+												case "__commitId__":
+													if parsedUint, err := strconv.ParseUint(value, 10, 64); err == nil {
+														stage.commitId = uint(parsedUint)
+														stage.commitIdWhenParsed = stage.commitId
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
 					case *ast.ExprStmt:
 						exprStmt := stmt
 						// astCoordinate := // astCoordinate + "\tExprStmt: "
@@ -725,7 +757,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						var ok bool
 						gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 						if !ok {
-							log.Fatalln("gongstructName not found for identifier", identifier)
+							log.Println("gongstructName not found for identifier", identifier)
+							break
 						}
 						switch gongstructName {
 						// insertion point for basic lit assignments
@@ -863,7 +896,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				_ = basicLit.Value
 				_ = basicLit
 			}
-			for _, arg := range callExpr.Args {
+			for argNb, arg := range callExpr.Args {
+				_ = argNb
 				// astCoordinate := astCoordinate + "\tArg"
 				switch arg := arg.(type) {
 				case *ast.Ident, *ast.SelectorExpr:
@@ -884,7 +918,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 
 					gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 					if !ok {
-						log.Fatalln("gongstructName not found for identifier", identifier)
+						log.Println("gongstructName not found for identifier", identifier)
+						break
 					}
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
@@ -924,24 +959,24 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "FormFields":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing FormDiv[identifier].FormFields = append(FormDiv[identifier].FormFields, FormField instance )
-							// the map will not find the FormField instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_FormField[targetIdentifier]; ok {
-								__gong__map_FormDiv[identifier].FormFields =
-									append(__gong__map_FormDiv[identifier].FormFields, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_FormField[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_FormDiv[identifier]
+								instanceWhoseFieldIsAppended.FormFields = append(instanceWhoseFieldIsAppended.FormFields, instanceToAppend)
 							}
 						case "CheckBoxs":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing FormDiv[identifier].CheckBoxs = append(FormDiv[identifier].CheckBoxs, CheckBox instance )
-							// the map will not find the CheckBox instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_CheckBox[targetIdentifier]; ok {
-								__gong__map_FormDiv[identifier].CheckBoxs =
-									append(__gong__map_FormDiv[identifier].CheckBoxs, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_CheckBox[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_FormDiv[identifier]
+								instanceWhoseFieldIsAppended.CheckBoxs = append(instanceWhoseFieldIsAppended.CheckBoxs, instanceToAppend)
 							}
 						}
 					case "FormEditAssocButton":
@@ -972,14 +1007,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "Options":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing FormFieldSelect[identifier].Options = append(FormFieldSelect[identifier].Options, Option instance )
-							// the map will not find the Option instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Option[targetIdentifier]; ok {
-								__gong__map_FormFieldSelect[identifier].Options =
-									append(__gong__map_FormFieldSelect[identifier].Options, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Option[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_FormFieldSelect[identifier]
+								instanceWhoseFieldIsAppended.Options = append(instanceWhoseFieldIsAppended.Options, instanceToAppend)
 							}
 						}
 					case "FormFieldString":
@@ -994,14 +1029,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "FormDivs":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing FormGroup[identifier].FormDivs = append(FormGroup[identifier].FormDivs, FormDiv instance )
-							// the map will not find the FormDiv instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_FormDiv[targetIdentifier]; ok {
-								__gong__map_FormGroup[identifier].FormDivs =
-									append(__gong__map_FormGroup[identifier].FormDivs, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_FormDiv[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_FormGroup[identifier]
+								instanceWhoseFieldIsAppended.FormDivs = append(instanceWhoseFieldIsAppended.FormDivs, instanceToAppend)
 							}
 						}
 					case "FormSortAssocButton":
@@ -1016,38 +1051,38 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "Cells":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing Row[identifier].Cells = append(Row[identifier].Cells, Cell instance )
-							// the map will not find the Cell instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Cell[targetIdentifier]; ok {
-								__gong__map_Row[identifier].Cells =
-									append(__gong__map_Row[identifier].Cells, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Cell[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_Row[identifier]
+								instanceWhoseFieldIsAppended.Cells = append(instanceWhoseFieldIsAppended.Cells, instanceToAppend)
 							}
 						}
 					case "Table":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "DisplayedColumns":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing Table[identifier].DisplayedColumns = append(Table[identifier].DisplayedColumns, DisplayedColumn instance )
-							// the map will not find the DisplayedColumn instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_DisplayedColumn[targetIdentifier]; ok {
-								__gong__map_Table[identifier].DisplayedColumns =
-									append(__gong__map_Table[identifier].DisplayedColumns, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_DisplayedColumn[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_Table[identifier]
+								instanceWhoseFieldIsAppended.DisplayedColumns = append(instanceWhoseFieldIsAppended.DisplayedColumns, instanceToAppend)
 							}
 						case "Rows":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing Table[identifier].Rows = append(Table[identifier].Rows, Row instance )
-							// the map will not find the Row instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Row[targetIdentifier]; ok {
-								__gong__map_Table[identifier].Rows =
-									append(__gong__map_Table[identifier].Rows, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Row[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_Table[identifier]
+								instanceWhoseFieldIsAppended.Rows = append(instanceWhoseFieldIsAppended.Rows, instanceToAppend)
 							}
 						}
 					}
@@ -1098,7 +1133,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			var ok bool
 			gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 			if !ok {
-				log.Fatalln("gongstructName not found for identifier", identifier)
+				log.Println("gongstructName not found for identifier", identifier)
+				break
 			}
 
 			// substitute the RHS part of the assignment if a //gong:ident directive is met
@@ -1221,6 +1257,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_FormEditAssocButton[identifier].AssociationStorage = fielValue
+				case "ToolTipText":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FormEditAssocButton[identifier].ToolTipText = fielValue
 				}
 			case "FormField":
 				switch fieldName {
@@ -1384,6 +1424,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_FormSortAssocButton[identifier].Label = fielValue
+				case "ToolTipText":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FormSortAssocButton[identifier].ToolTipText = fielValue
 				}
 			case "Option":
 				switch fieldName {
@@ -1408,6 +1452,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Table[identifier].Name = fielValue
+				case "SaveButtonLabel":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Table[identifier].SaveButtonLabel = fielValue
 				case "NbOfStickyColumns":
 					// convert string to int
 					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
@@ -1426,7 +1474,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			var ok bool
 			gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 			if !ok {
-				log.Fatalln("gongstructName not found for identifier", identifier)
+				log.Println("gongstructName not found for identifier", identifier)
+				break
 			}
 			switch gongstructName {
 			// insertion point for bool & pointers assignments
@@ -1525,6 +1574,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						log.Fatalln(err)
 					}
 					__gong__map_FormEditAssocButton[identifier].IsForSavePurpose = fielValue
+				case "HasToolTip":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_FormEditAssocButton[identifier].HasToolTip = fielValue
 				}
 			case "FormField":
 				switch fieldName {
@@ -1659,6 +1715,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			case "FormSortAssocButton":
 				switch fieldName {
 				// insertion point for field dependant code
+				case "HasToolTip":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_FormSortAssocButton[identifier].HasToolTip = fielValue
 				}
 			case "Option":
 				switch fieldName {
@@ -1775,7 +1838,17 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				var ok bool
 				gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 				if !ok {
-					log.Fatalln("gongstructName not found for identifier", identifier)
+					log.Println("gongstructName not found for identifier", identifier)
+					break
+				}
+
+				if basicLit == nil {
+					// for the meta field written as ref_models.ENUM_VALUE1
+					basicLit = new(ast.BasicLit)
+					basicLit.Kind = token.STRING // Or another appropriate token.Kind
+					basicLit.Value = selectorExpr.X.(*ast.Ident).Name + "." + Sel.Name
+					_ = basicLit.Kind
+					_ = basicLit.Value
 				}
 
 				// remove first and last char

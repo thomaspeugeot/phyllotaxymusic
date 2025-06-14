@@ -79,6 +79,18 @@ func FillUpNamedFormFromGongstruct(instance any, probe *Probe, formStage *gongta
 		)
 		formGroup.HasSuppressButton = true
 		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.FavIcon:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "FavIcon Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__FavIconFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
 	case *models.Form:
 		formGroup := (&gongtable.FormGroup{
 			Name:  formName,
@@ -97,6 +109,30 @@ func FillUpNamedFormFromGongstruct(instance any, probe *Probe, formStage *gongta
 			Label: "Load Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__LoadFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.LogoOnTheLeft:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "LogoOnTheLeft Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__LogoOnTheLeftFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.LogoOnTheRight:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "LogoOnTheRight Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__LogoOnTheRightFormCallback(
 			instancesTyped,
 			probe,
 			formGroup,
@@ -145,6 +181,18 @@ func FillUpNamedFormFromGongstruct(instance any, probe *Probe, formStage *gongta
 			Label: "Table Form",
 		}).Stage(formStage)
 		formGroup.OnSave = __gong__New__TableFormCallback(
+			instancesTyped,
+			probe,
+			formGroup,
+		)
+		formGroup.HasSuppressButton = true
+		FillUpForm(instancesTyped, formGroup, probe)
+	case *models.Title:
+		formGroup := (&gongtable.FormGroup{
+			Name:  formName,
+			Label: "Title Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__TitleFormCallback(
 			instancesTyped,
 			probe,
 			formGroup,

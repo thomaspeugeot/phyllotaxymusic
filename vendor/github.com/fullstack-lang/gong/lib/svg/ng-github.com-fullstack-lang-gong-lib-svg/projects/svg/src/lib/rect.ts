@@ -48,6 +48,13 @@ export class Rect {
 	HasBottomHandle: boolean = false
 	CanMoveHorizontaly: boolean = false
 	CanMoveVerticaly: boolean = false
+	ChangeColorWhenHovered: boolean = false
+	ColorWhenHovered: string = ""
+	OriginalColor: string = ""
+	FillOpacityWhenHovered: number = 0
+	OriginalFillOpacity: number = 0
+	HasToolTip: boolean = false
+	ToolTipText: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
 	Animations: Array<Animate> = []
@@ -90,6 +97,13 @@ export function CopyRectToRectAPI(rect: Rect, rectAPI: RectAPI) {
 	rectAPI.HasBottomHandle = rect.HasBottomHandle
 	rectAPI.CanMoveHorizontaly = rect.CanMoveHorizontaly
 	rectAPI.CanMoveVerticaly = rect.CanMoveVerticaly
+	rectAPI.ChangeColorWhenHovered = rect.ChangeColorWhenHovered
+	rectAPI.ColorWhenHovered = rect.ColorWhenHovered
+	rectAPI.OriginalColor = rect.OriginalColor
+	rectAPI.FillOpacityWhenHovered = rect.FillOpacityWhenHovered
+	rectAPI.OriginalFillOpacity = rect.OriginalFillOpacity
+	rectAPI.HasToolTip = rect.HasToolTip
+	rectAPI.ToolTipText = rect.ToolTipText
 
 	// insertion point for pointer fields encoding
 
@@ -154,6 +168,13 @@ export function CopyRectAPIToRect(rectAPI: RectAPI, rect: Rect, frontRepo: Front
 	rect.HasBottomHandle = rectAPI.HasBottomHandle
 	rect.CanMoveHorizontaly = rectAPI.CanMoveHorizontaly
 	rect.CanMoveVerticaly = rectAPI.CanMoveVerticaly
+	rect.ChangeColorWhenHovered = rectAPI.ChangeColorWhenHovered
+	rect.ColorWhenHovered = rectAPI.ColorWhenHovered
+	rect.OriginalColor = rectAPI.OriginalColor
+	rect.FillOpacityWhenHovered = rectAPI.FillOpacityWhenHovered
+	rect.OriginalFillOpacity = rectAPI.OriginalFillOpacity
+	rect.HasToolTip = rectAPI.HasToolTip
+	rect.ToolTipText = rectAPI.ToolTipText
 
 	// insertion point for pointer fields encoding
 

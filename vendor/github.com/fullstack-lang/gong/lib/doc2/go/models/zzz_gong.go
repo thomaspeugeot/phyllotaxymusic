@@ -27,10 +27,10 @@ func __Gong__Abs(x int) int {
 
 var _ = __Gong__Abs
 
-const ProbeTreeSidebarSuffix = "-sidebar"
-const ProbeTableSuffix = "-table"
-const ProbeFormSuffix = "-form"
-const ProbeSplitSuffix = "-probe"
+const ProbeTreeSidebarSuffix = ":sidebar of the probe"
+const ProbeTableSuffix = ":table of the probe"
+const ProbeFormSuffix = ":form of the probe"
+const ProbeSplitSuffix = ":probe of the probe"
 
 func (stage *Stage) GetProbeTreeSidebarStageName() string {
 	return stage.GetType() + ":" + stage.GetName() + ProbeTreeSidebarSuffix
@@ -79,7 +79,12 @@ type GongStructInterface interface {
 // Stage enables storage of staged instances
 // swagger:ignore
 type Stage struct {
-	name string
+	name               string
+	commitId           uint // commitId is updated at each commit
+	commitTimeStamp    time.Time
+	contentWhenParsed  string
+	commitIdWhenParsed uint
+	generatesDiff      bool
 
 	// insertion point for definition of arrays registering instances
 	AttributeShapes           map[*AttributeShape]any
@@ -237,6 +242,10 @@ type Stage struct {
 	NamedStructs []*NamedStruct
 }
 
+func (stage *Stage) SetGeneratesDiff(generatesDiff bool) {
+	stage.generatesDiff = generatesDiff
+}
+
 // GetNamedStructs implements models.ProbebStage.
 func (stage *Stage) GetNamedStructsNames() (res []string) {
 
@@ -266,6 +275,30 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 
 	for _, instance := range orderedSet {
 		res = append(res, instance.GetName())
+	}
+
+	return
+}
+
+func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []T) {
+
+	orderedSet := []T{}
+	for instance := range set {
+		orderedSet = append(orderedSet, instance)
+	}
+	sort.Slice(orderedSet[:], func(i, j int) bool {
+		instancei := orderedSet[i]
+		instancej := orderedSet[j]
+		i_order, oki := order[instancei]
+		j_order, okj := order[instancej]
+		if !oki || !okj {
+			log.Fatalf("GetNamedStructInstances: pointer not found")
+		}
+		return i_order < j_order
+	})
+
+	for _, instance := range orderedSet {
+		res = append(res, instance)
 	}
 
 	return
@@ -528,6 +561,8 @@ func (stage *Stage) CommitWithSuspendedCallbacks() {
 
 func (stage *Stage) Commit() {
 	stage.ComputeReverseMaps()
+	stage.commitId++
+	stage.commitTimeStamp = time.Now()
 
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
@@ -1773,23 +1808,23 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case AttributeShape:
-		res = []string{"Name", "Identifier", "IdentifierMeta", "FieldTypeAsString", "Structname", "Fieldtypename"}
+		res = []string{"Name", "IdentifierMeta", "FieldTypeAsString", "Structname", "Fieldtypename"}
 	case Classdiagram:
 		res = []string{"Name", "Description", "IsIncludedInStaticWebSite", "GongStructShapes", "GongEnumShapes", "GongNoteShapes", "IsInRenameMode", "IsExpanded", "NodeGongStructsIsExpanded", "NodeGongStructNodeExpansion", "NodeGongEnumsIsExpanded", "NodeGongEnumNodeExpansion", "NodeGongNotesIsExpanded", "NodeGongNoteNodeExpansion"}
 	case DiagramPackage:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "SelectedClassdiagram", "AbsolutePathToDiagramPackage"}
 	case GongEnumShape:
-		res = []string{"Name", "X", "Y", "Identifier", "IdentifierMeta", "GongEnumValueShapes", "Width", "Height", "IsExpanded"}
+		res = []string{"Name", "X", "Y", "IdentifierMeta", "GongEnumValueShapes", "Width", "Height", "IsExpanded"}
 	case GongEnumValueShape:
-		res = []string{"Name", "Identifier"}
+		res = []string{"Name", "IdentifierMeta"}
 	case GongNoteLinkShape:
 		res = []string{"Name", "Identifier", "Type"}
 	case GongNoteShape:
 		res = []string{"Name", "Identifier", "Body", "BodyHTML", "X", "Y", "Width", "Height", "Matched", "GongNoteLinkShapes", "IsExpanded"}
 	case GongStructShape:
-		res = []string{"Name", "X", "Y", "Identifier", "IdentifierMeta", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
+		res = []string{"Name", "X", "Y", "IdentifierMeta", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
 	case LinkShape:
-		res = []string{"Name", "Identifier", "IdentifierMeta", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
+		res = []string{"Name", "IdentifierMeta", "FieldTypeIdentifierMeta", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	}
 	return
 }
@@ -1871,23 +1906,23 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *AttributeShape:
-		res = []string{"Name", "Identifier", "IdentifierMeta", "FieldTypeAsString", "Structname", "Fieldtypename"}
+		res = []string{"Name", "IdentifierMeta", "FieldTypeAsString", "Structname", "Fieldtypename"}
 	case *Classdiagram:
 		res = []string{"Name", "Description", "IsIncludedInStaticWebSite", "GongStructShapes", "GongEnumShapes", "GongNoteShapes", "IsInRenameMode", "IsExpanded", "NodeGongStructsIsExpanded", "NodeGongStructNodeExpansion", "NodeGongEnumsIsExpanded", "NodeGongEnumNodeExpansion", "NodeGongNotesIsExpanded", "NodeGongNoteNodeExpansion"}
 	case *DiagramPackage:
 		res = []string{"Name", "Path", "GongModelPath", "Classdiagrams", "SelectedClassdiagram", "AbsolutePathToDiagramPackage"}
 	case *GongEnumShape:
-		res = []string{"Name", "X", "Y", "Identifier", "IdentifierMeta", "GongEnumValueShapes", "Width", "Height", "IsExpanded"}
+		res = []string{"Name", "X", "Y", "IdentifierMeta", "GongEnumValueShapes", "Width", "Height", "IsExpanded"}
 	case *GongEnumValueShape:
-		res = []string{"Name", "Identifier"}
+		res = []string{"Name", "IdentifierMeta"}
 	case *GongNoteLinkShape:
 		res = []string{"Name", "Identifier", "Type"}
 	case *GongNoteShape:
 		res = []string{"Name", "Identifier", "Body", "BodyHTML", "X", "Y", "Width", "Height", "Matched", "GongNoteLinkShapes", "IsExpanded"}
 	case *GongStructShape:
-		res = []string{"Name", "X", "Y", "Identifier", "IdentifierMeta", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
+		res = []string{"Name", "X", "Y", "IdentifierMeta", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
 	case *LinkShape:
-		res = []string{"Name", "Identifier", "IdentifierMeta", "Fieldtypename", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
+		res = []string{"Name", "IdentifierMeta", "FieldTypeIdentifierMeta", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	}
 	return
 }
@@ -1934,8 +1969,6 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
 		case "FieldTypeAsString":
 			res.valueString = inferedInstance.FieldTypeAsString
 		case "Structname":
@@ -2038,8 +2071,6 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
 			res.valueFloat = inferedInstance.Y
 			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
 		case "GongEnumValueShapes":
 			for idx, __instance__ := range inferedInstance.GongEnumValueShapes {
 				if idx > 0 {
@@ -2065,8 +2096,6 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
 		}
 	case *GongNoteLinkShape:
 		switch fieldName {
@@ -2135,8 +2164,6 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
 			res.valueFloat = inferedInstance.Y
 			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
 		case "ShowNbInstances":
 			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowNbInstances)
 			res.valueBool = inferedInstance.ShowNbInstances
@@ -2177,10 +2204,6 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
-		case "Fieldtypename":
-			res.valueString = inferedInstance.Fieldtypename
 		case "FieldOffsetX":
 			res.valueString = fmt.Sprintf("%f", inferedInstance.FieldOffsetX)
 			res.valueFloat = inferedInstance.FieldOffsetX
@@ -2253,8 +2276,6 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
 		case "FieldTypeAsString":
 			res.valueString = inferedInstance.FieldTypeAsString
 		case "Structname":
@@ -2357,8 +2378,6 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
 			res.valueFloat = inferedInstance.Y
 			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
 		case "GongEnumValueShapes":
 			for idx, __instance__ := range inferedInstance.GongEnumValueShapes {
 				if idx > 0 {
@@ -2384,8 +2403,6 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
 		}
 	case GongNoteLinkShape:
 		switch fieldName {
@@ -2454,8 +2471,6 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
 			res.valueFloat = inferedInstance.Y
 			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
 		case "ShowNbInstances":
 			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowNbInstances)
 			res.valueBool = inferedInstance.ShowNbInstances
@@ -2496,10 +2511,6 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 		// string value of fields
 		case "Name":
 			res.valueString = inferedInstance.Name
-		case "Identifier":
-			res.valueString = inferedInstance.Identifier
-		case "Fieldtypename":
-			res.valueString = inferedInstance.Fieldtypename
 		case "FieldOffsetX":
 			res.valueString = fmt.Sprintf("%f", inferedInstance.FieldOffsetX)
 			res.valueFloat = inferedInstance.FieldOffsetX

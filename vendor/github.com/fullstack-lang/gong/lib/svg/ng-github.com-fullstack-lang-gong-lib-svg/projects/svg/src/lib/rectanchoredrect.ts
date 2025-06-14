@@ -28,6 +28,8 @@ export class RectAnchoredRect {
 	RectAnchorType: string = ""
 	WidthFollowRect: boolean = false
 	HeightFollowRect: boolean = false
+	HasToolTip: boolean = false
+	ToolTipText: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -58,6 +60,8 @@ export function CopyRectAnchoredRectToRectAnchoredRectAPI(rectanchoredrect: Rect
 	rectanchoredrectAPI.RectAnchorType = rectanchoredrect.RectAnchorType
 	rectanchoredrectAPI.WidthFollowRect = rectanchoredrect.WidthFollowRect
 	rectanchoredrectAPI.HeightFollowRect = rectanchoredrect.HeightFollowRect
+	rectanchoredrectAPI.HasToolTip = rectanchoredrect.HasToolTip
+	rectanchoredrectAPI.ToolTipText = rectanchoredrect.ToolTipText
 	rectanchoredrectAPI.Color = rectanchoredrect.Color
 	rectanchoredrectAPI.FillOpacity = rectanchoredrect.FillOpacity
 	rectanchoredrectAPI.Stroke = rectanchoredrect.Stroke
@@ -94,6 +98,8 @@ export function CopyRectAnchoredRectAPIToRectAnchoredRect(rectanchoredrectAPI: R
 	rectanchoredrect.RectAnchorType = rectanchoredrectAPI.RectAnchorType
 	rectanchoredrect.WidthFollowRect = rectanchoredrectAPI.WidthFollowRect
 	rectanchoredrect.HeightFollowRect = rectanchoredrectAPI.HeightFollowRect
+	rectanchoredrect.HasToolTip = rectanchoredrectAPI.HasToolTip
+	rectanchoredrect.ToolTipText = rectanchoredrectAPI.ToolTipText
 	rectanchoredrect.Color = rectanchoredrectAPI.Color
 	rectanchoredrect.FillOpacity = rectanchoredrectAPI.FillOpacity
 	rectanchoredrect.Stroke = rectanchoredrectAPI.Stroke

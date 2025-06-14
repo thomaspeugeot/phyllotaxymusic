@@ -65,11 +65,20 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "Doc" {
 		updateAndCommitTable[models.Doc](nodeImplGongstruct.probe)
 	}
+	if nodeImplGongstruct.gongStruct.GetName() == "FavIcon" {
+		updateAndCommitTable[models.FavIcon](nodeImplGongstruct.probe)
+	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Form" {
 		updateAndCommitTable[models.Form](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Load" {
 		updateAndCommitTable[models.Load](nodeImplGongstruct.probe)
+	}
+	if nodeImplGongstruct.gongStruct.GetName() == "LogoOnTheLeft" {
+		updateAndCommitTable[models.LogoOnTheLeft](nodeImplGongstruct.probe)
+	}
+	if nodeImplGongstruct.gongStruct.GetName() == "LogoOnTheRight" {
+		updateAndCommitTable[models.LogoOnTheRight](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Slider" {
 		updateAndCommitTable[models.Slider](nodeImplGongstruct.probe)
@@ -82,6 +91,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Table" {
 		updateAndCommitTable[models.Table](nodeImplGongstruct.probe)
+	}
+	if nodeImplGongstruct.gongStruct.GetName() == "Title" {
+		updateAndCommitTable[models.Title](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Tone" {
 		updateAndCommitTable[models.Tone](nodeImplGongstruct.probe)

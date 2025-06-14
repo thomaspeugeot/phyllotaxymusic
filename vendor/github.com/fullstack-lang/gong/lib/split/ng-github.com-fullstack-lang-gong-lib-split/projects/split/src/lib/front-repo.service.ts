@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 
 import { Observable, combineLatest, BehaviorSubject, of } from 'rxjs'
+import { shareReplay } from 'rxjs/operators'
 
 // insertion point sub template for services imports
 import { AsSplitAPI } from './assplit-api'
@@ -24,6 +25,10 @@ import { DocAPI } from './doc-api'
 import { Doc, CopyDocAPIToDoc } from './doc'
 import { DocService } from './doc.service'
 
+import { FavIconAPI } from './favicon-api'
+import { FavIcon, CopyFavIconAPIToFavIcon } from './favicon'
+import { FavIconService } from './favicon.service'
+
 import { FormAPI } from './form-api'
 import { Form, CopyFormAPIToForm } from './form'
 import { FormService } from './form.service'
@@ -31,6 +36,14 @@ import { FormService } from './form.service'
 import { LoadAPI } from './load-api'
 import { Load, CopyLoadAPIToLoad } from './load'
 import { LoadService } from './load.service'
+
+import { LogoOnTheLeftAPI } from './logoontheleft-api'
+import { LogoOnTheLeft, CopyLogoOnTheLeftAPIToLogoOnTheLeft } from './logoontheleft'
+import { LogoOnTheLeftService } from './logoontheleft.service'
+
+import { LogoOnTheRightAPI } from './logoontheright-api'
+import { LogoOnTheRight, CopyLogoOnTheRightAPIToLogoOnTheRight } from './logoontheright'
+import { LogoOnTheRightService } from './logoontheright.service'
 
 import { SliderAPI } from './slider-api'
 import { Slider, CopySliderAPIToSlider } from './slider'
@@ -47,6 +60,10 @@ import { SvgService } from './svg.service'
 import { TableAPI } from './table-api'
 import { Table, CopyTableAPIToTable } from './table'
 import { TableService } from './table.service'
+
+import { TitleAPI } from './title-api'
+import { Title, CopyTitleAPIToTitle } from './title'
+import { TitleService } from './title.service'
 
 import { ToneAPI } from './tone-api'
 import { Tone, CopyToneAPIToTone } from './tone'
@@ -86,11 +103,20 @@ export class FrontRepo { // insertion point sub template
 	array_Docs = new Array<Doc>() // array of front instances
 	map_ID_Doc = new Map<number, Doc>() // map of front instances
 
+	array_FavIcons = new Array<FavIcon>() // array of front instances
+	map_ID_FavIcon = new Map<number, FavIcon>() // map of front instances
+
 	array_Forms = new Array<Form>() // array of front instances
 	map_ID_Form = new Map<number, Form>() // map of front instances
 
 	array_Loads = new Array<Load>() // array of front instances
 	map_ID_Load = new Map<number, Load>() // map of front instances
+
+	array_LogoOnTheLefts = new Array<LogoOnTheLeft>() // array of front instances
+	map_ID_LogoOnTheLeft = new Map<number, LogoOnTheLeft>() // map of front instances
+
+	array_LogoOnTheRights = new Array<LogoOnTheRight>() // array of front instances
+	map_ID_LogoOnTheRight = new Map<number, LogoOnTheRight>() // map of front instances
 
 	array_Sliders = new Array<Slider>() // array of front instances
 	map_ID_Slider = new Map<number, Slider>() // map of front instances
@@ -103,6 +129,9 @@ export class FrontRepo { // insertion point sub template
 
 	array_Tables = new Array<Table>() // array of front instances
 	map_ID_Table = new Map<number, Table>() // map of front instances
+
+	array_Titles = new Array<Title>() // array of front instances
+	map_ID_Title = new Map<number, Title>() // map of front instances
 
 	array_Tones = new Array<Tone>() // array of front instances
 	map_ID_Tone = new Map<number, Tone>() // map of front instances
@@ -135,10 +164,16 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Cursors as unknown as Array<Type>
 			case 'Doc':
 				return this.array_Docs as unknown as Array<Type>
+			case 'FavIcon':
+				return this.array_FavIcons as unknown as Array<Type>
 			case 'Form':
 				return this.array_Forms as unknown as Array<Type>
 			case 'Load':
 				return this.array_Loads as unknown as Array<Type>
+			case 'LogoOnTheLeft':
+				return this.array_LogoOnTheLefts as unknown as Array<Type>
+			case 'LogoOnTheRight':
+				return this.array_LogoOnTheRights as unknown as Array<Type>
 			case 'Slider':
 				return this.array_Sliders as unknown as Array<Type>
 			case 'Split':
@@ -147,6 +182,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Svgs as unknown as Array<Type>
 			case 'Table':
 				return this.array_Tables as unknown as Array<Type>
+			case 'Title':
+				return this.array_Titles as unknown as Array<Type>
 			case 'Tone':
 				return this.array_Tones as unknown as Array<Type>
 			case 'Tree':
@@ -156,7 +193,7 @@ export class FrontRepo { // insertion point sub template
 			case 'Xlsx':
 				return this.array_Xlsxs as unknown as Array<Type>
 			default:
-				throw new Error("Type not recognized");
+				throw new Error("Type not recognized")
 		}
 	}
 
@@ -173,10 +210,16 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Cursor as unknown as Map<number, Type>
 			case 'Doc':
 				return this.map_ID_Doc as unknown as Map<number, Type>
+			case 'FavIcon':
+				return this.map_ID_FavIcon as unknown as Map<number, Type>
 			case 'Form':
 				return this.map_ID_Form as unknown as Map<number, Type>
 			case 'Load':
 				return this.map_ID_Load as unknown as Map<number, Type>
+			case 'LogoOnTheLeft':
+				return this.map_ID_LogoOnTheLeft as unknown as Map<number, Type>
+			case 'LogoOnTheRight':
+				return this.map_ID_LogoOnTheRight as unknown as Map<number, Type>
 			case 'Slider':
 				return this.map_ID_Slider as unknown as Map<number, Type>
 			case 'Split':
@@ -185,6 +228,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Svg as unknown as Map<number, Type>
 			case 'Table':
 				return this.map_ID_Table as unknown as Map<number, Type>
+			case 'Title':
+				return this.map_ID_Title as unknown as Map<number, Type>
 			case 'Tone':
 				return this.map_ID_Tone as unknown as Map<number, Type>
 			case 'Tree':
@@ -194,7 +239,7 @@ export class FrontRepo { // insertion point sub template
 			case 'Xlsx':
 				return this.map_ID_Xlsx as unknown as Map<number, Type>
 			default:
-				throw new Error("Type not recognized");
+				throw new Error("Type not recognized")
 		}
 	}
 }
@@ -247,16 +292,19 @@ export enum SelectionMode {
 export class FrontRepoService {
 
 	Name: string = ""
-	private socket: WebSocket | undefined
 
 	httpOptions = {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-	};
+	}
 
 	//
 	// Store of all instances of the stack
 	//
 	frontRepo = new (FrontRepo)
+
+	// Manage open WebSocket connections
+	private webSocketConnections = new Map<string, Observable<FrontRepo>>()
+
 
 	constructor(
 		private http: HttpClient, // insertion point sub template 
@@ -265,12 +313,16 @@ export class FrontRepoService {
 		private buttonService: ButtonService,
 		private cursorService: CursorService,
 		private docService: DocService,
+		private faviconService: FavIconService,
 		private formService: FormService,
 		private loadService: LoadService,
+		private logoontheleftService: LogoOnTheLeftService,
+		private logoontherightService: LogoOnTheRightService,
 		private sliderService: SliderService,
 		private splitService: SplitService,
 		private svgService: SvgService,
 		private tableService: TableService,
+		private titleService: TitleService,
 		private toneService: ToneService,
 		private treeService: TreeService,
 		private viewService: ViewService,
@@ -287,7 +339,7 @@ export class FrontRepoService {
 				let behaviorSubject = instanceToBePosted[(structName + "ServiceChanged") as keyof typeof instanceToBePosted] as unknown as BehaviorSubject<string>
 				behaviorSubject.next("post")
 			}
-		);
+		)
 	}
 
 	// deleteService provides a delete function for each struct name
@@ -300,7 +352,7 @@ export class FrontRepoService {
 				let behaviorSubject = instanceToBeDeleted[(structName + "ServiceChanged") as keyof typeof instanceToBeDeleted] as unknown as BehaviorSubject<string>
 				behaviorSubject.next("delete")
 			}
-		);
+		)
 	}
 
 	// typing of observable can be messy in typescript. Therefore, one force the type
@@ -312,17 +364,21 @@ export class FrontRepoService {
 		Observable<ButtonAPI[]>,
 		Observable<CursorAPI[]>,
 		Observable<DocAPI[]>,
+		Observable<FavIconAPI[]>,
 		Observable<FormAPI[]>,
 		Observable<LoadAPI[]>,
+		Observable<LogoOnTheLeftAPI[]>,
+		Observable<LogoOnTheRightAPI[]>,
 		Observable<SliderAPI[]>,
 		Observable<SplitAPI[]>,
 		Observable<SvgAPI[]>,
 		Observable<TableAPI[]>,
+		Observable<TitleAPI[]>,
 		Observable<ToneAPI[]>,
 		Observable<TreeAPI[]>,
 		Observable<ViewAPI[]>,
 		Observable<XlsxAPI[]>,
-	];
+	]
 
 	//
 	// pull performs a GET on all struct of the stack and redeem association pointers 
@@ -342,12 +398,16 @@ export class FrontRepoService {
 			this.buttonService.getButtons(this.Name, this.frontRepo),
 			this.cursorService.getCursors(this.Name, this.frontRepo),
 			this.docService.getDocs(this.Name, this.frontRepo),
+			this.faviconService.getFavIcons(this.Name, this.frontRepo),
 			this.formService.getForms(this.Name, this.frontRepo),
 			this.loadService.getLoads(this.Name, this.frontRepo),
+			this.logoontheleftService.getLogoOnTheLefts(this.Name, this.frontRepo),
+			this.logoontherightService.getLogoOnTheRights(this.Name, this.frontRepo),
 			this.sliderService.getSliders(this.Name, this.frontRepo),
 			this.splitService.getSplits(this.Name, this.frontRepo),
 			this.svgService.getSvgs(this.Name, this.frontRepo),
 			this.tableService.getTables(this.Name, this.frontRepo),
+			this.titleService.getTitles(this.Name, this.frontRepo),
 			this.toneService.getTones(this.Name, this.frontRepo),
 			this.treeService.getTrees(this.Name, this.frontRepo),
 			this.viewService.getViews(this.Name, this.frontRepo),
@@ -367,12 +427,16 @@ export class FrontRepoService {
 						buttons_,
 						cursors_,
 						docs_,
+						favicons_,
 						forms_,
 						loads_,
+						logoonthelefts_,
+						logoontherights_,
 						sliders_,
 						splits_,
 						svgs_,
 						tables_,
+						titles_,
 						tones_,
 						trees_,
 						views_,
@@ -391,10 +455,16 @@ export class FrontRepoService {
 						cursors = cursors_ as CursorAPI[]
 						var docs: DocAPI[]
 						docs = docs_ as DocAPI[]
+						var favicons: FavIconAPI[]
+						favicons = favicons_ as FavIconAPI[]
 						var forms: FormAPI[]
 						forms = forms_ as FormAPI[]
 						var loads: LoadAPI[]
 						loads = loads_ as LoadAPI[]
+						var logoonthelefts: LogoOnTheLeftAPI[]
+						logoonthelefts = logoonthelefts_ as LogoOnTheLeftAPI[]
+						var logoontherights: LogoOnTheRightAPI[]
+						logoontherights = logoontherights_ as LogoOnTheRightAPI[]
 						var sliders: SliderAPI[]
 						sliders = sliders_ as SliderAPI[]
 						var splits: SplitAPI[]
@@ -403,6 +473,8 @@ export class FrontRepoService {
 						svgs = svgs_ as SvgAPI[]
 						var tables: TableAPI[]
 						tables = tables_ as TableAPI[]
+						var titles: TitleAPI[]
+						titles = titles_ as TitleAPI[]
 						var tones: ToneAPI[]
 						tones = tones_ as ToneAPI[]
 						var trees: TreeAPI[]
@@ -476,6 +548,18 @@ export class FrontRepoService {
 						)
 
 						// init the arrays
+						this.frontRepo.array_FavIcons = []
+						this.frontRepo.map_ID_FavIcon.clear()
+
+						favicons.forEach(
+							faviconAPI => {
+								let favicon = new FavIcon
+								this.frontRepo.array_FavIcons.push(favicon)
+								this.frontRepo.map_ID_FavIcon.set(faviconAPI.ID, favicon)
+							}
+						)
+
+						// init the arrays
 						this.frontRepo.array_Forms = []
 						this.frontRepo.map_ID_Form.clear()
 
@@ -496,6 +580,30 @@ export class FrontRepoService {
 								let load = new Load
 								this.frontRepo.array_Loads.push(load)
 								this.frontRepo.map_ID_Load.set(loadAPI.ID, load)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_LogoOnTheLefts = []
+						this.frontRepo.map_ID_LogoOnTheLeft.clear()
+
+						logoonthelefts.forEach(
+							logoontheleftAPI => {
+								let logoontheleft = new LogoOnTheLeft
+								this.frontRepo.array_LogoOnTheLefts.push(logoontheleft)
+								this.frontRepo.map_ID_LogoOnTheLeft.set(logoontheleftAPI.ID, logoontheleft)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_LogoOnTheRights = []
+						this.frontRepo.map_ID_LogoOnTheRight.clear()
+
+						logoontherights.forEach(
+							logoontherightAPI => {
+								let logoontheright = new LogoOnTheRight
+								this.frontRepo.array_LogoOnTheRights.push(logoontheright)
+								this.frontRepo.map_ID_LogoOnTheRight.set(logoontherightAPI.ID, logoontheright)
 							}
 						)
 
@@ -544,6 +652,18 @@ export class FrontRepoService {
 								let table = new Table
 								this.frontRepo.array_Tables.push(table)
 								this.frontRepo.map_ID_Table.set(tableAPI.ID, table)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_Titles = []
+						this.frontRepo.map_ID_Title.clear()
+
+						titles.forEach(
+							titleAPI => {
+								let title = new Title
+								this.frontRepo.array_Titles.push(title)
+								this.frontRepo.map_ID_Title.set(titleAPI.ID, title)
 							}
 						)
 
@@ -640,6 +760,14 @@ export class FrontRepoService {
 						)
 
 						// fill up front objects
+						favicons.forEach(
+							faviconAPI => {
+								let favicon = this.frontRepo.map_ID_FavIcon.get(faviconAPI.ID)
+								CopyFavIconAPIToFavIcon(faviconAPI, favicon!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
 						forms.forEach(
 							formAPI => {
 								let form = this.frontRepo.map_ID_Form.get(formAPI.ID)
@@ -652,6 +780,22 @@ export class FrontRepoService {
 							loadAPI => {
 								let load = this.frontRepo.map_ID_Load.get(loadAPI.ID)
 								CopyLoadAPIToLoad(loadAPI, load!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						logoonthelefts.forEach(
+							logoontheleftAPI => {
+								let logoontheleft = this.frontRepo.map_ID_LogoOnTheLeft.get(logoontheleftAPI.ID)
+								CopyLogoOnTheLeftAPIToLogoOnTheLeft(logoontheleftAPI, logoontheleft!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						logoontherights.forEach(
+							logoontherightAPI => {
+								let logoontheright = this.frontRepo.map_ID_LogoOnTheRight.get(logoontherightAPI.ID)
+								CopyLogoOnTheRightAPIToLogoOnTheRight(logoontherightAPI, logoontheright!, this.frontRepo)
 							}
 						)
 
@@ -684,6 +828,14 @@ export class FrontRepoService {
 							tableAPI => {
 								let table = this.frontRepo.map_ID_Table.get(tableAPI.ID)
 								CopyTableAPIToTable(tableAPI, table!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						titles.forEach(
+							titleAPI => {
+								let title = this.frontRepo.map_ID_Title.get(titleAPI.ID)
+								CopyTitleAPIToTitle(titleAPI, title!, this.frontRepo)
 							}
 						)
 
@@ -730,37 +882,35 @@ export class FrontRepoService {
 
 	public connectToWebSocket(Name: string): Observable<FrontRepo> {
 
-		this.Name = Name
+		// Check if a connection for this name already exists
+		if (this.webSocketConnections.has(Name)) {
+			return this.webSocketConnections.get(Name)!
+		}
 
+		//
+		// Create a new connection
+		//
+		let host = window.location.host
+		const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
 
-		// Determine the base URL for the WebSocket connection dynamically
-		// window.location.host includes hostname and port (e.g., "localhost:8080" or "yourdomain.com:8090")
-		// If running on standard ports (80 for http, 443 for https), the port might not be explicitly in window.location.host
-		// but WebSocket constructor handles 'ws://' and 'wss://' correctly with host.
-		let host = window.location.host; // e.g., localhost:4200 or myapp.com
-		const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'; // Use wss for https, ws for http
-
-		// Check if the host is localhost:4200 and change it to localhost:8080 (when using ng serve)
 		if (host === 'localhost:4200') {
-			host = 'localhost:8080';
+			host = 'localhost:8080'
 		}
 
 		// Construct the base path using the dynamic host and protocol
 		// The API path remains the same.
 		let basePath = `${protocol}//${host}/api/github.com/fullstack-lang/gong/lib/split/go/v1/ws/stage`
 
-		let params = new HttpParams().set("Name", this.Name)
+		let params = new HttpParams().set("Name", Name)
 		let paramString = params.toString()
 		let url = `${basePath}?${paramString}`
-		this.socket = new WebSocket(url)
 
-		return new Observable(observer => {
-			this.socket!.onmessage = event => {
+		const newConnection$ = new Observable<FrontRepo>(observer => {
+			const socket = new WebSocket(url)
 
-
+			socket.onmessage = event => {
 				const backRepoData = new BackRepoData(JSON.parse(event.data))
-
-				let frontRepo = new (FrontRepo)
+				let frontRepo = new (FrontRepo)()
 				frontRepo.GONG__Index = backRepoData.GONG__Index
 
 				// 
@@ -829,6 +979,18 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
+				frontRepo.array_FavIcons = []
+				frontRepo.map_ID_FavIcon.clear()
+
+				backRepoData.FavIconAPIs.forEach(
+					faviconAPI => {
+						let favicon = new FavIcon
+						frontRepo.array_FavIcons.push(favicon)
+						frontRepo.map_ID_FavIcon.set(faviconAPI.ID, favicon)
+					}
+				)
+
+				// init the arrays
 				frontRepo.array_Forms = []
 				frontRepo.map_ID_Form.clear()
 
@@ -849,6 +1011,30 @@ export class FrontRepoService {
 						let load = new Load
 						frontRepo.array_Loads.push(load)
 						frontRepo.map_ID_Load.set(loadAPI.ID, load)
+					}
+				)
+
+				// init the arrays
+				frontRepo.array_LogoOnTheLefts = []
+				frontRepo.map_ID_LogoOnTheLeft.clear()
+
+				backRepoData.LogoOnTheLeftAPIs.forEach(
+					logoontheleftAPI => {
+						let logoontheleft = new LogoOnTheLeft
+						frontRepo.array_LogoOnTheLefts.push(logoontheleft)
+						frontRepo.map_ID_LogoOnTheLeft.set(logoontheleftAPI.ID, logoontheleft)
+					}
+				)
+
+				// init the arrays
+				frontRepo.array_LogoOnTheRights = []
+				frontRepo.map_ID_LogoOnTheRight.clear()
+
+				backRepoData.LogoOnTheRightAPIs.forEach(
+					logoontherightAPI => {
+						let logoontheright = new LogoOnTheRight
+						frontRepo.array_LogoOnTheRights.push(logoontheright)
+						frontRepo.map_ID_LogoOnTheRight.set(logoontherightAPI.ID, logoontheright)
 					}
 				)
 
@@ -897,6 +1083,18 @@ export class FrontRepoService {
 						let table = new Table
 						frontRepo.array_Tables.push(table)
 						frontRepo.map_ID_Table.set(tableAPI.ID, table)
+					}
+				)
+
+				// init the arrays
+				frontRepo.array_Titles = []
+				frontRepo.map_ID_Title.clear()
+
+				backRepoData.TitleAPIs.forEach(
+					titleAPI => {
+						let title = new Title
+						frontRepo.array_Titles.push(title)
+						frontRepo.map_ID_Title.set(titleAPI.ID, title)
 					}
 				)
 
@@ -995,6 +1193,14 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.FavIconAPIs.forEach(
+					faviconAPI => {
+						let favicon = frontRepo.map_ID_FavIcon.get(faviconAPI.ID)
+						CopyFavIconAPIToFavIcon(faviconAPI, favicon!, frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.FormAPIs.forEach(
 					formAPI => {
 						let form = frontRepo.map_ID_Form.get(formAPI.ID)
@@ -1007,6 +1213,22 @@ export class FrontRepoService {
 					loadAPI => {
 						let load = frontRepo.map_ID_Load.get(loadAPI.ID)
 						CopyLoadAPIToLoad(loadAPI, load!, frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.LogoOnTheLeftAPIs.forEach(
+					logoontheleftAPI => {
+						let logoontheleft = frontRepo.map_ID_LogoOnTheLeft.get(logoontheleftAPI.ID)
+						CopyLogoOnTheLeftAPIToLogoOnTheLeft(logoontheleftAPI, logoontheleft!, frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.LogoOnTheRightAPIs.forEach(
+					logoontherightAPI => {
+						let logoontheright = frontRepo.map_ID_LogoOnTheRight.get(logoontherightAPI.ID)
+						CopyLogoOnTheRightAPIToLogoOnTheRight(logoontherightAPI, logoontheright!, frontRepo)
 					}
 				)
 
@@ -1043,6 +1265,14 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
+				backRepoData.TitleAPIs.forEach(
+					titleAPI => {
+						let title = frontRepo.map_ID_Title.get(titleAPI.ID)
+						CopyTitleAPIToTitle(titleAPI, title!, frontRepo)
+					}
+				)
+
+				// fill up front objects
 				backRepoData.ToneAPIs.forEach(
 					toneAPI => {
 						let tone = frontRepo.map_ID_Tone.get(toneAPI.ID)
@@ -1075,20 +1305,29 @@ export class FrontRepoService {
 				)
 
 
-
 				observer.next(frontRepo)
 			}
-			this.socket!.onerror = event => {
-				observer.error(event)
-			}
-			this.socket!.onclose = event => {
-				observer.complete()
-			}
 
+			socket.onerror = event => observer.error(event)
+			socket.onclose = () => observer.complete()
+
+			// Teardown logic: Called when the last subscriber unsubscribes.
 			return () => {
-				this.socket!.close()
+				this.webSocketConnections.delete(Name) // Remove from cache
+				socket.close()
 			}
-		})
+		}).pipe(
+			// This is the key:
+			// - shareReplay makes this a "multicast" observable, sharing the single WebSocket among subscribers.
+			// - { bufferSize: 1, refCount: true } means:
+			//   - bufferSize: 1 => new subscribers get the last emitted value immediately.
+			//   - refCount: true => the connection starts with the first subscriber and stops with the last.
+			shareReplay({ bufferSize: 1, refCount: true })
+		)
+
+		// Store the new connection observable in the map
+		this.webSocketConnections.set(Name, newConnection$)
+		return newConnection$
 	}
 }
 
@@ -1108,33 +1347,45 @@ export function getCursorUniqueID(id: number): number {
 export function getDocUniqueID(id: number): number {
 	return 47 * id
 }
-export function getFormUniqueID(id: number): number {
+export function getFavIconUniqueID(id: number): number {
 	return 53 * id
 }
-export function getLoadUniqueID(id: number): number {
+export function getFormUniqueID(id: number): number {
 	return 59 * id
 }
-export function getSliderUniqueID(id: number): number {
+export function getLoadUniqueID(id: number): number {
 	return 61 * id
 }
-export function getSplitUniqueID(id: number): number {
+export function getLogoOnTheLeftUniqueID(id: number): number {
 	return 67 * id
 }
-export function getSvgUniqueID(id: number): number {
+export function getLogoOnTheRightUniqueID(id: number): number {
 	return 71 * id
 }
-export function getTableUniqueID(id: number): number {
+export function getSliderUniqueID(id: number): number {
 	return 73 * id
 }
-export function getToneUniqueID(id: number): number {
+export function getSplitUniqueID(id: number): number {
 	return 79 * id
 }
-export function getTreeUniqueID(id: number): number {
+export function getSvgUniqueID(id: number): number {
 	return 83 * id
 }
-export function getViewUniqueID(id: number): number {
+export function getTableUniqueID(id: number): number {
 	return 89 * id
 }
-export function getXlsxUniqueID(id: number): number {
+export function getTitleUniqueID(id: number): number {
 	return 97 * id
+}
+export function getToneUniqueID(id: number): number {
+	return 101 * id
+}
+export function getTreeUniqueID(id: number): number {
+	return 103 * id
+}
+export function getViewUniqueID(id: number): number {
+	return 107 * id
+}
+export function getXlsxUniqueID(id: number): number {
+	return 109 * id
 }

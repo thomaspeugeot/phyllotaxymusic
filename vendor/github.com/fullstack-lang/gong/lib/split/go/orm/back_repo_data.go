@@ -14,9 +14,15 @@ type BackRepoData struct {
 
 	DocAPIs []*DocAPI
 
+	FavIconAPIs []*FavIconAPI
+
 	FormAPIs []*FormAPI
 
 	LoadAPIs []*LoadAPI
+
+	LogoOnTheLeftAPIs []*LogoOnTheLeftAPI
+
+	LogoOnTheRightAPIs []*LogoOnTheRightAPI
 
 	SliderAPIs []*SliderAPI
 
@@ -25,6 +31,8 @@ type BackRepoData struct {
 	SvgAPIs []*SvgAPI
 
 	TableAPIs []*TableAPI
+
+	TitleAPIs []*TitleAPI
 
 	ToneAPIs []*ToneAPI
 
@@ -95,6 +103,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		backRepoData.DocAPIs = append(backRepoData.DocAPIs, &docAPI)
 	}
 
+	for _, faviconDB := range backRepo.BackRepoFavIcon.Map_FavIconDBID_FavIconDB {
+
+		var faviconAPI FavIconAPI
+		faviconAPI.ID = faviconDB.ID
+		faviconAPI.FavIconPointersEncoding = faviconDB.FavIconPointersEncoding
+		faviconDB.CopyBasicFieldsToFavIcon_WOP(&faviconAPI.FavIcon_WOP)
+
+		backRepoData.FavIconAPIs = append(backRepoData.FavIconAPIs, &faviconAPI)
+	}
+
 	for _, formDB := range backRepo.BackRepoForm.Map_FormDBID_FormDB {
 
 		var formAPI FormAPI
@@ -113,6 +131,26 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		loadDB.CopyBasicFieldsToLoad_WOP(&loadAPI.Load_WOP)
 
 		backRepoData.LoadAPIs = append(backRepoData.LoadAPIs, &loadAPI)
+	}
+
+	for _, logoontheleftDB := range backRepo.BackRepoLogoOnTheLeft.Map_LogoOnTheLeftDBID_LogoOnTheLeftDB {
+
+		var logoontheleftAPI LogoOnTheLeftAPI
+		logoontheleftAPI.ID = logoontheleftDB.ID
+		logoontheleftAPI.LogoOnTheLeftPointersEncoding = logoontheleftDB.LogoOnTheLeftPointersEncoding
+		logoontheleftDB.CopyBasicFieldsToLogoOnTheLeft_WOP(&logoontheleftAPI.LogoOnTheLeft_WOP)
+
+		backRepoData.LogoOnTheLeftAPIs = append(backRepoData.LogoOnTheLeftAPIs, &logoontheleftAPI)
+	}
+
+	for _, logoontherightDB := range backRepo.BackRepoLogoOnTheRight.Map_LogoOnTheRightDBID_LogoOnTheRightDB {
+
+		var logoontherightAPI LogoOnTheRightAPI
+		logoontherightAPI.ID = logoontherightDB.ID
+		logoontherightAPI.LogoOnTheRightPointersEncoding = logoontherightDB.LogoOnTheRightPointersEncoding
+		logoontherightDB.CopyBasicFieldsToLogoOnTheRight_WOP(&logoontherightAPI.LogoOnTheRight_WOP)
+
+		backRepoData.LogoOnTheRightAPIs = append(backRepoData.LogoOnTheRightAPIs, &logoontherightAPI)
 	}
 
 	for _, sliderDB := range backRepo.BackRepoSlider.Map_SliderDBID_SliderDB {
@@ -153,6 +191,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		tableDB.CopyBasicFieldsToTable_WOP(&tableAPI.Table_WOP)
 
 		backRepoData.TableAPIs = append(backRepoData.TableAPIs, &tableAPI)
+	}
+
+	for _, titleDB := range backRepo.BackRepoTitle.Map_TitleDBID_TitleDB {
+
+		var titleAPI TitleAPI
+		titleAPI.ID = titleDB.ID
+		titleAPI.TitlePointersEncoding = titleDB.TitlePointersEncoding
+		titleDB.CopyBasicFieldsToTitle_WOP(&titleAPI.Title_WOP)
+
+		backRepoData.TitleAPIs = append(backRepoData.TitleAPIs, &titleAPI)
 	}
 
 	for _, toneDB := range backRepo.BackRepoTone.Map_ToneDBID_ToneDB {

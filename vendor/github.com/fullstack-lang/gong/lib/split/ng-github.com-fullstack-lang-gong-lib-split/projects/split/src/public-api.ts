@@ -33,6 +33,10 @@ export * from './lib/doc-api'
 export * from './lib/doc'
 export * from './lib/doc.service'
 
+export * from './lib/favicon-api'
+export * from './lib/favicon'
+export * from './lib/favicon.service'
+
 export * from './lib/form-api'
 export * from './lib/form'
 export * from './lib/form.service'
@@ -40,6 +44,14 @@ export * from './lib/form.service'
 export * from './lib/load-api'
 export * from './lib/load'
 export * from './lib/load.service'
+
+export * from './lib/logoontheleft-api'
+export * from './lib/logoontheleft'
+export * from './lib/logoontheleft.service'
+
+export * from './lib/logoontheright-api'
+export * from './lib/logoontheright'
+export * from './lib/logoontheright.service'
 
 export * from './lib/slider-api'
 export * from './lib/slider'
@@ -56,6 +68,10 @@ export * from './lib/svg.service'
 export * from './lib/table-api'
 export * from './lib/table'
 export * from './lib/table.service'
+
+export * from './lib/title-api'
+export * from './lib/title'
+export * from './lib/title.service'
 
 export * from './lib/tone-api'
 export * from './lib/tone'

@@ -46,6 +46,15 @@ func ParseAstFile(stage *Stage, pathToFile string) error {
 		return errors.New("Path does not exist %s ;" + fileOfInterest)
 	}
 
+	// Read the file content using os.ReadFile
+	content, err := os.ReadFile(fileOfInterest)
+	if err != nil {
+		return errors.New("Unable to read file " + err.Error())
+	}
+
+	// Assign the content to stage.contentWhenParsed
+	stage.contentWhenParsed = string(content)
+
 	fset := token.NewFileSet()
 	// startParser := time.Now()
 	inFile, errParser := parser.ParseFile(fset, fileOfInterest, nil, parser.ParseComments)
@@ -79,7 +88,7 @@ func ParseAstEmbeddedFile(stage *Stage, directory embed.FS, pathToFile string) e
 	fileContentBytes, err := directory.ReadFile(pathToFile)
 	if err != nil {
 		// Return a specific error if the file can't be read from the embed.FS
-		return errors.New("Unable to read embedded file '" + pathToFile + "': " + err.Error())
+		return errors.New(stage.GetName() + "; Unable to read embedded file " + err.Error())
 	}
 
 	// 2. Create a FileSet to manage position information.
@@ -139,6 +148,29 @@ func ParseAstFileFromAst(stage *Stage, inFile *ast.File, fset *token.FileSet) er
 				// astCoordinate := // astCoordinate + "\tBody: "
 				for _, stmt := range body.List {
 					switch stmt := stmt.(type) {
+					case *ast.DeclStmt:
+						if genDecl, ok := stmt.Decl.(*ast.GenDecl); ok && genDecl.Tok == token.CONST {
+							for _, spec := range genDecl.Specs {
+								if valueSpec, ok := spec.(*ast.ValueSpec); ok {
+									for i, name := range valueSpec.Names {
+										if i < len(valueSpec.Values) {
+											if basicLit, ok := valueSpec.Values[i].(*ast.BasicLit); ok && basicLit.Kind == token.STRING {
+												// Remove quotes from string literal
+												value := strings.Trim(basicLit.Value, `"`)
+
+												switch name.Name {
+												case "__commitId__":
+													if parsedUint, err := strconv.ParseUint(value, 10, 64); err == nil {
+														stage.commitId = uint(parsedUint)
+														stage.commitIdWhenParsed = stage.commitId
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
 					case *ast.ExprStmt:
 						exprStmt := stmt
 						// astCoordinate := // astCoordinate + "\tExprStmt: "
@@ -760,7 +792,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						var ok bool
 						gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 						if !ok {
-							log.Fatalln("gongstructName not found for identifier", identifier)
+							log.Println("gongstructName not found for identifier", identifier)
+							break
 						}
 						switch gongstructName {
 						// insertion point for basic lit assignments
@@ -906,7 +939,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				_ = basicLit.Value
 				_ = basicLit
 			}
-			for _, arg := range callExpr.Args {
+			for argNb, arg := range callExpr.Args {
+				_ = argNb
 				// astCoordinate := astCoordinate + "\tArg"
 				switch arg := arg.(type) {
 				case *ast.Ident, *ast.SelectorExpr:
@@ -927,7 +961,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 
 					gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 					if !ok {
-						log.Fatalln("gongstructName not found for identifier", identifier)
+						log.Println("gongstructName not found for identifier", identifier)
+						break
 					}
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
@@ -939,14 +974,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "Axiss":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing AxisGrid[identifier].Axiss = append(AxisGrid[identifier].Axiss, Axis instance )
-							// the map will not find the Axis instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Axis[targetIdentifier]; ok {
-								__gong__map_AxisGrid[identifier].Axiss =
-									append(__gong__map_AxisGrid[identifier].Axiss, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Axis[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_AxisGrid[identifier]
+								instanceWhoseFieldIsAppended.Axiss = append(instanceWhoseFieldIsAppended.Axiss, instanceToAppend)
 							}
 						}
 					case "Bezier":
@@ -957,28 +992,28 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "Beziers":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing BezierGrid[identifier].Beziers = append(BezierGrid[identifier].Beziers, Bezier instance )
-							// the map will not find the Bezier instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Bezier[targetIdentifier]; ok {
-								__gong__map_BezierGrid[identifier].Beziers =
-									append(__gong__map_BezierGrid[identifier].Beziers, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Bezier[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_BezierGrid[identifier]
+								instanceWhoseFieldIsAppended.Beziers = append(instanceWhoseFieldIsAppended.Beziers, instanceToAppend)
 							}
 						}
 					case "BezierGridStack":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "BezierGrids":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing BezierGridStack[identifier].BezierGrids = append(BezierGridStack[identifier].BezierGrids, BezierGrid instance )
-							// the map will not find the BezierGrid instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_BezierGrid[targetIdentifier]; ok {
-								__gong__map_BezierGridStack[identifier].BezierGrids =
-									append(__gong__map_BezierGridStack[identifier].BezierGrids, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_BezierGrid[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_BezierGridStack[identifier]
+								instanceWhoseFieldIsAppended.BezierGrids = append(instanceWhoseFieldIsAppended.BezierGrids, instanceToAppend)
 							}
 						}
 					case "Chapter":
@@ -993,28 +1028,28 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "Circles":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing CircleGrid[identifier].Circles = append(CircleGrid[identifier].Circles, Circle instance )
-							// the map will not find the Circle instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Circle[targetIdentifier]; ok {
-								__gong__map_CircleGrid[identifier].Circles =
-									append(__gong__map_CircleGrid[identifier].Circles, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Circle[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_CircleGrid[identifier]
+								instanceWhoseFieldIsAppended.Circles = append(instanceWhoseFieldIsAppended.Circles, instanceToAppend)
 							}
 						}
 					case "Content":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "Chapters":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing Content[identifier].Chapters = append(Content[identifier].Chapters, Chapter instance )
-							// the map will not find the Chapter instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Chapter[targetIdentifier]; ok {
-								__gong__map_Content[identifier].Chapters =
-									append(__gong__map_Content[identifier].Chapters, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Chapter[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_Content[identifier]
+								instanceWhoseFieldIsAppended.Chapters = append(instanceWhoseFieldIsAppended.Chapters, instanceToAppend)
 							}
 						}
 					case "ExportToMusicxml":
@@ -1029,24 +1064,24 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "FrontCurves":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing FrontCurveStack[identifier].FrontCurves = append(FrontCurveStack[identifier].FrontCurves, FrontCurve instance )
-							// the map will not find the FrontCurve instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_FrontCurve[targetIdentifier]; ok {
-								__gong__map_FrontCurveStack[identifier].FrontCurves =
-									append(__gong__map_FrontCurveStack[identifier].FrontCurves, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_FrontCurve[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_FrontCurveStack[identifier]
+								instanceWhoseFieldIsAppended.FrontCurves = append(instanceWhoseFieldIsAppended.FrontCurves, instanceToAppend)
 							}
 						case "SpiralCircles":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing FrontCurveStack[identifier].SpiralCircles = append(FrontCurveStack[identifier].SpiralCircles, SpiralCircle instance )
-							// the map will not find the SpiralCircle instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_SpiralCircle[targetIdentifier]; ok {
-								__gong__map_FrontCurveStack[identifier].SpiralCircles =
-									append(__gong__map_FrontCurveStack[identifier].SpiralCircles, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_SpiralCircle[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_FrontCurveStack[identifier]
+								instanceWhoseFieldIsAppended.SpiralCircles = append(instanceWhoseFieldIsAppended.SpiralCircles, instanceToAppend)
 							}
 						}
 					case "HorizontalAxis":
@@ -1069,14 +1104,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "Rhombuses":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing RhombusGrid[identifier].Rhombuses = append(RhombusGrid[identifier].Rhombuses, Rhombus instance )
-							// the map will not find the Rhombus instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_Rhombus[targetIdentifier]; ok {
-								__gong__map_RhombusGrid[identifier].Rhombuses =
-									append(__gong__map_RhombusGrid[identifier].Rhombuses, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Rhombus[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_RhombusGrid[identifier]
+								instanceWhoseFieldIsAppended.Rhombuses = append(instanceWhoseFieldIsAppended.Rhombuses, instanceToAppend)
 							}
 						}
 					case "ShapeCategory":
@@ -1091,14 +1126,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "SpiralBeziers":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing SpiralBezierGrid[identifier].SpiralBeziers = append(SpiralBezierGrid[identifier].SpiralBeziers, SpiralBezier instance )
-							// the map will not find the SpiralBezier instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_SpiralBezier[targetIdentifier]; ok {
-								__gong__map_SpiralBezierGrid[identifier].SpiralBeziers =
-									append(__gong__map_SpiralBezierGrid[identifier].SpiralBeziers, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_SpiralBezier[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_SpiralBezierGrid[identifier]
+								instanceWhoseFieldIsAppended.SpiralBeziers = append(instanceWhoseFieldIsAppended.SpiralBeziers, instanceToAppend)
 							}
 						}
 					case "SpiralCircle":
@@ -1109,14 +1144,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "SpiralCircles":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing SpiralCircleGrid[identifier].SpiralCircles = append(SpiralCircleGrid[identifier].SpiralCircles, SpiralCircle instance )
-							// the map will not find the SpiralCircle instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_SpiralCircle[targetIdentifier]; ok {
-								__gong__map_SpiralCircleGrid[identifier].SpiralCircles =
-									append(__gong__map_SpiralCircleGrid[identifier].SpiralCircles, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_SpiralCircle[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_SpiralCircleGrid[identifier]
+								instanceWhoseFieldIsAppended.SpiralCircles = append(instanceWhoseFieldIsAppended.SpiralCircles, instanceToAppend)
 							}
 						}
 					case "SpiralLine":
@@ -1127,14 +1162,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "SpiralLines":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing SpiralLineGrid[identifier].SpiralLines = append(SpiralLineGrid[identifier].SpiralLines, SpiralLine instance )
-							// the map will not find the SpiralLine instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_SpiralLine[targetIdentifier]; ok {
-								__gong__map_SpiralLineGrid[identifier].SpiralLines =
-									append(__gong__map_SpiralLineGrid[identifier].SpiralLines, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_SpiralLine[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_SpiralLineGrid[identifier]
+								instanceWhoseFieldIsAppended.SpiralLines = append(instanceWhoseFieldIsAppended.SpiralLines, instanceToAppend)
 							}
 						}
 					case "SpiralOrigin":
@@ -1149,14 +1184,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						case "SpiralRhombuses":
-							// remove first and last char
-							targetIdentifier := ident.Name
-							// when parsing SpiralRhombusGrid[identifier].SpiralRhombuses = append(SpiralRhombusGrid[identifier].SpiralRhombuses, SpiralRhombus instance )
-							// the map will not find the SpiralRhombus instance, when parsing the first arg
-							// therefore, the condition is necessary
-							if target, ok := __gong__map_SpiralRhombus[targetIdentifier]; ok {
-								__gong__map_SpiralRhombusGrid[identifier].SpiralRhombuses =
-									append(__gong__map_SpiralRhombusGrid[identifier].SpiralRhombuses, target)
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_SpiralRhombus[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_SpiralRhombusGrid[identifier]
+								instanceWhoseFieldIsAppended.SpiralRhombuses = append(instanceWhoseFieldIsAppended.SpiralRhombuses, instanceToAppend)
 							}
 						}
 					case "VerticalAxis":
@@ -1211,7 +1246,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			var ok bool
 			gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 			if !ok {
-				log.Fatalln("gongstructName not found for identifier", identifier)
+				log.Println("gongstructName not found for identifier", identifier)
+				break
 			}
 
 			// substitute the RHS part of the assignment if a //gong:ident directive is met
@@ -2650,7 +2686,8 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			var ok bool
 			gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 			if !ok {
-				log.Fatalln("gongstructName not found for identifier", identifier)
+				log.Println("gongstructName not found for identifier", identifier)
+				break
 			}
 			switch gongstructName {
 			// insertion point for bool & pointers assignments
@@ -3277,7 +3314,17 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				var ok bool
 				gongstructName, ok = __gong__map_Indentifiers_gongstructName[identifier]
 				if !ok {
-					log.Fatalln("gongstructName not found for identifier", identifier)
+					log.Println("gongstructName not found for identifier", identifier)
+					break
+				}
+
+				if basicLit == nil {
+					// for the meta field written as ref_models.ENUM_VALUE1
+					basicLit = new(ast.BasicLit)
+					basicLit.Kind = token.STRING // Or another appropriate token.Kind
+					basicLit.Value = selectorExpr.X.(*ast.Ident).Name + "." + Sel.Name
+					_ = basicLit.Kind
+					_ = basicLit.Value
 				}
 
 				// remove first and last char

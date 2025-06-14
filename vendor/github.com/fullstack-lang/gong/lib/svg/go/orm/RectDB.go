@@ -166,6 +166,29 @@ type RectDB struct {
 	// provide the sql storage for the boolan
 	CanMoveVerticaly_Data sql.NullBool
 
+	// Declation for basic field rectDB.ChangeColorWhenHovered
+	// provide the sql storage for the boolan
+	ChangeColorWhenHovered_Data sql.NullBool
+
+	// Declation for basic field rectDB.ColorWhenHovered
+	ColorWhenHovered_Data sql.NullString
+
+	// Declation for basic field rectDB.OriginalColor
+	OriginalColor_Data sql.NullString
+
+	// Declation for basic field rectDB.FillOpacityWhenHovered
+	FillOpacityWhenHovered_Data sql.NullFloat64
+
+	// Declation for basic field rectDB.OriginalFillOpacity
+	OriginalFillOpacity_Data sql.NullFloat64
+
+	// Declation for basic field rectDB.HasToolTip
+	// provide the sql storage for the boolan
+	HasToolTip_Data sql.NullBool
+
+	// Declation for basic field rectDB.ToolTipText
+	ToolTipText_Data sql.NullString
+
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
 	RectPointersEncoding
@@ -241,6 +264,20 @@ type RectWOP struct {
 	CanMoveHorizontaly bool `xlsx:"26"`
 
 	CanMoveVerticaly bool `xlsx:"27"`
+
+	ChangeColorWhenHovered bool `xlsx:"28"`
+
+	ColorWhenHovered string `xlsx:"29"`
+
+	OriginalColor string `xlsx:"30"`
+
+	FillOpacityWhenHovered float64 `xlsx:"31"`
+
+	OriginalFillOpacity float64 `xlsx:"32"`
+
+	HasToolTip bool `xlsx:"33"`
+
+	ToolTipText string `xlsx:"34"`
 	// insertion for WOP pointer fields
 }
 
@@ -274,6 +311,13 @@ var Rect_Fields = []string{
 	"HasBottomHandle",
 	"CanMoveHorizontaly",
 	"CanMoveVerticaly",
+	"ChangeColorWhenHovered",
+	"ColorWhenHovered",
+	"OriginalColor",
+	"FillOpacityWhenHovered",
+	"OriginalFillOpacity",
+	"HasToolTip",
+	"ToolTipText",
 }
 
 type BackRepoRectStruct struct {
@@ -739,6 +783,27 @@ func (rectDB *RectDB) CopyBasicFieldsFromRect(rect *models.Rect) {
 
 	rectDB.CanMoveVerticaly_Data.Bool = rect.CanMoveVerticaly
 	rectDB.CanMoveVerticaly_Data.Valid = true
+
+	rectDB.ChangeColorWhenHovered_Data.Bool = rect.ChangeColorWhenHovered
+	rectDB.ChangeColorWhenHovered_Data.Valid = true
+
+	rectDB.ColorWhenHovered_Data.String = rect.ColorWhenHovered
+	rectDB.ColorWhenHovered_Data.Valid = true
+
+	rectDB.OriginalColor_Data.String = rect.OriginalColor
+	rectDB.OriginalColor_Data.Valid = true
+
+	rectDB.FillOpacityWhenHovered_Data.Float64 = rect.FillOpacityWhenHovered
+	rectDB.FillOpacityWhenHovered_Data.Valid = true
+
+	rectDB.OriginalFillOpacity_Data.Float64 = rect.OriginalFillOpacity
+	rectDB.OriginalFillOpacity_Data.Valid = true
+
+	rectDB.HasToolTip_Data.Bool = rect.HasToolTip
+	rectDB.HasToolTip_Data.Valid = true
+
+	rectDB.ToolTipText_Data.String = rect.ToolTipText
+	rectDB.ToolTipText_Data.Valid = true
 }
 
 // CopyBasicFieldsFromRect_WOP
@@ -825,6 +890,27 @@ func (rectDB *RectDB) CopyBasicFieldsFromRect_WOP(rect *models.Rect_WOP) {
 
 	rectDB.CanMoveVerticaly_Data.Bool = rect.CanMoveVerticaly
 	rectDB.CanMoveVerticaly_Data.Valid = true
+
+	rectDB.ChangeColorWhenHovered_Data.Bool = rect.ChangeColorWhenHovered
+	rectDB.ChangeColorWhenHovered_Data.Valid = true
+
+	rectDB.ColorWhenHovered_Data.String = rect.ColorWhenHovered
+	rectDB.ColorWhenHovered_Data.Valid = true
+
+	rectDB.OriginalColor_Data.String = rect.OriginalColor
+	rectDB.OriginalColor_Data.Valid = true
+
+	rectDB.FillOpacityWhenHovered_Data.Float64 = rect.FillOpacityWhenHovered
+	rectDB.FillOpacityWhenHovered_Data.Valid = true
+
+	rectDB.OriginalFillOpacity_Data.Float64 = rect.OriginalFillOpacity
+	rectDB.OriginalFillOpacity_Data.Valid = true
+
+	rectDB.HasToolTip_Data.Bool = rect.HasToolTip
+	rectDB.HasToolTip_Data.Valid = true
+
+	rectDB.ToolTipText_Data.String = rect.ToolTipText
+	rectDB.ToolTipText_Data.Valid = true
 }
 
 // CopyBasicFieldsFromRectWOP
@@ -911,6 +997,27 @@ func (rectDB *RectDB) CopyBasicFieldsFromRectWOP(rect *RectWOP) {
 
 	rectDB.CanMoveVerticaly_Data.Bool = rect.CanMoveVerticaly
 	rectDB.CanMoveVerticaly_Data.Valid = true
+
+	rectDB.ChangeColorWhenHovered_Data.Bool = rect.ChangeColorWhenHovered
+	rectDB.ChangeColorWhenHovered_Data.Valid = true
+
+	rectDB.ColorWhenHovered_Data.String = rect.ColorWhenHovered
+	rectDB.ColorWhenHovered_Data.Valid = true
+
+	rectDB.OriginalColor_Data.String = rect.OriginalColor
+	rectDB.OriginalColor_Data.Valid = true
+
+	rectDB.FillOpacityWhenHovered_Data.Float64 = rect.FillOpacityWhenHovered
+	rectDB.FillOpacityWhenHovered_Data.Valid = true
+
+	rectDB.OriginalFillOpacity_Data.Float64 = rect.OriginalFillOpacity
+	rectDB.OriginalFillOpacity_Data.Valid = true
+
+	rectDB.HasToolTip_Data.Bool = rect.HasToolTip
+	rectDB.HasToolTip_Data.Valid = true
+
+	rectDB.ToolTipText_Data.String = rect.ToolTipText
+	rectDB.ToolTipText_Data.Valid = true
 }
 
 // CopyBasicFieldsToRect
@@ -943,6 +1050,13 @@ func (rectDB *RectDB) CopyBasicFieldsToRect(rect *models.Rect) {
 	rect.HasBottomHandle = rectDB.HasBottomHandle_Data.Bool
 	rect.CanMoveHorizontaly = rectDB.CanMoveHorizontaly_Data.Bool
 	rect.CanMoveVerticaly = rectDB.CanMoveVerticaly_Data.Bool
+	rect.ChangeColorWhenHovered = rectDB.ChangeColorWhenHovered_Data.Bool
+	rect.ColorWhenHovered = rectDB.ColorWhenHovered_Data.String
+	rect.OriginalColor = rectDB.OriginalColor_Data.String
+	rect.FillOpacityWhenHovered = rectDB.FillOpacityWhenHovered_Data.Float64
+	rect.OriginalFillOpacity = rectDB.OriginalFillOpacity_Data.Float64
+	rect.HasToolTip = rectDB.HasToolTip_Data.Bool
+	rect.ToolTipText = rectDB.ToolTipText_Data.String
 }
 
 // CopyBasicFieldsToRect_WOP
@@ -975,6 +1089,13 @@ func (rectDB *RectDB) CopyBasicFieldsToRect_WOP(rect *models.Rect_WOP) {
 	rect.HasBottomHandle = rectDB.HasBottomHandle_Data.Bool
 	rect.CanMoveHorizontaly = rectDB.CanMoveHorizontaly_Data.Bool
 	rect.CanMoveVerticaly = rectDB.CanMoveVerticaly_Data.Bool
+	rect.ChangeColorWhenHovered = rectDB.ChangeColorWhenHovered_Data.Bool
+	rect.ColorWhenHovered = rectDB.ColorWhenHovered_Data.String
+	rect.OriginalColor = rectDB.OriginalColor_Data.String
+	rect.FillOpacityWhenHovered = rectDB.FillOpacityWhenHovered_Data.Float64
+	rect.OriginalFillOpacity = rectDB.OriginalFillOpacity_Data.Float64
+	rect.HasToolTip = rectDB.HasToolTip_Data.Bool
+	rect.ToolTipText = rectDB.ToolTipText_Data.String
 }
 
 // CopyBasicFieldsToRectWOP
@@ -1008,6 +1129,13 @@ func (rectDB *RectDB) CopyBasicFieldsToRectWOP(rect *RectWOP) {
 	rect.HasBottomHandle = rectDB.HasBottomHandle_Data.Bool
 	rect.CanMoveHorizontaly = rectDB.CanMoveHorizontaly_Data.Bool
 	rect.CanMoveVerticaly = rectDB.CanMoveVerticaly_Data.Bool
+	rect.ChangeColorWhenHovered = rectDB.ChangeColorWhenHovered_Data.Bool
+	rect.ColorWhenHovered = rectDB.ColorWhenHovered_Data.String
+	rect.OriginalColor = rectDB.OriginalColor_Data.String
+	rect.FillOpacityWhenHovered = rectDB.FillOpacityWhenHovered_Data.Float64
+	rect.OriginalFillOpacity = rectDB.OriginalFillOpacity_Data.Float64
+	rect.HasToolTip = rectDB.HasToolTip_Data.Bool
+	rect.ToolTipText = rectDB.ToolTipText_Data.String
 }
 
 // Backup generates a json file from a slice of all RectDB instances in the backrepo

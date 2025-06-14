@@ -23,6 +23,8 @@ export class RectAnchoredRectAPI {
 	RectAnchorType: string = ""
 	WidthFollowRect: boolean = false
 	HeightFollowRect: boolean = false
+	HasToolTip: boolean = false
+	ToolTipText: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""

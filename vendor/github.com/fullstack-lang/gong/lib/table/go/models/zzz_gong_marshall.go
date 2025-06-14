@@ -10,6 +10,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 const marshallRes = `package {{PackageName}}
@@ -35,12 +37,18 @@ var _ map[string]any = map[string]any{
 // function will stage objects
 func _(stage *models.Stage) {
 
+	const __write__local_time = "{{LocalTimeStamp}}"
+	const __write__utc_time__ = "{{UTCTimeStamp}}"
+
+	const __commitId__ = "{{CommitId}}"
+
 	// Declaration of instances to stage{{Identifiers}}
 
 	// Setup of values{{ValueInitializers}}
 
 	// Setup of pointers{{PointersInitializers}}
-}`
+}
+`
 
 const IdentifiersDecls = `
 	{{Identifier}} := (&models.{{GeneratedStructName}}{}).Stage(stage)`
@@ -575,6 +583,18 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsForSavePurpose")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", formeditassocbutton.IsForSavePurpose))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasToolTip")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", formeditassocbutton.HasToolTip))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ToolTipText")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(formeditassocbutton.ToolTipText))
 		initializerStatements += setValueField
 
 	}
@@ -1157,6 +1177,18 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(formsortassocbutton.Label))
 		initializerStatements += setValueField
 
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasToolTip")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", formsortassocbutton.HasToolTip))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ToolTipText")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(formsortassocbutton.ToolTipText))
+		initializerStatements += setValueField
+
 	}
 
 	map_Option_Identifiers := make(map[*Option]string)
@@ -1314,6 +1346,12 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasSaveButton")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", table.HasSaveButton))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SaveButtonLabel")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(table.SaveButtonLabel))
 		initializerStatements += setValueField
 
 		setValueField = NumberInitStatement
@@ -1822,6 +1860,15 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 	res = strings.ReplaceAll(res, "{{ValueInitializers}}", initializerStatements)
 	res = strings.ReplaceAll(res, "{{PointersInitializers}}", pointersInitializesStatements)
 
+	// Local time with timezone
+	localTimestamp := stage.commitTimeStamp.Format("2006-01-02 15:04:05.000000 MST")
+
+	// UTC time
+	utcTimestamp := stage.commitTimeStamp.UTC().Format("2006-01-02 15:04:05.000000 UTC")
+	res = strings.ReplaceAll(res, "{{LocalTimeStamp}}", localTimestamp)
+	res = strings.ReplaceAll(res, "{{UTCTimeStamp}}", utcTimestamp)
+	res = strings.ReplaceAll(res, "{{CommitId}}", fmt.Sprintf("%.10d", stage.commitId))
+
 	if stage.MetaPackageImportAlias != "" {
 		res = strings.ReplaceAll(res, "{{ImportPackageDeclaration}}",
 			fmt.Sprintf("\n\t%s %s", stage.MetaPackageImportAlias, stage.MetaPackageImportPath))
@@ -1869,7 +1916,44 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		// res = strings.ReplaceAll(res, "{{EntriesDocLinkStringDocLinkIdentifier}}", entries)
 	}
 
+	if stage.generatesDiff {
+		diff := computeDiff(stage.contentWhenParsed, res)
+		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.delta", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
+		diff = ComputeDiff(stage.contentWhenParsed, res)
+		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.diff", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
+	}
+	stage.contentWhenParsed = res
+	stage.commitIdWhenParsed = stage.commitId
+
 	fmt.Fprintln(file, res)
+}
+
+// computeDiff calculates the git-style unified diff between two strings.
+func computeDiff(a, b string) string {
+	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(a, b, false)
+	return dmp.DiffToDelta(diffs)
+}
+
+// computePrettyDiff calculates the git-style unified diff between two strings.
+func computePrettyDiff(a, b string) string {
+	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(a, b, false)
+	return dmp.DiffPrettyHtml(diffs)
+}
+
+// applyDiff reconstructs the original string 'a' from the new string 'b' and the diff string 'c'.
+func applyDiff(b, c string) (string, error) {
+	dmp := diffmatchpatch.New()
+	diffs, err := dmp.DiffFromDelta(b, c)
+	if err != nil {
+		return "", err
+	}
+	patches := dmp.PatchMake(b, diffs)
+	// We are applying the patch in reverse to get from 'b' to 'a'.
+	// The library's PatchApply function returns the new string and a slice of booleans indicating the success of each patch application.
+	result, _ := dmp.PatchApply(patches, b)
+	return result, nil
 }
 
 // unique identifier per struct

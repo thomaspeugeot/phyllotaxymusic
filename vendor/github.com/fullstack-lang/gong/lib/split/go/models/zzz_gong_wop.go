@@ -94,6 +94,20 @@ func (from *Doc) CopyBasicFields(to *Doc) {
 	to.StackName = from.StackName
 }
 
+type FavIcon_WOP struct {
+	// insertion point
+
+	Name string
+
+	SVG string
+}
+
+func (from *FavIcon) CopyBasicFields(to *FavIcon) {
+	// insertion point
+	to.Name = from.Name
+	to.SVG = from.SVG
+}
+
 type Form_WOP struct {
 	// insertion point
 
@@ -123,6 +137,46 @@ func (from *Load) CopyBasicFields(to *Load) {
 	// insertion point
 	to.Name = from.Name
 	to.StackName = from.StackName
+}
+
+type LogoOnTheLeft_WOP struct {
+	// insertion point
+
+	Name string
+
+	Width int
+
+	Height int
+
+	SVG string
+}
+
+func (from *LogoOnTheLeft) CopyBasicFields(to *LogoOnTheLeft) {
+	// insertion point
+	to.Name = from.Name
+	to.Width = from.Width
+	to.Height = from.Height
+	to.SVG = from.SVG
+}
+
+type LogoOnTheRight_WOP struct {
+	// insertion point
+
+	Name string
+
+	Width int
+
+	Height int
+
+	SVG string
+}
+
+func (from *LogoOnTheRight) CopyBasicFields(to *LogoOnTheRight) {
+	// insertion point
+	to.Name = from.Name
+	to.Width = from.Width
+	to.Height = from.Height
+	to.SVG = from.SVG
 }
 
 type Slider_WOP struct {
@@ -185,6 +239,17 @@ func (from *Table) CopyBasicFields(to *Table) {
 	to.Name = from.Name
 	to.StackName = from.StackName
 	to.TableName = from.TableName
+}
+
+type Title_WOP struct {
+	// insertion point
+
+	Name string
+}
+
+func (from *Title) CopyBasicFields(to *Title) {
+	// insertion point
+	to.Name = from.Name
 }
 
 type Tone_WOP struct {

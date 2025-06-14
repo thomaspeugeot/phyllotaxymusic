@@ -95,6 +95,13 @@ type RectAnchoredRectDB struct {
 	// provide the sql storage for the boolan
 	HeightFollowRect_Data sql.NullBool
 
+	// Declation for basic field rectanchoredrectDB.HasToolTip
+	// provide the sql storage for the boolan
+	HasToolTip_Data sql.NullBool
+
+	// Declation for basic field rectanchoredrectDB.ToolTipText
+	ToolTipText_Data sql.NullString
+
 	// Declation for basic field rectanchoredrectDB.Color
 	Color_Data sql.NullString
 
@@ -163,21 +170,25 @@ type RectAnchoredRectWOP struct {
 
 	HeightFollowRect bool `xlsx:"11"`
 
-	Color string `xlsx:"12"`
+	HasToolTip bool `xlsx:"12"`
 
-	FillOpacity float64 `xlsx:"13"`
+	ToolTipText string `xlsx:"13"`
 
-	Stroke string `xlsx:"14"`
+	Color string `xlsx:"14"`
 
-	StrokeOpacity float64 `xlsx:"15"`
+	FillOpacity float64 `xlsx:"15"`
 
-	StrokeWidth float64 `xlsx:"16"`
+	Stroke string `xlsx:"16"`
 
-	StrokeDashArray string `xlsx:"17"`
+	StrokeOpacity float64 `xlsx:"17"`
 
-	StrokeDashArrayWhenSelected string `xlsx:"18"`
+	StrokeWidth float64 `xlsx:"18"`
 
-	Transform string `xlsx:"19"`
+	StrokeDashArray string `xlsx:"19"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"20"`
+
+	Transform string `xlsx:"21"`
 	// insertion for WOP pointer fields
 }
 
@@ -195,6 +206,8 @@ var RectAnchoredRect_Fields = []string{
 	"RectAnchorType",
 	"WidthFollowRect",
 	"HeightFollowRect",
+	"HasToolTip",
+	"ToolTipText",
 	"Color",
 	"FillOpacity",
 	"Stroke",
@@ -513,6 +526,12 @@ func (rectanchoredrectDB *RectAnchoredRectDB) CopyBasicFieldsFromRectAnchoredRec
 	rectanchoredrectDB.HeightFollowRect_Data.Bool = rectanchoredrect.HeightFollowRect
 	rectanchoredrectDB.HeightFollowRect_Data.Valid = true
 
+	rectanchoredrectDB.HasToolTip_Data.Bool = rectanchoredrect.HasToolTip
+	rectanchoredrectDB.HasToolTip_Data.Valid = true
+
+	rectanchoredrectDB.ToolTipText_Data.String = rectanchoredrect.ToolTipText
+	rectanchoredrectDB.ToolTipText_Data.Valid = true
+
 	rectanchoredrectDB.Color_Data.String = rectanchoredrect.Color
 	rectanchoredrectDB.Color_Data.Valid = true
 
@@ -574,6 +593,12 @@ func (rectanchoredrectDB *RectAnchoredRectDB) CopyBasicFieldsFromRectAnchoredRec
 
 	rectanchoredrectDB.HeightFollowRect_Data.Bool = rectanchoredrect.HeightFollowRect
 	rectanchoredrectDB.HeightFollowRect_Data.Valid = true
+
+	rectanchoredrectDB.HasToolTip_Data.Bool = rectanchoredrect.HasToolTip
+	rectanchoredrectDB.HasToolTip_Data.Valid = true
+
+	rectanchoredrectDB.ToolTipText_Data.String = rectanchoredrect.ToolTipText
+	rectanchoredrectDB.ToolTipText_Data.Valid = true
 
 	rectanchoredrectDB.Color_Data.String = rectanchoredrect.Color
 	rectanchoredrectDB.Color_Data.Valid = true
@@ -637,6 +662,12 @@ func (rectanchoredrectDB *RectAnchoredRectDB) CopyBasicFieldsFromRectAnchoredRec
 	rectanchoredrectDB.HeightFollowRect_Data.Bool = rectanchoredrect.HeightFollowRect
 	rectanchoredrectDB.HeightFollowRect_Data.Valid = true
 
+	rectanchoredrectDB.HasToolTip_Data.Bool = rectanchoredrect.HasToolTip
+	rectanchoredrectDB.HasToolTip_Data.Valid = true
+
+	rectanchoredrectDB.ToolTipText_Data.String = rectanchoredrect.ToolTipText
+	rectanchoredrectDB.ToolTipText_Data.Valid = true
+
 	rectanchoredrectDB.Color_Data.String = rectanchoredrect.Color
 	rectanchoredrectDB.Color_Data.Valid = true
 
@@ -676,6 +707,8 @@ func (rectanchoredrectDB *RectAnchoredRectDB) CopyBasicFieldsToRectAnchoredRect(
 	rectanchoredrect.RectAnchorType.FromString(rectanchoredrectDB.RectAnchorType_Data.String)
 	rectanchoredrect.WidthFollowRect = rectanchoredrectDB.WidthFollowRect_Data.Bool
 	rectanchoredrect.HeightFollowRect = rectanchoredrectDB.HeightFollowRect_Data.Bool
+	rectanchoredrect.HasToolTip = rectanchoredrectDB.HasToolTip_Data.Bool
+	rectanchoredrect.ToolTipText = rectanchoredrectDB.ToolTipText_Data.String
 	rectanchoredrect.Color = rectanchoredrectDB.Color_Data.String
 	rectanchoredrect.FillOpacity = rectanchoredrectDB.FillOpacity_Data.Float64
 	rectanchoredrect.Stroke = rectanchoredrectDB.Stroke_Data.String
@@ -700,6 +733,8 @@ func (rectanchoredrectDB *RectAnchoredRectDB) CopyBasicFieldsToRectAnchoredRect_
 	rectanchoredrect.RectAnchorType.FromString(rectanchoredrectDB.RectAnchorType_Data.String)
 	rectanchoredrect.WidthFollowRect = rectanchoredrectDB.WidthFollowRect_Data.Bool
 	rectanchoredrect.HeightFollowRect = rectanchoredrectDB.HeightFollowRect_Data.Bool
+	rectanchoredrect.HasToolTip = rectanchoredrectDB.HasToolTip_Data.Bool
+	rectanchoredrect.ToolTipText = rectanchoredrectDB.ToolTipText_Data.String
 	rectanchoredrect.Color = rectanchoredrectDB.Color_Data.String
 	rectanchoredrect.FillOpacity = rectanchoredrectDB.FillOpacity_Data.Float64
 	rectanchoredrect.Stroke = rectanchoredrectDB.Stroke_Data.String
@@ -725,6 +760,8 @@ func (rectanchoredrectDB *RectAnchoredRectDB) CopyBasicFieldsToRectAnchoredRectW
 	rectanchoredrect.RectAnchorType.FromString(rectanchoredrectDB.RectAnchorType_Data.String)
 	rectanchoredrect.WidthFollowRect = rectanchoredrectDB.WidthFollowRect_Data.Bool
 	rectanchoredrect.HeightFollowRect = rectanchoredrectDB.HeightFollowRect_Data.Bool
+	rectanchoredrect.HasToolTip = rectanchoredrectDB.HasToolTip_Data.Bool
+	rectanchoredrect.ToolTipText = rectanchoredrectDB.ToolTipText_Data.String
 	rectanchoredrect.Color = rectanchoredrectDB.Color_Data.String
 	rectanchoredrect.FillOpacity = rectanchoredrectDB.FillOpacity_Data.Float64
 	rectanchoredrect.Stroke = rectanchoredrectDB.Stroke_Data.String

@@ -27,10 +27,10 @@ func __Gong__Abs(x int) int {
 
 var _ = __Gong__Abs
 
-const ProbeTreeSidebarSuffix = "-sidebar"
-const ProbeTableSuffix = "-table"
-const ProbeFormSuffix = "-form"
-const ProbeSplitSuffix = "-probe"
+const ProbeTreeSidebarSuffix = ":sidebar of the probe"
+const ProbeTableSuffix = ":table of the probe"
+const ProbeFormSuffix = ":form of the probe"
+const ProbeSplitSuffix = ":probe of the probe"
 
 func (stage *Stage) GetProbeTreeSidebarStageName() string {
 	return stage.GetType() + ":" + stage.GetName() + ProbeTreeSidebarSuffix
@@ -79,7 +79,12 @@ type GongStructInterface interface {
 // Stage enables storage of staged instances
 // swagger:ignore
 type Stage struct {
-	name string
+	name               string
+	commitId           uint // commitId is updated at each commit
+	commitTimeStamp    time.Time
+	contentWhenParsed  string
+	commitIdWhenParsed uint
+	generatesDiff      bool
 
 	// insertion point for definition of arrays registering instances
 	GongBasicFields           map[*GongBasicField]any
@@ -271,6 +276,10 @@ type Stage struct {
 	NamedStructs []*NamedStruct
 }
 
+func (stage *Stage) SetGeneratesDiff(generatesDiff bool) {
+	stage.generatesDiff = generatesDiff
+}
+
 // GetNamedStructs implements models.ProbebStage.
 func (stage *Stage) GetNamedStructsNames() (res []string) {
 
@@ -300,6 +309,30 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 
 	for _, instance := range orderedSet {
 		res = append(res, instance.GetName())
+	}
+
+	return
+}
+
+func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []T) {
+
+	orderedSet := []T{}
+	for instance := range set {
+		orderedSet = append(orderedSet, instance)
+	}
+	sort.Slice(orderedSet[:], func(i, j int) bool {
+		instancei := orderedSet[i]
+		instancej := orderedSet[j]
+		i_order, oki := order[instancei]
+		j_order, okj := order[instancej]
+		if !oki || !okj {
+			log.Fatalf("GetNamedStructInstances: pointer not found")
+		}
+		return i_order < j_order
+	})
+
+	for _, instance := range orderedSet {
+		res = append(res, instance)
 	}
 
 	return
@@ -604,6 +637,8 @@ func (stage *Stage) CommitWithSuspendedCallbacks() {
 
 func (stage *Stage) Commit() {
 	stage.ComputeReverseMaps()
+	stage.commitId++
+	stage.commitTimeStamp = time.Now()
 
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
@@ -2174,7 +2209,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case GongBasicField:
-		res = []string{"Name", "BasicKindName", "GongEnum", "DeclaredType", "CompositeStructName", "Index", "IsDocLink", "IsTextArea", "IsBespokeWidth", "BespokeWidth", "IsBespokeHeight", "BespokeHeight"}
+		res = []string{"Name", "BasicKindName", "GongEnum", "DeclaredType", "CompositeStructName", "Index", "IsTextArea", "IsBespokeWidth", "BespokeWidth", "IsBespokeHeight", "BespokeHeight"}
 	case GongEnum:
 		res = []string{"Name", "Type", "GongEnumValues"}
 	case GongEnumValue:
@@ -2284,7 +2319,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case *GongBasicField:
-		res = []string{"Name", "BasicKindName", "GongEnum", "DeclaredType", "CompositeStructName", "Index", "IsDocLink", "IsTextArea", "IsBespokeWidth", "BespokeWidth", "IsBespokeHeight", "BespokeHeight"}
+		res = []string{"Name", "BasicKindName", "GongEnum", "DeclaredType", "CompositeStructName", "Index", "IsTextArea", "IsBespokeWidth", "BespokeWidth", "IsBespokeHeight", "BespokeHeight"}
 	case *GongEnum:
 		res = []string{"Name", "Type", "GongEnumValues"}
 	case *GongEnumValue:
@@ -2367,10 +2402,6 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
 			res.valueInt = inferedInstance.Index
 			res.GongFieldValueType = GongFieldValueTypeInt
-		case "IsDocLink":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDocLink)
-			res.valueBool = inferedInstance.IsDocLink
-			res.GongFieldValueType = GongFieldValueTypeBool
 		case "IsTextArea":
 			res.valueString = fmt.Sprintf("%t", inferedInstance.IsTextArea)
 			res.valueBool = inferedInstance.IsTextArea
@@ -2623,10 +2654,6 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
 			res.valueInt = inferedInstance.Index
 			res.GongFieldValueType = GongFieldValueTypeInt
-		case "IsDocLink":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDocLink)
-			res.valueBool = inferedInstance.IsDocLink
-			res.GongFieldValueType = GongFieldValueTypeBool
 		case "IsTextArea":
 			res.valueString = fmt.Sprintf("%t", inferedInstance.IsTextArea)
 			res.valueBool = inferedInstance.IsTextArea

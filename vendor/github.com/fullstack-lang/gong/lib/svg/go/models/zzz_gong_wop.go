@@ -519,6 +519,20 @@ type Rect_WOP struct {
 	CanMoveHorizontaly bool
 
 	CanMoveVerticaly bool
+
+	ChangeColorWhenHovered bool
+
+	ColorWhenHovered string
+
+	OriginalColor string
+
+	FillOpacityWhenHovered float64
+
+	OriginalFillOpacity float64
+
+	HasToolTip bool
+
+	ToolTipText string
 }
 
 func (from *Rect) CopyBasicFields(to *Rect) {
@@ -550,6 +564,13 @@ func (from *Rect) CopyBasicFields(to *Rect) {
 	to.HasBottomHandle = from.HasBottomHandle
 	to.CanMoveHorizontaly = from.CanMoveHorizontaly
 	to.CanMoveVerticaly = from.CanMoveVerticaly
+	to.ChangeColorWhenHovered = from.ChangeColorWhenHovered
+	to.ColorWhenHovered = from.ColorWhenHovered
+	to.OriginalColor = from.OriginalColor
+	to.FillOpacityWhenHovered = from.FillOpacityWhenHovered
+	to.OriginalFillOpacity = from.OriginalFillOpacity
+	to.HasToolTip = from.HasToolTip
+	to.ToolTipText = from.ToolTipText
 }
 
 type RectAnchoredPath_WOP struct {
@@ -630,6 +651,10 @@ type RectAnchoredRect_WOP struct {
 
 	HeightFollowRect bool
 
+	HasToolTip bool
+
+	ToolTipText string
+
 	Color string
 
 	FillOpacity float64
@@ -660,6 +685,8 @@ func (from *RectAnchoredRect) CopyBasicFields(to *RectAnchoredRect) {
 	to.RectAnchorType = from.RectAnchorType
 	to.WidthFollowRect = from.WidthFollowRect
 	to.HeightFollowRect = from.HeightFollowRect
+	to.HasToolTip = from.HasToolTip
+	to.ToolTipText = from.ToolTipText
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
@@ -693,6 +720,8 @@ type RectAnchoredText_WOP struct {
 
 	TextAnchorType TextAnchorType
 
+	WritingMode WritingMode
+
 	Color string
 
 	FillOpacity float64
@@ -722,6 +751,7 @@ func (from *RectAnchoredText) CopyBasicFields(to *RectAnchoredText) {
 	to.Y_Offset = from.Y_Offset
 	to.RectAnchorType = from.RectAnchorType
 	to.TextAnchorType = from.TextAnchorType
+	to.WritingMode = from.WritingMode
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke

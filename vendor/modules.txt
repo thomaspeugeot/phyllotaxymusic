@@ -52,7 +52,7 @@ github.com/dustin/go-humanize
 # github.com/frankban/quicktest v1.14.6
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20250602074328-8bf4252db41f
+# github.com/fullstack-lang/gong v0.0.0-20250614100256-9f4acd020e65
 ## explicit; go 1.24.3
 github.com/fullstack-lang/gong/go
 github.com/fullstack-lang/gong/go/controllers
@@ -136,6 +136,7 @@ github.com/fullstack-lang/gong/lib/svg/go/controllers
 github.com/fullstack-lang/gong/lib/svg/go/db
 github.com/fullstack-lang/gong/lib/svg/go/fullstack
 github.com/fullstack-lang/gong/lib/svg/go/models
+github.com/fullstack-lang/gong/lib/svg/go/models/path
 github.com/fullstack-lang/gong/lib/svg/go/orm
 github.com/fullstack-lang/gong/lib/svg/go/probe
 github.com/fullstack-lang/gong/lib/svg/go/stack
@@ -299,6 +300,9 @@ github.com/rogpeppe/fastuuid
 # github.com/rogpeppe/go-internal v1.14.1
 ## explicit; go 1.23
 github.com/rogpeppe/go-internal/fmtsort
+# github.com/sergi/go-diff v1.4.0
+## explicit; go 1.13
+github.com/sergi/go-diff/diffmatchpatch
 # github.com/shabbyrobe/xmlwriter v0.0.0-20230525083848-85336ec334fa
 ## explicit; go 1.13
 github.com/shabbyrobe/xmlwriter
@@ -429,8 +433,8 @@ google.golang.org/protobuf/proto
 google.golang.org/protobuf/reflect/protoreflect
 google.golang.org/protobuf/reflect/protoregistry
 google.golang.org/protobuf/runtime/protoiface
-# gopkg.in/yaml.v2 v2.3.0
-## explicit
+# gopkg.in/yaml.v2 v2.4.0
+## explicit; go 1.15
 gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit

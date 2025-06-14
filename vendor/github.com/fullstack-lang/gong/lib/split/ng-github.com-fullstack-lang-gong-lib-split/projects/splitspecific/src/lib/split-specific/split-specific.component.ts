@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Renderer2, Input, OnInit, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 import * as split from '../../../../split/src/public-api'
 
@@ -20,7 +21,8 @@ import { ToneSpecificComponent } from '../../../../../../../tone/ng-github.com-f
 import { TreeSpecificComponent } from '../../../../../../../tree/ng-github.com-fullstack-lang-gong-lib-tree/projects/treespecific/src/lib/tree-specific/tree-specific.component'
 import { XlsxSpecificComponent } from '../../../../../../../xlsx/ng-github.com-fullstack-lang-gong-lib-xlsx/projects/xlsxspecific/src/lib/xlsx-specific/xlsx-specific.component'
 
-
+// to set the title of the application
+import { DomSanitizer, SafeHtml, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'lib-split-specific',
@@ -43,40 +45,101 @@ import { XlsxSpecificComponent } from '../../../../../../../xlsx/ng-github.com-f
     TreeSpecificComponent,
     XlsxSpecificComponent,
 
-  
   ],
   templateUrl: './split-specific.component.html',
   styleUrl: './split-specific.component.css'
 })
 export class SplitSpecificComponent implements OnInit {
-    @Input() Name: string = ""
+  @Input() Name: string = ""
 
-    public frontRepo?: split.FrontRepo;
+  public frontRepo?: split.FrontRepo;
 
-    view = ""
+  view = ""
 
-    constructor(
-      private frontRepoService: split.FrontRepoService,
-    ) { }
+  radioButtonHeight = 40
 
-    ngOnInit(): void {
-      console.log("ngOnInit");
-  
-      this.frontRepoService.connectToWebSocket(this.Name).subscribe({
-        next: (frontRepo) => {
-          this.frontRepo = frontRepo;
-  
-          if (this.frontRepo.array_Views.length > 0) {
+  constructor(
+    private frontRepoService: split.FrontRepoService,
+    private titleService: Title,
+    private renderer: Renderer2,
+    private sanitizer: DomSanitizer,
+    @Inject(DOCUMENT) private document: Document
+  ) { }
 
-            this.frontRepo.array_Views.sort((a: split.View, b : split.View) => {
-              return a.ID - b.ID
-            })
+  ngOnInit(): void {
+    console.log("ngOnInit");
 
-            this.view = this.frontRepo.array_Views[0].Name
-          }
+    this.frontRepoService.connectToWebSocket(this.Name).subscribe({
+      next: (frontRepo) => {
+        this.frontRepo = frontRepo;
 
+        if (this.frontRepo.array_Titles.length > 0) {
+          this.titleService.setTitle(this.frontRepo.array_Titles[0].Name)
         }
+
+
+        if (this.frontRepo.array_FavIcons.length > 0) {
+          this.setSvgFavicon(this.frontRepo.array_FavIcons[0].SVG)
+        }
+
+        for (let logo of this.frontRepo.array_LogoOnTheLefts) {
+          if (this.radioButtonHeight < logo.Height) {
+            this.radioButtonHeight = logo.Height
+          }
+        }
+        for (let logo of this.frontRepo.array_LogoOnTheRights) {
+          if (this.radioButtonHeight < logo.Height) {
+            this.radioButtonHeight = logo.Height
+          }
+        }
+
+        if (this.frontRepo.array_Views.length > 0) {
+
+          this.frontRepo.array_Views.sort((a: split.View, b: split.View) => {
+            return a.ID - b.ID
+          })
+
+          this.view = this.frontRepo.array_Views[0].Name
+        }
+
       }
-      )
     }
+    )
+  }
+
+  setSvgFavicon(svgString: string) {
+    // Create data URL from SVG string
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
+    const svgUrl = URL.createObjectURL(svgBlob);
+
+    // Alternative: use data URL directly
+    // const svgUrl = `data:image/svg+xml;base64,${btoa(svgString)}`;
+
+    // Find existing favicon or create new one
+    let link: HTMLLinkElement | null = this.document.querySelector("link[rel*='icon']");
+
+    if (link) {
+      // Existing favicon found, update it
+      link.href = svgUrl;
+    } else {
+      // No existing favicon, create new one
+      link = this.renderer.createElement('link');
+      if (link) {
+        link.rel = 'icon';
+        link.type = 'image/svg+xml';
+        link.href = svgUrl;
+        this.renderer.appendChild(this.document.head, link);
+      }
+
+    }
+  }
+
+  getSafeHtml(svgContent: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(svgContent);
+  }
+
+  get currentView(): split.View | undefined {
+    return this.frontRepo?.array_Views.find(v => v.Name === this.view);
+  }
+
 }

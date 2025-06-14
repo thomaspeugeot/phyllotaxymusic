@@ -14,8 +14,6 @@ type AttributeShape_WOP struct {
 
 	Name string
 
-	Identifier string
-
 	IdentifierMeta any
 
 	FieldTypeAsString string
@@ -28,7 +26,6 @@ type AttributeShape_WOP struct {
 func (from *AttributeShape) CopyBasicFields(to *AttributeShape) {
 	// insertion point
 	to.Name = from.Name
-	to.Identifier = from.Identifier
 	to.IdentifierMeta = from.IdentifierMeta
 	to.FieldTypeAsString = from.FieldTypeAsString
 	to.Structname = from.Structname
@@ -105,8 +102,6 @@ type GongEnumShape_WOP struct {
 
 	Y float64
 
-	Identifier string
-
 	IdentifierMeta any
 
 	Width float64
@@ -121,7 +116,6 @@ func (from *GongEnumShape) CopyBasicFields(to *GongEnumShape) {
 	to.Name = from.Name
 	to.X = from.X
 	to.Y = from.Y
-	to.Identifier = from.Identifier
 	to.IdentifierMeta = from.IdentifierMeta
 	to.Width = from.Width
 	to.Height = from.Height
@@ -133,13 +127,13 @@ type GongEnumValueShape_WOP struct {
 
 	Name string
 
-	Identifier string
+	IdentifierMeta any
 }
 
 func (from *GongEnumValueShape) CopyBasicFields(to *GongEnumValueShape) {
 	// insertion point
 	to.Name = from.Name
-	to.Identifier = from.Identifier
+	to.IdentifierMeta = from.IdentifierMeta
 }
 
 type GongNoteLinkShape_WOP struct {
@@ -206,8 +200,6 @@ type GongStructShape_WOP struct {
 
 	Y float64
 
-	Identifier string
-
 	IdentifierMeta any
 
 	ShowNbInstances bool
@@ -226,7 +218,6 @@ func (from *GongStructShape) CopyBasicFields(to *GongStructShape) {
 	to.Name = from.Name
 	to.X = from.X
 	to.Y = from.Y
-	to.Identifier = from.Identifier
 	to.IdentifierMeta = from.IdentifierMeta
 	to.ShowNbInstances = from.ShowNbInstances
 	to.NbInstances = from.NbInstances
@@ -240,11 +231,9 @@ type LinkShape_WOP struct {
 
 	Name string
 
-	Identifier string
-
 	IdentifierMeta any
 
-	Fieldtypename string
+	FieldTypeIdentifierMeta any
 
 	FieldOffsetX float64
 
@@ -280,9 +269,8 @@ type LinkShape_WOP struct {
 func (from *LinkShape) CopyBasicFields(to *LinkShape) {
 	// insertion point
 	to.Name = from.Name
-	to.Identifier = from.Identifier
 	to.IdentifierMeta = from.IdentifierMeta
-	to.Fieldtypename = from.Fieldtypename
+	to.FieldTypeIdentifierMeta = from.FieldTypeIdentifierMeta
 	to.FieldOffsetX = from.FieldOffsetX
 	to.FieldOffsetY = from.FieldOffsetY
 	to.TargetMultiplicity = from.TargetMultiplicity

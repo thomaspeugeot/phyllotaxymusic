@@ -10,6 +10,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 const marshallRes = `package {{PackageName}}
@@ -35,12 +37,18 @@ var _ map[string]any = map[string]any{
 // function will stage objects
 func _(stage *models.Stage) {
 
+	const __write__local_time = "{{LocalTimeStamp}}"
+	const __write__utc_time__ = "{{UTCTimeStamp}}"
+
+	const __commitId__ = "{{CommitId}}"
+
 	// Declaration of instances to stage{{Identifiers}}
 
 	// Setup of values{{ValueInitializers}}
 
 	// Setup of pointers{{PointersInitializers}}
-}`
+}
+`
 
 const IdentifiersDecls = `
 	{{Identifier}} := (&models.{{GeneratedStructName}}{}).Stage(stage)`
@@ -364,6 +372,53 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 
 	}
 
+	map_FavIcon_Identifiers := make(map[*FavIcon]string)
+	_ = map_FavIcon_Identifiers
+
+	faviconOrdered := []*FavIcon{}
+	for favicon := range stage.FavIcons {
+		faviconOrdered = append(faviconOrdered, favicon)
+	}
+	sort.Slice(faviconOrdered[:], func(i, j int) bool {
+		faviconi := faviconOrdered[i]
+		faviconj := faviconOrdered[j]
+		faviconi_order, oki := stage.FavIconMap_Staged_Order[faviconi]
+		faviconj_order, okj := stage.FavIconMap_Staged_Order[faviconj]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return faviconi_order < faviconj_order
+	})
+	if len(faviconOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, favicon := range faviconOrdered {
+
+		id = generatesIdentifier("FavIcon", idx, favicon.Name)
+		map_FavIcon_Identifiers[favicon] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "FavIcon")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", favicon.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(favicon.Name))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SVG")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(favicon.SVG))
+		initializerStatements += setValueField
+
+	}
+
 	map_Form_Identifiers := make(map[*Form]string)
 	_ = map_Form_Identifiers
 
@@ -460,6 +515,124 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StackName")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(load.StackName))
+		initializerStatements += setValueField
+
+	}
+
+	map_LogoOnTheLeft_Identifiers := make(map[*LogoOnTheLeft]string)
+	_ = map_LogoOnTheLeft_Identifiers
+
+	logoontheleftOrdered := []*LogoOnTheLeft{}
+	for logoontheleft := range stage.LogoOnTheLefts {
+		logoontheleftOrdered = append(logoontheleftOrdered, logoontheleft)
+	}
+	sort.Slice(logoontheleftOrdered[:], func(i, j int) bool {
+		logoonthelefti := logoontheleftOrdered[i]
+		logoontheleftj := logoontheleftOrdered[j]
+		logoonthelefti_order, oki := stage.LogoOnTheLeftMap_Staged_Order[logoonthelefti]
+		logoontheleftj_order, okj := stage.LogoOnTheLeftMap_Staged_Order[logoontheleftj]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return logoonthelefti_order < logoontheleftj_order
+	})
+	if len(logoontheleftOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, logoontheleft := range logoontheleftOrdered {
+
+		id = generatesIdentifier("LogoOnTheLeft", idx, logoontheleft.Name)
+		map_LogoOnTheLeft_Identifiers[logoontheleft] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "LogoOnTheLeft")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", logoontheleft.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(logoontheleft.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Width")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", logoontheleft.Width))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Height")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", logoontheleft.Height))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SVG")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(logoontheleft.SVG))
+		initializerStatements += setValueField
+
+	}
+
+	map_LogoOnTheRight_Identifiers := make(map[*LogoOnTheRight]string)
+	_ = map_LogoOnTheRight_Identifiers
+
+	logoontherightOrdered := []*LogoOnTheRight{}
+	for logoontheright := range stage.LogoOnTheRights {
+		logoontherightOrdered = append(logoontherightOrdered, logoontheright)
+	}
+	sort.Slice(logoontherightOrdered[:], func(i, j int) bool {
+		logoontherighti := logoontherightOrdered[i]
+		logoontherightj := logoontherightOrdered[j]
+		logoontherighti_order, oki := stage.LogoOnTheRightMap_Staged_Order[logoontherighti]
+		logoontherightj_order, okj := stage.LogoOnTheRightMap_Staged_Order[logoontherightj]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return logoontherighti_order < logoontherightj_order
+	})
+	if len(logoontherightOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, logoontheright := range logoontherightOrdered {
+
+		id = generatesIdentifier("LogoOnTheRight", idx, logoontheright.Name)
+		map_LogoOnTheRight_Identifiers[logoontheright] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "LogoOnTheRight")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", logoontheright.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(logoontheright.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Width")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", logoontheright.Width))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Height")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", logoontheright.Height))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SVG")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(logoontheright.SVG))
 		initializerStatements += setValueField
 
 	}
@@ -660,6 +833,47 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "TableName")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(table.TableName))
+		initializerStatements += setValueField
+
+	}
+
+	map_Title_Identifiers := make(map[*Title]string)
+	_ = map_Title_Identifiers
+
+	titleOrdered := []*Title{}
+	for title := range stage.Titles {
+		titleOrdered = append(titleOrdered, title)
+	}
+	sort.Slice(titleOrdered[:], func(i, j int) bool {
+		titlei := titleOrdered[i]
+		titlej := titleOrdered[j]
+		titlei_order, oki := stage.TitleMap_Staged_Order[titlei]
+		titlej_order, okj := stage.TitleMap_Staged_Order[titlej]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return titlei_order < titlej_order
+	})
+	if len(titleOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, title := range titleOrdered {
+
+		id = generatesIdentifier("Title", idx, title.Name)
+		map_Title_Identifiers[title] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Title")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", title.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(title.Name))
 		initializerStatements += setValueField
 
 	}
@@ -1036,6 +1250,19 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		// Initialisation of values
 	}
 
+	if len(faviconOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of FavIcon instances pointers"
+	}
+	for idx, favicon := range faviconOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("FavIcon", idx, favicon.Name)
+		map_FavIcon_Identifiers[favicon] = id
+
+		// Initialisation of values
+	}
+
 	if len(formOrdered) > 0 {
 		pointersInitializesStatements += "\n\t// setup of Form instances pointers"
 	}
@@ -1058,6 +1285,32 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 
 		id = generatesIdentifier("Load", idx, load.Name)
 		map_Load_Identifiers[load] = id
+
+		// Initialisation of values
+	}
+
+	if len(logoontheleftOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of LogoOnTheLeft instances pointers"
+	}
+	for idx, logoontheleft := range logoontheleftOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("LogoOnTheLeft", idx, logoontheleft.Name)
+		map_LogoOnTheLeft_Identifiers[logoontheleft] = id
+
+		// Initialisation of values
+	}
+
+	if len(logoontherightOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of LogoOnTheRight instances pointers"
+	}
+	for idx, logoontheright := range logoontherightOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("LogoOnTheRight", idx, logoontheright.Name)
+		map_LogoOnTheRight_Identifiers[logoontheright] = id
 
 		// Initialisation of values
 	}
@@ -1110,6 +1363,19 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 
 		id = generatesIdentifier("Table", idx, table.Name)
 		map_Table_Identifiers[table] = id
+
+		// Initialisation of values
+	}
+
+	if len(titleOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of Title instances pointers"
+	}
+	for idx, title := range titleOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Title", idx, title.Name)
+		map_Title_Identifiers[title] = id
 
 		// Initialisation of values
 	}
@@ -1178,6 +1444,15 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 	res = strings.ReplaceAll(res, "{{ValueInitializers}}", initializerStatements)
 	res = strings.ReplaceAll(res, "{{PointersInitializers}}", pointersInitializesStatements)
 
+	// Local time with timezone
+	localTimestamp := stage.commitTimeStamp.Format("2006-01-02 15:04:05.000000 MST")
+
+	// UTC time
+	utcTimestamp := stage.commitTimeStamp.UTC().Format("2006-01-02 15:04:05.000000 UTC")
+	res = strings.ReplaceAll(res, "{{LocalTimeStamp}}", localTimestamp)
+	res = strings.ReplaceAll(res, "{{UTCTimeStamp}}", utcTimestamp)
+	res = strings.ReplaceAll(res, "{{CommitId}}", fmt.Sprintf("%.10d", stage.commitId))
+
 	if stage.MetaPackageImportAlias != "" {
 		res = strings.ReplaceAll(res, "{{ImportPackageDeclaration}}",
 			fmt.Sprintf("\n\t%s %s", stage.MetaPackageImportAlias, stage.MetaPackageImportPath))
@@ -1225,7 +1500,44 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		// res = strings.ReplaceAll(res, "{{EntriesDocLinkStringDocLinkIdentifier}}", entries)
 	}
 
+	if stage.generatesDiff {
+		diff := computeDiff(stage.contentWhenParsed, res)
+		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.delta", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
+		diff = ComputeDiff(stage.contentWhenParsed, res)
+		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.diff", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
+	}
+	stage.contentWhenParsed = res
+	stage.commitIdWhenParsed = stage.commitId
+
 	fmt.Fprintln(file, res)
+}
+
+// computeDiff calculates the git-style unified diff between two strings.
+func computeDiff(a, b string) string {
+	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(a, b, false)
+	return dmp.DiffToDelta(diffs)
+}
+
+// computePrettyDiff calculates the git-style unified diff between two strings.
+func computePrettyDiff(a, b string) string {
+	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(a, b, false)
+	return dmp.DiffPrettyHtml(diffs)
+}
+
+// applyDiff reconstructs the original string 'a' from the new string 'b' and the diff string 'c'.
+func applyDiff(b, c string) (string, error) {
+	dmp := diffmatchpatch.New()
+	diffs, err := dmp.DiffFromDelta(b, c)
+	if err != nil {
+		return "", err
+	}
+	patches := dmp.PatchMake(b, diffs)
+	// We are applying the patch in reverse to get from 'b' to 'a'.
+	// The library's PatchApply function returns the new string and a slice of booleans indicating the success of each patch application.
+	result, _ := dmp.PatchApply(patches, b)
+	return result, nil
 }
 
 // unique identifier per struct

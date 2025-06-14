@@ -1,5 +1,12 @@
 package models
 
+import (
+	"fmt"
+	"strings"
+
+	"github.com/fullstack-lang/gong/lib/svg/go/models/path"
+)
+
 type RectAnchoredPath struct {
 	Name string
 
@@ -21,4 +28,35 @@ type RectAnchoredPath struct {
 	AppliedScaling float64
 
 	Presentation
+}
+
+func (rectAnchoredPath *RectAnchoredPath) WriteSVG(sb *strings.Builder, x, y float64) (maxX, maxY float64) {
+
+	sb.WriteString(
+		fmt.Sprintf(
+			`<path
+			d="%s"`,
+			rectAnchoredPath.Definition,
+		))
+
+	// add a translation to the presentation of the path
+	// (path does not treat x,y)
+	var presentation Presentation
+	presentation = rectAnchoredPath.Presentation
+
+	presentation.Transform =
+		fmt.Sprintf("translate(%s %s) ",
+			formatFloat(x+rectAnchoredPath.X_Offset),
+			formatFloat(y+rectAnchoredPath.Y_Offset),
+		) + presentation.Transform
+	presentation.WriteSVG(sb)
+	sb.WriteString(" >\n")
+
+	sb.WriteString("</path>\n")
+
+	pathBound := path.ProcessSVGPath(rectAnchoredPath.Definition)
+	maxX = x + rectAnchoredPath.X_Offset + pathBound.MaxX
+	maxY = y + rectAnchoredPath.Y_Offset + pathBound.MaxY
+
+	return
 }

@@ -28,10 +28,19 @@ func (stage *Stage) ComputeReverseMaps() {
 	// Compute reverse map for named struct Doc
 	// insertion point per field
 
+	// Compute reverse map for named struct FavIcon
+	// insertion point per field
+
 	// Compute reverse map for named struct Form
 	// insertion point per field
 
 	// Compute reverse map for named struct Load
+	// insertion point per field
+
+	// Compute reverse map for named struct LogoOnTheLeft
+	// insertion point per field
+
+	// Compute reverse map for named struct LogoOnTheRight
 	// insertion point per field
 
 	// Compute reverse map for named struct Slider
@@ -44,6 +53,9 @@ func (stage *Stage) ComputeReverseMaps() {
 	// insertion point per field
 
 	// Compute reverse map for named struct Table
+	// insertion point per field
+
+	// Compute reverse map for named struct Title
 	// insertion point per field
 
 	// Compute reverse map for named struct Tone

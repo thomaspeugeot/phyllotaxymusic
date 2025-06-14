@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"log"
 
 	svg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 )
@@ -59,24 +60,27 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		return
 	}
 
-	svg := new(svg_models.SVG).Stage(docSVGMapper.svgStage)
+	svg := new(svg_models.SVG)
 	svg.Name = selectedDiagram.Name
 	svg.IsEditable = !embeddedDiagram
 
 	for _, gongstructShape := range selectedDiagram.GongStructShapes {
 
-		rectLayer := new(svg_models.Layer).Stage(docSVGMapper.svgStage)
-		rectLayer.Name = "Layer" + gongstructShape.Identifier
+		rectLayer := new(svg_models.Layer)
+
+		gongStructIdentifier := IdentifierMetaToGongStructName(gongstructShape.IdentifierMeta)
+
+		rectLayer.Name = "Layer" + gongStructIdentifier
 		svg.Layers = append(svg.Layers, rectLayer)
 
-		rect := new(svg_models.Rect).Stage(docSVGMapper.svgStage)
-		rect.Name = gongstructShape.Identifier
+		rect := new(svg_models.Rect)
+		rect.Name = gongStructIdentifier
 
 		// hook a callback on rect modifications
 		rect.Impl = NewRectImplGongstructShape(gongstructShape, gongdocStage)
 
 		docSVGMapper.map_GongstructShape_Rect[gongstructShape] = rect
-		docSVGMapper.map_Structname_Rect[gongstructShape.Identifier] = rect
+		docSVGMapper.map_Structname_Rect[gongStructIdentifier] = rect
 
 		rectLayer.Rects = append(rectLayer.Rects, rect)
 		rect.X = gongstructShape.X
@@ -110,8 +114,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		//
 		// Title
 		//
-		title := new(svg_models.RectAnchoredText).Stage(docSVGMapper.svgStage)
-		title.Name = IdentifierToGongObjectName(gongstructShape.Identifier)
+		title := new(svg_models.RectAnchoredText)
+		title.Name = gongStructIdentifier
 		title.Content = title.Name
 		title.X_Offset = 0
 		title.Y_Offset = 20
@@ -123,8 +127,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, title)
 
 		// additional box to hightlight the title
-		titleBox := new(svg_models.RectAnchoredRect).Stage(docSVGMapper.svgStage)
-		titleBox.Name = IdentifierToGongObjectName(gongstructShape.Identifier)
+		titleBox := new(svg_models.RectAnchoredRect)
+		titleBox.Name = gongStructIdentifier
 		titleBox.X_Offset = rect.StrokeWidth
 		titleBox.Y_Offset = rect.StrokeWidth
 		titleBox.Width = rect.Width - 2*rect.StrokeWidth - 30
@@ -146,9 +150,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		// fields
 		//
 		for idx, field := range gongstructShape.AttributeShapes {
-			fieldText := new(svg_models.RectAnchoredText).Stage(docSVGMapper.svgStage)
-			fieldText.Name = field.Name + " : " + field.Fieldtypename
-			fieldText.Content = field.Name + " : " + field.Fieldtypename
+			fieldText := new(svg_models.RectAnchoredText)
+			fieldText.Name = IdentifierMetaToFieldName(field.IdentifierMeta) + " : " + field.Fieldtypename
+			fieldText.Content = IdentifierMetaToFieldName(field.IdentifierMeta) + " : " + field.Fieldtypename
 
 			// field position
 			fieldText.X_Offset = 10
@@ -165,7 +169,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		// number of instance (x%d)
 		//
 		if gongstructShape.ShowNbInstances {
-			nbInstancesText := new(svg_models.RectAnchoredText).Stage(docSVGMapper.svgStage)
+			nbInstancesText := new(svg_models.RectAnchoredText)
 			nbInstancesText.Name = fmt.Sprintf("(x%d)", gongstructShape.NbInstances)
 			nbInstancesText.Content = fmt.Sprintf("(x%d)", gongstructShape.NbInstances)
 
@@ -185,22 +189,32 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 	for _, gongstructShape := range selectedDiagram.GongStructShapes {
 
 		startRect := docSVGMapper.map_GongstructShape_Rect[gongstructShape]
-		for _, linkOfDocLib := range gongstructShape.LinkShapes {
+		for _, linkShape := range gongstructShape.LinkShapes {
+			var ok bool
+			var fieldMetaIdentifierString string
+			if fieldMetaIdentifierString, ok = linkShape.IdentifierMeta.(string); !ok {
+				// some legacy diagram have not the meta identifier
+				// therefore, we continue
+				log.Println("not a identifier meta as string")
+				continue
+			}
 
-			endRect, ok := docSVGMapper.map_Structname_Rect[linkOfDocLib.Fieldtypename]
+			endRectGongStructName := IdentifierMetaToGongStructName(linkShape.FieldTypeIdentifierMeta)
+			endRect, ok := docSVGMapper.map_Structname_Rect[endRectGongStructName]
 
 			// if some renaming of field type name has occured, end rect might be nil
 			if !ok {
 				continue
 			}
 
-			link := new(svg_models.Link).Stage(docSVGMapper.svgStage)
+			link := new(svg_models.Link)
 			link.Name = startRect.Name + " - to - " + endRect.Name
 
-			link.Impl = NewLinkImplLink(linkOfDocLib, gongdocStage)
+			link.Impl = NewLinkImplLink(linkShape, gongdocStage)
 
-			linkLayer := new(svg_models.Layer).Stage(docSVGMapper.svgStage)
-			docSVGMapper.map_Fieldname_Link[linkOfDocLib.Identifier] = link
+			linkLayer := new(svg_models.Layer)
+
+			docSVGMapper.map_Fieldname_Link[fieldMetaIdentifierString] = link
 
 			linkLayer.Links = append(linkLayer.Links, link)
 			svg.Layers = append(svg.Layers, linkLayer)
@@ -213,23 +227,23 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			link.EndArrowSize = 8
 			link.Type = svg_models.LINK_TYPE_FLOATING_ORTHOGONAL
 
-			link.StartOrientation = svg_models.OrientationType(linkOfDocLib.StartOrientation)
+			link.StartOrientation = svg_models.OrientationType(linkShape.StartOrientation)
 
 			// take into accound legacy links
 			if link.StartOrientation == "" {
 				link.StartOrientation = svg_models.ORIENTATION_HORIZONTAL
 			}
 
-			link.StartRatio = linkOfDocLib.StartRatio
-			link.EndOrientation = svg_models.OrientationType(linkOfDocLib.EndOrientation)
+			link.StartRatio = linkShape.StartRatio
+			link.EndOrientation = svg_models.OrientationType(linkShape.EndOrientation)
 			// take into accound legacy links
 			if link.EndOrientation == "" {
 				link.EndOrientation = svg_models.ORIENTATION_HORIZONTAL
 			}
 
-			link.EndRatio = linkOfDocLib.EndRatio
+			link.EndRatio = linkShape.EndRatio
 
-			link.CornerOffsetRatio = linkOfDocLib.CornerOffsetRatio
+			link.CornerOffsetRatio = linkShape.CornerOffsetRatio
 
 			link.CornerRadius = 8
 
@@ -237,16 +251,16 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			link.End = endRect
 
 			// add text to the arrow
-			targetMulitplicity := new(svg_models.LinkAnchoredText).Stage(docSVGMapper.svgStage)
+			targetMulitplicity := new(svg_models.LinkAnchoredText)
 			targetMulitplicity.AutomaticLayout = true
 			targetMulitplicity.LinkAnchorType = svg_models.LINK_RIGHT_OR_BOTTOM
 
-			targetMulitplicity.Impl = NewAnchoredTextImplLinkTargetMultiplicity(linkOfDocLib, gongdocStage)
+			targetMulitplicity.Impl = NewAnchoredTextImplLinkTargetMultiplicity(linkShape, gongdocStage)
 			link.TextAtArrowEnd = append(link.TextAtArrowEnd, targetMulitplicity)
-			targetMulitplicity.Name = linkOfDocLib.TargetMultiplicity.ToString()
+			targetMulitplicity.Name = linkShape.TargetMultiplicity.ToString()
 			targetMulitplicity.Content = targetMulitplicity.Name
-			targetMulitplicity.X_Offset = linkOfDocLib.TargetMultiplicityOffsetX
-			targetMulitplicity.Y_Offset = linkOfDocLib.TargetMultiplicityOffsetY
+			targetMulitplicity.X_Offset = linkShape.TargetMultiplicityOffsetX
+			targetMulitplicity.Y_Offset = linkShape.TargetMultiplicityOffsetY
 			targetMulitplicity.Stroke = svg_models.Black.ToString()
 			targetMulitplicity.StrokeOpacity = 1
 			targetMulitplicity.StrokeWidth = 1
@@ -256,17 +270,17 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 			targetMulitplicity.FontSize = "15"
 			targetMulitplicity.LetterSpacing = "0.1em"
 
-			fieldName := new(svg_models.LinkAnchoredText).Stage(docSVGMapper.svgStage)
+			fieldName := new(svg_models.LinkAnchoredText)
 			fieldName.AutomaticLayout = true
 			fieldName.LinkAnchorType = svg_models.LINK_LEFT_OR_TOP
 
-			fieldName.Impl = NewAnchoredTextImplLinkFieldName(linkOfDocLib, gongdocStage)
+			fieldName.Impl = NewAnchoredTextImplLinkFieldName(linkShape, gongdocStage)
 
 			link.TextAtArrowEnd = append(link.TextAtArrowEnd, fieldName)
-			fieldName.Name = linkOfDocLib.GetName()
+			fieldName.Name = linkShape.GetName()
 			fieldName.Content = fieldName.Name
-			fieldName.Y_Offset = linkOfDocLib.FieldOffsetY
-			fieldName.X_Offset = linkOfDocLib.FieldOffsetX
+			fieldName.Y_Offset = linkShape.FieldOffsetY
+			fieldName.X_Offset = linkShape.FieldOffsetX
 			fieldName.Stroke = svg_models.Black.ToString()
 			fieldName.StrokeOpacity = 1
 			fieldName.StrokeWidth = 1
@@ -278,17 +292,17 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 
 			// add the callback
 
-			sourceMultiplicity := new(svg_models.LinkAnchoredText).Stage(docSVGMapper.svgStage)
+			sourceMultiplicity := new(svg_models.LinkAnchoredText)
 			sourceMultiplicity.AutomaticLayout = true
 			sourceMultiplicity.LinkAnchorType = svg_models.LINK_RIGHT_OR_BOTTOM
 
-			sourceMultiplicity.Impl = NewAnchoredTextImplLinkSourceMultiplicity(linkOfDocLib, gongdocStage)
+			sourceMultiplicity.Impl = NewAnchoredTextImplLinkSourceMultiplicity(linkShape, gongdocStage)
 
 			link.TextAtArrowStart = append(link.TextAtArrowStart, sourceMultiplicity)
-			sourceMultiplicity.Name = linkOfDocLib.SourceMultiplicity.ToString()
+			sourceMultiplicity.Name = linkShape.SourceMultiplicity.ToString()
 			sourceMultiplicity.Content = sourceMultiplicity.Name
-			sourceMultiplicity.X_Offset = linkOfDocLib.SourceMultiplicityOffsetX
-			sourceMultiplicity.Y_Offset = linkOfDocLib.SourceMultiplicityOffsetY
+			sourceMultiplicity.X_Offset = linkShape.SourceMultiplicityOffsetX
+			sourceMultiplicity.Y_Offset = linkShape.SourceMultiplicityOffsetY
 			sourceMultiplicity.Stroke = svg_models.Black.ToString()
 			sourceMultiplicity.StrokeOpacity = 1
 			sourceMultiplicity.StrokeWidth = 1
@@ -303,17 +317,17 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 	//
 	for _, gongenumShape := range selectedDiagram.GongEnumShapes {
 
-		rectLayer := new(svg_models.Layer).Stage(docSVGMapper.svgStage)
-		rectLayer.Name = "Layer" + gongenumShape.Identifier
+		rectLayer := new(svg_models.Layer)
+		rectLayer.Name = "Layer" + GongEnumIdentifierMetaToGongEnumName(gongenumShape.IdentifierMeta)
 		svg.Layers = append(svg.Layers, rectLayer)
 
-		rect := new(svg_models.Rect).Stage(docSVGMapper.svgStage)
-		rect.Name = gongenumShape.Identifier
+		rect := new(svg_models.Rect)
+		rect.Name = GongEnumIdentifierMetaToGongEnumName(gongenumShape.IdentifierMeta)
 
 		rect.Impl = NewRectImplGongenumShape(gongenumShape, gongdocStage)
 
 		docSVGMapper.map_GongenumShape_Rect[gongenumShape] = rect
-		docSVGMapper.map_Structname_Rect[gongenumShape.Identifier] = rect
+		docSVGMapper.map_Structname_Rect[GongEnumIdentifierMetaToGongEnumName(gongenumShape.IdentifierMeta)] = rect
 
 		rectLayer.Rects = append(rectLayer.Rects, rect)
 		rect.X = gongenumShape.X
@@ -344,8 +358,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		//
 		// Title
 		//
-		title := new(svg_models.RectAnchoredText).Stage(docSVGMapper.svgStage)
-		title.Name = IdentifierToGongObjectName(gongenumShape.Identifier)
+		title := new(svg_models.RectAnchoredText)
+		title.Name = IdentifierToGongStructName(GongEnumIdentifierMetaToGongEnumName(gongenumShape.IdentifierMeta))
 		title.Content = title.Name
 		title.X_Offset = 0
 		title.Y_Offset = 20
@@ -357,8 +371,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, title)
 
 		// additional box to hightlight the title
-		titleBox := new(svg_models.RectAnchoredRect).Stage(docSVGMapper.svgStage)
-		titleBox.Name = IdentifierToGongObjectName(gongenumShape.Identifier)
+		titleBox := new(svg_models.RectAnchoredRect)
+		titleBox.Name = IdentifierToGongStructName(GongEnumIdentifierMetaToGongEnumName(gongenumShape.IdentifierMeta))
 		titleBox.X_Offset = 0
 		titleBox.Y_Offset = 0
 		titleBox.Width = rect.Width
@@ -374,10 +388,10 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		//
 		// fields
 		//
-		for idx, field := range gongenumShape.GongEnumValueShapes {
-			fieldText := new(svg_models.RectAnchoredText).Stage(docSVGMapper.svgStage)
-			fieldText.Name = field.Name
-			fieldText.Content = field.Name
+		for idx, gongEnumValueShape := range gongenumShape.GongEnumValueShapes {
+			fieldText := new(svg_models.RectAnchoredText)
+			fieldText.Name = GongEnumValueShapeIdentifierMetaToValueName(gongEnumValueShape.IdentifierMeta)
+			fieldText.Content = GongEnumValueShapeIdentifierMetaToValueName(gongEnumValueShape.IdentifierMeta)
 
 			// field position
 			fieldText.X_Offset = 10
@@ -396,11 +410,11 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 	//
 	for _, noteShape := range selectedDiagram.GongNoteShapes {
 
-		rectLayer := new(svg_models.Layer).Stage(docSVGMapper.svgStage)
+		rectLayer := new(svg_models.Layer)
 		rectLayer.Name = "Layer" + noteShape.Identifier
 		svg.Layers = append(svg.Layers, rectLayer)
 
-		rect := new(svg_models.Rect).Stage(docSVGMapper.svgStage)
+		rect := new(svg_models.Rect)
 		rect.Name = noteShape.Identifier
 
 		rect.Impl = NewRectImplNoteShape(noteShape, gongdocStage)
@@ -437,8 +451,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		//
 		// Title
 		//
-		title := new(svg_models.RectAnchoredText).Stage(docSVGMapper.svgStage)
-		title.Name = IdentifierToGongObjectName(noteShape.Identifier)
+		title := new(svg_models.RectAnchoredText)
+		title.Name = IdentifierToGongStructName(noteShape.Identifier)
 		title.Content = title.Name
 		title.X_Offset = 0
 		title.Y_Offset = 20
@@ -453,7 +467,7 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		//
 		// Title
 		//
-		content := new(svg_models.RectAnchoredText).Stage(docSVGMapper.svgStage)
+		content := new(svg_models.RectAnchoredText)
 		content.Name = noteShape.Body
 		content.Content = content.Name
 		content.X_Offset = 0
@@ -498,9 +512,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 				endRect, ok = docSVGMapper.map_Structname_Rect[noteLink.Identifier]
 				if ok {
 					// create the link
-					link := new(svg_models.Link).Stage(docSVGMapper.svgStage)
+					link := new(svg_models.Link)
 					link.Name = startRect.Name + " - to - " + endRect.Name
-					linkLayer := new(svg_models.Layer).Stage(docSVGMapper.svgStage)
+					linkLayer := new(svg_models.Layer)
 
 					linkLayer.Links = append(linkLayer.Links, link)
 					svg.Layers = append(svg.Layers, linkLayer)
@@ -540,9 +554,9 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 				// find the endLink
 				endLink, ok = docSVGMapper.map_Fieldname_Link[noteLink.Identifier]
 				if ok {
-					rectLinkLink := new(svg_models.RectLinkLink).Stage(docSVGMapper.svgStage)
+					rectLinkLink := new(svg_models.RectLinkLink)
 					rectLinkLink.Name = startRect.Name + " - to - " + endLink.Name
-					rectLinkLinkLayer := new(svg_models.Layer).Stage(docSVGMapper.svgStage)
+					rectLinkLinkLayer := new(svg_models.Layer)
 
 					rectLinkLinkLayer.RectLinkLinks = append(rectLinkLinkLayer.RectLinkLinks, rectLinkLink)
 					svg.Layers = append(svg.Layers, rectLinkLinkLayer)
@@ -562,5 +576,8 @@ func (docSVGMapper *DocSVGMapper) GenerateSvg(
 		}
 
 	}
+
+	svg_models.StageBranch(docSVGMapper.svgStage, svg)
+
 	docSVGMapper.svgStage.Commit()
 }

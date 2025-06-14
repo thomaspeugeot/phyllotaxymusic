@@ -86,6 +86,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/docs/:id", GetController().UpdateDoc)
 		v1.DELETE("/v1/docs/:id", GetController().DeleteDoc)
 
+		v1.GET("/v1/favicons", GetController().GetFavIcons)
+		v1.GET("/v1/favicons/:id", GetController().GetFavIcon)
+		v1.POST("/v1/favicons", GetController().PostFavIcon)
+		v1.PATCH("/v1/favicons/:id", GetController().UpdateFavIcon)
+		v1.PUT("/v1/favicons/:id", GetController().UpdateFavIcon)
+		v1.DELETE("/v1/favicons/:id", GetController().DeleteFavIcon)
+
 		v1.GET("/v1/forms", GetController().GetForms)
 		v1.GET("/v1/forms/:id", GetController().GetForm)
 		v1.POST("/v1/forms", GetController().PostForm)
@@ -99,6 +106,20 @@ func registerControllers(r *gin.Engine) {
 		v1.PATCH("/v1/loads/:id", GetController().UpdateLoad)
 		v1.PUT("/v1/loads/:id", GetController().UpdateLoad)
 		v1.DELETE("/v1/loads/:id", GetController().DeleteLoad)
+
+		v1.GET("/v1/logoonthelefts", GetController().GetLogoOnTheLefts)
+		v1.GET("/v1/logoonthelefts/:id", GetController().GetLogoOnTheLeft)
+		v1.POST("/v1/logoonthelefts", GetController().PostLogoOnTheLeft)
+		v1.PATCH("/v1/logoonthelefts/:id", GetController().UpdateLogoOnTheLeft)
+		v1.PUT("/v1/logoonthelefts/:id", GetController().UpdateLogoOnTheLeft)
+		v1.DELETE("/v1/logoonthelefts/:id", GetController().DeleteLogoOnTheLeft)
+
+		v1.GET("/v1/logoontherights", GetController().GetLogoOnTheRights)
+		v1.GET("/v1/logoontherights/:id", GetController().GetLogoOnTheRight)
+		v1.POST("/v1/logoontherights", GetController().PostLogoOnTheRight)
+		v1.PATCH("/v1/logoontherights/:id", GetController().UpdateLogoOnTheRight)
+		v1.PUT("/v1/logoontherights/:id", GetController().UpdateLogoOnTheRight)
+		v1.DELETE("/v1/logoontherights/:id", GetController().DeleteLogoOnTheRight)
 
 		v1.GET("/v1/sliders", GetController().GetSliders)
 		v1.GET("/v1/sliders/:id", GetController().GetSlider)
@@ -127,6 +148,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PATCH("/v1/tables/:id", GetController().UpdateTable)
 		v1.PUT("/v1/tables/:id", GetController().UpdateTable)
 		v1.DELETE("/v1/tables/:id", GetController().DeleteTable)
+
+		v1.GET("/v1/titles", GetController().GetTitles)
+		v1.GET("/v1/titles/:id", GetController().GetTitle)
+		v1.POST("/v1/titles", GetController().PostTitle)
+		v1.PATCH("/v1/titles/:id", GetController().UpdateTitle)
+		v1.PUT("/v1/titles/:id", GetController().UpdateTitle)
+		v1.DELETE("/v1/titles/:id", GetController().DeleteTitle)
 
 		v1.GET("/v1/tones", GetController().GetTones)
 		v1.GET("/v1/tones/:id", GetController().GetTone)
@@ -226,7 +254,7 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 				return false
 			}
 
-			log.Printf("CheckOrigin: Accepted - Origin '%s' with port %d", origin, port)
+			log.Printf("%s CheckOrigin: Accepted - Origin '%s' with port %d", time.Now().Format("2006-01-02 15:04:05.000000"), origin, port)
 			return true
 		},
 	}
@@ -279,7 +307,7 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 			// ReadMessage is used to detect client disconnection
 			_, _, err := wsConnection.ReadMessage()
 			if err != nil {
-				log.Println("github.com/fullstack-lang/gong/lib/split/go", stackPath, "WS client disconnected:", err)
+				log.Println(time.Now().Format("2006-01-02 15:04:05.000000"), "github.com/fullstack-lang/gong/lib/split/go", stackPath, "WS client disconnected:", err)
 				cancel() // Cancel the context
 				return
 			}

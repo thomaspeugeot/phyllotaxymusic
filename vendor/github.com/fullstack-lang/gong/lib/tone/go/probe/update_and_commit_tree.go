@@ -35,7 +35,21 @@ func updateAndCommitTree(
 	probe.treeStage.Reset()
 
 	// create tree
-	sidebar := (&tree.Tree{Name: SideBarTreeName}).Stage(probe.treeStage)
+	sidebar := &tree.Tree{Name: SideBarTreeName}
+
+	// Add a refresh button
+	nodeRefreshButton := &tree.Node{Name: ""}
+	sidebar.RootNodes = append(sidebar.RootNodes, nodeRefreshButton)
+	refreshButton := &tree.Button{
+		Name:            "RefreshButton" + " " + string(gongtree_buttons.BUTTON_refresh),
+		Icon:            string(gongtree_buttons.BUTTON_refresh),
+		HasToolTip:      true,
+		ToolTipText:     "Refresh probe",
+		ToolTipPosition: tree.Left,
+	}
+
+	nodeRefreshButton.Buttons = append(nodeRefreshButton.Buttons, refreshButton)
+	refreshButton.Impl = NewButtonImplRefresh(probe)
 
 	// collect all gong struct to construe the true
 	setOfGongStructs := *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](probe.gongStage)
@@ -55,7 +69,10 @@ func updateAndCommitTree(
 		name := gongStruct.Name + " (" +
 			fmt.Sprintf("%d", probe.stageOfInterest.Map_GongStructName_InstancesNb[gongStruct.Name]) + ")"
 
-		nodeGongstruct := (&tree.Node{Name: name}).Stage(probe.treeStage)
+		nodeGongstruct := &tree.Node{Name: name}
+		nodeGongstruct.HasToolTip = true
+		nodeGongstruct.ToolTipText = "Display table of all " + name + " instances"
+		nodeGongstruct.ToolTipPosition = tree.Right
 
 		nodeGongstruct.IsExpanded = false
 		if _, ok := expandedNodesSet[strings.Fields(name)[0]]; ok {
@@ -68,7 +85,7 @@ func updateAndCommitTree(
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.Freqency](probe.stageOfInterest)
 			for _freqency := range set {
-				nodeInstance := (&tree.Node{Name: _freqency.GetName()}).Stage(probe.treeStage)
+				nodeInstance := &tree.Node{Name: _freqency.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_freqency, "Freqency", probe)
 
@@ -78,7 +95,7 @@ func updateAndCommitTree(
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.Note](probe.stageOfInterest)
 			for _note := range set {
-				nodeInstance := (&tree.Node{Name: _note.GetName()}).Stage(probe.treeStage)
+				nodeInstance := &tree.Node{Name: _note.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_note, "Note", probe)
 
@@ -88,7 +105,7 @@ func updateAndCommitTree(
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.Player](probe.stageOfInterest)
 			for _player := range set {
-				nodeInstance := (&tree.Node{Name: _player.GetName()}).Stage(probe.treeStage)
+				nodeInstance := &tree.Node{Name: _player.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_player, "Player", probe)
 
@@ -100,9 +117,13 @@ func updateAndCommitTree(
 		nodeGongstruct.Impl = NewTreeNodeImplGongstruct(gongStruct, probe)
 
 		// add add button
-		addButton := (&tree.Button{
-			Name: gongStruct.Name + " " + string(gongtree_buttons.BUTTON_add),
-			Icon: string(gongtree_buttons.BUTTON_add)}).Stage(probe.treeStage)
+		addButton := &tree.Button{
+			Name:            gongStruct.Name + " " + string(gongtree_buttons.BUTTON_add),
+			Icon:            string(gongtree_buttons.BUTTON_add),
+			HasToolTip:      true,
+			ToolTipText:     "Add an instance of " + gongStruct.GetName(),
+			ToolTipPosition: tree.Right,
+		}
 		nodeGongstruct.Buttons = append(nodeGongstruct.Buttons, addButton)
 		addButton.Impl = NewButtonImplGongstruct(
 			gongStruct,
@@ -113,14 +134,7 @@ func updateAndCommitTree(
 		sidebar.RootNodes = append(sidebar.RootNodes, nodeGongstruct)
 	}
 
-	// Add a refresh button
-	nodeRefreshButton := (&tree.Node{Name: ""}).Stage(probe.treeStage)
-	sidebar.RootNodes = append(sidebar.RootNodes, nodeRefreshButton)
-	refreshButton := (&tree.Button{
-		Name: "RefreshButton" + " " + string(gongtree_buttons.BUTTON_refresh),
-		Icon: string(gongtree_buttons.BUTTON_refresh)}).Stage(probe.treeStage)
-	nodeRefreshButton.Buttons = append(nodeRefreshButton.Buttons, refreshButton)
-	refreshButton.Impl = NewButtonImplRefresh(probe)
+	tree.StageBranch(probe.treeStage, sidebar)
 
 	probe.treeStage.Commit()
 }

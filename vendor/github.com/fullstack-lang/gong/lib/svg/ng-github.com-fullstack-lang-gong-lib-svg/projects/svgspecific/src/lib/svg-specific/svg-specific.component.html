@@ -2,9 +2,7 @@
 
 <div #controlsContainer style="display: flex; align-items: center; gap: 20px; margin-bottom: 0px; margin-top: -20px; flex-wrap: wrap; padding: 0px 5px; "> 
   
-  <button mat-raised-button color="primary" (click)="generatesSVG(true)" style="margin-right: 10px; transform: scale(0.75);">Save</button>
-
-  <button mat-raised-button color="primary" (click)="generatesSVGInTheBack(true)" style="margin-right: 10px; transform: scale(0.75);">Generates</button>
+  <button mat-raised-button color="primary" (click)="generatesSVG(true)" style="margin-right: 10px; transform: scale(0.75);">Download diagram</button>
 
   <div style="display: flex; align-items: center; gap: 8px; transform: scale(0.75);">
     <span style="min-width: 40px;">Zoom:</span>
@@ -45,7 +43,8 @@
     <span style="min-width: 40px; text-align: right;">{{ shiftYSlider.value }}px</span>
   </div>
 
-</div>
+  <button mat-button (click)="generatesSVGInTheBack(true)" style="margin-right: 10px; transform: scale(0.75); opacity: 0.8;">Backend generation (experimental)</button>
+  </div>
 
 <mat-divider style="border-top-width: 1.5px; border-top-color: rgba(0, 0, 0, 0.5); opacity: 1; height: 0px; /* Explicit height might help */ display: block; /* Ensure it takes block space */ "></mat-divider>
 
@@ -231,9 +230,17 @@
             [attr.stroke-width]="rect.StrokeWidth"
             [attr.stroke-dasharray]="rect.IsSelected ? rect.StrokeDashArrayWhenSelected : rect.StrokeDashArray"
             [attr.transform]="rect.Transform"
+
             (mousedown)="rectMouseDown($event, rect)"
             (mousemove)="onmousemove($event)"
-            (mouseup)="rectMouseUp($event, rect)">
+            (mouseup)="rectMouseUp($event, rect)"
+            (mouseenter)="onRectHover(rect, true)"
+            (mouseleave)="onRectHover(rect, false)"
+            
+            [matTooltip]="rect.ToolTipText"
+            [matTooltipDisabled]="!rect.HasToolTip">
+            
+            >
             @for(animate of rect.Animations; track animate) {
               <animate
                 [attr.attributeName]="animate.AttributeName"
@@ -242,184 +249,23 @@
                 [attr.repeatCount]="animate.RepeatCount" />
             }
           </rect>
-          @for(rectAnchoredRect of rect.RectAnchoredRects!; track rectAnchoredRect) {
-            @if(rectAnchoredRect.RectAnchorType == RectAnchorType.RECT_TOP) {
-              <ng-container [ngTemplateOutlet]="anchoredRect" [ngTemplateOutletContext]="{ 
-                      rect: rectAnchoredRect, 
-                      anchorX: rect.X + rect.Width/2 + rectAnchoredRect.X_Offset, 
-                      anchorY: rect.Y + rectAnchoredRect.Y_Offset,
-                      width: (rectAnchoredRect.WidthFollowRect ? rect.Width : rectAnchoredRect.Width) }">
-              </ng-container>
-            }
-            @if(rectAnchoredRect.RectAnchorType == RectAnchorType.RECT_TOP_LEFT) {
-              <ng-container [ngTemplateOutlet]="anchoredRect" [ngTemplateOutletContext]="{ 
-                      rect: rectAnchoredRect, 
-                      anchorX: rect.X + rectAnchoredRect.X_Offset, 
-                      anchorY: rect.Y + rectAnchoredRect.Y_Offset,
-                      width: (rectAnchoredRect.WidthFollowRect ? rect.Width : rectAnchoredRect.Width) }">
-              </ng-container>
-            }
-            @if(rectAnchoredRect.RectAnchorType == RectAnchorType.RECT_BOTTOM) {
-              <ng-container [ngTemplateOutlet]="anchoredRect" [ngTemplateOutletContext]="{ 
-                      rect: rectAnchoredRect, 
-                      anchorX: rect.X + rect.Width/2 + rectAnchoredRect.X_Offset, 
-                      anchorY: rect.Y + rect.Height + rectAnchoredRect.Y_Offset,
-                      width: (rectAnchoredRect.WidthFollowRect ? rect.Width : rectAnchoredRect.Width) }">
-              </ng-container>
-            }
+          @for (rectAnchoredRect of rect.RectAnchoredRects!; track rectAnchoredRect) {
+            <ng-container 
+              [ngTemplateOutlet]="anchoredRect" 
+              [ngTemplateOutletContext]="getContextForAnchoredRect(rectAnchoredRect, rect)">
+            </ng-container>
           }
-          @for(rectAnchoredPath of rect.RectAnchoredPaths!; track rectAnchoredPath) {
-            @if(rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_TOP) {
-              <ng-container [ngTemplateOutlet]="anchoredPath" [ngTemplateOutletContext]="{ 
-                      path: rectAnchoredPath, 
-                      anchorX: rect.X + rect.Width/2 + rectAnchoredPath.X_Offset, 
-                      anchorY: rect.Y + rectAnchoredPath.Y_Offset }">
-              </ng-container>
-            }
-            @if(rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_TOP_LEFT) {
-              <ng-container [ngTemplateOutlet]="anchoredPath" [ngTemplateOutletContext]="{ 
-                      path: rectAnchoredPath, 
-                      anchorX: rect.X + rectAnchoredPath.X_Offset, 
-                      anchorY: rect.Y + rectAnchoredPath.Y_Offset }">
-              </ng-container>
-            }
-            @if(rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM) {
-              <ng-container [ngTemplateOutlet]="anchoredPath" [ngTemplateOutletContext]="{ 
-                      path: rectAnchoredPath, 
-                      anchorX: rect.X + rect.Width/2 + rectAnchoredPath.X_Offset, 
-                      anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset }">
-              </ng-container>
-            }
-            @if(rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_LEFT) {
-              <ng-container [ngTemplateOutlet]="anchoredPath" [ngTemplateOutletContext]="{ 
-                      path: rectAnchoredPath, 
-                      anchorX: rect.X + rectAnchoredPath.X_Offset, 
-                      anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset }">
-              </ng-container>
-            }
-            @if(rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_LEFT_LEFT) {
-              <ng-container [ngTemplateOutlet]="anchoredPath" [ngTemplateOutletContext]="{ 
-                      path: rectAnchoredPath, 
-                      anchorX: rect.X - rect.Height + rectAnchoredPath.X_Offset, 
-                      anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset }">
-              </ng-container>
-            }
-            @if(rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_BOTTOM_LEFT) {
-              <ng-container [ngTemplateOutlet]="anchoredPath" [ngTemplateOutletContext]="{ 
-                      path: rectAnchoredPath, 
-                      anchorX: rect.X + rectAnchoredPath.X_Offset, 
-                      anchorY: rect.Y + rect.Height + rect.Height + rectAnchoredPath.Y_Offset }">
-              </ng-container>
-            }
-            @if(rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_RIGHT) {
-              <ng-container [ngTemplateOutlet]="anchoredPath" [ngTemplateOutletContext]="{ 
-                      path: rectAnchoredPath, 
-                      anchorX: rect.X + rect.Width + rectAnchoredPath.X_Offset, 
-                      anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset }">
-              </ng-container>
-            }
-            @if(rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_CENTER) {
-              <ng-container [ngTemplateOutlet]="anchoredPath" [ngTemplateOutletContext]="{ 
-                      path: rectAnchoredPath, 
-                      anchorX: rect.X + rect.Width/2 + rectAnchoredPath.X_Offset, 
-                      anchorY: rect.Y + rect.Height/2 + rectAnchoredPath.Y_Offset }">
-              </ng-container>
-            }
-            @if(rectAnchoredPath.RectAnchorType == RectAnchorType.RECT_BOTTOM_INSIDE_RIGHT) {
-              <ng-container [ngTemplateOutlet]="anchoredPath" [ngTemplateOutletContext]="{ 
-                      path: rectAnchoredPath, 
-                      anchorX: rect.X + rect.Width - rect.Height + rectAnchoredPath.X_Offset, 
-                      anchorY: rect.Y + rect.Height + rectAnchoredPath.Y_Offset }">
-              </ng-container>
-            }
+          @for (rectAnchoredPath of rect.RectAnchoredPaths!; track rectAnchoredPath) {
+            <ng-container
+              [ngTemplateOutlet]="anchoredPath"
+              [ngTemplateOutletContext]="getContextForAnchoredPath(rectAnchoredPath, rect)">
+            </ng-container>
           }
-          @for(text of rect.RectAnchoredTexts!; track text) {
-            @switch(text.RectAnchorType) {
-              @case(RectAnchorType.RECT_TOP_LEFT) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + text.X_Offset, 
-                  anchorY: rect.Y + text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_TOP) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + rect.Width/2 + text.X_Offset, 
-                  anchorY: rect.Y + text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_TOP_RIGHT) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + rect.Width + text.X_Offset, 
-                  anchorY: rect.Y + text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_BOTTOM) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + rect.Width/2 + text.X_Offset, 
-                  anchorY: rect.Y + rect.Height + text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_BOTTOM_LEFT) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + text.X_Offset, 
-                  anchorY: rect.Y + rect.Height + text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_BOTTOM_LEFT_LEFT) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X - text.X_Offset, 
-                  anchorY: rect.Y + rect.Height + text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_BOTTOM_BOTTOM_LEFT) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + text.X_Offset, 
-                  anchorY: rect.Y + rect.Height + text.Y_Offset * 2 }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_BOTTOM_RIGHT) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + rect.Width + text.X_Offset, 
-                  anchorY: rect.Y + rect.Height + text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_BOTTOM_INSIDE_RIGHT) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + rect.Width - text.X_Offset, 
-                  anchorY: rect.Y + rect.Height - text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_LEFT) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + text.X_Offset, 
-                  anchorY: rect.Y + rect.Height/2 + text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_RIGHT) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + rect.Width + text.X_Offset, 
-                  anchorY: rect.Y + rect.Height/2 + text.Y_Offset }">
-                </ng-container>
-              }
-              @case(RectAnchorType.RECT_CENTER) {
-                <ng-container [ngTemplateOutlet]="anchoredText" [ngTemplateOutletContext]="{ 
-                  text: text, 
-                  anchorX: rect.X + rect.Width/2 + text.X_Offset, 
-                  anchorY: rect.Y + rect.Height/2 + text.Y_Offset }">
-                </ng-container>
-              }
-            }
+          @for(rectAnchoredText of rect.RectAnchoredTexts!; track rectAnchoredText) {
+            <ng-container 
+              [ngTemplateOutlet]="anchoredText" 
+              [ngTemplateOutletContext]="getContextForAnchoredText(rectAnchoredText, rect)">
+            </ng-container>
           }
           <ng-container>
             @if(rect.HasLeftHandle) {
@@ -741,6 +587,7 @@
       [attr.stroke-width]="text.StrokeWidth != 0 ? text.StrokeWidth : null"
       [attr.stroke-dasharray]="text.StrokeDashArray"
       [attr.transform]="text.Transform"
+      [attr.writing-mode]="text.WritingMode"
       [attr.text-anchor]="text.TextAnchorType"
       [attr.font-weight]="text.FontWeight"
       [attr.font-style]="text.FontStyle"
@@ -765,7 +612,8 @@
     [attr.fill-opacity]="rect.FillOpacity"
     [attr.stroke]="rect.Stroke"
     [attr.stroke-opacity]="rect.StrokeOpacity"
-    [attr.stroke-width]="rect.StrokeWidth">
+    [attr.stroke-width]="rect.StrokeWidth"
+    >
   </svg:rect>
 </ng-template>
 
