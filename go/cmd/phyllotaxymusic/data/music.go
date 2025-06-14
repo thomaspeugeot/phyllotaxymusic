@@ -21,10 +21,10 @@ var _ map[string]any = map[string]any{
 // function will stage objects
 func _(stage *models.Stage) {
 
-	const __write__local_time = "2025-06-14 13:13:17.057294 CEST"
-	const __write__utc_time__ = "2025-06-14 11:13:17.057294 UTC"
+	const __write__local_time = "2025-06-14 13:16:35.626847 CEST"
+	const __write__utc_time__ = "2025-06-14 11:16:35.626847 UTC"
 
-	const __commitId__ = "0000000093"
+	const __commitId__ = "0000000348"
 
 	// Declaration of instances to stage
 
@@ -775,7 +775,7 @@ With the second voice note, this gives
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
-	__Parameter__000000_Reference.PitchHeight = 0.100000
+	__Parameter__000000_Reference.PitchHeight = 0.118000
 	__Parameter__000000_Reference.NbPitchLines = 61
 	__Parameter__000000_Reference.BeatLinesHeightRatio = 0.170000
 	__Parameter__000000_Reference.NbBeatLines = 49

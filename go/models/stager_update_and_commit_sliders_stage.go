@@ -177,7 +177,7 @@ func (stager *Stager) UpdateAndCommitSlidersStage() {
 				stager,
 				"Pitch Height",
 				0,
-				0.1,
+				0.3,
 				0.001,
 				&stager.parameter.PitchHeight,
 			),
