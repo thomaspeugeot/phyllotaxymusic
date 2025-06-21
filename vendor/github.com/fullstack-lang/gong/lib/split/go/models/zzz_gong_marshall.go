@@ -9,7 +9,6 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"time"
 
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
@@ -83,7 +82,7 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		log.Fatalln(name + " is not a go filename")
 	}
 
-	log.Printf("%s Marshalling %s", time.Now().Format("2006-01-02 15:04:05.000000"), name)
+	log.Printf("Marshalling %s", name)
 	newBase := filepath.Base(file.Name())
 
 	res := marshallRes
@@ -1021,6 +1020,12 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ShowViewName")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", view.ShowViewName))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsSelectedView")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", view.IsSelectedView))
 		initializerStatements += setValueField
 
 	}

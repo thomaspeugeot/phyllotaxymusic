@@ -3,11 +3,16 @@ package controllers
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/fullstack-lang/gong/lib/svg/go/orm"
@@ -254,7 +259,7 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 				return false
 			}
 
-			log.Printf("%s CheckOrigin: Accepted - Origin '%s' with port %d", time.Now().Format("2006-01-02 15:04:05.000000"), origin, port)
+			// log.Printf("CheckOrigin: Accepted - Origin '%s' with port %d", origin, port)
 			return true
 		},
 	}
@@ -282,11 +287,6 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 
 	index := controller.listenerIndex
 	controller.listenerIndex++
-	log.Printf(
-		"%s github.com/fullstack-lang/gong/lib/svg/go: Con: '%s', index %d",
-		time.Now().Format("2006-01-02 15:04:05.000000"),
-		stackPath, index,
-	)
 
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
@@ -307,7 +307,7 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 			// ReadMessage is used to detect client disconnection
 			_, _, err := wsConnection.ReadMessage()
 			if err != nil {
-				log.Println(time.Now().Format("2006-01-02 15:04:05.000000"), "github.com/fullstack-lang/gong/lib/svg/go", stackPath, "WS client disconnected:", err)
+				log.Println("github.com/fullstack-lang/gong/lib/svg/go", stackPath, "WS client disconnected:", err)
 				cancel() // Cancel the context
 				return
 			}
@@ -317,21 +317,50 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 	backRepoData := new(orm.BackRepoData)
 	orm.CopyBackRepoToBackRepoData(backRepo, backRepoData)
 	backRepoData.GONG__Index = index
-	
+
 	refresh := 0
-	err = wsConnection.WriteJSON(backRepoData)
+	// Marshal the data to JSON first to be able to get its size
+	jsonData, err := json.Marshal(backRepoData)
+	if err != nil {
+		log.Printf("Error marshaling JSON: %v", err)
+		return
+	}
+
+	// Get the size of the JSON data in bytes
+	jsonSize := len(jsonData)
+
+    // Calculate the full SHA-256 hash
+    fullHash := sha256.Sum256(jsonData)
+
+    // Use the first 12 characters for a shorter, yet highly unique, signature
+    shortHash := hex.EncodeToString(fullHash[:])[0:12]
+
+	// Use WriteMessage to send the pre-marshaled JSON data.
+	// websocket.TextMessage is typically what WriteJSON uses.
+	err = wsConnection.WriteMessage(websocket.TextMessage, jsonData)
 	if err != nil {
 		log.Println("github.com/fullstack-lang/gong/lib/svg/go:\n",
 			"client no longer receiver web socket message, assuming it is no longer alive, closing websocket handler")
 		fmt.Println(err)
 		return
 	} else {
-	log.Printf(
-		"%s github.com/fullstack-lang/gong/lib/svg/go: %03d: '%s', index %d",
-		time.Now().Format("2006-01-02 15:04:05.000000"),
-		refresh,
-		stackPath, index,
-	)
+		// 1. Extract the component name from the long path for cleaner logs
+		// For example, "github.com/fullstack-lang/gong/lib/table/go" becomes "table"
+		parts := strings.Split("github.com/fullstack-lang/gong/lib/svg/go", "/") // Assuming goFilePath holds the path
+		component := "unknown"
+		if len(parts) > 2 {
+			component = parts[len(parts)-2]
+		}
+
+		// 2. Use a single, formatted log line
+		log.Printf(
+			"%-12s | %-85s | Idx: %d | Size: %-9s | Hash: %s",
+			component,
+			stackPath,
+			index,
+			formatBytes(jsonSize),
+			shortHash,
+		)
 	}
 	for {
 		select {
@@ -351,24 +380,69 @@ func (controller *Controller) onWebSocketRequestForBackRepoContent(c *gin.Contex
 				wsConnection.SetWriteDeadline(time.Now().Add(10 * time.Second))
 
 				// Send backRepo data
-				err = wsConnection.WriteJSON(backRepoData)
+				// Marshal the data to JSON first to be able to get its size
+				jsonData, err := json.Marshal(backRepoData)
 				if err != nil {
-					log.Println("github.com/fullstack-lang/gong/lib/svg/go:\n", stackPath,
-						"client no longer receiver web socket message,closing websocket handler")
+					log.Printf("Error marshaling JSON: %v", err)
+					return
+				}
+
+				// Get the size of the JSON data in bytes
+				jsonSize := len(jsonData)
+
+				// Calculate the full SHA-256 hash
+				fullHash := sha256.Sum256(jsonData)
+
+				// Use the first 12 characters for a shorter, yet highly unique, signature
+				shortHash := hex.EncodeToString(fullHash[:])[0:12]
+
+				// Use WriteMessage to send the pre-marshaled JSON data.
+				// websocket.TextMessage is typically what WriteJSON uses.
+				err = wsConnection.WriteMessage(websocket.TextMessage, jsonData)
+				if err != nil {
+					log.Println("github.com/fullstack-lang/gong/lib/svg/go:\n",
+						"client no longer receiver web socket message, assuming it is no longer alive, closing websocket handler")
 					fmt.Println(err)
-					cancel() // Cancel the context
 					return
 				} else {
+					// 1. Extract the component name from the long path for cleaner logs
+					// For example, "github.com/fullstack-lang/gong/lib/table/go" becomes "table"
+					parts := strings.Split("github.com/fullstack-lang/gong/lib/svg/go", "/") // Assuming goFilePath holds the path
+					component := "unknown"
+					if len(parts) > 2 {
+						component = parts[len(parts)-2]
+					}
+
+					// 2. Use a single, formatted log line
 					log.Printf(
-						"%s github.com/fullstack-lang/gong/lib/svg/go: %03d: '%s', index %d",
-						time.Now().Format("2006-01-02 15:04:05.000000"),
-						refresh,
-						stackPath, index,
+						"%-12s | %-85s | Idx: %d | Size: %-9s | Hash: %s",
+						component,
+						stackPath,
+						index,
+						formatBytes(jsonSize),
+						shortHash,
 					)
 				}
 			}
 		}
 	}
+}
+
+// formatBytes converts a size in bytes to a human-readable string (KB, MB, GB).
+func formatBytes(size int) string {
+    if size < 1024 {
+        return fmt.Sprintf("%d B", size)
+    }
+    sizeInKB := float64(size) / 1024.0
+    if sizeInKB < 1024.0 {
+        // For KB, show one decimal place if it's not a whole number
+        if math.Mod(sizeInKB, 1.0) == 0 {
+            return fmt.Sprintf("%.0f KB", sizeInKB)
+        }
+        return fmt.Sprintf("%.1f KB", sizeInKB)
+    }
+    sizeInMB := sizeInKB / 1024.0
+    return fmt.Sprintf("%.2f MB", sizeInMB)
 }
 
 // swagger:route GET /commitfrombacknb backrepo GetLastCommitFromBackNb

@@ -24,7 +24,7 @@ var (
 func main() {
 
 	log.SetPrefix("phyllotaxymusic: ")
-	log.SetFlags(0)
+	log.SetFlags(log.Lmicroseconds)
 
 	// parse program arguments
 	flag.Parse()

@@ -478,6 +478,14 @@ type Stage struct {
 	NamedStructs []*NamedStruct
 }
 
+func (stage *Stage) GetCommitId() uint {
+	return stage.commitId
+}
+
+func (stage *Stage) GetCommitTS() time.Time {
+	return stage.commitTimeStamp
+}
+
 func (stage *Stage) SetGeneratesDiff(generatesDiff bool) {
 	stage.generatesDiff = generatesDiff
 }
@@ -513,6 +521,407 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 		res = append(res, instance.GetName())
 	}
 
+	return
+}
+
+func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
+	var t T
+	switch any(t).(type) {
+		// insertion point for case
+	case *Axis:
+		tmp := GetStructInstancesByOrder(stage.Axiss, stage.AxisMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Axis implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *AxisGrid:
+		tmp := GetStructInstancesByOrder(stage.AxisGrids, stage.AxisGridMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *AxisGrid implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Bezier:
+		tmp := GetStructInstancesByOrder(stage.Beziers, stage.BezierMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Bezier implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *BezierGrid:
+		tmp := GetStructInstancesByOrder(stage.BezierGrids, stage.BezierGridMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *BezierGrid implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *BezierGridStack:
+		tmp := GetStructInstancesByOrder(stage.BezierGridStacks, stage.BezierGridStackMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *BezierGridStack implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Chapter:
+		tmp := GetStructInstancesByOrder(stage.Chapters, stage.ChapterMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Chapter implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Circle:
+		tmp := GetStructInstancesByOrder(stage.Circles, stage.CircleMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Circle implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *CircleGrid:
+		tmp := GetStructInstancesByOrder(stage.CircleGrids, stage.CircleGridMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *CircleGrid implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Content:
+		tmp := GetStructInstancesByOrder(stage.Contents, stage.ContentMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Content implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *ExportToMusicxml:
+		tmp := GetStructInstancesByOrder(stage.ExportToMusicxmls, stage.ExportToMusicxmlMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *ExportToMusicxml implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *FrontCurve:
+		tmp := GetStructInstancesByOrder(stage.FrontCurves, stage.FrontCurveMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *FrontCurve implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *FrontCurveStack:
+		tmp := GetStructInstancesByOrder(stage.FrontCurveStacks, stage.FrontCurveStackMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *FrontCurveStack implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *HorizontalAxis:
+		tmp := GetStructInstancesByOrder(stage.HorizontalAxiss, stage.HorizontalAxisMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *HorizontalAxis implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Key:
+		tmp := GetStructInstancesByOrder(stage.Keys, stage.KeyMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Key implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Parameter:
+		tmp := GetStructInstancesByOrder(stage.Parameters, stage.ParameterMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Parameter implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Rhombus:
+		tmp := GetStructInstancesByOrder(stage.Rhombuss, stage.RhombusMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Rhombus implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *RhombusGrid:
+		tmp := GetStructInstancesByOrder(stage.RhombusGrids, stage.RhombusGridMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *RhombusGrid implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *ShapeCategory:
+		tmp := GetStructInstancesByOrder(stage.ShapeCategorys, stage.ShapeCategoryMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *ShapeCategory implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SpiralBezier:
+		tmp := GetStructInstancesByOrder(stage.SpiralBeziers, stage.SpiralBezierMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SpiralBezier implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SpiralBezierGrid:
+		tmp := GetStructInstancesByOrder(stage.SpiralBezierGrids, stage.SpiralBezierGridMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SpiralBezierGrid implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SpiralCircle:
+		tmp := GetStructInstancesByOrder(stage.SpiralCircles, stage.SpiralCircleMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SpiralCircle implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SpiralCircleGrid:
+		tmp := GetStructInstancesByOrder(stage.SpiralCircleGrids, stage.SpiralCircleGridMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SpiralCircleGrid implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SpiralLine:
+		tmp := GetStructInstancesByOrder(stage.SpiralLines, stage.SpiralLineMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SpiralLine implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SpiralLineGrid:
+		tmp := GetStructInstancesByOrder(stage.SpiralLineGrids, stage.SpiralLineGridMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SpiralLineGrid implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SpiralOrigin:
+		tmp := GetStructInstancesByOrder(stage.SpiralOrigins, stage.SpiralOriginMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SpiralOrigin implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SpiralRhombus:
+		tmp := GetStructInstancesByOrder(stage.SpiralRhombuss, stage.SpiralRhombusMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SpiralRhombus implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SpiralRhombusGrid:
+		tmp := GetStructInstancesByOrder(stage.SpiralRhombusGrids, stage.SpiralRhombusGridMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SpiralRhombusGrid implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *VerticalAxis:
+		tmp := GetStructInstancesByOrder(stage.VerticalAxiss, stage.VerticalAxisMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *VerticalAxis implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+
+	}
 	return
 }
 

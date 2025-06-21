@@ -400,6 +400,14 @@ type Stage struct {
 	NamedStructs []*NamedStruct
 }
 
+func (stage *Stage) GetCommitId() uint {
+	return stage.commitId
+}
+
+func (stage *Stage) GetCommitTS() time.Time {
+	return stage.commitTimeStamp
+}
+
 func (stage *Stage) SetGeneratesDiff(generatesDiff bool) {
 	stage.generatesDiff = generatesDiff
 }
@@ -435,6 +443,281 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 		res = append(res, instance.GetName())
 	}
 
+	return
+}
+
+func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
+	var t T
+	switch any(t).(type) {
+		// insertion point for case
+	case *Animate:
+		tmp := GetStructInstancesByOrder(stage.Animates, stage.AnimateMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Animate implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Circle:
+		tmp := GetStructInstancesByOrder(stage.Circles, stage.CircleMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Circle implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Ellipse:
+		tmp := GetStructInstancesByOrder(stage.Ellipses, stage.EllipseMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Ellipse implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Layer:
+		tmp := GetStructInstancesByOrder(stage.Layers, stage.LayerMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Layer implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Line:
+		tmp := GetStructInstancesByOrder(stage.Lines, stage.LineMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Line implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Link:
+		tmp := GetStructInstancesByOrder(stage.Links, stage.LinkMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Link implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *LinkAnchoredText:
+		tmp := GetStructInstancesByOrder(stage.LinkAnchoredTexts, stage.LinkAnchoredTextMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *LinkAnchoredText implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Path:
+		tmp := GetStructInstancesByOrder(stage.Paths, stage.PathMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Path implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Point:
+		tmp := GetStructInstancesByOrder(stage.Points, stage.PointMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Point implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Polygone:
+		tmp := GetStructInstancesByOrder(stage.Polygones, stage.PolygoneMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Polygone implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Polyline:
+		tmp := GetStructInstancesByOrder(stage.Polylines, stage.PolylineMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Polyline implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Rect:
+		tmp := GetStructInstancesByOrder(stage.Rects, stage.RectMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Rect implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *RectAnchoredPath:
+		tmp := GetStructInstancesByOrder(stage.RectAnchoredPaths, stage.RectAnchoredPathMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *RectAnchoredPath implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *RectAnchoredRect:
+		tmp := GetStructInstancesByOrder(stage.RectAnchoredRects, stage.RectAnchoredRectMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *RectAnchoredRect implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *RectAnchoredText:
+		tmp := GetStructInstancesByOrder(stage.RectAnchoredTexts, stage.RectAnchoredTextMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *RectAnchoredText implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *RectLinkLink:
+		tmp := GetStructInstancesByOrder(stage.RectLinkLinks, stage.RectLinkLinkMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *RectLinkLink implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SVG:
+		tmp := GetStructInstancesByOrder(stage.SVGs, stage.SVGMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SVG implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *SvgText:
+		tmp := GetStructInstancesByOrder(stage.SvgTexts, stage.SvgTextMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *SvgText implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Text:
+		tmp := GetStructInstancesByOrder(stage.Texts, stage.TextMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Text implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+
+	}
 	return
 }
 
@@ -3413,7 +3696,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case RectLinkLink:
 		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case SVG:
-		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFrontEndFileGenerated", "IsSVGBackEndFileGenerated", "DefaultDirectoryForGeneratedImages"}
+		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFrontEndFileGenerated", "IsSVGBackEndFileGenerated", "DefaultDirectoryForGeneratedImages", "IsControlBannerHidden"}
 	case SvgText:
 		res = []string{"Name", "Text"}
 	case Text:
@@ -3618,7 +3901,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *RectLinkLink:
 		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
 	case *SVG:
-		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFrontEndFileGenerated", "IsSVGBackEndFileGenerated", "DefaultDirectoryForGeneratedImages"}
+		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFrontEndFileGenerated", "IsSVGBackEndFileGenerated", "DefaultDirectoryForGeneratedImages", "IsControlBannerHidden"}
 	case *SvgText:
 		res = []string{"Name", "Text"}
 	case *Text:
@@ -4619,6 +4902,10 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 			res.GongFieldValueType = GongFieldValueTypeBool
 		case "DefaultDirectoryForGeneratedImages":
 			res.valueString = inferedInstance.DefaultDirectoryForGeneratedImages
+		case "IsControlBannerHidden":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsControlBannerHidden)
+			res.valueBool = inferedInstance.IsControlBannerHidden
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	case *SvgText:
 		switch fieldName {
@@ -5646,6 +5933,10 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 			res.GongFieldValueType = GongFieldValueTypeBool
 		case "DefaultDirectoryForGeneratedImages":
 			res.valueString = inferedInstance.DefaultDirectoryForGeneratedImages
+		case "IsControlBannerHidden":
+			res.valueString = fmt.Sprintf("%t", inferedInstance.IsControlBannerHidden)
+			res.valueBool = inferedInstance.IsControlBannerHidden
+			res.GongFieldValueType = GongFieldValueTypeBool
 		}
 	case SvgText:
 		switch fieldName {

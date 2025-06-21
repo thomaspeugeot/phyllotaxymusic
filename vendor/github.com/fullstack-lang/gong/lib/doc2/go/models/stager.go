@@ -13,6 +13,7 @@ import (
 	split "github.com/fullstack-lang/gong/lib/split/go/models"
 	ssg "github.com/fullstack-lang/gong/lib/ssg/go/models"
 	svg "github.com/fullstack-lang/gong/lib/svg/go/models"
+	svg_models "github.com/fullstack-lang/gong/lib/svg/go/models"
 	table "github.com/fullstack-lang/gong/lib/table/go/models"
 	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
 )
@@ -26,6 +27,18 @@ type Stager struct {
 	ssgStage  *ssg.Stage
 
 	embeddedDiagrams bool
+
+	map_GongstructShape_Rect map[*GongStructShape]*svg_models.Rect
+	map_GongenumShape_Rect   map[*GongEnumShape]*svg_models.Rect
+	map_NoteShape_Rect       map[*GongNoteShape]*svg_models.Rect
+	map_Structname_Rect      map[string]*svg_models.Rect
+	map_Fieldname_Link       map[string]*svg_models.Link
+
+	// this is a map is the managed by the callee thread
+	// to inform of the number of instance by gongstruct names
+	// this map is managed by callee stage struct
+	map_GongStructName_InstancesNb map[string]int
+	showNbInstances                bool
 }
 
 func NewStager(
@@ -39,6 +52,9 @@ func NewStager(
 	ssgStage *ssg.Stage,
 
 	embeddedDiagrams bool,
+
+	map_GongStructName_InstancesNb map[string]int,
+
 ) (stager *Stager) {
 
 	stager = new(Stager)
@@ -51,6 +67,8 @@ func NewStager(
 	stager.ssgStage = ssgStage
 
 	stager.embeddedDiagrams = embeddedDiagrams
+
+	stager.map_GongStructName_InstancesNb = map_GongStructName_InstancesNb
 
 	// StageBranch will stage on the the first argument
 	// all instances related to the second argument
@@ -110,10 +128,14 @@ func NewStager(
 		diagramPackage = k
 	}
 	if diagramPackage == nil {
-		diagramPackage = (&DiagramPackage{
-			Name: fmt.Sprintf("Diagram Package created the %s", time.Now().Local().UTC().Format(time.RFC3339)),
-		}).Stage(stage)
-		stage.Commit()
+		if !embeddedDiagrams {
+			diagramPackage = (&DiagramPackage{
+				Name: fmt.Sprintf("Diagram Package created the %s", time.Now().Local().UTC().Format(time.RFC3339)),
+			}).Stage(stage)
+			stage.Commit()
+		} else {
+			return
+		}
 	}
 
 	// refresh all notes body from the original gong note in the package models

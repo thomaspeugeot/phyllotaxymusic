@@ -242,6 +242,14 @@ type Stage struct {
 	NamedStructs []*NamedStruct
 }
 
+func (stage *Stage) GetCommitId() uint {
+	return stage.commitId
+}
+
+func (stage *Stage) GetCommitTS() time.Time {
+	return stage.commitTimeStamp
+}
+
 func (stage *Stage) SetGeneratesDiff(generatesDiff bool) {
 	stage.generatesDiff = generatesDiff
 }
@@ -277,6 +285,141 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 		res = append(res, instance.GetName())
 	}
 
+	return
+}
+
+func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
+	var t T
+	switch any(t).(type) {
+		// insertion point for case
+	case *AttributeShape:
+		tmp := GetStructInstancesByOrder(stage.AttributeShapes, stage.AttributeShapeMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *AttributeShape implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Classdiagram:
+		tmp := GetStructInstancesByOrder(stage.Classdiagrams, stage.ClassdiagramMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Classdiagram implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *DiagramPackage:
+		tmp := GetStructInstancesByOrder(stage.DiagramPackages, stage.DiagramPackageMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *DiagramPackage implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *GongEnumShape:
+		tmp := GetStructInstancesByOrder(stage.GongEnumShapes, stage.GongEnumShapeMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *GongEnumShape implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *GongEnumValueShape:
+		tmp := GetStructInstancesByOrder(stage.GongEnumValueShapes, stage.GongEnumValueShapeMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *GongEnumValueShape implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *GongNoteLinkShape:
+		tmp := GetStructInstancesByOrder(stage.GongNoteLinkShapes, stage.GongNoteLinkShapeMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *GongNoteLinkShape implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *GongNoteShape:
+		tmp := GetStructInstancesByOrder(stage.GongNoteShapes, stage.GongNoteShapeMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *GongNoteShape implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *GongStructShape:
+		tmp := GetStructInstancesByOrder(stage.GongStructShapes, stage.GongStructShapeMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *GongStructShape implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *LinkShape:
+		tmp := GetStructInstancesByOrder(stage.LinkShapes, stage.LinkShapeMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *LinkShape implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+
+	}
 	return
 }
 
@@ -1822,7 +1965,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	case GongNoteShape:
 		res = []string{"Name", "Identifier", "Body", "BodyHTML", "X", "Y", "Width", "Height", "Matched", "GongNoteLinkShapes", "IsExpanded"}
 	case GongStructShape:
-		res = []string{"Name", "X", "Y", "IdentifierMeta", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
+		res = []string{"Name", "X", "Y", "IdentifierMeta", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
 	case LinkShape:
 		res = []string{"Name", "IdentifierMeta", "FieldTypeIdentifierMeta", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	}
@@ -1920,7 +2063,7 @@ func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
 	case *GongNoteShape:
 		res = []string{"Name", "Identifier", "Body", "BodyHTML", "X", "Y", "Width", "Height", "Matched", "GongNoteLinkShapes", "IsExpanded"}
 	case *GongStructShape:
-		res = []string{"Name", "X", "Y", "IdentifierMeta", "ShowNbInstances", "NbInstances", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
+		res = []string{"Name", "X", "Y", "IdentifierMeta", "AttributeShapes", "LinkShapes", "Width", "Height", "IsSelected"}
 	case *LinkShape:
 		res = []string{"Name", "IdentifierMeta", "FieldTypeIdentifierMeta", "FieldOffsetX", "FieldOffsetY", "TargetMultiplicity", "TargetMultiplicityOffsetX", "TargetMultiplicityOffsetY", "SourceMultiplicity", "SourceMultiplicityOffsetX", "SourceMultiplicityOffsetY", "X", "Y", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio"}
 	}
@@ -2164,14 +2307,6 @@ func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFie
 			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
 			res.valueFloat = inferedInstance.Y
 			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "ShowNbInstances":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowNbInstances)
-			res.valueBool = inferedInstance.ShowNbInstances
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NbInstances":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NbInstances)
-			res.valueInt = inferedInstance.NbInstances
-			res.GongFieldValueType = GongFieldValueTypeInt
 		case "AttributeShapes":
 			for idx, __instance__ := range inferedInstance.AttributeShapes {
 				if idx > 0 {
@@ -2471,14 +2606,6 @@ func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
 			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
 			res.valueFloat = inferedInstance.Y
 			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "ShowNbInstances":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.ShowNbInstances)
-			res.valueBool = inferedInstance.ShowNbInstances
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NbInstances":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NbInstances)
-			res.valueInt = inferedInstance.NbInstances
-			res.GongFieldValueType = GongFieldValueTypeInt
 		case "AttributeShapes":
 			for idx, __instance__ := range inferedInstance.AttributeShapes {
 				if idx > 0 {
