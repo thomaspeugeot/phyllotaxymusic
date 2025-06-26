@@ -21,10 +21,10 @@ var _ map[string]any = map[string]any{
 // function will stage objects
 func _(stage *models.Stage) {
 
-	const __write__local_time = "2025-06-21 14:00:51.794936 CEST"
-	const __write__utc_time__ = "2025-06-21 12:00:51.794936 UTC"
+	const __write__local_time = "2025-06-26 08:23:10.792832 CEST"
+	const __write__utc_time__ = "2025-06-26 06:23:10.792832 UTC"
 
-	const __commitId__ = "0000001322"
+	const __commitId__ = "0000001379"
 
 	// Declaration of instances to stage
 
@@ -233,13 +233,13 @@ func _(stage *models.Stage) {
 	__Axis__000004_Rotated_Axis.Transform = ``
 
 	__AxisGrid__000000_Beat_Lines.Name = `Beat Lines`
-	__AxisGrid__000000_Beat_Lines.IsDisplayed = false
+	__AxisGrid__000000_Beat_Lines.IsDisplayed = true
 
 	__AxisGrid__000001_Construction_Axis_Grid.Name = `Construction Axis Grid`
 	__AxisGrid__000001_Construction_Axis_Grid.IsDisplayed = false
 
 	__AxisGrid__000002_Pitch_Lines.Name = `Pitch Lines`
-	__AxisGrid__000002_Pitch_Lines.IsDisplayed = false
+	__AxisGrid__000002_Pitch_Lines.IsDisplayed = true
 
 	__Bezier__000000_2nd_voice_seed.Name = `2nd voice seed`
 	__Bezier__000000_2nd_voice_seed.IsDisplayed = false
@@ -775,7 +775,7 @@ With the second voice note, this gives
 	__Parameter__000000_Reference.FkeySizeRatio = 0.001430
 	__Parameter__000000_Reference.FkeyOriginRelativeX = 1.500000
 	__Parameter__000000_Reference.FkeyOriginRelativeY = -3.400000
-	__Parameter__000000_Reference.PitchHeight = 0.099000
+	__Parameter__000000_Reference.PitchHeight = 0.139000
 	__Parameter__000000_Reference.NbPitchLines = 61
 	__Parameter__000000_Reference.BeatLinesHeightRatio = 0.170000
 	__Parameter__000000_Reference.NbBeatLines = 49
@@ -874,10 +874,10 @@ With the second voice note, this gives
 	__RhombusGrid__000002_Rotated_Rhombus_Grid.IsDisplayed = false
 
 	__ShapeCategory__000000_0_Axes.Name = `0. Axes`
-	__ShapeCategory__000000_0_Axes.IsExpanded = true
+	__ShapeCategory__000000_0_Axes.IsExpanded = false
 
 	__ShapeCategory__000001_1_Initial.Name = `1. Initial`
-	__ShapeCategory__000001_1_Initial.IsExpanded = true
+	__ShapeCategory__000001_1_Initial.IsExpanded = false
 
 	__ShapeCategory__000002_2_Rotated.Name = `2. Rotated`
 	__ShapeCategory__000002_2_Rotated.IsExpanded = false
@@ -892,10 +892,10 @@ With the second voice note, this gives
 	__ShapeCategory__000005_5_Vertical_growth.IsExpanded = false
 
 	__ShapeCategory__000006_6_Spiral_growth.Name = `6. Spiral growth`
-	__ShapeCategory__000006_6_Spiral_growth.IsExpanded = true
+	__ShapeCategory__000006_6_Spiral_growth.IsExpanded = false
 
 	__ShapeCategory__000007_7_Spiral_Growth_Bezier.Name = `7. Spiral Growth Bezier`
-	__ShapeCategory__000007_7_Spiral_Growth_Bezier.IsExpanded = true
+	__ShapeCategory__000007_7_Spiral_Growth_Bezier.IsExpanded = false
 
 	__ShapeCategory__000008_8_Score_notation.Name = `8. Score notation`
 	__ShapeCategory__000008_8_Score_notation.IsExpanded = true

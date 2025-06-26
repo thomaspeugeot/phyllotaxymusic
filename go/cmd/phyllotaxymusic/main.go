@@ -36,7 +36,9 @@ func main() {
 	phyllotaxymusic_stack := phyllotaxymusic_stack.NewStack(r,
 		m.Phylotaxy.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
 
-	m.NewStager(r, phyllotaxymusic_stack.Stage).UpdateAllStages()
+	stager := m.NewStager(r, phyllotaxymusic_stack.Stage)
+
+	stager.UpdateAllStages()
 
 	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))

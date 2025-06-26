@@ -190,7 +190,8 @@ func ParseAstFileFromAst(stage *Stage, inFile *ast.File, fset *token.FileSet) er
 						// Create an ast.CommentMap from the ast.File's comments.
 						// This helps keeping the association between comments
 						// and AST nodes.
-						cmap := ast.NewCommentMap(fset, inFile, inFile.Comments)
+						// cmap := ast.NewCommentMap(fset, inFile, inFile.Comments)
+						var cmap ast.CommentMap
 						astCoordinate := "\tAssignStmt: "
 						// log.Println(// astCoordinate)
 						assignStmt := stmt
@@ -1722,6 +1723,9 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						log.Fatalln(err)
 					}
 					__gong__map_FormSortAssocButton[identifier].HasToolTip = fielValue
+				case "FormEditAssocButton":
+					targetIdentifier := ident.Name
+					__gong__map_FormSortAssocButton[identifier].FormEditAssocButton = __gong__map_FormEditAssocButton[targetIdentifier]
 				}
 			case "Option":
 				switch fieldName {

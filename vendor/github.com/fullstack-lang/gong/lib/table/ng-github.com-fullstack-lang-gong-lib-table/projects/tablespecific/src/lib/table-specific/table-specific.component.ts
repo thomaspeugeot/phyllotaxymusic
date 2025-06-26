@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, Input, OnInit, Optional, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, Inject, Input, OnInit, OnDestroy, Optional, ViewChild } from '@angular/core'
 import { Subscription, debounceTime, distinctUntilChanged, forkJoin } from 'rxjs'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 
@@ -50,7 +50,7 @@ import { ConfirmationDialogComponent } from '../dialog/dialog.component'
   templateUrl: './table-specific.component.html',
   styleUrl: './table-specific.component.css'
 })
-export class TableSpecificComponent implements OnInit, AfterViewInit {
+export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = []
   allDisplayedColumns: string[] = [] // in case there is a checkbox
@@ -88,6 +88,10 @@ export class TableSpecificComponent implements OnInit, AfterViewInit {
   currTime: number = 0
   dateOfLastTimerEmission: Date = new Date()
 
+  // Subscription management
+  private subscriptions: Subscription = new Subscription()
+  private webSocketSubscription?: Subscription
+  private filterSubscription?: Subscription
 
   public gongtableFrontRepo?: table.FrontRepo
 
@@ -131,7 +135,8 @@ export class TableSpecificComponent implements OnInit, AfterViewInit {
 
     this.refresh()
 
-    this.filterControl.valueChanges
+    // Subscribe to filter control changes and add to subscriptions
+    this.filterSubscription = this.filterControl.valueChanges
       .pipe(
         debounceTime(200),
         distinctUntilChanged()
@@ -139,10 +144,35 @@ export class TableSpecificComponent implements OnInit, AfterViewInit {
       .subscribe(value => {
         this.dataSource.filter = value ? value.trim().toLowerCase() : ''
       })
+
+    // Add filter subscription to the main subscriptions container
+    if (this.filterSubscription) {
+      this.subscriptions.add(this.filterSubscription)
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions to prevent memory leaks
+    this.subscriptions.unsubscribe()
+    
+    // Explicitly unsubscribe from the WebSocket connection if it exists
+    if (this.webSocketSubscription) {
+      this.webSocketSubscription.unsubscribe()
+    }
+
+    // Unsubscribe from the commit number subscription
+    if (this.commutNbFromBackSubscription) {
+      this.commutNbFromBackSubscription.unsubscribe()
+    }
   }
 
   refresh(): void {
-    this.gongtableFrontRepoService.connectToWebSocket(this.Name).subscribe(
+    // Unsubscribe from previous WebSocket connection if it exists
+    if (this.webSocketSubscription) {
+      this.webSocketSubscription.unsubscribe()
+    }
+
+    this.webSocketSubscription = this.gongtableFrontRepoService.connectToWebSocket(this.Name).subscribe(
       gongtablesFrontRepo => {
         this.gongtableFrontRepo = gongtablesFrontRepo
         this.selectedTable = undefined
@@ -166,7 +196,6 @@ export class TableSpecificComponent implements OnInit, AfterViewInit {
           return
         }
 
-        this.dataSource = new MatTableDataSource(this.selectedTable.Rows || [])
 
         this.mapHeaderIdIndex = new Map<string, number>()
         this.displayedColumns = []
@@ -255,8 +284,60 @@ export class TableSpecificComponent implements OnInit, AfterViewInit {
         if (this.selectedTable.HasPaginator && this.paginator) {
           this.dataSource.paginator = this.paginator
         }
+
+        // for sorting, we reorder the items according to the order in the association storage
+        // and we remove the items that are not in the association storage
+        if (this.selectedTable.CanDragDropRows && this.tableDialogData.AssociationStorage) {
+          const sliceOfIDs = decodeStringToIntArray_json(this.tableDialogData.AssociationStorage)
+
+          // --- DEBUGGING START ---
+          // Step 1: Check the IDs you expect to find.
+          console.log("Association IDs to order by:", sliceOfIDs);
+          // --- DEBUGGING END ---
+
+          // Create a Map for quick lookup of rows by their ID.
+          const rowMapByID = new Map<number, table.Row>()
+          for (const row of this.selectedTable.Rows) {
+            if (row.Cells.length > 0 && row.Cells[0]?.CellInt) {
+
+              // FIX: Explicitly convert the ID from the cell to a number to prevent type mismatch (e.g., "4" vs 4).
+              const id = Number(row.Cells[0].CellInt.Value)
+
+              // Only add the row to the map if its ID is a valid number.
+              if (!isNaN(id)) {
+                rowMapByID.set(id, row)
+              }
+            }
+          }
+
+          // --- DEBUGGING START ---
+          // Step 2: Check the map that was created. Does it contain keys 4 and 1?
+          // If not, the original `this.selectedTable.Rows` does not contain rows with these IDs.
+          console.log("Map of available rows (ID -> Row):", rowMapByID);
+          // --- DEBUGGING END ---
+
+          // Build the new `Rows` array by iterating through the ordered IDs.
+          const orderedRows: table.Row[] = sliceOfIDs
+            .map(id => rowMapByID.get(id)) // Look up the row for each ID (as a number)
+            .filter((row): row is table.Row => row !== undefined) // Filter out any IDs that didn't have a matching row
+
+          // --- DEBUGGING START ---
+          // Step 3: Check the final result.
+          console.log("Final ordered and filtered rows:", orderedRows);
+          // --- DEBUGGING END ---
+
+          this.selectedTable.Rows = orderedRows
+        }
+
+        this.dataSource = new MatTableDataSource(this.selectedTable.Rows || [])
+
       }
     )
+
+    // Add the WebSocket subscription to the main subscriptions container
+    if (this.webSocketSubscription) {
+      this.subscriptions.add(this.webSocketSubscription)
+    }
   }
 
   ngAfterViewInit() {
@@ -311,71 +392,52 @@ export class TableSpecificComponent implements OnInit, AfterViewInit {
 
     this.selectedTable.SavingInProgress = true // Indicate saving started
 
-    if (modifiedRows.size === 0) {
-      // Even if no rows changed selection status, we might want to save the table state
-      // or simply close if that's the desired behavior.
-      this.tableService.updateFront(this.selectedTable, this.Name).subscribe({
-        next: () => {
-          console.log('Table state saved (no selection changes).')
-          if (this.selectedTable) this.selectedTable.SavingInProgress = false // Ensure selectedTable is defined
-          if (this.tableDialogData && this.dialogRef) {
-            // Pass the current selection (which might be empty or unchanged)
-            this.dialogRef.close(this.selection.selected)
-          }
-        },
-        error: (err) => {
-          console.error('Error saving table state:', err)
-          if (this.selectedTable) this.selectedTable.SavingInProgress = false // Ensure selectedTable is defined
-        }
-      })
-      return
+    if (this.tableDialogData && this.dialogRef) {
+      // Pass the current selection (which might be empty or unchanged)
+      this.dialogRef.close(this.selection.selected)
     }
-
-    const promises = Array.from(modifiedRows).map(row =>
-      this.rowService.updateFront(row, this.Name)
-    )
-
-    forkJoin(promises).subscribe({
-      next: () => {
-        console.log('Modified rows updated.')
-        // After rows are updated, update the table itself
-        if (!this.selectedTable) { // Guard against undefined selectedTable
-          console.error("Selected table became undefined during save operation.")
-          return
-        }
-        this.tableService.updateFront(this.selectedTable, this.Name).subscribe({
-          next: () => {
-            console.log('Table updated after row modifications.')
-            if (this.selectedTable) this.selectedTable.SavingInProgress = false // Ensure selectedTable is defined
-            if (this.tableDialogData && this.dialogRef) {
-              // Pass the final selection state
-              this.dialogRef.close(this.selection.selected)
-            }
-          },
-          error: (err) => {
-            console.error('Error updating table after row modifications:', err)
-            if (this.selectedTable) this.selectedTable.SavingInProgress = false // Ensure selectedTable is defined
-          }
-        })
-      },
-      error: (err) => {
-        console.error('Error updating one or more rows:', err)
-        if (this.selectedTable) this.selectedTable.SavingInProgress = false // Ensure selectedTable is defined
-      }
-    })
+    return
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    if (!this.selectedTable || !this.selectedTable.Rows) return
+    if (!this.selectedTable || !this.selectedTable.Rows) {
+      return
+    }
 
+    // This moves the item in the local array, reordering the rows
     moveItemInArray(this.selectedTable.Rows, event.previousIndex, event.currentIndex)
-    this.dataSource.data = [...this.selectedTable.Rows] // Update data source data
 
-    this.tableService.updateFront(this.selectedTable, this.Name).subscribe(
-      () => {
-        console.log("Table rows shuffled and updated:", this.selectedTable?.Name)
-      }
-    )
+    // This updates the MatTableDataSource to reflect the new order in the UI
+    this.dataSource.data = [...this.selectedTable.Rows]
+
+    // one need to update the associated storage
+    // [START] Completed Code
+    if (this.selectedTable?.CanDragDropRows && this.tableDialogData?.AssociationStorage) {
+
+      // 1. Extract the IDs from the rows in their new order.
+      // We must ensure that we only process rows that have a valid ID structure,
+      // which is assumed to be in the first cell as an integer (CellInt).
+      const newOrderedIDs: number[] = this.selectedTable.Rows
+        .map(row => {
+          // Safely access the ID from the first cell
+          if (row.Cells && row.Cells.length > 0 && row.Cells[0]?.CellInt) {
+            return row.Cells[0].CellInt.Value
+          }
+          return null // Return null for rows that don't match the structure
+        })
+        .filter((id): id is number => id !== null) // Filter out any nulls to get a clean number array
+
+      // 2. Convert the new array of IDs into a JSON string.
+      const newAssociationStorage = JSON.stringify(newOrderedIDs)
+
+      // 3. Update the AssociationStorage property in the dialog data.
+      // This ensures that when the dialog is saved or closed, the new order is available
+      // to the component that opened it.
+      this.tableDialogData.AssociationStorage = newAssociationStorage
+
+      console.log("Updated association order:", this.tableDialogData.AssociationStorage)
+    }
+    // [END] Completed Code
   }
 
   isDraggableRow = (index: number, item: table.Row): boolean => !!this.selectedTable?.CanDragDropRows
@@ -392,11 +454,14 @@ export class TableSpecificComponent implements OnInit, AfterViewInit {
     console.log("Material Table: onClick: Stack: `" + this.Name + "`table:`" + this.TableName + "`row:" + (row.Name || 'Unnamed Row'))
 
     const originalCells = row.Cells
-    this.rowService.updateFront(row, this.Name).subscribe(
+    const updateSubscription = this.rowService.updateFront(row, this.Name).subscribe(
       () => {
         console.log("Row updated on click:", row.Name || 'Unnamed Row')
       }
     )
+    
+    // Add the subscription to be cleaned up
+    this.subscriptions.add(updateSubscription)
   }
 
   getDynamicStyles(columnIndex: number): { [key: string]: any } {
@@ -423,23 +488,31 @@ export class TableSpecificComponent implements OnInit, AfterViewInit {
         data: { message: cellIcon.ConfirmationMessage }
       });
 
-      dialogRef.afterClosed().subscribe(result => {
+      const dialogSubscription = dialogRef.afterClosed().subscribe(result => {
         if (!result) {
           return
         } else {
-          this.celliconService.updateFront(cellIcon, this.Name).subscribe(
+          const updateSubscription = this.celliconService.updateFront(cellIcon, this.Name).subscribe(
             () => {
               console.log("Cell icon updated after confirmation:", cellIcon.Name || 'Unnamed Icon')
             }
           )
+          // Add the subscription to be cleaned up
+          this.subscriptions.add(updateSubscription)
         }
       });
+      
+      // Add the dialog subscription to be cleaned up
+      this.subscriptions.add(dialogSubscription)
     } else {
-            this.celliconService.updateFront(cellIcon, this.Name).subscribe(
+      const updateSubscription = this.celliconService.updateFront(cellIcon, this.Name).subscribe(
         () => {
           console.log("Cell icon updated:", cellIcon.Name || 'Unnamed Icon')
         }
       )
+      
+      // Add the subscription to be cleaned up
+      this.subscriptions.add(updateSubscription)
     }
   }
 }
