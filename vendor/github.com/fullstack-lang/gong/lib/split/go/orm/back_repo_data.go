@@ -12,8 +12,6 @@ type BackRepoData struct {
 
 	CursorAPIs []*CursorAPI
 
-	DocAPIs []*DocAPI
-
 	FavIconAPIs []*FavIconAPI
 
 	FormAPIs []*FormAPI
@@ -23,6 +21,8 @@ type BackRepoData struct {
 	LogoOnTheLeftAPIs []*LogoOnTheLeftAPI
 
 	LogoOnTheRightAPIs []*LogoOnTheRightAPI
+
+	MarkdownAPIs []*MarkdownAPI
 
 	SliderAPIs []*SliderAPI
 
@@ -93,16 +93,6 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		backRepoData.CursorAPIs = append(backRepoData.CursorAPIs, &cursorAPI)
 	}
 
-	for _, docDB := range backRepo.BackRepoDoc.Map_DocDBID_DocDB {
-
-		var docAPI DocAPI
-		docAPI.ID = docDB.ID
-		docAPI.DocPointersEncoding = docDB.DocPointersEncoding
-		docDB.CopyBasicFieldsToDoc_WOP(&docAPI.Doc_WOP)
-
-		backRepoData.DocAPIs = append(backRepoData.DocAPIs, &docAPI)
-	}
-
 	for _, faviconDB := range backRepo.BackRepoFavIcon.Map_FavIconDBID_FavIconDB {
 
 		var faviconAPI FavIconAPI
@@ -151,6 +141,16 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		logoontherightDB.CopyBasicFieldsToLogoOnTheRight_WOP(&logoontherightAPI.LogoOnTheRight_WOP)
 
 		backRepoData.LogoOnTheRightAPIs = append(backRepoData.LogoOnTheRightAPIs, &logoontherightAPI)
+	}
+
+	for _, markdownDB := range backRepo.BackRepoMarkdown.Map_MarkdownDBID_MarkdownDB {
+
+		var markdownAPI MarkdownAPI
+		markdownAPI.ID = markdownDB.ID
+		markdownAPI.MarkdownPointersEncoding = markdownDB.MarkdownPointersEncoding
+		markdownDB.CopyBasicFieldsToMarkdown_WOP(&markdownAPI.Markdown_WOP)
+
+		backRepoData.MarkdownAPIs = append(backRepoData.MarkdownAPIs, &markdownAPI)
 	}
 
 	for _, sliderDB := range backRepo.BackRepoSlider.Map_SliderDBID_SliderDB {

@@ -180,12 +180,12 @@ func (assplitareaFormCallback *AsSplitAreaFormCallback) OnSave() {
 			FormDivSelectFieldToField(&(assplitarea_.Button), assplitareaFormCallback.probe.stageOfInterest, formDiv)
 		case "Cursor":
 			FormDivSelectFieldToField(&(assplitarea_.Cursor), assplitareaFormCallback.probe.stageOfInterest, formDiv)
-		case "Doc":
-			FormDivSelectFieldToField(&(assplitarea_.Doc), assplitareaFormCallback.probe.stageOfInterest, formDiv)
 		case "Form":
 			FormDivSelectFieldToField(&(assplitarea_.Form), assplitareaFormCallback.probe.stageOfInterest, formDiv)
 		case "Load":
 			FormDivSelectFieldToField(&(assplitarea_.Load), assplitareaFormCallback.probe.stageOfInterest, formDiv)
+		case "Markdown":
+			FormDivSelectFieldToField(&(assplitarea_.Markdown), assplitareaFormCallback.probe.stageOfInterest, formDiv)
 		case "Slider":
 			FormDivSelectFieldToField(&(assplitarea_.Slider), assplitareaFormCallback.probe.stageOfInterest, formDiv)
 		case "Split":
@@ -530,85 +530,6 @@ func (cursorFormCallback *CursorFormCallback) OnSave() {
 
 	updateAndCommitTree(cursorFormCallback.probe)
 }
-func __gong__New__DocFormCallback(
-	doc *models.Doc,
-	probe *Probe,
-	formGroup *table.FormGroup,
-) (docFormCallback *DocFormCallback) {
-	docFormCallback = new(DocFormCallback)
-	docFormCallback.probe = probe
-	docFormCallback.doc = doc
-	docFormCallback.formGroup = formGroup
-
-	docFormCallback.CreationMode = (doc == nil)
-
-	return
-}
-
-type DocFormCallback struct {
-	doc *models.Doc
-
-	// If the form call is called on the creation of a new instnace
-	CreationMode bool
-
-	probe *Probe
-
-	formGroup *table.FormGroup
-}
-
-func (docFormCallback *DocFormCallback) OnSave() {
-
-	// log.Println("DocFormCallback, OnSave")
-
-	// checkout formStage to have the form group on the stage synchronized with the
-	// back repo (and front repo)
-	docFormCallback.probe.formStage.Checkout()
-
-	if docFormCallback.doc == nil {
-		docFormCallback.doc = new(models.Doc).Stage(docFormCallback.probe.stageOfInterest)
-	}
-	doc_ := docFormCallback.doc
-	_ = doc_
-
-	for _, formDiv := range docFormCallback.formGroup.FormDivs {
-		switch formDiv.Name {
-		// insertion point per field
-		case "Name":
-			FormDivBasicFieldToField(&(doc_.Name), formDiv)
-		case "StackName":
-			FormDivBasicFieldToField(&(doc_.StackName), formDiv)
-		}
-	}
-
-	// manage the suppress operation
-	if docFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		doc_.Unstage(docFormCallback.probe.stageOfInterest)
-	}
-
-	docFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Doc](
-		docFormCallback.probe,
-	)
-	docFormCallback.probe.tableStage.Commit()
-
-	// display a new form by reset the form stage
-	if docFormCallback.CreationMode || docFormCallback.formGroup.HasSuppressButtonBeenPressed {
-		docFormCallback.probe.formStage.Reset()
-		newFormGroup := (&table.FormGroup{
-			Name: FormName,
-		}).Stage(docFormCallback.probe.formStage)
-		newFormGroup.OnSave = __gong__New__DocFormCallback(
-			nil,
-			docFormCallback.probe,
-			newFormGroup,
-		)
-		doc := new(models.Doc)
-		FillUpForm(doc, newFormGroup, docFormCallback.probe)
-		docFormCallback.probe.formStage.Commit()
-	}
-
-	updateAndCommitTree(docFormCallback.probe)
-}
 func __gong__New__FavIconFormCallback(
 	favicon *models.FavIcon,
 	probe *Probe,
@@ -735,8 +656,6 @@ func (formFormCallback *FormFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(form_.Name), formDiv)
 		case "StackName":
 			FormDivBasicFieldToField(&(form_.StackName), formDiv)
-		case "FormName":
-			FormDivBasicFieldToField(&(form_.FormName), formDiv)
 		}
 	}
 
@@ -1013,6 +932,85 @@ func (logoontherightFormCallback *LogoOnTheRightFormCallback) OnSave() {
 	}
 
 	updateAndCommitTree(logoontherightFormCallback.probe)
+}
+func __gong__New__MarkdownFormCallback(
+	markdown *models.Markdown,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (markdownFormCallback *MarkdownFormCallback) {
+	markdownFormCallback = new(MarkdownFormCallback)
+	markdownFormCallback.probe = probe
+	markdownFormCallback.markdown = markdown
+	markdownFormCallback.formGroup = formGroup
+
+	markdownFormCallback.CreationMode = (markdown == nil)
+
+	return
+}
+
+type MarkdownFormCallback struct {
+	markdown *models.Markdown
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (markdownFormCallback *MarkdownFormCallback) OnSave() {
+
+	// log.Println("MarkdownFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	markdownFormCallback.probe.formStage.Checkout()
+
+	if markdownFormCallback.markdown == nil {
+		markdownFormCallback.markdown = new(models.Markdown).Stage(markdownFormCallback.probe.stageOfInterest)
+	}
+	markdown_ := markdownFormCallback.markdown
+	_ = markdown_
+
+	for _, formDiv := range markdownFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(markdown_.Name), formDiv)
+		case "StackName":
+			FormDivBasicFieldToField(&(markdown_.StackName), formDiv)
+		}
+	}
+
+	// manage the suppress operation
+	if markdownFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		markdown_.Unstage(markdownFormCallback.probe.stageOfInterest)
+	}
+
+	markdownFormCallback.probe.stageOfInterest.Commit()
+	updateAndCommitTable[models.Markdown](
+		markdownFormCallback.probe,
+	)
+	markdownFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if markdownFormCallback.CreationMode || markdownFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		markdownFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: FormName,
+		}).Stage(markdownFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__MarkdownFormCallback(
+			nil,
+			markdownFormCallback.probe,
+			newFormGroup,
+		)
+		markdown := new(models.Markdown)
+		FillUpForm(markdown, newFormGroup, markdownFormCallback.probe)
+		markdownFormCallback.probe.formStage.Commit()
+	}
+
+	updateAndCommitTree(markdownFormCallback.probe)
 }
 func __gong__New__SliderFormCallback(
 	slider *models.Slider,
@@ -1300,8 +1298,6 @@ func (tableFormCallback *TableFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(table_.Name), formDiv)
 		case "StackName":
 			FormDivBasicFieldToField(&(table_.StackName), formDiv)
-		case "TableName":
-			FormDivBasicFieldToField(&(table_.TableName), formDiv)
 		}
 	}
 
@@ -1537,8 +1533,6 @@ func (treeFormCallback *TreeFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(tree_.Name), formDiv)
 		case "StackName":
 			FormDivBasicFieldToField(&(tree_.StackName), formDiv)
-		case "TreeName":
-			FormDivBasicFieldToField(&(tree_.TreeName), formDiv)
 		}
 	}
 

@@ -84,13 +84,6 @@ func registerControllers(r *gin.Engine) {
 		v1.PUT("/v1/cursors/:id", GetController().UpdateCursor)
 		v1.DELETE("/v1/cursors/:id", GetController().DeleteCursor)
 
-		v1.GET("/v1/docs", GetController().GetDocs)
-		v1.GET("/v1/docs/:id", GetController().GetDoc)
-		v1.POST("/v1/docs", GetController().PostDoc)
-		v1.PATCH("/v1/docs/:id", GetController().UpdateDoc)
-		v1.PUT("/v1/docs/:id", GetController().UpdateDoc)
-		v1.DELETE("/v1/docs/:id", GetController().DeleteDoc)
-
 		v1.GET("/v1/favicons", GetController().GetFavIcons)
 		v1.GET("/v1/favicons/:id", GetController().GetFavIcon)
 		v1.POST("/v1/favicons", GetController().PostFavIcon)
@@ -125,6 +118,13 @@ func registerControllers(r *gin.Engine) {
 		v1.PATCH("/v1/logoontherights/:id", GetController().UpdateLogoOnTheRight)
 		v1.PUT("/v1/logoontherights/:id", GetController().UpdateLogoOnTheRight)
 		v1.DELETE("/v1/logoontherights/:id", GetController().DeleteLogoOnTheRight)
+
+		v1.GET("/v1/markdowns", GetController().GetMarkdowns)
+		v1.GET("/v1/markdowns/:id", GetController().GetMarkdown)
+		v1.POST("/v1/markdowns", GetController().PostMarkdown)
+		v1.PATCH("/v1/markdowns/:id", GetController().UpdateMarkdown)
+		v1.PUT("/v1/markdowns/:id", GetController().UpdateMarkdown)
+		v1.DELETE("/v1/markdowns/:id", GetController().DeleteMarkdown)
 
 		v1.GET("/v1/sliders", GetController().GetSliders)
 		v1.GET("/v1/sliders/:id", GetController().GetSlider)

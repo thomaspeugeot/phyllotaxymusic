@@ -62,9 +62,6 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	if nodeImplGongstruct.gongStruct.GetName() == "Cursor" {
 		updateAndCommitTable[models.Cursor](nodeImplGongstruct.probe)
 	}
-	if nodeImplGongstruct.gongStruct.GetName() == "Doc" {
-		updateAndCommitTable[models.Doc](nodeImplGongstruct.probe)
-	}
 	if nodeImplGongstruct.gongStruct.GetName() == "FavIcon" {
 		updateAndCommitTable[models.FavIcon](nodeImplGongstruct.probe)
 	}
@@ -79,6 +76,9 @@ func (nodeImplGongstruct *TreeNodeImplGongstruct) OnAfterUpdate(
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "LogoOnTheRight" {
 		updateAndCommitTable[models.LogoOnTheRight](nodeImplGongstruct.probe)
+	}
+	if nodeImplGongstruct.gongStruct.GetName() == "Markdown" {
+		updateAndCommitTable[models.Markdown](nodeImplGongstruct.probe)
 	}
 	if nodeImplGongstruct.gongStruct.GetName() == "Slider" {
 		updateAndCommitTable[models.Slider](nodeImplGongstruct.probe)

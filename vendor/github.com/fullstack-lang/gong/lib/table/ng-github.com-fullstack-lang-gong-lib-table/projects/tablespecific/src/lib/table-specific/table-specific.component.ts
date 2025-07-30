@@ -27,6 +27,8 @@ import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button'
 import { decodeStringToIntArray_json } from '../association-storage'
 import { ConfirmationDialogComponent } from '../dialog/dialog.component'
+import { MatIconModule } from '@angular/material/icon'
+import { MatTooltipModule } from '@angular/material/tooltip'
 
 
 @Component({
@@ -46,6 +48,8 @@ import { ConfirmationDialogComponent } from '../dialog/dialog.component'
     MatSortModule,
     CommonModule,
     DragDropModule,
+    MatIconModule,
+    MatTooltipModule,
   ],
   templateUrl: './table-specific.component.html',
   styleUrl: './table-specific.component.css'
@@ -68,7 +72,6 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
   selectedTable: table.Table | undefined = undefined
 
   @Input() Name: string = ""
-  @Input() TableName: string = ""
 
   // for filtering
   filterControl = new FormControl()
@@ -98,6 +101,9 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
   // SelectionModel to hold the selected rows
   selection: SelectionModel<table.Row> = new SelectionModel<table.Row>(allowMultiSelect, [])
   initialSelection = new Array<table.Row>()
+
+  // NEW: for toggling text truncation
+  public isTextTruncated = true
 
   constructor(
     private gongtableFrontRepoService: table.FrontRepoService,
@@ -130,7 +136,6 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnInit(): void {
     if (this.tableDialogData) {
       this.Name = this.tableDialogData.Name
-      this.TableName = this.tableDialogData.TableName
     }
 
     this.refresh()
@@ -166,6 +171,11 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
+  // NEW: toggle function for the text wrap button
+  toggleTextTruncation(): void {
+    this.isTextTruncated = !this.isTextTruncated
+  }
+
   refresh(): void {
     // Unsubscribe from previous WebSocket connection if it exists
     if (this.webSocketSubscription) {
@@ -185,14 +195,10 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
         let tableNames = new (Array<string>)
         for (let item of this.gongtableFrontRepo.getFrontArray<table.Table>(table.Table.GONGSTRUCT_NAME)) {
           tableNames.push(item.Name)
-          if (item.Name == this.TableName) {
-            this.selectedTable = item
-            break // Found the table, no need to continue loop
-          }
+          this.selectedTable = item
         }
 
         if (!this.selectedTable) {
-          console.error(this.selectedTable, "not found among table names", tableNames)
           return
         }
 
@@ -244,43 +250,6 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
           this.selection = new SelectionModel<table.Row>(allowMultiSelect, this.initialSelection)
         }
 
-
-        if (this.selectedTable.HasFiltering) {
-          this.dataSource.filterPredicate = (row: table.Row, filter: string) => {
-            let mergedContent = ""
-            if (row.Cells) {
-              for (let cell of row.Cells) {
-                if (cell.CellInt) mergedContent += cell.CellInt.Value
-                if (cell.CellFloat64) mergedContent += cell.CellFloat64.Value
-                if (cell.CellString) mergedContent += cell.CellString.Value
-                // Add other cell types if necessary
-              }
-            }
-            mergedContent = mergedContent.toLowerCase()
-            return mergedContent.includes(filter.toLowerCase())
-          }
-        }
-
-        this.matSortDirective = ""
-        if (this.selectedTable.HasColumnSorting && this.sort) {
-          this.dataSource.sort = this.sort
-          this.matSortDirective = "mat-sort"
-
-          this.dataSource.sortingDataAccessor = (row: table.Row, sortHeaderId: string): string | number => {
-            if (!row.Cells) return ""
-            const index = this.mapHeaderIdIndex.get(sortHeaderId)
-            if (index === undefined) return ""
-
-            const cell: table.Cell = row.Cells[index]
-            if (cell.CellInt) return cell.CellInt.Value
-            if (cell.CellFloat64) return cell.CellFloat64.Value
-            if (cell.CellString) return cell.CellString.Value
-            if (cell.CellIcon) return cell.CellIcon.Icon || "" // Ensure string for sorting
-            if (cell.CellBool) return cell.CellBool.Value ? "true" : "false"
-            return ""
-          }
-        }
-
         // for sorting, we reorder the items according to the order in the association storage
         // and we remove the items that are not in the association storage
         if (this.selectedTable.CanDragDropRows && this.tableDialogData.AssociationStorage) {
@@ -325,7 +294,45 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
           this.selectedTable.Rows = orderedRows
         }
 
+        // Create the new dataSource
         this.dataSource = new MatTableDataSource(this.selectedTable.Rows || [])
+
+        // NOW, set the filterPredicate on the new dataSource
+        if (this.selectedTable.HasFiltering) {
+          this.dataSource.filterPredicate = (row: table.Row, filter: string) => {
+            let mergedContent = ""
+            if (row.Cells) {
+              for (let cell of row.Cells) {
+                if (cell.CellInt) mergedContent += cell.CellInt.Value
+                if (cell.CellFloat64) mergedContent += cell.CellFloat64.Value
+                if (cell.CellString) mergedContent += cell.CellString.Value
+                // Add other cell types if necessary
+              }
+            }
+            mergedContent = mergedContent.toLowerCase()
+            return mergedContent.includes(filter.toLowerCase())
+          }
+        }
+
+        this.matSortDirective = ""
+        if (this.selectedTable.HasColumnSorting && this.sort) {
+          this.dataSource.sort = this.sort
+          this.matSortDirective = "mat-sort"
+
+          this.dataSource.sortingDataAccessor = (row: table.Row, sortHeaderId: string): string | number => {
+            if (!row.Cells) return ""
+            const index = this.mapHeaderIdIndex.get(sortHeaderId)
+            if (index === undefined) return ""
+
+            const cell: table.Cell = row.Cells[index]
+            if (cell.CellInt) return cell.CellInt.Value
+            if (cell.CellFloat64) return cell.CellFloat64.Value
+            if (cell.CellString) return cell.CellString.Value
+            if (cell.CellIcon) return cell.CellIcon.Icon || "" // Ensure string for sorting
+            if (cell.CellBool) return cell.CellBool.Value ? "true" : "false"
+            return ""
+          }
+        }
 
         // IMPORTANT: Re-apply sort and paginator after creating new data source
         if (this.selectedTable.HasColumnSorting && this.sort) {
@@ -481,7 +488,7 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   onClick(row: table.Row): void {
-    console.log("Material Table: onClick: Stack: `" + this.Name + "`table:`" + this.TableName + "`row:" + (row.Name || 'Unnamed Row'))
+    console.log("Material Table: onClick: Stack: `" + this.Name + "`row:" + (row.Name || 'Unnamed Row'))
 
     const originalCells = row.Cells
     const updateSubscription = this.rowService.updateFront(row, this.Name).subscribe(

@@ -21,10 +21,6 @@ import { CursorAPI } from './cursor-api'
 import { Cursor, CopyCursorAPIToCursor } from './cursor'
 import { CursorService } from './cursor.service'
 
-import { DocAPI } from './doc-api'
-import { Doc, CopyDocAPIToDoc } from './doc'
-import { DocService } from './doc.service'
-
 import { FavIconAPI } from './favicon-api'
 import { FavIcon, CopyFavIconAPIToFavIcon } from './favicon'
 import { FavIconService } from './favicon.service'
@@ -44,6 +40,10 @@ import { LogoOnTheLeftService } from './logoontheleft.service'
 import { LogoOnTheRightAPI } from './logoontheright-api'
 import { LogoOnTheRight, CopyLogoOnTheRightAPIToLogoOnTheRight } from './logoontheright'
 import { LogoOnTheRightService } from './logoontheright.service'
+
+import { MarkdownAPI } from './markdown-api'
+import { Markdown, CopyMarkdownAPIToMarkdown } from './markdown'
+import { MarkdownService } from './markdown.service'
 
 import { SliderAPI } from './slider-api'
 import { Slider, CopySliderAPIToSlider } from './slider'
@@ -100,9 +100,6 @@ export class FrontRepo { // insertion point sub template
 	array_Cursors = new Array<Cursor>() // array of front instances
 	map_ID_Cursor = new Map<number, Cursor>() // map of front instances
 
-	array_Docs = new Array<Doc>() // array of front instances
-	map_ID_Doc = new Map<number, Doc>() // map of front instances
-
 	array_FavIcons = new Array<FavIcon>() // array of front instances
 	map_ID_FavIcon = new Map<number, FavIcon>() // map of front instances
 
@@ -117,6 +114,9 @@ export class FrontRepo { // insertion point sub template
 
 	array_LogoOnTheRights = new Array<LogoOnTheRight>() // array of front instances
 	map_ID_LogoOnTheRight = new Map<number, LogoOnTheRight>() // map of front instances
+
+	array_Markdowns = new Array<Markdown>() // array of front instances
+	map_ID_Markdown = new Map<number, Markdown>() // map of front instances
 
 	array_Sliders = new Array<Slider>() // array of front instances
 	map_ID_Slider = new Map<number, Slider>() // map of front instances
@@ -162,8 +162,6 @@ export class FrontRepo { // insertion point sub template
 				return this.array_Buttons as unknown as Array<Type>
 			case 'Cursor':
 				return this.array_Cursors as unknown as Array<Type>
-			case 'Doc':
-				return this.array_Docs as unknown as Array<Type>
 			case 'FavIcon':
 				return this.array_FavIcons as unknown as Array<Type>
 			case 'Form':
@@ -174,6 +172,8 @@ export class FrontRepo { // insertion point sub template
 				return this.array_LogoOnTheLefts as unknown as Array<Type>
 			case 'LogoOnTheRight':
 				return this.array_LogoOnTheRights as unknown as Array<Type>
+			case 'Markdown':
+				return this.array_Markdowns as unknown as Array<Type>
 			case 'Slider':
 				return this.array_Sliders as unknown as Array<Type>
 			case 'Split':
@@ -208,8 +208,6 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_Button as unknown as Map<number, Type>
 			case 'Cursor':
 				return this.map_ID_Cursor as unknown as Map<number, Type>
-			case 'Doc':
-				return this.map_ID_Doc as unknown as Map<number, Type>
 			case 'FavIcon':
 				return this.map_ID_FavIcon as unknown as Map<number, Type>
 			case 'Form':
@@ -220,6 +218,8 @@ export class FrontRepo { // insertion point sub template
 				return this.map_ID_LogoOnTheLeft as unknown as Map<number, Type>
 			case 'LogoOnTheRight':
 				return this.map_ID_LogoOnTheRight as unknown as Map<number, Type>
+			case 'Markdown':
+				return this.map_ID_Markdown as unknown as Map<number, Type>
 			case 'Slider':
 				return this.map_ID_Slider as unknown as Map<number, Type>
 			case 'Split':
@@ -312,12 +312,12 @@ export class FrontRepoService {
 		private assplitareaService: AsSplitAreaService,
 		private buttonService: ButtonService,
 		private cursorService: CursorService,
-		private docService: DocService,
 		private faviconService: FavIconService,
 		private formService: FormService,
 		private loadService: LoadService,
 		private logoontheleftService: LogoOnTheLeftService,
 		private logoontherightService: LogoOnTheRightService,
+		private markdownService: MarkdownService,
 		private sliderService: SliderService,
 		private splitService: SplitService,
 		private svgService: SvgService,
@@ -363,12 +363,12 @@ export class FrontRepoService {
 		Observable<AsSplitAreaAPI[]>,
 		Observable<ButtonAPI[]>,
 		Observable<CursorAPI[]>,
-		Observable<DocAPI[]>,
 		Observable<FavIconAPI[]>,
 		Observable<FormAPI[]>,
 		Observable<LoadAPI[]>,
 		Observable<LogoOnTheLeftAPI[]>,
 		Observable<LogoOnTheRightAPI[]>,
+		Observable<MarkdownAPI[]>,
 		Observable<SliderAPI[]>,
 		Observable<SplitAPI[]>,
 		Observable<SvgAPI[]>,
@@ -397,12 +397,12 @@ export class FrontRepoService {
 			this.assplitareaService.getAsSplitAreas(this.Name, this.frontRepo),
 			this.buttonService.getButtons(this.Name, this.frontRepo),
 			this.cursorService.getCursors(this.Name, this.frontRepo),
-			this.docService.getDocs(this.Name, this.frontRepo),
 			this.faviconService.getFavIcons(this.Name, this.frontRepo),
 			this.formService.getForms(this.Name, this.frontRepo),
 			this.loadService.getLoads(this.Name, this.frontRepo),
 			this.logoontheleftService.getLogoOnTheLefts(this.Name, this.frontRepo),
 			this.logoontherightService.getLogoOnTheRights(this.Name, this.frontRepo),
+			this.markdownService.getMarkdowns(this.Name, this.frontRepo),
 			this.sliderService.getSliders(this.Name, this.frontRepo),
 			this.splitService.getSplits(this.Name, this.frontRepo),
 			this.svgService.getSvgs(this.Name, this.frontRepo),
@@ -426,12 +426,12 @@ export class FrontRepoService {
 						assplitareas_,
 						buttons_,
 						cursors_,
-						docs_,
 						favicons_,
 						forms_,
 						loads_,
 						logoonthelefts_,
 						logoontherights_,
+						markdowns_,
 						sliders_,
 						splits_,
 						svgs_,
@@ -453,8 +453,6 @@ export class FrontRepoService {
 						buttons = buttons_ as ButtonAPI[]
 						var cursors: CursorAPI[]
 						cursors = cursors_ as CursorAPI[]
-						var docs: DocAPI[]
-						docs = docs_ as DocAPI[]
 						var favicons: FavIconAPI[]
 						favicons = favicons_ as FavIconAPI[]
 						var forms: FormAPI[]
@@ -465,6 +463,8 @@ export class FrontRepoService {
 						logoonthelefts = logoonthelefts_ as LogoOnTheLeftAPI[]
 						var logoontherights: LogoOnTheRightAPI[]
 						logoontherights = logoontherights_ as LogoOnTheRightAPI[]
+						var markdowns: MarkdownAPI[]
+						markdowns = markdowns_ as MarkdownAPI[]
 						var sliders: SliderAPI[]
 						sliders = sliders_ as SliderAPI[]
 						var splits: SplitAPI[]
@@ -536,18 +536,6 @@ export class FrontRepoService {
 						)
 
 						// init the arrays
-						this.frontRepo.array_Docs = []
-						this.frontRepo.map_ID_Doc.clear()
-
-						docs.forEach(
-							docAPI => {
-								let doc = new Doc
-								this.frontRepo.array_Docs.push(doc)
-								this.frontRepo.map_ID_Doc.set(docAPI.ID, doc)
-							}
-						)
-
-						// init the arrays
 						this.frontRepo.array_FavIcons = []
 						this.frontRepo.map_ID_FavIcon.clear()
 
@@ -604,6 +592,18 @@ export class FrontRepoService {
 								let logoontheright = new LogoOnTheRight
 								this.frontRepo.array_LogoOnTheRights.push(logoontheright)
 								this.frontRepo.map_ID_LogoOnTheRight.set(logoontherightAPI.ID, logoontheright)
+							}
+						)
+
+						// init the arrays
+						this.frontRepo.array_Markdowns = []
+						this.frontRepo.map_ID_Markdown.clear()
+
+						markdowns.forEach(
+							markdownAPI => {
+								let markdown = new Markdown
+								this.frontRepo.array_Markdowns.push(markdown)
+								this.frontRepo.map_ID_Markdown.set(markdownAPI.ID, markdown)
 							}
 						)
 
@@ -752,14 +752,6 @@ export class FrontRepoService {
 						)
 
 						// fill up front objects
-						docs.forEach(
-							docAPI => {
-								let doc = this.frontRepo.map_ID_Doc.get(docAPI.ID)
-								CopyDocAPIToDoc(docAPI, doc!, this.frontRepo)
-							}
-						)
-
-						// fill up front objects
 						favicons.forEach(
 							faviconAPI => {
 								let favicon = this.frontRepo.map_ID_FavIcon.get(faviconAPI.ID)
@@ -796,6 +788,14 @@ export class FrontRepoService {
 							logoontherightAPI => {
 								let logoontheright = this.frontRepo.map_ID_LogoOnTheRight.get(logoontherightAPI.ID)
 								CopyLogoOnTheRightAPIToLogoOnTheRight(logoontherightAPI, logoontheright!, this.frontRepo)
+							}
+						)
+
+						// fill up front objects
+						markdowns.forEach(
+							markdownAPI => {
+								let markdown = this.frontRepo.map_ID_Markdown.get(markdownAPI.ID)
+								CopyMarkdownAPIToMarkdown(markdownAPI, markdown!, this.frontRepo)
 							}
 						)
 
@@ -967,18 +967,6 @@ export class FrontRepoService {
 				)
 
 				// init the arrays
-				frontRepo.array_Docs = []
-				frontRepo.map_ID_Doc.clear()
-
-				backRepoData.DocAPIs.forEach(
-					docAPI => {
-						let doc = new Doc
-						frontRepo.array_Docs.push(doc)
-						frontRepo.map_ID_Doc.set(docAPI.ID, doc)
-					}
-				)
-
-				// init the arrays
 				frontRepo.array_FavIcons = []
 				frontRepo.map_ID_FavIcon.clear()
 
@@ -1035,6 +1023,18 @@ export class FrontRepoService {
 						let logoontheright = new LogoOnTheRight
 						frontRepo.array_LogoOnTheRights.push(logoontheright)
 						frontRepo.map_ID_LogoOnTheRight.set(logoontherightAPI.ID, logoontheright)
+					}
+				)
+
+				// init the arrays
+				frontRepo.array_Markdowns = []
+				frontRepo.map_ID_Markdown.clear()
+
+				backRepoData.MarkdownAPIs.forEach(
+					markdownAPI => {
+						let markdown = new Markdown
+						frontRepo.array_Markdowns.push(markdown)
+						frontRepo.map_ID_Markdown.set(markdownAPI.ID, markdown)
 					}
 				)
 
@@ -1185,14 +1185,6 @@ export class FrontRepoService {
 				)
 
 				// fill up front objects
-				backRepoData.DocAPIs.forEach(
-					docAPI => {
-						let doc = frontRepo.map_ID_Doc.get(docAPI.ID)
-						CopyDocAPIToDoc(docAPI, doc!, frontRepo)
-					}
-				)
-
-				// fill up front objects
 				backRepoData.FavIconAPIs.forEach(
 					faviconAPI => {
 						let favicon = frontRepo.map_ID_FavIcon.get(faviconAPI.ID)
@@ -1229,6 +1221,14 @@ export class FrontRepoService {
 					logoontherightAPI => {
 						let logoontheright = frontRepo.map_ID_LogoOnTheRight.get(logoontherightAPI.ID)
 						CopyLogoOnTheRightAPIToLogoOnTheRight(logoontherightAPI, logoontheright!, frontRepo)
+					}
+				)
+
+				// fill up front objects
+				backRepoData.MarkdownAPIs.forEach(
+					markdownAPI => {
+						let markdown = frontRepo.map_ID_Markdown.get(markdownAPI.ID)
+						CopyMarkdownAPIToMarkdown(markdownAPI, markdown!, frontRepo)
 					}
 				)
 
@@ -1344,22 +1344,22 @@ export function getButtonUniqueID(id: number): number {
 export function getCursorUniqueID(id: number): number {
 	return 43 * id
 }
-export function getDocUniqueID(id: number): number {
+export function getFavIconUniqueID(id: number): number {
 	return 47 * id
 }
-export function getFavIconUniqueID(id: number): number {
+export function getFormUniqueID(id: number): number {
 	return 53 * id
 }
-export function getFormUniqueID(id: number): number {
+export function getLoadUniqueID(id: number): number {
 	return 59 * id
 }
-export function getLoadUniqueID(id: number): number {
+export function getLogoOnTheLeftUniqueID(id: number): number {
 	return 61 * id
 }
-export function getLogoOnTheLeftUniqueID(id: number): number {
+export function getLogoOnTheRightUniqueID(id: number): number {
 	return 67 * id
 }
-export function getLogoOnTheRightUniqueID(id: number): number {
+export function getMarkdownUniqueID(id: number): number {
 	return 71 * id
 }
 export function getSliderUniqueID(id: number): number {

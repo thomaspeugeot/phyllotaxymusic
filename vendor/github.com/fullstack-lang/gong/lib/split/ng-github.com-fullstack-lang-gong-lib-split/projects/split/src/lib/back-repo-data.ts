@@ -9,8 +9,6 @@ import { ButtonAPI } from './button-api'
 
 import { CursorAPI } from './cursor-api'
 
-import { DocAPI } from './doc-api'
-
 import { FavIconAPI } from './favicon-api'
 
 import { FormAPI } from './form-api'
@@ -20,6 +18,8 @@ import { LoadAPI } from './load-api'
 import { LogoOnTheLeftAPI } from './logoontheleft-api'
 
 import { LogoOnTheRightAPI } from './logoontheright-api'
+
+import { MarkdownAPI } from './markdown-api'
 
 import { SliderAPI } from './slider-api'
 
@@ -50,8 +50,6 @@ export class BackRepoData {
 
 	CursorAPIs = new Array<CursorAPI>()
 
-	DocAPIs = new Array<DocAPI>()
-
 	FavIconAPIs = new Array<FavIconAPI>()
 
 	FormAPIs = new Array<FormAPI>()
@@ -61,6 +59,8 @@ export class BackRepoData {
 	LogoOnTheLeftAPIs = new Array<LogoOnTheLeftAPI>()
 
 	LogoOnTheRightAPIs = new Array<LogoOnTheRightAPI>()
+
+	MarkdownAPIs = new Array<MarkdownAPI>()
 
 	SliderAPIs = new Array<SliderAPI>()
 
@@ -94,8 +94,6 @@ export class BackRepoData {
 
 		this.CursorAPIs = data?.CursorAPIs || [];
 
-		this.DocAPIs = data?.DocAPIs || [];
-
 		this.FavIconAPIs = data?.FavIconAPIs || [];
 
 		this.FormAPIs = data?.FormAPIs || [];
@@ -105,6 +103,8 @@ export class BackRepoData {
 		this.LogoOnTheLeftAPIs = data?.LogoOnTheLeftAPIs || [];
 
 		this.LogoOnTheRightAPIs = data?.LogoOnTheRightAPIs || [];
+
+		this.MarkdownAPIs = data?.MarkdownAPIs || [];
 
 		this.SliderAPIs = data?.SliderAPIs || [];
 

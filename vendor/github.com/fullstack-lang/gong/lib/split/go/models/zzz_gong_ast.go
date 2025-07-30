@@ -397,12 +397,12 @@ var __gong__map_AsSplit = make(map[string]*AsSplit)
 var __gong__map_AsSplitArea = make(map[string]*AsSplitArea)
 var __gong__map_Button = make(map[string]*Button)
 var __gong__map_Cursor = make(map[string]*Cursor)
-var __gong__map_Doc = make(map[string]*Doc)
 var __gong__map_FavIcon = make(map[string]*FavIcon)
 var __gong__map_Form = make(map[string]*Form)
 var __gong__map_Load = make(map[string]*Load)
 var __gong__map_LogoOnTheLeft = make(map[string]*LogoOnTheLeft)
 var __gong__map_LogoOnTheRight = make(map[string]*LogoOnTheRight)
+var __gong__map_Markdown = make(map[string]*Markdown)
 var __gong__map_Slider = make(map[string]*Slider)
 var __gong__map_Split = make(map[string]*Split)
 var __gong__map_Svg = make(map[string]*Svg)
@@ -608,12 +608,6 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 										instanceCursor.Stage(stage)
 										instance = any(instanceCursor)
 										__gong__map_Cursor[identifier] = instanceCursor
-									case "Doc":
-										instanceDoc := new(Doc)
-										instanceDoc.Name = instanceName
-										instanceDoc.Stage(stage)
-										instance = any(instanceDoc)
-										__gong__map_Doc[identifier] = instanceDoc
 									case "FavIcon":
 										instanceFavIcon := new(FavIcon)
 										instanceFavIcon.Name = instanceName
@@ -644,6 +638,12 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 										instanceLogoOnTheRight.Stage(stage)
 										instance = any(instanceLogoOnTheRight)
 										__gong__map_LogoOnTheRight[identifier] = instanceLogoOnTheRight
+									case "Markdown":
+										instanceMarkdown := new(Markdown)
+										instanceMarkdown.Name = instanceName
+										instanceMarkdown.Stage(stage)
+										instance = any(instanceMarkdown)
+										__gong__map_Markdown[identifier] = instanceMarkdown
 									case "Slider":
 										instanceSlider := new(Slider)
 										instanceSlider.Name = instanceName
@@ -751,10 +751,6 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 							switch fieldName {
 							// insertion point for date assign code
 							}
-						case "Doc":
-							switch fieldName {
-							// insertion point for date assign code
-							}
 						case "FavIcon":
 							switch fieldName {
 							// insertion point for date assign code
@@ -772,6 +768,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 							// insertion point for date assign code
 							}
 						case "LogoOnTheRight":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "Markdown":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -894,10 +894,6 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
-					case "Doc":
-						switch fieldName {
-						// insertion point for slice of pointers assign code
-						}
 					case "FavIcon":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
@@ -915,6 +911,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						// insertion point for slice of pointers assign code
 						}
 					case "LogoOnTheRight":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "Markdown":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -1078,18 +1078,6 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Cursor[identifier].Style = fielValue
 				}
-			case "Doc":
-				switch fieldName {
-				// insertion point for field dependant code
-				case "Name":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Doc[identifier].Name = fielValue
-				case "StackName":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Doc[identifier].StackName = fielValue
-				}
 			case "FavIcon":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1113,10 +1101,6 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Form[identifier].StackName = fielValue
-				case "FormName":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Form[identifier].FormName = fielValue
 				}
 			case "Load":
 				switch fieldName {
@@ -1182,6 +1166,18 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_LogoOnTheRight[identifier].SVG = fielValue
 				}
+			case "Markdown":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Markdown[identifier].Name = fielValue
+				case "StackName":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Markdown[identifier].StackName = fielValue
+				}
 			case "Slider":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1233,10 +1229,6 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Table[identifier].StackName = fielValue
-				case "TableName":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Table[identifier].TableName = fielValue
 				}
 			case "Title":
 				switch fieldName {
@@ -1269,10 +1261,6 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Tree[identifier].StackName = fielValue
-				case "TreeName":
-					// remove first and last char
-					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Tree[identifier].TreeName = fielValue
 				}
 			case "View":
 				switch fieldName {
@@ -1339,15 +1327,15 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				case "Cursor":
 					targetIdentifier := ident.Name
 					__gong__map_AsSplitArea[identifier].Cursor = __gong__map_Cursor[targetIdentifier]
-				case "Doc":
-					targetIdentifier := ident.Name
-					__gong__map_AsSplitArea[identifier].Doc = __gong__map_Doc[targetIdentifier]
 				case "Form":
 					targetIdentifier := ident.Name
 					__gong__map_AsSplitArea[identifier].Form = __gong__map_Form[targetIdentifier]
 				case "Load":
 					targetIdentifier := ident.Name
 					__gong__map_AsSplitArea[identifier].Load = __gong__map_Load[targetIdentifier]
+				case "Markdown":
+					targetIdentifier := ident.Name
+					__gong__map_AsSplitArea[identifier].Markdown = __gong__map_Markdown[targetIdentifier]
 				case "Slider":
 					targetIdentifier := ident.Name
 					__gong__map_AsSplitArea[identifier].Slider = __gong__map_Slider[targetIdentifier]
@@ -1385,10 +1373,6 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				switch fieldName {
 				// insertion point for field dependant code
 				}
-			case "Doc":
-				switch fieldName {
-				// insertion point for field dependant code
-				}
 			case "FavIcon":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -1406,6 +1390,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				// insertion point for field dependant code
 				}
 			case "LogoOnTheRight":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
+			case "Markdown":
 				switch fieldName {
 				// insertion point for field dependant code
 				}
@@ -1540,10 +1528,6 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					switch fieldName {
 					// insertion point for selector expr assign code
 					}
-				case "Doc":
-					switch fieldName {
-					// insertion point for selector expr assign code
-					}
 				case "FavIcon":
 					switch fieldName {
 					// insertion point for selector expr assign code
@@ -1561,6 +1545,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// insertion point for selector expr assign code
 					}
 				case "LogoOnTheRight":
+					switch fieldName {
+					// insertion point for selector expr assign code
+					}
+				case "Markdown":
 					switch fieldName {
 					// insertion point for selector expr assign code
 					}

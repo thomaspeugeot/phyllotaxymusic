@@ -29,10 +29,6 @@ export * from './lib/cursor-api'
 export * from './lib/cursor'
 export * from './lib/cursor.service'
 
-export * from './lib/doc-api'
-export * from './lib/doc'
-export * from './lib/doc.service'
-
 export * from './lib/favicon-api'
 export * from './lib/favicon'
 export * from './lib/favicon.service'
@@ -52,6 +48,10 @@ export * from './lib/logoontheleft.service'
 export * from './lib/logoontheright-api'
 export * from './lib/logoontheright'
 export * from './lib/logoontheright.service'
+
+export * from './lib/markdown-api'
+export * from './lib/markdown'
+export * from './lib/markdown.service'
 
 export * from './lib/slider-api'
 export * from './lib/slider'

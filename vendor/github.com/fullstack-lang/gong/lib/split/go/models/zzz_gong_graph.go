@@ -17,9 +17,6 @@ func IsStaged[Type Gongstruct](stage *Stage, instance *Type) (ok bool) {
 	case *Cursor:
 		ok = stage.IsStagedCursor(target)
 
-	case *Doc:
-		ok = stage.IsStagedDoc(target)
-
 	case *FavIcon:
 		ok = stage.IsStagedFavIcon(target)
 
@@ -34,6 +31,9 @@ func IsStaged[Type Gongstruct](stage *Stage, instance *Type) (ok bool) {
 
 	case *LogoOnTheRight:
 		ok = stage.IsStagedLogoOnTheRight(target)
+
+	case *Markdown:
+		ok = stage.IsStagedMarkdown(target)
 
 	case *Slider:
 		ok = stage.IsStagedSlider(target)
@@ -97,13 +97,6 @@ func (stage *Stage) IsStagedCursor(cursor *Cursor) (ok bool) {
 	return
 }
 
-func (stage *Stage) IsStagedDoc(doc *Doc) (ok bool) {
-
-	_, ok = stage.Docs[doc]
-
-	return
-}
-
 func (stage *Stage) IsStagedFavIcon(favicon *FavIcon) (ok bool) {
 
 	_, ok = stage.FavIcons[favicon]
@@ -135,6 +128,13 @@ func (stage *Stage) IsStagedLogoOnTheLeft(logoontheleft *LogoOnTheLeft) (ok bool
 func (stage *Stage) IsStagedLogoOnTheRight(logoontheright *LogoOnTheRight) (ok bool) {
 
 	_, ok = stage.LogoOnTheRights[logoontheright]
+
+	return
+}
+
+func (stage *Stage) IsStagedMarkdown(markdown *Markdown) (ok bool) {
+
+	_, ok = stage.Markdowns[markdown]
 
 	return
 }
@@ -222,9 +222,6 @@ func StageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 	case *Cursor:
 		stage.StageBranchCursor(target)
 
-	case *Doc:
-		stage.StageBranchDoc(target)
-
 	case *FavIcon:
 		stage.StageBranchFavIcon(target)
 
@@ -239,6 +236,9 @@ func StageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 
 	case *LogoOnTheRight:
 		stage.StageBranchLogoOnTheRight(target)
+
+	case *Markdown:
+		stage.StageBranchMarkdown(target)
 
 	case *Slider:
 		stage.StageBranchSlider(target)
@@ -310,14 +310,14 @@ func (stage *Stage) StageBranchAsSplitArea(assplitarea *AsSplitArea) {
 	if assplitarea.Cursor != nil {
 		StageBranch(stage, assplitarea.Cursor)
 	}
-	if assplitarea.Doc != nil {
-		StageBranch(stage, assplitarea.Doc)
-	}
 	if assplitarea.Form != nil {
 		StageBranch(stage, assplitarea.Form)
 	}
 	if assplitarea.Load != nil {
 		StageBranch(stage, assplitarea.Load)
+	}
+	if assplitarea.Markdown != nil {
+		StageBranch(stage, assplitarea.Markdown)
 	}
 	if assplitarea.Slider != nil {
 		StageBranch(stage, assplitarea.Slider)
@@ -368,21 +368,6 @@ func (stage *Stage) StageBranchCursor(cursor *Cursor) {
 	}
 
 	cursor.Stage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
-func (stage *Stage) StageBranchDoc(doc *Doc) {
-
-	// check if instance is already staged
-	if IsStaged(stage, doc) {
-		return
-	}
-
-	doc.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -458,6 +443,21 @@ func (stage *Stage) StageBranchLogoOnTheRight(logoontheright *LogoOnTheRight) {
 	}
 
 	logoontheright.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *Stage) StageBranchMarkdown(markdown *Markdown) {
+
+	// check if instance is already staged
+	if IsStaged(stage, markdown) {
+		return
+	}
+
+	markdown.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -630,10 +630,6 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchCursor(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
-	case *Doc:
-		toT := CopyBranchDoc(mapOrigCopy, fromT)
-		return any(toT).(*Type)
-
 	case *FavIcon:
 		toT := CopyBranchFavIcon(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -652,6 +648,10 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 
 	case *LogoOnTheRight:
 		toT := CopyBranchLogoOnTheRight(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *Markdown:
+		toT := CopyBranchMarkdown(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
 	case *Slider:
@@ -741,14 +741,14 @@ func CopyBranchAsSplitArea(mapOrigCopy map[any]any, assplitareaFrom *AsSplitArea
 	if assplitareaFrom.Cursor != nil {
 		assplitareaTo.Cursor = CopyBranchCursor(mapOrigCopy, assplitareaFrom.Cursor)
 	}
-	if assplitareaFrom.Doc != nil {
-		assplitareaTo.Doc = CopyBranchDoc(mapOrigCopy, assplitareaFrom.Doc)
-	}
 	if assplitareaFrom.Form != nil {
 		assplitareaTo.Form = CopyBranchForm(mapOrigCopy, assplitareaFrom.Form)
 	}
 	if assplitareaFrom.Load != nil {
 		assplitareaTo.Load = CopyBranchLoad(mapOrigCopy, assplitareaFrom.Load)
+	}
+	if assplitareaFrom.Markdown != nil {
+		assplitareaTo.Markdown = CopyBranchMarkdown(mapOrigCopy, assplitareaFrom.Markdown)
 	}
 	if assplitareaFrom.Slider != nil {
 		assplitareaTo.Slider = CopyBranchSlider(mapOrigCopy, assplitareaFrom.Slider)
@@ -807,25 +807,6 @@ func CopyBranchCursor(mapOrigCopy map[any]any, cursorFrom *Cursor) (cursorTo *Cu
 	cursorTo = new(Cursor)
 	mapOrigCopy[cursorFrom] = cursorTo
 	cursorFrom.CopyBasicFields(cursorTo)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-	return
-}
-
-func CopyBranchDoc(mapOrigCopy map[any]any, docFrom *Doc) (docTo *Doc) {
-
-	// docFrom has already been copied
-	if _docTo, ok := mapOrigCopy[docFrom]; ok {
-		docTo = _docTo.(*Doc)
-		return
-	}
-
-	docTo = new(Doc)
-	mapOrigCopy[docFrom] = docTo
-	docFrom.CopyBasicFields(docTo)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -921,6 +902,25 @@ func CopyBranchLogoOnTheRight(mapOrigCopy map[any]any, logoontherightFrom *LogoO
 	logoontherightTo = new(LogoOnTheRight)
 	mapOrigCopy[logoontherightFrom] = logoontherightTo
 	logoontherightFrom.CopyBasicFields(logoontherightTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchMarkdown(mapOrigCopy map[any]any, markdownFrom *Markdown) (markdownTo *Markdown) {
+
+	// markdownFrom has already been copied
+	if _markdownTo, ok := mapOrigCopy[markdownFrom]; ok {
+		markdownTo = _markdownTo.(*Markdown)
+		return
+	}
+
+	markdownTo = new(Markdown)
+	mapOrigCopy[markdownFrom] = markdownTo
+	markdownFrom.CopyBasicFields(markdownTo)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -1123,9 +1123,6 @@ func UnstageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 	case *Cursor:
 		stage.UnstageBranchCursor(target)
 
-	case *Doc:
-		stage.UnstageBranchDoc(target)
-
 	case *FavIcon:
 		stage.UnstageBranchFavIcon(target)
 
@@ -1140,6 +1137,9 @@ func UnstageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 
 	case *LogoOnTheRight:
 		stage.UnstageBranchLogoOnTheRight(target)
+
+	case *Markdown:
+		stage.UnstageBranchMarkdown(target)
 
 	case *Slider:
 		stage.UnstageBranchSlider(target)
@@ -1211,14 +1211,14 @@ func (stage *Stage) UnstageBranchAsSplitArea(assplitarea *AsSplitArea) {
 	if assplitarea.Cursor != nil {
 		UnstageBranch(stage, assplitarea.Cursor)
 	}
-	if assplitarea.Doc != nil {
-		UnstageBranch(stage, assplitarea.Doc)
-	}
 	if assplitarea.Form != nil {
 		UnstageBranch(stage, assplitarea.Form)
 	}
 	if assplitarea.Load != nil {
 		UnstageBranch(stage, assplitarea.Load)
+	}
+	if assplitarea.Markdown != nil {
+		UnstageBranch(stage, assplitarea.Markdown)
 	}
 	if assplitarea.Slider != nil {
 		UnstageBranch(stage, assplitarea.Slider)
@@ -1269,21 +1269,6 @@ func (stage *Stage) UnstageBranchCursor(cursor *Cursor) {
 	}
 
 	cursor.Unstage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
-func (stage *Stage) UnstageBranchDoc(doc *Doc) {
-
-	// check if instance is already staged
-	if !IsStaged(stage, doc) {
-		return
-	}
-
-	doc.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -1359,6 +1344,21 @@ func (stage *Stage) UnstageBranchLogoOnTheRight(logoontheright *LogoOnTheRight) 
 	}
 
 	logoontheright.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *Stage) UnstageBranchMarkdown(markdown *Markdown) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, markdown) {
+		return
+	}
+
+	markdown.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 

@@ -14,8 +14,6 @@ import (
 	"github.com/fullstack-lang/gong/lib/split/go/models"
 )
 
-const SideBarTreeName = "gong"
-
 func updateAndCommitTree(
 	probe *Probe,
 ) {
@@ -36,7 +34,7 @@ func updateAndCommitTree(
 	probe.treeStage.Reset()
 
 	// create tree
-	sidebar := &tree.Tree{Name: SideBarTreeName}
+	sidebar := &tree.Tree{Name: "Sidebar"}
 
 	nodeRefreshButton := &tree.Node{Name: fmt.Sprintf("Stage %s, # %d, %s",
 		probe.stageOfInterest.GetName(),
@@ -124,16 +122,6 @@ func updateAndCommitTree(
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}
-		case "Doc":
-			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Doc](probe.stageOfInterest)
-			for _doc := range set {
-				nodeInstance := &tree.Node{Name: _doc.GetName()}
-				nodeInstance.IsNodeClickable = true
-				nodeInstance.Impl = NewInstanceNodeCallback(_doc, "Doc", probe)
-
-				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
-			}
 		case "FavIcon":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSet[models.FavIcon](probe.stageOfInterest)
@@ -181,6 +169,16 @@ func updateAndCommitTree(
 				nodeInstance := &tree.Node{Name: _logoontheright.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_logoontheright, "LogoOnTheRight", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+			}
+		case "Markdown":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSet[models.Markdown](probe.stageOfInterest)
+			for _markdown := range set {
+				nodeInstance := &tree.Node{Name: _markdown.GetName()}
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_markdown, "Markdown", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
 			}

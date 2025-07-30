@@ -31,10 +31,6 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 		cursorInstance := any(concreteInstance).(*models.Cursor)
 		ret2 := backRepo.BackRepoCursor.GetCursorDBFromCursorPtr(cursorInstance)
 		ret = any(ret2).(*T2)
-	case *models.Doc:
-		docInstance := any(concreteInstance).(*models.Doc)
-		ret2 := backRepo.BackRepoDoc.GetDocDBFromDocPtr(docInstance)
-		ret = any(ret2).(*T2)
 	case *models.FavIcon:
 		faviconInstance := any(concreteInstance).(*models.FavIcon)
 		ret2 := backRepo.BackRepoFavIcon.GetFavIconDBFromFavIconPtr(faviconInstance)
@@ -54,6 +50,10 @@ func GetInstanceDBFromInstance[T models.Gongstruct, T2 GongstructDB](
 	case *models.LogoOnTheRight:
 		logoontherightInstance := any(concreteInstance).(*models.LogoOnTheRight)
 		ret2 := backRepo.BackRepoLogoOnTheRight.GetLogoOnTheRightDBFromLogoOnTheRightPtr(logoontherightInstance)
+		ret = any(ret2).(*T2)
+	case *models.Markdown:
+		markdownInstance := any(concreteInstance).(*models.Markdown)
+		ret2 := backRepo.BackRepoMarkdown.GetMarkdownDBFromMarkdownPtr(markdownInstance)
 		ret = any(ret2).(*T2)
 	case *models.Slider:
 		sliderInstance := any(concreteInstance).(*models.Slider)
@@ -124,11 +124,6 @@ func GetID[T models.Gongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
-	case *models.Doc:
-		tmp := GetInstanceDBFromInstance[models.Doc, DocDB](
-			stage, backRepo, inst,
-		)
-		id = int(tmp.ID)
 	case *models.FavIcon:
 		tmp := GetInstanceDBFromInstance[models.FavIcon, FavIconDB](
 			stage, backRepo, inst,
@@ -151,6 +146,11 @@ func GetID[T models.Gongstruct](
 		id = int(tmp.ID)
 	case *models.LogoOnTheRight:
 		tmp := GetInstanceDBFromInstance[models.LogoOnTheRight, LogoOnTheRightDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Markdown:
+		tmp := GetInstanceDBFromInstance[models.Markdown, MarkdownDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
@@ -232,11 +232,6 @@ func GetIDPointer[T models.PointerToGongstruct](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)
-	case *models.Doc:
-		tmp := GetInstanceDBFromInstance[models.Doc, DocDB](
-			stage, backRepo, inst,
-		)
-		id = int(tmp.ID)
 	case *models.FavIcon:
 		tmp := GetInstanceDBFromInstance[models.FavIcon, FavIconDB](
 			stage, backRepo, inst,
@@ -259,6 +254,11 @@ func GetIDPointer[T models.PointerToGongstruct](
 		id = int(tmp.ID)
 	case *models.LogoOnTheRight:
 		tmp := GetInstanceDBFromInstance[models.LogoOnTheRight, LogoOnTheRightDB](
+			stage, backRepo, inst,
+		)
+		id = int(tmp.ID)
+	case *models.Markdown:
+		tmp := GetInstanceDBFromInstance[models.Markdown, MarkdownDB](
 			stage, backRepo, inst,
 		)
 		id = int(tmp.ID)

@@ -22,10 +22,6 @@ func AfterCreateFromFront[Type Gongstruct](stage *Stage, instance *Type) {
 		if stage.OnAfterCursorCreateCallback != nil {
 			stage.OnAfterCursorCreateCallback.OnAfterCreate(stage, target)
 		}
-	case *Doc:
-		if stage.OnAfterDocCreateCallback != nil {
-			stage.OnAfterDocCreateCallback.OnAfterCreate(stage, target)
-		}
 	case *FavIcon:
 		if stage.OnAfterFavIconCreateCallback != nil {
 			stage.OnAfterFavIconCreateCallback.OnAfterCreate(stage, target)
@@ -45,6 +41,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *Stage, instance *Type) {
 	case *LogoOnTheRight:
 		if stage.OnAfterLogoOnTheRightCreateCallback != nil {
 			stage.OnAfterLogoOnTheRightCreateCallback.OnAfterCreate(stage, target)
+		}
+	case *Markdown:
+		if stage.OnAfterMarkdownCreateCallback != nil {
+			stage.OnAfterMarkdownCreateCallback.OnAfterCreate(stage, target)
 		}
 	case *Slider:
 		if stage.OnAfterSliderCreateCallback != nil {
@@ -112,11 +112,6 @@ func AfterUpdateFromFront[Type Gongstruct](stage *Stage, old, new *Type) {
 		if stage.OnAfterCursorUpdateCallback != nil {
 			stage.OnAfterCursorUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
-	case *Doc:
-		newTarget := any(new).(*Doc)
-		if stage.OnAfterDocUpdateCallback != nil {
-			stage.OnAfterDocUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
-		}
 	case *FavIcon:
 		newTarget := any(new).(*FavIcon)
 		if stage.OnAfterFavIconUpdateCallback != nil {
@@ -141,6 +136,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *Stage, old, new *Type) {
 		newTarget := any(new).(*LogoOnTheRight)
 		if stage.OnAfterLogoOnTheRightUpdateCallback != nil {
 			stage.OnAfterLogoOnTheRightUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *Markdown:
+		newTarget := any(new).(*Markdown)
+		if stage.OnAfterMarkdownUpdateCallback != nil {
+			stage.OnAfterMarkdownUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *Slider:
 		newTarget := any(new).(*Slider)
@@ -217,11 +217,6 @@ func AfterDeleteFromFront[Type Gongstruct](stage *Stage, staged, front *Type) {
 			staged := any(staged).(*Cursor)
 			stage.OnAfterCursorDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
-	case *Doc:
-		if stage.OnAfterDocDeleteCallback != nil {
-			staged := any(staged).(*Doc)
-			stage.OnAfterDocDeleteCallback.OnAfterDelete(stage, staged, front)
-		}
 	case *FavIcon:
 		if stage.OnAfterFavIconDeleteCallback != nil {
 			staged := any(staged).(*FavIcon)
@@ -246,6 +241,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *Stage, staged, front *Type) {
 		if stage.OnAfterLogoOnTheRightDeleteCallback != nil {
 			staged := any(staged).(*LogoOnTheRight)
 			stage.OnAfterLogoOnTheRightDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
+	case *Markdown:
+		if stage.OnAfterMarkdownDeleteCallback != nil {
+			staged := any(staged).(*Markdown)
+			stage.OnAfterMarkdownDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	case *Slider:
 		if stage.OnAfterSliderDeleteCallback != nil {
@@ -318,10 +318,6 @@ func AfterReadFromFront[Type Gongstruct](stage *Stage, instance *Type) {
 		if stage.OnAfterCursorReadCallback != nil {
 			stage.OnAfterCursorReadCallback.OnAfterRead(stage, target)
 		}
-	case *Doc:
-		if stage.OnAfterDocReadCallback != nil {
-			stage.OnAfterDocReadCallback.OnAfterRead(stage, target)
-		}
 	case *FavIcon:
 		if stage.OnAfterFavIconReadCallback != nil {
 			stage.OnAfterFavIconReadCallback.OnAfterRead(stage, target)
@@ -341,6 +337,10 @@ func AfterReadFromFront[Type Gongstruct](stage *Stage, instance *Type) {
 	case *LogoOnTheRight:
 		if stage.OnAfterLogoOnTheRightReadCallback != nil {
 			stage.OnAfterLogoOnTheRightReadCallback.OnAfterRead(stage, target)
+		}
+	case *Markdown:
+		if stage.OnAfterMarkdownReadCallback != nil {
+			stage.OnAfterMarkdownReadCallback.OnAfterRead(stage, target)
 		}
 	case *Slider:
 		if stage.OnAfterSliderReadCallback != nil {
@@ -401,9 +401,6 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *Stage, callback OnA
 	case *Cursor:
 		stage.OnAfterCursorUpdateCallback = any(callback).(OnAfterUpdateInterface[Cursor])
 	
-	case *Doc:
-		stage.OnAfterDocUpdateCallback = any(callback).(OnAfterUpdateInterface[Doc])
-	
 	case *FavIcon:
 		stage.OnAfterFavIconUpdateCallback = any(callback).(OnAfterUpdateInterface[FavIcon])
 	
@@ -418,6 +415,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *Stage, callback OnA
 	
 	case *LogoOnTheRight:
 		stage.OnAfterLogoOnTheRightUpdateCallback = any(callback).(OnAfterUpdateInterface[LogoOnTheRight])
+	
+	case *Markdown:
+		stage.OnAfterMarkdownUpdateCallback = any(callback).(OnAfterUpdateInterface[Markdown])
 	
 	case *Slider:
 		stage.OnAfterSliderUpdateCallback = any(callback).(OnAfterUpdateInterface[Slider])
@@ -465,9 +465,6 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *Stage, callback OnA
 	case *Cursor:
 		stage.OnAfterCursorCreateCallback = any(callback).(OnAfterCreateInterface[Cursor])
 	
-	case *Doc:
-		stage.OnAfterDocCreateCallback = any(callback).(OnAfterCreateInterface[Doc])
-	
 	case *FavIcon:
 		stage.OnAfterFavIconCreateCallback = any(callback).(OnAfterCreateInterface[FavIcon])
 	
@@ -482,6 +479,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *Stage, callback OnA
 	
 	case *LogoOnTheRight:
 		stage.OnAfterLogoOnTheRightCreateCallback = any(callback).(OnAfterCreateInterface[LogoOnTheRight])
+	
+	case *Markdown:
+		stage.OnAfterMarkdownCreateCallback = any(callback).(OnAfterCreateInterface[Markdown])
 	
 	case *Slider:
 		stage.OnAfterSliderCreateCallback = any(callback).(OnAfterCreateInterface[Slider])
@@ -529,9 +529,6 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *Stage, callback OnA
 	case *Cursor:
 		stage.OnAfterCursorDeleteCallback = any(callback).(OnAfterDeleteInterface[Cursor])
 	
-	case *Doc:
-		stage.OnAfterDocDeleteCallback = any(callback).(OnAfterDeleteInterface[Doc])
-	
 	case *FavIcon:
 		stage.OnAfterFavIconDeleteCallback = any(callback).(OnAfterDeleteInterface[FavIcon])
 	
@@ -546,6 +543,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *Stage, callback OnA
 	
 	case *LogoOnTheRight:
 		stage.OnAfterLogoOnTheRightDeleteCallback = any(callback).(OnAfterDeleteInterface[LogoOnTheRight])
+	
+	case *Markdown:
+		stage.OnAfterMarkdownDeleteCallback = any(callback).(OnAfterDeleteInterface[Markdown])
 	
 	case *Slider:
 		stage.OnAfterSliderDeleteCallback = any(callback).(OnAfterDeleteInterface[Slider])
@@ -593,9 +593,6 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *Stage, callback OnAft
 	case *Cursor:
 		stage.OnAfterCursorReadCallback = any(callback).(OnAfterReadInterface[Cursor])
 	
-	case *Doc:
-		stage.OnAfterDocReadCallback = any(callback).(OnAfterReadInterface[Doc])
-	
 	case *FavIcon:
 		stage.OnAfterFavIconReadCallback = any(callback).(OnAfterReadInterface[FavIcon])
 	
@@ -610,6 +607,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *Stage, callback OnAft
 	
 	case *LogoOnTheRight:
 		stage.OnAfterLogoOnTheRightReadCallback = any(callback).(OnAfterReadInterface[LogoOnTheRight])
+	
+	case *Markdown:
+		stage.OnAfterMarkdownReadCallback = any(callback).(OnAfterReadInterface[Markdown])
 	
 	case *Slider:
 		stage.OnAfterSliderReadCallback = any(callback).(OnAfterReadInterface[Slider])

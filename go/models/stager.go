@@ -103,7 +103,6 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 							Size:             15,
 							Tree: (&split.Tree{
 								StackName: stager.treeStage.GetName(),
-								TreeName:  Sidebar.ToString(),
 							}),
 						}),
 
