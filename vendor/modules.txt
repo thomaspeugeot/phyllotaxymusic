@@ -52,7 +52,7 @@ github.com/dustin/go-humanize
 # github.com/frankban/quicktest v1.14.6
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20250730104708-ea31bc9f3ddd
+# github.com/fullstack-lang/gong v0.0.0-20250731115806-9eee1862ee00
 ## explicit; go 1.24.3
 github.com/fullstack-lang/gong/go
 github.com/fullstack-lang/gong/go/controllers
@@ -109,6 +109,7 @@ github.com/fullstack-lang/gong/lib/slider/go/orm
 github.com/fullstack-lang/gong/lib/slider/go/probe
 github.com/fullstack-lang/gong/lib/slider/go/stack
 github.com/fullstack-lang/gong/lib/slider/ng-github.com-fullstack-lang-gong-lib-slider
+github.com/fullstack-lang/gong/lib/split
 github.com/fullstack-lang/gong/lib/split/go
 github.com/fullstack-lang/gong/lib/split/go/controllers
 github.com/fullstack-lang/gong/lib/split/go/db
@@ -117,6 +118,7 @@ github.com/fullstack-lang/gong/lib/split/go/models
 github.com/fullstack-lang/gong/lib/split/go/orm
 github.com/fullstack-lang/gong/lib/split/go/probe
 github.com/fullstack-lang/gong/lib/split/go/stack
+github.com/fullstack-lang/gong/lib/split/go/static
 github.com/fullstack-lang/gong/lib/split/ng-github.com-fullstack-lang-gong-lib-split
 github.com/fullstack-lang/gong/lib/ssg/go
 github.com/fullstack-lang/gong/lib/ssg/go/controllers

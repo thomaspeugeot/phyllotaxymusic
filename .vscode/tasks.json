@@ -76,7 +76,9 @@
 			},
 			"command": "gongc",
 			"group": "build",
-			"args": []
+			"args": [
+				"-level1",
+			]
 		},
 		{
 			"label": "01 - gongc phyllotaxymusic -clean",
@@ -91,7 +93,7 @@
 			]
 		},
 		{
-			"label": "01 - gongc phyllotaxymusic -skipNg",
+			"label": "01 - gongc phyllotaxymusic -level1 -skipGoModCommands",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -99,19 +101,9 @@
 			"command": "gongc",
 			"group": "build",
 			"args": [
-				"-skipNg"
-			]
-		},
-		{
-			"label": "01 - gongc phyllotaxymusic -skipGoModCommands",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-skipGoModCommands"
+				"-skipGoModCommands",
+				"-level1",
+				"-skipStager=false"
 			]
 		},
 		{
@@ -125,6 +117,7 @@
 			"args": [
 				"-skipNg",
 				"-skipGoModCommands",
+				"-skipStager=false",
 				"-compileForDebug"
 			]
 		},
