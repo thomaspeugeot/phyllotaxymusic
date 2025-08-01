@@ -5,9 +5,12 @@ import (
 	"log"
 	"strconv"
 
+	// insertion point for models import
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/models"
 	phyllotaxymusic_stack "github.com/thomaspeugeot/phyllotaxymusic/go/stack"
-	phyllotaxymusic_static "github.com/thomaspeugeot/phyllotaxymusic/go/static"
+
+	// static
+	split_static "github.com/fullstack-lang/gong/lib/split/go/static"
 )
 
 var (
@@ -30,7 +33,7 @@ func main() {
 	flag.Parse()
 
 	// setup the static file server and get the controller
-	r := phyllotaxymusic_static.ServeStaticFiles(*logGINFlag)
+	r := split_static.ServeStaticFiles(*logGINFlag)
 
 	// setup phyllotaxymusic_stack
 	phyllotaxymusic_stack := phyllotaxymusic_stack.NewStack(r,
@@ -40,10 +43,9 @@ func main() {
 
 	stager.UpdateAllStages()
 
-	log.Printf("%s", "Server ready serve on localhost:"+strconv.Itoa(*port))
+	log.Println("Server ready serve on localhost:" + strconv.Itoa(*port))
 	err := r.Run(":" + strconv.Itoa(*port))
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-
 }

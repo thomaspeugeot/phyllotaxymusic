@@ -9,7 +9,7 @@ import (
 	"os"
 
 	// this package contains ...
-	"github.com/thomaspeugeot/phyllotaxymusic"
+	"github.com/fullstack-lang/gong/lib/split"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
@@ -35,7 +35,7 @@ func ServeStaticFiles(logGINFlag bool) (r *gin.Engine) {
 
 	// insertion point for serving the static file
 	// provide the static route for the angular pages
-	r.Use(static.Serve("/", EmbedFolder(phyllotaxymusic.NgDistNg, "ng-github.com-thomaspeugeot-phyllotaxymusic/dist/ng-github.com-thomaspeugeot-phyllotaxymusic/browser")))
+	r.Use(static.Serve("/", EmbedFolder(split.NgDistNg, "ng-github.com-fullstack-lang-gong-lib-split/dist/ng-github.com-fullstack-lang-gong-lib-split/browser")))
 	r.NoRoute(func(c *gin.Context) {
 		fmt.Println(c.Request.URL.Path, "doesn't exists, redirect on /")
 		c.Redirect(http.StatusMovedPermanently, "/")

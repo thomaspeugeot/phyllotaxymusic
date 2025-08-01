@@ -1,7 +1,0 @@
-{
-    "name": "phyllotaxymusic",
-    "workspaces": [
-        "ng-github.com-thomaspeugeot-phyllotaxymusic",
-        ""
-    ]
-}
