@@ -3,8 +3,6 @@
 package models
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
 
 	button_stack "github.com/fullstack-lang/gong/lib/button/go/stack"
@@ -57,8 +55,16 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 	for parameter_ := range *parameters {
 		if parameter_.Name == "Reference" {
 			parameter = parameter_
-		} else {
-			log.Fatal("no Reference parameter on stage")
+		}
+	}
+
+	if parameter == nil {
+		InitializeDatabase(stage)
+		parameters := GetGongstructInstancesSet[Parameter](stage)
+		for parameter_ := range *parameters {
+			if parameter_.Name == "Reference" {
+				parameter = parameter_
+			}
 		}
 	}
 
