@@ -28,7 +28,7 @@ func (stager *Stager) UpdateAndCommitSlidersStage() {
 				stager,
 				"Side Length",
 				5,
-				200,
+				300,
 				5,
 				&stager.parameter.SideLength,
 			),
