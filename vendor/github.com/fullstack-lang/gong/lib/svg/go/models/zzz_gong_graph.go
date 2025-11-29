@@ -1,6 +1,79 @@
 // generated code - do not edit
 package models
 
+func IsStagedPointerToGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) (ok bool) {
+
+	switch target := any(instance).(type) {
+	// insertion point for stage
+	case *Animate:
+		ok = stage.IsStagedAnimate(target)
+
+	case *Circle:
+		ok = stage.IsStagedCircle(target)
+
+	case *Condition:
+		ok = stage.IsStagedCondition(target)
+
+	case *ControlPoint:
+		ok = stage.IsStagedControlPoint(target)
+
+	case *Ellipse:
+		ok = stage.IsStagedEllipse(target)
+
+	case *Layer:
+		ok = stage.IsStagedLayer(target)
+
+	case *Line:
+		ok = stage.IsStagedLine(target)
+
+	case *Link:
+		ok = stage.IsStagedLink(target)
+
+	case *LinkAnchoredText:
+		ok = stage.IsStagedLinkAnchoredText(target)
+
+	case *Path:
+		ok = stage.IsStagedPath(target)
+
+	case *Point:
+		ok = stage.IsStagedPoint(target)
+
+	case *Polygone:
+		ok = stage.IsStagedPolygone(target)
+
+	case *Polyline:
+		ok = stage.IsStagedPolyline(target)
+
+	case *Rect:
+		ok = stage.IsStagedRect(target)
+
+	case *RectAnchoredPath:
+		ok = stage.IsStagedRectAnchoredPath(target)
+
+	case *RectAnchoredRect:
+		ok = stage.IsStagedRectAnchoredRect(target)
+
+	case *RectAnchoredText:
+		ok = stage.IsStagedRectAnchoredText(target)
+
+	case *RectLinkLink:
+		ok = stage.IsStagedRectLinkLink(target)
+
+	case *SVG:
+		ok = stage.IsStagedSVG(target)
+
+	case *SvgText:
+		ok = stage.IsStagedSvgText(target)
+
+	case *Text:
+		ok = stage.IsStagedText(target)
+
+	default:
+		_ = target
+	}
+	return
+}
+
 func IsStaged[Type Gongstruct](stage *Stage, instance *Type) (ok bool) {
 
 	switch target := any(instance).(type) {
@@ -10,6 +83,12 @@ func IsStaged[Type Gongstruct](stage *Stage, instance *Type) (ok bool) {
 
 	case *Circle:
 		ok = stage.IsStagedCircle(target)
+
+	case *Condition:
+		ok = stage.IsStagedCondition(target)
+
+	case *ControlPoint:
+		ok = stage.IsStagedControlPoint(target)
 
 	case *Ellipse:
 		ok = stage.IsStagedEllipse(target)
@@ -79,6 +158,20 @@ func (stage *Stage) IsStagedAnimate(animate *Animate) (ok bool) {
 func (stage *Stage) IsStagedCircle(circle *Circle) (ok bool) {
 
 	_, ok = stage.Circles[circle]
+
+	return
+}
+
+func (stage *Stage) IsStagedCondition(condition *Condition) (ok bool) {
+
+	_, ok = stage.Conditions[condition]
+
+	return
+}
+
+func (stage *Stage) IsStagedControlPoint(controlpoint *ControlPoint) (ok bool) {
+
+	_, ok = stage.ControlPoints[controlpoint]
 
 	return
 }
@@ -216,6 +309,12 @@ func StageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 	case *Circle:
 		stage.StageBranchCircle(target)
 
+	case *Condition:
+		stage.StageBranchCondition(target)
+
+	case *ControlPoint:
+		stage.StageBranchControlPoint(target)
+
 	case *Ellipse:
 		stage.StageBranchEllipse(target)
 
@@ -303,6 +402,39 @@ func (stage *Stage) StageBranchCircle(circle *Circle) {
 	for _, _animate := range circle.Animations {
 		StageBranch(stage, _animate)
 	}
+
+}
+
+func (stage *Stage) StageBranchCondition(condition *Condition) {
+
+	// check if instance is already staged
+	if IsStaged(stage, condition) {
+		return
+	}
+
+	condition.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *Stage) StageBranchControlPoint(controlpoint *ControlPoint) {
+
+	// check if instance is already staged
+	if IsStaged(stage, controlpoint) {
+		return
+	}
+
+	controlpoint.Stage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if controlpoint.ClosestRect != nil {
+		StageBranch(stage, controlpoint.ClosestRect)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -411,8 +543,8 @@ func (stage *Stage) StageBranchLink(link *Link) {
 	for _, _linkanchoredtext := range link.TextAtArrowEnd {
 		StageBranch(stage, _linkanchoredtext)
 	}
-	for _, _point := range link.ControlPoints {
-		StageBranch(stage, _point)
+	for _, _controlpoint := range link.ControlPoints {
+		StageBranch(stage, _controlpoint)
 	}
 
 }
@@ -516,6 +648,12 @@ func (stage *Stage) StageBranchRect(rect *Rect) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _condition := range rect.HoveringTrigger {
+		StageBranch(stage, _condition)
+	}
+	for _, _condition := range rect.DisplayConditions {
+		StageBranch(stage, _condition)
+	}
 	for _, _animate := range rect.Animations {
 		StageBranch(stage, _animate)
 	}
@@ -676,6 +814,14 @@ func CopyBranch[Type Gongstruct](from *Type) (to *Type) {
 		toT := CopyBranchCircle(mapOrigCopy, fromT)
 		return any(toT).(*Type)
 
+	case *Condition:
+		toT := CopyBranchCondition(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
+	case *ControlPoint:
+		toT := CopyBranchControlPoint(mapOrigCopy, fromT)
+		return any(toT).(*Type)
+
 	case *Ellipse:
 		toT := CopyBranchEllipse(mapOrigCopy, fromT)
 		return any(toT).(*Type)
@@ -788,6 +934,47 @@ func CopyBranchCircle(mapOrigCopy map[any]any, circleFrom *Circle) (circleTo *Ci
 	for _, _animate := range circleFrom.Animations {
 		circleTo.Animations = append(circleTo.Animations, CopyBranchAnimate(mapOrigCopy, _animate))
 	}
+
+	return
+}
+
+func CopyBranchCondition(mapOrigCopy map[any]any, conditionFrom *Condition) (conditionTo *Condition) {
+
+	// conditionFrom has already been copied
+	if _conditionTo, ok := mapOrigCopy[conditionFrom]; ok {
+		conditionTo = _conditionTo.(*Condition)
+		return
+	}
+
+	conditionTo = new(Condition)
+	mapOrigCopy[conditionFrom] = conditionTo
+	conditionFrom.CopyBasicFields(conditionTo)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+	return
+}
+
+func CopyBranchControlPoint(mapOrigCopy map[any]any, controlpointFrom *ControlPoint) (controlpointTo *ControlPoint) {
+
+	// controlpointFrom has already been copied
+	if _controlpointTo, ok := mapOrigCopy[controlpointFrom]; ok {
+		controlpointTo = _controlpointTo.(*ControlPoint)
+		return
+	}
+
+	controlpointTo = new(ControlPoint)
+	mapOrigCopy[controlpointFrom] = controlpointTo
+	controlpointFrom.CopyBasicFields(controlpointTo)
+
+	//insertion point for the staging of instances referenced by pointers
+	if controlpointFrom.ClosestRect != nil {
+		controlpointTo.ClosestRect = CopyBranchRect(mapOrigCopy, controlpointFrom.ClosestRect)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 	return
 }
@@ -912,8 +1099,8 @@ func CopyBranchLink(mapOrigCopy map[any]any, linkFrom *Link) (linkTo *Link) {
 	for _, _linkanchoredtext := range linkFrom.TextAtArrowEnd {
 		linkTo.TextAtArrowEnd = append(linkTo.TextAtArrowEnd, CopyBranchLinkAnchoredText(mapOrigCopy, _linkanchoredtext))
 	}
-	for _, _point := range linkFrom.ControlPoints {
-		linkTo.ControlPoints = append(linkTo.ControlPoints, CopyBranchPoint(mapOrigCopy, _point))
+	for _, _controlpoint := range linkFrom.ControlPoints {
+		linkTo.ControlPoints = append(linkTo.ControlPoints, CopyBranchControlPoint(mapOrigCopy, _controlpoint))
 	}
 
 	return
@@ -1041,6 +1228,12 @@ func CopyBranchRect(mapOrigCopy map[any]any, rectFrom *Rect) (rectTo *Rect) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _condition := range rectFrom.HoveringTrigger {
+		rectTo.HoveringTrigger = append(rectTo.HoveringTrigger, CopyBranchCondition(mapOrigCopy, _condition))
+	}
+	for _, _condition := range rectFrom.DisplayConditions {
+		rectTo.DisplayConditions = append(rectTo.DisplayConditions, CopyBranchCondition(mapOrigCopy, _condition))
+	}
 	for _, _animate := range rectFrom.Animations {
 		rectTo.Animations = append(rectTo.Animations, CopyBranchAnimate(mapOrigCopy, _animate))
 	}
@@ -1225,6 +1418,12 @@ func UnstageBranch[Type Gongstruct](stage *Stage, instance *Type) {
 	case *Circle:
 		stage.UnstageBranchCircle(target)
 
+	case *Condition:
+		stage.UnstageBranchCondition(target)
+
+	case *ControlPoint:
+		stage.UnstageBranchControlPoint(target)
+
 	case *Ellipse:
 		stage.UnstageBranchEllipse(target)
 
@@ -1312,6 +1511,39 @@ func (stage *Stage) UnstageBranchCircle(circle *Circle) {
 	for _, _animate := range circle.Animations {
 		UnstageBranch(stage, _animate)
 	}
+
+}
+
+func (stage *Stage) UnstageBranchCondition(condition *Condition) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, condition) {
+		return
+	}
+
+	condition.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+
+	//insertion point for the staging of instances referenced by slice of pointers
+
+}
+
+func (stage *Stage) UnstageBranchControlPoint(controlpoint *ControlPoint) {
+
+	// check if instance is already staged
+	if !IsStaged(stage, controlpoint) {
+		return
+	}
+
+	controlpoint.Unstage(stage)
+
+	//insertion point for the staging of instances referenced by pointers
+	if controlpoint.ClosestRect != nil {
+		UnstageBranch(stage, controlpoint.ClosestRect)
+	}
+
+	//insertion point for the staging of instances referenced by slice of pointers
 
 }
 
@@ -1420,8 +1652,8 @@ func (stage *Stage) UnstageBranchLink(link *Link) {
 	for _, _linkanchoredtext := range link.TextAtArrowEnd {
 		UnstageBranch(stage, _linkanchoredtext)
 	}
-	for _, _point := range link.ControlPoints {
-		UnstageBranch(stage, _point)
+	for _, _controlpoint := range link.ControlPoints {
+		UnstageBranch(stage, _controlpoint)
 	}
 
 }
@@ -1525,6 +1757,12 @@ func (stage *Stage) UnstageBranchRect(rect *Rect) {
 	//insertion point for the staging of instances referenced by pointers
 
 	//insertion point for the staging of instances referenced by slice of pointers
+	for _, _condition := range rect.HoveringTrigger {
+		UnstageBranch(stage, _condition)
+	}
+	for _, _condition := range rect.DisplayConditions {
+		UnstageBranch(stage, _condition)
+	}
 	for _, _animate := range rect.Animations {
 		UnstageBranch(stage, _animate)
 	}

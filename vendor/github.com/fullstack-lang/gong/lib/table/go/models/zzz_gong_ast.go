@@ -905,13 +905,18 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					var ident *ast.Ident
 					var ok bool
 					_ = ok
+					_ = arg
 					if ident, ok = arg.(*ast.Ident); !ok {
+						_ = ident
+						_ = ok
 						// log.Println("we are in the case of new(....)")
 					}
 
 					var se *ast.SelectorExpr
 					if se, ok = arg.(*ast.SelectorExpr); ok {
 						if ident, ok = se.X.(*ast.Ident); !ok {
+							_ = ident
+							_ = ok
 							// log.Println("we are in the case of append(....)")
 						}
 					}
@@ -1104,9 +1109,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				if bl, ok := v.X.(*ast.BasicLit); ok {
 					basicLit = bl
 					// Check the operator to set the sign
-					if v.Op == token.SUB { // token.SUB is for '-'
+					switch v.Op {
+					case token.SUB: // token.SUB is for '-'
 						exprSign = -1
-					} else if v.Op == token.ADD { // token.ADD is for '+'
+					case token.ADD: // token.ADD is for '+'
 						exprSign = 1
 					}
 				}
@@ -1262,6 +1268,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_FormEditAssocButton[identifier].ToolTipText = fielValue
+				case "MatTooltipShowDelay":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FormEditAssocButton[identifier].MatTooltipShowDelay = fielValue
 				}
 			case "FormField":
 				switch fieldName {
@@ -1429,6 +1439,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_FormSortAssocButton[identifier].ToolTipText = fielValue
+				case "MatTooltipShowDelay":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_FormSortAssocButton[identifier].MatTooltipShowDelay = fielValue
 				}
 			case "Option":
 				switch fieldName {
@@ -1679,6 +1693,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						log.Fatalln(err)
 					}
 					__gong__map_FormFieldSelect[identifier].CanBeEmpty = fielValue
+				case "PreserveInitialOrder":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_FormFieldSelect[identifier].PreserveInitialOrder = fielValue
 				}
 			case "FormFieldString":
 				switch fieldName {

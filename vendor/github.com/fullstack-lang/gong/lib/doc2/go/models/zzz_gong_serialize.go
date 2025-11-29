@@ -12,19 +12,22 @@ import (
 )
 
 func SerializeStage(stage *Stage, filename string) {
+	SerializeStage2(stage, filename, false)
+}
+func SerializeStage2(stage *Stage, filename string, addIDs bool) {
 
 	f := excelize.NewFile()
 	{
 		// insertion point
-		SerializeExcelizePointerToGongstruct[*AttributeShape](stage, f)
-		SerializeExcelizePointerToGongstruct[*Classdiagram](stage, f)
-		SerializeExcelizePointerToGongstruct[*DiagramPackage](stage, f)
-		SerializeExcelizePointerToGongstruct[*GongEnumShape](stage, f)
-		SerializeExcelizePointerToGongstruct[*GongEnumValueShape](stage, f)
-		SerializeExcelizePointerToGongstruct[*GongNoteLinkShape](stage, f)
-		SerializeExcelizePointerToGongstruct[*GongNoteShape](stage, f)
-		SerializeExcelizePointerToGongstruct[*GongStructShape](stage, f)
-		SerializeExcelizePointerToGongstruct[*LinkShape](stage, f)
+		SerializeExcelizePointerToGongstruct2[*AttributeShape](stage, f, addIDs)
+		SerializeExcelizePointerToGongstruct2[*Classdiagram](stage, f, addIDs)
+		SerializeExcelizePointerToGongstruct2[*DiagramPackage](stage, f, addIDs)
+		SerializeExcelizePointerToGongstruct2[*GongEnumShape](stage, f, addIDs)
+		SerializeExcelizePointerToGongstruct2[*GongEnumValueShape](stage, f, addIDs)
+		SerializeExcelizePointerToGongstruct2[*GongNoteLinkShape](stage, f, addIDs)
+		SerializeExcelizePointerToGongstruct2[*GongNoteShape](stage, f, addIDs)
+		SerializeExcelizePointerToGongstruct2[*GongStructShape](stage, f, addIDs)
+		SerializeExcelizePointerToGongstruct2[*LinkShape](stage, f, addIDs)
 	}
 
 	// Create a style with wrap text enabled
@@ -162,32 +165,6 @@ type Tabulator interface {
 	AddCell(sheetName string, rowId, columnIndex int, value string)
 }
 
-func Serialize[Type Gongstruct](stage *Stage, tab Tabulator) {
-	sheetName := GetGongstructName[Type]()
-
-	sheetName = shortenString(sheetName)
-
-	// Create a new sheet.
-	tab.AddSheet(sheetName)
-
-	headerRowIndex := tab.AddRow(sheetName)
-	for colIndex, fieldName := range GetFields[Type]() {
-		tab.AddCell(sheetName, headerRowIndex, colIndex, fieldName)
-		// f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), fieldName)
-	}
-
-	set := *GetGongstructInstancesSet[Type](stage)
-	for instance := range set {
-		line := tab.AddRow(sheetName)
-		for index, fieldName := range GetFields[Type]() {
-			tab.AddCell(sheetName, line, index, GetFieldStringValue(
-				any(*instance).(Type), fieldName).valueString)
-			// f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), GetFieldStringValue(
-			// 	any(*instance).(Type), fieldName))
-		}
-	}
-}
-
 type ExcelizeTabulator struct {
 	f *excelize.File
 }
@@ -209,6 +186,10 @@ func (tab *ExcelizeTabulator) AddCell(sheetName string, rowId, columnIndex int, 
 }
 
 func SerializeExcelizePointerToGongstruct[Type PointerToGongstruct](stage *Stage, f *excelize.File) {
+	SerializeExcelizePointerToGongstruct2[Type](stage, f, false)
+}
+
+func SerializeExcelizePointerToGongstruct2[Type PointerToGongstruct](stage *Stage, f *excelize.File, addIDs bool) {
 	sheetName := GetPointerToGongstructName[Type]()
 
 	sheetName = shortenString(sheetName)
@@ -228,65 +209,54 @@ func SerializeExcelizePointerToGongstruct[Type PointerToGongstruct](stage *Stage
 
 	line := 1
 
-	for index, fieldName := range GetFieldsFromPointer[Type]() {
-		f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), fieldName)
+	for index, fieldHeader := range GetFieldsFromPointer[Type]() {
+		if !addIDs {
+			f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), fieldHeader.Name)
+		} else {
+			f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+1)), line), fieldHeader.Name)
+			switch fieldHeader.GongFieldValueType {
+			case GongFieldValueTypePointer:
+				f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), fieldHeader.Name+":ID")
+			case GongFieldValueTypeSliceOfPointers:
+				f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), fieldHeader.Name+":IDs")
+			default:
+				if index == 0 {
+					f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), fieldHeader.Name+":ID")
+				} else {
+					f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), fieldHeader.Name+":noID")
+				}			
+			}
+		}
 	}
+
+	// AutoFilter starting from A1
 	f.AutoFilter(sheetName,
 		fmt.Sprintf("%s%d", IntToLetters(int32(1)), line),
 		[]excelize.AutoFilterOptions{})
 
 	for _, instance := range sortedSlice {
 		line = line + 1
+
+		// 3. Add the ID value in column A
+		// We use type assertion to check if the instance implements GetID()
+		id := GetOrderPointerGongstruct(stage, instance)
+
 		for index, fieldName := range GetFieldsFromPointer[Type]() {
-			fieldStringValue := GetFieldStringValueFromPointer(instance, fieldName)
-			f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), fieldStringValue.GetValueString())
-		}
-	}
+			fieldStringValue := GetFieldStringValueFromPointer(instance, fieldName.Name, stage)
+			if !addIDs {
+				f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), fieldStringValue.GetValueString())
+			} else {
+				f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+1)), line), fieldStringValue.GetValueString())
+				if index == 0 {
+					f.SetCellInt(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), int64(id))
+				} else {
+					switch fieldStringValue.GongFieldValueType {
+					case GongFieldValueTypePointer, GongFieldValueTypeSliceOfPointers:
+						f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), fieldStringValue.ids)
+					}
+				}
 
-	// Autofit all columns according to their text content
-	cols, err := f.GetCols(sheetName)
-	if err != nil {
-		log.Panicln("SerializeExcelize")
-	}
-	for idx, col := range cols {
-		largestWidth := 0
-		for _, rowCell := range col {
-			cellWidth := utf8.RuneCountInString(rowCell) + 2 // + 2 for margin
-			if cellWidth > largestWidth {
-				largestWidth = cellWidth
 			}
-		}
-		name, err := excelize.ColumnNumberToName(idx + 1)
-		if err != nil {
-			log.Panicln("SerializeExcelize")
-		}
-		f.SetColWidth(sheetName, name, name, float64(largestWidth))
-	}
-}
-
-func SerializeExcelize[Type Gongstruct](stage *Stage, f *excelize.File) {
-	sheetName := GetGongstructName[Type]()
-
-	sheetName = shortenString(sheetName)
-
-	// Create a new sheet.
-	f.NewSheet(sheetName)
-
-	set := *GetGongstructInstancesSet[Type](stage)
-	line := 1
-
-	for index, fieldName := range GetFields[Type]() {
-		f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), fieldName)
-	}
-	f.AutoFilter(sheetName,
-		fmt.Sprintf("%s%d", IntToLetters(int32(1)), line),
-		[]excelize.AutoFilterOptions{})
-
-	for instance := range set {
-		line = line + 1
-		for index, fieldName := range GetFields[Type]() {
-			fieldStringValue := GetFieldStringValue(any(*instance).(Type), fieldName)
-			f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(index+1)), line), fieldStringValue.GetValueString())
 		}
 	}
 

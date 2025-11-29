@@ -1,4 +1,5 @@
 // insertion point for imports
+import { ConditionAPI } from './condition-api'
 import { AnimateAPI } from './animate-api'
 import { RectAnchoredTextAPI } from './rectanchoredtext-api'
 import { RectAnchoredRectAPI } from './rectanchoredrect-api'
@@ -11,8 +12,6 @@ export class RectAPI {
 
 	static GONGSTRUCT_NAME = "Rect"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -50,14 +49,23 @@ export class RectAPI {
 	OriginalFillOpacity: number = 0
 	HasToolTip: boolean = false
 	ToolTipText: string = ""
+	ToolTipPosition: string = ""
+	MouseX: number = 0
+	MouseY: number = 0
+	MouseEventKey: string = ""
 
 	// insertion point for other decls
 
 	RectPointersEncoding: RectPointersEncoding = new RectPointersEncoding
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export class RectPointersEncoding {
 	// insertion point for pointers and slices of pointers encoding fields
+	HoveringTrigger: number[] = []
+	DisplayConditions: number[] = []
 	Animations: number[] = []
 	RectAnchoredTexts: number[] = []
 	RectAnchoredRects: number[] = []

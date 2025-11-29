@@ -95,7 +95,7 @@ export class RectAnchoredTextService {
       catchError(this.handleError<RectAnchoredTextAPI>('postRectAnchoredText'))
     );
   }
-  
+
   /** POST: add a new rectanchoredtext to the server */
   post(rectanchoredtextdb: RectAnchoredTextAPI, Name: string, frontRepo: FrontRepo): Observable<RectAnchoredTextAPI> {
     return this.postRectAnchoredText(rectanchoredtextdb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class RectAnchoredTextService {
   private handleError<T>(operation = 'operation in RectAnchoredTextService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("RectAnchoredTextService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

@@ -82,6 +82,34 @@ func (from *Circle) CopyBasicFields(to *Circle) {
 	to.Transform = from.Transform
 }
 
+type Condition_WOP struct {
+	// insertion point
+
+	Name string
+}
+
+func (from *Condition) CopyBasicFields(to *Condition) {
+	// insertion point
+	to.Name = from.Name
+}
+
+type ControlPoint_WOP struct {
+	// insertion point
+
+	Name string
+
+	X_Relative float64
+
+	Y_Relative float64
+}
+
+func (from *ControlPoint) CopyBasicFields(to *ControlPoint) {
+	// insertion point
+	to.Name = from.Name
+	to.X_Relative = from.X_Relative
+	to.Y_Relative = from.Y_Relative
+}
+
 type Ellipse_WOP struct {
 	// insertion point
 
@@ -222,9 +250,13 @@ type Link_WOP struct {
 
 	EndArrowSize float64
 
+	EndArrowOffset float64
+
 	HasStartArrow bool
 
 	StartArrowSize float64
+
+	StartArrowOffset float64
 
 	Color string
 
@@ -241,6 +273,12 @@ type Link_WOP struct {
 	StrokeDashArrayWhenSelected string
 
 	Transform string
+
+	MouseX float64
+
+	MouseY float64
+
+	MouseEventKey MouseEventKey
 }
 
 func (from *Link) CopyBasicFields(to *Link) {
@@ -258,8 +296,10 @@ func (from *Link) CopyBasicFields(to *Link) {
 	to.CornerRadius = from.CornerRadius
 	to.HasEndArrow = from.HasEndArrow
 	to.EndArrowSize = from.EndArrowSize
+	to.EndArrowOffset = from.EndArrowOffset
 	to.HasStartArrow = from.HasStartArrow
 	to.StartArrowSize = from.StartArrowSize
+	to.StartArrowOffset = from.StartArrowOffset
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
@@ -268,6 +308,9 @@ func (from *Link) CopyBasicFields(to *Link) {
 	to.StrokeDashArray = from.StrokeDashArray
 	to.StrokeDashArrayWhenSelected = from.StrokeDashArrayWhenSelected
 	to.Transform = from.Transform
+	to.MouseX = from.MouseX
+	to.MouseY = from.MouseY
+	to.MouseEventKey = from.MouseEventKey
 }
 
 type LinkAnchoredText_WOP struct {
@@ -292,6 +335,10 @@ type LinkAnchoredText_WOP struct {
 	FontStyle string
 
 	LetterSpacing string
+
+	FontFamily string
+
+	WhiteSpace WhiteSpaceEnum
 
 	Color string
 
@@ -322,6 +369,8 @@ func (from *LinkAnchoredText) CopyBasicFields(to *LinkAnchoredText) {
 	to.FontSize = from.FontSize
 	to.FontStyle = from.FontStyle
 	to.LetterSpacing = from.LetterSpacing
+	to.FontFamily = from.FontFamily
+	to.WhiteSpace = from.WhiteSpace
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
 	to.Stroke = from.Stroke
@@ -533,6 +582,14 @@ type Rect_WOP struct {
 	HasToolTip bool
 
 	ToolTipText string
+
+	ToolTipPosition ToolTipPositionEnum
+
+	MouseX float64
+
+	MouseY float64
+
+	MouseEventKey MouseEventKey
 }
 
 func (from *Rect) CopyBasicFields(to *Rect) {
@@ -571,6 +628,10 @@ func (from *Rect) CopyBasicFields(to *Rect) {
 	to.OriginalFillOpacity = from.OriginalFillOpacity
 	to.HasToolTip = from.HasToolTip
 	to.ToolTipText = from.ToolTipText
+	to.ToolTipPosition = from.ToolTipPosition
+	to.MouseX = from.MouseX
+	to.MouseY = from.MouseY
+	to.MouseEventKey = from.MouseEventKey
 }
 
 type RectAnchoredPath_WOP struct {
@@ -712,6 +773,10 @@ type RectAnchoredText_WOP struct {
 
 	LetterSpacing string
 
+	FontFamily string
+
+	WhiteSpace WhiteSpaceEnum
+
 	X_Offset float64
 
 	Y_Offset float64
@@ -719,6 +784,8 @@ type RectAnchoredText_WOP struct {
 	RectAnchorType RectAnchorType
 
 	TextAnchorType TextAnchorType
+
+	DominantBaseline DominantBaselineType
 
 	WritingMode WritingMode
 
@@ -747,10 +814,13 @@ func (from *RectAnchoredText) CopyBasicFields(to *RectAnchoredText) {
 	to.FontSize = from.FontSize
 	to.FontStyle = from.FontStyle
 	to.LetterSpacing = from.LetterSpacing
+	to.FontFamily = from.FontFamily
+	to.WhiteSpace = from.WhiteSpace
 	to.X_Offset = from.X_Offset
 	to.Y_Offset = from.Y_Offset
 	to.RectAnchorType = from.RectAnchorType
 	to.TextAnchorType = from.TextAnchorType
+	to.DominantBaseline = from.DominantBaseline
 	to.WritingMode = from.WritingMode
 	to.Color = from.Color
 	to.FillOpacity = from.FillOpacity
@@ -877,6 +947,10 @@ type Text_WOP struct {
 	FontStyle string
 
 	LetterSpacing string
+
+	FontFamily string
+
+	WhiteSpace WhiteSpaceEnum
 }
 
 func (from *Text) CopyBasicFields(to *Text) {
@@ -897,5 +971,7 @@ func (from *Text) CopyBasicFields(to *Text) {
 	to.FontSize = from.FontSize
 	to.FontStyle = from.FontStyle
 	to.LetterSpacing = from.LetterSpacing
+	to.FontFamily = from.FontFamily
+	to.WhiteSpace = from.WhiteSpace
 }
 

@@ -8,18 +8,20 @@ export class ViewAPI {
 
 	static GONGSTRUCT_NAME = "View"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
 	Name: string = ""
 	ShowViewName: boolean = false
 	IsSelectedView: boolean = false
+	Direction: string = ""
 
 	// insertion point for other decls
 
 	ViewPointersEncoding: ViewPointersEncoding = new ViewPointersEncoding
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export class ViewPointersEncoding {

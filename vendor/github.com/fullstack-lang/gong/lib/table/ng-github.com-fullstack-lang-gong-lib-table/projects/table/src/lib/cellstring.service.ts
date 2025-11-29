@@ -94,7 +94,7 @@ export class CellStringService {
       catchError(this.handleError<CellStringAPI>('postCellString'))
     );
   }
-  
+
   /** POST: add a new cellstring to the server */
   post(cellstringdb: CellStringAPI, Name: string, frontRepo: FrontRepo): Observable<CellStringAPI> {
     return this.postCellString(cellstringdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class CellStringService {
   private handleError<T>(operation = 'operation in CellStringService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("CellStringService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

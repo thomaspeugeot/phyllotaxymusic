@@ -260,13 +260,13 @@ func (controller *Controller) UpdatePointerToGongStructField(c *gin.Context) {
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(_values) == 1 {
-		value := _values["Name"]
-		if len(value) == 1 {
-			stackPath = value[0]
-			// log.Println("UpdatePointerToGongStructField", "Name", stackPath)
+	if len(_values) >= 1 {
+		_nameValues := _values["Name"]
+		if len(_nameValues) == 1 {
+			stackPath = _nameValues[0]
 		}
 	}
+
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		message := "PATCH Stack github.com/fullstack-lang/gong/go, Unkown stack: \"" + stackPath + "\"\n"
@@ -328,7 +328,7 @@ func (controller *Controller) UpdatePointerToGongStructField(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	pointertogongstructfieldOld := backRepo.BackRepoPointerToGongStructField.Map_PointerToGongStructFieldDBID_PointerToGongStructFieldPtr[pointertogongstructfieldDB.ID]
 	if pointertogongstructfieldOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), pointertogongstructfieldOld, pointertogongstructfieldNew)
+		models.OnAfterUpdateFromFront(backRepo.GetStage(), pointertogongstructfieldOld, pointertogongstructfieldNew)
 	}
 
 	// an UPDATE generates a back repo commit increase

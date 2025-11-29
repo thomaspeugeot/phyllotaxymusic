@@ -10,7 +10,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct Group
 	// insertion point per field
-	clear(stage.Group_Sliders_reverseMap)
 	stage.Group_Sliders_reverseMap = make(map[*Slider]*Group)
 	for group := range stage.Groups {
 		_ = group
@@ -18,7 +17,6 @@ func (stage *Stage) ComputeReverseMaps() {
 			stage.Group_Sliders_reverseMap[_slider] = group
 		}
 	}
-	clear(stage.Group_Checkboxes_reverseMap)
 	stage.Group_Checkboxes_reverseMap = make(map[*Checkbox]*Group)
 	for group := range stage.Groups {
 		_ = group
@@ -29,7 +27,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct Layout
 	// insertion point per field
-	clear(stage.Layout_Groups_reverseMap)
 	stage.Layout_Groups_reverseMap = make(map[*Group]*Layout)
 	for layout := range stage.Layouts {
 		_ = layout
@@ -41,4 +38,58 @@ func (stage *Stage) ComputeReverseMaps() {
 	// Compute reverse map for named struct Slider
 	// insertion point per field
 
+}
+
+func (stage *Stage) GetInstances() (res []GongstructIF) {
+
+	// insertion point per named struct
+	for instance := range stage.Checkboxs {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Groups {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Layouts {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Sliders {
+		res = append(res, instance)
+	}
+
+	return
+}
+
+// insertion point per named struct
+func (checkbox *Checkbox) GongCopy() GongstructIF {
+	newInstance := *checkbox
+	return &newInstance
+}
+
+func (group *Group) GongCopy() GongstructIF {
+	newInstance := *group
+	return &newInstance
+}
+
+func (layout *Layout) GongCopy() GongstructIF {
+	newInstance := *layout
+	return &newInstance
+}
+
+func (slider *Slider) GongCopy() GongstructIF {
+	newInstance := *slider
+	return &newInstance
+}
+
+// ComputeReference will creates a deep copy of each of the staged elements
+func (stage *Stage) ComputeReference() {
+	stage.reference = make(map[GongstructIF]GongstructIF)
+	for _, instance := range stage.GetInstances() {
+		stage.reference[instance] = instance.GongCopy()
+	}
+	stage.new = make(map[GongstructIF]struct{})
+	stage.modified = make(map[GongstructIF]struct{})
+	stage.deleted = make(map[GongstructIF]struct{})
 }

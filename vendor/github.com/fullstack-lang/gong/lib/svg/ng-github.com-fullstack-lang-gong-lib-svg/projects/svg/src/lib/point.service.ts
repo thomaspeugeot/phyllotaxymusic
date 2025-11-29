@@ -94,7 +94,7 @@ export class PointService {
       catchError(this.handleError<PointAPI>('postPoint'))
     );
   }
-  
+
   /** POST: add a new point to the server */
   post(pointdb: PointAPI, Name: string, frontRepo: FrontRepo): Observable<PointAPI> {
     return this.postPoint(pointdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class PointService {
   private handleError<T>(operation = 'operation in PointService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("PointService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

@@ -95,7 +95,7 @@ export class PolygoneService {
       catchError(this.handleError<PolygoneAPI>('postPolygone'))
     );
   }
-  
+
   /** POST: add a new polygone to the server */
   post(polygonedb: PolygoneAPI, Name: string, frontRepo: FrontRepo): Observable<PolygoneAPI> {
     return this.postPolygone(polygonedb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class PolygoneService {
   private handleError<T>(operation = 'operation in PolygoneService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("PolygoneService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

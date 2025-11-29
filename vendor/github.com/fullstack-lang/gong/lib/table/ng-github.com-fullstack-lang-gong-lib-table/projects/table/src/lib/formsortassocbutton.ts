@@ -13,8 +13,6 @@ export class FormSortAssocButton {
 
 	static GONGSTRUCT_NAME = "FormSortAssocButton"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -22,10 +20,14 @@ export class FormSortAssocButton {
 	Label: string = ""
 	HasToolTip: boolean = false
 	ToolTipText: string = ""
+	MatTooltipShowDelay: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
 	FormEditAssocButton?: FormEditAssocButton
 
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export function CopyFormSortAssocButtonToFormSortAssocButtonAPI(formsortassocbutton: FormSortAssocButton, formsortassocbuttonAPI: FormSortAssocButtonAPI) {
@@ -39,6 +41,7 @@ export function CopyFormSortAssocButtonToFormSortAssocButtonAPI(formsortassocbut
 	formsortassocbuttonAPI.Label = formsortassocbutton.Label
 	formsortassocbuttonAPI.HasToolTip = formsortassocbutton.HasToolTip
 	formsortassocbuttonAPI.ToolTipText = formsortassocbutton.ToolTipText
+	formsortassocbuttonAPI.MatTooltipShowDelay = formsortassocbutton.MatTooltipShowDelay
 
 	// insertion point for pointer fields encoding
 	formsortassocbuttonAPI.FormSortAssocButtonPointersEncoding.FormEditAssocButtonID.Valid = true
@@ -67,6 +70,7 @@ export function CopyFormSortAssocButtonAPIToFormSortAssocButton(formsortassocbut
 	formsortassocbutton.Label = formsortassocbuttonAPI.Label
 	formsortassocbutton.HasToolTip = formsortassocbuttonAPI.HasToolTip
 	formsortassocbutton.ToolTipText = formsortassocbuttonAPI.ToolTipText
+	formsortassocbutton.MatTooltipShowDelay = formsortassocbuttonAPI.MatTooltipShowDelay
 
 	// insertion point for pointer fields encoding
 	formsortassocbutton.FormEditAssocButton = frontRepo.map_ID_FormEditAssocButton.get(formsortassocbuttonAPI.FormSortAssocButtonPointersEncoding.FormEditAssocButtonID.Int64)

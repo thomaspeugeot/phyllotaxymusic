@@ -95,7 +95,7 @@ export class NoteService {
       catchError(this.handleError<NoteAPI>('postNote'))
     );
   }
-  
+
   /** POST: add a new note to the server */
   post(notedb: NoteAPI, Name: string, frontRepo: FrontRepo): Observable<NoteAPI> {
     return this.postNote(notedb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class NoteService {
   private handleError<T>(operation = 'operation in NoteService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("NoteService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

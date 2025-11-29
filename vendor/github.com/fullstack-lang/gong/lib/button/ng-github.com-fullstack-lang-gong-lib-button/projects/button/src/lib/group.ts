@@ -13,16 +13,18 @@ export class Group {
 
 	static GONGSTRUCT_NAME = "Group"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
 	Name: string = ""
 	Percentage: number = 0
+	NbColumns: number = 0
 
 	// insertion point for pointers and slices of pointers declarations
 	Buttons: Array<Button> = []
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export function CopyGroupToGroupAPI(group: Group, groupAPI: GroupAPI) {
@@ -34,6 +36,7 @@ export function CopyGroupToGroupAPI(group: Group, groupAPI: GroupAPI) {
 	// insertion point for basic fields copy operations
 	groupAPI.Name = group.Name
 	groupAPI.Percentage = group.Percentage
+	groupAPI.NbColumns = group.NbColumns
 
 	// insertion point for pointer fields encoding
 
@@ -58,6 +61,7 @@ export function CopyGroupAPIToGroup(groupAPI: GroupAPI, group: Group, frontRepo:
 	// insertion point for basic fields copy operations
 	group.Name = groupAPI.Name
 	group.Percentage = groupAPI.Percentage
+	group.NbColumns = groupAPI.NbColumns
 
 	// insertion point for pointer fields encoding
 

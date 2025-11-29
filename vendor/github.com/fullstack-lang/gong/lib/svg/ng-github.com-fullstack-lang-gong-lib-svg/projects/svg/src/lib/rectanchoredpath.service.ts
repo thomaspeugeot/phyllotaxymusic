@@ -94,7 +94,7 @@ export class RectAnchoredPathService {
       catchError(this.handleError<RectAnchoredPathAPI>('postRectAnchoredPath'))
     );
   }
-  
+
   /** POST: add a new rectanchoredpath to the server */
   post(rectanchoredpathdb: RectAnchoredPathAPI, Name: string, frontRepo: FrontRepo): Observable<RectAnchoredPathAPI> {
     return this.postRectAnchoredPath(rectanchoredpathdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class RectAnchoredPathService {
   private handleError<T>(operation = 'operation in RectAnchoredPathService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("RectAnchoredPathService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

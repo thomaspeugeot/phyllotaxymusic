@@ -394,7 +394,9 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 
 // insertion point for identifiers maps
 var __gong__map_Button = make(map[string]*Button)
+var __gong__map_ButtonToggle = make(map[string]*ButtonToggle)
 var __gong__map_Group = make(map[string]*Group)
+var __gong__map_GroupToogle = make(map[string]*GroupToogle)
 var __gong__map_Layout = make(map[string]*Layout)
 
 // Parser needs to be configured for having the [Name1.Name2] or [pkg.Name1] ...
@@ -574,12 +576,24 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 										instanceButton.Stage(stage)
 										instance = any(instanceButton)
 										__gong__map_Button[identifier] = instanceButton
+									case "ButtonToggle":
+										instanceButtonToggle := new(ButtonToggle)
+										instanceButtonToggle.Name = instanceName
+										instanceButtonToggle.Stage(stage)
+										instance = any(instanceButtonToggle)
+										__gong__map_ButtonToggle[identifier] = instanceButtonToggle
 									case "Group":
 										instanceGroup := new(Group)
 										instanceGroup.Name = instanceName
 										instanceGroup.Stage(stage)
 										instance = any(instanceGroup)
 										__gong__map_Group[identifier] = instanceGroup
+									case "GroupToogle":
+										instanceGroupToogle := new(GroupToogle)
+										instanceGroupToogle.Name = instanceName
+										instanceGroupToogle.Stage(stage)
+										instance = any(instanceGroupToogle)
+										__gong__map_GroupToogle[identifier] = instanceGroupToogle
 									case "Layout":
 										instanceLayout := new(Layout)
 										instanceLayout.Name = instanceName
@@ -627,7 +641,15 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "ButtonToggle":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "Group":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "GroupToogle":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -673,13 +695,18 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					var ident *ast.Ident
 					var ok bool
 					_ = ok
+					_ = arg
 					if ident, ok = arg.(*ast.Ident); !ok {
+						_ = ident
+						_ = ok
 						// log.Println("we are in the case of new(....)")
 					}
 
 					var se *ast.SelectorExpr
 					if se, ok = arg.(*ast.SelectorExpr); ok {
 						if ident, ok = se.X.(*ast.Ident); !ok {
+							_ = ident
+							_ = ok
 							// log.Println("we are in the case of append(....)")
 						}
 					}
@@ -693,6 +720,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
 					case "Button":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "ButtonToggle":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -710,6 +741,20 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 								instanceWhoseFieldIsAppended.Buttons = append(instanceWhoseFieldIsAppended.Buttons, instanceToAppend)
 							}
 						}
+					case "GroupToogle":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						case "ButtonToggles":
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_ButtonToggle[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_GroupToogle[identifier]
+								instanceWhoseFieldIsAppended.ButtonToggles = append(instanceWhoseFieldIsAppended.ButtonToggles, instanceToAppend)
+							}
+						}
 					case "Layout":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
@@ -722,6 +767,16 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 							if instanceToAppend, ok := __gong__map_Group[identifierOfInstanceToAppend]; ok {
 								instanceWhoseFieldIsAppended := __gong__map_Layout[identifier]
 								instanceWhoseFieldIsAppended.Groups = append(instanceWhoseFieldIsAppended.Groups, instanceToAppend)
+							}
+						case "GroupToogles":
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_GroupToogle[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_Layout[identifier]
+								instanceWhoseFieldIsAppended.GroupToogles = append(instanceWhoseFieldIsAppended.GroupToogles, instanceToAppend)
 							}
 						}
 					}
@@ -742,9 +797,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				if bl, ok := v.X.(*ast.BasicLit); ok {
 					basicLit = bl
 					// Check the operator to set the sign
-					if v.Op == token.SUB { // token.SUB is for '-'
+					switch v.Op {
+					case token.SUB: // token.SUB is for '-'
 						exprSign = -1
-					} else if v.Op == token.ADD { // token.ADD is for '+'
+					case token.ADD: // token.ADD is for '+'
 						exprSign = 1
 					}
 				}
@@ -799,6 +855,22 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Button[identifier].Icon = fielValue
 				}
+			case "ButtonToggle":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_ButtonToggle[identifier].Name = fielValue
+				case "Label":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_ButtonToggle[identifier].Label = fielValue
+				case "Icon":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_ButtonToggle[identifier].Icon = fielValue
+				}
 			case "Group":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -813,6 +885,28 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						log.Fatalln(err)
 					}
 					__gong__map_Group[identifier].Percentage = exprSign * fielValue
+				case "NbColumns":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Group[identifier].NbColumns = int(exprSign) * int(fielValue)
+				}
+			case "GroupToogle":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_GroupToogle[identifier].Name = fielValue
+				case "Percentage":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_GroupToogle[identifier].Percentage = exprSign * fielValue
 				}
 			case "Layout":
 				switch fieldName {
@@ -840,10 +934,46 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			case "Button":
 				switch fieldName {
 				// insertion point for field dependant code
+				case "IsDisabled":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Button[identifier].IsDisabled = fielValue
+				}
+			case "ButtonToggle":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsDisabled":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_ButtonToggle[identifier].IsDisabled = fielValue
+				case "IsChecked":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_ButtonToggle[identifier].IsChecked = fielValue
 				}
 			case "Group":
 				switch fieldName {
 				// insertion point for field dependant code
+				}
+			case "GroupToogle":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "IsSingleSelector":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_GroupToogle[identifier].IsSingleSelector = fielValue
 				}
 			case "Layout":
 				switch fieldName {
@@ -910,8 +1040,37 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				case "Button":
 					switch fieldName {
 					// insertion point for selector expr assign code
+					case "Color":
+						var val MatButtonPaletteType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Button[identifier].Color = MatButtonPaletteType(val)
+					case "MatButtonType":
+						var val MatButtonType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Button[identifier].MatButtonType = MatButtonType(val)
+					case "MatButtonAppearance":
+						var val MatButtonAppearance
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Button[identifier].MatButtonAppearance = MatButtonAppearance(val)
+					}
+				case "ButtonToggle":
+					switch fieldName {
+					// insertion point for selector expr assign code
 					}
 				case "Group":
+					switch fieldName {
+					// insertion point for selector expr assign code
+					}
+				case "GroupToogle":
 					switch fieldName {
 					// insertion point for selector expr assign code
 					}

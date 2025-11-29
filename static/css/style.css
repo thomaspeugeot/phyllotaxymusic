@@ -19,9 +19,11 @@ body {
     border-right: 1px solid #e0e0e0;
     background-color: #f8f9fa;
     box-sizing: border-box;
-    /* Include padding in width */
     overflow-y: auto;
-    /* Allow scrolling if content overflows */
+
+    position: sticky;
+    top: 0;
+    height: 100vh;
 }
 
 .sidebar h2 {
@@ -106,7 +108,7 @@ body {
     padding: 30px 40px;
     max-width: 900px;
     /* Limit content width for readability */
-    margin-left: auto;
+    /* margin-left: auto; */
     /* Center content area if space allows */
     margin-right: auto;
     box-sizing: border-box;
@@ -224,4 +226,16 @@ body {
 .page-content tr:nth-child(even) {
     background-color: #f8f9fa;
     /* Zebra striping for rows */
+}
+
+.version-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 0.8em;
+    color: #aaa;
+    background-color: #f8f9fa;
+    padding: 2px 5px;
+    border-radius: 3px;
+    z-index: 1000;
 }

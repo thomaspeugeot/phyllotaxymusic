@@ -1,5 +1,6 @@
 ---
 title: "Phyllotaxy Music"
+versioninfo: ""
 ---
 This site describes phyllotaxy generated music.
 
@@ -10,7 +11,7 @@ theme, a suite of music notes, a melodic material.
 
 ### Cannon
 
-A wellknown music theme is at the start of Bach's 2nd 
+A well known music theme is at the start of Bach's 2nd 
 fugue in C minor. It starts with the C note.
 
 <img src="./images/bach2ndFugue.png" style="height: 100px; width: auto;">
@@ -19,30 +20,30 @@ In this piece, the theme is repeated with two voices that overlaps.
 
 <img src="./images/bach2ndFugue_large.png" style="height: 400px; width: auto;">
 
-Let's a have a look to this memorable piece. The first voice 
+The first voice 
 starts with a C on the first measure. On the third measure, the theme starts again, but it starts with a G. 
 The G of the second voice is seven half tone higher, or a fifth in music parlance, above the
- C of the first voice. A fifth is an a well suited gap between notes to sounds harmounuously. 
+ C of the first voice. A fifth is an a well suited gap between notes to sounds harmoniously. 
 The next note, a F# on the second voice, is played along a A on the first voice, also a
 third. A third,  And so one.
 
 It is the composer's chore
 to have the theme well suited for supporting overlapping itself.
 
-Having a theme that repeats itself harmonously with a shift in beats and tone is called a cannon:
+Having a theme that repeats itself harmoniously with a shift in beats and tone is called a cannon:
 
 - Pachelbel's Canon in D
 - "Row, Row, Row Your Boat"
 
-Phylotaxy will help us to compose theme that are suited for cannon with the following idea : 
+Phyllotaxy will help us to compose theme that are suited for cannon with the following idea : 
 if a cannon theme is a curve on a plan, it must overlap with itself with an horizontal and a vertical shift. 
 
-### Phylotaxy
+### Phyllotaxy
 
-Phylotaxy means "shape of leaves" 
+Phyllotaxy means "shape of leaves" 
 ("phyllo" is greek for leave and "taxy" is greek for shape). 
 It is the 
-science developped by botanist, 
+science developed by botanist, 
 mathematicians and physicists 
 to understand why plants
 have the shape they have.

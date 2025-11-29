@@ -8,8 +8,6 @@ export class TextAPI {
 
 	static GONGSTRUCT_NAME = "Text"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -29,10 +27,15 @@ export class TextAPI {
 	FontSize: string = ""
 	FontStyle: string = ""
 	LetterSpacing: string = ""
+	FontFamily: string = ""
+	WhiteSpace: string = ""
 
 	// insertion point for other decls
 
 	TextPointersEncoding: TextPointersEncoding = new TextPointersEncoding
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export class TextPointersEncoding {

@@ -94,7 +94,7 @@ export class CellIconService {
       catchError(this.handleError<CellIconAPI>('postCellIcon'))
     );
   }
-  
+
   /** POST: add a new cellicon to the server */
   post(cellicondb: CellIconAPI, Name: string, frontRepo: FrontRepo): Observable<CellIconAPI> {
     return this.postCellIcon(cellicondb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class CellIconService {
   private handleError<T>(operation = 'operation in CellIconService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("CellIconService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

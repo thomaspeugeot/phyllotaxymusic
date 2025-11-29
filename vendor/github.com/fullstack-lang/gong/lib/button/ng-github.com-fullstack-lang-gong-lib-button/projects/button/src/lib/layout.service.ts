@@ -18,6 +18,7 @@ import { FrontRepo, FrontRepoService } from './front-repo.service';
 
 // insertion point for imports
 import { GroupAPI } from './group-api'
+import { GroupToogleAPI } from './grouptoogle-api'
 
 @Injectable({
   providedIn: 'root'
@@ -95,7 +96,7 @@ export class LayoutService {
       catchError(this.handleError<LayoutAPI>('postLayout'))
     );
   }
-  
+
   /** POST: add a new layout to the server */
   post(layoutdb: LayoutAPI, Name: string, frontRepo: FrontRepo): Observable<LayoutAPI> {
     return this.postLayout(layoutdb, Name, frontRepo)
@@ -187,7 +188,7 @@ export class LayoutService {
   private handleError<T>(operation = 'operation in LayoutService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("LayoutService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

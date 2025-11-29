@@ -3,7 +3,7 @@ package models
 import "go/ast"
 
 func checkFunctionSignature(file *ast.File, modelPkg *ModelPkg) {
-	targetFuncName := "OnAfterUpdate"
+	targetFuncNameOnAfterUpdate := "OnAfterUpdate"
 
 	for i, decl := range file.Decls {
 		_ = i
@@ -12,7 +12,7 @@ func checkFunctionSignature(file *ast.File, modelPkg *ModelPkg) {
 			continue
 		}
 
-		if funcDecl.Name.Name == targetFuncName {
+		if funcDecl.Name.Name == targetFuncNameOnAfterUpdate {
 			recv := funcDecl.Recv.List[0]
 			ptrType, ok := recv.Type.(*ast.StarExpr)
 			if !ok {
@@ -33,14 +33,15 @@ func checkFunctionSignature(file *ast.File, modelPkg *ModelPkg) {
 
 			params := funcDecl.Type.Params.List
 
-			if len(params) != 2 {
+			if len(params) < 2 {
 				continue
 			}
 
 			param1 := params[0].Type.(*ast.StarExpr)
 			param2 := params[1].Type.(*ast.StarExpr)
 
-			if param1.X.(*ast.Ident).Name == "Stage" &&
+			if funcDecl.Name.Name == targetFuncNameOnAfterUpdate &&
+				param1.X.(*ast.Ident).Name == "Stage" &&
 				param2.X.(*ast.Ident).Name == gongstruct.Name {
 
 				gongstruct.HasOnAfterUpdateSignature = true

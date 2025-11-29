@@ -17,6 +17,7 @@ var GeneratedModelFiles = []string{
 	string(GeneratedGongCallbacksGoFilePath),
 	string(GeneratedGongReverseGoFilePath),
 	string(GeneratedGongOrchestratorGoFilePath),
+	string(GeneratedGongOrchestratorWMEGoFilePath),
 	string(GeneratedGongWopGoFilePath),
 
 	string(LegacyGeneratedGongGoFilePath),
@@ -49,19 +50,21 @@ const (
 	LegacyGeneratedGongSerializeGoFilePath    GeneratedGoFilePath = "gong_serialize.go"
 	LegacyGeneratedGongWopGoFilePath          GeneratedGoFilePath = "gong_wop.go"
 
-	GeneratedGongGoFilePath             GeneratedGoFilePath = "zzz_gong.go"
-	GeneratedGongDiffGoFilePath         GeneratedGoFilePath = "zzz_gong_diff.go"
-	GeneratedGongEnumGoFilePath         GeneratedGoFilePath = "zzz_gong_enum.go"
-	GeneratedGongMarshallGoFilePath     GeneratedGoFilePath = "zzz_gong_marshall.go"
-	GeneratedGongGraphGoFilePath        GeneratedGoFilePath = "zzz_gong_graph.go"
-	GeneratedGongSlicesGoFilePath       GeneratedGoFilePath = "zzz_gong_slices.go"
-	GeneratedGongCoderGoFilePath        GeneratedGoFilePath = "zzz_gong_coder.go"
-	GeneratedGongAstGoFilePath          GeneratedGoFilePath = "zzz_gong_ast.go"
-	GeneratedGongCallbacksGoFilePath    GeneratedGoFilePath = "zzz_gong_callbacks.go"
-	GeneratedGongOrchestratorGoFilePath GeneratedGoFilePath = "zzz_gong_orchestrator.go"
-	GeneratedGongReverseGoFilePath      GeneratedGoFilePath = "zzz_gong_reverse.go"
-	GeneratedGongSerializeGoFilePath    GeneratedGoFilePath = "zzz_gong_serialize.go"
-	GeneratedGongWopGoFilePath          GeneratedGoFilePath = "zzz_gong_wop.go"
-	StagerGoFilePath                    GeneratedGoFilePath = "stager.go"
-	DocsGoFilePath                      GeneratedGoFilePath = "docs.go"
+	GeneratedGongGoFilePath                GeneratedGoFilePath = "zzz_gong.go"
+	GeneratedGongDiffGoFilePath            GeneratedGoFilePath = "zzz_gong_diff.go"
+	GeneratedGongEnumGoFilePath            GeneratedGoFilePath = "zzz_gong_enum.go"
+	GeneratedGongMarshallGoFilePath        GeneratedGoFilePath = "zzz_gong_marshall.go"
+	GeneratedGongGraphGoFilePath           GeneratedGoFilePath = "zzz_gong_graph.go"
+	GeneratedGongSlicesGoFilePath          GeneratedGoFilePath = "zzz_gong_slices.go"
+	GeneratedGongCleanGoFilePath           GeneratedGoFilePath = "zzz_gong_clean.go"
+	GeneratedGongCoderGoFilePath           GeneratedGoFilePath = "zzz_gong_coder.go"
+	GeneratedGongAstGoFilePath             GeneratedGoFilePath = "zzz_gong_ast.go"
+	GeneratedGongCallbacksGoFilePath       GeneratedGoFilePath = "zzz_gong_callbacks.go"
+	GeneratedGongOrchestratorGoFilePath    GeneratedGoFilePath = "zzz_gong_orchestrator.go"
+	GeneratedGongOrchestratorWMEGoFilePath GeneratedGoFilePath = "zzz_gong_orchestrator_wme.go"
+	GeneratedGongReverseGoFilePath         GeneratedGoFilePath = "zzz_gong_reverse.go"
+	GeneratedGongSerializeGoFilePath       GeneratedGoFilePath = "zzz_gong_serialize.go"
+	GeneratedGongWopGoFilePath             GeneratedGoFilePath = "zzz_gong_wop.go"
+	StagerGoFilePath                       GeneratedGoFilePath = "stager.go"
+	DocsGoFilePath                         GeneratedGoFilePath = "docs.go"
 )

@@ -94,7 +94,7 @@ export class FormFieldTimeService {
       catchError(this.handleError<FormFieldTimeAPI>('postFormFieldTime'))
     );
   }
-  
+
   /** POST: add a new formfieldtime to the server */
   post(formfieldtimedb: FormFieldTimeAPI, Name: string, frontRepo: FrontRepo): Observable<FormFieldTimeAPI> {
     return this.postFormFieldTime(formfieldtimedb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class FormFieldTimeService {
   private handleError<T>(operation = 'operation in FormFieldTimeService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FormFieldTimeService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

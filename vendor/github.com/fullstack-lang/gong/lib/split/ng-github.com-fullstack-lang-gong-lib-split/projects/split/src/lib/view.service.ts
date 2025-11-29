@@ -95,7 +95,7 @@ export class ViewService {
       catchError(this.handleError<ViewAPI>('postView'))
     );
   }
-  
+
   /** POST: add a new view to the server */
   post(viewdb: ViewAPI, Name: string, frontRepo: FrontRepo): Observable<ViewAPI> {
     return this.postView(viewdb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class ViewService {
   private handleError<T>(operation = 'operation in ViewService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("ViewService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

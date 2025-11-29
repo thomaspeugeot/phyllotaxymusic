@@ -56,7 +56,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "AsSplit"
 			rf.Fieldname = "AsSplitAreas"
-			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := instanceWithInferedType.GongGetReverseFieldOwner(probe.stageOfInterest, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.AsSplit),
@@ -78,7 +78,7 @@ func FillUpForm(
 			_ = rf
 			rf.GongstructName = "View"
 			rf.Fieldname = "RootAsSplitAreas"
-			reverseFieldOwner := models.GetReverseFieldOwner(probe.stageOfInterest, instanceWithInferedType, &rf)
+			reverseFieldOwner := instanceWithInferedType.GongGetReverseFieldOwner(probe.stageOfInterest, &rf)
 			if reverseFieldOwner != nil {
 				AssociationReverseFieldToForm(
 					reverseFieldOwner.(*models.View),
@@ -220,6 +220,7 @@ func FillUpForm(
 		AssociationSliceToForm("RootAsSplitAreas", instanceWithInferedType, &instanceWithInferedType.RootAsSplitAreas, formGroup, probe)
 		BasicFieldtoForm("IsSelectedView", instanceWithInferedType.IsSelectedView, instanceWithInferedType, probe.formStage, formGroup,
 			false, false, 0, false, 0)
+		EnumTypeStringToForm("Direction", instanceWithInferedType.Direction, instanceWithInferedType, probe.formStage, formGroup)
 
 	case *models.Xlsx:
 		// insertion point

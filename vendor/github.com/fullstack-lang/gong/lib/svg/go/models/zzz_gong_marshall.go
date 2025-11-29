@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -79,14 +78,32 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 	name := file.Name()
 
 	if !strings.HasSuffix(name, ".go") {
-		log.Fatalln(name + " is not a go filename")
+		log.Println(name + " is not a go filename")
 	}
 
 	log.Printf("Marshalling %s", name)
-	newBase := filepath.Base(file.Name())
 
-	res := marshallRes
-	res = strings.ReplaceAll(res, "{{databaseName}}", strings.ReplaceAll(newBase, ".go", ""))
+	res, err := stage.MarshallToString(modelsPackageName, packageName)
+	if err != nil {
+		log.Fatalln("Error marshalling to string:", err)
+	}
+
+	if stage.generatesDiff {
+		diff := computeDiff(stage.contentWhenParsed, res)
+		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.delta", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
+		diff = ComputeDiff(stage.contentWhenParsed, res)
+		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.diff", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
+	}
+	stage.contentWhenParsed = res
+	stage.commitIdWhenParsed = stage.commitId
+
+	fmt.Fprintln(file, res)
+}
+
+// MarshallToString marshall the stage content into a string
+func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res string, err error) {
+
+	res = marshallRes
 	res = strings.ReplaceAll(res, "{{PackageName}}", packageName)
 	res = strings.ReplaceAll(res, "{{ModelsPackageName}}", modelsPackageName)
 
@@ -284,6 +301,100 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circle.Transform))
+		initializerStatements += setValueField
+
+	}
+
+	map_Condition_Identifiers := make(map[*Condition]string)
+	_ = map_Condition_Identifiers
+
+	conditionOrdered := []*Condition{}
+	for condition := range stage.Conditions {
+		conditionOrdered = append(conditionOrdered, condition)
+	}
+	sort.Slice(conditionOrdered[:], func(i, j int) bool {
+		conditioni := conditionOrdered[i]
+		conditionj := conditionOrdered[j]
+		conditioni_order, oki := stage.ConditionMap_Staged_Order[conditioni]
+		conditionj_order, okj := stage.ConditionMap_Staged_Order[conditionj]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return conditioni_order < conditionj_order
+	})
+	if len(conditionOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, condition := range conditionOrdered {
+
+		id = generatesIdentifier("Condition", idx, condition.Name)
+		map_Condition_Identifiers[condition] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Condition")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", condition.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(condition.Name))
+		initializerStatements += setValueField
+
+	}
+
+	map_ControlPoint_Identifiers := make(map[*ControlPoint]string)
+	_ = map_ControlPoint_Identifiers
+
+	controlpointOrdered := []*ControlPoint{}
+	for controlpoint := range stage.ControlPoints {
+		controlpointOrdered = append(controlpointOrdered, controlpoint)
+	}
+	sort.Slice(controlpointOrdered[:], func(i, j int) bool {
+		controlpointi := controlpointOrdered[i]
+		controlpointj := controlpointOrdered[j]
+		controlpointi_order, oki := stage.ControlPointMap_Staged_Order[controlpointi]
+		controlpointj_order, okj := stage.ControlPointMap_Staged_Order[controlpointj]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return controlpointi_order < controlpointj_order
+	})
+	if len(controlpointOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, controlpoint := range controlpointOrdered {
+
+		id = generatesIdentifier("ControlPoint", idx, controlpoint.Name)
+		map_ControlPoint_Identifiers[controlpoint] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "ControlPoint")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", controlpoint.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(controlpoint.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "X_Relative")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", controlpoint.X_Relative))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Y_Relative")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", controlpoint.Y_Relative))
 		initializerStatements += setValueField
 
 	}
@@ -690,6 +801,12 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EndArrowOffset")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", link.EndArrowOffset))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasStartArrow")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", link.HasStartArrow))
 		initializerStatements += setValueField
@@ -698,6 +815,12 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StartArrowSize")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", link.StartArrowSize))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StartArrowOffset")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", link.StartArrowOffset))
 		initializerStatements += setValueField
 
 		setValueField = StringInitStatement
@@ -747,6 +870,26 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(link.Transform))
 		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MouseX")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", link.MouseX))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MouseY")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", link.MouseY))
+		initializerStatements += setValueField
+
+		if link.MouseEventKey != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MouseEventKey")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+link.MouseEventKey.ToCodeString())
+			initializerStatements += setValueField
+		}
 
 	}
 
@@ -844,6 +987,20 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "LetterSpacing")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(linkanchoredtext.LetterSpacing))
 		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FontFamily")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(linkanchoredtext.FontFamily))
+		initializerStatements += setValueField
+
+		if linkanchoredtext.WhiteSpace != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "WhiteSpace")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+linkanchoredtext.WhiteSpace.ToCodeString())
+			initializerStatements += setValueField
+		}
 
 		setValueField = StringInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
@@ -1470,6 +1627,34 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rect.ToolTipText))
 		initializerStatements += setValueField
 
+		if rect.ToolTipPosition != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ToolTipPosition")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+rect.ToolTipPosition.ToCodeString())
+			initializerStatements += setValueField
+		}
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MouseX")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rect.MouseX))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MouseY")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rect.MouseY))
+		initializerStatements += setValueField
+
+		if rect.MouseEventKey != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MouseEventKey")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+rect.MouseEventKey.ToCodeString())
+			initializerStatements += setValueField
+		}
+
 	}
 
 	map_RectAnchoredPath_Identifiers := make(map[*RectAnchoredPath]string)
@@ -1831,6 +2016,20 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rectanchoredtext.LetterSpacing))
 		initializerStatements += setValueField
 
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FontFamily")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rectanchoredtext.FontFamily))
+		initializerStatements += setValueField
+
+		if rectanchoredtext.WhiteSpace != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "WhiteSpace")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+rectanchoredtext.WhiteSpace.ToCodeString())
+			initializerStatements += setValueField
+		}
+
 		setValueField = NumberInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "X_Offset")
@@ -1856,6 +2055,14 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "TextAnchorType")
 			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+rectanchoredtext.TextAnchorType.ToCodeString())
+			initializerStatements += setValueField
+		}
+
+		if rectanchoredtext.DominantBaseline != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "DominantBaseline")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+rectanchoredtext.DominantBaseline.ToCodeString())
 			initializerStatements += setValueField
 		}
 
@@ -2267,6 +2474,20 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(text.LetterSpacing))
 		initializerStatements += setValueField
 
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FontFamily")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(text.FontFamily))
+		initializerStatements += setValueField
+
+		if text.WhiteSpace != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "WhiteSpace")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+text.WhiteSpace.ToCodeString())
+			initializerStatements += setValueField
+		}
+
 	}
 
 	// insertion initialization of objects to stage
@@ -2299,6 +2520,40 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Animations")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Animate_Identifiers[_animate])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
+	if len(conditionOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of Condition instances pointers"
+	}
+	for idx, condition := range conditionOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Condition", idx, condition.Name)
+		map_Condition_Identifiers[condition] = id
+
+		// Initialisation of values
+	}
+
+	if len(controlpointOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of ControlPoint instances pointers"
+	}
+	for idx, controlpoint := range controlpointOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("ControlPoint", idx, controlpoint.Name)
+		map_ControlPoint_Identifiers[controlpoint] = id
+
+		// Initialisation of values
+		if controlpoint.ClosestRect != nil {
+			setPointerField = PointerFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ClosestRect")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rect_Identifiers[controlpoint.ClosestRect])
 			pointersInitializesStatements += setPointerField
 		}
 
@@ -2482,11 +2737,11 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 			pointersInitializesStatements += setPointerField
 		}
 
-		for _, _point := range link.ControlPoints {
+		for _, _controlpoint := range link.ControlPoints {
 			setPointerField = SliceOfPointersFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ControlPoints")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Point_Identifiers[_point])
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ControlPoint_Identifiers[_controlpoint])
 			pointersInitializesStatements += setPointerField
 		}
 
@@ -2600,6 +2855,22 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		map_Rect_Identifiers[rect] = id
 
 		// Initialisation of values
+		for _, _condition := range rect.HoveringTrigger {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "HoveringTrigger")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Condition_Identifiers[_condition])
+			pointersInitializesStatements += setPointerField
+		}
+
+		for _, _condition := range rect.DisplayConditions {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "DisplayConditions")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Condition_Identifiers[_condition])
+			pointersInitializesStatements += setPointerField
+		}
+
 		for _, _animate := range rect.Animations {
 			setPointerField = SliceOfPointersFieldInitStatement
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
@@ -2840,17 +3111,7 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 
 		// res = strings.ReplaceAll(res, "{{EntriesDocLinkStringDocLinkIdentifier}}", entries)
 	}
-
-	if stage.generatesDiff {
-		diff := computeDiff(stage.contentWhenParsed, res)
-		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.delta", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
-		diff = ComputeDiff(stage.contentWhenParsed, res)
-		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.diff", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
-	}
-	stage.contentWhenParsed = res
-	stage.commitIdWhenParsed = stage.commitId
-
-	fmt.Fprintln(file, res)
+	return
 }
 
 // computeDiff calculates the git-style unified diff between two strings.
@@ -2861,25 +3122,25 @@ func computeDiff(a, b string) string {
 }
 
 // computePrettyDiff calculates the git-style unified diff between two strings.
-func computePrettyDiff(a, b string) string {
-	dmp := diffmatchpatch.New()
-	diffs := dmp.DiffMain(a, b, false)
-	return dmp.DiffPrettyHtml(diffs)
-}
+// func computePrettyDiff(a, b string) string {
+// 	dmp := diffmatchpatch.New()
+// 	diffs := dmp.DiffMain(a, b, false)
+// 	return dmp.DiffPrettyHtml(diffs)
+// }
 
 // applyDiff reconstructs the original string 'a' from the new string 'b' and the diff string 'c'.
-func applyDiff(b, c string) (string, error) {
-	dmp := diffmatchpatch.New()
-	diffs, err := dmp.DiffFromDelta(b, c)
-	if err != nil {
-		return "", err
-	}
-	patches := dmp.PatchMake(b, diffs)
-	// We are applying the patch in reverse to get from 'b' to 'a'.
-	// The library's PatchApply function returns the new string and a slice of booleans indicating the success of each patch application.
-	result, _ := dmp.PatchApply(patches, b)
-	return result, nil
-}
+// func applyDiff(b, c string) (string, error) {
+// 	dmp := diffmatchpatch.New()
+// 	diffs, err := dmp.DiffFromDelta(b, c)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	patches := dmp.PatchMake(b, diffs)
+// 	// We are applying the patch in reverse to get from 'b' to 'a'.
+// 	// The library's PatchApply function returns the new string and a slice of booleans indicating the success of each patch application.
+// 	result, _ := dmp.PatchApply(patches, b)
+// 	return result, nil
+// }
 
 // unique identifier per struct
 func generatesIdentifier(gongStructName string, idx int, instanceName string) (identifier string) {

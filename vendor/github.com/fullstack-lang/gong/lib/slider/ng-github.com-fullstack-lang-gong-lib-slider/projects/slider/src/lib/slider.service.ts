@@ -94,7 +94,7 @@ export class SliderService {
       catchError(this.handleError<SliderAPI>('postSlider'))
     );
   }
-  
+
   /** POST: add a new slider to the server */
   post(sliderdb: SliderAPI, Name: string, frontRepo: FrontRepo): Observable<SliderAPI> {
     return this.postSlider(sliderdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class SliderService {
   private handleError<T>(operation = 'operation in SliderService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("SliderService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

@@ -94,7 +94,7 @@ export class DisplayedColumnService {
       catchError(this.handleError<DisplayedColumnAPI>('postDisplayedColumn'))
     );
   }
-  
+
   /** POST: add a new displayedcolumn to the server */
   post(displayedcolumndb: DisplayedColumnAPI, Name: string, frontRepo: FrontRepo): Observable<DisplayedColumnAPI> {
     return this.postDisplayedColumn(displayedcolumndb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class DisplayedColumnService {
   private handleError<T>(operation = 'operation in DisplayedColumnService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("DisplayedColumnService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

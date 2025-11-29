@@ -10,6 +10,7 @@ import (
 	"math"
 	"slices"
 	"sort"
+	"strings"
 	"time"
 
 	gong_go "github.com/fullstack-lang/gong/go"
@@ -26,6 +27,7 @@ func __Gong__Abs(x int) int {
 }
 
 var _ = __Gong__Abs
+var _ = strings.Clone("")
 
 const ProbeTreeSidebarSuffix = ":sidebar of the probe"
 const ProbeTableSuffix = ":table of the probe"
@@ -50,6 +52,7 @@ func (stage *Stage) GetProbeSplitStageName() string {
 
 // errUnkownEnum is returns when a value cannot match enum values
 var errUnkownEnum = errors.New("unkown enum")
+var _ = errUnkownEnum
 
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
@@ -74,6 +77,8 @@ type GongStructInterface interface {
 	// GetID() (res int)
 	// GetFields() (res []string)
 	// GetFieldStringValue(fieldName string) (res string)
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
 }
 
 // Stage enables storage of staged instances
@@ -260,6 +265,12 @@ type Stage struct {
 	// end of insertion point
 
 	NamedStructs []*NamedStruct
+
+	// for the computation of the diff at each commit we need
+	reference map[GongstructIF]GongstructIF
+	modified  map[GongstructIF]struct{}
+	new       map[GongstructIF]struct{}
+	deleted   map[GongstructIF]struct{}
 }
 
 func (stage *Stage) GetCommitId() uint {
@@ -282,6 +293,22 @@ func (stage *Stage) GetNamedStructsNames() (res []string) {
 	}
 
 	return
+}
+
+func (stage *Stage) GetReference() map[GongstructIF]GongstructIF {
+	return stage.reference
+}
+
+func (stage *Stage) GetModified() map[GongstructIF]struct{} {
+	return stage.modified
+}
+
+func (stage *Stage) GetNew() map[GongstructIF]struct{} {
+	return stage.new
+}
+
+func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
+	return stage.deleted
 }
 
 func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
@@ -311,7 +338,7 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
 	var t T
 	switch any(t).(type) {
-		// insertion point for case
+	// insertion point for case
 	case *GongBasicField:
 		tmp := GetStructInstancesByOrder(stage.GongBasicFields, stage.GongBasicFieldMap_Staged_Order)
 
@@ -488,9 +515,7 @@ func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T
 		return i_order < j_order
 	})
 
-	for _, instance := range orderedSet {
-		res = append(res, instance)
-	}
+	res = append(res, orderedSet...)
 
 	return
 }
@@ -699,6 +724,11 @@ func NewStage(name string) (stage *Stage) {
 			{name: "PointerToGongStructField"},
 			{name: "SliceOfPointerToGongStructField"},
 		}, // end of insertion point
+
+		reference: make(map[GongstructIF]GongstructIF),
+		new:       make(map[GongstructIF]struct{}),
+		modified:  make(map[GongstructIF]struct{}),
+		deleted:   make(map[GongstructIF]struct{}),
 	}
 
 	return
@@ -783,10 +813,21 @@ func (stage *Stage) Commit() {
 	stage.commitId++
 	stage.commitTimeStamp = time.Now()
 
+	if stage.OnInitCommitCallback != nil {
+		stage.OnInitCommitCallback.BeforeCommit(stage)
+	}
+	if stage.OnInitCommitFromBackCallback != nil {
+		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
+	}
+
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
+	stage.ComputeInstancesNb()
+	stage.ComputeReference()
+}
 
+func (stage *Stage) ComputeInstancesNb() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["GongBasicField"] = len(stage.GongBasicFields)
 	stage.Map_GongStructName_InstancesNb["GongEnum"] = len(stage.GongEnums)
@@ -799,7 +840,6 @@ func (stage *Stage) Commit() {
 	stage.Map_GongStructName_InstancesNb["ModelPkg"] = len(stage.ModelPkgs)
 	stage.Map_GongStructName_InstancesNb["PointerToGongStructField"] = len(stage.PointerToGongStructFields)
 	stage.Map_GongStructName_InstancesNb["SliceOfPointerToGongStructField"] = len(stage.SliceOfPointerToGongStructFields)
-
 }
 
 func (stage *Stage) Checkout() {
@@ -808,19 +848,7 @@ func (stage *Stage) Checkout() {
 	}
 
 	stage.ComputeReverseMaps()
-	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["GongBasicField"] = len(stage.GongBasicFields)
-	stage.Map_GongStructName_InstancesNb["GongEnum"] = len(stage.GongEnums)
-	stage.Map_GongStructName_InstancesNb["GongEnumValue"] = len(stage.GongEnumValues)
-	stage.Map_GongStructName_InstancesNb["GongLink"] = len(stage.GongLinks)
-	stage.Map_GongStructName_InstancesNb["GongNote"] = len(stage.GongNotes)
-	stage.Map_GongStructName_InstancesNb["GongStruct"] = len(stage.GongStructs)
-	stage.Map_GongStructName_InstancesNb["GongTimeField"] = len(stage.GongTimeFields)
-	stage.Map_GongStructName_InstancesNb["MetaReference"] = len(stage.MetaReferences)
-	stage.Map_GongStructName_InstancesNb["ModelPkg"] = len(stage.ModelPkgs)
-	stage.Map_GongStructName_InstancesNb["PointerToGongStructField"] = len(stage.PointerToGongStructFields)
-	stage.Map_GongStructName_InstancesNb["SliceOfPointerToGongStructField"] = len(stage.SliceOfPointerToGongStructFields)
-
+	stage.ComputeInstancesNb()
 }
 
 // backup generates backup files in the dirPath
@@ -859,6 +887,12 @@ func (gongbasicfield *GongBasicField) Stage(stage *Stage) *GongBasicField {
 		stage.GongBasicFields[gongbasicfield] = __member
 		stage.GongBasicFieldMap_Staged_Order[gongbasicfield] = stage.GongBasicFieldOrder
 		stage.GongBasicFieldOrder++
+		stage.new[gongbasicfield] = struct{}{}
+		delete(stage.deleted, gongbasicfield)
+	} else {
+		if _, ok := stage.new[gongbasicfield]; !ok {
+			stage.modified[gongbasicfield] = struct{}{}
+		}
 	}
 	stage.GongBasicFields_mapString[gongbasicfield.Name] = gongbasicfield
 
@@ -869,6 +903,12 @@ func (gongbasicfield *GongBasicField) Stage(stage *Stage) *GongBasicField {
 func (gongbasicfield *GongBasicField) Unstage(stage *Stage) *GongBasicField {
 	delete(stage.GongBasicFields, gongbasicfield)
 	delete(stage.GongBasicFields_mapString, gongbasicfield.Name)
+
+	if _, ok := stage.reference[gongbasicfield]; ok {
+		stage.deleted[gongbasicfield] = struct{}{}
+	} else {
+		delete(stage.new, gongbasicfield)
+	}
 	return gongbasicfield
 }
 
@@ -890,6 +930,10 @@ func (gongbasicfield *GongBasicField) Commit(stage *Stage) *GongBasicField {
 
 func (gongbasicfield *GongBasicField) CommitVoid(stage *Stage) {
 	gongbasicfield.Commit(stage)
+}
+
+func (gongbasicfield *GongBasicField) StageVoid(stage *Stage) {
+	gongbasicfield.Stage(stage)
 }
 
 // Checkout gongbasicfield to the back repo (if it is already staged)
@@ -914,6 +958,12 @@ func (gongenum *GongEnum) Stage(stage *Stage) *GongEnum {
 		stage.GongEnums[gongenum] = __member
 		stage.GongEnumMap_Staged_Order[gongenum] = stage.GongEnumOrder
 		stage.GongEnumOrder++
+		stage.new[gongenum] = struct{}{}
+		delete(stage.deleted, gongenum)
+	} else {
+		if _, ok := stage.new[gongenum]; !ok {
+			stage.modified[gongenum] = struct{}{}
+		}
 	}
 	stage.GongEnums_mapString[gongenum.Name] = gongenum
 
@@ -924,6 +974,12 @@ func (gongenum *GongEnum) Stage(stage *Stage) *GongEnum {
 func (gongenum *GongEnum) Unstage(stage *Stage) *GongEnum {
 	delete(stage.GongEnums, gongenum)
 	delete(stage.GongEnums_mapString, gongenum.Name)
+
+	if _, ok := stage.reference[gongenum]; ok {
+		stage.deleted[gongenum] = struct{}{}
+	} else {
+		delete(stage.new, gongenum)
+	}
 	return gongenum
 }
 
@@ -945,6 +1001,10 @@ func (gongenum *GongEnum) Commit(stage *Stage) *GongEnum {
 
 func (gongenum *GongEnum) CommitVoid(stage *Stage) {
 	gongenum.Commit(stage)
+}
+
+func (gongenum *GongEnum) StageVoid(stage *Stage) {
+	gongenum.Stage(stage)
 }
 
 // Checkout gongenum to the back repo (if it is already staged)
@@ -969,6 +1029,12 @@ func (gongenumvalue *GongEnumValue) Stage(stage *Stage) *GongEnumValue {
 		stage.GongEnumValues[gongenumvalue] = __member
 		stage.GongEnumValueMap_Staged_Order[gongenumvalue] = stage.GongEnumValueOrder
 		stage.GongEnumValueOrder++
+		stage.new[gongenumvalue] = struct{}{}
+		delete(stage.deleted, gongenumvalue)
+	} else {
+		if _, ok := stage.new[gongenumvalue]; !ok {
+			stage.modified[gongenumvalue] = struct{}{}
+		}
 	}
 	stage.GongEnumValues_mapString[gongenumvalue.Name] = gongenumvalue
 
@@ -979,6 +1045,12 @@ func (gongenumvalue *GongEnumValue) Stage(stage *Stage) *GongEnumValue {
 func (gongenumvalue *GongEnumValue) Unstage(stage *Stage) *GongEnumValue {
 	delete(stage.GongEnumValues, gongenumvalue)
 	delete(stage.GongEnumValues_mapString, gongenumvalue.Name)
+
+	if _, ok := stage.reference[gongenumvalue]; ok {
+		stage.deleted[gongenumvalue] = struct{}{}
+	} else {
+		delete(stage.new, gongenumvalue)
+	}
 	return gongenumvalue
 }
 
@@ -1000,6 +1072,10 @@ func (gongenumvalue *GongEnumValue) Commit(stage *Stage) *GongEnumValue {
 
 func (gongenumvalue *GongEnumValue) CommitVoid(stage *Stage) {
 	gongenumvalue.Commit(stage)
+}
+
+func (gongenumvalue *GongEnumValue) StageVoid(stage *Stage) {
+	gongenumvalue.Stage(stage)
 }
 
 // Checkout gongenumvalue to the back repo (if it is already staged)
@@ -1024,6 +1100,12 @@ func (gonglink *GongLink) Stage(stage *Stage) *GongLink {
 		stage.GongLinks[gonglink] = __member
 		stage.GongLinkMap_Staged_Order[gonglink] = stage.GongLinkOrder
 		stage.GongLinkOrder++
+		stage.new[gonglink] = struct{}{}
+		delete(stage.deleted, gonglink)
+	} else {
+		if _, ok := stage.new[gonglink]; !ok {
+			stage.modified[gonglink] = struct{}{}
+		}
 	}
 	stage.GongLinks_mapString[gonglink.Name] = gonglink
 
@@ -1034,6 +1116,12 @@ func (gonglink *GongLink) Stage(stage *Stage) *GongLink {
 func (gonglink *GongLink) Unstage(stage *Stage) *GongLink {
 	delete(stage.GongLinks, gonglink)
 	delete(stage.GongLinks_mapString, gonglink.Name)
+
+	if _, ok := stage.reference[gonglink]; ok {
+		stage.deleted[gonglink] = struct{}{}
+	} else {
+		delete(stage.new, gonglink)
+	}
 	return gonglink
 }
 
@@ -1055,6 +1143,10 @@ func (gonglink *GongLink) Commit(stage *Stage) *GongLink {
 
 func (gonglink *GongLink) CommitVoid(stage *Stage) {
 	gonglink.Commit(stage)
+}
+
+func (gonglink *GongLink) StageVoid(stage *Stage) {
+	gonglink.Stage(stage)
 }
 
 // Checkout gonglink to the back repo (if it is already staged)
@@ -1079,6 +1171,12 @@ func (gongnote *GongNote) Stage(stage *Stage) *GongNote {
 		stage.GongNotes[gongnote] = __member
 		stage.GongNoteMap_Staged_Order[gongnote] = stage.GongNoteOrder
 		stage.GongNoteOrder++
+		stage.new[gongnote] = struct{}{}
+		delete(stage.deleted, gongnote)
+	} else {
+		if _, ok := stage.new[gongnote]; !ok {
+			stage.modified[gongnote] = struct{}{}
+		}
 	}
 	stage.GongNotes_mapString[gongnote.Name] = gongnote
 
@@ -1089,6 +1187,12 @@ func (gongnote *GongNote) Stage(stage *Stage) *GongNote {
 func (gongnote *GongNote) Unstage(stage *Stage) *GongNote {
 	delete(stage.GongNotes, gongnote)
 	delete(stage.GongNotes_mapString, gongnote.Name)
+
+	if _, ok := stage.reference[gongnote]; ok {
+		stage.deleted[gongnote] = struct{}{}
+	} else {
+		delete(stage.new, gongnote)
+	}
 	return gongnote
 }
 
@@ -1110,6 +1214,10 @@ func (gongnote *GongNote) Commit(stage *Stage) *GongNote {
 
 func (gongnote *GongNote) CommitVoid(stage *Stage) {
 	gongnote.Commit(stage)
+}
+
+func (gongnote *GongNote) StageVoid(stage *Stage) {
+	gongnote.Stage(stage)
 }
 
 // Checkout gongnote to the back repo (if it is already staged)
@@ -1134,6 +1242,12 @@ func (gongstruct *GongStruct) Stage(stage *Stage) *GongStruct {
 		stage.GongStructs[gongstruct] = __member
 		stage.GongStructMap_Staged_Order[gongstruct] = stage.GongStructOrder
 		stage.GongStructOrder++
+		stage.new[gongstruct] = struct{}{}
+		delete(stage.deleted, gongstruct)
+	} else {
+		if _, ok := stage.new[gongstruct]; !ok {
+			stage.modified[gongstruct] = struct{}{}
+		}
 	}
 	stage.GongStructs_mapString[gongstruct.Name] = gongstruct
 
@@ -1144,6 +1258,12 @@ func (gongstruct *GongStruct) Stage(stage *Stage) *GongStruct {
 func (gongstruct *GongStruct) Unstage(stage *Stage) *GongStruct {
 	delete(stage.GongStructs, gongstruct)
 	delete(stage.GongStructs_mapString, gongstruct.Name)
+
+	if _, ok := stage.reference[gongstruct]; ok {
+		stage.deleted[gongstruct] = struct{}{}
+	} else {
+		delete(stage.new, gongstruct)
+	}
 	return gongstruct
 }
 
@@ -1165,6 +1285,10 @@ func (gongstruct *GongStruct) Commit(stage *Stage) *GongStruct {
 
 func (gongstruct *GongStruct) CommitVoid(stage *Stage) {
 	gongstruct.Commit(stage)
+}
+
+func (gongstruct *GongStruct) StageVoid(stage *Stage) {
+	gongstruct.Stage(stage)
 }
 
 // Checkout gongstruct to the back repo (if it is already staged)
@@ -1189,6 +1313,12 @@ func (gongtimefield *GongTimeField) Stage(stage *Stage) *GongTimeField {
 		stage.GongTimeFields[gongtimefield] = __member
 		stage.GongTimeFieldMap_Staged_Order[gongtimefield] = stage.GongTimeFieldOrder
 		stage.GongTimeFieldOrder++
+		stage.new[gongtimefield] = struct{}{}
+		delete(stage.deleted, gongtimefield)
+	} else {
+		if _, ok := stage.new[gongtimefield]; !ok {
+			stage.modified[gongtimefield] = struct{}{}
+		}
 	}
 	stage.GongTimeFields_mapString[gongtimefield.Name] = gongtimefield
 
@@ -1199,6 +1329,12 @@ func (gongtimefield *GongTimeField) Stage(stage *Stage) *GongTimeField {
 func (gongtimefield *GongTimeField) Unstage(stage *Stage) *GongTimeField {
 	delete(stage.GongTimeFields, gongtimefield)
 	delete(stage.GongTimeFields_mapString, gongtimefield.Name)
+
+	if _, ok := stage.reference[gongtimefield]; ok {
+		stage.deleted[gongtimefield] = struct{}{}
+	} else {
+		delete(stage.new, gongtimefield)
+	}
 	return gongtimefield
 }
 
@@ -1220,6 +1356,10 @@ func (gongtimefield *GongTimeField) Commit(stage *Stage) *GongTimeField {
 
 func (gongtimefield *GongTimeField) CommitVoid(stage *Stage) {
 	gongtimefield.Commit(stage)
+}
+
+func (gongtimefield *GongTimeField) StageVoid(stage *Stage) {
+	gongtimefield.Stage(stage)
 }
 
 // Checkout gongtimefield to the back repo (if it is already staged)
@@ -1244,6 +1384,12 @@ func (metareference *MetaReference) Stage(stage *Stage) *MetaReference {
 		stage.MetaReferences[metareference] = __member
 		stage.MetaReferenceMap_Staged_Order[metareference] = stage.MetaReferenceOrder
 		stage.MetaReferenceOrder++
+		stage.new[metareference] = struct{}{}
+		delete(stage.deleted, metareference)
+	} else {
+		if _, ok := stage.new[metareference]; !ok {
+			stage.modified[metareference] = struct{}{}
+		}
 	}
 	stage.MetaReferences_mapString[metareference.Name] = metareference
 
@@ -1254,6 +1400,12 @@ func (metareference *MetaReference) Stage(stage *Stage) *MetaReference {
 func (metareference *MetaReference) Unstage(stage *Stage) *MetaReference {
 	delete(stage.MetaReferences, metareference)
 	delete(stage.MetaReferences_mapString, metareference.Name)
+
+	if _, ok := stage.reference[metareference]; ok {
+		stage.deleted[metareference] = struct{}{}
+	} else {
+		delete(stage.new, metareference)
+	}
 	return metareference
 }
 
@@ -1275,6 +1427,10 @@ func (metareference *MetaReference) Commit(stage *Stage) *MetaReference {
 
 func (metareference *MetaReference) CommitVoid(stage *Stage) {
 	metareference.Commit(stage)
+}
+
+func (metareference *MetaReference) StageVoid(stage *Stage) {
+	metareference.Stage(stage)
 }
 
 // Checkout metareference to the back repo (if it is already staged)
@@ -1299,6 +1455,12 @@ func (modelpkg *ModelPkg) Stage(stage *Stage) *ModelPkg {
 		stage.ModelPkgs[modelpkg] = __member
 		stage.ModelPkgMap_Staged_Order[modelpkg] = stage.ModelPkgOrder
 		stage.ModelPkgOrder++
+		stage.new[modelpkg] = struct{}{}
+		delete(stage.deleted, modelpkg)
+	} else {
+		if _, ok := stage.new[modelpkg]; !ok {
+			stage.modified[modelpkg] = struct{}{}
+		}
 	}
 	stage.ModelPkgs_mapString[modelpkg.Name] = modelpkg
 
@@ -1309,6 +1471,12 @@ func (modelpkg *ModelPkg) Stage(stage *Stage) *ModelPkg {
 func (modelpkg *ModelPkg) Unstage(stage *Stage) *ModelPkg {
 	delete(stage.ModelPkgs, modelpkg)
 	delete(stage.ModelPkgs_mapString, modelpkg.Name)
+
+	if _, ok := stage.reference[modelpkg]; ok {
+		stage.deleted[modelpkg] = struct{}{}
+	} else {
+		delete(stage.new, modelpkg)
+	}
 	return modelpkg
 }
 
@@ -1330,6 +1498,10 @@ func (modelpkg *ModelPkg) Commit(stage *Stage) *ModelPkg {
 
 func (modelpkg *ModelPkg) CommitVoid(stage *Stage) {
 	modelpkg.Commit(stage)
+}
+
+func (modelpkg *ModelPkg) StageVoid(stage *Stage) {
+	modelpkg.Stage(stage)
 }
 
 // Checkout modelpkg to the back repo (if it is already staged)
@@ -1354,6 +1526,12 @@ func (pointertogongstructfield *PointerToGongStructField) Stage(stage *Stage) *P
 		stage.PointerToGongStructFields[pointertogongstructfield] = __member
 		stage.PointerToGongStructFieldMap_Staged_Order[pointertogongstructfield] = stage.PointerToGongStructFieldOrder
 		stage.PointerToGongStructFieldOrder++
+		stage.new[pointertogongstructfield] = struct{}{}
+		delete(stage.deleted, pointertogongstructfield)
+	} else {
+		if _, ok := stage.new[pointertogongstructfield]; !ok {
+			stage.modified[pointertogongstructfield] = struct{}{}
+		}
 	}
 	stage.PointerToGongStructFields_mapString[pointertogongstructfield.Name] = pointertogongstructfield
 
@@ -1364,6 +1542,12 @@ func (pointertogongstructfield *PointerToGongStructField) Stage(stage *Stage) *P
 func (pointertogongstructfield *PointerToGongStructField) Unstage(stage *Stage) *PointerToGongStructField {
 	delete(stage.PointerToGongStructFields, pointertogongstructfield)
 	delete(stage.PointerToGongStructFields_mapString, pointertogongstructfield.Name)
+
+	if _, ok := stage.reference[pointertogongstructfield]; ok {
+		stage.deleted[pointertogongstructfield] = struct{}{}
+	} else {
+		delete(stage.new, pointertogongstructfield)
+	}
 	return pointertogongstructfield
 }
 
@@ -1385,6 +1569,10 @@ func (pointertogongstructfield *PointerToGongStructField) Commit(stage *Stage) *
 
 func (pointertogongstructfield *PointerToGongStructField) CommitVoid(stage *Stage) {
 	pointertogongstructfield.Commit(stage)
+}
+
+func (pointertogongstructfield *PointerToGongStructField) StageVoid(stage *Stage) {
+	pointertogongstructfield.Stage(stage)
 }
 
 // Checkout pointertogongstructfield to the back repo (if it is already staged)
@@ -1409,6 +1597,12 @@ func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) Stage(st
 		stage.SliceOfPointerToGongStructFields[sliceofpointertogongstructfield] = __member
 		stage.SliceOfPointerToGongStructFieldMap_Staged_Order[sliceofpointertogongstructfield] = stage.SliceOfPointerToGongStructFieldOrder
 		stage.SliceOfPointerToGongStructFieldOrder++
+		stage.new[sliceofpointertogongstructfield] = struct{}{}
+		delete(stage.deleted, sliceofpointertogongstructfield)
+	} else {
+		if _, ok := stage.new[sliceofpointertogongstructfield]; !ok {
+			stage.modified[sliceofpointertogongstructfield] = struct{}{}
+		}
 	}
 	stage.SliceOfPointerToGongStructFields_mapString[sliceofpointertogongstructfield.Name] = sliceofpointertogongstructfield
 
@@ -1419,6 +1613,12 @@ func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) Stage(st
 func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) Unstage(stage *Stage) *SliceOfPointerToGongStructField {
 	delete(stage.SliceOfPointerToGongStructFields, sliceofpointertogongstructfield)
 	delete(stage.SliceOfPointerToGongStructFields_mapString, sliceofpointertogongstructfield.Name)
+
+	if _, ok := stage.reference[sliceofpointertogongstructfield]; ok {
+		stage.deleted[sliceofpointertogongstructfield] = struct{}{}
+	} else {
+		delete(stage.new, sliceofpointertogongstructfield)
+	}
 	return sliceofpointertogongstructfield
 }
 
@@ -1440,6 +1640,10 @@ func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) Commit(s
 
 func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) CommitVoid(stage *Stage) {
 	sliceofpointertogongstructfield.Commit(stage)
+}
+
+func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) StageVoid(stage *Stage) {
+	sliceofpointertogongstructfield.Stage(stage)
 }
 
 // Checkout sliceofpointertogongstructfield to the back repo (if it is already staged)
@@ -1542,6 +1746,7 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.SliceOfPointerToGongStructFieldMap_Staged_Order = make(map[*SliceOfPointerToGongStructField]uint)
 	stage.SliceOfPointerToGongStructFieldOrder = 0
 
+	stage.ComputeReference()
 }
 
 func (stage *Stage) Nil() { // insertion point for array nil
@@ -1642,10 +1847,22 @@ type GongtructBasicField interface {
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
-type PointerToGongstruct interface {
+type GongstructIF interface {
 	GetName() string
 	CommitVoid(*Stage)
+	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
+	GongGetFieldHeaders() []GongFieldHeader
+	GongClean(stage *Stage)
+	GongGetFieldValue(fieldName string, stage *Stage) GongFieldValue
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
+	GongCopy() GongstructIF
+	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string
+	GongGetReverseFieldOwner(stage *Stage, reverseField *ReverseField) GongstructIF
+}
+type PointerToGongstruct interface {
+	GongstructIF
 	comparable
 }
 
@@ -1816,7 +2033,7 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 }
 
 // GetGongstructInstancesMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
+// it is usefull because it allows refactoring of gongstruct identifier
 func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type {
 	var ret Type
 
@@ -2167,40 +2384,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	return nil
 }
 
-// GetGongstructName returns the name of the Gongstruct
-// this can be usefull if one want program robust to refactoring
-func GetGongstructName[Type Gongstruct]() (res string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case GongBasicField:
-		res = "GongBasicField"
-	case GongEnum:
-		res = "GongEnum"
-	case GongEnumValue:
-		res = "GongEnumValue"
-	case GongLink:
-		res = "GongLink"
-	case GongNote:
-		res = "GongNote"
-	case GongStruct:
-		res = "GongStruct"
-	case GongTimeField:
-		res = "GongTimeField"
-	case MetaReference:
-		res = "MetaReference"
-	case ModelPkg:
-		res = "ModelPkg"
-	case PointerToGongStructField:
-		res = "PointerToGongStructField"
-	case SliceOfPointerToGongStructField:
-		res = "SliceOfPointerToGongStructField"
-	}
-	return res
-}
-
 // GetPointerToGongstructName returns the name of the Gongstruct
 // this can be usefull if one want program robust to refactoring
 func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
@@ -2235,45 +2418,12 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	return res
 }
 
-// GetFields return the array of the fields
-func GetFields[Type Gongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case GongBasicField:
-		res = []string{"Name", "BasicKindName", "GongEnum", "DeclaredType", "CompositeStructName", "Index", "IsTextArea", "IsBespokeWidth", "BespokeWidth", "IsBespokeHeight", "BespokeHeight"}
-	case GongEnum:
-		res = []string{"Name", "Type", "GongEnumValues"}
-	case GongEnumValue:
-		res = []string{"Name", "Value"}
-	case GongLink:
-		res = []string{"Name", "Recv", "ImportPath"}
-	case GongNote:
-		res = []string{"Name", "Body", "BodyHTML", "Links"}
-	case GongStruct:
-		res = []string{"Name", "GongBasicFields", "GongTimeFields", "PointerToGongStructFields", "SliceOfPointerToGongStructFields", "HasOnAfterUpdateSignature", "IsIgnoredForFront"}
-	case GongTimeField:
-		res = []string{"Name", "Index", "CompositeStructName", "BespokeTimeFormat"}
-	case MetaReference:
-		res = []string{"Name"}
-	case ModelPkg:
-		res = []string{"Name", "PkgPath", "PathToGoSubDirectory", "OrmPkgGenPath", "DbOrmPkgGenPath", "DbLiteOrmPkgGenPath", "DbPkgGenPath", "ControllersPkgGenPath", "FullstackPkgGenPath", "StackPkgGenPath", "StaticPkgGenPath", "ProbePkgGenPath", "NgWorkspacePath", "NgWorkspaceName", "NgDataLibrarySourceCodeDirectory", "NgSpecificLibrarySourceCodeDirectory", "MaterialLibDatamodelTargetPath"}
-	case PointerToGongStructField:
-		res = []string{"Name", "GongStruct", "Index", "CompositeStructName", "IsType"}
-	case SliceOfPointerToGongStructField:
-		res = []string{"Name", "GongStruct", "Index", "CompositeStructName"}
-	}
-	return
-}
-
 type ReverseField struct {
 	GongstructName string
 	Fieldname      string
 }
 
-func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
+func GetReverseFields[Type PointerToGongstruct]() (res []ReverseField) {
 
 	res = make([]ReverseField, 0)
 
@@ -2282,52 +2432,52 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	switch any(ret).(type) {
 
 	// insertion point for generic get gongstruct name
-	case GongBasicField:
+	case *GongBasicField:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "GongStruct"
 		rf.Fieldname = "GongBasicFields"
 		res = append(res, rf)
-	case GongEnum:
+	case *GongEnum:
 		var rf ReverseField
 		_ = rf
-	case GongEnumValue:
+	case *GongEnumValue:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "GongEnum"
 		rf.Fieldname = "GongEnumValues"
 		res = append(res, rf)
-	case GongLink:
+	case *GongLink:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "GongNote"
 		rf.Fieldname = "Links"
 		res = append(res, rf)
-	case GongNote:
+	case *GongNote:
 		var rf ReverseField
 		_ = rf
-	case GongStruct:
+	case *GongStruct:
 		var rf ReverseField
 		_ = rf
-	case GongTimeField:
+	case *GongTimeField:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "GongStruct"
 		rf.Fieldname = "GongTimeFields"
 		res = append(res, rf)
-	case MetaReference:
+	case *MetaReference:
 		var rf ReverseField
 		_ = rf
-	case ModelPkg:
+	case *ModelPkg:
 		var rf ReverseField
 		_ = rf
-	case PointerToGongStructField:
+	case *PointerToGongStructField:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "GongStruct"
 		rf.Fieldname = "PointerToGongStructFields"
 		res = append(res, rf)
-	case SliceOfPointerToGongStructField:
+	case *SliceOfPointerToGongStructField:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "GongStruct"
@@ -2337,54 +2487,372 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	return
 }
 
-// GetFieldsFromPointer return the array of the fields
-func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case *GongBasicField:
-		res = []string{"Name", "BasicKindName", "GongEnum", "DeclaredType", "CompositeStructName", "Index", "IsTextArea", "IsBespokeWidth", "BespokeWidth", "IsBespokeHeight", "BespokeHeight"}
-	case *GongEnum:
-		res = []string{"Name", "Type", "GongEnumValues"}
-	case *GongEnumValue:
-		res = []string{"Name", "Value"}
-	case *GongLink:
-		res = []string{"Name", "Recv", "ImportPath"}
-	case *GongNote:
-		res = []string{"Name", "Body", "BodyHTML", "Links"}
-	case *GongStruct:
-		res = []string{"Name", "GongBasicFields", "GongTimeFields", "PointerToGongStructFields", "SliceOfPointerToGongStructFields", "HasOnAfterUpdateSignature", "IsIgnoredForFront"}
-	case *GongTimeField:
-		res = []string{"Name", "Index", "CompositeStructName", "BespokeTimeFormat"}
-	case *MetaReference:
-		res = []string{"Name"}
-	case *ModelPkg:
-		res = []string{"Name", "PkgPath", "PathToGoSubDirectory", "OrmPkgGenPath", "DbOrmPkgGenPath", "DbLiteOrmPkgGenPath", "DbPkgGenPath", "ControllersPkgGenPath", "FullstackPkgGenPath", "StackPkgGenPath", "StaticPkgGenPath", "ProbePkgGenPath", "NgWorkspacePath", "NgWorkspaceName", "NgDataLibrarySourceCodeDirectory", "NgSpecificLibrarySourceCodeDirectory", "MaterialLibDatamodelTargetPath"}
-	case *PointerToGongStructField:
-		res = []string{"Name", "GongStruct", "Index", "CompositeStructName", "IsType"}
-	case *SliceOfPointerToGongStructField:
-		res = []string{"Name", "GongStruct", "Index", "CompositeStructName"}
+// insertion point for get fields header method
+func (gongbasicfield *GongBasicField) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BasicKindName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "GongEnum",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "GongEnum",
+		},
+		{
+			Name:               "DeclaredType",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CompositeStructName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Index",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsTextArea",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsBespokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BespokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsBespokeHeight",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BespokeHeight",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
 	}
 	return
+}
+
+func (gongenum *GongEnum) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Type",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "GongEnumValues",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "GongEnumValue",
+		},
+	}
+	return
+}
+
+func (gongenumvalue *GongEnumValue) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (gonglink *GongLink) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Recv",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ImportPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (gongnote *GongNote) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Body",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BodyHTML",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Links",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "GongLink",
+		},
+	}
+	return
+}
+
+func (gongstruct *GongStruct) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "GongBasicFields",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "GongBasicField",
+		},
+		{
+			Name:                 "GongTimeFields",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "GongTimeField",
+		},
+		{
+			Name:                 "PointerToGongStructFields",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "PointerToGongStructField",
+		},
+		{
+			Name:                 "SliceOfPointerToGongStructFields",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "SliceOfPointerToGongStructField",
+		},
+		{
+			Name:               "HasOnAfterUpdateSignature",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsIgnoredForFront",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (gongtimefield *GongTimeField) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Index",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CompositeStructName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BespokeTimeFormat",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (metareference *MetaReference) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (modelpkg *ModelPkg) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "PkgPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "PathToGoSubDirectory",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "OrmPkgGenPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "DbOrmPkgGenPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "DbLiteOrmPkgGenPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "DbPkgGenPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ControllersPkgGenPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FullstackPkgGenPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StackPkgGenPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StaticPkgGenPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ProbePkgGenPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "NgWorkspacePath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "NgWorkspaceName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "NgDataLibrarySourceCodeDirectory",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "NgSpecificLibrarySourceCodeDirectory",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MaterialLibDatamodelTargetPath",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (pointertogongstructfield *PointerToGongStructField) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "GongStruct",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "GongStruct",
+		},
+		{
+			Name:               "Index",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CompositeStructName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsType",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "GongStruct",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "GongStruct",
+		},
+		{
+			Name:               "Index",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CompositeStructName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+// GetFieldsFromPointer return the array of the fields
+func GetFieldsFromPointer[Type PointerToGongstruct]() (res []GongFieldHeader) {
+
+	var ret Type
+	return ret.GongGetFieldHeaders()
 }
 
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt             GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat           GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool            GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeString          GongFieldValueType = "GongFieldValueTypeString"
+	GongFieldValueTypeBasicKind       GongFieldValueType = "GongFieldValueTypeBasicKind"
+	GongFieldValueTypePointer         GongFieldValueType = "GongFieldValueTypePointer"
+	GongFieldValueTypeSliceOfPointers GongFieldValueType = "GongFieldValueTypeSliceOfPointers"
 )
 
 type GongFieldValue struct {
-	valueString string
 	GongFieldValueType
-	valueInt   int
-	valueFloat float64
-	valueBool  bool
+	valueString string
+	valueInt    int
+	valueFloat  float64
+	valueBool   bool
+
+	// in case of a pointer, the ID of the pointed element
+	// in case of a slice of pointers, the IDs, separated by semi columbs
+	ids string
+}
+
+type GongFieldHeader struct {
+	Name string
+	GongFieldValueType
+	TargetGongstructName string
 }
 
 func (gongValueField *GongFieldValue) GetValueString() string {
@@ -2403,477 +2871,658 @@ func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }
 
-func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFieldValue) {
-
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case *GongBasicField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "BasicKindName":
-			res.valueString = inferedInstance.BasicKindName
-		case "GongEnum":
-			if inferedInstance.GongEnum != nil {
-				res.valueString = inferedInstance.GongEnum.Name
-			}
-		case "DeclaredType":
-			res.valueString = inferedInstance.DeclaredType
-		case "CompositeStructName":
-			res.valueString = inferedInstance.CompositeStructName
-		case "Index":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
-			res.valueInt = inferedInstance.Index
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "IsTextArea":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsTextArea)
-			res.valueBool = inferedInstance.IsTextArea
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsBespokeWidth":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsBespokeWidth)
-			res.valueBool = inferedInstance.IsBespokeWidth
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "BespokeWidth":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.BespokeWidth)
-			res.valueInt = inferedInstance.BespokeWidth
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "IsBespokeHeight":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsBespokeHeight)
-			res.valueBool = inferedInstance.IsBespokeHeight
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "BespokeHeight":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.BespokeHeight)
-			res.valueInt = inferedInstance.BespokeHeight
-			res.GongFieldValueType = GongFieldValueTypeInt
+// insertion point for generic get gongstruct field value
+func (gongbasicfield *GongBasicField) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = gongbasicfield.Name
+	case "BasicKindName":
+		res.valueString = gongbasicfield.BasicKindName
+	case "GongEnum":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if gongbasicfield.GongEnum != nil {
+			res.valueString = gongbasicfield.GongEnum.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, gongbasicfield.GongEnum))
 		}
-	case *GongEnum:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Type":
-			enum := inferedInstance.Type
-			res.valueString = enum.ToCodeString()
-		case "GongEnumValues":
-			for idx, __instance__ := range inferedInstance.GongEnumValues {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *GongEnumValue:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value
-		}
-	case *GongLink:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Recv":
-			res.valueString = inferedInstance.Recv
-		case "ImportPath":
-			res.valueString = inferedInstance.ImportPath
-		}
-	case *GongNote:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Body":
-			res.valueString = inferedInstance.Body
-		case "BodyHTML":
-			res.valueString = inferedInstance.BodyHTML
-		case "Links":
-			for idx, __instance__ := range inferedInstance.Links {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *GongStruct:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "GongBasicFields":
-			for idx, __instance__ := range inferedInstance.GongBasicFields {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "GongTimeFields":
-			for idx, __instance__ := range inferedInstance.GongTimeFields {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "PointerToGongStructFields":
-			for idx, __instance__ := range inferedInstance.PointerToGongStructFields {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "SliceOfPointerToGongStructFields":
-			for idx, __instance__ := range inferedInstance.SliceOfPointerToGongStructFields {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "HasOnAfterUpdateSignature":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasOnAfterUpdateSignature)
-			res.valueBool = inferedInstance.HasOnAfterUpdateSignature
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsIgnoredForFront":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsIgnoredForFront)
-			res.valueBool = inferedInstance.IsIgnoredForFront
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case *GongTimeField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Index":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
-			res.valueInt = inferedInstance.Index
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "CompositeStructName":
-			res.valueString = inferedInstance.CompositeStructName
-		case "BespokeTimeFormat":
-			res.valueString = inferedInstance.BespokeTimeFormat
-		}
-	case *MetaReference:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	case *ModelPkg:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "PkgPath":
-			res.valueString = inferedInstance.PkgPath
-		case "PathToGoSubDirectory":
-			res.valueString = inferedInstance.PathToGoSubDirectory
-		case "OrmPkgGenPath":
-			res.valueString = inferedInstance.OrmPkgGenPath
-		case "DbOrmPkgGenPath":
-			res.valueString = inferedInstance.DbOrmPkgGenPath
-		case "DbLiteOrmPkgGenPath":
-			res.valueString = inferedInstance.DbLiteOrmPkgGenPath
-		case "DbPkgGenPath":
-			res.valueString = inferedInstance.DbPkgGenPath
-		case "ControllersPkgGenPath":
-			res.valueString = inferedInstance.ControllersPkgGenPath
-		case "FullstackPkgGenPath":
-			res.valueString = inferedInstance.FullstackPkgGenPath
-		case "StackPkgGenPath":
-			res.valueString = inferedInstance.StackPkgGenPath
-		case "StaticPkgGenPath":
-			res.valueString = inferedInstance.StaticPkgGenPath
-		case "ProbePkgGenPath":
-			res.valueString = inferedInstance.ProbePkgGenPath
-		case "NgWorkspacePath":
-			res.valueString = inferedInstance.NgWorkspacePath
-		case "NgWorkspaceName":
-			res.valueString = inferedInstance.NgWorkspaceName
-		case "NgDataLibrarySourceCodeDirectory":
-			res.valueString = inferedInstance.NgDataLibrarySourceCodeDirectory
-		case "NgSpecificLibrarySourceCodeDirectory":
-			res.valueString = inferedInstance.NgSpecificLibrarySourceCodeDirectory
-		case "MaterialLibDatamodelTargetPath":
-			res.valueString = inferedInstance.MaterialLibDatamodelTargetPath
-		}
-	case *PointerToGongStructField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "GongStruct":
-			if inferedInstance.GongStruct != nil {
-				res.valueString = inferedInstance.GongStruct.Name
-			}
-		case "Index":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
-			res.valueInt = inferedInstance.Index
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "CompositeStructName":
-			res.valueString = inferedInstance.CompositeStructName
-		case "IsType":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsType)
-			res.valueBool = inferedInstance.IsType
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case *SliceOfPointerToGongStructField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "GongStruct":
-			if inferedInstance.GongStruct != nil {
-				res.valueString = inferedInstance.GongStruct.Name
-			}
-		case "Index":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
-			res.valueInt = inferedInstance.Index
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "CompositeStructName":
-			res.valueString = inferedInstance.CompositeStructName
-		}
-	default:
-		_ = inferedInstance
+	case "DeclaredType":
+		res.valueString = gongbasicfield.DeclaredType
+	case "CompositeStructName":
+		res.valueString = gongbasicfield.CompositeStructName
+	case "Index":
+		res.valueString = fmt.Sprintf("%d", gongbasicfield.Index)
+		res.valueInt = gongbasicfield.Index
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "IsTextArea":
+		res.valueString = fmt.Sprintf("%t", gongbasicfield.IsTextArea)
+		res.valueBool = gongbasicfield.IsTextArea
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsBespokeWidth":
+		res.valueString = fmt.Sprintf("%t", gongbasicfield.IsBespokeWidth)
+		res.valueBool = gongbasicfield.IsBespokeWidth
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "BespokeWidth":
+		res.valueString = fmt.Sprintf("%d", gongbasicfield.BespokeWidth)
+		res.valueInt = gongbasicfield.BespokeWidth
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "IsBespokeHeight":
+		res.valueString = fmt.Sprintf("%t", gongbasicfield.IsBespokeHeight)
+		res.valueBool = gongbasicfield.IsBespokeHeight
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "BespokeHeight":
+		res.valueString = fmt.Sprintf("%d", gongbasicfield.BespokeHeight)
+		res.valueInt = gongbasicfield.BespokeHeight
+		res.GongFieldValueType = GongFieldValueTypeInt
 	}
 	return
 }
+func (gongenum *GongEnum) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = gongenum.Name
+	case "Type":
+		enum := gongenum.Type
+		res.valueString = enum.ToCodeString()
+	case "GongEnumValues":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range gongenum.GongEnumValues {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (gongenumvalue *GongEnumValue) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = gongenumvalue.Name
+	case "Value":
+		res.valueString = gongenumvalue.Value
+	}
+	return
+}
+func (gonglink *GongLink) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = gonglink.Name
+	case "Recv":
+		res.valueString = gonglink.Recv
+	case "ImportPath":
+		res.valueString = gonglink.ImportPath
+	}
+	return
+}
+func (gongnote *GongNote) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = gongnote.Name
+	case "Body":
+		res.valueString = gongnote.Body
+	case "BodyHTML":
+		res.valueString = gongnote.BodyHTML
+	case "Links":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range gongnote.Links {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (gongstruct *GongStruct) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = gongstruct.Name
+	case "GongBasicFields":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range gongstruct.GongBasicFields {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "GongTimeFields":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range gongstruct.GongTimeFields {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "PointerToGongStructFields":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range gongstruct.PointerToGongStructFields {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "SliceOfPointerToGongStructFields":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range gongstruct.SliceOfPointerToGongStructFields {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "HasOnAfterUpdateSignature":
+		res.valueString = fmt.Sprintf("%t", gongstruct.HasOnAfterUpdateSignature)
+		res.valueBool = gongstruct.HasOnAfterUpdateSignature
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsIgnoredForFront":
+		res.valueString = fmt.Sprintf("%t", gongstruct.IsIgnoredForFront)
+		res.valueBool = gongstruct.IsIgnoredForFront
+		res.GongFieldValueType = GongFieldValueTypeBool
+	}
+	return
+}
+func (gongtimefield *GongTimeField) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = gongtimefield.Name
+	case "Index":
+		res.valueString = fmt.Sprintf("%d", gongtimefield.Index)
+		res.valueInt = gongtimefield.Index
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "CompositeStructName":
+		res.valueString = gongtimefield.CompositeStructName
+	case "BespokeTimeFormat":
+		res.valueString = gongtimefield.BespokeTimeFormat
+	}
+	return
+}
+func (metareference *MetaReference) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = metareference.Name
+	}
+	return
+}
+func (modelpkg *ModelPkg) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = modelpkg.Name
+	case "PkgPath":
+		res.valueString = modelpkg.PkgPath
+	case "PathToGoSubDirectory":
+		res.valueString = modelpkg.PathToGoSubDirectory
+	case "OrmPkgGenPath":
+		res.valueString = modelpkg.OrmPkgGenPath
+	case "DbOrmPkgGenPath":
+		res.valueString = modelpkg.DbOrmPkgGenPath
+	case "DbLiteOrmPkgGenPath":
+		res.valueString = modelpkg.DbLiteOrmPkgGenPath
+	case "DbPkgGenPath":
+		res.valueString = modelpkg.DbPkgGenPath
+	case "ControllersPkgGenPath":
+		res.valueString = modelpkg.ControllersPkgGenPath
+	case "FullstackPkgGenPath":
+		res.valueString = modelpkg.FullstackPkgGenPath
+	case "StackPkgGenPath":
+		res.valueString = modelpkg.StackPkgGenPath
+	case "StaticPkgGenPath":
+		res.valueString = modelpkg.StaticPkgGenPath
+	case "ProbePkgGenPath":
+		res.valueString = modelpkg.ProbePkgGenPath
+	case "NgWorkspacePath":
+		res.valueString = modelpkg.NgWorkspacePath
+	case "NgWorkspaceName":
+		res.valueString = modelpkg.NgWorkspaceName
+	case "NgDataLibrarySourceCodeDirectory":
+		res.valueString = modelpkg.NgDataLibrarySourceCodeDirectory
+	case "NgSpecificLibrarySourceCodeDirectory":
+		res.valueString = modelpkg.NgSpecificLibrarySourceCodeDirectory
+	case "MaterialLibDatamodelTargetPath":
+		res.valueString = modelpkg.MaterialLibDatamodelTargetPath
+	}
+	return
+}
+func (pointertogongstructfield *PointerToGongStructField) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = pointertogongstructfield.Name
+	case "GongStruct":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if pointertogongstructfield.GongStruct != nil {
+			res.valueString = pointertogongstructfield.GongStruct.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, pointertogongstructfield.GongStruct))
+		}
+	case "Index":
+		res.valueString = fmt.Sprintf("%d", pointertogongstructfield.Index)
+		res.valueInt = pointertogongstructfield.Index
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "CompositeStructName":
+		res.valueString = pointertogongstructfield.CompositeStructName
+	case "IsType":
+		res.valueString = fmt.Sprintf("%t", pointertogongstructfield.IsType)
+		res.valueBool = pointertogongstructfield.IsType
+		res.GongFieldValueType = GongFieldValueTypeBool
+	}
+	return
+}
+func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = sliceofpointertogongstructfield.Name
+	case "GongStruct":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if sliceofpointertogongstructfield.GongStruct != nil {
+			res.valueString = sliceofpointertogongstructfield.GongStruct.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, sliceofpointertogongstructfield.GongStruct))
+		}
+	case "Index":
+		res.valueString = fmt.Sprintf("%d", sliceofpointertogongstructfield.Index)
+		res.valueInt = sliceofpointertogongstructfield.Index
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "CompositeStructName":
+		res.valueString = sliceofpointertogongstructfield.CompositeStructName
+	}
+	return
+}
+func GetFieldStringValueFromPointer(instance GongstructIF, fieldName string, stage *Stage) (res GongFieldValue) {
 
-func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
+	res = instance.GongGetFieldValue(fieldName, stage)
+	return
+}
 
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case GongBasicField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "BasicKindName":
-			res.valueString = inferedInstance.BasicKindName
-		case "GongEnum":
-			if inferedInstance.GongEnum != nil {
-				res.valueString = inferedInstance.GongEnum.Name
-			}
-		case "DeclaredType":
-			res.valueString = inferedInstance.DeclaredType
-		case "CompositeStructName":
-			res.valueString = inferedInstance.CompositeStructName
-		case "Index":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
-			res.valueInt = inferedInstance.Index
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "IsTextArea":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsTextArea)
-			res.valueBool = inferedInstance.IsTextArea
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsBespokeWidth":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsBespokeWidth)
-			res.valueBool = inferedInstance.IsBespokeWidth
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "BespokeWidth":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.BespokeWidth)
-			res.valueInt = inferedInstance.BespokeWidth
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "IsBespokeHeight":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsBespokeHeight)
-			res.valueBool = inferedInstance.IsBespokeHeight
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "BespokeHeight":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.BespokeHeight)
-			res.valueInt = inferedInstance.BespokeHeight
-			res.GongFieldValueType = GongFieldValueTypeInt
-		}
-	case GongEnum:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Type":
-			enum := inferedInstance.Type
-			res.valueString = enum.ToCodeString()
-		case "GongEnumValues":
-			for idx, __instance__ := range inferedInstance.GongEnumValues {
-				if idx > 0 {
-					res.valueString += "\n"
+// insertion point for generic set gongstruct field value
+func (gongbasicfield *GongBasicField) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		gongbasicfield.Name = value.GetValueString()
+	case "BasicKindName":
+		gongbasicfield.BasicKindName = value.GetValueString()
+	case "GongEnum":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			gongbasicfield.GongEnum = nil
+			for __instance__ := range stage.GongEnums {
+				if stage.GongEnumMap_Staged_Order[__instance__] == uint(id) {
+					gongbasicfield.GongEnum = __instance__
+					break
 				}
-				res.valueString += __instance__.Name
 			}
 		}
-	case GongEnumValue:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value
-		}
-	case GongLink:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Recv":
-			res.valueString = inferedInstance.Recv
-		case "ImportPath":
-			res.valueString = inferedInstance.ImportPath
-		}
-	case GongNote:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Body":
-			res.valueString = inferedInstance.Body
-		case "BodyHTML":
-			res.valueString = inferedInstance.BodyHTML
-		case "Links":
-			for idx, __instance__ := range inferedInstance.Links {
-				if idx > 0 {
-					res.valueString += "\n"
+	case "DeclaredType":
+		gongbasicfield.DeclaredType = value.GetValueString()
+	case "CompositeStructName":
+		gongbasicfield.CompositeStructName = value.GetValueString()
+	case "Index":
+		gongbasicfield.Index = int(value.GetValueInt())
+	case "IsTextArea":
+		gongbasicfield.IsTextArea = value.GetValueBool()
+	case "IsBespokeWidth":
+		gongbasicfield.IsBespokeWidth = value.GetValueBool()
+	case "BespokeWidth":
+		gongbasicfield.BespokeWidth = int(value.GetValueInt())
+	case "IsBespokeHeight":
+		gongbasicfield.IsBespokeHeight = value.GetValueBool()
+	case "BespokeHeight":
+		gongbasicfield.BespokeHeight = int(value.GetValueInt())
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (gongenum *GongEnum) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		gongenum.Name = value.GetValueString()
+	case "Type":
+		gongenum.Type.FromCodeString(value.GetValueString())
+	case "GongEnumValues":
+		gongenum.GongEnumValues = make([]*GongEnumValue, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.GongEnumValues {
+					if stage.GongEnumValueMap_Staged_Order[__instance__] == uint(id) {
+						gongenum.GongEnumValues = append(gongenum.GongEnumValues, __instance__)
+						break
+					}
 				}
-				res.valueString += __instance__.Name
 			}
-		}
-	case GongStruct:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "GongBasicFields":
-			for idx, __instance__ := range inferedInstance.GongBasicFields {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "GongTimeFields":
-			for idx, __instance__ := range inferedInstance.GongTimeFields {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "PointerToGongStructFields":
-			for idx, __instance__ := range inferedInstance.PointerToGongStructFields {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "SliceOfPointerToGongStructFields":
-			for idx, __instance__ := range inferedInstance.SliceOfPointerToGongStructFields {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "HasOnAfterUpdateSignature":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasOnAfterUpdateSignature)
-			res.valueBool = inferedInstance.HasOnAfterUpdateSignature
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsIgnoredForFront":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsIgnoredForFront)
-			res.valueBool = inferedInstance.IsIgnoredForFront
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case GongTimeField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Index":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
-			res.valueInt = inferedInstance.Index
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "CompositeStructName":
-			res.valueString = inferedInstance.CompositeStructName
-		case "BespokeTimeFormat":
-			res.valueString = inferedInstance.BespokeTimeFormat
-		}
-	case MetaReference:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	case ModelPkg:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "PkgPath":
-			res.valueString = inferedInstance.PkgPath
-		case "PathToGoSubDirectory":
-			res.valueString = inferedInstance.PathToGoSubDirectory
-		case "OrmPkgGenPath":
-			res.valueString = inferedInstance.OrmPkgGenPath
-		case "DbOrmPkgGenPath":
-			res.valueString = inferedInstance.DbOrmPkgGenPath
-		case "DbLiteOrmPkgGenPath":
-			res.valueString = inferedInstance.DbLiteOrmPkgGenPath
-		case "DbPkgGenPath":
-			res.valueString = inferedInstance.DbPkgGenPath
-		case "ControllersPkgGenPath":
-			res.valueString = inferedInstance.ControllersPkgGenPath
-		case "FullstackPkgGenPath":
-			res.valueString = inferedInstance.FullstackPkgGenPath
-		case "StackPkgGenPath":
-			res.valueString = inferedInstance.StackPkgGenPath
-		case "StaticPkgGenPath":
-			res.valueString = inferedInstance.StaticPkgGenPath
-		case "ProbePkgGenPath":
-			res.valueString = inferedInstance.ProbePkgGenPath
-		case "NgWorkspacePath":
-			res.valueString = inferedInstance.NgWorkspacePath
-		case "NgWorkspaceName":
-			res.valueString = inferedInstance.NgWorkspaceName
-		case "NgDataLibrarySourceCodeDirectory":
-			res.valueString = inferedInstance.NgDataLibrarySourceCodeDirectory
-		case "NgSpecificLibrarySourceCodeDirectory":
-			res.valueString = inferedInstance.NgSpecificLibrarySourceCodeDirectory
-		case "MaterialLibDatamodelTargetPath":
-			res.valueString = inferedInstance.MaterialLibDatamodelTargetPath
-		}
-	case PointerToGongStructField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "GongStruct":
-			if inferedInstance.GongStruct != nil {
-				res.valueString = inferedInstance.GongStruct.Name
-			}
-		case "Index":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
-			res.valueInt = inferedInstance.Index
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "CompositeStructName":
-			res.valueString = inferedInstance.CompositeStructName
-		case "IsType":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsType)
-			res.valueBool = inferedInstance.IsType
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case SliceOfPointerToGongStructField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "GongStruct":
-			if inferedInstance.GongStruct != nil {
-				res.valueString = inferedInstance.GongStruct.Name
-			}
-		case "Index":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Index)
-			res.valueInt = inferedInstance.Index
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "CompositeStructName":
-			res.valueString = inferedInstance.CompositeStructName
 		}
 	default:
-		_ = inferedInstance
+		return fmt.Errorf("unknown field %s", fieldName)
 	}
+	return nil
+}
+
+func (gongenumvalue *GongEnumValue) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		gongenumvalue.Name = value.GetValueString()
+	case "Value":
+		gongenumvalue.Value = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (gonglink *GongLink) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		gonglink.Name = value.GetValueString()
+	case "Recv":
+		gonglink.Recv = value.GetValueString()
+	case "ImportPath":
+		gonglink.ImportPath = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (gongnote *GongNote) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		gongnote.Name = value.GetValueString()
+	case "Body":
+		gongnote.Body = value.GetValueString()
+	case "BodyHTML":
+		gongnote.BodyHTML = value.GetValueString()
+	case "Links":
+		gongnote.Links = make([]*GongLink, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.GongLinks {
+					if stage.GongLinkMap_Staged_Order[__instance__] == uint(id) {
+						gongnote.Links = append(gongnote.Links, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (gongstruct *GongStruct) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		gongstruct.Name = value.GetValueString()
+	case "GongBasicFields":
+		gongstruct.GongBasicFields = make([]*GongBasicField, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.GongBasicFields {
+					if stage.GongBasicFieldMap_Staged_Order[__instance__] == uint(id) {
+						gongstruct.GongBasicFields = append(gongstruct.GongBasicFields, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "GongTimeFields":
+		gongstruct.GongTimeFields = make([]*GongTimeField, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.GongTimeFields {
+					if stage.GongTimeFieldMap_Staged_Order[__instance__] == uint(id) {
+						gongstruct.GongTimeFields = append(gongstruct.GongTimeFields, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "PointerToGongStructFields":
+		gongstruct.PointerToGongStructFields = make([]*PointerToGongStructField, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.PointerToGongStructFields {
+					if stage.PointerToGongStructFieldMap_Staged_Order[__instance__] == uint(id) {
+						gongstruct.PointerToGongStructFields = append(gongstruct.PointerToGongStructFields, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "SliceOfPointerToGongStructFields":
+		gongstruct.SliceOfPointerToGongStructFields = make([]*SliceOfPointerToGongStructField, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.SliceOfPointerToGongStructFields {
+					if stage.SliceOfPointerToGongStructFieldMap_Staged_Order[__instance__] == uint(id) {
+						gongstruct.SliceOfPointerToGongStructFields = append(gongstruct.SliceOfPointerToGongStructFields, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "HasOnAfterUpdateSignature":
+		gongstruct.HasOnAfterUpdateSignature = value.GetValueBool()
+	case "IsIgnoredForFront":
+		gongstruct.IsIgnoredForFront = value.GetValueBool()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (gongtimefield *GongTimeField) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		gongtimefield.Name = value.GetValueString()
+	case "Index":
+		gongtimefield.Index = int(value.GetValueInt())
+	case "CompositeStructName":
+		gongtimefield.CompositeStructName = value.GetValueString()
+	case "BespokeTimeFormat":
+		gongtimefield.BespokeTimeFormat = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (metareference *MetaReference) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		metareference.Name = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (modelpkg *ModelPkg) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		modelpkg.Name = value.GetValueString()
+	case "PkgPath":
+		modelpkg.PkgPath = value.GetValueString()
+	case "PathToGoSubDirectory":
+		modelpkg.PathToGoSubDirectory = value.GetValueString()
+	case "OrmPkgGenPath":
+		modelpkg.OrmPkgGenPath = value.GetValueString()
+	case "DbOrmPkgGenPath":
+		modelpkg.DbOrmPkgGenPath = value.GetValueString()
+	case "DbLiteOrmPkgGenPath":
+		modelpkg.DbLiteOrmPkgGenPath = value.GetValueString()
+	case "DbPkgGenPath":
+		modelpkg.DbPkgGenPath = value.GetValueString()
+	case "ControllersPkgGenPath":
+		modelpkg.ControllersPkgGenPath = value.GetValueString()
+	case "FullstackPkgGenPath":
+		modelpkg.FullstackPkgGenPath = value.GetValueString()
+	case "StackPkgGenPath":
+		modelpkg.StackPkgGenPath = value.GetValueString()
+	case "StaticPkgGenPath":
+		modelpkg.StaticPkgGenPath = value.GetValueString()
+	case "ProbePkgGenPath":
+		modelpkg.ProbePkgGenPath = value.GetValueString()
+	case "NgWorkspacePath":
+		modelpkg.NgWorkspacePath = value.GetValueString()
+	case "NgWorkspaceName":
+		modelpkg.NgWorkspaceName = value.GetValueString()
+	case "NgDataLibrarySourceCodeDirectory":
+		modelpkg.NgDataLibrarySourceCodeDirectory = value.GetValueString()
+	case "NgSpecificLibrarySourceCodeDirectory":
+		modelpkg.NgSpecificLibrarySourceCodeDirectory = value.GetValueString()
+	case "MaterialLibDatamodelTargetPath":
+		modelpkg.MaterialLibDatamodelTargetPath = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (pointertogongstructfield *PointerToGongStructField) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		pointertogongstructfield.Name = value.GetValueString()
+	case "GongStruct":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			pointertogongstructfield.GongStruct = nil
+			for __instance__ := range stage.GongStructs {
+				if stage.GongStructMap_Staged_Order[__instance__] == uint(id) {
+					pointertogongstructfield.GongStruct = __instance__
+					break
+				}
+			}
+		}
+	case "Index":
+		pointertogongstructfield.Index = int(value.GetValueInt())
+	case "CompositeStructName":
+		pointertogongstructfield.CompositeStructName = value.GetValueString()
+	case "IsType":
+		pointertogongstructfield.IsType = value.GetValueBool()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		sliceofpointertogongstructfield.Name = value.GetValueString()
+	case "GongStruct":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			sliceofpointertogongstructfield.GongStruct = nil
+			for __instance__ := range stage.GongStructs {
+				if stage.GongStructMap_Staged_Order[__instance__] == uint(id) {
+					sliceofpointertogongstructfield.GongStruct = __instance__
+					break
+				}
+			}
+		}
+	case "Index":
+		sliceofpointertogongstructfield.Index = int(value.GetValueInt())
+	case "CompositeStructName":
+		sliceofpointertogongstructfield.CompositeStructName = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func SetFieldStringValueFromPointer(instance GongstructIF, fieldName string, value GongFieldValue, stage *Stage) error {
+	return instance.GongSetFieldValue(fieldName, value, stage)
+}
+
+// insertion point for generic get gongstruct name
+func (gongbasicfield *GongBasicField) GongGetGongstructName() string {
+	return "GongBasicField"
+}
+
+func (gongenum *GongEnum) GongGetGongstructName() string {
+	return "GongEnum"
+}
+
+func (gongenumvalue *GongEnumValue) GongGetGongstructName() string {
+	return "GongEnumValue"
+}
+
+func (gonglink *GongLink) GongGetGongstructName() string {
+	return "GongLink"
+}
+
+func (gongnote *GongNote) GongGetGongstructName() string {
+	return "GongNote"
+}
+
+func (gongstruct *GongStruct) GongGetGongstructName() string {
+	return "GongStruct"
+}
+
+func (gongtimefield *GongTimeField) GongGetGongstructName() string {
+	return "GongTimeField"
+}
+
+func (metareference *MetaReference) GongGetGongstructName() string {
+	return "MetaReference"
+}
+
+func (modelpkg *ModelPkg) GongGetGongstructName() string {
+	return "ModelPkg"
+}
+
+func (pointertogongstructfield *PointerToGongStructField) GongGetGongstructName() string {
+	return "PointerToGongStructField"
+}
+
+func (sliceofpointertogongstructfield *SliceOfPointerToGongStructField) GongGetGongstructName() string {
+	return "SliceOfPointerToGongStructField"
+}
+
+func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
+	res = instance.GongGetGongstructName()
 	return
 }
 

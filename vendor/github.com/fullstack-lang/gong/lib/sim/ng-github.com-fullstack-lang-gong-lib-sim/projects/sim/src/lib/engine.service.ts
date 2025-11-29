@@ -94,7 +94,7 @@ export class EngineService {
       catchError(this.handleError<EngineAPI>('postEngine'))
     );
   }
-  
+
   /** POST: add a new engine to the server */
   post(enginedb: EngineAPI, Name: string, frontRepo: FrontRepo): Observable<EngineAPI> {
     return this.postEngine(enginedb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class EngineService {
   private handleError<T>(operation = 'operation in EngineService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("EngineService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

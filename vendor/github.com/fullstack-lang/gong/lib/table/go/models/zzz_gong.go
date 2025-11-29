@@ -10,6 +10,7 @@ import (
 	"math"
 	"slices"
 	"sort"
+	"strings"
 	"time"
 
 	table_go "github.com/fullstack-lang/gong/lib/table/go"
@@ -26,6 +27,7 @@ func __Gong__Abs(x int) int {
 }
 
 var _ = __Gong__Abs
+var _ = strings.Clone("")
 
 const ProbeTreeSidebarSuffix = ":sidebar of the probe"
 const ProbeTableSuffix = ":table of the probe"
@@ -50,6 +52,7 @@ func (stage *Stage) GetProbeSplitStageName() string {
 
 // errUnkownEnum is returns when a value cannot match enum values
 var errUnkownEnum = errors.New("unkown enum")
+var _ = errUnkownEnum
 
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
@@ -74,6 +77,8 @@ type GongStructInterface interface {
 	// GetID() (res int)
 	// GetFields() (res []string)
 	// GetFieldStringValue(fieldName string) (res string)
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
 }
 
 // Stage enables storage of staged instances
@@ -406,6 +411,12 @@ type Stage struct {
 	// end of insertion point
 
 	NamedStructs []*NamedStruct
+
+	// for the computation of the diff at each commit we need
+	reference map[GongstructIF]GongstructIF
+	modified  map[GongstructIF]struct{}
+	new       map[GongstructIF]struct{}
+	deleted   map[GongstructIF]struct{}
 }
 
 func (stage *Stage) GetCommitId() uint {
@@ -428,6 +439,22 @@ func (stage *Stage) GetNamedStructsNames() (res []string) {
 	}
 
 	return
+}
+
+func (stage *Stage) GetReference() map[GongstructIF]GongstructIF {
+	return stage.reference
+}
+
+func (stage *Stage) GetModified() map[GongstructIF]struct{} {
+	return stage.modified
+}
+
+func (stage *Stage) GetNew() map[GongstructIF]struct{} {
+	return stage.new
+}
+
+func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
+	return stage.deleted
 }
 
 func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
@@ -457,7 +484,7 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
 	var t T
 	switch any(t).(type) {
-		// insertion point for case
+	// insertion point for case
 	case *Cell:
 		tmp := GetStructInstancesByOrder(stage.Cells, stage.CellMap_Staged_Order)
 
@@ -802,9 +829,7 @@ func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T
 		return i_order < j_order
 	})
 
-	for _, instance := range orderedSet {
-		res = append(res, instance)
-	}
+	res = append(res, orderedSet...)
 
 	return
 }
@@ -1133,6 +1158,11 @@ func NewStage(name string) (stage *Stage) {
 			{name: "Row"},
 			{name: "Table"},
 		}, // end of insertion point
+
+		reference: make(map[GongstructIF]GongstructIF),
+		new:       make(map[GongstructIF]struct{}),
+		modified:  make(map[GongstructIF]struct{}),
+		deleted:   make(map[GongstructIF]struct{}),
 	}
 
 	return
@@ -1265,10 +1295,21 @@ func (stage *Stage) Commit() {
 	stage.commitId++
 	stage.commitTimeStamp = time.Now()
 
+	if stage.OnInitCommitCallback != nil {
+		stage.OnInitCommitCallback.BeforeCommit(stage)
+	}
+	if stage.OnInitCommitFromBackCallback != nil {
+		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
+	}
+
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
+	stage.ComputeInstancesNb()
+	stage.ComputeReference()
+}
 
+func (stage *Stage) ComputeInstancesNb() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Cell"] = len(stage.Cells)
 	stage.Map_GongStructName_InstancesNb["CellBoolean"] = len(stage.CellBooleans)
@@ -1293,7 +1334,6 @@ func (stage *Stage) Commit() {
 	stage.Map_GongStructName_InstancesNb["Option"] = len(stage.Options)
 	stage.Map_GongStructName_InstancesNb["Row"] = len(stage.Rows)
 	stage.Map_GongStructName_InstancesNb["Table"] = len(stage.Tables)
-
 }
 
 func (stage *Stage) Checkout() {
@@ -1302,31 +1342,7 @@ func (stage *Stage) Checkout() {
 	}
 
 	stage.ComputeReverseMaps()
-	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["Cell"] = len(stage.Cells)
-	stage.Map_GongStructName_InstancesNb["CellBoolean"] = len(stage.CellBooleans)
-	stage.Map_GongStructName_InstancesNb["CellFloat64"] = len(stage.CellFloat64s)
-	stage.Map_GongStructName_InstancesNb["CellIcon"] = len(stage.CellIcons)
-	stage.Map_GongStructName_InstancesNb["CellInt"] = len(stage.CellInts)
-	stage.Map_GongStructName_InstancesNb["CellString"] = len(stage.CellStrings)
-	stage.Map_GongStructName_InstancesNb["CheckBox"] = len(stage.CheckBoxs)
-	stage.Map_GongStructName_InstancesNb["DisplayedColumn"] = len(stage.DisplayedColumns)
-	stage.Map_GongStructName_InstancesNb["FormDiv"] = len(stage.FormDivs)
-	stage.Map_GongStructName_InstancesNb["FormEditAssocButton"] = len(stage.FormEditAssocButtons)
-	stage.Map_GongStructName_InstancesNb["FormField"] = len(stage.FormFields)
-	stage.Map_GongStructName_InstancesNb["FormFieldDate"] = len(stage.FormFieldDates)
-	stage.Map_GongStructName_InstancesNb["FormFieldDateTime"] = len(stage.FormFieldDateTimes)
-	stage.Map_GongStructName_InstancesNb["FormFieldFloat64"] = len(stage.FormFieldFloat64s)
-	stage.Map_GongStructName_InstancesNb["FormFieldInt"] = len(stage.FormFieldInts)
-	stage.Map_GongStructName_InstancesNb["FormFieldSelect"] = len(stage.FormFieldSelects)
-	stage.Map_GongStructName_InstancesNb["FormFieldString"] = len(stage.FormFieldStrings)
-	stage.Map_GongStructName_InstancesNb["FormFieldTime"] = len(stage.FormFieldTimes)
-	stage.Map_GongStructName_InstancesNb["FormGroup"] = len(stage.FormGroups)
-	stage.Map_GongStructName_InstancesNb["FormSortAssocButton"] = len(stage.FormSortAssocButtons)
-	stage.Map_GongStructName_InstancesNb["Option"] = len(stage.Options)
-	stage.Map_GongStructName_InstancesNb["Row"] = len(stage.Rows)
-	stage.Map_GongStructName_InstancesNb["Table"] = len(stage.Tables)
-
+	stage.ComputeInstancesNb()
 }
 
 // backup generates backup files in the dirPath
@@ -1365,6 +1381,12 @@ func (cell *Cell) Stage(stage *Stage) *Cell {
 		stage.Cells[cell] = __member
 		stage.CellMap_Staged_Order[cell] = stage.CellOrder
 		stage.CellOrder++
+		stage.new[cell] = struct{}{}
+		delete(stage.deleted, cell)
+	} else {
+		if _, ok := stage.new[cell]; !ok {
+			stage.modified[cell] = struct{}{}
+		}
 	}
 	stage.Cells_mapString[cell.Name] = cell
 
@@ -1375,6 +1397,12 @@ func (cell *Cell) Stage(stage *Stage) *Cell {
 func (cell *Cell) Unstage(stage *Stage) *Cell {
 	delete(stage.Cells, cell)
 	delete(stage.Cells_mapString, cell.Name)
+
+	if _, ok := stage.reference[cell]; ok {
+		stage.deleted[cell] = struct{}{}
+	} else {
+		delete(stage.new, cell)
+	}
 	return cell
 }
 
@@ -1396,6 +1424,10 @@ func (cell *Cell) Commit(stage *Stage) *Cell {
 
 func (cell *Cell) CommitVoid(stage *Stage) {
 	cell.Commit(stage)
+}
+
+func (cell *Cell) StageVoid(stage *Stage) {
+	cell.Stage(stage)
 }
 
 // Checkout cell to the back repo (if it is already staged)
@@ -1420,6 +1452,12 @@ func (cellboolean *CellBoolean) Stage(stage *Stage) *CellBoolean {
 		stage.CellBooleans[cellboolean] = __member
 		stage.CellBooleanMap_Staged_Order[cellboolean] = stage.CellBooleanOrder
 		stage.CellBooleanOrder++
+		stage.new[cellboolean] = struct{}{}
+		delete(stage.deleted, cellboolean)
+	} else {
+		if _, ok := stage.new[cellboolean]; !ok {
+			stage.modified[cellboolean] = struct{}{}
+		}
 	}
 	stage.CellBooleans_mapString[cellboolean.Name] = cellboolean
 
@@ -1430,6 +1468,12 @@ func (cellboolean *CellBoolean) Stage(stage *Stage) *CellBoolean {
 func (cellboolean *CellBoolean) Unstage(stage *Stage) *CellBoolean {
 	delete(stage.CellBooleans, cellboolean)
 	delete(stage.CellBooleans_mapString, cellboolean.Name)
+
+	if _, ok := stage.reference[cellboolean]; ok {
+		stage.deleted[cellboolean] = struct{}{}
+	} else {
+		delete(stage.new, cellboolean)
+	}
 	return cellboolean
 }
 
@@ -1451,6 +1495,10 @@ func (cellboolean *CellBoolean) Commit(stage *Stage) *CellBoolean {
 
 func (cellboolean *CellBoolean) CommitVoid(stage *Stage) {
 	cellboolean.Commit(stage)
+}
+
+func (cellboolean *CellBoolean) StageVoid(stage *Stage) {
+	cellboolean.Stage(stage)
 }
 
 // Checkout cellboolean to the back repo (if it is already staged)
@@ -1475,6 +1523,12 @@ func (cellfloat64 *CellFloat64) Stage(stage *Stage) *CellFloat64 {
 		stage.CellFloat64s[cellfloat64] = __member
 		stage.CellFloat64Map_Staged_Order[cellfloat64] = stage.CellFloat64Order
 		stage.CellFloat64Order++
+		stage.new[cellfloat64] = struct{}{}
+		delete(stage.deleted, cellfloat64)
+	} else {
+		if _, ok := stage.new[cellfloat64]; !ok {
+			stage.modified[cellfloat64] = struct{}{}
+		}
 	}
 	stage.CellFloat64s_mapString[cellfloat64.Name] = cellfloat64
 
@@ -1485,6 +1539,12 @@ func (cellfloat64 *CellFloat64) Stage(stage *Stage) *CellFloat64 {
 func (cellfloat64 *CellFloat64) Unstage(stage *Stage) *CellFloat64 {
 	delete(stage.CellFloat64s, cellfloat64)
 	delete(stage.CellFloat64s_mapString, cellfloat64.Name)
+
+	if _, ok := stage.reference[cellfloat64]; ok {
+		stage.deleted[cellfloat64] = struct{}{}
+	} else {
+		delete(stage.new, cellfloat64)
+	}
 	return cellfloat64
 }
 
@@ -1506,6 +1566,10 @@ func (cellfloat64 *CellFloat64) Commit(stage *Stage) *CellFloat64 {
 
 func (cellfloat64 *CellFloat64) CommitVoid(stage *Stage) {
 	cellfloat64.Commit(stage)
+}
+
+func (cellfloat64 *CellFloat64) StageVoid(stage *Stage) {
+	cellfloat64.Stage(stage)
 }
 
 // Checkout cellfloat64 to the back repo (if it is already staged)
@@ -1530,6 +1594,12 @@ func (cellicon *CellIcon) Stage(stage *Stage) *CellIcon {
 		stage.CellIcons[cellicon] = __member
 		stage.CellIconMap_Staged_Order[cellicon] = stage.CellIconOrder
 		stage.CellIconOrder++
+		stage.new[cellicon] = struct{}{}
+		delete(stage.deleted, cellicon)
+	} else {
+		if _, ok := stage.new[cellicon]; !ok {
+			stage.modified[cellicon] = struct{}{}
+		}
 	}
 	stage.CellIcons_mapString[cellicon.Name] = cellicon
 
@@ -1540,6 +1610,12 @@ func (cellicon *CellIcon) Stage(stage *Stage) *CellIcon {
 func (cellicon *CellIcon) Unstage(stage *Stage) *CellIcon {
 	delete(stage.CellIcons, cellicon)
 	delete(stage.CellIcons_mapString, cellicon.Name)
+
+	if _, ok := stage.reference[cellicon]; ok {
+		stage.deleted[cellicon] = struct{}{}
+	} else {
+		delete(stage.new, cellicon)
+	}
 	return cellicon
 }
 
@@ -1561,6 +1637,10 @@ func (cellicon *CellIcon) Commit(stage *Stage) *CellIcon {
 
 func (cellicon *CellIcon) CommitVoid(stage *Stage) {
 	cellicon.Commit(stage)
+}
+
+func (cellicon *CellIcon) StageVoid(stage *Stage) {
+	cellicon.Stage(stage)
 }
 
 // Checkout cellicon to the back repo (if it is already staged)
@@ -1585,6 +1665,12 @@ func (cellint *CellInt) Stage(stage *Stage) *CellInt {
 		stage.CellInts[cellint] = __member
 		stage.CellIntMap_Staged_Order[cellint] = stage.CellIntOrder
 		stage.CellIntOrder++
+		stage.new[cellint] = struct{}{}
+		delete(stage.deleted, cellint)
+	} else {
+		if _, ok := stage.new[cellint]; !ok {
+			stage.modified[cellint] = struct{}{}
+		}
 	}
 	stage.CellInts_mapString[cellint.Name] = cellint
 
@@ -1595,6 +1681,12 @@ func (cellint *CellInt) Stage(stage *Stage) *CellInt {
 func (cellint *CellInt) Unstage(stage *Stage) *CellInt {
 	delete(stage.CellInts, cellint)
 	delete(stage.CellInts_mapString, cellint.Name)
+
+	if _, ok := stage.reference[cellint]; ok {
+		stage.deleted[cellint] = struct{}{}
+	} else {
+		delete(stage.new, cellint)
+	}
 	return cellint
 }
 
@@ -1616,6 +1708,10 @@ func (cellint *CellInt) Commit(stage *Stage) *CellInt {
 
 func (cellint *CellInt) CommitVoid(stage *Stage) {
 	cellint.Commit(stage)
+}
+
+func (cellint *CellInt) StageVoid(stage *Stage) {
+	cellint.Stage(stage)
 }
 
 // Checkout cellint to the back repo (if it is already staged)
@@ -1640,6 +1736,12 @@ func (cellstring *CellString) Stage(stage *Stage) *CellString {
 		stage.CellStrings[cellstring] = __member
 		stage.CellStringMap_Staged_Order[cellstring] = stage.CellStringOrder
 		stage.CellStringOrder++
+		stage.new[cellstring] = struct{}{}
+		delete(stage.deleted, cellstring)
+	} else {
+		if _, ok := stage.new[cellstring]; !ok {
+			stage.modified[cellstring] = struct{}{}
+		}
 	}
 	stage.CellStrings_mapString[cellstring.Name] = cellstring
 
@@ -1650,6 +1752,12 @@ func (cellstring *CellString) Stage(stage *Stage) *CellString {
 func (cellstring *CellString) Unstage(stage *Stage) *CellString {
 	delete(stage.CellStrings, cellstring)
 	delete(stage.CellStrings_mapString, cellstring.Name)
+
+	if _, ok := stage.reference[cellstring]; ok {
+		stage.deleted[cellstring] = struct{}{}
+	} else {
+		delete(stage.new, cellstring)
+	}
 	return cellstring
 }
 
@@ -1671,6 +1779,10 @@ func (cellstring *CellString) Commit(stage *Stage) *CellString {
 
 func (cellstring *CellString) CommitVoid(stage *Stage) {
 	cellstring.Commit(stage)
+}
+
+func (cellstring *CellString) StageVoid(stage *Stage) {
+	cellstring.Stage(stage)
 }
 
 // Checkout cellstring to the back repo (if it is already staged)
@@ -1695,6 +1807,12 @@ func (checkbox *CheckBox) Stage(stage *Stage) *CheckBox {
 		stage.CheckBoxs[checkbox] = __member
 		stage.CheckBoxMap_Staged_Order[checkbox] = stage.CheckBoxOrder
 		stage.CheckBoxOrder++
+		stage.new[checkbox] = struct{}{}
+		delete(stage.deleted, checkbox)
+	} else {
+		if _, ok := stage.new[checkbox]; !ok {
+			stage.modified[checkbox] = struct{}{}
+		}
 	}
 	stage.CheckBoxs_mapString[checkbox.Name] = checkbox
 
@@ -1705,6 +1823,12 @@ func (checkbox *CheckBox) Stage(stage *Stage) *CheckBox {
 func (checkbox *CheckBox) Unstage(stage *Stage) *CheckBox {
 	delete(stage.CheckBoxs, checkbox)
 	delete(stage.CheckBoxs_mapString, checkbox.Name)
+
+	if _, ok := stage.reference[checkbox]; ok {
+		stage.deleted[checkbox] = struct{}{}
+	} else {
+		delete(stage.new, checkbox)
+	}
 	return checkbox
 }
 
@@ -1726,6 +1850,10 @@ func (checkbox *CheckBox) Commit(stage *Stage) *CheckBox {
 
 func (checkbox *CheckBox) CommitVoid(stage *Stage) {
 	checkbox.Commit(stage)
+}
+
+func (checkbox *CheckBox) StageVoid(stage *Stage) {
+	checkbox.Stage(stage)
 }
 
 // Checkout checkbox to the back repo (if it is already staged)
@@ -1750,6 +1878,12 @@ func (displayedcolumn *DisplayedColumn) Stage(stage *Stage) *DisplayedColumn {
 		stage.DisplayedColumns[displayedcolumn] = __member
 		stage.DisplayedColumnMap_Staged_Order[displayedcolumn] = stage.DisplayedColumnOrder
 		stage.DisplayedColumnOrder++
+		stage.new[displayedcolumn] = struct{}{}
+		delete(stage.deleted, displayedcolumn)
+	} else {
+		if _, ok := stage.new[displayedcolumn]; !ok {
+			stage.modified[displayedcolumn] = struct{}{}
+		}
 	}
 	stage.DisplayedColumns_mapString[displayedcolumn.Name] = displayedcolumn
 
@@ -1760,6 +1894,12 @@ func (displayedcolumn *DisplayedColumn) Stage(stage *Stage) *DisplayedColumn {
 func (displayedcolumn *DisplayedColumn) Unstage(stage *Stage) *DisplayedColumn {
 	delete(stage.DisplayedColumns, displayedcolumn)
 	delete(stage.DisplayedColumns_mapString, displayedcolumn.Name)
+
+	if _, ok := stage.reference[displayedcolumn]; ok {
+		stage.deleted[displayedcolumn] = struct{}{}
+	} else {
+		delete(stage.new, displayedcolumn)
+	}
 	return displayedcolumn
 }
 
@@ -1781,6 +1921,10 @@ func (displayedcolumn *DisplayedColumn) Commit(stage *Stage) *DisplayedColumn {
 
 func (displayedcolumn *DisplayedColumn) CommitVoid(stage *Stage) {
 	displayedcolumn.Commit(stage)
+}
+
+func (displayedcolumn *DisplayedColumn) StageVoid(stage *Stage) {
+	displayedcolumn.Stage(stage)
 }
 
 // Checkout displayedcolumn to the back repo (if it is already staged)
@@ -1805,6 +1949,12 @@ func (formdiv *FormDiv) Stage(stage *Stage) *FormDiv {
 		stage.FormDivs[formdiv] = __member
 		stage.FormDivMap_Staged_Order[formdiv] = stage.FormDivOrder
 		stage.FormDivOrder++
+		stage.new[formdiv] = struct{}{}
+		delete(stage.deleted, formdiv)
+	} else {
+		if _, ok := stage.new[formdiv]; !ok {
+			stage.modified[formdiv] = struct{}{}
+		}
 	}
 	stage.FormDivs_mapString[formdiv.Name] = formdiv
 
@@ -1815,6 +1965,12 @@ func (formdiv *FormDiv) Stage(stage *Stage) *FormDiv {
 func (formdiv *FormDiv) Unstage(stage *Stage) *FormDiv {
 	delete(stage.FormDivs, formdiv)
 	delete(stage.FormDivs_mapString, formdiv.Name)
+
+	if _, ok := stage.reference[formdiv]; ok {
+		stage.deleted[formdiv] = struct{}{}
+	} else {
+		delete(stage.new, formdiv)
+	}
 	return formdiv
 }
 
@@ -1836,6 +1992,10 @@ func (formdiv *FormDiv) Commit(stage *Stage) *FormDiv {
 
 func (formdiv *FormDiv) CommitVoid(stage *Stage) {
 	formdiv.Commit(stage)
+}
+
+func (formdiv *FormDiv) StageVoid(stage *Stage) {
+	formdiv.Stage(stage)
 }
 
 // Checkout formdiv to the back repo (if it is already staged)
@@ -1860,6 +2020,12 @@ func (formeditassocbutton *FormEditAssocButton) Stage(stage *Stage) *FormEditAss
 		stage.FormEditAssocButtons[formeditassocbutton] = __member
 		stage.FormEditAssocButtonMap_Staged_Order[formeditassocbutton] = stage.FormEditAssocButtonOrder
 		stage.FormEditAssocButtonOrder++
+		stage.new[formeditassocbutton] = struct{}{}
+		delete(stage.deleted, formeditassocbutton)
+	} else {
+		if _, ok := stage.new[formeditassocbutton]; !ok {
+			stage.modified[formeditassocbutton] = struct{}{}
+		}
 	}
 	stage.FormEditAssocButtons_mapString[formeditassocbutton.Name] = formeditassocbutton
 
@@ -1870,6 +2036,12 @@ func (formeditassocbutton *FormEditAssocButton) Stage(stage *Stage) *FormEditAss
 func (formeditassocbutton *FormEditAssocButton) Unstage(stage *Stage) *FormEditAssocButton {
 	delete(stage.FormEditAssocButtons, formeditassocbutton)
 	delete(stage.FormEditAssocButtons_mapString, formeditassocbutton.Name)
+
+	if _, ok := stage.reference[formeditassocbutton]; ok {
+		stage.deleted[formeditassocbutton] = struct{}{}
+	} else {
+		delete(stage.new, formeditassocbutton)
+	}
 	return formeditassocbutton
 }
 
@@ -1891,6 +2063,10 @@ func (formeditassocbutton *FormEditAssocButton) Commit(stage *Stage) *FormEditAs
 
 func (formeditassocbutton *FormEditAssocButton) CommitVoid(stage *Stage) {
 	formeditassocbutton.Commit(stage)
+}
+
+func (formeditassocbutton *FormEditAssocButton) StageVoid(stage *Stage) {
+	formeditassocbutton.Stage(stage)
 }
 
 // Checkout formeditassocbutton to the back repo (if it is already staged)
@@ -1915,6 +2091,12 @@ func (formfield *FormField) Stage(stage *Stage) *FormField {
 		stage.FormFields[formfield] = __member
 		stage.FormFieldMap_Staged_Order[formfield] = stage.FormFieldOrder
 		stage.FormFieldOrder++
+		stage.new[formfield] = struct{}{}
+		delete(stage.deleted, formfield)
+	} else {
+		if _, ok := stage.new[formfield]; !ok {
+			stage.modified[formfield] = struct{}{}
+		}
 	}
 	stage.FormFields_mapString[formfield.Name] = formfield
 
@@ -1925,6 +2107,12 @@ func (formfield *FormField) Stage(stage *Stage) *FormField {
 func (formfield *FormField) Unstage(stage *Stage) *FormField {
 	delete(stage.FormFields, formfield)
 	delete(stage.FormFields_mapString, formfield.Name)
+
+	if _, ok := stage.reference[formfield]; ok {
+		stage.deleted[formfield] = struct{}{}
+	} else {
+		delete(stage.new, formfield)
+	}
 	return formfield
 }
 
@@ -1946,6 +2134,10 @@ func (formfield *FormField) Commit(stage *Stage) *FormField {
 
 func (formfield *FormField) CommitVoid(stage *Stage) {
 	formfield.Commit(stage)
+}
+
+func (formfield *FormField) StageVoid(stage *Stage) {
+	formfield.Stage(stage)
 }
 
 // Checkout formfield to the back repo (if it is already staged)
@@ -1970,6 +2162,12 @@ func (formfielddate *FormFieldDate) Stage(stage *Stage) *FormFieldDate {
 		stage.FormFieldDates[formfielddate] = __member
 		stage.FormFieldDateMap_Staged_Order[formfielddate] = stage.FormFieldDateOrder
 		stage.FormFieldDateOrder++
+		stage.new[formfielddate] = struct{}{}
+		delete(stage.deleted, formfielddate)
+	} else {
+		if _, ok := stage.new[formfielddate]; !ok {
+			stage.modified[formfielddate] = struct{}{}
+		}
 	}
 	stage.FormFieldDates_mapString[formfielddate.Name] = formfielddate
 
@@ -1980,6 +2178,12 @@ func (formfielddate *FormFieldDate) Stage(stage *Stage) *FormFieldDate {
 func (formfielddate *FormFieldDate) Unstage(stage *Stage) *FormFieldDate {
 	delete(stage.FormFieldDates, formfielddate)
 	delete(stage.FormFieldDates_mapString, formfielddate.Name)
+
+	if _, ok := stage.reference[formfielddate]; ok {
+		stage.deleted[formfielddate] = struct{}{}
+	} else {
+		delete(stage.new, formfielddate)
+	}
 	return formfielddate
 }
 
@@ -2001,6 +2205,10 @@ func (formfielddate *FormFieldDate) Commit(stage *Stage) *FormFieldDate {
 
 func (formfielddate *FormFieldDate) CommitVoid(stage *Stage) {
 	formfielddate.Commit(stage)
+}
+
+func (formfielddate *FormFieldDate) StageVoid(stage *Stage) {
+	formfielddate.Stage(stage)
 }
 
 // Checkout formfielddate to the back repo (if it is already staged)
@@ -2025,6 +2233,12 @@ func (formfielddatetime *FormFieldDateTime) Stage(stage *Stage) *FormFieldDateTi
 		stage.FormFieldDateTimes[formfielddatetime] = __member
 		stage.FormFieldDateTimeMap_Staged_Order[formfielddatetime] = stage.FormFieldDateTimeOrder
 		stage.FormFieldDateTimeOrder++
+		stage.new[formfielddatetime] = struct{}{}
+		delete(stage.deleted, formfielddatetime)
+	} else {
+		if _, ok := stage.new[formfielddatetime]; !ok {
+			stage.modified[formfielddatetime] = struct{}{}
+		}
 	}
 	stage.FormFieldDateTimes_mapString[formfielddatetime.Name] = formfielddatetime
 
@@ -2035,6 +2249,12 @@ func (formfielddatetime *FormFieldDateTime) Stage(stage *Stage) *FormFieldDateTi
 func (formfielddatetime *FormFieldDateTime) Unstage(stage *Stage) *FormFieldDateTime {
 	delete(stage.FormFieldDateTimes, formfielddatetime)
 	delete(stage.FormFieldDateTimes_mapString, formfielddatetime.Name)
+
+	if _, ok := stage.reference[formfielddatetime]; ok {
+		stage.deleted[formfielddatetime] = struct{}{}
+	} else {
+		delete(stage.new, formfielddatetime)
+	}
 	return formfielddatetime
 }
 
@@ -2056,6 +2276,10 @@ func (formfielddatetime *FormFieldDateTime) Commit(stage *Stage) *FormFieldDateT
 
 func (formfielddatetime *FormFieldDateTime) CommitVoid(stage *Stage) {
 	formfielddatetime.Commit(stage)
+}
+
+func (formfielddatetime *FormFieldDateTime) StageVoid(stage *Stage) {
+	formfielddatetime.Stage(stage)
 }
 
 // Checkout formfielddatetime to the back repo (if it is already staged)
@@ -2080,6 +2304,12 @@ func (formfieldfloat64 *FormFieldFloat64) Stage(stage *Stage) *FormFieldFloat64 
 		stage.FormFieldFloat64s[formfieldfloat64] = __member
 		stage.FormFieldFloat64Map_Staged_Order[formfieldfloat64] = stage.FormFieldFloat64Order
 		stage.FormFieldFloat64Order++
+		stage.new[formfieldfloat64] = struct{}{}
+		delete(stage.deleted, formfieldfloat64)
+	} else {
+		if _, ok := stage.new[formfieldfloat64]; !ok {
+			stage.modified[formfieldfloat64] = struct{}{}
+		}
 	}
 	stage.FormFieldFloat64s_mapString[formfieldfloat64.Name] = formfieldfloat64
 
@@ -2090,6 +2320,12 @@ func (formfieldfloat64 *FormFieldFloat64) Stage(stage *Stage) *FormFieldFloat64 
 func (formfieldfloat64 *FormFieldFloat64) Unstage(stage *Stage) *FormFieldFloat64 {
 	delete(stage.FormFieldFloat64s, formfieldfloat64)
 	delete(stage.FormFieldFloat64s_mapString, formfieldfloat64.Name)
+
+	if _, ok := stage.reference[formfieldfloat64]; ok {
+		stage.deleted[formfieldfloat64] = struct{}{}
+	} else {
+		delete(stage.new, formfieldfloat64)
+	}
 	return formfieldfloat64
 }
 
@@ -2111,6 +2347,10 @@ func (formfieldfloat64 *FormFieldFloat64) Commit(stage *Stage) *FormFieldFloat64
 
 func (formfieldfloat64 *FormFieldFloat64) CommitVoid(stage *Stage) {
 	formfieldfloat64.Commit(stage)
+}
+
+func (formfieldfloat64 *FormFieldFloat64) StageVoid(stage *Stage) {
+	formfieldfloat64.Stage(stage)
 }
 
 // Checkout formfieldfloat64 to the back repo (if it is already staged)
@@ -2135,6 +2375,12 @@ func (formfieldint *FormFieldInt) Stage(stage *Stage) *FormFieldInt {
 		stage.FormFieldInts[formfieldint] = __member
 		stage.FormFieldIntMap_Staged_Order[formfieldint] = stage.FormFieldIntOrder
 		stage.FormFieldIntOrder++
+		stage.new[formfieldint] = struct{}{}
+		delete(stage.deleted, formfieldint)
+	} else {
+		if _, ok := stage.new[formfieldint]; !ok {
+			stage.modified[formfieldint] = struct{}{}
+		}
 	}
 	stage.FormFieldInts_mapString[formfieldint.Name] = formfieldint
 
@@ -2145,6 +2391,12 @@ func (formfieldint *FormFieldInt) Stage(stage *Stage) *FormFieldInt {
 func (formfieldint *FormFieldInt) Unstage(stage *Stage) *FormFieldInt {
 	delete(stage.FormFieldInts, formfieldint)
 	delete(stage.FormFieldInts_mapString, formfieldint.Name)
+
+	if _, ok := stage.reference[formfieldint]; ok {
+		stage.deleted[formfieldint] = struct{}{}
+	} else {
+		delete(stage.new, formfieldint)
+	}
 	return formfieldint
 }
 
@@ -2166,6 +2418,10 @@ func (formfieldint *FormFieldInt) Commit(stage *Stage) *FormFieldInt {
 
 func (formfieldint *FormFieldInt) CommitVoid(stage *Stage) {
 	formfieldint.Commit(stage)
+}
+
+func (formfieldint *FormFieldInt) StageVoid(stage *Stage) {
+	formfieldint.Stage(stage)
 }
 
 // Checkout formfieldint to the back repo (if it is already staged)
@@ -2190,6 +2446,12 @@ func (formfieldselect *FormFieldSelect) Stage(stage *Stage) *FormFieldSelect {
 		stage.FormFieldSelects[formfieldselect] = __member
 		stage.FormFieldSelectMap_Staged_Order[formfieldselect] = stage.FormFieldSelectOrder
 		stage.FormFieldSelectOrder++
+		stage.new[formfieldselect] = struct{}{}
+		delete(stage.deleted, formfieldselect)
+	} else {
+		if _, ok := stage.new[formfieldselect]; !ok {
+			stage.modified[formfieldselect] = struct{}{}
+		}
 	}
 	stage.FormFieldSelects_mapString[formfieldselect.Name] = formfieldselect
 
@@ -2200,6 +2462,12 @@ func (formfieldselect *FormFieldSelect) Stage(stage *Stage) *FormFieldSelect {
 func (formfieldselect *FormFieldSelect) Unstage(stage *Stage) *FormFieldSelect {
 	delete(stage.FormFieldSelects, formfieldselect)
 	delete(stage.FormFieldSelects_mapString, formfieldselect.Name)
+
+	if _, ok := stage.reference[formfieldselect]; ok {
+		stage.deleted[formfieldselect] = struct{}{}
+	} else {
+		delete(stage.new, formfieldselect)
+	}
 	return formfieldselect
 }
 
@@ -2221,6 +2489,10 @@ func (formfieldselect *FormFieldSelect) Commit(stage *Stage) *FormFieldSelect {
 
 func (formfieldselect *FormFieldSelect) CommitVoid(stage *Stage) {
 	formfieldselect.Commit(stage)
+}
+
+func (formfieldselect *FormFieldSelect) StageVoid(stage *Stage) {
+	formfieldselect.Stage(stage)
 }
 
 // Checkout formfieldselect to the back repo (if it is already staged)
@@ -2245,6 +2517,12 @@ func (formfieldstring *FormFieldString) Stage(stage *Stage) *FormFieldString {
 		stage.FormFieldStrings[formfieldstring] = __member
 		stage.FormFieldStringMap_Staged_Order[formfieldstring] = stage.FormFieldStringOrder
 		stage.FormFieldStringOrder++
+		stage.new[formfieldstring] = struct{}{}
+		delete(stage.deleted, formfieldstring)
+	} else {
+		if _, ok := stage.new[formfieldstring]; !ok {
+			stage.modified[formfieldstring] = struct{}{}
+		}
 	}
 	stage.FormFieldStrings_mapString[formfieldstring.Name] = formfieldstring
 
@@ -2255,6 +2533,12 @@ func (formfieldstring *FormFieldString) Stage(stage *Stage) *FormFieldString {
 func (formfieldstring *FormFieldString) Unstage(stage *Stage) *FormFieldString {
 	delete(stage.FormFieldStrings, formfieldstring)
 	delete(stage.FormFieldStrings_mapString, formfieldstring.Name)
+
+	if _, ok := stage.reference[formfieldstring]; ok {
+		stage.deleted[formfieldstring] = struct{}{}
+	} else {
+		delete(stage.new, formfieldstring)
+	}
 	return formfieldstring
 }
 
@@ -2276,6 +2560,10 @@ func (formfieldstring *FormFieldString) Commit(stage *Stage) *FormFieldString {
 
 func (formfieldstring *FormFieldString) CommitVoid(stage *Stage) {
 	formfieldstring.Commit(stage)
+}
+
+func (formfieldstring *FormFieldString) StageVoid(stage *Stage) {
+	formfieldstring.Stage(stage)
 }
 
 // Checkout formfieldstring to the back repo (if it is already staged)
@@ -2300,6 +2588,12 @@ func (formfieldtime *FormFieldTime) Stage(stage *Stage) *FormFieldTime {
 		stage.FormFieldTimes[formfieldtime] = __member
 		stage.FormFieldTimeMap_Staged_Order[formfieldtime] = stage.FormFieldTimeOrder
 		stage.FormFieldTimeOrder++
+		stage.new[formfieldtime] = struct{}{}
+		delete(stage.deleted, formfieldtime)
+	} else {
+		if _, ok := stage.new[formfieldtime]; !ok {
+			stage.modified[formfieldtime] = struct{}{}
+		}
 	}
 	stage.FormFieldTimes_mapString[formfieldtime.Name] = formfieldtime
 
@@ -2310,6 +2604,12 @@ func (formfieldtime *FormFieldTime) Stage(stage *Stage) *FormFieldTime {
 func (formfieldtime *FormFieldTime) Unstage(stage *Stage) *FormFieldTime {
 	delete(stage.FormFieldTimes, formfieldtime)
 	delete(stage.FormFieldTimes_mapString, formfieldtime.Name)
+
+	if _, ok := stage.reference[formfieldtime]; ok {
+		stage.deleted[formfieldtime] = struct{}{}
+	} else {
+		delete(stage.new, formfieldtime)
+	}
 	return formfieldtime
 }
 
@@ -2331,6 +2631,10 @@ func (formfieldtime *FormFieldTime) Commit(stage *Stage) *FormFieldTime {
 
 func (formfieldtime *FormFieldTime) CommitVoid(stage *Stage) {
 	formfieldtime.Commit(stage)
+}
+
+func (formfieldtime *FormFieldTime) StageVoid(stage *Stage) {
+	formfieldtime.Stage(stage)
 }
 
 // Checkout formfieldtime to the back repo (if it is already staged)
@@ -2355,6 +2659,12 @@ func (formgroup *FormGroup) Stage(stage *Stage) *FormGroup {
 		stage.FormGroups[formgroup] = __member
 		stage.FormGroupMap_Staged_Order[formgroup] = stage.FormGroupOrder
 		stage.FormGroupOrder++
+		stage.new[formgroup] = struct{}{}
+		delete(stage.deleted, formgroup)
+	} else {
+		if _, ok := stage.new[formgroup]; !ok {
+			stage.modified[formgroup] = struct{}{}
+		}
 	}
 	stage.FormGroups_mapString[formgroup.Name] = formgroup
 
@@ -2365,6 +2675,12 @@ func (formgroup *FormGroup) Stage(stage *Stage) *FormGroup {
 func (formgroup *FormGroup) Unstage(stage *Stage) *FormGroup {
 	delete(stage.FormGroups, formgroup)
 	delete(stage.FormGroups_mapString, formgroup.Name)
+
+	if _, ok := stage.reference[formgroup]; ok {
+		stage.deleted[formgroup] = struct{}{}
+	} else {
+		delete(stage.new, formgroup)
+	}
 	return formgroup
 }
 
@@ -2386,6 +2702,10 @@ func (formgroup *FormGroup) Commit(stage *Stage) *FormGroup {
 
 func (formgroup *FormGroup) CommitVoid(stage *Stage) {
 	formgroup.Commit(stage)
+}
+
+func (formgroup *FormGroup) StageVoid(stage *Stage) {
+	formgroup.Stage(stage)
 }
 
 // Checkout formgroup to the back repo (if it is already staged)
@@ -2410,6 +2730,12 @@ func (formsortassocbutton *FormSortAssocButton) Stage(stage *Stage) *FormSortAss
 		stage.FormSortAssocButtons[formsortassocbutton] = __member
 		stage.FormSortAssocButtonMap_Staged_Order[formsortassocbutton] = stage.FormSortAssocButtonOrder
 		stage.FormSortAssocButtonOrder++
+		stage.new[formsortassocbutton] = struct{}{}
+		delete(stage.deleted, formsortassocbutton)
+	} else {
+		if _, ok := stage.new[formsortassocbutton]; !ok {
+			stage.modified[formsortassocbutton] = struct{}{}
+		}
 	}
 	stage.FormSortAssocButtons_mapString[formsortassocbutton.Name] = formsortassocbutton
 
@@ -2420,6 +2746,12 @@ func (formsortassocbutton *FormSortAssocButton) Stage(stage *Stage) *FormSortAss
 func (formsortassocbutton *FormSortAssocButton) Unstage(stage *Stage) *FormSortAssocButton {
 	delete(stage.FormSortAssocButtons, formsortassocbutton)
 	delete(stage.FormSortAssocButtons_mapString, formsortassocbutton.Name)
+
+	if _, ok := stage.reference[formsortassocbutton]; ok {
+		stage.deleted[formsortassocbutton] = struct{}{}
+	} else {
+		delete(stage.new, formsortassocbutton)
+	}
 	return formsortassocbutton
 }
 
@@ -2441,6 +2773,10 @@ func (formsortassocbutton *FormSortAssocButton) Commit(stage *Stage) *FormSortAs
 
 func (formsortassocbutton *FormSortAssocButton) CommitVoid(stage *Stage) {
 	formsortassocbutton.Commit(stage)
+}
+
+func (formsortassocbutton *FormSortAssocButton) StageVoid(stage *Stage) {
+	formsortassocbutton.Stage(stage)
 }
 
 // Checkout formsortassocbutton to the back repo (if it is already staged)
@@ -2465,6 +2801,12 @@ func (option *Option) Stage(stage *Stage) *Option {
 		stage.Options[option] = __member
 		stage.OptionMap_Staged_Order[option] = stage.OptionOrder
 		stage.OptionOrder++
+		stage.new[option] = struct{}{}
+		delete(stage.deleted, option)
+	} else {
+		if _, ok := stage.new[option]; !ok {
+			stage.modified[option] = struct{}{}
+		}
 	}
 	stage.Options_mapString[option.Name] = option
 
@@ -2475,6 +2817,12 @@ func (option *Option) Stage(stage *Stage) *Option {
 func (option *Option) Unstage(stage *Stage) *Option {
 	delete(stage.Options, option)
 	delete(stage.Options_mapString, option.Name)
+
+	if _, ok := stage.reference[option]; ok {
+		stage.deleted[option] = struct{}{}
+	} else {
+		delete(stage.new, option)
+	}
 	return option
 }
 
@@ -2496,6 +2844,10 @@ func (option *Option) Commit(stage *Stage) *Option {
 
 func (option *Option) CommitVoid(stage *Stage) {
 	option.Commit(stage)
+}
+
+func (option *Option) StageVoid(stage *Stage) {
+	option.Stage(stage)
 }
 
 // Checkout option to the back repo (if it is already staged)
@@ -2520,6 +2872,12 @@ func (row *Row) Stage(stage *Stage) *Row {
 		stage.Rows[row] = __member
 		stage.RowMap_Staged_Order[row] = stage.RowOrder
 		stage.RowOrder++
+		stage.new[row] = struct{}{}
+		delete(stage.deleted, row)
+	} else {
+		if _, ok := stage.new[row]; !ok {
+			stage.modified[row] = struct{}{}
+		}
 	}
 	stage.Rows_mapString[row.Name] = row
 
@@ -2530,6 +2888,12 @@ func (row *Row) Stage(stage *Stage) *Row {
 func (row *Row) Unstage(stage *Stage) *Row {
 	delete(stage.Rows, row)
 	delete(stage.Rows_mapString, row.Name)
+
+	if _, ok := stage.reference[row]; ok {
+		stage.deleted[row] = struct{}{}
+	} else {
+		delete(stage.new, row)
+	}
 	return row
 }
 
@@ -2551,6 +2915,10 @@ func (row *Row) Commit(stage *Stage) *Row {
 
 func (row *Row) CommitVoid(stage *Stage) {
 	row.Commit(stage)
+}
+
+func (row *Row) StageVoid(stage *Stage) {
+	row.Stage(stage)
 }
 
 // Checkout row to the back repo (if it is already staged)
@@ -2575,6 +2943,12 @@ func (table *Table) Stage(stage *Stage) *Table {
 		stage.Tables[table] = __member
 		stage.TableMap_Staged_Order[table] = stage.TableOrder
 		stage.TableOrder++
+		stage.new[table] = struct{}{}
+		delete(stage.deleted, table)
+	} else {
+		if _, ok := stage.new[table]; !ok {
+			stage.modified[table] = struct{}{}
+		}
 	}
 	stage.Tables_mapString[table.Name] = table
 
@@ -2585,6 +2959,12 @@ func (table *Table) Stage(stage *Stage) *Table {
 func (table *Table) Unstage(stage *Stage) *Table {
 	delete(stage.Tables, table)
 	delete(stage.Tables_mapString, table.Name)
+
+	if _, ok := stage.reference[table]; ok {
+		stage.deleted[table] = struct{}{}
+	} else {
+		delete(stage.new, table)
+	}
 	return table
 }
 
@@ -2606,6 +2986,10 @@ func (table *Table) Commit(stage *Stage) *Table {
 
 func (table *Table) CommitVoid(stage *Stage) {
 	table.Commit(stage)
+}
+
+func (table *Table) StageVoid(stage *Stage) {
+	table.Stage(stage)
 }
 
 // Checkout table to the back repo (if it is already staged)
@@ -2792,6 +3176,7 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.TableMap_Staged_Order = make(map[*Table]uint)
 	stage.TableOrder = 0
 
+	stage.ComputeReference()
 }
 
 func (stage *Stage) Nil() { // insertion point for array nil
@@ -2976,10 +3361,22 @@ type GongtructBasicField interface {
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
-type PointerToGongstruct interface {
+type GongstructIF interface {
 	GetName() string
 	CommitVoid(*Stage)
+	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
+	GongGetFieldHeaders() []GongFieldHeader
+	GongClean(stage *Stage)
+	GongGetFieldValue(fieldName string, stage *Stage) GongFieldValue
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
+	GongCopy() GongstructIF
+	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string
+	GongGetReverseFieldOwner(stage *Stage, reverseField *ReverseField) GongstructIF
+}
+type PointerToGongstruct interface {
+	GongstructIF
 	comparable
 }
 
@@ -3246,7 +3643,7 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 }
 
 // GetGongstructInstancesMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
+// it is usefull because it allows refactoring of gongstruct identifier
 func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type {
 	var ret Type
 
@@ -4046,64 +4443,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	return nil
 }
 
-// GetGongstructName returns the name of the Gongstruct
-// this can be usefull if one want program robust to refactoring
-func GetGongstructName[Type Gongstruct]() (res string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Cell:
-		res = "Cell"
-	case CellBoolean:
-		res = "CellBoolean"
-	case CellFloat64:
-		res = "CellFloat64"
-	case CellIcon:
-		res = "CellIcon"
-	case CellInt:
-		res = "CellInt"
-	case CellString:
-		res = "CellString"
-	case CheckBox:
-		res = "CheckBox"
-	case DisplayedColumn:
-		res = "DisplayedColumn"
-	case FormDiv:
-		res = "FormDiv"
-	case FormEditAssocButton:
-		res = "FormEditAssocButton"
-	case FormField:
-		res = "FormField"
-	case FormFieldDate:
-		res = "FormFieldDate"
-	case FormFieldDateTime:
-		res = "FormFieldDateTime"
-	case FormFieldFloat64:
-		res = "FormFieldFloat64"
-	case FormFieldInt:
-		res = "FormFieldInt"
-	case FormFieldSelect:
-		res = "FormFieldSelect"
-	case FormFieldString:
-		res = "FormFieldString"
-	case FormFieldTime:
-		res = "FormFieldTime"
-	case FormGroup:
-		res = "FormGroup"
-	case FormSortAssocButton:
-		res = "FormSortAssocButton"
-	case Option:
-		res = "Option"
-	case Row:
-		res = "Row"
-	case Table:
-		res = "Table"
-	}
-	return res
-}
-
 // GetPointerToGongstructName returns the name of the Gongstruct
 // this can be usefull if one want program robust to refactoring
 func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
@@ -4162,69 +4501,12 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	return res
 }
 
-// GetFields return the array of the fields
-func GetFields[Type Gongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Cell:
-		res = []string{"Name", "CellString", "CellFloat64", "CellInt", "CellBool", "CellIcon"}
-	case CellBoolean:
-		res = []string{"Name", "Value"}
-	case CellFloat64:
-		res = []string{"Name", "Value"}
-	case CellIcon:
-		res = []string{"Name", "Icon", "NeedsConfirmation", "ConfirmationMessage"}
-	case CellInt:
-		res = []string{"Name", "Value"}
-	case CellString:
-		res = []string{"Name", "Value"}
-	case CheckBox:
-		res = []string{"Name", "Value"}
-	case DisplayedColumn:
-		res = []string{"Name"}
-	case FormDiv:
-		res = []string{"Name", "FormFields", "CheckBoxs", "FormEditAssocButton", "FormSortAssocButton"}
-	case FormEditAssocButton:
-		res = []string{"Name", "Label", "AssociationStorage", "HasChanged", "IsForSavePurpose", "HasToolTip", "ToolTipText"}
-	case FormField:
-		res = []string{"Name", "InputTypeEnum", "Label", "Placeholder", "FormFieldString", "FormFieldFloat64", "FormFieldInt", "FormFieldDate", "FormFieldTime", "FormFieldDateTime", "FormFieldSelect", "HasBespokeWidth", "BespokeWidthPx", "HasBespokeHeight", "BespokeHeightPx"}
-	case FormFieldDate:
-		res = []string{"Name", "Value"}
-	case FormFieldDateTime:
-		res = []string{"Name", "Value"}
-	case FormFieldFloat64:
-		res = []string{"Name", "Value", "HasMinValidator", "MinValue", "HasMaxValidator", "MaxValue"}
-	case FormFieldInt:
-		res = []string{"Name", "Value", "HasMinValidator", "MinValue", "HasMaxValidator", "MaxValue"}
-	case FormFieldSelect:
-		res = []string{"Name", "Value", "Options", "CanBeEmpty"}
-	case FormFieldString:
-		res = []string{"Name", "Value", "IsTextArea"}
-	case FormFieldTime:
-		res = []string{"Name", "Value", "Step"}
-	case FormGroup:
-		res = []string{"Name", "Label", "FormDivs", "HasSuppressButton", "HasSuppressButtonBeenPressed"}
-	case FormSortAssocButton:
-		res = []string{"Name", "Label", "HasToolTip", "ToolTipText", "FormEditAssocButton"}
-	case Option:
-		res = []string{"Name"}
-	case Row:
-		res = []string{"Name", "Cells", "IsChecked"}
-	case Table:
-		res = []string{"Name", "DisplayedColumns", "Rows", "HasFiltering", "HasColumnSorting", "HasPaginator", "HasCheckableRows", "HasSaveButton", "SaveButtonLabel", "CanDragDropRows", "HasCloseButton", "SavingInProgress", "NbOfStickyColumns"}
-	}
-	return
-}
-
 type ReverseField struct {
 	GongstructName string
 	Fieldname      string
 }
 
-func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
+func GetReverseFields[Type PointerToGongstruct]() (res []ReverseField) {
 
 	res = make([]ReverseField, 0)
 
@@ -4233,172 +4515,736 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	switch any(ret).(type) {
 
 	// insertion point for generic get gongstruct name
-	case Cell:
+	case *Cell:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Row"
 		rf.Fieldname = "Cells"
 		res = append(res, rf)
-	case CellBoolean:
+	case *CellBoolean:
 		var rf ReverseField
 		_ = rf
-	case CellFloat64:
+	case *CellFloat64:
 		var rf ReverseField
 		_ = rf
-	case CellIcon:
+	case *CellIcon:
 		var rf ReverseField
 		_ = rf
-	case CellInt:
+	case *CellInt:
 		var rf ReverseField
 		_ = rf
-	case CellString:
+	case *CellString:
 		var rf ReverseField
 		_ = rf
-	case CheckBox:
+	case *CheckBox:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "FormDiv"
 		rf.Fieldname = "CheckBoxs"
 		res = append(res, rf)
-	case DisplayedColumn:
+	case *DisplayedColumn:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Table"
 		rf.Fieldname = "DisplayedColumns"
 		res = append(res, rf)
-	case FormDiv:
+	case *FormDiv:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "FormGroup"
 		rf.Fieldname = "FormDivs"
 		res = append(res, rf)
-	case FormEditAssocButton:
+	case *FormEditAssocButton:
 		var rf ReverseField
 		_ = rf
-	case FormField:
+	case *FormField:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "FormDiv"
 		rf.Fieldname = "FormFields"
 		res = append(res, rf)
-	case FormFieldDate:
+	case *FormFieldDate:
 		var rf ReverseField
 		_ = rf
-	case FormFieldDateTime:
+	case *FormFieldDateTime:
 		var rf ReverseField
 		_ = rf
-	case FormFieldFloat64:
+	case *FormFieldFloat64:
 		var rf ReverseField
 		_ = rf
-	case FormFieldInt:
+	case *FormFieldInt:
 		var rf ReverseField
 		_ = rf
-	case FormFieldSelect:
+	case *FormFieldSelect:
 		var rf ReverseField
 		_ = rf
-	case FormFieldString:
+	case *FormFieldString:
 		var rf ReverseField
 		_ = rf
-	case FormFieldTime:
+	case *FormFieldTime:
 		var rf ReverseField
 		_ = rf
-	case FormGroup:
+	case *FormGroup:
 		var rf ReverseField
 		_ = rf
-	case FormSortAssocButton:
+	case *FormSortAssocButton:
 		var rf ReverseField
 		_ = rf
-	case Option:
+	case *Option:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "FormFieldSelect"
 		rf.Fieldname = "Options"
 		res = append(res, rf)
-	case Row:
+	case *Row:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Table"
 		rf.Fieldname = "Rows"
 		res = append(res, rf)
-	case Table:
+	case *Table:
 		var rf ReverseField
 		_ = rf
 	}
 	return
 }
 
-// GetFieldsFromPointer return the array of the fields
-func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case *Cell:
-		res = []string{"Name", "CellString", "CellFloat64", "CellInt", "CellBool", "CellIcon"}
-	case *CellBoolean:
-		res = []string{"Name", "Value"}
-	case *CellFloat64:
-		res = []string{"Name", "Value"}
-	case *CellIcon:
-		res = []string{"Name", "Icon", "NeedsConfirmation", "ConfirmationMessage"}
-	case *CellInt:
-		res = []string{"Name", "Value"}
-	case *CellString:
-		res = []string{"Name", "Value"}
-	case *CheckBox:
-		res = []string{"Name", "Value"}
-	case *DisplayedColumn:
-		res = []string{"Name"}
-	case *FormDiv:
-		res = []string{"Name", "FormFields", "CheckBoxs", "FormEditAssocButton", "FormSortAssocButton"}
-	case *FormEditAssocButton:
-		res = []string{"Name", "Label", "AssociationStorage", "HasChanged", "IsForSavePurpose", "HasToolTip", "ToolTipText"}
-	case *FormField:
-		res = []string{"Name", "InputTypeEnum", "Label", "Placeholder", "FormFieldString", "FormFieldFloat64", "FormFieldInt", "FormFieldDate", "FormFieldTime", "FormFieldDateTime", "FormFieldSelect", "HasBespokeWidth", "BespokeWidthPx", "HasBespokeHeight", "BespokeHeightPx"}
-	case *FormFieldDate:
-		res = []string{"Name", "Value"}
-	case *FormFieldDateTime:
-		res = []string{"Name", "Value"}
-	case *FormFieldFloat64:
-		res = []string{"Name", "Value", "HasMinValidator", "MinValue", "HasMaxValidator", "MaxValue"}
-	case *FormFieldInt:
-		res = []string{"Name", "Value", "HasMinValidator", "MinValue", "HasMaxValidator", "MaxValue"}
-	case *FormFieldSelect:
-		res = []string{"Name", "Value", "Options", "CanBeEmpty"}
-	case *FormFieldString:
-		res = []string{"Name", "Value", "IsTextArea"}
-	case *FormFieldTime:
-		res = []string{"Name", "Value", "Step"}
-	case *FormGroup:
-		res = []string{"Name", "Label", "FormDivs", "HasSuppressButton", "HasSuppressButtonBeenPressed"}
-	case *FormSortAssocButton:
-		res = []string{"Name", "Label", "HasToolTip", "ToolTipText", "FormEditAssocButton"}
-	case *Option:
-		res = []string{"Name"}
-	case *Row:
-		res = []string{"Name", "Cells", "IsChecked"}
-	case *Table:
-		res = []string{"Name", "DisplayedColumns", "Rows", "HasFiltering", "HasColumnSorting", "HasPaginator", "HasCheckableRows", "HasSaveButton", "SaveButtonLabel", "CanDragDropRows", "HasCloseButton", "SavingInProgress", "NbOfStickyColumns"}
+// insertion point for get fields header method
+func (cell *Cell) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "CellString",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "CellString",
+		},
+		{
+			Name:                 "CellFloat64",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "CellFloat64",
+		},
+		{
+			Name:                 "CellInt",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "CellInt",
+		},
+		{
+			Name:                 "CellBool",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "CellBoolean",
+		},
+		{
+			Name:                 "CellIcon",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "CellIcon",
+		},
 	}
 	return
+}
+
+func (cellboolean *CellBoolean) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (cellfloat64 *CellFloat64) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (cellicon *CellIcon) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Icon",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "NeedsConfirmation",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ConfirmationMessage",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (cellint *CellInt) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (cellstring *CellString) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (checkbox *CheckBox) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (displayedcolumn *DisplayedColumn) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formdiv *FormDiv) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "FormFields",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "FormField",
+		},
+		{
+			Name:                 "CheckBoxs",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "CheckBox",
+		},
+		{
+			Name:                 "FormEditAssocButton",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormEditAssocButton",
+		},
+		{
+			Name:                 "FormSortAssocButton",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormSortAssocButton",
+		},
+	}
+	return
+}
+
+func (formeditassocbutton *FormEditAssocButton) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Label",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "AssociationStorage",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasChanged",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsForSavePurpose",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasToolTip",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ToolTipText",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MatTooltipShowDelay",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formfield *FormField) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "InputTypeEnum",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Label",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Placeholder",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "FormFieldString",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormFieldString",
+		},
+		{
+			Name:                 "FormFieldFloat64",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormFieldFloat64",
+		},
+		{
+			Name:                 "FormFieldInt",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormFieldInt",
+		},
+		{
+			Name:                 "FormFieldDate",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormFieldDate",
+		},
+		{
+			Name:                 "FormFieldTime",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormFieldTime",
+		},
+		{
+			Name:                 "FormFieldDateTime",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormFieldDateTime",
+		},
+		{
+			Name:                 "FormFieldSelect",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormFieldSelect",
+		},
+		{
+			Name:               "HasBespokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BespokeWidthPx",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasBespokeHeight",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BespokeHeightPx",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formfielddate *FormFieldDate) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formfielddatetime *FormFieldDateTime) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formfieldfloat64 *FormFieldFloat64) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasMinValidator",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MinValue",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasMaxValidator",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MaxValue",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formfieldint *FormFieldInt) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasMinValidator",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MinValue",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasMaxValidator",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MaxValue",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formfieldselect *FormFieldSelect) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Value",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "Option",
+		},
+		{
+			Name:                 "Options",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Option",
+		},
+		{
+			Name:               "CanBeEmpty",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "PreserveInitialOrder",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formfieldstring *FormFieldString) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsTextArea",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formfieldtime *FormFieldTime) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Value",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Step",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formgroup *FormGroup) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Label",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "FormDivs",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "FormDiv",
+		},
+		{
+			Name:               "HasSuppressButton",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasSuppressButtonBeenPressed",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (formsortassocbutton *FormSortAssocButton) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Label",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasToolTip",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ToolTipText",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MatTooltipShowDelay",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "FormEditAssocButton",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "FormEditAssocButton",
+		},
+	}
+	return
+}
+
+func (option *Option) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (row *Row) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Cells",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Cell",
+		},
+		{
+			Name:               "IsChecked",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (table *Table) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "DisplayedColumns",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "DisplayedColumn",
+		},
+		{
+			Name:                 "Rows",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Row",
+		},
+		{
+			Name:               "HasFiltering",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasColumnSorting",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasPaginator",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasCheckableRows",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasSaveButton",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "SaveButtonLabel",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CanDragDropRows",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasCloseButton",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "SavingInProgress",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "NbOfStickyColumns",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+// GetFieldsFromPointer return the array of the fields
+func GetFieldsFromPointer[Type PointerToGongstruct]() (res []GongFieldHeader) {
+
+	var ret Type
+	return ret.GongGetFieldHeaders()
 }
 
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt             GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat           GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool            GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeString          GongFieldValueType = "GongFieldValueTypeString"
+	GongFieldValueTypeBasicKind       GongFieldValueType = "GongFieldValueTypeBasicKind"
+	GongFieldValueTypePointer         GongFieldValueType = "GongFieldValueTypePointer"
+	GongFieldValueTypeSliceOfPointers GongFieldValueType = "GongFieldValueTypeSliceOfPointers"
 )
 
 type GongFieldValue struct {
-	valueString string
 	GongFieldValueType
-	valueInt   int
-	valueFloat float64
-	valueBool  bool
+	valueString string
+	valueInt    int
+	valueFloat  float64
+	valueBool   bool
+
+	// in case of a pointer, the ID of the pointed element
+	// in case of a slice of pointers, the IDs, separated by semi columbs
+	ids string
+}
+
+type GongFieldHeader struct {
+	Name string
+	GongFieldValueType
+	TargetGongstructName string
 }
 
 func (gongValueField *GongFieldValue) GetValueString() string {
@@ -4417,899 +5263,1295 @@ func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }
 
-func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFieldValue) {
-
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case *Cell:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "CellString":
-			if inferedInstance.CellString != nil {
-				res.valueString = inferedInstance.CellString.Name
-			}
-		case "CellFloat64":
-			if inferedInstance.CellFloat64 != nil {
-				res.valueString = inferedInstance.CellFloat64.Name
-			}
-		case "CellInt":
-			if inferedInstance.CellInt != nil {
-				res.valueString = inferedInstance.CellInt.Name
-			}
-		case "CellBool":
-			if inferedInstance.CellBool != nil {
-				res.valueString = inferedInstance.CellBool.Name
-			}
-		case "CellIcon":
-			if inferedInstance.CellIcon != nil {
-				res.valueString = inferedInstance.CellIcon.Name
-			}
+// insertion point for generic get gongstruct field value
+func (cell *Cell) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = cell.Name
+	case "CellString":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if cell.CellString != nil {
+			res.valueString = cell.CellString.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, cell.CellString))
 		}
-	case *CellBoolean:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.Value)
-			res.valueBool = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeBool
+	case "CellFloat64":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if cell.CellFloat64 != nil {
+			res.valueString = cell.CellFloat64.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, cell.CellFloat64))
 		}
-	case *CellFloat64:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Value)
-			res.valueFloat = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeFloat
+	case "CellInt":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if cell.CellInt != nil {
+			res.valueString = cell.CellInt.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, cell.CellInt))
 		}
-	case *CellIcon:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Icon":
-			res.valueString = inferedInstance.Icon
-		case "NeedsConfirmation":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.NeedsConfirmation)
-			res.valueBool = inferedInstance.NeedsConfirmation
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ConfirmationMessage":
-			res.valueString = inferedInstance.ConfirmationMessage
+	case "CellBool":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if cell.CellBool != nil {
+			res.valueString = cell.CellBool.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, cell.CellBool))
 		}
-	case *CellInt:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Value)
-			res.valueInt = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeInt
+	case "CellIcon":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if cell.CellIcon != nil {
+			res.valueString = cell.CellIcon.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, cell.CellIcon))
 		}
-	case *CellString:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value
-		}
-	case *CheckBox:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.Value)
-			res.valueBool = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case *DisplayedColumn:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	case *FormDiv:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "FormFields":
-			for idx, __instance__ := range inferedInstance.FormFields {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "CheckBoxs":
-			for idx, __instance__ := range inferedInstance.CheckBoxs {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "FormEditAssocButton":
-			if inferedInstance.FormEditAssocButton != nil {
-				res.valueString = inferedInstance.FormEditAssocButton.Name
-			}
-		case "FormSortAssocButton":
-			if inferedInstance.FormSortAssocButton != nil {
-				res.valueString = inferedInstance.FormSortAssocButton.Name
-			}
-		}
-	case *FormEditAssocButton:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Label":
-			res.valueString = inferedInstance.Label
-		case "AssociationStorage":
-			res.valueString = inferedInstance.AssociationStorage
-		case "HasChanged":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasChanged)
-			res.valueBool = inferedInstance.HasChanged
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsForSavePurpose":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsForSavePurpose)
-			res.valueBool = inferedInstance.IsForSavePurpose
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		}
-	case *FormField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "InputTypeEnum":
-			enum := inferedInstance.InputTypeEnum
-			res.valueString = enum.ToCodeString()
-		case "Label":
-			res.valueString = inferedInstance.Label
-		case "Placeholder":
-			res.valueString = inferedInstance.Placeholder
-		case "FormFieldString":
-			if inferedInstance.FormFieldString != nil {
-				res.valueString = inferedInstance.FormFieldString.Name
-			}
-		case "FormFieldFloat64":
-			if inferedInstance.FormFieldFloat64 != nil {
-				res.valueString = inferedInstance.FormFieldFloat64.Name
-			}
-		case "FormFieldInt":
-			if inferedInstance.FormFieldInt != nil {
-				res.valueString = inferedInstance.FormFieldInt.Name
-			}
-		case "FormFieldDate":
-			if inferedInstance.FormFieldDate != nil {
-				res.valueString = inferedInstance.FormFieldDate.Name
-			}
-		case "FormFieldTime":
-			if inferedInstance.FormFieldTime != nil {
-				res.valueString = inferedInstance.FormFieldTime.Name
-			}
-		case "FormFieldDateTime":
-			if inferedInstance.FormFieldDateTime != nil {
-				res.valueString = inferedInstance.FormFieldDateTime.Name
-			}
-		case "FormFieldSelect":
-			if inferedInstance.FormFieldSelect != nil {
-				res.valueString = inferedInstance.FormFieldSelect.Name
-			}
-		case "HasBespokeWidth":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBespokeWidth)
-			res.valueBool = inferedInstance.HasBespokeWidth
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "BespokeWidthPx":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.BespokeWidthPx)
-			res.valueInt = inferedInstance.BespokeWidthPx
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "HasBespokeHeight":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBespokeHeight)
-			res.valueBool = inferedInstance.HasBespokeHeight
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "BespokeHeightPx":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.BespokeHeightPx)
-			res.valueInt = inferedInstance.BespokeHeightPx
-			res.GongFieldValueType = GongFieldValueTypeInt
-		}
-	case *FormFieldDate:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value.String()
-		}
-	case *FormFieldDateTime:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value.String()
-		}
-	case *FormFieldFloat64:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Value)
-			res.valueFloat = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasMinValidator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasMinValidator)
-			res.valueBool = inferedInstance.HasMinValidator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MinValue":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MinValue)
-			res.valueFloat = inferedInstance.MinValue
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasMaxValidator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasMaxValidator)
-			res.valueBool = inferedInstance.HasMaxValidator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MaxValue":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MaxValue)
-			res.valueFloat = inferedInstance.MaxValue
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	case *FormFieldInt:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Value)
-			res.valueInt = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "HasMinValidator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasMinValidator)
-			res.valueBool = inferedInstance.HasMinValidator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MinValue":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.MinValue)
-			res.valueInt = inferedInstance.MinValue
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "HasMaxValidator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasMaxValidator)
-			res.valueBool = inferedInstance.HasMaxValidator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MaxValue":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.MaxValue)
-			res.valueInt = inferedInstance.MaxValue
-			res.GongFieldValueType = GongFieldValueTypeInt
-		}
-	case *FormFieldSelect:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			if inferedInstance.Value != nil {
-				res.valueString = inferedInstance.Value.Name
-			}
-		case "Options":
-			for idx, __instance__ := range inferedInstance.Options {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "CanBeEmpty":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanBeEmpty)
-			res.valueBool = inferedInstance.CanBeEmpty
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case *FormFieldString:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value
-		case "IsTextArea":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsTextArea)
-			res.valueBool = inferedInstance.IsTextArea
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case *FormFieldTime:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value.String()
-		case "Step":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Step)
-			res.valueFloat = inferedInstance.Step
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	case *FormGroup:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Label":
-			res.valueString = inferedInstance.Label
-		case "FormDivs":
-			for idx, __instance__ := range inferedInstance.FormDivs {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "HasSuppressButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSuppressButton)
-			res.valueBool = inferedInstance.HasSuppressButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasSuppressButtonBeenPressed":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSuppressButtonBeenPressed)
-			res.valueBool = inferedInstance.HasSuppressButtonBeenPressed
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case *FormSortAssocButton:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Label":
-			res.valueString = inferedInstance.Label
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		case "FormEditAssocButton":
-			if inferedInstance.FormEditAssocButton != nil {
-				res.valueString = inferedInstance.FormEditAssocButton.Name
-			}
-		}
-	case *Option:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	case *Row:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Cells":
-			for idx, __instance__ := range inferedInstance.Cells {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "IsChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsChecked)
-			res.valueBool = inferedInstance.IsChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case *Table:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "DisplayedColumns":
-			for idx, __instance__ := range inferedInstance.DisplayedColumns {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Rows":
-			for idx, __instance__ := range inferedInstance.Rows {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "HasFiltering":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasFiltering)
-			res.valueBool = inferedInstance.HasFiltering
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasColumnSorting":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasColumnSorting)
-			res.valueBool = inferedInstance.HasColumnSorting
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasPaginator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasPaginator)
-			res.valueBool = inferedInstance.HasPaginator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasCheckableRows":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasCheckableRows)
-			res.valueBool = inferedInstance.HasCheckableRows
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasSaveButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSaveButton)
-			res.valueBool = inferedInstance.HasSaveButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "SaveButtonLabel":
-			res.valueString = inferedInstance.SaveButtonLabel
-		case "CanDragDropRows":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanDragDropRows)
-			res.valueBool = inferedInstance.CanDragDropRows
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasCloseButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasCloseButton)
-			res.valueBool = inferedInstance.HasCloseButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "SavingInProgress":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.SavingInProgress)
-			res.valueBool = inferedInstance.SavingInProgress
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NbOfStickyColumns":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NbOfStickyColumns)
-			res.valueInt = inferedInstance.NbOfStickyColumns
-			res.GongFieldValueType = GongFieldValueTypeInt
-		}
-	default:
-		_ = inferedInstance
 	}
 	return
 }
+func (cellboolean *CellBoolean) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = cellboolean.Name
+	case "Value":
+		res.valueString = fmt.Sprintf("%t", cellboolean.Value)
+		res.valueBool = cellboolean.Value
+		res.GongFieldValueType = GongFieldValueTypeBool
+	}
+	return
+}
+func (cellfloat64 *CellFloat64) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = cellfloat64.Name
+	case "Value":
+		res.valueString = fmt.Sprintf("%f", cellfloat64.Value)
+		res.valueFloat = cellfloat64.Value
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	}
+	return
+}
+func (cellicon *CellIcon) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = cellicon.Name
+	case "Icon":
+		res.valueString = cellicon.Icon
+	case "NeedsConfirmation":
+		res.valueString = fmt.Sprintf("%t", cellicon.NeedsConfirmation)
+		res.valueBool = cellicon.NeedsConfirmation
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "ConfirmationMessage":
+		res.valueString = cellicon.ConfirmationMessage
+	}
+	return
+}
+func (cellint *CellInt) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = cellint.Name
+	case "Value":
+		res.valueString = fmt.Sprintf("%d", cellint.Value)
+		res.valueInt = cellint.Value
+		res.GongFieldValueType = GongFieldValueTypeInt
+	}
+	return
+}
+func (cellstring *CellString) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = cellstring.Name
+	case "Value":
+		res.valueString = cellstring.Value
+	}
+	return
+}
+func (checkbox *CheckBox) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = checkbox.Name
+	case "Value":
+		res.valueString = fmt.Sprintf("%t", checkbox.Value)
+		res.valueBool = checkbox.Value
+		res.GongFieldValueType = GongFieldValueTypeBool
+	}
+	return
+}
+func (displayedcolumn *DisplayedColumn) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = displayedcolumn.Name
+	}
+	return
+}
+func (formdiv *FormDiv) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formdiv.Name
+	case "FormFields":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range formdiv.FormFields {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "CheckBoxs":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range formdiv.CheckBoxs {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "FormEditAssocButton":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formdiv.FormEditAssocButton != nil {
+			res.valueString = formdiv.FormEditAssocButton.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formdiv.FormEditAssocButton))
+		}
+	case "FormSortAssocButton":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formdiv.FormSortAssocButton != nil {
+			res.valueString = formdiv.FormSortAssocButton.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formdiv.FormSortAssocButton))
+		}
+	}
+	return
+}
+func (formeditassocbutton *FormEditAssocButton) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formeditassocbutton.Name
+	case "Label":
+		res.valueString = formeditassocbutton.Label
+	case "AssociationStorage":
+		res.valueString = formeditassocbutton.AssociationStorage
+	case "HasChanged":
+		res.valueString = fmt.Sprintf("%t", formeditassocbutton.HasChanged)
+		res.valueBool = formeditassocbutton.HasChanged
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsForSavePurpose":
+		res.valueString = fmt.Sprintf("%t", formeditassocbutton.IsForSavePurpose)
+		res.valueBool = formeditassocbutton.IsForSavePurpose
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasToolTip":
+		res.valueString = fmt.Sprintf("%t", formeditassocbutton.HasToolTip)
+		res.valueBool = formeditassocbutton.HasToolTip
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "ToolTipText":
+		res.valueString = formeditassocbutton.ToolTipText
+	case "MatTooltipShowDelay":
+		res.valueString = formeditassocbutton.MatTooltipShowDelay
+	}
+	return
+}
+func (formfield *FormField) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formfield.Name
+	case "InputTypeEnum":
+		enum := formfield.InputTypeEnum
+		res.valueString = enum.ToCodeString()
+	case "Label":
+		res.valueString = formfield.Label
+	case "Placeholder":
+		res.valueString = formfield.Placeholder
+	case "FormFieldString":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formfield.FormFieldString != nil {
+			res.valueString = formfield.FormFieldString.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formfield.FormFieldString))
+		}
+	case "FormFieldFloat64":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formfield.FormFieldFloat64 != nil {
+			res.valueString = formfield.FormFieldFloat64.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formfield.FormFieldFloat64))
+		}
+	case "FormFieldInt":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formfield.FormFieldInt != nil {
+			res.valueString = formfield.FormFieldInt.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formfield.FormFieldInt))
+		}
+	case "FormFieldDate":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formfield.FormFieldDate != nil {
+			res.valueString = formfield.FormFieldDate.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formfield.FormFieldDate))
+		}
+	case "FormFieldTime":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formfield.FormFieldTime != nil {
+			res.valueString = formfield.FormFieldTime.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formfield.FormFieldTime))
+		}
+	case "FormFieldDateTime":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formfield.FormFieldDateTime != nil {
+			res.valueString = formfield.FormFieldDateTime.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formfield.FormFieldDateTime))
+		}
+	case "FormFieldSelect":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formfield.FormFieldSelect != nil {
+			res.valueString = formfield.FormFieldSelect.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formfield.FormFieldSelect))
+		}
+	case "HasBespokeWidth":
+		res.valueString = fmt.Sprintf("%t", formfield.HasBespokeWidth)
+		res.valueBool = formfield.HasBespokeWidth
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "BespokeWidthPx":
+		res.valueString = fmt.Sprintf("%d", formfield.BespokeWidthPx)
+		res.valueInt = formfield.BespokeWidthPx
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "HasBespokeHeight":
+		res.valueString = fmt.Sprintf("%t", formfield.HasBespokeHeight)
+		res.valueBool = formfield.HasBespokeHeight
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "BespokeHeightPx":
+		res.valueString = fmt.Sprintf("%d", formfield.BespokeHeightPx)
+		res.valueInt = formfield.BespokeHeightPx
+		res.GongFieldValueType = GongFieldValueTypeInt
+	}
+	return
+}
+func (formfielddate *FormFieldDate) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formfielddate.Name
+	case "Value":
+		res.valueString = formfielddate.Value.String()
+	}
+	return
+}
+func (formfielddatetime *FormFieldDateTime) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formfielddatetime.Name
+	case "Value":
+		res.valueString = formfielddatetime.Value.String()
+	}
+	return
+}
+func (formfieldfloat64 *FormFieldFloat64) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formfieldfloat64.Name
+	case "Value":
+		res.valueString = fmt.Sprintf("%f", formfieldfloat64.Value)
+		res.valueFloat = formfieldfloat64.Value
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "HasMinValidator":
+		res.valueString = fmt.Sprintf("%t", formfieldfloat64.HasMinValidator)
+		res.valueBool = formfieldfloat64.HasMinValidator
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "MinValue":
+		res.valueString = fmt.Sprintf("%f", formfieldfloat64.MinValue)
+		res.valueFloat = formfieldfloat64.MinValue
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "HasMaxValidator":
+		res.valueString = fmt.Sprintf("%t", formfieldfloat64.HasMaxValidator)
+		res.valueBool = formfieldfloat64.HasMaxValidator
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "MaxValue":
+		res.valueString = fmt.Sprintf("%f", formfieldfloat64.MaxValue)
+		res.valueFloat = formfieldfloat64.MaxValue
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	}
+	return
+}
+func (formfieldint *FormFieldInt) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formfieldint.Name
+	case "Value":
+		res.valueString = fmt.Sprintf("%d", formfieldint.Value)
+		res.valueInt = formfieldint.Value
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "HasMinValidator":
+		res.valueString = fmt.Sprintf("%t", formfieldint.HasMinValidator)
+		res.valueBool = formfieldint.HasMinValidator
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "MinValue":
+		res.valueString = fmt.Sprintf("%d", formfieldint.MinValue)
+		res.valueInt = formfieldint.MinValue
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "HasMaxValidator":
+		res.valueString = fmt.Sprintf("%t", formfieldint.HasMaxValidator)
+		res.valueBool = formfieldint.HasMaxValidator
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "MaxValue":
+		res.valueString = fmt.Sprintf("%d", formfieldint.MaxValue)
+		res.valueInt = formfieldint.MaxValue
+		res.GongFieldValueType = GongFieldValueTypeInt
+	}
+	return
+}
+func (formfieldselect *FormFieldSelect) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formfieldselect.Name
+	case "Value":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formfieldselect.Value != nil {
+			res.valueString = formfieldselect.Value.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formfieldselect.Value))
+		}
+	case "Options":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range formfieldselect.Options {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "CanBeEmpty":
+		res.valueString = fmt.Sprintf("%t", formfieldselect.CanBeEmpty)
+		res.valueBool = formfieldselect.CanBeEmpty
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "PreserveInitialOrder":
+		res.valueString = fmt.Sprintf("%t", formfieldselect.PreserveInitialOrder)
+		res.valueBool = formfieldselect.PreserveInitialOrder
+		res.GongFieldValueType = GongFieldValueTypeBool
+	}
+	return
+}
+func (formfieldstring *FormFieldString) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formfieldstring.Name
+	case "Value":
+		res.valueString = formfieldstring.Value
+	case "IsTextArea":
+		res.valueString = fmt.Sprintf("%t", formfieldstring.IsTextArea)
+		res.valueBool = formfieldstring.IsTextArea
+		res.GongFieldValueType = GongFieldValueTypeBool
+	}
+	return
+}
+func (formfieldtime *FormFieldTime) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formfieldtime.Name
+	case "Value":
+		res.valueString = formfieldtime.Value.String()
+	case "Step":
+		res.valueString = fmt.Sprintf("%f", formfieldtime.Step)
+		res.valueFloat = formfieldtime.Step
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	}
+	return
+}
+func (formgroup *FormGroup) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formgroup.Name
+	case "Label":
+		res.valueString = formgroup.Label
+	case "FormDivs":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range formgroup.FormDivs {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "HasSuppressButton":
+		res.valueString = fmt.Sprintf("%t", formgroup.HasSuppressButton)
+		res.valueBool = formgroup.HasSuppressButton
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasSuppressButtonBeenPressed":
+		res.valueString = fmt.Sprintf("%t", formgroup.HasSuppressButtonBeenPressed)
+		res.valueBool = formgroup.HasSuppressButtonBeenPressed
+		res.GongFieldValueType = GongFieldValueTypeBool
+	}
+	return
+}
+func (formsortassocbutton *FormSortAssocButton) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = formsortassocbutton.Name
+	case "Label":
+		res.valueString = formsortassocbutton.Label
+	case "HasToolTip":
+		res.valueString = fmt.Sprintf("%t", formsortassocbutton.HasToolTip)
+		res.valueBool = formsortassocbutton.HasToolTip
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "ToolTipText":
+		res.valueString = formsortassocbutton.ToolTipText
+	case "MatTooltipShowDelay":
+		res.valueString = formsortassocbutton.MatTooltipShowDelay
+	case "FormEditAssocButton":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if formsortassocbutton.FormEditAssocButton != nil {
+			res.valueString = formsortassocbutton.FormEditAssocButton.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, formsortassocbutton.FormEditAssocButton))
+		}
+	}
+	return
+}
+func (option *Option) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = option.Name
+	}
+	return
+}
+func (row *Row) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = row.Name
+	case "Cells":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range row.Cells {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "IsChecked":
+		res.valueString = fmt.Sprintf("%t", row.IsChecked)
+		res.valueBool = row.IsChecked
+		res.GongFieldValueType = GongFieldValueTypeBool
+	}
+	return
+}
+func (table *Table) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = table.Name
+	case "DisplayedColumns":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range table.DisplayedColumns {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Rows":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range table.Rows {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "HasFiltering":
+		res.valueString = fmt.Sprintf("%t", table.HasFiltering)
+		res.valueBool = table.HasFiltering
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasColumnSorting":
+		res.valueString = fmt.Sprintf("%t", table.HasColumnSorting)
+		res.valueBool = table.HasColumnSorting
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasPaginator":
+		res.valueString = fmt.Sprintf("%t", table.HasPaginator)
+		res.valueBool = table.HasPaginator
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasCheckableRows":
+		res.valueString = fmt.Sprintf("%t", table.HasCheckableRows)
+		res.valueBool = table.HasCheckableRows
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasSaveButton":
+		res.valueString = fmt.Sprintf("%t", table.HasSaveButton)
+		res.valueBool = table.HasSaveButton
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "SaveButtonLabel":
+		res.valueString = table.SaveButtonLabel
+	case "CanDragDropRows":
+		res.valueString = fmt.Sprintf("%t", table.CanDragDropRows)
+		res.valueBool = table.CanDragDropRows
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasCloseButton":
+		res.valueString = fmt.Sprintf("%t", table.HasCloseButton)
+		res.valueBool = table.HasCloseButton
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "SavingInProgress":
+		res.valueString = fmt.Sprintf("%t", table.SavingInProgress)
+		res.valueBool = table.SavingInProgress
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "NbOfStickyColumns":
+		res.valueString = fmt.Sprintf("%d", table.NbOfStickyColumns)
+		res.valueInt = table.NbOfStickyColumns
+		res.GongFieldValueType = GongFieldValueTypeInt
+	}
+	return
+}
+func GetFieldStringValueFromPointer(instance GongstructIF, fieldName string, stage *Stage) (res GongFieldValue) {
 
-func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
+	res = instance.GongGetFieldValue(fieldName, stage)
+	return
+}
 
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case Cell:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "CellString":
-			if inferedInstance.CellString != nil {
-				res.valueString = inferedInstance.CellString.Name
-			}
-		case "CellFloat64":
-			if inferedInstance.CellFloat64 != nil {
-				res.valueString = inferedInstance.CellFloat64.Name
-			}
-		case "CellInt":
-			if inferedInstance.CellInt != nil {
-				res.valueString = inferedInstance.CellInt.Name
-			}
-		case "CellBool":
-			if inferedInstance.CellBool != nil {
-				res.valueString = inferedInstance.CellBool.Name
-			}
-		case "CellIcon":
-			if inferedInstance.CellIcon != nil {
-				res.valueString = inferedInstance.CellIcon.Name
-			}
-		}
-	case CellBoolean:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.Value)
-			res.valueBool = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case CellFloat64:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Value)
-			res.valueFloat = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	case CellIcon:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Icon":
-			res.valueString = inferedInstance.Icon
-		case "NeedsConfirmation":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.NeedsConfirmation)
-			res.valueBool = inferedInstance.NeedsConfirmation
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ConfirmationMessage":
-			res.valueString = inferedInstance.ConfirmationMessage
-		}
-	case CellInt:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Value)
-			res.valueInt = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeInt
-		}
-	case CellString:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value
-		}
-	case CheckBox:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.Value)
-			res.valueBool = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case DisplayedColumn:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	case FormDiv:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "FormFields":
-			for idx, __instance__ := range inferedInstance.FormFields {
-				if idx > 0 {
-					res.valueString += "\n"
+// insertion point for generic set gongstruct field value
+func (cell *Cell) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		cell.Name = value.GetValueString()
+	case "CellString":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			cell.CellString = nil
+			for __instance__ := range stage.CellStrings {
+				if stage.CellStringMap_Staged_Order[__instance__] == uint(id) {
+					cell.CellString = __instance__
+					break
 				}
-				res.valueString += __instance__.Name
 			}
-		case "CheckBoxs":
-			for idx, __instance__ := range inferedInstance.CheckBoxs {
-				if idx > 0 {
-					res.valueString += "\n"
+		}
+	case "CellFloat64":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			cell.CellFloat64 = nil
+			for __instance__ := range stage.CellFloat64s {
+				if stage.CellFloat64Map_Staged_Order[__instance__] == uint(id) {
+					cell.CellFloat64 = __instance__
+					break
 				}
-				res.valueString += __instance__.Name
-			}
-		case "FormEditAssocButton":
-			if inferedInstance.FormEditAssocButton != nil {
-				res.valueString = inferedInstance.FormEditAssocButton.Name
-			}
-		case "FormSortAssocButton":
-			if inferedInstance.FormSortAssocButton != nil {
-				res.valueString = inferedInstance.FormSortAssocButton.Name
 			}
 		}
-	case FormEditAssocButton:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Label":
-			res.valueString = inferedInstance.Label
-		case "AssociationStorage":
-			res.valueString = inferedInstance.AssociationStorage
-		case "HasChanged":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasChanged)
-			res.valueBool = inferedInstance.HasChanged
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsForSavePurpose":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsForSavePurpose)
-			res.valueBool = inferedInstance.IsForSavePurpose
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		}
-	case FormField:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "InputTypeEnum":
-			enum := inferedInstance.InputTypeEnum
-			res.valueString = enum.ToCodeString()
-		case "Label":
-			res.valueString = inferedInstance.Label
-		case "Placeholder":
-			res.valueString = inferedInstance.Placeholder
-		case "FormFieldString":
-			if inferedInstance.FormFieldString != nil {
-				res.valueString = inferedInstance.FormFieldString.Name
-			}
-		case "FormFieldFloat64":
-			if inferedInstance.FormFieldFloat64 != nil {
-				res.valueString = inferedInstance.FormFieldFloat64.Name
-			}
-		case "FormFieldInt":
-			if inferedInstance.FormFieldInt != nil {
-				res.valueString = inferedInstance.FormFieldInt.Name
-			}
-		case "FormFieldDate":
-			if inferedInstance.FormFieldDate != nil {
-				res.valueString = inferedInstance.FormFieldDate.Name
-			}
-		case "FormFieldTime":
-			if inferedInstance.FormFieldTime != nil {
-				res.valueString = inferedInstance.FormFieldTime.Name
-			}
-		case "FormFieldDateTime":
-			if inferedInstance.FormFieldDateTime != nil {
-				res.valueString = inferedInstance.FormFieldDateTime.Name
-			}
-		case "FormFieldSelect":
-			if inferedInstance.FormFieldSelect != nil {
-				res.valueString = inferedInstance.FormFieldSelect.Name
-			}
-		case "HasBespokeWidth":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBespokeWidth)
-			res.valueBool = inferedInstance.HasBespokeWidth
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "BespokeWidthPx":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.BespokeWidthPx)
-			res.valueInt = inferedInstance.BespokeWidthPx
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "HasBespokeHeight":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBespokeHeight)
-			res.valueBool = inferedInstance.HasBespokeHeight
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "BespokeHeightPx":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.BespokeHeightPx)
-			res.valueInt = inferedInstance.BespokeHeightPx
-			res.GongFieldValueType = GongFieldValueTypeInt
-		}
-	case FormFieldDate:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value.String()
-		}
-	case FormFieldDateTime:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value.String()
-		}
-	case FormFieldFloat64:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Value)
-			res.valueFloat = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasMinValidator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasMinValidator)
-			res.valueBool = inferedInstance.HasMinValidator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MinValue":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MinValue)
-			res.valueFloat = inferedInstance.MinValue
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasMaxValidator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasMaxValidator)
-			res.valueBool = inferedInstance.HasMaxValidator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MaxValue":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MaxValue)
-			res.valueFloat = inferedInstance.MaxValue
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	case FormFieldInt:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.Value)
-			res.valueInt = inferedInstance.Value
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "HasMinValidator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasMinValidator)
-			res.valueBool = inferedInstance.HasMinValidator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MinValue":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.MinValue)
-			res.valueInt = inferedInstance.MinValue
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "HasMaxValidator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasMaxValidator)
-			res.valueBool = inferedInstance.HasMaxValidator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MaxValue":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.MaxValue)
-			res.valueInt = inferedInstance.MaxValue
-			res.GongFieldValueType = GongFieldValueTypeInt
-		}
-	case FormFieldSelect:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			if inferedInstance.Value != nil {
-				res.valueString = inferedInstance.Value.Name
-			}
-		case "Options":
-			for idx, __instance__ := range inferedInstance.Options {
-				if idx > 0 {
-					res.valueString += "\n"
+	case "CellInt":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			cell.CellInt = nil
+			for __instance__ := range stage.CellInts {
+				if stage.CellIntMap_Staged_Order[__instance__] == uint(id) {
+					cell.CellInt = __instance__
+					break
 				}
-				res.valueString += __instance__.Name
 			}
-		case "CanBeEmpty":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanBeEmpty)
-			res.valueBool = inferedInstance.CanBeEmpty
-			res.GongFieldValueType = GongFieldValueTypeBool
 		}
-	case FormFieldString:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value
-		case "IsTextArea":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsTextArea)
-			res.valueBool = inferedInstance.IsTextArea
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case FormFieldTime:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Value":
-			res.valueString = inferedInstance.Value.String()
-		case "Step":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Step)
-			res.valueFloat = inferedInstance.Step
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	case FormGroup:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Label":
-			res.valueString = inferedInstance.Label
-		case "FormDivs":
-			for idx, __instance__ := range inferedInstance.FormDivs {
-				if idx > 0 {
-					res.valueString += "\n"
+	case "CellBool":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			cell.CellBool = nil
+			for __instance__ := range stage.CellBooleans {
+				if stage.CellBooleanMap_Staged_Order[__instance__] == uint(id) {
+					cell.CellBool = __instance__
+					break
 				}
-				res.valueString += __instance__.Name
-			}
-		case "HasSuppressButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSuppressButton)
-			res.valueBool = inferedInstance.HasSuppressButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasSuppressButtonBeenPressed":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSuppressButtonBeenPressed)
-			res.valueBool = inferedInstance.HasSuppressButtonBeenPressed
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case FormSortAssocButton:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Label":
-			res.valueString = inferedInstance.Label
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		case "FormEditAssocButton":
-			if inferedInstance.FormEditAssocButton != nil {
-				res.valueString = inferedInstance.FormEditAssocButton.Name
 			}
 		}
-	case Option:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	case Row:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Cells":
-			for idx, __instance__ := range inferedInstance.Cells {
-				if idx > 0 {
-					res.valueString += "\n"
+	case "CellIcon":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			cell.CellIcon = nil
+			for __instance__ := range stage.CellIcons {
+				if stage.CellIconMap_Staged_Order[__instance__] == uint(id) {
+					cell.CellIcon = __instance__
+					break
 				}
-				res.valueString += __instance__.Name
 			}
-		case "IsChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsChecked)
-			res.valueBool = inferedInstance.IsChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case Table:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "DisplayedColumns":
-			for idx, __instance__ := range inferedInstance.DisplayedColumns {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Rows":
-			for idx, __instance__ := range inferedInstance.Rows {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "HasFiltering":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasFiltering)
-			res.valueBool = inferedInstance.HasFiltering
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasColumnSorting":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasColumnSorting)
-			res.valueBool = inferedInstance.HasColumnSorting
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasPaginator":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasPaginator)
-			res.valueBool = inferedInstance.HasPaginator
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasCheckableRows":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasCheckableRows)
-			res.valueBool = inferedInstance.HasCheckableRows
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasSaveButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSaveButton)
-			res.valueBool = inferedInstance.HasSaveButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "SaveButtonLabel":
-			res.valueString = inferedInstance.SaveButtonLabel
-		case "CanDragDropRows":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanDragDropRows)
-			res.valueBool = inferedInstance.CanDragDropRows
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasCloseButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasCloseButton)
-			res.valueBool = inferedInstance.HasCloseButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "SavingInProgress":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.SavingInProgress)
-			res.valueBool = inferedInstance.SavingInProgress
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "NbOfStickyColumns":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.NbOfStickyColumns)
-			res.valueInt = inferedInstance.NbOfStickyColumns
-			res.GongFieldValueType = GongFieldValueTypeInt
 		}
 	default:
-		_ = inferedInstance
+		return fmt.Errorf("unknown field %s", fieldName)
 	}
+	return nil
+}
+
+func (cellboolean *CellBoolean) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		cellboolean.Name = value.GetValueString()
+	case "Value":
+		cellboolean.Value = value.GetValueBool()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (cellfloat64 *CellFloat64) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		cellfloat64.Name = value.GetValueString()
+	case "Value":
+		cellfloat64.Value = value.GetValueFloat()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (cellicon *CellIcon) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		cellicon.Name = value.GetValueString()
+	case "Icon":
+		cellicon.Icon = value.GetValueString()
+	case "NeedsConfirmation":
+		cellicon.NeedsConfirmation = value.GetValueBool()
+	case "ConfirmationMessage":
+		cellicon.ConfirmationMessage = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (cellint *CellInt) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		cellint.Name = value.GetValueString()
+	case "Value":
+		cellint.Value = int(value.GetValueInt())
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (cellstring *CellString) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		cellstring.Name = value.GetValueString()
+	case "Value":
+		cellstring.Value = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (checkbox *CheckBox) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		checkbox.Name = value.GetValueString()
+	case "Value":
+		checkbox.Value = value.GetValueBool()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (displayedcolumn *DisplayedColumn) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		displayedcolumn.Name = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formdiv *FormDiv) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formdiv.Name = value.GetValueString()
+	case "FormFields":
+		formdiv.FormFields = make([]*FormField, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.FormFields {
+					if stage.FormFieldMap_Staged_Order[__instance__] == uint(id) {
+						formdiv.FormFields = append(formdiv.FormFields, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "CheckBoxs":
+		formdiv.CheckBoxs = make([]*CheckBox, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.CheckBoxs {
+					if stage.CheckBoxMap_Staged_Order[__instance__] == uint(id) {
+						formdiv.CheckBoxs = append(formdiv.CheckBoxs, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "FormEditAssocButton":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formdiv.FormEditAssocButton = nil
+			for __instance__ := range stage.FormEditAssocButtons {
+				if stage.FormEditAssocButtonMap_Staged_Order[__instance__] == uint(id) {
+					formdiv.FormEditAssocButton = __instance__
+					break
+				}
+			}
+		}
+	case "FormSortAssocButton":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formdiv.FormSortAssocButton = nil
+			for __instance__ := range stage.FormSortAssocButtons {
+				if stage.FormSortAssocButtonMap_Staged_Order[__instance__] == uint(id) {
+					formdiv.FormSortAssocButton = __instance__
+					break
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formeditassocbutton *FormEditAssocButton) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formeditassocbutton.Name = value.GetValueString()
+	case "Label":
+		formeditassocbutton.Label = value.GetValueString()
+	case "AssociationStorage":
+		formeditassocbutton.AssociationStorage = value.GetValueString()
+	case "HasChanged":
+		formeditassocbutton.HasChanged = value.GetValueBool()
+	case "IsForSavePurpose":
+		formeditassocbutton.IsForSavePurpose = value.GetValueBool()
+	case "HasToolTip":
+		formeditassocbutton.HasToolTip = value.GetValueBool()
+	case "ToolTipText":
+		formeditassocbutton.ToolTipText = value.GetValueString()
+	case "MatTooltipShowDelay":
+		formeditassocbutton.MatTooltipShowDelay = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formfield *FormField) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formfield.Name = value.GetValueString()
+	case "InputTypeEnum":
+		formfield.InputTypeEnum.FromCodeString(value.GetValueString())
+	case "Label":
+		formfield.Label = value.GetValueString()
+	case "Placeholder":
+		formfield.Placeholder = value.GetValueString()
+	case "FormFieldString":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formfield.FormFieldString = nil
+			for __instance__ := range stage.FormFieldStrings {
+				if stage.FormFieldStringMap_Staged_Order[__instance__] == uint(id) {
+					formfield.FormFieldString = __instance__
+					break
+				}
+			}
+		}
+	case "FormFieldFloat64":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formfield.FormFieldFloat64 = nil
+			for __instance__ := range stage.FormFieldFloat64s {
+				if stage.FormFieldFloat64Map_Staged_Order[__instance__] == uint(id) {
+					formfield.FormFieldFloat64 = __instance__
+					break
+				}
+			}
+		}
+	case "FormFieldInt":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formfield.FormFieldInt = nil
+			for __instance__ := range stage.FormFieldInts {
+				if stage.FormFieldIntMap_Staged_Order[__instance__] == uint(id) {
+					formfield.FormFieldInt = __instance__
+					break
+				}
+			}
+		}
+	case "FormFieldDate":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formfield.FormFieldDate = nil
+			for __instance__ := range stage.FormFieldDates {
+				if stage.FormFieldDateMap_Staged_Order[__instance__] == uint(id) {
+					formfield.FormFieldDate = __instance__
+					break
+				}
+			}
+		}
+	case "FormFieldTime":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formfield.FormFieldTime = nil
+			for __instance__ := range stage.FormFieldTimes {
+				if stage.FormFieldTimeMap_Staged_Order[__instance__] == uint(id) {
+					formfield.FormFieldTime = __instance__
+					break
+				}
+			}
+		}
+	case "FormFieldDateTime":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formfield.FormFieldDateTime = nil
+			for __instance__ := range stage.FormFieldDateTimes {
+				if stage.FormFieldDateTimeMap_Staged_Order[__instance__] == uint(id) {
+					formfield.FormFieldDateTime = __instance__
+					break
+				}
+			}
+		}
+	case "FormFieldSelect":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formfield.FormFieldSelect = nil
+			for __instance__ := range stage.FormFieldSelects {
+				if stage.FormFieldSelectMap_Staged_Order[__instance__] == uint(id) {
+					formfield.FormFieldSelect = __instance__
+					break
+				}
+			}
+		}
+	case "HasBespokeWidth":
+		formfield.HasBespokeWidth = value.GetValueBool()
+	case "BespokeWidthPx":
+		formfield.BespokeWidthPx = int(value.GetValueInt())
+	case "HasBespokeHeight":
+		formfield.HasBespokeHeight = value.GetValueBool()
+	case "BespokeHeightPx":
+		formfield.BespokeHeightPx = int(value.GetValueInt())
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formfielddate *FormFieldDate) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formfielddate.Name = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formfielddatetime *FormFieldDateTime) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formfielddatetime.Name = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formfieldfloat64 *FormFieldFloat64) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formfieldfloat64.Name = value.GetValueString()
+	case "Value":
+		formfieldfloat64.Value = value.GetValueFloat()
+	case "HasMinValidator":
+		formfieldfloat64.HasMinValidator = value.GetValueBool()
+	case "MinValue":
+		formfieldfloat64.MinValue = value.GetValueFloat()
+	case "HasMaxValidator":
+		formfieldfloat64.HasMaxValidator = value.GetValueBool()
+	case "MaxValue":
+		formfieldfloat64.MaxValue = value.GetValueFloat()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formfieldint *FormFieldInt) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formfieldint.Name = value.GetValueString()
+	case "Value":
+		formfieldint.Value = int(value.GetValueInt())
+	case "HasMinValidator":
+		formfieldint.HasMinValidator = value.GetValueBool()
+	case "MinValue":
+		formfieldint.MinValue = int(value.GetValueInt())
+	case "HasMaxValidator":
+		formfieldint.HasMaxValidator = value.GetValueBool()
+	case "MaxValue":
+		formfieldint.MaxValue = int(value.GetValueInt())
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formfieldselect *FormFieldSelect) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formfieldselect.Name = value.GetValueString()
+	case "Value":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formfieldselect.Value = nil
+			for __instance__ := range stage.Options {
+				if stage.OptionMap_Staged_Order[__instance__] == uint(id) {
+					formfieldselect.Value = __instance__
+					break
+				}
+			}
+		}
+	case "Options":
+		formfieldselect.Options = make([]*Option, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Options {
+					if stage.OptionMap_Staged_Order[__instance__] == uint(id) {
+						formfieldselect.Options = append(formfieldselect.Options, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "CanBeEmpty":
+		formfieldselect.CanBeEmpty = value.GetValueBool()
+	case "PreserveInitialOrder":
+		formfieldselect.PreserveInitialOrder = value.GetValueBool()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formfieldstring *FormFieldString) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formfieldstring.Name = value.GetValueString()
+	case "Value":
+		formfieldstring.Value = value.GetValueString()
+	case "IsTextArea":
+		formfieldstring.IsTextArea = value.GetValueBool()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formfieldtime *FormFieldTime) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formfieldtime.Name = value.GetValueString()
+	case "Step":
+		formfieldtime.Step = value.GetValueFloat()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formgroup *FormGroup) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formgroup.Name = value.GetValueString()
+	case "Label":
+		formgroup.Label = value.GetValueString()
+	case "FormDivs":
+		formgroup.FormDivs = make([]*FormDiv, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.FormDivs {
+					if stage.FormDivMap_Staged_Order[__instance__] == uint(id) {
+						formgroup.FormDivs = append(formgroup.FormDivs, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "HasSuppressButton":
+		formgroup.HasSuppressButton = value.GetValueBool()
+	case "HasSuppressButtonBeenPressed":
+		formgroup.HasSuppressButtonBeenPressed = value.GetValueBool()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (formsortassocbutton *FormSortAssocButton) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		formsortassocbutton.Name = value.GetValueString()
+	case "Label":
+		formsortassocbutton.Label = value.GetValueString()
+	case "HasToolTip":
+		formsortassocbutton.HasToolTip = value.GetValueBool()
+	case "ToolTipText":
+		formsortassocbutton.ToolTipText = value.GetValueString()
+	case "MatTooltipShowDelay":
+		formsortassocbutton.MatTooltipShowDelay = value.GetValueString()
+	case "FormEditAssocButton":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			formsortassocbutton.FormEditAssocButton = nil
+			for __instance__ := range stage.FormEditAssocButtons {
+				if stage.FormEditAssocButtonMap_Staged_Order[__instance__] == uint(id) {
+					formsortassocbutton.FormEditAssocButton = __instance__
+					break
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (option *Option) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		option.Name = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (row *Row) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		row.Name = value.GetValueString()
+	case "Cells":
+		row.Cells = make([]*Cell, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Cells {
+					if stage.CellMap_Staged_Order[__instance__] == uint(id) {
+						row.Cells = append(row.Cells, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "IsChecked":
+		row.IsChecked = value.GetValueBool()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (table *Table) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		table.Name = value.GetValueString()
+	case "DisplayedColumns":
+		table.DisplayedColumns = make([]*DisplayedColumn, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.DisplayedColumns {
+					if stage.DisplayedColumnMap_Staged_Order[__instance__] == uint(id) {
+						table.DisplayedColumns = append(table.DisplayedColumns, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Rows":
+		table.Rows = make([]*Row, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Rows {
+					if stage.RowMap_Staged_Order[__instance__] == uint(id) {
+						table.Rows = append(table.Rows, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "HasFiltering":
+		table.HasFiltering = value.GetValueBool()
+	case "HasColumnSorting":
+		table.HasColumnSorting = value.GetValueBool()
+	case "HasPaginator":
+		table.HasPaginator = value.GetValueBool()
+	case "HasCheckableRows":
+		table.HasCheckableRows = value.GetValueBool()
+	case "HasSaveButton":
+		table.HasSaveButton = value.GetValueBool()
+	case "SaveButtonLabel":
+		table.SaveButtonLabel = value.GetValueString()
+	case "CanDragDropRows":
+		table.CanDragDropRows = value.GetValueBool()
+	case "HasCloseButton":
+		table.HasCloseButton = value.GetValueBool()
+	case "SavingInProgress":
+		table.SavingInProgress = value.GetValueBool()
+	case "NbOfStickyColumns":
+		table.NbOfStickyColumns = int(value.GetValueInt())
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func SetFieldStringValueFromPointer(instance GongstructIF, fieldName string, value GongFieldValue, stage *Stage) error {
+	return instance.GongSetFieldValue(fieldName, value, stage)
+}
+
+// insertion point for generic get gongstruct name
+func (cell *Cell) GongGetGongstructName() string {
+	return "Cell"
+}
+
+func (cellboolean *CellBoolean) GongGetGongstructName() string {
+	return "CellBoolean"
+}
+
+func (cellfloat64 *CellFloat64) GongGetGongstructName() string {
+	return "CellFloat64"
+}
+
+func (cellicon *CellIcon) GongGetGongstructName() string {
+	return "CellIcon"
+}
+
+func (cellint *CellInt) GongGetGongstructName() string {
+	return "CellInt"
+}
+
+func (cellstring *CellString) GongGetGongstructName() string {
+	return "CellString"
+}
+
+func (checkbox *CheckBox) GongGetGongstructName() string {
+	return "CheckBox"
+}
+
+func (displayedcolumn *DisplayedColumn) GongGetGongstructName() string {
+	return "DisplayedColumn"
+}
+
+func (formdiv *FormDiv) GongGetGongstructName() string {
+	return "FormDiv"
+}
+
+func (formeditassocbutton *FormEditAssocButton) GongGetGongstructName() string {
+	return "FormEditAssocButton"
+}
+
+func (formfield *FormField) GongGetGongstructName() string {
+	return "FormField"
+}
+
+func (formfielddate *FormFieldDate) GongGetGongstructName() string {
+	return "FormFieldDate"
+}
+
+func (formfielddatetime *FormFieldDateTime) GongGetGongstructName() string {
+	return "FormFieldDateTime"
+}
+
+func (formfieldfloat64 *FormFieldFloat64) GongGetGongstructName() string {
+	return "FormFieldFloat64"
+}
+
+func (formfieldint *FormFieldInt) GongGetGongstructName() string {
+	return "FormFieldInt"
+}
+
+func (formfieldselect *FormFieldSelect) GongGetGongstructName() string {
+	return "FormFieldSelect"
+}
+
+func (formfieldstring *FormFieldString) GongGetGongstructName() string {
+	return "FormFieldString"
+}
+
+func (formfieldtime *FormFieldTime) GongGetGongstructName() string {
+	return "FormFieldTime"
+}
+
+func (formgroup *FormGroup) GongGetGongstructName() string {
+	return "FormGroup"
+}
+
+func (formsortassocbutton *FormSortAssocButton) GongGetGongstructName() string {
+	return "FormSortAssocButton"
+}
+
+func (option *Option) GongGetGongstructName() string {
+	return "Option"
+}
+
+func (row *Row) GongGetGongstructName() string {
+	return "Row"
+}
+
+func (table *Table) GongGetGongstructName() string {
+	return "Table"
+}
+
+func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
+	res = instance.GongGetGongstructName()
 	return
 }
 

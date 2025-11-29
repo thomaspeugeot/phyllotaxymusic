@@ -739,13 +739,18 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					var ident *ast.Ident
 					var ok bool
 					_ = ok
+					_ = arg
 					if ident, ok = arg.(*ast.Ident); !ok {
+						_ = ident
+						_ = ok
 						// log.Println("we are in the case of new(....)")
 					}
 
 					var se *ast.SelectorExpr
 					if se, ok = arg.(*ast.SelectorExpr); ok {
 						if ident, ok = se.X.(*ast.Ident); !ok {
+							_ = ident
+							_ = ok
 							// log.Println("we are in the case of append(....)")
 						}
 					}
@@ -904,9 +909,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				if bl, ok := v.X.(*ast.BasicLit); ok {
 					basicLit = bl
 					// Check the operator to set the sign
-					if v.Op == token.SUB { // token.SUB is for '-'
+					switch v.Op {
+					case token.SUB: // token.SUB is for '-'
 						exprSign = -1
-					} else if v.Op == token.ADD { // token.ADD is for '+'
+					case token.ADD: // token.ADD is for '+'
 						exprSign = 1
 					}
 				}
@@ -1275,6 +1281,27 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						log.Fatalln(err)
 					}
 					__gong__map_Classdiagram[identifier].IsIncludedInStaticWebSite = fielValue
+				case "ShowNbInstances":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Classdiagram[identifier].ShowNbInstances = fielValue
+				case "ShowMultiplicity":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Classdiagram[identifier].ShowMultiplicity = fielValue
+				case "ShowLinkNames":
+					// convert string to boolean
+					fielValue, err := strconv.ParseBool(ident.Name)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Classdiagram[identifier].ShowLinkNames = fielValue
 				case "IsInRenameMode":
 					// convert string to boolean
 					fielValue, err := strconv.ParseBool(ident.Name)

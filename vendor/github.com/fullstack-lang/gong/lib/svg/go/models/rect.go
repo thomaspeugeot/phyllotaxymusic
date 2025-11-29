@@ -10,6 +10,7 @@ type Rect struct {
 
 	X, Y, Width, Height, RX float64
 	Presentation
+	ShapeConditions
 
 	Animations []*Animate
 
@@ -43,10 +44,13 @@ type Rect struct {
 	FillOpacityWhenHovered float64
 	OriginalFillOpacity    float64
 
-	HasToolTip  bool
-	ToolTipText string
+	HasToolTip      bool
+	ToolTipText     string
+	ToolTipPosition ToolTipPositionEnum
 
 	Impl RectImplInterface
+
+	MouseEvent
 }
 
 // OnAfterUpdate, notice that rect == stagedRect

@@ -17,6 +17,7 @@ import { Rect, CopyRectToRectAPI } from './rect'
 import { FrontRepo, FrontRepoService } from './front-repo.service';
 
 // insertion point for imports
+import { ConditionAPI } from './condition-api'
 import { AnimateAPI } from './animate-api'
 import { RectAnchoredTextAPI } from './rectanchoredtext-api'
 import { RectAnchoredRectAPI } from './rectanchoredrect-api'
@@ -98,7 +99,7 @@ export class RectService {
       catchError(this.handleError<RectAPI>('postRect'))
     );
   }
-  
+
   /** POST: add a new rect to the server */
   post(rectdb: RectAPI, Name: string, frontRepo: FrontRepo): Observable<RectAPI> {
     return this.postRect(rectdb, Name, frontRepo)
@@ -190,7 +191,7 @@ export class RectService {
   private handleError<T>(operation = 'operation in RectService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("RectService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

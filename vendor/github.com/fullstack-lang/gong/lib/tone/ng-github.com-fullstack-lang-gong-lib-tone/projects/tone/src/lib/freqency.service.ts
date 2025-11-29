@@ -94,7 +94,7 @@ export class FreqencyService {
       catchError(this.handleError<FreqencyAPI>('postFreqency'))
     );
   }
-  
+
   /** POST: add a new freqency to the server */
   post(freqencydb: FreqencyAPI, Name: string, frontRepo: FrontRepo): Observable<FreqencyAPI> {
     return this.postFreqency(freqencydb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class FreqencyService {
   private handleError<T>(operation = 'operation in FreqencyService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FreqencyService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

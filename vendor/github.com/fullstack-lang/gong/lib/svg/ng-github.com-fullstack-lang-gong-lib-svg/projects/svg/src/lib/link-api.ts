@@ -1,7 +1,7 @@
 // insertion point for imports
 import { RectAPI } from './rect-api'
 import { LinkAnchoredTextAPI } from './linkanchoredtext-api'
-import { PointAPI } from './point-api'
+import { ControlPointAPI } from './controlpoint-api'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -10,8 +10,6 @@ export class LinkAPI {
 
 	static GONGSTRUCT_NAME = "Link"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -28,8 +26,10 @@ export class LinkAPI {
 	CornerRadius: number = 0
 	HasEndArrow: boolean = false
 	EndArrowSize: number = 0
+	EndArrowOffset: number = 0
 	HasStartArrow: boolean = false
 	StartArrowSize: number = 0
+	StartArrowOffset: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -38,10 +38,16 @@ export class LinkAPI {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
+	MouseX: number = 0
+	MouseY: number = 0
+	MouseEventKey: string = ""
 
 	// insertion point for other decls
 
 	LinkPointersEncoding: LinkPointersEncoding = new LinkPointersEncoding
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export class LinkPointersEncoding {

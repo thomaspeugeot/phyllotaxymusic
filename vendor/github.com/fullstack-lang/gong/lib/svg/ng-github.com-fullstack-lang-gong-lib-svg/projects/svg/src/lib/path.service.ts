@@ -95,7 +95,7 @@ export class PathService {
       catchError(this.handleError<PathAPI>('postPath'))
     );
   }
-  
+
   /** POST: add a new path to the server */
   post(pathdb: PathAPI, Name: string, frontRepo: FrontRepo): Observable<PathAPI> {
     return this.postPath(pathdb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class PathService {
   private handleError<T>(operation = 'operation in PathService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("PathService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

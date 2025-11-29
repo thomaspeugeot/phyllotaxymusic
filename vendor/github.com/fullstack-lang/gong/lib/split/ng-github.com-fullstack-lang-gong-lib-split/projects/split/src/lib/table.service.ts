@@ -94,7 +94,7 @@ export class TableService {
       catchError(this.handleError<TableAPI>('postTable'))
     );
   }
-  
+
   /** POST: add a new table to the server */
   post(tabledb: TableAPI, Name: string, frontRepo: FrontRepo): Observable<TableAPI> {
     return this.postTable(tabledb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class TableService {
   private handleError<T>(operation = 'operation in TableService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("TableService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

@@ -96,7 +96,7 @@ export class GroupService {
       catchError(this.handleError<GroupAPI>('postGroup'))
     );
   }
-  
+
   /** POST: add a new group to the server */
   post(groupdb: GroupAPI, Name: string, frontRepo: FrontRepo): Observable<GroupAPI> {
     return this.postGroup(groupdb, Name, frontRepo)
@@ -188,7 +188,7 @@ export class GroupService {
   private handleError<T>(operation = 'operation in GroupService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("GroupService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

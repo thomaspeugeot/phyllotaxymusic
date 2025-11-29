@@ -94,7 +94,7 @@ export class SplitService {
       catchError(this.handleError<SplitAPI>('postSplit'))
     );
   }
-  
+
   /** POST: add a new split to the server */
   post(splitdb: SplitAPI, Name: string, frontRepo: FrontRepo): Observable<SplitAPI> {
     return this.postSplit(splitdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class SplitService {
   private handleError<T>(operation = 'operation in SplitService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("SplitService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

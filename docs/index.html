@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    
     <div class="container">
         <nav class="sidebar">
             <img src="images/logo.svg" alt="Site Logo" class="site-logo"> <h2><a href="index.html">Phyllotaxy Music</a></h2>
@@ -47,31 +48,31 @@
 <p>Precisely, phyllotaxy can help to generates a music
 theme, a suite of music notes, a melodic material.</p>
 <h3>Cannon</h3>
-<p>A wellknown music theme is at the start of Bach's 2nd
+<p>A well known music theme is at the start of Bach's 2nd
 fugue in C minor. It starts with the C note.</p>
 <img src="./images/bach2ndFugue.png" style="height: 100px; width: auto;">
 <p>In this piece, the theme is repeated with two voices that overlaps.</p>
 <img src="./images/bach2ndFugue_large.png" style="height: 400px; width: auto;">
-<p>Let's a have a look to this memorable piece. The first voice
+<p>The first voice
 starts with a C on the first measure. On the third measure, the theme starts again, but it starts with a G.
 The G of the second voice is seven half tone higher, or a fifth in music parlance, above the
-C of the first voice. A fifth is an a well suited gap between notes to sounds harmounuously.
+C of the first voice. A fifth is an a well suited gap between notes to sounds harmoniously.
 The next note, a F# on the second voice, is played along a A on the first voice, also a
 third. A third,  And so one.</p>
 <p>It is the composer's chore
 to have the theme well suited for supporting overlapping itself.</p>
-<p>Having a theme that repeats itself harmonously with a shift in beats and tone is called a cannon:</p>
+<p>Having a theme that repeats itself harmoniously with a shift in beats and tone is called a cannon:</p>
 <ul>
 <li>Pachelbel's Canon in D</li>
 <li>&quot;Row, Row, Row Your Boat&quot;</li>
 </ul>
-<p>Phylotaxy will help us to compose theme that are suited for cannon with the following idea :
+<p>Phyllotaxy will help us to compose theme that are suited for cannon with the following idea :
 if a cannon theme is a curve on a plan, it must overlap with itself with an horizontal and a vertical shift.</p>
-<h3>Phylotaxy</h3>
-<p>Phylotaxy means &quot;shape of leaves&quot;
+<h3>Phyllotaxy</h3>
+<p>Phyllotaxy means &quot;shape of leaves&quot;
 (&quot;phyllo&quot; is greek for leave and &quot;taxy&quot; is greek for shape).
 It is the
-science developped by botanist,
+science developed by botanist,
 mathematicians and physicists
 to understand why plants
 have the shape they have.</p>
@@ -157,5 +158,44 @@ draw some notes of your choosing.</p>
 
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const chapters = document.querySelectorAll('.sidebar > ul > li');
+
+            chapters.forEach(function(chapter) {
+                
+                const chapterLink = chapter.querySelector('a');
+                const submenu = chapter.querySelector('ul');
+
+                
+                if (chapterLink && submenu) {
+                    
+                    
+                    
+                    const isActive = chapter.querySelector('.active-section, .active-page') !== null;
+
+                    
+                    chapterLink.addEventListener('click', function(event) {
+                        
+                        event.preventDefault();
+
+                        
+                        if (submenu.style.display === 'none') {
+                            submenu.style.display = 'block';
+                        } else {
+                            submenu.style.display = 'none';
+                        }
+                    });
+
+                    
+                    if (!isActive) {
+                        submenu.style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

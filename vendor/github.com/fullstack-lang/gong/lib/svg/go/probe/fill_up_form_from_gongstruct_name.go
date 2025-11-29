@@ -51,6 +51,32 @@ func FillUpFormFromGongstructName(
 		circle := new(models.Circle)
 		formGroup.HasSuppressButton = !isNewInstance
 		FillUpForm(circle, formGroup, probe)
+	case "Condition":
+		formGroup := (&form.FormGroup{
+			Name:  FormName,
+			Label: prefix + "Condition Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__ConditionFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		condition := new(models.Condition)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(condition, formGroup, probe)
+	case "ControlPoint":
+		formGroup := (&form.FormGroup{
+			Name:  FormName,
+			Label: prefix + "ControlPoint Form",
+		}).Stage(formStage)
+		formGroup.OnSave = __gong__New__ControlPointFormCallback(
+			nil,
+			probe,
+			formGroup,
+		)
+		controlpoint := new(models.ControlPoint)
+		formGroup.HasSuppressButton = !isNewInstance
+		FillUpForm(controlpoint, formGroup, probe)
 	case "Ellipse":
 		formGroup := (&form.FormGroup{
 			Name:  FormName,

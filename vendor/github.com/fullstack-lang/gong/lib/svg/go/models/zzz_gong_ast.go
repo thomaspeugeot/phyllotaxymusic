@@ -395,6 +395,8 @@ var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 // insertion point for identifiers maps
 var __gong__map_Animate = make(map[string]*Animate)
 var __gong__map_Circle = make(map[string]*Circle)
+var __gong__map_Condition = make(map[string]*Condition)
+var __gong__map_ControlPoint = make(map[string]*ControlPoint)
 var __gong__map_Ellipse = make(map[string]*Ellipse)
 var __gong__map_Layer = make(map[string]*Layer)
 var __gong__map_Line = make(map[string]*Line)
@@ -596,6 +598,18 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 										instanceCircle.Stage(stage)
 										instance = any(instanceCircle)
 										__gong__map_Circle[identifier] = instanceCircle
+									case "Condition":
+										instanceCondition := new(Condition)
+										instanceCondition.Name = instanceName
+										instanceCondition.Stage(stage)
+										instance = any(instanceCondition)
+										__gong__map_Condition[identifier] = instanceCondition
+									case "ControlPoint":
+										instanceControlPoint := new(ControlPoint)
+										instanceControlPoint.Name = instanceName
+										instanceControlPoint.Stage(stage)
+										instance = any(instanceControlPoint)
+										__gong__map_ControlPoint[identifier] = instanceControlPoint
 									case "Ellipse":
 										instanceEllipse := new(Ellipse)
 										instanceEllipse.Name = instanceName
@@ -743,6 +757,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 							switch fieldName {
 							// insertion point for date assign code
 							}
+						case "Condition":
+							switch fieldName {
+							// insertion point for date assign code
+							}
+						case "ControlPoint":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "Ellipse":
 							switch fieldName {
 							// insertion point for date assign code
@@ -849,13 +871,18 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					var ident *ast.Ident
 					var ok bool
 					_ = ok
+					_ = arg
 					if ident, ok = arg.(*ast.Ident); !ok {
+						_ = ident
+						_ = ok
 						// log.Println("we are in the case of new(....)")
 					}
 
 					var se *ast.SelectorExpr
 					if se, ok = arg.(*ast.SelectorExpr); ok {
 						if ident, ok = se.X.(*ast.Ident); !ok {
+							_ = ident
+							_ = ok
 							// log.Println("we are in the case of append(....)")
 						}
 					}
@@ -885,6 +912,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 								instanceWhoseFieldIsAppended := __gong__map_Circle[identifier]
 								instanceWhoseFieldIsAppended.Animations = append(instanceWhoseFieldIsAppended.Animations, instanceToAppend)
 							}
+						}
+					case "Condition":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
+					case "ControlPoint":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
 						}
 					case "Ellipse":
 						switch fieldName {
@@ -1047,7 +1082,7 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 								break
 							}
 							identifierOfInstanceToAppend := ident.Name
-							if instanceToAppend, ok := __gong__map_Point[identifierOfInstanceToAppend]; ok {
+							if instanceToAppend, ok := __gong__map_ControlPoint[identifierOfInstanceToAppend]; ok {
 								instanceWhoseFieldIsAppended := __gong__map_Link[identifier]
 								instanceWhoseFieldIsAppended.ControlPoints = append(instanceWhoseFieldIsAppended.ControlPoints, instanceToAppend)
 							}
@@ -1115,6 +1150,26 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					case "Rect":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
+						case "HoveringTrigger":
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Condition[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_Rect[identifier]
+								instanceWhoseFieldIsAppended.HoveringTrigger = append(instanceWhoseFieldIsAppended.HoveringTrigger, instanceToAppend)
+							}
+						case "DisplayConditions":
+							// perform the append only when the loop is processing the second argument
+							if argNb == 0 {
+								break
+							}
+							identifierOfInstanceToAppend := ident.Name
+							if instanceToAppend, ok := __gong__map_Condition[identifierOfInstanceToAppend]; ok {
+								instanceWhoseFieldIsAppended := __gong__map_Rect[identifier]
+								instanceWhoseFieldIsAppended.DisplayConditions = append(instanceWhoseFieldIsAppended.DisplayConditions, instanceToAppend)
+							}
 						case "Animations":
 							// perform the append only when the loop is processing the second argument
 							if argNb == 0 {
@@ -1232,9 +1287,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				if bl, ok := v.X.(*ast.BasicLit); ok {
 					basicLit = bl
 					// Check the operator to set the sign
-					if v.Op == token.SUB { // token.SUB is for '-'
+					switch v.Op {
+					case token.SUB: // token.SUB is for '-'
 						exprSign = -1
-					} else if v.Op == token.ADD { // token.ADD is for '+'
+					case token.ADD: // token.ADD is for '+'
 						exprSign = 1
 					}
 				}
@@ -1374,6 +1430,36 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Circle[identifier].Transform = fielValue
+				}
+			case "Condition":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Condition[identifier].Name = fielValue
+				}
+			case "ControlPoint":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_ControlPoint[identifier].Name = fielValue
+				case "X_Relative":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_ControlPoint[identifier].X_Relative = exprSign * fielValue
+				case "Y_Relative":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_ControlPoint[identifier].Y_Relative = exprSign * fielValue
 				}
 			case "Ellipse":
 				switch fieldName {
@@ -1593,6 +1679,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						log.Fatalln(err)
 					}
 					__gong__map_Link[identifier].EndArrowSize = exprSign * fielValue
+				case "EndArrowOffset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].EndArrowOffset = exprSign * fielValue
 				case "StartArrowSize":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -1600,6 +1693,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 						log.Fatalln(err)
 					}
 					__gong__map_Link[identifier].StartArrowSize = exprSign * fielValue
+				case "StartArrowOffset":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].StartArrowOffset = exprSign * fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -1641,6 +1741,20 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Link[identifier].Transform = fielValue
+				case "MouseX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].MouseX = exprSign * fielValue
+				case "MouseY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Link[identifier].MouseY = exprSign * fielValue
 				}
 			case "LinkAnchoredText":
 				switch fieldName {
@@ -1683,6 +1797,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_LinkAnchoredText[identifier].LetterSpacing = fielValue
+				case "FontFamily":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_LinkAnchoredText[identifier].FontFamily = fielValue
 				case "Color":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
@@ -2015,6 +2133,20 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Rect[identifier].ToolTipText = fielValue
+				case "MouseX":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Rect[identifier].MouseX = exprSign * fielValue
+				case "MouseY":
+					// convert string to float64
+					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_Rect[identifier].MouseY = exprSign * fielValue
 				}
 			case "RectAnchoredPath":
 				switch fieldName {
@@ -2219,6 +2351,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_RectAnchoredText[identifier].LetterSpacing = fielValue
+				case "FontFamily":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_RectAnchoredText[identifier].FontFamily = fielValue
 				case "X_Offset":
 					// convert string to float64
 					fielValue, err := strconv.ParseFloat(basicLit.Value, 64)
@@ -2437,6 +2573,10 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_Text[identifier].LetterSpacing = fielValue
+				case "FontFamily":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_Text[identifier].FontFamily = fielValue
 				}
 			}
 		case *ast.Ident:
@@ -2460,6 +2600,17 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 			case "Circle":
 				switch fieldName {
 				// insertion point for field dependant code
+				}
+			case "Condition":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
+			case "ControlPoint":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "ClosestRect":
+					targetIdentifier := ident.Name
+					__gong__map_ControlPoint[identifier].ClosestRect = __gong__map_Rect[targetIdentifier]
 				}
 			case "Ellipse":
 				switch fieldName {
@@ -2802,6 +2953,14 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 					switch fieldName {
 					// insertion point for selector expr assign code
 					}
+				case "Condition":
+					switch fieldName {
+					// insertion point for selector expr assign code
+					}
+				case "ControlPoint":
+					switch fieldName {
+					// insertion point for selector expr assign code
+					}
 				case "Ellipse":
 					switch fieldName {
 					// insertion point for selector expr assign code
@@ -2852,6 +3011,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 							log.Fatalln(err)
 						}
 						__gong__map_Link[identifier].EndOrientation = OrientationType(val)
+					case "MouseEventKey":
+						var val MouseEventKey
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Link[identifier].MouseEventKey = MouseEventKey(val)
 					}
 				case "LinkAnchoredText":
 					switch fieldName {
@@ -2863,6 +3029,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 							log.Fatalln(err)
 						}
 						__gong__map_LinkAnchoredText[identifier].LinkAnchorType = LinkAnchorType(val)
+					case "WhiteSpace":
+						var val WhiteSpaceEnum
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_LinkAnchoredText[identifier].WhiteSpace = WhiteSpaceEnum(val)
 					}
 				case "Path":
 					switch fieldName {
@@ -2883,6 +3056,20 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				case "Rect":
 					switch fieldName {
 					// insertion point for selector expr assign code
+					case "ToolTipPosition":
+						var val ToolTipPositionEnum
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Rect[identifier].ToolTipPosition = ToolTipPositionEnum(val)
+					case "MouseEventKey":
+						var val MouseEventKey
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Rect[identifier].MouseEventKey = MouseEventKey(val)
 					}
 				case "RectAnchoredPath":
 					switch fieldName {
@@ -2909,6 +3096,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				case "RectAnchoredText":
 					switch fieldName {
 					// insertion point for selector expr assign code
+					case "WhiteSpace":
+						var val WhiteSpaceEnum
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_RectAnchoredText[identifier].WhiteSpace = WhiteSpaceEnum(val)
 					case "RectAnchorType":
 						var val RectAnchorType
 						err := (&val).FromCodeString(enumValue)
@@ -2923,6 +3117,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 							log.Fatalln(err)
 						}
 						__gong__map_RectAnchoredText[identifier].TextAnchorType = TextAnchorType(val)
+					case "DominantBaseline":
+						var val DominantBaselineType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_RectAnchoredText[identifier].DominantBaseline = DominantBaselineType(val)
 					case "WritingMode":
 						var val WritingMode
 						err := (&val).FromCodeString(enumValue)
@@ -2953,6 +3154,13 @@ func UnmarshallGongstructStaging(stage *Stage, cmap *ast.CommentMap, assignStmt 
 				case "Text":
 					switch fieldName {
 					// insertion point for selector expr assign code
+					case "WhiteSpace":
+						var val WhiteSpaceEnum
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_Text[identifier].WhiteSpace = WhiteSpaceEnum(val)
 					}
 				}
 			}

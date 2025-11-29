@@ -52,7 +52,7 @@ github.com/dustin/go-humanize
 # github.com/frankban/quicktest v1.14.6
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20250731115806-9eee1862ee00
+# github.com/fullstack-lang/gong v0.0.0-20251129093308-a6f5435f219c
 ## explicit; go 1.24.3
 github.com/fullstack-lang/gong/go
 github.com/fullstack-lang/gong/go/controllers
@@ -87,8 +87,6 @@ github.com/fullstack-lang/gong/lib/doc2/go/models
 github.com/fullstack-lang/gong/lib/doc2/go/models/nodestates
 github.com/fullstack-lang/gong/lib/doc2/go/orm
 github.com/fullstack-lang/gong/lib/doc2/go/prepare
-github.com/fullstack-lang/gong/lib/doc2/ng-github.com-fullstack-lang-gong-lib-doc2
-github.com/fullstack-lang/gong/lib/gantt/ng-github.com-fullstack-lang-gong-lib-gantt
 github.com/fullstack-lang/gong/lib/load/go
 github.com/fullstack-lang/gong/lib/load/go/controllers
 github.com/fullstack-lang/gong/lib/load/go/db
@@ -167,8 +165,6 @@ github.com/fullstack-lang/gong/lib/tree/go/orm
 github.com/fullstack-lang/gong/lib/tree/go/probe
 github.com/fullstack-lang/gong/lib/tree/go/stack
 github.com/fullstack-lang/gong/lib/tree/ng-github.com-fullstack-lang-gong-lib-tree
-github.com/fullstack-lang/gong/lib/xlsx/ng-github.com-fullstack-lang-gong-lib-xlsx
-github.com/fullstack-lang/gong/ng-github.com-fullstack-lang-gong
 # github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 ## explicit; go 1.23.1
 github.com/fullstack-lang/maticons/maticons

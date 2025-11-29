@@ -94,7 +94,7 @@ export class MarkdownService {
       catchError(this.handleError<MarkdownAPI>('postMarkdown'))
     );
   }
-  
+
   /** POST: add a new markdown to the server */
   post(markdowndb: MarkdownAPI, Name: string, frontRepo: FrontRepo): Observable<MarkdownAPI> {
     return this.postMarkdown(markdowndb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class MarkdownService {
   private handleError<T>(operation = 'operation in MarkdownService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("MarkdownService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

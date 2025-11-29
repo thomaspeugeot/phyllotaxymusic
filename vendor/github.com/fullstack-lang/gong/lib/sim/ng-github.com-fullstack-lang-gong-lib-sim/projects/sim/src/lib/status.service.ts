@@ -94,7 +94,7 @@ export class StatusService {
       catchError(this.handleError<StatusAPI>('postStatus'))
     );
   }
-  
+
   /** POST: add a new status to the server */
   post(statusdb: StatusAPI, Name: string, frontRepo: FrontRepo): Observable<StatusAPI> {
     return this.postStatus(statusdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class StatusService {
   private handleError<T>(operation = 'operation in StatusService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("StatusService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

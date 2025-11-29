@@ -260,13 +260,13 @@ func (controller *Controller) UpdateButton(c *gin.Context) {
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(_values) == 1 {
-		value := _values["Name"]
-		if len(value) == 1 {
-			stackPath = value[0]
-			// log.Println("UpdateButton", "Name", stackPath)
+	if len(_values) >= 1 {
+		_nameValues := _values["Name"]
+		if len(_nameValues) == 1 {
+			stackPath = _nameValues[0]
 		}
 	}
+
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		message := "PATCH Stack github.com/fullstack-lang/gong/lib/tree/go, Unkown stack: \"" + stackPath + "\"\n"
@@ -328,7 +328,7 @@ func (controller *Controller) UpdateButton(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	buttonOld := backRepo.BackRepoButton.Map_ButtonDBID_ButtonPtr[buttonDB.ID]
 	if buttonOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), buttonOld, buttonNew)
+		models.OnAfterUpdateFromFront(backRepo.GetStage(), buttonOld, buttonNew)
 	}
 
 	// an UPDATE generates a back repo commit increase

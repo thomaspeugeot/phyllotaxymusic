@@ -94,7 +94,7 @@ export class FormEditAssocButtonService {
       catchError(this.handleError<FormEditAssocButtonAPI>('postFormEditAssocButton'))
     );
   }
-  
+
   /** POST: add a new formeditassocbutton to the server */
   post(formeditassocbuttondb: FormEditAssocButtonAPI, Name: string, frontRepo: FrontRepo): Observable<FormEditAssocButtonAPI> {
     return this.postFormEditAssocButton(formeditassocbuttondb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class FormEditAssocButtonService {
   private handleError<T>(operation = 'operation in FormEditAssocButtonService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FormEditAssocButtonService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

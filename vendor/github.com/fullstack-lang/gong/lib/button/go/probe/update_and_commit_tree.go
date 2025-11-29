@@ -40,6 +40,12 @@ func updateAndCommitTree(
 		probe.stageOfInterest.GetName(),
 		probe.stageOfInterest.GetCommitId(),
 		probe.stageOfInterest.GetCommitTS().Local().Format(time.Kitchen))}
+	nodeRefreshButton.Name +=
+		fmt.Sprintf(" (%d/%d/%d)", 
+			len(probe.stageOfInterest.GetNew()), 
+			len(probe.stageOfInterest.GetModified()), 
+			len(probe.stageOfInterest.GetDeleted()),
+		)
 	sidebar.RootNodes = append(sidebar.RootNodes, nodeRefreshButton)
 	refreshButton := &tree.Button{
 		Name:            "RefreshButton" + " " + string(gongtree_buttons.BUTTON_refresh),
@@ -53,7 +59,7 @@ func updateAndCommitTree(
 	refreshButton.Impl = NewButtonImplRefresh(probe)
 
 	// collect all gong struct to construe the true
-	setOfGongStructs := *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](probe.gongStage)
+	setOfGongStructs := *gong_models.GetGongstructInstancesSetFromPointerType[*gong_models.GongStruct](probe.gongStage)
 
 	sliceOfGongStructsSorted := make([]*gong_models.GongStruct, len(setOfGongStructs))
 	i := 0
@@ -84,34 +90,119 @@ func updateAndCommitTree(
 		// insertion point
 		case "Button":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Button](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Button](probe.stageOfInterest)
+			created := 0
+			updated := 0
+			deleted := 0
 			for _button := range set {
 				nodeInstance := &tree.Node{Name: _button.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_button, "Button", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+				if _, ok := probe.stageOfInterest.GetNew()[_button]; ok {
+					created++
+				}
+				if _, ok := probe.stageOfInterest.GetModified()[_button]; ok {
+					updated++
+				}
+				if _, ok := probe.stageOfInterest.GetDeleted()[_button]; ok {
+					deleted++
+				}
 			}
+			nodeGongstruct.Name += fmt.Sprintf(" (%d/%d/%d)", created, updated, deleted)
+		case "ButtonToggle":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.ButtonToggle](probe.stageOfInterest)
+			created := 0
+			updated := 0
+			deleted := 0
+			for _buttontoggle := range set {
+				nodeInstance := &tree.Node{Name: _buttontoggle.GetName()}
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_buttontoggle, "ButtonToggle", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+				if _, ok := probe.stageOfInterest.GetNew()[_buttontoggle]; ok {
+					created++
+				}
+				if _, ok := probe.stageOfInterest.GetModified()[_buttontoggle]; ok {
+					updated++
+				}
+				if _, ok := probe.stageOfInterest.GetDeleted()[_buttontoggle]; ok {
+					deleted++
+				}
+			}
+			nodeGongstruct.Name += fmt.Sprintf(" (%d/%d/%d)", created, updated, deleted)
 		case "Group":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Group](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Group](probe.stageOfInterest)
+			created := 0
+			updated := 0
+			deleted := 0
 			for _group := range set {
 				nodeInstance := &tree.Node{Name: _group.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_group, "Group", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+				if _, ok := probe.stageOfInterest.GetNew()[_group]; ok {
+					created++
+				}
+				if _, ok := probe.stageOfInterest.GetModified()[_group]; ok {
+					updated++
+				}
+				if _, ok := probe.stageOfInterest.GetDeleted()[_group]; ok {
+					deleted++
+				}
 			}
+			nodeGongstruct.Name += fmt.Sprintf(" (%d/%d/%d)", created, updated, deleted)
+		case "GroupToogle":
+			nodeGongstruct.Name = name
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.GroupToogle](probe.stageOfInterest)
+			created := 0
+			updated := 0
+			deleted := 0
+			for _grouptoogle := range set {
+				nodeInstance := &tree.Node{Name: _grouptoogle.GetName()}
+				nodeInstance.IsNodeClickable = true
+				nodeInstance.Impl = NewInstanceNodeCallback(_grouptoogle, "GroupToogle", probe)
+
+				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+				if _, ok := probe.stageOfInterest.GetNew()[_grouptoogle]; ok {
+					created++
+				}
+				if _, ok := probe.stageOfInterest.GetModified()[_grouptoogle]; ok {
+					updated++
+				}
+				if _, ok := probe.stageOfInterest.GetDeleted()[_grouptoogle]; ok {
+					deleted++
+				}
+			}
+			nodeGongstruct.Name += fmt.Sprintf(" (%d/%d/%d)", created, updated, deleted)
 		case "Layout":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Layout](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Layout](probe.stageOfInterest)
+			created := 0
+			updated := 0
+			deleted := 0
 			for _layout := range set {
 				nodeInstance := &tree.Node{Name: _layout.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_layout, "Layout", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+				if _, ok := probe.stageOfInterest.GetNew()[_layout]; ok {
+					created++
+				}
+				if _, ok := probe.stageOfInterest.GetModified()[_layout]; ok {
+					updated++
+				}
+				if _, ok := probe.stageOfInterest.GetDeleted()[_layout]; ok {
+					deleted++
+				}
 			}
+			nodeGongstruct.Name += fmt.Sprintf(" (%d/%d/%d)", created, updated, deleted)
 		}
 
 		nodeGongstruct.IsNodeClickable = true
@@ -140,14 +231,14 @@ func updateAndCommitTree(
 	probe.treeStage.Commit()
 }
 
-type InstanceNodeCallback[T models.Gongstruct] struct {
-	Instance       *T
+type InstanceNodeCallback[T models.PointerToGongstruct] struct {
+	Instance       T
 	gongstructName string
 	probe          *Probe
 }
 
-func NewInstanceNodeCallback[T models.Gongstruct](
-	instance *T,
+func NewInstanceNodeCallback[T models.PointerToGongstruct](
+	instance T,
 	gongstructName string,
 	probe *Probe) (
 	instanceNodeCallback *InstanceNodeCallback[T],

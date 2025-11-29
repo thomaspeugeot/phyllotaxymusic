@@ -10,6 +10,7 @@ import (
 	"math"
 	"slices"
 	"sort"
+	"strings"
 	"time"
 
 	tree_go "github.com/fullstack-lang/gong/lib/tree/go"
@@ -26,6 +27,7 @@ func __Gong__Abs(x int) int {
 }
 
 var _ = __Gong__Abs
+var _ = strings.Clone("")
 
 const ProbeTreeSidebarSuffix = ":sidebar of the probe"
 const ProbeTableSuffix = ":table of the probe"
@@ -50,6 +52,7 @@ func (stage *Stage) GetProbeSplitStageName() string {
 
 // errUnkownEnum is returns when a value cannot match enum values
 var errUnkownEnum = errors.New("unkown enum")
+var _ = errUnkownEnum
 
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
@@ -74,6 +77,8 @@ type GongStructInterface interface {
 	// GetID() (res int)
 	// GetFields() (res []string)
 	// GetFieldStringValue(fieldName string) (res string)
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
 }
 
 // Stage enables storage of staged instances
@@ -170,6 +175,12 @@ type Stage struct {
 	// end of insertion point
 
 	NamedStructs []*NamedStruct
+
+	// for the computation of the diff at each commit we need
+	reference map[GongstructIF]GongstructIF
+	modified  map[GongstructIF]struct{}
+	new       map[GongstructIF]struct{}
+	deleted   map[GongstructIF]struct{}
 }
 
 func (stage *Stage) GetCommitId() uint {
@@ -192,6 +203,22 @@ func (stage *Stage) GetNamedStructsNames() (res []string) {
 	}
 
 	return
+}
+
+func (stage *Stage) GetReference() map[GongstructIF]GongstructIF {
+	return stage.reference
+}
+
+func (stage *Stage) GetModified() map[GongstructIF]struct{} {
+	return stage.modified
+}
+
+func (stage *Stage) GetNew() map[GongstructIF]struct{} {
+	return stage.new
+}
+
+func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
+	return stage.deleted
 }
 
 func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
@@ -221,7 +248,7 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
 	var t T
 	switch any(t).(type) {
-		// insertion point for case
+	// insertion point for case
 	case *Button:
 		tmp := GetStructInstancesByOrder(stage.Buttons, stage.ButtonMap_Staged_Order)
 
@@ -300,9 +327,7 @@ func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T
 		return i_order < j_order
 	})
 
-	for _, instance := range orderedSet {
-		res = append(res, instance)
-	}
+	res = append(res, orderedSet...)
 
 	return
 }
@@ -441,6 +466,11 @@ func NewStage(name string) (stage *Stage) {
 			{name: "SVGIcon"},
 			{name: "Tree"},
 		}, // end of insertion point
+
+		reference: make(map[GongstructIF]GongstructIF),
+		new:       make(map[GongstructIF]struct{}),
+		modified:  make(map[GongstructIF]struct{}),
+		deleted:   make(map[GongstructIF]struct{}),
 	}
 
 	return
@@ -497,16 +527,26 @@ func (stage *Stage) Commit() {
 	stage.commitId++
 	stage.commitTimeStamp = time.Now()
 
+	if stage.OnInitCommitCallback != nil {
+		stage.OnInitCommitCallback.BeforeCommit(stage)
+	}
+	if stage.OnInitCommitFromBackCallback != nil {
+		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
+	}
+
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
+	stage.ComputeInstancesNb()
+	stage.ComputeReference()
+}
 
+func (stage *Stage) ComputeInstancesNb() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Button"] = len(stage.Buttons)
 	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
 	stage.Map_GongStructName_InstancesNb["SVGIcon"] = len(stage.SVGIcons)
 	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
-
 }
 
 func (stage *Stage) Checkout() {
@@ -515,12 +555,7 @@ func (stage *Stage) Checkout() {
 	}
 
 	stage.ComputeReverseMaps()
-	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["Button"] = len(stage.Buttons)
-	stage.Map_GongStructName_InstancesNb["Node"] = len(stage.Nodes)
-	stage.Map_GongStructName_InstancesNb["SVGIcon"] = len(stage.SVGIcons)
-	stage.Map_GongStructName_InstancesNb["Tree"] = len(stage.Trees)
-
+	stage.ComputeInstancesNb()
 }
 
 // backup generates backup files in the dirPath
@@ -559,6 +594,12 @@ func (button *Button) Stage(stage *Stage) *Button {
 		stage.Buttons[button] = __member
 		stage.ButtonMap_Staged_Order[button] = stage.ButtonOrder
 		stage.ButtonOrder++
+		stage.new[button] = struct{}{}
+		delete(stage.deleted, button)
+	} else {
+		if _, ok := stage.new[button]; !ok {
+			stage.modified[button] = struct{}{}
+		}
 	}
 	stage.Buttons_mapString[button.Name] = button
 
@@ -569,6 +610,12 @@ func (button *Button) Stage(stage *Stage) *Button {
 func (button *Button) Unstage(stage *Stage) *Button {
 	delete(stage.Buttons, button)
 	delete(stage.Buttons_mapString, button.Name)
+
+	if _, ok := stage.reference[button]; ok {
+		stage.deleted[button] = struct{}{}
+	} else {
+		delete(stage.new, button)
+	}
 	return button
 }
 
@@ -590,6 +637,10 @@ func (button *Button) Commit(stage *Stage) *Button {
 
 func (button *Button) CommitVoid(stage *Stage) {
 	button.Commit(stage)
+}
+
+func (button *Button) StageVoid(stage *Stage) {
+	button.Stage(stage)
 }
 
 // Checkout button to the back repo (if it is already staged)
@@ -614,6 +665,12 @@ func (node *Node) Stage(stage *Stage) *Node {
 		stage.Nodes[node] = __member
 		stage.NodeMap_Staged_Order[node] = stage.NodeOrder
 		stage.NodeOrder++
+		stage.new[node] = struct{}{}
+		delete(stage.deleted, node)
+	} else {
+		if _, ok := stage.new[node]; !ok {
+			stage.modified[node] = struct{}{}
+		}
 	}
 	stage.Nodes_mapString[node.Name] = node
 
@@ -624,6 +681,12 @@ func (node *Node) Stage(stage *Stage) *Node {
 func (node *Node) Unstage(stage *Stage) *Node {
 	delete(stage.Nodes, node)
 	delete(stage.Nodes_mapString, node.Name)
+
+	if _, ok := stage.reference[node]; ok {
+		stage.deleted[node] = struct{}{}
+	} else {
+		delete(stage.new, node)
+	}
 	return node
 }
 
@@ -645,6 +708,10 @@ func (node *Node) Commit(stage *Stage) *Node {
 
 func (node *Node) CommitVoid(stage *Stage) {
 	node.Commit(stage)
+}
+
+func (node *Node) StageVoid(stage *Stage) {
+	node.Stage(stage)
 }
 
 // Checkout node to the back repo (if it is already staged)
@@ -669,6 +736,12 @@ func (svgicon *SVGIcon) Stage(stage *Stage) *SVGIcon {
 		stage.SVGIcons[svgicon] = __member
 		stage.SVGIconMap_Staged_Order[svgicon] = stage.SVGIconOrder
 		stage.SVGIconOrder++
+		stage.new[svgicon] = struct{}{}
+		delete(stage.deleted, svgicon)
+	} else {
+		if _, ok := stage.new[svgicon]; !ok {
+			stage.modified[svgicon] = struct{}{}
+		}
 	}
 	stage.SVGIcons_mapString[svgicon.Name] = svgicon
 
@@ -679,6 +752,12 @@ func (svgicon *SVGIcon) Stage(stage *Stage) *SVGIcon {
 func (svgicon *SVGIcon) Unstage(stage *Stage) *SVGIcon {
 	delete(stage.SVGIcons, svgicon)
 	delete(stage.SVGIcons_mapString, svgicon.Name)
+
+	if _, ok := stage.reference[svgicon]; ok {
+		stage.deleted[svgicon] = struct{}{}
+	} else {
+		delete(stage.new, svgicon)
+	}
 	return svgicon
 }
 
@@ -700,6 +779,10 @@ func (svgicon *SVGIcon) Commit(stage *Stage) *SVGIcon {
 
 func (svgicon *SVGIcon) CommitVoid(stage *Stage) {
 	svgicon.Commit(stage)
+}
+
+func (svgicon *SVGIcon) StageVoid(stage *Stage) {
+	svgicon.Stage(stage)
 }
 
 // Checkout svgicon to the back repo (if it is already staged)
@@ -724,6 +807,12 @@ func (tree *Tree) Stage(stage *Stage) *Tree {
 		stage.Trees[tree] = __member
 		stage.TreeMap_Staged_Order[tree] = stage.TreeOrder
 		stage.TreeOrder++
+		stage.new[tree] = struct{}{}
+		delete(stage.deleted, tree)
+	} else {
+		if _, ok := stage.new[tree]; !ok {
+			stage.modified[tree] = struct{}{}
+		}
 	}
 	stage.Trees_mapString[tree.Name] = tree
 
@@ -734,6 +823,12 @@ func (tree *Tree) Stage(stage *Stage) *Tree {
 func (tree *Tree) Unstage(stage *Stage) *Tree {
 	delete(stage.Trees, tree)
 	delete(stage.Trees_mapString, tree.Name)
+
+	if _, ok := stage.reference[tree]; ok {
+		stage.deleted[tree] = struct{}{}
+	} else {
+		delete(stage.new, tree)
+	}
 	return tree
 }
 
@@ -755,6 +850,10 @@ func (tree *Tree) Commit(stage *Stage) *Tree {
 
 func (tree *Tree) CommitVoid(stage *Stage) {
 	tree.Commit(stage)
+}
+
+func (tree *Tree) StageVoid(stage *Stage) {
+	tree.Stage(stage)
 }
 
 // Checkout tree to the back repo (if it is already staged)
@@ -808,6 +907,7 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.TreeMap_Staged_Order = make(map[*Tree]uint)
 	stage.TreeOrder = 0
 
+	stage.ComputeReference()
 }
 
 func (stage *Stage) Nil() { // insertion point for array nil
@@ -859,10 +959,22 @@ type GongtructBasicField interface {
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
-type PointerToGongstruct interface {
+type GongstructIF interface {
 	GetName() string
 	CommitVoid(*Stage)
+	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
+	GongGetFieldHeaders() []GongFieldHeader
+	GongClean(stage *Stage)
+	GongGetFieldValue(fieldName string, stage *Stage) GongFieldValue
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
+	GongCopy() GongstructIF
+	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string
+	GongGetReverseFieldOwner(stage *Stage, reverseField *ReverseField) GongstructIF
+}
+type PointerToGongstruct interface {
+	GongstructIF
 	comparable
 }
 
@@ -977,7 +1089,7 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 }
 
 // GetGongstructInstancesMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
+// it is usefull because it allows refactoring of gongstruct identifier
 func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type {
 	var ret Type
 
@@ -1167,26 +1279,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	return nil
 }
 
-// GetGongstructName returns the name of the Gongstruct
-// this can be usefull if one want program robust to refactoring
-func GetGongstructName[Type Gongstruct]() (res string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Button:
-		res = "Button"
-	case Node:
-		res = "Node"
-	case SVGIcon:
-		res = "SVGIcon"
-	case Tree:
-		res = "Tree"
-	}
-	return res
-}
-
 // GetPointerToGongstructName returns the name of the Gongstruct
 // this can be usefull if one want program robust to refactoring
 func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
@@ -1207,31 +1299,12 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	return res
 }
 
-// GetFields return the array of the fields
-func GetFields[Type Gongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Button:
-		res = []string{"Name", "Icon", "SVGIcon", "IsDisabled", "HasToolTip", "ToolTipText", "ToolTipPosition"}
-	case Node:
-		res = []string{"Name", "FontStyle", "BackgroundColor", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "CheckboxHasToolTip", "CheckboxToolTipText", "CheckboxToolTipPosition", "HasSecondCheckboxButton", "IsSecondCheckboxChecked", "IsSecondCheckboxDisabled", "SecondCheckboxHasToolTip", "SecondCheckboxToolTipText", "SecondCheckboxToolTipPosition", "TextAfterSecondCheckbox", "HasToolTip", "ToolTipText", "ToolTipPosition", "IsInEditMode", "IsNodeClickable", "IsWithPreceedingIcon", "PreceedingIcon", "PreceedingSVGIcon", "Children", "Buttons"}
-	case SVGIcon:
-		res = []string{"Name", "SVG"}
-	case Tree:
-		res = []string{"Name", "RootNodes"}
-	}
-	return
-}
-
 type ReverseField struct {
 	GongstructName string
 	Fieldname      string
 }
 
-func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
+func GetReverseFields[Type PointerToGongstruct]() (res []ReverseField) {
 
 	res = make([]ReverseField, 0)
 
@@ -1240,13 +1313,13 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	switch any(ret).(type) {
 
 	// insertion point for generic get gongstruct name
-	case Button:
+	case *Button:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Node"
 		rf.Fieldname = "Buttons"
 		res = append(res, rf)
-	case Node:
+	case *Node:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Node"
@@ -1255,50 +1328,237 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 		rf.GongstructName = "Tree"
 		rf.Fieldname = "RootNodes"
 		res = append(res, rf)
-	case SVGIcon:
+	case *SVGIcon:
 		var rf ReverseField
 		_ = rf
-	case Tree:
+	case *Tree:
 		var rf ReverseField
 		_ = rf
+	}
+	return
+}
+
+// insertion point for get fields header method
+func (button *Button) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Icon",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "SVGIcon",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "SVGIcon",
+		},
+		{
+			Name:               "IsDisabled",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasToolTip",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ToolTipText",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ToolTipPosition",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (node *Node) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontStyle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BackgroundColor",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsExpanded",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasCheckboxButton",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsChecked",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsCheckboxDisabled",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CheckboxHasToolTip",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CheckboxToolTipText",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CheckboxToolTipPosition",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasSecondCheckboxButton",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsSecondCheckboxChecked",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsSecondCheckboxDisabled",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "SecondCheckboxHasToolTip",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "SecondCheckboxToolTipText",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "SecondCheckboxToolTipPosition",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "TextAfterSecondCheckbox",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasToolTip",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ToolTipText",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ToolTipPosition",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsInEditMode",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsNodeClickable",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsWithPreceedingIcon",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "PreceedingIcon",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "PreceedingSVGIcon",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "SVGIcon",
+		},
+		{
+			Name:                 "Children",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Node",
+		},
+		{
+			Name:                 "Buttons",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Button",
+		},
+	}
+	return
+}
+
+func (svgicon *SVGIcon) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "SVG",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (tree *Tree) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "RootNodes",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Node",
+		},
 	}
 	return
 }
 
 // GetFieldsFromPointer return the array of the fields
-func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
+func GetFieldsFromPointer[Type PointerToGongstruct]() (res []GongFieldHeader) {
 
 	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case *Button:
-		res = []string{"Name", "Icon", "SVGIcon", "IsDisabled", "HasToolTip", "ToolTipText", "ToolTipPosition"}
-	case *Node:
-		res = []string{"Name", "FontStyle", "BackgroundColor", "IsExpanded", "HasCheckboxButton", "IsChecked", "IsCheckboxDisabled", "CheckboxHasToolTip", "CheckboxToolTipText", "CheckboxToolTipPosition", "HasSecondCheckboxButton", "IsSecondCheckboxChecked", "IsSecondCheckboxDisabled", "SecondCheckboxHasToolTip", "SecondCheckboxToolTipText", "SecondCheckboxToolTipPosition", "TextAfterSecondCheckbox", "HasToolTip", "ToolTipText", "ToolTipPosition", "IsInEditMode", "IsNodeClickable", "IsWithPreceedingIcon", "PreceedingIcon", "PreceedingSVGIcon", "Children", "Buttons"}
-	case *SVGIcon:
-		res = []string{"Name", "SVG"}
-	case *Tree:
-		res = []string{"Name", "RootNodes"}
-	}
-	return
+	return ret.GongGetFieldHeaders()
 }
 
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt             GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat           GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool            GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeString          GongFieldValueType = "GongFieldValueTypeString"
+	GongFieldValueTypeBasicKind       GongFieldValueType = "GongFieldValueTypeBasicKind"
+	GongFieldValueTypePointer         GongFieldValueType = "GongFieldValueTypePointer"
+	GongFieldValueTypeSliceOfPointers GongFieldValueType = "GongFieldValueTypeSliceOfPointers"
 )
 
 type GongFieldValue struct {
-	valueString string
 	GongFieldValueType
-	valueInt   int
-	valueFloat float64
-	valueBool  bool
+	valueString string
+	valueInt    int
+	valueFloat  float64
+	valueBool   bool
+
+	// in case of a pointer, the ID of the pointed element
+	// in case of a slice of pointers, the IDs, separated by semi columbs
+	ids string
+}
+
+type GongFieldHeader struct {
+	Name string
+	GongFieldValueType
+	TargetGongstructName string
 }
 
 func (gongValueField *GongFieldValue) GetValueString() string {
@@ -1317,315 +1577,370 @@ func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }
 
-func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFieldValue) {
-
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case *Button:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Icon":
-			res.valueString = inferedInstance.Icon
-		case "SVGIcon":
-			if inferedInstance.SVGIcon != nil {
-				res.valueString = inferedInstance.SVGIcon.Name
-			}
-		case "IsDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisabled)
-			res.valueBool = inferedInstance.IsDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		case "ToolTipPosition":
-			enum := inferedInstance.ToolTipPosition
-			res.valueString = enum.ToCodeString()
+// insertion point for generic get gongstruct field value
+func (button *Button) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = button.Name
+	case "Icon":
+		res.valueString = button.Icon
+	case "SVGIcon":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if button.SVGIcon != nil {
+			res.valueString = button.SVGIcon.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, button.SVGIcon))
 		}
-	case *Node:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "FontStyle":
-			enum := inferedInstance.FontStyle
-			res.valueString = enum.ToCodeString()
-		case "BackgroundColor":
-			res.valueString = inferedInstance.BackgroundColor
-		case "IsExpanded":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsExpanded)
-			res.valueBool = inferedInstance.IsExpanded
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasCheckboxButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasCheckboxButton)
-			res.valueBool = inferedInstance.HasCheckboxButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsChecked)
-			res.valueBool = inferedInstance.IsChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsCheckboxDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsCheckboxDisabled)
-			res.valueBool = inferedInstance.IsCheckboxDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CheckboxHasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CheckboxHasToolTip)
-			res.valueBool = inferedInstance.CheckboxHasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CheckboxToolTipText":
-			res.valueString = inferedInstance.CheckboxToolTipText
-		case "CheckboxToolTipPosition":
-			enum := inferedInstance.CheckboxToolTipPosition
-			res.valueString = enum.ToCodeString()
-		case "HasSecondCheckboxButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSecondCheckboxButton)
-			res.valueBool = inferedInstance.HasSecondCheckboxButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSecondCheckboxChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxChecked)
-			res.valueBool = inferedInstance.IsSecondCheckboxChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSecondCheckboxDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxDisabled)
-			res.valueBool = inferedInstance.IsSecondCheckboxDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "SecondCheckboxHasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.SecondCheckboxHasToolTip)
-			res.valueBool = inferedInstance.SecondCheckboxHasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "SecondCheckboxToolTipText":
-			res.valueString = inferedInstance.SecondCheckboxToolTipText
-		case "SecondCheckboxToolTipPosition":
-			enum := inferedInstance.SecondCheckboxToolTipPosition
-			res.valueString = enum.ToCodeString()
-		case "TextAfterSecondCheckbox":
-			res.valueString = inferedInstance.TextAfterSecondCheckbox
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		case "ToolTipPosition":
-			enum := inferedInstance.ToolTipPosition
-			res.valueString = enum.ToCodeString()
-		case "IsInEditMode":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsInEditMode)
-			res.valueBool = inferedInstance.IsInEditMode
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsNodeClickable":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsNodeClickable)
-			res.valueBool = inferedInstance.IsNodeClickable
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsWithPreceedingIcon":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsWithPreceedingIcon)
-			res.valueBool = inferedInstance.IsWithPreceedingIcon
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "PreceedingIcon":
-			res.valueString = inferedInstance.PreceedingIcon
-		case "PreceedingSVGIcon":
-			if inferedInstance.PreceedingSVGIcon != nil {
-				res.valueString = inferedInstance.PreceedingSVGIcon.Name
-			}
-		case "Children":
-			for idx, __instance__ := range inferedInstance.Children {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Buttons":
-			for idx, __instance__ := range inferedInstance.Buttons {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *SVGIcon:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "SVG":
-			res.valueString = inferedInstance.SVG
-		}
-	case *Tree:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "RootNodes":
-			for idx, __instance__ := range inferedInstance.RootNodes {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	default:
-		_ = inferedInstance
+	case "IsDisabled":
+		res.valueString = fmt.Sprintf("%t", button.IsDisabled)
+		res.valueBool = button.IsDisabled
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasToolTip":
+		res.valueString = fmt.Sprintf("%t", button.HasToolTip)
+		res.valueBool = button.HasToolTip
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "ToolTipText":
+		res.valueString = button.ToolTipText
+	case "ToolTipPosition":
+		enum := button.ToolTipPosition
+		res.valueString = enum.ToCodeString()
 	}
 	return
 }
+func (node *Node) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = node.Name
+	case "FontStyle":
+		enum := node.FontStyle
+		res.valueString = enum.ToCodeString()
+	case "BackgroundColor":
+		res.valueString = node.BackgroundColor
+	case "IsExpanded":
+		res.valueString = fmt.Sprintf("%t", node.IsExpanded)
+		res.valueBool = node.IsExpanded
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasCheckboxButton":
+		res.valueString = fmt.Sprintf("%t", node.HasCheckboxButton)
+		res.valueBool = node.HasCheckboxButton
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsChecked":
+		res.valueString = fmt.Sprintf("%t", node.IsChecked)
+		res.valueBool = node.IsChecked
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsCheckboxDisabled":
+		res.valueString = fmt.Sprintf("%t", node.IsCheckboxDisabled)
+		res.valueBool = node.IsCheckboxDisabled
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "CheckboxHasToolTip":
+		res.valueString = fmt.Sprintf("%t", node.CheckboxHasToolTip)
+		res.valueBool = node.CheckboxHasToolTip
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "CheckboxToolTipText":
+		res.valueString = node.CheckboxToolTipText
+	case "CheckboxToolTipPosition":
+		enum := node.CheckboxToolTipPosition
+		res.valueString = enum.ToCodeString()
+	case "HasSecondCheckboxButton":
+		res.valueString = fmt.Sprintf("%t", node.HasSecondCheckboxButton)
+		res.valueBool = node.HasSecondCheckboxButton
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsSecondCheckboxChecked":
+		res.valueString = fmt.Sprintf("%t", node.IsSecondCheckboxChecked)
+		res.valueBool = node.IsSecondCheckboxChecked
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsSecondCheckboxDisabled":
+		res.valueString = fmt.Sprintf("%t", node.IsSecondCheckboxDisabled)
+		res.valueBool = node.IsSecondCheckboxDisabled
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "SecondCheckboxHasToolTip":
+		res.valueString = fmt.Sprintf("%t", node.SecondCheckboxHasToolTip)
+		res.valueBool = node.SecondCheckboxHasToolTip
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "SecondCheckboxToolTipText":
+		res.valueString = node.SecondCheckboxToolTipText
+	case "SecondCheckboxToolTipPosition":
+		enum := node.SecondCheckboxToolTipPosition
+		res.valueString = enum.ToCodeString()
+	case "TextAfterSecondCheckbox":
+		res.valueString = node.TextAfterSecondCheckbox
+	case "HasToolTip":
+		res.valueString = fmt.Sprintf("%t", node.HasToolTip)
+		res.valueBool = node.HasToolTip
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "ToolTipText":
+		res.valueString = node.ToolTipText
+	case "ToolTipPosition":
+		enum := node.ToolTipPosition
+		res.valueString = enum.ToCodeString()
+	case "IsInEditMode":
+		res.valueString = fmt.Sprintf("%t", node.IsInEditMode)
+		res.valueBool = node.IsInEditMode
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsNodeClickable":
+		res.valueString = fmt.Sprintf("%t", node.IsNodeClickable)
+		res.valueBool = node.IsNodeClickable
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsWithPreceedingIcon":
+		res.valueString = fmt.Sprintf("%t", node.IsWithPreceedingIcon)
+		res.valueBool = node.IsWithPreceedingIcon
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "PreceedingIcon":
+		res.valueString = node.PreceedingIcon
+	case "PreceedingSVGIcon":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if node.PreceedingSVGIcon != nil {
+			res.valueString = node.PreceedingSVGIcon.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, node.PreceedingSVGIcon))
+		}
+	case "Children":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range node.Children {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Buttons":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range node.Buttons {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (svgicon *SVGIcon) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = svgicon.Name
+	case "SVG":
+		res.valueString = svgicon.SVG
+	}
+	return
+}
+func (tree *Tree) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = tree.Name
+	case "RootNodes":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range tree.RootNodes {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func GetFieldStringValueFromPointer(instance GongstructIF, fieldName string, stage *Stage) (res GongFieldValue) {
 
-func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
+	res = instance.GongGetFieldValue(fieldName, stage)
+	return
+}
 
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case Button:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Icon":
-			res.valueString = inferedInstance.Icon
-		case "SVGIcon":
-			if inferedInstance.SVGIcon != nil {
-				res.valueString = inferedInstance.SVGIcon.Name
-			}
-		case "IsDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsDisabled)
-			res.valueBool = inferedInstance.IsDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		case "ToolTipPosition":
-			enum := inferedInstance.ToolTipPosition
-			res.valueString = enum.ToCodeString()
-		}
-	case Node:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "FontStyle":
-			enum := inferedInstance.FontStyle
-			res.valueString = enum.ToCodeString()
-		case "BackgroundColor":
-			res.valueString = inferedInstance.BackgroundColor
-		case "IsExpanded":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsExpanded)
-			res.valueBool = inferedInstance.IsExpanded
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasCheckboxButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasCheckboxButton)
-			res.valueBool = inferedInstance.HasCheckboxButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsChecked)
-			res.valueBool = inferedInstance.IsChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsCheckboxDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsCheckboxDisabled)
-			res.valueBool = inferedInstance.IsCheckboxDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CheckboxHasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CheckboxHasToolTip)
-			res.valueBool = inferedInstance.CheckboxHasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CheckboxToolTipText":
-			res.valueString = inferedInstance.CheckboxToolTipText
-		case "CheckboxToolTipPosition":
-			enum := inferedInstance.CheckboxToolTipPosition
-			res.valueString = enum.ToCodeString()
-		case "HasSecondCheckboxButton":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasSecondCheckboxButton)
-			res.valueBool = inferedInstance.HasSecondCheckboxButton
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSecondCheckboxChecked":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxChecked)
-			res.valueBool = inferedInstance.IsSecondCheckboxChecked
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSecondCheckboxDisabled":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSecondCheckboxDisabled)
-			res.valueBool = inferedInstance.IsSecondCheckboxDisabled
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "SecondCheckboxHasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.SecondCheckboxHasToolTip)
-			res.valueBool = inferedInstance.SecondCheckboxHasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "SecondCheckboxToolTipText":
-			res.valueString = inferedInstance.SecondCheckboxToolTipText
-		case "SecondCheckboxToolTipPosition":
-			enum := inferedInstance.SecondCheckboxToolTipPosition
-			res.valueString = enum.ToCodeString()
-		case "TextAfterSecondCheckbox":
-			res.valueString = inferedInstance.TextAfterSecondCheckbox
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		case "ToolTipPosition":
-			enum := inferedInstance.ToolTipPosition
-			res.valueString = enum.ToCodeString()
-		case "IsInEditMode":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsInEditMode)
-			res.valueBool = inferedInstance.IsInEditMode
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsNodeClickable":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsNodeClickable)
-			res.valueBool = inferedInstance.IsNodeClickable
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsWithPreceedingIcon":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsWithPreceedingIcon)
-			res.valueBool = inferedInstance.IsWithPreceedingIcon
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "PreceedingIcon":
-			res.valueString = inferedInstance.PreceedingIcon
-		case "PreceedingSVGIcon":
-			if inferedInstance.PreceedingSVGIcon != nil {
-				res.valueString = inferedInstance.PreceedingSVGIcon.Name
-			}
-		case "Children":
-			for idx, __instance__ := range inferedInstance.Children {
-				if idx > 0 {
-					res.valueString += "\n"
+// insertion point for generic set gongstruct field value
+func (button *Button) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		button.Name = value.GetValueString()
+	case "Icon":
+		button.Icon = value.GetValueString()
+	case "SVGIcon":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			button.SVGIcon = nil
+			for __instance__ := range stage.SVGIcons {
+				if stage.SVGIconMap_Staged_Order[__instance__] == uint(id) {
+					button.SVGIcon = __instance__
+					break
 				}
-				res.valueString += __instance__.Name
-			}
-		case "Buttons":
-			for idx, __instance__ := range inferedInstance.Buttons {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
 			}
 		}
-	case SVGIcon:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "SVG":
-			res.valueString = inferedInstance.SVG
-		}
-	case Tree:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "RootNodes":
-			for idx, __instance__ := range inferedInstance.RootNodes {
-				if idx > 0 {
-					res.valueString += "\n"
+	case "IsDisabled":
+		button.IsDisabled = value.GetValueBool()
+	case "HasToolTip":
+		button.HasToolTip = value.GetValueBool()
+	case "ToolTipText":
+		button.ToolTipText = value.GetValueString()
+	case "ToolTipPosition":
+		button.ToolTipPosition.FromCodeString(value.GetValueString())
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (node *Node) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		node.Name = value.GetValueString()
+	case "FontStyle":
+		node.FontStyle.FromCodeString(value.GetValueString())
+	case "BackgroundColor":
+		node.BackgroundColor = value.GetValueString()
+	case "IsExpanded":
+		node.IsExpanded = value.GetValueBool()
+	case "HasCheckboxButton":
+		node.HasCheckboxButton = value.GetValueBool()
+	case "IsChecked":
+		node.IsChecked = value.GetValueBool()
+	case "IsCheckboxDisabled":
+		node.IsCheckboxDisabled = value.GetValueBool()
+	case "CheckboxHasToolTip":
+		node.CheckboxHasToolTip = value.GetValueBool()
+	case "CheckboxToolTipText":
+		node.CheckboxToolTipText = value.GetValueString()
+	case "CheckboxToolTipPosition":
+		node.CheckboxToolTipPosition.FromCodeString(value.GetValueString())
+	case "HasSecondCheckboxButton":
+		node.HasSecondCheckboxButton = value.GetValueBool()
+	case "IsSecondCheckboxChecked":
+		node.IsSecondCheckboxChecked = value.GetValueBool()
+	case "IsSecondCheckboxDisabled":
+		node.IsSecondCheckboxDisabled = value.GetValueBool()
+	case "SecondCheckboxHasToolTip":
+		node.SecondCheckboxHasToolTip = value.GetValueBool()
+	case "SecondCheckboxToolTipText":
+		node.SecondCheckboxToolTipText = value.GetValueString()
+	case "SecondCheckboxToolTipPosition":
+		node.SecondCheckboxToolTipPosition.FromCodeString(value.GetValueString())
+	case "TextAfterSecondCheckbox":
+		node.TextAfterSecondCheckbox = value.GetValueString()
+	case "HasToolTip":
+		node.HasToolTip = value.GetValueBool()
+	case "ToolTipText":
+		node.ToolTipText = value.GetValueString()
+	case "ToolTipPosition":
+		node.ToolTipPosition.FromCodeString(value.GetValueString())
+	case "IsInEditMode":
+		node.IsInEditMode = value.GetValueBool()
+	case "IsNodeClickable":
+		node.IsNodeClickable = value.GetValueBool()
+	case "IsWithPreceedingIcon":
+		node.IsWithPreceedingIcon = value.GetValueBool()
+	case "PreceedingIcon":
+		node.PreceedingIcon = value.GetValueString()
+	case "PreceedingSVGIcon":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			node.PreceedingSVGIcon = nil
+			for __instance__ := range stage.SVGIcons {
+				if stage.SVGIconMap_Staged_Order[__instance__] == uint(id) {
+					node.PreceedingSVGIcon = __instance__
+					break
 				}
-				res.valueString += __instance__.Name
+			}
+		}
+	case "Children":
+		node.Children = make([]*Node, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Nodes {
+					if stage.NodeMap_Staged_Order[__instance__] == uint(id) {
+						node.Children = append(node.Children, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Buttons":
+		node.Buttons = make([]*Button, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Buttons {
+					if stage.ButtonMap_Staged_Order[__instance__] == uint(id) {
+						node.Buttons = append(node.Buttons, __instance__)
+						break
+					}
+				}
 			}
 		}
 	default:
-		_ = inferedInstance
+		return fmt.Errorf("unknown field %s", fieldName)
 	}
+	return nil
+}
+
+func (svgicon *SVGIcon) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		svgicon.Name = value.GetValueString()
+	case "SVG":
+		svgicon.SVG = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (tree *Tree) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		tree.Name = value.GetValueString()
+	case "RootNodes":
+		tree.RootNodes = make([]*Node, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Nodes {
+					if stage.NodeMap_Staged_Order[__instance__] == uint(id) {
+						tree.RootNodes = append(tree.RootNodes, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func SetFieldStringValueFromPointer(instance GongstructIF, fieldName string, value GongFieldValue, stage *Stage) error {
+	return instance.GongSetFieldValue(fieldName, value, stage)
+}
+
+// insertion point for generic get gongstruct name
+func (button *Button) GongGetGongstructName() string {
+	return "Button"
+}
+
+func (node *Node) GongGetGongstructName() string {
+	return "Node"
+}
+
+func (svgicon *SVGIcon) GongGetGongstructName() string {
+	return "SVGIcon"
+}
+
+func (tree *Tree) GongGetGongstructName() string {
+	return "Tree"
+}
+
+func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
+	res = instance.GongGetGongstructName()
 	return
 }
 

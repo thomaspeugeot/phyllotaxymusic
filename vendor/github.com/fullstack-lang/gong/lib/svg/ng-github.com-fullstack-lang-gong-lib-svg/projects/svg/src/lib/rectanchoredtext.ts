@@ -13,8 +13,6 @@ export class RectAnchoredText {
 
 	static GONGSTRUCT_NAME = "RectAnchoredText"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -24,10 +22,13 @@ export class RectAnchoredText {
 	FontSize: string = ""
 	FontStyle: string = ""
 	LetterSpacing: string = ""
+	FontFamily: string = ""
+	WhiteSpace: string = ""
 	X_Offset: number = 0
 	Y_Offset: number = 0
 	RectAnchorType: string = ""
 	TextAnchorType: string = ""
+	DominantBaseline: string = ""
 	WritingMode: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
@@ -40,6 +41,9 @@ export class RectAnchoredText {
 
 	// insertion point for pointers and slices of pointers declarations
 	Animates: Array<Animate> = []
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export function CopyRectAnchoredTextToRectAnchoredTextAPI(rectanchoredtext: RectAnchoredText, rectanchoredtextAPI: RectAnchoredTextAPI) {
@@ -55,10 +59,13 @@ export function CopyRectAnchoredTextToRectAnchoredTextAPI(rectanchoredtext: Rect
 	rectanchoredtextAPI.FontSize = rectanchoredtext.FontSize
 	rectanchoredtextAPI.FontStyle = rectanchoredtext.FontStyle
 	rectanchoredtextAPI.LetterSpacing = rectanchoredtext.LetterSpacing
+	rectanchoredtextAPI.FontFamily = rectanchoredtext.FontFamily
+	rectanchoredtextAPI.WhiteSpace = rectanchoredtext.WhiteSpace
 	rectanchoredtextAPI.X_Offset = rectanchoredtext.X_Offset
 	rectanchoredtextAPI.Y_Offset = rectanchoredtext.Y_Offset
 	rectanchoredtextAPI.RectAnchorType = rectanchoredtext.RectAnchorType
 	rectanchoredtextAPI.TextAnchorType = rectanchoredtext.TextAnchorType
+	rectanchoredtextAPI.DominantBaseline = rectanchoredtext.DominantBaseline
 	rectanchoredtextAPI.WritingMode = rectanchoredtext.WritingMode
 	rectanchoredtextAPI.Color = rectanchoredtext.Color
 	rectanchoredtextAPI.FillOpacity = rectanchoredtext.FillOpacity
@@ -96,10 +103,13 @@ export function CopyRectAnchoredTextAPIToRectAnchoredText(rectanchoredtextAPI: R
 	rectanchoredtext.FontSize = rectanchoredtextAPI.FontSize
 	rectanchoredtext.FontStyle = rectanchoredtextAPI.FontStyle
 	rectanchoredtext.LetterSpacing = rectanchoredtextAPI.LetterSpacing
+	rectanchoredtext.FontFamily = rectanchoredtextAPI.FontFamily
+	rectanchoredtext.WhiteSpace = rectanchoredtextAPI.WhiteSpace
 	rectanchoredtext.X_Offset = rectanchoredtextAPI.X_Offset
 	rectanchoredtext.Y_Offset = rectanchoredtextAPI.Y_Offset
 	rectanchoredtext.RectAnchorType = rectanchoredtextAPI.RectAnchorType
 	rectanchoredtext.TextAnchorType = rectanchoredtextAPI.TextAnchorType
+	rectanchoredtext.DominantBaseline = rectanchoredtextAPI.DominantBaseline
 	rectanchoredtext.WritingMode = rectanchoredtextAPI.WritingMode
 	rectanchoredtext.Color = rectanchoredtextAPI.Color
 	rectanchoredtext.FillOpacity = rectanchoredtextAPI.FillOpacity

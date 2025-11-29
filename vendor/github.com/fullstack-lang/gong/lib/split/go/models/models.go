@@ -5,7 +5,6 @@ package models
 import (
 	_ "github.com/fullstack-lang/gong/lib/button/ng-github.com-fullstack-lang-gong-lib-button"
 	_ "github.com/fullstack-lang/gong/lib/cursor/ng-github.com-fullstack-lang-gong-lib-cursor"
-	_ "github.com/fullstack-lang/gong/lib/gantt/ng-github.com-fullstack-lang-gong-lib-gantt"
 	_ "github.com/fullstack-lang/gong/lib/load/ng-github.com-fullstack-lang-gong-lib-load"
 	_ "github.com/fullstack-lang/gong/lib/markdown/ng-github.com-fullstack-lang-gong-lib-markdown"
 	_ "github.com/fullstack-lang/gong/lib/sim/ng-github.com-fullstack-lang-gong-lib-sim"
@@ -14,7 +13,6 @@ import (
 	_ "github.com/fullstack-lang/gong/lib/table/ng-github.com-fullstack-lang-gong-lib-table"
 	_ "github.com/fullstack-lang/gong/lib/tone/ng-github.com-fullstack-lang-gong-lib-tone"
 	_ "github.com/fullstack-lang/gong/lib/tree/ng-github.com-fullstack-lang-gong-lib-tree"
-	_ "github.com/fullstack-lang/gong/lib/xlsx/ng-github.com-fullstack-lang-gong-lib-xlsx"
 )
 
 // View is the top structuring eleement of the split component
@@ -27,6 +25,9 @@ type View struct {
 	ShowViewName     bool // by default, a standalone views wont display the
 	RootAsSplitAreas []*AsSplitArea
 	IsSelectedView   bool
+
+	// Direction the initial direction for the split dividing of the view. Vertical if ""
+	Direction Direction
 }
 
 type Direction string

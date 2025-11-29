@@ -10,6 +10,7 @@ import (
 	"math"
 	"slices"
 	"sort"
+	"strings"
 	"time"
 
 	tone_go "github.com/fullstack-lang/gong/lib/tone/go"
@@ -26,6 +27,7 @@ func __Gong__Abs(x int) int {
 }
 
 var _ = __Gong__Abs
+var _ = strings.Clone("")
 
 const ProbeTreeSidebarSuffix = ":sidebar of the probe"
 const ProbeTableSuffix = ":table of the probe"
@@ -50,6 +52,7 @@ func (stage *Stage) GetProbeSplitStageName() string {
 
 // errUnkownEnum is returns when a value cannot match enum values
 var errUnkownEnum = errors.New("unkown enum")
+var _ = errUnkownEnum
 
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
@@ -74,6 +77,8 @@ type GongStructInterface interface {
 	// GetID() (res int)
 	// GetFields() (res []string)
 	// GetFieldStringValue(fieldName string) (res string)
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
 }
 
 // Stage enables storage of staged instances
@@ -154,6 +159,12 @@ type Stage struct {
 	// end of insertion point
 
 	NamedStructs []*NamedStruct
+
+	// for the computation of the diff at each commit we need
+	reference map[GongstructIF]GongstructIF
+	modified  map[GongstructIF]struct{}
+	new       map[GongstructIF]struct{}
+	deleted   map[GongstructIF]struct{}
 }
 
 func (stage *Stage) GetCommitId() uint {
@@ -176,6 +187,22 @@ func (stage *Stage) GetNamedStructsNames() (res []string) {
 	}
 
 	return
+}
+
+func (stage *Stage) GetReference() map[GongstructIF]GongstructIF {
+	return stage.reference
+}
+
+func (stage *Stage) GetModified() map[GongstructIF]struct{} {
+	return stage.modified
+}
+
+func (stage *Stage) GetNew() map[GongstructIF]struct{} {
+	return stage.new
+}
+
+func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
+	return stage.deleted
 }
 
 func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
@@ -205,7 +232,7 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
 	var t T
 	switch any(t).(type) {
-		// insertion point for case
+	// insertion point for case
 	case *Freqency:
 		tmp := GetStructInstancesByOrder(stage.Freqencys, stage.FreqencyMap_Staged_Order)
 
@@ -270,9 +297,7 @@ func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T
 		return i_order < j_order
 	})
 
-	for _, instance := range orderedSet {
-		res = append(res, instance)
-	}
+	res = append(res, orderedSet...)
 
 	return
 }
@@ -401,6 +426,11 @@ func NewStage(name string) (stage *Stage) {
 			{name: "Note"},
 			{name: "Player"},
 		}, // end of insertion point
+
+		reference: make(map[GongstructIF]GongstructIF),
+		new:       make(map[GongstructIF]struct{}),
+		modified:  make(map[GongstructIF]struct{}),
+		deleted:   make(map[GongstructIF]struct{}),
 	}
 
 	return
@@ -453,15 +483,25 @@ func (stage *Stage) Commit() {
 	stage.commitId++
 	stage.commitTimeStamp = time.Now()
 
+	if stage.OnInitCommitCallback != nil {
+		stage.OnInitCommitCallback.BeforeCommit(stage)
+	}
+	if stage.OnInitCommitFromBackCallback != nil {
+		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
+	}
+
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
+	stage.ComputeInstancesNb()
+	stage.ComputeReference()
+}
 
+func (stage *Stage) ComputeInstancesNb() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Freqency"] = len(stage.Freqencys)
 	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
 	stage.Map_GongStructName_InstancesNb["Player"] = len(stage.Players)
-
 }
 
 func (stage *Stage) Checkout() {
@@ -470,11 +510,7 @@ func (stage *Stage) Checkout() {
 	}
 
 	stage.ComputeReverseMaps()
-	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["Freqency"] = len(stage.Freqencys)
-	stage.Map_GongStructName_InstancesNb["Note"] = len(stage.Notes)
-	stage.Map_GongStructName_InstancesNb["Player"] = len(stage.Players)
-
+	stage.ComputeInstancesNb()
 }
 
 // backup generates backup files in the dirPath
@@ -513,6 +549,12 @@ func (freqency *Freqency) Stage(stage *Stage) *Freqency {
 		stage.Freqencys[freqency] = __member
 		stage.FreqencyMap_Staged_Order[freqency] = stage.FreqencyOrder
 		stage.FreqencyOrder++
+		stage.new[freqency] = struct{}{}
+		delete(stage.deleted, freqency)
+	} else {
+		if _, ok := stage.new[freqency]; !ok {
+			stage.modified[freqency] = struct{}{}
+		}
 	}
 	stage.Freqencys_mapString[freqency.Name] = freqency
 
@@ -523,6 +565,12 @@ func (freqency *Freqency) Stage(stage *Stage) *Freqency {
 func (freqency *Freqency) Unstage(stage *Stage) *Freqency {
 	delete(stage.Freqencys, freqency)
 	delete(stage.Freqencys_mapString, freqency.Name)
+
+	if _, ok := stage.reference[freqency]; ok {
+		stage.deleted[freqency] = struct{}{}
+	} else {
+		delete(stage.new, freqency)
+	}
 	return freqency
 }
 
@@ -544,6 +592,10 @@ func (freqency *Freqency) Commit(stage *Stage) *Freqency {
 
 func (freqency *Freqency) CommitVoid(stage *Stage) {
 	freqency.Commit(stage)
+}
+
+func (freqency *Freqency) StageVoid(stage *Stage) {
+	freqency.Stage(stage)
 }
 
 // Checkout freqency to the back repo (if it is already staged)
@@ -568,6 +620,12 @@ func (note *Note) Stage(stage *Stage) *Note {
 		stage.Notes[note] = __member
 		stage.NoteMap_Staged_Order[note] = stage.NoteOrder
 		stage.NoteOrder++
+		stage.new[note] = struct{}{}
+		delete(stage.deleted, note)
+	} else {
+		if _, ok := stage.new[note]; !ok {
+			stage.modified[note] = struct{}{}
+		}
 	}
 	stage.Notes_mapString[note.Name] = note
 
@@ -578,6 +636,12 @@ func (note *Note) Stage(stage *Stage) *Note {
 func (note *Note) Unstage(stage *Stage) *Note {
 	delete(stage.Notes, note)
 	delete(stage.Notes_mapString, note.Name)
+
+	if _, ok := stage.reference[note]; ok {
+		stage.deleted[note] = struct{}{}
+	} else {
+		delete(stage.new, note)
+	}
 	return note
 }
 
@@ -599,6 +663,10 @@ func (note *Note) Commit(stage *Stage) *Note {
 
 func (note *Note) CommitVoid(stage *Stage) {
 	note.Commit(stage)
+}
+
+func (note *Note) StageVoid(stage *Stage) {
+	note.Stage(stage)
 }
 
 // Checkout note to the back repo (if it is already staged)
@@ -623,6 +691,12 @@ func (player *Player) Stage(stage *Stage) *Player {
 		stage.Players[player] = __member
 		stage.PlayerMap_Staged_Order[player] = stage.PlayerOrder
 		stage.PlayerOrder++
+		stage.new[player] = struct{}{}
+		delete(stage.deleted, player)
+	} else {
+		if _, ok := stage.new[player]; !ok {
+			stage.modified[player] = struct{}{}
+		}
 	}
 	stage.Players_mapString[player.Name] = player
 
@@ -633,6 +707,12 @@ func (player *Player) Stage(stage *Stage) *Player {
 func (player *Player) Unstage(stage *Stage) *Player {
 	delete(stage.Players, player)
 	delete(stage.Players_mapString, player.Name)
+
+	if _, ok := stage.reference[player]; ok {
+		stage.deleted[player] = struct{}{}
+	} else {
+		delete(stage.new, player)
+	}
 	return player
 }
 
@@ -654,6 +734,10 @@ func (player *Player) Commit(stage *Stage) *Player {
 
 func (player *Player) CommitVoid(stage *Stage) {
 	player.Commit(stage)
+}
+
+func (player *Player) StageVoid(stage *Stage) {
+	player.Stage(stage)
 }
 
 // Checkout player to the back repo (if it is already staged)
@@ -700,6 +784,7 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.PlayerMap_Staged_Order = make(map[*Player]uint)
 	stage.PlayerOrder = 0
 
+	stage.ComputeReference()
 }
 
 func (stage *Stage) Nil() { // insertion point for array nil
@@ -744,10 +829,22 @@ type GongtructBasicField interface {
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
-type PointerToGongstruct interface {
+type GongstructIF interface {
 	GetName() string
 	CommitVoid(*Stage)
+	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
+	GongGetFieldHeaders() []GongFieldHeader
+	GongClean(stage *Stage)
+	GongGetFieldValue(fieldName string, stage *Stage) GongFieldValue
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
+	GongCopy() GongstructIF
+	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string
+	GongGetReverseFieldOwner(stage *Stage, reverseField *ReverseField) GongstructIF
+}
+type PointerToGongstruct interface {
+	GongstructIF
 	comparable
 }
 
@@ -854,7 +951,7 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 }
 
 // GetGongstructInstancesMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
+// it is usefull because it allows refactoring of gongstruct identifier
 func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type {
 	var ret Type
 
@@ -970,24 +1067,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	return nil
 }
 
-// GetGongstructName returns the name of the Gongstruct
-// this can be usefull if one want program robust to refactoring
-func GetGongstructName[Type Gongstruct]() (res string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Freqency:
-		res = "Freqency"
-	case Note:
-		res = "Note"
-	case Player:
-		res = "Player"
-	}
-	return res
-}
-
 // GetPointerToGongstructName returns the name of the Gongstruct
 // this can be usefull if one want program robust to refactoring
 func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
@@ -1006,29 +1085,12 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	return res
 }
 
-// GetFields return the array of the fields
-func GetFields[Type Gongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Freqency:
-		res = []string{"Name"}
-	case Note:
-		res = []string{"Name", "Frequencies", "Start", "Duration", "Velocity", "Info"}
-	case Player:
-		res = []string{"Name", "Status"}
-	}
-	return
-}
-
 type ReverseField struct {
 	GongstructName string
 	Fieldname      string
 }
 
-func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
+func GetReverseFields[Type PointerToGongstruct]() (res []ReverseField) {
 
 	res = make([]ReverseField, 0)
 
@@ -1037,54 +1099,116 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	switch any(ret).(type) {
 
 	// insertion point for generic get gongstruct name
-	case Freqency:
+	case *Freqency:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Note"
 		rf.Fieldname = "Frequencies"
 		res = append(res, rf)
-	case Note:
+	case *Note:
 		var rf ReverseField
 		_ = rf
-	case Player:
+	case *Player:
 		var rf ReverseField
 		_ = rf
+	}
+	return
+}
+
+// insertion point for get fields header method
+func (freqency *Freqency) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (note *Note) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Frequencies",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Freqency",
+		},
+		{
+			Name:               "Start",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Duration",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Velocity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Info",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (player *Player) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Status",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
 	}
 	return
 }
 
 // GetFieldsFromPointer return the array of the fields
-func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
+func GetFieldsFromPointer[Type PointerToGongstruct]() (res []GongFieldHeader) {
 
 	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case *Freqency:
-		res = []string{"Name"}
-	case *Note:
-		res = []string{"Name", "Frequencies", "Start", "Duration", "Velocity", "Info"}
-	case *Player:
-		res = []string{"Name", "Status"}
-	}
-	return
+	return ret.GongGetFieldHeaders()
 }
 
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt             GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat           GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool            GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeString          GongFieldValueType = "GongFieldValueTypeString"
+	GongFieldValueTypeBasicKind       GongFieldValueType = "GongFieldValueTypeBasicKind"
+	GongFieldValueTypePointer         GongFieldValueType = "GongFieldValueTypePointer"
+	GongFieldValueTypeSliceOfPointers GongFieldValueType = "GongFieldValueTypeSliceOfPointers"
 )
 
 type GongFieldValue struct {
-	valueString string
 	GongFieldValueType
-	valueInt   int
-	valueFloat float64
-	valueBool  bool
+	valueString string
+	valueInt    int
+	valueFloat  float64
+	valueBool   bool
+
+	// in case of a pointer, the ID of the pointed element
+	// in case of a slice of pointers, the IDs, separated by semi columbs
+	ids string
+}
+
+type GongFieldHeader struct {
+	Name string
+	GongFieldValueType
+	TargetGongstructName string
 }
 
 func (gongValueField *GongFieldValue) GetValueString() string {
@@ -1103,107 +1227,141 @@ func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }
 
-func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFieldValue) {
-
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case *Freqency:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	case *Note:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Frequencies":
-			for idx, __instance__ := range inferedInstance.Frequencies {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Start":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Start)
-			res.valueFloat = inferedInstance.Start
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Duration":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Duration)
-			res.valueFloat = inferedInstance.Duration
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Velocity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Velocity)
-			res.valueFloat = inferedInstance.Velocity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Info":
-			res.valueString = inferedInstance.Info
-		}
-	case *Player:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Status":
-			enum := inferedInstance.Status
-			res.valueString = enum.ToCodeString()
-		}
-	default:
-		_ = inferedInstance
+// insertion point for generic get gongstruct field value
+func (freqency *Freqency) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = freqency.Name
 	}
 	return
 }
-
-func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
-
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case Freqency:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	case Note:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Frequencies":
-			for idx, __instance__ := range inferedInstance.Frequencies {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
+func (note *Note) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = note.Name
+	case "Frequencies":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range note.Frequencies {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
 			}
-		case "Start":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Start)
-			res.valueFloat = inferedInstance.Start
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Duration":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Duration)
-			res.valueFloat = inferedInstance.Duration
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Velocity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Velocity)
-			res.valueFloat = inferedInstance.Velocity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Info":
-			res.valueString = inferedInstance.Info
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
 		}
-	case Player:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Status":
-			enum := inferedInstance.Status
-			res.valueString = enum.ToCodeString()
-		}
-	default:
-		_ = inferedInstance
+	case "Start":
+		res.valueString = fmt.Sprintf("%f", note.Start)
+		res.valueFloat = note.Start
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Duration":
+		res.valueString = fmt.Sprintf("%f", note.Duration)
+		res.valueFloat = note.Duration
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Velocity":
+		res.valueString = fmt.Sprintf("%f", note.Velocity)
+		res.valueFloat = note.Velocity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Info":
+		res.valueString = note.Info
 	}
+	return
+}
+func (player *Player) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = player.Name
+	case "Status":
+		enum := player.Status
+		res.valueString = enum.ToCodeString()
+	}
+	return
+}
+func GetFieldStringValueFromPointer(instance GongstructIF, fieldName string, stage *Stage) (res GongFieldValue) {
+
+	res = instance.GongGetFieldValue(fieldName, stage)
+	return
+}
+
+// insertion point for generic set gongstruct field value
+func (freqency *Freqency) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		freqency.Name = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (note *Note) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		note.Name = value.GetValueString()
+	case "Frequencies":
+		note.Frequencies = make([]*Freqency, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Freqencys {
+					if stage.FreqencyMap_Staged_Order[__instance__] == uint(id) {
+						note.Frequencies = append(note.Frequencies, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Start":
+		note.Start = value.GetValueFloat()
+	case "Duration":
+		note.Duration = value.GetValueFloat()
+	case "Velocity":
+		note.Velocity = value.GetValueFloat()
+	case "Info":
+		note.Info = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (player *Player) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		player.Name = value.GetValueString()
+	case "Status":
+		player.Status.FromCodeString(value.GetValueString())
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func SetFieldStringValueFromPointer(instance GongstructIF, fieldName string, value GongFieldValue, stage *Stage) error {
+	return instance.GongSetFieldValue(fieldName, value, stage)
+}
+
+// insertion point for generic get gongstruct name
+func (freqency *Freqency) GongGetGongstructName() string {
+	return "Freqency"
+}
+
+func (note *Note) GongGetGongstructName() string {
+	return "Note"
+}
+
+func (player *Player) GongGetGongstructName() string {
+	return "Player"
+}
+
+func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
+	res = instance.GongGetGongstructName()
 	return
 }
 

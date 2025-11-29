@@ -94,7 +94,7 @@ export class TitleService {
       catchError(this.handleError<TitleAPI>('postTitle'))
     );
   }
-  
+
   /** POST: add a new title to the server */
   post(titledb: TitleAPI, Name: string, frontRepo: FrontRepo): Observable<TitleAPI> {
     return this.postTitle(titledb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class TitleService {
   private handleError<T>(operation = 'operation in TitleService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("TitleService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

@@ -31,7 +31,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct FormDiv
 	// insertion point per field
-	clear(stage.FormDiv_FormFields_reverseMap)
 	stage.FormDiv_FormFields_reverseMap = make(map[*FormField]*FormDiv)
 	for formdiv := range stage.FormDivs {
 		_ = formdiv
@@ -39,7 +38,6 @@ func (stage *Stage) ComputeReverseMaps() {
 			stage.FormDiv_FormFields_reverseMap[_formfield] = formdiv
 		}
 	}
-	clear(stage.FormDiv_CheckBoxs_reverseMap)
 	stage.FormDiv_CheckBoxs_reverseMap = make(map[*CheckBox]*FormDiv)
 	for formdiv := range stage.FormDivs {
 		_ = formdiv
@@ -68,7 +66,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct FormFieldSelect
 	// insertion point per field
-	clear(stage.FormFieldSelect_Options_reverseMap)
 	stage.FormFieldSelect_Options_reverseMap = make(map[*Option]*FormFieldSelect)
 	for formfieldselect := range stage.FormFieldSelects {
 		_ = formfieldselect
@@ -85,7 +82,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct FormGroup
 	// insertion point per field
-	clear(stage.FormGroup_FormDivs_reverseMap)
 	stage.FormGroup_FormDivs_reverseMap = make(map[*FormDiv]*FormGroup)
 	for formgroup := range stage.FormGroups {
 		_ = formgroup
@@ -102,7 +98,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct Row
 	// insertion point per field
-	clear(stage.Row_Cells_reverseMap)
 	stage.Row_Cells_reverseMap = make(map[*Cell]*Row)
 	for row := range stage.Rows {
 		_ = row
@@ -113,7 +108,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct Table
 	// insertion point per field
-	clear(stage.Table_DisplayedColumns_reverseMap)
 	stage.Table_DisplayedColumns_reverseMap = make(map[*DisplayedColumn]*Table)
 	for table := range stage.Tables {
 		_ = table
@@ -121,7 +115,6 @@ func (stage *Stage) ComputeReverseMaps() {
 			stage.Table_DisplayedColumns_reverseMap[_displayedcolumn] = table
 		}
 	}
-	clear(stage.Table_Rows_reverseMap)
 	stage.Table_Rows_reverseMap = make(map[*Row]*Table)
 	for table := range stage.Tables {
 		_ = table
@@ -130,4 +123,229 @@ func (stage *Stage) ComputeReverseMaps() {
 		}
 	}
 
+}
+
+func (stage *Stage) GetInstances() (res []GongstructIF) {
+
+	// insertion point per named struct
+	for instance := range stage.Cells {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.CellBooleans {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.CellFloat64s {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.CellIcons {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.CellInts {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.CellStrings {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.CheckBoxs {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.DisplayedColumns {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormDivs {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormEditAssocButtons {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormFields {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormFieldDates {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormFieldDateTimes {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormFieldFloat64s {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormFieldInts {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormFieldSelects {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormFieldStrings {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormFieldTimes {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormGroups {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FormSortAssocButtons {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Options {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Rows {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Tables {
+		res = append(res, instance)
+	}
+
+	return
+}
+
+// insertion point per named struct
+func (cell *Cell) GongCopy() GongstructIF {
+	newInstance := *cell
+	return &newInstance
+}
+
+func (cellboolean *CellBoolean) GongCopy() GongstructIF {
+	newInstance := *cellboolean
+	return &newInstance
+}
+
+func (cellfloat64 *CellFloat64) GongCopy() GongstructIF {
+	newInstance := *cellfloat64
+	return &newInstance
+}
+
+func (cellicon *CellIcon) GongCopy() GongstructIF {
+	newInstance := *cellicon
+	return &newInstance
+}
+
+func (cellint *CellInt) GongCopy() GongstructIF {
+	newInstance := *cellint
+	return &newInstance
+}
+
+func (cellstring *CellString) GongCopy() GongstructIF {
+	newInstance := *cellstring
+	return &newInstance
+}
+
+func (checkbox *CheckBox) GongCopy() GongstructIF {
+	newInstance := *checkbox
+	return &newInstance
+}
+
+func (displayedcolumn *DisplayedColumn) GongCopy() GongstructIF {
+	newInstance := *displayedcolumn
+	return &newInstance
+}
+
+func (formdiv *FormDiv) GongCopy() GongstructIF {
+	newInstance := *formdiv
+	return &newInstance
+}
+
+func (formeditassocbutton *FormEditAssocButton) GongCopy() GongstructIF {
+	newInstance := *formeditassocbutton
+	return &newInstance
+}
+
+func (formfield *FormField) GongCopy() GongstructIF {
+	newInstance := *formfield
+	return &newInstance
+}
+
+func (formfielddate *FormFieldDate) GongCopy() GongstructIF {
+	newInstance := *formfielddate
+	return &newInstance
+}
+
+func (formfielddatetime *FormFieldDateTime) GongCopy() GongstructIF {
+	newInstance := *formfielddatetime
+	return &newInstance
+}
+
+func (formfieldfloat64 *FormFieldFloat64) GongCopy() GongstructIF {
+	newInstance := *formfieldfloat64
+	return &newInstance
+}
+
+func (formfieldint *FormFieldInt) GongCopy() GongstructIF {
+	newInstance := *formfieldint
+	return &newInstance
+}
+
+func (formfieldselect *FormFieldSelect) GongCopy() GongstructIF {
+	newInstance := *formfieldselect
+	return &newInstance
+}
+
+func (formfieldstring *FormFieldString) GongCopy() GongstructIF {
+	newInstance := *formfieldstring
+	return &newInstance
+}
+
+func (formfieldtime *FormFieldTime) GongCopy() GongstructIF {
+	newInstance := *formfieldtime
+	return &newInstance
+}
+
+func (formgroup *FormGroup) GongCopy() GongstructIF {
+	newInstance := *formgroup
+	return &newInstance
+}
+
+func (formsortassocbutton *FormSortAssocButton) GongCopy() GongstructIF {
+	newInstance := *formsortassocbutton
+	return &newInstance
+}
+
+func (option *Option) GongCopy() GongstructIF {
+	newInstance := *option
+	return &newInstance
+}
+
+func (row *Row) GongCopy() GongstructIF {
+	newInstance := *row
+	return &newInstance
+}
+
+func (table *Table) GongCopy() GongstructIF {
+	newInstance := *table
+	return &newInstance
+}
+
+// ComputeReference will creates a deep copy of each of the staged elements
+func (stage *Stage) ComputeReference() {
+	stage.reference = make(map[GongstructIF]GongstructIF)
+	for _, instance := range stage.GetInstances() {
+		stage.reference[instance] = instance.GongCopy()
+	}
+	stage.new = make(map[GongstructIF]struct{})
+	stage.modified = make(map[GongstructIF]struct{})
+	stage.deleted = make(map[GongstructIF]struct{})
 }

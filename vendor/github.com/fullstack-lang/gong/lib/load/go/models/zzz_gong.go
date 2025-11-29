@@ -10,6 +10,7 @@ import (
 	"math"
 	"slices"
 	"sort"
+	"strings"
 	"time"
 
 	load_go "github.com/fullstack-lang/gong/lib/load/go"
@@ -26,6 +27,7 @@ func __Gong__Abs(x int) int {
 }
 
 var _ = __Gong__Abs
+var _ = strings.Clone("")
 
 const ProbeTreeSidebarSuffix = ":sidebar of the probe"
 const ProbeTableSuffix = ":table of the probe"
@@ -50,6 +52,7 @@ func (stage *Stage) GetProbeSplitStageName() string {
 
 // errUnkownEnum is returns when a value cannot match enum values
 var errUnkownEnum = errors.New("unkown enum")
+var _ = errUnkownEnum
 
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
@@ -74,6 +77,8 @@ type GongStructInterface interface {
 	// GetID() (res int)
 	// GetFields() (res []string)
 	// GetFieldStringValue(fieldName string) (res string)
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
 }
 
 // Stage enables storage of staged instances
@@ -152,6 +157,12 @@ type Stage struct {
 	// end of insertion point
 
 	NamedStructs []*NamedStruct
+
+	// for the computation of the diff at each commit we need
+	reference map[GongstructIF]GongstructIF
+	modified  map[GongstructIF]struct{}
+	new       map[GongstructIF]struct{}
+	deleted   map[GongstructIF]struct{}
 }
 
 func (stage *Stage) GetCommitId() uint {
@@ -174,6 +185,22 @@ func (stage *Stage) GetNamedStructsNames() (res []string) {
 	}
 
 	return
+}
+
+func (stage *Stage) GetReference() map[GongstructIF]GongstructIF {
+	return stage.reference
+}
+
+func (stage *Stage) GetModified() map[GongstructIF]struct{} {
+	return stage.modified
+}
+
+func (stage *Stage) GetNew() map[GongstructIF]struct{} {
+	return stage.new
+}
+
+func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
+	return stage.deleted
 }
 
 func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
@@ -203,7 +230,7 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
 	var t T
 	switch any(t).(type) {
-		// insertion point for case
+	// insertion point for case
 	case *FileToDownload:
 		tmp := GetStructInstancesByOrder(stage.FileToDownloads, stage.FileToDownloadMap_Staged_Order)
 
@@ -268,9 +295,7 @@ func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T
 		return i_order < j_order
 	})
 
-	for _, instance := range orderedSet {
-		res = append(res, instance)
-	}
+	res = append(res, orderedSet...)
 
 	return
 }
@@ -399,6 +424,11 @@ func NewStage(name string) (stage *Stage) {
 			{name: "FileToUpload"},
 			{name: "Message"},
 		}, // end of insertion point
+
+		reference: make(map[GongstructIF]GongstructIF),
+		new:       make(map[GongstructIF]struct{}),
+		modified:  make(map[GongstructIF]struct{}),
+		deleted:   make(map[GongstructIF]struct{}),
 	}
 
 	return
@@ -451,15 +481,25 @@ func (stage *Stage) Commit() {
 	stage.commitId++
 	stage.commitTimeStamp = time.Now()
 
+	if stage.OnInitCommitCallback != nil {
+		stage.OnInitCommitCallback.BeforeCommit(stage)
+	}
+	if stage.OnInitCommitFromBackCallback != nil {
+		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
+	}
+
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
+	stage.ComputeInstancesNb()
+	stage.ComputeReference()
+}
 
+func (stage *Stage) ComputeInstancesNb() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["FileToDownload"] = len(stage.FileToDownloads)
 	stage.Map_GongStructName_InstancesNb["FileToUpload"] = len(stage.FileToUploads)
 	stage.Map_GongStructName_InstancesNb["Message"] = len(stage.Messages)
-
 }
 
 func (stage *Stage) Checkout() {
@@ -468,11 +508,7 @@ func (stage *Stage) Checkout() {
 	}
 
 	stage.ComputeReverseMaps()
-	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["FileToDownload"] = len(stage.FileToDownloads)
-	stage.Map_GongStructName_InstancesNb["FileToUpload"] = len(stage.FileToUploads)
-	stage.Map_GongStructName_InstancesNb["Message"] = len(stage.Messages)
-
+	stage.ComputeInstancesNb()
 }
 
 // backup generates backup files in the dirPath
@@ -511,6 +547,12 @@ func (filetodownload *FileToDownload) Stage(stage *Stage) *FileToDownload {
 		stage.FileToDownloads[filetodownload] = __member
 		stage.FileToDownloadMap_Staged_Order[filetodownload] = stage.FileToDownloadOrder
 		stage.FileToDownloadOrder++
+		stage.new[filetodownload] = struct{}{}
+		delete(stage.deleted, filetodownload)
+	} else {
+		if _, ok := stage.new[filetodownload]; !ok {
+			stage.modified[filetodownload] = struct{}{}
+		}
 	}
 	stage.FileToDownloads_mapString[filetodownload.Name] = filetodownload
 
@@ -521,6 +563,12 @@ func (filetodownload *FileToDownload) Stage(stage *Stage) *FileToDownload {
 func (filetodownload *FileToDownload) Unstage(stage *Stage) *FileToDownload {
 	delete(stage.FileToDownloads, filetodownload)
 	delete(stage.FileToDownloads_mapString, filetodownload.Name)
+
+	if _, ok := stage.reference[filetodownload]; ok {
+		stage.deleted[filetodownload] = struct{}{}
+	} else {
+		delete(stage.new, filetodownload)
+	}
 	return filetodownload
 }
 
@@ -542,6 +590,10 @@ func (filetodownload *FileToDownload) Commit(stage *Stage) *FileToDownload {
 
 func (filetodownload *FileToDownload) CommitVoid(stage *Stage) {
 	filetodownload.Commit(stage)
+}
+
+func (filetodownload *FileToDownload) StageVoid(stage *Stage) {
+	filetodownload.Stage(stage)
 }
 
 // Checkout filetodownload to the back repo (if it is already staged)
@@ -566,6 +618,12 @@ func (filetoupload *FileToUpload) Stage(stage *Stage) *FileToUpload {
 		stage.FileToUploads[filetoupload] = __member
 		stage.FileToUploadMap_Staged_Order[filetoupload] = stage.FileToUploadOrder
 		stage.FileToUploadOrder++
+		stage.new[filetoupload] = struct{}{}
+		delete(stage.deleted, filetoupload)
+	} else {
+		if _, ok := stage.new[filetoupload]; !ok {
+			stage.modified[filetoupload] = struct{}{}
+		}
 	}
 	stage.FileToUploads_mapString[filetoupload.Name] = filetoupload
 
@@ -576,6 +634,12 @@ func (filetoupload *FileToUpload) Stage(stage *Stage) *FileToUpload {
 func (filetoupload *FileToUpload) Unstage(stage *Stage) *FileToUpload {
 	delete(stage.FileToUploads, filetoupload)
 	delete(stage.FileToUploads_mapString, filetoupload.Name)
+
+	if _, ok := stage.reference[filetoupload]; ok {
+		stage.deleted[filetoupload] = struct{}{}
+	} else {
+		delete(stage.new, filetoupload)
+	}
 	return filetoupload
 }
 
@@ -597,6 +661,10 @@ func (filetoupload *FileToUpload) Commit(stage *Stage) *FileToUpload {
 
 func (filetoupload *FileToUpload) CommitVoid(stage *Stage) {
 	filetoupload.Commit(stage)
+}
+
+func (filetoupload *FileToUpload) StageVoid(stage *Stage) {
+	filetoupload.Stage(stage)
 }
 
 // Checkout filetoupload to the back repo (if it is already staged)
@@ -621,6 +689,12 @@ func (message *Message) Stage(stage *Stage) *Message {
 		stage.Messages[message] = __member
 		stage.MessageMap_Staged_Order[message] = stage.MessageOrder
 		stage.MessageOrder++
+		stage.new[message] = struct{}{}
+		delete(stage.deleted, message)
+	} else {
+		if _, ok := stage.new[message]; !ok {
+			stage.modified[message] = struct{}{}
+		}
 	}
 	stage.Messages_mapString[message.Name] = message
 
@@ -631,6 +705,12 @@ func (message *Message) Stage(stage *Stage) *Message {
 func (message *Message) Unstage(stage *Stage) *Message {
 	delete(stage.Messages, message)
 	delete(stage.Messages_mapString, message.Name)
+
+	if _, ok := stage.reference[message]; ok {
+		stage.deleted[message] = struct{}{}
+	} else {
+		delete(stage.new, message)
+	}
 	return message
 }
 
@@ -652,6 +732,10 @@ func (message *Message) Commit(stage *Stage) *Message {
 
 func (message *Message) CommitVoid(stage *Stage) {
 	message.Commit(stage)
+}
+
+func (message *Message) StageVoid(stage *Stage) {
+	message.Stage(stage)
 }
 
 // Checkout message to the back repo (if it is already staged)
@@ -698,6 +782,7 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.MessageMap_Staged_Order = make(map[*Message]uint)
 	stage.MessageOrder = 0
 
+	stage.ComputeReference()
 }
 
 func (stage *Stage) Nil() { // insertion point for array nil
@@ -742,10 +827,22 @@ type GongtructBasicField interface {
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
-type PointerToGongstruct interface {
+type GongstructIF interface {
 	GetName() string
 	CommitVoid(*Stage)
+	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
+	GongGetFieldHeaders() []GongFieldHeader
+	GongClean(stage *Stage)
+	GongGetFieldValue(fieldName string, stage *Stage) GongFieldValue
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
+	GongCopy() GongstructIF
+	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string
+	GongGetReverseFieldOwner(stage *Stage, reverseField *ReverseField) GongstructIF
+}
+type PointerToGongstruct interface {
+	GongstructIF
 	comparable
 }
 
@@ -852,7 +949,7 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 }
 
 // GetGongstructInstancesMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
+// it is usefull because it allows refactoring of gongstruct identifier
 func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type {
 	var ret Type
 
@@ -958,24 +1055,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	return nil
 }
 
-// GetGongstructName returns the name of the Gongstruct
-// this can be usefull if one want program robust to refactoring
-func GetGongstructName[Type Gongstruct]() (res string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case FileToDownload:
-		res = "FileToDownload"
-	case FileToUpload:
-		res = "FileToUpload"
-	case Message:
-		res = "Message"
-	}
-	return res
-}
-
 // GetPointerToGongstructName returns the name of the Gongstruct
 // this can be usefull if one want program robust to refactoring
 func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
@@ -994,29 +1073,12 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	return res
 }
 
-// GetFields return the array of the fields
-func GetFields[Type Gongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case FileToDownload:
-		res = []string{"Name", "Content"}
-	case FileToUpload:
-		res = []string{"Name", "Base64EncodedContent"}
-	case Message:
-		res = []string{"Name"}
-	}
-	return
-}
-
 type ReverseField struct {
 	GongstructName string
 	Fieldname      string
 }
 
-func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
+func GetReverseFields[Type PointerToGongstruct]() (res []ReverseField) {
 
 	res = make([]ReverseField, 0)
 
@@ -1025,51 +1087,96 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	switch any(ret).(type) {
 
 	// insertion point for generic get gongstruct name
-	case FileToDownload:
+	case *FileToDownload:
 		var rf ReverseField
 		_ = rf
-	case FileToUpload:
+	case *FileToUpload:
 		var rf ReverseField
 		_ = rf
-	case Message:
+	case *Message:
 		var rf ReverseField
 		_ = rf
+	}
+	return
+}
+
+// insertion point for get fields header method
+func (filetodownload *FileToDownload) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Content",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (filetoupload *FileToUpload) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Base64EncodedContent",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (message *Message) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
 	}
 	return
 }
 
 // GetFieldsFromPointer return the array of the fields
-func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
+func GetFieldsFromPointer[Type PointerToGongstruct]() (res []GongFieldHeader) {
 
 	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case *FileToDownload:
-		res = []string{"Name", "Content"}
-	case *FileToUpload:
-		res = []string{"Name", "Base64EncodedContent"}
-	case *Message:
-		res = []string{"Name"}
-	}
-	return
+	return ret.GongGetFieldHeaders()
 }
 
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt             GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat           GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool            GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeString          GongFieldValueType = "GongFieldValueTypeString"
+	GongFieldValueTypeBasicKind       GongFieldValueType = "GongFieldValueTypeBasicKind"
+	GongFieldValueTypePointer         GongFieldValueType = "GongFieldValueTypePointer"
+	GongFieldValueTypeSliceOfPointers GongFieldValueType = "GongFieldValueTypeSliceOfPointers"
 )
 
 type GongFieldValue struct {
-	valueString string
 	GongFieldValueType
-	valueInt   int
-	valueFloat float64
-	valueBool  bool
+	valueString string
+	valueInt    int
+	valueFloat  float64
+	valueBool   bool
+
+	// in case of a pointer, the ID of the pointed element
+	// in case of a slice of pointers, the IDs, separated by semi columbs
+	ids string
+}
+
+type GongFieldHeader struct {
+	Name string
+	GongFieldValueType
+	TargetGongstructName string
 }
 
 func (gongValueField *GongFieldValue) GetValueString() string {
@@ -1088,67 +1195,98 @@ func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }
 
-func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFieldValue) {
-
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case *FileToDownload:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Content":
-			res.valueString = inferedInstance.Content
-		}
-	case *FileToUpload:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Base64EncodedContent":
-			res.valueString = inferedInstance.Base64EncodedContent
-		}
-	case *Message:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	default:
-		_ = inferedInstance
+// insertion point for generic get gongstruct field value
+func (filetodownload *FileToDownload) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = filetodownload.Name
+	case "Content":
+		res.valueString = filetodownload.Content
 	}
 	return
 }
-
-func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
-
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case FileToDownload:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Content":
-			res.valueString = inferedInstance.Content
-		}
-	case FileToUpload:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Base64EncodedContent":
-			res.valueString = inferedInstance.Base64EncodedContent
-		}
-	case Message:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		}
-	default:
-		_ = inferedInstance
+func (filetoupload *FileToUpload) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = filetoupload.Name
+	case "Base64EncodedContent":
+		res.valueString = filetoupload.Base64EncodedContent
 	}
+	return
+}
+func (message *Message) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = message.Name
+	}
+	return
+}
+func GetFieldStringValueFromPointer(instance GongstructIF, fieldName string, stage *Stage) (res GongFieldValue) {
+
+	res = instance.GongGetFieldValue(fieldName, stage)
+	return
+}
+
+// insertion point for generic set gongstruct field value
+func (filetodownload *FileToDownload) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		filetodownload.Name = value.GetValueString()
+	case "Content":
+		filetodownload.Content = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (filetoupload *FileToUpload) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		filetoupload.Name = value.GetValueString()
+	case "Base64EncodedContent":
+		filetoupload.Base64EncodedContent = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (message *Message) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		message.Name = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func SetFieldStringValueFromPointer(instance GongstructIF, fieldName string, value GongFieldValue, stage *Stage) error {
+	return instance.GongSetFieldValue(fieldName, value, stage)
+}
+
+// insertion point for generic get gongstruct name
+func (filetodownload *FileToDownload) GongGetGongstructName() string {
+	return "FileToDownload"
+}
+
+func (filetoupload *FileToUpload) GongGetGongstructName() string {
+	return "FileToUpload"
+}
+
+func (message *Message) GongGetGongstructName() string {
+	return "Message"
+}
+
+func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
+	res = instance.GongGetGongstructName()
 	return
 }
 

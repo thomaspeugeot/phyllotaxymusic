@@ -95,7 +95,7 @@ export class FormFieldSelectService {
       catchError(this.handleError<FormFieldSelectAPI>('postFormFieldSelect'))
     );
   }
-  
+
   /** POST: add a new formfieldselect to the server */
   post(formfieldselectdb: FormFieldSelectAPI, Name: string, frontRepo: FrontRepo): Observable<FormFieldSelectAPI> {
     return this.postFormFieldSelect(formfieldselectdb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class FormFieldSelectService {
   private handleError<T>(operation = 'operation in FormFieldSelectService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FormFieldSelectService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

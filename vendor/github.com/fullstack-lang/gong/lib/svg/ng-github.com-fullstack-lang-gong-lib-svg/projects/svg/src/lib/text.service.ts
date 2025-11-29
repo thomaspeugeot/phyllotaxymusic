@@ -95,7 +95,7 @@ export class TextService {
       catchError(this.handleError<TextAPI>('postText'))
     );
   }
-  
+
   /** POST: add a new text to the server */
   post(textdb: TextAPI, Name: string, frontRepo: FrontRepo): Observable<TextAPI> {
     return this.postText(textdb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class TextService {
   private handleError<T>(operation = 'operation in TextService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("TextService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

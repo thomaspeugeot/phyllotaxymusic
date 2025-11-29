@@ -94,7 +94,7 @@ export class FormFieldFloat64Service {
       catchError(this.handleError<FormFieldFloat64API>('postFormFieldFloat64'))
     );
   }
-  
+
   /** POST: add a new formfieldfloat64 to the server */
   post(formfieldfloat64db: FormFieldFloat64API, Name: string, frontRepo: FrontRepo): Observable<FormFieldFloat64API> {
     return this.postFormFieldFloat64(formfieldfloat64db, Name, frontRepo)
@@ -186,7 +186,7 @@ export class FormFieldFloat64Service {
   private handleError<T>(operation = 'operation in FormFieldFloat64Service', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FormFieldFloat64Service" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

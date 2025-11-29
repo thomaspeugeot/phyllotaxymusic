@@ -94,7 +94,7 @@ export class PlayerService {
       catchError(this.handleError<PlayerAPI>('postPlayer'))
     );
   }
-  
+
   /** POST: add a new player to the server */
   post(playerdb: PlayerAPI, Name: string, frontRepo: FrontRepo): Observable<PlayerAPI> {
     return this.postPlayer(playerdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class PlayerService {
   private handleError<T>(operation = 'operation in PlayerService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("PlayerService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

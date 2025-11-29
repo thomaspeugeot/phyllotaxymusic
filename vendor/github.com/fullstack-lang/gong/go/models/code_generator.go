@@ -78,7 +78,8 @@ func CodeGenerator(
 	// a sub sub template is generated within a sub template
 	subSubToSubMap map[string]string,
 	forGongStructWithNameFieldOnly bool,
-	forGongStructWithHasOnUpdateSignatureOnly bool) {
+	forGongStructWithHasOnUpdateSignatureOnly bool,
+) {
 
 	file, err := os.Create(generatedFilePath)
 
@@ -103,10 +104,14 @@ func CodeGenerator(
 		if forGongStructWithNameFieldOnly && !_struct.HasNameField() {
 			continue
 		}
+
+		// this case is to deal with the special code generation
+		// where the set of gong struct is restricted
 		if forGongStructWithHasOnUpdateSignatureOnly &&
 			!_struct.HasOnAfterUpdateSignature {
 			continue
 		}
+
 		if strings.HasSuffix(generatedFilePath, ".ts") && _struct.IsIgnoredForFront {
 			continue
 		}

@@ -2,44 +2,30 @@
 package probe
 
 import (
-
 	gongtable "github.com/fullstack-lang/gong/lib/table/go/models"
 
 	"github.com/fullstack-lang/gong/lib/slider/go/models"
 )
 
-func NewCellDeleteIconImpl[T models.Gongstruct](
-	Instance *T,
+func NewCellDeleteIconImplPointerToGongstruct[T models.PointerToGongstruct](
+	Instance T,
 	probe *Probe,
-) (cellDeleteIconImpl *CellDeleteIconImpl[T]) {
-	cellDeleteIconImpl = new(CellDeleteIconImpl[T])
+) (cellDeleteIconImpl *CellDeleteIconImplPointerToGongstruct[T]) {
+	cellDeleteIconImpl = new(CellDeleteIconImplPointerToGongstruct[T])
 	cellDeleteIconImpl.Instance = Instance
 	cellDeleteIconImpl.probe = probe
 	return
 }
 
-type CellDeleteIconImpl[T models.Gongstruct] struct {
-	Instance *T
+type CellDeleteIconImplPointerToGongstruct[T models.PointerToGongstruct] struct {
+	Instance T
 	probe    *Probe
 }
 
-func (cellDeleteIconImpl *CellDeleteIconImpl[T]) CellIconUpdated(stage *gongtable.Stage,
+func (cellDeleteIconImpl *CellDeleteIconImplPointerToGongstruct[T]) CellIconUpdated(stage *gongtable.Stage,
 	row, updatedCellIcon *gongtable.CellIcon) {
-	// log.Println("CellIconUpdate: CellIconUpdated", updatedCellIcon.Name)
+	cellDeleteIconImpl.Instance.UnstageVoid(cellDeleteIconImpl.probe.stageOfInterest)
 
-	switch instancesTyped := any(cellDeleteIconImpl.Instance).(type) {
-	// insertion point
-	case *models.Checkbox:
-		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
-	case *models.Group:
-		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
-	case *models.Layout:
-		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
-	case *models.Slider:
-		instancesTyped.Unstage(cellDeleteIconImpl.probe.stageOfInterest)
-	default:
-		_ = instancesTyped
-	}
 	cellDeleteIconImpl.probe.stageOfInterest.Commit()
 
 	updateAndCommitTable[T](cellDeleteIconImpl.probe)

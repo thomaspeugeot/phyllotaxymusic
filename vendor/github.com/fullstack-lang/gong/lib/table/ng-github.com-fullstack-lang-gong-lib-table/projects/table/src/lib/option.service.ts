@@ -94,7 +94,7 @@ export class OptionService {
       catchError(this.handleError<OptionAPI>('postOption'))
     );
   }
-  
+
   /** POST: add a new option to the server */
   post(optiondb: OptionAPI, Name: string, frontRepo: FrontRepo): Observable<OptionAPI> {
     return this.postOption(optiondb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class OptionService {
   private handleError<T>(operation = 'operation in OptionService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("OptionService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

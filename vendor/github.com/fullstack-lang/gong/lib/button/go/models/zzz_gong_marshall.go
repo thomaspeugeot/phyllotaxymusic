@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -79,14 +78,32 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 	name := file.Name()
 
 	if !strings.HasSuffix(name, ".go") {
-		log.Fatalln(name + " is not a go filename")
+		log.Println(name + " is not a go filename")
 	}
 
 	log.Printf("Marshalling %s", name)
-	newBase := filepath.Base(file.Name())
 
-	res := marshallRes
-	res = strings.ReplaceAll(res, "{{databaseName}}", strings.ReplaceAll(newBase, ".go", ""))
+	res, err := stage.MarshallToString(modelsPackageName, packageName)
+	if err != nil {
+		log.Fatalln("Error marshalling to string:", err)
+	}
+
+	if stage.generatesDiff {
+		diff := computeDiff(stage.contentWhenParsed, res)
+		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.delta", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
+		diff = ComputeDiff(stage.contentWhenParsed, res)
+		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.diff", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
+	}
+	stage.contentWhenParsed = res
+	stage.commitIdWhenParsed = stage.commitId
+
+	fmt.Fprintln(file, res)
+}
+
+// MarshallToString marshall the stage content into a string
+func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res string, err error) {
+
+	res = marshallRes
 	res = strings.ReplaceAll(res, "{{PackageName}}", packageName)
 	res = strings.ReplaceAll(res, "{{ModelsPackageName}}", modelsPackageName)
 
@@ -155,6 +172,101 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(button.Icon))
 		initializerStatements += setValueField
 
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisabled")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", button.IsDisabled))
+		initializerStatements += setValueField
+
+		if button.Color != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+button.Color.ToCodeString())
+			initializerStatements += setValueField
+		}
+
+		if button.MatButtonType != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MatButtonType")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+button.MatButtonType.ToCodeString())
+			initializerStatements += setValueField
+		}
+
+		if button.MatButtonAppearance != "" {
+			setValueField = StringEnumInitStatement
+			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MatButtonAppearance")
+			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+button.MatButtonAppearance.ToCodeString())
+			initializerStatements += setValueField
+		}
+
+	}
+
+	map_ButtonToggle_Identifiers := make(map[*ButtonToggle]string)
+	_ = map_ButtonToggle_Identifiers
+
+	buttontoggleOrdered := []*ButtonToggle{}
+	for buttontoggle := range stage.ButtonToggles {
+		buttontoggleOrdered = append(buttontoggleOrdered, buttontoggle)
+	}
+	sort.Slice(buttontoggleOrdered[:], func(i, j int) bool {
+		buttontogglei := buttontoggleOrdered[i]
+		buttontogglej := buttontoggleOrdered[j]
+		buttontogglei_order, oki := stage.ButtonToggleMap_Staged_Order[buttontogglei]
+		buttontogglej_order, okj := stage.ButtonToggleMap_Staged_Order[buttontogglej]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return buttontogglei_order < buttontogglej_order
+	})
+	if len(buttontoggleOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, buttontoggle := range buttontoggleOrdered {
+
+		id = generatesIdentifier("ButtonToggle", idx, buttontoggle.Name)
+		map_ButtonToggle_Identifiers[buttontoggle] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "ButtonToggle")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", buttontoggle.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(buttontoggle.Name))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Label")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(buttontoggle.Label))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Icon")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(buttontoggle.Icon))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisabled")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", buttontoggle.IsDisabled))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsChecked")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", buttontoggle.IsChecked))
+		initializerStatements += setValueField
+
 	}
 
 	map_Group_Identifiers := make(map[*Group]string)
@@ -200,6 +312,65 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Percentage")
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", group.Percentage))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbColumns")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", group.NbColumns))
+		initializerStatements += setValueField
+
+	}
+
+	map_GroupToogle_Identifiers := make(map[*GroupToogle]string)
+	_ = map_GroupToogle_Identifiers
+
+	grouptoogleOrdered := []*GroupToogle{}
+	for grouptoogle := range stage.GroupToogles {
+		grouptoogleOrdered = append(grouptoogleOrdered, grouptoogle)
+	}
+	sort.Slice(grouptoogleOrdered[:], func(i, j int) bool {
+		grouptooglei := grouptoogleOrdered[i]
+		grouptooglej := grouptoogleOrdered[j]
+		grouptooglei_order, oki := stage.GroupToogleMap_Staged_Order[grouptooglei]
+		grouptooglej_order, okj := stage.GroupToogleMap_Staged_Order[grouptooglej]
+		if !oki || !okj {
+			log.Fatalln("unknown pointers")
+		}
+		return grouptooglei_order < grouptooglej_order
+	})
+	if len(grouptoogleOrdered) > 0 {
+		identifiersDecl += "\n"
+	}
+	for idx, grouptoogle := range grouptoogleOrdered {
+
+		id = generatesIdentifier("GroupToogle", idx, grouptoogle.Name)
+		map_GroupToogle_Identifiers[grouptoogle] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "GroupToogle")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", grouptoogle.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(grouptoogle.Name))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Percentage")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", grouptoogle.Percentage))
+		initializerStatements += setValueField
+
+		setValueField = NumberInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsSingleSelector")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", grouptoogle.IsSingleSelector))
 		initializerStatements += setValueField
 
 	}
@@ -259,6 +430,19 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 		// Initialisation of values
 	}
 
+	if len(buttontoggleOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of ButtonToggle instances pointers"
+	}
+	for idx, buttontoggle := range buttontoggleOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("ButtonToggle", idx, buttontoggle.Name)
+		map_ButtonToggle_Identifiers[buttontoggle] = id
+
+		// Initialisation of values
+	}
+
 	if len(groupOrdered) > 0 {
 		pointersInitializesStatements += "\n\t// setup of Group instances pointers"
 	}
@@ -280,6 +464,27 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 
 	}
 
+	if len(grouptoogleOrdered) > 0 {
+		pointersInitializesStatements += "\n\t// setup of GroupToogle instances pointers"
+	}
+	for idx, grouptoogle := range grouptoogleOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("GroupToogle", idx, grouptoogle.Name)
+		map_GroupToogle_Identifiers[grouptoogle] = id
+
+		// Initialisation of values
+		for _, _buttontoggle := range grouptoogle.ButtonToggles {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ButtonToggles")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ButtonToggle_Identifiers[_buttontoggle])
+			pointersInitializesStatements += setPointerField
+		}
+
+	}
+
 	if len(layoutOrdered) > 0 {
 		pointersInitializesStatements += "\n\t// setup of Layout instances pointers"
 	}
@@ -296,6 +501,14 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Groups")
 			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Group_Identifiers[_group])
+			pointersInitializesStatements += setPointerField
+		}
+
+		for _, _grouptoogle := range layout.GroupToogles {
+			setPointerField = SliceOfPointersFieldInitStatement
+			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GroupToogles")
+			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_GroupToogle_Identifiers[_grouptoogle])
 			pointersInitializesStatements += setPointerField
 		}
 
@@ -360,17 +573,7 @@ func (stage *Stage) Marshall(file *os.File, modelsPackageName, packageName strin
 
 		// res = strings.ReplaceAll(res, "{{EntriesDocLinkStringDocLinkIdentifier}}", entries)
 	}
-
-	if stage.generatesDiff {
-		diff := computeDiff(stage.contentWhenParsed, res)
-		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.delta", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
-		diff = ComputeDiff(stage.contentWhenParsed, res)
-		os.WriteFile(fmt.Sprintf("%s-%.10d-%.10d.diff", name, stage.commitIdWhenParsed, stage.commitId), []byte(diff), os.FileMode(0666))
-	}
-	stage.contentWhenParsed = res
-	stage.commitIdWhenParsed = stage.commitId
-
-	fmt.Fprintln(file, res)
+	return
 }
 
 // computeDiff calculates the git-style unified diff between two strings.
@@ -381,25 +584,25 @@ func computeDiff(a, b string) string {
 }
 
 // computePrettyDiff calculates the git-style unified diff between two strings.
-func computePrettyDiff(a, b string) string {
-	dmp := diffmatchpatch.New()
-	diffs := dmp.DiffMain(a, b, false)
-	return dmp.DiffPrettyHtml(diffs)
-}
+// func computePrettyDiff(a, b string) string {
+// 	dmp := diffmatchpatch.New()
+// 	diffs := dmp.DiffMain(a, b, false)
+// 	return dmp.DiffPrettyHtml(diffs)
+// }
 
 // applyDiff reconstructs the original string 'a' from the new string 'b' and the diff string 'c'.
-func applyDiff(b, c string) (string, error) {
-	dmp := diffmatchpatch.New()
-	diffs, err := dmp.DiffFromDelta(b, c)
-	if err != nil {
-		return "", err
-	}
-	patches := dmp.PatchMake(b, diffs)
-	// We are applying the patch in reverse to get from 'b' to 'a'.
-	// The library's PatchApply function returns the new string and a slice of booleans indicating the success of each patch application.
-	result, _ := dmp.PatchApply(patches, b)
-	return result, nil
-}
+// func applyDiff(b, c string) (string, error) {
+// 	dmp := diffmatchpatch.New()
+// 	diffs, err := dmp.DiffFromDelta(b, c)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	patches := dmp.PatchMake(b, diffs)
+// 	// We are applying the patch in reverse to get from 'b' to 'a'.
+// 	// The library's PatchApply function returns the new string and a slice of booleans indicating the success of each patch application.
+// 	result, _ := dmp.PatchApply(patches, b)
+// 	return result, nil
+// }
 
 // unique identifier per struct
 func generatesIdentifier(gongStructName string, idx int, instanceName string) (identifier string) {

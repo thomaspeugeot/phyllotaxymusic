@@ -118,12 +118,18 @@ type LinkDB struct {
 	// Declation for basic field linkDB.EndArrowSize
 	EndArrowSize_Data sql.NullFloat64
 
+	// Declation for basic field linkDB.EndArrowOffset
+	EndArrowOffset_Data sql.NullFloat64
+
 	// Declation for basic field linkDB.HasStartArrow
 	// provide the sql storage for the boolan
 	HasStartArrow_Data sql.NullBool
 
 	// Declation for basic field linkDB.StartArrowSize
 	StartArrowSize_Data sql.NullFloat64
+
+	// Declation for basic field linkDB.StartArrowOffset
+	StartArrowOffset_Data sql.NullFloat64
 
 	// Declation for basic field linkDB.Color
 	Color_Data sql.NullString
@@ -148,6 +154,15 @@ type LinkDB struct {
 
 	// Declation for basic field linkDB.Transform
 	Transform_Data sql.NullString
+
+	// Declation for basic field linkDB.MouseX
+	MouseX_Data sql.NullFloat64
+
+	// Declation for basic field linkDB.MouseY
+	MouseY_Data sql.NullFloat64
+
+	// Declation for basic field linkDB.MouseEventKey
+	MouseEventKey_Data sql.NullString
 
 	// encoding of pointers
 	// for GORM serialization, it is necessary to embed to Pointer Encoding declaration
@@ -197,25 +212,35 @@ type LinkWOP struct {
 
 	EndArrowSize float64 `xlsx:"13"`
 
-	HasStartArrow bool `xlsx:"14"`
+	EndArrowOffset float64 `xlsx:"14"`
 
-	StartArrowSize float64 `xlsx:"15"`
+	HasStartArrow bool `xlsx:"15"`
 
-	Color string `xlsx:"16"`
+	StartArrowSize float64 `xlsx:"16"`
 
-	FillOpacity float64 `xlsx:"17"`
+	StartArrowOffset float64 `xlsx:"17"`
 
-	Stroke string `xlsx:"18"`
+	Color string `xlsx:"18"`
 
-	StrokeOpacity float64 `xlsx:"19"`
+	FillOpacity float64 `xlsx:"19"`
 
-	StrokeWidth float64 `xlsx:"20"`
+	Stroke string `xlsx:"20"`
 
-	StrokeDashArray string `xlsx:"21"`
+	StrokeOpacity float64 `xlsx:"21"`
 
-	StrokeDashArrayWhenSelected string `xlsx:"22"`
+	StrokeWidth float64 `xlsx:"22"`
 
-	Transform string `xlsx:"23"`
+	StrokeDashArray string `xlsx:"23"`
+
+	StrokeDashArrayWhenSelected string `xlsx:"24"`
+
+	Transform string `xlsx:"25"`
+
+	MouseX float64 `xlsx:"26"`
+
+	MouseY float64 `xlsx:"27"`
+
+	MouseEventKey models.MouseEventKey `xlsx:"28"`
 	// insertion for WOP pointer fields
 }
 
@@ -235,8 +260,10 @@ var Link_Fields = []string{
 	"CornerRadius",
 	"HasEndArrow",
 	"EndArrowSize",
+	"EndArrowOffset",
 	"HasStartArrow",
 	"StartArrowSize",
+	"StartArrowOffset",
 	"Color",
 	"FillOpacity",
 	"Stroke",
@@ -245,6 +272,9 @@ var Link_Fields = []string{
 	"StrokeDashArray",
 	"StrokeDashArrayWhenSelected",
 	"Transform",
+	"MouseX",
+	"MouseY",
+	"MouseEventKey",
 }
 
 type BackRepoLinkStruct struct {
@@ -438,19 +468,19 @@ func (backRepoLink *BackRepoLinkStruct) CommitPhaseTwoInstance(backRepo *BackRep
 		// 1. reset
 		linkDB.LinkPointersEncoding.ControlPoints = make([]int, 0)
 		// 2. encode
-		for _, pointAssocEnd := range link.ControlPoints {
-			pointAssocEnd_DB :=
-				backRepo.BackRepoPoint.GetPointDBFromPointPtr(pointAssocEnd)
+		for _, controlpointAssocEnd := range link.ControlPoints {
+			controlpointAssocEnd_DB :=
+				backRepo.BackRepoControlPoint.GetControlPointDBFromControlPointPtr(controlpointAssocEnd)
 			
-			// the stage might be inconsistant, meaning that the pointAssocEnd_DB might
+			// the stage might be inconsistant, meaning that the controlpointAssocEnd_DB might
 			// be missing from the stage. In this case, the commit operation is robust
 			// An alternative would be to crash here to reveal the missing element.
-			if pointAssocEnd_DB == nil {
+			if controlpointAssocEnd_DB == nil {
 				continue
 			}
 			
 			linkDB.LinkPointersEncoding.ControlPoints =
-				append(linkDB.LinkPointersEncoding.ControlPoints, int(pointAssocEnd_DB.ID))
+				append(linkDB.LinkPointersEncoding.ControlPoints, int(controlpointAssocEnd_DB.ID))
 		}
 
 		_, err := backRepoLink.db.Save(linkDB)
@@ -627,12 +657,12 @@ func (linkDB *LinkDB) DecodePointers(backRepo *BackRepoStruct, link *models.Link
 	}
 
 	// This loop redeem link.ControlPoints in the stage from the encode in the back repo
-	// It parses all PointDB in the back repo and if the reverse pointer encoding matches the back repo ID
+	// It parses all ControlPointDB in the back repo and if the reverse pointer encoding matches the back repo ID
 	// it appends the stage instance
 	// 1. reset the slice
 	link.ControlPoints = link.ControlPoints[:0]
-	for _, _Pointid := range linkDB.LinkPointersEncoding.ControlPoints {
-		link.ControlPoints = append(link.ControlPoints, backRepo.BackRepoPoint.Map_PointDBID_PointPtr[uint(_Pointid)])
+	for _, _ControlPointid := range linkDB.LinkPointersEncoding.ControlPoints {
+		link.ControlPoints = append(link.ControlPoints, backRepo.BackRepoControlPoint.Map_ControlPointDBID_ControlPointPtr[uint(_ControlPointid)])
 	}
 
 	return
@@ -708,11 +738,17 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
 	linkDB.EndArrowSize_Data.Float64 = link.EndArrowSize
 	linkDB.EndArrowSize_Data.Valid = true
 
+	linkDB.EndArrowOffset_Data.Float64 = link.EndArrowOffset
+	linkDB.EndArrowOffset_Data.Valid = true
+
 	linkDB.HasStartArrow_Data.Bool = link.HasStartArrow
 	linkDB.HasStartArrow_Data.Valid = true
 
 	linkDB.StartArrowSize_Data.Float64 = link.StartArrowSize
 	linkDB.StartArrowSize_Data.Valid = true
+
+	linkDB.StartArrowOffset_Data.Float64 = link.StartArrowOffset
+	linkDB.StartArrowOffset_Data.Valid = true
 
 	linkDB.Color_Data.String = link.Color
 	linkDB.Color_Data.Valid = true
@@ -737,6 +773,15 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLink(link *models.Link) {
 
 	linkDB.Transform_Data.String = link.Transform
 	linkDB.Transform_Data.Valid = true
+
+	linkDB.MouseX_Data.Float64 = link.MouseX
+	linkDB.MouseX_Data.Valid = true
+
+	linkDB.MouseY_Data.Float64 = link.MouseY
+	linkDB.MouseY_Data.Valid = true
+
+	linkDB.MouseEventKey_Data.String = link.MouseEventKey.ToString()
+	linkDB.MouseEventKey_Data.Valid = true
 }
 
 // CopyBasicFieldsFromLink_WOP
@@ -782,11 +827,17 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLink_WOP(link *models.Link_WOP) {
 	linkDB.EndArrowSize_Data.Float64 = link.EndArrowSize
 	linkDB.EndArrowSize_Data.Valid = true
 
+	linkDB.EndArrowOffset_Data.Float64 = link.EndArrowOffset
+	linkDB.EndArrowOffset_Data.Valid = true
+
 	linkDB.HasStartArrow_Data.Bool = link.HasStartArrow
 	linkDB.HasStartArrow_Data.Valid = true
 
 	linkDB.StartArrowSize_Data.Float64 = link.StartArrowSize
 	linkDB.StartArrowSize_Data.Valid = true
+
+	linkDB.StartArrowOffset_Data.Float64 = link.StartArrowOffset
+	linkDB.StartArrowOffset_Data.Valid = true
 
 	linkDB.Color_Data.String = link.Color
 	linkDB.Color_Data.Valid = true
@@ -811,6 +862,15 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLink_WOP(link *models.Link_WOP) {
 
 	linkDB.Transform_Data.String = link.Transform
 	linkDB.Transform_Data.Valid = true
+
+	linkDB.MouseX_Data.Float64 = link.MouseX
+	linkDB.MouseX_Data.Valid = true
+
+	linkDB.MouseY_Data.Float64 = link.MouseY
+	linkDB.MouseY_Data.Valid = true
+
+	linkDB.MouseEventKey_Data.String = link.MouseEventKey.ToString()
+	linkDB.MouseEventKey_Data.Valid = true
 }
 
 // CopyBasicFieldsFromLinkWOP
@@ -856,11 +916,17 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLinkWOP(link *LinkWOP) {
 	linkDB.EndArrowSize_Data.Float64 = link.EndArrowSize
 	linkDB.EndArrowSize_Data.Valid = true
 
+	linkDB.EndArrowOffset_Data.Float64 = link.EndArrowOffset
+	linkDB.EndArrowOffset_Data.Valid = true
+
 	linkDB.HasStartArrow_Data.Bool = link.HasStartArrow
 	linkDB.HasStartArrow_Data.Valid = true
 
 	linkDB.StartArrowSize_Data.Float64 = link.StartArrowSize
 	linkDB.StartArrowSize_Data.Valid = true
+
+	linkDB.StartArrowOffset_Data.Float64 = link.StartArrowOffset
+	linkDB.StartArrowOffset_Data.Valid = true
 
 	linkDB.Color_Data.String = link.Color
 	linkDB.Color_Data.Valid = true
@@ -885,6 +951,15 @@ func (linkDB *LinkDB) CopyBasicFieldsFromLinkWOP(link *LinkWOP) {
 
 	linkDB.Transform_Data.String = link.Transform
 	linkDB.Transform_Data.Valid = true
+
+	linkDB.MouseX_Data.Float64 = link.MouseX
+	linkDB.MouseX_Data.Valid = true
+
+	linkDB.MouseY_Data.Float64 = link.MouseY
+	linkDB.MouseY_Data.Valid = true
+
+	linkDB.MouseEventKey_Data.String = link.MouseEventKey.ToString()
+	linkDB.MouseEventKey_Data.Valid = true
 }
 
 // CopyBasicFieldsToLink
@@ -903,8 +978,10 @@ func (linkDB *LinkDB) CopyBasicFieldsToLink(link *models.Link) {
 	link.CornerRadius = linkDB.CornerRadius_Data.Float64
 	link.HasEndArrow = linkDB.HasEndArrow_Data.Bool
 	link.EndArrowSize = linkDB.EndArrowSize_Data.Float64
+	link.EndArrowOffset = linkDB.EndArrowOffset_Data.Float64
 	link.HasStartArrow = linkDB.HasStartArrow_Data.Bool
 	link.StartArrowSize = linkDB.StartArrowSize_Data.Float64
+	link.StartArrowOffset = linkDB.StartArrowOffset_Data.Float64
 	link.Color = linkDB.Color_Data.String
 	link.FillOpacity = linkDB.FillOpacity_Data.Float64
 	link.Stroke = linkDB.Stroke_Data.String
@@ -913,6 +990,9 @@ func (linkDB *LinkDB) CopyBasicFieldsToLink(link *models.Link) {
 	link.StrokeDashArray = linkDB.StrokeDashArray_Data.String
 	link.StrokeDashArrayWhenSelected = linkDB.StrokeDashArrayWhenSelected_Data.String
 	link.Transform = linkDB.Transform_Data.String
+	link.MouseX = linkDB.MouseX_Data.Float64
+	link.MouseY = linkDB.MouseY_Data.Float64
+	link.MouseEventKey.FromString(linkDB.MouseEventKey_Data.String)
 }
 
 // CopyBasicFieldsToLink_WOP
@@ -931,8 +1011,10 @@ func (linkDB *LinkDB) CopyBasicFieldsToLink_WOP(link *models.Link_WOP) {
 	link.CornerRadius = linkDB.CornerRadius_Data.Float64
 	link.HasEndArrow = linkDB.HasEndArrow_Data.Bool
 	link.EndArrowSize = linkDB.EndArrowSize_Data.Float64
+	link.EndArrowOffset = linkDB.EndArrowOffset_Data.Float64
 	link.HasStartArrow = linkDB.HasStartArrow_Data.Bool
 	link.StartArrowSize = linkDB.StartArrowSize_Data.Float64
+	link.StartArrowOffset = linkDB.StartArrowOffset_Data.Float64
 	link.Color = linkDB.Color_Data.String
 	link.FillOpacity = linkDB.FillOpacity_Data.Float64
 	link.Stroke = linkDB.Stroke_Data.String
@@ -941,6 +1023,9 @@ func (linkDB *LinkDB) CopyBasicFieldsToLink_WOP(link *models.Link_WOP) {
 	link.StrokeDashArray = linkDB.StrokeDashArray_Data.String
 	link.StrokeDashArrayWhenSelected = linkDB.StrokeDashArrayWhenSelected_Data.String
 	link.Transform = linkDB.Transform_Data.String
+	link.MouseX = linkDB.MouseX_Data.Float64
+	link.MouseY = linkDB.MouseY_Data.Float64
+	link.MouseEventKey.FromString(linkDB.MouseEventKey_Data.String)
 }
 
 // CopyBasicFieldsToLinkWOP
@@ -960,8 +1045,10 @@ func (linkDB *LinkDB) CopyBasicFieldsToLinkWOP(link *LinkWOP) {
 	link.CornerRadius = linkDB.CornerRadius_Data.Float64
 	link.HasEndArrow = linkDB.HasEndArrow_Data.Bool
 	link.EndArrowSize = linkDB.EndArrowSize_Data.Float64
+	link.EndArrowOffset = linkDB.EndArrowOffset_Data.Float64
 	link.HasStartArrow = linkDB.HasStartArrow_Data.Bool
 	link.StartArrowSize = linkDB.StartArrowSize_Data.Float64
+	link.StartArrowOffset = linkDB.StartArrowOffset_Data.Float64
 	link.Color = linkDB.Color_Data.String
 	link.FillOpacity = linkDB.FillOpacity_Data.Float64
 	link.Stroke = linkDB.Stroke_Data.String
@@ -970,6 +1057,9 @@ func (linkDB *LinkDB) CopyBasicFieldsToLinkWOP(link *LinkWOP) {
 	link.StrokeDashArray = linkDB.StrokeDashArray_Data.String
 	link.StrokeDashArrayWhenSelected = linkDB.StrokeDashArrayWhenSelected_Data.String
 	link.Transform = linkDB.Transform_Data.String
+	link.MouseX = linkDB.MouseX_Data.Float64
+	link.MouseY = linkDB.MouseY_Data.Float64
+	link.MouseEventKey.FromString(linkDB.MouseEventKey_Data.String)
 }
 
 // Backup generates a json file from a slice of all LinkDB instances in the backrepo

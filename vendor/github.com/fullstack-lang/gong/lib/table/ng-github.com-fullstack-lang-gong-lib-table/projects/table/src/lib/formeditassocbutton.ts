@@ -12,8 +12,6 @@ export class FormEditAssocButton {
 
 	static GONGSTRUCT_NAME = "FormEditAssocButton"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -24,8 +22,12 @@ export class FormEditAssocButton {
 	IsForSavePurpose: boolean = false
 	HasToolTip: boolean = false
 	ToolTipText: string = ""
+	MatTooltipShowDelay: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export function CopyFormEditAssocButtonToFormEditAssocButtonAPI(formeditassocbutton: FormEditAssocButton, formeditassocbuttonAPI: FormEditAssocButtonAPI) {
@@ -42,6 +44,7 @@ export function CopyFormEditAssocButtonToFormEditAssocButtonAPI(formeditassocbut
 	formeditassocbuttonAPI.IsForSavePurpose = formeditassocbutton.IsForSavePurpose
 	formeditassocbuttonAPI.HasToolTip = formeditassocbutton.HasToolTip
 	formeditassocbuttonAPI.ToolTipText = formeditassocbutton.ToolTipText
+	formeditassocbuttonAPI.MatTooltipShowDelay = formeditassocbutton.MatTooltipShowDelay
 
 	// insertion point for pointer fields encoding
 
@@ -66,6 +69,7 @@ export function CopyFormEditAssocButtonAPIToFormEditAssocButton(formeditassocbut
 	formeditassocbutton.IsForSavePurpose = formeditassocbuttonAPI.IsForSavePurpose
 	formeditassocbutton.HasToolTip = formeditassocbuttonAPI.HasToolTip
 	formeditassocbutton.ToolTipText = formeditassocbuttonAPI.ToolTipText
+	formeditassocbutton.MatTooltipShowDelay = formeditassocbuttonAPI.MatTooltipShowDelay
 
 	// insertion point for pointer fields encoding
 

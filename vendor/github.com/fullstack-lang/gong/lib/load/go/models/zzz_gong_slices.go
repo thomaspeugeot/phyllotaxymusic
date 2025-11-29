@@ -15,3 +15,48 @@ func (stage *Stage) ComputeReverseMaps() {
 	// insertion point per field
 
 }
+
+func (stage *Stage) GetInstances() (res []GongstructIF) {
+
+	// insertion point per named struct
+	for instance := range stage.FileToDownloads {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FileToUploads {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Messages {
+		res = append(res, instance)
+	}
+
+	return
+}
+
+// insertion point per named struct
+func (filetodownload *FileToDownload) GongCopy() GongstructIF {
+	newInstance := *filetodownload
+	return &newInstance
+}
+
+func (filetoupload *FileToUpload) GongCopy() GongstructIF {
+	newInstance := *filetoupload
+	return &newInstance
+}
+
+func (message *Message) GongCopy() GongstructIF {
+	newInstance := *message
+	return &newInstance
+}
+
+// ComputeReference will creates a deep copy of each of the staged elements
+func (stage *Stage) ComputeReference() {
+	stage.reference = make(map[GongstructIF]GongstructIF)
+	for _, instance := range stage.GetInstances() {
+		stage.reference[instance] = instance.GongCopy()
+	}
+	stage.new = make(map[GongstructIF]struct{})
+	stage.modified = make(map[GongstructIF]struct{})
+	stage.deleted = make(map[GongstructIF]struct{})
+}

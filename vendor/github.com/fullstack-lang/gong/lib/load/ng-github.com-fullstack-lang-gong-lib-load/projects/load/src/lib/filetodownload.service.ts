@@ -94,7 +94,7 @@ export class FileToDownloadService {
       catchError(this.handleError<FileToDownloadAPI>('postFileToDownload'))
     );
   }
-  
+
   /** POST: add a new filetodownload to the server */
   post(filetodownloaddb: FileToDownloadAPI, Name: string, frontRepo: FrontRepo): Observable<FileToDownloadAPI> {
     return this.postFileToDownload(filetodownloaddb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class FileToDownloadService {
   private handleError<T>(operation = 'operation in FileToDownloadService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FileToDownloadService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

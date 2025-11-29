@@ -10,6 +10,7 @@ import (
 	"math"
 	"slices"
 	"sort"
+	"strings"
 	"time"
 
 	slider_go "github.com/fullstack-lang/gong/lib/slider/go"
@@ -26,6 +27,7 @@ func __Gong__Abs(x int) int {
 }
 
 var _ = __Gong__Abs
+var _ = strings.Clone("")
 
 const ProbeTreeSidebarSuffix = ":sidebar of the probe"
 const ProbeTableSuffix = ":table of the probe"
@@ -50,6 +52,7 @@ func (stage *Stage) GetProbeSplitStageName() string {
 
 // errUnkownEnum is returns when a value cannot match enum values
 var errUnkownEnum = errors.New("unkown enum")
+var _ = errUnkownEnum
 
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
@@ -74,6 +77,8 @@ type GongStructInterface interface {
 	// GetID() (res int)
 	// GetFields() (res []string)
 	// GetFieldStringValue(fieldName string) (res string)
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
 }
 
 // Stage enables storage of staged instances
@@ -170,6 +175,12 @@ type Stage struct {
 	// end of insertion point
 
 	NamedStructs []*NamedStruct
+
+	// for the computation of the diff at each commit we need
+	reference map[GongstructIF]GongstructIF
+	modified  map[GongstructIF]struct{}
+	new       map[GongstructIF]struct{}
+	deleted   map[GongstructIF]struct{}
 }
 
 func (stage *Stage) GetCommitId() uint {
@@ -192,6 +203,22 @@ func (stage *Stage) GetNamedStructsNames() (res []string) {
 	}
 
 	return
+}
+
+func (stage *Stage) GetReference() map[GongstructIF]GongstructIF {
+	return stage.reference
+}
+
+func (stage *Stage) GetModified() map[GongstructIF]struct{} {
+	return stage.modified
+}
+
+func (stage *Stage) GetNew() map[GongstructIF]struct{} {
+	return stage.new
+}
+
+func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
+	return stage.deleted
 }
 
 func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
@@ -221,7 +248,7 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
 	var t T
 	switch any(t).(type) {
-		// insertion point for case
+	// insertion point for case
 	case *Checkbox:
 		tmp := GetStructInstancesByOrder(stage.Checkboxs, stage.CheckboxMap_Staged_Order)
 
@@ -300,9 +327,7 @@ func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T
 		return i_order < j_order
 	})
 
-	for _, instance := range orderedSet {
-		res = append(res, instance)
-	}
+	res = append(res, orderedSet...)
 
 	return
 }
@@ -441,6 +466,11 @@ func NewStage(name string) (stage *Stage) {
 			{name: "Layout"},
 			{name: "Slider"},
 		}, // end of insertion point
+
+		reference: make(map[GongstructIF]GongstructIF),
+		new:       make(map[GongstructIF]struct{}),
+		modified:  make(map[GongstructIF]struct{}),
+		deleted:   make(map[GongstructIF]struct{}),
 	}
 
 	return
@@ -497,16 +527,26 @@ func (stage *Stage) Commit() {
 	stage.commitId++
 	stage.commitTimeStamp = time.Now()
 
+	if stage.OnInitCommitCallback != nil {
+		stage.OnInitCommitCallback.BeforeCommit(stage)
+	}
+	if stage.OnInitCommitFromBackCallback != nil {
+		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
+	}
+
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
+	stage.ComputeInstancesNb()
+	stage.ComputeReference()
+}
 
+func (stage *Stage) ComputeInstancesNb() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Checkbox"] = len(stage.Checkboxs)
 	stage.Map_GongStructName_InstancesNb["Group"] = len(stage.Groups)
 	stage.Map_GongStructName_InstancesNb["Layout"] = len(stage.Layouts)
 	stage.Map_GongStructName_InstancesNb["Slider"] = len(stage.Sliders)
-
 }
 
 func (stage *Stage) Checkout() {
@@ -515,12 +555,7 @@ func (stage *Stage) Checkout() {
 	}
 
 	stage.ComputeReverseMaps()
-	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["Checkbox"] = len(stage.Checkboxs)
-	stage.Map_GongStructName_InstancesNb["Group"] = len(stage.Groups)
-	stage.Map_GongStructName_InstancesNb["Layout"] = len(stage.Layouts)
-	stage.Map_GongStructName_InstancesNb["Slider"] = len(stage.Sliders)
-
+	stage.ComputeInstancesNb()
 }
 
 // backup generates backup files in the dirPath
@@ -559,6 +594,12 @@ func (checkbox *Checkbox) Stage(stage *Stage) *Checkbox {
 		stage.Checkboxs[checkbox] = __member
 		stage.CheckboxMap_Staged_Order[checkbox] = stage.CheckboxOrder
 		stage.CheckboxOrder++
+		stage.new[checkbox] = struct{}{}
+		delete(stage.deleted, checkbox)
+	} else {
+		if _, ok := stage.new[checkbox]; !ok {
+			stage.modified[checkbox] = struct{}{}
+		}
 	}
 	stage.Checkboxs_mapString[checkbox.Name] = checkbox
 
@@ -569,6 +610,12 @@ func (checkbox *Checkbox) Stage(stage *Stage) *Checkbox {
 func (checkbox *Checkbox) Unstage(stage *Stage) *Checkbox {
 	delete(stage.Checkboxs, checkbox)
 	delete(stage.Checkboxs_mapString, checkbox.Name)
+
+	if _, ok := stage.reference[checkbox]; ok {
+		stage.deleted[checkbox] = struct{}{}
+	} else {
+		delete(stage.new, checkbox)
+	}
 	return checkbox
 }
 
@@ -590,6 +637,10 @@ func (checkbox *Checkbox) Commit(stage *Stage) *Checkbox {
 
 func (checkbox *Checkbox) CommitVoid(stage *Stage) {
 	checkbox.Commit(stage)
+}
+
+func (checkbox *Checkbox) StageVoid(stage *Stage) {
+	checkbox.Stage(stage)
 }
 
 // Checkout checkbox to the back repo (if it is already staged)
@@ -614,6 +665,12 @@ func (group *Group) Stage(stage *Stage) *Group {
 		stage.Groups[group] = __member
 		stage.GroupMap_Staged_Order[group] = stage.GroupOrder
 		stage.GroupOrder++
+		stage.new[group] = struct{}{}
+		delete(stage.deleted, group)
+	} else {
+		if _, ok := stage.new[group]; !ok {
+			stage.modified[group] = struct{}{}
+		}
 	}
 	stage.Groups_mapString[group.Name] = group
 
@@ -624,6 +681,12 @@ func (group *Group) Stage(stage *Stage) *Group {
 func (group *Group) Unstage(stage *Stage) *Group {
 	delete(stage.Groups, group)
 	delete(stage.Groups_mapString, group.Name)
+
+	if _, ok := stage.reference[group]; ok {
+		stage.deleted[group] = struct{}{}
+	} else {
+		delete(stage.new, group)
+	}
 	return group
 }
 
@@ -645,6 +708,10 @@ func (group *Group) Commit(stage *Stage) *Group {
 
 func (group *Group) CommitVoid(stage *Stage) {
 	group.Commit(stage)
+}
+
+func (group *Group) StageVoid(stage *Stage) {
+	group.Stage(stage)
 }
 
 // Checkout group to the back repo (if it is already staged)
@@ -669,6 +736,12 @@ func (layout *Layout) Stage(stage *Stage) *Layout {
 		stage.Layouts[layout] = __member
 		stage.LayoutMap_Staged_Order[layout] = stage.LayoutOrder
 		stage.LayoutOrder++
+		stage.new[layout] = struct{}{}
+		delete(stage.deleted, layout)
+	} else {
+		if _, ok := stage.new[layout]; !ok {
+			stage.modified[layout] = struct{}{}
+		}
 	}
 	stage.Layouts_mapString[layout.Name] = layout
 
@@ -679,6 +752,12 @@ func (layout *Layout) Stage(stage *Stage) *Layout {
 func (layout *Layout) Unstage(stage *Stage) *Layout {
 	delete(stage.Layouts, layout)
 	delete(stage.Layouts_mapString, layout.Name)
+
+	if _, ok := stage.reference[layout]; ok {
+		stage.deleted[layout] = struct{}{}
+	} else {
+		delete(stage.new, layout)
+	}
 	return layout
 }
 
@@ -700,6 +779,10 @@ func (layout *Layout) Commit(stage *Stage) *Layout {
 
 func (layout *Layout) CommitVoid(stage *Stage) {
 	layout.Commit(stage)
+}
+
+func (layout *Layout) StageVoid(stage *Stage) {
+	layout.Stage(stage)
 }
 
 // Checkout layout to the back repo (if it is already staged)
@@ -724,6 +807,12 @@ func (slider *Slider) Stage(stage *Stage) *Slider {
 		stage.Sliders[slider] = __member
 		stage.SliderMap_Staged_Order[slider] = stage.SliderOrder
 		stage.SliderOrder++
+		stage.new[slider] = struct{}{}
+		delete(stage.deleted, slider)
+	} else {
+		if _, ok := stage.new[slider]; !ok {
+			stage.modified[slider] = struct{}{}
+		}
 	}
 	stage.Sliders_mapString[slider.Name] = slider
 
@@ -734,6 +823,12 @@ func (slider *Slider) Stage(stage *Stage) *Slider {
 func (slider *Slider) Unstage(stage *Stage) *Slider {
 	delete(stage.Sliders, slider)
 	delete(stage.Sliders_mapString, slider.Name)
+
+	if _, ok := stage.reference[slider]; ok {
+		stage.deleted[slider] = struct{}{}
+	} else {
+		delete(stage.new, slider)
+	}
 	return slider
 }
 
@@ -755,6 +850,10 @@ func (slider *Slider) Commit(stage *Stage) *Slider {
 
 func (slider *Slider) CommitVoid(stage *Stage) {
 	slider.Commit(stage)
+}
+
+func (slider *Slider) StageVoid(stage *Stage) {
+	slider.Stage(stage)
 }
 
 // Checkout slider to the back repo (if it is already staged)
@@ -808,6 +907,7 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.SliderMap_Staged_Order = make(map[*Slider]uint)
 	stage.SliderOrder = 0
 
+	stage.ComputeReference()
 }
 
 func (stage *Stage) Nil() { // insertion point for array nil
@@ -859,10 +959,22 @@ type GongtructBasicField interface {
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
-type PointerToGongstruct interface {
+type GongstructIF interface {
 	GetName() string
 	CommitVoid(*Stage)
+	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
+	GongGetFieldHeaders() []GongFieldHeader
+	GongClean(stage *Stage)
+	GongGetFieldValue(fieldName string, stage *Stage) GongFieldValue
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
+	GongCopy() GongstructIF
+	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string
+	GongGetReverseFieldOwner(stage *Stage, reverseField *ReverseField) GongstructIF
+}
+type PointerToGongstruct interface {
+	GongstructIF
 	comparable
 }
 
@@ -977,7 +1089,7 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 }
 
 // GetGongstructInstancesMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
+// it is usefull because it allows refactoring of gongstruct identifier
 func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type {
 	var ret Type
 
@@ -1129,26 +1241,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	return nil
 }
 
-// GetGongstructName returns the name of the Gongstruct
-// this can be usefull if one want program robust to refactoring
-func GetGongstructName[Type Gongstruct]() (res string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Checkbox:
-		res = "Checkbox"
-	case Group:
-		res = "Group"
-	case Layout:
-		res = "Layout"
-	case Slider:
-		res = "Slider"
-	}
-	return res
-}
-
 // GetPointerToGongstructName returns the name of the Gongstruct
 // this can be usefull if one want program robust to refactoring
 func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
@@ -1169,31 +1261,12 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	return res
 }
 
-// GetFields return the array of the fields
-func GetFields[Type Gongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Checkbox:
-		res = []string{"Name", "ValueBool", "LabelForTrue", "LabelForFalse"}
-	case Group:
-		res = []string{"Name", "Percentage", "Sliders", "Checkboxes"}
-	case Layout:
-		res = []string{"Name", "Groups"}
-	case Slider:
-		res = []string{"Name", "IsFloat64", "IsInt", "MinInt", "MaxInt", "StepInt", "ValueInt", "MinFloat64", "MaxFloat64", "StepFloat64", "ValueFloat64"}
-	}
-	return
-}
-
 type ReverseField struct {
 	GongstructName string
 	Fieldname      string
 }
 
-func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
+func GetReverseFields[Type PointerToGongstruct]() (res []ReverseField) {
 
 	res = make([]ReverseField, 0)
 
@@ -1202,22 +1275,22 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	switch any(ret).(type) {
 
 	// insertion point for generic get gongstruct name
-	case Checkbox:
+	case *Checkbox:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Group"
 		rf.Fieldname = "Checkboxes"
 		res = append(res, rf)
-	case Group:
+	case *Group:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layout"
 		rf.Fieldname = "Groups"
 		res = append(res, rf)
-	case Layout:
+	case *Layout:
 		var rf ReverseField
 		_ = rf
-	case Slider:
+	case *Slider:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Group"
@@ -1227,40 +1300,157 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	return
 }
 
-// GetFieldsFromPointer return the array of the fields
-func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case *Checkbox:
-		res = []string{"Name", "ValueBool", "LabelForTrue", "LabelForFalse"}
-	case *Group:
-		res = []string{"Name", "Percentage", "Sliders", "Checkboxes"}
-	case *Layout:
-		res = []string{"Name", "Groups"}
-	case *Slider:
-		res = []string{"Name", "IsFloat64", "IsInt", "MinInt", "MaxInt", "StepInt", "ValueInt", "MinFloat64", "MaxFloat64", "StepFloat64", "ValueFloat64"}
+// insertion point for get fields header method
+func (checkbox *Checkbox) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ValueBool",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "LabelForTrue",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "LabelForFalse",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
 	}
 	return
+}
+
+func (group *Group) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Percentage",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Sliders",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Slider",
+		},
+		{
+			Name:                 "Checkboxes",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Checkbox",
+		},
+	}
+	return
+}
+
+func (layout *Layout) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Groups",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Group",
+		},
+	}
+	return
+}
+
+func (slider *Slider) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsFloat64",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsInt",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MinInt",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MaxInt",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StepInt",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ValueInt",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MinFloat64",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MaxFloat64",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StepFloat64",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ValueFloat64",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+// GetFieldsFromPointer return the array of the fields
+func GetFieldsFromPointer[Type PointerToGongstruct]() (res []GongFieldHeader) {
+
+	var ret Type
+	return ret.GongGetFieldHeaders()
 }
 
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt             GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat           GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool            GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeString          GongFieldValueType = "GongFieldValueTypeString"
+	GongFieldValueTypeBasicKind       GongFieldValueType = "GongFieldValueTypeBasicKind"
+	GongFieldValueTypePointer         GongFieldValueType = "GongFieldValueTypePointer"
+	GongFieldValueTypeSliceOfPointers GongFieldValueType = "GongFieldValueTypeSliceOfPointers"
 )
 
 type GongFieldValue struct {
-	valueString string
 	GongFieldValueType
-	valueInt   int
-	valueFloat float64
-	valueBool  bool
+	valueString string
+	valueInt    int
+	valueFloat  float64
+	valueBool   bool
+
+	// in case of a pointer, the ID of the pointed element
+	// in case of a slice of pointers, the IDs, separated by semi columbs
+	ids string
+}
+
+type GongFieldHeader struct {
+	Name string
+	GongFieldValueType
+	TargetGongstructName string
 }
 
 func (gongValueField *GongFieldValue) GetValueString() string {
@@ -1279,217 +1469,265 @@ func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }
 
-func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFieldValue) {
-
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case *Checkbox:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "ValueBool":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.ValueBool)
-			res.valueBool = inferedInstance.ValueBool
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "LabelForTrue":
-			res.valueString = inferedInstance.LabelForTrue
-		case "LabelForFalse":
-			res.valueString = inferedInstance.LabelForFalse
-		}
-	case *Group:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Percentage":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Percentage)
-			res.valueFloat = inferedInstance.Percentage
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Sliders":
-			for idx, __instance__ := range inferedInstance.Sliders {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Checkboxes":
-			for idx, __instance__ := range inferedInstance.Checkboxes {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *Layout:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Groups":
-			for idx, __instance__ := range inferedInstance.Groups {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *Slider:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "IsFloat64":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsFloat64)
-			res.valueBool = inferedInstance.IsFloat64
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsInt":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsInt)
-			res.valueBool = inferedInstance.IsInt
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MinInt":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.MinInt)
-			res.valueInt = inferedInstance.MinInt
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "MaxInt":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.MaxInt)
-			res.valueInt = inferedInstance.MaxInt
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "StepInt":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.StepInt)
-			res.valueInt = inferedInstance.StepInt
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "ValueInt":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.ValueInt)
-			res.valueInt = inferedInstance.ValueInt
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "MinFloat64":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MinFloat64)
-			res.valueFloat = inferedInstance.MinFloat64
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "MaxFloat64":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MaxFloat64)
-			res.valueFloat = inferedInstance.MaxFloat64
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StepFloat64":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StepFloat64)
-			res.valueFloat = inferedInstance.StepFloat64
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "ValueFloat64":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.ValueFloat64)
-			res.valueFloat = inferedInstance.ValueFloat64
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	default:
-		_ = inferedInstance
+// insertion point for generic get gongstruct field value
+func (checkbox *Checkbox) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = checkbox.Name
+	case "ValueBool":
+		res.valueString = fmt.Sprintf("%t", checkbox.ValueBool)
+		res.valueBool = checkbox.ValueBool
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "LabelForTrue":
+		res.valueString = checkbox.LabelForTrue
+	case "LabelForFalse":
+		res.valueString = checkbox.LabelForFalse
 	}
 	return
 }
+func (group *Group) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = group.Name
+	case "Percentage":
+		res.valueString = fmt.Sprintf("%f", group.Percentage)
+		res.valueFloat = group.Percentage
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Sliders":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range group.Sliders {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Checkboxes":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range group.Checkboxes {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (layout *Layout) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = layout.Name
+	case "Groups":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layout.Groups {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (slider *Slider) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = slider.Name
+	case "IsFloat64":
+		res.valueString = fmt.Sprintf("%t", slider.IsFloat64)
+		res.valueBool = slider.IsFloat64
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsInt":
+		res.valueString = fmt.Sprintf("%t", slider.IsInt)
+		res.valueBool = slider.IsInt
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "MinInt":
+		res.valueString = fmt.Sprintf("%d", slider.MinInt)
+		res.valueInt = slider.MinInt
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "MaxInt":
+		res.valueString = fmt.Sprintf("%d", slider.MaxInt)
+		res.valueInt = slider.MaxInt
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "StepInt":
+		res.valueString = fmt.Sprintf("%d", slider.StepInt)
+		res.valueInt = slider.StepInt
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "ValueInt":
+		res.valueString = fmt.Sprintf("%d", slider.ValueInt)
+		res.valueInt = slider.ValueInt
+		res.GongFieldValueType = GongFieldValueTypeInt
+	case "MinFloat64":
+		res.valueString = fmt.Sprintf("%f", slider.MinFloat64)
+		res.valueFloat = slider.MinFloat64
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "MaxFloat64":
+		res.valueString = fmt.Sprintf("%f", slider.MaxFloat64)
+		res.valueFloat = slider.MaxFloat64
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StepFloat64":
+		res.valueString = fmt.Sprintf("%f", slider.StepFloat64)
+		res.valueFloat = slider.StepFloat64
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "ValueFloat64":
+		res.valueString = fmt.Sprintf("%f", slider.ValueFloat64)
+		res.valueFloat = slider.ValueFloat64
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	}
+	return
+}
+func GetFieldStringValueFromPointer(instance GongstructIF, fieldName string, stage *Stage) (res GongFieldValue) {
 
-func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
+	res = instance.GongGetFieldValue(fieldName, stage)
+	return
+}
 
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case Checkbox:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "ValueBool":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.ValueBool)
-			res.valueBool = inferedInstance.ValueBool
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "LabelForTrue":
-			res.valueString = inferedInstance.LabelForTrue
-		case "LabelForFalse":
-			res.valueString = inferedInstance.LabelForFalse
-		}
-	case Group:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Percentage":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Percentage)
-			res.valueFloat = inferedInstance.Percentage
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Sliders":
-			for idx, __instance__ := range inferedInstance.Sliders {
-				if idx > 0 {
-					res.valueString += "\n"
+// insertion point for generic set gongstruct field value
+func (checkbox *Checkbox) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		checkbox.Name = value.GetValueString()
+	case "ValueBool":
+		checkbox.ValueBool = value.GetValueBool()
+	case "LabelForTrue":
+		checkbox.LabelForTrue = value.GetValueString()
+	case "LabelForFalse":
+		checkbox.LabelForFalse = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (group *Group) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		group.Name = value.GetValueString()
+	case "Percentage":
+		group.Percentage = value.GetValueFloat()
+	case "Sliders":
+		group.Sliders = make([]*Slider, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Sliders {
+					if stage.SliderMap_Staged_Order[__instance__] == uint(id) {
+						group.Sliders = append(group.Sliders, __instance__)
+						break
+					}
 				}
-				res.valueString += __instance__.Name
-			}
-		case "Checkboxes":
-			for idx, __instance__ := range inferedInstance.Checkboxes {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case Layout:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Groups":
-			for idx, __instance__ := range inferedInstance.Groups {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
 			}
 		}
-	case Slider:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "IsFloat64":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsFloat64)
-			res.valueBool = inferedInstance.IsFloat64
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsInt":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsInt)
-			res.valueBool = inferedInstance.IsInt
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "MinInt":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.MinInt)
-			res.valueInt = inferedInstance.MinInt
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "MaxInt":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.MaxInt)
-			res.valueInt = inferedInstance.MaxInt
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "StepInt":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.StepInt)
-			res.valueInt = inferedInstance.StepInt
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "ValueInt":
-			res.valueString = fmt.Sprintf("%d", inferedInstance.ValueInt)
-			res.valueInt = inferedInstance.ValueInt
-			res.GongFieldValueType = GongFieldValueTypeInt
-		case "MinFloat64":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MinFloat64)
-			res.valueFloat = inferedInstance.MinFloat64
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "MaxFloat64":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MaxFloat64)
-			res.valueFloat = inferedInstance.MaxFloat64
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StepFloat64":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StepFloat64)
-			res.valueFloat = inferedInstance.StepFloat64
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "ValueFloat64":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.ValueFloat64)
-			res.valueFloat = inferedInstance.ValueFloat64
-			res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Checkboxes":
+		group.Checkboxes = make([]*Checkbox, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Checkboxs {
+					if stage.CheckboxMap_Staged_Order[__instance__] == uint(id) {
+						group.Checkboxes = append(group.Checkboxes, __instance__)
+						break
+					}
+				}
+			}
 		}
 	default:
-		_ = inferedInstance
+		return fmt.Errorf("unknown field %s", fieldName)
 	}
+	return nil
+}
+
+func (layout *Layout) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		layout.Name = value.GetValueString()
+	case "Groups":
+		layout.Groups = make([]*Group, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Groups {
+					if stage.GroupMap_Staged_Order[__instance__] == uint(id) {
+						layout.Groups = append(layout.Groups, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (slider *Slider) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		slider.Name = value.GetValueString()
+	case "IsFloat64":
+		slider.IsFloat64 = value.GetValueBool()
+	case "IsInt":
+		slider.IsInt = value.GetValueBool()
+	case "MinInt":
+		slider.MinInt = int(value.GetValueInt())
+	case "MaxInt":
+		slider.MaxInt = int(value.GetValueInt())
+	case "StepInt":
+		slider.StepInt = int(value.GetValueInt())
+	case "ValueInt":
+		slider.ValueInt = int(value.GetValueInt())
+	case "MinFloat64":
+		slider.MinFloat64 = value.GetValueFloat()
+	case "MaxFloat64":
+		slider.MaxFloat64 = value.GetValueFloat()
+	case "StepFloat64":
+		slider.StepFloat64 = value.GetValueFloat()
+	case "ValueFloat64":
+		slider.ValueFloat64 = value.GetValueFloat()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func SetFieldStringValueFromPointer(instance GongstructIF, fieldName string, value GongFieldValue, stage *Stage) error {
+	return instance.GongSetFieldValue(fieldName, value, stage)
+}
+
+// insertion point for generic get gongstruct name
+func (checkbox *Checkbox) GongGetGongstructName() string {
+	return "Checkbox"
+}
+
+func (group *Group) GongGetGongstructName() string {
+	return "Group"
+}
+
+func (layout *Layout) GongGetGongstructName() string {
+	return "Layout"
+}
+
+func (slider *Slider) GongGetGongstructName() string {
+	return "Slider"
+}
+
+func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
+	res = instance.GongGetGongstructName()
 	return
 }
 

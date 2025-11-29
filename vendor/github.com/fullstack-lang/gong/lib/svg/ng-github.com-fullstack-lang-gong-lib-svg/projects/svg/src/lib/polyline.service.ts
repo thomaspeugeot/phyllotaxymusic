@@ -95,7 +95,7 @@ export class PolylineService {
       catchError(this.handleError<PolylineAPI>('postPolyline'))
     );
   }
-  
+
   /** POST: add a new polyline to the server */
   post(polylinedb: PolylineAPI, Name: string, frontRepo: FrontRepo): Observable<PolylineAPI> {
     return this.postPolyline(polylinedb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class PolylineService {
   private handleError<T>(operation = 'operation in PolylineService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("PolylineService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

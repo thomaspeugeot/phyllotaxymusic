@@ -13,8 +13,6 @@ export class LinkAnchoredText {
 
 	static GONGSTRUCT_NAME = "LinkAnchoredText"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -28,6 +26,8 @@ export class LinkAnchoredText {
 	FontSize: string = ""
 	FontStyle: string = ""
 	LetterSpacing: string = ""
+	FontFamily: string = ""
+	WhiteSpace: string = ""
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -39,6 +39,9 @@ export class LinkAnchoredText {
 
 	// insertion point for pointers and slices of pointers declarations
 	Animates: Array<Animate> = []
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export function CopyLinkAnchoredTextToLinkAnchoredTextAPI(linkanchoredtext: LinkAnchoredText, linkanchoredtextAPI: LinkAnchoredTextAPI) {
@@ -58,6 +61,8 @@ export function CopyLinkAnchoredTextToLinkAnchoredTextAPI(linkanchoredtext: Link
 	linkanchoredtextAPI.FontSize = linkanchoredtext.FontSize
 	linkanchoredtextAPI.FontStyle = linkanchoredtext.FontStyle
 	linkanchoredtextAPI.LetterSpacing = linkanchoredtext.LetterSpacing
+	linkanchoredtextAPI.FontFamily = linkanchoredtext.FontFamily
+	linkanchoredtextAPI.WhiteSpace = linkanchoredtext.WhiteSpace
 	linkanchoredtextAPI.Color = linkanchoredtext.Color
 	linkanchoredtextAPI.FillOpacity = linkanchoredtext.FillOpacity
 	linkanchoredtextAPI.Stroke = linkanchoredtext.Stroke
@@ -98,6 +103,8 @@ export function CopyLinkAnchoredTextAPIToLinkAnchoredText(linkanchoredtextAPI: L
 	linkanchoredtext.FontSize = linkanchoredtextAPI.FontSize
 	linkanchoredtext.FontStyle = linkanchoredtextAPI.FontStyle
 	linkanchoredtext.LetterSpacing = linkanchoredtextAPI.LetterSpacing
+	linkanchoredtext.FontFamily = linkanchoredtextAPI.FontFamily
+	linkanchoredtext.WhiteSpace = linkanchoredtextAPI.WhiteSpace
 	linkanchoredtext.Color = linkanchoredtextAPI.Color
 	linkanchoredtext.FillOpacity = linkanchoredtextAPI.FillOpacity
 	linkanchoredtext.Stroke = linkanchoredtextAPI.Stroke

@@ -1788,6 +1788,206 @@ func (colortype ColorType) CodeValues() (res []string) {
 	return
 }
 
+// Utility function for DominantBaselineType
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (dominantbaselinetype DominantBaselineType) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch dominantbaselinetype {
+	// insertion code per enum code
+	case DominantBaselineAuto:
+		res = "auto"
+	case DominantBaselineAlphabetic:
+		res = "alphabetic"
+	case DominantBaselineIdeographic:
+		res = "ideographic"
+	case DominantBaselineHanging:
+		res = "hanging"
+	case DominantBaselineMathematical:
+		res = "mathematical"
+	case DominantBaselineCentral:
+		res = "central"
+	case DominantBaselineMiddle:
+		res = "middle"
+	case DominantBaselineTextAfterEdge:
+		res = "text-after-edge"
+	case DominantBaselineTextBeforeEdge:
+		res = "text-before-edge"
+	case DominantBaselineTextTop:
+		res = "text-top"
+	case DominantBaselineUseScript:
+		res = "use-script"
+	case DominantBaselineNoChange:
+		res = "no-change"
+	case DominantBaselineResetSize:
+		res = "reset-size"
+	}
+	return
+}
+
+func (dominantbaselinetype *DominantBaselineType) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "auto":
+		*dominantbaselinetype = DominantBaselineAuto
+		return
+	case "alphabetic":
+		*dominantbaselinetype = DominantBaselineAlphabetic
+		return
+	case "ideographic":
+		*dominantbaselinetype = DominantBaselineIdeographic
+		return
+	case "hanging":
+		*dominantbaselinetype = DominantBaselineHanging
+		return
+	case "mathematical":
+		*dominantbaselinetype = DominantBaselineMathematical
+		return
+	case "central":
+		*dominantbaselinetype = DominantBaselineCentral
+		return
+	case "middle":
+		*dominantbaselinetype = DominantBaselineMiddle
+		return
+	case "text-after-edge":
+		*dominantbaselinetype = DominantBaselineTextAfterEdge
+		return
+	case "text-before-edge":
+		*dominantbaselinetype = DominantBaselineTextBeforeEdge
+		return
+	case "text-top":
+		*dominantbaselinetype = DominantBaselineTextTop
+		return
+	case "use-script":
+		*dominantbaselinetype = DominantBaselineUseScript
+		return
+	case "no-change":
+		*dominantbaselinetype = DominantBaselineNoChange
+		return
+	case "reset-size":
+		*dominantbaselinetype = DominantBaselineResetSize
+		return
+	default:
+		return errUnkownEnum
+	}
+}
+
+func (dominantbaselinetype *DominantBaselineType) FromCodeString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "DominantBaselineAuto":
+		*dominantbaselinetype = DominantBaselineAuto
+	case "DominantBaselineAlphabetic":
+		*dominantbaselinetype = DominantBaselineAlphabetic
+	case "DominantBaselineIdeographic":
+		*dominantbaselinetype = DominantBaselineIdeographic
+	case "DominantBaselineHanging":
+		*dominantbaselinetype = DominantBaselineHanging
+	case "DominantBaselineMathematical":
+		*dominantbaselinetype = DominantBaselineMathematical
+	case "DominantBaselineCentral":
+		*dominantbaselinetype = DominantBaselineCentral
+	case "DominantBaselineMiddle":
+		*dominantbaselinetype = DominantBaselineMiddle
+	case "DominantBaselineTextAfterEdge":
+		*dominantbaselinetype = DominantBaselineTextAfterEdge
+	case "DominantBaselineTextBeforeEdge":
+		*dominantbaselinetype = DominantBaselineTextBeforeEdge
+	case "DominantBaselineTextTop":
+		*dominantbaselinetype = DominantBaselineTextTop
+	case "DominantBaselineUseScript":
+		*dominantbaselinetype = DominantBaselineUseScript
+	case "DominantBaselineNoChange":
+		*dominantbaselinetype = DominantBaselineNoChange
+	case "DominantBaselineResetSize":
+		*dominantbaselinetype = DominantBaselineResetSize
+	default:
+		err = errUnkownEnum
+	}
+	return
+}
+
+func (dominantbaselinetype *DominantBaselineType) ToCodeString() (res string) {
+
+	switch *dominantbaselinetype {
+	// insertion code per enum code
+	case DominantBaselineAuto:
+		res = "DominantBaselineAuto"
+	case DominantBaselineAlphabetic:
+		res = "DominantBaselineAlphabetic"
+	case DominantBaselineIdeographic:
+		res = "DominantBaselineIdeographic"
+	case DominantBaselineHanging:
+		res = "DominantBaselineHanging"
+	case DominantBaselineMathematical:
+		res = "DominantBaselineMathematical"
+	case DominantBaselineCentral:
+		res = "DominantBaselineCentral"
+	case DominantBaselineMiddle:
+		res = "DominantBaselineMiddle"
+	case DominantBaselineTextAfterEdge:
+		res = "DominantBaselineTextAfterEdge"
+	case DominantBaselineTextBeforeEdge:
+		res = "DominantBaselineTextBeforeEdge"
+	case DominantBaselineTextTop:
+		res = "DominantBaselineTextTop"
+	case DominantBaselineUseScript:
+		res = "DominantBaselineUseScript"
+	case DominantBaselineNoChange:
+		res = "DominantBaselineNoChange"
+	case DominantBaselineResetSize:
+		res = "DominantBaselineResetSize"
+	}
+	return
+}
+
+func (dominantbaselinetype DominantBaselineType) Codes() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "DominantBaselineAuto")
+	res = append(res, "DominantBaselineAlphabetic")
+	res = append(res, "DominantBaselineIdeographic")
+	res = append(res, "DominantBaselineHanging")
+	res = append(res, "DominantBaselineMathematical")
+	res = append(res, "DominantBaselineCentral")
+	res = append(res, "DominantBaselineMiddle")
+	res = append(res, "DominantBaselineTextAfterEdge")
+	res = append(res, "DominantBaselineTextBeforeEdge")
+	res = append(res, "DominantBaselineTextTop")
+	res = append(res, "DominantBaselineUseScript")
+	res = append(res, "DominantBaselineNoChange")
+	res = append(res, "DominantBaselineResetSize")
+
+	return
+}
+
+func (dominantbaselinetype DominantBaselineType) CodeValues() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "auto")
+	res = append(res, "alphabetic")
+	res = append(res, "ideographic")
+	res = append(res, "hanging")
+	res = append(res, "mathematical")
+	res = append(res, "central")
+	res = append(res, "middle")
+	res = append(res, "text-after-edge")
+	res = append(res, "text-before-edge")
+	res = append(res, "text-top")
+	res = append(res, "use-script")
+	res = append(res, "no-change")
+	res = append(res, "reset-size")
+
+	return
+}
+
 // Utility function for DrawingState
 // if enum values are string, it is stored with the value
 // if enum values are int, they are stored with the code of the value
@@ -2021,6 +2221,96 @@ func (linktype LinkType) CodeValues() (res []string) {
 	// insertion code per enum code
 	res = append(res, "LINK_TYPE_LINE_WITH_CONTROL_POINTS")
 	res = append(res, "LINK_TYPE_FLOATING_ORTHOGONAL")
+
+	return
+}
+
+// Utility function for MouseEventKey
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (mouseeventkey MouseEventKey) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch mouseeventkey {
+	// insertion code per enum code
+	case MouseEventKeyShift:
+		res = "Shift"
+	case MouseEventKeyAlt:
+		res = "Alt"
+	case MouseEventKeyMeta:
+		res = "Meta"
+	}
+	return
+}
+
+func (mouseeventkey *MouseEventKey) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "Shift":
+		*mouseeventkey = MouseEventKeyShift
+		return
+	case "Alt":
+		*mouseeventkey = MouseEventKeyAlt
+		return
+	case "Meta":
+		*mouseeventkey = MouseEventKeyMeta
+		return
+	default:
+		return errUnkownEnum
+	}
+}
+
+func (mouseeventkey *MouseEventKey) FromCodeString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "MouseEventKeyShift":
+		*mouseeventkey = MouseEventKeyShift
+	case "MouseEventKeyAlt":
+		*mouseeventkey = MouseEventKeyAlt
+	case "MouseEventKeyMeta":
+		*mouseeventkey = MouseEventKeyMeta
+	default:
+		err = errUnkownEnum
+	}
+	return
+}
+
+func (mouseeventkey *MouseEventKey) ToCodeString() (res string) {
+
+	switch *mouseeventkey {
+	// insertion code per enum code
+	case MouseEventKeyShift:
+		res = "MouseEventKeyShift"
+	case MouseEventKeyAlt:
+		res = "MouseEventKeyAlt"
+	case MouseEventKeyMeta:
+		res = "MouseEventKeyMeta"
+	}
+	return
+}
+
+func (mouseeventkey MouseEventKey) Codes() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "MouseEventKeyShift")
+	res = append(res, "MouseEventKeyAlt")
+	res = append(res, "MouseEventKeyMeta")
+
+	return
+}
+
+func (mouseeventkey MouseEventKey) CodeValues() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "Shift")
+	res = append(res, "Alt")
+	res = append(res, "Meta")
 
 	return
 }
@@ -2717,6 +3007,208 @@ func (textanchortype TextAnchorType) CodeValues() (res []string) {
 	res = append(res, "start")
 	res = append(res, "middle")
 	res = append(res, "end")
+
+	return
+}
+
+// Utility function for ToolTipPositionEnum
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (tooltippositionenum ToolTipPositionEnum) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch tooltippositionenum {
+	// insertion code per enum code
+	case Below:
+		res = "below"
+	case Above:
+		res = "above"
+	case Left:
+		res = "left"
+	case Right:
+		res = "right"
+	}
+	return
+}
+
+func (tooltippositionenum *ToolTipPositionEnum) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "below":
+		*tooltippositionenum = Below
+		return
+	case "above":
+		*tooltippositionenum = Above
+		return
+	case "left":
+		*tooltippositionenum = Left
+		return
+	case "right":
+		*tooltippositionenum = Right
+		return
+	default:
+		return errUnkownEnum
+	}
+}
+
+func (tooltippositionenum *ToolTipPositionEnum) FromCodeString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "Below":
+		*tooltippositionenum = Below
+	case "Above":
+		*tooltippositionenum = Above
+	case "Left":
+		*tooltippositionenum = Left
+	case "Right":
+		*tooltippositionenum = Right
+	default:
+		err = errUnkownEnum
+	}
+	return
+}
+
+func (tooltippositionenum *ToolTipPositionEnum) ToCodeString() (res string) {
+
+	switch *tooltippositionenum {
+	// insertion code per enum code
+	case Below:
+		res = "Below"
+	case Above:
+		res = "Above"
+	case Left:
+		res = "Left"
+	case Right:
+		res = "Right"
+	}
+	return
+}
+
+func (tooltippositionenum ToolTipPositionEnum) Codes() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "Below")
+	res = append(res, "Above")
+	res = append(res, "Left")
+	res = append(res, "Right")
+
+	return
+}
+
+func (tooltippositionenum ToolTipPositionEnum) CodeValues() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "below")
+	res = append(res, "above")
+	res = append(res, "left")
+	res = append(res, "right")
+
+	return
+}
+
+// Utility function for WhiteSpaceEnum
+// if enum values are string, it is stored with the value
+// if enum values are int, they are stored with the code of the value
+func (whitespaceenum WhiteSpaceEnum) ToString() (res string) {
+
+	// migration of former implementation of enum
+	switch whitespaceenum {
+	// insertion code per enum code
+	case WhiteSpaceEnumNormal:
+		res = "normal"
+	case WhiteSpaceEnumPre:
+		res = "pre"
+	case WhiteSpaceEnumPreWrap:
+		res = "pre-wrap"
+	case WhiteSpaceEnumPreLine:
+		res = "pre-line"
+	}
+	return
+}
+
+func (whitespaceenum *WhiteSpaceEnum) FromString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "normal":
+		*whitespaceenum = WhiteSpaceEnumNormal
+		return
+	case "pre":
+		*whitespaceenum = WhiteSpaceEnumPre
+		return
+	case "pre-wrap":
+		*whitespaceenum = WhiteSpaceEnumPreWrap
+		return
+	case "pre-line":
+		*whitespaceenum = WhiteSpaceEnumPreLine
+		return
+	default:
+		return errUnkownEnum
+	}
+}
+
+func (whitespaceenum *WhiteSpaceEnum) FromCodeString(input string) (err error) {
+
+	switch input {
+	// insertion code per enum code
+	case "WhiteSpaceEnumNormal":
+		*whitespaceenum = WhiteSpaceEnumNormal
+	case "WhiteSpaceEnumPre":
+		*whitespaceenum = WhiteSpaceEnumPre
+	case "WhiteSpaceEnumPreWrap":
+		*whitespaceenum = WhiteSpaceEnumPreWrap
+	case "WhiteSpaceEnumPreLine":
+		*whitespaceenum = WhiteSpaceEnumPreLine
+	default:
+		err = errUnkownEnum
+	}
+	return
+}
+
+func (whitespaceenum *WhiteSpaceEnum) ToCodeString() (res string) {
+
+	switch *whitespaceenum {
+	// insertion code per enum code
+	case WhiteSpaceEnumNormal:
+		res = "WhiteSpaceEnumNormal"
+	case WhiteSpaceEnumPre:
+		res = "WhiteSpaceEnumPre"
+	case WhiteSpaceEnumPreWrap:
+		res = "WhiteSpaceEnumPreWrap"
+	case WhiteSpaceEnumPreLine:
+		res = "WhiteSpaceEnumPreLine"
+	}
+	return
+}
+
+func (whitespaceenum WhiteSpaceEnum) Codes() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "WhiteSpaceEnumNormal")
+	res = append(res, "WhiteSpaceEnumPre")
+	res = append(res, "WhiteSpaceEnumPreWrap")
+	res = append(res, "WhiteSpaceEnumPreLine")
+
+	return
+}
+
+func (whitespaceenum WhiteSpaceEnum) CodeValues() (res []string) {
+
+	res = make([]string, 0)
+
+	// insertion code per enum code
+	res = append(res, "normal")
+	res = append(res, "pre")
+	res = append(res, "pre-wrap")
+	res = append(res, "pre-line")
 
 	return
 }

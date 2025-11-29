@@ -4,6 +4,7 @@ import { RectAPI } from './rect-api'
 import { FrontRepo } from './front-repo.service';
 
 // insertion point for imports
+import { Condition } from './condition'
 import { Animate } from './animate'
 import { RectAnchoredText } from './rectanchoredtext'
 import { RectAnchoredRect } from './rectanchoredrect'
@@ -16,8 +17,6 @@ export class Rect {
 
 	static GONGSTRUCT_NAME = "Rect"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -55,12 +54,21 @@ export class Rect {
 	OriginalFillOpacity: number = 0
 	HasToolTip: boolean = false
 	ToolTipText: string = ""
+	ToolTipPosition: string = ""
+	MouseX: number = 0
+	MouseY: number = 0
+	MouseEventKey: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+	HoveringTrigger: Array<Condition> = []
+	DisplayConditions: Array<Condition> = []
 	Animations: Array<Animate> = []
 	RectAnchoredTexts: Array<RectAnchoredText> = []
 	RectAnchoredRects: Array<RectAnchoredRect> = []
 	RectAnchoredPaths: Array<RectAnchoredPath> = []
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export function CopyRectToRectAPI(rect: Rect, rectAPI: RectAPI) {
@@ -104,10 +112,24 @@ export function CopyRectToRectAPI(rect: Rect, rectAPI: RectAPI) {
 	rectAPI.OriginalFillOpacity = rect.OriginalFillOpacity
 	rectAPI.HasToolTip = rect.HasToolTip
 	rectAPI.ToolTipText = rect.ToolTipText
+	rectAPI.ToolTipPosition = rect.ToolTipPosition
+	rectAPI.MouseX = rect.MouseX
+	rectAPI.MouseY = rect.MouseY
+	rectAPI.MouseEventKey = rect.MouseEventKey
 
 	// insertion point for pointer fields encoding
 
 	// insertion point for slice of pointers fields encoding
+	rectAPI.RectPointersEncoding.HoveringTrigger = []
+	for (let _condition of rect.HoveringTrigger) {
+		rectAPI.RectPointersEncoding.HoveringTrigger.push(_condition.ID)
+	}
+
+	rectAPI.RectPointersEncoding.DisplayConditions = []
+	for (let _condition of rect.DisplayConditions) {
+		rectAPI.RectPointersEncoding.DisplayConditions.push(_condition.ID)
+	}
+
 	rectAPI.RectPointersEncoding.Animations = []
 	for (let _animate of rect.Animations) {
 		rectAPI.RectPointersEncoding.Animations.push(_animate.ID)
@@ -175,10 +197,38 @@ export function CopyRectAPIToRect(rectAPI: RectAPI, rect: Rect, frontRepo: Front
 	rect.OriginalFillOpacity = rectAPI.OriginalFillOpacity
 	rect.HasToolTip = rectAPI.HasToolTip
 	rect.ToolTipText = rectAPI.ToolTipText
+	rect.ToolTipPosition = rectAPI.ToolTipPosition
+	rect.MouseX = rectAPI.MouseX
+	rect.MouseY = rectAPI.MouseY
+	rect.MouseEventKey = rectAPI.MouseEventKey
 
 	// insertion point for pointer fields encoding
 
 	// insertion point for slice of pointers fields encoding
+	if (!Array.isArray(rectAPI.RectPointersEncoding.HoveringTrigger)) {
+		console.error('Rects is not an array:', rectAPI.RectPointersEncoding.HoveringTrigger);
+		return;
+	}
+
+	rect.HoveringTrigger = new Array<Condition>()
+	for (let _id of rectAPI.RectPointersEncoding.HoveringTrigger) {
+		let _condition = frontRepo.map_ID_Condition.get(_id)
+		if (_condition != undefined) {
+			rect.HoveringTrigger.push(_condition!)
+		}
+	}
+	if (!Array.isArray(rectAPI.RectPointersEncoding.DisplayConditions)) {
+		console.error('Rects is not an array:', rectAPI.RectPointersEncoding.DisplayConditions);
+		return;
+	}
+
+	rect.DisplayConditions = new Array<Condition>()
+	for (let _id of rectAPI.RectPointersEncoding.DisplayConditions) {
+		let _condition = frontRepo.map_ID_Condition.get(_id)
+		if (_condition != undefined) {
+			rect.DisplayConditions.push(_condition!)
+		}
+	}
 	if (!Array.isArray(rectAPI.RectPointersEncoding.Animations)) {
 		console.error('Rects is not an array:', rectAPI.RectPointersEncoding.Animations);
 		return;

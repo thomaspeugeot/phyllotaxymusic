@@ -1,6 +1,7 @@
 import * as svg from '../../../svg/src/public-api'
 import { Segment } from './draw.segments'
 import { getFunctionName } from './get.function.name'
+import { SvgOrientationType } from './svg-orientation-type'
 
 
 
@@ -42,67 +43,63 @@ export function updateLinkFromCursor(
         return
     }
 
-    if (segment.Orientation == svg.OrientationType.ORIENTATION_HORIZONTAL) {
+    if (segment.Orientation == SvgOrientationType.ORIENTATION_HORIZONTAL) {
 
         // set up the cursor style
         document.body.style.cursor = 'ns-resize'
 
         let deltaY = pointAtMouseMove.Y - pointAtMouseDown!.Y
+
+        // first segment
         if (draggedSegmentNumber == 0 && deltaY != 0) {
 
-            let newStartRatio = (pointAtMouseMove.Y - previousStart!.Y) / previousStart!.Height
-            link.StartRatio = newStartRatio
+            let newRatio = (pointAtMouseMove.Y - previousStart!.Y) / previousStart!.Height
 
-            if (newStartRatio < 0 || newStartRatio > 1) {
+            if (newRatio < 0 || newRatio > 1) {
 
                 let nextStartRatio = (pointAtMouseMove.X - link.Start!.X) / link.Start!.Width
 
-                // we swap first segment from horizontal to vertical only if the new ratio
+                // we swap the segment from horizontal to vertical only if the new ratio
                 // is within 0 and 1 
                 if (nextStartRatio >= 0 && nextStartRatio <= 1) {
 
-                    // the cursor is at the left of the start rectangle
-                    if (newStartRatio < 0) {
-
+                    if (newRatio < 0) {
                         // we compute the CornerOffsetRatio in order to have the vertical middle segment
                         // at the left of the End Rect
                         let targetY_ForVerticalMiddleSegment = pointAtMouseMove.Y
-                        // Math.max(link.Start!.Y - offSetForNewMidlleSegment, offsetFromBorderForNewMidlleSegment)
-
                         link.CornerOffsetRatio = (targetY_ForVerticalMiddleSegment - link.Start!.Y) / link.Start!.Height
                     }
 
                     // 
-                    if (newStartRatio > 1) {
+                    if (newRatio > 1) {
                         let targetY_ForVerticalMiddleSegment = pointAtMouseMove.Y
-
                         link.CornerOffsetRatio = (targetY_ForVerticalMiddleSegment - link.Start!.Y) / link.Start!.Height
-
-                        console.log("link.CornerOffsetRatio", link.CornerOffsetRatio)
                     }
                     // switch dragged element to next segment
                     draggedSegmentNumber = 1
 
-                    newStartRatio = nextStartRatio
-                    link.StartOrientation = svg.OrientationType.ORIENTATION_VERTICAL
-                    link.StartRatio = newStartRatio
+                    newRatio = nextStartRatio
+                    link.StartOrientation = SvgOrientationType.ORIENTATION_VERTICAL
+                    link.StartRatio = newRatio
                 } else {
                     document.body.style.cursor = 'not-allowed'
-                    if (newStartRatio < 0) { newStartRatio = 0 }
-                    if (newStartRatio > 1) { newStartRatio = 1 }
+                    if (newRatio < 0) { newRatio = 0 }
+                    if (newRatio > 1) { newRatio = 1 }
                 }
             }
+            link.StartRatio = newRatio
         }
 
         // last segment
         if (draggedSegmentNumber == segments!.length - 1 && deltaY != 0) {
 
-            // console.log(getFunctionName(), previousEnd?.Y)
             let newRatio = (pointAtMouseMove.Y - previousEnd!.Y) / previousEnd!.Height
 
             if (newRatio < 0 || newRatio > 1) {
                 let nextStartRatio = (pointAtMouseMove.X - link.End!.X) / link.End!.Width
 
+                // we swap the segment from horizontal to vertical only if the new ratio
+                // is within 0 and 1 
                 if (nextStartRatio >= 0 && nextStartRatio <= 1) {
 
                     if (newRatio < 0) {
@@ -139,9 +136,7 @@ export function updateLinkFromCursor(
             link.CornerOffsetRatio = newCornerOffsetRatio
         }
     }
-    if (segment.Orientation == svg.OrientationType.ORIENTATION_VERTICAL) {
-
-
+    if (segment.Orientation == SvgOrientationType.ORIENTATION_VERTICAL) {
 
         // set up the cursor style
         document.body.style.cursor = 'ew-resize'
@@ -177,7 +172,7 @@ export function updateLinkFromCursor(
                     }
 
                     newStartRatio = newStartVerticalRatio
-                    link.StartOrientation = svg.OrientationType.ORIENTATION_HORIZONTAL
+                    link.StartOrientation = SvgOrientationType.ORIENTATION_HORIZONTAL
                     link.StartRatio = newStartVerticalRatio
                 } else {
                     document.body.style.cursor = 'not-allowed'
@@ -214,7 +209,7 @@ export function updateLinkFromCursor(
                     }
 
                     newEndRatio = newOrientationRatio
-                    link.EndOrientation = svg.OrientationType.ORIENTATION_HORIZONTAL
+                    link.EndOrientation = SvgOrientationType.ORIENTATION_HORIZONTAL
                     link.EndRatio = newEndRatio
                     // switch dragged element to previous segment
                     draggedSegmentNumber = segments!.length - 1

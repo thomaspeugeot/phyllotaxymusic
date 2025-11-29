@@ -94,7 +94,7 @@ export class FormService {
       catchError(this.handleError<FormAPI>('postForm'))
     );
   }
-  
+
   /** POST: add a new form to the server */
   post(formdb: FormAPI, Name: string, frontRepo: FrontRepo): Observable<FormAPI> {
     return this.postForm(formdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class FormService {
   private handleError<T>(operation = 'operation in FormService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FormService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

@@ -43,7 +43,6 @@ func (impl *BeforeCommitImplementation) BeforeCommit(stage *models.Stage) {
 		packageName = "main"
 	}
 
-	stage.Checkout()
 	stage.Marshall(file, "github.com/fullstack-lang/gong/lib/button/go/models", packageName)
 }
 
@@ -114,9 +113,6 @@ func NewStack(
 	stack.BackRepo = backRepo
 
 	if unmarshallFromCode != "" {
-		stage.Checkout()
-		stage.Reset()
-		stage.Commit()
 		err := models.ParseAstFile(stage, unmarshallFromCode)
 
 		// if the application is run with -unmarshallFromCode=xxx.go -marshallOnCommit
@@ -125,7 +121,7 @@ func NewStack(
 			log.Println("no file to read " + err.Error())
 		}
 
-		stage.Commit()
+		stage.ComputeInstancesNb()
 	} else {
 		// in case the database is used, checkout the content to the stage
 		stage.Checkout()

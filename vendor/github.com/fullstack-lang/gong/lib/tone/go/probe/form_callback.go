@@ -81,9 +81,8 @@ func (freqencyFormCallback *FreqencyFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Note"
 				rf.Fieldname = "Frequencies"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := freqency_.GongGetReverseFieldOwner(
 					freqencyFormCallback.probe.stageOfInterest,
-					freqency_,
 					&rf)
 
 				var ok bool
@@ -140,7 +139,7 @@ func (freqencyFormCallback *FreqencyFormCallback) OnSave() {
 	}
 
 	freqencyFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Freqency](
+	updateAndCommitTable[*models.Freqency](
 		freqencyFormCallback.probe,
 	)
 	freqencyFormCallback.probe.tableStage.Commit()
@@ -250,7 +249,7 @@ func (noteFormCallback *NoteFormCallback) OnSave() {
 	}
 
 	noteFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Note](
+	updateAndCommitTable[*models.Note](
 		noteFormCallback.probe,
 	)
 	noteFormCallback.probe.tableStage.Commit()
@@ -329,7 +328,7 @@ func (playerFormCallback *PlayerFormCallback) OnSave() {
 	}
 
 	playerFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Player](
+	updateAndCommitTable[*models.Player](
 		playerFormCallback.probe,
 	)
 	playerFormCallback.probe.tableStage.Commit()

@@ -8,8 +8,6 @@ export class FormSortAssocButtonAPI {
 
 	static GONGSTRUCT_NAME = "FormSortAssocButton"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -17,10 +15,14 @@ export class FormSortAssocButtonAPI {
 	Label: string = ""
 	HasToolTip: boolean = false
 	ToolTipText: string = ""
+	MatTooltipShowDelay: string = ""
 
 	// insertion point for other decls
 
 	FormSortAssocButtonPointersEncoding: FormSortAssocButtonPointersEncoding = new FormSortAssocButtonPointersEncoding
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export class FormSortAssocButtonPointersEncoding {

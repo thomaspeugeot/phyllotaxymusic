@@ -10,7 +10,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct Node
 	// insertion point per field
-	clear(stage.Node_Children_reverseMap)
 	stage.Node_Children_reverseMap = make(map[*Node]*Node)
 	for node := range stage.Nodes {
 		_ = node
@@ -18,7 +17,6 @@ func (stage *Stage) ComputeReverseMaps() {
 			stage.Node_Children_reverseMap[_node] = node
 		}
 	}
-	clear(stage.Node_Buttons_reverseMap)
 	stage.Node_Buttons_reverseMap = make(map[*Button]*Node)
 	for node := range stage.Nodes {
 		_ = node
@@ -32,7 +30,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct Tree
 	// insertion point per field
-	clear(stage.Tree_RootNodes_reverseMap)
 	stage.Tree_RootNodes_reverseMap = make(map[*Node]*Tree)
 	for tree := range stage.Trees {
 		_ = tree
@@ -41,4 +38,58 @@ func (stage *Stage) ComputeReverseMaps() {
 		}
 	}
 
+}
+
+func (stage *Stage) GetInstances() (res []GongstructIF) {
+
+	// insertion point per named struct
+	for instance := range stage.Buttons {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Nodes {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SVGIcons {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Trees {
+		res = append(res, instance)
+	}
+
+	return
+}
+
+// insertion point per named struct
+func (button *Button) GongCopy() GongstructIF {
+	newInstance := *button
+	return &newInstance
+}
+
+func (node *Node) GongCopy() GongstructIF {
+	newInstance := *node
+	return &newInstance
+}
+
+func (svgicon *SVGIcon) GongCopy() GongstructIF {
+	newInstance := *svgicon
+	return &newInstance
+}
+
+func (tree *Tree) GongCopy() GongstructIF {
+	newInstance := *tree
+	return &newInstance
+}
+
+// ComputeReference will creates a deep copy of each of the staged elements
+func (stage *Stage) ComputeReference() {
+	stage.reference = make(map[GongstructIF]GongstructIF)
+	for _, instance := range stage.GetInstances() {
+		stage.reference[instance] = instance.GongCopy()
+	}
+	stage.new = make(map[GongstructIF]struct{})
+	stage.modified = make(map[GongstructIF]struct{})
+	stage.deleted = make(map[GongstructIF]struct{})
 }

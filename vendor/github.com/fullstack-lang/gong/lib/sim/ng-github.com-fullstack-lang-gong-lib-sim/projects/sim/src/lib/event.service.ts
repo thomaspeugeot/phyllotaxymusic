@@ -94,7 +94,7 @@ export class EventService {
       catchError(this.handleError<EventAPI>('postEvent'))
     );
   }
-  
+
   /** POST: add a new event to the server */
   post(eventdb: EventAPI, Name: string, frontRepo: FrontRepo): Observable<EventAPI> {
     return this.postEvent(eventdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class EventService {
   private handleError<T>(operation = 'operation in EventService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("EventService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

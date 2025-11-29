@@ -260,13 +260,13 @@ func (controller *Controller) UpdateLogoOnTheRight(c *gin.Context) {
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(_values) == 1 {
-		value := _values["Name"]
-		if len(value) == 1 {
-			stackPath = value[0]
-			// log.Println("UpdateLogoOnTheRight", "Name", stackPath)
+	if len(_values) >= 1 {
+		_nameValues := _values["Name"]
+		if len(_nameValues) == 1 {
+			stackPath = _nameValues[0]
 		}
 	}
+
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		message := "PATCH Stack github.com/fullstack-lang/gong/lib/split/go, Unkown stack: \"" + stackPath + "\"\n"
@@ -328,7 +328,7 @@ func (controller *Controller) UpdateLogoOnTheRight(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	logoontherightOld := backRepo.BackRepoLogoOnTheRight.Map_LogoOnTheRightDBID_LogoOnTheRightPtr[logoontherightDB.ID]
 	if logoontherightOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), logoontherightOld, logoontherightNew)
+		models.OnAfterUpdateFromFront(backRepo.GetStage(), logoontherightOld, logoontherightNew)
 	}
 
 	// an UPDATE generates a back repo commit increase

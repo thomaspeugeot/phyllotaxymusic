@@ -95,7 +95,7 @@ export class CircleService {
       catchError(this.handleError<CircleAPI>('postCircle'))
     );
   }
-  
+
   /** POST: add a new circle to the server */
   post(circledb: CircleAPI, Name: string, frontRepo: FrontRepo): Observable<CircleAPI> {
     return this.postCircle(circledb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class CircleService {
   private handleError<T>(operation = 'operation in CircleService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("CircleService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

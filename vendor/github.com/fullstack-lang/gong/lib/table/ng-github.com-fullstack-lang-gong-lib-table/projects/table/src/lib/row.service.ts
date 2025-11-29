@@ -95,7 +95,7 @@ export class RowService {
       catchError(this.handleError<RowAPI>('postRow'))
     );
   }
-  
+
   /** POST: add a new row to the server */
   post(rowdb: RowAPI, Name: string, frontRepo: FrontRepo): Observable<RowAPI> {
     return this.postRow(rowdb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class RowService {
   private handleError<T>(operation = 'operation in RowService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("RowService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

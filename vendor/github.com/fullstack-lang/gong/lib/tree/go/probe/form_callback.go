@@ -93,9 +93,8 @@ func (buttonFormCallback *ButtonFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Node"
 				rf.Fieldname = "Buttons"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := button_.GongGetReverseFieldOwner(
 					buttonFormCallback.probe.stageOfInterest,
-					button_,
 					&rf)
 
 				var ok bool
@@ -152,7 +151,7 @@ func (buttonFormCallback *ButtonFormCallback) OnSave() {
 	}
 
 	buttonFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Button](
+	updateAndCommitTable[*models.Button](
 		buttonFormCallback.probe,
 	)
 	buttonFormCallback.probe.tableStage.Commit()
@@ -335,9 +334,8 @@ func (nodeFormCallback *NodeFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Node"
 				rf.Fieldname = "Children"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := node_.GongGetReverseFieldOwner(
 					nodeFormCallback.probe.stageOfInterest,
-					node_,
 					&rf)
 
 				var ok bool
@@ -402,9 +400,8 @@ func (nodeFormCallback *NodeFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Tree"
 				rf.Fieldname = "RootNodes"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := node_.GongGetReverseFieldOwner(
 					nodeFormCallback.probe.stageOfInterest,
-					node_,
 					&rf)
 
 				var ok bool
@@ -461,7 +458,7 @@ func (nodeFormCallback *NodeFormCallback) OnSave() {
 	}
 
 	nodeFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Node](
+	updateAndCommitTable[*models.Node](
 		nodeFormCallback.probe,
 	)
 	nodeFormCallback.probe.tableStage.Commit()
@@ -540,7 +537,7 @@ func (svgiconFormCallback *SVGIconFormCallback) OnSave() {
 	}
 
 	svgiconFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.SVGIcon](
+	updateAndCommitTable[*models.SVGIcon](
 		svgiconFormCallback.probe,
 	)
 	svgiconFormCallback.probe.tableStage.Commit()
@@ -642,7 +639,7 @@ func (treeFormCallback *TreeFormCallback) OnSave() {
 	}
 
 	treeFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Tree](
+	updateAndCommitTable[*models.Tree](
 		treeFormCallback.probe,
 	)
 	treeFormCallback.probe.tableStage.Commit()

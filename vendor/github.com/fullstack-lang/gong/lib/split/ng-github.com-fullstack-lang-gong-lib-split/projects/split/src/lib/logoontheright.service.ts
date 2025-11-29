@@ -94,7 +94,7 @@ export class LogoOnTheRightService {
       catchError(this.handleError<LogoOnTheRightAPI>('postLogoOnTheRight'))
     );
   }
-  
+
   /** POST: add a new logoontheright to the server */
   post(logoontherightdb: LogoOnTheRightAPI, Name: string, frontRepo: FrontRepo): Observable<LogoOnTheRightAPI> {
     return this.postLogoOnTheRight(logoontherightdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class LogoOnTheRightService {
   private handleError<T>(operation = 'operation in LogoOnTheRightService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("LogoOnTheRightService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

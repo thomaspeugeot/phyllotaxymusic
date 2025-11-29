@@ -11,7 +11,7 @@ import { MatDividerModule } from '@angular/material/divider'
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 
 
 import { manageHandles } from '../manage.handles';
@@ -41,6 +41,8 @@ import { LinkSegmentsPipe } from '../link-segments.pipe'
 
 import { formatSVG, processSVG } from '../cleanandresizesvg'
 import { LayoutService } from '../layout.service';
+import { getPosition } from '../get-position';
+import { controlPointToPoint, pointToControlPoint } from '../control-points';
 
 @Component({
   selector: 'lib-svg-specific',
@@ -82,7 +84,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
     // Now you can use textWidthCalculator
     this.changeDetectorRef.detectChanges() // this is necessary to have the width configuration working
     this.oneEm = this.textWidthCalculator!.measureTextHeight("A");
-    console.log("this.oneEm", this.oneEm)
+    // console.log("this.oneEm", this.oneEm)
     this.changeDetectorRef.detectChanges() // this is necessary to have the width configuration working
 
     // Initial height calculation after view is ready
@@ -228,6 +230,19 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   //
+  // HOVERING MANAGEMENT
+  //
+  // Map to store hover states for Conditions by their ID
+  public conditionHoverStates: Map<number, boolean> = new Map<number, boolean>()
+
+
+  // for control point dragging
+  controlPointDragging: boolean = false
+  activeControlPointLink: svg.Link | undefined
+  activeControlPointIndex: number = 0
+  ControlPointAtMouseDown: svg.ControlPoint | undefined
+
+  //
   // BACKEND MANAGEMENT
   //
   public gongsvgFrontRepo?: svg.FrontRepo
@@ -248,6 +263,7 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public rectService: svg.RectService,
     private linkService: svg.LinkService,
+    private controlPointService: svg.ControlPointService,
     private anchoredTextService: svg.LinkAnchoredTextService,
     private rectAnchoredPathService: svg.RectAnchoredPathService,
     private svgTextService: svg.SvgTextService,
@@ -294,6 +310,9 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
       gongsvgsFrontRepo => {
         this.gongsvgFrontRepo = gongsvgsFrontRepo
         //   "in promise to front repose servive pull", "gongsvgFrontRepo not good")
+
+        // Initialize conditionHoverStates after repo is loaded
+        this.initializeConditionHoverStates()
 
         if (this.gongsvgFrontRepo.getFrontArray(svg.SVG.GONGSTRUCT_NAME).length == 1) {
           this.svg = this.gongsvgFrontRepo.getFrontArray<svg.SVG>(svg.SVG.GONGSTRUCT_NAME)[0]
@@ -467,6 +486,17 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
     if (distanceMoved < this.dragThreshold && this.State == StateEnumType.NOT_EDITABLE) {
       console.log(getFunctionName(), "distanceMoved below threshold in state", this.State)
 
+      this.draggedRect!.MouseX = this.PointAtMouseUp.X
+      this.draggedRect!.MouseY = this.PointAtMouseUp.Y
+      if (event.shiftKey) {
+        this.draggedRect!.MouseEventKey = svg.MouseEventKey.MouseEventKeyShift
+      }
+      if (event.altKey) {
+        this.draggedRect!.MouseEventKey = svg.MouseEventKey.MouseEventKeyAlt
+      }
+      if (event.metaKey) {
+        this.draggedRect!.MouseEventKey = svg.MouseEventKey.MouseEventKeyMeta
+      }
       this.rectService.updateFront(this.draggedRect!, this.Name).subscribe(
         _ => {
         }
@@ -520,6 +550,18 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.State == StateEnumType.LINK_DRAGGING) {
       this.State = StateEnumType.WAITING_FOR_USER_INPUT
       console.log(getFunctionName(), "state at exit", this.State)
+      let point = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
+      this.draggedLink!.MouseX = point.X
+      this.draggedLink!.MouseY = point.Y
+      if (event.shiftKey) {
+        this.draggedLink!.MouseEventKey = svg.MouseEventKey.MouseEventKeyShift
+      }
+      if (event.altKey) {
+        this.draggedLink!.MouseEventKey = svg.MouseEventKey.MouseEventKeyAlt
+      }
+      if (event.metaKey) {
+        this.draggedLink!.MouseEventKey = svg.MouseEventKey.MouseEventKeyMeta
+      }
       this.linkService.updateFront(this.draggedLink!, this.Name).subscribe(
         () => {
         }
@@ -549,6 +591,11 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
         () => {
         }
       )
+    }
+
+    if (this.State == StateEnumType.CONTROL_POINT_DRAGGING) {
+      this.State = StateEnumType.WAITING_FOR_USER_INPUT
+      console.log(getFunctionName(), "state at exit", this.State)
     }
 
     this.computeShapeStates()
@@ -742,6 +789,32 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     }
+
+    if (this.State == StateEnumType.CONTROL_POINT_DRAGGING) {
+      if (!this.activeControlPointLink || !this.ControlPointAtMouseDown) {
+        return
+      }
+
+      // Get the actual point object from the link
+      let draggedPoint = this.activeControlPointLink.ControlPoints[this.activeControlPointIndex]
+
+      // Update its coordinates based on the drag delta
+      let point = new (svg.Point)
+      point = controlPointToPoint(this.ControlPointAtMouseDown)
+
+      point.X = point.X + deltaX
+      point.Y = point.Y + deltaY
+
+      let draggedPointTmp = pointToControlPoint(point, this.activeControlPointLink)
+      draggedPoint.X_Relative = draggedPointTmp.X_Relative
+      draggedPoint.Y_Relative = draggedPointTmp.Y_Relative
+      draggedPoint.ClosestRect = draggedPointTmp.ClosestRect
+
+      // Recompute the link's segments so the line redraws live
+      let segments = drawSegmentsFromLink(this.activeControlPointLink!)
+      this.map_Link_Segment.set(this.activeControlPointLink!, segments)
+    }
+
     this.changeDetectorRef.detectChanges()
   }
 
@@ -955,40 +1028,10 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
   public getPosition(
     startRect: svg.Rect | undefined,
     position: string | undefined,
-    endRect?: svg.Rect | undefined
+    endRect: svg.Rect | undefined,
+    offset: number
   ): Coordinate {
-
-    let coordinate: Coordinate = [0, 0]
-
-    if (startRect == undefined || position == undefined) {
-      return coordinate
-    }
-
-    switch (position) {
-      case svg.AnchorType.ANCHOR_BOTTOM:
-        coordinate = [startRect.X + startRect.Width / 2, startRect.Y + startRect.Height]
-        break;
-      case svg.AnchorType.ANCHOR_TOP:
-        coordinate = [startRect.X + startRect.Width / 2, startRect.Y]
-        break;
-      case svg.AnchorType.ANCHOR_LEFT:
-        coordinate = [startRect.X, startRect.Y + startRect.Height / 2]
-        break;
-      case svg.AnchorType.ANCHOR_RIGHT:
-        coordinate = [startRect.X + startRect.Width, startRect.Y + startRect.Height / 2]
-        break;
-      case svg.AnchorType.ANCHOR_CENTER:
-        if (endRect == undefined) {
-          coordinate = [startRect.X + startRect.Width / 2, startRect.Y + startRect.Height / 2]
-        } else {
-          let endRectCenter = createPoint(endRect.X + endRect.Width / 2, endRect.Y + endRect.Height / 2)
-          let borderPoint = drawLineFromRectToB(startRect, endRectCenter)
-          coordinate = [borderPoint.X, borderPoint.Y]
-        }
-        break;
-    }
-
-    return coordinate
+    return getPosition(startRect, position, endRect, offset)
   }
 
   generatesSVG(download: boolean) {
@@ -1143,206 +1186,317 @@ export class SvgSpecificComponent implements OnInit, OnDestroy, AfterViewInit {
         this.changeDetectorRef.detectChanges();
       }
     }
+
+    if (rect.HoveringTrigger && rect.HoveringTrigger.length > 0) {
+      rect.HoveringTrigger.forEach(condition => {
+        if (this.conditionHoverStates.has(condition.ID)) {
+          this.conditionHoverStates.set(condition.ID, isHovered);
+          console.log(`Condition ID ${condition.ID} hover state set to: ${isHovered}`);
+        } else {
+          console.warn(`Condition ID ${condition.ID} not found in hover states map during hover event.`);
+        }
+      });
+    }
   }
 
 
-  // In your component.ts file
-
-getContextForAnchoredRect(anchoredRect: svg.RectAnchoredRect, parentRect: svg.Rect) {
+  getContextForAnchoredRect(anchoredRect: svg.RectAnchoredRect, parentRect: svg.Rect) {
     let anchorX = 0;
     let anchorY = 0;
 
     // Calculate width based on whether it should follow the parent
     const width = anchoredRect.WidthFollowRect
-        ? parentRect.Width
-        : anchoredRect.Width;
+      ? parentRect.Width
+      : anchoredRect.Width;
 
     // The switch logic is now neatly contained in the component method
     switch (anchoredRect.RectAnchorType) {
-        case svg.RectAnchorType.RECT_TOP:
-            anchorX = parentRect.X + parentRect.Width / 2 + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_TOP_LEFT:
-            anchorX = parentRect.X + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_TOP_RIGHT:
-            anchorX = parentRect.X + parentRect.Width + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM:
-            anchorX = parentRect.X + parentRect.Width / 2 + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_LEFT:
-            anchorX = parentRect.X + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_LEFT_LEFT:
-            anchorX = parentRect.X - parentRect.Height + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_BOTTOM_LEFT:
-            anchorX = parentRect.X + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + parentRect.Height + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_RIGHT:
-            anchorX = parentRect.X + parentRect.Width + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_INSIDE_RIGHT:
-            anchorX = parentRect.X + parentRect.Width - anchoredRect.Width + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height -anchoredRect.Height + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_LEFT:
-            anchorX = parentRect.X + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height / 2 + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_RIGHT:
-            anchorX = parentRect.X + parentRect.Width + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height / 2 + anchoredRect.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_CENTER:
-            anchorX = parentRect.X + parentRect.Width / 2 + anchoredRect.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height / 2 + anchoredRect.Y_Offset;
-            break;
+      case svg.RectAnchorType.RECT_TOP:
+        anchorX = parentRect.X + parentRect.Width / 2 + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_TOP_LEFT:
+        anchorX = parentRect.X + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_TOP_RIGHT:
+        anchorX = parentRect.X + parentRect.Width + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM:
+        anchorX = parentRect.X + parentRect.Width / 2 + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_LEFT:
+        anchorX = parentRect.X + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_LEFT_LEFT:
+        anchorX = parentRect.X - parentRect.Height + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_BOTTOM_LEFT:
+        anchorX = parentRect.X + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + parentRect.Height + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_RIGHT:
+        anchorX = parentRect.X + parentRect.Width + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_INSIDE_RIGHT:
+        anchorX = parentRect.X + parentRect.Width - anchoredRect.Width + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height - anchoredRect.Height + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_LEFT:
+        anchorX = parentRect.X + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height / 2 + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_RIGHT:
+        anchorX = parentRect.X + parentRect.Width + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height / 2 + anchoredRect.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_CENTER:
+        anchorX = parentRect.X + parentRect.Width / 2 + anchoredRect.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height / 2 + anchoredRect.Y_Offset;
+        break;
     }
 
     // Return the complete context object that the template needs
     return {
-        rect: anchoredRect,
-        anchorX: anchorX,
-        anchorY: anchorY,
-        width: width,
+      rect: anchoredRect,
+      anchorX: anchorX,
+      anchorY: anchorY,
+      width: width,
     };
-}
+  }
 
-getContextForAnchoredPath(path: svg.RectAnchoredPath, parentRect: svg.Rect) {
+  getContextForAnchoredPath(path: svg.RectAnchoredPath, parentRect: svg.Rect) {
     let anchorX = 0;
     let anchorY = 0;
 
     // The switch logic is moved here from the template - now matches rect method exactly
     switch (path.RectAnchorType) {
-        case svg.RectAnchorType.RECT_TOP:
-            anchorX = parentRect.X + parentRect.Width / 2 + path.X_Offset;
-            anchorY = parentRect.Y + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_TOP_LEFT:
-            anchorX = parentRect.X + path.X_Offset;
-            anchorY = parentRect.Y + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_TOP_RIGHT:
-            anchorX = parentRect.X + parentRect.Width + path.X_Offset;
-            anchorY = parentRect.Y + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM:
-            anchorX = parentRect.X + parentRect.Width / 2 + path.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_LEFT:
-            anchorX = parentRect.X + path.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_LEFT_LEFT:
-            anchorX = parentRect.X - parentRect.Height + path.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_BOTTOM_LEFT:
-            anchorX = parentRect.X + path.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + parentRect.Height + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_RIGHT:
-            anchorX = parentRect.X + parentRect.Width + path.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_INSIDE_RIGHT:
-            anchorX = parentRect.X + parentRect.Width + path.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_LEFT:
-            anchorX = parentRect.X + path.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height / 2 + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_RIGHT:
-            anchorX = parentRect.X + parentRect.Width + path.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height / 2 + path.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_CENTER:
-            anchorX = parentRect.X + parentRect.Width / 2 + path.X_Offset;
-            anchorY = parentRect.Y + parentRect.Height / 2 + path.Y_Offset;
-            break;
+      case svg.RectAnchorType.RECT_TOP:
+        anchorX = parentRect.X + parentRect.Width / 2 + path.X_Offset;
+        anchorY = parentRect.Y + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_TOP_LEFT:
+        anchorX = parentRect.X + path.X_Offset;
+        anchorY = parentRect.Y + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_TOP_RIGHT:
+        anchorX = parentRect.X + parentRect.Width + path.X_Offset;
+        anchorY = parentRect.Y + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM:
+        anchorX = parentRect.X + parentRect.Width / 2 + path.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_LEFT:
+        anchorX = parentRect.X + path.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_LEFT_LEFT:
+        anchorX = parentRect.X - parentRect.Height + path.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_BOTTOM_LEFT:
+        anchorX = parentRect.X + path.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + parentRect.Height + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_RIGHT:
+        anchorX = parentRect.X + parentRect.Width + path.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_INSIDE_RIGHT:
+        anchorX = parentRect.X + parentRect.Width + path.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_LEFT:
+        anchorX = parentRect.X + path.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height / 2 + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_RIGHT:
+        anchorX = parentRect.X + parentRect.Width + path.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height / 2 + path.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_CENTER:
+        anchorX = parentRect.X + parentRect.Width / 2 + path.X_Offset;
+        anchorY = parentRect.Y + parentRect.Height / 2 + path.Y_Offset;
+        break;
     }
 
     // Return the context object for the template
     return {
-        path: path,
-        anchorX: anchorX,
-        anchorY: anchorY,
+      path: path,
+      anchorX: anchorX,
+      anchorY: anchorY,
     };
-}
+  }
 
-getContextForAnchoredText(text: svg.RectAnchoredText, rect: svg.Rect) {
+  getContextForAnchoredText(text: svg.RectAnchoredText, rect: svg.Rect) {
     let anchorX = 0;
     let anchorY = 0;
 
     // The same switch logic is now consistent with rect method
     switch (text.RectAnchorType) {
-        case svg.RectAnchorType.RECT_TOP:
-            anchorX = rect.X + rect.Width / 2 + text.X_Offset;
-            anchorY = rect.Y + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_TOP_LEFT:
-            anchorX = rect.X + text.X_Offset;
-            anchorY = rect.Y + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_TOP_RIGHT:
-            anchorX = rect.X + rect.Width + text.X_Offset;
-            anchorY = rect.Y + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM:
-            anchorX = rect.X + rect.Width / 2 + text.X_Offset;
-            anchorY = rect.Y + rect.Height + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_LEFT:
-            anchorX = rect.X + text.X_Offset;
-            anchorY = rect.Y + rect.Height + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_LEFT_LEFT:
-            anchorX = rect.X - rect.Height + text.X_Offset;
-            anchorY = rect.Y + rect.Height + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_BOTTOM_LEFT:
-            anchorX = rect.X + text.X_Offset;
-            anchorY = rect.Y + rect.Height + rect.Height + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_RIGHT:
-            anchorX = rect.X + rect.Width + text.X_Offset;
-            anchorY = rect.Y + rect.Height + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_BOTTOM_INSIDE_RIGHT:
-            anchorX = rect.X + rect.Width + text.X_Offset;
-            anchorY = rect.Y + rect.Height + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_LEFT:
-            anchorX = rect.X + text.X_Offset;
-            anchorY = rect.Y + rect.Height / 2 + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_RIGHT:
-            anchorX = rect.X + rect.Width + text.X_Offset;
-            anchorY = rect.Y + rect.Height / 2 + text.Y_Offset;
-            break;
-        case svg.RectAnchorType.RECT_CENTER:
-            anchorX = rect.X + rect.Width / 2 + text.X_Offset;
-            anchorY = rect.Y + rect.Height / 2 + text.Y_Offset;
-            break;
+      case svg.RectAnchorType.RECT_TOP:
+        anchorX = rect.X + rect.Width / 2 + text.X_Offset;
+        anchorY = rect.Y + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_TOP_LEFT:
+        anchorX = rect.X + text.X_Offset;
+        anchorY = rect.Y + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_TOP_RIGHT:
+        anchorX = rect.X + rect.Width + text.X_Offset;
+        anchorY = rect.Y + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM:
+        anchorX = rect.X + rect.Width / 2 + text.X_Offset;
+        anchorY = rect.Y + rect.Height + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_LEFT:
+        anchorX = rect.X + text.X_Offset;
+        anchorY = rect.Y + rect.Height + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_LEFT_LEFT:
+        anchorX = rect.X - rect.Height + text.X_Offset;
+        anchorY = rect.Y + rect.Height + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_BOTTOM_LEFT:
+        anchorX = rect.X + text.X_Offset;
+        anchorY = rect.Y + rect.Height + rect.Height + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_RIGHT:
+        anchorX = rect.X + rect.Width + text.X_Offset;
+        anchorY = rect.Y + rect.Height + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_BOTTOM_INSIDE_RIGHT:
+        anchorX = rect.X + rect.Width + text.X_Offset;
+        anchorY = rect.Y + rect.Height + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_LEFT:
+        anchorX = rect.X + text.X_Offset;
+        anchorY = rect.Y + rect.Height / 2 + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_RIGHT:
+        anchorX = rect.X + rect.Width + text.X_Offset;
+        anchorY = rect.Y + rect.Height / 2 + text.Y_Offset;
+        break;
+      case svg.RectAnchorType.RECT_CENTER:
+        anchorX = rect.X + rect.Width / 2 + text.X_Offset;
+        anchorY = rect.Y + rect.Height / 2 + text.Y_Offset;
+        break;
     }
 
     // Return the context object the template needs
     return {
-        text: text,
-        anchorX: anchorX,
-        anchorY: anchorY,
+      text: text,
+      anchorX: anchorX,
+      anchorY: anchorY,
     };
-}
+  }
+
+  getTooltipPosition(rect: svg.Rect): TooltipPosition {
+    // Check if ToolTipPosition is a valid, non-empty string
+    if (rect.ToolTipPosition) {
+      // If it exists, cast it to the TooltipPosition type
+      return rect.ToolTipPosition as TooltipPosition;
+    } else {
+      // Otherwise, provide a default position
+      return 'above'; // You can change this default to 'below', 'left', 'right', etc.
+    }
+  }
+
+  private initializeConditionHoverStates(): void {
+    this.conditionHoverStates.clear(); // Clear previous states if any
+    if (this.gongsvgFrontRepo) {
+      const conditions = this.gongsvgFrontRepo.getFrontArray<svg.Condition>(svg.Condition.GONGSTRUCT_NAME);
+      conditions.forEach(condition => {
+        this.conditionHoverStates.set(condition.ID, false); // Initialize all to false
+      });
+    }
+  }
+
+  // --- Helper function to check display conditions ---
+  shouldDisplayRect(rect: svg.Rect): boolean {
+    if (!rect.DisplayConditions || rect.DisplayConditions.length === 0) {
+      return true; // No conditions, always display
+    }
+
+    // Check if ALL display conditions are currently true in the state map
+    for (const condition of rect.DisplayConditions) {
+      const conditionState = this.conditionHoverStates.get(condition.ID);
+      // console.log(`Checking display for Rect ${rect.Name}: Condition ${condition.ID} state is ${conditionState}`);
+      if (conditionState === undefined || conditionState === false) {
+        // console.log(`Rect ${rect.Name} should NOT display because Condition ${condition.ID} is ${conditionState}`);
+        return false; // If any condition is missing or false, do not display
+      }
+    }
+    // console.log(`Rect ${rect.Name} should display`);
+    return true; // All conditions are true
+  }
+
+  isConditionHovered(conditionID: number): boolean {
+    return this.conditionHoverStates.get(conditionID) ?? false;
+  }
+
+  public getPolylinePoints(segments: Segment[]): string {
+    if (!segments || segments.length === 0) {
+      return "";
+    }
+    // Build the string: "x1,y1 x2,y2 x3,y3 ..."
+    // The first point
+    let points = `${segments[0].StartPoint.X},${segments[0].StartPoint.Y}`;
+    // All subsequent end points
+    for (const segment of segments) {
+      points += ` ${segment.EndPoint.X},${segment.EndPoint.Y}`;
+    }
+    return points;
+  }
+
+  controlPointMouseDown(event: MouseEvent, link: svg.Link, pointIndex: number): void {
+    this.PointAtMouseDown = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
+
+    if (this.State == StateEnumType.WAITING_FOR_USER_INPUT && !event.altKey && !event.shiftKey) {
+      // Set the state to CONTROL_POINT_DRAGGING
+      // (This assumes you've added CONTROL_POINT_DRAGGING to your StateEnumType)
+      this.State = StateEnumType.CONTROL_POINT_DRAGGING
+      console.log(getFunctionName(), "state at exit", this.State)
+
+      // Set tracking properties
+      this.controlPointDragging = true
+      this.activeControlPointLink = link
+      this.activeControlPointIndex = pointIndex
+
+      // Store a clone of the point's original position
+      this.ControlPointAtMouseDown = structuredClone(link.ControlPoints[pointIndex])
+
+      // Stop the event from bubbling up to the background rect
+      event.stopPropagation()
+    }
+  }
+
+  controlPointMouseUp(event: MouseEvent, controlPoint: svg.ControlPoint): void {
+    this.PointAtMouseUp = mouseCoordInComponentRef(event, this.zoom, this.shiftX, this.shiftY)
+    console.log(getFunctionName(), "state at entry", this.State)
+
+    // let draggedPoint = this.activeControlPointLink!.ControlPoints[this.activeControlPointIndex]
+
+    this.controlPointService.updateFront(controlPoint, this.Name).subscribe(
+      () => {
+      }
+    )
+    this.processMouseUp(event)
+  }
+
+  pointToControlPoint(point: svg.Point, link: svg.Link): svg.ControlPoint {
+    return pointToControlPoint(point, link)
+  }
+
+  controlPointToPoint(controlPoint: svg.ControlPoint): svg.Point {
+    return controlPointToPoint(controlPoint)
+  }
+
 }

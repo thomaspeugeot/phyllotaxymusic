@@ -94,7 +94,7 @@ export class SvgService {
       catchError(this.handleError<SvgAPI>('postSvg'))
     );
   }
-  
+
   /** POST: add a new svg to the server */
   post(svgdb: SvgAPI, Name: string, frontRepo: FrontRepo): Observable<SvgAPI> {
     return this.postSvg(svgdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class SvgService {
   private handleError<T>(operation = 'operation in SvgService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("SvgService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

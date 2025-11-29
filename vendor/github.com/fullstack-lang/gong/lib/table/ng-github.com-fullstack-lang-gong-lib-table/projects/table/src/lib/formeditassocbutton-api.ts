@@ -7,8 +7,6 @@ export class FormEditAssocButtonAPI {
 
 	static GONGSTRUCT_NAME = "FormEditAssocButton"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -19,10 +17,14 @@ export class FormEditAssocButtonAPI {
 	IsForSavePurpose: boolean = false
 	HasToolTip: boolean = false
 	ToolTipText: string = ""
+	MatTooltipShowDelay: string = ""
 
 	// insertion point for other decls
 
 	FormEditAssocButtonPointersEncoding: FormEditAssocButtonPointersEncoding = new FormEditAssocButtonPointersEncoding
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export class FormEditAssocButtonPointersEncoding {

@@ -93,9 +93,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Circle"
 				rf.Fieldname = "Animations"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -160,9 +159,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Ellipse"
 				rf.Fieldname = "Animates"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -227,9 +225,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Line"
 				rf.Fieldname = "Animates"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -294,9 +291,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "LinkAnchoredText"
 				rf.Fieldname = "Animates"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -361,9 +357,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Path"
 				rf.Fieldname = "Animates"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -428,9 +423,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Polygone"
 				rf.Fieldname = "Animates"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -495,9 +489,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Polyline"
 				rf.Fieldname = "Animates"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -562,9 +555,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Rect"
 				rf.Fieldname = "Animations"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -629,9 +621,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "RectAnchoredText"
 				rf.Fieldname = "Animates"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -696,9 +687,8 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Text"
 				rf.Fieldname = "Animates"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := animate_.GongGetReverseFieldOwner(
 					animateFormCallback.probe.stageOfInterest,
-					animate_,
 					&rf)
 
 				var ok bool
@@ -755,7 +745,7 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 	}
 
 	animateFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Animate](
+	updateAndCommitTable[*models.Animate](
 		animateFormCallback.probe,
 	)
 	animateFormCallback.probe.tableStage.Commit()
@@ -887,9 +877,8 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "Circles"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := circle_.GongGetReverseFieldOwner(
 					circleFormCallback.probe.stageOfInterest,
-					circle_,
 					&rf)
 
 				var ok bool
@@ -946,7 +935,7 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 	}
 
 	circleFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Circle](
+	updateAndCommitTable[*models.Circle](
 		circleFormCallback.probe,
 	)
 	circleFormCallback.probe.tableStage.Commit()
@@ -968,6 +957,364 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 	}
 
 	updateAndCommitTree(circleFormCallback.probe)
+}
+func __gong__New__ConditionFormCallback(
+	condition *models.Condition,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (conditionFormCallback *ConditionFormCallback) {
+	conditionFormCallback = new(ConditionFormCallback)
+	conditionFormCallback.probe = probe
+	conditionFormCallback.condition = condition
+	conditionFormCallback.formGroup = formGroup
+
+	conditionFormCallback.CreationMode = (condition == nil)
+
+	return
+}
+
+type ConditionFormCallback struct {
+	condition *models.Condition
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (conditionFormCallback *ConditionFormCallback) OnSave() {
+
+	// log.Println("ConditionFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	conditionFormCallback.probe.formStage.Checkout()
+
+	if conditionFormCallback.condition == nil {
+		conditionFormCallback.condition = new(models.Condition).Stage(conditionFormCallback.probe.stageOfInterest)
+	}
+	condition_ := conditionFormCallback.condition
+	_ = condition_
+
+	for _, formDiv := range conditionFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(condition_.Name), formDiv)
+		case "Rect:HoveringTrigger":
+			// WARNING : this form deals with the N-N association "Rect.HoveringTrigger []*Condition" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Condition). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Rect
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Rect"
+				rf.Fieldname = "HoveringTrigger"
+				formerAssociationSource := condition_.GongGetReverseFieldOwner(
+					conditionFormCallback.probe.stageOfInterest,
+					&rf)
+
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Rect)
+					if !ok {
+						log.Fatalln("Source of Rect.HoveringTrigger []*Condition, is not an Rect instance")
+					}
+				}
+			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.HoveringTrigger, condition_)
+					formerSource.HoveringTrigger = slices.Delete(formerSource.HoveringTrigger, idx, idx+1)
+				}
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Rect
+			for _rect := range *models.GetGongstructInstancesSet[models.Rect](conditionFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _rect.GetName() == newSourceName.GetName() {
+					newSource = _rect // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Rect.HoveringTrigger []*Condition, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// (3) append the new value to the new source field
+			newSource.HoveringTrigger = append(newSource.HoveringTrigger, condition_)
+		case "Rect:DisplayConditions":
+			// WARNING : this form deals with the N-N association "Rect.DisplayConditions []*Condition" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of Condition). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Rect
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Rect"
+				rf.Fieldname = "DisplayConditions"
+				formerAssociationSource := condition_.GongGetReverseFieldOwner(
+					conditionFormCallback.probe.stageOfInterest,
+					&rf)
+
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Rect)
+					if !ok {
+						log.Fatalln("Source of Rect.DisplayConditions []*Condition, is not an Rect instance")
+					}
+				}
+			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.DisplayConditions, condition_)
+					formerSource.DisplayConditions = slices.Delete(formerSource.DisplayConditions, idx, idx+1)
+				}
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Rect
+			for _rect := range *models.GetGongstructInstancesSet[models.Rect](conditionFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _rect.GetName() == newSourceName.GetName() {
+					newSource = _rect // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Rect.DisplayConditions []*Condition, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// (3) append the new value to the new source field
+			newSource.DisplayConditions = append(newSource.DisplayConditions, condition_)
+		}
+	}
+
+	// manage the suppress operation
+	if conditionFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		condition_.Unstage(conditionFormCallback.probe.stageOfInterest)
+	}
+
+	conditionFormCallback.probe.stageOfInterest.Commit()
+	updateAndCommitTable[*models.Condition](
+		conditionFormCallback.probe,
+	)
+	conditionFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if conditionFormCallback.CreationMode || conditionFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		conditionFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: FormName,
+		}).Stage(conditionFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__ConditionFormCallback(
+			nil,
+			conditionFormCallback.probe,
+			newFormGroup,
+		)
+		condition := new(models.Condition)
+		FillUpForm(condition, newFormGroup, conditionFormCallback.probe)
+		conditionFormCallback.probe.formStage.Commit()
+	}
+
+	updateAndCommitTree(conditionFormCallback.probe)
+}
+func __gong__New__ControlPointFormCallback(
+	controlpoint *models.ControlPoint,
+	probe *Probe,
+	formGroup *table.FormGroup,
+) (controlpointFormCallback *ControlPointFormCallback) {
+	controlpointFormCallback = new(ControlPointFormCallback)
+	controlpointFormCallback.probe = probe
+	controlpointFormCallback.controlpoint = controlpoint
+	controlpointFormCallback.formGroup = formGroup
+
+	controlpointFormCallback.CreationMode = (controlpoint == nil)
+
+	return
+}
+
+type ControlPointFormCallback struct {
+	controlpoint *models.ControlPoint
+
+	// If the form call is called on the creation of a new instnace
+	CreationMode bool
+
+	probe *Probe
+
+	formGroup *table.FormGroup
+}
+
+func (controlpointFormCallback *ControlPointFormCallback) OnSave() {
+
+	// log.Println("ControlPointFormCallback, OnSave")
+
+	// checkout formStage to have the form group on the stage synchronized with the
+	// back repo (and front repo)
+	controlpointFormCallback.probe.formStage.Checkout()
+
+	if controlpointFormCallback.controlpoint == nil {
+		controlpointFormCallback.controlpoint = new(models.ControlPoint).Stage(controlpointFormCallback.probe.stageOfInterest)
+	}
+	controlpoint_ := controlpointFormCallback.controlpoint
+	_ = controlpoint_
+
+	for _, formDiv := range controlpointFormCallback.formGroup.FormDivs {
+		switch formDiv.Name {
+		// insertion point per field
+		case "Name":
+			FormDivBasicFieldToField(&(controlpoint_.Name), formDiv)
+		case "X_Relative":
+			FormDivBasicFieldToField(&(controlpoint_.X_Relative), formDiv)
+		case "Y_Relative":
+			FormDivBasicFieldToField(&(controlpoint_.Y_Relative), formDiv)
+		case "ClosestRect":
+			FormDivSelectFieldToField(&(controlpoint_.ClosestRect), controlpointFormCallback.probe.stageOfInterest, formDiv)
+		case "Link:ControlPoints":
+			// WARNING : this form deals with the N-N association "Link.ControlPoints []*ControlPoint" but
+			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
+			//
+			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
+			// association. For those use cases, it is handy to set the source of the assocation with
+			// the form of the target source (when editing an instance of ControlPoint). Setting up a value
+			// will discard the former value is there is one.
+			//
+			// Therefore, the forms works only in ONE particular case:
+			// - there was no association to this target
+			var formerSource *models.Link
+			{
+				var rf models.ReverseField
+				_ = rf
+				rf.GongstructName = "Link"
+				rf.Fieldname = "ControlPoints"
+				formerAssociationSource := controlpoint_.GongGetReverseFieldOwner(
+					controlpointFormCallback.probe.stageOfInterest,
+					&rf)
+
+				var ok bool
+				if formerAssociationSource != nil {
+					formerSource, ok = formerAssociationSource.(*models.Link)
+					if !ok {
+						log.Fatalln("Source of Link.ControlPoints []*ControlPoint, is not an Link instance")
+					}
+				}
+			}
+
+			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
+
+			// case when the user set empty for the source value
+			if newSourceName == nil {
+				// That could mean we clear the assocation for all source instances
+				if formerSource != nil {
+					idx := slices.Index(formerSource.ControlPoints, controlpoint_)
+					formerSource.ControlPoints = slices.Delete(formerSource.ControlPoints, idx, idx+1)
+				}
+				break // nothing else to do for this field
+			}
+
+			// the former source is not empty. the new value could
+			// be different but there mught more that one source thet
+			// points to this target
+			if formerSource != nil {
+				break // nothing else to do for this field
+			}
+
+			// (2) find the source
+			var newSource *models.Link
+			for _link := range *models.GetGongstructInstancesSet[models.Link](controlpointFormCallback.probe.stageOfInterest) {
+
+				// the match is base on the name
+				if _link.GetName() == newSourceName.GetName() {
+					newSource = _link // we have a match
+					break
+				}
+			}
+			if newSource == nil {
+				log.Println("Source of Link.ControlPoints []*ControlPoint, with name", newSourceName, ", does not exist")
+				break
+			}
+
+			// (3) append the new value to the new source field
+			newSource.ControlPoints = append(newSource.ControlPoints, controlpoint_)
+		}
+	}
+
+	// manage the suppress operation
+	if controlpointFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		controlpoint_.Unstage(controlpointFormCallback.probe.stageOfInterest)
+	}
+
+	controlpointFormCallback.probe.stageOfInterest.Commit()
+	updateAndCommitTable[*models.ControlPoint](
+		controlpointFormCallback.probe,
+	)
+	controlpointFormCallback.probe.tableStage.Commit()
+
+	// display a new form by reset the form stage
+	if controlpointFormCallback.CreationMode || controlpointFormCallback.formGroup.HasSuppressButtonBeenPressed {
+		controlpointFormCallback.probe.formStage.Reset()
+		newFormGroup := (&table.FormGroup{
+			Name: FormName,
+		}).Stage(controlpointFormCallback.probe.formStage)
+		newFormGroup.OnSave = __gong__New__ControlPointFormCallback(
+			nil,
+			controlpointFormCallback.probe,
+			newFormGroup,
+		)
+		controlpoint := new(models.ControlPoint)
+		FillUpForm(controlpoint, newFormGroup, controlpointFormCallback.probe)
+		controlpointFormCallback.probe.formStage.Commit()
+	}
+
+	updateAndCommitTree(controlpointFormCallback.probe)
 }
 func __gong__New__EllipseFormCallback(
 	ellipse *models.Ellipse,
@@ -1080,9 +1427,8 @@ func (ellipseFormCallback *EllipseFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "Ellipses"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := ellipse_.GongGetReverseFieldOwner(
 					ellipseFormCallback.probe.stageOfInterest,
-					ellipse_,
 					&rf)
 
 				var ok bool
@@ -1139,7 +1485,7 @@ func (ellipseFormCallback *EllipseFormCallback) OnSave() {
 	}
 
 	ellipseFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Ellipse](
+	updateAndCommitTable[*models.Ellipse](
 		ellipseFormCallback.probe,
 	)
 	ellipseFormCallback.probe.tableStage.Commit()
@@ -1474,9 +1820,8 @@ func (layerFormCallback *LayerFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "SVG"
 				rf.Fieldname = "Layers"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := layer_.GongGetReverseFieldOwner(
 					layerFormCallback.probe.stageOfInterest,
-					layer_,
 					&rf)
 
 				var ok bool
@@ -1533,7 +1878,7 @@ func (layerFormCallback *LayerFormCallback) OnSave() {
 	}
 
 	layerFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Layer](
+	updateAndCommitTable[*models.Layer](
 		layerFormCallback.probe,
 	)
 	layerFormCallback.probe.tableStage.Commit()
@@ -1671,9 +2016,8 @@ func (lineFormCallback *LineFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "Lines"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := line_.GongGetReverseFieldOwner(
 					lineFormCallback.probe.stageOfInterest,
-					line_,
 					&rf)
 
 				var ok bool
@@ -1730,7 +2074,7 @@ func (lineFormCallback *LineFormCallback) OnSave() {
 	}
 
 	lineFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Line](
+	updateAndCommitTable[*models.Line](
 		lineFormCallback.probe,
 	)
 	lineFormCallback.probe.tableStage.Commit()
@@ -1826,10 +2170,14 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(link_.HasEndArrow), formDiv)
 		case "EndArrowSize":
 			FormDivBasicFieldToField(&(link_.EndArrowSize), formDiv)
+		case "EndArrowOffset":
+			FormDivBasicFieldToField(&(link_.EndArrowOffset), formDiv)
 		case "HasStartArrow":
 			FormDivBasicFieldToField(&(link_.HasStartArrow), formDiv)
 		case "StartArrowSize":
 			FormDivBasicFieldToField(&(link_.StartArrowSize), formDiv)
+		case "StartArrowOffset":
+			FormDivBasicFieldToField(&(link_.StartArrowOffset), formDiv)
 		case "TextAtArrowStart":
 			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.LinkAnchoredText](linkFormCallback.probe.stageOfInterest)
 			instanceSlice := make([]*models.LinkAnchoredText, 0)
@@ -1881,11 +2229,11 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 			link_.TextAtArrowEnd = instanceSlice
 
 		case "ControlPoints":
-			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Point](linkFormCallback.probe.stageOfInterest)
-			instanceSlice := make([]*models.Point, 0)
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.ControlPoint](linkFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.ControlPoint, 0)
 
 			// make a map of all instances by their ID
-			map_id_instances := make(map[uint]*models.Point)
+			map_id_instances := make(map[uint]*models.ControlPoint)
 
 			for instance := range instanceSet {
 				id := models.GetOrderPointerGongstruct(
@@ -1921,6 +2269,12 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(link_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(link_.Transform), formDiv)
+		case "MouseX":
+			FormDivBasicFieldToField(&(link_.MouseX), formDiv)
+		case "MouseY":
+			FormDivBasicFieldToField(&(link_.MouseY), formDiv)
+		case "MouseEventKey":
+			FormDivEnumStringFieldToField(&(link_.MouseEventKey), formDiv)
 		case "Layer:Links":
 			// WARNING : this form deals with the N-N association "Layer.Links []*Link" but
 			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
@@ -1938,9 +2292,8 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "Links"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := link_.GongGetReverseFieldOwner(
 					linkFormCallback.probe.stageOfInterest,
-					link_,
 					&rf)
 
 				var ok bool
@@ -1997,7 +2350,7 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 	}
 
 	linkFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Link](
+	updateAndCommitTable[*models.Link](
 		linkFormCallback.probe,
 	)
 	linkFormCallback.probe.tableStage.Commit()
@@ -2083,6 +2436,10 @@ func (linkanchoredtextFormCallback *LinkAnchoredTextFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(linkanchoredtext_.FontStyle), formDiv)
 		case "LetterSpacing":
 			FormDivBasicFieldToField(&(linkanchoredtext_.LetterSpacing), formDiv)
+		case "FontFamily":
+			FormDivBasicFieldToField(&(linkanchoredtext_.FontFamily), formDiv)
+		case "WhiteSpace":
+			FormDivEnumStringFieldToField(&(linkanchoredtext_.WhiteSpace), formDiv)
 		case "Color":
 			FormDivBasicFieldToField(&(linkanchoredtext_.Color), formDiv)
 		case "FillOpacity":
@@ -2141,9 +2498,8 @@ func (linkanchoredtextFormCallback *LinkAnchoredTextFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Link"
 				rf.Fieldname = "TextAtArrowStart"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := linkanchoredtext_.GongGetReverseFieldOwner(
 					linkanchoredtextFormCallback.probe.stageOfInterest,
-					linkanchoredtext_,
 					&rf)
 
 				var ok bool
@@ -2208,9 +2564,8 @@ func (linkanchoredtextFormCallback *LinkAnchoredTextFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Link"
 				rf.Fieldname = "TextAtArrowEnd"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := linkanchoredtext_.GongGetReverseFieldOwner(
 					linkanchoredtextFormCallback.probe.stageOfInterest,
-					linkanchoredtext_,
 					&rf)
 
 				var ok bool
@@ -2267,7 +2622,7 @@ func (linkanchoredtextFormCallback *LinkAnchoredTextFormCallback) OnSave() {
 	}
 
 	linkanchoredtextFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.LinkAnchoredText](
+	updateAndCommitTable[*models.LinkAnchoredText](
 		linkanchoredtextFormCallback.probe,
 	)
 	linkanchoredtextFormCallback.probe.tableStage.Commit()
@@ -2395,9 +2750,8 @@ func (pathFormCallback *PathFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "Paths"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := path_.GongGetReverseFieldOwner(
 					pathFormCallback.probe.stageOfInterest,
-					path_,
 					&rf)
 
 				var ok bool
@@ -2454,7 +2808,7 @@ func (pathFormCallback *PathFormCallback) OnSave() {
 	}
 
 	pathFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Path](
+	updateAndCommitTable[*models.Path](
 		pathFormCallback.probe,
 	)
 	pathFormCallback.probe.tableStage.Commit()
@@ -2526,73 +2880,6 @@ func (pointFormCallback *PointFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(point_.X), formDiv)
 		case "Y":
 			FormDivBasicFieldToField(&(point_.Y), formDiv)
-		case "Link:ControlPoints":
-			// WARNING : this form deals with the N-N association "Link.ControlPoints []*Point" but
-			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
-			//
-			// In many use cases, for instance tree structures, the assocation is semanticaly a 1-N
-			// association. For those use cases, it is handy to set the source of the assocation with
-			// the form of the target source (when editing an instance of Point). Setting up a value
-			// will discard the former value is there is one.
-			//
-			// Therefore, the forms works only in ONE particular case:
-			// - there was no association to this target
-			var formerSource *models.Link
-			{
-				var rf models.ReverseField
-				_ = rf
-				rf.GongstructName = "Link"
-				rf.Fieldname = "ControlPoints"
-				formerAssociationSource := models.GetReverseFieldOwner(
-					pointFormCallback.probe.stageOfInterest,
-					point_,
-					&rf)
-
-				var ok bool
-				if formerAssociationSource != nil {
-					formerSource, ok = formerAssociationSource.(*models.Link)
-					if !ok {
-						log.Fatalln("Source of Link.ControlPoints []*Point, is not an Link instance")
-					}
-				}
-			}
-
-			newSourceName := formDiv.FormFields[0].FormFieldSelect.Value
-
-			// case when the user set empty for the source value
-			if newSourceName == nil {
-				// That could mean we clear the assocation for all source instances
-				if formerSource != nil {
-					idx := slices.Index(formerSource.ControlPoints, point_)
-					formerSource.ControlPoints = slices.Delete(formerSource.ControlPoints, idx, idx+1)
-				}
-				break // nothing else to do for this field
-			}
-
-			// the former source is not empty. the new value could
-			// be different but there mught more that one source thet
-			// points to this target
-			if formerSource != nil {
-				break // nothing else to do for this field
-			}
-
-			// (2) find the source
-			var newSource *models.Link
-			for _link := range *models.GetGongstructInstancesSet[models.Link](pointFormCallback.probe.stageOfInterest) {
-
-				// the match is base on the name
-				if _link.GetName() == newSourceName.GetName() {
-					newSource = _link // we have a match
-					break
-				}
-			}
-			if newSource == nil {
-				log.Println("Source of Link.ControlPoints []*Point, with name", newSourceName, ", does not exist")
-				break
-			}
-
-			// (3) append the new value to the new source field
-			newSource.ControlPoints = append(newSource.ControlPoints, point_)
 		}
 	}
 
@@ -2602,7 +2889,7 @@ func (pointFormCallback *PointFormCallback) OnSave() {
 	}
 
 	pointFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Point](
+	updateAndCommitTable[*models.Point](
 		pointFormCallback.probe,
 	)
 	pointFormCallback.probe.tableStage.Commit()
@@ -2730,9 +3017,8 @@ func (polygoneFormCallback *PolygoneFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "Polygones"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := polygone_.GongGetReverseFieldOwner(
 					polygoneFormCallback.probe.stageOfInterest,
-					polygone_,
 					&rf)
 
 				var ok bool
@@ -2789,7 +3075,7 @@ func (polygoneFormCallback *PolygoneFormCallback) OnSave() {
 	}
 
 	polygoneFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Polygone](
+	updateAndCommitTable[*models.Polygone](
 		polygoneFormCallback.probe,
 	)
 	polygoneFormCallback.probe.tableStage.Commit()
@@ -2917,9 +3203,8 @@ func (polylineFormCallback *PolylineFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "Polylines"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := polyline_.GongGetReverseFieldOwner(
 					polylineFormCallback.probe.stageOfInterest,
-					polyline_,
 					&rf)
 
 				var ok bool
@@ -2976,7 +3261,7 @@ func (polylineFormCallback *PolylineFormCallback) OnSave() {
 	}
 
 	polylineFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Polyline](
+	updateAndCommitTable[*models.Polyline](
 		polylineFormCallback.probe,
 	)
 	polylineFormCallback.probe.tableStage.Commit()
@@ -3070,6 +3355,56 @@ func (rectFormCallback *RectFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rect_.StrokeDashArrayWhenSelected), formDiv)
 		case "Transform":
 			FormDivBasicFieldToField(&(rect_.Transform), formDiv)
+		case "HoveringTrigger":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Condition](rectFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Condition, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Condition)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					rectFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			rect_.HoveringTrigger = instanceSlice
+
+		case "DisplayConditions":
+			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Condition](rectFormCallback.probe.stageOfInterest)
+			instanceSlice := make([]*models.Condition, 0)
+
+			// make a map of all instances by their ID
+			map_id_instances := make(map[uint]*models.Condition)
+
+			for instance := range instanceSet {
+				id := models.GetOrderPointerGongstruct(
+					rectFormCallback.probe.stageOfInterest,
+					instance,
+				)
+				map_id_instances[id] = instance
+			}
+
+			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+
+			if err != nil {
+				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
+			}
+			for _, id := range ids {
+				instanceSlice = append(instanceSlice, map_id_instances[id])
+			}
+			rect_.DisplayConditions = instanceSlice
+
 		case "Animations":
 			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Animate](rectFormCallback.probe.stageOfInterest)
 			instanceSlice := make([]*models.Animate, 0)
@@ -3210,6 +3545,14 @@ func (rectFormCallback *RectFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rect_.HasToolTip), formDiv)
 		case "ToolTipText":
 			FormDivBasicFieldToField(&(rect_.ToolTipText), formDiv)
+		case "ToolTipPosition":
+			FormDivEnumStringFieldToField(&(rect_.ToolTipPosition), formDiv)
+		case "MouseX":
+			FormDivBasicFieldToField(&(rect_.MouseX), formDiv)
+		case "MouseY":
+			FormDivBasicFieldToField(&(rect_.MouseY), formDiv)
+		case "MouseEventKey":
+			FormDivEnumStringFieldToField(&(rect_.MouseEventKey), formDiv)
 		case "Layer:Rects":
 			// WARNING : this form deals with the N-N association "Layer.Rects []*Rect" but
 			// it work only for 1-N associations (TODO: #660, enable this form only for field with //gong:1_N magic code)
@@ -3227,9 +3570,8 @@ func (rectFormCallback *RectFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "Rects"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := rect_.GongGetReverseFieldOwner(
 					rectFormCallback.probe.stageOfInterest,
-					rect_,
 					&rf)
 
 				var ok bool
@@ -3286,7 +3628,7 @@ func (rectFormCallback *RectFormCallback) OnSave() {
 	}
 
 	rectFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Rect](
+	updateAndCommitTable[*models.Rect](
 		rectFormCallback.probe,
 	)
 	rectFormCallback.probe.tableStage.Commit()
@@ -3399,9 +3741,8 @@ func (rectanchoredpathFormCallback *RectAnchoredPathFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Rect"
 				rf.Fieldname = "RectAnchoredPaths"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := rectanchoredpath_.GongGetReverseFieldOwner(
 					rectanchoredpathFormCallback.probe.stageOfInterest,
-					rectanchoredpath_,
 					&rf)
 
 				var ok bool
@@ -3458,7 +3799,7 @@ func (rectanchoredpathFormCallback *RectAnchoredPathFormCallback) OnSave() {
 	}
 
 	rectanchoredpathFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.RectAnchoredPath](
+	updateAndCommitTable[*models.RectAnchoredPath](
 		rectanchoredpathFormCallback.probe,
 	)
 	rectanchoredpathFormCallback.probe.tableStage.Commit()
@@ -3583,9 +3924,8 @@ func (rectanchoredrectFormCallback *RectAnchoredRectFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Rect"
 				rf.Fieldname = "RectAnchoredRects"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := rectanchoredrect_.GongGetReverseFieldOwner(
 					rectanchoredrectFormCallback.probe.stageOfInterest,
-					rectanchoredrect_,
 					&rf)
 
 				var ok bool
@@ -3642,7 +3982,7 @@ func (rectanchoredrectFormCallback *RectAnchoredRectFormCallback) OnSave() {
 	}
 
 	rectanchoredrectFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.RectAnchoredRect](
+	updateAndCommitTable[*models.RectAnchoredRect](
 		rectanchoredrectFormCallback.probe,
 	)
 	rectanchoredrectFormCallback.probe.tableStage.Commit()
@@ -3720,6 +4060,10 @@ func (rectanchoredtextFormCallback *RectAnchoredTextFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(rectanchoredtext_.FontStyle), formDiv)
 		case "LetterSpacing":
 			FormDivBasicFieldToField(&(rectanchoredtext_.LetterSpacing), formDiv)
+		case "FontFamily":
+			FormDivBasicFieldToField(&(rectanchoredtext_.FontFamily), formDiv)
+		case "WhiteSpace":
+			FormDivEnumStringFieldToField(&(rectanchoredtext_.WhiteSpace), formDiv)
 		case "X_Offset":
 			FormDivBasicFieldToField(&(rectanchoredtext_.X_Offset), formDiv)
 		case "Y_Offset":
@@ -3728,6 +4072,8 @@ func (rectanchoredtextFormCallback *RectAnchoredTextFormCallback) OnSave() {
 			FormDivEnumStringFieldToField(&(rectanchoredtext_.RectAnchorType), formDiv)
 		case "TextAnchorType":
 			FormDivEnumStringFieldToField(&(rectanchoredtext_.TextAnchorType), formDiv)
+		case "DominantBaseline":
+			FormDivEnumStringFieldToField(&(rectanchoredtext_.DominantBaseline), formDiv)
 		case "WritingMode":
 			FormDivEnumStringFieldToField(&(rectanchoredtext_.WritingMode), formDiv)
 		case "Color":
@@ -3788,9 +4134,8 @@ func (rectanchoredtextFormCallback *RectAnchoredTextFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Rect"
 				rf.Fieldname = "RectAnchoredTexts"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := rectanchoredtext_.GongGetReverseFieldOwner(
 					rectanchoredtextFormCallback.probe.stageOfInterest,
-					rectanchoredtext_,
 					&rf)
 
 				var ok bool
@@ -3847,7 +4192,7 @@ func (rectanchoredtextFormCallback *RectAnchoredTextFormCallback) OnSave() {
 	}
 
 	rectanchoredtextFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.RectAnchoredText](
+	updateAndCommitTable[*models.RectAnchoredText](
 		rectanchoredtextFormCallback.probe,
 	)
 	rectanchoredtextFormCallback.probe.tableStage.Commit()
@@ -3954,9 +4299,8 @@ func (rectlinklinkFormCallback *RectLinkLinkFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "RectLinkLinks"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := rectlinklink_.GongGetReverseFieldOwner(
 					rectlinklinkFormCallback.probe.stageOfInterest,
-					rectlinklink_,
 					&rf)
 
 				var ok bool
@@ -4013,7 +4357,7 @@ func (rectlinklinkFormCallback *RectLinkLinkFormCallback) OnSave() {
 	}
 
 	rectlinklinkFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.RectLinkLink](
+	updateAndCommitTable[*models.RectLinkLink](
 		rectlinklinkFormCallback.probe,
 	)
 	rectlinklinkFormCallback.probe.tableStage.Commit()
@@ -4131,7 +4475,7 @@ func (svgFormCallback *SVGFormCallback) OnSave() {
 	}
 
 	svgFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.SVG](
+	updateAndCommitTable[*models.SVG](
 		svgFormCallback.probe,
 	)
 	svgFormCallback.probe.tableStage.Commit()
@@ -4210,7 +4554,7 @@ func (svgtextFormCallback *SvgTextFormCallback) OnSave() {
 	}
 
 	svgtextFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.SvgText](
+	updateAndCommitTable[*models.SvgText](
 		svgtextFormCallback.probe,
 	)
 	svgtextFormCallback.probe.tableStage.Commit()
@@ -4308,6 +4652,10 @@ func (textFormCallback *TextFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(text_.FontStyle), formDiv)
 		case "LetterSpacing":
 			FormDivBasicFieldToField(&(text_.LetterSpacing), formDiv)
+		case "FontFamily":
+			FormDivBasicFieldToField(&(text_.FontFamily), formDiv)
+		case "WhiteSpace":
+			FormDivEnumStringFieldToField(&(text_.WhiteSpace), formDiv)
 		case "Animates":
 			instanceSet := *models.GetGongstructInstancesSetFromPointerType[*models.Animate](textFormCallback.probe.stageOfInterest)
 			instanceSlice := make([]*models.Animate, 0)
@@ -4350,9 +4698,8 @@ func (textFormCallback *TextFormCallback) OnSave() {
 				_ = rf
 				rf.GongstructName = "Layer"
 				rf.Fieldname = "Texts"
-				formerAssociationSource := models.GetReverseFieldOwner(
+				formerAssociationSource := text_.GongGetReverseFieldOwner(
 					textFormCallback.probe.stageOfInterest,
-					text_,
 					&rf)
 
 				var ok bool
@@ -4409,7 +4756,7 @@ func (textFormCallback *TextFormCallback) OnSave() {
 	}
 
 	textFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[models.Text](
+	updateAndCommitTable[*models.Text](
 		textFormCallback.probe,
 	)
 	textFormCallback.probe.tableStage.Commit()

@@ -95,7 +95,7 @@ export class AsSplitService {
       catchError(this.handleError<AsSplitAPI>('postAsSplit'))
     );
   }
-  
+
   /** POST: add a new assplit to the server */
   post(assplitdb: AsSplitAPI, Name: string, frontRepo: FrontRepo): Observable<AsSplitAPI> {
     return this.postAsSplit(assplitdb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class AsSplitService {
   private handleError<T>(operation = 'operation in AsSplitService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("AsSplitService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

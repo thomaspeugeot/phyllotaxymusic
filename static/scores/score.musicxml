@@ -75,7 +75,7 @@
                 <direction-type>
                     <metronome>
                         <beat-unit>quarter</beat-unit>
-                        <per-minute>75</per-minute>
+                        <per-minute>102</per-minute>
                     </metronome>
                 </direction-type>
             </direction>
@@ -86,15 +86,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -108,33 +119,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -142,6 +131,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -201,19 +191,30 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>2</voice>
+                <type>16th</type>
+                <staff>1</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>D</step>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -223,8 +224,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -241,15 +242,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -263,33 +275,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -297,6 +287,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -308,19 +299,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -331,41 +323,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -375,8 +345,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -393,15 +363,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -415,33 +396,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -449,6 +408,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -460,19 +420,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -483,41 +444,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -527,8 +466,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -545,15 +484,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -567,33 +517,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -601,6 +529,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -612,19 +541,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -635,41 +565,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -679,8 +587,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -697,15 +605,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -719,33 +638,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -753,6 +650,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -764,19 +662,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -787,41 +686,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -831,8 +708,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -849,15 +726,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -871,33 +759,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -905,6 +771,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -916,19 +783,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -939,41 +807,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -983,8 +829,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -1001,15 +847,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -1023,33 +880,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -1057,6 +892,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -1068,19 +904,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -1091,41 +928,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -1135,8 +950,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -1153,15 +968,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -1175,33 +1001,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -1209,6 +1013,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -1220,19 +1025,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -1243,41 +1049,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -1287,8 +1071,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -1305,15 +1089,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -1327,33 +1122,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -1361,6 +1134,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -1372,19 +1146,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -1395,41 +1170,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -1439,8 +1192,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -1457,15 +1210,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -1479,33 +1243,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -1513,6 +1255,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -1524,19 +1267,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -1547,41 +1291,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -1591,8 +1313,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="start"></tie>
                 <duration>4</duration>
@@ -1609,15 +1331,26 @@
                     <alter>1</alter>
                     <octave>3</octave>
                 </pitch>
-                <duration>2</duration>
+                <duration>1</duration>
                 <voice>1</voice>
-                <type>eighth</type>
+                <type>16th</type>
                 <staff>2</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>D</step>
+                    <step>B</step>
+                    <octave>3</octave>
+                </pitch>
+                <duration>1</duration>
+                <voice>1</voice>
+                <type>16th</type>
+                <staff>2</staff>
+            </note>
+            <note>
+                <Name></Name>
+                <pitch>
+                    <step>C</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>4</duration>
@@ -1631,33 +1364,11 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
-                <duration>6</duration>
+                <tie type="start"></tie>
+                <duration>10</duration>
                 <voice>1</voice>
-                <type>quarter</type>
-                <dot></dot>
+                <type>half</type>
                 <staff>2</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>1</voice>
-                <type>16th</type>
-                <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
@@ -1665,6 +1376,7 @@
                     <step>B</step>
                     <octave>3</octave>
                 </pitch>
+                <tie type="stop"></tie>
                 <duration>2</duration>
                 <voice>1</voice>
                 <type>eighth</type>
@@ -1676,19 +1388,20 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <tie type="stop"></tie>
-                <duration>2</duration>
+                <duration>6</duration>
                 <voice>2</voice>
-                <type>eighth</type>
+                <type>quarter</type>
+                <dot></dot>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
@@ -1699,41 +1412,19 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>G</step>
+                    <step>B</step>
                     <octave>4</octave>
                 </pitch>
                 <duration>1</duration>
                 <voice>2</voice>
                 <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
                 <staff>1</staff>
             </note>
             <note>
                 <Name></Name>
                 <pitch>
                     <step>D</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -1743,8 +1434,8 @@
             <note>
                 <Name></Name>
                 <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
+                    <step>C</step>
+                    <octave>5</octave>
                 </pitch>
                 <duration>4</duration>
                 <voice>2</voice>
@@ -1756,39 +1447,6 @@
             <backup>
                 <duration>16</duration>
             </backup>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>2</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>G</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>1</duration>
-                <voice>2</voice>
-                <type>16th</type>
-                <staff>1</staff>
-            </note>
-            <note>
-                <Name></Name>
-                <pitch>
-                    <step>F</step>
-                    <octave>4</octave>
-                </pitch>
-                <duration>2</duration>
-                <voice>2</voice>
-                <type>eighth</type>
-                <staff>1</staff>
-            </note>
         </measure>
     </part>
 </score-partwise>

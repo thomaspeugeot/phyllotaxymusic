@@ -94,7 +94,7 @@ export class SVGIconService {
       catchError(this.handleError<SVGIconAPI>('postSVGIcon'))
     );
   }
-  
+
   /** POST: add a new svgicon to the server */
   post(svgicondb: SVGIconAPI, Name: string, frontRepo: FrontRepo): Observable<SVGIconAPI> {
     return this.postSVGIcon(svgicondb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class SVGIconService {
   private handleError<T>(operation = 'operation in SVGIconService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("SVGIconService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

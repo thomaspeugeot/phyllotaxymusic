@@ -8,6 +8,10 @@ type BackRepoData struct {
 
 	CircleAPIs []*CircleAPI
 
+	ConditionAPIs []*ConditionAPI
+
+	ControlPointAPIs []*ControlPointAPI
+
 	EllipseAPIs []*EllipseAPI
 
 	LayerAPIs []*LayerAPI
@@ -71,6 +75,26 @@ func CopyBackRepoToBackRepoData(backRepo *BackRepoStruct, backRepoData *BackRepo
 		circleDB.CopyBasicFieldsToCircle_WOP(&circleAPI.Circle_WOP)
 
 		backRepoData.CircleAPIs = append(backRepoData.CircleAPIs, &circleAPI)
+	}
+
+	for _, conditionDB := range backRepo.BackRepoCondition.Map_ConditionDBID_ConditionDB {
+
+		var conditionAPI ConditionAPI
+		conditionAPI.ID = conditionDB.ID
+		conditionAPI.ConditionPointersEncoding = conditionDB.ConditionPointersEncoding
+		conditionDB.CopyBasicFieldsToCondition_WOP(&conditionAPI.Condition_WOP)
+
+		backRepoData.ConditionAPIs = append(backRepoData.ConditionAPIs, &conditionAPI)
+	}
+
+	for _, controlpointDB := range backRepo.BackRepoControlPoint.Map_ControlPointDBID_ControlPointDB {
+
+		var controlpointAPI ControlPointAPI
+		controlpointAPI.ID = controlpointDB.ID
+		controlpointAPI.ControlPointPointersEncoding = controlpointDB.ControlPointPointersEncoding
+		controlpointDB.CopyBasicFieldsToControlPoint_WOP(&controlpointAPI.ControlPoint_WOP)
+
+		backRepoData.ControlPointAPIs = append(backRepoData.ControlPointAPIs, &controlpointAPI)
 	}
 
 	for _, ellipseDB := range backRepo.BackRepoEllipse.Map_EllipseDBID_EllipseDB {

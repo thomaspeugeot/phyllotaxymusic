@@ -95,7 +95,7 @@ export class FormGroupService {
       catchError(this.handleError<FormGroupAPI>('postFormGroup'))
     );
   }
-  
+
   /** POST: add a new formgroup to the server */
   post(formgroupdb: FormGroupAPI, Name: string, frontRepo: FrontRepo): Observable<FormGroupAPI> {
     return this.postFormGroup(formgroupdb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class FormGroupService {
   private handleError<T>(operation = 'operation in FormGroupService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FormGroupService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

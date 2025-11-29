@@ -94,7 +94,7 @@ export class TreeService {
       catchError(this.handleError<TreeAPI>('postTree'))
     );
   }
-  
+
   /** POST: add a new tree to the server */
   post(treedb: TreeAPI, Name: string, frontRepo: FrontRepo): Observable<TreeAPI> {
     return this.postTree(treedb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class TreeService {
   private handleError<T>(operation = 'operation in TreeService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("TreeService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

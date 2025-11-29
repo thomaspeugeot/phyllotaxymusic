@@ -98,7 +98,7 @@ export class FormDivService {
       catchError(this.handleError<FormDivAPI>('postFormDiv'))
     );
   }
-  
+
   /** POST: add a new formdiv to the server */
   post(formdivdb: FormDivAPI, Name: string, frontRepo: FrontRepo): Observable<FormDivAPI> {
     return this.postFormDiv(formdivdb, Name, frontRepo)
@@ -190,7 +190,7 @@ export class FormDivService {
   private handleError<T>(operation = 'operation in FormDivService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FormDivService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

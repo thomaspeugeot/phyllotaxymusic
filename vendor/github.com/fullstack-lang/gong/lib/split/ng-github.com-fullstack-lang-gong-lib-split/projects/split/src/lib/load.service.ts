@@ -94,7 +94,7 @@ export class LoadService {
       catchError(this.handleError<LoadAPI>('postLoad'))
     );
   }
-  
+
   /** POST: add a new load to the server */
   post(loaddb: LoadAPI, Name: string, frontRepo: FrontRepo): Observable<LoadAPI> {
     return this.postLoad(loaddb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class LoadService {
   private handleError<T>(operation = 'operation in LoadService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("LoadService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

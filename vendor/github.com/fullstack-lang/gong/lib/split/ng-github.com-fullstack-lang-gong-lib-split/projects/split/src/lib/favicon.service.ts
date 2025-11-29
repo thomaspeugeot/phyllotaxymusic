@@ -94,7 +94,7 @@ export class FavIconService {
       catchError(this.handleError<FavIconAPI>('postFavIcon'))
     );
   }
-  
+
   /** POST: add a new favicon to the server */
   post(favicondb: FavIconAPI, Name: string, frontRepo: FrontRepo): Observable<FavIconAPI> {
     return this.postFavIcon(favicondb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class FavIconService {
   private handleError<T>(operation = 'operation in FavIconService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("FavIconService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

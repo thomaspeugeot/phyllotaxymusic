@@ -95,7 +95,7 @@ export class EllipseService {
       catchError(this.handleError<EllipseAPI>('postEllipse'))
     );
   }
-  
+
   /** POST: add a new ellipse to the server */
   post(ellipsedb: EllipseAPI, Name: string, frontRepo: FrontRepo): Observable<EllipseAPI> {
     return this.postEllipse(ellipsedb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class EllipseService {
   private handleError<T>(operation = 'operation in EllipseService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("EllipseService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

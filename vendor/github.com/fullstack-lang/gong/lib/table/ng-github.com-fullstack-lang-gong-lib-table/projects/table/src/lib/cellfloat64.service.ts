@@ -94,7 +94,7 @@ export class CellFloat64Service {
       catchError(this.handleError<CellFloat64API>('postCellFloat64'))
     );
   }
-  
+
   /** POST: add a new cellfloat64 to the server */
   post(cellfloat64db: CellFloat64API, Name: string, frontRepo: FrontRepo): Observable<CellFloat64API> {
     return this.postCellFloat64(cellfloat64db, Name, frontRepo)
@@ -186,7 +186,7 @@ export class CellFloat64Service {
   private handleError<T>(operation = 'operation in CellFloat64Service', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("CellFloat64Service" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

@@ -94,7 +94,7 @@ export class ToneService {
       catchError(this.handleError<ToneAPI>('postTone'))
     );
   }
-  
+
   /** POST: add a new tone to the server */
   post(tonedb: ToneAPI, Name: string, frontRepo: FrontRepo): Observable<ToneAPI> {
     return this.postTone(tonedb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class ToneService {
   private handleError<T>(operation = 'operation in ToneService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("ToneService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

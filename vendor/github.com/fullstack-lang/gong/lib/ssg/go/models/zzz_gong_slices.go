@@ -7,7 +7,6 @@ func (stage *Stage) ComputeReverseMaps() {
 	// insertion point per named struct
 	// Compute reverse map for named struct Chapter
 	// insertion point per field
-	clear(stage.Chapter_Pages_reverseMap)
 	stage.Chapter_Pages_reverseMap = make(map[*Page]*Chapter)
 	for chapter := range stage.Chapters {
 		_ = chapter
@@ -18,7 +17,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct Content
 	// insertion point per field
-	clear(stage.Content_Chapters_reverseMap)
 	stage.Content_Chapters_reverseMap = make(map[*Chapter]*Content)
 	for content := range stage.Contents {
 		_ = content
@@ -30,4 +28,49 @@ func (stage *Stage) ComputeReverseMaps() {
 	// Compute reverse map for named struct Page
 	// insertion point per field
 
+}
+
+func (stage *Stage) GetInstances() (res []GongstructIF) {
+
+	// insertion point per named struct
+	for instance := range stage.Chapters {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Contents {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Pages {
+		res = append(res, instance)
+	}
+
+	return
+}
+
+// insertion point per named struct
+func (chapter *Chapter) GongCopy() GongstructIF {
+	newInstance := *chapter
+	return &newInstance
+}
+
+func (content *Content) GongCopy() GongstructIF {
+	newInstance := *content
+	return &newInstance
+}
+
+func (page *Page) GongCopy() GongstructIF {
+	newInstance := *page
+	return &newInstance
+}
+
+// ComputeReference will creates a deep copy of each of the staged elements
+func (stage *Stage) ComputeReference() {
+	stage.reference = make(map[GongstructIF]GongstructIF)
+	for _, instance := range stage.GetInstances() {
+		stage.reference[instance] = instance.GongCopy()
+	}
+	stage.new = make(map[GongstructIF]struct{})
+	stage.modified = make(map[GongstructIF]struct{})
+	stage.deleted = make(map[GongstructIF]struct{})
 }

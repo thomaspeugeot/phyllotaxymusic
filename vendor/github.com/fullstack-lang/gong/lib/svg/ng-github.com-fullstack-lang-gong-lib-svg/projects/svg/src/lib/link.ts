@@ -6,7 +6,7 @@ import { FrontRepo } from './front-repo.service';
 // insertion point for imports
 import { Rect } from './rect'
 import { LinkAnchoredText } from './linkanchoredtext'
-import { Point } from './point'
+import { ControlPoint } from './controlpoint'
 
 // usefull for managing pointer ID values that can be nullable
 import { NullInt64 } from './null-int64'
@@ -15,8 +15,6 @@ export class Link {
 
 	static GONGSTRUCT_NAME = "Link"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
@@ -33,8 +31,10 @@ export class Link {
 	CornerRadius: number = 0
 	HasEndArrow: boolean = false
 	EndArrowSize: number = 0
+	EndArrowOffset: number = 0
 	HasStartArrow: boolean = false
 	StartArrowSize: number = 0
+	StartArrowOffset: number = 0
 	Color: string = ""
 	FillOpacity: number = 0
 	Stroke: string = ""
@@ -43,6 +43,9 @@ export class Link {
 	StrokeDashArray: string = ""
 	StrokeDashArrayWhenSelected: string = ""
 	Transform: string = ""
+	MouseX: number = 0
+	MouseY: number = 0
+	MouseEventKey: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
 	Start?: Rect
@@ -51,7 +54,10 @@ export class Link {
 
 	TextAtArrowStart: Array<LinkAnchoredText> = []
 	TextAtArrowEnd: Array<LinkAnchoredText> = []
-	ControlPoints: Array<Point> = []
+	ControlPoints: Array<ControlPoint> = []
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export function CopyLinkToLinkAPI(link: Link, linkAPI: LinkAPI) {
@@ -74,8 +80,10 @@ export function CopyLinkToLinkAPI(link: Link, linkAPI: LinkAPI) {
 	linkAPI.CornerRadius = link.CornerRadius
 	linkAPI.HasEndArrow = link.HasEndArrow
 	linkAPI.EndArrowSize = link.EndArrowSize
+	linkAPI.EndArrowOffset = link.EndArrowOffset
 	linkAPI.HasStartArrow = link.HasStartArrow
 	linkAPI.StartArrowSize = link.StartArrowSize
+	linkAPI.StartArrowOffset = link.StartArrowOffset
 	linkAPI.Color = link.Color
 	linkAPI.FillOpacity = link.FillOpacity
 	linkAPI.Stroke = link.Stroke
@@ -84,6 +92,9 @@ export function CopyLinkToLinkAPI(link: Link, linkAPI: LinkAPI) {
 	linkAPI.StrokeDashArray = link.StrokeDashArray
 	linkAPI.StrokeDashArrayWhenSelected = link.StrokeDashArrayWhenSelected
 	linkAPI.Transform = link.Transform
+	linkAPI.MouseX = link.MouseX
+	linkAPI.MouseY = link.MouseY
+	linkAPI.MouseEventKey = link.MouseEventKey
 
 	// insertion point for pointer fields encoding
 	linkAPI.LinkPointersEncoding.StartID.Valid = true
@@ -113,8 +124,8 @@ export function CopyLinkToLinkAPI(link: Link, linkAPI: LinkAPI) {
 	}
 
 	linkAPI.LinkPointersEncoding.ControlPoints = []
-	for (let _point of link.ControlPoints) {
-		linkAPI.LinkPointersEncoding.ControlPoints.push(_point.ID)
+	for (let _controlpoint of link.ControlPoints) {
+		linkAPI.LinkPointersEncoding.ControlPoints.push(_controlpoint.ID)
 	}
 
 }
@@ -143,8 +154,10 @@ export function CopyLinkAPIToLink(linkAPI: LinkAPI, link: Link, frontRepo: Front
 	link.CornerRadius = linkAPI.CornerRadius
 	link.HasEndArrow = linkAPI.HasEndArrow
 	link.EndArrowSize = linkAPI.EndArrowSize
+	link.EndArrowOffset = linkAPI.EndArrowOffset
 	link.HasStartArrow = linkAPI.HasStartArrow
 	link.StartArrowSize = linkAPI.StartArrowSize
+	link.StartArrowOffset = linkAPI.StartArrowOffset
 	link.Color = linkAPI.Color
 	link.FillOpacity = linkAPI.FillOpacity
 	link.Stroke = linkAPI.Stroke
@@ -153,6 +166,9 @@ export function CopyLinkAPIToLink(linkAPI: LinkAPI, link: Link, frontRepo: Front
 	link.StrokeDashArray = linkAPI.StrokeDashArray
 	link.StrokeDashArrayWhenSelected = linkAPI.StrokeDashArrayWhenSelected
 	link.Transform = linkAPI.Transform
+	link.MouseX = linkAPI.MouseX
+	link.MouseY = linkAPI.MouseY
+	link.MouseEventKey = linkAPI.MouseEventKey
 
 	// insertion point for pointer fields encoding
 	link.Start = frontRepo.map_ID_Rect.get(linkAPI.LinkPointersEncoding.StartID.Int64)
@@ -188,11 +204,11 @@ export function CopyLinkAPIToLink(linkAPI: LinkAPI, link: Link, frontRepo: Front
 		return;
 	}
 
-	link.ControlPoints = new Array<Point>()
+	link.ControlPoints = new Array<ControlPoint>()
 	for (let _id of linkAPI.LinkPointersEncoding.ControlPoints) {
-		let _point = frontRepo.map_ID_Point.get(_id)
-		if (_point != undefined) {
-			link.ControlPoints.push(_point!)
+		let _controlpoint = frontRepo.map_ID_ControlPoint.get(_id)
+		if (_controlpoint != undefined) {
+			link.ControlPoints.push(_controlpoint!)
 		}
 	}
 }

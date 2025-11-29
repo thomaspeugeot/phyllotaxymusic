@@ -94,7 +94,7 @@ export class MessageService {
       catchError(this.handleError<MessageAPI>('postMessage'))
     );
   }
-  
+
   /** POST: add a new message to the server */
   post(messagedb: MessageAPI, Name: string, frontRepo: FrontRepo): Observable<MessageAPI> {
     return this.postMessage(messagedb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class MessageService {
   private handleError<T>(operation = 'operation in MessageService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("MessageService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

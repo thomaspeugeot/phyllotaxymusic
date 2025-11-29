@@ -27,16 +27,16 @@ func (stager *Stager) UpdateAndCommitSVGStage() {
 
 	stager.svgStage.Reset()
 
-	var selectedDiagram *Classdiagram
+	var classdiagram *Classdiagram
 
 	var diagramPackage *DiagramPackage
 	for diagramPackage = range *GetGongstructInstancesSet[DiagramPackage](stager.stage) {
 
-		selectedDiagram = diagramPackage.SelectedClassdiagram
+		classdiagram = diagramPackage.SelectedClassdiagram
 
 		// if no class diagram is selected generate a blank diagram
-		if selectedDiagram == nil {
-			selectedDiagram = new(Classdiagram)
+		if classdiagram == nil {
+			classdiagram = new(Classdiagram)
 		}
 	}
 	if diagramPackage == nil {
@@ -44,10 +44,10 @@ func (stager *Stager) UpdateAndCommitSVGStage() {
 	}
 
 	svg := new(svg_models.SVG)
-	svg.Name = selectedDiagram.Name
+	svg.Name = classdiagram.Name
 	svg.IsEditable = !stager.embeddedDiagrams
 
-	for _, gongstructShape := range selectedDiagram.GongStructShapes {
+	for _, gongstructShape := range classdiagram.GongStructShapes {
 
 		rectLayer := new(svg_models.Layer)
 
@@ -151,7 +151,7 @@ func (stager *Stager) UpdateAndCommitSVGStage() {
 		//
 		// number of instance (x%d)
 		//
-		if !stager.hideNbInstances {
+		if classdiagram.ShowNbInstances {
 
 			if nbInstance, ok := stager.map_GongStructName_InstancesNb[gongStructIdentifier]; ok {
 
@@ -173,7 +173,7 @@ func (stager *Stager) UpdateAndCommitSVGStage() {
 	}
 
 	// display links between gongstruct shapes
-	for _, gongstructShape := range selectedDiagram.GongStructShapes {
+	for _, gongstructShape := range classdiagram.GongStructShapes {
 
 		startRect := stager.map_GongstructShape_Rect[gongstructShape]
 		for _, linkShape := range gongstructShape.LinkShapes {
@@ -238,71 +238,76 @@ func (stager *Stager) UpdateAndCommitSVGStage() {
 			link.End = endRect
 
 			// add text to the arrow
-			targetMulitplicity := new(svg_models.LinkAnchoredText)
-			targetMulitplicity.AutomaticLayout = true
-			targetMulitplicity.LinkAnchorType = svg_models.LINK_RIGHT_OR_BOTTOM
+			if classdiagram.ShowMultiplicity {
+				targetMulitplicity := new(svg_models.LinkAnchoredText)
+				targetMulitplicity.AutomaticLayout = true
+				targetMulitplicity.LinkAnchorType = svg_models.LINK_RIGHT_OR_BOTTOM
 
-			targetMulitplicity.Impl = NewAnchoredTextImplLinkTargetMultiplicity(linkShape, stager.stage)
-			link.TextAtArrowEnd = append(link.TextAtArrowEnd, targetMulitplicity)
-			targetMulitplicity.Name = linkShape.TargetMultiplicity.ToString()
-			targetMulitplicity.Content = targetMulitplicity.Name
-			targetMulitplicity.X_Offset = linkShape.TargetMultiplicityOffsetX
-			targetMulitplicity.Y_Offset = linkShape.TargetMultiplicityOffsetY
-			targetMulitplicity.Stroke = svg_models.Black.ToString()
-			targetMulitplicity.StrokeOpacity = 1
-			targetMulitplicity.StrokeWidth = 1
-			targetMulitplicity.Color = svg_models.Black.ToString()
-			targetMulitplicity.FillOpacity = 100
-			targetMulitplicity.FontWeight = "300"
-			targetMulitplicity.FontSize = "15"
-			targetMulitplicity.LetterSpacing = "0.1em"
+				targetMulitplicity.Impl = NewAnchoredTextImplLinkTargetMultiplicity(linkShape, stager.stage)
+				link.TextAtArrowEnd = append(link.TextAtArrowEnd, targetMulitplicity)
+				targetMulitplicity.Name = linkShape.TargetMultiplicity.ToString()
+				targetMulitplicity.Content = targetMulitplicity.Name
+				targetMulitplicity.X_Offset = linkShape.TargetMultiplicityOffsetX
+				targetMulitplicity.Y_Offset = linkShape.TargetMultiplicityOffsetY
+				targetMulitplicity.Stroke = svg_models.Black.ToString()
+				targetMulitplicity.StrokeOpacity = 1
+				targetMulitplicity.StrokeWidth = 1
+				targetMulitplicity.Color = svg_models.Black.ToString()
+				targetMulitplicity.FillOpacity = 100
+				targetMulitplicity.FontWeight = "300"
+				targetMulitplicity.FontSize = "15"
+				targetMulitplicity.LetterSpacing = "0.1em"
+			}
 
-			fieldName := new(svg_models.LinkAnchoredText)
-			fieldName.AutomaticLayout = true
-			fieldName.LinkAnchorType = svg_models.LINK_LEFT_OR_TOP
+			if classdiagram.ShowLinkNames {
+				fieldName := new(svg_models.LinkAnchoredText)
+				fieldName.AutomaticLayout = true
+				fieldName.LinkAnchorType = svg_models.LINK_LEFT_OR_TOP
 
-			fieldName.Impl = NewAnchoredTextImplLinkFieldName(linkShape, stager.stage)
+				fieldName.Impl = NewAnchoredTextImplLinkFieldName(linkShape, stager.stage)
 
-			link.TextAtArrowEnd = append(link.TextAtArrowEnd, fieldName)
-			fieldName.Name = linkShape.GetName()
-			fieldName.Content = fieldName.Name
-			fieldName.Y_Offset = linkShape.FieldOffsetY
-			fieldName.X_Offset = linkShape.FieldOffsetX
-			fieldName.Stroke = svg_models.Black.ToString()
-			fieldName.StrokeOpacity = 1
-			fieldName.StrokeWidth = 1
-			fieldName.Color = svg_models.Black.ToString()
-			fieldName.FillOpacity = 100
-			fieldName.FontWeight = "300"
-			fieldName.FontSize = "15"
-			fieldName.LetterSpacing = "0.1em"
+				link.TextAtArrowEnd = append(link.TextAtArrowEnd, fieldName)
+				fieldName.Name = linkShape.GetName()
+				fieldName.Content = IdentifierMetaToFieldName(linkShape.IdentifierMeta)
+				fieldName.Y_Offset = linkShape.FieldOffsetY
+				fieldName.X_Offset = linkShape.FieldOffsetX
+				fieldName.Stroke = svg_models.Black.ToString()
+				fieldName.StrokeOpacity = 1
+				fieldName.StrokeWidth = 1
+				fieldName.Color = svg_models.Black.ToString()
+				fieldName.FillOpacity = 100
+				fieldName.FontWeight = "300"
+				fieldName.FontSize = "15"
+				fieldName.LetterSpacing = "0.1em"
+			}
 
 			// add the callback
+			if classdiagram.ShowMultiplicity {
+				sourceMultiplicity := new(svg_models.LinkAnchoredText)
+				sourceMultiplicity.AutomaticLayout = true
+				sourceMultiplicity.LinkAnchorType = svg_models.LINK_RIGHT_OR_BOTTOM
 
-			sourceMultiplicity := new(svg_models.LinkAnchoredText)
-			sourceMultiplicity.AutomaticLayout = true
-			sourceMultiplicity.LinkAnchorType = svg_models.LINK_RIGHT_OR_BOTTOM
+				sourceMultiplicity.Impl = NewAnchoredTextImplLinkSourceMultiplicity(linkShape, stager.stage)
 
-			sourceMultiplicity.Impl = NewAnchoredTextImplLinkSourceMultiplicity(linkShape, stager.stage)
-
-			link.TextAtArrowStart = append(link.TextAtArrowStart, sourceMultiplicity)
-			sourceMultiplicity.Name = linkShape.SourceMultiplicity.ToString()
-			sourceMultiplicity.Content = sourceMultiplicity.Name
-			sourceMultiplicity.X_Offset = linkShape.SourceMultiplicityOffsetX
-			sourceMultiplicity.Y_Offset = linkShape.SourceMultiplicityOffsetY
-			sourceMultiplicity.Stroke = svg_models.Black.ToString()
-			sourceMultiplicity.StrokeOpacity = 1
-			sourceMultiplicity.StrokeWidth = 1
-			sourceMultiplicity.FontWeight = "300"
-			sourceMultiplicity.FontSize = "15"
-			sourceMultiplicity.LetterSpacing = "0.1em"
+				link.TextAtArrowStart = append(link.TextAtArrowStart, sourceMultiplicity)
+				sourceMultiplicity.Name = linkShape.SourceMultiplicity.ToString()
+				sourceMultiplicity.Content = sourceMultiplicity.Name
+				sourceMultiplicity.X_Offset = linkShape.SourceMultiplicityOffsetX
+				sourceMultiplicity.Y_Offset = linkShape.SourceMultiplicityOffsetY
+				sourceMultiplicity.Stroke = svg_models.Black.ToString()
+				sourceMultiplicity.StrokeOpacity = 1
+				sourceMultiplicity.StrokeWidth = 1
+				sourceMultiplicity.FontWeight = "300"
+				sourceMultiplicity.FontSize = "15"
+				sourceMultiplicity.LetterSpacing = "0.1em"
+			}
 		}
 	}
 
 	//
 	// GongEnumShapes
 	//
-	for _, gongenumShape := range selectedDiagram.GongEnumShapes {
+	for _, gongenumShape := range classdiagram.GongEnumShapes {
 
 		rectLayer := new(svg_models.Layer)
 		rectLayer.Name = "Layer" + GongEnumIdentifierMetaToGongEnumName(gongenumShape.IdentifierMeta)
@@ -395,7 +400,7 @@ func (stager *Stager) UpdateAndCommitSVGStage() {
 	//
 	// Notes
 	//
-	for _, noteShape := range selectedDiagram.GongNoteShapes {
+	for _, noteShape := range classdiagram.GongNoteShapes {
 
 		rectLayer := new(svg_models.Layer)
 		rectLayer.Name = "Layer" + noteShape.Identifier
@@ -472,7 +477,15 @@ func (stager *Stager) UpdateAndCommitSVGStage() {
 		//
 		content := new(svg_models.RectAnchoredText)
 		content.Name = noteContent
-		content.Content = content.Name
+
+		// Wrap the content string based on the rectangle width
+		// nbPixPerCharacter is an approximation for the width of a character in the SVG font
+		const nbPixPerCharacter = 8.0
+		if rect.Width > 0 {
+			content.Content = WrapString(noteContent, int(rect.Width/nbPixPerCharacter))
+		} else {
+			content.Content = noteContent
+		}
 		content.X_Offset = 0
 		content.Y_Offset = 40
 		content.RectAnchorType = svg_models.RECT_TOP
@@ -500,7 +513,7 @@ func (stager *Stager) UpdateAndCommitSVGStage() {
 	//
 	// Links between notes and othe shapes
 	//
-	for _, noteShape := range selectedDiagram.GongNoteShapes {
+	for _, noteShape := range classdiagram.GongNoteShapes {
 
 		startRect := stager.map_NoteShape_Rect[noteShape]
 		_ = startRect

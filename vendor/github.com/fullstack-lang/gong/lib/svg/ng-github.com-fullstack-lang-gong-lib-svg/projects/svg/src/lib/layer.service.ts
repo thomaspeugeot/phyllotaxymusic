@@ -104,7 +104,7 @@ export class LayerService {
       catchError(this.handleError<LayerAPI>('postLayer'))
     );
   }
-  
+
   /** POST: add a new layer to the server */
   post(layerdb: LayerAPI, Name: string, frontRepo: FrontRepo): Observable<LayerAPI> {
     return this.postLayer(layerdb, Name, frontRepo)
@@ -196,7 +196,7 @@ export class LayerService {
   private handleError<T>(operation = 'operation in LayerService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("LayerService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

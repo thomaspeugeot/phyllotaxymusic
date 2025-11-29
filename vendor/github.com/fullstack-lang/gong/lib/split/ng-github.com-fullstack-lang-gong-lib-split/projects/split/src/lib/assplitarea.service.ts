@@ -107,7 +107,7 @@ export class AsSplitAreaService {
       catchError(this.handleError<AsSplitAreaAPI>('postAsSplitArea'))
     );
   }
-  
+
   /** POST: add a new assplitarea to the server */
   post(assplitareadb: AsSplitAreaAPI, Name: string, frontRepo: FrontRepo): Observable<AsSplitAreaAPI> {
     return this.postAsSplitArea(assplitareadb, Name, frontRepo)
@@ -199,7 +199,7 @@ export class AsSplitAreaService {
   private handleError<T>(operation = 'operation in AsSplitAreaService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("AsSplitAreaService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

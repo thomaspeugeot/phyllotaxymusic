@@ -2,6 +2,16 @@
 package models
 
 // insertion point
+// ControlPointOrchestrator
+type ControlPointOrchestrator struct {
+}
+
+func (orchestrator *ControlPointOrchestrator) OnAfterUpdate(
+	gongsvgStage *Stage,
+	stagedControlPoint, backRepoControlPoint *ControlPoint) {
+
+	stagedControlPoint.OnAfterUpdate(gongsvgStage, stagedControlPoint, backRepoControlPoint)
+}
 // LineOrchestrator
 type LineOrchestrator struct {
 }
@@ -31,6 +41,16 @@ func (orchestrator *LinkAnchoredTextOrchestrator) OnAfterUpdate(
 	stagedLinkAnchoredText, backRepoLinkAnchoredText *LinkAnchoredText) {
 
 	stagedLinkAnchoredText.OnAfterUpdate(gongsvgStage, stagedLinkAnchoredText, backRepoLinkAnchoredText)
+}
+// PointOrchestrator
+type PointOrchestrator struct {
+}
+
+func (orchestrator *PointOrchestrator) OnAfterUpdate(
+	gongsvgStage *Stage,
+	stagedPoint, backRepoPoint *Point) {
+
+	stagedPoint.OnAfterUpdate(gongsvgStage, stagedPoint, backRepoPoint)
 }
 // RectOrchestrator
 type RectOrchestrator struct {
@@ -69,12 +89,16 @@ func SetOrchestratorOnAfterUpdate[Type Gongstruct](stage *Stage) {
 
 	switch any(ret).(type) {
 	// insertion point
+	case ControlPoint:
+		stage.OnAfterControlPointUpdateCallback = new(ControlPointOrchestrator)
 	case Line:
 		stage.OnAfterLineUpdateCallback = new(LineOrchestrator)
 	case Link:
 		stage.OnAfterLinkUpdateCallback = new(LinkOrchestrator)
 	case LinkAnchoredText:
 		stage.OnAfterLinkAnchoredTextUpdateCallback = new(LinkAnchoredTextOrchestrator)
+	case Point:
+		stage.OnAfterPointUpdateCallback = new(PointOrchestrator)
 	case Rect:
 		stage.OnAfterRectUpdateCallback = new(RectOrchestrator)
 	case SVG:

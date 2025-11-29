@@ -19,7 +19,7 @@ import { FrontRepo, FrontRepoService } from './front-repo.service';
 // insertion point for imports
 import { RectAPI } from './rect-api'
 import { LinkAnchoredTextAPI } from './linkanchoredtext-api'
-import { PointAPI } from './point-api'
+import { ControlPointAPI } from './controlpoint-api'
 
 @Injectable({
   providedIn: 'root'
@@ -97,7 +97,7 @@ export class LinkService {
       catchError(this.handleError<LinkAPI>('postLink'))
     );
   }
-  
+
   /** POST: add a new link to the server */
   post(linkdb: LinkAPI, Name: string, frontRepo: FrontRepo): Observable<LinkAPI> {
     return this.postLink(linkdb, Name, frontRepo)
@@ -189,7 +189,7 @@ export class LinkService {
   private handleError<T>(operation = 'operation in LinkService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("LinkService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

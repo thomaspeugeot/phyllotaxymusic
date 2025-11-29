@@ -235,14 +235,12 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
 
             // parse all rows, get the ID (first cell), and if the ID is in the association storage,
             // push the row into the initial selection
-            this.selectedTable.Rows.forEach(Row => {
-              if (Row.Cells.length > 0 && Row.Cells[0].CellInt) {
-                let id = Row.Cells[0].CellInt.Value
-
-                if (sliceOfIDs.includes(id)) {
-                  this.initialSelection.push(Row)
-                }
+            this.selectedTable.Rows.forEach(row => {
+              let id = row.ID - 1
+              if (sliceOfIDs.includes(id)) {
+                this.initialSelection.push(row)
               }
+
             })
 
           }
@@ -263,16 +261,16 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
           // Create a Map for quick lookup of rows by their ID.
           const rowMapByID = new Map<number, table.Row>()
           for (const row of this.selectedTable.Rows) {
-            if (row.Cells.length > 0 && row.Cells[0]?.CellInt) {
 
-              // FIX: Explicitly convert the ID from the cell to a number to prevent type mismatch (e.g., "4" vs 4).
-              const id = Number(row.Cells[0].CellInt.Value)
 
-              // Only add the row to the map if its ID is a valid number.
-              if (!isNaN(id)) {
-                rowMapByID.set(id, row)
-              }
+            // FIX: Explicitly convert the ID from the cell to a number to prevent type mismatch (e.g., "4" vs 4).
+            const id = Number(row.ID - 1)
+
+            // Only add the row to the map if its ID is a valid number.
+            if (!isNaN(id)) {
+              rowMapByID.set(id, row)
             }
+
           }
 
           // --- DEBUGGING START ---
@@ -282,9 +280,16 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
           // --- DEBUGGING END ---
 
           // Build the new `Rows` array by iterating through the ordered IDs.
-          const orderedRows: table.Row[] = sliceOfIDs
-            .map(id => rowMapByID.get(id)) // Look up the row for each ID (as a number)
-            .filter((row): row is table.Row => row !== undefined) // Filter out any IDs that didn't have a matching row
+          const orderedRows: table.Row[] = [] // 1. Create an empty array
+
+          for (const id of sliceOfIDs) { // 2. Loop through each ID
+            const row = rowMapByID.get(id) // 3. Look up the row in the map
+
+            // 4. If the row exists, add it to our new array
+            if (row !== undefined) {
+              orderedRows.push(row)
+            }
+          }
 
           // --- DEBUGGING START ---
           // Step 3: Check the final result.
@@ -451,11 +456,7 @@ export class TableSpecificComponent implements OnInit, AfterViewInit, OnDestroy 
       // which is assumed to be in the first cell as an integer (CellInt).
       const newOrderedIDs: number[] = this.selectedTable.Rows
         .map(row => {
-          // Safely access the ID from the first cell
-          if (row.Cells && row.Cells.length > 0 && row.Cells[0]?.CellInt) {
-            return row.Cells[0].CellInt.Value
-          }
-          return null // Return null for rows that don't match the structure
+          return row.ID - 1
         })
         .filter((id): id is number => id !== null) // Filter out any nulls to get a clean number array
 

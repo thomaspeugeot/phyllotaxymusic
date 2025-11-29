@@ -95,7 +95,7 @@ export class LinkAnchoredTextService {
       catchError(this.handleError<LinkAnchoredTextAPI>('postLinkAnchoredText'))
     );
   }
-  
+
   /** POST: add a new linkanchoredtext to the server */
   post(linkanchoredtextdb: LinkAnchoredTextAPI, Name: string, frontRepo: FrontRepo): Observable<LinkAnchoredTextAPI> {
     return this.postLinkAnchoredText(linkanchoredtextdb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class LinkAnchoredTextService {
   private handleError<T>(operation = 'operation in LinkAnchoredTextService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("LinkAnchoredTextService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

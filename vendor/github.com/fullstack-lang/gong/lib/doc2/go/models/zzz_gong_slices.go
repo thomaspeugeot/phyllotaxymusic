@@ -10,7 +10,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct Classdiagram
 	// insertion point per field
-	clear(stage.Classdiagram_GongStructShapes_reverseMap)
 	stage.Classdiagram_GongStructShapes_reverseMap = make(map[*GongStructShape]*Classdiagram)
 	for classdiagram := range stage.Classdiagrams {
 		_ = classdiagram
@@ -18,7 +17,6 @@ func (stage *Stage) ComputeReverseMaps() {
 			stage.Classdiagram_GongStructShapes_reverseMap[_gongstructshape] = classdiagram
 		}
 	}
-	clear(stage.Classdiagram_GongEnumShapes_reverseMap)
 	stage.Classdiagram_GongEnumShapes_reverseMap = make(map[*GongEnumShape]*Classdiagram)
 	for classdiagram := range stage.Classdiagrams {
 		_ = classdiagram
@@ -26,7 +24,6 @@ func (stage *Stage) ComputeReverseMaps() {
 			stage.Classdiagram_GongEnumShapes_reverseMap[_gongenumshape] = classdiagram
 		}
 	}
-	clear(stage.Classdiagram_GongNoteShapes_reverseMap)
 	stage.Classdiagram_GongNoteShapes_reverseMap = make(map[*GongNoteShape]*Classdiagram)
 	for classdiagram := range stage.Classdiagrams {
 		_ = classdiagram
@@ -37,7 +34,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct DiagramPackage
 	// insertion point per field
-	clear(stage.DiagramPackage_Classdiagrams_reverseMap)
 	stage.DiagramPackage_Classdiagrams_reverseMap = make(map[*Classdiagram]*DiagramPackage)
 	for diagrampackage := range stage.DiagramPackages {
 		_ = diagrampackage
@@ -48,7 +44,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct GongEnumShape
 	// insertion point per field
-	clear(stage.GongEnumShape_GongEnumValueShapes_reverseMap)
 	stage.GongEnumShape_GongEnumValueShapes_reverseMap = make(map[*GongEnumValueShape]*GongEnumShape)
 	for gongenumshape := range stage.GongEnumShapes {
 		_ = gongenumshape
@@ -65,7 +60,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct GongNoteShape
 	// insertion point per field
-	clear(stage.GongNoteShape_GongNoteLinkShapes_reverseMap)
 	stage.GongNoteShape_GongNoteLinkShapes_reverseMap = make(map[*GongNoteLinkShape]*GongNoteShape)
 	for gongnoteshape := range stage.GongNoteShapes {
 		_ = gongnoteshape
@@ -76,7 +70,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct GongStructShape
 	// insertion point per field
-	clear(stage.GongStructShape_AttributeShapes_reverseMap)
 	stage.GongStructShape_AttributeShapes_reverseMap = make(map[*AttributeShape]*GongStructShape)
 	for gongstructshape := range stage.GongStructShapes {
 		_ = gongstructshape
@@ -84,7 +77,6 @@ func (stage *Stage) ComputeReverseMaps() {
 			stage.GongStructShape_AttributeShapes_reverseMap[_attributeshape] = gongstructshape
 		}
 	}
-	clear(stage.GongStructShape_LinkShapes_reverseMap)
 	stage.GongStructShape_LinkShapes_reverseMap = make(map[*LinkShape]*GongStructShape)
 	for gongstructshape := range stage.GongStructShapes {
 		_ = gongstructshape
@@ -96,4 +88,103 @@ func (stage *Stage) ComputeReverseMaps() {
 	// Compute reverse map for named struct LinkShape
 	// insertion point per field
 
+}
+
+func (stage *Stage) GetInstances() (res []GongstructIF) {
+
+	// insertion point per named struct
+	for instance := range stage.AttributeShapes {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Classdiagrams {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.DiagramPackages {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.GongEnumShapes {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.GongEnumValueShapes {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.GongNoteLinkShapes {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.GongNoteShapes {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.GongStructShapes {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.LinkShapes {
+		res = append(res, instance)
+	}
+
+	return
+}
+
+// insertion point per named struct
+func (attributeshape *AttributeShape) GongCopy() GongstructIF {
+	newInstance := *attributeshape
+	return &newInstance
+}
+
+func (classdiagram *Classdiagram) GongCopy() GongstructIF {
+	newInstance := *classdiagram
+	return &newInstance
+}
+
+func (diagrampackage *DiagramPackage) GongCopy() GongstructIF {
+	newInstance := *diagrampackage
+	return &newInstance
+}
+
+func (gongenumshape *GongEnumShape) GongCopy() GongstructIF {
+	newInstance := *gongenumshape
+	return &newInstance
+}
+
+func (gongenumvalueshape *GongEnumValueShape) GongCopy() GongstructIF {
+	newInstance := *gongenumvalueshape
+	return &newInstance
+}
+
+func (gongnotelinkshape *GongNoteLinkShape) GongCopy() GongstructIF {
+	newInstance := *gongnotelinkshape
+	return &newInstance
+}
+
+func (gongnoteshape *GongNoteShape) GongCopy() GongstructIF {
+	newInstance := *gongnoteshape
+	return &newInstance
+}
+
+func (gongstructshape *GongStructShape) GongCopy() GongstructIF {
+	newInstance := *gongstructshape
+	return &newInstance
+}
+
+func (linkshape *LinkShape) GongCopy() GongstructIF {
+	newInstance := *linkshape
+	return &newInstance
+}
+
+// ComputeReference will creates a deep copy of each of the staged elements
+func (stage *Stage) ComputeReference() {
+	stage.reference = make(map[GongstructIF]GongstructIF)
+	for _, instance := range stage.GetInstances() {
+		stage.reference[instance] = instance.GongCopy()
+	}
+	stage.new = make(map[GongstructIF]struct{})
+	stage.modified = make(map[GongstructIF]struct{})
+	stage.deleted = make(map[GongstructIF]struct{})
 }

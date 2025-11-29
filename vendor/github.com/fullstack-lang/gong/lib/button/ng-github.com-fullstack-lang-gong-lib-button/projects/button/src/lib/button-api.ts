@@ -7,18 +7,23 @@ export class ButtonAPI {
 
 	static GONGSTRUCT_NAME = "Button"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
 	Name: string = ""
 	Label: string = ""
 	Icon: string = ""
+	IsDisabled: boolean = false
+	Color: string = ""
+	MatButtonType: string = ""
+	MatButtonAppearance: string = ""
 
 	// insertion point for other decls
 
 	ButtonPointersEncoding: ButtonPointersEncoding = new ButtonPointersEncoding
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export class ButtonPointersEncoding {

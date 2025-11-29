@@ -40,6 +40,12 @@ func updateAndCommitTree(
 		probe.stageOfInterest.GetName(),
 		probe.stageOfInterest.GetCommitId(),
 		probe.stageOfInterest.GetCommitTS().Local().Format(time.Kitchen))}
+	nodeRefreshButton.Name +=
+		fmt.Sprintf(" (%d/%d/%d)", 
+			len(probe.stageOfInterest.GetNew()), 
+			len(probe.stageOfInterest.GetModified()), 
+			len(probe.stageOfInterest.GetDeleted()),
+		)
 	sidebar.RootNodes = append(sidebar.RootNodes, nodeRefreshButton)
 	refreshButton := &tree.Button{
 		Name:            "RefreshButton" + " " + string(gongtree_buttons.BUTTON_refresh),
@@ -53,7 +59,7 @@ func updateAndCommitTree(
 	refreshButton.Impl = NewButtonImplRefresh(probe)
 
 	// collect all gong struct to construe the true
-	setOfGongStructs := *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](probe.gongStage)
+	setOfGongStructs := *gong_models.GetGongstructInstancesSetFromPointerType[*gong_models.GongStruct](probe.gongStage)
 
 	sliceOfGongStructsSorted := make([]*gong_models.GongStruct, len(setOfGongStructs))
 	i := 0
@@ -84,34 +90,73 @@ func updateAndCommitTree(
 		// insertion point
 		case "FileToDownload":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.FileToDownload](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.FileToDownload](probe.stageOfInterest)
+			created := 0
+			updated := 0
+			deleted := 0
 			for _filetodownload := range set {
 				nodeInstance := &tree.Node{Name: _filetodownload.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_filetodownload, "FileToDownload", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+				if _, ok := probe.stageOfInterest.GetNew()[_filetodownload]; ok {
+					created++
+				}
+				if _, ok := probe.stageOfInterest.GetModified()[_filetodownload]; ok {
+					updated++
+				}
+				if _, ok := probe.stageOfInterest.GetDeleted()[_filetodownload]; ok {
+					deleted++
+				}
 			}
+			nodeGongstruct.Name += fmt.Sprintf(" (%d/%d/%d)", created, updated, deleted)
 		case "FileToUpload":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.FileToUpload](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.FileToUpload](probe.stageOfInterest)
+			created := 0
+			updated := 0
+			deleted := 0
 			for _filetoupload := range set {
 				nodeInstance := &tree.Node{Name: _filetoupload.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_filetoupload, "FileToUpload", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+				if _, ok := probe.stageOfInterest.GetNew()[_filetoupload]; ok {
+					created++
+				}
+				if _, ok := probe.stageOfInterest.GetModified()[_filetoupload]; ok {
+					updated++
+				}
+				if _, ok := probe.stageOfInterest.GetDeleted()[_filetoupload]; ok {
+					deleted++
+				}
 			}
+			nodeGongstruct.Name += fmt.Sprintf(" (%d/%d/%d)", created, updated, deleted)
 		case "Message":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Message](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Message](probe.stageOfInterest)
+			created := 0
+			updated := 0
+			deleted := 0
 			for _message := range set {
 				nodeInstance := &tree.Node{Name: _message.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_message, "Message", probe)
 
 				nodeGongstruct.Children = append(nodeGongstruct.Children, nodeInstance)
+				if _, ok := probe.stageOfInterest.GetNew()[_message]; ok {
+					created++
+				}
+				if _, ok := probe.stageOfInterest.GetModified()[_message]; ok {
+					updated++
+				}
+				if _, ok := probe.stageOfInterest.GetDeleted()[_message]; ok {
+					deleted++
+				}
 			}
+			nodeGongstruct.Name += fmt.Sprintf(" (%d/%d/%d)", created, updated, deleted)
 		}
 
 		nodeGongstruct.IsNodeClickable = true
@@ -140,14 +185,14 @@ func updateAndCommitTree(
 	probe.treeStage.Commit()
 }
 
-type InstanceNodeCallback[T models.Gongstruct] struct {
-	Instance       *T
+type InstanceNodeCallback[T models.PointerToGongstruct] struct {
+	Instance       T
 	gongstructName string
 	probe          *Probe
 }
 
-func NewInstanceNodeCallback[T models.Gongstruct](
-	instance *T,
+func NewInstanceNodeCallback[T models.PointerToGongstruct](
+	instance T,
 	gongstructName string,
 	probe *Probe) (
 	instanceNodeCallback *InstanceNodeCallback[T],

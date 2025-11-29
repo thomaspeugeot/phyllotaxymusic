@@ -12,16 +12,21 @@ export class Button {
 
 	static GONGSTRUCT_NAME = "Button"
 
-	CreatedAt?: string
-	DeletedAt?: string
 	ID: number = 0
 
 	// insertion point for basic fields declarations
 	Name: string = ""
 	Label: string = ""
 	Icon: string = ""
+	IsDisabled: boolean = false
+	Color: string = ""
+	MatButtonType: string = ""
+	MatButtonAppearance: string = ""
 
 	// insertion point for pointers and slices of pointers declarations
+
+	CreatedAt?: string
+	DeletedAt?: string
 }
 
 export function CopyButtonToButtonAPI(button: Button, buttonAPI: ButtonAPI) {
@@ -34,6 +39,10 @@ export function CopyButtonToButtonAPI(button: Button, buttonAPI: ButtonAPI) {
 	buttonAPI.Name = button.Name
 	buttonAPI.Label = button.Label
 	buttonAPI.Icon = button.Icon
+	buttonAPI.IsDisabled = button.IsDisabled
+	buttonAPI.Color = button.Color
+	buttonAPI.MatButtonType = button.MatButtonType
+	buttonAPI.MatButtonAppearance = button.MatButtonAppearance
 
 	// insertion point for pointer fields encoding
 
@@ -54,6 +63,10 @@ export function CopyButtonAPIToButton(buttonAPI: ButtonAPI, button: Button, fron
 	button.Name = buttonAPI.Name
 	button.Label = buttonAPI.Label
 	button.Icon = buttonAPI.Icon
+	button.IsDisabled = buttonAPI.IsDisabled
+	button.Color = buttonAPI.Color
+	button.MatButtonType = buttonAPI.MatButtonType
+	button.MatButtonAppearance = buttonAPI.MatButtonAppearance
 
 	// insertion point for pointer fields encoding
 

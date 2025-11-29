@@ -94,7 +94,7 @@ export class AnimateService {
       catchError(this.handleError<AnimateAPI>('postAnimate'))
     );
   }
-  
+
   /** POST: add a new animate to the server */
   post(animatedb: AnimateAPI, Name: string, frontRepo: FrontRepo): Observable<AnimateAPI> {
     return this.postAnimate(animatedb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class AnimateService {
   private handleError<T>(operation = 'operation in AnimateService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("AnimateService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

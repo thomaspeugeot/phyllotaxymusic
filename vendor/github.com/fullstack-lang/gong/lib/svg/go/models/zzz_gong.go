@@ -10,6 +10,7 @@ import (
 	"math"
 	"slices"
 	"sort"
+	"strings"
 	"time"
 
 	svg_go "github.com/fullstack-lang/gong/lib/svg/go"
@@ -26,6 +27,7 @@ func __Gong__Abs(x int) int {
 }
 
 var _ = __Gong__Abs
+var _ = strings.Clone("")
 
 const ProbeTreeSidebarSuffix = ":sidebar of the probe"
 const ProbeTableSuffix = ":table of the probe"
@@ -50,6 +52,7 @@ func (stage *Stage) GetProbeSplitStageName() string {
 
 // errUnkownEnum is returns when a value cannot match enum values
 var errUnkownEnum = errors.New("unkown enum")
+var _ = errUnkownEnum
 
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
@@ -74,6 +77,8 @@ type GongStructInterface interface {
 	// GetID() (res int)
 	// GetFields() (res []string)
 	// GetFieldStringValue(fieldName string) (res string)
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
 }
 
 // Stage enables storage of staged instances
@@ -106,6 +111,24 @@ type Stage struct {
 	OnAfterCircleUpdateCallback OnAfterUpdateInterface[Circle]
 	OnAfterCircleDeleteCallback OnAfterDeleteInterface[Circle]
 	OnAfterCircleReadCallback   OnAfterReadInterface[Circle]
+
+	Conditions           map[*Condition]any
+	Conditions_mapString map[string]*Condition
+
+	// insertion point for slice of pointers maps
+	OnAfterConditionCreateCallback OnAfterCreateInterface[Condition]
+	OnAfterConditionUpdateCallback OnAfterUpdateInterface[Condition]
+	OnAfterConditionDeleteCallback OnAfterDeleteInterface[Condition]
+	OnAfterConditionReadCallback   OnAfterReadInterface[Condition]
+
+	ControlPoints           map[*ControlPoint]any
+	ControlPoints_mapString map[string]*ControlPoint
+
+	// insertion point for slice of pointers maps
+	OnAfterControlPointCreateCallback OnAfterCreateInterface[ControlPoint]
+	OnAfterControlPointUpdateCallback OnAfterUpdateInterface[ControlPoint]
+	OnAfterControlPointDeleteCallback OnAfterDeleteInterface[ControlPoint]
+	OnAfterControlPointReadCallback   OnAfterReadInterface[ControlPoint]
 
 	Ellipses           map[*Ellipse]any
 	Ellipses_mapString map[string]*Ellipse
@@ -166,7 +189,7 @@ type Stage struct {
 
 	Link_TextAtArrowEnd_reverseMap map[*LinkAnchoredText]*Link
 
-	Link_ControlPoints_reverseMap map[*Point]*Link
+	Link_ControlPoints_reverseMap map[*ControlPoint]*Link
 
 	OnAfterLinkCreateCallback OnAfterCreateInterface[Link]
 	OnAfterLinkUpdateCallback OnAfterUpdateInterface[Link]
@@ -230,6 +253,10 @@ type Stage struct {
 	Rects_mapString map[string]*Rect
 
 	// insertion point for slice of pointers maps
+	Rect_HoveringTrigger_reverseMap map[*Condition]*Rect
+
+	Rect_DisplayConditions_reverseMap map[*Condition]*Rect
+
 	Rect_Animations_reverseMap map[*Animate]*Rect
 
 	Rect_RectAnchoredTexts_reverseMap map[*RectAnchoredText]*Rect
@@ -344,6 +371,12 @@ type Stage struct {
 	CircleOrder            uint
 	CircleMap_Staged_Order map[*Circle]uint
 
+	ConditionOrder            uint
+	ConditionMap_Staged_Order map[*Condition]uint
+
+	ControlPointOrder            uint
+	ControlPointMap_Staged_Order map[*ControlPoint]uint
+
 	EllipseOrder            uint
 	EllipseMap_Staged_Order map[*Ellipse]uint
 
@@ -398,6 +431,12 @@ type Stage struct {
 	// end of insertion point
 
 	NamedStructs []*NamedStruct
+
+	// for the computation of the diff at each commit we need
+	reference map[GongstructIF]GongstructIF
+	modified  map[GongstructIF]struct{}
+	new       map[GongstructIF]struct{}
+	deleted   map[GongstructIF]struct{}
 }
 
 func (stage *Stage) GetCommitId() uint {
@@ -420,6 +459,22 @@ func (stage *Stage) GetNamedStructsNames() (res []string) {
 	}
 
 	return
+}
+
+func (stage *Stage) GetReference() map[GongstructIF]GongstructIF {
+	return stage.reference
+}
+
+func (stage *Stage) GetModified() map[GongstructIF]struct{} {
+	return stage.modified
+}
+
+func (stage *Stage) GetNew() map[GongstructIF]struct{} {
+	return stage.new
+}
+
+func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
+	return stage.deleted
 }
 
 func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
@@ -449,7 +504,7 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]u
 func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
 	var t T
 	switch any(t).(type) {
-		// insertion point for case
+	// insertion point for case
 	case *Animate:
 		tmp := GetStructInstancesByOrder(stage.Animates, stage.AnimateMap_Staged_Order)
 
@@ -475,6 +530,34 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 			// Assert that the element 'v' can be treated as type 'T'.
 			// Note: This relies on the constraint that PointerToGongstruct
 			// is an interface that *Circle implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *Condition:
+		tmp := GetStructInstancesByOrder(stage.Conditions, stage.ConditionMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *Condition implements.
+			res = append(res, any(v).(T))
+		}
+		return res
+	case *ControlPoint:
+		tmp := GetStructInstancesByOrder(stage.ControlPoints, stage.ControlPointMap_Staged_Order)
+
+		// Create a new slice of the generic type T with the same capacity.
+		res = make([]T, 0, len(tmp))
+
+		// Iterate over the source slice and perform a type assertion on each element.
+		for _, v := range tmp {
+			// Assert that the element 'v' can be treated as type 'T'.
+			// Note: This relies on the constraint that PointerToGongstruct
+			// is an interface that *ControlPoint implements.
 			res = append(res, any(v).(T))
 		}
 		return res
@@ -738,9 +821,7 @@ func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T
 		return i_order < j_order
 	})
 
-	for _, instance := range orderedSet {
-		res = append(res, instance)
-	}
+	res = append(res, orderedSet...)
 
 	return
 }
@@ -753,6 +834,10 @@ func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []st
 		res = GetNamedStructInstances(stage.Animates, stage.AnimateMap_Staged_Order)
 	case "Circle":
 		res = GetNamedStructInstances(stage.Circles, stage.CircleMap_Staged_Order)
+	case "Condition":
+		res = GetNamedStructInstances(stage.Conditions, stage.ConditionMap_Staged_Order)
+	case "ControlPoint":
+		res = GetNamedStructInstances(stage.ControlPoints, stage.ControlPointMap_Staged_Order)
 	case "Ellipse":
 		res = GetNamedStructInstances(stage.Ellipses, stage.EllipseMap_Staged_Order)
 	case "Layer":
@@ -860,6 +945,10 @@ type BackRepoInterface interface {
 	CheckoutAnimate(animate *Animate)
 	CommitCircle(circle *Circle)
 	CheckoutCircle(circle *Circle)
+	CommitCondition(condition *Condition)
+	CheckoutCondition(condition *Condition)
+	CommitControlPoint(controlpoint *ControlPoint)
+	CheckoutControlPoint(controlpoint *ControlPoint)
 	CommitEllipse(ellipse *Ellipse)
 	CheckoutEllipse(ellipse *Ellipse)
 	CommitLayer(layer *Layer)
@@ -906,6 +995,12 @@ func NewStage(name string) (stage *Stage) {
 
 		Circles:           make(map[*Circle]any),
 		Circles_mapString: make(map[string]*Circle),
+
+		Conditions:           make(map[*Condition]any),
+		Conditions_mapString: make(map[string]*Condition),
+
+		ControlPoints:           make(map[*ControlPoint]any),
+		ControlPoints_mapString: make(map[string]*ControlPoint),
 
 		Ellipses:           make(map[*Ellipse]any),
 		Ellipses_mapString: make(map[string]*Ellipse),
@@ -972,6 +1067,10 @@ func NewStage(name string) (stage *Stage) {
 
 		CircleMap_Staged_Order: make(map[*Circle]uint),
 
+		ConditionMap_Staged_Order: make(map[*Condition]uint),
+
+		ControlPointMap_Staged_Order: make(map[*ControlPoint]uint),
+
 		EllipseMap_Staged_Order: make(map[*Ellipse]uint),
 
 		LayerMap_Staged_Order: make(map[*Layer]uint),
@@ -1011,6 +1110,8 @@ func NewStage(name string) (stage *Stage) {
 		NamedStructs: []*NamedStruct{ // insertion point for order map initialisations
 			{name: "Animate"},
 			{name: "Circle"},
+			{name: "Condition"},
+			{name: "ControlPoint"},
 			{name: "Ellipse"},
 			{name: "Layer"},
 			{name: "Line"},
@@ -1029,6 +1130,11 @@ func NewStage(name string) (stage *Stage) {
 			{name: "SvgText"},
 			{name: "Text"},
 		}, // end of insertion point
+
+		reference: make(map[GongstructIF]GongstructIF),
+		new:       make(map[GongstructIF]struct{}),
+		modified:  make(map[GongstructIF]struct{}),
+		deleted:   make(map[GongstructIF]struct{}),
 	}
 
 	return
@@ -1042,6 +1148,10 @@ func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
 		return stage.AnimateMap_Staged_Order[instance]
 	case *Circle:
 		return stage.CircleMap_Staged_Order[instance]
+	case *Condition:
+		return stage.ConditionMap_Staged_Order[instance]
+	case *ControlPoint:
+		return stage.ControlPointMap_Staged_Order[instance]
 	case *Ellipse:
 		return stage.EllipseMap_Staged_Order[instance]
 	case *Layer:
@@ -1089,6 +1199,10 @@ func GetOrderPointerGongstruct[Type PointerToGongstruct](stage *Stage, instance 
 		return stage.AnimateMap_Staged_Order[instance]
 	case *Circle:
 		return stage.CircleMap_Staged_Order[instance]
+	case *Condition:
+		return stage.ConditionMap_Staged_Order[instance]
+	case *ControlPoint:
+		return stage.ControlPointMap_Staged_Order[instance]
 	case *Ellipse:
 		return stage.EllipseMap_Staged_Order[instance]
 	case *Layer:
@@ -1145,13 +1259,26 @@ func (stage *Stage) Commit() {
 	stage.commitId++
 	stage.commitTimeStamp = time.Now()
 
+	if stage.OnInitCommitCallback != nil {
+		stage.OnInitCommitCallback.BeforeCommit(stage)
+	}
+	if stage.OnInitCommitFromBackCallback != nil {
+		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
+	}
+
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
+	stage.ComputeInstancesNb()
+	stage.ComputeReference()
+}
 
+func (stage *Stage) ComputeInstancesNb() {
 	// insertion point for computing the map of number of instances per gongstruct
 	stage.Map_GongStructName_InstancesNb["Animate"] = len(stage.Animates)
 	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
+	stage.Map_GongStructName_InstancesNb["Condition"] = len(stage.Conditions)
+	stage.Map_GongStructName_InstancesNb["ControlPoint"] = len(stage.ControlPoints)
 	stage.Map_GongStructName_InstancesNb["Ellipse"] = len(stage.Ellipses)
 	stage.Map_GongStructName_InstancesNb["Layer"] = len(stage.Layers)
 	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
@@ -1169,7 +1296,6 @@ func (stage *Stage) Commit() {
 	stage.Map_GongStructName_InstancesNb["SVG"] = len(stage.SVGs)
 	stage.Map_GongStructName_InstancesNb["SvgText"] = len(stage.SvgTexts)
 	stage.Map_GongStructName_InstancesNb["Text"] = len(stage.Texts)
-
 }
 
 func (stage *Stage) Checkout() {
@@ -1178,27 +1304,7 @@ func (stage *Stage) Checkout() {
 	}
 
 	stage.ComputeReverseMaps()
-	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["Animate"] = len(stage.Animates)
-	stage.Map_GongStructName_InstancesNb["Circle"] = len(stage.Circles)
-	stage.Map_GongStructName_InstancesNb["Ellipse"] = len(stage.Ellipses)
-	stage.Map_GongStructName_InstancesNb["Layer"] = len(stage.Layers)
-	stage.Map_GongStructName_InstancesNb["Line"] = len(stage.Lines)
-	stage.Map_GongStructName_InstancesNb["Link"] = len(stage.Links)
-	stage.Map_GongStructName_InstancesNb["LinkAnchoredText"] = len(stage.LinkAnchoredTexts)
-	stage.Map_GongStructName_InstancesNb["Path"] = len(stage.Paths)
-	stage.Map_GongStructName_InstancesNb["Point"] = len(stage.Points)
-	stage.Map_GongStructName_InstancesNb["Polygone"] = len(stage.Polygones)
-	stage.Map_GongStructName_InstancesNb["Polyline"] = len(stage.Polylines)
-	stage.Map_GongStructName_InstancesNb["Rect"] = len(stage.Rects)
-	stage.Map_GongStructName_InstancesNb["RectAnchoredPath"] = len(stage.RectAnchoredPaths)
-	stage.Map_GongStructName_InstancesNb["RectAnchoredRect"] = len(stage.RectAnchoredRects)
-	stage.Map_GongStructName_InstancesNb["RectAnchoredText"] = len(stage.RectAnchoredTexts)
-	stage.Map_GongStructName_InstancesNb["RectLinkLink"] = len(stage.RectLinkLinks)
-	stage.Map_GongStructName_InstancesNb["SVG"] = len(stage.SVGs)
-	stage.Map_GongStructName_InstancesNb["SvgText"] = len(stage.SvgTexts)
-	stage.Map_GongStructName_InstancesNb["Text"] = len(stage.Texts)
-
+	stage.ComputeInstancesNb()
 }
 
 // backup generates backup files in the dirPath
@@ -1237,6 +1343,12 @@ func (animate *Animate) Stage(stage *Stage) *Animate {
 		stage.Animates[animate] = __member
 		stage.AnimateMap_Staged_Order[animate] = stage.AnimateOrder
 		stage.AnimateOrder++
+		stage.new[animate] = struct{}{}
+		delete(stage.deleted, animate)
+	} else {
+		if _, ok := stage.new[animate]; !ok {
+			stage.modified[animate] = struct{}{}
+		}
 	}
 	stage.Animates_mapString[animate.Name] = animate
 
@@ -1247,6 +1359,12 @@ func (animate *Animate) Stage(stage *Stage) *Animate {
 func (animate *Animate) Unstage(stage *Stage) *Animate {
 	delete(stage.Animates, animate)
 	delete(stage.Animates_mapString, animate.Name)
+
+	if _, ok := stage.reference[animate]; ok {
+		stage.deleted[animate] = struct{}{}
+	} else {
+		delete(stage.new, animate)
+	}
 	return animate
 }
 
@@ -1268,6 +1386,10 @@ func (animate *Animate) Commit(stage *Stage) *Animate {
 
 func (animate *Animate) CommitVoid(stage *Stage) {
 	animate.Commit(stage)
+}
+
+func (animate *Animate) StageVoid(stage *Stage) {
+	animate.Stage(stage)
 }
 
 // Checkout animate to the back repo (if it is already staged)
@@ -1292,6 +1414,12 @@ func (circle *Circle) Stage(stage *Stage) *Circle {
 		stage.Circles[circle] = __member
 		stage.CircleMap_Staged_Order[circle] = stage.CircleOrder
 		stage.CircleOrder++
+		stage.new[circle] = struct{}{}
+		delete(stage.deleted, circle)
+	} else {
+		if _, ok := stage.new[circle]; !ok {
+			stage.modified[circle] = struct{}{}
+		}
 	}
 	stage.Circles_mapString[circle.Name] = circle
 
@@ -1302,6 +1430,12 @@ func (circle *Circle) Stage(stage *Stage) *Circle {
 func (circle *Circle) Unstage(stage *Stage) *Circle {
 	delete(stage.Circles, circle)
 	delete(stage.Circles_mapString, circle.Name)
+
+	if _, ok := stage.reference[circle]; ok {
+		stage.deleted[circle] = struct{}{}
+	} else {
+		delete(stage.new, circle)
+	}
 	return circle
 }
 
@@ -1325,6 +1459,10 @@ func (circle *Circle) CommitVoid(stage *Stage) {
 	circle.Commit(stage)
 }
 
+func (circle *Circle) StageVoid(stage *Stage) {
+	circle.Stage(stage)
+}
+
 // Checkout circle to the back repo (if it is already staged)
 func (circle *Circle) Checkout(stage *Stage) *Circle {
 	if _, ok := stage.Circles[circle]; ok {
@@ -1340,6 +1478,148 @@ func (circle *Circle) GetName() (res string) {
 	return circle.Name
 }
 
+// Stage puts condition to the model stage
+func (condition *Condition) Stage(stage *Stage) *Condition {
+
+	if _, ok := stage.Conditions[condition]; !ok {
+		stage.Conditions[condition] = __member
+		stage.ConditionMap_Staged_Order[condition] = stage.ConditionOrder
+		stage.ConditionOrder++
+		stage.new[condition] = struct{}{}
+		delete(stage.deleted, condition)
+	} else {
+		if _, ok := stage.new[condition]; !ok {
+			stage.modified[condition] = struct{}{}
+		}
+	}
+	stage.Conditions_mapString[condition.Name] = condition
+
+	return condition
+}
+
+// Unstage removes condition off the model stage
+func (condition *Condition) Unstage(stage *Stage) *Condition {
+	delete(stage.Conditions, condition)
+	delete(stage.Conditions_mapString, condition.Name)
+
+	if _, ok := stage.reference[condition]; ok {
+		stage.deleted[condition] = struct{}{}
+	} else {
+		delete(stage.new, condition)
+	}
+	return condition
+}
+
+// UnstageVoid removes condition off the model stage
+func (condition *Condition) UnstageVoid(stage *Stage) {
+	delete(stage.Conditions, condition)
+	delete(stage.Conditions_mapString, condition.Name)
+}
+
+// commit condition to the back repo (if it is already staged)
+func (condition *Condition) Commit(stage *Stage) *Condition {
+	if _, ok := stage.Conditions[condition]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitCondition(condition)
+		}
+	}
+	return condition
+}
+
+func (condition *Condition) CommitVoid(stage *Stage) {
+	condition.Commit(stage)
+}
+
+func (condition *Condition) StageVoid(stage *Stage) {
+	condition.Stage(stage)
+}
+
+// Checkout condition to the back repo (if it is already staged)
+func (condition *Condition) Checkout(stage *Stage) *Condition {
+	if _, ok := stage.Conditions[condition]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutCondition(condition)
+		}
+	}
+	return condition
+}
+
+// for satisfaction of GongStruct interface
+func (condition *Condition) GetName() (res string) {
+	return condition.Name
+}
+
+// Stage puts controlpoint to the model stage
+func (controlpoint *ControlPoint) Stage(stage *Stage) *ControlPoint {
+
+	if _, ok := stage.ControlPoints[controlpoint]; !ok {
+		stage.ControlPoints[controlpoint] = __member
+		stage.ControlPointMap_Staged_Order[controlpoint] = stage.ControlPointOrder
+		stage.ControlPointOrder++
+		stage.new[controlpoint] = struct{}{}
+		delete(stage.deleted, controlpoint)
+	} else {
+		if _, ok := stage.new[controlpoint]; !ok {
+			stage.modified[controlpoint] = struct{}{}
+		}
+	}
+	stage.ControlPoints_mapString[controlpoint.Name] = controlpoint
+
+	return controlpoint
+}
+
+// Unstage removes controlpoint off the model stage
+func (controlpoint *ControlPoint) Unstage(stage *Stage) *ControlPoint {
+	delete(stage.ControlPoints, controlpoint)
+	delete(stage.ControlPoints_mapString, controlpoint.Name)
+
+	if _, ok := stage.reference[controlpoint]; ok {
+		stage.deleted[controlpoint] = struct{}{}
+	} else {
+		delete(stage.new, controlpoint)
+	}
+	return controlpoint
+}
+
+// UnstageVoid removes controlpoint off the model stage
+func (controlpoint *ControlPoint) UnstageVoid(stage *Stage) {
+	delete(stage.ControlPoints, controlpoint)
+	delete(stage.ControlPoints_mapString, controlpoint.Name)
+}
+
+// commit controlpoint to the back repo (if it is already staged)
+func (controlpoint *ControlPoint) Commit(stage *Stage) *ControlPoint {
+	if _, ok := stage.ControlPoints[controlpoint]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CommitControlPoint(controlpoint)
+		}
+	}
+	return controlpoint
+}
+
+func (controlpoint *ControlPoint) CommitVoid(stage *Stage) {
+	controlpoint.Commit(stage)
+}
+
+func (controlpoint *ControlPoint) StageVoid(stage *Stage) {
+	controlpoint.Stage(stage)
+}
+
+// Checkout controlpoint to the back repo (if it is already staged)
+func (controlpoint *ControlPoint) Checkout(stage *Stage) *ControlPoint {
+	if _, ok := stage.ControlPoints[controlpoint]; ok {
+		if stage.BackRepo != nil {
+			stage.BackRepo.CheckoutControlPoint(controlpoint)
+		}
+	}
+	return controlpoint
+}
+
+// for satisfaction of GongStruct interface
+func (controlpoint *ControlPoint) GetName() (res string) {
+	return controlpoint.Name
+}
+
 // Stage puts ellipse to the model stage
 func (ellipse *Ellipse) Stage(stage *Stage) *Ellipse {
 
@@ -1347,6 +1627,12 @@ func (ellipse *Ellipse) Stage(stage *Stage) *Ellipse {
 		stage.Ellipses[ellipse] = __member
 		stage.EllipseMap_Staged_Order[ellipse] = stage.EllipseOrder
 		stage.EllipseOrder++
+		stage.new[ellipse] = struct{}{}
+		delete(stage.deleted, ellipse)
+	} else {
+		if _, ok := stage.new[ellipse]; !ok {
+			stage.modified[ellipse] = struct{}{}
+		}
 	}
 	stage.Ellipses_mapString[ellipse.Name] = ellipse
 
@@ -1357,6 +1643,12 @@ func (ellipse *Ellipse) Stage(stage *Stage) *Ellipse {
 func (ellipse *Ellipse) Unstage(stage *Stage) *Ellipse {
 	delete(stage.Ellipses, ellipse)
 	delete(stage.Ellipses_mapString, ellipse.Name)
+
+	if _, ok := stage.reference[ellipse]; ok {
+		stage.deleted[ellipse] = struct{}{}
+	} else {
+		delete(stage.new, ellipse)
+	}
 	return ellipse
 }
 
@@ -1378,6 +1670,10 @@ func (ellipse *Ellipse) Commit(stage *Stage) *Ellipse {
 
 func (ellipse *Ellipse) CommitVoid(stage *Stage) {
 	ellipse.Commit(stage)
+}
+
+func (ellipse *Ellipse) StageVoid(stage *Stage) {
+	ellipse.Stage(stage)
 }
 
 // Checkout ellipse to the back repo (if it is already staged)
@@ -1402,6 +1698,12 @@ func (layer *Layer) Stage(stage *Stage) *Layer {
 		stage.Layers[layer] = __member
 		stage.LayerMap_Staged_Order[layer] = stage.LayerOrder
 		stage.LayerOrder++
+		stage.new[layer] = struct{}{}
+		delete(stage.deleted, layer)
+	} else {
+		if _, ok := stage.new[layer]; !ok {
+			stage.modified[layer] = struct{}{}
+		}
 	}
 	stage.Layers_mapString[layer.Name] = layer
 
@@ -1412,6 +1714,12 @@ func (layer *Layer) Stage(stage *Stage) *Layer {
 func (layer *Layer) Unstage(stage *Stage) *Layer {
 	delete(stage.Layers, layer)
 	delete(stage.Layers_mapString, layer.Name)
+
+	if _, ok := stage.reference[layer]; ok {
+		stage.deleted[layer] = struct{}{}
+	} else {
+		delete(stage.new, layer)
+	}
 	return layer
 }
 
@@ -1433,6 +1741,10 @@ func (layer *Layer) Commit(stage *Stage) *Layer {
 
 func (layer *Layer) CommitVoid(stage *Stage) {
 	layer.Commit(stage)
+}
+
+func (layer *Layer) StageVoid(stage *Stage) {
+	layer.Stage(stage)
 }
 
 // Checkout layer to the back repo (if it is already staged)
@@ -1457,6 +1769,12 @@ func (line *Line) Stage(stage *Stage) *Line {
 		stage.Lines[line] = __member
 		stage.LineMap_Staged_Order[line] = stage.LineOrder
 		stage.LineOrder++
+		stage.new[line] = struct{}{}
+		delete(stage.deleted, line)
+	} else {
+		if _, ok := stage.new[line]; !ok {
+			stage.modified[line] = struct{}{}
+		}
 	}
 	stage.Lines_mapString[line.Name] = line
 
@@ -1467,6 +1785,12 @@ func (line *Line) Stage(stage *Stage) *Line {
 func (line *Line) Unstage(stage *Stage) *Line {
 	delete(stage.Lines, line)
 	delete(stage.Lines_mapString, line.Name)
+
+	if _, ok := stage.reference[line]; ok {
+		stage.deleted[line] = struct{}{}
+	} else {
+		delete(stage.new, line)
+	}
 	return line
 }
 
@@ -1488,6 +1812,10 @@ func (line *Line) Commit(stage *Stage) *Line {
 
 func (line *Line) CommitVoid(stage *Stage) {
 	line.Commit(stage)
+}
+
+func (line *Line) StageVoid(stage *Stage) {
+	line.Stage(stage)
 }
 
 // Checkout line to the back repo (if it is already staged)
@@ -1512,6 +1840,12 @@ func (link *Link) Stage(stage *Stage) *Link {
 		stage.Links[link] = __member
 		stage.LinkMap_Staged_Order[link] = stage.LinkOrder
 		stage.LinkOrder++
+		stage.new[link] = struct{}{}
+		delete(stage.deleted, link)
+	} else {
+		if _, ok := stage.new[link]; !ok {
+			stage.modified[link] = struct{}{}
+		}
 	}
 	stage.Links_mapString[link.Name] = link
 
@@ -1522,6 +1856,12 @@ func (link *Link) Stage(stage *Stage) *Link {
 func (link *Link) Unstage(stage *Stage) *Link {
 	delete(stage.Links, link)
 	delete(stage.Links_mapString, link.Name)
+
+	if _, ok := stage.reference[link]; ok {
+		stage.deleted[link] = struct{}{}
+	} else {
+		delete(stage.new, link)
+	}
 	return link
 }
 
@@ -1543,6 +1883,10 @@ func (link *Link) Commit(stage *Stage) *Link {
 
 func (link *Link) CommitVoid(stage *Stage) {
 	link.Commit(stage)
+}
+
+func (link *Link) StageVoid(stage *Stage) {
+	link.Stage(stage)
 }
 
 // Checkout link to the back repo (if it is already staged)
@@ -1567,6 +1911,12 @@ func (linkanchoredtext *LinkAnchoredText) Stage(stage *Stage) *LinkAnchoredText 
 		stage.LinkAnchoredTexts[linkanchoredtext] = __member
 		stage.LinkAnchoredTextMap_Staged_Order[linkanchoredtext] = stage.LinkAnchoredTextOrder
 		stage.LinkAnchoredTextOrder++
+		stage.new[linkanchoredtext] = struct{}{}
+		delete(stage.deleted, linkanchoredtext)
+	} else {
+		if _, ok := stage.new[linkanchoredtext]; !ok {
+			stage.modified[linkanchoredtext] = struct{}{}
+		}
 	}
 	stage.LinkAnchoredTexts_mapString[linkanchoredtext.Name] = linkanchoredtext
 
@@ -1577,6 +1927,12 @@ func (linkanchoredtext *LinkAnchoredText) Stage(stage *Stage) *LinkAnchoredText 
 func (linkanchoredtext *LinkAnchoredText) Unstage(stage *Stage) *LinkAnchoredText {
 	delete(stage.LinkAnchoredTexts, linkanchoredtext)
 	delete(stage.LinkAnchoredTexts_mapString, linkanchoredtext.Name)
+
+	if _, ok := stage.reference[linkanchoredtext]; ok {
+		stage.deleted[linkanchoredtext] = struct{}{}
+	} else {
+		delete(stage.new, linkanchoredtext)
+	}
 	return linkanchoredtext
 }
 
@@ -1598,6 +1954,10 @@ func (linkanchoredtext *LinkAnchoredText) Commit(stage *Stage) *LinkAnchoredText
 
 func (linkanchoredtext *LinkAnchoredText) CommitVoid(stage *Stage) {
 	linkanchoredtext.Commit(stage)
+}
+
+func (linkanchoredtext *LinkAnchoredText) StageVoid(stage *Stage) {
+	linkanchoredtext.Stage(stage)
 }
 
 // Checkout linkanchoredtext to the back repo (if it is already staged)
@@ -1622,6 +1982,12 @@ func (path *Path) Stage(stage *Stage) *Path {
 		stage.Paths[path] = __member
 		stage.PathMap_Staged_Order[path] = stage.PathOrder
 		stage.PathOrder++
+		stage.new[path] = struct{}{}
+		delete(stage.deleted, path)
+	} else {
+		if _, ok := stage.new[path]; !ok {
+			stage.modified[path] = struct{}{}
+		}
 	}
 	stage.Paths_mapString[path.Name] = path
 
@@ -1632,6 +1998,12 @@ func (path *Path) Stage(stage *Stage) *Path {
 func (path *Path) Unstage(stage *Stage) *Path {
 	delete(stage.Paths, path)
 	delete(stage.Paths_mapString, path.Name)
+
+	if _, ok := stage.reference[path]; ok {
+		stage.deleted[path] = struct{}{}
+	} else {
+		delete(stage.new, path)
+	}
 	return path
 }
 
@@ -1653,6 +2025,10 @@ func (path *Path) Commit(stage *Stage) *Path {
 
 func (path *Path) CommitVoid(stage *Stage) {
 	path.Commit(stage)
+}
+
+func (path *Path) StageVoid(stage *Stage) {
+	path.Stage(stage)
 }
 
 // Checkout path to the back repo (if it is already staged)
@@ -1677,6 +2053,12 @@ func (point *Point) Stage(stage *Stage) *Point {
 		stage.Points[point] = __member
 		stage.PointMap_Staged_Order[point] = stage.PointOrder
 		stage.PointOrder++
+		stage.new[point] = struct{}{}
+		delete(stage.deleted, point)
+	} else {
+		if _, ok := stage.new[point]; !ok {
+			stage.modified[point] = struct{}{}
+		}
 	}
 	stage.Points_mapString[point.Name] = point
 
@@ -1687,6 +2069,12 @@ func (point *Point) Stage(stage *Stage) *Point {
 func (point *Point) Unstage(stage *Stage) *Point {
 	delete(stage.Points, point)
 	delete(stage.Points_mapString, point.Name)
+
+	if _, ok := stage.reference[point]; ok {
+		stage.deleted[point] = struct{}{}
+	} else {
+		delete(stage.new, point)
+	}
 	return point
 }
 
@@ -1708,6 +2096,10 @@ func (point *Point) Commit(stage *Stage) *Point {
 
 func (point *Point) CommitVoid(stage *Stage) {
 	point.Commit(stage)
+}
+
+func (point *Point) StageVoid(stage *Stage) {
+	point.Stage(stage)
 }
 
 // Checkout point to the back repo (if it is already staged)
@@ -1732,6 +2124,12 @@ func (polygone *Polygone) Stage(stage *Stage) *Polygone {
 		stage.Polygones[polygone] = __member
 		stage.PolygoneMap_Staged_Order[polygone] = stage.PolygoneOrder
 		stage.PolygoneOrder++
+		stage.new[polygone] = struct{}{}
+		delete(stage.deleted, polygone)
+	} else {
+		if _, ok := stage.new[polygone]; !ok {
+			stage.modified[polygone] = struct{}{}
+		}
 	}
 	stage.Polygones_mapString[polygone.Name] = polygone
 
@@ -1742,6 +2140,12 @@ func (polygone *Polygone) Stage(stage *Stage) *Polygone {
 func (polygone *Polygone) Unstage(stage *Stage) *Polygone {
 	delete(stage.Polygones, polygone)
 	delete(stage.Polygones_mapString, polygone.Name)
+
+	if _, ok := stage.reference[polygone]; ok {
+		stage.deleted[polygone] = struct{}{}
+	} else {
+		delete(stage.new, polygone)
+	}
 	return polygone
 }
 
@@ -1763,6 +2167,10 @@ func (polygone *Polygone) Commit(stage *Stage) *Polygone {
 
 func (polygone *Polygone) CommitVoid(stage *Stage) {
 	polygone.Commit(stage)
+}
+
+func (polygone *Polygone) StageVoid(stage *Stage) {
+	polygone.Stage(stage)
 }
 
 // Checkout polygone to the back repo (if it is already staged)
@@ -1787,6 +2195,12 @@ func (polyline *Polyline) Stage(stage *Stage) *Polyline {
 		stage.Polylines[polyline] = __member
 		stage.PolylineMap_Staged_Order[polyline] = stage.PolylineOrder
 		stage.PolylineOrder++
+		stage.new[polyline] = struct{}{}
+		delete(stage.deleted, polyline)
+	} else {
+		if _, ok := stage.new[polyline]; !ok {
+			stage.modified[polyline] = struct{}{}
+		}
 	}
 	stage.Polylines_mapString[polyline.Name] = polyline
 
@@ -1797,6 +2211,12 @@ func (polyline *Polyline) Stage(stage *Stage) *Polyline {
 func (polyline *Polyline) Unstage(stage *Stage) *Polyline {
 	delete(stage.Polylines, polyline)
 	delete(stage.Polylines_mapString, polyline.Name)
+
+	if _, ok := stage.reference[polyline]; ok {
+		stage.deleted[polyline] = struct{}{}
+	} else {
+		delete(stage.new, polyline)
+	}
 	return polyline
 }
 
@@ -1818,6 +2238,10 @@ func (polyline *Polyline) Commit(stage *Stage) *Polyline {
 
 func (polyline *Polyline) CommitVoid(stage *Stage) {
 	polyline.Commit(stage)
+}
+
+func (polyline *Polyline) StageVoid(stage *Stage) {
+	polyline.Stage(stage)
 }
 
 // Checkout polyline to the back repo (if it is already staged)
@@ -1842,6 +2266,12 @@ func (rect *Rect) Stage(stage *Stage) *Rect {
 		stage.Rects[rect] = __member
 		stage.RectMap_Staged_Order[rect] = stage.RectOrder
 		stage.RectOrder++
+		stage.new[rect] = struct{}{}
+		delete(stage.deleted, rect)
+	} else {
+		if _, ok := stage.new[rect]; !ok {
+			stage.modified[rect] = struct{}{}
+		}
 	}
 	stage.Rects_mapString[rect.Name] = rect
 
@@ -1852,6 +2282,12 @@ func (rect *Rect) Stage(stage *Stage) *Rect {
 func (rect *Rect) Unstage(stage *Stage) *Rect {
 	delete(stage.Rects, rect)
 	delete(stage.Rects_mapString, rect.Name)
+
+	if _, ok := stage.reference[rect]; ok {
+		stage.deleted[rect] = struct{}{}
+	} else {
+		delete(stage.new, rect)
+	}
 	return rect
 }
 
@@ -1873,6 +2309,10 @@ func (rect *Rect) Commit(stage *Stage) *Rect {
 
 func (rect *Rect) CommitVoid(stage *Stage) {
 	rect.Commit(stage)
+}
+
+func (rect *Rect) StageVoid(stage *Stage) {
+	rect.Stage(stage)
 }
 
 // Checkout rect to the back repo (if it is already staged)
@@ -1897,6 +2337,12 @@ func (rectanchoredpath *RectAnchoredPath) Stage(stage *Stage) *RectAnchoredPath 
 		stage.RectAnchoredPaths[rectanchoredpath] = __member
 		stage.RectAnchoredPathMap_Staged_Order[rectanchoredpath] = stage.RectAnchoredPathOrder
 		stage.RectAnchoredPathOrder++
+		stage.new[rectanchoredpath] = struct{}{}
+		delete(stage.deleted, rectanchoredpath)
+	} else {
+		if _, ok := stage.new[rectanchoredpath]; !ok {
+			stage.modified[rectanchoredpath] = struct{}{}
+		}
 	}
 	stage.RectAnchoredPaths_mapString[rectanchoredpath.Name] = rectanchoredpath
 
@@ -1907,6 +2353,12 @@ func (rectanchoredpath *RectAnchoredPath) Stage(stage *Stage) *RectAnchoredPath 
 func (rectanchoredpath *RectAnchoredPath) Unstage(stage *Stage) *RectAnchoredPath {
 	delete(stage.RectAnchoredPaths, rectanchoredpath)
 	delete(stage.RectAnchoredPaths_mapString, rectanchoredpath.Name)
+
+	if _, ok := stage.reference[rectanchoredpath]; ok {
+		stage.deleted[rectanchoredpath] = struct{}{}
+	} else {
+		delete(stage.new, rectanchoredpath)
+	}
 	return rectanchoredpath
 }
 
@@ -1928,6 +2380,10 @@ func (rectanchoredpath *RectAnchoredPath) Commit(stage *Stage) *RectAnchoredPath
 
 func (rectanchoredpath *RectAnchoredPath) CommitVoid(stage *Stage) {
 	rectanchoredpath.Commit(stage)
+}
+
+func (rectanchoredpath *RectAnchoredPath) StageVoid(stage *Stage) {
+	rectanchoredpath.Stage(stage)
 }
 
 // Checkout rectanchoredpath to the back repo (if it is already staged)
@@ -1952,6 +2408,12 @@ func (rectanchoredrect *RectAnchoredRect) Stage(stage *Stage) *RectAnchoredRect 
 		stage.RectAnchoredRects[rectanchoredrect] = __member
 		stage.RectAnchoredRectMap_Staged_Order[rectanchoredrect] = stage.RectAnchoredRectOrder
 		stage.RectAnchoredRectOrder++
+		stage.new[rectanchoredrect] = struct{}{}
+		delete(stage.deleted, rectanchoredrect)
+	} else {
+		if _, ok := stage.new[rectanchoredrect]; !ok {
+			stage.modified[rectanchoredrect] = struct{}{}
+		}
 	}
 	stage.RectAnchoredRects_mapString[rectanchoredrect.Name] = rectanchoredrect
 
@@ -1962,6 +2424,12 @@ func (rectanchoredrect *RectAnchoredRect) Stage(stage *Stage) *RectAnchoredRect 
 func (rectanchoredrect *RectAnchoredRect) Unstage(stage *Stage) *RectAnchoredRect {
 	delete(stage.RectAnchoredRects, rectanchoredrect)
 	delete(stage.RectAnchoredRects_mapString, rectanchoredrect.Name)
+
+	if _, ok := stage.reference[rectanchoredrect]; ok {
+		stage.deleted[rectanchoredrect] = struct{}{}
+	} else {
+		delete(stage.new, rectanchoredrect)
+	}
 	return rectanchoredrect
 }
 
@@ -1983,6 +2451,10 @@ func (rectanchoredrect *RectAnchoredRect) Commit(stage *Stage) *RectAnchoredRect
 
 func (rectanchoredrect *RectAnchoredRect) CommitVoid(stage *Stage) {
 	rectanchoredrect.Commit(stage)
+}
+
+func (rectanchoredrect *RectAnchoredRect) StageVoid(stage *Stage) {
+	rectanchoredrect.Stage(stage)
 }
 
 // Checkout rectanchoredrect to the back repo (if it is already staged)
@@ -2007,6 +2479,12 @@ func (rectanchoredtext *RectAnchoredText) Stage(stage *Stage) *RectAnchoredText 
 		stage.RectAnchoredTexts[rectanchoredtext] = __member
 		stage.RectAnchoredTextMap_Staged_Order[rectanchoredtext] = stage.RectAnchoredTextOrder
 		stage.RectAnchoredTextOrder++
+		stage.new[rectanchoredtext] = struct{}{}
+		delete(stage.deleted, rectanchoredtext)
+	} else {
+		if _, ok := stage.new[rectanchoredtext]; !ok {
+			stage.modified[rectanchoredtext] = struct{}{}
+		}
 	}
 	stage.RectAnchoredTexts_mapString[rectanchoredtext.Name] = rectanchoredtext
 
@@ -2017,6 +2495,12 @@ func (rectanchoredtext *RectAnchoredText) Stage(stage *Stage) *RectAnchoredText 
 func (rectanchoredtext *RectAnchoredText) Unstage(stage *Stage) *RectAnchoredText {
 	delete(stage.RectAnchoredTexts, rectanchoredtext)
 	delete(stage.RectAnchoredTexts_mapString, rectanchoredtext.Name)
+
+	if _, ok := stage.reference[rectanchoredtext]; ok {
+		stage.deleted[rectanchoredtext] = struct{}{}
+	} else {
+		delete(stage.new, rectanchoredtext)
+	}
 	return rectanchoredtext
 }
 
@@ -2038,6 +2522,10 @@ func (rectanchoredtext *RectAnchoredText) Commit(stage *Stage) *RectAnchoredText
 
 func (rectanchoredtext *RectAnchoredText) CommitVoid(stage *Stage) {
 	rectanchoredtext.Commit(stage)
+}
+
+func (rectanchoredtext *RectAnchoredText) StageVoid(stage *Stage) {
+	rectanchoredtext.Stage(stage)
 }
 
 // Checkout rectanchoredtext to the back repo (if it is already staged)
@@ -2062,6 +2550,12 @@ func (rectlinklink *RectLinkLink) Stage(stage *Stage) *RectLinkLink {
 		stage.RectLinkLinks[rectlinklink] = __member
 		stage.RectLinkLinkMap_Staged_Order[rectlinklink] = stage.RectLinkLinkOrder
 		stage.RectLinkLinkOrder++
+		stage.new[rectlinklink] = struct{}{}
+		delete(stage.deleted, rectlinklink)
+	} else {
+		if _, ok := stage.new[rectlinklink]; !ok {
+			stage.modified[rectlinklink] = struct{}{}
+		}
 	}
 	stage.RectLinkLinks_mapString[rectlinklink.Name] = rectlinklink
 
@@ -2072,6 +2566,12 @@ func (rectlinklink *RectLinkLink) Stage(stage *Stage) *RectLinkLink {
 func (rectlinklink *RectLinkLink) Unstage(stage *Stage) *RectLinkLink {
 	delete(stage.RectLinkLinks, rectlinklink)
 	delete(stage.RectLinkLinks_mapString, rectlinklink.Name)
+
+	if _, ok := stage.reference[rectlinklink]; ok {
+		stage.deleted[rectlinklink] = struct{}{}
+	} else {
+		delete(stage.new, rectlinklink)
+	}
 	return rectlinklink
 }
 
@@ -2093,6 +2593,10 @@ func (rectlinklink *RectLinkLink) Commit(stage *Stage) *RectLinkLink {
 
 func (rectlinklink *RectLinkLink) CommitVoid(stage *Stage) {
 	rectlinklink.Commit(stage)
+}
+
+func (rectlinklink *RectLinkLink) StageVoid(stage *Stage) {
+	rectlinklink.Stage(stage)
 }
 
 // Checkout rectlinklink to the back repo (if it is already staged)
@@ -2117,6 +2621,12 @@ func (svg *SVG) Stage(stage *Stage) *SVG {
 		stage.SVGs[svg] = __member
 		stage.SVGMap_Staged_Order[svg] = stage.SVGOrder
 		stage.SVGOrder++
+		stage.new[svg] = struct{}{}
+		delete(stage.deleted, svg)
+	} else {
+		if _, ok := stage.new[svg]; !ok {
+			stage.modified[svg] = struct{}{}
+		}
 	}
 	stage.SVGs_mapString[svg.Name] = svg
 
@@ -2127,6 +2637,12 @@ func (svg *SVG) Stage(stage *Stage) *SVG {
 func (svg *SVG) Unstage(stage *Stage) *SVG {
 	delete(stage.SVGs, svg)
 	delete(stage.SVGs_mapString, svg.Name)
+
+	if _, ok := stage.reference[svg]; ok {
+		stage.deleted[svg] = struct{}{}
+	} else {
+		delete(stage.new, svg)
+	}
 	return svg
 }
 
@@ -2148,6 +2664,10 @@ func (svg *SVG) Commit(stage *Stage) *SVG {
 
 func (svg *SVG) CommitVoid(stage *Stage) {
 	svg.Commit(stage)
+}
+
+func (svg *SVG) StageVoid(stage *Stage) {
+	svg.Stage(stage)
 }
 
 // Checkout svg to the back repo (if it is already staged)
@@ -2172,6 +2692,12 @@ func (svgtext *SvgText) Stage(stage *Stage) *SvgText {
 		stage.SvgTexts[svgtext] = __member
 		stage.SvgTextMap_Staged_Order[svgtext] = stage.SvgTextOrder
 		stage.SvgTextOrder++
+		stage.new[svgtext] = struct{}{}
+		delete(stage.deleted, svgtext)
+	} else {
+		if _, ok := stage.new[svgtext]; !ok {
+			stage.modified[svgtext] = struct{}{}
+		}
 	}
 	stage.SvgTexts_mapString[svgtext.Name] = svgtext
 
@@ -2182,6 +2708,12 @@ func (svgtext *SvgText) Stage(stage *Stage) *SvgText {
 func (svgtext *SvgText) Unstage(stage *Stage) *SvgText {
 	delete(stage.SvgTexts, svgtext)
 	delete(stage.SvgTexts_mapString, svgtext.Name)
+
+	if _, ok := stage.reference[svgtext]; ok {
+		stage.deleted[svgtext] = struct{}{}
+	} else {
+		delete(stage.new, svgtext)
+	}
 	return svgtext
 }
 
@@ -2203,6 +2735,10 @@ func (svgtext *SvgText) Commit(stage *Stage) *SvgText {
 
 func (svgtext *SvgText) CommitVoid(stage *Stage) {
 	svgtext.Commit(stage)
+}
+
+func (svgtext *SvgText) StageVoid(stage *Stage) {
+	svgtext.Stage(stage)
 }
 
 // Checkout svgtext to the back repo (if it is already staged)
@@ -2227,6 +2763,12 @@ func (text *Text) Stage(stage *Stage) *Text {
 		stage.Texts[text] = __member
 		stage.TextMap_Staged_Order[text] = stage.TextOrder
 		stage.TextOrder++
+		stage.new[text] = struct{}{}
+		delete(stage.deleted, text)
+	} else {
+		if _, ok := stage.new[text]; !ok {
+			stage.modified[text] = struct{}{}
+		}
 	}
 	stage.Texts_mapString[text.Name] = text
 
@@ -2237,6 +2779,12 @@ func (text *Text) Stage(stage *Stage) *Text {
 func (text *Text) Unstage(stage *Stage) *Text {
 	delete(stage.Texts, text)
 	delete(stage.Texts_mapString, text.Name)
+
+	if _, ok := stage.reference[text]; ok {
+		stage.deleted[text] = struct{}{}
+	} else {
+		delete(stage.new, text)
+	}
 	return text
 }
 
@@ -2260,6 +2808,10 @@ func (text *Text) CommitVoid(stage *Stage) {
 	text.Commit(stage)
 }
 
+func (text *Text) StageVoid(stage *Stage) {
+	text.Stage(stage)
+}
+
 // Checkout text to the back repo (if it is already staged)
 func (text *Text) Checkout(stage *Stage) *Text {
 	if _, ok := stage.Texts[text]; ok {
@@ -2279,6 +2831,8 @@ func (text *Text) GetName() (res string) {
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMAnimate(Animate *Animate)
 	CreateORMCircle(Circle *Circle)
+	CreateORMCondition(Condition *Condition)
+	CreateORMControlPoint(ControlPoint *ControlPoint)
 	CreateORMEllipse(Ellipse *Ellipse)
 	CreateORMLayer(Layer *Layer)
 	CreateORMLine(Line *Line)
@@ -2301,6 +2855,8 @@ type AllModelsStructCreateInterface interface { // insertion point for Callbacks
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
 	DeleteORMAnimate(Animate *Animate)
 	DeleteORMCircle(Circle *Circle)
+	DeleteORMCondition(Condition *Condition)
+	DeleteORMControlPoint(ControlPoint *ControlPoint)
 	DeleteORMEllipse(Ellipse *Ellipse)
 	DeleteORMLayer(Layer *Layer)
 	DeleteORMLine(Line *Line)
@@ -2330,6 +2886,16 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.Circles_mapString = make(map[string]*Circle)
 	stage.CircleMap_Staged_Order = make(map[*Circle]uint)
 	stage.CircleOrder = 0
+
+	stage.Conditions = make(map[*Condition]any)
+	stage.Conditions_mapString = make(map[string]*Condition)
+	stage.ConditionMap_Staged_Order = make(map[*Condition]uint)
+	stage.ConditionOrder = 0
+
+	stage.ControlPoints = make(map[*ControlPoint]any)
+	stage.ControlPoints_mapString = make(map[string]*ControlPoint)
+	stage.ControlPointMap_Staged_Order = make(map[*ControlPoint]uint)
+	stage.ControlPointOrder = 0
 
 	stage.Ellipses = make(map[*Ellipse]any)
 	stage.Ellipses_mapString = make(map[string]*Ellipse)
@@ -2416,6 +2982,7 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.TextMap_Staged_Order = make(map[*Text]uint)
 	stage.TextOrder = 0
 
+	stage.ComputeReference()
 }
 
 func (stage *Stage) Nil() { // insertion point for array nil
@@ -2424,6 +2991,12 @@ func (stage *Stage) Nil() { // insertion point for array nil
 
 	stage.Circles = nil
 	stage.Circles_mapString = nil
+
+	stage.Conditions = nil
+	stage.Conditions_mapString = nil
+
+	stage.ControlPoints = nil
+	stage.ControlPoints_mapString = nil
 
 	stage.Ellipses = nil
 	stage.Ellipses_mapString = nil
@@ -2485,6 +3058,14 @@ func (stage *Stage) Unstage() { // insertion point for array nil
 
 	for circle := range stage.Circles {
 		circle.Unstage(stage)
+	}
+
+	for condition := range stage.Conditions {
+		condition.Unstage(stage)
+	}
+
+	for controlpoint := range stage.ControlPoints {
+		controlpoint.Unstage(stage)
 	}
 
 	for ellipse := range stage.Ellipses {
@@ -2572,10 +3153,22 @@ type GongtructBasicField interface {
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
-type PointerToGongstruct interface {
+type GongstructIF interface {
 	GetName() string
 	CommitVoid(*Stage)
+	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
+	GongGetFieldHeaders() []GongFieldHeader
+	GongClean(stage *Stage)
+	GongGetFieldValue(fieldName string, stage *Stage) GongFieldValue
+	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
+	GongGetGongstructName() string
+	GongCopy() GongstructIF
+	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string
+	GongGetReverseFieldOwner(stage *Stage, reverseField *ReverseField) GongstructIF
+}
+type PointerToGongstruct interface {
+	GongstructIF
 	comparable
 }
 
@@ -2620,6 +3213,10 @@ func GongGetSet[Type GongstructSet](stage *Stage) *Type {
 		return any(&stage.Animates).(*Type)
 	case map[*Circle]any:
 		return any(&stage.Circles).(*Type)
+	case map[*Condition]any:
+		return any(&stage.Conditions).(*Type)
+	case map[*ControlPoint]any:
+		return any(&stage.ControlPoints).(*Type)
 	case map[*Ellipse]any:
 		return any(&stage.Ellipses).(*Type)
 	case map[*Layer]any:
@@ -2670,6 +3267,10 @@ func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
 		return any(&stage.Animates_mapString).(*Type)
 	case map[string]*Circle:
 		return any(&stage.Circles_mapString).(*Type)
+	case map[string]*Condition:
+		return any(&stage.Conditions_mapString).(*Type)
+	case map[string]*ControlPoint:
+		return any(&stage.ControlPoints_mapString).(*Type)
 	case map[string]*Ellipse:
 		return any(&stage.Ellipses_mapString).(*Type)
 	case map[string]*Layer:
@@ -2720,6 +3321,10 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
 		return any(&stage.Animates).(*map[*Type]any)
 	case Circle:
 		return any(&stage.Circles).(*map[*Type]any)
+	case Condition:
+		return any(&stage.Conditions).(*map[*Type]any)
+	case ControlPoint:
+		return any(&stage.ControlPoints).(*map[*Type]any)
 	case Ellipse:
 		return any(&stage.Ellipses).(*map[*Type]any)
 	case Layer:
@@ -2770,6 +3375,10 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 		return any(&stage.Animates).(*map[Type]any)
 	case *Circle:
 		return any(&stage.Circles).(*map[Type]any)
+	case *Condition:
+		return any(&stage.Conditions).(*map[Type]any)
+	case *ControlPoint:
+		return any(&stage.ControlPoints).(*map[Type]any)
 	case *Ellipse:
 		return any(&stage.Ellipses).(*map[Type]any)
 	case *Layer:
@@ -2810,7 +3419,7 @@ func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *S
 }
 
 // GetGongstructInstancesMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
+// it is usefull because it allows refactoring of gongstruct identifier
 func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type {
 	var ret Type
 
@@ -2820,6 +3429,10 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *Stage) *map[string]*Type 
 		return any(&stage.Animates_mapString).(*map[string]*Type)
 	case Circle:
 		return any(&stage.Circles_mapString).(*map[string]*Type)
+	case Condition:
+		return any(&stage.Conditions_mapString).(*map[string]*Type)
+	case ControlPoint:
+		return any(&stage.ControlPoints_mapString).(*map[string]*Type)
 	case Ellipse:
 		return any(&stage.Ellipses_mapString).(*map[string]*Type)
 	case Layer:
@@ -2878,6 +3491,16 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			// field is initialized with an instance of Animate with the name of the field
 			Animations: []*Animate{{Name: "Animations"}},
 		}).(*Type)
+	case Condition:
+		return any(&Condition{
+			// Initialisation of associations
+		}).(*Type)
+	case ControlPoint:
+		return any(&ControlPoint{
+			// Initialisation of associations
+			// field is initialized with an instance of Rect with the name of the field
+			ClosestRect: &Rect{Name: "ClosestRect"},
+		}).(*Type)
 	case Ellipse:
 		return any(&Ellipse{
 			// Initialisation of associations
@@ -2925,8 +3548,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 			TextAtArrowStart: []*LinkAnchoredText{{Name: "TextAtArrowStart"}},
 			// field is initialized with an instance of LinkAnchoredText with the name of the field
 			TextAtArrowEnd: []*LinkAnchoredText{{Name: "TextAtArrowEnd"}},
-			// field is initialized with an instance of Point with the name of the field
-			ControlPoints: []*Point{{Name: "ControlPoints"}},
+			// field is initialized with an instance of ControlPoint with the name of the field
+			ControlPoints: []*ControlPoint{{Name: "ControlPoints"}},
 		}).(*Type)
 	case LinkAnchoredText:
 		return any(&LinkAnchoredText{
@@ -3037,6 +3660,33 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 	case Circle:
 		switch fieldname {
 		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of Condition
+	case Condition:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of ControlPoint
+	case ControlPoint:
+		switch fieldname {
+		// insertion point for per direct association field
+		case "ClosestRect":
+			res := make(map[*Rect][]*ControlPoint)
+			for controlpoint := range stage.ControlPoints {
+				if controlpoint.ClosestRect != nil {
+					rect_ := controlpoint.ClosestRect
+					var controlpoints []*ControlPoint
+					_, ok := res[rect_]
+					if ok {
+						controlpoints = res[rect_]
+					} else {
+						controlpoints = make([]*ControlPoint, 0)
+					}
+					controlpoints = append(controlpoints, controlpoint)
+					res[rect_] = controlpoints
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		}
 	// reverse maps of direct associations of Ellipse
 	case Ellipse:
@@ -3259,6 +3909,16 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			}
 			return any(res).(map[*End][]*Start)
 		}
+	// reverse maps of direct associations of Condition
+	case Condition:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
+	// reverse maps of direct associations of ControlPoint
+	case ControlPoint:
+		switch fieldname {
+		// insertion point for per direct association field
+		}
 	// reverse maps of direct associations of Ellipse
 	case Ellipse:
 		switch fieldname {
@@ -3391,10 +4051,10 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 			}
 			return any(res).(map[*End][]*Start)
 		case "ControlPoints":
-			res := make(map[*Point][]*Link)
+			res := make(map[*ControlPoint][]*Link)
 			for link := range stage.Links {
-				for _, point_ := range link.ControlPoints {
-					res[point_] = append(res[point_], link)
+				for _, controlpoint_ := range link.ControlPoints {
+					res[controlpoint_] = append(res[controlpoint_], link)
 				}
 			}
 			return any(res).(map[*End][]*Start)
@@ -3460,6 +4120,22 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	case Rect:
 		switch fieldname {
 		// insertion point for per direct association field
+		case "HoveringTrigger":
+			res := make(map[*Condition][]*Rect)
+			for rect := range stage.Rects {
+				for _, condition_ := range rect.HoveringTrigger {
+					res[condition_] = append(res[condition_], rect)
+				}
+			}
+			return any(res).(map[*End][]*Start)
+		case "DisplayConditions":
+			res := make(map[*Condition][]*Rect)
+			for rect := range stage.Rects {
+				for _, condition_ := range rect.DisplayConditions {
+					res[condition_] = append(res[condition_], rect)
+				}
+			}
+			return any(res).(map[*End][]*Start)
 		case "Animations":
 			res := make(map[*Animate][]*Rect)
 			for rect := range stage.Rects {
@@ -3556,56 +4232,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 	return nil
 }
 
-// GetGongstructName returns the name of the Gongstruct
-// this can be usefull if one want program robust to refactoring
-func GetGongstructName[Type Gongstruct]() (res string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Animate:
-		res = "Animate"
-	case Circle:
-		res = "Circle"
-	case Ellipse:
-		res = "Ellipse"
-	case Layer:
-		res = "Layer"
-	case Line:
-		res = "Line"
-	case Link:
-		res = "Link"
-	case LinkAnchoredText:
-		res = "LinkAnchoredText"
-	case Path:
-		res = "Path"
-	case Point:
-		res = "Point"
-	case Polygone:
-		res = "Polygone"
-	case Polyline:
-		res = "Polyline"
-	case Rect:
-		res = "Rect"
-	case RectAnchoredPath:
-		res = "RectAnchoredPath"
-	case RectAnchoredRect:
-		res = "RectAnchoredRect"
-	case RectAnchoredText:
-		res = "RectAnchoredText"
-	case RectLinkLink:
-		res = "RectLinkLink"
-	case SVG:
-		res = "SVG"
-	case SvgText:
-		res = "SvgText"
-	case Text:
-		res = "Text"
-	}
-	return res
-}
-
 // GetPointerToGongstructName returns the name of the Gongstruct
 // this can be usefull if one want program robust to refactoring
 func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
@@ -3618,6 +4244,10 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 		res = "Animate"
 	case *Circle:
 		res = "Circle"
+	case *Condition:
+		res = "Condition"
+	case *ControlPoint:
+		res = "ControlPoint"
 	case *Ellipse:
 		res = "Ellipse"
 	case *Layer:
@@ -3656,61 +4286,12 @@ func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
 	return res
 }
 
-// GetFields return the array of the fields
-func GetFields[Type Gongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case Animate:
-		res = []string{"Name", "AttributeName", "Values", "From", "To", "Dur", "RepeatCount"}
-	case Circle:
-		res = []string{"Name", "CX", "CY", "Radius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations"}
-	case Ellipse:
-		res = []string{"Name", "CX", "CY", "RX", "RY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case Layer:
-		res = []string{"Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links", "RectLinkLinks"}
-	case Line:
-		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
-	case Link:
-		res = []string{"Name", "Type", "IsBezierCurve", "Start", "StartAnchorType", "End", "EndAnchorType", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio", "CornerRadius", "HasEndArrow", "EndArrowSize", "HasStartArrow", "StartArrowSize", "TextAtArrowStart", "TextAtArrowEnd", "ControlPoints", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case LinkAnchoredText:
-		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case Path:
-		res = []string{"Name", "Definition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case Point:
-		res = []string{"Name", "X", "Y"}
-	case Polygone:
-		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case Polyline:
-		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case Rect:
-		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations", "IsSelectable", "IsSelected", "CanHaveLeftHandle", "HasLeftHandle", "CanHaveRightHandle", "HasRightHandle", "CanHaveTopHandle", "HasTopHandle", "IsScalingProportionally", "CanHaveBottomHandle", "HasBottomHandle", "CanMoveHorizontaly", "CanMoveVerticaly", "RectAnchoredTexts", "RectAnchoredRects", "RectAnchoredPaths", "ChangeColorWhenHovered", "ColorWhenHovered", "OriginalColor", "FillOpacityWhenHovered", "OriginalFillOpacity", "HasToolTip", "ToolTipText"}
-	case RectAnchoredPath:
-		res = []string{"Name", "Definition", "X_Offset", "Y_Offset", "RectAnchorType", "ScalePropotionnally", "AppliedScaling", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case RectAnchoredRect:
-		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "HasToolTip", "ToolTipText", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case RectAnchoredText:
-		res = []string{"Name", "Content", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "WritingMode", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case RectLinkLink:
-		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case SVG:
-		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFrontEndFileGenerated", "IsSVGBackEndFileGenerated", "DefaultDirectoryForGeneratedImages", "IsControlBannerHidden"}
-	case SvgText:
-		res = []string{"Name", "Text"}
-	case Text:
-		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "Animates"}
-	}
-	return
-}
-
 type ReverseField struct {
 	GongstructName string
 	Fieldname      string
 }
 
-func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
+func GetReverseFields[Type PointerToGongstruct]() (res []ReverseField) {
 
 	res = make([]ReverseField, 0)
 
@@ -3719,7 +4300,7 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	switch any(ret).(type) {
 
 	// insertion point for generic get gongstruct name
-	case Animate:
+	case *Animate:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Circle"
@@ -3752,37 +4333,52 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 		rf.GongstructName = "Text"
 		rf.Fieldname = "Animates"
 		res = append(res, rf)
-	case Circle:
+	case *Circle:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
 		rf.Fieldname = "Circles"
 		res = append(res, rf)
-	case Ellipse:
+	case *Condition:
+		var rf ReverseField
+		_ = rf
+		rf.GongstructName = "Rect"
+		rf.Fieldname = "HoveringTrigger"
+		res = append(res, rf)
+		rf.GongstructName = "Rect"
+		rf.Fieldname = "DisplayConditions"
+		res = append(res, rf)
+	case *ControlPoint:
+		var rf ReverseField
+		_ = rf
+		rf.GongstructName = "Link"
+		rf.Fieldname = "ControlPoints"
+		res = append(res, rf)
+	case *Ellipse:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
 		rf.Fieldname = "Ellipses"
 		res = append(res, rf)
-	case Layer:
+	case *Layer:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "SVG"
 		rf.Fieldname = "Layers"
 		res = append(res, rf)
-	case Line:
+	case *Line:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
 		rf.Fieldname = "Lines"
 		res = append(res, rf)
-	case Link:
+	case *Link:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
 		rf.Fieldname = "Links"
 		res = append(res, rf)
-	case LinkAnchoredText:
+	case *LinkAnchoredText:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Link"
@@ -3791,67 +4387,64 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 		rf.GongstructName = "Link"
 		rf.Fieldname = "TextAtArrowEnd"
 		res = append(res, rf)
-	case Path:
+	case *Path:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
 		rf.Fieldname = "Paths"
 		res = append(res, rf)
-	case Point:
+	case *Point:
 		var rf ReverseField
 		_ = rf
-		rf.GongstructName = "Link"
-		rf.Fieldname = "ControlPoints"
-		res = append(res, rf)
-	case Polygone:
+	case *Polygone:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
 		rf.Fieldname = "Polygones"
 		res = append(res, rf)
-	case Polyline:
+	case *Polyline:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
 		rf.Fieldname = "Polylines"
 		res = append(res, rf)
-	case Rect:
+	case *Rect:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
 		rf.Fieldname = "Rects"
 		res = append(res, rf)
-	case RectAnchoredPath:
+	case *RectAnchoredPath:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Rect"
 		rf.Fieldname = "RectAnchoredPaths"
 		res = append(res, rf)
-	case RectAnchoredRect:
+	case *RectAnchoredRect:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Rect"
 		rf.Fieldname = "RectAnchoredRects"
 		res = append(res, rf)
-	case RectAnchoredText:
+	case *RectAnchoredText:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Rect"
 		rf.Fieldname = "RectAnchoredTexts"
 		res = append(res, rf)
-	case RectLinkLink:
+	case *RectLinkLink:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
 		rf.Fieldname = "RectLinkLinks"
 		res = append(res, rf)
-	case SVG:
+	case *SVG:
 		var rf ReverseField
 		_ = rf
-	case SvgText:
+	case *SvgText:
 		var rf ReverseField
 		_ = rf
-	case Text:
+	case *Text:
 		var rf ReverseField
 		_ = rf
 		rf.GongstructName = "Layer"
@@ -3861,70 +4454,1433 @@ func GetReverseFields[Type Gongstruct]() (res []ReverseField) {
 	return
 }
 
-// GetFieldsFromPointer return the array of the fields
-func GetFieldsFromPointer[Type PointerToGongstruct]() (res []string) {
-
-	var ret Type
-
-	switch any(ret).(type) {
-	// insertion point for generic get gongstruct name
-	case *Animate:
-		res = []string{"Name", "AttributeName", "Values", "From", "To", "Dur", "RepeatCount"}
-	case *Circle:
-		res = []string{"Name", "CX", "CY", "Radius", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations"}
-	case *Ellipse:
-		res = []string{"Name", "CX", "CY", "RX", "RY", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case *Layer:
-		res = []string{"Name", "Rects", "Texts", "Circles", "Lines", "Ellipses", "Polylines", "Polygones", "Paths", "Links", "RectLinkLinks"}
-	case *Line:
-		res = []string{"Name", "X1", "Y1", "X2", "Y2", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates", "MouseClickX", "MouseClickY"}
-	case *Link:
-		res = []string{"Name", "Type", "IsBezierCurve", "Start", "StartAnchorType", "End", "EndAnchorType", "StartOrientation", "StartRatio", "EndOrientation", "EndRatio", "CornerOffsetRatio", "CornerRadius", "HasEndArrow", "EndArrowSize", "HasStartArrow", "StartArrowSize", "TextAtArrowStart", "TextAtArrowEnd", "ControlPoints", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case *LinkAnchoredText:
-		res = []string{"Name", "Content", "AutomaticLayout", "LinkAnchorType", "X_Offset", "Y_Offset", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case *Path:
-		res = []string{"Name", "Definition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case *Point:
-		res = []string{"Name", "X", "Y"}
-	case *Polygone:
-		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case *Polyline:
-		res = []string{"Name", "Points", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case *Rect:
-		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animations", "IsSelectable", "IsSelected", "CanHaveLeftHandle", "HasLeftHandle", "CanHaveRightHandle", "HasRightHandle", "CanHaveTopHandle", "HasTopHandle", "IsScalingProportionally", "CanHaveBottomHandle", "HasBottomHandle", "CanMoveHorizontaly", "CanMoveVerticaly", "RectAnchoredTexts", "RectAnchoredRects", "RectAnchoredPaths", "ChangeColorWhenHovered", "ColorWhenHovered", "OriginalColor", "FillOpacityWhenHovered", "OriginalFillOpacity", "HasToolTip", "ToolTipText"}
-	case *RectAnchoredPath:
-		res = []string{"Name", "Definition", "X_Offset", "Y_Offset", "RectAnchorType", "ScalePropotionnally", "AppliedScaling", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case *RectAnchoredRect:
-		res = []string{"Name", "X", "Y", "Width", "Height", "RX", "X_Offset", "Y_Offset", "RectAnchorType", "WidthFollowRect", "HeightFollowRect", "HasToolTip", "ToolTipText", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case *RectAnchoredText:
-		res = []string{"Name", "Content", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "X_Offset", "Y_Offset", "RectAnchorType", "TextAnchorType", "WritingMode", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "Animates"}
-	case *RectLinkLink:
-		res = []string{"Name", "Start", "End", "TargetAnchorPosition", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform"}
-	case *SVG:
-		res = []string{"Name", "Layers", "DrawingState", "StartRect", "EndRect", "IsEditable", "IsSVGFrontEndFileGenerated", "IsSVGBackEndFileGenerated", "DefaultDirectoryForGeneratedImages", "IsControlBannerHidden"}
-	case *SvgText:
-		res = []string{"Name", "Text"}
-	case *Text:
-		res = []string{"Name", "X", "Y", "Content", "Color", "FillOpacity", "Stroke", "StrokeOpacity", "StrokeWidth", "StrokeDashArray", "StrokeDashArrayWhenSelected", "Transform", "FontWeight", "FontSize", "FontStyle", "LetterSpacing", "Animates"}
+// insertion point for get fields header method
+func (animate *Animate) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "AttributeName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Values",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "From",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "To",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Dur",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "RepeatCount",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
 	}
 	return
+}
+
+func (circle *Circle) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CX",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CY",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Radius",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Animations",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+	}
+	return
+}
+
+func (condition *Condition) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (controlpoint *ControlPoint) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X_Relative",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y_Relative",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "ClosestRect",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "Rect",
+		},
+	}
+	return
+}
+
+func (ellipse *Ellipse) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CX",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CY",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "RX",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "RY",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Animates",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+	}
+	return
+}
+
+func (layer *Layer) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Rects",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Rect",
+		},
+		{
+			Name:                 "Texts",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Text",
+		},
+		{
+			Name:                 "Circles",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Circle",
+		},
+		{
+			Name:                 "Lines",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Line",
+		},
+		{
+			Name:                 "Ellipses",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Ellipse",
+		},
+		{
+			Name:                 "Polylines",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Polyline",
+		},
+		{
+			Name:                 "Polygones",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Polygone",
+		},
+		{
+			Name:                 "Paths",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Path",
+		},
+		{
+			Name:                 "Links",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Link",
+		},
+		{
+			Name:                 "RectLinkLinks",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "RectLinkLink",
+		},
+	}
+	return
+}
+
+func (line *Line) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X1",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y1",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X2",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y2",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Animates",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+		{
+			Name:               "MouseClickX",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MouseClickY",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (link *Link) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Type",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsBezierCurve",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Start",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "Rect",
+		},
+		{
+			Name:               "StartAnchorType",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "End",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "Rect",
+		},
+		{
+			Name:               "EndAnchorType",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StartOrientation",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StartRatio",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "EndOrientation",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "EndRatio",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CornerOffsetRatio",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CornerRadius",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasEndArrow",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "EndArrowSize",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "EndArrowOffset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasStartArrow",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StartArrowSize",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StartArrowOffset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "TextAtArrowStart",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "LinkAnchoredText",
+		},
+		{
+			Name:                 "TextAtArrowEnd",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "LinkAnchoredText",
+		},
+		{
+			Name:                 "ControlPoints",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "ControlPoint",
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MouseX",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MouseY",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MouseEventKey",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (linkanchoredtext *LinkAnchoredText) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Content",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "AutomaticLayout",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "LinkAnchorType",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X_Offset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y_Offset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontWeight",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontSize",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontStyle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "LetterSpacing",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontFamily",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "WhiteSpace",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Animates",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+	}
+	return
+}
+
+func (path *Path) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Definition",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Animates",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+	}
+	return
+}
+
+func (point *Point) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (polygone *Polygone) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Points",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Animates",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+	}
+	return
+}
+
+func (polyline *Polyline) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Points",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Animates",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+	}
+	return
+}
+
+func (rect *Rect) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Width",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Height",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "RX",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "HoveringTrigger",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Condition",
+		},
+		{
+			Name:                 "DisplayConditions",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Condition",
+		},
+		{
+			Name:                 "Animations",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+		{
+			Name:               "IsSelectable",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CanHaveLeftHandle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasLeftHandle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CanHaveRightHandle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasRightHandle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CanHaveTopHandle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasTopHandle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsScalingProportionally",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CanHaveBottomHandle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasBottomHandle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CanMoveHorizontaly",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "CanMoveVerticaly",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "RectAnchoredTexts",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "RectAnchoredText",
+		},
+		{
+			Name:                 "RectAnchoredRects",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "RectAnchoredRect",
+		},
+		{
+			Name:                 "RectAnchoredPaths",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "RectAnchoredPath",
+		},
+		{
+			Name:               "ChangeColorWhenHovered",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ColorWhenHovered",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "OriginalColor",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacityWhenHovered",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "OriginalFillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasToolTip",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ToolTipText",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ToolTipPosition",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MouseX",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MouseY",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "MouseEventKey",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (rectanchoredpath *RectAnchoredPath) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Definition",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X_Offset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y_Offset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "RectAnchorType",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ScalePropotionnally",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "AppliedScaling",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (rectanchoredrect *RectAnchoredRect) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Width",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Height",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "RX",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X_Offset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y_Offset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "RectAnchorType",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "WidthFollowRect",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HeightFollowRect",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "HasToolTip",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "ToolTipText",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (rectanchoredtext *RectAnchoredText) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Content",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontWeight",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontSize",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontStyle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "LetterSpacing",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontFamily",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "WhiteSpace",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X_Offset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y_Offset",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "RectAnchorType",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "TextAnchorType",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "DominantBaseline",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "WritingMode",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Animates",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+	}
+	return
+}
+
+func (rectlinklink *RectLinkLink) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Start",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "Rect",
+		},
+		{
+			Name:                 "End",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "Link",
+		},
+		{
+			Name:               "TargetAnchorPosition",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (svg *SVG) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Layers",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Layer",
+		},
+		{
+			Name:               "DrawingState",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "StartRect",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "Rect",
+		},
+		{
+			Name:                 "EndRect",
+			GongFieldValueType:   GongFieldValueTypePointer,
+			TargetGongstructName: "Rect",
+		},
+		{
+			Name:               "IsEditable",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsSVGFrontEndFileGenerated",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsSVGBackEndFileGenerated",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "DefaultDirectoryForGeneratedImages",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsControlBannerHidden",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (svgtext *SvgText) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Text",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+	}
+	return
+}
+
+func (text *Text) GongGetFieldHeaders() (res []GongFieldHeader) {
+	// insertion point for list of field headers
+	res = []GongFieldHeader{
+		{
+			Name:               "Name",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "X",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Y",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Content",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Color",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FillOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Stroke",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeOpacity",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeWidth",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArray",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "StrokeDashArrayWhenSelected",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "Transform",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontWeight",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontSize",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontStyle",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "LetterSpacing",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "FontFamily",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "WhiteSpace",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:                 "Animates",
+			GongFieldValueType:   GongFieldValueTypeSliceOfPointers,
+			TargetGongstructName: "Animate",
+		},
+	}
+	return
+}
+
+// GetFieldsFromPointer return the array of the fields
+func GetFieldsFromPointer[Type PointerToGongstruct]() (res []GongFieldHeader) {
+
+	var ret Type
+	return ret.GongGetFieldHeaders()
 }
 
 type GongFieldValueType string
 
 const (
-	GongFieldValueTypeInt    GongFieldValueType = "GongFieldValueTypeInt"
-	GongFieldValueTypeFloat  GongFieldValueType = "GongFieldValueTypeFloat"
-	GongFieldValueTypeBool   GongFieldValueType = "GongFieldValueTypeBool"
-	GongFieldValueTypeOthers GongFieldValueType = "GongFieldValueTypeOthers"
+	GongFieldValueTypeInt             GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeFloat           GongFieldValueType = "GongFieldValueTypeFloat"
+	GongFieldValueTypeBool            GongFieldValueType = "GongFieldValueTypeBool"
+	GongFieldValueTypeString          GongFieldValueType = "GongFieldValueTypeString"
+	GongFieldValueTypeBasicKind       GongFieldValueType = "GongFieldValueTypeBasicKind"
+	GongFieldValueTypePointer         GongFieldValueType = "GongFieldValueTypePointer"
+	GongFieldValueTypeSliceOfPointers GongFieldValueType = "GongFieldValueTypeSliceOfPointers"
 )
 
 type GongFieldValue struct {
-	valueString string
 	GongFieldValueType
-	valueInt   int
-	valueFloat float64
-	valueBool  bool
+	valueString string
+	valueInt    int
+	valueFloat  float64
+	valueBool   bool
+
+	// in case of a pointer, the ID of the pointed element
+	// in case of a slice of pointers, the IDs, separated by semi columbs
+	ids string
+}
+
+type GongFieldHeader struct {
+	Name string
+	GongFieldValueType
+	TargetGongstructName string
 }
 
 func (gongValueField *GongFieldValue) GetValueString() string {
@@ -3943,2065 +5899,2562 @@ func (gongValueField *GongFieldValue) GetValueBool() bool {
 	return gongValueField.valueBool
 }
 
-func GetFieldStringValueFromPointer(instance any, fieldName string) (res GongFieldValue) {
-
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case *Animate:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "AttributeName":
-			res.valueString = inferedInstance.AttributeName
-		case "Values":
-			res.valueString = inferedInstance.Values
-		case "From":
-			res.valueString = inferedInstance.From
-		case "To":
-			res.valueString = inferedInstance.To
-		case "Dur":
-			res.valueString = inferedInstance.Dur
-		case "RepeatCount":
-			res.valueString = inferedInstance.RepeatCount
-		}
-	case *Circle:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "CX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CX)
-			res.valueFloat = inferedInstance.CX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CY)
-			res.valueFloat = inferedInstance.CY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Radius":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Radius)
-			res.valueFloat = inferedInstance.Radius
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animations":
-			for idx, __instance__ := range inferedInstance.Animations {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *Ellipse:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "CX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CX)
-			res.valueFloat = inferedInstance.CX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CY)
-			res.valueFloat = inferedInstance.CY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.RX)
-			res.valueFloat = inferedInstance.RX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.RY)
-			res.valueFloat = inferedInstance.RY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *Layer:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Rects":
-			for idx, __instance__ := range inferedInstance.Rects {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Texts":
-			for idx, __instance__ := range inferedInstance.Texts {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Circles":
-			for idx, __instance__ := range inferedInstance.Circles {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Lines":
-			for idx, __instance__ := range inferedInstance.Lines {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Ellipses":
-			for idx, __instance__ := range inferedInstance.Ellipses {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Polylines":
-			for idx, __instance__ := range inferedInstance.Polylines {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Polygones":
-			for idx, __instance__ := range inferedInstance.Polygones {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Paths":
-			for idx, __instance__ := range inferedInstance.Paths {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Links":
-			for idx, __instance__ := range inferedInstance.Links {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "RectLinkLinks":
-			for idx, __instance__ := range inferedInstance.RectLinkLinks {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *Line:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X1":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X1)
-			res.valueFloat = inferedInstance.X1
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y1":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y1)
-			res.valueFloat = inferedInstance.Y1
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "X2":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X2)
-			res.valueFloat = inferedInstance.X2
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y2":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y2)
-			res.valueFloat = inferedInstance.Y2
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "MouseClickX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MouseClickX)
-			res.valueFloat = inferedInstance.MouseClickX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "MouseClickY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MouseClickY)
-			res.valueFloat = inferedInstance.MouseClickY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	case *Link:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Type":
-			enum := inferedInstance.Type
-			res.valueString = enum.ToCodeString()
-		case "IsBezierCurve":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsBezierCurve)
-			res.valueBool = inferedInstance.IsBezierCurve
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "Start":
-			if inferedInstance.Start != nil {
-				res.valueString = inferedInstance.Start.Name
-			}
-		case "StartAnchorType":
-			enum := inferedInstance.StartAnchorType
-			res.valueString = enum.ToCodeString()
-		case "End":
-			if inferedInstance.End != nil {
-				res.valueString = inferedInstance.End.Name
-			}
-		case "EndAnchorType":
-			enum := inferedInstance.EndAnchorType
-			res.valueString = enum.ToCodeString()
-		case "StartOrientation":
-			enum := inferedInstance.StartOrientation
-			res.valueString = enum.ToCodeString()
-		case "StartRatio":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StartRatio)
-			res.valueFloat = inferedInstance.StartRatio
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "EndOrientation":
-			enum := inferedInstance.EndOrientation
-			res.valueString = enum.ToCodeString()
-		case "EndRatio":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.EndRatio)
-			res.valueFloat = inferedInstance.EndRatio
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CornerOffsetRatio":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CornerOffsetRatio)
-			res.valueFloat = inferedInstance.CornerOffsetRatio
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CornerRadius":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CornerRadius)
-			res.valueFloat = inferedInstance.CornerRadius
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasEndArrow":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasEndArrow)
-			res.valueBool = inferedInstance.HasEndArrow
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "EndArrowSize":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.EndArrowSize)
-			res.valueFloat = inferedInstance.EndArrowSize
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasStartArrow":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasStartArrow)
-			res.valueBool = inferedInstance.HasStartArrow
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "StartArrowSize":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StartArrowSize)
-			res.valueFloat = inferedInstance.StartArrowSize
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "TextAtArrowStart":
-			for idx, __instance__ := range inferedInstance.TextAtArrowStart {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "TextAtArrowEnd":
-			for idx, __instance__ := range inferedInstance.TextAtArrowEnd {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "ControlPoints":
-			for idx, __instance__ := range inferedInstance.ControlPoints {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		}
-	case *LinkAnchoredText:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Content":
-			res.valueString = inferedInstance.Content
-		case "AutomaticLayout":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.AutomaticLayout)
-			res.valueBool = inferedInstance.AutomaticLayout
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "LinkAnchorType":
-			enum := inferedInstance.LinkAnchorType
-			res.valueString = enum.ToCodeString()
-		case "X_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
-			res.valueFloat = inferedInstance.X_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_Offset)
-			res.valueFloat = inferedInstance.Y_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "FontWeight":
-			res.valueString = inferedInstance.FontWeight
-		case "FontSize":
-			res.valueString = inferedInstance.FontSize
-		case "FontStyle":
-			res.valueString = inferedInstance.FontStyle
-		case "LetterSpacing":
-			res.valueString = inferedInstance.LetterSpacing
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *Path:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Definition":
-			res.valueString = inferedInstance.Definition
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *Point:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X)
-			res.valueFloat = inferedInstance.X
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
-			res.valueFloat = inferedInstance.Y
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	case *Polygone:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Points":
-			res.valueString = inferedInstance.Points
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *Polyline:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Points":
-			res.valueString = inferedInstance.Points
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *Rect:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X)
-			res.valueFloat = inferedInstance.X
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
-			res.valueFloat = inferedInstance.Y
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Width":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Width)
-			res.valueFloat = inferedInstance.Width
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Height":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Height)
-			res.valueFloat = inferedInstance.Height
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.RX)
-			res.valueFloat = inferedInstance.RX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animations":
-			for idx, __instance__ := range inferedInstance.Animations {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "IsSelectable":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSelectable)
-			res.valueBool = inferedInstance.IsSelectable
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSelected":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSelected)
-			res.valueBool = inferedInstance.IsSelected
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanHaveLeftHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanHaveLeftHandle)
-			res.valueBool = inferedInstance.CanHaveLeftHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasLeftHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasLeftHandle)
-			res.valueBool = inferedInstance.HasLeftHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanHaveRightHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanHaveRightHandle)
-			res.valueBool = inferedInstance.CanHaveRightHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasRightHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasRightHandle)
-			res.valueBool = inferedInstance.HasRightHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanHaveTopHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanHaveTopHandle)
-			res.valueBool = inferedInstance.CanHaveTopHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasTopHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasTopHandle)
-			res.valueBool = inferedInstance.HasTopHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsScalingProportionally":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsScalingProportionally)
-			res.valueBool = inferedInstance.IsScalingProportionally
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanHaveBottomHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanHaveBottomHandle)
-			res.valueBool = inferedInstance.CanHaveBottomHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasBottomHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBottomHandle)
-			res.valueBool = inferedInstance.HasBottomHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanMoveHorizontaly":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanMoveHorizontaly)
-			res.valueBool = inferedInstance.CanMoveHorizontaly
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanMoveVerticaly":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanMoveVerticaly)
-			res.valueBool = inferedInstance.CanMoveVerticaly
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "RectAnchoredTexts":
-			for idx, __instance__ := range inferedInstance.RectAnchoredTexts {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "RectAnchoredRects":
-			for idx, __instance__ := range inferedInstance.RectAnchoredRects {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "RectAnchoredPaths":
-			for idx, __instance__ := range inferedInstance.RectAnchoredPaths {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "ChangeColorWhenHovered":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.ChangeColorWhenHovered)
-			res.valueBool = inferedInstance.ChangeColorWhenHovered
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ColorWhenHovered":
-			res.valueString = inferedInstance.ColorWhenHovered
-		case "OriginalColor":
-			res.valueString = inferedInstance.OriginalColor
-		case "FillOpacityWhenHovered":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacityWhenHovered)
-			res.valueFloat = inferedInstance.FillOpacityWhenHovered
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "OriginalFillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.OriginalFillOpacity)
-			res.valueFloat = inferedInstance.OriginalFillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		}
-	case *RectAnchoredPath:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Definition":
-			res.valueString = inferedInstance.Definition
-		case "X_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
-			res.valueFloat = inferedInstance.X_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_Offset)
-			res.valueFloat = inferedInstance.Y_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RectAnchorType":
-			enum := inferedInstance.RectAnchorType
-			res.valueString = enum.ToCodeString()
-		case "ScalePropotionnally":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.ScalePropotionnally)
-			res.valueBool = inferedInstance.ScalePropotionnally
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "AppliedScaling":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.AppliedScaling)
-			res.valueFloat = inferedInstance.AppliedScaling
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		}
-	case *RectAnchoredRect:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X)
-			res.valueFloat = inferedInstance.X
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
-			res.valueFloat = inferedInstance.Y
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Width":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Width)
-			res.valueFloat = inferedInstance.Width
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Height":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Height)
-			res.valueFloat = inferedInstance.Height
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.RX)
-			res.valueFloat = inferedInstance.RX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "X_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
-			res.valueFloat = inferedInstance.X_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_Offset)
-			res.valueFloat = inferedInstance.Y_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RectAnchorType":
-			enum := inferedInstance.RectAnchorType
-			res.valueString = enum.ToCodeString()
-		case "WidthFollowRect":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.WidthFollowRect)
-			res.valueBool = inferedInstance.WidthFollowRect
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HeightFollowRect":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HeightFollowRect)
-			res.valueBool = inferedInstance.HeightFollowRect
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		}
-	case *RectAnchoredText:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Content":
-			res.valueString = inferedInstance.Content
-		case "FontWeight":
-			res.valueString = inferedInstance.FontWeight
-		case "FontSize":
-			res.valueString = inferedInstance.FontSize
-		case "FontStyle":
-			res.valueString = inferedInstance.FontStyle
-		case "LetterSpacing":
-			res.valueString = inferedInstance.LetterSpacing
-		case "X_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
-			res.valueFloat = inferedInstance.X_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_Offset)
-			res.valueFloat = inferedInstance.Y_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RectAnchorType":
-			enum := inferedInstance.RectAnchorType
-			res.valueString = enum.ToCodeString()
-		case "TextAnchorType":
-			enum := inferedInstance.TextAnchorType
-			res.valueString = enum.ToCodeString()
-		case "WritingMode":
-			enum := inferedInstance.WritingMode
-			res.valueString = enum.ToCodeString()
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case *RectLinkLink:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Start":
-			if inferedInstance.Start != nil {
-				res.valueString = inferedInstance.Start.Name
-			}
-		case "End":
-			if inferedInstance.End != nil {
-				res.valueString = inferedInstance.End.Name
-			}
-		case "TargetAnchorPosition":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.TargetAnchorPosition)
-			res.valueFloat = inferedInstance.TargetAnchorPosition
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		}
-	case *SVG:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Layers":
-			for idx, __instance__ := range inferedInstance.Layers {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "DrawingState":
-			enum := inferedInstance.DrawingState
-			res.valueString = enum.ToCodeString()
-		case "StartRect":
-			if inferedInstance.StartRect != nil {
-				res.valueString = inferedInstance.StartRect.Name
-			}
-		case "EndRect":
-			if inferedInstance.EndRect != nil {
-				res.valueString = inferedInstance.EndRect.Name
-			}
-		case "IsEditable":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsEditable)
-			res.valueBool = inferedInstance.IsEditable
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSVGFrontEndFileGenerated":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGFrontEndFileGenerated)
-			res.valueBool = inferedInstance.IsSVGFrontEndFileGenerated
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSVGBackEndFileGenerated":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGBackEndFileGenerated)
-			res.valueBool = inferedInstance.IsSVGBackEndFileGenerated
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "DefaultDirectoryForGeneratedImages":
-			res.valueString = inferedInstance.DefaultDirectoryForGeneratedImages
-		case "IsControlBannerHidden":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsControlBannerHidden)
-			res.valueBool = inferedInstance.IsControlBannerHidden
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case *SvgText:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Text":
-			res.valueString = inferedInstance.Text
-		}
-	case *Text:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X)
-			res.valueFloat = inferedInstance.X
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
-			res.valueFloat = inferedInstance.Y
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Content":
-			res.valueString = inferedInstance.Content
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "FontWeight":
-			res.valueString = inferedInstance.FontWeight
-		case "FontSize":
-			res.valueString = inferedInstance.FontSize
-		case "FontStyle":
-			res.valueString = inferedInstance.FontStyle
-		case "LetterSpacing":
-			res.valueString = inferedInstance.LetterSpacing
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	default:
-		_ = inferedInstance
+// insertion point for generic get gongstruct field value
+func (animate *Animate) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = animate.Name
+	case "AttributeName":
+		res.valueString = animate.AttributeName
+	case "Values":
+		res.valueString = animate.Values
+	case "From":
+		res.valueString = animate.From
+	case "To":
+		res.valueString = animate.To
+	case "Dur":
+		res.valueString = animate.Dur
+	case "RepeatCount":
+		res.valueString = animate.RepeatCount
 	}
 	return
 }
+func (circle *Circle) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = circle.Name
+	case "CX":
+		res.valueString = fmt.Sprintf("%f", circle.CX)
+		res.valueFloat = circle.CX
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "CY":
+		res.valueString = fmt.Sprintf("%f", circle.CY)
+		res.valueFloat = circle.CY
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Radius":
+		res.valueString = fmt.Sprintf("%f", circle.Radius)
+		res.valueFloat = circle.Radius
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Color":
+		res.valueString = circle.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", circle.FillOpacity)
+		res.valueFloat = circle.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = circle.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", circle.StrokeOpacity)
+		res.valueFloat = circle.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", circle.StrokeWidth)
+		res.valueFloat = circle.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = circle.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = circle.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = circle.Transform
+	case "Animations":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range circle.Animations {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (condition *Condition) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = condition.Name
+	}
+	return
+}
+func (controlpoint *ControlPoint) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = controlpoint.Name
+	case "X_Relative":
+		res.valueString = fmt.Sprintf("%f", controlpoint.X_Relative)
+		res.valueFloat = controlpoint.X_Relative
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y_Relative":
+		res.valueString = fmt.Sprintf("%f", controlpoint.Y_Relative)
+		res.valueFloat = controlpoint.Y_Relative
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "ClosestRect":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if controlpoint.ClosestRect != nil {
+			res.valueString = controlpoint.ClosestRect.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, controlpoint.ClosestRect))
+		}
+	}
+	return
+}
+func (ellipse *Ellipse) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = ellipse.Name
+	case "CX":
+		res.valueString = fmt.Sprintf("%f", ellipse.CX)
+		res.valueFloat = ellipse.CX
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "CY":
+		res.valueString = fmt.Sprintf("%f", ellipse.CY)
+		res.valueFloat = ellipse.CY
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "RX":
+		res.valueString = fmt.Sprintf("%f", ellipse.RX)
+		res.valueFloat = ellipse.RX
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "RY":
+		res.valueString = fmt.Sprintf("%f", ellipse.RY)
+		res.valueFloat = ellipse.RY
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Color":
+		res.valueString = ellipse.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", ellipse.FillOpacity)
+		res.valueFloat = ellipse.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = ellipse.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", ellipse.StrokeOpacity)
+		res.valueFloat = ellipse.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", ellipse.StrokeWidth)
+		res.valueFloat = ellipse.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = ellipse.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = ellipse.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = ellipse.Transform
+	case "Animates":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range ellipse.Animates {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (layer *Layer) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = layer.Name
+	case "Rects":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.Rects {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Texts":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.Texts {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Circles":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.Circles {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Lines":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.Lines {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Ellipses":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.Ellipses {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Polylines":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.Polylines {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Polygones":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.Polygones {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Paths":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.Paths {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Links":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.Links {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "RectLinkLinks":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range layer.RectLinkLinks {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (line *Line) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = line.Name
+	case "X1":
+		res.valueString = fmt.Sprintf("%f", line.X1)
+		res.valueFloat = line.X1
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y1":
+		res.valueString = fmt.Sprintf("%f", line.Y1)
+		res.valueFloat = line.Y1
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "X2":
+		res.valueString = fmt.Sprintf("%f", line.X2)
+		res.valueFloat = line.X2
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y2":
+		res.valueString = fmt.Sprintf("%f", line.Y2)
+		res.valueFloat = line.Y2
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Color":
+		res.valueString = line.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", line.FillOpacity)
+		res.valueFloat = line.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = line.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", line.StrokeOpacity)
+		res.valueFloat = line.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", line.StrokeWidth)
+		res.valueFloat = line.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = line.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = line.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = line.Transform
+	case "Animates":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range line.Animates {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "MouseClickX":
+		res.valueString = fmt.Sprintf("%f", line.MouseClickX)
+		res.valueFloat = line.MouseClickX
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "MouseClickY":
+		res.valueString = fmt.Sprintf("%f", line.MouseClickY)
+		res.valueFloat = line.MouseClickY
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	}
+	return
+}
+func (link *Link) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = link.Name
+	case "Type":
+		enum := link.Type
+		res.valueString = enum.ToCodeString()
+	case "IsBezierCurve":
+		res.valueString = fmt.Sprintf("%t", link.IsBezierCurve)
+		res.valueBool = link.IsBezierCurve
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "Start":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if link.Start != nil {
+			res.valueString = link.Start.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, link.Start))
+		}
+	case "StartAnchorType":
+		enum := link.StartAnchorType
+		res.valueString = enum.ToCodeString()
+	case "End":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if link.End != nil {
+			res.valueString = link.End.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, link.End))
+		}
+	case "EndAnchorType":
+		enum := link.EndAnchorType
+		res.valueString = enum.ToCodeString()
+	case "StartOrientation":
+		enum := link.StartOrientation
+		res.valueString = enum.ToCodeString()
+	case "StartRatio":
+		res.valueString = fmt.Sprintf("%f", link.StartRatio)
+		res.valueFloat = link.StartRatio
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "EndOrientation":
+		enum := link.EndOrientation
+		res.valueString = enum.ToCodeString()
+	case "EndRatio":
+		res.valueString = fmt.Sprintf("%f", link.EndRatio)
+		res.valueFloat = link.EndRatio
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "CornerOffsetRatio":
+		res.valueString = fmt.Sprintf("%f", link.CornerOffsetRatio)
+		res.valueFloat = link.CornerOffsetRatio
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "CornerRadius":
+		res.valueString = fmt.Sprintf("%f", link.CornerRadius)
+		res.valueFloat = link.CornerRadius
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "HasEndArrow":
+		res.valueString = fmt.Sprintf("%t", link.HasEndArrow)
+		res.valueBool = link.HasEndArrow
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "EndArrowSize":
+		res.valueString = fmt.Sprintf("%f", link.EndArrowSize)
+		res.valueFloat = link.EndArrowSize
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "EndArrowOffset":
+		res.valueString = fmt.Sprintf("%f", link.EndArrowOffset)
+		res.valueFloat = link.EndArrowOffset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "HasStartArrow":
+		res.valueString = fmt.Sprintf("%t", link.HasStartArrow)
+		res.valueBool = link.HasStartArrow
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "StartArrowSize":
+		res.valueString = fmt.Sprintf("%f", link.StartArrowSize)
+		res.valueFloat = link.StartArrowSize
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StartArrowOffset":
+		res.valueString = fmt.Sprintf("%f", link.StartArrowOffset)
+		res.valueFloat = link.StartArrowOffset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "TextAtArrowStart":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range link.TextAtArrowStart {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "TextAtArrowEnd":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range link.TextAtArrowEnd {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "ControlPoints":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range link.ControlPoints {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Color":
+		res.valueString = link.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", link.FillOpacity)
+		res.valueFloat = link.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = link.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", link.StrokeOpacity)
+		res.valueFloat = link.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", link.StrokeWidth)
+		res.valueFloat = link.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = link.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = link.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = link.Transform
+	case "MouseX":
+		res.valueString = fmt.Sprintf("%f", link.MouseX)
+		res.valueFloat = link.MouseX
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "MouseY":
+		res.valueString = fmt.Sprintf("%f", link.MouseY)
+		res.valueFloat = link.MouseY
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "MouseEventKey":
+		enum := link.MouseEventKey
+		res.valueString = enum.ToCodeString()
+	}
+	return
+}
+func (linkanchoredtext *LinkAnchoredText) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = linkanchoredtext.Name
+	case "Content":
+		res.valueString = linkanchoredtext.Content
+	case "AutomaticLayout":
+		res.valueString = fmt.Sprintf("%t", linkanchoredtext.AutomaticLayout)
+		res.valueBool = linkanchoredtext.AutomaticLayout
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "LinkAnchorType":
+		enum := linkanchoredtext.LinkAnchorType
+		res.valueString = enum.ToCodeString()
+	case "X_Offset":
+		res.valueString = fmt.Sprintf("%f", linkanchoredtext.X_Offset)
+		res.valueFloat = linkanchoredtext.X_Offset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y_Offset":
+		res.valueString = fmt.Sprintf("%f", linkanchoredtext.Y_Offset)
+		res.valueFloat = linkanchoredtext.Y_Offset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "FontWeight":
+		res.valueString = linkanchoredtext.FontWeight
+	case "FontSize":
+		res.valueString = linkanchoredtext.FontSize
+	case "FontStyle":
+		res.valueString = linkanchoredtext.FontStyle
+	case "LetterSpacing":
+		res.valueString = linkanchoredtext.LetterSpacing
+	case "FontFamily":
+		res.valueString = linkanchoredtext.FontFamily
+	case "WhiteSpace":
+		enum := linkanchoredtext.WhiteSpace
+		res.valueString = enum.ToCodeString()
+	case "Color":
+		res.valueString = linkanchoredtext.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", linkanchoredtext.FillOpacity)
+		res.valueFloat = linkanchoredtext.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = linkanchoredtext.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", linkanchoredtext.StrokeOpacity)
+		res.valueFloat = linkanchoredtext.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", linkanchoredtext.StrokeWidth)
+		res.valueFloat = linkanchoredtext.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = linkanchoredtext.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = linkanchoredtext.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = linkanchoredtext.Transform
+	case "Animates":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range linkanchoredtext.Animates {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (path *Path) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = path.Name
+	case "Definition":
+		res.valueString = path.Definition
+	case "Color":
+		res.valueString = path.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", path.FillOpacity)
+		res.valueFloat = path.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = path.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", path.StrokeOpacity)
+		res.valueFloat = path.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", path.StrokeWidth)
+		res.valueFloat = path.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = path.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = path.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = path.Transform
+	case "Animates":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range path.Animates {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (point *Point) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = point.Name
+	case "X":
+		res.valueString = fmt.Sprintf("%f", point.X)
+		res.valueFloat = point.X
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y":
+		res.valueString = fmt.Sprintf("%f", point.Y)
+		res.valueFloat = point.Y
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	}
+	return
+}
+func (polygone *Polygone) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = polygone.Name
+	case "Points":
+		res.valueString = polygone.Points
+	case "Color":
+		res.valueString = polygone.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", polygone.FillOpacity)
+		res.valueFloat = polygone.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = polygone.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", polygone.StrokeOpacity)
+		res.valueFloat = polygone.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", polygone.StrokeWidth)
+		res.valueFloat = polygone.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = polygone.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = polygone.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = polygone.Transform
+	case "Animates":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range polygone.Animates {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (polyline *Polyline) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = polyline.Name
+	case "Points":
+		res.valueString = polyline.Points
+	case "Color":
+		res.valueString = polyline.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", polyline.FillOpacity)
+		res.valueFloat = polyline.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = polyline.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", polyline.StrokeOpacity)
+		res.valueFloat = polyline.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", polyline.StrokeWidth)
+		res.valueFloat = polyline.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = polyline.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = polyline.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = polyline.Transform
+	case "Animates":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range polyline.Animates {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (rect *Rect) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = rect.Name
+	case "X":
+		res.valueString = fmt.Sprintf("%f", rect.X)
+		res.valueFloat = rect.X
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y":
+		res.valueString = fmt.Sprintf("%f", rect.Y)
+		res.valueFloat = rect.Y
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Width":
+		res.valueString = fmt.Sprintf("%f", rect.Width)
+		res.valueFloat = rect.Width
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Height":
+		res.valueString = fmt.Sprintf("%f", rect.Height)
+		res.valueFloat = rect.Height
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "RX":
+		res.valueString = fmt.Sprintf("%f", rect.RX)
+		res.valueFloat = rect.RX
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Color":
+		res.valueString = rect.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", rect.FillOpacity)
+		res.valueFloat = rect.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = rect.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", rect.StrokeOpacity)
+		res.valueFloat = rect.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", rect.StrokeWidth)
+		res.valueFloat = rect.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = rect.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = rect.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = rect.Transform
+	case "HoveringTrigger":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range rect.HoveringTrigger {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "DisplayConditions":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range rect.DisplayConditions {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "Animations":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range rect.Animations {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "IsSelectable":
+		res.valueString = fmt.Sprintf("%t", rect.IsSelectable)
+		res.valueBool = rect.IsSelectable
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsSelected":
+		res.valueString = fmt.Sprintf("%t", rect.IsSelected)
+		res.valueBool = rect.IsSelected
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "CanHaveLeftHandle":
+		res.valueString = fmt.Sprintf("%t", rect.CanHaveLeftHandle)
+		res.valueBool = rect.CanHaveLeftHandle
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasLeftHandle":
+		res.valueString = fmt.Sprintf("%t", rect.HasLeftHandle)
+		res.valueBool = rect.HasLeftHandle
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "CanHaveRightHandle":
+		res.valueString = fmt.Sprintf("%t", rect.CanHaveRightHandle)
+		res.valueBool = rect.CanHaveRightHandle
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasRightHandle":
+		res.valueString = fmt.Sprintf("%t", rect.HasRightHandle)
+		res.valueBool = rect.HasRightHandle
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "CanHaveTopHandle":
+		res.valueString = fmt.Sprintf("%t", rect.CanHaveTopHandle)
+		res.valueBool = rect.CanHaveTopHandle
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasTopHandle":
+		res.valueString = fmt.Sprintf("%t", rect.HasTopHandle)
+		res.valueBool = rect.HasTopHandle
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsScalingProportionally":
+		res.valueString = fmt.Sprintf("%t", rect.IsScalingProportionally)
+		res.valueBool = rect.IsScalingProportionally
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "CanHaveBottomHandle":
+		res.valueString = fmt.Sprintf("%t", rect.CanHaveBottomHandle)
+		res.valueBool = rect.CanHaveBottomHandle
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasBottomHandle":
+		res.valueString = fmt.Sprintf("%t", rect.HasBottomHandle)
+		res.valueBool = rect.HasBottomHandle
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "CanMoveHorizontaly":
+		res.valueString = fmt.Sprintf("%t", rect.CanMoveHorizontaly)
+		res.valueBool = rect.CanMoveHorizontaly
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "CanMoveVerticaly":
+		res.valueString = fmt.Sprintf("%t", rect.CanMoveVerticaly)
+		res.valueBool = rect.CanMoveVerticaly
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "RectAnchoredTexts":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range rect.RectAnchoredTexts {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "RectAnchoredRects":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range rect.RectAnchoredRects {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "RectAnchoredPaths":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range rect.RectAnchoredPaths {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "ChangeColorWhenHovered":
+		res.valueString = fmt.Sprintf("%t", rect.ChangeColorWhenHovered)
+		res.valueBool = rect.ChangeColorWhenHovered
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "ColorWhenHovered":
+		res.valueString = rect.ColorWhenHovered
+	case "OriginalColor":
+		res.valueString = rect.OriginalColor
+	case "FillOpacityWhenHovered":
+		res.valueString = fmt.Sprintf("%f", rect.FillOpacityWhenHovered)
+		res.valueFloat = rect.FillOpacityWhenHovered
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "OriginalFillOpacity":
+		res.valueString = fmt.Sprintf("%f", rect.OriginalFillOpacity)
+		res.valueFloat = rect.OriginalFillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "HasToolTip":
+		res.valueString = fmt.Sprintf("%t", rect.HasToolTip)
+		res.valueBool = rect.HasToolTip
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "ToolTipText":
+		res.valueString = rect.ToolTipText
+	case "ToolTipPosition":
+		enum := rect.ToolTipPosition
+		res.valueString = enum.ToCodeString()
+	case "MouseX":
+		res.valueString = fmt.Sprintf("%f", rect.MouseX)
+		res.valueFloat = rect.MouseX
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "MouseY":
+		res.valueString = fmt.Sprintf("%f", rect.MouseY)
+		res.valueFloat = rect.MouseY
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "MouseEventKey":
+		enum := rect.MouseEventKey
+		res.valueString = enum.ToCodeString()
+	}
+	return
+}
+func (rectanchoredpath *RectAnchoredPath) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = rectanchoredpath.Name
+	case "Definition":
+		res.valueString = rectanchoredpath.Definition
+	case "X_Offset":
+		res.valueString = fmt.Sprintf("%f", rectanchoredpath.X_Offset)
+		res.valueFloat = rectanchoredpath.X_Offset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y_Offset":
+		res.valueString = fmt.Sprintf("%f", rectanchoredpath.Y_Offset)
+		res.valueFloat = rectanchoredpath.Y_Offset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "RectAnchorType":
+		enum := rectanchoredpath.RectAnchorType
+		res.valueString = enum.ToCodeString()
+	case "ScalePropotionnally":
+		res.valueString = fmt.Sprintf("%t", rectanchoredpath.ScalePropotionnally)
+		res.valueBool = rectanchoredpath.ScalePropotionnally
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "AppliedScaling":
+		res.valueString = fmt.Sprintf("%f", rectanchoredpath.AppliedScaling)
+		res.valueFloat = rectanchoredpath.AppliedScaling
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Color":
+		res.valueString = rectanchoredpath.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", rectanchoredpath.FillOpacity)
+		res.valueFloat = rectanchoredpath.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = rectanchoredpath.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", rectanchoredpath.StrokeOpacity)
+		res.valueFloat = rectanchoredpath.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", rectanchoredpath.StrokeWidth)
+		res.valueFloat = rectanchoredpath.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = rectanchoredpath.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = rectanchoredpath.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = rectanchoredpath.Transform
+	}
+	return
+}
+func (rectanchoredrect *RectAnchoredRect) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = rectanchoredrect.Name
+	case "X":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.X)
+		res.valueFloat = rectanchoredrect.X
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.Y)
+		res.valueFloat = rectanchoredrect.Y
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Width":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.Width)
+		res.valueFloat = rectanchoredrect.Width
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Height":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.Height)
+		res.valueFloat = rectanchoredrect.Height
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "RX":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.RX)
+		res.valueFloat = rectanchoredrect.RX
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "X_Offset":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.X_Offset)
+		res.valueFloat = rectanchoredrect.X_Offset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y_Offset":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.Y_Offset)
+		res.valueFloat = rectanchoredrect.Y_Offset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "RectAnchorType":
+		enum := rectanchoredrect.RectAnchorType
+		res.valueString = enum.ToCodeString()
+	case "WidthFollowRect":
+		res.valueString = fmt.Sprintf("%t", rectanchoredrect.WidthFollowRect)
+		res.valueBool = rectanchoredrect.WidthFollowRect
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HeightFollowRect":
+		res.valueString = fmt.Sprintf("%t", rectanchoredrect.HeightFollowRect)
+		res.valueBool = rectanchoredrect.HeightFollowRect
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "HasToolTip":
+		res.valueString = fmt.Sprintf("%t", rectanchoredrect.HasToolTip)
+		res.valueBool = rectanchoredrect.HasToolTip
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "ToolTipText":
+		res.valueString = rectanchoredrect.ToolTipText
+	case "Color":
+		res.valueString = rectanchoredrect.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.FillOpacity)
+		res.valueFloat = rectanchoredrect.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = rectanchoredrect.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.StrokeOpacity)
+		res.valueFloat = rectanchoredrect.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", rectanchoredrect.StrokeWidth)
+		res.valueFloat = rectanchoredrect.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = rectanchoredrect.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = rectanchoredrect.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = rectanchoredrect.Transform
+	}
+	return
+}
+func (rectanchoredtext *RectAnchoredText) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = rectanchoredtext.Name
+	case "Content":
+		res.valueString = rectanchoredtext.Content
+	case "FontWeight":
+		res.valueString = rectanchoredtext.FontWeight
+	case "FontSize":
+		res.valueString = rectanchoredtext.FontSize
+	case "FontStyle":
+		res.valueString = rectanchoredtext.FontStyle
+	case "LetterSpacing":
+		res.valueString = rectanchoredtext.LetterSpacing
+	case "FontFamily":
+		res.valueString = rectanchoredtext.FontFamily
+	case "WhiteSpace":
+		enum := rectanchoredtext.WhiteSpace
+		res.valueString = enum.ToCodeString()
+	case "X_Offset":
+		res.valueString = fmt.Sprintf("%f", rectanchoredtext.X_Offset)
+		res.valueFloat = rectanchoredtext.X_Offset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y_Offset":
+		res.valueString = fmt.Sprintf("%f", rectanchoredtext.Y_Offset)
+		res.valueFloat = rectanchoredtext.Y_Offset
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "RectAnchorType":
+		enum := rectanchoredtext.RectAnchorType
+		res.valueString = enum.ToCodeString()
+	case "TextAnchorType":
+		enum := rectanchoredtext.TextAnchorType
+		res.valueString = enum.ToCodeString()
+	case "DominantBaseline":
+		enum := rectanchoredtext.DominantBaseline
+		res.valueString = enum.ToCodeString()
+	case "WritingMode":
+		enum := rectanchoredtext.WritingMode
+		res.valueString = enum.ToCodeString()
+	case "Color":
+		res.valueString = rectanchoredtext.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", rectanchoredtext.FillOpacity)
+		res.valueFloat = rectanchoredtext.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = rectanchoredtext.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", rectanchoredtext.StrokeOpacity)
+		res.valueFloat = rectanchoredtext.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", rectanchoredtext.StrokeWidth)
+		res.valueFloat = rectanchoredtext.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = rectanchoredtext.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = rectanchoredtext.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = rectanchoredtext.Transform
+	case "Animates":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range rectanchoredtext.Animates {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func (rectlinklink *RectLinkLink) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = rectlinklink.Name
+	case "Start":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if rectlinklink.Start != nil {
+			res.valueString = rectlinklink.Start.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, rectlinklink.Start))
+		}
+	case "End":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if rectlinklink.End != nil {
+			res.valueString = rectlinklink.End.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, rectlinklink.End))
+		}
+	case "TargetAnchorPosition":
+		res.valueString = fmt.Sprintf("%f", rectlinklink.TargetAnchorPosition)
+		res.valueFloat = rectlinklink.TargetAnchorPosition
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Color":
+		res.valueString = rectlinklink.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", rectlinklink.FillOpacity)
+		res.valueFloat = rectlinklink.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = rectlinklink.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", rectlinklink.StrokeOpacity)
+		res.valueFloat = rectlinklink.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", rectlinklink.StrokeWidth)
+		res.valueFloat = rectlinklink.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = rectlinklink.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = rectlinklink.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = rectlinklink.Transform
+	}
+	return
+}
+func (svg *SVG) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = svg.Name
+	case "Layers":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range svg.Layers {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	case "DrawingState":
+		enum := svg.DrawingState
+		res.valueString = enum.ToCodeString()
+	case "StartRect":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if svg.StartRect != nil {
+			res.valueString = svg.StartRect.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, svg.StartRect))
+		}
+	case "EndRect":
+		res.GongFieldValueType = GongFieldValueTypePointer
+		if svg.EndRect != nil {
+			res.valueString = svg.EndRect.Name
+			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, svg.EndRect))
+		}
+	case "IsEditable":
+		res.valueString = fmt.Sprintf("%t", svg.IsEditable)
+		res.valueBool = svg.IsEditable
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsSVGFrontEndFileGenerated":
+		res.valueString = fmt.Sprintf("%t", svg.IsSVGFrontEndFileGenerated)
+		res.valueBool = svg.IsSVGFrontEndFileGenerated
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "IsSVGBackEndFileGenerated":
+		res.valueString = fmt.Sprintf("%t", svg.IsSVGBackEndFileGenerated)
+		res.valueBool = svg.IsSVGBackEndFileGenerated
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "DefaultDirectoryForGeneratedImages":
+		res.valueString = svg.DefaultDirectoryForGeneratedImages
+	case "IsControlBannerHidden":
+		res.valueString = fmt.Sprintf("%t", svg.IsControlBannerHidden)
+		res.valueBool = svg.IsControlBannerHidden
+		res.GongFieldValueType = GongFieldValueTypeBool
+	}
+	return
+}
+func (svgtext *SvgText) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = svgtext.Name
+	case "Text":
+		res.valueString = svgtext.Text
+	}
+	return
+}
+func (text *Text) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
+	switch fieldName {
+	// string value of fields
+	case "Name":
+		res.valueString = text.Name
+	case "X":
+		res.valueString = fmt.Sprintf("%f", text.X)
+		res.valueFloat = text.X
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Y":
+		res.valueString = fmt.Sprintf("%f", text.Y)
+		res.valueFloat = text.Y
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Content":
+		res.valueString = text.Content
+	case "Color":
+		res.valueString = text.Color
+	case "FillOpacity":
+		res.valueString = fmt.Sprintf("%f", text.FillOpacity)
+		res.valueFloat = text.FillOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "Stroke":
+		res.valueString = text.Stroke
+	case "StrokeOpacity":
+		res.valueString = fmt.Sprintf("%f", text.StrokeOpacity)
+		res.valueFloat = text.StrokeOpacity
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeWidth":
+		res.valueString = fmt.Sprintf("%f", text.StrokeWidth)
+		res.valueFloat = text.StrokeWidth
+		res.GongFieldValueType = GongFieldValueTypeFloat
+	case "StrokeDashArray":
+		res.valueString = text.StrokeDashArray
+	case "StrokeDashArrayWhenSelected":
+		res.valueString = text.StrokeDashArrayWhenSelected
+	case "Transform":
+		res.valueString = text.Transform
+	case "FontWeight":
+		res.valueString = text.FontWeight
+	case "FontSize":
+		res.valueString = text.FontSize
+	case "FontStyle":
+		res.valueString = text.FontStyle
+	case "LetterSpacing":
+		res.valueString = text.LetterSpacing
+	case "FontFamily":
+		res.valueString = text.FontFamily
+	case "WhiteSpace":
+		enum := text.WhiteSpace
+		res.valueString = enum.ToCodeString()
+	case "Animates":
+		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
+		for idx, __instance__ := range text.Animates {
+			if idx > 0 {
+				res.valueString += "\n"
+				res.ids += ";"
+			}
+			res.valueString += __instance__.Name
+			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+		}
+	}
+	return
+}
+func GetFieldStringValueFromPointer(instance GongstructIF, fieldName string, stage *Stage) (res GongFieldValue) {
 
-func GetFieldStringValue(instance any, fieldName string) (res GongFieldValue) {
+	res = instance.GongGetFieldValue(fieldName, stage)
+	return
+}
 
-	switch inferedInstance := any(instance).(type) {
-	// insertion point for generic get gongstruct field value
-	case Animate:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "AttributeName":
-			res.valueString = inferedInstance.AttributeName
-		case "Values":
-			res.valueString = inferedInstance.Values
-		case "From":
-			res.valueString = inferedInstance.From
-		case "To":
-			res.valueString = inferedInstance.To
-		case "Dur":
-			res.valueString = inferedInstance.Dur
-		case "RepeatCount":
-			res.valueString = inferedInstance.RepeatCount
-		}
-	case Circle:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "CX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CX)
-			res.valueFloat = inferedInstance.CX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CY)
-			res.valueFloat = inferedInstance.CY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Radius":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Radius)
-			res.valueFloat = inferedInstance.Radius
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animations":
-			for idx, __instance__ := range inferedInstance.Animations {
-				if idx > 0 {
-					res.valueString += "\n"
+// insertion point for generic set gongstruct field value
+func (animate *Animate) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		animate.Name = value.GetValueString()
+	case "AttributeName":
+		animate.AttributeName = value.GetValueString()
+	case "Values":
+		animate.Values = value.GetValueString()
+	case "From":
+		animate.From = value.GetValueString()
+	case "To":
+		animate.To = value.GetValueString()
+	case "Dur":
+		animate.Dur = value.GetValueString()
+	case "RepeatCount":
+		animate.RepeatCount = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (circle *Circle) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		circle.Name = value.GetValueString()
+	case "CX":
+		circle.CX = value.GetValueFloat()
+	case "CY":
+		circle.CY = value.GetValueFloat()
+	case "Radius":
+		circle.Radius = value.GetValueFloat()
+	case "Color":
+		circle.Color = value.GetValueString()
+	case "FillOpacity":
+		circle.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		circle.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		circle.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		circle.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		circle.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		circle.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		circle.Transform = value.GetValueString()
+	case "Animations":
+		circle.Animations = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						circle.Animations = append(circle.Animations, __instance__)
+						break
+					}
 				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case Ellipse:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "CX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CX)
-			res.valueFloat = inferedInstance.CX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CY)
-			res.valueFloat = inferedInstance.CY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.RX)
-			res.valueFloat = inferedInstance.RX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.RY)
-			res.valueFloat = inferedInstance.RY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case Layer:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Rects":
-			for idx, __instance__ := range inferedInstance.Rects {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Texts":
-			for idx, __instance__ := range inferedInstance.Texts {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Circles":
-			for idx, __instance__ := range inferedInstance.Circles {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Lines":
-			for idx, __instance__ := range inferedInstance.Lines {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Ellipses":
-			for idx, __instance__ := range inferedInstance.Ellipses {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Polylines":
-			for idx, __instance__ := range inferedInstance.Polylines {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Polygones":
-			for idx, __instance__ := range inferedInstance.Polygones {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Paths":
-			for idx, __instance__ := range inferedInstance.Paths {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Links":
-			for idx, __instance__ := range inferedInstance.Links {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "RectLinkLinks":
-			for idx, __instance__ := range inferedInstance.RectLinkLinks {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case Line:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X1":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X1)
-			res.valueFloat = inferedInstance.X1
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y1":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y1)
-			res.valueFloat = inferedInstance.Y1
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "X2":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X2)
-			res.valueFloat = inferedInstance.X2
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y2":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y2)
-			res.valueFloat = inferedInstance.Y2
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "MouseClickX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MouseClickX)
-			res.valueFloat = inferedInstance.MouseClickX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "MouseClickY":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.MouseClickY)
-			res.valueFloat = inferedInstance.MouseClickY
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	case Link:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Type":
-			enum := inferedInstance.Type
-			res.valueString = enum.ToCodeString()
-		case "IsBezierCurve":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsBezierCurve)
-			res.valueBool = inferedInstance.IsBezierCurve
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "Start":
-			if inferedInstance.Start != nil {
-				res.valueString = inferedInstance.Start.Name
-			}
-		case "StartAnchorType":
-			enum := inferedInstance.StartAnchorType
-			res.valueString = enum.ToCodeString()
-		case "End":
-			if inferedInstance.End != nil {
-				res.valueString = inferedInstance.End.Name
-			}
-		case "EndAnchorType":
-			enum := inferedInstance.EndAnchorType
-			res.valueString = enum.ToCodeString()
-		case "StartOrientation":
-			enum := inferedInstance.StartOrientation
-			res.valueString = enum.ToCodeString()
-		case "StartRatio":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StartRatio)
-			res.valueFloat = inferedInstance.StartRatio
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "EndOrientation":
-			enum := inferedInstance.EndOrientation
-			res.valueString = enum.ToCodeString()
-		case "EndRatio":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.EndRatio)
-			res.valueFloat = inferedInstance.EndRatio
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CornerOffsetRatio":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CornerOffsetRatio)
-			res.valueFloat = inferedInstance.CornerOffsetRatio
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "CornerRadius":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.CornerRadius)
-			res.valueFloat = inferedInstance.CornerRadius
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasEndArrow":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasEndArrow)
-			res.valueBool = inferedInstance.HasEndArrow
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "EndArrowSize":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.EndArrowSize)
-			res.valueFloat = inferedInstance.EndArrowSize
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasStartArrow":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasStartArrow)
-			res.valueBool = inferedInstance.HasStartArrow
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "StartArrowSize":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StartArrowSize)
-			res.valueFloat = inferedInstance.StartArrowSize
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "TextAtArrowStart":
-			for idx, __instance__ := range inferedInstance.TextAtArrowStart {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "TextAtArrowEnd":
-			for idx, __instance__ := range inferedInstance.TextAtArrowEnd {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "ControlPoints":
-			for idx, __instance__ := range inferedInstance.ControlPoints {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		}
-	case LinkAnchoredText:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Content":
-			res.valueString = inferedInstance.Content
-		case "AutomaticLayout":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.AutomaticLayout)
-			res.valueBool = inferedInstance.AutomaticLayout
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "LinkAnchorType":
-			enum := inferedInstance.LinkAnchorType
-			res.valueString = enum.ToCodeString()
-		case "X_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
-			res.valueFloat = inferedInstance.X_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_Offset)
-			res.valueFloat = inferedInstance.Y_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "FontWeight":
-			res.valueString = inferedInstance.FontWeight
-		case "FontSize":
-			res.valueString = inferedInstance.FontSize
-		case "FontStyle":
-			res.valueString = inferedInstance.FontStyle
-		case "LetterSpacing":
-			res.valueString = inferedInstance.LetterSpacing
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case Path:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Definition":
-			res.valueString = inferedInstance.Definition
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case Point:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X)
-			res.valueFloat = inferedInstance.X
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
-			res.valueFloat = inferedInstance.Y
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		}
-	case Polygone:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Points":
-			res.valueString = inferedInstance.Points
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case Polyline:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Points":
-			res.valueString = inferedInstance.Points
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case Rect:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X)
-			res.valueFloat = inferedInstance.X
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
-			res.valueFloat = inferedInstance.Y
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Width":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Width)
-			res.valueFloat = inferedInstance.Width
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Height":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Height)
-			res.valueFloat = inferedInstance.Height
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.RX)
-			res.valueFloat = inferedInstance.RX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animations":
-			for idx, __instance__ := range inferedInstance.Animations {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "IsSelectable":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSelectable)
-			res.valueBool = inferedInstance.IsSelectable
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSelected":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSelected)
-			res.valueBool = inferedInstance.IsSelected
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanHaveLeftHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanHaveLeftHandle)
-			res.valueBool = inferedInstance.CanHaveLeftHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasLeftHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasLeftHandle)
-			res.valueBool = inferedInstance.HasLeftHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanHaveRightHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanHaveRightHandle)
-			res.valueBool = inferedInstance.CanHaveRightHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasRightHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasRightHandle)
-			res.valueBool = inferedInstance.HasRightHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanHaveTopHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanHaveTopHandle)
-			res.valueBool = inferedInstance.CanHaveTopHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasTopHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasTopHandle)
-			res.valueBool = inferedInstance.HasTopHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsScalingProportionally":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsScalingProportionally)
-			res.valueBool = inferedInstance.IsScalingProportionally
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanHaveBottomHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanHaveBottomHandle)
-			res.valueBool = inferedInstance.CanHaveBottomHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasBottomHandle":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasBottomHandle)
-			res.valueBool = inferedInstance.HasBottomHandle
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanMoveHorizontaly":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanMoveHorizontaly)
-			res.valueBool = inferedInstance.CanMoveHorizontaly
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "CanMoveVerticaly":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.CanMoveVerticaly)
-			res.valueBool = inferedInstance.CanMoveVerticaly
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "RectAnchoredTexts":
-			for idx, __instance__ := range inferedInstance.RectAnchoredTexts {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "RectAnchoredRects":
-			for idx, __instance__ := range inferedInstance.RectAnchoredRects {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "RectAnchoredPaths":
-			for idx, __instance__ := range inferedInstance.RectAnchoredPaths {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "ChangeColorWhenHovered":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.ChangeColorWhenHovered)
-			res.valueBool = inferedInstance.ChangeColorWhenHovered
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ColorWhenHovered":
-			res.valueString = inferedInstance.ColorWhenHovered
-		case "OriginalColor":
-			res.valueString = inferedInstance.OriginalColor
-		case "FillOpacityWhenHovered":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacityWhenHovered)
-			res.valueFloat = inferedInstance.FillOpacityWhenHovered
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "OriginalFillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.OriginalFillOpacity)
-			res.valueFloat = inferedInstance.OriginalFillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		}
-	case RectAnchoredPath:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Definition":
-			res.valueString = inferedInstance.Definition
-		case "X_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
-			res.valueFloat = inferedInstance.X_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_Offset)
-			res.valueFloat = inferedInstance.Y_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RectAnchorType":
-			enum := inferedInstance.RectAnchorType
-			res.valueString = enum.ToCodeString()
-		case "ScalePropotionnally":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.ScalePropotionnally)
-			res.valueBool = inferedInstance.ScalePropotionnally
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "AppliedScaling":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.AppliedScaling)
-			res.valueFloat = inferedInstance.AppliedScaling
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		}
-	case RectAnchoredRect:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X)
-			res.valueFloat = inferedInstance.X
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
-			res.valueFloat = inferedInstance.Y
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Width":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Width)
-			res.valueFloat = inferedInstance.Width
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Height":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Height)
-			res.valueFloat = inferedInstance.Height
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RX":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.RX)
-			res.valueFloat = inferedInstance.RX
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "X_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
-			res.valueFloat = inferedInstance.X_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_Offset)
-			res.valueFloat = inferedInstance.Y_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RectAnchorType":
-			enum := inferedInstance.RectAnchorType
-			res.valueString = enum.ToCodeString()
-		case "WidthFollowRect":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.WidthFollowRect)
-			res.valueBool = inferedInstance.WidthFollowRect
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HeightFollowRect":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HeightFollowRect)
-			res.valueBool = inferedInstance.HeightFollowRect
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "HasToolTip":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.HasToolTip)
-			res.valueBool = inferedInstance.HasToolTip
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "ToolTipText":
-			res.valueString = inferedInstance.ToolTipText
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		}
-	case RectAnchoredText:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Content":
-			res.valueString = inferedInstance.Content
-		case "FontWeight":
-			res.valueString = inferedInstance.FontWeight
-		case "FontSize":
-			res.valueString = inferedInstance.FontSize
-		case "FontStyle":
-			res.valueString = inferedInstance.FontStyle
-		case "LetterSpacing":
-			res.valueString = inferedInstance.LetterSpacing
-		case "X_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X_Offset)
-			res.valueFloat = inferedInstance.X_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y_Offset":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y_Offset)
-			res.valueFloat = inferedInstance.Y_Offset
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "RectAnchorType":
-			enum := inferedInstance.RectAnchorType
-			res.valueString = enum.ToCodeString()
-		case "TextAnchorType":
-			enum := inferedInstance.TextAnchorType
-			res.valueString = enum.ToCodeString()
-		case "WritingMode":
-			enum := inferedInstance.WritingMode
-			res.valueString = enum.ToCodeString()
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		}
-	case RectLinkLink:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Start":
-			if inferedInstance.Start != nil {
-				res.valueString = inferedInstance.Start.Name
-			}
-		case "End":
-			if inferedInstance.End != nil {
-				res.valueString = inferedInstance.End.Name
-			}
-		case "TargetAnchorPosition":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.TargetAnchorPosition)
-			res.valueFloat = inferedInstance.TargetAnchorPosition
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		}
-	case SVG:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Layers":
-			for idx, __instance__ := range inferedInstance.Layers {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
-			}
-		case "DrawingState":
-			enum := inferedInstance.DrawingState
-			res.valueString = enum.ToCodeString()
-		case "StartRect":
-			if inferedInstance.StartRect != nil {
-				res.valueString = inferedInstance.StartRect.Name
-			}
-		case "EndRect":
-			if inferedInstance.EndRect != nil {
-				res.valueString = inferedInstance.EndRect.Name
-			}
-		case "IsEditable":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsEditable)
-			res.valueBool = inferedInstance.IsEditable
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSVGFrontEndFileGenerated":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGFrontEndFileGenerated)
-			res.valueBool = inferedInstance.IsSVGFrontEndFileGenerated
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "IsSVGBackEndFileGenerated":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsSVGBackEndFileGenerated)
-			res.valueBool = inferedInstance.IsSVGBackEndFileGenerated
-			res.GongFieldValueType = GongFieldValueTypeBool
-		case "DefaultDirectoryForGeneratedImages":
-			res.valueString = inferedInstance.DefaultDirectoryForGeneratedImages
-		case "IsControlBannerHidden":
-			res.valueString = fmt.Sprintf("%t", inferedInstance.IsControlBannerHidden)
-			res.valueBool = inferedInstance.IsControlBannerHidden
-			res.GongFieldValueType = GongFieldValueTypeBool
-		}
-	case SvgText:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "Text":
-			res.valueString = inferedInstance.Text
-		}
-	case Text:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res.valueString = inferedInstance.Name
-		case "X":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.X)
-			res.valueFloat = inferedInstance.X
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Y":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.Y)
-			res.valueFloat = inferedInstance.Y
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Content":
-			res.valueString = inferedInstance.Content
-		case "Color":
-			res.valueString = inferedInstance.Color
-		case "FillOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.FillOpacity)
-			res.valueFloat = inferedInstance.FillOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "Stroke":
-			res.valueString = inferedInstance.Stroke
-		case "StrokeOpacity":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeOpacity)
-			res.valueFloat = inferedInstance.StrokeOpacity
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeWidth":
-			res.valueString = fmt.Sprintf("%f", inferedInstance.StrokeWidth)
-			res.valueFloat = inferedInstance.StrokeWidth
-			res.GongFieldValueType = GongFieldValueTypeFloat
-		case "StrokeDashArray":
-			res.valueString = inferedInstance.StrokeDashArray
-		case "StrokeDashArrayWhenSelected":
-			res.valueString = inferedInstance.StrokeDashArrayWhenSelected
-		case "Transform":
-			res.valueString = inferedInstance.Transform
-		case "FontWeight":
-			res.valueString = inferedInstance.FontWeight
-		case "FontSize":
-			res.valueString = inferedInstance.FontSize
-		case "FontStyle":
-			res.valueString = inferedInstance.FontStyle
-		case "LetterSpacing":
-			res.valueString = inferedInstance.LetterSpacing
-		case "Animates":
-			for idx, __instance__ := range inferedInstance.Animates {
-				if idx > 0 {
-					res.valueString += "\n"
-				}
-				res.valueString += __instance__.Name
 			}
 		}
 	default:
-		_ = inferedInstance
+		return fmt.Errorf("unknown field %s", fieldName)
 	}
+	return nil
+}
+
+func (condition *Condition) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		condition.Name = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (controlpoint *ControlPoint) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		controlpoint.Name = value.GetValueString()
+	case "X_Relative":
+		controlpoint.X_Relative = value.GetValueFloat()
+	case "Y_Relative":
+		controlpoint.Y_Relative = value.GetValueFloat()
+	case "ClosestRect":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			controlpoint.ClosestRect = nil
+			for __instance__ := range stage.Rects {
+				if stage.RectMap_Staged_Order[__instance__] == uint(id) {
+					controlpoint.ClosestRect = __instance__
+					break
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (ellipse *Ellipse) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		ellipse.Name = value.GetValueString()
+	case "CX":
+		ellipse.CX = value.GetValueFloat()
+	case "CY":
+		ellipse.CY = value.GetValueFloat()
+	case "RX":
+		ellipse.RX = value.GetValueFloat()
+	case "RY":
+		ellipse.RY = value.GetValueFloat()
+	case "Color":
+		ellipse.Color = value.GetValueString()
+	case "FillOpacity":
+		ellipse.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		ellipse.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		ellipse.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		ellipse.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		ellipse.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		ellipse.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		ellipse.Transform = value.GetValueString()
+	case "Animates":
+		ellipse.Animates = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						ellipse.Animates = append(ellipse.Animates, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (layer *Layer) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		layer.Name = value.GetValueString()
+	case "Rects":
+		layer.Rects = make([]*Rect, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Rects {
+					if stage.RectMap_Staged_Order[__instance__] == uint(id) {
+						layer.Rects = append(layer.Rects, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Texts":
+		layer.Texts = make([]*Text, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Texts {
+					if stage.TextMap_Staged_Order[__instance__] == uint(id) {
+						layer.Texts = append(layer.Texts, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Circles":
+		layer.Circles = make([]*Circle, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Circles {
+					if stage.CircleMap_Staged_Order[__instance__] == uint(id) {
+						layer.Circles = append(layer.Circles, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Lines":
+		layer.Lines = make([]*Line, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Lines {
+					if stage.LineMap_Staged_Order[__instance__] == uint(id) {
+						layer.Lines = append(layer.Lines, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Ellipses":
+		layer.Ellipses = make([]*Ellipse, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Ellipses {
+					if stage.EllipseMap_Staged_Order[__instance__] == uint(id) {
+						layer.Ellipses = append(layer.Ellipses, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Polylines":
+		layer.Polylines = make([]*Polyline, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Polylines {
+					if stage.PolylineMap_Staged_Order[__instance__] == uint(id) {
+						layer.Polylines = append(layer.Polylines, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Polygones":
+		layer.Polygones = make([]*Polygone, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Polygones {
+					if stage.PolygoneMap_Staged_Order[__instance__] == uint(id) {
+						layer.Polygones = append(layer.Polygones, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Paths":
+		layer.Paths = make([]*Path, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Paths {
+					if stage.PathMap_Staged_Order[__instance__] == uint(id) {
+						layer.Paths = append(layer.Paths, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Links":
+		layer.Links = make([]*Link, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Links {
+					if stage.LinkMap_Staged_Order[__instance__] == uint(id) {
+						layer.Links = append(layer.Links, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "RectLinkLinks":
+		layer.RectLinkLinks = make([]*RectLinkLink, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.RectLinkLinks {
+					if stage.RectLinkLinkMap_Staged_Order[__instance__] == uint(id) {
+						layer.RectLinkLinks = append(layer.RectLinkLinks, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (line *Line) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		line.Name = value.GetValueString()
+	case "X1":
+		line.X1 = value.GetValueFloat()
+	case "Y1":
+		line.Y1 = value.GetValueFloat()
+	case "X2":
+		line.X2 = value.GetValueFloat()
+	case "Y2":
+		line.Y2 = value.GetValueFloat()
+	case "Color":
+		line.Color = value.GetValueString()
+	case "FillOpacity":
+		line.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		line.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		line.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		line.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		line.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		line.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		line.Transform = value.GetValueString()
+	case "Animates":
+		line.Animates = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						line.Animates = append(line.Animates, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "MouseClickX":
+		line.MouseClickX = value.GetValueFloat()
+	case "MouseClickY":
+		line.MouseClickY = value.GetValueFloat()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (link *Link) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		link.Name = value.GetValueString()
+	case "Type":
+		link.Type.FromCodeString(value.GetValueString())
+	case "IsBezierCurve":
+		link.IsBezierCurve = value.GetValueBool()
+	case "Start":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			link.Start = nil
+			for __instance__ := range stage.Rects {
+				if stage.RectMap_Staged_Order[__instance__] == uint(id) {
+					link.Start = __instance__
+					break
+				}
+			}
+		}
+	case "StartAnchorType":
+		link.StartAnchorType.FromCodeString(value.GetValueString())
+	case "End":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			link.End = nil
+			for __instance__ := range stage.Rects {
+				if stage.RectMap_Staged_Order[__instance__] == uint(id) {
+					link.End = __instance__
+					break
+				}
+			}
+		}
+	case "EndAnchorType":
+		link.EndAnchorType.FromCodeString(value.GetValueString())
+	case "StartOrientation":
+		link.StartOrientation.FromCodeString(value.GetValueString())
+	case "StartRatio":
+		link.StartRatio = value.GetValueFloat()
+	case "EndOrientation":
+		link.EndOrientation.FromCodeString(value.GetValueString())
+	case "EndRatio":
+		link.EndRatio = value.GetValueFloat()
+	case "CornerOffsetRatio":
+		link.CornerOffsetRatio = value.GetValueFloat()
+	case "CornerRadius":
+		link.CornerRadius = value.GetValueFloat()
+	case "HasEndArrow":
+		link.HasEndArrow = value.GetValueBool()
+	case "EndArrowSize":
+		link.EndArrowSize = value.GetValueFloat()
+	case "EndArrowOffset":
+		link.EndArrowOffset = value.GetValueFloat()
+	case "HasStartArrow":
+		link.HasStartArrow = value.GetValueBool()
+	case "StartArrowSize":
+		link.StartArrowSize = value.GetValueFloat()
+	case "StartArrowOffset":
+		link.StartArrowOffset = value.GetValueFloat()
+	case "TextAtArrowStart":
+		link.TextAtArrowStart = make([]*LinkAnchoredText, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.LinkAnchoredTexts {
+					if stage.LinkAnchoredTextMap_Staged_Order[__instance__] == uint(id) {
+						link.TextAtArrowStart = append(link.TextAtArrowStart, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "TextAtArrowEnd":
+		link.TextAtArrowEnd = make([]*LinkAnchoredText, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.LinkAnchoredTexts {
+					if stage.LinkAnchoredTextMap_Staged_Order[__instance__] == uint(id) {
+						link.TextAtArrowEnd = append(link.TextAtArrowEnd, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "ControlPoints":
+		link.ControlPoints = make([]*ControlPoint, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.ControlPoints {
+					if stage.ControlPointMap_Staged_Order[__instance__] == uint(id) {
+						link.ControlPoints = append(link.ControlPoints, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Color":
+		link.Color = value.GetValueString()
+	case "FillOpacity":
+		link.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		link.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		link.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		link.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		link.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		link.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		link.Transform = value.GetValueString()
+	case "MouseX":
+		link.MouseX = value.GetValueFloat()
+	case "MouseY":
+		link.MouseY = value.GetValueFloat()
+	case "MouseEventKey":
+		link.MouseEventKey.FromCodeString(value.GetValueString())
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (linkanchoredtext *LinkAnchoredText) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		linkanchoredtext.Name = value.GetValueString()
+	case "Content":
+		linkanchoredtext.Content = value.GetValueString()
+	case "AutomaticLayout":
+		linkanchoredtext.AutomaticLayout = value.GetValueBool()
+	case "LinkAnchorType":
+		linkanchoredtext.LinkAnchorType.FromCodeString(value.GetValueString())
+	case "X_Offset":
+		linkanchoredtext.X_Offset = value.GetValueFloat()
+	case "Y_Offset":
+		linkanchoredtext.Y_Offset = value.GetValueFloat()
+	case "FontWeight":
+		linkanchoredtext.FontWeight = value.GetValueString()
+	case "FontSize":
+		linkanchoredtext.FontSize = value.GetValueString()
+	case "FontStyle":
+		linkanchoredtext.FontStyle = value.GetValueString()
+	case "LetterSpacing":
+		linkanchoredtext.LetterSpacing = value.GetValueString()
+	case "FontFamily":
+		linkanchoredtext.FontFamily = value.GetValueString()
+	case "WhiteSpace":
+		linkanchoredtext.WhiteSpace.FromCodeString(value.GetValueString())
+	case "Color":
+		linkanchoredtext.Color = value.GetValueString()
+	case "FillOpacity":
+		linkanchoredtext.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		linkanchoredtext.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		linkanchoredtext.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		linkanchoredtext.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		linkanchoredtext.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		linkanchoredtext.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		linkanchoredtext.Transform = value.GetValueString()
+	case "Animates":
+		linkanchoredtext.Animates = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						linkanchoredtext.Animates = append(linkanchoredtext.Animates, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (path *Path) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		path.Name = value.GetValueString()
+	case "Definition":
+		path.Definition = value.GetValueString()
+	case "Color":
+		path.Color = value.GetValueString()
+	case "FillOpacity":
+		path.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		path.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		path.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		path.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		path.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		path.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		path.Transform = value.GetValueString()
+	case "Animates":
+		path.Animates = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						path.Animates = append(path.Animates, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (point *Point) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		point.Name = value.GetValueString()
+	case "X":
+		point.X = value.GetValueFloat()
+	case "Y":
+		point.Y = value.GetValueFloat()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (polygone *Polygone) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		polygone.Name = value.GetValueString()
+	case "Points":
+		polygone.Points = value.GetValueString()
+	case "Color":
+		polygone.Color = value.GetValueString()
+	case "FillOpacity":
+		polygone.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		polygone.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		polygone.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		polygone.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		polygone.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		polygone.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		polygone.Transform = value.GetValueString()
+	case "Animates":
+		polygone.Animates = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						polygone.Animates = append(polygone.Animates, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (polyline *Polyline) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		polyline.Name = value.GetValueString()
+	case "Points":
+		polyline.Points = value.GetValueString()
+	case "Color":
+		polyline.Color = value.GetValueString()
+	case "FillOpacity":
+		polyline.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		polyline.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		polyline.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		polyline.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		polyline.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		polyline.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		polyline.Transform = value.GetValueString()
+	case "Animates":
+		polyline.Animates = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						polyline.Animates = append(polyline.Animates, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (rect *Rect) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		rect.Name = value.GetValueString()
+	case "X":
+		rect.X = value.GetValueFloat()
+	case "Y":
+		rect.Y = value.GetValueFloat()
+	case "Width":
+		rect.Width = value.GetValueFloat()
+	case "Height":
+		rect.Height = value.GetValueFloat()
+	case "RX":
+		rect.RX = value.GetValueFloat()
+	case "Color":
+		rect.Color = value.GetValueString()
+	case "FillOpacity":
+		rect.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		rect.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		rect.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		rect.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		rect.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		rect.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		rect.Transform = value.GetValueString()
+	case "HoveringTrigger":
+		rect.HoveringTrigger = make([]*Condition, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Conditions {
+					if stage.ConditionMap_Staged_Order[__instance__] == uint(id) {
+						rect.HoveringTrigger = append(rect.HoveringTrigger, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "DisplayConditions":
+		rect.DisplayConditions = make([]*Condition, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Conditions {
+					if stage.ConditionMap_Staged_Order[__instance__] == uint(id) {
+						rect.DisplayConditions = append(rect.DisplayConditions, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "Animations":
+		rect.Animations = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						rect.Animations = append(rect.Animations, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "IsSelectable":
+		rect.IsSelectable = value.GetValueBool()
+	case "IsSelected":
+		rect.IsSelected = value.GetValueBool()
+	case "CanHaveLeftHandle":
+		rect.CanHaveLeftHandle = value.GetValueBool()
+	case "HasLeftHandle":
+		rect.HasLeftHandle = value.GetValueBool()
+	case "CanHaveRightHandle":
+		rect.CanHaveRightHandle = value.GetValueBool()
+	case "HasRightHandle":
+		rect.HasRightHandle = value.GetValueBool()
+	case "CanHaveTopHandle":
+		rect.CanHaveTopHandle = value.GetValueBool()
+	case "HasTopHandle":
+		rect.HasTopHandle = value.GetValueBool()
+	case "IsScalingProportionally":
+		rect.IsScalingProportionally = value.GetValueBool()
+	case "CanHaveBottomHandle":
+		rect.CanHaveBottomHandle = value.GetValueBool()
+	case "HasBottomHandle":
+		rect.HasBottomHandle = value.GetValueBool()
+	case "CanMoveHorizontaly":
+		rect.CanMoveHorizontaly = value.GetValueBool()
+	case "CanMoveVerticaly":
+		rect.CanMoveVerticaly = value.GetValueBool()
+	case "RectAnchoredTexts":
+		rect.RectAnchoredTexts = make([]*RectAnchoredText, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.RectAnchoredTexts {
+					if stage.RectAnchoredTextMap_Staged_Order[__instance__] == uint(id) {
+						rect.RectAnchoredTexts = append(rect.RectAnchoredTexts, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "RectAnchoredRects":
+		rect.RectAnchoredRects = make([]*RectAnchoredRect, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.RectAnchoredRects {
+					if stage.RectAnchoredRectMap_Staged_Order[__instance__] == uint(id) {
+						rect.RectAnchoredRects = append(rect.RectAnchoredRects, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "RectAnchoredPaths":
+		rect.RectAnchoredPaths = make([]*RectAnchoredPath, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.RectAnchoredPaths {
+					if stage.RectAnchoredPathMap_Staged_Order[__instance__] == uint(id) {
+						rect.RectAnchoredPaths = append(rect.RectAnchoredPaths, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "ChangeColorWhenHovered":
+		rect.ChangeColorWhenHovered = value.GetValueBool()
+	case "ColorWhenHovered":
+		rect.ColorWhenHovered = value.GetValueString()
+	case "OriginalColor":
+		rect.OriginalColor = value.GetValueString()
+	case "FillOpacityWhenHovered":
+		rect.FillOpacityWhenHovered = value.GetValueFloat()
+	case "OriginalFillOpacity":
+		rect.OriginalFillOpacity = value.GetValueFloat()
+	case "HasToolTip":
+		rect.HasToolTip = value.GetValueBool()
+	case "ToolTipText":
+		rect.ToolTipText = value.GetValueString()
+	case "ToolTipPosition":
+		rect.ToolTipPosition.FromCodeString(value.GetValueString())
+	case "MouseX":
+		rect.MouseX = value.GetValueFloat()
+	case "MouseY":
+		rect.MouseY = value.GetValueFloat()
+	case "MouseEventKey":
+		rect.MouseEventKey.FromCodeString(value.GetValueString())
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (rectanchoredpath *RectAnchoredPath) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		rectanchoredpath.Name = value.GetValueString()
+	case "Definition":
+		rectanchoredpath.Definition = value.GetValueString()
+	case "X_Offset":
+		rectanchoredpath.X_Offset = value.GetValueFloat()
+	case "Y_Offset":
+		rectanchoredpath.Y_Offset = value.GetValueFloat()
+	case "RectAnchorType":
+		rectanchoredpath.RectAnchorType.FromCodeString(value.GetValueString())
+	case "ScalePropotionnally":
+		rectanchoredpath.ScalePropotionnally = value.GetValueBool()
+	case "AppliedScaling":
+		rectanchoredpath.AppliedScaling = value.GetValueFloat()
+	case "Color":
+		rectanchoredpath.Color = value.GetValueString()
+	case "FillOpacity":
+		rectanchoredpath.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		rectanchoredpath.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		rectanchoredpath.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		rectanchoredpath.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		rectanchoredpath.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		rectanchoredpath.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		rectanchoredpath.Transform = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (rectanchoredrect *RectAnchoredRect) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		rectanchoredrect.Name = value.GetValueString()
+	case "X":
+		rectanchoredrect.X = value.GetValueFloat()
+	case "Y":
+		rectanchoredrect.Y = value.GetValueFloat()
+	case "Width":
+		rectanchoredrect.Width = value.GetValueFloat()
+	case "Height":
+		rectanchoredrect.Height = value.GetValueFloat()
+	case "RX":
+		rectanchoredrect.RX = value.GetValueFloat()
+	case "X_Offset":
+		rectanchoredrect.X_Offset = value.GetValueFloat()
+	case "Y_Offset":
+		rectanchoredrect.Y_Offset = value.GetValueFloat()
+	case "RectAnchorType":
+		rectanchoredrect.RectAnchorType.FromCodeString(value.GetValueString())
+	case "WidthFollowRect":
+		rectanchoredrect.WidthFollowRect = value.GetValueBool()
+	case "HeightFollowRect":
+		rectanchoredrect.HeightFollowRect = value.GetValueBool()
+	case "HasToolTip":
+		rectanchoredrect.HasToolTip = value.GetValueBool()
+	case "ToolTipText":
+		rectanchoredrect.ToolTipText = value.GetValueString()
+	case "Color":
+		rectanchoredrect.Color = value.GetValueString()
+	case "FillOpacity":
+		rectanchoredrect.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		rectanchoredrect.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		rectanchoredrect.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		rectanchoredrect.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		rectanchoredrect.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		rectanchoredrect.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		rectanchoredrect.Transform = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (rectanchoredtext *RectAnchoredText) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		rectanchoredtext.Name = value.GetValueString()
+	case "Content":
+		rectanchoredtext.Content = value.GetValueString()
+	case "FontWeight":
+		rectanchoredtext.FontWeight = value.GetValueString()
+	case "FontSize":
+		rectanchoredtext.FontSize = value.GetValueString()
+	case "FontStyle":
+		rectanchoredtext.FontStyle = value.GetValueString()
+	case "LetterSpacing":
+		rectanchoredtext.LetterSpacing = value.GetValueString()
+	case "FontFamily":
+		rectanchoredtext.FontFamily = value.GetValueString()
+	case "WhiteSpace":
+		rectanchoredtext.WhiteSpace.FromCodeString(value.GetValueString())
+	case "X_Offset":
+		rectanchoredtext.X_Offset = value.GetValueFloat()
+	case "Y_Offset":
+		rectanchoredtext.Y_Offset = value.GetValueFloat()
+	case "RectAnchorType":
+		rectanchoredtext.RectAnchorType.FromCodeString(value.GetValueString())
+	case "TextAnchorType":
+		rectanchoredtext.TextAnchorType.FromCodeString(value.GetValueString())
+	case "DominantBaseline":
+		rectanchoredtext.DominantBaseline.FromCodeString(value.GetValueString())
+	case "WritingMode":
+		rectanchoredtext.WritingMode.FromCodeString(value.GetValueString())
+	case "Color":
+		rectanchoredtext.Color = value.GetValueString()
+	case "FillOpacity":
+		rectanchoredtext.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		rectanchoredtext.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		rectanchoredtext.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		rectanchoredtext.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		rectanchoredtext.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		rectanchoredtext.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		rectanchoredtext.Transform = value.GetValueString()
+	case "Animates":
+		rectanchoredtext.Animates = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						rectanchoredtext.Animates = append(rectanchoredtext.Animates, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (rectlinklink *RectLinkLink) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		rectlinklink.Name = value.GetValueString()
+	case "Start":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			rectlinklink.Start = nil
+			for __instance__ := range stage.Rects {
+				if stage.RectMap_Staged_Order[__instance__] == uint(id) {
+					rectlinklink.Start = __instance__
+					break
+				}
+			}
+		}
+	case "End":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			rectlinklink.End = nil
+			for __instance__ := range stage.Links {
+				if stage.LinkMap_Staged_Order[__instance__] == uint(id) {
+					rectlinklink.End = __instance__
+					break
+				}
+			}
+		}
+	case "TargetAnchorPosition":
+		rectlinklink.TargetAnchorPosition = value.GetValueFloat()
+	case "Color":
+		rectlinklink.Color = value.GetValueString()
+	case "FillOpacity":
+		rectlinklink.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		rectlinklink.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		rectlinklink.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		rectlinklink.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		rectlinklink.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		rectlinklink.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		rectlinklink.Transform = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (svg *SVG) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		svg.Name = value.GetValueString()
+	case "Layers":
+		svg.Layers = make([]*Layer, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Layers {
+					if stage.LayerMap_Staged_Order[__instance__] == uint(id) {
+						svg.Layers = append(svg.Layers, __instance__)
+						break
+					}
+				}
+			}
+		}
+	case "DrawingState":
+		svg.DrawingState.FromCodeString(value.GetValueString())
+	case "StartRect":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			svg.StartRect = nil
+			for __instance__ := range stage.Rects {
+				if stage.RectMap_Staged_Order[__instance__] == uint(id) {
+					svg.StartRect = __instance__
+					break
+				}
+			}
+		}
+	case "EndRect":
+		var id int
+		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
+			svg.EndRect = nil
+			for __instance__ := range stage.Rects {
+				if stage.RectMap_Staged_Order[__instance__] == uint(id) {
+					svg.EndRect = __instance__
+					break
+				}
+			}
+		}
+	case "IsEditable":
+		svg.IsEditable = value.GetValueBool()
+	case "IsSVGFrontEndFileGenerated":
+		svg.IsSVGFrontEndFileGenerated = value.GetValueBool()
+	case "IsSVGBackEndFileGenerated":
+		svg.IsSVGBackEndFileGenerated = value.GetValueBool()
+	case "DefaultDirectoryForGeneratedImages":
+		svg.DefaultDirectoryForGeneratedImages = value.GetValueString()
+	case "IsControlBannerHidden":
+		svg.IsControlBannerHidden = value.GetValueBool()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (svgtext *SvgText) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		svgtext.Name = value.GetValueString()
+	case "Text":
+		svgtext.Text = value.GetValueString()
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func (text *Text) GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error {
+	switch fieldName {
+	// insertion point for per field code
+	case "Name":
+		text.Name = value.GetValueString()
+	case "X":
+		text.X = value.GetValueFloat()
+	case "Y":
+		text.Y = value.GetValueFloat()
+	case "Content":
+		text.Content = value.GetValueString()
+	case "Color":
+		text.Color = value.GetValueString()
+	case "FillOpacity":
+		text.FillOpacity = value.GetValueFloat()
+	case "Stroke":
+		text.Stroke = value.GetValueString()
+	case "StrokeOpacity":
+		text.StrokeOpacity = value.GetValueFloat()
+	case "StrokeWidth":
+		text.StrokeWidth = value.GetValueFloat()
+	case "StrokeDashArray":
+		text.StrokeDashArray = value.GetValueString()
+	case "StrokeDashArrayWhenSelected":
+		text.StrokeDashArrayWhenSelected = value.GetValueString()
+	case "Transform":
+		text.Transform = value.GetValueString()
+	case "FontWeight":
+		text.FontWeight = value.GetValueString()
+	case "FontSize":
+		text.FontSize = value.GetValueString()
+	case "FontStyle":
+		text.FontStyle = value.GetValueString()
+	case "LetterSpacing":
+		text.LetterSpacing = value.GetValueString()
+	case "FontFamily":
+		text.FontFamily = value.GetValueString()
+	case "WhiteSpace":
+		text.WhiteSpace.FromCodeString(value.GetValueString())
+	case "Animates":
+		text.Animates = make([]*Animate, 0)
+		ids := strings.Split(value.ids, ";")
+		for _, idStr := range ids {
+			var id int
+			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
+				for __instance__ := range stage.Animates {
+					if stage.AnimateMap_Staged_Order[__instance__] == uint(id) {
+						text.Animates = append(text.Animates, __instance__)
+						break
+					}
+				}
+			}
+		}
+	default:
+		return fmt.Errorf("unknown field %s", fieldName)
+	}
+	return nil
+}
+
+func SetFieldStringValueFromPointer(instance GongstructIF, fieldName string, value GongFieldValue, stage *Stage) error {
+	return instance.GongSetFieldValue(fieldName, value, stage)
+}
+
+// insertion point for generic get gongstruct name
+func (animate *Animate) GongGetGongstructName() string {
+	return "Animate"
+}
+
+func (circle *Circle) GongGetGongstructName() string {
+	return "Circle"
+}
+
+func (condition *Condition) GongGetGongstructName() string {
+	return "Condition"
+}
+
+func (controlpoint *ControlPoint) GongGetGongstructName() string {
+	return "ControlPoint"
+}
+
+func (ellipse *Ellipse) GongGetGongstructName() string {
+	return "Ellipse"
+}
+
+func (layer *Layer) GongGetGongstructName() string {
+	return "Layer"
+}
+
+func (line *Line) GongGetGongstructName() string {
+	return "Line"
+}
+
+func (link *Link) GongGetGongstructName() string {
+	return "Link"
+}
+
+func (linkanchoredtext *LinkAnchoredText) GongGetGongstructName() string {
+	return "LinkAnchoredText"
+}
+
+func (path *Path) GongGetGongstructName() string {
+	return "Path"
+}
+
+func (point *Point) GongGetGongstructName() string {
+	return "Point"
+}
+
+func (polygone *Polygone) GongGetGongstructName() string {
+	return "Polygone"
+}
+
+func (polyline *Polyline) GongGetGongstructName() string {
+	return "Polyline"
+}
+
+func (rect *Rect) GongGetGongstructName() string {
+	return "Rect"
+}
+
+func (rectanchoredpath *RectAnchoredPath) GongGetGongstructName() string {
+	return "RectAnchoredPath"
+}
+
+func (rectanchoredrect *RectAnchoredRect) GongGetGongstructName() string {
+	return "RectAnchoredRect"
+}
+
+func (rectanchoredtext *RectAnchoredText) GongGetGongstructName() string {
+	return "RectAnchoredText"
+}
+
+func (rectlinklink *RectLinkLink) GongGetGongstructName() string {
+	return "RectLinkLink"
+}
+
+func (svg *SVG) GongGetGongstructName() string {
+	return "SVG"
+}
+
+func (svgtext *SvgText) GongGetGongstructName() string {
+	return "SvgText"
+}
+
+func (text *Text) GongGetGongstructName() string {
+	return "Text"
+}
+
+func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
+	res = instance.GongGetGongstructName()
 	return
 }
 

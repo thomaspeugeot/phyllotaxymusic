@@ -95,7 +95,7 @@ export class ButtonService {
       catchError(this.handleError<ButtonAPI>('postButton'))
     );
   }
-  
+
   /** POST: add a new button to the server */
   post(buttondb: ButtonAPI, Name: string, frontRepo: FrontRepo): Observable<ButtonAPI> {
     return this.postButton(buttondb, Name, frontRepo)
@@ -187,7 +187,7 @@ export class ButtonService {
   private handleError<T>(operation = 'operation in ButtonService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("ButtonService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption

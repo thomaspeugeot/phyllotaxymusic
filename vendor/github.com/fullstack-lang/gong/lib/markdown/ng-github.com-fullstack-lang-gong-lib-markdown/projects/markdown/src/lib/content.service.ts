@@ -94,7 +94,7 @@ export class ContentService {
       catchError(this.handleError<ContentAPI>('postContent'))
     );
   }
-  
+
   /** POST: add a new content to the server */
   post(contentdb: ContentAPI, Name: string, frontRepo: FrontRepo): Observable<ContentAPI> {
     return this.postContent(contentdb, Name, frontRepo)
@@ -186,7 +186,7 @@ export class ContentService {
   private handleError<T>(operation = 'operation in ContentService', result?: T) {
     return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
+      // TODO: send the error to remote logging
       console.error("ContentService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
