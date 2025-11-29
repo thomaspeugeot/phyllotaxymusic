@@ -21,10 +21,10 @@ var _ map[string]any = map[string]any{
 // function will stage objects
 func _(stage *models.Stage) {
 
-	const __write__local_time = "2025-07-31 16:00:04.562695 EDT"
-	const __write__utc_time__ = "2025-07-31 20:00:04.562695 UTC"
+	const __write__local_time = "2025-11-29 10:41:48.879999 CET"
+	const __write__utc_time__ = "2025-11-29 09:41:48.879999 UTC"
 
-	const __commitId__ = "0000001393"
+	const __commitId__ = "0000001398"
 
 	// Declaration of instances to stage
 
@@ -786,7 +786,7 @@ With the second voice note, this gives
 	__Parameter__000000_Reference.BeatsPerSecond = 6.850000
 	__Parameter__000000_Reference.Level = 11.100000
 	__Parameter__000000_Reference.IsMinor = true
-	__Parameter__000000_Reference.ThemeBinaryEncoding = 28743
+	__Parameter__000000_Reference.ThemeBinaryEncoding = 71
 	__Parameter__000000_Reference.OriginX = 100.000000
 	__Parameter__000000_Reference.OriginY = 950.000000
 	__Parameter__000000_Reference.SpiralOriginX = 500.000000
