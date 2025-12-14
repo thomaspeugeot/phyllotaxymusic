@@ -20,4 +20,5 @@ go get github.com/fullstack-lang/gong@"$LATEST_COMMIT"
 go mod tidy
 go mod vendor
 
+gong generate --level1 go/models
 echo "Module updated successfully!"

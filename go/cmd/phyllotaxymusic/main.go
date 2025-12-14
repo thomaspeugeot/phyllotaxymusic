@@ -6,11 +6,9 @@ import (
 	"strconv"
 
 	// insertion point for models import
+	phyllotaxymusic_level1stack "github.com/thomaspeugeot/phyllotaxymusic/go/level1stack"
 	m "github.com/thomaspeugeot/phyllotaxymusic/go/models"
-	phyllotaxymusic_stack "github.com/thomaspeugeot/phyllotaxymusic/go/stack"
-
 	// static
-	split_static "github.com/fullstack-lang/gong/lib/split/go/static"
 )
 
 var (
@@ -32,19 +30,16 @@ func main() {
 	// parse program arguments
 	flag.Parse()
 
-	// setup the static file server and get the controller
-	r := split_static.ServeStaticFiles(*logGINFlag)
-
 	// setup phyllotaxymusic_stack
-	phyllotaxymusic_stack := phyllotaxymusic_stack.NewStack(r,
-		m.Phylotaxy.ToString(), *unmarshallFromCode, *marshallOnCommit, "", *embeddedDiagrams, true)
+	stack := phyllotaxymusic_level1stack.NewLevel1Stack(
+		m.Phylotaxy.ToString(), *unmarshallFromCode, *marshallOnCommit, true, *embeddedDiagrams)
 
-	stager := m.NewStager(r, phyllotaxymusic_stack.Stage)
+	stager := m.NewStager(stack.R, stack.Stage)
 
 	stager.UpdateAllStages()
 
 	log.Println("Server ready serve on localhost:" + strconv.Itoa(*port))
-	err := r.Run(":" + strconv.Itoa(*port))
+	err := stack.R.Run(":" + strconv.Itoa(*port))
 	if err != nil {
 		log.Fatalln(err.Error())
 	}

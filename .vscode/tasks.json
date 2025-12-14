@@ -69,7 +69,7 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "01 - gong generate phyllotaxymusic -skipNg -skipGoModCommands",
+			"label": "01 - gong generate phyllotaxymusic",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -78,37 +78,7 @@
 			"group": "build",
 			"args": [
 				"generate",
-				"-skipNg",
-				"-skipGoModCommands",
-				"-skipStager=false",
-				"-compileForDebug"
-			]
-		},
-		{
-			"label": "01 - gong generate phyllotaxymusic -skipNpmInstall -skipGoModCommands",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"generate",
-				"-skipNpmInstall",
-				"-skipGoModCommands",
-				"-compileForDebug"
-			]
-		},
-				{
-			"label": "01 - gong generate phyllotaxymusic",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"generate",
+				"--level1"
 			]
 		},
 		{
@@ -120,6 +90,18 @@
 			"command": "go",
 			"args": [
 				"build"
+			],
+			"group": "build"
+		},
+		{
+			"label": "00 - go clean",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/go/cmd/phyllotaxymusic"
+			},
+			"command": "go",
+			"args": [
+				"clean"
 			],
 			"group": "build"
 		},
