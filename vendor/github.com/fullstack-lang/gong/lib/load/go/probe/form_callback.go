@@ -64,8 +64,8 @@ func (filetodownloadFormCallback *FileToDownloadFormCallback) OnSave() {
 		// insertion point per field
 		case "Name":
 			FormDivBasicFieldToField(&(filetodownload_.Name), formDiv)
-		case "Content":
-			FormDivBasicFieldToField(&(filetodownload_.Content), formDiv)
+		case "Base64EncodedContent":
+			FormDivBasicFieldToField(&(filetodownload_.Base64EncodedContent), formDiv)
 		}
 	}
 
@@ -75,10 +75,9 @@ func (filetodownloadFormCallback *FileToDownloadFormCallback) OnSave() {
 	}
 
 	filetodownloadFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.FileToDownload](
+	updateProbeTable[*models.FileToDownload](
 		filetodownloadFormCallback.probe,
 	)
-	filetodownloadFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if filetodownloadFormCallback.CreationMode || filetodownloadFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -154,10 +153,9 @@ func (filetouploadFormCallback *FileToUploadFormCallback) OnSave() {
 	}
 
 	filetouploadFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.FileToUpload](
+	updateProbeTable[*models.FileToUpload](
 		filetouploadFormCallback.probe,
 	)
-	filetouploadFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if filetouploadFormCallback.CreationMode || filetouploadFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -231,10 +229,9 @@ func (messageFormCallback *MessageFormCallback) OnSave() {
 	}
 
 	messageFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Message](
+	updateProbeTable[*models.Message](
 		messageFormCallback.probe,
 	)
-	messageFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if messageFormCallback.CreationMode || messageFormCallback.formGroup.HasSuppressButtonBeenPressed {

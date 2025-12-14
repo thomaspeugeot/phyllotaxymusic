@@ -3,12 +3,13 @@ module github.com/thomaspeugeot/phyllotaxymusic
 go 1.24.3
 
 require (
-	github.com/fullstack-lang/gong v0.0.0-20251129093308-a6f5435f219c
+	github.com/fullstack-lang/gong v0.0.0-20251213161747-417b04f37cf1
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
+	github.com/gin-contrib/cors v1.7.5
+	github.com/gin-contrib/static v1.1.5
 	github.com/gin-gonic/gin v1.10.1
 	github.com/glebarez/sqlite v1.11.0
 	github.com/gorilla/websocket v1.5.3
-	github.com/sergi/go-diff v1.4.0
 	github.com/tealeg/xlsx/v3 v3.3.13
 	github.com/xuri/excelize/v2 v2.9.1
 	gorm.io/gorm v1.30.0
@@ -21,9 +22,7 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
-	github.com/gin-contrib/cors v1.7.5 // indirect
 	github.com/gin-contrib/sse v1.1.0 // indirect
-	github.com/gin-contrib/static v1.1.5 // indirect
 	github.com/glebarez/go-sqlite v1.22.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect

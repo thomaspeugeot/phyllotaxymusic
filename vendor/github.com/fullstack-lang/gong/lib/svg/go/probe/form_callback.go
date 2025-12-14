@@ -745,10 +745,9 @@ func (animateFormCallback *AnimateFormCallback) OnSave() {
 	}
 
 	animateFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Animate](
+	updateProbeTable[*models.Animate](
 		animateFormCallback.probe,
 	)
-	animateFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if animateFormCallback.CreationMode || animateFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -935,10 +934,9 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 	}
 
 	circleFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Circle](
+	updateProbeTable[*models.Circle](
 		circleFormCallback.probe,
 	)
-	circleFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if circleFormCallback.CreationMode || circleFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1144,10 +1142,9 @@ func (conditionFormCallback *ConditionFormCallback) OnSave() {
 	}
 
 	conditionFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Condition](
+	updateProbeTable[*models.Condition](
 		conditionFormCallback.probe,
 	)
-	conditionFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if conditionFormCallback.CreationMode || conditionFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1293,10 +1290,9 @@ func (controlpointFormCallback *ControlPointFormCallback) OnSave() {
 	}
 
 	controlpointFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.ControlPoint](
+	updateProbeTable[*models.ControlPoint](
 		controlpointFormCallback.probe,
 	)
-	controlpointFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if controlpointFormCallback.CreationMode || controlpointFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1485,10 +1481,9 @@ func (ellipseFormCallback *EllipseFormCallback) OnSave() {
 	}
 
 	ellipseFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Ellipse](
+	updateProbeTable[*models.Ellipse](
 		ellipseFormCallback.probe,
 	)
-	ellipseFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if ellipseFormCallback.CreationMode || ellipseFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -1878,10 +1873,9 @@ func (layerFormCallback *LayerFormCallback) OnSave() {
 	}
 
 	layerFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Layer](
+	updateProbeTable[*models.Layer](
 		layerFormCallback.probe,
 	)
-	layerFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if layerFormCallback.CreationMode || layerFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2074,10 +2068,9 @@ func (lineFormCallback *LineFormCallback) OnSave() {
 	}
 
 	lineFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Line](
+	updateProbeTable[*models.Line](
 		lineFormCallback.probe,
 	)
-	lineFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if lineFormCallback.CreationMode || lineFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2350,10 +2343,9 @@ func (linkFormCallback *LinkFormCallback) OnSave() {
 	}
 
 	linkFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Link](
+	updateProbeTable[*models.Link](
 		linkFormCallback.probe,
 	)
-	linkFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if linkFormCallback.CreationMode || linkFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2622,10 +2614,9 @@ func (linkanchoredtextFormCallback *LinkAnchoredTextFormCallback) OnSave() {
 	}
 
 	linkanchoredtextFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.LinkAnchoredText](
+	updateProbeTable[*models.LinkAnchoredText](
 		linkanchoredtextFormCallback.probe,
 	)
-	linkanchoredtextFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if linkanchoredtextFormCallback.CreationMode || linkanchoredtextFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2808,10 +2799,9 @@ func (pathFormCallback *PathFormCallback) OnSave() {
 	}
 
 	pathFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Path](
+	updateProbeTable[*models.Path](
 		pathFormCallback.probe,
 	)
-	pathFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if pathFormCallback.CreationMode || pathFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -2889,10 +2879,9 @@ func (pointFormCallback *PointFormCallback) OnSave() {
 	}
 
 	pointFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Point](
+	updateProbeTable[*models.Point](
 		pointFormCallback.probe,
 	)
-	pointFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if pointFormCallback.CreationMode || pointFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -3075,10 +3064,9 @@ func (polygoneFormCallback *PolygoneFormCallback) OnSave() {
 	}
 
 	polygoneFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Polygone](
+	updateProbeTable[*models.Polygone](
 		polygoneFormCallback.probe,
 	)
-	polygoneFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if polygoneFormCallback.CreationMode || polygoneFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -3261,10 +3249,9 @@ func (polylineFormCallback *PolylineFormCallback) OnSave() {
 	}
 
 	polylineFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Polyline](
+	updateProbeTable[*models.Polyline](
 		polylineFormCallback.probe,
 	)
-	polylineFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if polylineFormCallback.CreationMode || polylineFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -3628,10 +3615,9 @@ func (rectFormCallback *RectFormCallback) OnSave() {
 	}
 
 	rectFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Rect](
+	updateProbeTable[*models.Rect](
 		rectFormCallback.probe,
 	)
-	rectFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if rectFormCallback.CreationMode || rectFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -3799,10 +3785,9 @@ func (rectanchoredpathFormCallback *RectAnchoredPathFormCallback) OnSave() {
 	}
 
 	rectanchoredpathFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.RectAnchoredPath](
+	updateProbeTable[*models.RectAnchoredPath](
 		rectanchoredpathFormCallback.probe,
 	)
-	rectanchoredpathFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if rectanchoredpathFormCallback.CreationMode || rectanchoredpathFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -3982,10 +3967,9 @@ func (rectanchoredrectFormCallback *RectAnchoredRectFormCallback) OnSave() {
 	}
 
 	rectanchoredrectFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.RectAnchoredRect](
+	updateProbeTable[*models.RectAnchoredRect](
 		rectanchoredrectFormCallback.probe,
 	)
-	rectanchoredrectFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if rectanchoredrectFormCallback.CreationMode || rectanchoredrectFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -4192,10 +4176,9 @@ func (rectanchoredtextFormCallback *RectAnchoredTextFormCallback) OnSave() {
 	}
 
 	rectanchoredtextFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.RectAnchoredText](
+	updateProbeTable[*models.RectAnchoredText](
 		rectanchoredtextFormCallback.probe,
 	)
-	rectanchoredtextFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if rectanchoredtextFormCallback.CreationMode || rectanchoredtextFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -4357,10 +4340,9 @@ func (rectlinklinkFormCallback *RectLinkLinkFormCallback) OnSave() {
 	}
 
 	rectlinklinkFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.RectLinkLink](
+	updateProbeTable[*models.RectLinkLink](
 		rectlinklinkFormCallback.probe,
 	)
-	rectlinklinkFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if rectlinklinkFormCallback.CreationMode || rectlinklinkFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -4475,10 +4457,9 @@ func (svgFormCallback *SVGFormCallback) OnSave() {
 	}
 
 	svgFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.SVG](
+	updateProbeTable[*models.SVG](
 		svgFormCallback.probe,
 	)
-	svgFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if svgFormCallback.CreationMode || svgFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -4554,10 +4535,9 @@ func (svgtextFormCallback *SvgTextFormCallback) OnSave() {
 	}
 
 	svgtextFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.SvgText](
+	updateProbeTable[*models.SvgText](
 		svgtextFormCallback.probe,
 	)
-	svgtextFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if svgtextFormCallback.CreationMode || svgtextFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -4756,10 +4736,9 @@ func (textFormCallback *TextFormCallback) OnSave() {
 	}
 
 	textFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Text](
+	updateProbeTable[*models.Text](
 		textFormCallback.probe,
 	)
-	textFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if textFormCallback.CreationMode || textFormCallback.formGroup.HasSuppressButtonBeenPressed {

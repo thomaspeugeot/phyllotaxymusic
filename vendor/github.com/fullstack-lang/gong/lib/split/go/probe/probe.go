@@ -6,14 +6,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/fullstack-lang/gong/lib/doc2/go/prepare"
+	"github.com/fullstack-lang/gong/lib/doc/go/prepare"
 	gongsplit_fullstack "github.com/fullstack-lang/gong/lib/split/go/fullstack"
 	gongtable_fullstack "github.com/fullstack-lang/gong/lib/table/go/fullstack"
 	gongtree_fullstack "github.com/fullstack-lang/gong/lib/tree/go/fullstack"
 
-	gong_fullstack "github.com/fullstack-lang/gong/go/fullstack"
 	gong_models "github.com/fullstack-lang/gong/go/models"
 
+	doc "github.com/fullstack-lang/gong/lib/doc/go/models"
 	split "github.com/fullstack-lang/gong/lib/split/go/models"
 	form "github.com/fullstack-lang/gong/lib/table/go/models"
 	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
@@ -37,6 +37,8 @@ type Probe struct {
 
 	// AsSplitArea for the diagram editor
 	diagramEditor *split.AsSplitArea
+
+	docStager *doc.Stager
 }
 
 func NewProbe(
@@ -51,8 +53,8 @@ func NewProbe(
 	splitStage.Commit()
 
 	// load the gong
-	gongStage, _ := gong_fullstack.NewStackInstance(r, stageOfInterest.GetName())
-	gong_models.LoadEmbedded(gongStage, goModelsDir)
+	stage := gong_models.NewStage(stageOfInterest.GetName())
+	gong_models.LoadEmbedded(stage, goModelsDir)
 
 	// treeForSelectingDate that is on the sidebar
 	treeStage, _ := gongtree_fullstack.NewStackInstance(r, stageOfInterest.GetProbeTreeSidebarStageName())
@@ -65,14 +67,15 @@ func NewProbe(
 	formStage, _ := gongtable_fullstack.NewStackInstance(r, stageOfInterest.GetProbeFormStageName())
 	formStage.Commit()
 
-	probe = new(Probe)
-	probe.r = r
-	probe.stageOfInterest = stageOfInterest
-	probe.gongStage = gongStage
-	probe.treeStage = treeStage
-	probe.formStage = formStage
-	probe.tableStage = tableStage
-	probe.splitStage = splitStage
+	probe = &Probe{
+		r:               r,
+		stageOfInterest: stageOfInterest,
+		gongStage:       stage,
+		treeStage:       treeStage,
+		formStage:       formStage,
+		tableStage:      tableStage,
+		splitStage:      splitStage,
+	}
 
 	// prepare the receiving AsSplitArea
 	probe.diagramEditor = &split.AsSplitArea{
@@ -81,12 +84,12 @@ func NewProbe(
 		Size:             50,
 	}
 
-	prepare.Prepare(
+	probe.docStager = prepare.Prepare(
 		r,
 		embeddedDiagrams,
 
 		// this is the prefix of the names of the stages svg and tree that will be created
-		// by doc2. Using a combination of the package name and the stage of interest name
+		// by doc. Using a combination of the package name and the stage of interest name
 		// might prevent name collisions if more that one probe is being instancied
 		"github.com/fullstack-lang/gong/lib/split/go"+":"+stageOfInterest.GetName(),
 		split_go.GoModelsDir,
@@ -146,6 +149,7 @@ func NewProbe(
 
 func (probe *Probe) Refresh() {
 	updateAndCommitTree(probe)
+	probe.docStager.UpdateAndCommitSVGStage()
 }
 
 func (probe *Probe) GetFormStage() *form.Stage {
@@ -158,4 +162,8 @@ func (probe *Probe) GetDataEditor() *split.AsSplit {
 
 func (probe *Probe) GetDiagramEditor() *split.AsSplitArea {
 	return probe.diagramEditor
+}
+
+func (probe *Probe) FillUpFormFromGongstruct(instance any, formName string) {
+	FillUpFormFromGongstruct(instance, probe)
 }

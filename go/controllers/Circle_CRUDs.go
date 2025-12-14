@@ -260,13 +260,13 @@ func (controller *Controller) UpdateCircle(c *gin.Context) {
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(_values) == 1 {
-		value := _values["Name"]
-		if len(value) == 1 {
-			stackPath = value[0]
-			// log.Println("UpdateCircle", "Name", stackPath)
+	if len(_values) >= 1 {
+		_nameValues := _values["Name"]
+		if len(_nameValues) == 1 {
+			stackPath = _nameValues[0]
 		}
 	}
+
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		message := "PATCH Stack github.com/thomaspeugeot/phyllotaxymusic/go, Unkown stack: \"" + stackPath + "\"\n"
@@ -328,7 +328,7 @@ func (controller *Controller) UpdateCircle(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	circleOld := backRepo.BackRepoCircle.Map_CircleDBID_CirclePtr[circleDB.ID]
 	if circleOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), circleOld, circleNew)
+		models.OnAfterUpdateFromFront(backRepo.GetStage(), circleOld, circleNew)
 	}
 
 	// an UPDATE generates a back repo commit increase

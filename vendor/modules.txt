@@ -52,15 +52,11 @@ github.com/dustin/go-humanize
 # github.com/frankban/quicktest v1.14.6
 ## explicit; go 1.13
 github.com/frankban/quicktest
-# github.com/fullstack-lang/gong v0.0.0-20251129093308-a6f5435f219c
+# github.com/fullstack-lang/gong v0.0.0-20251213161747-417b04f37cf1
 ## explicit; go 1.24.3
 github.com/fullstack-lang/gong/go
-github.com/fullstack-lang/gong/go/controllers
-github.com/fullstack-lang/gong/go/db
-github.com/fullstack-lang/gong/go/fullstack
 github.com/fullstack-lang/gong/go/ignore
 github.com/fullstack-lang/gong/go/models
-github.com/fullstack-lang/gong/go/orm
 github.com/fullstack-lang/gong/lib/button/go
 github.com/fullstack-lang/gong/lib/button/go/controllers
 github.com/fullstack-lang/gong/lib/button/go/db
@@ -79,14 +75,10 @@ github.com/fullstack-lang/gong/lib/cursor/go/orm
 github.com/fullstack-lang/gong/lib/cursor/go/probe
 github.com/fullstack-lang/gong/lib/cursor/go/stack
 github.com/fullstack-lang/gong/lib/cursor/ng-github.com-fullstack-lang-gong-lib-cursor
-github.com/fullstack-lang/gong/lib/doc2/go
-github.com/fullstack-lang/gong/lib/doc2/go/controllers
-github.com/fullstack-lang/gong/lib/doc2/go/db
-github.com/fullstack-lang/gong/lib/doc2/go/fullstack
-github.com/fullstack-lang/gong/lib/doc2/go/models
-github.com/fullstack-lang/gong/lib/doc2/go/models/nodestates
-github.com/fullstack-lang/gong/lib/doc2/go/orm
-github.com/fullstack-lang/gong/lib/doc2/go/prepare
+github.com/fullstack-lang/gong/lib/doc/go
+github.com/fullstack-lang/gong/lib/doc/go/models
+github.com/fullstack-lang/gong/lib/doc/go/models/nodestates
+github.com/fullstack-lang/gong/lib/doc/go/prepare
 github.com/fullstack-lang/gong/lib/load/go
 github.com/fullstack-lang/gong/lib/load/go/controllers
 github.com/fullstack-lang/gong/lib/load/go/db
@@ -119,16 +111,11 @@ github.com/fullstack-lang/gong/lib/split/go/stack
 github.com/fullstack-lang/gong/lib/split/go/static
 github.com/fullstack-lang/gong/lib/split/ng-github.com-fullstack-lang-gong-lib-split
 github.com/fullstack-lang/gong/lib/ssg/go
-github.com/fullstack-lang/gong/lib/ssg/go/controllers
-github.com/fullstack-lang/gong/lib/ssg/go/db
 github.com/fullstack-lang/gong/lib/ssg/go/defaults
-github.com/fullstack-lang/gong/lib/ssg/go/fullstack
 github.com/fullstack-lang/gong/lib/ssg/go/gen
+github.com/fullstack-lang/gong/lib/ssg/go/level1stack
 github.com/fullstack-lang/gong/lib/ssg/go/models
-github.com/fullstack-lang/gong/lib/ssg/go/orm
 github.com/fullstack-lang/gong/lib/ssg/go/probe
-github.com/fullstack-lang/gong/lib/ssg/go/stack
-github.com/fullstack-lang/gong/lib/ssg/ng-github.com-fullstack-lang-gong-lib-ssg
 github.com/fullstack-lang/gong/lib/svg/go
 github.com/fullstack-lang/gong/lib/svg/go/controllers
 github.com/fullstack-lang/gong/lib/svg/go/db
@@ -293,9 +280,6 @@ github.com/rogpeppe/fastuuid
 # github.com/rogpeppe/go-internal v1.14.1
 ## explicit; go 1.23
 github.com/rogpeppe/go-internal/fmtsort
-# github.com/sergi/go-diff v1.4.0
-## explicit; go 1.13
-github.com/sergi/go-diff/diffmatchpatch
 # github.com/shabbyrobe/xmlwriter v0.0.0-20230525083848-85336ec334fa
 ## explicit; go 1.13
 github.com/shabbyrobe/xmlwriter

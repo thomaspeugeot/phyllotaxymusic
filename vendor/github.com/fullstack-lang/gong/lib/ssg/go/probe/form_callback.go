@@ -166,10 +166,9 @@ func (chapterFormCallback *ChapterFormCallback) OnSave() {
 	}
 
 	chapterFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Chapter](
+	updateProbeTable[*models.Chapter](
 		chapterFormCallback.probe,
 	)
-	chapterFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if chapterFormCallback.CreationMode || chapterFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -244,6 +243,14 @@ func (contentFormCallback *ContentFormCallback) OnSave() {
 			FormDivBasicFieldToField(&(content_.LayoutPath), formDiv)
 		case "StaticPath":
 			FormDivBasicFieldToField(&(content_.StaticPath), formDiv)
+		case "IsBespokeLogoFileName":
+			FormDivBasicFieldToField(&(content_.IsBespokeLogoFileName), formDiv)
+		case "BespokeLogoFileName":
+			FormDivBasicFieldToField(&(content_.BespokeLogoFileName), formDiv)
+		case "IsBespokePageTileLogoFileName":
+			FormDivBasicFieldToField(&(content_.IsBespokePageTileLogoFileName), formDiv)
+		case "BespokePageTileLogoFileName":
+			FormDivBasicFieldToField(&(content_.BespokePageTileLogoFileName), formDiv)
 		case "Target":
 			FormDivEnumStringFieldToField(&(content_.Target), formDiv)
 		case "Chapters":
@@ -282,10 +289,9 @@ func (contentFormCallback *ContentFormCallback) OnSave() {
 	}
 
 	contentFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Content](
+	updateProbeTable[*models.Content](
 		contentFormCallback.probe,
 	)
-	contentFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if contentFormCallback.CreationMode || contentFormCallback.formGroup.HasSuppressButtonBeenPressed {
@@ -427,10 +433,9 @@ func (pageFormCallback *PageFormCallback) OnSave() {
 	}
 
 	pageFormCallback.probe.stageOfInterest.Commit()
-	updateAndCommitTable[*models.Page](
+	updateProbeTable[*models.Page](
 		pageFormCallback.probe,
 	)
-	pageFormCallback.probe.tableStage.Commit()
 
 	// display a new form by reset the form stage
 	if pageFormCallback.CreationMode || pageFormCallback.formGroup.HasSuppressButtonBeenPressed {

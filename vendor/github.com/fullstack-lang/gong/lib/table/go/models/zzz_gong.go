@@ -69,6 +69,7 @@ type __void any
 
 // needed for creating set of instances in the stage
 var __member __void
+var _ = __member
 
 // GongStructInterface is the interface met by GongStructs
 // It allows runtime reflexion of instances (without the hassle of the "reflect" package)
@@ -84,15 +85,10 @@ type GongStructInterface interface {
 // Stage enables storage of staged instances
 // swagger:ignore
 type Stage struct {
-	name               string
-	commitId           uint // commitId is updated at each commit
-	commitTimeStamp    time.Time
-	contentWhenParsed  string
-	commitIdWhenParsed uint
-	generatesDiff      bool
+	name string
 
 	// insertion point for definition of arrays registering instances
-	Cells           map[*Cell]any
+	Cells           map[*Cell]struct{}
 	Cells_mapString map[string]*Cell
 
 	// insertion point for slice of pointers maps
@@ -101,7 +97,7 @@ type Stage struct {
 	OnAfterCellDeleteCallback OnAfterDeleteInterface[Cell]
 	OnAfterCellReadCallback   OnAfterReadInterface[Cell]
 
-	CellBooleans           map[*CellBoolean]any
+	CellBooleans           map[*CellBoolean]struct{}
 	CellBooleans_mapString map[string]*CellBoolean
 
 	// insertion point for slice of pointers maps
@@ -110,7 +106,7 @@ type Stage struct {
 	OnAfterCellBooleanDeleteCallback OnAfterDeleteInterface[CellBoolean]
 	OnAfterCellBooleanReadCallback   OnAfterReadInterface[CellBoolean]
 
-	CellFloat64s           map[*CellFloat64]any
+	CellFloat64s           map[*CellFloat64]struct{}
 	CellFloat64s_mapString map[string]*CellFloat64
 
 	// insertion point for slice of pointers maps
@@ -119,7 +115,7 @@ type Stage struct {
 	OnAfterCellFloat64DeleteCallback OnAfterDeleteInterface[CellFloat64]
 	OnAfterCellFloat64ReadCallback   OnAfterReadInterface[CellFloat64]
 
-	CellIcons           map[*CellIcon]any
+	CellIcons           map[*CellIcon]struct{}
 	CellIcons_mapString map[string]*CellIcon
 
 	// insertion point for slice of pointers maps
@@ -128,7 +124,7 @@ type Stage struct {
 	OnAfterCellIconDeleteCallback OnAfterDeleteInterface[CellIcon]
 	OnAfterCellIconReadCallback   OnAfterReadInterface[CellIcon]
 
-	CellInts           map[*CellInt]any
+	CellInts           map[*CellInt]struct{}
 	CellInts_mapString map[string]*CellInt
 
 	// insertion point for slice of pointers maps
@@ -137,7 +133,7 @@ type Stage struct {
 	OnAfterCellIntDeleteCallback OnAfterDeleteInterface[CellInt]
 	OnAfterCellIntReadCallback   OnAfterReadInterface[CellInt]
 
-	CellStrings           map[*CellString]any
+	CellStrings           map[*CellString]struct{}
 	CellStrings_mapString map[string]*CellString
 
 	// insertion point for slice of pointers maps
@@ -146,7 +142,7 @@ type Stage struct {
 	OnAfterCellStringDeleteCallback OnAfterDeleteInterface[CellString]
 	OnAfterCellStringReadCallback   OnAfterReadInterface[CellString]
 
-	CheckBoxs           map[*CheckBox]any
+	CheckBoxs           map[*CheckBox]struct{}
 	CheckBoxs_mapString map[string]*CheckBox
 
 	// insertion point for slice of pointers maps
@@ -155,7 +151,7 @@ type Stage struct {
 	OnAfterCheckBoxDeleteCallback OnAfterDeleteInterface[CheckBox]
 	OnAfterCheckBoxReadCallback   OnAfterReadInterface[CheckBox]
 
-	DisplayedColumns           map[*DisplayedColumn]any
+	DisplayedColumns           map[*DisplayedColumn]struct{}
 	DisplayedColumns_mapString map[string]*DisplayedColumn
 
 	// insertion point for slice of pointers maps
@@ -164,7 +160,7 @@ type Stage struct {
 	OnAfterDisplayedColumnDeleteCallback OnAfterDeleteInterface[DisplayedColumn]
 	OnAfterDisplayedColumnReadCallback   OnAfterReadInterface[DisplayedColumn]
 
-	FormDivs           map[*FormDiv]any
+	FormDivs           map[*FormDiv]struct{}
 	FormDivs_mapString map[string]*FormDiv
 
 	// insertion point for slice of pointers maps
@@ -177,7 +173,7 @@ type Stage struct {
 	OnAfterFormDivDeleteCallback OnAfterDeleteInterface[FormDiv]
 	OnAfterFormDivReadCallback   OnAfterReadInterface[FormDiv]
 
-	FormEditAssocButtons           map[*FormEditAssocButton]any
+	FormEditAssocButtons           map[*FormEditAssocButton]struct{}
 	FormEditAssocButtons_mapString map[string]*FormEditAssocButton
 
 	// insertion point for slice of pointers maps
@@ -186,7 +182,7 @@ type Stage struct {
 	OnAfterFormEditAssocButtonDeleteCallback OnAfterDeleteInterface[FormEditAssocButton]
 	OnAfterFormEditAssocButtonReadCallback   OnAfterReadInterface[FormEditAssocButton]
 
-	FormFields           map[*FormField]any
+	FormFields           map[*FormField]struct{}
 	FormFields_mapString map[string]*FormField
 
 	// insertion point for slice of pointers maps
@@ -195,7 +191,7 @@ type Stage struct {
 	OnAfterFormFieldDeleteCallback OnAfterDeleteInterface[FormField]
 	OnAfterFormFieldReadCallback   OnAfterReadInterface[FormField]
 
-	FormFieldDates           map[*FormFieldDate]any
+	FormFieldDates           map[*FormFieldDate]struct{}
 	FormFieldDates_mapString map[string]*FormFieldDate
 
 	// insertion point for slice of pointers maps
@@ -204,7 +200,7 @@ type Stage struct {
 	OnAfterFormFieldDateDeleteCallback OnAfterDeleteInterface[FormFieldDate]
 	OnAfterFormFieldDateReadCallback   OnAfterReadInterface[FormFieldDate]
 
-	FormFieldDateTimes           map[*FormFieldDateTime]any
+	FormFieldDateTimes           map[*FormFieldDateTime]struct{}
 	FormFieldDateTimes_mapString map[string]*FormFieldDateTime
 
 	// insertion point for slice of pointers maps
@@ -213,7 +209,7 @@ type Stage struct {
 	OnAfterFormFieldDateTimeDeleteCallback OnAfterDeleteInterface[FormFieldDateTime]
 	OnAfterFormFieldDateTimeReadCallback   OnAfterReadInterface[FormFieldDateTime]
 
-	FormFieldFloat64s           map[*FormFieldFloat64]any
+	FormFieldFloat64s           map[*FormFieldFloat64]struct{}
 	FormFieldFloat64s_mapString map[string]*FormFieldFloat64
 
 	// insertion point for slice of pointers maps
@@ -222,7 +218,7 @@ type Stage struct {
 	OnAfterFormFieldFloat64DeleteCallback OnAfterDeleteInterface[FormFieldFloat64]
 	OnAfterFormFieldFloat64ReadCallback   OnAfterReadInterface[FormFieldFloat64]
 
-	FormFieldInts           map[*FormFieldInt]any
+	FormFieldInts           map[*FormFieldInt]struct{}
 	FormFieldInts_mapString map[string]*FormFieldInt
 
 	// insertion point for slice of pointers maps
@@ -231,7 +227,7 @@ type Stage struct {
 	OnAfterFormFieldIntDeleteCallback OnAfterDeleteInterface[FormFieldInt]
 	OnAfterFormFieldIntReadCallback   OnAfterReadInterface[FormFieldInt]
 
-	FormFieldSelects           map[*FormFieldSelect]any
+	FormFieldSelects           map[*FormFieldSelect]struct{}
 	FormFieldSelects_mapString map[string]*FormFieldSelect
 
 	// insertion point for slice of pointers maps
@@ -242,7 +238,7 @@ type Stage struct {
 	OnAfterFormFieldSelectDeleteCallback OnAfterDeleteInterface[FormFieldSelect]
 	OnAfterFormFieldSelectReadCallback   OnAfterReadInterface[FormFieldSelect]
 
-	FormFieldStrings           map[*FormFieldString]any
+	FormFieldStrings           map[*FormFieldString]struct{}
 	FormFieldStrings_mapString map[string]*FormFieldString
 
 	// insertion point for slice of pointers maps
@@ -251,7 +247,7 @@ type Stage struct {
 	OnAfterFormFieldStringDeleteCallback OnAfterDeleteInterface[FormFieldString]
 	OnAfterFormFieldStringReadCallback   OnAfterReadInterface[FormFieldString]
 
-	FormFieldTimes           map[*FormFieldTime]any
+	FormFieldTimes           map[*FormFieldTime]struct{}
 	FormFieldTimes_mapString map[string]*FormFieldTime
 
 	// insertion point for slice of pointers maps
@@ -260,7 +256,7 @@ type Stage struct {
 	OnAfterFormFieldTimeDeleteCallback OnAfterDeleteInterface[FormFieldTime]
 	OnAfterFormFieldTimeReadCallback   OnAfterReadInterface[FormFieldTime]
 
-	FormGroups           map[*FormGroup]any
+	FormGroups           map[*FormGroup]struct{}
 	FormGroups_mapString map[string]*FormGroup
 
 	// insertion point for slice of pointers maps
@@ -271,7 +267,7 @@ type Stage struct {
 	OnAfterFormGroupDeleteCallback OnAfterDeleteInterface[FormGroup]
 	OnAfterFormGroupReadCallback   OnAfterReadInterface[FormGroup]
 
-	FormSortAssocButtons           map[*FormSortAssocButton]any
+	FormSortAssocButtons           map[*FormSortAssocButton]struct{}
 	FormSortAssocButtons_mapString map[string]*FormSortAssocButton
 
 	// insertion point for slice of pointers maps
@@ -280,7 +276,7 @@ type Stage struct {
 	OnAfterFormSortAssocButtonDeleteCallback OnAfterDeleteInterface[FormSortAssocButton]
 	OnAfterFormSortAssocButtonReadCallback   OnAfterReadInterface[FormSortAssocButton]
 
-	Options           map[*Option]any
+	Options           map[*Option]struct{}
 	Options_mapString map[string]*Option
 
 	// insertion point for slice of pointers maps
@@ -289,7 +285,7 @@ type Stage struct {
 	OnAfterOptionDeleteCallback OnAfterDeleteInterface[Option]
 	OnAfterOptionReadCallback   OnAfterReadInterface[Option]
 
-	Rows           map[*Row]any
+	Rows           map[*Row]struct{}
 	Rows_mapString map[string]*Row
 
 	// insertion point for slice of pointers maps
@@ -300,7 +296,7 @@ type Stage struct {
 	OnAfterRowDeleteCallback OnAfterDeleteInterface[Row]
 	OnAfterRowReadCallback   OnAfterReadInterface[Row]
 
-	Tables           map[*Table]any
+	Tables           map[*Table]struct{}
 	Tables_mapString map[string]*Table
 
 	// insertion point for slice of pointers maps
@@ -419,18 +415,6 @@ type Stage struct {
 	deleted   map[GongstructIF]struct{}
 }
 
-func (stage *Stage) GetCommitId() uint {
-	return stage.commitId
-}
-
-func (stage *Stage) GetCommitTS() time.Time {
-	return stage.commitTimeStamp
-}
-
-func (stage *Stage) SetGeneratesDiff(generatesDiff bool) {
-	stage.generatesDiff = generatesDiff
-}
-
 // GetNamedStructs implements models.ProbebStage.
 func (stage *Stage) GetNamedStructsNames() (res []string) {
 
@@ -457,7 +441,7 @@ func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
 	return stage.deleted
 }
 
-func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
+func GetNamedStructInstances[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []string) {
 
 	orderedSet := []T{}
 	for instance := range set {
@@ -812,7 +796,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 	return
 }
 
-func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []T) {
+func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []T) {
 
 	orderedSet := []T{}
 	for instance := range set {
@@ -1006,73 +990,73 @@ type BackRepoInterface interface {
 func NewStage(name string) (stage *Stage) {
 
 	stage = &Stage{ // insertion point for array initiatialisation
-		Cells:           make(map[*Cell]any),
+		Cells:           make(map[*Cell]struct{}),
 		Cells_mapString: make(map[string]*Cell),
 
-		CellBooleans:           make(map[*CellBoolean]any),
+		CellBooleans:           make(map[*CellBoolean]struct{}),
 		CellBooleans_mapString: make(map[string]*CellBoolean),
 
-		CellFloat64s:           make(map[*CellFloat64]any),
+		CellFloat64s:           make(map[*CellFloat64]struct{}),
 		CellFloat64s_mapString: make(map[string]*CellFloat64),
 
-		CellIcons:           make(map[*CellIcon]any),
+		CellIcons:           make(map[*CellIcon]struct{}),
 		CellIcons_mapString: make(map[string]*CellIcon),
 
-		CellInts:           make(map[*CellInt]any),
+		CellInts:           make(map[*CellInt]struct{}),
 		CellInts_mapString: make(map[string]*CellInt),
 
-		CellStrings:           make(map[*CellString]any),
+		CellStrings:           make(map[*CellString]struct{}),
 		CellStrings_mapString: make(map[string]*CellString),
 
-		CheckBoxs:           make(map[*CheckBox]any),
+		CheckBoxs:           make(map[*CheckBox]struct{}),
 		CheckBoxs_mapString: make(map[string]*CheckBox),
 
-		DisplayedColumns:           make(map[*DisplayedColumn]any),
+		DisplayedColumns:           make(map[*DisplayedColumn]struct{}),
 		DisplayedColumns_mapString: make(map[string]*DisplayedColumn),
 
-		FormDivs:           make(map[*FormDiv]any),
+		FormDivs:           make(map[*FormDiv]struct{}),
 		FormDivs_mapString: make(map[string]*FormDiv),
 
-		FormEditAssocButtons:           make(map[*FormEditAssocButton]any),
+		FormEditAssocButtons:           make(map[*FormEditAssocButton]struct{}),
 		FormEditAssocButtons_mapString: make(map[string]*FormEditAssocButton),
 
-		FormFields:           make(map[*FormField]any),
+		FormFields:           make(map[*FormField]struct{}),
 		FormFields_mapString: make(map[string]*FormField),
 
-		FormFieldDates:           make(map[*FormFieldDate]any),
+		FormFieldDates:           make(map[*FormFieldDate]struct{}),
 		FormFieldDates_mapString: make(map[string]*FormFieldDate),
 
-		FormFieldDateTimes:           make(map[*FormFieldDateTime]any),
+		FormFieldDateTimes:           make(map[*FormFieldDateTime]struct{}),
 		FormFieldDateTimes_mapString: make(map[string]*FormFieldDateTime),
 
-		FormFieldFloat64s:           make(map[*FormFieldFloat64]any),
+		FormFieldFloat64s:           make(map[*FormFieldFloat64]struct{}),
 		FormFieldFloat64s_mapString: make(map[string]*FormFieldFloat64),
 
-		FormFieldInts:           make(map[*FormFieldInt]any),
+		FormFieldInts:           make(map[*FormFieldInt]struct{}),
 		FormFieldInts_mapString: make(map[string]*FormFieldInt),
 
-		FormFieldSelects:           make(map[*FormFieldSelect]any),
+		FormFieldSelects:           make(map[*FormFieldSelect]struct{}),
 		FormFieldSelects_mapString: make(map[string]*FormFieldSelect),
 
-		FormFieldStrings:           make(map[*FormFieldString]any),
+		FormFieldStrings:           make(map[*FormFieldString]struct{}),
 		FormFieldStrings_mapString: make(map[string]*FormFieldString),
 
-		FormFieldTimes:           make(map[*FormFieldTime]any),
+		FormFieldTimes:           make(map[*FormFieldTime]struct{}),
 		FormFieldTimes_mapString: make(map[string]*FormFieldTime),
 
-		FormGroups:           make(map[*FormGroup]any),
+		FormGroups:           make(map[*FormGroup]struct{}),
 		FormGroups_mapString: make(map[string]*FormGroup),
 
-		FormSortAssocButtons:           make(map[*FormSortAssocButton]any),
+		FormSortAssocButtons:           make(map[*FormSortAssocButton]struct{}),
 		FormSortAssocButtons_mapString: make(map[string]*FormSortAssocButton),
 
-		Options:           make(map[*Option]any),
+		Options:           make(map[*Option]struct{}),
 		Options_mapString: make(map[string]*Option),
 
-		Rows:           make(map[*Row]any),
+		Rows:           make(map[*Row]struct{}),
 		Rows_mapString: make(map[string]*Row),
 
-		Tables:           make(map[*Table]any),
+		Tables:           make(map[*Table]struct{}),
 		Tables_mapString: make(map[string]*Table),
 
 		// end of insertion point
@@ -1292,8 +1276,6 @@ func (stage *Stage) CommitWithSuspendedCallbacks() {
 
 func (stage *Stage) Commit() {
 	stage.ComputeReverseMaps()
-	stage.commitId++
-	stage.commitTimeStamp = time.Now()
 
 	if stage.OnInitCommitCallback != nil {
 		stage.OnInitCommitCallback.BeforeCommit(stage)
@@ -1378,7 +1360,7 @@ func (stage *Stage) RestoreXL(dirPath string) {
 func (cell *Cell) Stage(stage *Stage) *Cell {
 
 	if _, ok := stage.Cells[cell]; !ok {
-		stage.Cells[cell] = __member
+		stage.Cells[cell] = struct{}{}
 		stage.CellMap_Staged_Order[cell] = stage.CellOrder
 		stage.CellOrder++
 		stage.new[cell] = struct{}{}
@@ -1445,11 +1427,16 @@ func (cell *Cell) GetName() (res string) {
 	return cell.Name
 }
 
+// for satisfaction of GongStruct interface
+func (cell *Cell) SetName(name string) (){
+	cell.Name = name
+}
+
 // Stage puts cellboolean to the model stage
 func (cellboolean *CellBoolean) Stage(stage *Stage) *CellBoolean {
 
 	if _, ok := stage.CellBooleans[cellboolean]; !ok {
-		stage.CellBooleans[cellboolean] = __member
+		stage.CellBooleans[cellboolean] = struct{}{}
 		stage.CellBooleanMap_Staged_Order[cellboolean] = stage.CellBooleanOrder
 		stage.CellBooleanOrder++
 		stage.new[cellboolean] = struct{}{}
@@ -1516,11 +1503,16 @@ func (cellboolean *CellBoolean) GetName() (res string) {
 	return cellboolean.Name
 }
 
+// for satisfaction of GongStruct interface
+func (cellboolean *CellBoolean) SetName(name string) (){
+	cellboolean.Name = name
+}
+
 // Stage puts cellfloat64 to the model stage
 func (cellfloat64 *CellFloat64) Stage(stage *Stage) *CellFloat64 {
 
 	if _, ok := stage.CellFloat64s[cellfloat64]; !ok {
-		stage.CellFloat64s[cellfloat64] = __member
+		stage.CellFloat64s[cellfloat64] = struct{}{}
 		stage.CellFloat64Map_Staged_Order[cellfloat64] = stage.CellFloat64Order
 		stage.CellFloat64Order++
 		stage.new[cellfloat64] = struct{}{}
@@ -1587,11 +1579,16 @@ func (cellfloat64 *CellFloat64) GetName() (res string) {
 	return cellfloat64.Name
 }
 
+// for satisfaction of GongStruct interface
+func (cellfloat64 *CellFloat64) SetName(name string) (){
+	cellfloat64.Name = name
+}
+
 // Stage puts cellicon to the model stage
 func (cellicon *CellIcon) Stage(stage *Stage) *CellIcon {
 
 	if _, ok := stage.CellIcons[cellicon]; !ok {
-		stage.CellIcons[cellicon] = __member
+		stage.CellIcons[cellicon] = struct{}{}
 		stage.CellIconMap_Staged_Order[cellicon] = stage.CellIconOrder
 		stage.CellIconOrder++
 		stage.new[cellicon] = struct{}{}
@@ -1658,11 +1655,16 @@ func (cellicon *CellIcon) GetName() (res string) {
 	return cellicon.Name
 }
 
+// for satisfaction of GongStruct interface
+func (cellicon *CellIcon) SetName(name string) (){
+	cellicon.Name = name
+}
+
 // Stage puts cellint to the model stage
 func (cellint *CellInt) Stage(stage *Stage) *CellInt {
 
 	if _, ok := stage.CellInts[cellint]; !ok {
-		stage.CellInts[cellint] = __member
+		stage.CellInts[cellint] = struct{}{}
 		stage.CellIntMap_Staged_Order[cellint] = stage.CellIntOrder
 		stage.CellIntOrder++
 		stage.new[cellint] = struct{}{}
@@ -1729,11 +1731,16 @@ func (cellint *CellInt) GetName() (res string) {
 	return cellint.Name
 }
 
+// for satisfaction of GongStruct interface
+func (cellint *CellInt) SetName(name string) (){
+	cellint.Name = name
+}
+
 // Stage puts cellstring to the model stage
 func (cellstring *CellString) Stage(stage *Stage) *CellString {
 
 	if _, ok := stage.CellStrings[cellstring]; !ok {
-		stage.CellStrings[cellstring] = __member
+		stage.CellStrings[cellstring] = struct{}{}
 		stage.CellStringMap_Staged_Order[cellstring] = stage.CellStringOrder
 		stage.CellStringOrder++
 		stage.new[cellstring] = struct{}{}
@@ -1800,11 +1807,16 @@ func (cellstring *CellString) GetName() (res string) {
 	return cellstring.Name
 }
 
+// for satisfaction of GongStruct interface
+func (cellstring *CellString) SetName(name string) (){
+	cellstring.Name = name
+}
+
 // Stage puts checkbox to the model stage
 func (checkbox *CheckBox) Stage(stage *Stage) *CheckBox {
 
 	if _, ok := stage.CheckBoxs[checkbox]; !ok {
-		stage.CheckBoxs[checkbox] = __member
+		stage.CheckBoxs[checkbox] = struct{}{}
 		stage.CheckBoxMap_Staged_Order[checkbox] = stage.CheckBoxOrder
 		stage.CheckBoxOrder++
 		stage.new[checkbox] = struct{}{}
@@ -1871,11 +1883,16 @@ func (checkbox *CheckBox) GetName() (res string) {
 	return checkbox.Name
 }
 
+// for satisfaction of GongStruct interface
+func (checkbox *CheckBox) SetName(name string) (){
+	checkbox.Name = name
+}
+
 // Stage puts displayedcolumn to the model stage
 func (displayedcolumn *DisplayedColumn) Stage(stage *Stage) *DisplayedColumn {
 
 	if _, ok := stage.DisplayedColumns[displayedcolumn]; !ok {
-		stage.DisplayedColumns[displayedcolumn] = __member
+		stage.DisplayedColumns[displayedcolumn] = struct{}{}
 		stage.DisplayedColumnMap_Staged_Order[displayedcolumn] = stage.DisplayedColumnOrder
 		stage.DisplayedColumnOrder++
 		stage.new[displayedcolumn] = struct{}{}
@@ -1942,11 +1959,16 @@ func (displayedcolumn *DisplayedColumn) GetName() (res string) {
 	return displayedcolumn.Name
 }
 
+// for satisfaction of GongStruct interface
+func (displayedcolumn *DisplayedColumn) SetName(name string) (){
+	displayedcolumn.Name = name
+}
+
 // Stage puts formdiv to the model stage
 func (formdiv *FormDiv) Stage(stage *Stage) *FormDiv {
 
 	if _, ok := stage.FormDivs[formdiv]; !ok {
-		stage.FormDivs[formdiv] = __member
+		stage.FormDivs[formdiv] = struct{}{}
 		stage.FormDivMap_Staged_Order[formdiv] = stage.FormDivOrder
 		stage.FormDivOrder++
 		stage.new[formdiv] = struct{}{}
@@ -2013,11 +2035,16 @@ func (formdiv *FormDiv) GetName() (res string) {
 	return formdiv.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formdiv *FormDiv) SetName(name string) (){
+	formdiv.Name = name
+}
+
 // Stage puts formeditassocbutton to the model stage
 func (formeditassocbutton *FormEditAssocButton) Stage(stage *Stage) *FormEditAssocButton {
 
 	if _, ok := stage.FormEditAssocButtons[formeditassocbutton]; !ok {
-		stage.FormEditAssocButtons[formeditassocbutton] = __member
+		stage.FormEditAssocButtons[formeditassocbutton] = struct{}{}
 		stage.FormEditAssocButtonMap_Staged_Order[formeditassocbutton] = stage.FormEditAssocButtonOrder
 		stage.FormEditAssocButtonOrder++
 		stage.new[formeditassocbutton] = struct{}{}
@@ -2084,11 +2111,16 @@ func (formeditassocbutton *FormEditAssocButton) GetName() (res string) {
 	return formeditassocbutton.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formeditassocbutton *FormEditAssocButton) SetName(name string) (){
+	formeditassocbutton.Name = name
+}
+
 // Stage puts formfield to the model stage
 func (formfield *FormField) Stage(stage *Stage) *FormField {
 
 	if _, ok := stage.FormFields[formfield]; !ok {
-		stage.FormFields[formfield] = __member
+		stage.FormFields[formfield] = struct{}{}
 		stage.FormFieldMap_Staged_Order[formfield] = stage.FormFieldOrder
 		stage.FormFieldOrder++
 		stage.new[formfield] = struct{}{}
@@ -2155,11 +2187,16 @@ func (formfield *FormField) GetName() (res string) {
 	return formfield.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formfield *FormField) SetName(name string) (){
+	formfield.Name = name
+}
+
 // Stage puts formfielddate to the model stage
 func (formfielddate *FormFieldDate) Stage(stage *Stage) *FormFieldDate {
 
 	if _, ok := stage.FormFieldDates[formfielddate]; !ok {
-		stage.FormFieldDates[formfielddate] = __member
+		stage.FormFieldDates[formfielddate] = struct{}{}
 		stage.FormFieldDateMap_Staged_Order[formfielddate] = stage.FormFieldDateOrder
 		stage.FormFieldDateOrder++
 		stage.new[formfielddate] = struct{}{}
@@ -2226,11 +2263,16 @@ func (formfielddate *FormFieldDate) GetName() (res string) {
 	return formfielddate.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formfielddate *FormFieldDate) SetName(name string) (){
+	formfielddate.Name = name
+}
+
 // Stage puts formfielddatetime to the model stage
 func (formfielddatetime *FormFieldDateTime) Stage(stage *Stage) *FormFieldDateTime {
 
 	if _, ok := stage.FormFieldDateTimes[formfielddatetime]; !ok {
-		stage.FormFieldDateTimes[formfielddatetime] = __member
+		stage.FormFieldDateTimes[formfielddatetime] = struct{}{}
 		stage.FormFieldDateTimeMap_Staged_Order[formfielddatetime] = stage.FormFieldDateTimeOrder
 		stage.FormFieldDateTimeOrder++
 		stage.new[formfielddatetime] = struct{}{}
@@ -2297,11 +2339,16 @@ func (formfielddatetime *FormFieldDateTime) GetName() (res string) {
 	return formfielddatetime.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formfielddatetime *FormFieldDateTime) SetName(name string) (){
+	formfielddatetime.Name = name
+}
+
 // Stage puts formfieldfloat64 to the model stage
 func (formfieldfloat64 *FormFieldFloat64) Stage(stage *Stage) *FormFieldFloat64 {
 
 	if _, ok := stage.FormFieldFloat64s[formfieldfloat64]; !ok {
-		stage.FormFieldFloat64s[formfieldfloat64] = __member
+		stage.FormFieldFloat64s[formfieldfloat64] = struct{}{}
 		stage.FormFieldFloat64Map_Staged_Order[formfieldfloat64] = stage.FormFieldFloat64Order
 		stage.FormFieldFloat64Order++
 		stage.new[formfieldfloat64] = struct{}{}
@@ -2368,11 +2415,16 @@ func (formfieldfloat64 *FormFieldFloat64) GetName() (res string) {
 	return formfieldfloat64.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formfieldfloat64 *FormFieldFloat64) SetName(name string) (){
+	formfieldfloat64.Name = name
+}
+
 // Stage puts formfieldint to the model stage
 func (formfieldint *FormFieldInt) Stage(stage *Stage) *FormFieldInt {
 
 	if _, ok := stage.FormFieldInts[formfieldint]; !ok {
-		stage.FormFieldInts[formfieldint] = __member
+		stage.FormFieldInts[formfieldint] = struct{}{}
 		stage.FormFieldIntMap_Staged_Order[formfieldint] = stage.FormFieldIntOrder
 		stage.FormFieldIntOrder++
 		stage.new[formfieldint] = struct{}{}
@@ -2439,11 +2491,16 @@ func (formfieldint *FormFieldInt) GetName() (res string) {
 	return formfieldint.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formfieldint *FormFieldInt) SetName(name string) (){
+	formfieldint.Name = name
+}
+
 // Stage puts formfieldselect to the model stage
 func (formfieldselect *FormFieldSelect) Stage(stage *Stage) *FormFieldSelect {
 
 	if _, ok := stage.FormFieldSelects[formfieldselect]; !ok {
-		stage.FormFieldSelects[formfieldselect] = __member
+		stage.FormFieldSelects[formfieldselect] = struct{}{}
 		stage.FormFieldSelectMap_Staged_Order[formfieldselect] = stage.FormFieldSelectOrder
 		stage.FormFieldSelectOrder++
 		stage.new[formfieldselect] = struct{}{}
@@ -2510,11 +2567,16 @@ func (formfieldselect *FormFieldSelect) GetName() (res string) {
 	return formfieldselect.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formfieldselect *FormFieldSelect) SetName(name string) (){
+	formfieldselect.Name = name
+}
+
 // Stage puts formfieldstring to the model stage
 func (formfieldstring *FormFieldString) Stage(stage *Stage) *FormFieldString {
 
 	if _, ok := stage.FormFieldStrings[formfieldstring]; !ok {
-		stage.FormFieldStrings[formfieldstring] = __member
+		stage.FormFieldStrings[formfieldstring] = struct{}{}
 		stage.FormFieldStringMap_Staged_Order[formfieldstring] = stage.FormFieldStringOrder
 		stage.FormFieldStringOrder++
 		stage.new[formfieldstring] = struct{}{}
@@ -2581,11 +2643,16 @@ func (formfieldstring *FormFieldString) GetName() (res string) {
 	return formfieldstring.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formfieldstring *FormFieldString) SetName(name string) (){
+	formfieldstring.Name = name
+}
+
 // Stage puts formfieldtime to the model stage
 func (formfieldtime *FormFieldTime) Stage(stage *Stage) *FormFieldTime {
 
 	if _, ok := stage.FormFieldTimes[formfieldtime]; !ok {
-		stage.FormFieldTimes[formfieldtime] = __member
+		stage.FormFieldTimes[formfieldtime] = struct{}{}
 		stage.FormFieldTimeMap_Staged_Order[formfieldtime] = stage.FormFieldTimeOrder
 		stage.FormFieldTimeOrder++
 		stage.new[formfieldtime] = struct{}{}
@@ -2652,11 +2719,16 @@ func (formfieldtime *FormFieldTime) GetName() (res string) {
 	return formfieldtime.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formfieldtime *FormFieldTime) SetName(name string) (){
+	formfieldtime.Name = name
+}
+
 // Stage puts formgroup to the model stage
 func (formgroup *FormGroup) Stage(stage *Stage) *FormGroup {
 
 	if _, ok := stage.FormGroups[formgroup]; !ok {
-		stage.FormGroups[formgroup] = __member
+		stage.FormGroups[formgroup] = struct{}{}
 		stage.FormGroupMap_Staged_Order[formgroup] = stage.FormGroupOrder
 		stage.FormGroupOrder++
 		stage.new[formgroup] = struct{}{}
@@ -2723,11 +2795,16 @@ func (formgroup *FormGroup) GetName() (res string) {
 	return formgroup.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formgroup *FormGroup) SetName(name string) (){
+	formgroup.Name = name
+}
+
 // Stage puts formsortassocbutton to the model stage
 func (formsortassocbutton *FormSortAssocButton) Stage(stage *Stage) *FormSortAssocButton {
 
 	if _, ok := stage.FormSortAssocButtons[formsortassocbutton]; !ok {
-		stage.FormSortAssocButtons[formsortassocbutton] = __member
+		stage.FormSortAssocButtons[formsortassocbutton] = struct{}{}
 		stage.FormSortAssocButtonMap_Staged_Order[formsortassocbutton] = stage.FormSortAssocButtonOrder
 		stage.FormSortAssocButtonOrder++
 		stage.new[formsortassocbutton] = struct{}{}
@@ -2794,11 +2871,16 @@ func (formsortassocbutton *FormSortAssocButton) GetName() (res string) {
 	return formsortassocbutton.Name
 }
 
+// for satisfaction of GongStruct interface
+func (formsortassocbutton *FormSortAssocButton) SetName(name string) (){
+	formsortassocbutton.Name = name
+}
+
 // Stage puts option to the model stage
 func (option *Option) Stage(stage *Stage) *Option {
 
 	if _, ok := stage.Options[option]; !ok {
-		stage.Options[option] = __member
+		stage.Options[option] = struct{}{}
 		stage.OptionMap_Staged_Order[option] = stage.OptionOrder
 		stage.OptionOrder++
 		stage.new[option] = struct{}{}
@@ -2865,11 +2947,16 @@ func (option *Option) GetName() (res string) {
 	return option.Name
 }
 
+// for satisfaction of GongStruct interface
+func (option *Option) SetName(name string) (){
+	option.Name = name
+}
+
 // Stage puts row to the model stage
 func (row *Row) Stage(stage *Stage) *Row {
 
 	if _, ok := stage.Rows[row]; !ok {
-		stage.Rows[row] = __member
+		stage.Rows[row] = struct{}{}
 		stage.RowMap_Staged_Order[row] = stage.RowOrder
 		stage.RowOrder++
 		stage.new[row] = struct{}{}
@@ -2936,11 +3023,16 @@ func (row *Row) GetName() (res string) {
 	return row.Name
 }
 
+// for satisfaction of GongStruct interface
+func (row *Row) SetName(name string) (){
+	row.Name = name
+}
+
 // Stage puts table to the model stage
 func (table *Table) Stage(stage *Stage) *Table {
 
 	if _, ok := stage.Tables[table]; !ok {
-		stage.Tables[table] = __member
+		stage.Tables[table] = struct{}{}
 		stage.TableMap_Staged_Order[table] = stage.TableOrder
 		stage.TableOrder++
 		stage.new[table] = struct{}{}
@@ -3007,6 +3099,11 @@ func (table *Table) GetName() (res string) {
 	return table.Name
 }
 
+// for satisfaction of GongStruct interface
+func (table *Table) SetName(name string) (){
+	table.Name = name
+}
+
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMCell(Cell *Cell)
@@ -3061,117 +3158,117 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 }
 
 func (stage *Stage) Reset() { // insertion point for array reset
-	stage.Cells = make(map[*Cell]any)
+	stage.Cells = make(map[*Cell]struct{})
 	stage.Cells_mapString = make(map[string]*Cell)
 	stage.CellMap_Staged_Order = make(map[*Cell]uint)
 	stage.CellOrder = 0
 
-	stage.CellBooleans = make(map[*CellBoolean]any)
+	stage.CellBooleans = make(map[*CellBoolean]struct{})
 	stage.CellBooleans_mapString = make(map[string]*CellBoolean)
 	stage.CellBooleanMap_Staged_Order = make(map[*CellBoolean]uint)
 	stage.CellBooleanOrder = 0
 
-	stage.CellFloat64s = make(map[*CellFloat64]any)
+	stage.CellFloat64s = make(map[*CellFloat64]struct{})
 	stage.CellFloat64s_mapString = make(map[string]*CellFloat64)
 	stage.CellFloat64Map_Staged_Order = make(map[*CellFloat64]uint)
 	stage.CellFloat64Order = 0
 
-	stage.CellIcons = make(map[*CellIcon]any)
+	stage.CellIcons = make(map[*CellIcon]struct{})
 	stage.CellIcons_mapString = make(map[string]*CellIcon)
 	stage.CellIconMap_Staged_Order = make(map[*CellIcon]uint)
 	stage.CellIconOrder = 0
 
-	stage.CellInts = make(map[*CellInt]any)
+	stage.CellInts = make(map[*CellInt]struct{})
 	stage.CellInts_mapString = make(map[string]*CellInt)
 	stage.CellIntMap_Staged_Order = make(map[*CellInt]uint)
 	stage.CellIntOrder = 0
 
-	stage.CellStrings = make(map[*CellString]any)
+	stage.CellStrings = make(map[*CellString]struct{})
 	stage.CellStrings_mapString = make(map[string]*CellString)
 	stage.CellStringMap_Staged_Order = make(map[*CellString]uint)
 	stage.CellStringOrder = 0
 
-	stage.CheckBoxs = make(map[*CheckBox]any)
+	stage.CheckBoxs = make(map[*CheckBox]struct{})
 	stage.CheckBoxs_mapString = make(map[string]*CheckBox)
 	stage.CheckBoxMap_Staged_Order = make(map[*CheckBox]uint)
 	stage.CheckBoxOrder = 0
 
-	stage.DisplayedColumns = make(map[*DisplayedColumn]any)
+	stage.DisplayedColumns = make(map[*DisplayedColumn]struct{})
 	stage.DisplayedColumns_mapString = make(map[string]*DisplayedColumn)
 	stage.DisplayedColumnMap_Staged_Order = make(map[*DisplayedColumn]uint)
 	stage.DisplayedColumnOrder = 0
 
-	stage.FormDivs = make(map[*FormDiv]any)
+	stage.FormDivs = make(map[*FormDiv]struct{})
 	stage.FormDivs_mapString = make(map[string]*FormDiv)
 	stage.FormDivMap_Staged_Order = make(map[*FormDiv]uint)
 	stage.FormDivOrder = 0
 
-	stage.FormEditAssocButtons = make(map[*FormEditAssocButton]any)
+	stage.FormEditAssocButtons = make(map[*FormEditAssocButton]struct{})
 	stage.FormEditAssocButtons_mapString = make(map[string]*FormEditAssocButton)
 	stage.FormEditAssocButtonMap_Staged_Order = make(map[*FormEditAssocButton]uint)
 	stage.FormEditAssocButtonOrder = 0
 
-	stage.FormFields = make(map[*FormField]any)
+	stage.FormFields = make(map[*FormField]struct{})
 	stage.FormFields_mapString = make(map[string]*FormField)
 	stage.FormFieldMap_Staged_Order = make(map[*FormField]uint)
 	stage.FormFieldOrder = 0
 
-	stage.FormFieldDates = make(map[*FormFieldDate]any)
+	stage.FormFieldDates = make(map[*FormFieldDate]struct{})
 	stage.FormFieldDates_mapString = make(map[string]*FormFieldDate)
 	stage.FormFieldDateMap_Staged_Order = make(map[*FormFieldDate]uint)
 	stage.FormFieldDateOrder = 0
 
-	stage.FormFieldDateTimes = make(map[*FormFieldDateTime]any)
+	stage.FormFieldDateTimes = make(map[*FormFieldDateTime]struct{})
 	stage.FormFieldDateTimes_mapString = make(map[string]*FormFieldDateTime)
 	stage.FormFieldDateTimeMap_Staged_Order = make(map[*FormFieldDateTime]uint)
 	stage.FormFieldDateTimeOrder = 0
 
-	stage.FormFieldFloat64s = make(map[*FormFieldFloat64]any)
+	stage.FormFieldFloat64s = make(map[*FormFieldFloat64]struct{})
 	stage.FormFieldFloat64s_mapString = make(map[string]*FormFieldFloat64)
 	stage.FormFieldFloat64Map_Staged_Order = make(map[*FormFieldFloat64]uint)
 	stage.FormFieldFloat64Order = 0
 
-	stage.FormFieldInts = make(map[*FormFieldInt]any)
+	stage.FormFieldInts = make(map[*FormFieldInt]struct{})
 	stage.FormFieldInts_mapString = make(map[string]*FormFieldInt)
 	stage.FormFieldIntMap_Staged_Order = make(map[*FormFieldInt]uint)
 	stage.FormFieldIntOrder = 0
 
-	stage.FormFieldSelects = make(map[*FormFieldSelect]any)
+	stage.FormFieldSelects = make(map[*FormFieldSelect]struct{})
 	stage.FormFieldSelects_mapString = make(map[string]*FormFieldSelect)
 	stage.FormFieldSelectMap_Staged_Order = make(map[*FormFieldSelect]uint)
 	stage.FormFieldSelectOrder = 0
 
-	stage.FormFieldStrings = make(map[*FormFieldString]any)
+	stage.FormFieldStrings = make(map[*FormFieldString]struct{})
 	stage.FormFieldStrings_mapString = make(map[string]*FormFieldString)
 	stage.FormFieldStringMap_Staged_Order = make(map[*FormFieldString]uint)
 	stage.FormFieldStringOrder = 0
 
-	stage.FormFieldTimes = make(map[*FormFieldTime]any)
+	stage.FormFieldTimes = make(map[*FormFieldTime]struct{})
 	stage.FormFieldTimes_mapString = make(map[string]*FormFieldTime)
 	stage.FormFieldTimeMap_Staged_Order = make(map[*FormFieldTime]uint)
 	stage.FormFieldTimeOrder = 0
 
-	stage.FormGroups = make(map[*FormGroup]any)
+	stage.FormGroups = make(map[*FormGroup]struct{})
 	stage.FormGroups_mapString = make(map[string]*FormGroup)
 	stage.FormGroupMap_Staged_Order = make(map[*FormGroup]uint)
 	stage.FormGroupOrder = 0
 
-	stage.FormSortAssocButtons = make(map[*FormSortAssocButton]any)
+	stage.FormSortAssocButtons = make(map[*FormSortAssocButton]struct{})
 	stage.FormSortAssocButtons_mapString = make(map[string]*FormSortAssocButton)
 	stage.FormSortAssocButtonMap_Staged_Order = make(map[*FormSortAssocButton]uint)
 	stage.FormSortAssocButtonOrder = 0
 
-	stage.Options = make(map[*Option]any)
+	stage.Options = make(map[*Option]struct{})
 	stage.Options_mapString = make(map[string]*Option)
 	stage.OptionMap_Staged_Order = make(map[*Option]uint)
 	stage.OptionOrder = 0
 
-	stage.Rows = make(map[*Row]any)
+	stage.Rows = make(map[*Row]struct{})
 	stage.Rows_mapString = make(map[string]*Row)
 	stage.RowMap_Staged_Order = make(map[*Row]uint)
 	stage.RowOrder = 0
 
-	stage.Tables = make(map[*Table]any)
+	stage.Tables = make(map[*Table]struct{})
 	stage.Tables_mapString = make(map[string]*Table)
 	stage.TableMap_Staged_Order = make(map[*Table]uint)
 	stage.TableOrder = 0
@@ -3363,6 +3460,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type GongstructIF interface {
 	GetName() string
+	SetName(string)
 	CommitVoid(*Stage)
 	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
@@ -3384,7 +3482,7 @@ func CompareGongstructByName[T PointerToGongstruct](a, b T) int {
 	return cmp.Compare(a.GetName(), b.GetName())
 }
 
-func SortGongstructSetByName[T PointerToGongstruct](set map[T]any) (sortedSlice []T) {
+func SortGongstructSetByName[T PointerToGongstruct](set map[T]struct{}) (sortedSlice []T) {
 
 	for key := range set {
 		sortedSlice = append(sortedSlice, key)
@@ -3468,59 +3566,59 @@ func GongGetSet[Type GongstructSet](stage *Stage) *Type {
 	}
 }
 
-// GongGetMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
-func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
+// GongGetMap returns the map of staged Gonstruct instance by their name
+// Can be usefull if names are unique
+func GongGetMap[Type GongstructIF](stage *Stage) map[string]Type {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[string]*Cell:
-		return any(&stage.Cells_mapString).(*Type)
-	case map[string]*CellBoolean:
-		return any(&stage.CellBooleans_mapString).(*Type)
-	case map[string]*CellFloat64:
-		return any(&stage.CellFloat64s_mapString).(*Type)
-	case map[string]*CellIcon:
-		return any(&stage.CellIcons_mapString).(*Type)
-	case map[string]*CellInt:
-		return any(&stage.CellInts_mapString).(*Type)
-	case map[string]*CellString:
-		return any(&stage.CellStrings_mapString).(*Type)
-	case map[string]*CheckBox:
-		return any(&stage.CheckBoxs_mapString).(*Type)
-	case map[string]*DisplayedColumn:
-		return any(&stage.DisplayedColumns_mapString).(*Type)
-	case map[string]*FormDiv:
-		return any(&stage.FormDivs_mapString).(*Type)
-	case map[string]*FormEditAssocButton:
-		return any(&stage.FormEditAssocButtons_mapString).(*Type)
-	case map[string]*FormField:
-		return any(&stage.FormFields_mapString).(*Type)
-	case map[string]*FormFieldDate:
-		return any(&stage.FormFieldDates_mapString).(*Type)
-	case map[string]*FormFieldDateTime:
-		return any(&stage.FormFieldDateTimes_mapString).(*Type)
-	case map[string]*FormFieldFloat64:
-		return any(&stage.FormFieldFloat64s_mapString).(*Type)
-	case map[string]*FormFieldInt:
-		return any(&stage.FormFieldInts_mapString).(*Type)
-	case map[string]*FormFieldSelect:
-		return any(&stage.FormFieldSelects_mapString).(*Type)
-	case map[string]*FormFieldString:
-		return any(&stage.FormFieldStrings_mapString).(*Type)
-	case map[string]*FormFieldTime:
-		return any(&stage.FormFieldTimes_mapString).(*Type)
-	case map[string]*FormGroup:
-		return any(&stage.FormGroups_mapString).(*Type)
-	case map[string]*FormSortAssocButton:
-		return any(&stage.FormSortAssocButtons_mapString).(*Type)
-	case map[string]*Option:
-		return any(&stage.Options_mapString).(*Type)
-	case map[string]*Row:
-		return any(&stage.Rows_mapString).(*Type)
-	case map[string]*Table:
-		return any(&stage.Tables_mapString).(*Type)
+	case *Cell:
+		return any(stage.Cells_mapString).(map[string]Type)
+	case *CellBoolean:
+		return any(stage.CellBooleans_mapString).(map[string]Type)
+	case *CellFloat64:
+		return any(stage.CellFloat64s_mapString).(map[string]Type)
+	case *CellIcon:
+		return any(stage.CellIcons_mapString).(map[string]Type)
+	case *CellInt:
+		return any(stage.CellInts_mapString).(map[string]Type)
+	case *CellString:
+		return any(stage.CellStrings_mapString).(map[string]Type)
+	case *CheckBox:
+		return any(stage.CheckBoxs_mapString).(map[string]Type)
+	case *DisplayedColumn:
+		return any(stage.DisplayedColumns_mapString).(map[string]Type)
+	case *FormDiv:
+		return any(stage.FormDivs_mapString).(map[string]Type)
+	case *FormEditAssocButton:
+		return any(stage.FormEditAssocButtons_mapString).(map[string]Type)
+	case *FormField:
+		return any(stage.FormFields_mapString).(map[string]Type)
+	case *FormFieldDate:
+		return any(stage.FormFieldDates_mapString).(map[string]Type)
+	case *FormFieldDateTime:
+		return any(stage.FormFieldDateTimes_mapString).(map[string]Type)
+	case *FormFieldFloat64:
+		return any(stage.FormFieldFloat64s_mapString).(map[string]Type)
+	case *FormFieldInt:
+		return any(stage.FormFieldInts_mapString).(map[string]Type)
+	case *FormFieldSelect:
+		return any(stage.FormFieldSelects_mapString).(map[string]Type)
+	case *FormFieldString:
+		return any(stage.FormFieldStrings_mapString).(map[string]Type)
+	case *FormFieldTime:
+		return any(stage.FormFieldTimes_mapString).(map[string]Type)
+	case *FormGroup:
+		return any(stage.FormGroups_mapString).(map[string]Type)
+	case *FormSortAssocButton:
+		return any(stage.FormSortAssocButtons_mapString).(map[string]Type)
+	case *Option:
+		return any(stage.Options_mapString).(map[string]Type)
+	case *Row:
+		return any(stage.Rows_mapString).(map[string]Type)
+	case *Table:
+		return any(stage.Tables_mapString).(map[string]Type)
 	default:
 		return nil
 	}
@@ -3528,57 +3626,57 @@ func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
 
 // GetGongstructInstancesSet returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
+func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]struct{} {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case Cell:
-		return any(&stage.Cells).(*map[*Type]any)
+		return any(&stage.Cells).(*map[*Type]struct{})
 	case CellBoolean:
-		return any(&stage.CellBooleans).(*map[*Type]any)
+		return any(&stage.CellBooleans).(*map[*Type]struct{})
 	case CellFloat64:
-		return any(&stage.CellFloat64s).(*map[*Type]any)
+		return any(&stage.CellFloat64s).(*map[*Type]struct{})
 	case CellIcon:
-		return any(&stage.CellIcons).(*map[*Type]any)
+		return any(&stage.CellIcons).(*map[*Type]struct{})
 	case CellInt:
-		return any(&stage.CellInts).(*map[*Type]any)
+		return any(&stage.CellInts).(*map[*Type]struct{})
 	case CellString:
-		return any(&stage.CellStrings).(*map[*Type]any)
+		return any(&stage.CellStrings).(*map[*Type]struct{})
 	case CheckBox:
-		return any(&stage.CheckBoxs).(*map[*Type]any)
+		return any(&stage.CheckBoxs).(*map[*Type]struct{})
 	case DisplayedColumn:
-		return any(&stage.DisplayedColumns).(*map[*Type]any)
+		return any(&stage.DisplayedColumns).(*map[*Type]struct{})
 	case FormDiv:
-		return any(&stage.FormDivs).(*map[*Type]any)
+		return any(&stage.FormDivs).(*map[*Type]struct{})
 	case FormEditAssocButton:
-		return any(&stage.FormEditAssocButtons).(*map[*Type]any)
+		return any(&stage.FormEditAssocButtons).(*map[*Type]struct{})
 	case FormField:
-		return any(&stage.FormFields).(*map[*Type]any)
+		return any(&stage.FormFields).(*map[*Type]struct{})
 	case FormFieldDate:
-		return any(&stage.FormFieldDates).(*map[*Type]any)
+		return any(&stage.FormFieldDates).(*map[*Type]struct{})
 	case FormFieldDateTime:
-		return any(&stage.FormFieldDateTimes).(*map[*Type]any)
+		return any(&stage.FormFieldDateTimes).(*map[*Type]struct{})
 	case FormFieldFloat64:
-		return any(&stage.FormFieldFloat64s).(*map[*Type]any)
+		return any(&stage.FormFieldFloat64s).(*map[*Type]struct{})
 	case FormFieldInt:
-		return any(&stage.FormFieldInts).(*map[*Type]any)
+		return any(&stage.FormFieldInts).(*map[*Type]struct{})
 	case FormFieldSelect:
-		return any(&stage.FormFieldSelects).(*map[*Type]any)
+		return any(&stage.FormFieldSelects).(*map[*Type]struct{})
 	case FormFieldString:
-		return any(&stage.FormFieldStrings).(*map[*Type]any)
+		return any(&stage.FormFieldStrings).(*map[*Type]struct{})
 	case FormFieldTime:
-		return any(&stage.FormFieldTimes).(*map[*Type]any)
+		return any(&stage.FormFieldTimes).(*map[*Type]struct{})
 	case FormGroup:
-		return any(&stage.FormGroups).(*map[*Type]any)
+		return any(&stage.FormGroups).(*map[*Type]struct{})
 	case FormSortAssocButton:
-		return any(&stage.FormSortAssocButtons).(*map[*Type]any)
+		return any(&stage.FormSortAssocButtons).(*map[*Type]struct{})
 	case Option:
-		return any(&stage.Options).(*map[*Type]any)
+		return any(&stage.Options).(*map[*Type]struct{})
 	case Row:
-		return any(&stage.Rows).(*map[*Type]any)
+		return any(&stage.Rows).(*map[*Type]struct{})
 	case Table:
-		return any(&stage.Tables).(*map[*Type]any)
+		return any(&stage.Tables).(*map[*Type]struct{})
 	default:
 		return nil
 	}
@@ -3586,57 +3684,57 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
 
 // GetGongstructInstancesSetFromPointerType returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *Stage) *map[Type]any {
+func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *Stage) *map[Type]struct{} {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case *Cell:
-		return any(&stage.Cells).(*map[Type]any)
+		return any(&stage.Cells).(*map[Type]struct{})
 	case *CellBoolean:
-		return any(&stage.CellBooleans).(*map[Type]any)
+		return any(&stage.CellBooleans).(*map[Type]struct{})
 	case *CellFloat64:
-		return any(&stage.CellFloat64s).(*map[Type]any)
+		return any(&stage.CellFloat64s).(*map[Type]struct{})
 	case *CellIcon:
-		return any(&stage.CellIcons).(*map[Type]any)
+		return any(&stage.CellIcons).(*map[Type]struct{})
 	case *CellInt:
-		return any(&stage.CellInts).(*map[Type]any)
+		return any(&stage.CellInts).(*map[Type]struct{})
 	case *CellString:
-		return any(&stage.CellStrings).(*map[Type]any)
+		return any(&stage.CellStrings).(*map[Type]struct{})
 	case *CheckBox:
-		return any(&stage.CheckBoxs).(*map[Type]any)
+		return any(&stage.CheckBoxs).(*map[Type]struct{})
 	case *DisplayedColumn:
-		return any(&stage.DisplayedColumns).(*map[Type]any)
+		return any(&stage.DisplayedColumns).(*map[Type]struct{})
 	case *FormDiv:
-		return any(&stage.FormDivs).(*map[Type]any)
+		return any(&stage.FormDivs).(*map[Type]struct{})
 	case *FormEditAssocButton:
-		return any(&stage.FormEditAssocButtons).(*map[Type]any)
+		return any(&stage.FormEditAssocButtons).(*map[Type]struct{})
 	case *FormField:
-		return any(&stage.FormFields).(*map[Type]any)
+		return any(&stage.FormFields).(*map[Type]struct{})
 	case *FormFieldDate:
-		return any(&stage.FormFieldDates).(*map[Type]any)
+		return any(&stage.FormFieldDates).(*map[Type]struct{})
 	case *FormFieldDateTime:
-		return any(&stage.FormFieldDateTimes).(*map[Type]any)
+		return any(&stage.FormFieldDateTimes).(*map[Type]struct{})
 	case *FormFieldFloat64:
-		return any(&stage.FormFieldFloat64s).(*map[Type]any)
+		return any(&stage.FormFieldFloat64s).(*map[Type]struct{})
 	case *FormFieldInt:
-		return any(&stage.FormFieldInts).(*map[Type]any)
+		return any(&stage.FormFieldInts).(*map[Type]struct{})
 	case *FormFieldSelect:
-		return any(&stage.FormFieldSelects).(*map[Type]any)
+		return any(&stage.FormFieldSelects).(*map[Type]struct{})
 	case *FormFieldString:
-		return any(&stage.FormFieldStrings).(*map[Type]any)
+		return any(&stage.FormFieldStrings).(*map[Type]struct{})
 	case *FormFieldTime:
-		return any(&stage.FormFieldTimes).(*map[Type]any)
+		return any(&stage.FormFieldTimes).(*map[Type]struct{})
 	case *FormGroup:
-		return any(&stage.FormGroups).(*map[Type]any)
+		return any(&stage.FormGroups).(*map[Type]struct{})
 	case *FormSortAssocButton:
-		return any(&stage.FormSortAssocButtons).(*map[Type]any)
+		return any(&stage.FormSortAssocButtons).(*map[Type]struct{})
 	case *Option:
-		return any(&stage.Options).(*map[Type]any)
+		return any(&stage.Options).(*map[Type]struct{})
 	case *Row:
-		return any(&stage.Rows).(*map[Type]any)
+		return any(&stage.Rows).(*map[Type]struct{})
 	case *Table:
-		return any(&stage.Tables).(*map[Type]any)
+		return any(&stage.Tables).(*map[Type]struct{})
 	default:
 		return nil
 	}
@@ -6555,4 +6653,123 @@ func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
 	return
 }
 
+func (stage *Stage) ResetMapStrings() {
+
+	// insertion point for generic get gongstruct name
+	stage.Cells_mapString = make(map[string]*Cell)
+	for cell := range stage.Cells {
+		stage.Cells_mapString[cell.Name] = cell
+	}
+
+	stage.CellBooleans_mapString = make(map[string]*CellBoolean)
+	for cellboolean := range stage.CellBooleans {
+		stage.CellBooleans_mapString[cellboolean.Name] = cellboolean
+	}
+
+	stage.CellFloat64s_mapString = make(map[string]*CellFloat64)
+	for cellfloat64 := range stage.CellFloat64s {
+		stage.CellFloat64s_mapString[cellfloat64.Name] = cellfloat64
+	}
+
+	stage.CellIcons_mapString = make(map[string]*CellIcon)
+	for cellicon := range stage.CellIcons {
+		stage.CellIcons_mapString[cellicon.Name] = cellicon
+	}
+
+	stage.CellInts_mapString = make(map[string]*CellInt)
+	for cellint := range stage.CellInts {
+		stage.CellInts_mapString[cellint.Name] = cellint
+	}
+
+	stage.CellStrings_mapString = make(map[string]*CellString)
+	for cellstring := range stage.CellStrings {
+		stage.CellStrings_mapString[cellstring.Name] = cellstring
+	}
+
+	stage.CheckBoxs_mapString = make(map[string]*CheckBox)
+	for checkbox := range stage.CheckBoxs {
+		stage.CheckBoxs_mapString[checkbox.Name] = checkbox
+	}
+
+	stage.DisplayedColumns_mapString = make(map[string]*DisplayedColumn)
+	for displayedcolumn := range stage.DisplayedColumns {
+		stage.DisplayedColumns_mapString[displayedcolumn.Name] = displayedcolumn
+	}
+
+	stage.FormDivs_mapString = make(map[string]*FormDiv)
+	for formdiv := range stage.FormDivs {
+		stage.FormDivs_mapString[formdiv.Name] = formdiv
+	}
+
+	stage.FormEditAssocButtons_mapString = make(map[string]*FormEditAssocButton)
+	for formeditassocbutton := range stage.FormEditAssocButtons {
+		stage.FormEditAssocButtons_mapString[formeditassocbutton.Name] = formeditassocbutton
+	}
+
+	stage.FormFields_mapString = make(map[string]*FormField)
+	for formfield := range stage.FormFields {
+		stage.FormFields_mapString[formfield.Name] = formfield
+	}
+
+	stage.FormFieldDates_mapString = make(map[string]*FormFieldDate)
+	for formfielddate := range stage.FormFieldDates {
+		stage.FormFieldDates_mapString[formfielddate.Name] = formfielddate
+	}
+
+	stage.FormFieldDateTimes_mapString = make(map[string]*FormFieldDateTime)
+	for formfielddatetime := range stage.FormFieldDateTimes {
+		stage.FormFieldDateTimes_mapString[formfielddatetime.Name] = formfielddatetime
+	}
+
+	stage.FormFieldFloat64s_mapString = make(map[string]*FormFieldFloat64)
+	for formfieldfloat64 := range stage.FormFieldFloat64s {
+		stage.FormFieldFloat64s_mapString[formfieldfloat64.Name] = formfieldfloat64
+	}
+
+	stage.FormFieldInts_mapString = make(map[string]*FormFieldInt)
+	for formfieldint := range stage.FormFieldInts {
+		stage.FormFieldInts_mapString[formfieldint.Name] = formfieldint
+	}
+
+	stage.FormFieldSelects_mapString = make(map[string]*FormFieldSelect)
+	for formfieldselect := range stage.FormFieldSelects {
+		stage.FormFieldSelects_mapString[formfieldselect.Name] = formfieldselect
+	}
+
+	stage.FormFieldStrings_mapString = make(map[string]*FormFieldString)
+	for formfieldstring := range stage.FormFieldStrings {
+		stage.FormFieldStrings_mapString[formfieldstring.Name] = formfieldstring
+	}
+
+	stage.FormFieldTimes_mapString = make(map[string]*FormFieldTime)
+	for formfieldtime := range stage.FormFieldTimes {
+		stage.FormFieldTimes_mapString[formfieldtime.Name] = formfieldtime
+	}
+
+	stage.FormGroups_mapString = make(map[string]*FormGroup)
+	for formgroup := range stage.FormGroups {
+		stage.FormGroups_mapString[formgroup.Name] = formgroup
+	}
+
+	stage.FormSortAssocButtons_mapString = make(map[string]*FormSortAssocButton)
+	for formsortassocbutton := range stage.FormSortAssocButtons {
+		stage.FormSortAssocButtons_mapString[formsortassocbutton.Name] = formsortassocbutton
+	}
+
+	stage.Options_mapString = make(map[string]*Option)
+	for option := range stage.Options {
+		stage.Options_mapString[option.Name] = option
+	}
+
+	stage.Rows_mapString = make(map[string]*Row)
+	for row := range stage.Rows {
+		stage.Rows_mapString[row.Name] = row
+	}
+
+	stage.Tables_mapString = make(map[string]*Table)
+	for table := range stage.Tables {
+		stage.Tables_mapString[table.Name] = table
+	}
+
+}
 // Last line of the template

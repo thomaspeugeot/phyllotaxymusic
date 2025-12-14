@@ -260,13 +260,13 @@ func (controller *Controller) UpdateAxisGrid(c *gin.Context) {
 
 	_values := c.Request.URL.Query()
 	stackPath := ""
-	if len(_values) == 1 {
-		value := _values["Name"]
-		if len(value) == 1 {
-			stackPath = value[0]
-			// log.Println("UpdateAxisGrid", "Name", stackPath)
+	if len(_values) >= 1 {
+		_nameValues := _values["Name"]
+		if len(_nameValues) == 1 {
+			stackPath = _nameValues[0]
 		}
 	}
+
 	backRepo := controller.Map_BackRepos[stackPath]
 	if backRepo == nil {
 		message := "PATCH Stack github.com/thomaspeugeot/phyllotaxymusic/go, Unkown stack: \"" + stackPath + "\"\n"
@@ -328,7 +328,7 @@ func (controller *Controller) UpdateAxisGrid(c *gin.Context) {
 	// get stage instance from DB instance, and call callback function
 	axisgridOld := backRepo.BackRepoAxisGrid.Map_AxisGridDBID_AxisGridPtr[axisgridDB.ID]
 	if axisgridOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), axisgridOld, axisgridNew)
+		models.OnAfterUpdateFromFront(backRepo.GetStage(), axisgridOld, axisgridNew)
 	}
 
 	// an UPDATE generates a back repo commit increase

@@ -10,7 +10,7 @@ import (
 	load_stack "github.com/fullstack-lang/gong/lib/load/go/stack"
 	slider_stack "github.com/fullstack-lang/gong/lib/slider/go/stack"
 	split_stack "github.com/fullstack-lang/gong/lib/split/go/stack"
-	ssg_stack "github.com/fullstack-lang/gong/lib/ssg/go/stack"
+	ssg_level1stack "github.com/fullstack-lang/gong/lib/ssg/go/level1stack"
 	svg_stack "github.com/fullstack-lang/gong/lib/svg/go/stack"
 	tone_stack "github.com/fullstack-lang/gong/lib/tone/go/stack"
 	tree_stack "github.com/fullstack-lang/gong/lib/tree/go/stack"
@@ -82,7 +82,7 @@ func NewStager(r *gin.Engine, stage *Stage) (stager *Stager) {
 	stager.buttonStage = button_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.cursorStage = cursor_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.loadStage = load_stack.NewStack(r, name, "", "", "", true, true).Stage
-	stager.ssgStage = ssg_stack.NewStack(r, name, "", "", "", true, true).Stage
+	stager.ssgStage = ssg_level1stack.NewLevel1Stack(name, "", "", true, true).Stage
 	stager.svgStage = svg_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.toneStage = tone_stack.NewStack(r, name, "", "", "", true, true).Stage
 	stager.treeStage = tree_stack.NewStack(r, name, "", "", "", true, true).Stage

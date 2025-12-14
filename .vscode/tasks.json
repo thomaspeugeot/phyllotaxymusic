@@ -69,52 +69,15 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "01 - gongc phyllotaxymusic",
+			"label": "01 - gong generate phyllotaxymusic -skipNg -skipGoModCommands",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
 			},
-			"command": "gongc",
+			"command": "gong",
 			"group": "build",
 			"args": [
-				"-level1",
-			]
-		},
-		{
-			"label": "01 - gongc phyllotaxymusic -clean",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-clean"
-			]
-		},
-		{
-			"label": "01 - gongc phyllotaxymusic -level1 -skipGoModCommands",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
-				"-skipGoModCommands",
-				"-level1",
-				"-skipStager=false"
-			]
-		},
-		{
-			"label": "01 - gongc phyllotaxymusic -skipNg -skipGoModCommands",
-			"type": "shell",
-			"options": {
-				"cwd": "${workspaceFolder}/go/models"
-			},
-			"command": "gongc",
-			"group": "build",
-			"args": [
+				"generate",
 				"-skipNg",
 				"-skipGoModCommands",
 				"-skipStager=false",
@@ -122,7 +85,7 @@
 			]
 		},
 		{
-			"label": "01 - gongc phyllotaxymusic -skipNpmInstall -skipGoModCommands",
+			"label": "01 - gong generate phyllotaxymusic -skipNpmInstall -skipGoModCommands",
 			"type": "shell",
 			"options": {
 				"cwd": "${workspaceFolder}/go/models"
@@ -130,16 +93,23 @@
 			"command": "gongc",
 			"group": "build",
 			"args": [
+				"generate",
 				"-skipNpmInstall",
 				"-skipGoModCommands",
 				"-compileForDebug"
 			]
 		},
-		{
-			"label": "00 - update gong dep",
+				{
+			"label": "01 - gong generate phyllotaxymusic",
 			"type": "shell",
-			"command": "go get github.com/fullstack-lang/gong@main",
-			"group": "build"
+			"options": {
+				"cwd": "${workspaceFolder}/go/models"
+			},
+			"command": "gongc",
+			"group": "build",
+			"args": [
+				"generate",
+			]
 		},
 		{
 			"label": "00 - go build",

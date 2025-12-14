@@ -10,7 +10,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct AxisGrid
 	// insertion point per field
-	clear(stage.AxisGrid_Axiss_reverseMap)
 	stage.AxisGrid_Axiss_reverseMap = make(map[*Axis]*AxisGrid)
 	for axisgrid := range stage.AxisGrids {
 		_ = axisgrid
@@ -24,7 +23,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct BezierGrid
 	// insertion point per field
-	clear(stage.BezierGrid_Beziers_reverseMap)
 	stage.BezierGrid_Beziers_reverseMap = make(map[*Bezier]*BezierGrid)
 	for beziergrid := range stage.BezierGrids {
 		_ = beziergrid
@@ -35,7 +33,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct BezierGridStack
 	// insertion point per field
-	clear(stage.BezierGridStack_BezierGrids_reverseMap)
 	stage.BezierGridStack_BezierGrids_reverseMap = make(map[*BezierGrid]*BezierGridStack)
 	for beziergridstack := range stage.BezierGridStacks {
 		_ = beziergridstack
@@ -52,7 +49,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct CircleGrid
 	// insertion point per field
-	clear(stage.CircleGrid_Circles_reverseMap)
 	stage.CircleGrid_Circles_reverseMap = make(map[*Circle]*CircleGrid)
 	for circlegrid := range stage.CircleGrids {
 		_ = circlegrid
@@ -63,7 +59,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct Content
 	// insertion point per field
-	clear(stage.Content_Chapters_reverseMap)
 	stage.Content_Chapters_reverseMap = make(map[*Chapter]*Content)
 	for content := range stage.Contents {
 		_ = content
@@ -80,7 +75,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct FrontCurveStack
 	// insertion point per field
-	clear(stage.FrontCurveStack_FrontCurves_reverseMap)
 	stage.FrontCurveStack_FrontCurves_reverseMap = make(map[*FrontCurve]*FrontCurveStack)
 	for frontcurvestack := range stage.FrontCurveStacks {
 		_ = frontcurvestack
@@ -88,7 +82,6 @@ func (stage *Stage) ComputeReverseMaps() {
 			stage.FrontCurveStack_FrontCurves_reverseMap[_frontcurve] = frontcurvestack
 		}
 	}
-	clear(stage.FrontCurveStack_SpiralCircles_reverseMap)
 	stage.FrontCurveStack_SpiralCircles_reverseMap = make(map[*SpiralCircle]*FrontCurveStack)
 	for frontcurvestack := range stage.FrontCurveStacks {
 		_ = frontcurvestack
@@ -111,7 +104,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct RhombusGrid
 	// insertion point per field
-	clear(stage.RhombusGrid_Rhombuses_reverseMap)
 	stage.RhombusGrid_Rhombuses_reverseMap = make(map[*Rhombus]*RhombusGrid)
 	for rhombusgrid := range stage.RhombusGrids {
 		_ = rhombusgrid
@@ -128,7 +120,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct SpiralBezierGrid
 	// insertion point per field
-	clear(stage.SpiralBezierGrid_SpiralBeziers_reverseMap)
 	stage.SpiralBezierGrid_SpiralBeziers_reverseMap = make(map[*SpiralBezier]*SpiralBezierGrid)
 	for spiralbeziergrid := range stage.SpiralBezierGrids {
 		_ = spiralbeziergrid
@@ -142,7 +133,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct SpiralCircleGrid
 	// insertion point per field
-	clear(stage.SpiralCircleGrid_SpiralCircles_reverseMap)
 	stage.SpiralCircleGrid_SpiralCircles_reverseMap = make(map[*SpiralCircle]*SpiralCircleGrid)
 	for spiralcirclegrid := range stage.SpiralCircleGrids {
 		_ = spiralcirclegrid
@@ -156,7 +146,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct SpiralLineGrid
 	// insertion point per field
-	clear(stage.SpiralLineGrid_SpiralLines_reverseMap)
 	stage.SpiralLineGrid_SpiralLines_reverseMap = make(map[*SpiralLine]*SpiralLineGrid)
 	for spirallinegrid := range stage.SpiralLineGrids {
 		_ = spirallinegrid
@@ -173,7 +162,6 @@ func (stage *Stage) ComputeReverseMaps() {
 
 	// Compute reverse map for named struct SpiralRhombusGrid
 	// insertion point per field
-	clear(stage.SpiralRhombusGrid_SpiralRhombuses_reverseMap)
 	stage.SpiralRhombusGrid_SpiralRhombuses_reverseMap = make(map[*SpiralRhombus]*SpiralRhombusGrid)
 	for spiralrhombusgrid := range stage.SpiralRhombusGrids {
 		_ = spiralrhombusgrid
@@ -185,4 +173,274 @@ func (stage *Stage) ComputeReverseMaps() {
 	// Compute reverse map for named struct VerticalAxis
 	// insertion point per field
 
+}
+
+func (stage *Stage) GetInstances() (res []GongstructIF) {
+
+	// insertion point per named struct
+	for instance := range stage.Axiss {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.AxisGrids {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Beziers {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.BezierGrids {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.BezierGridStacks {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Chapters {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Circles {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.CircleGrids {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Contents {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.ExportToMusicxmls {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FrontCurves {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.FrontCurveStacks {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.HorizontalAxiss {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Keys {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Parameters {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.Rhombuss {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.RhombusGrids {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.ShapeCategorys {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SpiralBeziers {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SpiralBezierGrids {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SpiralCircles {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SpiralCircleGrids {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SpiralLines {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SpiralLineGrids {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SpiralOrigins {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SpiralRhombuss {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.SpiralRhombusGrids {
+		res = append(res, instance)
+	}
+
+	for instance := range stage.VerticalAxiss {
+		res = append(res, instance)
+	}
+
+	return
+}
+
+// insertion point per named struct
+func (axis *Axis) GongCopy() GongstructIF {
+	newInstance := *axis
+	return &newInstance
+}
+
+func (axisgrid *AxisGrid) GongCopy() GongstructIF {
+	newInstance := *axisgrid
+	return &newInstance
+}
+
+func (bezier *Bezier) GongCopy() GongstructIF {
+	newInstance := *bezier
+	return &newInstance
+}
+
+func (beziergrid *BezierGrid) GongCopy() GongstructIF {
+	newInstance := *beziergrid
+	return &newInstance
+}
+
+func (beziergridstack *BezierGridStack) GongCopy() GongstructIF {
+	newInstance := *beziergridstack
+	return &newInstance
+}
+
+func (chapter *Chapter) GongCopy() GongstructIF {
+	newInstance := *chapter
+	return &newInstance
+}
+
+func (circle *Circle) GongCopy() GongstructIF {
+	newInstance := *circle
+	return &newInstance
+}
+
+func (circlegrid *CircleGrid) GongCopy() GongstructIF {
+	newInstance := *circlegrid
+	return &newInstance
+}
+
+func (content *Content) GongCopy() GongstructIF {
+	newInstance := *content
+	return &newInstance
+}
+
+func (exporttomusicxml *ExportToMusicxml) GongCopy() GongstructIF {
+	newInstance := *exporttomusicxml
+	return &newInstance
+}
+
+func (frontcurve *FrontCurve) GongCopy() GongstructIF {
+	newInstance := *frontcurve
+	return &newInstance
+}
+
+func (frontcurvestack *FrontCurveStack) GongCopy() GongstructIF {
+	newInstance := *frontcurvestack
+	return &newInstance
+}
+
+func (horizontalaxis *HorizontalAxis) GongCopy() GongstructIF {
+	newInstance := *horizontalaxis
+	return &newInstance
+}
+
+func (key *Key) GongCopy() GongstructIF {
+	newInstance := *key
+	return &newInstance
+}
+
+func (parameter *Parameter) GongCopy() GongstructIF {
+	newInstance := *parameter
+	return &newInstance
+}
+
+func (rhombus *Rhombus) GongCopy() GongstructIF {
+	newInstance := *rhombus
+	return &newInstance
+}
+
+func (rhombusgrid *RhombusGrid) GongCopy() GongstructIF {
+	newInstance := *rhombusgrid
+	return &newInstance
+}
+
+func (shapecategory *ShapeCategory) GongCopy() GongstructIF {
+	newInstance := *shapecategory
+	return &newInstance
+}
+
+func (spiralbezier *SpiralBezier) GongCopy() GongstructIF {
+	newInstance := *spiralbezier
+	return &newInstance
+}
+
+func (spiralbeziergrid *SpiralBezierGrid) GongCopy() GongstructIF {
+	newInstance := *spiralbeziergrid
+	return &newInstance
+}
+
+func (spiralcircle *SpiralCircle) GongCopy() GongstructIF {
+	newInstance := *spiralcircle
+	return &newInstance
+}
+
+func (spiralcirclegrid *SpiralCircleGrid) GongCopy() GongstructIF {
+	newInstance := *spiralcirclegrid
+	return &newInstance
+}
+
+func (spiralline *SpiralLine) GongCopy() GongstructIF {
+	newInstance := *spiralline
+	return &newInstance
+}
+
+func (spirallinegrid *SpiralLineGrid) GongCopy() GongstructIF {
+	newInstance := *spirallinegrid
+	return &newInstance
+}
+
+func (spiralorigin *SpiralOrigin) GongCopy() GongstructIF {
+	newInstance := *spiralorigin
+	return &newInstance
+}
+
+func (spiralrhombus *SpiralRhombus) GongCopy() GongstructIF {
+	newInstance := *spiralrhombus
+	return &newInstance
+}
+
+func (spiralrhombusgrid *SpiralRhombusGrid) GongCopy() GongstructIF {
+	newInstance := *spiralrhombusgrid
+	return &newInstance
+}
+
+func (verticalaxis *VerticalAxis) GongCopy() GongstructIF {
+	newInstance := *verticalaxis
+	return &newInstance
+}
+
+// ComputeReference will creates a deep copy of each of the staged elements
+func (stage *Stage) ComputeReference() {
+	stage.reference = make(map[GongstructIF]GongstructIF)
+	for _, instance := range stage.GetInstances() {
+		stage.reference[instance] = instance.GongCopy()
+	}
+	stage.new = make(map[GongstructIF]struct{})
+	stage.modified = make(map[GongstructIF]struct{})
+	stage.deleted = make(map[GongstructIF]struct{})
 }

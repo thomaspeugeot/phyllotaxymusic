@@ -69,6 +69,7 @@ type __void any
 
 // needed for creating set of instances in the stage
 var __member __void
+var _ = __member
 
 // GongStructInterface is the interface met by GongStructs
 // It allows runtime reflexion of instances (without the hassle of the "reflect" package)
@@ -84,15 +85,10 @@ type GongStructInterface interface {
 // Stage enables storage of staged instances
 // swagger:ignore
 type Stage struct {
-	name               string
-	commitId           uint // commitId is updated at each commit
-	commitTimeStamp    time.Time
-	contentWhenParsed  string
-	commitIdWhenParsed uint
-	generatesDiff      bool
+	name string
 
 	// insertion point for definition of arrays registering instances
-	Checkboxs           map[*Checkbox]any
+	Checkboxs           map[*Checkbox]struct{}
 	Checkboxs_mapString map[string]*Checkbox
 
 	// insertion point for slice of pointers maps
@@ -101,7 +97,7 @@ type Stage struct {
 	OnAfterCheckboxDeleteCallback OnAfterDeleteInterface[Checkbox]
 	OnAfterCheckboxReadCallback   OnAfterReadInterface[Checkbox]
 
-	Groups           map[*Group]any
+	Groups           map[*Group]struct{}
 	Groups_mapString map[string]*Group
 
 	// insertion point for slice of pointers maps
@@ -114,7 +110,7 @@ type Stage struct {
 	OnAfterGroupDeleteCallback OnAfterDeleteInterface[Group]
 	OnAfterGroupReadCallback   OnAfterReadInterface[Group]
 
-	Layouts           map[*Layout]any
+	Layouts           map[*Layout]struct{}
 	Layouts_mapString map[string]*Layout
 
 	// insertion point for slice of pointers maps
@@ -125,7 +121,7 @@ type Stage struct {
 	OnAfterLayoutDeleteCallback OnAfterDeleteInterface[Layout]
 	OnAfterLayoutReadCallback   OnAfterReadInterface[Layout]
 
-	Sliders           map[*Slider]any
+	Sliders           map[*Slider]struct{}
 	Sliders_mapString map[string]*Slider
 
 	// insertion point for slice of pointers maps
@@ -183,18 +179,6 @@ type Stage struct {
 	deleted   map[GongstructIF]struct{}
 }
 
-func (stage *Stage) GetCommitId() uint {
-	return stage.commitId
-}
-
-func (stage *Stage) GetCommitTS() time.Time {
-	return stage.commitTimeStamp
-}
-
-func (stage *Stage) SetGeneratesDiff(generatesDiff bool) {
-	stage.generatesDiff = generatesDiff
-}
-
 // GetNamedStructs implements models.ProbebStage.
 func (stage *Stage) GetNamedStructsNames() (res []string) {
 
@@ -221,7 +205,7 @@ func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
 	return stage.deleted
 }
 
-func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
+func GetNamedStructInstances[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []string) {
 
 	orderedSet := []T{}
 	for instance := range set {
@@ -310,7 +294,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 	return
 }
 
-func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []T) {
+func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []T) {
 
 	orderedSet := []T{}
 	for instance := range set {
@@ -428,16 +412,16 @@ type BackRepoInterface interface {
 func NewStage(name string) (stage *Stage) {
 
 	stage = &Stage{ // insertion point for array initiatialisation
-		Checkboxs:           make(map[*Checkbox]any),
+		Checkboxs:           make(map[*Checkbox]struct{}),
 		Checkboxs_mapString: make(map[string]*Checkbox),
 
-		Groups:           make(map[*Group]any),
+		Groups:           make(map[*Group]struct{}),
 		Groups_mapString: make(map[string]*Group),
 
-		Layouts:           make(map[*Layout]any),
+		Layouts:           make(map[*Layout]struct{}),
 		Layouts_mapString: make(map[string]*Layout),
 
-		Sliders:           make(map[*Slider]any),
+		Sliders:           make(map[*Slider]struct{}),
 		Sliders_mapString: make(map[string]*Slider),
 
 		// end of insertion point
@@ -524,8 +508,6 @@ func (stage *Stage) CommitWithSuspendedCallbacks() {
 
 func (stage *Stage) Commit() {
 	stage.ComputeReverseMaps()
-	stage.commitId++
-	stage.commitTimeStamp = time.Now()
 
 	if stage.OnInitCommitCallback != nil {
 		stage.OnInitCommitCallback.BeforeCommit(stage)
@@ -591,7 +573,7 @@ func (stage *Stage) RestoreXL(dirPath string) {
 func (checkbox *Checkbox) Stage(stage *Stage) *Checkbox {
 
 	if _, ok := stage.Checkboxs[checkbox]; !ok {
-		stage.Checkboxs[checkbox] = __member
+		stage.Checkboxs[checkbox] = struct{}{}
 		stage.CheckboxMap_Staged_Order[checkbox] = stage.CheckboxOrder
 		stage.CheckboxOrder++
 		stage.new[checkbox] = struct{}{}
@@ -658,11 +640,16 @@ func (checkbox *Checkbox) GetName() (res string) {
 	return checkbox.Name
 }
 
+// for satisfaction of GongStruct interface
+func (checkbox *Checkbox) SetName(name string) (){
+	checkbox.Name = name
+}
+
 // Stage puts group to the model stage
 func (group *Group) Stage(stage *Stage) *Group {
 
 	if _, ok := stage.Groups[group]; !ok {
-		stage.Groups[group] = __member
+		stage.Groups[group] = struct{}{}
 		stage.GroupMap_Staged_Order[group] = stage.GroupOrder
 		stage.GroupOrder++
 		stage.new[group] = struct{}{}
@@ -729,11 +716,16 @@ func (group *Group) GetName() (res string) {
 	return group.Name
 }
 
+// for satisfaction of GongStruct interface
+func (group *Group) SetName(name string) (){
+	group.Name = name
+}
+
 // Stage puts layout to the model stage
 func (layout *Layout) Stage(stage *Stage) *Layout {
 
 	if _, ok := stage.Layouts[layout]; !ok {
-		stage.Layouts[layout] = __member
+		stage.Layouts[layout] = struct{}{}
 		stage.LayoutMap_Staged_Order[layout] = stage.LayoutOrder
 		stage.LayoutOrder++
 		stage.new[layout] = struct{}{}
@@ -800,11 +792,16 @@ func (layout *Layout) GetName() (res string) {
 	return layout.Name
 }
 
+// for satisfaction of GongStruct interface
+func (layout *Layout) SetName(name string) (){
+	layout.Name = name
+}
+
 // Stage puts slider to the model stage
 func (slider *Slider) Stage(stage *Stage) *Slider {
 
 	if _, ok := stage.Sliders[slider]; !ok {
-		stage.Sliders[slider] = __member
+		stage.Sliders[slider] = struct{}{}
 		stage.SliderMap_Staged_Order[slider] = stage.SliderOrder
 		stage.SliderOrder++
 		stage.new[slider] = struct{}{}
@@ -871,6 +868,11 @@ func (slider *Slider) GetName() (res string) {
 	return slider.Name
 }
 
+// for satisfaction of GongStruct interface
+func (slider *Slider) SetName(name string) (){
+	slider.Name = name
+}
+
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMCheckbox(Checkbox *Checkbox)
@@ -887,22 +889,22 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 }
 
 func (stage *Stage) Reset() { // insertion point for array reset
-	stage.Checkboxs = make(map[*Checkbox]any)
+	stage.Checkboxs = make(map[*Checkbox]struct{})
 	stage.Checkboxs_mapString = make(map[string]*Checkbox)
 	stage.CheckboxMap_Staged_Order = make(map[*Checkbox]uint)
 	stage.CheckboxOrder = 0
 
-	stage.Groups = make(map[*Group]any)
+	stage.Groups = make(map[*Group]struct{})
 	stage.Groups_mapString = make(map[string]*Group)
 	stage.GroupMap_Staged_Order = make(map[*Group]uint)
 	stage.GroupOrder = 0
 
-	stage.Layouts = make(map[*Layout]any)
+	stage.Layouts = make(map[*Layout]struct{})
 	stage.Layouts_mapString = make(map[string]*Layout)
 	stage.LayoutMap_Staged_Order = make(map[*Layout]uint)
 	stage.LayoutOrder = 0
 
-	stage.Sliders = make(map[*Slider]any)
+	stage.Sliders = make(map[*Slider]struct{})
 	stage.Sliders_mapString = make(map[string]*Slider)
 	stage.SliderMap_Staged_Order = make(map[*Slider]uint)
 	stage.SliderOrder = 0
@@ -961,6 +963,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type GongstructIF interface {
 	GetName() string
+	SetName(string)
 	CommitVoid(*Stage)
 	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
@@ -982,7 +985,7 @@ func CompareGongstructByName[T PointerToGongstruct](a, b T) int {
 	return cmp.Compare(a.GetName(), b.GetName())
 }
 
-func SortGongstructSetByName[T PointerToGongstruct](set map[T]any) (sortedSlice []T) {
+func SortGongstructSetByName[T PointerToGongstruct](set map[T]struct{}) (sortedSlice []T) {
 
 	for key := range set {
 		sortedSlice = append(sortedSlice, key)
@@ -1028,21 +1031,21 @@ func GongGetSet[Type GongstructSet](stage *Stage) *Type {
 	}
 }
 
-// GongGetMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
-func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
+// GongGetMap returns the map of staged Gonstruct instance by their name
+// Can be usefull if names are unique
+func GongGetMap[Type GongstructIF](stage *Stage) map[string]Type {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[string]*Checkbox:
-		return any(&stage.Checkboxs_mapString).(*Type)
-	case map[string]*Group:
-		return any(&stage.Groups_mapString).(*Type)
-	case map[string]*Layout:
-		return any(&stage.Layouts_mapString).(*Type)
-	case map[string]*Slider:
-		return any(&stage.Sliders_mapString).(*Type)
+	case *Checkbox:
+		return any(stage.Checkboxs_mapString).(map[string]Type)
+	case *Group:
+		return any(stage.Groups_mapString).(map[string]Type)
+	case *Layout:
+		return any(stage.Layouts_mapString).(map[string]Type)
+	case *Slider:
+		return any(stage.Sliders_mapString).(map[string]Type)
 	default:
 		return nil
 	}
@@ -1050,19 +1053,19 @@ func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
 
 // GetGongstructInstancesSet returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
+func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]struct{} {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case Checkbox:
-		return any(&stage.Checkboxs).(*map[*Type]any)
+		return any(&stage.Checkboxs).(*map[*Type]struct{})
 	case Group:
-		return any(&stage.Groups).(*map[*Type]any)
+		return any(&stage.Groups).(*map[*Type]struct{})
 	case Layout:
-		return any(&stage.Layouts).(*map[*Type]any)
+		return any(&stage.Layouts).(*map[*Type]struct{})
 	case Slider:
-		return any(&stage.Sliders).(*map[*Type]any)
+		return any(&stage.Sliders).(*map[*Type]struct{})
 	default:
 		return nil
 	}
@@ -1070,19 +1073,19 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
 
 // GetGongstructInstancesSetFromPointerType returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *Stage) *map[Type]any {
+func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *Stage) *map[Type]struct{} {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case *Checkbox:
-		return any(&stage.Checkboxs).(*map[Type]any)
+		return any(&stage.Checkboxs).(*map[Type]struct{})
 	case *Group:
-		return any(&stage.Groups).(*map[Type]any)
+		return any(&stage.Groups).(*map[Type]struct{})
 	case *Layout:
-		return any(&stage.Layouts).(*map[Type]any)
+		return any(&stage.Layouts).(*map[Type]struct{})
 	case *Slider:
-		return any(&stage.Sliders).(*map[Type]any)
+		return any(&stage.Sliders).(*map[Type]struct{})
 	default:
 		return nil
 	}
@@ -1731,4 +1734,28 @@ func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
 	return
 }
 
+func (stage *Stage) ResetMapStrings() {
+
+	// insertion point for generic get gongstruct name
+	stage.Checkboxs_mapString = make(map[string]*Checkbox)
+	for checkbox := range stage.Checkboxs {
+		stage.Checkboxs_mapString[checkbox.Name] = checkbox
+	}
+
+	stage.Groups_mapString = make(map[string]*Group)
+	for group := range stage.Groups {
+		stage.Groups_mapString[group.Name] = group
+	}
+
+	stage.Layouts_mapString = make(map[string]*Layout)
+	for layout := range stage.Layouts {
+		stage.Layouts_mapString[layout.Name] = layout
+	}
+
+	stage.Sliders_mapString = make(map[string]*Slider)
+	for slider := range stage.Sliders {
+		stage.Sliders_mapString[slider.Name] = slider
+	}
+
+}
 // Last line of the template

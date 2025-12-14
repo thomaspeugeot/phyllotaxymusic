@@ -1,6 +1,100 @@
 // generated code - do not edit
 package models
 
+func IsStagedPointerToGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) (ok bool) {
+
+	switch target := any(instance).(type) {
+	// insertion point for stage
+	case *Axis:
+		ok = stage.IsStagedAxis(target)
+
+	case *AxisGrid:
+		ok = stage.IsStagedAxisGrid(target)
+
+	case *Bezier:
+		ok = stage.IsStagedBezier(target)
+
+	case *BezierGrid:
+		ok = stage.IsStagedBezierGrid(target)
+
+	case *BezierGridStack:
+		ok = stage.IsStagedBezierGridStack(target)
+
+	case *Chapter:
+		ok = stage.IsStagedChapter(target)
+
+	case *Circle:
+		ok = stage.IsStagedCircle(target)
+
+	case *CircleGrid:
+		ok = stage.IsStagedCircleGrid(target)
+
+	case *Content:
+		ok = stage.IsStagedContent(target)
+
+	case *ExportToMusicxml:
+		ok = stage.IsStagedExportToMusicxml(target)
+
+	case *FrontCurve:
+		ok = stage.IsStagedFrontCurve(target)
+
+	case *FrontCurveStack:
+		ok = stage.IsStagedFrontCurveStack(target)
+
+	case *HorizontalAxis:
+		ok = stage.IsStagedHorizontalAxis(target)
+
+	case *Key:
+		ok = stage.IsStagedKey(target)
+
+	case *Parameter:
+		ok = stage.IsStagedParameter(target)
+
+	case *Rhombus:
+		ok = stage.IsStagedRhombus(target)
+
+	case *RhombusGrid:
+		ok = stage.IsStagedRhombusGrid(target)
+
+	case *ShapeCategory:
+		ok = stage.IsStagedShapeCategory(target)
+
+	case *SpiralBezier:
+		ok = stage.IsStagedSpiralBezier(target)
+
+	case *SpiralBezierGrid:
+		ok = stage.IsStagedSpiralBezierGrid(target)
+
+	case *SpiralCircle:
+		ok = stage.IsStagedSpiralCircle(target)
+
+	case *SpiralCircleGrid:
+		ok = stage.IsStagedSpiralCircleGrid(target)
+
+	case *SpiralLine:
+		ok = stage.IsStagedSpiralLine(target)
+
+	case *SpiralLineGrid:
+		ok = stage.IsStagedSpiralLineGrid(target)
+
+	case *SpiralOrigin:
+		ok = stage.IsStagedSpiralOrigin(target)
+
+	case *SpiralRhombus:
+		ok = stage.IsStagedSpiralRhombus(target)
+
+	case *SpiralRhombusGrid:
+		ok = stage.IsStagedSpiralRhombusGrid(target)
+
+	case *VerticalAxis:
+		ok = stage.IsStagedVerticalAxis(target)
+
+	default:
+		_ = target
+	}
+	return
+}
+
 func IsStaged[Type Gongstruct](stage *Stage, instance *Type) (ok bool) {
 
 	switch target := any(instance).(type) {

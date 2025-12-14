@@ -69,6 +69,7 @@ type __void any
 
 // needed for creating set of instances in the stage
 var __member __void
+var _ = __member
 
 // GongStructInterface is the interface met by GongStructs
 // It allows runtime reflexion of instances (without the hassle of the "reflect" package)
@@ -84,15 +85,10 @@ type GongStructInterface interface {
 // Stage enables storage of staged instances
 // swagger:ignore
 type Stage struct {
-	name               string
-	commitId           uint // commitId is updated at each commit
-	commitTimeStamp    time.Time
-	contentWhenParsed  string
-	commitIdWhenParsed uint
-	generatesDiff      bool
+	name string
 
 	// insertion point for definition of arrays registering instances
-	Buttons           map[*Button]any
+	Buttons           map[*Button]struct{}
 	Buttons_mapString map[string]*Button
 
 	// insertion point for slice of pointers maps
@@ -101,7 +97,7 @@ type Stage struct {
 	OnAfterButtonDeleteCallback OnAfterDeleteInterface[Button]
 	OnAfterButtonReadCallback   OnAfterReadInterface[Button]
 
-	Nodes           map[*Node]any
+	Nodes           map[*Node]struct{}
 	Nodes_mapString map[string]*Node
 
 	// insertion point for slice of pointers maps
@@ -114,7 +110,7 @@ type Stage struct {
 	OnAfterNodeDeleteCallback OnAfterDeleteInterface[Node]
 	OnAfterNodeReadCallback   OnAfterReadInterface[Node]
 
-	SVGIcons           map[*SVGIcon]any
+	SVGIcons           map[*SVGIcon]struct{}
 	SVGIcons_mapString map[string]*SVGIcon
 
 	// insertion point for slice of pointers maps
@@ -123,7 +119,7 @@ type Stage struct {
 	OnAfterSVGIconDeleteCallback OnAfterDeleteInterface[SVGIcon]
 	OnAfterSVGIconReadCallback   OnAfterReadInterface[SVGIcon]
 
-	Trees           map[*Tree]any
+	Trees           map[*Tree]struct{}
 	Trees_mapString map[string]*Tree
 
 	// insertion point for slice of pointers maps
@@ -183,18 +179,6 @@ type Stage struct {
 	deleted   map[GongstructIF]struct{}
 }
 
-func (stage *Stage) GetCommitId() uint {
-	return stage.commitId
-}
-
-func (stage *Stage) GetCommitTS() time.Time {
-	return stage.commitTimeStamp
-}
-
-func (stage *Stage) SetGeneratesDiff(generatesDiff bool) {
-	stage.generatesDiff = generatesDiff
-}
-
 // GetNamedStructs implements models.ProbebStage.
 func (stage *Stage) GetNamedStructsNames() (res []string) {
 
@@ -221,7 +205,7 @@ func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
 	return stage.deleted
 }
 
-func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
+func GetNamedStructInstances[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []string) {
 
 	orderedSet := []T{}
 	for instance := range set {
@@ -310,7 +294,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 	return
 }
 
-func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []T) {
+func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []T) {
 
 	orderedSet := []T{}
 	for instance := range set {
@@ -428,16 +412,16 @@ type BackRepoInterface interface {
 func NewStage(name string) (stage *Stage) {
 
 	stage = &Stage{ // insertion point for array initiatialisation
-		Buttons:           make(map[*Button]any),
+		Buttons:           make(map[*Button]struct{}),
 		Buttons_mapString: make(map[string]*Button),
 
-		Nodes:           make(map[*Node]any),
+		Nodes:           make(map[*Node]struct{}),
 		Nodes_mapString: make(map[string]*Node),
 
-		SVGIcons:           make(map[*SVGIcon]any),
+		SVGIcons:           make(map[*SVGIcon]struct{}),
 		SVGIcons_mapString: make(map[string]*SVGIcon),
 
-		Trees:           make(map[*Tree]any),
+		Trees:           make(map[*Tree]struct{}),
 		Trees_mapString: make(map[string]*Tree),
 
 		// end of insertion point
@@ -524,8 +508,6 @@ func (stage *Stage) CommitWithSuspendedCallbacks() {
 
 func (stage *Stage) Commit() {
 	stage.ComputeReverseMaps()
-	stage.commitId++
-	stage.commitTimeStamp = time.Now()
 
 	if stage.OnInitCommitCallback != nil {
 		stage.OnInitCommitCallback.BeforeCommit(stage)
@@ -591,7 +573,7 @@ func (stage *Stage) RestoreXL(dirPath string) {
 func (button *Button) Stage(stage *Stage) *Button {
 
 	if _, ok := stage.Buttons[button]; !ok {
-		stage.Buttons[button] = __member
+		stage.Buttons[button] = struct{}{}
 		stage.ButtonMap_Staged_Order[button] = stage.ButtonOrder
 		stage.ButtonOrder++
 		stage.new[button] = struct{}{}
@@ -658,11 +640,16 @@ func (button *Button) GetName() (res string) {
 	return button.Name
 }
 
+// for satisfaction of GongStruct interface
+func (button *Button) SetName(name string) (){
+	button.Name = name
+}
+
 // Stage puts node to the model stage
 func (node *Node) Stage(stage *Stage) *Node {
 
 	if _, ok := stage.Nodes[node]; !ok {
-		stage.Nodes[node] = __member
+		stage.Nodes[node] = struct{}{}
 		stage.NodeMap_Staged_Order[node] = stage.NodeOrder
 		stage.NodeOrder++
 		stage.new[node] = struct{}{}
@@ -729,11 +716,16 @@ func (node *Node) GetName() (res string) {
 	return node.Name
 }
 
+// for satisfaction of GongStruct interface
+func (node *Node) SetName(name string) (){
+	node.Name = name
+}
+
 // Stage puts svgicon to the model stage
 func (svgicon *SVGIcon) Stage(stage *Stage) *SVGIcon {
 
 	if _, ok := stage.SVGIcons[svgicon]; !ok {
-		stage.SVGIcons[svgicon] = __member
+		stage.SVGIcons[svgicon] = struct{}{}
 		stage.SVGIconMap_Staged_Order[svgicon] = stage.SVGIconOrder
 		stage.SVGIconOrder++
 		stage.new[svgicon] = struct{}{}
@@ -800,11 +792,16 @@ func (svgicon *SVGIcon) GetName() (res string) {
 	return svgicon.Name
 }
 
+// for satisfaction of GongStruct interface
+func (svgicon *SVGIcon) SetName(name string) (){
+	svgicon.Name = name
+}
+
 // Stage puts tree to the model stage
 func (tree *Tree) Stage(stage *Stage) *Tree {
 
 	if _, ok := stage.Trees[tree]; !ok {
-		stage.Trees[tree] = __member
+		stage.Trees[tree] = struct{}{}
 		stage.TreeMap_Staged_Order[tree] = stage.TreeOrder
 		stage.TreeOrder++
 		stage.new[tree] = struct{}{}
@@ -871,6 +868,11 @@ func (tree *Tree) GetName() (res string) {
 	return tree.Name
 }
 
+// for satisfaction of GongStruct interface
+func (tree *Tree) SetName(name string) (){
+	tree.Name = name
+}
+
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMButton(Button *Button)
@@ -887,22 +889,22 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 }
 
 func (stage *Stage) Reset() { // insertion point for array reset
-	stage.Buttons = make(map[*Button]any)
+	stage.Buttons = make(map[*Button]struct{})
 	stage.Buttons_mapString = make(map[string]*Button)
 	stage.ButtonMap_Staged_Order = make(map[*Button]uint)
 	stage.ButtonOrder = 0
 
-	stage.Nodes = make(map[*Node]any)
+	stage.Nodes = make(map[*Node]struct{})
 	stage.Nodes_mapString = make(map[string]*Node)
 	stage.NodeMap_Staged_Order = make(map[*Node]uint)
 	stage.NodeOrder = 0
 
-	stage.SVGIcons = make(map[*SVGIcon]any)
+	stage.SVGIcons = make(map[*SVGIcon]struct{})
 	stage.SVGIcons_mapString = make(map[string]*SVGIcon)
 	stage.SVGIconMap_Staged_Order = make(map[*SVGIcon]uint)
 	stage.SVGIconOrder = 0
 
-	stage.Trees = make(map[*Tree]any)
+	stage.Trees = make(map[*Tree]struct{})
 	stage.Trees_mapString = make(map[string]*Tree)
 	stage.TreeMap_Staged_Order = make(map[*Tree]uint)
 	stage.TreeOrder = 0
@@ -961,6 +963,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type GongstructIF interface {
 	GetName() string
+	SetName(string)
 	CommitVoid(*Stage)
 	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
@@ -982,7 +985,7 @@ func CompareGongstructByName[T PointerToGongstruct](a, b T) int {
 	return cmp.Compare(a.GetName(), b.GetName())
 }
 
-func SortGongstructSetByName[T PointerToGongstruct](set map[T]any) (sortedSlice []T) {
+func SortGongstructSetByName[T PointerToGongstruct](set map[T]struct{}) (sortedSlice []T) {
 
 	for key := range set {
 		sortedSlice = append(sortedSlice, key)
@@ -1028,21 +1031,21 @@ func GongGetSet[Type GongstructSet](stage *Stage) *Type {
 	}
 }
 
-// GongGetMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
-func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
+// GongGetMap returns the map of staged Gonstruct instance by their name
+// Can be usefull if names are unique
+func GongGetMap[Type GongstructIF](stage *Stage) map[string]Type {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[string]*Button:
-		return any(&stage.Buttons_mapString).(*Type)
-	case map[string]*Node:
-		return any(&stage.Nodes_mapString).(*Type)
-	case map[string]*SVGIcon:
-		return any(&stage.SVGIcons_mapString).(*Type)
-	case map[string]*Tree:
-		return any(&stage.Trees_mapString).(*Type)
+	case *Button:
+		return any(stage.Buttons_mapString).(map[string]Type)
+	case *Node:
+		return any(stage.Nodes_mapString).(map[string]Type)
+	case *SVGIcon:
+		return any(stage.SVGIcons_mapString).(map[string]Type)
+	case *Tree:
+		return any(stage.Trees_mapString).(map[string]Type)
 	default:
 		return nil
 	}
@@ -1050,19 +1053,19 @@ func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
 
 // GetGongstructInstancesSet returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
+func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]struct{} {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case Button:
-		return any(&stage.Buttons).(*map[*Type]any)
+		return any(&stage.Buttons).(*map[*Type]struct{})
 	case Node:
-		return any(&stage.Nodes).(*map[*Type]any)
+		return any(&stage.Nodes).(*map[*Type]struct{})
 	case SVGIcon:
-		return any(&stage.SVGIcons).(*map[*Type]any)
+		return any(&stage.SVGIcons).(*map[*Type]struct{})
 	case Tree:
-		return any(&stage.Trees).(*map[*Type]any)
+		return any(&stage.Trees).(*map[*Type]struct{})
 	default:
 		return nil
 	}
@@ -1070,19 +1073,19 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
 
 // GetGongstructInstancesSetFromPointerType returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *Stage) *map[Type]any {
+func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *Stage) *map[Type]struct{} {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case *Button:
-		return any(&stage.Buttons).(*map[Type]any)
+		return any(&stage.Buttons).(*map[Type]struct{})
 	case *Node:
-		return any(&stage.Nodes).(*map[Type]any)
+		return any(&stage.Nodes).(*map[Type]struct{})
 	case *SVGIcon:
-		return any(&stage.SVGIcons).(*map[Type]any)
+		return any(&stage.SVGIcons).(*map[Type]struct{})
 	case *Tree:
-		return any(&stage.Trees).(*map[Type]any)
+		return any(&stage.Trees).(*map[Type]struct{})
 	default:
 		return nil
 	}
@@ -1944,4 +1947,28 @@ func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
 	return
 }
 
+func (stage *Stage) ResetMapStrings() {
+
+	// insertion point for generic get gongstruct name
+	stage.Buttons_mapString = make(map[string]*Button)
+	for button := range stage.Buttons {
+		stage.Buttons_mapString[button.Name] = button
+	}
+
+	stage.Nodes_mapString = make(map[string]*Node)
+	for node := range stage.Nodes {
+		stage.Nodes_mapString[node.Name] = node
+	}
+
+	stage.SVGIcons_mapString = make(map[string]*SVGIcon)
+	for svgicon := range stage.SVGIcons {
+		stage.SVGIcons_mapString[svgicon.Name] = svgicon
+	}
+
+	stage.Trees_mapString = make(map[string]*Tree)
+	for tree := range stage.Trees {
+		stage.Trees_mapString[tree.Name] = tree
+	}
+
+}
 // Last line of the template

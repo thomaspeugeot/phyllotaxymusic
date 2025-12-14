@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"sort"
 	"strings"
-	"time"
 
 	gongtree_buttons "github.com/fullstack-lang/gong/lib/tree/go/buttons"
 	tree "github.com/fullstack-lang/gong/lib/tree/go/models"
@@ -36,10 +35,9 @@ func updateAndCommitTree(
 	// create tree
 	sidebar := &tree.Tree{Name: "Sidebar"}
 
-	nodeRefreshButton := &tree.Node{Name: fmt.Sprintf("Stage %s, # %d, %s",
-		probe.stageOfInterest.GetName(),
-		probe.stageOfInterest.GetCommitId(),
-		probe.stageOfInterest.GetCommitTS().Local().Format(time.Kitchen))}
+	nodeRefreshButton := &tree.Node{Name: fmt.Sprintf("Stage %s",
+		probe.stageOfInterest.GetName())}
+
 	sidebar.RootNodes = append(sidebar.RootNodes, nodeRefreshButton)
 	refreshButton := &tree.Button{
 		Name:            "RefreshButton" + " " + string(gongtree_buttons.BUTTON_refresh),
@@ -53,7 +51,7 @@ func updateAndCommitTree(
 	refreshButton.Impl = NewButtonImplRefresh(probe)
 
 	// collect all gong struct to construe the true
-	setOfGongStructs := *gong_models.GetGongstructInstancesSet[gong_models.GongStruct](probe.gongStage)
+	setOfGongStructs := *gong_models.GetGongstructInstancesSetFromPointerType[*gong_models.GongStruct](probe.gongStage)
 
 	sliceOfGongStructsSorted := make([]*gong_models.GongStruct, len(setOfGongStructs))
 	i := 0
@@ -84,7 +82,7 @@ func updateAndCommitTree(
 		// insertion point
 		case "Axis":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Axis](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Axis](probe.stageOfInterest)
 			for _axis := range set {
 				nodeInstance := &tree.Node{Name: _axis.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -94,7 +92,7 @@ func updateAndCommitTree(
 			}
 		case "AxisGrid":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.AxisGrid](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.AxisGrid](probe.stageOfInterest)
 			for _axisgrid := range set {
 				nodeInstance := &tree.Node{Name: _axisgrid.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -104,7 +102,7 @@ func updateAndCommitTree(
 			}
 		case "Bezier":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Bezier](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Bezier](probe.stageOfInterest)
 			for _bezier := range set {
 				nodeInstance := &tree.Node{Name: _bezier.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -114,7 +112,7 @@ func updateAndCommitTree(
 			}
 		case "BezierGrid":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.BezierGrid](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.BezierGrid](probe.stageOfInterest)
 			for _beziergrid := range set {
 				nodeInstance := &tree.Node{Name: _beziergrid.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -124,7 +122,7 @@ func updateAndCommitTree(
 			}
 		case "BezierGridStack":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.BezierGridStack](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.BezierGridStack](probe.stageOfInterest)
 			for _beziergridstack := range set {
 				nodeInstance := &tree.Node{Name: _beziergridstack.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -134,7 +132,7 @@ func updateAndCommitTree(
 			}
 		case "Chapter":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Chapter](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Chapter](probe.stageOfInterest)
 			for _chapter := range set {
 				nodeInstance := &tree.Node{Name: _chapter.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -144,7 +142,7 @@ func updateAndCommitTree(
 			}
 		case "Circle":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Circle](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Circle](probe.stageOfInterest)
 			for _circle := range set {
 				nodeInstance := &tree.Node{Name: _circle.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -154,7 +152,7 @@ func updateAndCommitTree(
 			}
 		case "CircleGrid":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.CircleGrid](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.CircleGrid](probe.stageOfInterest)
 			for _circlegrid := range set {
 				nodeInstance := &tree.Node{Name: _circlegrid.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -164,7 +162,7 @@ func updateAndCommitTree(
 			}
 		case "Content":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Content](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Content](probe.stageOfInterest)
 			for _content := range set {
 				nodeInstance := &tree.Node{Name: _content.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -174,7 +172,7 @@ func updateAndCommitTree(
 			}
 		case "ExportToMusicxml":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.ExportToMusicxml](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.ExportToMusicxml](probe.stageOfInterest)
 			for _exporttomusicxml := range set {
 				nodeInstance := &tree.Node{Name: _exporttomusicxml.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -184,7 +182,7 @@ func updateAndCommitTree(
 			}
 		case "FrontCurve":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.FrontCurve](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.FrontCurve](probe.stageOfInterest)
 			for _frontcurve := range set {
 				nodeInstance := &tree.Node{Name: _frontcurve.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -194,7 +192,7 @@ func updateAndCommitTree(
 			}
 		case "FrontCurveStack":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.FrontCurveStack](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.FrontCurveStack](probe.stageOfInterest)
 			for _frontcurvestack := range set {
 				nodeInstance := &tree.Node{Name: _frontcurvestack.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -204,7 +202,7 @@ func updateAndCommitTree(
 			}
 		case "HorizontalAxis":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.HorizontalAxis](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.HorizontalAxis](probe.stageOfInterest)
 			for _horizontalaxis := range set {
 				nodeInstance := &tree.Node{Name: _horizontalaxis.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -214,7 +212,7 @@ func updateAndCommitTree(
 			}
 		case "Key":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Key](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Key](probe.stageOfInterest)
 			for _key := range set {
 				nodeInstance := &tree.Node{Name: _key.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -224,7 +222,7 @@ func updateAndCommitTree(
 			}
 		case "Parameter":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Parameter](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Parameter](probe.stageOfInterest)
 			for _parameter := range set {
 				nodeInstance := &tree.Node{Name: _parameter.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -234,7 +232,7 @@ func updateAndCommitTree(
 			}
 		case "Rhombus":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.Rhombus](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.Rhombus](probe.stageOfInterest)
 			for _rhombus := range set {
 				nodeInstance := &tree.Node{Name: _rhombus.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -244,7 +242,7 @@ func updateAndCommitTree(
 			}
 		case "RhombusGrid":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.RhombusGrid](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.RhombusGrid](probe.stageOfInterest)
 			for _rhombusgrid := range set {
 				nodeInstance := &tree.Node{Name: _rhombusgrid.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -254,7 +252,7 @@ func updateAndCommitTree(
 			}
 		case "ShapeCategory":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.ShapeCategory](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.ShapeCategory](probe.stageOfInterest)
 			for _shapecategory := range set {
 				nodeInstance := &tree.Node{Name: _shapecategory.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -264,7 +262,7 @@ func updateAndCommitTree(
 			}
 		case "SpiralBezier":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.SpiralBezier](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralBezier](probe.stageOfInterest)
 			for _spiralbezier := range set {
 				nodeInstance := &tree.Node{Name: _spiralbezier.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -274,7 +272,7 @@ func updateAndCommitTree(
 			}
 		case "SpiralBezierGrid":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.SpiralBezierGrid](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralBezierGrid](probe.stageOfInterest)
 			for _spiralbeziergrid := range set {
 				nodeInstance := &tree.Node{Name: _spiralbeziergrid.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -284,7 +282,7 @@ func updateAndCommitTree(
 			}
 		case "SpiralCircle":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.SpiralCircle](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralCircle](probe.stageOfInterest)
 			for _spiralcircle := range set {
 				nodeInstance := &tree.Node{Name: _spiralcircle.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -294,7 +292,7 @@ func updateAndCommitTree(
 			}
 		case "SpiralCircleGrid":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.SpiralCircleGrid](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralCircleGrid](probe.stageOfInterest)
 			for _spiralcirclegrid := range set {
 				nodeInstance := &tree.Node{Name: _spiralcirclegrid.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -304,7 +302,7 @@ func updateAndCommitTree(
 			}
 		case "SpiralLine":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.SpiralLine](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralLine](probe.stageOfInterest)
 			for _spiralline := range set {
 				nodeInstance := &tree.Node{Name: _spiralline.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -314,7 +312,7 @@ func updateAndCommitTree(
 			}
 		case "SpiralLineGrid":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.SpiralLineGrid](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralLineGrid](probe.stageOfInterest)
 			for _spirallinegrid := range set {
 				nodeInstance := &tree.Node{Name: _spirallinegrid.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -324,7 +322,7 @@ func updateAndCommitTree(
 			}
 		case "SpiralOrigin":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.SpiralOrigin](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralOrigin](probe.stageOfInterest)
 			for _spiralorigin := range set {
 				nodeInstance := &tree.Node{Name: _spiralorigin.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -334,7 +332,7 @@ func updateAndCommitTree(
 			}
 		case "SpiralRhombus":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.SpiralRhombus](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralRhombus](probe.stageOfInterest)
 			for _spiralrhombus := range set {
 				nodeInstance := &tree.Node{Name: _spiralrhombus.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -344,7 +342,7 @@ func updateAndCommitTree(
 			}
 		case "SpiralRhombusGrid":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.SpiralRhombusGrid](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralRhombusGrid](probe.stageOfInterest)
 			for _spiralrhombusgrid := range set {
 				nodeInstance := &tree.Node{Name: _spiralrhombusgrid.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -354,7 +352,7 @@ func updateAndCommitTree(
 			}
 		case "VerticalAxis":
 			nodeGongstruct.Name = name
-			set := *models.GetGongstructInstancesSet[models.VerticalAxis](probe.stageOfInterest)
+			set := *models.GetGongstructInstancesSetFromPointerType[*models.VerticalAxis](probe.stageOfInterest)
 			for _verticalaxis := range set {
 				nodeInstance := &tree.Node{Name: _verticalaxis.GetName()}
 				nodeInstance.IsNodeClickable = true
@@ -390,14 +388,14 @@ func updateAndCommitTree(
 	probe.treeStage.Commit()
 }
 
-type InstanceNodeCallback[T models.Gongstruct] struct {
-	Instance       *T
+type InstanceNodeCallback[T models.PointerToGongstruct] struct {
+	Instance       T
 	gongstructName string
 	probe          *Probe
 }
 
-func NewInstanceNodeCallback[T models.Gongstruct](
-	instance *T,
+func NewInstanceNodeCallback[T models.PointerToGongstruct](
+	instance T,
 	gongstructName string,
 	probe *Probe) (
 	instanceNodeCallback *InstanceNodeCallback[T],

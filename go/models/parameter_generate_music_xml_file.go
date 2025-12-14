@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/base64"
 	"encoding/xml"
 	"fmt"
 	"log"
@@ -78,7 +79,7 @@ func (parameter *Parameter) GenerateMusicXMLFile(generationMode GenerationMode) 
 		downloadStage := parameter.stager.loadStage
 		downloadStage.Reset()
 		fileToDownlad := (&load.FileToDownload{Name: filename}).Stage(downloadStage)
-		fileToDownlad.Content = string(output)
+		fileToDownlad.Base64EncodedContent = base64.StdEncoding.EncodeToString(output)
 		downloadStage.Commit()
 
 	} else {

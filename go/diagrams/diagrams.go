@@ -3,7 +3,7 @@ package diagrams
 import (
 	"time"
 
-	"github.com/fullstack-lang/gong/lib/doc2/go/models"
+	"github.com/fullstack-lang/gong/lib/doc/go/models"
 	// injection point for ident package import declaration
 	ref_models "github.com/thomaspeugeot/phyllotaxymusic/go/models"
 )
@@ -219,4 +219,3 @@ func _(stage *models.Stage) {
 	__GongStructShape__000000_Default_Axis.AttributeShapes = append(__GongStructShape__000000_Default_Axis.AttributeShapes, __AttributeShape__000001_Name)
 	__GongStructShape__000000_Default_Axis.AttributeShapes = append(__GongStructShape__000000_Default_Axis.AttributeShapes, __AttributeShape__000000_IsDisplayed)
 }
-

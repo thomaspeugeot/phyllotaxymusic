@@ -69,6 +69,7 @@ type __void any
 
 // needed for creating set of instances in the stage
 var __member __void
+var _ = __member
 
 // GongStructInterface is the interface met by GongStructs
 // It allows runtime reflexion of instances (without the hassle of the "reflect" package)
@@ -84,15 +85,10 @@ type GongStructInterface interface {
 // Stage enables storage of staged instances
 // swagger:ignore
 type Stage struct {
-	name               string
-	commitId           uint // commitId is updated at each commit
-	commitTimeStamp    time.Time
-	contentWhenParsed  string
-	commitIdWhenParsed uint
-	generatesDiff      bool
+	name string
 
 	// insertion point for definition of arrays registering instances
-	Chapters           map[*Chapter]any
+	Chapters           map[*Chapter]struct{}
 	Chapters_mapString map[string]*Chapter
 
 	// insertion point for slice of pointers maps
@@ -103,7 +99,7 @@ type Stage struct {
 	OnAfterChapterDeleteCallback OnAfterDeleteInterface[Chapter]
 	OnAfterChapterReadCallback   OnAfterReadInterface[Chapter]
 
-	Contents           map[*Content]any
+	Contents           map[*Content]struct{}
 	Contents_mapString map[string]*Content
 
 	// insertion point for slice of pointers maps
@@ -114,7 +110,7 @@ type Stage struct {
 	OnAfterContentDeleteCallback OnAfterDeleteInterface[Content]
 	OnAfterContentReadCallback   OnAfterReadInterface[Content]
 
-	Pages           map[*Page]any
+	Pages           map[*Page]struct{}
 	Pages_mapString map[string]*Page
 
 	// insertion point for slice of pointers maps
@@ -169,18 +165,6 @@ type Stage struct {
 	deleted   map[GongstructIF]struct{}
 }
 
-func (stage *Stage) GetCommitId() uint {
-	return stage.commitId
-}
-
-func (stage *Stage) GetCommitTS() time.Time {
-	return stage.commitTimeStamp
-}
-
-func (stage *Stage) SetGeneratesDiff(generatesDiff bool) {
-	stage.generatesDiff = generatesDiff
-}
-
 // GetNamedStructs implements models.ProbebStage.
 func (stage *Stage) GetNamedStructsNames() (res []string) {
 
@@ -207,7 +191,7 @@ func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
 	return stage.deleted
 }
 
-func GetNamedStructInstances[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []string) {
+func GetNamedStructInstances[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []string) {
 
 	orderedSet := []T{}
 	for instance := range set {
@@ -282,7 +266,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 	return
 }
 
-func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]any, order map[T]uint) (res []T) {
+func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []T) {
 
 	orderedSet := []T{}
 	for instance := range set {
@@ -396,13 +380,13 @@ type BackRepoInterface interface {
 func NewStage(name string) (stage *Stage) {
 
 	stage = &Stage{ // insertion point for array initiatialisation
-		Chapters:           make(map[*Chapter]any),
+		Chapters:           make(map[*Chapter]struct{}),
 		Chapters_mapString: make(map[string]*Chapter),
 
-		Contents:           make(map[*Content]any),
+		Contents:           make(map[*Content]struct{}),
 		Contents_mapString: make(map[string]*Content),
 
-		Pages:           make(map[*Page]any),
+		Pages:           make(map[*Page]struct{}),
 		Pages_mapString: make(map[string]*Page),
 
 		// end of insertion point
@@ -482,8 +466,6 @@ func (stage *Stage) CommitWithSuspendedCallbacks() {
 
 func (stage *Stage) Commit() {
 	stage.ComputeReverseMaps()
-	stage.commitId++
-	stage.commitTimeStamp = time.Now()
 
 	if stage.OnInitCommitCallback != nil {
 		stage.OnInitCommitCallback.BeforeCommit(stage)
@@ -548,7 +530,7 @@ func (stage *Stage) RestoreXL(dirPath string) {
 func (chapter *Chapter) Stage(stage *Stage) *Chapter {
 
 	if _, ok := stage.Chapters[chapter]; !ok {
-		stage.Chapters[chapter] = __member
+		stage.Chapters[chapter] = struct{}{}
 		stage.ChapterMap_Staged_Order[chapter] = stage.ChapterOrder
 		stage.ChapterOrder++
 		stage.new[chapter] = struct{}{}
@@ -615,11 +597,16 @@ func (chapter *Chapter) GetName() (res string) {
 	return chapter.Name
 }
 
+// for satisfaction of GongStruct interface
+func (chapter *Chapter) SetName(name string) (){
+	chapter.Name = name
+}
+
 // Stage puts content to the model stage
 func (content *Content) Stage(stage *Stage) *Content {
 
 	if _, ok := stage.Contents[content]; !ok {
-		stage.Contents[content] = __member
+		stage.Contents[content] = struct{}{}
 		stage.ContentMap_Staged_Order[content] = stage.ContentOrder
 		stage.ContentOrder++
 		stage.new[content] = struct{}{}
@@ -686,11 +673,16 @@ func (content *Content) GetName() (res string) {
 	return content.Name
 }
 
+// for satisfaction of GongStruct interface
+func (content *Content) SetName(name string) (){
+	content.Name = name
+}
+
 // Stage puts page to the model stage
 func (page *Page) Stage(stage *Stage) *Page {
 
 	if _, ok := stage.Pages[page]; !ok {
-		stage.Pages[page] = __member
+		stage.Pages[page] = struct{}{}
 		stage.PageMap_Staged_Order[page] = stage.PageOrder
 		stage.PageOrder++
 		stage.new[page] = struct{}{}
@@ -757,6 +749,11 @@ func (page *Page) GetName() (res string) {
 	return page.Name
 }
 
+// for satisfaction of GongStruct interface
+func (page *Page) SetName(name string) (){
+	page.Name = name
+}
+
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
 	CreateORMChapter(Chapter *Chapter)
@@ -771,17 +768,17 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 }
 
 func (stage *Stage) Reset() { // insertion point for array reset
-	stage.Chapters = make(map[*Chapter]any)
+	stage.Chapters = make(map[*Chapter]struct{})
 	stage.Chapters_mapString = make(map[string]*Chapter)
 	stage.ChapterMap_Staged_Order = make(map[*Chapter]uint)
 	stage.ChapterOrder = 0
 
-	stage.Contents = make(map[*Content]any)
+	stage.Contents = make(map[*Content]struct{})
 	stage.Contents_mapString = make(map[string]*Content)
 	stage.ContentMap_Staged_Order = make(map[*Content]uint)
 	stage.ContentOrder = 0
 
-	stage.Pages = make(map[*Page]any)
+	stage.Pages = make(map[*Page]struct{})
 	stage.Pages_mapString = make(map[string]*Page)
 	stage.PageMap_Staged_Order = make(map[*Page]uint)
 	stage.PageOrder = 0
@@ -833,6 +830,7 @@ type GongtructBasicField interface {
 // - full refactoring of Gongstruct identifiers / fields
 type GongstructIF interface {
 	GetName() string
+	SetName(string)
 	CommitVoid(*Stage)
 	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
@@ -854,7 +852,7 @@ func CompareGongstructByName[T PointerToGongstruct](a, b T) int {
 	return cmp.Compare(a.GetName(), b.GetName())
 }
 
-func SortGongstructSetByName[T PointerToGongstruct](set map[T]any) (sortedSlice []T) {
+func SortGongstructSetByName[T PointerToGongstruct](set map[T]struct{}) (sortedSlice []T) {
 
 	for key := range set {
 		sortedSlice = append(sortedSlice, key)
@@ -898,19 +896,19 @@ func GongGetSet[Type GongstructSet](stage *Stage) *Type {
 	}
 }
 
-// GongGetMap returns the map of staged GongstructType instances
-// it is usefull because it allows refactoring of gong struct identifier
-func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
+// GongGetMap returns the map of staged Gonstruct instance by their name
+// Can be usefull if names are unique
+func GongGetMap[Type GongstructIF](stage *Stage) map[string]Type {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[string]*Chapter:
-		return any(&stage.Chapters_mapString).(*Type)
-	case map[string]*Content:
-		return any(&stage.Contents_mapString).(*Type)
-	case map[string]*Page:
-		return any(&stage.Pages_mapString).(*Type)
+	case *Chapter:
+		return any(stage.Chapters_mapString).(map[string]Type)
+	case *Content:
+		return any(stage.Contents_mapString).(map[string]Type)
+	case *Page:
+		return any(stage.Pages_mapString).(map[string]Type)
 	default:
 		return nil
 	}
@@ -918,17 +916,17 @@ func GongGetMap[Type GongstructMapString](stage *Stage) *Type {
 
 // GetGongstructInstancesSet returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
+func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]struct{} {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case Chapter:
-		return any(&stage.Chapters).(*map[*Type]any)
+		return any(&stage.Chapters).(*map[*Type]struct{})
 	case Content:
-		return any(&stage.Contents).(*map[*Type]any)
+		return any(&stage.Contents).(*map[*Type]struct{})
 	case Page:
-		return any(&stage.Pages).(*map[*Type]any)
+		return any(&stage.Pages).(*map[*Type]struct{})
 	default:
 		return nil
 	}
@@ -936,17 +934,17 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *Stage) *map[*Type]any {
 
 // GetGongstructInstancesSetFromPointerType returns the set staged GongstructType instances
 // it is usefull because it allows refactoring of gongstruct identifier
-func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *Stage) *map[Type]any {
+func GetGongstructInstancesSetFromPointerType[Type PointerToGongstruct](stage *Stage) *map[Type]struct{} {
 	var ret Type
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
 	case *Chapter:
-		return any(&stage.Chapters).(*map[Type]any)
+		return any(&stage.Chapters).(*map[Type]struct{})
 	case *Content:
-		return any(&stage.Contents).(*map[Type]any)
+		return any(&stage.Contents).(*map[Type]struct{})
 	case *Page:
-		return any(&stage.Pages).(*map[Type]any)
+		return any(&stage.Pages).(*map[Type]struct{})
 	default:
 		return nil
 	}
@@ -1179,6 +1177,22 @@ func (content *Content) GongGetFieldHeaders() (res []GongFieldHeader) {
 			GongFieldValueType: GongFieldValueTypeBasicKind,
 		},
 		{
+			Name:               "IsBespokeLogoFileName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BespokeLogoFileName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "IsBespokePageTileLogoFileName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
+			Name:               "BespokePageTileLogoFileName",
+			GongFieldValueType: GongFieldValueTypeBasicKind,
+		},
+		{
 			Name:               "Target",
 			GongFieldValueType: GongFieldValueTypeBasicKind,
 		},
@@ -1299,6 +1313,18 @@ func (content *Content) GongGetFieldValue(fieldName string, stage *Stage) (res G
 		res.valueString = content.LayoutPath
 	case "StaticPath":
 		res.valueString = content.StaticPath
+	case "IsBespokeLogoFileName":
+		res.valueString = fmt.Sprintf("%t", content.IsBespokeLogoFileName)
+		res.valueBool = content.IsBespokeLogoFileName
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "BespokeLogoFileName":
+		res.valueString = content.BespokeLogoFileName
+	case "IsBespokePageTileLogoFileName":
+		res.valueString = fmt.Sprintf("%t", content.IsBespokePageTileLogoFileName)
+		res.valueBool = content.IsBespokePageTileLogoFileName
+		res.GongFieldValueType = GongFieldValueTypeBool
+	case "BespokePageTileLogoFileName":
+		res.valueString = content.BespokePageTileLogoFileName
 	case "Target":
 		enum := content.Target
 		res.valueString = enum.ToCodeString()
@@ -1376,6 +1402,14 @@ func (content *Content) GongSetFieldValue(fieldName string, value GongFieldValue
 		content.LayoutPath = value.GetValueString()
 	case "StaticPath":
 		content.StaticPath = value.GetValueString()
+	case "IsBespokeLogoFileName":
+		content.IsBespokeLogoFileName = value.GetValueBool()
+	case "BespokeLogoFileName":
+		content.BespokeLogoFileName = value.GetValueString()
+	case "IsBespokePageTileLogoFileName":
+		content.IsBespokePageTileLogoFileName = value.GetValueBool()
+	case "BespokePageTileLogoFileName":
+		content.BespokePageTileLogoFileName = value.GetValueString()
 	case "Target":
 		content.Target.FromCodeString(value.GetValueString())
 	case "Chapters":
@@ -1435,4 +1469,23 @@ func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
 	return
 }
 
+func (stage *Stage) ResetMapStrings() {
+
+	// insertion point for generic get gongstruct name
+	stage.Chapters_mapString = make(map[string]*Chapter)
+	for chapter := range stage.Chapters {
+		stage.Chapters_mapString[chapter.Name] = chapter
+	}
+
+	stage.Contents_mapString = make(map[string]*Content)
+	for content := range stage.Contents {
+		stage.Contents_mapString[content.Name] = content
+	}
+
+	stage.Pages_mapString = make(map[string]*Page)
+	for page := range stage.Pages {
+		stage.Pages_mapString[page.Name] = page
+	}
+
+}
 // Last line of the template

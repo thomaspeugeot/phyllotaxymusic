@@ -15,7 +15,7 @@ func (stager *Stager) UpdateAndCommitSsgStage() {
 	if len(*parameters) != 1 {
 		log.Fatalln("There should be one parameter, only one shall remains in scottland")
 	}
-	for k, _ := range *parameters {
+	for k := range *parameters {
 		parameter = k
 	}
 	_ = parameter
