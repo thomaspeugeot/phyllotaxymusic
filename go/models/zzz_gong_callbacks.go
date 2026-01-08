@@ -554,91 +554,63 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *Stage, callback OnA
 
 	var instance Type
 	switch any(instance).(type) {
-		// insertion point
+	// insertion point
 	case *Axis:
 		stage.OnAfterAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[Axis])
-	
 	case *AxisGrid:
 		stage.OnAfterAxisGridUpdateCallback = any(callback).(OnAfterUpdateInterface[AxisGrid])
-	
 	case *Bezier:
 		stage.OnAfterBezierUpdateCallback = any(callback).(OnAfterUpdateInterface[Bezier])
-	
 	case *BezierGrid:
 		stage.OnAfterBezierGridUpdateCallback = any(callback).(OnAfterUpdateInterface[BezierGrid])
-	
 	case *BezierGridStack:
 		stage.OnAfterBezierGridStackUpdateCallback = any(callback).(OnAfterUpdateInterface[BezierGridStack])
-	
 	case *Chapter:
 		stage.OnAfterChapterUpdateCallback = any(callback).(OnAfterUpdateInterface[Chapter])
-	
 	case *Circle:
 		stage.OnAfterCircleUpdateCallback = any(callback).(OnAfterUpdateInterface[Circle])
-	
 	case *CircleGrid:
 		stage.OnAfterCircleGridUpdateCallback = any(callback).(OnAfterUpdateInterface[CircleGrid])
-	
 	case *Content:
 		stage.OnAfterContentUpdateCallback = any(callback).(OnAfterUpdateInterface[Content])
-	
 	case *ExportToMusicxml:
 		stage.OnAfterExportToMusicxmlUpdateCallback = any(callback).(OnAfterUpdateInterface[ExportToMusicxml])
-	
 	case *FrontCurve:
 		stage.OnAfterFrontCurveUpdateCallback = any(callback).(OnAfterUpdateInterface[FrontCurve])
-	
 	case *FrontCurveStack:
 		stage.OnAfterFrontCurveStackUpdateCallback = any(callback).(OnAfterUpdateInterface[FrontCurveStack])
-	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[HorizontalAxis])
-	
 	case *Key:
 		stage.OnAfterKeyUpdateCallback = any(callback).(OnAfterUpdateInterface[Key])
-	
 	case *Parameter:
 		stage.OnAfterParameterUpdateCallback = any(callback).(OnAfterUpdateInterface[Parameter])
-	
 	case *Rhombus:
 		stage.OnAfterRhombusUpdateCallback = any(callback).(OnAfterUpdateInterface[Rhombus])
-	
 	case *RhombusGrid:
 		stage.OnAfterRhombusGridUpdateCallback = any(callback).(OnAfterUpdateInterface[RhombusGrid])
-	
 	case *ShapeCategory:
 		stage.OnAfterShapeCategoryUpdateCallback = any(callback).(OnAfterUpdateInterface[ShapeCategory])
-	
 	case *SpiralBezier:
 		stage.OnAfterSpiralBezierUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralBezier])
-	
 	case *SpiralBezierGrid:
 		stage.OnAfterSpiralBezierGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralBezierGrid])
-	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralCircle])
-	
 	case *SpiralCircleGrid:
 		stage.OnAfterSpiralCircleGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralCircleGrid])
-	
 	case *SpiralLine:
 		stage.OnAfterSpiralLineUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralLine])
-	
 	case *SpiralLineGrid:
 		stage.OnAfterSpiralLineGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralLineGrid])
-	
 	case *SpiralOrigin:
 		stage.OnAfterSpiralOriginUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralOrigin])
-	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralRhombus])
-	
 	case *SpiralRhombusGrid:
 		stage.OnAfterSpiralRhombusGridUpdateCallback = any(callback).(OnAfterUpdateInterface[SpiralRhombusGrid])
-	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisUpdateCallback = any(callback).(OnAfterUpdateInterface[VerticalAxis])
-	
 	}
 }
 func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *Stage, callback OnAfterCreateInterface[Type]) {
@@ -648,88 +620,60 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *Stage, callback OnA
 		// insertion point
 	case *Axis:
 		stage.OnAfterAxisCreateCallback = any(callback).(OnAfterCreateInterface[Axis])
-	
 	case *AxisGrid:
 		stage.OnAfterAxisGridCreateCallback = any(callback).(OnAfterCreateInterface[AxisGrid])
-	
 	case *Bezier:
 		stage.OnAfterBezierCreateCallback = any(callback).(OnAfterCreateInterface[Bezier])
-	
 	case *BezierGrid:
 		stage.OnAfterBezierGridCreateCallback = any(callback).(OnAfterCreateInterface[BezierGrid])
-	
 	case *BezierGridStack:
 		stage.OnAfterBezierGridStackCreateCallback = any(callback).(OnAfterCreateInterface[BezierGridStack])
-	
 	case *Chapter:
 		stage.OnAfterChapterCreateCallback = any(callback).(OnAfterCreateInterface[Chapter])
-	
 	case *Circle:
 		stage.OnAfterCircleCreateCallback = any(callback).(OnAfterCreateInterface[Circle])
-	
 	case *CircleGrid:
 		stage.OnAfterCircleGridCreateCallback = any(callback).(OnAfterCreateInterface[CircleGrid])
-	
 	case *Content:
 		stage.OnAfterContentCreateCallback = any(callback).(OnAfterCreateInterface[Content])
-	
 	case *ExportToMusicxml:
 		stage.OnAfterExportToMusicxmlCreateCallback = any(callback).(OnAfterCreateInterface[ExportToMusicxml])
-	
 	case *FrontCurve:
 		stage.OnAfterFrontCurveCreateCallback = any(callback).(OnAfterCreateInterface[FrontCurve])
-	
 	case *FrontCurveStack:
 		stage.OnAfterFrontCurveStackCreateCallback = any(callback).(OnAfterCreateInterface[FrontCurveStack])
-	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisCreateCallback = any(callback).(OnAfterCreateInterface[HorizontalAxis])
-	
 	case *Key:
 		stage.OnAfterKeyCreateCallback = any(callback).(OnAfterCreateInterface[Key])
-	
 	case *Parameter:
 		stage.OnAfterParameterCreateCallback = any(callback).(OnAfterCreateInterface[Parameter])
-	
 	case *Rhombus:
 		stage.OnAfterRhombusCreateCallback = any(callback).(OnAfterCreateInterface[Rhombus])
-	
 	case *RhombusGrid:
 		stage.OnAfterRhombusGridCreateCallback = any(callback).(OnAfterCreateInterface[RhombusGrid])
-	
 	case *ShapeCategory:
 		stage.OnAfterShapeCategoryCreateCallback = any(callback).(OnAfterCreateInterface[ShapeCategory])
-	
 	case *SpiralBezier:
 		stage.OnAfterSpiralBezierCreateCallback = any(callback).(OnAfterCreateInterface[SpiralBezier])
-	
 	case *SpiralBezierGrid:
 		stage.OnAfterSpiralBezierGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralBezierGrid])
-	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleCreateCallback = any(callback).(OnAfterCreateInterface[SpiralCircle])
-	
 	case *SpiralCircleGrid:
 		stage.OnAfterSpiralCircleGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralCircleGrid])
-	
 	case *SpiralLine:
 		stage.OnAfterSpiralLineCreateCallback = any(callback).(OnAfterCreateInterface[SpiralLine])
-	
 	case *SpiralLineGrid:
 		stage.OnAfterSpiralLineGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralLineGrid])
-	
 	case *SpiralOrigin:
 		stage.OnAfterSpiralOriginCreateCallback = any(callback).(OnAfterCreateInterface[SpiralOrigin])
-	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusCreateCallback = any(callback).(OnAfterCreateInterface[SpiralRhombus])
-	
 	case *SpiralRhombusGrid:
 		stage.OnAfterSpiralRhombusGridCreateCallback = any(callback).(OnAfterCreateInterface[SpiralRhombusGrid])
-	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisCreateCallback = any(callback).(OnAfterCreateInterface[VerticalAxis])
-	
 	}
 }
 func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *Stage, callback OnAfterDeleteInterface[Type]) {
@@ -739,88 +683,60 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *Stage, callback OnA
 		// insertion point
 	case *Axis:
 		stage.OnAfterAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[Axis])
-	
 	case *AxisGrid:
 		stage.OnAfterAxisGridDeleteCallback = any(callback).(OnAfterDeleteInterface[AxisGrid])
-	
 	case *Bezier:
 		stage.OnAfterBezierDeleteCallback = any(callback).(OnAfterDeleteInterface[Bezier])
-	
 	case *BezierGrid:
 		stage.OnAfterBezierGridDeleteCallback = any(callback).(OnAfterDeleteInterface[BezierGrid])
-	
 	case *BezierGridStack:
 		stage.OnAfterBezierGridStackDeleteCallback = any(callback).(OnAfterDeleteInterface[BezierGridStack])
-	
 	case *Chapter:
 		stage.OnAfterChapterDeleteCallback = any(callback).(OnAfterDeleteInterface[Chapter])
-	
 	case *Circle:
 		stage.OnAfterCircleDeleteCallback = any(callback).(OnAfterDeleteInterface[Circle])
-	
 	case *CircleGrid:
 		stage.OnAfterCircleGridDeleteCallback = any(callback).(OnAfterDeleteInterface[CircleGrid])
-	
 	case *Content:
 		stage.OnAfterContentDeleteCallback = any(callback).(OnAfterDeleteInterface[Content])
-	
 	case *ExportToMusicxml:
 		stage.OnAfterExportToMusicxmlDeleteCallback = any(callback).(OnAfterDeleteInterface[ExportToMusicxml])
-	
 	case *FrontCurve:
 		stage.OnAfterFrontCurveDeleteCallback = any(callback).(OnAfterDeleteInterface[FrontCurve])
-	
 	case *FrontCurveStack:
 		stage.OnAfterFrontCurveStackDeleteCallback = any(callback).(OnAfterDeleteInterface[FrontCurveStack])
-	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[HorizontalAxis])
-	
 	case *Key:
 		stage.OnAfterKeyDeleteCallback = any(callback).(OnAfterDeleteInterface[Key])
-	
 	case *Parameter:
 		stage.OnAfterParameterDeleteCallback = any(callback).(OnAfterDeleteInterface[Parameter])
-	
 	case *Rhombus:
 		stage.OnAfterRhombusDeleteCallback = any(callback).(OnAfterDeleteInterface[Rhombus])
-	
 	case *RhombusGrid:
 		stage.OnAfterRhombusGridDeleteCallback = any(callback).(OnAfterDeleteInterface[RhombusGrid])
-	
 	case *ShapeCategory:
 		stage.OnAfterShapeCategoryDeleteCallback = any(callback).(OnAfterDeleteInterface[ShapeCategory])
-	
 	case *SpiralBezier:
 		stage.OnAfterSpiralBezierDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralBezier])
-	
 	case *SpiralBezierGrid:
 		stage.OnAfterSpiralBezierGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralBezierGrid])
-	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralCircle])
-	
 	case *SpiralCircleGrid:
 		stage.OnAfterSpiralCircleGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralCircleGrid])
-	
 	case *SpiralLine:
 		stage.OnAfterSpiralLineDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralLine])
-	
 	case *SpiralLineGrid:
 		stage.OnAfterSpiralLineGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralLineGrid])
-	
 	case *SpiralOrigin:
 		stage.OnAfterSpiralOriginDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralOrigin])
-	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralRhombus])
-	
 	case *SpiralRhombusGrid:
 		stage.OnAfterSpiralRhombusGridDeleteCallback = any(callback).(OnAfterDeleteInterface[SpiralRhombusGrid])
-	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisDeleteCallback = any(callback).(OnAfterDeleteInterface[VerticalAxis])
-	
 	}
 }
 func SetCallbackAfterReadFromFront[Type Gongstruct](stage *Stage, callback OnAfterReadInterface[Type]) {
@@ -830,87 +746,59 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *Stage, callback OnAft
 		// insertion point
 	case *Axis:
 		stage.OnAfterAxisReadCallback = any(callback).(OnAfterReadInterface[Axis])
-	
 	case *AxisGrid:
 		stage.OnAfterAxisGridReadCallback = any(callback).(OnAfterReadInterface[AxisGrid])
-	
 	case *Bezier:
 		stage.OnAfterBezierReadCallback = any(callback).(OnAfterReadInterface[Bezier])
-	
 	case *BezierGrid:
 		stage.OnAfterBezierGridReadCallback = any(callback).(OnAfterReadInterface[BezierGrid])
-	
 	case *BezierGridStack:
 		stage.OnAfterBezierGridStackReadCallback = any(callback).(OnAfterReadInterface[BezierGridStack])
-	
 	case *Chapter:
 		stage.OnAfterChapterReadCallback = any(callback).(OnAfterReadInterface[Chapter])
-	
 	case *Circle:
 		stage.OnAfterCircleReadCallback = any(callback).(OnAfterReadInterface[Circle])
-	
 	case *CircleGrid:
 		stage.OnAfterCircleGridReadCallback = any(callback).(OnAfterReadInterface[CircleGrid])
-	
 	case *Content:
 		stage.OnAfterContentReadCallback = any(callback).(OnAfterReadInterface[Content])
-	
 	case *ExportToMusicxml:
 		stage.OnAfterExportToMusicxmlReadCallback = any(callback).(OnAfterReadInterface[ExportToMusicxml])
-	
 	case *FrontCurve:
 		stage.OnAfterFrontCurveReadCallback = any(callback).(OnAfterReadInterface[FrontCurve])
-	
 	case *FrontCurveStack:
 		stage.OnAfterFrontCurveStackReadCallback = any(callback).(OnAfterReadInterface[FrontCurveStack])
-	
 	case *HorizontalAxis:
 		stage.OnAfterHorizontalAxisReadCallback = any(callback).(OnAfterReadInterface[HorizontalAxis])
-	
 	case *Key:
 		stage.OnAfterKeyReadCallback = any(callback).(OnAfterReadInterface[Key])
-	
 	case *Parameter:
 		stage.OnAfterParameterReadCallback = any(callback).(OnAfterReadInterface[Parameter])
-	
 	case *Rhombus:
 		stage.OnAfterRhombusReadCallback = any(callback).(OnAfterReadInterface[Rhombus])
-	
 	case *RhombusGrid:
 		stage.OnAfterRhombusGridReadCallback = any(callback).(OnAfterReadInterface[RhombusGrid])
-	
 	case *ShapeCategory:
 		stage.OnAfterShapeCategoryReadCallback = any(callback).(OnAfterReadInterface[ShapeCategory])
-	
 	case *SpiralBezier:
 		stage.OnAfterSpiralBezierReadCallback = any(callback).(OnAfterReadInterface[SpiralBezier])
-	
 	case *SpiralBezierGrid:
 		stage.OnAfterSpiralBezierGridReadCallback = any(callback).(OnAfterReadInterface[SpiralBezierGrid])
-	
 	case *SpiralCircle:
 		stage.OnAfterSpiralCircleReadCallback = any(callback).(OnAfterReadInterface[SpiralCircle])
-	
 	case *SpiralCircleGrid:
 		stage.OnAfterSpiralCircleGridReadCallback = any(callback).(OnAfterReadInterface[SpiralCircleGrid])
-	
 	case *SpiralLine:
 		stage.OnAfterSpiralLineReadCallback = any(callback).(OnAfterReadInterface[SpiralLine])
-	
 	case *SpiralLineGrid:
 		stage.OnAfterSpiralLineGridReadCallback = any(callback).(OnAfterReadInterface[SpiralLineGrid])
-	
 	case *SpiralOrigin:
 		stage.OnAfterSpiralOriginReadCallback = any(callback).(OnAfterReadInterface[SpiralOrigin])
-	
 	case *SpiralRhombus:
 		stage.OnAfterSpiralRhombusReadCallback = any(callback).(OnAfterReadInterface[SpiralRhombus])
-	
 	case *SpiralRhombusGrid:
 		stage.OnAfterSpiralRhombusGridReadCallback = any(callback).(OnAfterReadInterface[SpiralRhombusGrid])
-	
 	case *VerticalAxis:
 		stage.OnAfterVerticalAxisReadCallback = any(callback).(OnAfterReadInterface[VerticalAxis])
-	
 	}
 }

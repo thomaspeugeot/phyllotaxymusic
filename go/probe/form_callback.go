@@ -259,13 +259,19 @@ func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.Axis](axisgridFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			axisgrid_.Axiss = instanceSlice
 
@@ -544,13 +550,19 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.Bezier](beziergridFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			beziergrid_.Beziers = instanceSlice
 
@@ -715,13 +727,19 @@ func (beziergridstackFormCallback *BezierGridStackFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.BezierGrid](beziergridstackFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			beziergridstack_.BezierGrids = instanceSlice
 
@@ -1142,13 +1160,19 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.Circle](circlegridFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			circlegrid_.Circles = instanceSlice
 
@@ -1255,13 +1279,19 @@ func (contentFormCallback *ContentFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.Chapter](contentFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			content_.Chapters = instanceSlice
 
@@ -1582,13 +1612,19 @@ func (frontcurvestackFormCallback *FrontCurveStackFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.FrontCurve](frontcurvestackFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			frontcurvestack_.FrontCurves = instanceSlice
 
@@ -1607,13 +1643,19 @@ func (frontcurvestackFormCallback *FrontCurveStackFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.SpiralCircle](frontcurvestackFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			frontcurvestack_.SpiralCircles = instanceSlice
 
@@ -2378,13 +2420,19 @@ func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.Rhombus](rhombusgridFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			rhombusgrid_.Rhombuses = instanceSlice
 
@@ -2739,13 +2787,19 @@ func (spiralbeziergridFormCallback *SpiralBezierGridFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.SpiralBezier](spiralbeziergridFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			spiralbeziergrid_.SpiralBeziers = instanceSlice
 
@@ -3090,13 +3144,19 @@ func (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.SpiralCircle](spiralcirclegridFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			spiralcirclegrid_.SpiralCircles = instanceSlice
 
@@ -3365,13 +3425,19 @@ func (spirallinegridFormCallback *SpiralLineGridFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.SpiralLine](spirallinegridFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			spirallinegrid_.SpiralLines = instanceSlice
 
@@ -3744,13 +3810,19 @@ func (spiralrhombusgridFormCallback *SpiralRhombusGridFormCallback) OnSave() {
 				map_id_instances[id] = instance
 			}
 
-			ids, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
+			rowIDs, err := DecodeStringToIntSlice(formDiv.FormEditAssocButton.AssociationStorage)
 
 			if err != nil {
 				log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage)
 			}
-			for _, id := range ids {
-				instanceSlice = append(instanceSlice, map_id_instances[id])
+			map_RowID_ID := GetMap_RowID_ID[*models.SpiralRhombus](spiralrhombusgridFormCallback.probe.stageOfInterest)
+
+			for _, rowID := range rowIDs {
+				if id, ok := map_RowID_ID[int(rowID)]; ok {
+					instanceSlice = append(instanceSlice, map_id_instances[id])
+				} else {
+					log.Panic("not a good storage", formDiv.FormEditAssocButton.AssociationStorage, "unkown row id", rowID)
+				}
 			}
 			spiralrhombusgrid_.SpiralRhombuses = instanceSlice
 

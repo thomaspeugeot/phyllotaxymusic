@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"regexp"
 	"sort"
 	"strings"
 )
@@ -33,16 +32,23 @@ var _ map[string]any = map[string]any{
 // function will stage objects
 func _(stage *models.Stage) {
 
-	// Declaration of instances to stage{{Identifiers}}
+	// insertion point for declaration of instances to stage{{Identifiers}}
 
-	// Setup of values{{ValueInitializers}}
+	// insertion point for initialization of values{{ValueInitializers}}
 
-	// Setup of pointers{{PointersInitializers}}
-}
-`
+	// insertion point for setup of pointers{{PointersInitializers}}
+}`
 
-const IdentifiersDecls = `
-	{{Identifier}} := (&models.{{GeneratedStructName}}{}).Stage(stage)`
+const GongIdentifiersDecls = `
+	{{Identifier}} := (&models.{{GeneratedStructName}}{Name: ` + "`" + `{{GeneratedFieldNameValue}}` + "`" + `}).Stage(stage)`
+
+const GongUnstageStmt = `
+	{{Identifier}}.Unstage(stage)`
+
+// previous version does not hanldle embedded structs (https://github.com/golang/go/issues/9859)
+// simpler version but the name of the instance cannot be human read before the fields initialization
+const IdentifiersDeclsWithoutNameInit = `
+	{{Identifier}} := (&models.{{GeneratedStructName}}{}).Stage(stage)` /* */
 
 const StringInitStatement = `
 	{{Identifier}}.{{GeneratedFieldName}} = ` + "`" + `{{GeneratedFieldNameValue}}` + "`"
@@ -97,17 +103,12 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	initializerStatements := ""
 	pointersInitializesStatements := ""
 
-	id := ""
-	_ = id
 	decl := ""
 	_ = decl
 	setValueField := ""
 	_ = setValueField
 
 	// insertion initialization of objects to stage
-	map_Axis_Identifiers := make(map[*Axis]string)
-	_ = map_Axis_Identifiers
-
 	axisOrdered := []*Axis{}
 	for axis := range stage.Axiss {
 		axisOrdered = append(axisOrdered, axis)
@@ -125,119 +126,30 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(axisOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, axis := range axisOrdered {
+	for _, axis := range axisOrdered {
 
-		id = generatesIdentifier("Axis", idx, axis.Name)
-		map_Axis_Identifiers[axis] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Axis")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", axis.Name)
-		identifiersDecl += decl
+		identifiersDecl += axis.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(axis.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", axis.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "AngleDegree")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.AngleDegree))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Length")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.Length))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.CenterX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.CenterY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EndX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.EndX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EndY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.EndY))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(axis.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(axis.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(axis.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(axis.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(axis.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += axis.GongMarshallField(stage, "Name")
+		initializerStatements += axis.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += axis.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += axis.GongMarshallField(stage, "AngleDegree")
+		initializerStatements += axis.GongMarshallField(stage, "Length")
+		initializerStatements += axis.GongMarshallField(stage, "CenterX")
+		initializerStatements += axis.GongMarshallField(stage, "CenterY")
+		initializerStatements += axis.GongMarshallField(stage, "EndX")
+		initializerStatements += axis.GongMarshallField(stage, "EndY")
+		initializerStatements += axis.GongMarshallField(stage, "Color")
+		initializerStatements += axis.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += axis.GongMarshallField(stage, "Stroke")
+		initializerStatements += axis.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += axis.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += axis.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += axis.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += axis.GongMarshallField(stage, "Transform")
 	}
-
-	map_AxisGrid_Identifiers := make(map[*AxisGrid]string)
-	_ = map_AxisGrid_Identifiers
 
 	axisgridOrdered := []*AxisGrid{}
 	for axisgrid := range stage.AxisGrids {
@@ -256,35 +168,18 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(axisgridOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, axisgrid := range axisgridOrdered {
+	for _, axisgrid := range axisgridOrdered {
 
-		id = generatesIdentifier("AxisGrid", idx, axisgrid.Name)
-		map_AxisGrid_Identifiers[axisgrid] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "AxisGrid")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", axisgrid.Name)
-		identifiersDecl += decl
+		identifiersDecl += axisgrid.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(axisgrid.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", axisgrid.IsDisplayed))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += axisgrid.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += axisgrid.GongMarshallField(stage, "Reference")
+		initializerStatements += axisgrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += axisgrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += axisgrid.GongMarshallField(stage, "Axiss")
 	}
-
-	map_Bezier_Identifiers := make(map[*Bezier]string)
-	_ = map_Bezier_Identifiers
 
 	bezierOrdered := []*Bezier{}
 	for bezier := range stage.Beziers {
@@ -303,131 +198,32 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(bezierOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, bezier := range bezierOrdered {
+	for _, bezier := range bezierOrdered {
 
-		id = generatesIdentifier("Bezier", idx, bezier.Name)
-		map_Bezier_Identifiers[bezier] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Bezier")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", bezier.Name)
-		identifiersDecl += decl
+		identifiersDecl += bezier.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(bezier.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", bezier.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StartX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.StartX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StartY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.StartY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ControlPointStartX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.ControlPointStartX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ControlPointStartY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.ControlPointStartY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EndX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.EndX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EndY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.EndY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ControlPointEndX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.ControlPointEndX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ControlPointEndY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.ControlPointEndY))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(bezier.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(bezier.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(bezier.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(bezier.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(bezier.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += bezier.GongMarshallField(stage, "Name")
+		initializerStatements += bezier.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += bezier.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += bezier.GongMarshallField(stage, "StartX")
+		initializerStatements += bezier.GongMarshallField(stage, "StartY")
+		initializerStatements += bezier.GongMarshallField(stage, "ControlPointStartX")
+		initializerStatements += bezier.GongMarshallField(stage, "ControlPointStartY")
+		initializerStatements += bezier.GongMarshallField(stage, "EndX")
+		initializerStatements += bezier.GongMarshallField(stage, "EndY")
+		initializerStatements += bezier.GongMarshallField(stage, "ControlPointEndX")
+		initializerStatements += bezier.GongMarshallField(stage, "ControlPointEndY")
+		initializerStatements += bezier.GongMarshallField(stage, "Color")
+		initializerStatements += bezier.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += bezier.GongMarshallField(stage, "Stroke")
+		initializerStatements += bezier.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += bezier.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += bezier.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += bezier.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += bezier.GongMarshallField(stage, "Transform")
 	}
-
-	map_BezierGrid_Identifiers := make(map[*BezierGrid]string)
-	_ = map_BezierGrid_Identifiers
 
 	beziergridOrdered := []*BezierGrid{}
 	for beziergrid := range stage.BezierGrids {
@@ -446,35 +242,18 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(beziergridOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, beziergrid := range beziergridOrdered {
+	for _, beziergrid := range beziergridOrdered {
 
-		id = generatesIdentifier("BezierGrid", idx, beziergrid.Name)
-		map_BezierGrid_Identifiers[beziergrid] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "BezierGrid")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", beziergrid.Name)
-		identifiersDecl += decl
+		identifiersDecl += beziergrid.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(beziergrid.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", beziergrid.IsDisplayed))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += beziergrid.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += beziergrid.GongMarshallField(stage, "Reference")
+		initializerStatements += beziergrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += beziergrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += beziergrid.GongMarshallField(stage, "Beziers")
 	}
-
-	map_BezierGridStack_Identifiers := make(map[*BezierGridStack]string)
-	_ = map_BezierGridStack_Identifiers
 
 	beziergridstackOrdered := []*BezierGridStack{}
 	for beziergridstack := range stage.BezierGridStacks {
@@ -493,35 +272,17 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(beziergridstackOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, beziergridstack := range beziergridstackOrdered {
+	for _, beziergridstack := range beziergridstackOrdered {
 
-		id = generatesIdentifier("BezierGridStack", idx, beziergridstack.Name)
-		map_BezierGridStack_Identifiers[beziergridstack] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "BezierGridStack")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", beziergridstack.Name)
-		identifiersDecl += decl
+		identifiersDecl += beziergridstack.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(beziergridstack.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", beziergridstack.IsDisplayed))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += beziergridstack.GongMarshallField(stage, "Name")
+		initializerStatements += beziergridstack.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += beziergridstack.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += beziergridstack.GongMarshallField(stage, "BezierGrids")
 	}
-
-	map_Chapter_Identifiers := make(map[*Chapter]string)
-	_ = map_Chapter_Identifiers
 
 	chapterOrdered := []*Chapter{}
 	for chapter := range stage.Chapters {
@@ -540,35 +301,15 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(chapterOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, chapter := range chapterOrdered {
+	for _, chapter := range chapterOrdered {
 
-		id = generatesIdentifier("Chapter", idx, chapter.Name)
-		map_Chapter_Identifiers[chapter] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Chapter")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", chapter.Name)
-		identifiersDecl += decl
+		identifiersDecl += chapter.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(chapter.Name))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MardownContent")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(chapter.MardownContent))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += chapter.GongMarshallField(stage, "Name")
+		initializerStatements += chapter.GongMarshallField(stage, "MardownContent")
 	}
-
-	map_Circle_Identifiers := make(map[*Circle]string)
-	_ = map_Circle_Identifiers
 
 	circleOrdered := []*Circle{}
 	for circle := range stage.Circles {
@@ -587,125 +328,31 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(circleOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, circle := range circleOrdered {
+	for _, circle := range circleOrdered {
 
-		id = generatesIdentifier("Circle", idx, circle.Name)
-		map_Circle_Identifiers[circle] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Circle")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", circle.Name)
-		identifiersDecl += decl
+		identifiersDecl += circle.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circle.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circle.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.CenterX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.CenterY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasBespokeRadius")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circle.HasBespokeRadius))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BespopkeRadius")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.BespopkeRadius))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circle.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circle.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circle.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circle.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circle.Transform))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Pitch")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", circle.Pitch))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ShowName")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circle.ShowName))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BeatNb")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", circle.BeatNb))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += circle.GongMarshallField(stage, "Name")
+		initializerStatements += circle.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += circle.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += circle.GongMarshallField(stage, "CenterX")
+		initializerStatements += circle.GongMarshallField(stage, "CenterY")
+		initializerStatements += circle.GongMarshallField(stage, "HasBespokeRadius")
+		initializerStatements += circle.GongMarshallField(stage, "BespopkeRadius")
+		initializerStatements += circle.GongMarshallField(stage, "Color")
+		initializerStatements += circle.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += circle.GongMarshallField(stage, "Stroke")
+		initializerStatements += circle.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += circle.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += circle.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += circle.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += circle.GongMarshallField(stage, "Transform")
+		initializerStatements += circle.GongMarshallField(stage, "Pitch")
+		initializerStatements += circle.GongMarshallField(stage, "ShowName")
+		initializerStatements += circle.GongMarshallField(stage, "BeatNb")
 	}
-
-	map_CircleGrid_Identifiers := make(map[*CircleGrid]string)
-	_ = map_CircleGrid_Identifiers
 
 	circlegridOrdered := []*CircleGrid{}
 	for circlegrid := range stage.CircleGrids {
@@ -724,35 +371,18 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(circlegridOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, circlegrid := range circlegridOrdered {
+	for _, circlegrid := range circlegridOrdered {
 
-		id = generatesIdentifier("CircleGrid", idx, circlegrid.Name)
-		map_CircleGrid_Identifiers[circlegrid] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "CircleGrid")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", circlegrid.Name)
-		identifiersDecl += decl
+		identifiersDecl += circlegrid.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(circlegrid.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circlegrid.IsDisplayed))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += circlegrid.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += circlegrid.GongMarshallField(stage, "Reference")
+		initializerStatements += circlegrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += circlegrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += circlegrid.GongMarshallField(stage, "Circles")
 	}
-
-	map_Content_Identifiers := make(map[*Content]string)
-	_ = map_Content_Identifiers
 
 	contentOrdered := []*Content{}
 	for content := range stage.Contents {
@@ -771,67 +401,21 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(contentOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, content := range contentOrdered {
+	for _, content := range contentOrdered {
 
-		id = generatesIdentifier("Content", idx, content.Name)
-		map_Content_Identifiers[content] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Content")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", content.Name)
-		identifiersDecl += decl
+		identifiersDecl += content.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.Name))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MardownContent")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.MardownContent))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ContentPath")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.ContentPath))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "OutputPath")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.OutputPath))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "LayoutPath")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.LayoutPath))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StaticPath")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(content.StaticPath))
-		initializerStatements += setValueField
-
-		if content.Target != "" {
-			setValueField = StringEnumInitStatement
-			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Target")
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+content.Target.ToCodeString())
-			initializerStatements += setValueField
-		}
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += content.GongMarshallField(stage, "Name")
+		initializerStatements += content.GongMarshallField(stage, "MardownContent")
+		initializerStatements += content.GongMarshallField(stage, "ContentPath")
+		initializerStatements += content.GongMarshallField(stage, "OutputPath")
+		initializerStatements += content.GongMarshallField(stage, "LayoutPath")
+		initializerStatements += content.GongMarshallField(stage, "StaticPath")
+		initializerStatements += content.GongMarshallField(stage, "Target")
+		pointersInitializesStatements += content.GongMarshallField(stage, "Chapters")
 	}
-
-	map_ExportToMusicxml_Identifiers := make(map[*ExportToMusicxml]string)
-	_ = map_ExportToMusicxml_Identifiers
 
 	exporttomusicxmlOrdered := []*ExportToMusicxml{}
 	for exporttomusicxml := range stage.ExportToMusicxmls {
@@ -850,29 +434,15 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(exporttomusicxmlOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, exporttomusicxml := range exporttomusicxmlOrdered {
+	for _, exporttomusicxml := range exporttomusicxmlOrdered {
 
-		id = generatesIdentifier("ExportToMusicxml", idx, exporttomusicxml.Name)
-		map_ExportToMusicxml_Identifiers[exporttomusicxml] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "ExportToMusicxml")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", exporttomusicxml.Name)
-		identifiersDecl += decl
+		identifiersDecl += exporttomusicxml.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(exporttomusicxml.Name))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += exporttomusicxml.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += exporttomusicxml.GongMarshallField(stage, "Parameter")
 	}
-
-	map_FrontCurve_Identifiers := make(map[*FrontCurve]string)
-	_ = map_FrontCurve_Identifiers
 
 	frontcurveOrdered := []*FrontCurve{}
 	for frontcurve := range stage.FrontCurves {
@@ -891,35 +461,15 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(frontcurveOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, frontcurve := range frontcurveOrdered {
+	for _, frontcurve := range frontcurveOrdered {
 
-		id = generatesIdentifier("FrontCurve", idx, frontcurve.Name)
-		map_FrontCurve_Identifiers[frontcurve] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "FrontCurve")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", frontcurve.Name)
-		identifiersDecl += decl
+		identifiersDecl += frontcurve.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurve.Name))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Path")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurve.Path))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += frontcurve.GongMarshallField(stage, "Name")
+		initializerStatements += frontcurve.GongMarshallField(stage, "Path")
 	}
-
-	map_FrontCurveStack_Identifiers := make(map[*FrontCurveStack]string)
-	_ = map_FrontCurveStack_Identifiers
 
 	frontcurvestackOrdered := []*FrontCurveStack{}
 	for frontcurvestack := range stage.FrontCurveStacks {
@@ -938,83 +488,26 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(frontcurvestackOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, frontcurvestack := range frontcurvestackOrdered {
+	for _, frontcurvestack := range frontcurvestackOrdered {
 
-		id = generatesIdentifier("FrontCurveStack", idx, frontcurvestack.Name)
-		map_FrontCurveStack_Identifiers[frontcurvestack] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "FrontCurveStack")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", frontcurvestack.Name)
-		identifiersDecl += decl
+		identifiersDecl += frontcurvestack.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", frontcurvestack.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", frontcurvestack.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", frontcurvestack.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", frontcurvestack.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "Name")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += frontcurvestack.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += frontcurvestack.GongMarshallField(stage, "FrontCurves")
+		pointersInitializesStatements += frontcurvestack.GongMarshallField(stage, "SpiralCircles")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "Color")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "Stroke")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "Transform")
 	}
-
-	map_HorizontalAxis_Identifiers := make(map[*HorizontalAxis]string)
-	_ = map_HorizontalAxis_Identifiers
 
 	horizontalaxisOrdered := []*HorizontalAxis{}
 	for horizontalaxis := range stage.HorizontalAxiss {
@@ -1033,95 +526,26 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(horizontalaxisOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, horizontalaxis := range horizontalaxisOrdered {
+	for _, horizontalaxis := range horizontalaxisOrdered {
 
-		id = generatesIdentifier("HorizontalAxis", idx, horizontalaxis.Name)
-		map_HorizontalAxis_Identifiers[horizontalaxis] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "HorizontalAxis")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", horizontalaxis.Name)
-		identifiersDecl += decl
+		identifiersDecl += horizontalaxis.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(horizontalaxis.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", horizontalaxis.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "AxisHandleBorderLength")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.AxisHandleBorderLength))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Axis_Length")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.Axis_Length))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(horizontalaxis.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(horizontalaxis.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(horizontalaxis.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(horizontalaxis.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(horizontalaxis.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Name")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += horizontalaxis.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "AxisHandleBorderLength")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Axis_Length")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Color")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Stroke")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Transform")
 	}
-
-	map_Key_Identifiers := make(map[*Key]string)
-	_ = map_Key_Identifiers
 
 	keyOrdered := []*Key{}
 	for key := range stage.Keys {
@@ -1140,89 +564,25 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(keyOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, key := range keyOrdered {
+	for _, key := range keyOrdered {
 
-		id = generatesIdentifier("Key", idx, key.Name)
-		map_Key_Identifiers[key] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Key")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", key.Name)
-		identifiersDecl += decl
+		identifiersDecl += key.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(key.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", key.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Path")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(key.Path))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(key.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", key.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(key.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", key.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", key.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(key.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(key.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(key.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += key.GongMarshallField(stage, "Name")
+		initializerStatements += key.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += key.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += key.GongMarshallField(stage, "Path")
+		initializerStatements += key.GongMarshallField(stage, "Color")
+		initializerStatements += key.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += key.GongMarshallField(stage, "Stroke")
+		initializerStatements += key.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += key.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += key.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += key.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += key.GongMarshallField(stage, "Transform")
 	}
-
-	map_Parameter_Identifiers := make(map[*Parameter]string)
-	_ = map_Parameter_Identifiers
 
 	parameterOrdered := []*Parameter{}
 	for parameter := range stage.Parameters {
@@ -1241,281 +601,115 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(parameterOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, parameter := range parameterOrdered {
+	for _, parameter := range parameterOrdered {
 
-		id = generatesIdentifier("Parameter", idx, parameter.Name)
-		map_Parameter_Identifiers[parameter] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Parameter")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", parameter.Name)
-		identifiersDecl += decl
+		identifiersDecl += parameter.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(parameter.Name))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BackendColor")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(parameter.BackendColor))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "MinuteColor")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(parameter.MinuteColor))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HourColor")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(parameter.HourColor))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "N")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.N))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "M")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.M))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Z")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.Z))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "InsideAngle")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.InsideAngle))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ShiftToNearestCircle")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.ShiftToNearestCircle))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SideLength")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SideLength))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StackWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.StackWidth))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbShitRight")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbShitRight))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StackHeight")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.StackHeight))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BezierControlLengthRatio")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.BezierControlLengthRatio))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SpiralBezierStrength")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SpiralBezierStrength))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbInterpolationPoints")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbInterpolationPoints))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FkeySizeRatio")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FkeySizeRatio))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FkeyOriginRelativeX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FkeyOriginRelativeX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FkeyOriginRelativeY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FkeyOriginRelativeY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "PitchHeight")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.PitchHeight))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbPitchLines")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbPitchLines))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BeatLinesHeightRatio")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.BeatLinesHeightRatio))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbBeatLines")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbBeatLines))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "NbOfBeatsInTheme")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbOfBeatsInTheme))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FirstVoiceShiftX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FirstVoiceShiftX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FirstVoiceShiftY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FirstVoiceShiftY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "PitchDifference")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.PitchDifference))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BeatsPerSecond")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.BeatsPerSecond))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Level")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.Level))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsMinor")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", parameter.IsMinor))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ThemeBinaryEncoding")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.ThemeBinaryEncoding))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "OriginX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.OriginX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "OriginY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.OriginY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SpiralOriginX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SpiralOriginX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SpiralOriginY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SpiralOriginY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "OriginCrossWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.OriginCrossWidth))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SpiralRadiusRatio")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SpiralRadiusRatio))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ShowSpiralBezierConstruct")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", parameter.ShowSpiralBezierConstruct))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ShowInterpolationPoints")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", parameter.ShowInterpolationPoints))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ActualBeatsTemporalShift")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.ActualBeatsTemporalShift))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "PathToStaticFiles")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(parameter.PathToStaticFiles))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "PathToGeneratedSVG")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(parameter.PathToGeneratedSVG))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "PathToGeneratedScore")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(parameter.PathToGeneratedScore))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += parameter.GongMarshallField(stage, "Name")
+		initializerStatements += parameter.GongMarshallField(stage, "BackendColor")
+		initializerStatements += parameter.GongMarshallField(stage, "MinuteColor")
+		initializerStatements += parameter.GongMarshallField(stage, "HourColor")
+		initializerStatements += parameter.GongMarshallField(stage, "N")
+		initializerStatements += parameter.GongMarshallField(stage, "M")
+		initializerStatements += parameter.GongMarshallField(stage, "Z")
+		initializerStatements += parameter.GongMarshallField(stage, "InsideAngle")
+		initializerStatements += parameter.GongMarshallField(stage, "ShiftToNearestCircle")
+		initializerStatements += parameter.GongMarshallField(stage, "SideLength")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialRhombus")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialCircle")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialRhombusGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "RotatedAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "RotatedRhombus")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "RotatedRhombusGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "RotatedCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "NextRhombus")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "NextCircle")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingRhombusGridSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingRhombusGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingCircleGridSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingCircleGridLeftSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingCircleGridLeft")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "ConstructionAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "ConstructionAxisGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "ConstructionCircle")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "ConstructionCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurve")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveShiftedRightSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveShiftedRight")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveNextSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveNext")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveNextShiftedRightSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveNextShiftedRight")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveStack")
+		initializerStatements += parameter.GongMarshallField(stage, "StackWidth")
+		initializerStatements += parameter.GongMarshallField(stage, "NbShitRight")
+		initializerStatements += parameter.GongMarshallField(stage, "StackHeight")
+		initializerStatements += parameter.GongMarshallField(stage, "BezierControlLengthRatio")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralRhombusGridSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralRhombusGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralCircleSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralCircleFullGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionOuterLineSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionInnerLineSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionOuterLineGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionInnerLineGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionOuterLineFullGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralBezierSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralBezierGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralBezierFullGrid")
+		initializerStatements += parameter.GongMarshallField(stage, "SpiralBezierStrength")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FrontCurveStack")
+		initializerStatements += parameter.GongMarshallField(stage, "NbInterpolationPoints")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "Fkey")
+		initializerStatements += parameter.GongMarshallField(stage, "FkeySizeRatio")
+		initializerStatements += parameter.GongMarshallField(stage, "FkeyOriginRelativeX")
+		initializerStatements += parameter.GongMarshallField(stage, "FkeyOriginRelativeY")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "PitchLines")
+		initializerStatements += parameter.GongMarshallField(stage, "PitchHeight")
+		initializerStatements += parameter.GongMarshallField(stage, "NbPitchLines")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "BeatLines")
+		initializerStatements += parameter.GongMarshallField(stage, "BeatLinesHeightRatio")
+		initializerStatements += parameter.GongMarshallField(stage, "NbBeatLines")
+		initializerStatements += parameter.GongMarshallField(stage, "NbOfBeatsInTheme")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FirstVoice")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FirstVoiceShiftedRigth")
+		initializerStatements += parameter.GongMarshallField(stage, "FirstVoiceShiftX")
+		initializerStatements += parameter.GongMarshallField(stage, "FirstVoiceShiftY")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SecondVoice")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SecondVoiceShiftedRight")
+		initializerStatements += parameter.GongMarshallField(stage, "PitchDifference")
+		initializerStatements += parameter.GongMarshallField(stage, "BeatsPerSecond")
+		initializerStatements += parameter.GongMarshallField(stage, "Level")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FirstVoiceNotes")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FirstVoiceNotesShiftedRight")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SecondVoiceNotes")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SecondVoiceNotesShiftedRight")
+		initializerStatements += parameter.GongMarshallField(stage, "IsMinor")
+		initializerStatements += parameter.GongMarshallField(stage, "ThemeBinaryEncoding")
+		initializerStatements += parameter.GongMarshallField(stage, "OriginX")
+		initializerStatements += parameter.GongMarshallField(stage, "OriginY")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "HorizontalAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "VerticalAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralOrigin")
+		initializerStatements += parameter.GongMarshallField(stage, "SpiralOriginX")
+		initializerStatements += parameter.GongMarshallField(stage, "SpiralOriginY")
+		initializerStatements += parameter.GongMarshallField(stage, "OriginCrossWidth")
+		initializerStatements += parameter.GongMarshallField(stage, "SpiralRadiusRatio")
+		initializerStatements += parameter.GongMarshallField(stage, "ShowSpiralBezierConstruct")
+		initializerStatements += parameter.GongMarshallField(stage, "ShowInterpolationPoints")
+		initializerStatements += parameter.GongMarshallField(stage, "ActualBeatsTemporalShift")
+		initializerStatements += parameter.GongMarshallField(stage, "PathToStaticFiles")
+		initializerStatements += parameter.GongMarshallField(stage, "PathToGeneratedSVG")
+		initializerStatements += parameter.GongMarshallField(stage, "PathToGeneratedScore")
 	}
-
-	map_Rhombus_Identifiers := make(map[*Rhombus]string)
-	_ = map_Rhombus_Identifiers
 
 	rhombusOrdered := []*Rhombus{}
 	for rhombus := range stage.Rhombuss {
@@ -1534,113 +728,29 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(rhombusOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, rhombus := range rhombusOrdered {
+	for _, rhombus := range rhombusOrdered {
 
-		id = generatesIdentifier("Rhombus", idx, rhombus.Name)
-		map_Rhombus_Identifiers[rhombus] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Rhombus")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", rhombus.Name)
-		identifiersDecl += decl
+		identifiersDecl += rhombus.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rhombus.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", rhombus.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.CenterX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.CenterY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "SideLength")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.SideLength))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "AngleDegree")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.AngleDegree))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "InsideAngle")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.InsideAngle))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rhombus.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rhombus.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rhombus.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rhombus.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rhombus.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += rhombus.GongMarshallField(stage, "Name")
+		initializerStatements += rhombus.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += rhombus.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += rhombus.GongMarshallField(stage, "CenterX")
+		initializerStatements += rhombus.GongMarshallField(stage, "CenterY")
+		initializerStatements += rhombus.GongMarshallField(stage, "SideLength")
+		initializerStatements += rhombus.GongMarshallField(stage, "AngleDegree")
+		initializerStatements += rhombus.GongMarshallField(stage, "InsideAngle")
+		initializerStatements += rhombus.GongMarshallField(stage, "Color")
+		initializerStatements += rhombus.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += rhombus.GongMarshallField(stage, "Stroke")
+		initializerStatements += rhombus.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += rhombus.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += rhombus.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += rhombus.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += rhombus.GongMarshallField(stage, "Transform")
 	}
-
-	map_RhombusGrid_Identifiers := make(map[*RhombusGrid]string)
-	_ = map_RhombusGrid_Identifiers
 
 	rhombusgridOrdered := []*RhombusGrid{}
 	for rhombusgrid := range stage.RhombusGrids {
@@ -1659,35 +769,18 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(rhombusgridOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, rhombusgrid := range rhombusgridOrdered {
+	for _, rhombusgrid := range rhombusgridOrdered {
 
-		id = generatesIdentifier("RhombusGrid", idx, rhombusgrid.Name)
-		map_RhombusGrid_Identifiers[rhombusgrid] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "RhombusGrid")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", rhombusgrid.Name)
-		identifiersDecl += decl
+		identifiersDecl += rhombusgrid.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(rhombusgrid.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", rhombusgrid.IsDisplayed))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += rhombusgrid.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += rhombusgrid.GongMarshallField(stage, "Reference")
+		initializerStatements += rhombusgrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += rhombusgrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += rhombusgrid.GongMarshallField(stage, "Rhombuses")
 	}
-
-	map_ShapeCategory_Identifiers := make(map[*ShapeCategory]string)
-	_ = map_ShapeCategory_Identifiers
 
 	shapecategoryOrdered := []*ShapeCategory{}
 	for shapecategory := range stage.ShapeCategorys {
@@ -1706,35 +799,15 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(shapecategoryOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, shapecategory := range shapecategoryOrdered {
+	for _, shapecategory := range shapecategoryOrdered {
 
-		id = generatesIdentifier("ShapeCategory", idx, shapecategory.Name)
-		map_ShapeCategory_Identifiers[shapecategory] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "ShapeCategory")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", shapecategory.Name)
-		identifiersDecl += decl
+		identifiersDecl += shapecategory.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(shapecategory.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsExpanded")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", shapecategory.IsExpanded))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += shapecategory.GongMarshallField(stage, "Name")
+		initializerStatements += shapecategory.GongMarshallField(stage, "IsExpanded")
 	}
-
-	map_SpiralBezier_Identifiers := make(map[*SpiralBezier]string)
-	_ = map_SpiralBezier_Identifiers
 
 	spiralbezierOrdered := []*SpiralBezier{}
 	for spiralbezier := range stage.SpiralBeziers {
@@ -1753,131 +826,32 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(spiralbezierOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, spiralbezier := range spiralbezierOrdered {
+	for _, spiralbezier := range spiralbezierOrdered {
 
-		id = generatesIdentifier("SpiralBezier", idx, spiralbezier.Name)
-		map_SpiralBezier_Identifiers[spiralbezier] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralBezier")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralbezier.Name)
-		identifiersDecl += decl
+		identifiersDecl += spiralbezier.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralbezier.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralbezier.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StartX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.StartX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StartY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.StartY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ControlPointStartX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.ControlPointStartX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ControlPointStartY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.ControlPointStartY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EndX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.EndX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EndY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.EndY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ControlPointEndX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.ControlPointEndX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ControlPointEndY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.ControlPointEndY))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralbezier.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralbezier.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralbezier.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralbezier.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralbezier.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += spiralbezier.GongMarshallField(stage, "Name")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralbezier.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StartX")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StartY")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "ControlPointStartX")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "ControlPointStartY")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "EndX")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "EndY")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "ControlPointEndX")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "ControlPointEndY")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "Color")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "Transform")
 	}
-
-	map_SpiralBezierGrid_Identifiers := make(map[*SpiralBezierGrid]string)
-	_ = map_SpiralBezierGrid_Identifiers
 
 	spiralbeziergridOrdered := []*SpiralBezierGrid{}
 	for spiralbeziergrid := range stage.SpiralBezierGrids {
@@ -1896,35 +870,17 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(spiralbeziergridOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, spiralbeziergrid := range spiralbeziergridOrdered {
+	for _, spiralbeziergrid := range spiralbeziergridOrdered {
 
-		id = generatesIdentifier("SpiralBezierGrid", idx, spiralbeziergrid.Name)
-		map_SpiralBezierGrid_Identifiers[spiralbeziergrid] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralBezierGrid")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralbeziergrid.Name)
-		identifiersDecl += decl
+		identifiersDecl += spiralbeziergrid.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralbeziergrid.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralbeziergrid.IsDisplayed))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += spiralbeziergrid.GongMarshallField(stage, "Name")
+		initializerStatements += spiralbeziergrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralbeziergrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += spiralbeziergrid.GongMarshallField(stage, "SpiralBeziers")
 	}
-
-	map_SpiralCircle_Identifiers := make(map[*SpiralCircle]string)
-	_ = map_SpiralCircle_Identifiers
 
 	spiralcircleOrdered := []*SpiralCircle{}
 	for spiralcircle := range stage.SpiralCircles {
@@ -1943,131 +899,32 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(spiralcircleOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, spiralcircle := range spiralcircleOrdered {
+	for _, spiralcircle := range spiralcircleOrdered {
 
-		id = generatesIdentifier("SpiralCircle", idx, spiralcircle.Name)
-		map_SpiralCircle_Identifiers[spiralcircle] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralCircle")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralcircle.Name)
-		identifiersDecl += decl
+		identifiersDecl += spiralcircle.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralcircle.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralcircle.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.CenterX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "CenterY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.CenterY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "HasBespokeRadius")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralcircle.HasBespokeRadius))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BespopkeRadius")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.BespopkeRadius))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralcircle.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralcircle.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralcircle.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralcircle.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralcircle.Transform))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Pitch")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", spiralcircle.Pitch))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "ShowName")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralcircle.ShowName))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "BeatNb")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", spiralcircle.BeatNb))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Path")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralcircle.Path))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Name")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralcircle.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "CenterX")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "CenterY")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "HasBespokeRadius")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "BespopkeRadius")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Color")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Transform")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Pitch")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "ShowName")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "BeatNb")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Path")
 	}
-
-	map_SpiralCircleGrid_Identifiers := make(map[*SpiralCircleGrid]string)
-	_ = map_SpiralCircleGrid_Identifiers
 
 	spiralcirclegridOrdered := []*SpiralCircleGrid{}
 	for spiralcirclegrid := range stage.SpiralCircleGrids {
@@ -2086,35 +943,18 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(spiralcirclegridOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, spiralcirclegrid := range spiralcirclegridOrdered {
+	for _, spiralcirclegrid := range spiralcirclegridOrdered {
 
-		id = generatesIdentifier("SpiralCircleGrid", idx, spiralcirclegrid.Name)
-		map_SpiralCircleGrid_Identifiers[spiralcirclegrid] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralCircleGrid")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralcirclegrid.Name)
-		identifiersDecl += decl
+		identifiersDecl += spiralcirclegrid.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralcirclegrid.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralcirclegrid.IsDisplayed))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += spiralcirclegrid.GongMarshallField(stage, "Name")
+		initializerStatements += spiralcirclegrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralcirclegrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += spiralcirclegrid.GongMarshallField(stage, "SpiralRhombusGrid")
+		pointersInitializesStatements += spiralcirclegrid.GongMarshallField(stage, "SpiralCircles")
 	}
-
-	map_SpiralLine_Identifiers := make(map[*SpiralLine]string)
-	_ = map_SpiralLine_Identifiers
 
 	spirallineOrdered := []*SpiralLine{}
 	for spiralline := range stage.SpiralLines {
@@ -2133,107 +973,28 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(spirallineOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, spiralline := range spirallineOrdered {
+	for _, spiralline := range spirallineOrdered {
 
-		id = generatesIdentifier("SpiralLine", idx, spiralline.Name)
-		map_SpiralLine_Identifiers[spiralline] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralLine")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralline.Name)
-		identifiersDecl += decl
+		identifiersDecl += spiralline.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralline.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralline.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StartX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.StartX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EndX")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.EndX))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StartY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.StartY))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EndY")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.EndY))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralline.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralline.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralline.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralline.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralline.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += spiralline.GongMarshallField(stage, "Name")
+		initializerStatements += spiralline.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralline.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralline.GongMarshallField(stage, "StartX")
+		initializerStatements += spiralline.GongMarshallField(stage, "EndX")
+		initializerStatements += spiralline.GongMarshallField(stage, "StartY")
+		initializerStatements += spiralline.GongMarshallField(stage, "EndY")
+		initializerStatements += spiralline.GongMarshallField(stage, "Color")
+		initializerStatements += spiralline.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralline.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralline.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralline.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralline.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralline.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralline.GongMarshallField(stage, "Transform")
 	}
-
-	map_SpiralLineGrid_Identifiers := make(map[*SpiralLineGrid]string)
-	_ = map_SpiralLineGrid_Identifiers
 
 	spirallinegridOrdered := []*SpiralLineGrid{}
 	for spirallinegrid := range stage.SpiralLineGrids {
@@ -2252,35 +1013,17 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(spirallinegridOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, spirallinegrid := range spirallinegridOrdered {
+	for _, spirallinegrid := range spirallinegridOrdered {
 
-		id = generatesIdentifier("SpiralLineGrid", idx, spirallinegrid.Name)
-		map_SpiralLineGrid_Identifiers[spirallinegrid] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralLineGrid")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spirallinegrid.Name)
-		identifiersDecl += decl
+		identifiersDecl += spirallinegrid.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spirallinegrid.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spirallinegrid.IsDisplayed))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += spirallinegrid.GongMarshallField(stage, "Name")
+		initializerStatements += spirallinegrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spirallinegrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += spirallinegrid.GongMarshallField(stage, "SpiralLines")
 	}
-
-	map_SpiralOrigin_Identifiers := make(map[*SpiralOrigin]string)
-	_ = map_SpiralOrigin_Identifiers
 
 	spiraloriginOrdered := []*SpiralOrigin{}
 	for spiralorigin := range stage.SpiralOrigins {
@@ -2299,83 +1042,24 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(spiraloriginOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, spiralorigin := range spiraloriginOrdered {
+	for _, spiralorigin := range spiraloriginOrdered {
 
-		id = generatesIdentifier("SpiralOrigin", idx, spiralorigin.Name)
-		map_SpiralOrigin_Identifiers[spiralorigin] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralOrigin")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralorigin.Name)
-		identifiersDecl += decl
+		identifiersDecl += spiralorigin.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralorigin.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralorigin.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralorigin.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralorigin.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralorigin.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralorigin.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralorigin.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralorigin.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralorigin.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralorigin.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += spiralorigin.GongMarshallField(stage, "Name")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralorigin.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "Color")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "Transform")
 	}
-
-	map_SpiralRhombus_Identifiers := make(map[*SpiralRhombus]string)
-	_ = map_SpiralRhombus_Identifiers
 
 	spiralrhombusOrdered := []*SpiralRhombus{}
 	for spiralrhombus := range stage.SpiralRhombuss {
@@ -2394,131 +1078,32 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(spiralrhombusOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, spiralrhombus := range spiralrhombusOrdered {
+	for _, spiralrhombus := range spiralrhombusOrdered {
 
-		id = generatesIdentifier("SpiralRhombus", idx, spiralrhombus.Name)
-		map_SpiralRhombus_Identifiers[spiralrhombus] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralRhombus")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralrhombus.Name)
-		identifiersDecl += decl
+		identifiersDecl += spiralrhombus.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralrhombus.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralrhombus.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "X_r0")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.X_r0))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Y_r0")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.Y_r0))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "X_r1")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.X_r1))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Y_r1")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.Y_r1))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "X_r2")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.X_r2))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Y_r2")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.Y_r2))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "X_r3")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.X_r3))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Y_r3")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.Y_r3))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralrhombus.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralrhombus.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralrhombus.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralrhombus.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralrhombus.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Name")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralrhombus.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "X_r0")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Y_r0")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "X_r1")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Y_r1")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "X_r2")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Y_r2")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "X_r3")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Y_r3")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Color")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Transform")
 	}
-
-	map_SpiralRhombusGrid_Identifiers := make(map[*SpiralRhombusGrid]string)
-	_ = map_SpiralRhombusGrid_Identifiers
 
 	spiralrhombusgridOrdered := []*SpiralRhombusGrid{}
 	for spiralrhombusgrid := range stage.SpiralRhombusGrids {
@@ -2537,35 +1122,17 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(spiralrhombusgridOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, spiralrhombusgrid := range spiralrhombusgridOrdered {
+	for _, spiralrhombusgrid := range spiralrhombusgridOrdered {
 
-		id = generatesIdentifier("SpiralRhombusGrid", idx, spiralrhombusgrid.Name)
-		map_SpiralRhombusGrid_Identifiers[spiralrhombusgrid] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "SpiralRhombusGrid")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", spiralrhombusgrid.Name)
-		identifiersDecl += decl
+		identifiersDecl += spiralrhombusgrid.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(spiralrhombusgrid.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralrhombusgrid.IsDisplayed))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += spiralrhombusgrid.GongMarshallField(stage, "Name")
+		initializerStatements += spiralrhombusgrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralrhombusgrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += spiralrhombusgrid.GongMarshallField(stage, "SpiralRhombuses")
 	}
-
-	map_VerticalAxis_Identifiers := make(map[*VerticalAxis]string)
-	_ = map_VerticalAxis_Identifiers
 
 	verticalaxisOrdered := []*VerticalAxis{}
 	for verticalaxis := range stage.VerticalAxiss {
@@ -2584,1248 +1151,250 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	if len(verticalaxisOrdered) > 0 {
 		identifiersDecl += "\n"
 	}
-	for idx, verticalaxis := range verticalaxisOrdered {
+	for _, verticalaxis := range verticalaxisOrdered {
 
-		id = generatesIdentifier("VerticalAxis", idx, verticalaxis.Name)
-		map_VerticalAxis_Identifiers[verticalaxis] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "VerticalAxis")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", verticalaxis.Name)
-		identifiersDecl += decl
+		identifiersDecl += verticalaxis.GongMarshallIdentifier(stage)
 
 		initializerStatements += "\n"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(verticalaxis.Name))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "IsDisplayed")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", verticalaxis.IsDisplayed))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "AxisHandleBorderLength")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.AxisHandleBorderLength))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Axis_Length")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.Axis_Length))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Color")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(verticalaxis.Color))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "FillOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.FillOpacity))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Stroke")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(verticalaxis.Stroke))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeOpacity")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.StrokeOpacity))
-		initializerStatements += setValueField
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeWidth")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.StrokeWidth))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArray")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(verticalaxis.StrokeDashArray))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(verticalaxis.StrokeDashArrayWhenSelected))
-		initializerStatements += setValueField
-
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Transform")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(verticalaxis.Transform))
-		initializerStatements += setValueField
-
+		// Insertion point for basic fields value assignment
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Name")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += verticalaxis.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "AxisHandleBorderLength")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Axis_Length")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Color")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Stroke")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Transform")
 	}
 
 	// insertion initialization of objects to stage
-	if len(axisOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of Axis instances pointers"
-	}
-	for idx, axis := range axisOrdered {
+	for _, axis := range axisOrdered {
+		_ = axis
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("Axis", idx, axis.Name)
-		map_Axis_Identifiers[axis] = id
-
-		// Initialisation of values
-		if axis.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[axis.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(axisgridOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of AxisGrid instances pointers"
-	}
-	for idx, axisgrid := range axisgridOrdered {
+	for _, axisgrid := range axisgridOrdered {
+		_ = axisgrid
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("AxisGrid", idx, axisgrid.Name)
-		map_AxisGrid_Identifiers[axisgrid] = id
-
-		// Initialisation of values
-		if axisgrid.Reference != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Axis_Identifiers[axisgrid.Reference])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if axisgrid.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[axisgrid.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _axis := range axisgrid.Axiss {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Axiss")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Axis_Identifiers[_axis])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(bezierOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of Bezier instances pointers"
-	}
-	for idx, bezier := range bezierOrdered {
+	for _, bezier := range bezierOrdered {
+		_ = bezier
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("Bezier", idx, bezier.Name)
-		map_Bezier_Identifiers[bezier] = id
-
-		// Initialisation of values
-		if bezier.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[bezier.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(beziergridOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of BezierGrid instances pointers"
-	}
-	for idx, beziergrid := range beziergridOrdered {
+	for _, beziergrid := range beziergridOrdered {
+		_ = beziergrid
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("BezierGrid", idx, beziergrid.Name)
-		map_BezierGrid_Identifiers[beziergrid] = id
-
-		// Initialisation of values
-		if beziergrid.Reference != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[beziergrid.Reference])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if beziergrid.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[beziergrid.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _bezier := range beziergrid.Beziers {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Beziers")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[_bezier])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(beziergridstackOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of BezierGridStack instances pointers"
-	}
-	for idx, beziergridstack := range beziergridstackOrdered {
+	for _, beziergridstack := range beziergridstackOrdered {
+		_ = beziergridstack
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("BezierGridStack", idx, beziergridstack.Name)
-		map_BezierGridStack_Identifiers[beziergridstack] = id
-
-		// Initialisation of values
-		if beziergridstack.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[beziergridstack.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _beziergrid := range beziergridstack.BezierGrids {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "BezierGrids")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[_beziergrid])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(chapterOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of Chapter instances pointers"
-	}
-	for idx, chapter := range chapterOrdered {
+	for _, chapter := range chapterOrdered {
+		_ = chapter
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("Chapter", idx, chapter.Name)
-		map_Chapter_Identifiers[chapter] = id
-
-		// Initialisation of values
+		// Insertion point for pointers initialization
 	}
 
-	if len(circleOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of Circle instances pointers"
-	}
-	for idx, circle := range circleOrdered {
+	for _, circle := range circleOrdered {
+		_ = circle
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("Circle", idx, circle.Name)
-		map_Circle_Identifiers[circle] = id
-
-		// Initialisation of values
-		if circle.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[circle.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(circlegridOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of CircleGrid instances pointers"
-	}
-	for idx, circlegrid := range circlegridOrdered {
+	for _, circlegrid := range circlegridOrdered {
+		_ = circlegrid
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("CircleGrid", idx, circlegrid.Name)
-		map_CircleGrid_Identifiers[circlegrid] = id
-
-		// Initialisation of values
-		if circlegrid.Reference != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[circlegrid.Reference])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if circlegrid.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[circlegrid.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _circle := range circlegrid.Circles {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Circles")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[_circle])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(contentOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of Content instances pointers"
-	}
-	for idx, content := range contentOrdered {
+	for _, content := range contentOrdered {
+		_ = content
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("Content", idx, content.Name)
-		map_Content_Identifiers[content] = id
-
-		// Initialisation of values
-		for _, _chapter := range content.Chapters {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Chapters")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Chapter_Identifiers[_chapter])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(exporttomusicxmlOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of ExportToMusicxml instances pointers"
-	}
-	for idx, exporttomusicxml := range exporttomusicxmlOrdered {
+	for _, exporttomusicxml := range exporttomusicxmlOrdered {
+		_ = exporttomusicxml
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("ExportToMusicxml", idx, exporttomusicxml.Name)
-		map_ExportToMusicxml_Identifiers[exporttomusicxml] = id
-
-		// Initialisation of values
-		if exporttomusicxml.Parameter != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Parameter")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Parameter_Identifiers[exporttomusicxml.Parameter])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(frontcurveOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of FrontCurve instances pointers"
-	}
-	for idx, frontcurve := range frontcurveOrdered {
+	for _, frontcurve := range frontcurveOrdered {
+		_ = frontcurve
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("FrontCurve", idx, frontcurve.Name)
-		map_FrontCurve_Identifiers[frontcurve] = id
-
-		// Initialisation of values
+		// Insertion point for pointers initialization
 	}
 
-	if len(frontcurvestackOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of FrontCurveStack instances pointers"
-	}
-	for idx, frontcurvestack := range frontcurvestackOrdered {
+	for _, frontcurvestack := range frontcurvestackOrdered {
+		_ = frontcurvestack
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("FrontCurveStack", idx, frontcurvestack.Name)
-		map_FrontCurveStack_Identifiers[frontcurvestack] = id
-
-		// Initialisation of values
-		if frontcurvestack.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[frontcurvestack.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _frontcurve := range frontcurvestack.FrontCurves {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "FrontCurves")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_FrontCurve_Identifiers[_frontcurve])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _spiralcircle := range frontcurvestack.SpiralCircles {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralCircles")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralCircle_Identifiers[_spiralcircle])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(horizontalaxisOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of HorizontalAxis instances pointers"
-	}
-	for idx, horizontalaxis := range horizontalaxisOrdered {
+	for _, horizontalaxis := range horizontalaxisOrdered {
+		_ = horizontalaxis
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("HorizontalAxis", idx, horizontalaxis.Name)
-		map_HorizontalAxis_Identifiers[horizontalaxis] = id
-
-		// Initialisation of values
-		if horizontalaxis.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[horizontalaxis.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(keyOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of Key instances pointers"
-	}
-	for idx, key := range keyOrdered {
+	for _, key := range keyOrdered {
+		_ = key
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("Key", idx, key.Name)
-		map_Key_Identifiers[key] = id
-
-		// Initialisation of values
-		if key.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[key.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(parameterOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of Parameter instances pointers"
-	}
-	for idx, parameter := range parameterOrdered {
+	for _, parameter := range parameterOrdered {
+		_ = parameter
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("Parameter", idx, parameter.Name)
-		map_Parameter_Identifiers[parameter] = id
-
-		// Initialisation of values
-		if parameter.InitialRhombus != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialRhombus")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[parameter.InitialRhombus])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.InitialCircle != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialCircle")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[parameter.InitialCircle])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.InitialRhombusGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialRhombusGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_RhombusGrid_Identifiers[parameter.InitialRhombusGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.InitialCircleGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialCircleGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.InitialCircleGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.InitialAxis != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "InitialAxis")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Axis_Identifiers[parameter.InitialAxis])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.RotatedAxis != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "RotatedAxis")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Axis_Identifiers[parameter.RotatedAxis])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.RotatedRhombus != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "RotatedRhombus")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[parameter.RotatedRhombus])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.RotatedRhombusGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "RotatedRhombusGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_RhombusGrid_Identifiers[parameter.RotatedRhombusGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.RotatedCircleGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "RotatedCircleGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.RotatedCircleGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.NextRhombus != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "NextRhombus")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[parameter.NextRhombus])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.NextCircle != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "NextCircle")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[parameter.NextCircle])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowingRhombusGridSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowingRhombusGridSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[parameter.GrowingRhombusGridSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowingRhombusGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowingRhombusGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_RhombusGrid_Identifiers[parameter.GrowingRhombusGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowingCircleGridSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowingCircleGridSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[parameter.GrowingCircleGridSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowingCircleGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowingCircleGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.GrowingCircleGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowingCircleGridLeftSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowingCircleGridLeftSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[parameter.GrowingCircleGridLeftSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowingCircleGridLeft != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowingCircleGridLeft")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.GrowingCircleGridLeft])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.ConstructionAxis != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ConstructionAxis")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Axis_Identifiers[parameter.ConstructionAxis])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.ConstructionAxisGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ConstructionAxisGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_AxisGrid_Identifiers[parameter.ConstructionAxisGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.ConstructionCircle != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ConstructionCircle")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Circle_Identifiers[parameter.ConstructionCircle])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.ConstructionCircleGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ConstructionCircleGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.ConstructionCircleGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowthCurveSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[parameter.GrowthCurveSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowthCurve != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurve")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.GrowthCurve])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowthCurveShiftedRightSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveShiftedRightSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[parameter.GrowthCurveShiftedRightSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowthCurveShiftedRight != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveShiftedRight")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.GrowthCurveShiftedRight])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowthCurveNextSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveNextSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[parameter.GrowthCurveNextSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowthCurveNext != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveNext")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.GrowthCurveNext])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowthCurveNextShiftedRightSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveNextShiftedRightSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Bezier_Identifiers[parameter.GrowthCurveNextShiftedRightSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowthCurveNextShiftedRight != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveNextShiftedRight")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.GrowthCurveNextShiftedRight])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.GrowthCurveStack != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "GrowthCurveStack")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGridStack_Identifiers[parameter.GrowthCurveStack])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralRhombusGridSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralRhombusGridSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralRhombus_Identifiers[parameter.SpiralRhombusGridSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralRhombusGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralRhombusGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralRhombusGrid_Identifiers[parameter.SpiralRhombusGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralCircleSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralCircleSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralCircle_Identifiers[parameter.SpiralCircleSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralCircleGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralCircleGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralCircleGrid_Identifiers[parameter.SpiralCircleGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralCircleFullGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralCircleFullGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralCircleGrid_Identifiers[parameter.SpiralCircleFullGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralConstructionOuterLineSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLine_Identifiers[parameter.SpiralConstructionOuterLineSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralConstructionInnerLineSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionInnerLineSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLine_Identifiers[parameter.SpiralConstructionInnerLineSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralConstructionOuterLineGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLineGrid_Identifiers[parameter.SpiralConstructionOuterLineGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralConstructionInnerLineGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionInnerLineGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLineGrid_Identifiers[parameter.SpiralConstructionInnerLineGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralConstructionCircleGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionCircleGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralCircleGrid_Identifiers[parameter.SpiralConstructionCircleGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralConstructionOuterLineFullGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineFullGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLineGrid_Identifiers[parameter.SpiralConstructionOuterLineFullGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralBezierSeed != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralBezierSeed")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralBezier_Identifiers[parameter.SpiralBezierSeed])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralBezierGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralBezierGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralBezierGrid_Identifiers[parameter.SpiralBezierGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralBezierFullGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralBezierFullGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralBezierGrid_Identifiers[parameter.SpiralBezierFullGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.FrontCurveStack != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "FrontCurveStack")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_FrontCurveStack_Identifiers[parameter.FrontCurveStack])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.Fkey != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Fkey")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Key_Identifiers[parameter.Fkey])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.PitchLines != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "PitchLines")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_AxisGrid_Identifiers[parameter.PitchLines])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.BeatLines != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "BeatLines")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_AxisGrid_Identifiers[parameter.BeatLines])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.FirstVoice != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "FirstVoice")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.FirstVoice])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.FirstVoiceShiftedRigth != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "FirstVoiceShiftedRigth")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.FirstVoiceShiftedRigth])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SecondVoice != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SecondVoice")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.SecondVoice])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SecondVoiceShiftedRight != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SecondVoiceShiftedRight")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_BezierGrid_Identifiers[parameter.SecondVoiceShiftedRight])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.FirstVoiceNotes != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "FirstVoiceNotes")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.FirstVoiceNotes])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.FirstVoiceNotesShiftedRight != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "FirstVoiceNotesShiftedRight")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.FirstVoiceNotesShiftedRight])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SecondVoiceNotes != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SecondVoiceNotes")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.SecondVoiceNotes])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SecondVoiceNotesShiftedRight != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SecondVoiceNotesShiftedRight")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_CircleGrid_Identifiers[parameter.SecondVoiceNotesShiftedRight])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.HorizontalAxis != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "HorizontalAxis")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_HorizontalAxis_Identifiers[parameter.HorizontalAxis])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.VerticalAxis != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "VerticalAxis")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_VerticalAxis_Identifiers[parameter.VerticalAxis])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if parameter.SpiralOrigin != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralOrigin")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralOrigin_Identifiers[parameter.SpiralOrigin])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(rhombusOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of Rhombus instances pointers"
-	}
-	for idx, rhombus := range rhombusOrdered {
+	for _, rhombus := range rhombusOrdered {
+		_ = rhombus
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("Rhombus", idx, rhombus.Name)
-		map_Rhombus_Identifiers[rhombus] = id
-
-		// Initialisation of values
-		if rhombus.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[rhombus.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(rhombusgridOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of RhombusGrid instances pointers"
-	}
-	for idx, rhombusgrid := range rhombusgridOrdered {
+	for _, rhombusgrid := range rhombusgridOrdered {
+		_ = rhombusgrid
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("RhombusGrid", idx, rhombusgrid.Name)
-		map_RhombusGrid_Identifiers[rhombusgrid] = id
-
-		// Initialisation of values
-		if rhombusgrid.Reference != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Reference")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[rhombusgrid.Reference])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if rhombusgrid.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[rhombusgrid.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _rhombus := range rhombusgrid.Rhombuses {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "Rhombuses")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_Rhombus_Identifiers[_rhombus])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(shapecategoryOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of ShapeCategory instances pointers"
-	}
-	for idx, shapecategory := range shapecategoryOrdered {
+	for _, shapecategory := range shapecategoryOrdered {
+		_ = shapecategory
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("ShapeCategory", idx, shapecategory.Name)
-		map_ShapeCategory_Identifiers[shapecategory] = id
-
-		// Initialisation of values
+		// Insertion point for pointers initialization
 	}
 
-	if len(spiralbezierOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of SpiralBezier instances pointers"
-	}
-	for idx, spiralbezier := range spiralbezierOrdered {
+	for _, spiralbezier := range spiralbezierOrdered {
+		_ = spiralbezier
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("SpiralBezier", idx, spiralbezier.Name)
-		map_SpiralBezier_Identifiers[spiralbezier] = id
-
-		// Initialisation of values
-		if spiralbezier.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralbezier.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(spiralbeziergridOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of SpiralBezierGrid instances pointers"
-	}
-	for idx, spiralbeziergrid := range spiralbeziergridOrdered {
+	for _, spiralbeziergrid := range spiralbeziergridOrdered {
+		_ = spiralbeziergrid
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("SpiralBezierGrid", idx, spiralbeziergrid.Name)
-		map_SpiralBezierGrid_Identifiers[spiralbeziergrid] = id
-
-		// Initialisation of values
-		if spiralbeziergrid.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralbeziergrid.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _spiralbezier := range spiralbeziergrid.SpiralBeziers {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralBeziers")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralBezier_Identifiers[_spiralbezier])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(spiralcircleOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of SpiralCircle instances pointers"
-	}
-	for idx, spiralcircle := range spiralcircleOrdered {
+	for _, spiralcircle := range spiralcircleOrdered {
+		_ = spiralcircle
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("SpiralCircle", idx, spiralcircle.Name)
-		map_SpiralCircle_Identifiers[spiralcircle] = id
-
-		// Initialisation of values
-		if spiralcircle.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralcircle.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(spiralcirclegridOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of SpiralCircleGrid instances pointers"
-	}
-	for idx, spiralcirclegrid := range spiralcirclegridOrdered {
+	for _, spiralcirclegrid := range spiralcirclegridOrdered {
+		_ = spiralcirclegrid
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("SpiralCircleGrid", idx, spiralcirclegrid.Name)
-		map_SpiralCircleGrid_Identifiers[spiralcirclegrid] = id
-
-		// Initialisation of values
-		if spiralcirclegrid.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralcirclegrid.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		if spiralcirclegrid.SpiralRhombusGrid != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralRhombusGrid")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralRhombusGrid_Identifiers[spiralcirclegrid.SpiralRhombusGrid])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _spiralcircle := range spiralcirclegrid.SpiralCircles {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralCircles")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralCircle_Identifiers[_spiralcircle])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(spirallineOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of SpiralLine instances pointers"
-	}
-	for idx, spiralline := range spirallineOrdered {
+	for _, spiralline := range spirallineOrdered {
+		_ = spiralline
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("SpiralLine", idx, spiralline.Name)
-		map_SpiralLine_Identifiers[spiralline] = id
-
-		// Initialisation of values
-		if spiralline.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralline.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(spirallinegridOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of SpiralLineGrid instances pointers"
-	}
-	for idx, spirallinegrid := range spirallinegridOrdered {
+	for _, spirallinegrid := range spirallinegridOrdered {
+		_ = spirallinegrid
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("SpiralLineGrid", idx, spirallinegrid.Name)
-		map_SpiralLineGrid_Identifiers[spirallinegrid] = id
-
-		// Initialisation of values
-		if spirallinegrid.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spirallinegrid.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _spiralline := range spirallinegrid.SpiralLines {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralLines")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralLine_Identifiers[_spiralline])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(spiraloriginOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of SpiralOrigin instances pointers"
-	}
-	for idx, spiralorigin := range spiraloriginOrdered {
+	for _, spiralorigin := range spiraloriginOrdered {
+		_ = spiralorigin
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("SpiralOrigin", idx, spiralorigin.Name)
-		map_SpiralOrigin_Identifiers[spiralorigin] = id
-
-		// Initialisation of values
-		if spiralorigin.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralorigin.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(spiralrhombusOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of SpiralRhombus instances pointers"
-	}
-	for idx, spiralrhombus := range spiralrhombusOrdered {
+	for _, spiralrhombus := range spiralrhombusOrdered {
+		_ = spiralrhombus
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("SpiralRhombus", idx, spiralrhombus.Name)
-		map_SpiralRhombus_Identifiers[spiralrhombus] = id
-
-		// Initialisation of values
-		if spiralrhombus.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralrhombus.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(spiralrhombusgridOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of SpiralRhombusGrid instances pointers"
-	}
-	for idx, spiralrhombusgrid := range spiralrhombusgridOrdered {
+	for _, spiralrhombusgrid := range spiralrhombusgridOrdered {
+		_ = spiralrhombusgrid
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("SpiralRhombusGrid", idx, spiralrhombusgrid.Name)
-		map_SpiralRhombusGrid_Identifiers[spiralrhombusgrid] = id
-
-		// Initialisation of values
-		if spiralrhombusgrid.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[spiralrhombusgrid.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
-		for _, _spiralrhombus := range spiralrhombusgrid.SpiralRhombuses {
-			setPointerField = SliceOfPointersFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "SpiralRhombuses")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_SpiralRhombus_Identifiers[_spiralrhombus])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
-	if len(verticalaxisOrdered) > 0 {
-		pointersInitializesStatements += "\n\t// setup of VerticalAxis instances pointers"
-	}
-	for idx, verticalaxis := range verticalaxisOrdered {
+	for _, verticalaxis := range verticalaxisOrdered {
+		_ = verticalaxis
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("VerticalAxis", idx, verticalaxis.Name)
-		map_VerticalAxis_Identifiers[verticalaxis] = id
-
-		// Initialisation of values
-		if verticalaxis.ShapeCategory != nil {
-			setPointerField = PointerFieldInitStatement
-			setPointerField = strings.ReplaceAll(setPointerField, "{{Identifier}}", id)
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldName}}", "ShapeCategory")
-			setPointerField = strings.ReplaceAll(setPointerField, "{{GeneratedFieldNameValue}}", map_ShapeCategory_Identifiers[verticalaxis.ShapeCategory])
-			pointersInitializesStatements += setPointerField
-		}
-
+		// Insertion point for pointers initialization
 	}
 
 	res = strings.ReplaceAll(res, "{{Identifiers}}", identifiersDecl)
@@ -3881,18 +1450,2843 @@ func (stage *Stage) MarshallToString(modelsPackageName, packageName string) (res
 	return
 }
 
-// unique identifier per struct
-func generatesIdentifier(gongStructName string, idx int, instanceName string) (identifier string) {
+// insertion point for marshall field methods
+func (axis *Axis) GongMarshallField(stage *Stage, fieldName string) (res string) {
 
-	identifier = instanceName
-	// Make a Regex to say we only want letters and numbers
-	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
-	if err != nil {
-		log.Fatal(err)
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(axis.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", axis.IsDisplayed))
+	case "AngleDegree":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "AngleDegree")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.AngleDegree))
+	case "Length":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Length")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.Length))
+	case "CenterX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "CenterX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.CenterX))
+	case "CenterY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "CenterY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.CenterY))
+	case "EndX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "EndX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.EndX))
+	case "EndY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "EndY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.EndY))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(axis.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(axis.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", axis.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(axis.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(axis.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(axis.Transform))
+
+	case "ShapeCategory":
+		if axis.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", axis.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct Axis", fieldName)
 	}
-	processedString := reg.ReplaceAllString(instanceName, "_")
+	return
+}
 
-	identifier = fmt.Sprintf("__%s__%06d_%s", gongStructName, idx, processedString)
+func (axisgrid *AxisGrid) GongMarshallField(stage *Stage, fieldName string) (res string) {
 
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axisgrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(axisgrid.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", axisgrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", axisgrid.IsDisplayed))
+
+	case "Reference":
+		if axisgrid.Reference != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", axisgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", axisgrid.Reference.GongGetIdentifier(stage))
+		}
+	case "ShapeCategory":
+		if axisgrid.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", axisgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", axisgrid.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "Axiss":
+		for _, _axis := range axisgrid.Axiss {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", axisgrid.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "Axiss")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _axis.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct AxisGrid", fieldName)
+	}
+	return
+}
+
+func (bezier *Bezier) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(bezier.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", bezier.IsDisplayed))
+	case "StartX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StartX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.StartX))
+	case "StartY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StartY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.StartY))
+	case "ControlPointStartX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ControlPointStartX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.ControlPointStartX))
+	case "ControlPointStartY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ControlPointStartY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.ControlPointStartY))
+	case "EndX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "EndX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.EndX))
+	case "EndY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "EndY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.EndY))
+	case "ControlPointEndX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ControlPointEndX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.ControlPointEndX))
+	case "ControlPointEndY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ControlPointEndY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.ControlPointEndY))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(bezier.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(bezier.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", bezier.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(bezier.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(bezier.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(bezier.Transform))
+
+	case "ShapeCategory":
+		if bezier.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", bezier.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct Bezier", fieldName)
+	}
+	return
+}
+
+func (beziergrid *BezierGrid) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", beziergrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(beziergrid.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", beziergrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", beziergrid.IsDisplayed))
+
+	case "Reference":
+		if beziergrid.Reference != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", beziergrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", beziergrid.Reference.GongGetIdentifier(stage))
+		}
+	case "ShapeCategory":
+		if beziergrid.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", beziergrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", beziergrid.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "Beziers":
+		for _, _bezier := range beziergrid.Beziers {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", beziergrid.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "Beziers")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _bezier.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct BezierGrid", fieldName)
+	}
+	return
+}
+
+func (beziergridstack *BezierGridStack) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", beziergridstack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(beziergridstack.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", beziergridstack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", beziergridstack.IsDisplayed))
+
+	case "ShapeCategory":
+		if beziergridstack.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", beziergridstack.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", beziergridstack.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "BezierGrids":
+		for _, _beziergrid := range beziergridstack.BezierGrids {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", beziergridstack.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "BezierGrids")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _beziergrid.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct BezierGridStack", fieldName)
+	}
+	return
+}
+
+func (chapter *Chapter) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", chapter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(chapter.Name))
+	case "MardownContent":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", chapter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "MardownContent")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(chapter.MardownContent))
+
+	default:
+		log.Panicf("Unknown field %s for Gongstruct Chapter", fieldName)
+	}
+	return
+}
+
+func (circle *Circle) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(circle.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circle.IsDisplayed))
+	case "CenterX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "CenterX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.CenterX))
+	case "CenterY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "CenterY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.CenterY))
+	case "HasBespokeRadius":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "HasBespokeRadius")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circle.HasBespokeRadius))
+	case "BespopkeRadius":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BespopkeRadius")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.BespopkeRadius))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(circle.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(circle.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", circle.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(circle.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(circle.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(circle.Transform))
+	case "Pitch":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Pitch")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", circle.Pitch))
+	case "ShowName":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShowName")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circle.ShowName))
+	case "BeatNb":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BeatNb")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", circle.BeatNb))
+
+	case "ShapeCategory":
+		if circle.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", circle.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct Circle", fieldName)
+	}
+	return
+}
+
+func (circlegrid *CircleGrid) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circlegrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(circlegrid.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", circlegrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", circlegrid.IsDisplayed))
+
+	case "Reference":
+		if circlegrid.Reference != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", circlegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", circlegrid.Reference.GongGetIdentifier(stage))
+		}
+	case "ShapeCategory":
+		if circlegrid.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", circlegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", circlegrid.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "Circles":
+		for _, _circle := range circlegrid.Circles {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", circlegrid.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "Circles")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _circle.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct CircleGrid", fieldName)
+	}
+	return
+}
+
+func (content *Content) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", content.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(content.Name))
+	case "MardownContent":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", content.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "MardownContent")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(content.MardownContent))
+	case "ContentPath":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", content.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ContentPath")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(content.ContentPath))
+	case "OutputPath":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", content.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "OutputPath")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(content.OutputPath))
+	case "LayoutPath":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", content.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "LayoutPath")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(content.LayoutPath))
+	case "StaticPath":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", content.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StaticPath")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(content.StaticPath))
+	case "Target":
+		if content.Target != "" {
+			res = StringEnumInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", content.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Target")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "models."+content.Target.ToCodeString())
+		}
+
+	case "Chapters":
+		for _, _chapter := range content.Chapters {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", content.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "Chapters")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _chapter.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct Content", fieldName)
+	}
+	return
+}
+
+func (exporttomusicxml *ExportToMusicxml) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", exporttomusicxml.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(exporttomusicxml.Name))
+
+	case "Parameter":
+		if exporttomusicxml.Parameter != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", exporttomusicxml.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Parameter")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", exporttomusicxml.Parameter.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct ExportToMusicxml", fieldName)
+	}
+	return
+}
+
+func (frontcurve *FrontCurve) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurve.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(frontcurve.Name))
+	case "Path":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurve.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Path")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(frontcurve.Path))
+
+	default:
+		log.Panicf("Unknown field %s for Gongstruct FrontCurve", fieldName)
+	}
+	return
+}
+
+func (frontcurvestack *FrontCurveStack) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", frontcurvestack.IsDisplayed))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", frontcurvestack.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", frontcurvestack.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", frontcurvestack.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(frontcurvestack.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(frontcurvestack.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(frontcurvestack.Transform))
+
+	case "ShapeCategory":
+		if frontcurvestack.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", frontcurvestack.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "FrontCurves":
+		for _, _frontcurve := range frontcurvestack.FrontCurves {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "FrontCurves")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _frontcurve.GongGetIdentifier(stage))
+			res += tmp
+		}
+	case "SpiralCircles":
+		for _, _spiralcircle := range frontcurvestack.SpiralCircles {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "SpiralCircles")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _spiralcircle.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct FrontCurveStack", fieldName)
+	}
+	return
+}
+
+func (horizontalaxis *HorizontalAxis) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(horizontalaxis.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", horizontalaxis.IsDisplayed))
+	case "AxisHandleBorderLength":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "AxisHandleBorderLength")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.AxisHandleBorderLength))
+	case "Axis_Length":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Axis_Length")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.Axis_Length))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(horizontalaxis.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(horizontalaxis.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", horizontalaxis.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(horizontalaxis.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(horizontalaxis.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(horizontalaxis.Transform))
+
+	case "ShapeCategory":
+		if horizontalaxis.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", horizontalaxis.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct HorizontalAxis", fieldName)
+	}
+	return
+}
+
+func (key *Key) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(key.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", key.IsDisplayed))
+	case "Path":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Path")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(key.Path))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(key.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", key.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(key.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", key.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", key.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(key.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(key.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(key.Transform))
+
+	case "ShapeCategory":
+		if key.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", key.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct Key", fieldName)
+	}
+	return
+}
+
+func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(parameter.Name))
+	case "BackendColor":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BackendColor")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(parameter.BackendColor))
+	case "MinuteColor":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "MinuteColor")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(parameter.MinuteColor))
+	case "HourColor":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "HourColor")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(parameter.HourColor))
+	case "N":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "N")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.N))
+	case "M":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "M")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.M))
+	case "Z":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Z")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.Z))
+	case "InsideAngle":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InsideAngle")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.InsideAngle))
+	case "ShiftToNearestCircle":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShiftToNearestCircle")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.ShiftToNearestCircle))
+	case "SideLength":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SideLength")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SideLength))
+	case "StackWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StackWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.StackWidth))
+	case "NbShitRight":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NbShitRight")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbShitRight))
+	case "StackHeight":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StackHeight")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.StackHeight))
+	case "BezierControlLengthRatio":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BezierControlLengthRatio")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.BezierControlLengthRatio))
+	case "SpiralBezierStrength":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierStrength")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SpiralBezierStrength))
+	case "NbInterpolationPoints":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NbInterpolationPoints")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbInterpolationPoints))
+	case "FkeySizeRatio":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FkeySizeRatio")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FkeySizeRatio))
+	case "FkeyOriginRelativeX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FkeyOriginRelativeX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FkeyOriginRelativeX))
+	case "FkeyOriginRelativeY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FkeyOriginRelativeY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FkeyOriginRelativeY))
+	case "PitchHeight":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "PitchHeight")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.PitchHeight))
+	case "NbPitchLines":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NbPitchLines")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbPitchLines))
+	case "BeatLinesHeightRatio":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BeatLinesHeightRatio")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.BeatLinesHeightRatio))
+	case "NbBeatLines":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NbBeatLines")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbBeatLines))
+	case "NbOfBeatsInTheme":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NbOfBeatsInTheme")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.NbOfBeatsInTheme))
+	case "FirstVoiceShiftX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceShiftX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FirstVoiceShiftX))
+	case "FirstVoiceShiftY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceShiftY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.FirstVoiceShiftY))
+	case "PitchDifference":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "PitchDifference")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.PitchDifference))
+	case "BeatsPerSecond":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BeatsPerSecond")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.BeatsPerSecond))
+	case "Level":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Level")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.Level))
+	case "IsMinor":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsMinor")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", parameter.IsMinor))
+	case "ThemeBinaryEncoding":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ThemeBinaryEncoding")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.ThemeBinaryEncoding))
+	case "OriginX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "OriginX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.OriginX))
+	case "OriginY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "OriginY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.OriginY))
+	case "SpiralOriginX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralOriginX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SpiralOriginX))
+	case "SpiralOriginY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralOriginY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SpiralOriginY))
+	case "OriginCrossWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "OriginCrossWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.OriginCrossWidth))
+	case "SpiralRadiusRatio":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRadiusRatio")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", parameter.SpiralRadiusRatio))
+	case "ShowSpiralBezierConstruct":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShowSpiralBezierConstruct")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", parameter.ShowSpiralBezierConstruct))
+	case "ShowInterpolationPoints":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShowInterpolationPoints")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", parameter.ShowInterpolationPoints))
+	case "ActualBeatsTemporalShift":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ActualBeatsTemporalShift")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", parameter.ActualBeatsTemporalShift))
+	case "PathToStaticFiles":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "PathToStaticFiles")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(parameter.PathToStaticFiles))
+	case "PathToGeneratedSVG":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "PathToGeneratedSVG")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(parameter.PathToGeneratedSVG))
+	case "PathToGeneratedScore":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "PathToGeneratedScore")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(parameter.PathToGeneratedScore))
+
+	case "InitialRhombus":
+		if parameter.InitialRhombus != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialRhombus")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialRhombus.GongGetIdentifier(stage))
+		}
+	case "InitialCircle":
+		if parameter.InitialCircle != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialCircle")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialCircle.GongGetIdentifier(stage))
+		}
+	case "InitialRhombusGrid":
+		if parameter.InitialRhombusGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialRhombusGrid.GongGetIdentifier(stage))
+		}
+	case "InitialCircleGrid":
+		if parameter.InitialCircleGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialCircleGrid.GongGetIdentifier(stage))
+		}
+	case "InitialAxis":
+		if parameter.InitialAxis != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialAxis.GongGetIdentifier(stage))
+		}
+	case "RotatedAxis":
+		if parameter.RotatedAxis != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.RotatedAxis.GongGetIdentifier(stage))
+		}
+	case "RotatedRhombus":
+		if parameter.RotatedRhombus != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedRhombus")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.RotatedRhombus.GongGetIdentifier(stage))
+		}
+	case "RotatedRhombusGrid":
+		if parameter.RotatedRhombusGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.RotatedRhombusGrid.GongGetIdentifier(stage))
+		}
+	case "RotatedCircleGrid":
+		if parameter.RotatedCircleGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.RotatedCircleGrid.GongGetIdentifier(stage))
+		}
+	case "NextRhombus":
+		if parameter.NextRhombus != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NextRhombus")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.NextRhombus.GongGetIdentifier(stage))
+		}
+	case "NextCircle":
+		if parameter.NextCircle != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NextCircle")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.NextCircle.GongGetIdentifier(stage))
+		}
+	case "GrowingRhombusGridSeed":
+		if parameter.GrowingRhombusGridSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingRhombusGridSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingRhombusGridSeed.GongGetIdentifier(stage))
+		}
+	case "GrowingRhombusGrid":
+		if parameter.GrowingRhombusGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingRhombusGrid.GongGetIdentifier(stage))
+		}
+	case "GrowingCircleGridSeed":
+		if parameter.GrowingCircleGridSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGridSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingCircleGridSeed.GongGetIdentifier(stage))
+		}
+	case "GrowingCircleGrid":
+		if parameter.GrowingCircleGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingCircleGrid.GongGetIdentifier(stage))
+		}
+	case "GrowingCircleGridLeftSeed":
+		if parameter.GrowingCircleGridLeftSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGridLeftSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingCircleGridLeftSeed.GongGetIdentifier(stage))
+		}
+	case "GrowingCircleGridLeft":
+		if parameter.GrowingCircleGridLeft != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGridLeft")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingCircleGridLeft.GongGetIdentifier(stage))
+		}
+	case "ConstructionAxis":
+		if parameter.ConstructionAxis != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.ConstructionAxis.GongGetIdentifier(stage))
+		}
+	case "ConstructionAxisGrid":
+		if parameter.ConstructionAxisGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionAxisGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.ConstructionAxisGrid.GongGetIdentifier(stage))
+		}
+	case "ConstructionCircle":
+		if parameter.ConstructionCircle != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionCircle")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.ConstructionCircle.GongGetIdentifier(stage))
+		}
+	case "ConstructionCircleGrid":
+		if parameter.ConstructionCircleGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.ConstructionCircleGrid.GongGetIdentifier(stage))
+		}
+	case "GrowthCurveSeed":
+		if parameter.GrowthCurveSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveSeed.GongGetIdentifier(stage))
+		}
+	case "GrowthCurve":
+		if parameter.GrowthCurve != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurve")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurve.GongGetIdentifier(stage))
+		}
+	case "GrowthCurveShiftedRightSeed":
+		if parameter.GrowthCurveShiftedRightSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveShiftedRightSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveShiftedRightSeed.GongGetIdentifier(stage))
+		}
+	case "GrowthCurveShiftedRight":
+		if parameter.GrowthCurveShiftedRight != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveShiftedRight.GongGetIdentifier(stage))
+		}
+	case "GrowthCurveNextSeed":
+		if parameter.GrowthCurveNextSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNextSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveNextSeed.GongGetIdentifier(stage))
+		}
+	case "GrowthCurveNext":
+		if parameter.GrowthCurveNext != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNext")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveNext.GongGetIdentifier(stage))
+		}
+	case "GrowthCurveNextShiftedRightSeed":
+		if parameter.GrowthCurveNextShiftedRightSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNextShiftedRightSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveNextShiftedRightSeed.GongGetIdentifier(stage))
+		}
+	case "GrowthCurveNextShiftedRight":
+		if parameter.GrowthCurveNextShiftedRight != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNextShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveNextShiftedRight.GongGetIdentifier(stage))
+		}
+	case "GrowthCurveStack":
+		if parameter.GrowthCurveStack != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveStack")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveStack.GongGetIdentifier(stage))
+		}
+	case "SpiralRhombusGridSeed":
+		if parameter.SpiralRhombusGridSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRhombusGridSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralRhombusGridSeed.GongGetIdentifier(stage))
+		}
+	case "SpiralRhombusGrid":
+		if parameter.SpiralRhombusGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralRhombusGrid.GongGetIdentifier(stage))
+		}
+	case "SpiralCircleSeed":
+		if parameter.SpiralCircleSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralCircleSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralCircleSeed.GongGetIdentifier(stage))
+		}
+	case "SpiralCircleGrid":
+		if parameter.SpiralCircleGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralCircleGrid.GongGetIdentifier(stage))
+		}
+	case "SpiralCircleFullGrid":
+		if parameter.SpiralCircleFullGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralCircleFullGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralCircleFullGrid.GongGetIdentifier(stage))
+		}
+	case "SpiralConstructionOuterLineSeed":
+		if parameter.SpiralConstructionOuterLineSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionOuterLineSeed.GongGetIdentifier(stage))
+		}
+	case "SpiralConstructionInnerLineSeed":
+		if parameter.SpiralConstructionInnerLineSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionInnerLineSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionInnerLineSeed.GongGetIdentifier(stage))
+		}
+	case "SpiralConstructionOuterLineGrid":
+		if parameter.SpiralConstructionOuterLineGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionOuterLineGrid.GongGetIdentifier(stage))
+		}
+	case "SpiralConstructionInnerLineGrid":
+		if parameter.SpiralConstructionInnerLineGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionInnerLineGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionInnerLineGrid.GongGetIdentifier(stage))
+		}
+	case "SpiralConstructionCircleGrid":
+		if parameter.SpiralConstructionCircleGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionCircleGrid.GongGetIdentifier(stage))
+		}
+	case "SpiralConstructionOuterLineFullGrid":
+		if parameter.SpiralConstructionOuterLineFullGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineFullGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionOuterLineFullGrid.GongGetIdentifier(stage))
+		}
+	case "SpiralBezierSeed":
+		if parameter.SpiralBezierSeed != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralBezierSeed.GongGetIdentifier(stage))
+		}
+	case "SpiralBezierGrid":
+		if parameter.SpiralBezierGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralBezierGrid.GongGetIdentifier(stage))
+		}
+	case "SpiralBezierFullGrid":
+		if parameter.SpiralBezierFullGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierFullGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralBezierFullGrid.GongGetIdentifier(stage))
+		}
+	case "FrontCurveStack":
+		if parameter.FrontCurveStack != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FrontCurveStack")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FrontCurveStack.GongGetIdentifier(stage))
+		}
+	case "Fkey":
+		if parameter.Fkey != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Fkey")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.Fkey.GongGetIdentifier(stage))
+		}
+	case "PitchLines":
+		if parameter.PitchLines != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "PitchLines")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.PitchLines.GongGetIdentifier(stage))
+		}
+	case "BeatLines":
+		if parameter.BeatLines != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BeatLines")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.BeatLines.GongGetIdentifier(stage))
+		}
+	case "FirstVoice":
+		if parameter.FirstVoice != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoice")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FirstVoice.GongGetIdentifier(stage))
+		}
+	case "FirstVoiceShiftedRigth":
+		if parameter.FirstVoiceShiftedRigth != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceShiftedRigth")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FirstVoiceShiftedRigth.GongGetIdentifier(stage))
+		}
+	case "SecondVoice":
+		if parameter.SecondVoice != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoice")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SecondVoice.GongGetIdentifier(stage))
+		}
+	case "SecondVoiceShiftedRight":
+		if parameter.SecondVoiceShiftedRight != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoiceShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SecondVoiceShiftedRight.GongGetIdentifier(stage))
+		}
+	case "FirstVoiceNotes":
+		if parameter.FirstVoiceNotes != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceNotes")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FirstVoiceNotes.GongGetIdentifier(stage))
+		}
+	case "FirstVoiceNotesShiftedRight":
+		if parameter.FirstVoiceNotesShiftedRight != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceNotesShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FirstVoiceNotesShiftedRight.GongGetIdentifier(stage))
+		}
+	case "SecondVoiceNotes":
+		if parameter.SecondVoiceNotes != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoiceNotes")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SecondVoiceNotes.GongGetIdentifier(stage))
+		}
+	case "SecondVoiceNotesShiftedRight":
+		if parameter.SecondVoiceNotesShiftedRight != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoiceNotesShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SecondVoiceNotesShiftedRight.GongGetIdentifier(stage))
+		}
+	case "HorizontalAxis":
+		if parameter.HorizontalAxis != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "HorizontalAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.HorizontalAxis.GongGetIdentifier(stage))
+		}
+	case "VerticalAxis":
+		if parameter.VerticalAxis != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "VerticalAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.VerticalAxis.GongGetIdentifier(stage))
+		}
+	case "SpiralOrigin":
+		if parameter.SpiralOrigin != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralOrigin")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralOrigin.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct Parameter", fieldName)
+	}
+	return
+}
+
+func (rhombus *Rhombus) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(rhombus.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", rhombus.IsDisplayed))
+	case "CenterX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "CenterX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.CenterX))
+	case "CenterY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "CenterY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.CenterY))
+	case "SideLength":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SideLength")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.SideLength))
+	case "AngleDegree":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "AngleDegree")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.AngleDegree))
+	case "InsideAngle":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InsideAngle")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.InsideAngle))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(rhombus.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(rhombus.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", rhombus.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(rhombus.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(rhombus.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(rhombus.Transform))
+
+	case "ShapeCategory":
+		if rhombus.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", rhombus.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct Rhombus", fieldName)
+	}
+	return
+}
+
+func (rhombusgrid *RhombusGrid) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombusgrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(rhombusgrid.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", rhombusgrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", rhombusgrid.IsDisplayed))
+
+	case "Reference":
+		if rhombusgrid.Reference != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", rhombusgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", rhombusgrid.Reference.GongGetIdentifier(stage))
+		}
+	case "ShapeCategory":
+		if rhombusgrid.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", rhombusgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", rhombusgrid.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "Rhombuses":
+		for _, _rhombus := range rhombusgrid.Rhombuses {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", rhombusgrid.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "Rhombuses")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _rhombus.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct RhombusGrid", fieldName)
+	}
+	return
+}
+
+func (shapecategory *ShapeCategory) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", shapecategory.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(shapecategory.Name))
+	case "IsExpanded":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", shapecategory.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsExpanded")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", shapecategory.IsExpanded))
+
+	default:
+		log.Panicf("Unknown field %s for Gongstruct ShapeCategory", fieldName)
+	}
+	return
+}
+
+func (spiralbezier *SpiralBezier) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralbezier.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralbezier.IsDisplayed))
+	case "StartX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StartX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.StartX))
+	case "StartY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StartY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.StartY))
+	case "ControlPointStartX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ControlPointStartX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.ControlPointStartX))
+	case "ControlPointStartY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ControlPointStartY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.ControlPointStartY))
+	case "EndX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "EndX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.EndX))
+	case "EndY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "EndY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.EndY))
+	case "ControlPointEndX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ControlPointEndX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.ControlPointEndX))
+	case "ControlPointEndY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ControlPointEndY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.ControlPointEndY))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralbezier.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralbezier.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralbezier.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralbezier.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralbezier.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralbezier.Transform))
+
+	case "ShapeCategory":
+		if spiralbezier.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralbezier.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct SpiralBezier", fieldName)
+	}
+	return
+}
+
+func (spiralbeziergrid *SpiralBezierGrid) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbeziergrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralbeziergrid.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralbeziergrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralbeziergrid.IsDisplayed))
+
+	case "ShapeCategory":
+		if spiralbeziergrid.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralbeziergrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralbeziergrid.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "SpiralBeziers":
+		for _, _spiralbezier := range spiralbeziergrid.SpiralBeziers {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", spiralbeziergrid.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "SpiralBeziers")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _spiralbezier.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct SpiralBezierGrid", fieldName)
+	}
+	return
+}
+
+func (spiralcircle *SpiralCircle) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralcircle.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralcircle.IsDisplayed))
+	case "CenterX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "CenterX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.CenterX))
+	case "CenterY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "CenterY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.CenterY))
+	case "HasBespokeRadius":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "HasBespokeRadius")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralcircle.HasBespokeRadius))
+	case "BespopkeRadius":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BespopkeRadius")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.BespopkeRadius))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralcircle.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralcircle.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralcircle.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralcircle.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralcircle.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralcircle.Transform))
+	case "Pitch":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Pitch")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", spiralcircle.Pitch))
+	case "ShowName":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShowName")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralcircle.ShowName))
+	case "BeatNb":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BeatNb")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", spiralcircle.BeatNb))
+	case "Path":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Path")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralcircle.Path))
+
+	case "ShapeCategory":
+		if spiralcircle.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralcircle.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct SpiralCircle", fieldName)
+	}
+	return
+}
+
+func (spiralcirclegrid *SpiralCircleGrid) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcirclegrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralcirclegrid.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralcirclegrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralcirclegrid.IsDisplayed))
+
+	case "ShapeCategory":
+		if spiralcirclegrid.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralcirclegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralcirclegrid.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "SpiralRhombusGrid":
+		if spiralcirclegrid.SpiralRhombusGrid != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralcirclegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralcirclegrid.SpiralRhombusGrid.GongGetIdentifier(stage))
+		}
+	case "SpiralCircles":
+		for _, _spiralcircle := range spiralcirclegrid.SpiralCircles {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", spiralcirclegrid.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "SpiralCircles")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _spiralcircle.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct SpiralCircleGrid", fieldName)
+	}
+	return
+}
+
+func (spiralline *SpiralLine) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralline.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralline.IsDisplayed))
+	case "StartX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StartX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.StartX))
+	case "EndX":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "EndX")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.EndX))
+	case "StartY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StartY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.StartY))
+	case "EndY":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "EndY")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.EndY))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralline.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralline.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralline.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralline.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralline.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralline.Transform))
+
+	case "ShapeCategory":
+		if spiralline.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralline.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct SpiralLine", fieldName)
+	}
+	return
+}
+
+func (spirallinegrid *SpiralLineGrid) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spirallinegrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spirallinegrid.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spirallinegrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spirallinegrid.IsDisplayed))
+
+	case "ShapeCategory":
+		if spirallinegrid.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spirallinegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spirallinegrid.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "SpiralLines":
+		for _, _spiralline := range spirallinegrid.SpiralLines {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", spirallinegrid.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "SpiralLines")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _spiralline.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct SpiralLineGrid", fieldName)
+	}
+	return
+}
+
+func (spiralorigin *SpiralOrigin) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralorigin.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralorigin.IsDisplayed))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralorigin.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralorigin.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralorigin.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralorigin.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralorigin.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralorigin.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralorigin.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralorigin.Transform))
+
+	case "ShapeCategory":
+		if spiralorigin.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralorigin.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct SpiralOrigin", fieldName)
+	}
+	return
+}
+
+func (spiralrhombus *SpiralRhombus) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralrhombus.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralrhombus.IsDisplayed))
+	case "X_r0":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "X_r0")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.X_r0))
+	case "Y_r0":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Y_r0")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.Y_r0))
+	case "X_r1":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "X_r1")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.X_r1))
+	case "Y_r1":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Y_r1")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.Y_r1))
+	case "X_r2":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "X_r2")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.X_r2))
+	case "Y_r2":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Y_r2")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.Y_r2))
+	case "X_r3":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "X_r3")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.X_r3))
+	case "Y_r3":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Y_r3")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.Y_r3))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralrhombus.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralrhombus.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", spiralrhombus.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralrhombus.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralrhombus.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralrhombus.Transform))
+
+	case "ShapeCategory":
+		if spiralrhombus.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralrhombus.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct SpiralRhombus", fieldName)
+	}
+	return
+}
+
+func (spiralrhombusgrid *SpiralRhombusGrid) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombusgrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(spiralrhombusgrid.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombusgrid.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", spiralrhombusgrid.IsDisplayed))
+
+	case "ShapeCategory":
+		if spiralrhombusgrid.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombusgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralrhombusgrid.ShapeCategory.GongGetIdentifier(stage))
+		}
+	case "SpiralRhombuses":
+		for _, _spiralrhombus := range spiralrhombusgrid.SpiralRhombuses {
+			tmp := SliceOfPointersFieldInitStatement
+			tmp = strings.ReplaceAll(tmp, "{{Identifier}}", spiralrhombusgrid.GongGetIdentifier(stage))
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldName}}", "SpiralRhombuses")
+			tmp = strings.ReplaceAll(tmp, "{{GeneratedFieldNameValue}}", _spiralrhombus.GongGetIdentifier(stage))
+			res += tmp
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct SpiralRhombusGrid", fieldName)
+	}
+	return
+}
+
+func (verticalaxis *VerticalAxis) GongMarshallField(stage *Stage, fieldName string) (res string) {
+
+	switch fieldName {
+	case "Name":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Name")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(verticalaxis.Name))
+	case "IsDisplayed":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "IsDisplayed")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%t", verticalaxis.IsDisplayed))
+	case "AxisHandleBorderLength":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "AxisHandleBorderLength")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.AxisHandleBorderLength))
+	case "Axis_Length":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Axis_Length")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.Axis_Length))
+	case "Color":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Color")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(verticalaxis.Color))
+	case "FillOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FillOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.FillOpacity))
+	case "Stroke":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Stroke")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(verticalaxis.Stroke))
+	case "StrokeOpacity":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeOpacity")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.StrokeOpacity))
+	case "StrokeWidth":
+		res = NumberInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeWidth")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%f", verticalaxis.StrokeWidth))
+	case "StrokeDashArray":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArray")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(verticalaxis.StrokeDashArray))
+	case "StrokeDashArrayWhenSelected":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "StrokeDashArrayWhenSelected")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(verticalaxis.StrokeDashArrayWhenSelected))
+	case "Transform":
+		res = StringInitStatement
+		res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+		res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Transform")
+		res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", string(verticalaxis.Transform))
+
+	case "ShapeCategory":
+		if verticalaxis.ShapeCategory != nil {
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", verticalaxis.ShapeCategory.GongGetIdentifier(stage))
+		}
+	default:
+		log.Panicf("Unknown field %s for Gongstruct VerticalAxis", fieldName)
+	}
+	return
+}
+
+// insertion point for marshall all fields methods
+func (axis *Axis) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += axis.GongMarshallField(stage, "Name")
+		initializerStatements += axis.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += axis.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += axis.GongMarshallField(stage, "AngleDegree")
+		initializerStatements += axis.GongMarshallField(stage, "Length")
+		initializerStatements += axis.GongMarshallField(stage, "CenterX")
+		initializerStatements += axis.GongMarshallField(stage, "CenterY")
+		initializerStatements += axis.GongMarshallField(stage, "EndX")
+		initializerStatements += axis.GongMarshallField(stage, "EndY")
+		initializerStatements += axis.GongMarshallField(stage, "Color")
+		initializerStatements += axis.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += axis.GongMarshallField(stage, "Stroke")
+		initializerStatements += axis.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += axis.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += axis.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += axis.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += axis.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (axisgrid *AxisGrid) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += axisgrid.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += axisgrid.GongMarshallField(stage, "Reference")
+		initializerStatements += axisgrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += axisgrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += axisgrid.GongMarshallField(stage, "Axiss")
+	}
+	return
+}
+func (bezier *Bezier) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += bezier.GongMarshallField(stage, "Name")
+		initializerStatements += bezier.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += bezier.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += bezier.GongMarshallField(stage, "StartX")
+		initializerStatements += bezier.GongMarshallField(stage, "StartY")
+		initializerStatements += bezier.GongMarshallField(stage, "ControlPointStartX")
+		initializerStatements += bezier.GongMarshallField(stage, "ControlPointStartY")
+		initializerStatements += bezier.GongMarshallField(stage, "EndX")
+		initializerStatements += bezier.GongMarshallField(stage, "EndY")
+		initializerStatements += bezier.GongMarshallField(stage, "ControlPointEndX")
+		initializerStatements += bezier.GongMarshallField(stage, "ControlPointEndY")
+		initializerStatements += bezier.GongMarshallField(stage, "Color")
+		initializerStatements += bezier.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += bezier.GongMarshallField(stage, "Stroke")
+		initializerStatements += bezier.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += bezier.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += bezier.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += bezier.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += bezier.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (beziergrid *BezierGrid) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += beziergrid.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += beziergrid.GongMarshallField(stage, "Reference")
+		initializerStatements += beziergrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += beziergrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += beziergrid.GongMarshallField(stage, "Beziers")
+	}
+	return
+}
+func (beziergridstack *BezierGridStack) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += beziergridstack.GongMarshallField(stage, "Name")
+		initializerStatements += beziergridstack.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += beziergridstack.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += beziergridstack.GongMarshallField(stage, "BezierGrids")
+	}
+	return
+}
+func (chapter *Chapter) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += chapter.GongMarshallField(stage, "Name")
+		initializerStatements += chapter.GongMarshallField(stage, "MardownContent")
+	}
+	return
+}
+func (circle *Circle) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += circle.GongMarshallField(stage, "Name")
+		initializerStatements += circle.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += circle.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += circle.GongMarshallField(stage, "CenterX")
+		initializerStatements += circle.GongMarshallField(stage, "CenterY")
+		initializerStatements += circle.GongMarshallField(stage, "HasBespokeRadius")
+		initializerStatements += circle.GongMarshallField(stage, "BespopkeRadius")
+		initializerStatements += circle.GongMarshallField(stage, "Color")
+		initializerStatements += circle.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += circle.GongMarshallField(stage, "Stroke")
+		initializerStatements += circle.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += circle.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += circle.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += circle.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += circle.GongMarshallField(stage, "Transform")
+		initializerStatements += circle.GongMarshallField(stage, "Pitch")
+		initializerStatements += circle.GongMarshallField(stage, "ShowName")
+		initializerStatements += circle.GongMarshallField(stage, "BeatNb")
+	}
+	return
+}
+func (circlegrid *CircleGrid) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += circlegrid.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += circlegrid.GongMarshallField(stage, "Reference")
+		initializerStatements += circlegrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += circlegrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += circlegrid.GongMarshallField(stage, "Circles")
+	}
+	return
+}
+func (content *Content) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += content.GongMarshallField(stage, "Name")
+		initializerStatements += content.GongMarshallField(stage, "MardownContent")
+		initializerStatements += content.GongMarshallField(stage, "ContentPath")
+		initializerStatements += content.GongMarshallField(stage, "OutputPath")
+		initializerStatements += content.GongMarshallField(stage, "LayoutPath")
+		initializerStatements += content.GongMarshallField(stage, "StaticPath")
+		initializerStatements += content.GongMarshallField(stage, "Target")
+		pointersInitializesStatements += content.GongMarshallField(stage, "Chapters")
+	}
+	return
+}
+func (exporttomusicxml *ExportToMusicxml) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += exporttomusicxml.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += exporttomusicxml.GongMarshallField(stage, "Parameter")
+	}
+	return
+}
+func (frontcurve *FrontCurve) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += frontcurve.GongMarshallField(stage, "Name")
+		initializerStatements += frontcurve.GongMarshallField(stage, "Path")
+	}
+	return
+}
+func (frontcurvestack *FrontCurveStack) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "Name")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += frontcurvestack.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += frontcurvestack.GongMarshallField(stage, "FrontCurves")
+		pointersInitializesStatements += frontcurvestack.GongMarshallField(stage, "SpiralCircles")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "Color")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "Stroke")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += frontcurvestack.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (horizontalaxis *HorizontalAxis) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Name")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += horizontalaxis.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "AxisHandleBorderLength")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Axis_Length")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Color")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Stroke")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += horizontalaxis.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (key *Key) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += key.GongMarshallField(stage, "Name")
+		initializerStatements += key.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += key.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += key.GongMarshallField(stage, "Path")
+		initializerStatements += key.GongMarshallField(stage, "Color")
+		initializerStatements += key.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += key.GongMarshallField(stage, "Stroke")
+		initializerStatements += key.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += key.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += key.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += key.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += key.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (parameter *Parameter) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += parameter.GongMarshallField(stage, "Name")
+		initializerStatements += parameter.GongMarshallField(stage, "BackendColor")
+		initializerStatements += parameter.GongMarshallField(stage, "MinuteColor")
+		initializerStatements += parameter.GongMarshallField(stage, "HourColor")
+		initializerStatements += parameter.GongMarshallField(stage, "N")
+		initializerStatements += parameter.GongMarshallField(stage, "M")
+		initializerStatements += parameter.GongMarshallField(stage, "Z")
+		initializerStatements += parameter.GongMarshallField(stage, "InsideAngle")
+		initializerStatements += parameter.GongMarshallField(stage, "ShiftToNearestCircle")
+		initializerStatements += parameter.GongMarshallField(stage, "SideLength")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialRhombus")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialCircle")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialRhombusGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "InitialAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "RotatedAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "RotatedRhombus")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "RotatedRhombusGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "RotatedCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "NextRhombus")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "NextCircle")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingRhombusGridSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingRhombusGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingCircleGridSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingCircleGridLeftSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowingCircleGridLeft")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "ConstructionAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "ConstructionAxisGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "ConstructionCircle")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "ConstructionCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurve")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveShiftedRightSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveShiftedRight")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveNextSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveNext")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveNextShiftedRightSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveNextShiftedRight")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "GrowthCurveStack")
+		initializerStatements += parameter.GongMarshallField(stage, "StackWidth")
+		initializerStatements += parameter.GongMarshallField(stage, "NbShitRight")
+		initializerStatements += parameter.GongMarshallField(stage, "StackHeight")
+		initializerStatements += parameter.GongMarshallField(stage, "BezierControlLengthRatio")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralRhombusGridSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralRhombusGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralCircleSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralCircleFullGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionOuterLineSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionInnerLineSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionOuterLineGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionInnerLineGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionCircleGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralConstructionOuterLineFullGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralBezierSeed")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralBezierGrid")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralBezierFullGrid")
+		initializerStatements += parameter.GongMarshallField(stage, "SpiralBezierStrength")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FrontCurveStack")
+		initializerStatements += parameter.GongMarshallField(stage, "NbInterpolationPoints")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "Fkey")
+		initializerStatements += parameter.GongMarshallField(stage, "FkeySizeRatio")
+		initializerStatements += parameter.GongMarshallField(stage, "FkeyOriginRelativeX")
+		initializerStatements += parameter.GongMarshallField(stage, "FkeyOriginRelativeY")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "PitchLines")
+		initializerStatements += parameter.GongMarshallField(stage, "PitchHeight")
+		initializerStatements += parameter.GongMarshallField(stage, "NbPitchLines")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "BeatLines")
+		initializerStatements += parameter.GongMarshallField(stage, "BeatLinesHeightRatio")
+		initializerStatements += parameter.GongMarshallField(stage, "NbBeatLines")
+		initializerStatements += parameter.GongMarshallField(stage, "NbOfBeatsInTheme")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FirstVoice")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FirstVoiceShiftedRigth")
+		initializerStatements += parameter.GongMarshallField(stage, "FirstVoiceShiftX")
+		initializerStatements += parameter.GongMarshallField(stage, "FirstVoiceShiftY")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SecondVoice")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SecondVoiceShiftedRight")
+		initializerStatements += parameter.GongMarshallField(stage, "PitchDifference")
+		initializerStatements += parameter.GongMarshallField(stage, "BeatsPerSecond")
+		initializerStatements += parameter.GongMarshallField(stage, "Level")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FirstVoiceNotes")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "FirstVoiceNotesShiftedRight")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SecondVoiceNotes")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SecondVoiceNotesShiftedRight")
+		initializerStatements += parameter.GongMarshallField(stage, "IsMinor")
+		initializerStatements += parameter.GongMarshallField(stage, "ThemeBinaryEncoding")
+		initializerStatements += parameter.GongMarshallField(stage, "OriginX")
+		initializerStatements += parameter.GongMarshallField(stage, "OriginY")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "HorizontalAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "VerticalAxis")
+		pointersInitializesStatements += parameter.GongMarshallField(stage, "SpiralOrigin")
+		initializerStatements += parameter.GongMarshallField(stage, "SpiralOriginX")
+		initializerStatements += parameter.GongMarshallField(stage, "SpiralOriginY")
+		initializerStatements += parameter.GongMarshallField(stage, "OriginCrossWidth")
+		initializerStatements += parameter.GongMarshallField(stage, "SpiralRadiusRatio")
+		initializerStatements += parameter.GongMarshallField(stage, "ShowSpiralBezierConstruct")
+		initializerStatements += parameter.GongMarshallField(stage, "ShowInterpolationPoints")
+		initializerStatements += parameter.GongMarshallField(stage, "ActualBeatsTemporalShift")
+		initializerStatements += parameter.GongMarshallField(stage, "PathToStaticFiles")
+		initializerStatements += parameter.GongMarshallField(stage, "PathToGeneratedSVG")
+		initializerStatements += parameter.GongMarshallField(stage, "PathToGeneratedScore")
+	}
+	return
+}
+func (rhombus *Rhombus) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += rhombus.GongMarshallField(stage, "Name")
+		initializerStatements += rhombus.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += rhombus.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += rhombus.GongMarshallField(stage, "CenterX")
+		initializerStatements += rhombus.GongMarshallField(stage, "CenterY")
+		initializerStatements += rhombus.GongMarshallField(stage, "SideLength")
+		initializerStatements += rhombus.GongMarshallField(stage, "AngleDegree")
+		initializerStatements += rhombus.GongMarshallField(stage, "InsideAngle")
+		initializerStatements += rhombus.GongMarshallField(stage, "Color")
+		initializerStatements += rhombus.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += rhombus.GongMarshallField(stage, "Stroke")
+		initializerStatements += rhombus.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += rhombus.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += rhombus.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += rhombus.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += rhombus.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (rhombusgrid *RhombusGrid) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += rhombusgrid.GongMarshallField(stage, "Name")
+		pointersInitializesStatements += rhombusgrid.GongMarshallField(stage, "Reference")
+		initializerStatements += rhombusgrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += rhombusgrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += rhombusgrid.GongMarshallField(stage, "Rhombuses")
+	}
+	return
+}
+func (shapecategory *ShapeCategory) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += shapecategory.GongMarshallField(stage, "Name")
+		initializerStatements += shapecategory.GongMarshallField(stage, "IsExpanded")
+	}
+	return
+}
+func (spiralbezier *SpiralBezier) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += spiralbezier.GongMarshallField(stage, "Name")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralbezier.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StartX")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StartY")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "ControlPointStartX")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "ControlPointStartY")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "EndX")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "EndY")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "ControlPointEndX")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "ControlPointEndY")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "Color")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralbezier.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (spiralbeziergrid *SpiralBezierGrid) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += spiralbeziergrid.GongMarshallField(stage, "Name")
+		initializerStatements += spiralbeziergrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralbeziergrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += spiralbeziergrid.GongMarshallField(stage, "SpiralBeziers")
+	}
+	return
+}
+func (spiralcircle *SpiralCircle) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Name")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralcircle.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "CenterX")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "CenterY")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "HasBespokeRadius")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "BespopkeRadius")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Color")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Transform")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Pitch")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "ShowName")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "BeatNb")
+		initializerStatements += spiralcircle.GongMarshallField(stage, "Path")
+	}
+	return
+}
+func (spiralcirclegrid *SpiralCircleGrid) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += spiralcirclegrid.GongMarshallField(stage, "Name")
+		initializerStatements += spiralcirclegrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralcirclegrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += spiralcirclegrid.GongMarshallField(stage, "SpiralRhombusGrid")
+		pointersInitializesStatements += spiralcirclegrid.GongMarshallField(stage, "SpiralCircles")
+	}
+	return
+}
+func (spiralline *SpiralLine) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += spiralline.GongMarshallField(stage, "Name")
+		initializerStatements += spiralline.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralline.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralline.GongMarshallField(stage, "StartX")
+		initializerStatements += spiralline.GongMarshallField(stage, "EndX")
+		initializerStatements += spiralline.GongMarshallField(stage, "StartY")
+		initializerStatements += spiralline.GongMarshallField(stage, "EndY")
+		initializerStatements += spiralline.GongMarshallField(stage, "Color")
+		initializerStatements += spiralline.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralline.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralline.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralline.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralline.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralline.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralline.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (spirallinegrid *SpiralLineGrid) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += spirallinegrid.GongMarshallField(stage, "Name")
+		initializerStatements += spirallinegrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spirallinegrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += spirallinegrid.GongMarshallField(stage, "SpiralLines")
+	}
+	return
+}
+func (spiralorigin *SpiralOrigin) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += spiralorigin.GongMarshallField(stage, "Name")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralorigin.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "Color")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralorigin.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (spiralrhombus *SpiralRhombus) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Name")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralrhombus.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "X_r0")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Y_r0")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "X_r1")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Y_r1")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "X_r2")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Y_r2")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "X_r3")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Y_r3")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Color")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Stroke")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += spiralrhombus.GongMarshallField(stage, "Transform")
+	}
+	return
+}
+func (spiralrhombusgrid *SpiralRhombusGrid) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += spiralrhombusgrid.GongMarshallField(stage, "Name")
+		initializerStatements += spiralrhombusgrid.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += spiralrhombusgrid.GongMarshallField(stage, "ShapeCategory")
+		pointersInitializesStatements += spiralrhombusgrid.GongMarshallField(stage, "SpiralRhombuses")
+	}
+	return
+}
+func (verticalaxis *VerticalAxis) GongMarshallAllFields(stage *Stage) (initializerStatements string, pointersInitializesStatements string) {
+
+	{ // Insertion point for basic fields value assignment
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Name")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "IsDisplayed")
+		pointersInitializesStatements += verticalaxis.GongMarshallField(stage, "ShapeCategory")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "AxisHandleBorderLength")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Axis_Length")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Color")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "FillOpacity")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Stroke")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "StrokeOpacity")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "StrokeWidth")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "StrokeDashArray")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "StrokeDashArrayWhenSelected")
+		initializerStatements += verticalaxis.GongMarshallField(stage, "Transform")
+	}
 	return
 }

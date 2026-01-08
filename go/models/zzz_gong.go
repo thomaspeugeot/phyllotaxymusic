@@ -31,6 +31,7 @@ var _ = strings.Clone("")
 
 const ProbeTreeSidebarSuffix = ":sidebar of the probe"
 const ProbeTableSuffix = ":table of the probe"
+const ProbeNotificationTableSuffix = ":notification table of the probe"
 const ProbeFormSuffix = ":form of the probe"
 const ProbeSplitSuffix = ":probe of the probe"
 
@@ -44,6 +45,10 @@ func (stage *Stage) GetProbeFormStageName() string {
 
 func (stage *Stage) GetProbeTableStageName() string {
 	return stage.GetType() + ":" + stage.GetName() + ProbeTableSuffix
+}
+
+func (stage *Stage) GetProbeNotificationTableStageName() string {
+	return stage.GetType() + ":" + stage.GetName() + ProbeNotificationTableSuffix
 }
 
 func (stage *Stage) GetProbeSplitStageName() string {
@@ -89,6 +94,7 @@ type Stage struct {
 
 	// insertion point for definition of arrays registering instances
 	Axiss           map[*Axis]struct{}
+	Axiss_reference map[*Axis]*Axis
 	Axiss_mapString map[string]*Axis
 
 	// insertion point for slice of pointers maps
@@ -98,6 +104,7 @@ type Stage struct {
 	OnAfterAxisReadCallback   OnAfterReadInterface[Axis]
 
 	AxisGrids           map[*AxisGrid]struct{}
+	AxisGrids_reference map[*AxisGrid]*AxisGrid
 	AxisGrids_mapString map[string]*AxisGrid
 
 	// insertion point for slice of pointers maps
@@ -109,6 +116,7 @@ type Stage struct {
 	OnAfterAxisGridReadCallback   OnAfterReadInterface[AxisGrid]
 
 	Beziers           map[*Bezier]struct{}
+	Beziers_reference map[*Bezier]*Bezier
 	Beziers_mapString map[string]*Bezier
 
 	// insertion point for slice of pointers maps
@@ -118,6 +126,7 @@ type Stage struct {
 	OnAfterBezierReadCallback   OnAfterReadInterface[Bezier]
 
 	BezierGrids           map[*BezierGrid]struct{}
+	BezierGrids_reference map[*BezierGrid]*BezierGrid
 	BezierGrids_mapString map[string]*BezierGrid
 
 	// insertion point for slice of pointers maps
@@ -129,6 +138,7 @@ type Stage struct {
 	OnAfterBezierGridReadCallback   OnAfterReadInterface[BezierGrid]
 
 	BezierGridStacks           map[*BezierGridStack]struct{}
+	BezierGridStacks_reference map[*BezierGridStack]*BezierGridStack
 	BezierGridStacks_mapString map[string]*BezierGridStack
 
 	// insertion point for slice of pointers maps
@@ -140,6 +150,7 @@ type Stage struct {
 	OnAfterBezierGridStackReadCallback   OnAfterReadInterface[BezierGridStack]
 
 	Chapters           map[*Chapter]struct{}
+	Chapters_reference map[*Chapter]*Chapter
 	Chapters_mapString map[string]*Chapter
 
 	// insertion point for slice of pointers maps
@@ -149,6 +160,7 @@ type Stage struct {
 	OnAfterChapterReadCallback   OnAfterReadInterface[Chapter]
 
 	Circles           map[*Circle]struct{}
+	Circles_reference map[*Circle]*Circle
 	Circles_mapString map[string]*Circle
 
 	// insertion point for slice of pointers maps
@@ -158,6 +170,7 @@ type Stage struct {
 	OnAfterCircleReadCallback   OnAfterReadInterface[Circle]
 
 	CircleGrids           map[*CircleGrid]struct{}
+	CircleGrids_reference map[*CircleGrid]*CircleGrid
 	CircleGrids_mapString map[string]*CircleGrid
 
 	// insertion point for slice of pointers maps
@@ -169,6 +182,7 @@ type Stage struct {
 	OnAfterCircleGridReadCallback   OnAfterReadInterface[CircleGrid]
 
 	Contents           map[*Content]struct{}
+	Contents_reference map[*Content]*Content
 	Contents_mapString map[string]*Content
 
 	// insertion point for slice of pointers maps
@@ -180,6 +194,7 @@ type Stage struct {
 	OnAfterContentReadCallback   OnAfterReadInterface[Content]
 
 	ExportToMusicxmls           map[*ExportToMusicxml]struct{}
+	ExportToMusicxmls_reference map[*ExportToMusicxml]*ExportToMusicxml
 	ExportToMusicxmls_mapString map[string]*ExportToMusicxml
 
 	// insertion point for slice of pointers maps
@@ -189,6 +204,7 @@ type Stage struct {
 	OnAfterExportToMusicxmlReadCallback   OnAfterReadInterface[ExportToMusicxml]
 
 	FrontCurves           map[*FrontCurve]struct{}
+	FrontCurves_reference map[*FrontCurve]*FrontCurve
 	FrontCurves_mapString map[string]*FrontCurve
 
 	// insertion point for slice of pointers maps
@@ -198,6 +214,7 @@ type Stage struct {
 	OnAfterFrontCurveReadCallback   OnAfterReadInterface[FrontCurve]
 
 	FrontCurveStacks           map[*FrontCurveStack]struct{}
+	FrontCurveStacks_reference map[*FrontCurveStack]*FrontCurveStack
 	FrontCurveStacks_mapString map[string]*FrontCurveStack
 
 	// insertion point for slice of pointers maps
@@ -211,6 +228,7 @@ type Stage struct {
 	OnAfterFrontCurveStackReadCallback   OnAfterReadInterface[FrontCurveStack]
 
 	HorizontalAxiss           map[*HorizontalAxis]struct{}
+	HorizontalAxiss_reference map[*HorizontalAxis]*HorizontalAxis
 	HorizontalAxiss_mapString map[string]*HorizontalAxis
 
 	// insertion point for slice of pointers maps
@@ -220,6 +238,7 @@ type Stage struct {
 	OnAfterHorizontalAxisReadCallback   OnAfterReadInterface[HorizontalAxis]
 
 	Keys           map[*Key]struct{}
+	Keys_reference map[*Key]*Key
 	Keys_mapString map[string]*Key
 
 	// insertion point for slice of pointers maps
@@ -229,6 +248,7 @@ type Stage struct {
 	OnAfterKeyReadCallback   OnAfterReadInterface[Key]
 
 	Parameters           map[*Parameter]struct{}
+	Parameters_reference map[*Parameter]*Parameter
 	Parameters_mapString map[string]*Parameter
 
 	// insertion point for slice of pointers maps
@@ -238,6 +258,7 @@ type Stage struct {
 	OnAfterParameterReadCallback   OnAfterReadInterface[Parameter]
 
 	Rhombuss           map[*Rhombus]struct{}
+	Rhombuss_reference map[*Rhombus]*Rhombus
 	Rhombuss_mapString map[string]*Rhombus
 
 	// insertion point for slice of pointers maps
@@ -247,6 +268,7 @@ type Stage struct {
 	OnAfterRhombusReadCallback   OnAfterReadInterface[Rhombus]
 
 	RhombusGrids           map[*RhombusGrid]struct{}
+	RhombusGrids_reference map[*RhombusGrid]*RhombusGrid
 	RhombusGrids_mapString map[string]*RhombusGrid
 
 	// insertion point for slice of pointers maps
@@ -258,6 +280,7 @@ type Stage struct {
 	OnAfterRhombusGridReadCallback   OnAfterReadInterface[RhombusGrid]
 
 	ShapeCategorys           map[*ShapeCategory]struct{}
+	ShapeCategorys_reference map[*ShapeCategory]*ShapeCategory
 	ShapeCategorys_mapString map[string]*ShapeCategory
 
 	// insertion point for slice of pointers maps
@@ -267,6 +290,7 @@ type Stage struct {
 	OnAfterShapeCategoryReadCallback   OnAfterReadInterface[ShapeCategory]
 
 	SpiralBeziers           map[*SpiralBezier]struct{}
+	SpiralBeziers_reference map[*SpiralBezier]*SpiralBezier
 	SpiralBeziers_mapString map[string]*SpiralBezier
 
 	// insertion point for slice of pointers maps
@@ -276,6 +300,7 @@ type Stage struct {
 	OnAfterSpiralBezierReadCallback   OnAfterReadInterface[SpiralBezier]
 
 	SpiralBezierGrids           map[*SpiralBezierGrid]struct{}
+	SpiralBezierGrids_reference map[*SpiralBezierGrid]*SpiralBezierGrid
 	SpiralBezierGrids_mapString map[string]*SpiralBezierGrid
 
 	// insertion point for slice of pointers maps
@@ -287,6 +312,7 @@ type Stage struct {
 	OnAfterSpiralBezierGridReadCallback   OnAfterReadInterface[SpiralBezierGrid]
 
 	SpiralCircles           map[*SpiralCircle]struct{}
+	SpiralCircles_reference map[*SpiralCircle]*SpiralCircle
 	SpiralCircles_mapString map[string]*SpiralCircle
 
 	// insertion point for slice of pointers maps
@@ -296,6 +322,7 @@ type Stage struct {
 	OnAfterSpiralCircleReadCallback   OnAfterReadInterface[SpiralCircle]
 
 	SpiralCircleGrids           map[*SpiralCircleGrid]struct{}
+	SpiralCircleGrids_reference map[*SpiralCircleGrid]*SpiralCircleGrid
 	SpiralCircleGrids_mapString map[string]*SpiralCircleGrid
 
 	// insertion point for slice of pointers maps
@@ -307,6 +334,7 @@ type Stage struct {
 	OnAfterSpiralCircleGridReadCallback   OnAfterReadInterface[SpiralCircleGrid]
 
 	SpiralLines           map[*SpiralLine]struct{}
+	SpiralLines_reference map[*SpiralLine]*SpiralLine
 	SpiralLines_mapString map[string]*SpiralLine
 
 	// insertion point for slice of pointers maps
@@ -316,6 +344,7 @@ type Stage struct {
 	OnAfterSpiralLineReadCallback   OnAfterReadInterface[SpiralLine]
 
 	SpiralLineGrids           map[*SpiralLineGrid]struct{}
+	SpiralLineGrids_reference map[*SpiralLineGrid]*SpiralLineGrid
 	SpiralLineGrids_mapString map[string]*SpiralLineGrid
 
 	// insertion point for slice of pointers maps
@@ -327,6 +356,7 @@ type Stage struct {
 	OnAfterSpiralLineGridReadCallback   OnAfterReadInterface[SpiralLineGrid]
 
 	SpiralOrigins           map[*SpiralOrigin]struct{}
+	SpiralOrigins_reference map[*SpiralOrigin]*SpiralOrigin
 	SpiralOrigins_mapString map[string]*SpiralOrigin
 
 	// insertion point for slice of pointers maps
@@ -336,6 +366,7 @@ type Stage struct {
 	OnAfterSpiralOriginReadCallback   OnAfterReadInterface[SpiralOrigin]
 
 	SpiralRhombuss           map[*SpiralRhombus]struct{}
+	SpiralRhombuss_reference map[*SpiralRhombus]*SpiralRhombus
 	SpiralRhombuss_mapString map[string]*SpiralRhombus
 
 	// insertion point for slice of pointers maps
@@ -345,6 +376,7 @@ type Stage struct {
 	OnAfterSpiralRhombusReadCallback   OnAfterReadInterface[SpiralRhombus]
 
 	SpiralRhombusGrids           map[*SpiralRhombusGrid]struct{}
+	SpiralRhombusGrids_reference map[*SpiralRhombusGrid]*SpiralRhombusGrid
 	SpiralRhombusGrids_mapString map[string]*SpiralRhombusGrid
 
 	// insertion point for slice of pointers maps
@@ -356,6 +388,7 @@ type Stage struct {
 	OnAfterSpiralRhombusGridReadCallback   OnAfterReadInterface[SpiralRhombusGrid]
 
 	VerticalAxiss           map[*VerticalAxis]struct{}
+	VerticalAxiss_reference map[*VerticalAxis]*VerticalAxis
 	VerticalAxiss_mapString map[string]*VerticalAxis
 
 	// insertion point for slice of pointers maps
@@ -478,11 +511,17 @@ type Stage struct {
 
 	NamedStructs []*NamedStruct
 
-	// for the computation of the diff at each commit we need
-	reference map[GongstructIF]GongstructIF
-	modified  map[GongstructIF]struct{}
-	new       map[GongstructIF]struct{}
-	deleted   map[GongstructIF]struct{}
+	// probeIF is the interface to the probe that allows log
+	// commit event to the probe
+	probeIF ProbeIF
+}
+
+func (stage *Stage) SetProbeIF(probeIF ProbeIF) {
+	stage.probeIF = probeIF
+}
+
+func (stage *Stage) GetProbeIF() ProbeIF {
+	return stage.probeIF
 }
 
 // GetNamedStructs implements models.ProbebStage.
@@ -493,22 +532,6 @@ func (stage *Stage) GetNamedStructsNames() (res []string) {
 	}
 
 	return
-}
-
-func (stage *Stage) GetReference() map[GongstructIF]GongstructIF {
-	return stage.reference
-}
-
-func (stage *Stage) GetModified() map[GongstructIF]struct{} {
-	return stage.modified
-}
-
-func (stage *Stage) GetNew() map[GongstructIF]struct{} {
-	return stage.new
-}
-
-func (stage *Stage) GetDeleted() map[GongstructIF]struct{} {
-	return stage.deleted
 }
 
 func GetNamedStructInstances[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []string) {
@@ -1332,11 +1355,6 @@ func NewStage(name string) (stage *Stage) {
 			{name: "SpiralRhombusGrid"},
 			{name: "VerticalAxis"},
 		}, // end of insertion point
-
-		reference: make(map[GongstructIF]GongstructIF),
-		new:       make(map[GongstructIF]struct{}),
-		modified:  make(map[GongstructIF]struct{}),
-		deleted:   make(map[GongstructIF]struct{}),
 	}
 
 	return
@@ -1498,6 +1516,7 @@ func (stage *Stage) Commit() {
 		stage.BackRepo.Commit(stage)
 	}
 	stage.ComputeInstancesNb()
+	stage.ComputeDifference()
 	stage.ComputeReference()
 }
 
@@ -1578,34 +1597,44 @@ func (axis *Axis) Stage(stage *Stage) *Axis {
 		stage.Axiss[axis] = struct{}{}
 		stage.AxisMap_Staged_Order[axis] = stage.AxisOrder
 		stage.AxisOrder++
-		stage.new[axis] = struct{}{}
-		delete(stage.deleted, axis)
-	} else {
-		if _, ok := stage.new[axis]; !ok {
-			stage.modified[axis] = struct{}{}
-		}
 	}
 	stage.Axiss_mapString[axis.Name] = axis
 
 	return axis
 }
 
+// StagePreserveOrder puts axis to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.AxisOrder
+// - update stage.AxisOrder accordingly
+func (axis *Axis) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.Axiss[axis]; !ok {
+		stage.Axiss[axis] = struct{}{}
+
+		if order > stage.AxisOrder {
+			stage.AxisOrder = order
+		}
+		stage.AxisMap_Staged_Order[axis] = stage.AxisOrder
+		stage.AxisOrder++
+	}
+	stage.Axiss_mapString[axis.Name] = axis
+}
+
 // Unstage removes axis off the model stage
 func (axis *Axis) Unstage(stage *Stage) *Axis {
 	delete(stage.Axiss, axis)
+	delete(stage.AxisMap_Staged_Order, axis)
 	delete(stage.Axiss_mapString, axis.Name)
 
-	if _, ok := stage.reference[axis]; ok {
-		stage.deleted[axis] = struct{}{}
-	} else {
-		delete(stage.new, axis)
-	}
 	return axis
 }
 
 // UnstageVoid removes axis off the model stage
 func (axis *Axis) UnstageVoid(stage *Stage) {
 	delete(stage.Axiss, axis)
+	delete(stage.AxisMap_Staged_Order, axis)
 	delete(stage.Axiss_mapString, axis.Name)
 }
 
@@ -1643,7 +1672,7 @@ func (axis *Axis) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (axis *Axis) SetName(name string) (){
+func (axis *Axis) SetName(name string) {
 	axis.Name = name
 }
 
@@ -1654,34 +1683,44 @@ func (axisgrid *AxisGrid) Stage(stage *Stage) *AxisGrid {
 		stage.AxisGrids[axisgrid] = struct{}{}
 		stage.AxisGridMap_Staged_Order[axisgrid] = stage.AxisGridOrder
 		stage.AxisGridOrder++
-		stage.new[axisgrid] = struct{}{}
-		delete(stage.deleted, axisgrid)
-	} else {
-		if _, ok := stage.new[axisgrid]; !ok {
-			stage.modified[axisgrid] = struct{}{}
-		}
 	}
 	stage.AxisGrids_mapString[axisgrid.Name] = axisgrid
 
 	return axisgrid
 }
 
+// StagePreserveOrder puts axisgrid to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.AxisGridOrder
+// - update stage.AxisGridOrder accordingly
+func (axisgrid *AxisGrid) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.AxisGrids[axisgrid]; !ok {
+		stage.AxisGrids[axisgrid] = struct{}{}
+
+		if order > stage.AxisGridOrder {
+			stage.AxisGridOrder = order
+		}
+		stage.AxisGridMap_Staged_Order[axisgrid] = stage.AxisGridOrder
+		stage.AxisGridOrder++
+	}
+	stage.AxisGrids_mapString[axisgrid.Name] = axisgrid
+}
+
 // Unstage removes axisgrid off the model stage
 func (axisgrid *AxisGrid) Unstage(stage *Stage) *AxisGrid {
 	delete(stage.AxisGrids, axisgrid)
+	delete(stage.AxisGridMap_Staged_Order, axisgrid)
 	delete(stage.AxisGrids_mapString, axisgrid.Name)
 
-	if _, ok := stage.reference[axisgrid]; ok {
-		stage.deleted[axisgrid] = struct{}{}
-	} else {
-		delete(stage.new, axisgrid)
-	}
 	return axisgrid
 }
 
 // UnstageVoid removes axisgrid off the model stage
 func (axisgrid *AxisGrid) UnstageVoid(stage *Stage) {
 	delete(stage.AxisGrids, axisgrid)
+	delete(stage.AxisGridMap_Staged_Order, axisgrid)
 	delete(stage.AxisGrids_mapString, axisgrid.Name)
 }
 
@@ -1719,7 +1758,7 @@ func (axisgrid *AxisGrid) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (axisgrid *AxisGrid) SetName(name string) (){
+func (axisgrid *AxisGrid) SetName(name string) {
 	axisgrid.Name = name
 }
 
@@ -1730,34 +1769,44 @@ func (bezier *Bezier) Stage(stage *Stage) *Bezier {
 		stage.Beziers[bezier] = struct{}{}
 		stage.BezierMap_Staged_Order[bezier] = stage.BezierOrder
 		stage.BezierOrder++
-		stage.new[bezier] = struct{}{}
-		delete(stage.deleted, bezier)
-	} else {
-		if _, ok := stage.new[bezier]; !ok {
-			stage.modified[bezier] = struct{}{}
-		}
 	}
 	stage.Beziers_mapString[bezier.Name] = bezier
 
 	return bezier
 }
 
+// StagePreserveOrder puts bezier to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.BezierOrder
+// - update stage.BezierOrder accordingly
+func (bezier *Bezier) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.Beziers[bezier]; !ok {
+		stage.Beziers[bezier] = struct{}{}
+
+		if order > stage.BezierOrder {
+			stage.BezierOrder = order
+		}
+		stage.BezierMap_Staged_Order[bezier] = stage.BezierOrder
+		stage.BezierOrder++
+	}
+	stage.Beziers_mapString[bezier.Name] = bezier
+}
+
 // Unstage removes bezier off the model stage
 func (bezier *Bezier) Unstage(stage *Stage) *Bezier {
 	delete(stage.Beziers, bezier)
+	delete(stage.BezierMap_Staged_Order, bezier)
 	delete(stage.Beziers_mapString, bezier.Name)
 
-	if _, ok := stage.reference[bezier]; ok {
-		stage.deleted[bezier] = struct{}{}
-	} else {
-		delete(stage.new, bezier)
-	}
 	return bezier
 }
 
 // UnstageVoid removes bezier off the model stage
 func (bezier *Bezier) UnstageVoid(stage *Stage) {
 	delete(stage.Beziers, bezier)
+	delete(stage.BezierMap_Staged_Order, bezier)
 	delete(stage.Beziers_mapString, bezier.Name)
 }
 
@@ -1795,7 +1844,7 @@ func (bezier *Bezier) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (bezier *Bezier) SetName(name string) (){
+func (bezier *Bezier) SetName(name string) {
 	bezier.Name = name
 }
 
@@ -1806,34 +1855,44 @@ func (beziergrid *BezierGrid) Stage(stage *Stage) *BezierGrid {
 		stage.BezierGrids[beziergrid] = struct{}{}
 		stage.BezierGridMap_Staged_Order[beziergrid] = stage.BezierGridOrder
 		stage.BezierGridOrder++
-		stage.new[beziergrid] = struct{}{}
-		delete(stage.deleted, beziergrid)
-	} else {
-		if _, ok := stage.new[beziergrid]; !ok {
-			stage.modified[beziergrid] = struct{}{}
-		}
 	}
 	stage.BezierGrids_mapString[beziergrid.Name] = beziergrid
 
 	return beziergrid
 }
 
+// StagePreserveOrder puts beziergrid to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.BezierGridOrder
+// - update stage.BezierGridOrder accordingly
+func (beziergrid *BezierGrid) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.BezierGrids[beziergrid]; !ok {
+		stage.BezierGrids[beziergrid] = struct{}{}
+
+		if order > stage.BezierGridOrder {
+			stage.BezierGridOrder = order
+		}
+		stage.BezierGridMap_Staged_Order[beziergrid] = stage.BezierGridOrder
+		stage.BezierGridOrder++
+	}
+	stage.BezierGrids_mapString[beziergrid.Name] = beziergrid
+}
+
 // Unstage removes beziergrid off the model stage
 func (beziergrid *BezierGrid) Unstage(stage *Stage) *BezierGrid {
 	delete(stage.BezierGrids, beziergrid)
+	delete(stage.BezierGridMap_Staged_Order, beziergrid)
 	delete(stage.BezierGrids_mapString, beziergrid.Name)
 
-	if _, ok := stage.reference[beziergrid]; ok {
-		stage.deleted[beziergrid] = struct{}{}
-	} else {
-		delete(stage.new, beziergrid)
-	}
 	return beziergrid
 }
 
 // UnstageVoid removes beziergrid off the model stage
 func (beziergrid *BezierGrid) UnstageVoid(stage *Stage) {
 	delete(stage.BezierGrids, beziergrid)
+	delete(stage.BezierGridMap_Staged_Order, beziergrid)
 	delete(stage.BezierGrids_mapString, beziergrid.Name)
 }
 
@@ -1871,7 +1930,7 @@ func (beziergrid *BezierGrid) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (beziergrid *BezierGrid) SetName(name string) (){
+func (beziergrid *BezierGrid) SetName(name string) {
 	beziergrid.Name = name
 }
 
@@ -1882,34 +1941,44 @@ func (beziergridstack *BezierGridStack) Stage(stage *Stage) *BezierGridStack {
 		stage.BezierGridStacks[beziergridstack] = struct{}{}
 		stage.BezierGridStackMap_Staged_Order[beziergridstack] = stage.BezierGridStackOrder
 		stage.BezierGridStackOrder++
-		stage.new[beziergridstack] = struct{}{}
-		delete(stage.deleted, beziergridstack)
-	} else {
-		if _, ok := stage.new[beziergridstack]; !ok {
-			stage.modified[beziergridstack] = struct{}{}
-		}
 	}
 	stage.BezierGridStacks_mapString[beziergridstack.Name] = beziergridstack
 
 	return beziergridstack
 }
 
+// StagePreserveOrder puts beziergridstack to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.BezierGridStackOrder
+// - update stage.BezierGridStackOrder accordingly
+func (beziergridstack *BezierGridStack) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.BezierGridStacks[beziergridstack]; !ok {
+		stage.BezierGridStacks[beziergridstack] = struct{}{}
+
+		if order > stage.BezierGridStackOrder {
+			stage.BezierGridStackOrder = order
+		}
+		stage.BezierGridStackMap_Staged_Order[beziergridstack] = stage.BezierGridStackOrder
+		stage.BezierGridStackOrder++
+	}
+	stage.BezierGridStacks_mapString[beziergridstack.Name] = beziergridstack
+}
+
 // Unstage removes beziergridstack off the model stage
 func (beziergridstack *BezierGridStack) Unstage(stage *Stage) *BezierGridStack {
 	delete(stage.BezierGridStacks, beziergridstack)
+	delete(stage.BezierGridStackMap_Staged_Order, beziergridstack)
 	delete(stage.BezierGridStacks_mapString, beziergridstack.Name)
 
-	if _, ok := stage.reference[beziergridstack]; ok {
-		stage.deleted[beziergridstack] = struct{}{}
-	} else {
-		delete(stage.new, beziergridstack)
-	}
 	return beziergridstack
 }
 
 // UnstageVoid removes beziergridstack off the model stage
 func (beziergridstack *BezierGridStack) UnstageVoid(stage *Stage) {
 	delete(stage.BezierGridStacks, beziergridstack)
+	delete(stage.BezierGridStackMap_Staged_Order, beziergridstack)
 	delete(stage.BezierGridStacks_mapString, beziergridstack.Name)
 }
 
@@ -1947,7 +2016,7 @@ func (beziergridstack *BezierGridStack) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (beziergridstack *BezierGridStack) SetName(name string) (){
+func (beziergridstack *BezierGridStack) SetName(name string) {
 	beziergridstack.Name = name
 }
 
@@ -1958,34 +2027,44 @@ func (chapter *Chapter) Stage(stage *Stage) *Chapter {
 		stage.Chapters[chapter] = struct{}{}
 		stage.ChapterMap_Staged_Order[chapter] = stage.ChapterOrder
 		stage.ChapterOrder++
-		stage.new[chapter] = struct{}{}
-		delete(stage.deleted, chapter)
-	} else {
-		if _, ok := stage.new[chapter]; !ok {
-			stage.modified[chapter] = struct{}{}
-		}
 	}
 	stage.Chapters_mapString[chapter.Name] = chapter
 
 	return chapter
 }
 
+// StagePreserveOrder puts chapter to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.ChapterOrder
+// - update stage.ChapterOrder accordingly
+func (chapter *Chapter) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.Chapters[chapter]; !ok {
+		stage.Chapters[chapter] = struct{}{}
+
+		if order > stage.ChapterOrder {
+			stage.ChapterOrder = order
+		}
+		stage.ChapterMap_Staged_Order[chapter] = stage.ChapterOrder
+		stage.ChapterOrder++
+	}
+	stage.Chapters_mapString[chapter.Name] = chapter
+}
+
 // Unstage removes chapter off the model stage
 func (chapter *Chapter) Unstage(stage *Stage) *Chapter {
 	delete(stage.Chapters, chapter)
+	delete(stage.ChapterMap_Staged_Order, chapter)
 	delete(stage.Chapters_mapString, chapter.Name)
 
-	if _, ok := stage.reference[chapter]; ok {
-		stage.deleted[chapter] = struct{}{}
-	} else {
-		delete(stage.new, chapter)
-	}
 	return chapter
 }
 
 // UnstageVoid removes chapter off the model stage
 func (chapter *Chapter) UnstageVoid(stage *Stage) {
 	delete(stage.Chapters, chapter)
+	delete(stage.ChapterMap_Staged_Order, chapter)
 	delete(stage.Chapters_mapString, chapter.Name)
 }
 
@@ -2023,7 +2102,7 @@ func (chapter *Chapter) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (chapter *Chapter) SetName(name string) (){
+func (chapter *Chapter) SetName(name string) {
 	chapter.Name = name
 }
 
@@ -2034,34 +2113,44 @@ func (circle *Circle) Stage(stage *Stage) *Circle {
 		stage.Circles[circle] = struct{}{}
 		stage.CircleMap_Staged_Order[circle] = stage.CircleOrder
 		stage.CircleOrder++
-		stage.new[circle] = struct{}{}
-		delete(stage.deleted, circle)
-	} else {
-		if _, ok := stage.new[circle]; !ok {
-			stage.modified[circle] = struct{}{}
-		}
 	}
 	stage.Circles_mapString[circle.Name] = circle
 
 	return circle
 }
 
+// StagePreserveOrder puts circle to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.CircleOrder
+// - update stage.CircleOrder accordingly
+func (circle *Circle) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.Circles[circle]; !ok {
+		stage.Circles[circle] = struct{}{}
+
+		if order > stage.CircleOrder {
+			stage.CircleOrder = order
+		}
+		stage.CircleMap_Staged_Order[circle] = stage.CircleOrder
+		stage.CircleOrder++
+	}
+	stage.Circles_mapString[circle.Name] = circle
+}
+
 // Unstage removes circle off the model stage
 func (circle *Circle) Unstage(stage *Stage) *Circle {
 	delete(stage.Circles, circle)
+	delete(stage.CircleMap_Staged_Order, circle)
 	delete(stage.Circles_mapString, circle.Name)
 
-	if _, ok := stage.reference[circle]; ok {
-		stage.deleted[circle] = struct{}{}
-	} else {
-		delete(stage.new, circle)
-	}
 	return circle
 }
 
 // UnstageVoid removes circle off the model stage
 func (circle *Circle) UnstageVoid(stage *Stage) {
 	delete(stage.Circles, circle)
+	delete(stage.CircleMap_Staged_Order, circle)
 	delete(stage.Circles_mapString, circle.Name)
 }
 
@@ -2099,7 +2188,7 @@ func (circle *Circle) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (circle *Circle) SetName(name string) (){
+func (circle *Circle) SetName(name string) {
 	circle.Name = name
 }
 
@@ -2110,34 +2199,44 @@ func (circlegrid *CircleGrid) Stage(stage *Stage) *CircleGrid {
 		stage.CircleGrids[circlegrid] = struct{}{}
 		stage.CircleGridMap_Staged_Order[circlegrid] = stage.CircleGridOrder
 		stage.CircleGridOrder++
-		stage.new[circlegrid] = struct{}{}
-		delete(stage.deleted, circlegrid)
-	} else {
-		if _, ok := stage.new[circlegrid]; !ok {
-			stage.modified[circlegrid] = struct{}{}
-		}
 	}
 	stage.CircleGrids_mapString[circlegrid.Name] = circlegrid
 
 	return circlegrid
 }
 
+// StagePreserveOrder puts circlegrid to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.CircleGridOrder
+// - update stage.CircleGridOrder accordingly
+func (circlegrid *CircleGrid) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.CircleGrids[circlegrid]; !ok {
+		stage.CircleGrids[circlegrid] = struct{}{}
+
+		if order > stage.CircleGridOrder {
+			stage.CircleGridOrder = order
+		}
+		stage.CircleGridMap_Staged_Order[circlegrid] = stage.CircleGridOrder
+		stage.CircleGridOrder++
+	}
+	stage.CircleGrids_mapString[circlegrid.Name] = circlegrid
+}
+
 // Unstage removes circlegrid off the model stage
 func (circlegrid *CircleGrid) Unstage(stage *Stage) *CircleGrid {
 	delete(stage.CircleGrids, circlegrid)
+	delete(stage.CircleGridMap_Staged_Order, circlegrid)
 	delete(stage.CircleGrids_mapString, circlegrid.Name)
 
-	if _, ok := stage.reference[circlegrid]; ok {
-		stage.deleted[circlegrid] = struct{}{}
-	} else {
-		delete(stage.new, circlegrid)
-	}
 	return circlegrid
 }
 
 // UnstageVoid removes circlegrid off the model stage
 func (circlegrid *CircleGrid) UnstageVoid(stage *Stage) {
 	delete(stage.CircleGrids, circlegrid)
+	delete(stage.CircleGridMap_Staged_Order, circlegrid)
 	delete(stage.CircleGrids_mapString, circlegrid.Name)
 }
 
@@ -2175,7 +2274,7 @@ func (circlegrid *CircleGrid) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (circlegrid *CircleGrid) SetName(name string) (){
+func (circlegrid *CircleGrid) SetName(name string) {
 	circlegrid.Name = name
 }
 
@@ -2186,34 +2285,44 @@ func (content *Content) Stage(stage *Stage) *Content {
 		stage.Contents[content] = struct{}{}
 		stage.ContentMap_Staged_Order[content] = stage.ContentOrder
 		stage.ContentOrder++
-		stage.new[content] = struct{}{}
-		delete(stage.deleted, content)
-	} else {
-		if _, ok := stage.new[content]; !ok {
-			stage.modified[content] = struct{}{}
-		}
 	}
 	stage.Contents_mapString[content.Name] = content
 
 	return content
 }
 
+// StagePreserveOrder puts content to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.ContentOrder
+// - update stage.ContentOrder accordingly
+func (content *Content) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.Contents[content]; !ok {
+		stage.Contents[content] = struct{}{}
+
+		if order > stage.ContentOrder {
+			stage.ContentOrder = order
+		}
+		stage.ContentMap_Staged_Order[content] = stage.ContentOrder
+		stage.ContentOrder++
+	}
+	stage.Contents_mapString[content.Name] = content
+}
+
 // Unstage removes content off the model stage
 func (content *Content) Unstage(stage *Stage) *Content {
 	delete(stage.Contents, content)
+	delete(stage.ContentMap_Staged_Order, content)
 	delete(stage.Contents_mapString, content.Name)
 
-	if _, ok := stage.reference[content]; ok {
-		stage.deleted[content] = struct{}{}
-	} else {
-		delete(stage.new, content)
-	}
 	return content
 }
 
 // UnstageVoid removes content off the model stage
 func (content *Content) UnstageVoid(stage *Stage) {
 	delete(stage.Contents, content)
+	delete(stage.ContentMap_Staged_Order, content)
 	delete(stage.Contents_mapString, content.Name)
 }
 
@@ -2251,7 +2360,7 @@ func (content *Content) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (content *Content) SetName(name string) (){
+func (content *Content) SetName(name string) {
 	content.Name = name
 }
 
@@ -2262,34 +2371,44 @@ func (exporttomusicxml *ExportToMusicxml) Stage(stage *Stage) *ExportToMusicxml 
 		stage.ExportToMusicxmls[exporttomusicxml] = struct{}{}
 		stage.ExportToMusicxmlMap_Staged_Order[exporttomusicxml] = stage.ExportToMusicxmlOrder
 		stage.ExportToMusicxmlOrder++
-		stage.new[exporttomusicxml] = struct{}{}
-		delete(stage.deleted, exporttomusicxml)
-	} else {
-		if _, ok := stage.new[exporttomusicxml]; !ok {
-			stage.modified[exporttomusicxml] = struct{}{}
-		}
 	}
 	stage.ExportToMusicxmls_mapString[exporttomusicxml.Name] = exporttomusicxml
 
 	return exporttomusicxml
 }
 
+// StagePreserveOrder puts exporttomusicxml to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.ExportToMusicxmlOrder
+// - update stage.ExportToMusicxmlOrder accordingly
+func (exporttomusicxml *ExportToMusicxml) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; !ok {
+		stage.ExportToMusicxmls[exporttomusicxml] = struct{}{}
+
+		if order > stage.ExportToMusicxmlOrder {
+			stage.ExportToMusicxmlOrder = order
+		}
+		stage.ExportToMusicxmlMap_Staged_Order[exporttomusicxml] = stage.ExportToMusicxmlOrder
+		stage.ExportToMusicxmlOrder++
+	}
+	stage.ExportToMusicxmls_mapString[exporttomusicxml.Name] = exporttomusicxml
+}
+
 // Unstage removes exporttomusicxml off the model stage
 func (exporttomusicxml *ExportToMusicxml) Unstage(stage *Stage) *ExportToMusicxml {
 	delete(stage.ExportToMusicxmls, exporttomusicxml)
+	delete(stage.ExportToMusicxmlMap_Staged_Order, exporttomusicxml)
 	delete(stage.ExportToMusicxmls_mapString, exporttomusicxml.Name)
 
-	if _, ok := stage.reference[exporttomusicxml]; ok {
-		stage.deleted[exporttomusicxml] = struct{}{}
-	} else {
-		delete(stage.new, exporttomusicxml)
-	}
 	return exporttomusicxml
 }
 
 // UnstageVoid removes exporttomusicxml off the model stage
 func (exporttomusicxml *ExportToMusicxml) UnstageVoid(stage *Stage) {
 	delete(stage.ExportToMusicxmls, exporttomusicxml)
+	delete(stage.ExportToMusicxmlMap_Staged_Order, exporttomusicxml)
 	delete(stage.ExportToMusicxmls_mapString, exporttomusicxml.Name)
 }
 
@@ -2327,7 +2446,7 @@ func (exporttomusicxml *ExportToMusicxml) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (exporttomusicxml *ExportToMusicxml) SetName(name string) (){
+func (exporttomusicxml *ExportToMusicxml) SetName(name string) {
 	exporttomusicxml.Name = name
 }
 
@@ -2338,34 +2457,44 @@ func (frontcurve *FrontCurve) Stage(stage *Stage) *FrontCurve {
 		stage.FrontCurves[frontcurve] = struct{}{}
 		stage.FrontCurveMap_Staged_Order[frontcurve] = stage.FrontCurveOrder
 		stage.FrontCurveOrder++
-		stage.new[frontcurve] = struct{}{}
-		delete(stage.deleted, frontcurve)
-	} else {
-		if _, ok := stage.new[frontcurve]; !ok {
-			stage.modified[frontcurve] = struct{}{}
-		}
 	}
 	stage.FrontCurves_mapString[frontcurve.Name] = frontcurve
 
 	return frontcurve
 }
 
+// StagePreserveOrder puts frontcurve to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.FrontCurveOrder
+// - update stage.FrontCurveOrder accordingly
+func (frontcurve *FrontCurve) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.FrontCurves[frontcurve]; !ok {
+		stage.FrontCurves[frontcurve] = struct{}{}
+
+		if order > stage.FrontCurveOrder {
+			stage.FrontCurveOrder = order
+		}
+		stage.FrontCurveMap_Staged_Order[frontcurve] = stage.FrontCurveOrder
+		stage.FrontCurveOrder++
+	}
+	stage.FrontCurves_mapString[frontcurve.Name] = frontcurve
+}
+
 // Unstage removes frontcurve off the model stage
 func (frontcurve *FrontCurve) Unstage(stage *Stage) *FrontCurve {
 	delete(stage.FrontCurves, frontcurve)
+	delete(stage.FrontCurveMap_Staged_Order, frontcurve)
 	delete(stage.FrontCurves_mapString, frontcurve.Name)
 
-	if _, ok := stage.reference[frontcurve]; ok {
-		stage.deleted[frontcurve] = struct{}{}
-	} else {
-		delete(stage.new, frontcurve)
-	}
 	return frontcurve
 }
 
 // UnstageVoid removes frontcurve off the model stage
 func (frontcurve *FrontCurve) UnstageVoid(stage *Stage) {
 	delete(stage.FrontCurves, frontcurve)
+	delete(stage.FrontCurveMap_Staged_Order, frontcurve)
 	delete(stage.FrontCurves_mapString, frontcurve.Name)
 }
 
@@ -2403,7 +2532,7 @@ func (frontcurve *FrontCurve) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (frontcurve *FrontCurve) SetName(name string) (){
+func (frontcurve *FrontCurve) SetName(name string) {
 	frontcurve.Name = name
 }
 
@@ -2414,34 +2543,44 @@ func (frontcurvestack *FrontCurveStack) Stage(stage *Stage) *FrontCurveStack {
 		stage.FrontCurveStacks[frontcurvestack] = struct{}{}
 		stage.FrontCurveStackMap_Staged_Order[frontcurvestack] = stage.FrontCurveStackOrder
 		stage.FrontCurveStackOrder++
-		stage.new[frontcurvestack] = struct{}{}
-		delete(stage.deleted, frontcurvestack)
-	} else {
-		if _, ok := stage.new[frontcurvestack]; !ok {
-			stage.modified[frontcurvestack] = struct{}{}
-		}
 	}
 	stage.FrontCurveStacks_mapString[frontcurvestack.Name] = frontcurvestack
 
 	return frontcurvestack
 }
 
+// StagePreserveOrder puts frontcurvestack to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.FrontCurveStackOrder
+// - update stage.FrontCurveStackOrder accordingly
+func (frontcurvestack *FrontCurveStack) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.FrontCurveStacks[frontcurvestack]; !ok {
+		stage.FrontCurveStacks[frontcurvestack] = struct{}{}
+
+		if order > stage.FrontCurveStackOrder {
+			stage.FrontCurveStackOrder = order
+		}
+		stage.FrontCurveStackMap_Staged_Order[frontcurvestack] = stage.FrontCurveStackOrder
+		stage.FrontCurveStackOrder++
+	}
+	stage.FrontCurveStacks_mapString[frontcurvestack.Name] = frontcurvestack
+}
+
 // Unstage removes frontcurvestack off the model stage
 func (frontcurvestack *FrontCurveStack) Unstage(stage *Stage) *FrontCurveStack {
 	delete(stage.FrontCurveStacks, frontcurvestack)
+	delete(stage.FrontCurveStackMap_Staged_Order, frontcurvestack)
 	delete(stage.FrontCurveStacks_mapString, frontcurvestack.Name)
 
-	if _, ok := stage.reference[frontcurvestack]; ok {
-		stage.deleted[frontcurvestack] = struct{}{}
-	} else {
-		delete(stage.new, frontcurvestack)
-	}
 	return frontcurvestack
 }
 
 // UnstageVoid removes frontcurvestack off the model stage
 func (frontcurvestack *FrontCurveStack) UnstageVoid(stage *Stage) {
 	delete(stage.FrontCurveStacks, frontcurvestack)
+	delete(stage.FrontCurveStackMap_Staged_Order, frontcurvestack)
 	delete(stage.FrontCurveStacks_mapString, frontcurvestack.Name)
 }
 
@@ -2479,7 +2618,7 @@ func (frontcurvestack *FrontCurveStack) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (frontcurvestack *FrontCurveStack) SetName(name string) (){
+func (frontcurvestack *FrontCurveStack) SetName(name string) {
 	frontcurvestack.Name = name
 }
 
@@ -2490,34 +2629,44 @@ func (horizontalaxis *HorizontalAxis) Stage(stage *Stage) *HorizontalAxis {
 		stage.HorizontalAxiss[horizontalaxis] = struct{}{}
 		stage.HorizontalAxisMap_Staged_Order[horizontalaxis] = stage.HorizontalAxisOrder
 		stage.HorizontalAxisOrder++
-		stage.new[horizontalaxis] = struct{}{}
-		delete(stage.deleted, horizontalaxis)
-	} else {
-		if _, ok := stage.new[horizontalaxis]; !ok {
-			stage.modified[horizontalaxis] = struct{}{}
-		}
 	}
 	stage.HorizontalAxiss_mapString[horizontalaxis.Name] = horizontalaxis
 
 	return horizontalaxis
 }
 
+// StagePreserveOrder puts horizontalaxis to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.HorizontalAxisOrder
+// - update stage.HorizontalAxisOrder accordingly
+func (horizontalaxis *HorizontalAxis) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.HorizontalAxiss[horizontalaxis]; !ok {
+		stage.HorizontalAxiss[horizontalaxis] = struct{}{}
+
+		if order > stage.HorizontalAxisOrder {
+			stage.HorizontalAxisOrder = order
+		}
+		stage.HorizontalAxisMap_Staged_Order[horizontalaxis] = stage.HorizontalAxisOrder
+		stage.HorizontalAxisOrder++
+	}
+	stage.HorizontalAxiss_mapString[horizontalaxis.Name] = horizontalaxis
+}
+
 // Unstage removes horizontalaxis off the model stage
 func (horizontalaxis *HorizontalAxis) Unstage(stage *Stage) *HorizontalAxis {
 	delete(stage.HorizontalAxiss, horizontalaxis)
+	delete(stage.HorizontalAxisMap_Staged_Order, horizontalaxis)
 	delete(stage.HorizontalAxiss_mapString, horizontalaxis.Name)
 
-	if _, ok := stage.reference[horizontalaxis]; ok {
-		stage.deleted[horizontalaxis] = struct{}{}
-	} else {
-		delete(stage.new, horizontalaxis)
-	}
 	return horizontalaxis
 }
 
 // UnstageVoid removes horizontalaxis off the model stage
 func (horizontalaxis *HorizontalAxis) UnstageVoid(stage *Stage) {
 	delete(stage.HorizontalAxiss, horizontalaxis)
+	delete(stage.HorizontalAxisMap_Staged_Order, horizontalaxis)
 	delete(stage.HorizontalAxiss_mapString, horizontalaxis.Name)
 }
 
@@ -2555,7 +2704,7 @@ func (horizontalaxis *HorizontalAxis) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (horizontalaxis *HorizontalAxis) SetName(name string) (){
+func (horizontalaxis *HorizontalAxis) SetName(name string) {
 	horizontalaxis.Name = name
 }
 
@@ -2566,34 +2715,44 @@ func (key *Key) Stage(stage *Stage) *Key {
 		stage.Keys[key] = struct{}{}
 		stage.KeyMap_Staged_Order[key] = stage.KeyOrder
 		stage.KeyOrder++
-		stage.new[key] = struct{}{}
-		delete(stage.deleted, key)
-	} else {
-		if _, ok := stage.new[key]; !ok {
-			stage.modified[key] = struct{}{}
-		}
 	}
 	stage.Keys_mapString[key.Name] = key
 
 	return key
 }
 
+// StagePreserveOrder puts key to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.KeyOrder
+// - update stage.KeyOrder accordingly
+func (key *Key) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.Keys[key]; !ok {
+		stage.Keys[key] = struct{}{}
+
+		if order > stage.KeyOrder {
+			stage.KeyOrder = order
+		}
+		stage.KeyMap_Staged_Order[key] = stage.KeyOrder
+		stage.KeyOrder++
+	}
+	stage.Keys_mapString[key.Name] = key
+}
+
 // Unstage removes key off the model stage
 func (key *Key) Unstage(stage *Stage) *Key {
 	delete(stage.Keys, key)
+	delete(stage.KeyMap_Staged_Order, key)
 	delete(stage.Keys_mapString, key.Name)
 
-	if _, ok := stage.reference[key]; ok {
-		stage.deleted[key] = struct{}{}
-	} else {
-		delete(stage.new, key)
-	}
 	return key
 }
 
 // UnstageVoid removes key off the model stage
 func (key *Key) UnstageVoid(stage *Stage) {
 	delete(stage.Keys, key)
+	delete(stage.KeyMap_Staged_Order, key)
 	delete(stage.Keys_mapString, key.Name)
 }
 
@@ -2631,7 +2790,7 @@ func (key *Key) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (key *Key) SetName(name string) (){
+func (key *Key) SetName(name string) {
 	key.Name = name
 }
 
@@ -2642,34 +2801,44 @@ func (parameter *Parameter) Stage(stage *Stage) *Parameter {
 		stage.Parameters[parameter] = struct{}{}
 		stage.ParameterMap_Staged_Order[parameter] = stage.ParameterOrder
 		stage.ParameterOrder++
-		stage.new[parameter] = struct{}{}
-		delete(stage.deleted, parameter)
-	} else {
-		if _, ok := stage.new[parameter]; !ok {
-			stage.modified[parameter] = struct{}{}
-		}
 	}
 	stage.Parameters_mapString[parameter.Name] = parameter
 
 	return parameter
 }
 
+// StagePreserveOrder puts parameter to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.ParameterOrder
+// - update stage.ParameterOrder accordingly
+func (parameter *Parameter) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.Parameters[parameter]; !ok {
+		stage.Parameters[parameter] = struct{}{}
+
+		if order > stage.ParameterOrder {
+			stage.ParameterOrder = order
+		}
+		stage.ParameterMap_Staged_Order[parameter] = stage.ParameterOrder
+		stage.ParameterOrder++
+	}
+	stage.Parameters_mapString[parameter.Name] = parameter
+}
+
 // Unstage removes parameter off the model stage
 func (parameter *Parameter) Unstage(stage *Stage) *Parameter {
 	delete(stage.Parameters, parameter)
+	delete(stage.ParameterMap_Staged_Order, parameter)
 	delete(stage.Parameters_mapString, parameter.Name)
 
-	if _, ok := stage.reference[parameter]; ok {
-		stage.deleted[parameter] = struct{}{}
-	} else {
-		delete(stage.new, parameter)
-	}
 	return parameter
 }
 
 // UnstageVoid removes parameter off the model stage
 func (parameter *Parameter) UnstageVoid(stage *Stage) {
 	delete(stage.Parameters, parameter)
+	delete(stage.ParameterMap_Staged_Order, parameter)
 	delete(stage.Parameters_mapString, parameter.Name)
 }
 
@@ -2707,7 +2876,7 @@ func (parameter *Parameter) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (parameter *Parameter) SetName(name string) (){
+func (parameter *Parameter) SetName(name string) {
 	parameter.Name = name
 }
 
@@ -2718,34 +2887,44 @@ func (rhombus *Rhombus) Stage(stage *Stage) *Rhombus {
 		stage.Rhombuss[rhombus] = struct{}{}
 		stage.RhombusMap_Staged_Order[rhombus] = stage.RhombusOrder
 		stage.RhombusOrder++
-		stage.new[rhombus] = struct{}{}
-		delete(stage.deleted, rhombus)
-	} else {
-		if _, ok := stage.new[rhombus]; !ok {
-			stage.modified[rhombus] = struct{}{}
-		}
 	}
 	stage.Rhombuss_mapString[rhombus.Name] = rhombus
 
 	return rhombus
 }
 
+// StagePreserveOrder puts rhombus to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.RhombusOrder
+// - update stage.RhombusOrder accordingly
+func (rhombus *Rhombus) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.Rhombuss[rhombus]; !ok {
+		stage.Rhombuss[rhombus] = struct{}{}
+
+		if order > stage.RhombusOrder {
+			stage.RhombusOrder = order
+		}
+		stage.RhombusMap_Staged_Order[rhombus] = stage.RhombusOrder
+		stage.RhombusOrder++
+	}
+	stage.Rhombuss_mapString[rhombus.Name] = rhombus
+}
+
 // Unstage removes rhombus off the model stage
 func (rhombus *Rhombus) Unstage(stage *Stage) *Rhombus {
 	delete(stage.Rhombuss, rhombus)
+	delete(stage.RhombusMap_Staged_Order, rhombus)
 	delete(stage.Rhombuss_mapString, rhombus.Name)
 
-	if _, ok := stage.reference[rhombus]; ok {
-		stage.deleted[rhombus] = struct{}{}
-	} else {
-		delete(stage.new, rhombus)
-	}
 	return rhombus
 }
 
 // UnstageVoid removes rhombus off the model stage
 func (rhombus *Rhombus) UnstageVoid(stage *Stage) {
 	delete(stage.Rhombuss, rhombus)
+	delete(stage.RhombusMap_Staged_Order, rhombus)
 	delete(stage.Rhombuss_mapString, rhombus.Name)
 }
 
@@ -2783,7 +2962,7 @@ func (rhombus *Rhombus) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (rhombus *Rhombus) SetName(name string) (){
+func (rhombus *Rhombus) SetName(name string) {
 	rhombus.Name = name
 }
 
@@ -2794,34 +2973,44 @@ func (rhombusgrid *RhombusGrid) Stage(stage *Stage) *RhombusGrid {
 		stage.RhombusGrids[rhombusgrid] = struct{}{}
 		stage.RhombusGridMap_Staged_Order[rhombusgrid] = stage.RhombusGridOrder
 		stage.RhombusGridOrder++
-		stage.new[rhombusgrid] = struct{}{}
-		delete(stage.deleted, rhombusgrid)
-	} else {
-		if _, ok := stage.new[rhombusgrid]; !ok {
-			stage.modified[rhombusgrid] = struct{}{}
-		}
 	}
 	stage.RhombusGrids_mapString[rhombusgrid.Name] = rhombusgrid
 
 	return rhombusgrid
 }
 
+// StagePreserveOrder puts rhombusgrid to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.RhombusGridOrder
+// - update stage.RhombusGridOrder accordingly
+func (rhombusgrid *RhombusGrid) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.RhombusGrids[rhombusgrid]; !ok {
+		stage.RhombusGrids[rhombusgrid] = struct{}{}
+
+		if order > stage.RhombusGridOrder {
+			stage.RhombusGridOrder = order
+		}
+		stage.RhombusGridMap_Staged_Order[rhombusgrid] = stage.RhombusGridOrder
+		stage.RhombusGridOrder++
+	}
+	stage.RhombusGrids_mapString[rhombusgrid.Name] = rhombusgrid
+}
+
 // Unstage removes rhombusgrid off the model stage
 func (rhombusgrid *RhombusGrid) Unstage(stage *Stage) *RhombusGrid {
 	delete(stage.RhombusGrids, rhombusgrid)
+	delete(stage.RhombusGridMap_Staged_Order, rhombusgrid)
 	delete(stage.RhombusGrids_mapString, rhombusgrid.Name)
 
-	if _, ok := stage.reference[rhombusgrid]; ok {
-		stage.deleted[rhombusgrid] = struct{}{}
-	} else {
-		delete(stage.new, rhombusgrid)
-	}
 	return rhombusgrid
 }
 
 // UnstageVoid removes rhombusgrid off the model stage
 func (rhombusgrid *RhombusGrid) UnstageVoid(stage *Stage) {
 	delete(stage.RhombusGrids, rhombusgrid)
+	delete(stage.RhombusGridMap_Staged_Order, rhombusgrid)
 	delete(stage.RhombusGrids_mapString, rhombusgrid.Name)
 }
 
@@ -2859,7 +3048,7 @@ func (rhombusgrid *RhombusGrid) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (rhombusgrid *RhombusGrid) SetName(name string) (){
+func (rhombusgrid *RhombusGrid) SetName(name string) {
 	rhombusgrid.Name = name
 }
 
@@ -2870,34 +3059,44 @@ func (shapecategory *ShapeCategory) Stage(stage *Stage) *ShapeCategory {
 		stage.ShapeCategorys[shapecategory] = struct{}{}
 		stage.ShapeCategoryMap_Staged_Order[shapecategory] = stage.ShapeCategoryOrder
 		stage.ShapeCategoryOrder++
-		stage.new[shapecategory] = struct{}{}
-		delete(stage.deleted, shapecategory)
-	} else {
-		if _, ok := stage.new[shapecategory]; !ok {
-			stage.modified[shapecategory] = struct{}{}
-		}
 	}
 	stage.ShapeCategorys_mapString[shapecategory.Name] = shapecategory
 
 	return shapecategory
 }
 
+// StagePreserveOrder puts shapecategory to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.ShapeCategoryOrder
+// - update stage.ShapeCategoryOrder accordingly
+func (shapecategory *ShapeCategory) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.ShapeCategorys[shapecategory]; !ok {
+		stage.ShapeCategorys[shapecategory] = struct{}{}
+
+		if order > stage.ShapeCategoryOrder {
+			stage.ShapeCategoryOrder = order
+		}
+		stage.ShapeCategoryMap_Staged_Order[shapecategory] = stage.ShapeCategoryOrder
+		stage.ShapeCategoryOrder++
+	}
+	stage.ShapeCategorys_mapString[shapecategory.Name] = shapecategory
+}
+
 // Unstage removes shapecategory off the model stage
 func (shapecategory *ShapeCategory) Unstage(stage *Stage) *ShapeCategory {
 	delete(stage.ShapeCategorys, shapecategory)
+	delete(stage.ShapeCategoryMap_Staged_Order, shapecategory)
 	delete(stage.ShapeCategorys_mapString, shapecategory.Name)
 
-	if _, ok := stage.reference[shapecategory]; ok {
-		stage.deleted[shapecategory] = struct{}{}
-	} else {
-		delete(stage.new, shapecategory)
-	}
 	return shapecategory
 }
 
 // UnstageVoid removes shapecategory off the model stage
 func (shapecategory *ShapeCategory) UnstageVoid(stage *Stage) {
 	delete(stage.ShapeCategorys, shapecategory)
+	delete(stage.ShapeCategoryMap_Staged_Order, shapecategory)
 	delete(stage.ShapeCategorys_mapString, shapecategory.Name)
 }
 
@@ -2935,7 +3134,7 @@ func (shapecategory *ShapeCategory) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (shapecategory *ShapeCategory) SetName(name string) (){
+func (shapecategory *ShapeCategory) SetName(name string) {
 	shapecategory.Name = name
 }
 
@@ -2946,34 +3145,44 @@ func (spiralbezier *SpiralBezier) Stage(stage *Stage) *SpiralBezier {
 		stage.SpiralBeziers[spiralbezier] = struct{}{}
 		stage.SpiralBezierMap_Staged_Order[spiralbezier] = stage.SpiralBezierOrder
 		stage.SpiralBezierOrder++
-		stage.new[spiralbezier] = struct{}{}
-		delete(stage.deleted, spiralbezier)
-	} else {
-		if _, ok := stage.new[spiralbezier]; !ok {
-			stage.modified[spiralbezier] = struct{}{}
-		}
 	}
 	stage.SpiralBeziers_mapString[spiralbezier.Name] = spiralbezier
 
 	return spiralbezier
 }
 
+// StagePreserveOrder puts spiralbezier to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.SpiralBezierOrder
+// - update stage.SpiralBezierOrder accordingly
+func (spiralbezier *SpiralBezier) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.SpiralBeziers[spiralbezier]; !ok {
+		stage.SpiralBeziers[spiralbezier] = struct{}{}
+
+		if order > stage.SpiralBezierOrder {
+			stage.SpiralBezierOrder = order
+		}
+		stage.SpiralBezierMap_Staged_Order[spiralbezier] = stage.SpiralBezierOrder
+		stage.SpiralBezierOrder++
+	}
+	stage.SpiralBeziers_mapString[spiralbezier.Name] = spiralbezier
+}
+
 // Unstage removes spiralbezier off the model stage
 func (spiralbezier *SpiralBezier) Unstage(stage *Stage) *SpiralBezier {
 	delete(stage.SpiralBeziers, spiralbezier)
+	delete(stage.SpiralBezierMap_Staged_Order, spiralbezier)
 	delete(stage.SpiralBeziers_mapString, spiralbezier.Name)
 
-	if _, ok := stage.reference[spiralbezier]; ok {
-		stage.deleted[spiralbezier] = struct{}{}
-	} else {
-		delete(stage.new, spiralbezier)
-	}
 	return spiralbezier
 }
 
 // UnstageVoid removes spiralbezier off the model stage
 func (spiralbezier *SpiralBezier) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralBeziers, spiralbezier)
+	delete(stage.SpiralBezierMap_Staged_Order, spiralbezier)
 	delete(stage.SpiralBeziers_mapString, spiralbezier.Name)
 }
 
@@ -3011,7 +3220,7 @@ func (spiralbezier *SpiralBezier) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (spiralbezier *SpiralBezier) SetName(name string) (){
+func (spiralbezier *SpiralBezier) SetName(name string) {
 	spiralbezier.Name = name
 }
 
@@ -3022,34 +3231,44 @@ func (spiralbeziergrid *SpiralBezierGrid) Stage(stage *Stage) *SpiralBezierGrid 
 		stage.SpiralBezierGrids[spiralbeziergrid] = struct{}{}
 		stage.SpiralBezierGridMap_Staged_Order[spiralbeziergrid] = stage.SpiralBezierGridOrder
 		stage.SpiralBezierGridOrder++
-		stage.new[spiralbeziergrid] = struct{}{}
-		delete(stage.deleted, spiralbeziergrid)
-	} else {
-		if _, ok := stage.new[spiralbeziergrid]; !ok {
-			stage.modified[spiralbeziergrid] = struct{}{}
-		}
 	}
 	stage.SpiralBezierGrids_mapString[spiralbeziergrid.Name] = spiralbeziergrid
 
 	return spiralbeziergrid
 }
 
+// StagePreserveOrder puts spiralbeziergrid to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.SpiralBezierGridOrder
+// - update stage.SpiralBezierGridOrder accordingly
+func (spiralbeziergrid *SpiralBezierGrid) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.SpiralBezierGrids[spiralbeziergrid]; !ok {
+		stage.SpiralBezierGrids[spiralbeziergrid] = struct{}{}
+
+		if order > stage.SpiralBezierGridOrder {
+			stage.SpiralBezierGridOrder = order
+		}
+		stage.SpiralBezierGridMap_Staged_Order[spiralbeziergrid] = stage.SpiralBezierGridOrder
+		stage.SpiralBezierGridOrder++
+	}
+	stage.SpiralBezierGrids_mapString[spiralbeziergrid.Name] = spiralbeziergrid
+}
+
 // Unstage removes spiralbeziergrid off the model stage
 func (spiralbeziergrid *SpiralBezierGrid) Unstage(stage *Stage) *SpiralBezierGrid {
 	delete(stage.SpiralBezierGrids, spiralbeziergrid)
+	delete(stage.SpiralBezierGridMap_Staged_Order, spiralbeziergrid)
 	delete(stage.SpiralBezierGrids_mapString, spiralbeziergrid.Name)
 
-	if _, ok := stage.reference[spiralbeziergrid]; ok {
-		stage.deleted[spiralbeziergrid] = struct{}{}
-	} else {
-		delete(stage.new, spiralbeziergrid)
-	}
 	return spiralbeziergrid
 }
 
 // UnstageVoid removes spiralbeziergrid off the model stage
 func (spiralbeziergrid *SpiralBezierGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralBezierGrids, spiralbeziergrid)
+	delete(stage.SpiralBezierGridMap_Staged_Order, spiralbeziergrid)
 	delete(stage.SpiralBezierGrids_mapString, spiralbeziergrid.Name)
 }
 
@@ -3087,7 +3306,7 @@ func (spiralbeziergrid *SpiralBezierGrid) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (spiralbeziergrid *SpiralBezierGrid) SetName(name string) (){
+func (spiralbeziergrid *SpiralBezierGrid) SetName(name string) {
 	spiralbeziergrid.Name = name
 }
 
@@ -3098,34 +3317,44 @@ func (spiralcircle *SpiralCircle) Stage(stage *Stage) *SpiralCircle {
 		stage.SpiralCircles[spiralcircle] = struct{}{}
 		stage.SpiralCircleMap_Staged_Order[spiralcircle] = stage.SpiralCircleOrder
 		stage.SpiralCircleOrder++
-		stage.new[spiralcircle] = struct{}{}
-		delete(stage.deleted, spiralcircle)
-	} else {
-		if _, ok := stage.new[spiralcircle]; !ok {
-			stage.modified[spiralcircle] = struct{}{}
-		}
 	}
 	stage.SpiralCircles_mapString[spiralcircle.Name] = spiralcircle
 
 	return spiralcircle
 }
 
+// StagePreserveOrder puts spiralcircle to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.SpiralCircleOrder
+// - update stage.SpiralCircleOrder accordingly
+func (spiralcircle *SpiralCircle) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.SpiralCircles[spiralcircle]; !ok {
+		stage.SpiralCircles[spiralcircle] = struct{}{}
+
+		if order > stage.SpiralCircleOrder {
+			stage.SpiralCircleOrder = order
+		}
+		stage.SpiralCircleMap_Staged_Order[spiralcircle] = stage.SpiralCircleOrder
+		stage.SpiralCircleOrder++
+	}
+	stage.SpiralCircles_mapString[spiralcircle.Name] = spiralcircle
+}
+
 // Unstage removes spiralcircle off the model stage
 func (spiralcircle *SpiralCircle) Unstage(stage *Stage) *SpiralCircle {
 	delete(stage.SpiralCircles, spiralcircle)
+	delete(stage.SpiralCircleMap_Staged_Order, spiralcircle)
 	delete(stage.SpiralCircles_mapString, spiralcircle.Name)
 
-	if _, ok := stage.reference[spiralcircle]; ok {
-		stage.deleted[spiralcircle] = struct{}{}
-	} else {
-		delete(stage.new, spiralcircle)
-	}
 	return spiralcircle
 }
 
 // UnstageVoid removes spiralcircle off the model stage
 func (spiralcircle *SpiralCircle) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralCircles, spiralcircle)
+	delete(stage.SpiralCircleMap_Staged_Order, spiralcircle)
 	delete(stage.SpiralCircles_mapString, spiralcircle.Name)
 }
 
@@ -3163,7 +3392,7 @@ func (spiralcircle *SpiralCircle) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (spiralcircle *SpiralCircle) SetName(name string) (){
+func (spiralcircle *SpiralCircle) SetName(name string) {
 	spiralcircle.Name = name
 }
 
@@ -3174,34 +3403,44 @@ func (spiralcirclegrid *SpiralCircleGrid) Stage(stage *Stage) *SpiralCircleGrid 
 		stage.SpiralCircleGrids[spiralcirclegrid] = struct{}{}
 		stage.SpiralCircleGridMap_Staged_Order[spiralcirclegrid] = stage.SpiralCircleGridOrder
 		stage.SpiralCircleGridOrder++
-		stage.new[spiralcirclegrid] = struct{}{}
-		delete(stage.deleted, spiralcirclegrid)
-	} else {
-		if _, ok := stage.new[spiralcirclegrid]; !ok {
-			stage.modified[spiralcirclegrid] = struct{}{}
-		}
 	}
 	stage.SpiralCircleGrids_mapString[spiralcirclegrid.Name] = spiralcirclegrid
 
 	return spiralcirclegrid
 }
 
+// StagePreserveOrder puts spiralcirclegrid to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.SpiralCircleGridOrder
+// - update stage.SpiralCircleGridOrder accordingly
+func (spiralcirclegrid *SpiralCircleGrid) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; !ok {
+		stage.SpiralCircleGrids[spiralcirclegrid] = struct{}{}
+
+		if order > stage.SpiralCircleGridOrder {
+			stage.SpiralCircleGridOrder = order
+		}
+		stage.SpiralCircleGridMap_Staged_Order[spiralcirclegrid] = stage.SpiralCircleGridOrder
+		stage.SpiralCircleGridOrder++
+	}
+	stage.SpiralCircleGrids_mapString[spiralcirclegrid.Name] = spiralcirclegrid
+}
+
 // Unstage removes spiralcirclegrid off the model stage
 func (spiralcirclegrid *SpiralCircleGrid) Unstage(stage *Stage) *SpiralCircleGrid {
 	delete(stage.SpiralCircleGrids, spiralcirclegrid)
+	delete(stage.SpiralCircleGridMap_Staged_Order, spiralcirclegrid)
 	delete(stage.SpiralCircleGrids_mapString, spiralcirclegrid.Name)
 
-	if _, ok := stage.reference[spiralcirclegrid]; ok {
-		stage.deleted[spiralcirclegrid] = struct{}{}
-	} else {
-		delete(stage.new, spiralcirclegrid)
-	}
 	return spiralcirclegrid
 }
 
 // UnstageVoid removes spiralcirclegrid off the model stage
 func (spiralcirclegrid *SpiralCircleGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralCircleGrids, spiralcirclegrid)
+	delete(stage.SpiralCircleGridMap_Staged_Order, spiralcirclegrid)
 	delete(stage.SpiralCircleGrids_mapString, spiralcirclegrid.Name)
 }
 
@@ -3239,7 +3478,7 @@ func (spiralcirclegrid *SpiralCircleGrid) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (spiralcirclegrid *SpiralCircleGrid) SetName(name string) (){
+func (spiralcirclegrid *SpiralCircleGrid) SetName(name string) {
 	spiralcirclegrid.Name = name
 }
 
@@ -3250,34 +3489,44 @@ func (spiralline *SpiralLine) Stage(stage *Stage) *SpiralLine {
 		stage.SpiralLines[spiralline] = struct{}{}
 		stage.SpiralLineMap_Staged_Order[spiralline] = stage.SpiralLineOrder
 		stage.SpiralLineOrder++
-		stage.new[spiralline] = struct{}{}
-		delete(stage.deleted, spiralline)
-	} else {
-		if _, ok := stage.new[spiralline]; !ok {
-			stage.modified[spiralline] = struct{}{}
-		}
 	}
 	stage.SpiralLines_mapString[spiralline.Name] = spiralline
 
 	return spiralline
 }
 
+// StagePreserveOrder puts spiralline to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.SpiralLineOrder
+// - update stage.SpiralLineOrder accordingly
+func (spiralline *SpiralLine) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.SpiralLines[spiralline]; !ok {
+		stage.SpiralLines[spiralline] = struct{}{}
+
+		if order > stage.SpiralLineOrder {
+			stage.SpiralLineOrder = order
+		}
+		stage.SpiralLineMap_Staged_Order[spiralline] = stage.SpiralLineOrder
+		stage.SpiralLineOrder++
+	}
+	stage.SpiralLines_mapString[spiralline.Name] = spiralline
+}
+
 // Unstage removes spiralline off the model stage
 func (spiralline *SpiralLine) Unstage(stage *Stage) *SpiralLine {
 	delete(stage.SpiralLines, spiralline)
+	delete(stage.SpiralLineMap_Staged_Order, spiralline)
 	delete(stage.SpiralLines_mapString, spiralline.Name)
 
-	if _, ok := stage.reference[spiralline]; ok {
-		stage.deleted[spiralline] = struct{}{}
-	} else {
-		delete(stage.new, spiralline)
-	}
 	return spiralline
 }
 
 // UnstageVoid removes spiralline off the model stage
 func (spiralline *SpiralLine) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralLines, spiralline)
+	delete(stage.SpiralLineMap_Staged_Order, spiralline)
 	delete(stage.SpiralLines_mapString, spiralline.Name)
 }
 
@@ -3315,7 +3564,7 @@ func (spiralline *SpiralLine) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (spiralline *SpiralLine) SetName(name string) (){
+func (spiralline *SpiralLine) SetName(name string) {
 	spiralline.Name = name
 }
 
@@ -3326,34 +3575,44 @@ func (spirallinegrid *SpiralLineGrid) Stage(stage *Stage) *SpiralLineGrid {
 		stage.SpiralLineGrids[spirallinegrid] = struct{}{}
 		stage.SpiralLineGridMap_Staged_Order[spirallinegrid] = stage.SpiralLineGridOrder
 		stage.SpiralLineGridOrder++
-		stage.new[spirallinegrid] = struct{}{}
-		delete(stage.deleted, spirallinegrid)
-	} else {
-		if _, ok := stage.new[spirallinegrid]; !ok {
-			stage.modified[spirallinegrid] = struct{}{}
-		}
 	}
 	stage.SpiralLineGrids_mapString[spirallinegrid.Name] = spirallinegrid
 
 	return spirallinegrid
 }
 
+// StagePreserveOrder puts spirallinegrid to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.SpiralLineGridOrder
+// - update stage.SpiralLineGridOrder accordingly
+func (spirallinegrid *SpiralLineGrid) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.SpiralLineGrids[spirallinegrid]; !ok {
+		stage.SpiralLineGrids[spirallinegrid] = struct{}{}
+
+		if order > stage.SpiralLineGridOrder {
+			stage.SpiralLineGridOrder = order
+		}
+		stage.SpiralLineGridMap_Staged_Order[spirallinegrid] = stage.SpiralLineGridOrder
+		stage.SpiralLineGridOrder++
+	}
+	stage.SpiralLineGrids_mapString[spirallinegrid.Name] = spirallinegrid
+}
+
 // Unstage removes spirallinegrid off the model stage
 func (spirallinegrid *SpiralLineGrid) Unstage(stage *Stage) *SpiralLineGrid {
 	delete(stage.SpiralLineGrids, spirallinegrid)
+	delete(stage.SpiralLineGridMap_Staged_Order, spirallinegrid)
 	delete(stage.SpiralLineGrids_mapString, spirallinegrid.Name)
 
-	if _, ok := stage.reference[spirallinegrid]; ok {
-		stage.deleted[spirallinegrid] = struct{}{}
-	} else {
-		delete(stage.new, spirallinegrid)
-	}
 	return spirallinegrid
 }
 
 // UnstageVoid removes spirallinegrid off the model stage
 func (spirallinegrid *SpiralLineGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralLineGrids, spirallinegrid)
+	delete(stage.SpiralLineGridMap_Staged_Order, spirallinegrid)
 	delete(stage.SpiralLineGrids_mapString, spirallinegrid.Name)
 }
 
@@ -3391,7 +3650,7 @@ func (spirallinegrid *SpiralLineGrid) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (spirallinegrid *SpiralLineGrid) SetName(name string) (){
+func (spirallinegrid *SpiralLineGrid) SetName(name string) {
 	spirallinegrid.Name = name
 }
 
@@ -3402,34 +3661,44 @@ func (spiralorigin *SpiralOrigin) Stage(stage *Stage) *SpiralOrigin {
 		stage.SpiralOrigins[spiralorigin] = struct{}{}
 		stage.SpiralOriginMap_Staged_Order[spiralorigin] = stage.SpiralOriginOrder
 		stage.SpiralOriginOrder++
-		stage.new[spiralorigin] = struct{}{}
-		delete(stage.deleted, spiralorigin)
-	} else {
-		if _, ok := stage.new[spiralorigin]; !ok {
-			stage.modified[spiralorigin] = struct{}{}
-		}
 	}
 	stage.SpiralOrigins_mapString[spiralorigin.Name] = spiralorigin
 
 	return spiralorigin
 }
 
+// StagePreserveOrder puts spiralorigin to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.SpiralOriginOrder
+// - update stage.SpiralOriginOrder accordingly
+func (spiralorigin *SpiralOrigin) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.SpiralOrigins[spiralorigin]; !ok {
+		stage.SpiralOrigins[spiralorigin] = struct{}{}
+
+		if order > stage.SpiralOriginOrder {
+			stage.SpiralOriginOrder = order
+		}
+		stage.SpiralOriginMap_Staged_Order[spiralorigin] = stage.SpiralOriginOrder
+		stage.SpiralOriginOrder++
+	}
+	stage.SpiralOrigins_mapString[spiralorigin.Name] = spiralorigin
+}
+
 // Unstage removes spiralorigin off the model stage
 func (spiralorigin *SpiralOrigin) Unstage(stage *Stage) *SpiralOrigin {
 	delete(stage.SpiralOrigins, spiralorigin)
+	delete(stage.SpiralOriginMap_Staged_Order, spiralorigin)
 	delete(stage.SpiralOrigins_mapString, spiralorigin.Name)
 
-	if _, ok := stage.reference[spiralorigin]; ok {
-		stage.deleted[spiralorigin] = struct{}{}
-	} else {
-		delete(stage.new, spiralorigin)
-	}
 	return spiralorigin
 }
 
 // UnstageVoid removes spiralorigin off the model stage
 func (spiralorigin *SpiralOrigin) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralOrigins, spiralorigin)
+	delete(stage.SpiralOriginMap_Staged_Order, spiralorigin)
 	delete(stage.SpiralOrigins_mapString, spiralorigin.Name)
 }
 
@@ -3467,7 +3736,7 @@ func (spiralorigin *SpiralOrigin) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (spiralorigin *SpiralOrigin) SetName(name string) (){
+func (spiralorigin *SpiralOrigin) SetName(name string) {
 	spiralorigin.Name = name
 }
 
@@ -3478,34 +3747,44 @@ func (spiralrhombus *SpiralRhombus) Stage(stage *Stage) *SpiralRhombus {
 		stage.SpiralRhombuss[spiralrhombus] = struct{}{}
 		stage.SpiralRhombusMap_Staged_Order[spiralrhombus] = stage.SpiralRhombusOrder
 		stage.SpiralRhombusOrder++
-		stage.new[spiralrhombus] = struct{}{}
-		delete(stage.deleted, spiralrhombus)
-	} else {
-		if _, ok := stage.new[spiralrhombus]; !ok {
-			stage.modified[spiralrhombus] = struct{}{}
-		}
 	}
 	stage.SpiralRhombuss_mapString[spiralrhombus.Name] = spiralrhombus
 
 	return spiralrhombus
 }
 
+// StagePreserveOrder puts spiralrhombus to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.SpiralRhombusOrder
+// - update stage.SpiralRhombusOrder accordingly
+func (spiralrhombus *SpiralRhombus) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.SpiralRhombuss[spiralrhombus]; !ok {
+		stage.SpiralRhombuss[spiralrhombus] = struct{}{}
+
+		if order > stage.SpiralRhombusOrder {
+			stage.SpiralRhombusOrder = order
+		}
+		stage.SpiralRhombusMap_Staged_Order[spiralrhombus] = stage.SpiralRhombusOrder
+		stage.SpiralRhombusOrder++
+	}
+	stage.SpiralRhombuss_mapString[spiralrhombus.Name] = spiralrhombus
+}
+
 // Unstage removes spiralrhombus off the model stage
 func (spiralrhombus *SpiralRhombus) Unstage(stage *Stage) *SpiralRhombus {
 	delete(stage.SpiralRhombuss, spiralrhombus)
+	delete(stage.SpiralRhombusMap_Staged_Order, spiralrhombus)
 	delete(stage.SpiralRhombuss_mapString, spiralrhombus.Name)
 
-	if _, ok := stage.reference[spiralrhombus]; ok {
-		stage.deleted[spiralrhombus] = struct{}{}
-	} else {
-		delete(stage.new, spiralrhombus)
-	}
 	return spiralrhombus
 }
 
 // UnstageVoid removes spiralrhombus off the model stage
 func (spiralrhombus *SpiralRhombus) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralRhombuss, spiralrhombus)
+	delete(stage.SpiralRhombusMap_Staged_Order, spiralrhombus)
 	delete(stage.SpiralRhombuss_mapString, spiralrhombus.Name)
 }
 
@@ -3543,7 +3822,7 @@ func (spiralrhombus *SpiralRhombus) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (spiralrhombus *SpiralRhombus) SetName(name string) (){
+func (spiralrhombus *SpiralRhombus) SetName(name string) {
 	spiralrhombus.Name = name
 }
 
@@ -3554,34 +3833,44 @@ func (spiralrhombusgrid *SpiralRhombusGrid) Stage(stage *Stage) *SpiralRhombusGr
 		stage.SpiralRhombusGrids[spiralrhombusgrid] = struct{}{}
 		stage.SpiralRhombusGridMap_Staged_Order[spiralrhombusgrid] = stage.SpiralRhombusGridOrder
 		stage.SpiralRhombusGridOrder++
-		stage.new[spiralrhombusgrid] = struct{}{}
-		delete(stage.deleted, spiralrhombusgrid)
-	} else {
-		if _, ok := stage.new[spiralrhombusgrid]; !ok {
-			stage.modified[spiralrhombusgrid] = struct{}{}
-		}
 	}
 	stage.SpiralRhombusGrids_mapString[spiralrhombusgrid.Name] = spiralrhombusgrid
 
 	return spiralrhombusgrid
 }
 
+// StagePreserveOrder puts spiralrhombusgrid to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.SpiralRhombusGridOrder
+// - update stage.SpiralRhombusGridOrder accordingly
+func (spiralrhombusgrid *SpiralRhombusGrid) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.SpiralRhombusGrids[spiralrhombusgrid]; !ok {
+		stage.SpiralRhombusGrids[spiralrhombusgrid] = struct{}{}
+
+		if order > stage.SpiralRhombusGridOrder {
+			stage.SpiralRhombusGridOrder = order
+		}
+		stage.SpiralRhombusGridMap_Staged_Order[spiralrhombusgrid] = stage.SpiralRhombusGridOrder
+		stage.SpiralRhombusGridOrder++
+	}
+	stage.SpiralRhombusGrids_mapString[spiralrhombusgrid.Name] = spiralrhombusgrid
+}
+
 // Unstage removes spiralrhombusgrid off the model stage
 func (spiralrhombusgrid *SpiralRhombusGrid) Unstage(stage *Stage) *SpiralRhombusGrid {
 	delete(stage.SpiralRhombusGrids, spiralrhombusgrid)
+	delete(stage.SpiralRhombusGridMap_Staged_Order, spiralrhombusgrid)
 	delete(stage.SpiralRhombusGrids_mapString, spiralrhombusgrid.Name)
 
-	if _, ok := stage.reference[spiralrhombusgrid]; ok {
-		stage.deleted[spiralrhombusgrid] = struct{}{}
-	} else {
-		delete(stage.new, spiralrhombusgrid)
-	}
 	return spiralrhombusgrid
 }
 
 // UnstageVoid removes spiralrhombusgrid off the model stage
 func (spiralrhombusgrid *SpiralRhombusGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralRhombusGrids, spiralrhombusgrid)
+	delete(stage.SpiralRhombusGridMap_Staged_Order, spiralrhombusgrid)
 	delete(stage.SpiralRhombusGrids_mapString, spiralrhombusgrid.Name)
 }
 
@@ -3619,7 +3908,7 @@ func (spiralrhombusgrid *SpiralRhombusGrid) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (spiralrhombusgrid *SpiralRhombusGrid) SetName(name string) (){
+func (spiralrhombusgrid *SpiralRhombusGrid) SetName(name string) {
 	spiralrhombusgrid.Name = name
 }
 
@@ -3630,34 +3919,44 @@ func (verticalaxis *VerticalAxis) Stage(stage *Stage) *VerticalAxis {
 		stage.VerticalAxiss[verticalaxis] = struct{}{}
 		stage.VerticalAxisMap_Staged_Order[verticalaxis] = stage.VerticalAxisOrder
 		stage.VerticalAxisOrder++
-		stage.new[verticalaxis] = struct{}{}
-		delete(stage.deleted, verticalaxis)
-	} else {
-		if _, ok := stage.new[verticalaxis]; !ok {
-			stage.modified[verticalaxis] = struct{}{}
-		}
 	}
 	stage.VerticalAxiss_mapString[verticalaxis.Name] = verticalaxis
 
 	return verticalaxis
 }
 
+// StagePreserveOrder puts verticalaxis to the model stage, and if the astrtuct
+// was not staged before:
+//
+// - force the order if the order is equal or greater than the stage.VerticalAxisOrder
+// - update stage.VerticalAxisOrder accordingly
+func (verticalaxis *VerticalAxis) StagePreserveOrder(stage *Stage, order uint) {
+
+	if _, ok := stage.VerticalAxiss[verticalaxis]; !ok {
+		stage.VerticalAxiss[verticalaxis] = struct{}{}
+
+		if order > stage.VerticalAxisOrder {
+			stage.VerticalAxisOrder = order
+		}
+		stage.VerticalAxisMap_Staged_Order[verticalaxis] = stage.VerticalAxisOrder
+		stage.VerticalAxisOrder++
+	}
+	stage.VerticalAxiss_mapString[verticalaxis.Name] = verticalaxis
+}
+
 // Unstage removes verticalaxis off the model stage
 func (verticalaxis *VerticalAxis) Unstage(stage *Stage) *VerticalAxis {
 	delete(stage.VerticalAxiss, verticalaxis)
+	delete(stage.VerticalAxisMap_Staged_Order, verticalaxis)
 	delete(stage.VerticalAxiss_mapString, verticalaxis.Name)
 
-	if _, ok := stage.reference[verticalaxis]; ok {
-		stage.deleted[verticalaxis] = struct{}{}
-	} else {
-		delete(stage.new, verticalaxis)
-	}
 	return verticalaxis
 }
 
 // UnstageVoid removes verticalaxis off the model stage
 func (verticalaxis *VerticalAxis) UnstageVoid(stage *Stage) {
 	delete(stage.VerticalAxiss, verticalaxis)
+	delete(stage.VerticalAxisMap_Staged_Order, verticalaxis)
 	delete(stage.VerticalAxiss_mapString, verticalaxis.Name)
 }
 
@@ -3695,7 +3994,7 @@ func (verticalaxis *VerticalAxis) GetName() (res string) {
 }
 
 // for satisfaction of GongStruct interface
-func (verticalaxis *VerticalAxis) SetName(name string) (){
+func (verticalaxis *VerticalAxis) SetName(name string) {
 	verticalaxis.Name = name
 }
 
@@ -4134,6 +4433,8 @@ type GongstructIF interface {
 	GongGetFieldValue(fieldName string, stage *Stage) GongFieldValue
 	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
 	GongGetGongstructName() string
+	GongGetOrder(stage *Stage) uint
+	GongGetIdentifier(stage *Stage) string
 	GongCopy() GongstructIF
 	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string
 	GongGetReverseFieldOwner(stage *Stage, reverseField *ReverseField) GongstructIF
@@ -6727,7 +7028,7 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 
 // GetPointerToGongstructName returns the name of the Gongstruct
 // this can be usefull if one want program robust to refactoring
-func GetPointerToGongstructName[Type PointerToGongstruct]() (res string) {
+func GetPointerToGongstructName[Type GongstructIF]() (res string) {
 
 	var ret Type
 
@@ -6798,7 +7099,7 @@ type ReverseField struct {
 	Fieldname      string
 }
 
-func GetReverseFields[Type PointerToGongstruct]() (res []ReverseField) {
+func GetReverseFields[Type GongstructIF]() (res []ReverseField) {
 
 	res = make([]ReverseField, 0)
 
@@ -12560,4 +12861,5 @@ func (stage *Stage) ResetMapStrings() {
 	}
 
 }
+
 // Last line of the template
