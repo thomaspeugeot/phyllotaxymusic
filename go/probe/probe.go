@@ -43,6 +43,17 @@ type Probe struct {
 	docStager *doc.Stager
 
 	notification []*Notification
+
+	// to limit the  number of elements per gong struct node in the tree
+	maxElementsNbPerGongStructNode int
+}
+
+func (probe *Probe) SetMaxElementsNbPerGongStructNode(nb int) {
+	probe.maxElementsNbPerGongStructNode = nb
+}
+
+func (probe *Probe) GetMaxElementsNbPerGongStructNode() int {
+	return probe.maxElementsNbPerGongStructNode
 }
 
 func NewProbe(
@@ -75,14 +86,15 @@ func NewProbe(
 	formStage.Commit()
 
 	probe = &Probe{
-		r:                      r,
-		stageOfInterest:        stageOfInterest,
-		gongStage:              stage,
-		treeStage:              treeStage,
-		formStage:              formStage,
-		tableStage:             tableStage,
-		notificationTableStage: notificationTableStage,
-		splitStage:             splitStage,
+		r:                              r,
+		stageOfInterest:                stageOfInterest,
+		gongStage:                      stage,
+		treeStage:                      treeStage,
+		formStage:                      formStage,
+		tableStage:                     tableStage,
+		notificationTableStage:         notificationTableStage,
+		splitStage:                     splitStage,
+		maxElementsNbPerGongStructNode: 10,
 	}
 
 	// prepare the receiving AsSplitArea
@@ -176,12 +188,18 @@ func (probe *Probe) Refresh() {
 	probe.docStager.UpdateAndCommitSVGStage()
 }
 
+const NbNotificationMax = 100
+
 func (probe *Probe) AddNotification(date time.Time, message string) {
 	notification := Notification{
 		Date:    date,
 		Message: message,
 	}
 	probe.notification = append(probe.notification, &notification)
+
+	if len(probe.notification) > NbNotificationMax {
+		probe.notification = probe.notification[1:] // Drop the first element (index 0)
+	}
 }
 
 func (probe *Probe) CommitNotificationTable() {

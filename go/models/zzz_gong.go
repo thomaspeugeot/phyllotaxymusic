@@ -88,14 +88,18 @@ type GongStructInterface interface {
 }
 
 // Stage enables storage of staged instances
-// swagger:ignore
 type Stage struct {
 	name string
 
+	// isInDeltaMode is true when the stage is used to compute difference between
+	// succesive commit
+	isInDeltaMode bool
+
 	// insertion point for definition of arrays registering instances
-	Axiss           map[*Axis]struct{}
-	Axiss_reference map[*Axis]*Axis
-	Axiss_mapString map[string]*Axis
+	Axiss                map[*Axis]struct{}
+	Axiss_reference      map[*Axis]*Axis
+	Axiss_referenceOrder map[*Axis]uint // diff Unstage needs the reference order
+	Axiss_mapString      map[string]*Axis
 
 	// insertion point for slice of pointers maps
 	OnAfterAxisCreateCallback OnAfterCreateInterface[Axis]
@@ -103,9 +107,10 @@ type Stage struct {
 	OnAfterAxisDeleteCallback OnAfterDeleteInterface[Axis]
 	OnAfterAxisReadCallback   OnAfterReadInterface[Axis]
 
-	AxisGrids           map[*AxisGrid]struct{}
-	AxisGrids_reference map[*AxisGrid]*AxisGrid
-	AxisGrids_mapString map[string]*AxisGrid
+	AxisGrids                map[*AxisGrid]struct{}
+	AxisGrids_reference      map[*AxisGrid]*AxisGrid
+	AxisGrids_referenceOrder map[*AxisGrid]uint // diff Unstage needs the reference order
+	AxisGrids_mapString      map[string]*AxisGrid
 
 	// insertion point for slice of pointers maps
 	AxisGrid_Axiss_reverseMap map[*Axis]*AxisGrid
@@ -115,9 +120,10 @@ type Stage struct {
 	OnAfterAxisGridDeleteCallback OnAfterDeleteInterface[AxisGrid]
 	OnAfterAxisGridReadCallback   OnAfterReadInterface[AxisGrid]
 
-	Beziers           map[*Bezier]struct{}
-	Beziers_reference map[*Bezier]*Bezier
-	Beziers_mapString map[string]*Bezier
+	Beziers                map[*Bezier]struct{}
+	Beziers_reference      map[*Bezier]*Bezier
+	Beziers_referenceOrder map[*Bezier]uint // diff Unstage needs the reference order
+	Beziers_mapString      map[string]*Bezier
 
 	// insertion point for slice of pointers maps
 	OnAfterBezierCreateCallback OnAfterCreateInterface[Bezier]
@@ -125,9 +131,10 @@ type Stage struct {
 	OnAfterBezierDeleteCallback OnAfterDeleteInterface[Bezier]
 	OnAfterBezierReadCallback   OnAfterReadInterface[Bezier]
 
-	BezierGrids           map[*BezierGrid]struct{}
-	BezierGrids_reference map[*BezierGrid]*BezierGrid
-	BezierGrids_mapString map[string]*BezierGrid
+	BezierGrids                map[*BezierGrid]struct{}
+	BezierGrids_reference      map[*BezierGrid]*BezierGrid
+	BezierGrids_referenceOrder map[*BezierGrid]uint // diff Unstage needs the reference order
+	BezierGrids_mapString      map[string]*BezierGrid
 
 	// insertion point for slice of pointers maps
 	BezierGrid_Beziers_reverseMap map[*Bezier]*BezierGrid
@@ -137,9 +144,10 @@ type Stage struct {
 	OnAfterBezierGridDeleteCallback OnAfterDeleteInterface[BezierGrid]
 	OnAfterBezierGridReadCallback   OnAfterReadInterface[BezierGrid]
 
-	BezierGridStacks           map[*BezierGridStack]struct{}
-	BezierGridStacks_reference map[*BezierGridStack]*BezierGridStack
-	BezierGridStacks_mapString map[string]*BezierGridStack
+	BezierGridStacks                map[*BezierGridStack]struct{}
+	BezierGridStacks_reference      map[*BezierGridStack]*BezierGridStack
+	BezierGridStacks_referenceOrder map[*BezierGridStack]uint // diff Unstage needs the reference order
+	BezierGridStacks_mapString      map[string]*BezierGridStack
 
 	// insertion point for slice of pointers maps
 	BezierGridStack_BezierGrids_reverseMap map[*BezierGrid]*BezierGridStack
@@ -149,9 +157,10 @@ type Stage struct {
 	OnAfterBezierGridStackDeleteCallback OnAfterDeleteInterface[BezierGridStack]
 	OnAfterBezierGridStackReadCallback   OnAfterReadInterface[BezierGridStack]
 
-	Chapters           map[*Chapter]struct{}
-	Chapters_reference map[*Chapter]*Chapter
-	Chapters_mapString map[string]*Chapter
+	Chapters                map[*Chapter]struct{}
+	Chapters_reference      map[*Chapter]*Chapter
+	Chapters_referenceOrder map[*Chapter]uint // diff Unstage needs the reference order
+	Chapters_mapString      map[string]*Chapter
 
 	// insertion point for slice of pointers maps
 	OnAfterChapterCreateCallback OnAfterCreateInterface[Chapter]
@@ -159,9 +168,10 @@ type Stage struct {
 	OnAfterChapterDeleteCallback OnAfterDeleteInterface[Chapter]
 	OnAfterChapterReadCallback   OnAfterReadInterface[Chapter]
 
-	Circles           map[*Circle]struct{}
-	Circles_reference map[*Circle]*Circle
-	Circles_mapString map[string]*Circle
+	Circles                map[*Circle]struct{}
+	Circles_reference      map[*Circle]*Circle
+	Circles_referenceOrder map[*Circle]uint // diff Unstage needs the reference order
+	Circles_mapString      map[string]*Circle
 
 	// insertion point for slice of pointers maps
 	OnAfterCircleCreateCallback OnAfterCreateInterface[Circle]
@@ -169,9 +179,10 @@ type Stage struct {
 	OnAfterCircleDeleteCallback OnAfterDeleteInterface[Circle]
 	OnAfterCircleReadCallback   OnAfterReadInterface[Circle]
 
-	CircleGrids           map[*CircleGrid]struct{}
-	CircleGrids_reference map[*CircleGrid]*CircleGrid
-	CircleGrids_mapString map[string]*CircleGrid
+	CircleGrids                map[*CircleGrid]struct{}
+	CircleGrids_reference      map[*CircleGrid]*CircleGrid
+	CircleGrids_referenceOrder map[*CircleGrid]uint // diff Unstage needs the reference order
+	CircleGrids_mapString      map[string]*CircleGrid
 
 	// insertion point for slice of pointers maps
 	CircleGrid_Circles_reverseMap map[*Circle]*CircleGrid
@@ -181,9 +192,10 @@ type Stage struct {
 	OnAfterCircleGridDeleteCallback OnAfterDeleteInterface[CircleGrid]
 	OnAfterCircleGridReadCallback   OnAfterReadInterface[CircleGrid]
 
-	Contents           map[*Content]struct{}
-	Contents_reference map[*Content]*Content
-	Contents_mapString map[string]*Content
+	Contents                map[*Content]struct{}
+	Contents_reference      map[*Content]*Content
+	Contents_referenceOrder map[*Content]uint // diff Unstage needs the reference order
+	Contents_mapString      map[string]*Content
 
 	// insertion point for slice of pointers maps
 	Content_Chapters_reverseMap map[*Chapter]*Content
@@ -193,9 +205,10 @@ type Stage struct {
 	OnAfterContentDeleteCallback OnAfterDeleteInterface[Content]
 	OnAfterContentReadCallback   OnAfterReadInterface[Content]
 
-	ExportToMusicxmls           map[*ExportToMusicxml]struct{}
-	ExportToMusicxmls_reference map[*ExportToMusicxml]*ExportToMusicxml
-	ExportToMusicxmls_mapString map[string]*ExportToMusicxml
+	ExportToMusicxmls                map[*ExportToMusicxml]struct{}
+	ExportToMusicxmls_reference      map[*ExportToMusicxml]*ExportToMusicxml
+	ExportToMusicxmls_referenceOrder map[*ExportToMusicxml]uint // diff Unstage needs the reference order
+	ExportToMusicxmls_mapString      map[string]*ExportToMusicxml
 
 	// insertion point for slice of pointers maps
 	OnAfterExportToMusicxmlCreateCallback OnAfterCreateInterface[ExportToMusicxml]
@@ -203,9 +216,10 @@ type Stage struct {
 	OnAfterExportToMusicxmlDeleteCallback OnAfterDeleteInterface[ExportToMusicxml]
 	OnAfterExportToMusicxmlReadCallback   OnAfterReadInterface[ExportToMusicxml]
 
-	FrontCurves           map[*FrontCurve]struct{}
-	FrontCurves_reference map[*FrontCurve]*FrontCurve
-	FrontCurves_mapString map[string]*FrontCurve
+	FrontCurves                map[*FrontCurve]struct{}
+	FrontCurves_reference      map[*FrontCurve]*FrontCurve
+	FrontCurves_referenceOrder map[*FrontCurve]uint // diff Unstage needs the reference order
+	FrontCurves_mapString      map[string]*FrontCurve
 
 	// insertion point for slice of pointers maps
 	OnAfterFrontCurveCreateCallback OnAfterCreateInterface[FrontCurve]
@@ -213,9 +227,10 @@ type Stage struct {
 	OnAfterFrontCurveDeleteCallback OnAfterDeleteInterface[FrontCurve]
 	OnAfterFrontCurveReadCallback   OnAfterReadInterface[FrontCurve]
 
-	FrontCurveStacks           map[*FrontCurveStack]struct{}
-	FrontCurveStacks_reference map[*FrontCurveStack]*FrontCurveStack
-	FrontCurveStacks_mapString map[string]*FrontCurveStack
+	FrontCurveStacks                map[*FrontCurveStack]struct{}
+	FrontCurveStacks_reference      map[*FrontCurveStack]*FrontCurveStack
+	FrontCurveStacks_referenceOrder map[*FrontCurveStack]uint // diff Unstage needs the reference order
+	FrontCurveStacks_mapString      map[string]*FrontCurveStack
 
 	// insertion point for slice of pointers maps
 	FrontCurveStack_FrontCurves_reverseMap map[*FrontCurve]*FrontCurveStack
@@ -227,9 +242,10 @@ type Stage struct {
 	OnAfterFrontCurveStackDeleteCallback OnAfterDeleteInterface[FrontCurveStack]
 	OnAfterFrontCurveStackReadCallback   OnAfterReadInterface[FrontCurveStack]
 
-	HorizontalAxiss           map[*HorizontalAxis]struct{}
-	HorizontalAxiss_reference map[*HorizontalAxis]*HorizontalAxis
-	HorizontalAxiss_mapString map[string]*HorizontalAxis
+	HorizontalAxiss                map[*HorizontalAxis]struct{}
+	HorizontalAxiss_reference      map[*HorizontalAxis]*HorizontalAxis
+	HorizontalAxiss_referenceOrder map[*HorizontalAxis]uint // diff Unstage needs the reference order
+	HorizontalAxiss_mapString      map[string]*HorizontalAxis
 
 	// insertion point for slice of pointers maps
 	OnAfterHorizontalAxisCreateCallback OnAfterCreateInterface[HorizontalAxis]
@@ -237,9 +253,10 @@ type Stage struct {
 	OnAfterHorizontalAxisDeleteCallback OnAfterDeleteInterface[HorizontalAxis]
 	OnAfterHorizontalAxisReadCallback   OnAfterReadInterface[HorizontalAxis]
 
-	Keys           map[*Key]struct{}
-	Keys_reference map[*Key]*Key
-	Keys_mapString map[string]*Key
+	Keys                map[*Key]struct{}
+	Keys_reference      map[*Key]*Key
+	Keys_referenceOrder map[*Key]uint // diff Unstage needs the reference order
+	Keys_mapString      map[string]*Key
 
 	// insertion point for slice of pointers maps
 	OnAfterKeyCreateCallback OnAfterCreateInterface[Key]
@@ -247,9 +264,10 @@ type Stage struct {
 	OnAfterKeyDeleteCallback OnAfterDeleteInterface[Key]
 	OnAfterKeyReadCallback   OnAfterReadInterface[Key]
 
-	Parameters           map[*Parameter]struct{}
-	Parameters_reference map[*Parameter]*Parameter
-	Parameters_mapString map[string]*Parameter
+	Parameters                map[*Parameter]struct{}
+	Parameters_reference      map[*Parameter]*Parameter
+	Parameters_referenceOrder map[*Parameter]uint // diff Unstage needs the reference order
+	Parameters_mapString      map[string]*Parameter
 
 	// insertion point for slice of pointers maps
 	OnAfterParameterCreateCallback OnAfterCreateInterface[Parameter]
@@ -257,9 +275,10 @@ type Stage struct {
 	OnAfterParameterDeleteCallback OnAfterDeleteInterface[Parameter]
 	OnAfterParameterReadCallback   OnAfterReadInterface[Parameter]
 
-	Rhombuss           map[*Rhombus]struct{}
-	Rhombuss_reference map[*Rhombus]*Rhombus
-	Rhombuss_mapString map[string]*Rhombus
+	Rhombuss                map[*Rhombus]struct{}
+	Rhombuss_reference      map[*Rhombus]*Rhombus
+	Rhombuss_referenceOrder map[*Rhombus]uint // diff Unstage needs the reference order
+	Rhombuss_mapString      map[string]*Rhombus
 
 	// insertion point for slice of pointers maps
 	OnAfterRhombusCreateCallback OnAfterCreateInterface[Rhombus]
@@ -267,9 +286,10 @@ type Stage struct {
 	OnAfterRhombusDeleteCallback OnAfterDeleteInterface[Rhombus]
 	OnAfterRhombusReadCallback   OnAfterReadInterface[Rhombus]
 
-	RhombusGrids           map[*RhombusGrid]struct{}
-	RhombusGrids_reference map[*RhombusGrid]*RhombusGrid
-	RhombusGrids_mapString map[string]*RhombusGrid
+	RhombusGrids                map[*RhombusGrid]struct{}
+	RhombusGrids_reference      map[*RhombusGrid]*RhombusGrid
+	RhombusGrids_referenceOrder map[*RhombusGrid]uint // diff Unstage needs the reference order
+	RhombusGrids_mapString      map[string]*RhombusGrid
 
 	// insertion point for slice of pointers maps
 	RhombusGrid_Rhombuses_reverseMap map[*Rhombus]*RhombusGrid
@@ -279,9 +299,10 @@ type Stage struct {
 	OnAfterRhombusGridDeleteCallback OnAfterDeleteInterface[RhombusGrid]
 	OnAfterRhombusGridReadCallback   OnAfterReadInterface[RhombusGrid]
 
-	ShapeCategorys           map[*ShapeCategory]struct{}
-	ShapeCategorys_reference map[*ShapeCategory]*ShapeCategory
-	ShapeCategorys_mapString map[string]*ShapeCategory
+	ShapeCategorys                map[*ShapeCategory]struct{}
+	ShapeCategorys_reference      map[*ShapeCategory]*ShapeCategory
+	ShapeCategorys_referenceOrder map[*ShapeCategory]uint // diff Unstage needs the reference order
+	ShapeCategorys_mapString      map[string]*ShapeCategory
 
 	// insertion point for slice of pointers maps
 	OnAfterShapeCategoryCreateCallback OnAfterCreateInterface[ShapeCategory]
@@ -289,9 +310,10 @@ type Stage struct {
 	OnAfterShapeCategoryDeleteCallback OnAfterDeleteInterface[ShapeCategory]
 	OnAfterShapeCategoryReadCallback   OnAfterReadInterface[ShapeCategory]
 
-	SpiralBeziers           map[*SpiralBezier]struct{}
-	SpiralBeziers_reference map[*SpiralBezier]*SpiralBezier
-	SpiralBeziers_mapString map[string]*SpiralBezier
+	SpiralBeziers                map[*SpiralBezier]struct{}
+	SpiralBeziers_reference      map[*SpiralBezier]*SpiralBezier
+	SpiralBeziers_referenceOrder map[*SpiralBezier]uint // diff Unstage needs the reference order
+	SpiralBeziers_mapString      map[string]*SpiralBezier
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralBezierCreateCallback OnAfterCreateInterface[SpiralBezier]
@@ -299,9 +321,10 @@ type Stage struct {
 	OnAfterSpiralBezierDeleteCallback OnAfterDeleteInterface[SpiralBezier]
 	OnAfterSpiralBezierReadCallback   OnAfterReadInterface[SpiralBezier]
 
-	SpiralBezierGrids           map[*SpiralBezierGrid]struct{}
-	SpiralBezierGrids_reference map[*SpiralBezierGrid]*SpiralBezierGrid
-	SpiralBezierGrids_mapString map[string]*SpiralBezierGrid
+	SpiralBezierGrids                map[*SpiralBezierGrid]struct{}
+	SpiralBezierGrids_reference      map[*SpiralBezierGrid]*SpiralBezierGrid
+	SpiralBezierGrids_referenceOrder map[*SpiralBezierGrid]uint // diff Unstage needs the reference order
+	SpiralBezierGrids_mapString      map[string]*SpiralBezierGrid
 
 	// insertion point for slice of pointers maps
 	SpiralBezierGrid_SpiralBeziers_reverseMap map[*SpiralBezier]*SpiralBezierGrid
@@ -311,9 +334,10 @@ type Stage struct {
 	OnAfterSpiralBezierGridDeleteCallback OnAfterDeleteInterface[SpiralBezierGrid]
 	OnAfterSpiralBezierGridReadCallback   OnAfterReadInterface[SpiralBezierGrid]
 
-	SpiralCircles           map[*SpiralCircle]struct{}
-	SpiralCircles_reference map[*SpiralCircle]*SpiralCircle
-	SpiralCircles_mapString map[string]*SpiralCircle
+	SpiralCircles                map[*SpiralCircle]struct{}
+	SpiralCircles_reference      map[*SpiralCircle]*SpiralCircle
+	SpiralCircles_referenceOrder map[*SpiralCircle]uint // diff Unstage needs the reference order
+	SpiralCircles_mapString      map[string]*SpiralCircle
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralCircleCreateCallback OnAfterCreateInterface[SpiralCircle]
@@ -321,9 +345,10 @@ type Stage struct {
 	OnAfterSpiralCircleDeleteCallback OnAfterDeleteInterface[SpiralCircle]
 	OnAfterSpiralCircleReadCallback   OnAfterReadInterface[SpiralCircle]
 
-	SpiralCircleGrids           map[*SpiralCircleGrid]struct{}
-	SpiralCircleGrids_reference map[*SpiralCircleGrid]*SpiralCircleGrid
-	SpiralCircleGrids_mapString map[string]*SpiralCircleGrid
+	SpiralCircleGrids                map[*SpiralCircleGrid]struct{}
+	SpiralCircleGrids_reference      map[*SpiralCircleGrid]*SpiralCircleGrid
+	SpiralCircleGrids_referenceOrder map[*SpiralCircleGrid]uint // diff Unstage needs the reference order
+	SpiralCircleGrids_mapString      map[string]*SpiralCircleGrid
 
 	// insertion point for slice of pointers maps
 	SpiralCircleGrid_SpiralCircles_reverseMap map[*SpiralCircle]*SpiralCircleGrid
@@ -333,9 +358,10 @@ type Stage struct {
 	OnAfterSpiralCircleGridDeleteCallback OnAfterDeleteInterface[SpiralCircleGrid]
 	OnAfterSpiralCircleGridReadCallback   OnAfterReadInterface[SpiralCircleGrid]
 
-	SpiralLines           map[*SpiralLine]struct{}
-	SpiralLines_reference map[*SpiralLine]*SpiralLine
-	SpiralLines_mapString map[string]*SpiralLine
+	SpiralLines                map[*SpiralLine]struct{}
+	SpiralLines_reference      map[*SpiralLine]*SpiralLine
+	SpiralLines_referenceOrder map[*SpiralLine]uint // diff Unstage needs the reference order
+	SpiralLines_mapString      map[string]*SpiralLine
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralLineCreateCallback OnAfterCreateInterface[SpiralLine]
@@ -343,9 +369,10 @@ type Stage struct {
 	OnAfterSpiralLineDeleteCallback OnAfterDeleteInterface[SpiralLine]
 	OnAfterSpiralLineReadCallback   OnAfterReadInterface[SpiralLine]
 
-	SpiralLineGrids           map[*SpiralLineGrid]struct{}
-	SpiralLineGrids_reference map[*SpiralLineGrid]*SpiralLineGrid
-	SpiralLineGrids_mapString map[string]*SpiralLineGrid
+	SpiralLineGrids                map[*SpiralLineGrid]struct{}
+	SpiralLineGrids_reference      map[*SpiralLineGrid]*SpiralLineGrid
+	SpiralLineGrids_referenceOrder map[*SpiralLineGrid]uint // diff Unstage needs the reference order
+	SpiralLineGrids_mapString      map[string]*SpiralLineGrid
 
 	// insertion point for slice of pointers maps
 	SpiralLineGrid_SpiralLines_reverseMap map[*SpiralLine]*SpiralLineGrid
@@ -355,9 +382,10 @@ type Stage struct {
 	OnAfterSpiralLineGridDeleteCallback OnAfterDeleteInterface[SpiralLineGrid]
 	OnAfterSpiralLineGridReadCallback   OnAfterReadInterface[SpiralLineGrid]
 
-	SpiralOrigins           map[*SpiralOrigin]struct{}
-	SpiralOrigins_reference map[*SpiralOrigin]*SpiralOrigin
-	SpiralOrigins_mapString map[string]*SpiralOrigin
+	SpiralOrigins                map[*SpiralOrigin]struct{}
+	SpiralOrigins_reference      map[*SpiralOrigin]*SpiralOrigin
+	SpiralOrigins_referenceOrder map[*SpiralOrigin]uint // diff Unstage needs the reference order
+	SpiralOrigins_mapString      map[string]*SpiralOrigin
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralOriginCreateCallback OnAfterCreateInterface[SpiralOrigin]
@@ -365,9 +393,10 @@ type Stage struct {
 	OnAfterSpiralOriginDeleteCallback OnAfterDeleteInterface[SpiralOrigin]
 	OnAfterSpiralOriginReadCallback   OnAfterReadInterface[SpiralOrigin]
 
-	SpiralRhombuss           map[*SpiralRhombus]struct{}
-	SpiralRhombuss_reference map[*SpiralRhombus]*SpiralRhombus
-	SpiralRhombuss_mapString map[string]*SpiralRhombus
+	SpiralRhombuss                map[*SpiralRhombus]struct{}
+	SpiralRhombuss_reference      map[*SpiralRhombus]*SpiralRhombus
+	SpiralRhombuss_referenceOrder map[*SpiralRhombus]uint // diff Unstage needs the reference order
+	SpiralRhombuss_mapString      map[string]*SpiralRhombus
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralRhombusCreateCallback OnAfterCreateInterface[SpiralRhombus]
@@ -375,9 +404,10 @@ type Stage struct {
 	OnAfterSpiralRhombusDeleteCallback OnAfterDeleteInterface[SpiralRhombus]
 	OnAfterSpiralRhombusReadCallback   OnAfterReadInterface[SpiralRhombus]
 
-	SpiralRhombusGrids           map[*SpiralRhombusGrid]struct{}
-	SpiralRhombusGrids_reference map[*SpiralRhombusGrid]*SpiralRhombusGrid
-	SpiralRhombusGrids_mapString map[string]*SpiralRhombusGrid
+	SpiralRhombusGrids                map[*SpiralRhombusGrid]struct{}
+	SpiralRhombusGrids_reference      map[*SpiralRhombusGrid]*SpiralRhombusGrid
+	SpiralRhombusGrids_referenceOrder map[*SpiralRhombusGrid]uint // diff Unstage needs the reference order
+	SpiralRhombusGrids_mapString      map[string]*SpiralRhombusGrid
 
 	// insertion point for slice of pointers maps
 	SpiralRhombusGrid_SpiralRhombuses_reverseMap map[*SpiralRhombus]*SpiralRhombusGrid
@@ -387,9 +417,10 @@ type Stage struct {
 	OnAfterSpiralRhombusGridDeleteCallback OnAfterDeleteInterface[SpiralRhombusGrid]
 	OnAfterSpiralRhombusGridReadCallback   OnAfterReadInterface[SpiralRhombusGrid]
 
-	VerticalAxiss           map[*VerticalAxis]struct{}
-	VerticalAxiss_reference map[*VerticalAxis]*VerticalAxis
-	VerticalAxiss_mapString map[string]*VerticalAxis
+	VerticalAxiss                map[*VerticalAxis]struct{}
+	VerticalAxiss_reference      map[*VerticalAxis]*VerticalAxis
+	VerticalAxiss_referenceOrder map[*VerticalAxis]uint // diff Unstage needs the reference order
+	VerticalAxiss_mapString      map[string]*VerticalAxis
 
 	// insertion point for slice of pointers maps
 	OnAfterVerticalAxisCreateCallback OnAfterCreateInterface[VerticalAxis]
@@ -514,6 +545,14 @@ type Stage struct {
 	// probeIF is the interface to the probe that allows log
 	// commit event to the probe
 	probeIF ProbeIF
+}
+
+func (stager *Stage) SetDeltaMode(inDeltaMode bool) {
+	stager.isInDeltaMode = inDeltaMode
+}
+
+func (stage *Stage) IsDeltaMode() bool {
+	return stage.isInDeltaMode
 }
 
 func (stage *Stage) SetProbeIF(probeIF ProbeIF) {
@@ -1516,8 +1555,10 @@ func (stage *Stage) Commit() {
 		stage.BackRepo.Commit(stage)
 	}
 	stage.ComputeInstancesNb()
-	stage.ComputeDifference()
-	stage.ComputeReference()
+	if stage.IsDeltaMode() {
+		stage.ComputeDifference()
+		stage.ComputeReference()
+	}
 }
 
 func (stage *Stage) ComputeInstancesNb() {
@@ -4202,7 +4243,12 @@ func (stage *Stage) Reset() { // insertion point for array reset
 	stage.VerticalAxisMap_Staged_Order = make(map[*VerticalAxis]uint)
 	stage.VerticalAxisOrder = 0
 
-	stage.ComputeReference()
+	if stage.GetProbeIF() != nil {
+		stage.GetProbeIF().ResetNotifications()
+	}
+	if stage.IsDeltaMode() {
+		stage.ComputeReference()
+	}
 }
 
 func (stage *Stage) Nil() { // insertion point for array nil
@@ -4434,6 +4480,7 @@ type GongstructIF interface {
 	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
 	GongGetGongstructName() string
 	GongGetOrder(stage *Stage) uint
+	GongGetReferenceIdentifier(stage *Stage) string
 	GongGetIdentifier(stage *Stage) string
 	GongCopy() GongstructIF
 	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string

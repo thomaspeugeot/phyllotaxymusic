@@ -3,7 +3,7 @@ module github.com/thomaspeugeot/phyllotaxymusic
 go 1.25.5
 
 require (
-	github.com/fullstack-lang/gong v0.0.0-20260108051336-290bddd7cc3d
+	github.com/fullstack-lang/gong v0.0.0-20260110131834-d4d85ade8e69
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 	github.com/gin-gonic/gin v1.11.0
 	github.com/xuri/excelize/v2 v2.10.0
@@ -56,10 +56,10 @@ require (
 	github.com/yuin/goldmark-meta v1.1.0 // indirect
 	golang.org/x/arch v0.23.0 // indirect
 	golang.org/x/crypto v0.46.0 // indirect
-	golang.org/x/mod v0.31.0 // indirect
+	golang.org/x/mod v0.32.0 // indirect
 	golang.org/x/net v0.48.0 // indirect
-	golang.org/x/sys v0.39.0 // indirect
-	golang.org/x/text v0.32.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/gorm v1.31.1 // indirect

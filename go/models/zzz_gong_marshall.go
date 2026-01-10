@@ -1541,6 +1541,12 @@ func (axis *Axis) GongMarshallField(stage *Stage, fieldName string) (res string)
 			res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", axis.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", axis.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct Axis", fieldName)
@@ -1568,6 +1574,12 @@ func (axisgrid *AxisGrid) GongMarshallField(stage *Stage, fieldName string) (res
 			res = strings.ReplaceAll(res, "{{Identifier}}", axisgrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", axisgrid.Reference.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", axisgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "ShapeCategory":
 		if axisgrid.ShapeCategory != nil {
@@ -1575,6 +1587,12 @@ func (axisgrid *AxisGrid) GongMarshallField(stage *Stage, fieldName string) (res
 			res = strings.ReplaceAll(res, "{{Identifier}}", axisgrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", axisgrid.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", axisgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "Axiss":
 		for _, _axis := range axisgrid.Axiss {
@@ -1690,6 +1708,12 @@ func (bezier *Bezier) GongMarshallField(stage *Stage, fieldName string) (res str
 			res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", bezier.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", bezier.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct Bezier", fieldName)
@@ -1717,6 +1741,12 @@ func (beziergrid *BezierGrid) GongMarshallField(stage *Stage, fieldName string) 
 			res = strings.ReplaceAll(res, "{{Identifier}}", beziergrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", beziergrid.Reference.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", beziergrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "ShapeCategory":
 		if beziergrid.ShapeCategory != nil {
@@ -1724,6 +1754,12 @@ func (beziergrid *BezierGrid) GongMarshallField(stage *Stage, fieldName string) 
 			res = strings.ReplaceAll(res, "{{Identifier}}", beziergrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", beziergrid.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", beziergrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "Beziers":
 		for _, _bezier := range beziergrid.Beziers {
@@ -1759,6 +1795,12 @@ func (beziergridstack *BezierGridStack) GongMarshallField(stage *Stage, fieldNam
 			res = strings.ReplaceAll(res, "{{Identifier}}", beziergridstack.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", beziergridstack.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", beziergridstack.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "BezierGrids":
 		for _, _beziergrid := range beziergridstack.BezierGrids {
@@ -1889,6 +1931,12 @@ func (circle *Circle) GongMarshallField(stage *Stage, fieldName string) (res str
 			res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", circle.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", circle.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct Circle", fieldName)
@@ -1916,6 +1964,12 @@ func (circlegrid *CircleGrid) GongMarshallField(stage *Stage, fieldName string) 
 			res = strings.ReplaceAll(res, "{{Identifier}}", circlegrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", circlegrid.Reference.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", circlegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "ShapeCategory":
 		if circlegrid.ShapeCategory != nil {
@@ -1923,6 +1977,12 @@ func (circlegrid *CircleGrid) GongMarshallField(stage *Stage, fieldName string) 
 			res = strings.ReplaceAll(res, "{{Identifier}}", circlegrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", circlegrid.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", circlegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "Circles":
 		for _, _circle := range circlegrid.Circles {
@@ -2008,6 +2068,12 @@ func (exporttomusicxml *ExportToMusicxml) GongMarshallField(stage *Stage, fieldN
 			res = strings.ReplaceAll(res, "{{Identifier}}", exporttomusicxml.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Parameter")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", exporttomusicxml.Parameter.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", exporttomusicxml.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Parameter")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct ExportToMusicxml", fieldName)
@@ -2095,6 +2161,12 @@ func (frontcurvestack *FrontCurveStack) GongMarshallField(stage *Stage, fieldNam
 			res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", frontcurvestack.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", frontcurvestack.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "FrontCurves":
 		for _, _frontcurve := range frontcurvestack.FrontCurves {
@@ -2188,6 +2260,12 @@ func (horizontalaxis *HorizontalAxis) GongMarshallField(stage *Stage, fieldName 
 			res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", horizontalaxis.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", horizontalaxis.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct HorizontalAxis", fieldName)
@@ -2260,6 +2338,12 @@ func (key *Key) GongMarshallField(stage *Stage, fieldName string) (res string) {
 			res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", key.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", key.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct Key", fieldName)
@@ -2492,6 +2576,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialRhombus")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialRhombus.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialRhombus")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "InitialCircle":
 		if parameter.InitialCircle != nil {
@@ -2499,6 +2589,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialCircle")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialCircle.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialCircle")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "InitialRhombusGrid":
 		if parameter.InitialRhombusGrid != nil {
@@ -2506,6 +2602,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialRhombusGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialRhombusGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "InitialCircleGrid":
 		if parameter.InitialCircleGrid != nil {
@@ -2513,6 +2615,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialCircleGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialCircleGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "InitialAxis":
 		if parameter.InitialAxis != nil {
@@ -2520,6 +2628,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialAxis")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.InitialAxis.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "InitialAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "RotatedAxis":
 		if parameter.RotatedAxis != nil {
@@ -2527,6 +2641,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedAxis")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.RotatedAxis.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "RotatedRhombus":
 		if parameter.RotatedRhombus != nil {
@@ -2534,6 +2654,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedRhombus")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.RotatedRhombus.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedRhombus")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "RotatedRhombusGrid":
 		if parameter.RotatedRhombusGrid != nil {
@@ -2541,6 +2667,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedRhombusGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.RotatedRhombusGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "RotatedCircleGrid":
 		if parameter.RotatedCircleGrid != nil {
@@ -2548,6 +2680,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedCircleGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.RotatedCircleGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "RotatedCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "NextRhombus":
 		if parameter.NextRhombus != nil {
@@ -2555,6 +2693,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NextRhombus")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.NextRhombus.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NextRhombus")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "NextCircle":
 		if parameter.NextCircle != nil {
@@ -2562,6 +2706,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NextCircle")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.NextCircle.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "NextCircle")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowingRhombusGridSeed":
 		if parameter.GrowingRhombusGridSeed != nil {
@@ -2569,6 +2719,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingRhombusGridSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingRhombusGridSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingRhombusGridSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowingRhombusGrid":
 		if parameter.GrowingRhombusGrid != nil {
@@ -2576,6 +2732,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingRhombusGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingRhombusGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowingCircleGridSeed":
 		if parameter.GrowingCircleGridSeed != nil {
@@ -2583,6 +2745,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGridSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingCircleGridSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGridSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowingCircleGrid":
 		if parameter.GrowingCircleGrid != nil {
@@ -2590,6 +2758,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingCircleGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowingCircleGridLeftSeed":
 		if parameter.GrowingCircleGridLeftSeed != nil {
@@ -2597,6 +2771,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGridLeftSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingCircleGridLeftSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGridLeftSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowingCircleGridLeft":
 		if parameter.GrowingCircleGridLeft != nil {
@@ -2604,6 +2784,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGridLeft")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowingCircleGridLeft.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowingCircleGridLeft")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "ConstructionAxis":
 		if parameter.ConstructionAxis != nil {
@@ -2611,6 +2797,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionAxis")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.ConstructionAxis.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "ConstructionAxisGrid":
 		if parameter.ConstructionAxisGrid != nil {
@@ -2618,6 +2810,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionAxisGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.ConstructionAxisGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionAxisGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "ConstructionCircle":
 		if parameter.ConstructionCircle != nil {
@@ -2625,6 +2823,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionCircle")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.ConstructionCircle.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionCircle")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "ConstructionCircleGrid":
 		if parameter.ConstructionCircleGrid != nil {
@@ -2632,6 +2836,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionCircleGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.ConstructionCircleGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ConstructionCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowthCurveSeed":
 		if parameter.GrowthCurveSeed != nil {
@@ -2639,6 +2849,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowthCurve":
 		if parameter.GrowthCurve != nil {
@@ -2646,6 +2862,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurve")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurve.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurve")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowthCurveShiftedRightSeed":
 		if parameter.GrowthCurveShiftedRightSeed != nil {
@@ -2653,6 +2875,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveShiftedRightSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveShiftedRightSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveShiftedRightSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowthCurveShiftedRight":
 		if parameter.GrowthCurveShiftedRight != nil {
@@ -2660,6 +2888,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveShiftedRight")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveShiftedRight.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowthCurveNextSeed":
 		if parameter.GrowthCurveNextSeed != nil {
@@ -2667,6 +2901,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNextSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveNextSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNextSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowthCurveNext":
 		if parameter.GrowthCurveNext != nil {
@@ -2674,6 +2914,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNext")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveNext.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNext")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowthCurveNextShiftedRightSeed":
 		if parameter.GrowthCurveNextShiftedRightSeed != nil {
@@ -2681,6 +2927,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNextShiftedRightSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveNextShiftedRightSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNextShiftedRightSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowthCurveNextShiftedRight":
 		if parameter.GrowthCurveNextShiftedRight != nil {
@@ -2688,6 +2940,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNextShiftedRight")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveNextShiftedRight.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveNextShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "GrowthCurveStack":
 		if parameter.GrowthCurveStack != nil {
@@ -2695,6 +2953,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveStack")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.GrowthCurveStack.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "GrowthCurveStack")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralRhombusGridSeed":
 		if parameter.SpiralRhombusGridSeed != nil {
@@ -2702,6 +2966,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRhombusGridSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralRhombusGridSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRhombusGridSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralRhombusGrid":
 		if parameter.SpiralRhombusGrid != nil {
@@ -2709,6 +2979,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRhombusGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralRhombusGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralCircleSeed":
 		if parameter.SpiralCircleSeed != nil {
@@ -2716,6 +2992,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralCircleSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralCircleSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralCircleSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralCircleGrid":
 		if parameter.SpiralCircleGrid != nil {
@@ -2723,6 +3005,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralCircleGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralCircleGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralCircleFullGrid":
 		if parameter.SpiralCircleFullGrid != nil {
@@ -2730,6 +3018,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralCircleFullGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralCircleFullGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralCircleFullGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralConstructionOuterLineSeed":
 		if parameter.SpiralConstructionOuterLineSeed != nil {
@@ -2737,6 +3031,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionOuterLineSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralConstructionInnerLineSeed":
 		if parameter.SpiralConstructionInnerLineSeed != nil {
@@ -2744,6 +3044,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionInnerLineSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionInnerLineSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionInnerLineSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralConstructionOuterLineGrid":
 		if parameter.SpiralConstructionOuterLineGrid != nil {
@@ -2751,6 +3057,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionOuterLineGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralConstructionInnerLineGrid":
 		if parameter.SpiralConstructionInnerLineGrid != nil {
@@ -2758,6 +3070,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionInnerLineGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionInnerLineGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionInnerLineGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralConstructionCircleGrid":
 		if parameter.SpiralConstructionCircleGrid != nil {
@@ -2765,6 +3083,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionCircleGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionCircleGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionCircleGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralConstructionOuterLineFullGrid":
 		if parameter.SpiralConstructionOuterLineFullGrid != nil {
@@ -2772,6 +3096,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineFullGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralConstructionOuterLineFullGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralConstructionOuterLineFullGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralBezierSeed":
 		if parameter.SpiralBezierSeed != nil {
@@ -2779,6 +3109,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierSeed")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralBezierSeed.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierSeed")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralBezierGrid":
 		if parameter.SpiralBezierGrid != nil {
@@ -2786,6 +3122,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralBezierGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralBezierFullGrid":
 		if parameter.SpiralBezierFullGrid != nil {
@@ -2793,6 +3135,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierFullGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralBezierFullGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralBezierFullGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "FrontCurveStack":
 		if parameter.FrontCurveStack != nil {
@@ -2800,6 +3148,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FrontCurveStack")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FrontCurveStack.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FrontCurveStack")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "Fkey":
 		if parameter.Fkey != nil {
@@ -2807,6 +3161,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Fkey")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.Fkey.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Fkey")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "PitchLines":
 		if parameter.PitchLines != nil {
@@ -2814,6 +3174,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "PitchLines")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.PitchLines.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "PitchLines")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "BeatLines":
 		if parameter.BeatLines != nil {
@@ -2821,6 +3187,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BeatLines")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.BeatLines.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "BeatLines")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "FirstVoice":
 		if parameter.FirstVoice != nil {
@@ -2828,6 +3200,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoice")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FirstVoice.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoice")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "FirstVoiceShiftedRigth":
 		if parameter.FirstVoiceShiftedRigth != nil {
@@ -2835,6 +3213,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceShiftedRigth")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FirstVoiceShiftedRigth.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceShiftedRigth")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SecondVoice":
 		if parameter.SecondVoice != nil {
@@ -2842,6 +3226,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoice")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SecondVoice.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoice")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SecondVoiceShiftedRight":
 		if parameter.SecondVoiceShiftedRight != nil {
@@ -2849,6 +3239,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoiceShiftedRight")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SecondVoiceShiftedRight.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoiceShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "FirstVoiceNotes":
 		if parameter.FirstVoiceNotes != nil {
@@ -2856,6 +3252,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceNotes")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FirstVoiceNotes.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceNotes")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "FirstVoiceNotesShiftedRight":
 		if parameter.FirstVoiceNotesShiftedRight != nil {
@@ -2863,6 +3265,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceNotesShiftedRight")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.FirstVoiceNotesShiftedRight.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "FirstVoiceNotesShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SecondVoiceNotes":
 		if parameter.SecondVoiceNotes != nil {
@@ -2870,6 +3278,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoiceNotes")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SecondVoiceNotes.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoiceNotes")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SecondVoiceNotesShiftedRight":
 		if parameter.SecondVoiceNotesShiftedRight != nil {
@@ -2877,6 +3291,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoiceNotesShiftedRight")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SecondVoiceNotesShiftedRight.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SecondVoiceNotesShiftedRight")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "HorizontalAxis":
 		if parameter.HorizontalAxis != nil {
@@ -2884,6 +3304,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "HorizontalAxis")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.HorizontalAxis.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "HorizontalAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "VerticalAxis":
 		if parameter.VerticalAxis != nil {
@@ -2891,6 +3317,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "VerticalAxis")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.VerticalAxis.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "VerticalAxis")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralOrigin":
 		if parameter.SpiralOrigin != nil {
@@ -2898,6 +3330,12 @@ func (parameter *Parameter) GongMarshallField(stage *Stage, fieldName string) (r
 			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralOrigin")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", parameter.SpiralOrigin.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", parameter.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralOrigin")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct Parameter", fieldName)
@@ -2990,6 +3428,12 @@ func (rhombus *Rhombus) GongMarshallField(stage *Stage, fieldName string) (res s
 			res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", rhombus.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", rhombus.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct Rhombus", fieldName)
@@ -3017,6 +3461,12 @@ func (rhombusgrid *RhombusGrid) GongMarshallField(stage *Stage, fieldName string
 			res = strings.ReplaceAll(res, "{{Identifier}}", rhombusgrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", rhombusgrid.Reference.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", rhombusgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "Reference")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "ShapeCategory":
 		if rhombusgrid.ShapeCategory != nil {
@@ -3024,6 +3474,12 @@ func (rhombusgrid *RhombusGrid) GongMarshallField(stage *Stage, fieldName string
 			res = strings.ReplaceAll(res, "{{Identifier}}", rhombusgrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", rhombusgrid.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", rhombusgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "Rhombuses":
 		for _, _rhombus := range rhombusgrid.Rhombuses {
@@ -3159,6 +3615,12 @@ func (spiralbezier *SpiralBezier) GongMarshallField(stage *Stage, fieldName stri
 			res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralbezier.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralbezier.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct SpiralBezier", fieldName)
@@ -3186,6 +3648,12 @@ func (spiralbeziergrid *SpiralBezierGrid) GongMarshallField(stage *Stage, fieldN
 			res = strings.ReplaceAll(res, "{{Identifier}}", spiralbeziergrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralbeziergrid.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralbeziergrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralBeziers":
 		for _, _spiralbezier := range spiralbeziergrid.SpiralBeziers {
@@ -3301,6 +3769,12 @@ func (spiralcircle *SpiralCircle) GongMarshallField(stage *Stage, fieldName stri
 			res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralcircle.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralcircle.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct SpiralCircle", fieldName)
@@ -3328,6 +3802,12 @@ func (spiralcirclegrid *SpiralCircleGrid) GongMarshallField(stage *Stage, fieldN
 			res = strings.ReplaceAll(res, "{{Identifier}}", spiralcirclegrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralcirclegrid.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralcirclegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralRhombusGrid":
 		if spiralcirclegrid.SpiralRhombusGrid != nil {
@@ -3335,6 +3815,12 @@ func (spiralcirclegrid *SpiralCircleGrid) GongMarshallField(stage *Stage, fieldN
 			res = strings.ReplaceAll(res, "{{Identifier}}", spiralcirclegrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRhombusGrid")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralcirclegrid.SpiralRhombusGrid.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralcirclegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "SpiralRhombusGrid")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralCircles":
 		for _, _spiralcircle := range spiralcirclegrid.SpiralCircles {
@@ -3430,6 +3916,12 @@ func (spiralline *SpiralLine) GongMarshallField(stage *Stage, fieldName string) 
 			res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralline.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralline.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct SpiralLine", fieldName)
@@ -3457,6 +3949,12 @@ func (spirallinegrid *SpiralLineGrid) GongMarshallField(stage *Stage, fieldName 
 			res = strings.ReplaceAll(res, "{{Identifier}}", spirallinegrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spirallinegrid.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spirallinegrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralLines":
 		for _, _spiralline := range spirallinegrid.SpiralLines {
@@ -3532,6 +4030,12 @@ func (spiralorigin *SpiralOrigin) GongMarshallField(stage *Stage, fieldName stri
 			res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralorigin.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralorigin.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct SpiralOrigin", fieldName)
@@ -3639,6 +4143,12 @@ func (spiralrhombus *SpiralRhombus) GongMarshallField(stage *Stage, fieldName st
 			res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralrhombus.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombus.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct SpiralRhombus", fieldName)
@@ -3666,6 +4176,12 @@ func (spiralrhombusgrid *SpiralRhombusGrid) GongMarshallField(stage *Stage, fiel
 			res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombusgrid.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", spiralrhombusgrid.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", spiralrhombusgrid.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	case "SpiralRhombuses":
 		for _, _spiralrhombus := range spiralrhombusgrid.SpiralRhombuses {
@@ -3751,6 +4267,12 @@ func (verticalaxis *VerticalAxis) GongMarshallField(stage *Stage, fieldName stri
 			res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
 			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
 			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", verticalaxis.ShapeCategory.GongGetIdentifier(stage))
+		} else {
+			// in case of nil pointer, we need to unstage the previous value
+			res = PointerFieldInitStatement
+			res = strings.ReplaceAll(res, "{{Identifier}}", verticalaxis.GongGetIdentifier(stage))
+			res = strings.ReplaceAll(res, "{{GeneratedFieldName}}", "ShapeCategory")
+			res = strings.ReplaceAll(res, "{{GeneratedFieldNameValue}}", "nil")
 		}
 	default:
 		log.Panicf("Unknown field %s for Gongstruct VerticalAxis", fieldName)

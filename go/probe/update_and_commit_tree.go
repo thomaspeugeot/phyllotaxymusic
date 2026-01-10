@@ -105,7 +105,13 @@ func updateAndCommitTree(
 		case "Axis":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.Axis](probe.stageOfInterest)
+			count := 0
 			for _axis := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _axis.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_axis, "Axis", probe)
@@ -115,7 +121,13 @@ func updateAndCommitTree(
 		case "AxisGrid":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.AxisGrid](probe.stageOfInterest)
+			count := 0
 			for _axisgrid := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _axisgrid.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_axisgrid, "AxisGrid", probe)
@@ -125,7 +137,13 @@ func updateAndCommitTree(
 		case "Bezier":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.Bezier](probe.stageOfInterest)
+			count := 0
 			for _bezier := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _bezier.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_bezier, "Bezier", probe)
@@ -135,7 +153,13 @@ func updateAndCommitTree(
 		case "BezierGrid":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.BezierGrid](probe.stageOfInterest)
+			count := 0
 			for _beziergrid := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _beziergrid.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_beziergrid, "BezierGrid", probe)
@@ -145,7 +169,13 @@ func updateAndCommitTree(
 		case "BezierGridStack":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.BezierGridStack](probe.stageOfInterest)
+			count := 0
 			for _beziergridstack := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _beziergridstack.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_beziergridstack, "BezierGridStack", probe)
@@ -155,7 +185,13 @@ func updateAndCommitTree(
 		case "Chapter":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.Chapter](probe.stageOfInterest)
+			count := 0
 			for _chapter := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _chapter.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_chapter, "Chapter", probe)
@@ -165,7 +201,13 @@ func updateAndCommitTree(
 		case "Circle":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.Circle](probe.stageOfInterest)
+			count := 0
 			for _circle := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _circle.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_circle, "Circle", probe)
@@ -175,7 +217,13 @@ func updateAndCommitTree(
 		case "CircleGrid":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.CircleGrid](probe.stageOfInterest)
+			count := 0
 			for _circlegrid := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _circlegrid.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_circlegrid, "CircleGrid", probe)
@@ -185,7 +233,13 @@ func updateAndCommitTree(
 		case "Content":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.Content](probe.stageOfInterest)
+			count := 0
 			for _content := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _content.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_content, "Content", probe)
@@ -195,7 +249,13 @@ func updateAndCommitTree(
 		case "ExportToMusicxml":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.ExportToMusicxml](probe.stageOfInterest)
+			count := 0
 			for _exporttomusicxml := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _exporttomusicxml.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_exporttomusicxml, "ExportToMusicxml", probe)
@@ -205,7 +265,13 @@ func updateAndCommitTree(
 		case "FrontCurve":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.FrontCurve](probe.stageOfInterest)
+			count := 0
 			for _frontcurve := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _frontcurve.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_frontcurve, "FrontCurve", probe)
@@ -215,7 +281,13 @@ func updateAndCommitTree(
 		case "FrontCurveStack":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.FrontCurveStack](probe.stageOfInterest)
+			count := 0
 			for _frontcurvestack := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _frontcurvestack.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_frontcurvestack, "FrontCurveStack", probe)
@@ -225,7 +297,13 @@ func updateAndCommitTree(
 		case "HorizontalAxis":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.HorizontalAxis](probe.stageOfInterest)
+			count := 0
 			for _horizontalaxis := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _horizontalaxis.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_horizontalaxis, "HorizontalAxis", probe)
@@ -235,7 +313,13 @@ func updateAndCommitTree(
 		case "Key":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.Key](probe.stageOfInterest)
+			count := 0
 			for _key := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _key.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_key, "Key", probe)
@@ -245,7 +329,13 @@ func updateAndCommitTree(
 		case "Parameter":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.Parameter](probe.stageOfInterest)
+			count := 0
 			for _parameter := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _parameter.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_parameter, "Parameter", probe)
@@ -255,7 +345,13 @@ func updateAndCommitTree(
 		case "Rhombus":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.Rhombus](probe.stageOfInterest)
+			count := 0
 			for _rhombus := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _rhombus.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_rhombus, "Rhombus", probe)
@@ -265,7 +361,13 @@ func updateAndCommitTree(
 		case "RhombusGrid":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.RhombusGrid](probe.stageOfInterest)
+			count := 0
 			for _rhombusgrid := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _rhombusgrid.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_rhombusgrid, "RhombusGrid", probe)
@@ -275,7 +377,13 @@ func updateAndCommitTree(
 		case "ShapeCategory":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.ShapeCategory](probe.stageOfInterest)
+			count := 0
 			for _shapecategory := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _shapecategory.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_shapecategory, "ShapeCategory", probe)
@@ -285,7 +393,13 @@ func updateAndCommitTree(
 		case "SpiralBezier":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralBezier](probe.stageOfInterest)
+			count := 0
 			for _spiralbezier := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _spiralbezier.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_spiralbezier, "SpiralBezier", probe)
@@ -295,7 +409,13 @@ func updateAndCommitTree(
 		case "SpiralBezierGrid":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralBezierGrid](probe.stageOfInterest)
+			count := 0
 			for _spiralbeziergrid := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _spiralbeziergrid.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_spiralbeziergrid, "SpiralBezierGrid", probe)
@@ -305,7 +425,13 @@ func updateAndCommitTree(
 		case "SpiralCircle":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralCircle](probe.stageOfInterest)
+			count := 0
 			for _spiralcircle := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _spiralcircle.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_spiralcircle, "SpiralCircle", probe)
@@ -315,7 +441,13 @@ func updateAndCommitTree(
 		case "SpiralCircleGrid":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralCircleGrid](probe.stageOfInterest)
+			count := 0
 			for _spiralcirclegrid := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _spiralcirclegrid.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_spiralcirclegrid, "SpiralCircleGrid", probe)
@@ -325,7 +457,13 @@ func updateAndCommitTree(
 		case "SpiralLine":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralLine](probe.stageOfInterest)
+			count := 0
 			for _spiralline := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _spiralline.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_spiralline, "SpiralLine", probe)
@@ -335,7 +473,13 @@ func updateAndCommitTree(
 		case "SpiralLineGrid":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralLineGrid](probe.stageOfInterest)
+			count := 0
 			for _spirallinegrid := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _spirallinegrid.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_spirallinegrid, "SpiralLineGrid", probe)
@@ -345,7 +489,13 @@ func updateAndCommitTree(
 		case "SpiralOrigin":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralOrigin](probe.stageOfInterest)
+			count := 0
 			for _spiralorigin := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _spiralorigin.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_spiralorigin, "SpiralOrigin", probe)
@@ -355,7 +505,13 @@ func updateAndCommitTree(
 		case "SpiralRhombus":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralRhombus](probe.stageOfInterest)
+			count := 0
 			for _spiralrhombus := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _spiralrhombus.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_spiralrhombus, "SpiralRhombus", probe)
@@ -365,7 +521,13 @@ func updateAndCommitTree(
 		case "SpiralRhombusGrid":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.SpiralRhombusGrid](probe.stageOfInterest)
+			count := 0
 			for _spiralrhombusgrid := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _spiralrhombusgrid.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_spiralrhombusgrid, "SpiralRhombusGrid", probe)
@@ -375,7 +537,13 @@ func updateAndCommitTree(
 		case "VerticalAxis":
 			nodeGongstruct.Name = name
 			set := *models.GetGongstructInstancesSetFromPointerType[*models.VerticalAxis](probe.stageOfInterest)
+			count := 0
 			for _verticalaxis := range set {
+				if count >= probe.GetMaxElementsNbPerGongStructNode() {
+					nodeGongstruct.Children = append(nodeGongstruct.Children, &tree.Node{Name: "..."})
+					break
+				}
+				count++
 				nodeInstance := &tree.Node{Name: _verticalaxis.GetName()}
 				nodeInstance.IsNodeClickable = true
 				nodeInstance.Impl = NewInstanceNodeCallback(_verticalaxis, "VerticalAxis", probe)
