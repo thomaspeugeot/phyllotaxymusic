@@ -12,8 +12,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/frankban/quicktest v1.14.6 h1:7Xjx+VpznH+oBnejlPUj8oUpdxnVs4f8XU8WnHkI4W8=
 github.com/frankban/quicktest v1.14.6/go.mod h1:4ptaffx2x8+WTWXmUCuVU6aPUX1/Mz7zb5vbUoiM6w0=
-github.com/fullstack-lang/gong v0.0.0-20260110131834-d4d85ade8e69 h1:UqVI6KzKcYUTGrvETr/uAvHNNPrn8dYmDBN+EgLwxI8=
-github.com/fullstack-lang/gong v0.0.0-20260110131834-d4d85ade8e69/go.mod h1:sZDVUQ13PgnATgbouIkjaX0DX8f2eaeL7JS2xszsIVg=
+github.com/fullstack-lang/gong v0.0.0-20260411171006-5058ff0b2beb h1:nOZQUimKWb3q4VQzJKIBJAPbzKJX6RvULwe/1s2tHgM=
+github.com/fullstack-lang/gong v0.0.0-20260411171006-5058ff0b2beb/go.mod h1:O/vp2/hvU39UcV8+rizDN4VtFhWOuVF70EuNwoULwko=
 github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369 h1:tnlpjk07ksmzjPSoMBZ8FW088WI1VdnJ5d/lbNUHqBw=
 github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369/go.mod h1:kgbZUObfs2TDNCGjvgb/hL/3cZz9jWeKE7yhQ1V7GJI=
 github.com/gabriel-vasile/mimetype v1.4.12 h1:e9hWvmLYvtp846tLHam2o++qitpguFiYCKbn0w9jyqw=

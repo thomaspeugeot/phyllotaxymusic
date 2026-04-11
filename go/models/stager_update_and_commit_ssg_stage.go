@@ -42,7 +42,6 @@ func (stager *Stager) UpdateAndCommitSsgStage() {
 			Name:           content.Name,
 			MardownContent: content.MardownContent,
 
-			LayoutPath: content.LayoutPath,
 			StaticPath: content.StaticPath,
 
 			ContentPath: content.ContentPath,

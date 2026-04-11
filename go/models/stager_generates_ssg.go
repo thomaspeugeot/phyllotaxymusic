@@ -119,7 +119,7 @@ func (stager *Stager) GenerateSSG() {
 	}
 	stager.UpdateAndCommitSVGStage()
 
-	stager.ssgStage.Generation()
+	stager.ssgStage.Generation(true)
 }
 
 func (*Stager) prepareStaticDic(pathToGeneratedSVG string) (error, bool) {

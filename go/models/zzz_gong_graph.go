@@ -2977,6 +2977,1315 @@ func (stage *Stage) UnstageBranchVerticalAxis(verticalaxis *VerticalAxis) {
 
 }
 
+// insertion point for pointer reconstruction from references
+func (reference *Axis) GongReconstructPointersFromReferences(stage *Stage, instance *Axis) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *AxisGrid) GongReconstructPointersFromReferences(stage *Stage, instance *AxisGrid) () {
+	// insertion point for pointers field
+	if instance.Reference != nil {
+		reference.Reference = stage.Axiss_reference[instance.Reference]
+	}
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+	reference.Axiss = reference.Axiss[:0]
+	for _, _b := range instance.Axiss {
+		reference.Axiss = append(reference.Axiss, stage.Axiss_reference[_b])
+	}
+
+	return
+}
+
+func (reference *Bezier) GongReconstructPointersFromReferences(stage *Stage, instance *Bezier) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *BezierGrid) GongReconstructPointersFromReferences(stage *Stage, instance *BezierGrid) () {
+	// insertion point for pointers field
+	if instance.Reference != nil {
+		reference.Reference = stage.Beziers_reference[instance.Reference]
+	}
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+	reference.Beziers = reference.Beziers[:0]
+	for _, _b := range instance.Beziers {
+		reference.Beziers = append(reference.Beziers, stage.Beziers_reference[_b])
+	}
+
+	return
+}
+
+func (reference *BezierGridStack) GongReconstructPointersFromReferences(stage *Stage, instance *BezierGridStack) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+	reference.BezierGrids = reference.BezierGrids[:0]
+	for _, _b := range instance.BezierGrids {
+		reference.BezierGrids = append(reference.BezierGrids, stage.BezierGrids_reference[_b])
+	}
+
+	return
+}
+
+func (reference *Chapter) GongReconstructPointersFromReferences(stage *Stage, instance *Chapter) () {
+	// insertion point for pointers field
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *Circle) GongReconstructPointersFromReferences(stage *Stage, instance *Circle) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *CircleGrid) GongReconstructPointersFromReferences(stage *Stage, instance *CircleGrid) () {
+	// insertion point for pointers field
+	if instance.Reference != nil {
+		reference.Reference = stage.Circles_reference[instance.Reference]
+	}
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+	reference.Circles = reference.Circles[:0]
+	for _, _b := range instance.Circles {
+		reference.Circles = append(reference.Circles, stage.Circles_reference[_b])
+	}
+
+	return
+}
+
+func (reference *Content) GongReconstructPointersFromReferences(stage *Stage, instance *Content) () {
+	// insertion point for pointers field
+	// insertion point for slice of pointers field
+	reference.Chapters = reference.Chapters[:0]
+	for _, _b := range instance.Chapters {
+		reference.Chapters = append(reference.Chapters, stage.Chapters_reference[_b])
+	}
+
+	return
+}
+
+func (reference *ExportToMusicxml) GongReconstructPointersFromReferences(stage *Stage, instance *ExportToMusicxml) () {
+	// insertion point for pointers field
+	if instance.Parameter != nil {
+		reference.Parameter = stage.Parameters_reference[instance.Parameter]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *FrontCurve) GongReconstructPointersFromReferences(stage *Stage, instance *FrontCurve) () {
+	// insertion point for pointers field
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *FrontCurveStack) GongReconstructPointersFromReferences(stage *Stage, instance *FrontCurveStack) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+	reference.FrontCurves = reference.FrontCurves[:0]
+	for _, _b := range instance.FrontCurves {
+		reference.FrontCurves = append(reference.FrontCurves, stage.FrontCurves_reference[_b])
+	}
+	reference.SpiralCircles = reference.SpiralCircles[:0]
+	for _, _b := range instance.SpiralCircles {
+		reference.SpiralCircles = append(reference.SpiralCircles, stage.SpiralCircles_reference[_b])
+	}
+
+	return
+}
+
+func (reference *HorizontalAxis) GongReconstructPointersFromReferences(stage *Stage, instance *HorizontalAxis) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *Key) GongReconstructPointersFromReferences(stage *Stage, instance *Key) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *Parameter) GongReconstructPointersFromReferences(stage *Stage, instance *Parameter) () {
+	// insertion point for pointers field
+	if instance.InitialRhombus != nil {
+		reference.InitialRhombus = stage.Rhombuss_reference[instance.InitialRhombus]
+	}
+	if instance.InitialCircle != nil {
+		reference.InitialCircle = stage.Circles_reference[instance.InitialCircle]
+	}
+	if instance.InitialRhombusGrid != nil {
+		reference.InitialRhombusGrid = stage.RhombusGrids_reference[instance.InitialRhombusGrid]
+	}
+	if instance.InitialCircleGrid != nil {
+		reference.InitialCircleGrid = stage.CircleGrids_reference[instance.InitialCircleGrid]
+	}
+	if instance.InitialAxis != nil {
+		reference.InitialAxis = stage.Axiss_reference[instance.InitialAxis]
+	}
+	if instance.RotatedAxis != nil {
+		reference.RotatedAxis = stage.Axiss_reference[instance.RotatedAxis]
+	}
+	if instance.RotatedRhombus != nil {
+		reference.RotatedRhombus = stage.Rhombuss_reference[instance.RotatedRhombus]
+	}
+	if instance.RotatedRhombusGrid != nil {
+		reference.RotatedRhombusGrid = stage.RhombusGrids_reference[instance.RotatedRhombusGrid]
+	}
+	if instance.RotatedCircleGrid != nil {
+		reference.RotatedCircleGrid = stage.CircleGrids_reference[instance.RotatedCircleGrid]
+	}
+	if instance.NextRhombus != nil {
+		reference.NextRhombus = stage.Rhombuss_reference[instance.NextRhombus]
+	}
+	if instance.NextCircle != nil {
+		reference.NextCircle = stage.Circles_reference[instance.NextCircle]
+	}
+	if instance.GrowingRhombusGridSeed != nil {
+		reference.GrowingRhombusGridSeed = stage.Rhombuss_reference[instance.GrowingRhombusGridSeed]
+	}
+	if instance.GrowingRhombusGrid != nil {
+		reference.GrowingRhombusGrid = stage.RhombusGrids_reference[instance.GrowingRhombusGrid]
+	}
+	if instance.GrowingCircleGridSeed != nil {
+		reference.GrowingCircleGridSeed = stage.Circles_reference[instance.GrowingCircleGridSeed]
+	}
+	if instance.GrowingCircleGrid != nil {
+		reference.GrowingCircleGrid = stage.CircleGrids_reference[instance.GrowingCircleGrid]
+	}
+	if instance.GrowingCircleGridLeftSeed != nil {
+		reference.GrowingCircleGridLeftSeed = stage.Circles_reference[instance.GrowingCircleGridLeftSeed]
+	}
+	if instance.GrowingCircleGridLeft != nil {
+		reference.GrowingCircleGridLeft = stage.CircleGrids_reference[instance.GrowingCircleGridLeft]
+	}
+	if instance.ConstructionAxis != nil {
+		reference.ConstructionAxis = stage.Axiss_reference[instance.ConstructionAxis]
+	}
+	if instance.ConstructionAxisGrid != nil {
+		reference.ConstructionAxisGrid = stage.AxisGrids_reference[instance.ConstructionAxisGrid]
+	}
+	if instance.ConstructionCircle != nil {
+		reference.ConstructionCircle = stage.Circles_reference[instance.ConstructionCircle]
+	}
+	if instance.ConstructionCircleGrid != nil {
+		reference.ConstructionCircleGrid = stage.CircleGrids_reference[instance.ConstructionCircleGrid]
+	}
+	if instance.GrowthCurveSeed != nil {
+		reference.GrowthCurveSeed = stage.Beziers_reference[instance.GrowthCurveSeed]
+	}
+	if instance.GrowthCurve != nil {
+		reference.GrowthCurve = stage.BezierGrids_reference[instance.GrowthCurve]
+	}
+	if instance.GrowthCurveShiftedRightSeed != nil {
+		reference.GrowthCurveShiftedRightSeed = stage.Beziers_reference[instance.GrowthCurveShiftedRightSeed]
+	}
+	if instance.GrowthCurveShiftedRight != nil {
+		reference.GrowthCurveShiftedRight = stage.BezierGrids_reference[instance.GrowthCurveShiftedRight]
+	}
+	if instance.GrowthCurveNextSeed != nil {
+		reference.GrowthCurveNextSeed = stage.Beziers_reference[instance.GrowthCurveNextSeed]
+	}
+	if instance.GrowthCurveNext != nil {
+		reference.GrowthCurveNext = stage.BezierGrids_reference[instance.GrowthCurveNext]
+	}
+	if instance.GrowthCurveNextShiftedRightSeed != nil {
+		reference.GrowthCurveNextShiftedRightSeed = stage.Beziers_reference[instance.GrowthCurveNextShiftedRightSeed]
+	}
+	if instance.GrowthCurveNextShiftedRight != nil {
+		reference.GrowthCurveNextShiftedRight = stage.BezierGrids_reference[instance.GrowthCurveNextShiftedRight]
+	}
+	if instance.GrowthCurveStack != nil {
+		reference.GrowthCurveStack = stage.BezierGridStacks_reference[instance.GrowthCurveStack]
+	}
+	if instance.SpiralRhombusGridSeed != nil {
+		reference.SpiralRhombusGridSeed = stage.SpiralRhombuss_reference[instance.SpiralRhombusGridSeed]
+	}
+	if instance.SpiralRhombusGrid != nil {
+		reference.SpiralRhombusGrid = stage.SpiralRhombusGrids_reference[instance.SpiralRhombusGrid]
+	}
+	if instance.SpiralCircleSeed != nil {
+		reference.SpiralCircleSeed = stage.SpiralCircles_reference[instance.SpiralCircleSeed]
+	}
+	if instance.SpiralCircleGrid != nil {
+		reference.SpiralCircleGrid = stage.SpiralCircleGrids_reference[instance.SpiralCircleGrid]
+	}
+	if instance.SpiralCircleFullGrid != nil {
+		reference.SpiralCircleFullGrid = stage.SpiralCircleGrids_reference[instance.SpiralCircleFullGrid]
+	}
+	if instance.SpiralConstructionOuterLineSeed != nil {
+		reference.SpiralConstructionOuterLineSeed = stage.SpiralLines_reference[instance.SpiralConstructionOuterLineSeed]
+	}
+	if instance.SpiralConstructionInnerLineSeed != nil {
+		reference.SpiralConstructionInnerLineSeed = stage.SpiralLines_reference[instance.SpiralConstructionInnerLineSeed]
+	}
+	if instance.SpiralConstructionOuterLineGrid != nil {
+		reference.SpiralConstructionOuterLineGrid = stage.SpiralLineGrids_reference[instance.SpiralConstructionOuterLineGrid]
+	}
+	if instance.SpiralConstructionInnerLineGrid != nil {
+		reference.SpiralConstructionInnerLineGrid = stage.SpiralLineGrids_reference[instance.SpiralConstructionInnerLineGrid]
+	}
+	if instance.SpiralConstructionCircleGrid != nil {
+		reference.SpiralConstructionCircleGrid = stage.SpiralCircleGrids_reference[instance.SpiralConstructionCircleGrid]
+	}
+	if instance.SpiralConstructionOuterLineFullGrid != nil {
+		reference.SpiralConstructionOuterLineFullGrid = stage.SpiralLineGrids_reference[instance.SpiralConstructionOuterLineFullGrid]
+	}
+	if instance.SpiralBezierSeed != nil {
+		reference.SpiralBezierSeed = stage.SpiralBeziers_reference[instance.SpiralBezierSeed]
+	}
+	if instance.SpiralBezierGrid != nil {
+		reference.SpiralBezierGrid = stage.SpiralBezierGrids_reference[instance.SpiralBezierGrid]
+	}
+	if instance.SpiralBezierFullGrid != nil {
+		reference.SpiralBezierFullGrid = stage.SpiralBezierGrids_reference[instance.SpiralBezierFullGrid]
+	}
+	if instance.FrontCurveStack != nil {
+		reference.FrontCurveStack = stage.FrontCurveStacks_reference[instance.FrontCurveStack]
+	}
+	if instance.Fkey != nil {
+		reference.Fkey = stage.Keys_reference[instance.Fkey]
+	}
+	if instance.PitchLines != nil {
+		reference.PitchLines = stage.AxisGrids_reference[instance.PitchLines]
+	}
+	if instance.BeatLines != nil {
+		reference.BeatLines = stage.AxisGrids_reference[instance.BeatLines]
+	}
+	if instance.FirstVoice != nil {
+		reference.FirstVoice = stage.BezierGrids_reference[instance.FirstVoice]
+	}
+	if instance.FirstVoiceShiftedRigth != nil {
+		reference.FirstVoiceShiftedRigth = stage.BezierGrids_reference[instance.FirstVoiceShiftedRigth]
+	}
+	if instance.SecondVoice != nil {
+		reference.SecondVoice = stage.BezierGrids_reference[instance.SecondVoice]
+	}
+	if instance.SecondVoiceShiftedRight != nil {
+		reference.SecondVoiceShiftedRight = stage.BezierGrids_reference[instance.SecondVoiceShiftedRight]
+	}
+	if instance.FirstVoiceNotes != nil {
+		reference.FirstVoiceNotes = stage.CircleGrids_reference[instance.FirstVoiceNotes]
+	}
+	if instance.FirstVoiceNotesShiftedRight != nil {
+		reference.FirstVoiceNotesShiftedRight = stage.CircleGrids_reference[instance.FirstVoiceNotesShiftedRight]
+	}
+	if instance.SecondVoiceNotes != nil {
+		reference.SecondVoiceNotes = stage.CircleGrids_reference[instance.SecondVoiceNotes]
+	}
+	if instance.SecondVoiceNotesShiftedRight != nil {
+		reference.SecondVoiceNotesShiftedRight = stage.CircleGrids_reference[instance.SecondVoiceNotesShiftedRight]
+	}
+	if instance.HorizontalAxis != nil {
+		reference.HorizontalAxis = stage.HorizontalAxiss_reference[instance.HorizontalAxis]
+	}
+	if instance.VerticalAxis != nil {
+		reference.VerticalAxis = stage.VerticalAxiss_reference[instance.VerticalAxis]
+	}
+	if instance.SpiralOrigin != nil {
+		reference.SpiralOrigin = stage.SpiralOrigins_reference[instance.SpiralOrigin]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *Rhombus) GongReconstructPointersFromReferences(stage *Stage, instance *Rhombus) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *RhombusGrid) GongReconstructPointersFromReferences(stage *Stage, instance *RhombusGrid) () {
+	// insertion point for pointers field
+	if instance.Reference != nil {
+		reference.Reference = stage.Rhombuss_reference[instance.Reference]
+	}
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+	reference.Rhombuses = reference.Rhombuses[:0]
+	for _, _b := range instance.Rhombuses {
+		reference.Rhombuses = append(reference.Rhombuses, stage.Rhombuss_reference[_b])
+	}
+
+	return
+}
+
+func (reference *ShapeCategory) GongReconstructPointersFromReferences(stage *Stage, instance *ShapeCategory) () {
+	// insertion point for pointers field
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *SpiralBezier) GongReconstructPointersFromReferences(stage *Stage, instance *SpiralBezier) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *SpiralBezierGrid) GongReconstructPointersFromReferences(stage *Stage, instance *SpiralBezierGrid) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+	reference.SpiralBeziers = reference.SpiralBeziers[:0]
+	for _, _b := range instance.SpiralBeziers {
+		reference.SpiralBeziers = append(reference.SpiralBeziers, stage.SpiralBeziers_reference[_b])
+	}
+
+	return
+}
+
+func (reference *SpiralCircle) GongReconstructPointersFromReferences(stage *Stage, instance *SpiralCircle) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *SpiralCircleGrid) GongReconstructPointersFromReferences(stage *Stage, instance *SpiralCircleGrid) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	if instance.SpiralRhombusGrid != nil {
+		reference.SpiralRhombusGrid = stage.SpiralRhombusGrids_reference[instance.SpiralRhombusGrid]
+	}
+	// insertion point for slice of pointers field
+	reference.SpiralCircles = reference.SpiralCircles[:0]
+	for _, _b := range instance.SpiralCircles {
+		reference.SpiralCircles = append(reference.SpiralCircles, stage.SpiralCircles_reference[_b])
+	}
+
+	return
+}
+
+func (reference *SpiralLine) GongReconstructPointersFromReferences(stage *Stage, instance *SpiralLine) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *SpiralLineGrid) GongReconstructPointersFromReferences(stage *Stage, instance *SpiralLineGrid) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+	reference.SpiralLines = reference.SpiralLines[:0]
+	for _, _b := range instance.SpiralLines {
+		reference.SpiralLines = append(reference.SpiralLines, stage.SpiralLines_reference[_b])
+	}
+
+	return
+}
+
+func (reference *SpiralOrigin) GongReconstructPointersFromReferences(stage *Stage, instance *SpiralOrigin) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *SpiralRhombus) GongReconstructPointersFromReferences(stage *Stage, instance *SpiralRhombus) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+func (reference *SpiralRhombusGrid) GongReconstructPointersFromReferences(stage *Stage, instance *SpiralRhombusGrid) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+	reference.SpiralRhombuses = reference.SpiralRhombuses[:0]
+	for _, _b := range instance.SpiralRhombuses {
+		reference.SpiralRhombuses = append(reference.SpiralRhombuses, stage.SpiralRhombuss_reference[_b])
+	}
+
+	return
+}
+
+func (reference *VerticalAxis) GongReconstructPointersFromReferences(stage *Stage, instance *VerticalAxis) () {
+	// insertion point for pointers field
+	if instance.ShapeCategory != nil {
+		reference.ShapeCategory = stage.ShapeCategorys_reference[instance.ShapeCategory]
+	}
+	// insertion point for slice of pointers field
+
+	return
+}
+
+// insertion point for pointer reconstruction from instances
+func (reference *Axis) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *AxisGrid) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.Reference; _reference != nil {
+		reference.Reference = nil
+		if _instance, ok := stage.Axiss_instance[_reference]; ok {
+			reference.Reference = _instance
+		}
+	}
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _Axiss []*Axis
+	for _, _reference := range reference.Axiss {
+		if _instance, ok := stage.Axiss_instance[_reference]; ok {
+			_Axiss = append(_Axiss, _instance)
+		}
+	}
+	reference.Axiss = _Axiss
+
+	return
+}
+
+func (reference *Bezier) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *BezierGrid) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.Reference; _reference != nil {
+		reference.Reference = nil
+		if _instance, ok := stage.Beziers_instance[_reference]; ok {
+			reference.Reference = _instance
+		}
+	}
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _Beziers []*Bezier
+	for _, _reference := range reference.Beziers {
+		if _instance, ok := stage.Beziers_instance[_reference]; ok {
+			_Beziers = append(_Beziers, _instance)
+		}
+	}
+	reference.Beziers = _Beziers
+
+	return
+}
+
+func (reference *BezierGridStack) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _BezierGrids []*BezierGrid
+	for _, _reference := range reference.BezierGrids {
+		if _instance, ok := stage.BezierGrids_instance[_reference]; ok {
+			_BezierGrids = append(_BezierGrids, _instance)
+		}
+	}
+	reference.BezierGrids = _BezierGrids
+
+	return
+}
+
+func (reference *Chapter) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *Circle) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *CircleGrid) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.Reference; _reference != nil {
+		reference.Reference = nil
+		if _instance, ok := stage.Circles_instance[_reference]; ok {
+			reference.Reference = _instance
+		}
+	}
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _Circles []*Circle
+	for _, _reference := range reference.Circles {
+		if _instance, ok := stage.Circles_instance[_reference]; ok {
+			_Circles = append(_Circles, _instance)
+		}
+	}
+	reference.Circles = _Circles
+
+	return
+}
+
+func (reference *Content) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	// insertion point for slice of pointers fields
+	var _Chapters []*Chapter
+	for _, _reference := range reference.Chapters {
+		if _instance, ok := stage.Chapters_instance[_reference]; ok {
+			_Chapters = append(_Chapters, _instance)
+		}
+	}
+	reference.Chapters = _Chapters
+
+	return
+}
+
+func (reference *ExportToMusicxml) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.Parameter; _reference != nil {
+		reference.Parameter = nil
+		if _instance, ok := stage.Parameters_instance[_reference]; ok {
+			reference.Parameter = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *FrontCurve) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *FrontCurveStack) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _FrontCurves []*FrontCurve
+	for _, _reference := range reference.FrontCurves {
+		if _instance, ok := stage.FrontCurves_instance[_reference]; ok {
+			_FrontCurves = append(_FrontCurves, _instance)
+		}
+	}
+	reference.FrontCurves = _FrontCurves
+	var _SpiralCircles []*SpiralCircle
+	for _, _reference := range reference.SpiralCircles {
+		if _instance, ok := stage.SpiralCircles_instance[_reference]; ok {
+			_SpiralCircles = append(_SpiralCircles, _instance)
+		}
+	}
+	reference.SpiralCircles = _SpiralCircles
+
+	return
+}
+
+func (reference *HorizontalAxis) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *Key) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *Parameter) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.InitialRhombus; _reference != nil {
+		reference.InitialRhombus = nil
+		if _instance, ok := stage.Rhombuss_instance[_reference]; ok {
+			reference.InitialRhombus = _instance
+		}
+	}
+	if _reference := reference.InitialCircle; _reference != nil {
+		reference.InitialCircle = nil
+		if _instance, ok := stage.Circles_instance[_reference]; ok {
+			reference.InitialCircle = _instance
+		}
+	}
+	if _reference := reference.InitialRhombusGrid; _reference != nil {
+		reference.InitialRhombusGrid = nil
+		if _instance, ok := stage.RhombusGrids_instance[_reference]; ok {
+			reference.InitialRhombusGrid = _instance
+		}
+	}
+	if _reference := reference.InitialCircleGrid; _reference != nil {
+		reference.InitialCircleGrid = nil
+		if _instance, ok := stage.CircleGrids_instance[_reference]; ok {
+			reference.InitialCircleGrid = _instance
+		}
+	}
+	if _reference := reference.InitialAxis; _reference != nil {
+		reference.InitialAxis = nil
+		if _instance, ok := stage.Axiss_instance[_reference]; ok {
+			reference.InitialAxis = _instance
+		}
+	}
+	if _reference := reference.RotatedAxis; _reference != nil {
+		reference.RotatedAxis = nil
+		if _instance, ok := stage.Axiss_instance[_reference]; ok {
+			reference.RotatedAxis = _instance
+		}
+	}
+	if _reference := reference.RotatedRhombus; _reference != nil {
+		reference.RotatedRhombus = nil
+		if _instance, ok := stage.Rhombuss_instance[_reference]; ok {
+			reference.RotatedRhombus = _instance
+		}
+	}
+	if _reference := reference.RotatedRhombusGrid; _reference != nil {
+		reference.RotatedRhombusGrid = nil
+		if _instance, ok := stage.RhombusGrids_instance[_reference]; ok {
+			reference.RotatedRhombusGrid = _instance
+		}
+	}
+	if _reference := reference.RotatedCircleGrid; _reference != nil {
+		reference.RotatedCircleGrid = nil
+		if _instance, ok := stage.CircleGrids_instance[_reference]; ok {
+			reference.RotatedCircleGrid = _instance
+		}
+	}
+	if _reference := reference.NextRhombus; _reference != nil {
+		reference.NextRhombus = nil
+		if _instance, ok := stage.Rhombuss_instance[_reference]; ok {
+			reference.NextRhombus = _instance
+		}
+	}
+	if _reference := reference.NextCircle; _reference != nil {
+		reference.NextCircle = nil
+		if _instance, ok := stage.Circles_instance[_reference]; ok {
+			reference.NextCircle = _instance
+		}
+	}
+	if _reference := reference.GrowingRhombusGridSeed; _reference != nil {
+		reference.GrowingRhombusGridSeed = nil
+		if _instance, ok := stage.Rhombuss_instance[_reference]; ok {
+			reference.GrowingRhombusGridSeed = _instance
+		}
+	}
+	if _reference := reference.GrowingRhombusGrid; _reference != nil {
+		reference.GrowingRhombusGrid = nil
+		if _instance, ok := stage.RhombusGrids_instance[_reference]; ok {
+			reference.GrowingRhombusGrid = _instance
+		}
+	}
+	if _reference := reference.GrowingCircleGridSeed; _reference != nil {
+		reference.GrowingCircleGridSeed = nil
+		if _instance, ok := stage.Circles_instance[_reference]; ok {
+			reference.GrowingCircleGridSeed = _instance
+		}
+	}
+	if _reference := reference.GrowingCircleGrid; _reference != nil {
+		reference.GrowingCircleGrid = nil
+		if _instance, ok := stage.CircleGrids_instance[_reference]; ok {
+			reference.GrowingCircleGrid = _instance
+		}
+	}
+	if _reference := reference.GrowingCircleGridLeftSeed; _reference != nil {
+		reference.GrowingCircleGridLeftSeed = nil
+		if _instance, ok := stage.Circles_instance[_reference]; ok {
+			reference.GrowingCircleGridLeftSeed = _instance
+		}
+	}
+	if _reference := reference.GrowingCircleGridLeft; _reference != nil {
+		reference.GrowingCircleGridLeft = nil
+		if _instance, ok := stage.CircleGrids_instance[_reference]; ok {
+			reference.GrowingCircleGridLeft = _instance
+		}
+	}
+	if _reference := reference.ConstructionAxis; _reference != nil {
+		reference.ConstructionAxis = nil
+		if _instance, ok := stage.Axiss_instance[_reference]; ok {
+			reference.ConstructionAxis = _instance
+		}
+	}
+	if _reference := reference.ConstructionAxisGrid; _reference != nil {
+		reference.ConstructionAxisGrid = nil
+		if _instance, ok := stage.AxisGrids_instance[_reference]; ok {
+			reference.ConstructionAxisGrid = _instance
+		}
+	}
+	if _reference := reference.ConstructionCircle; _reference != nil {
+		reference.ConstructionCircle = nil
+		if _instance, ok := stage.Circles_instance[_reference]; ok {
+			reference.ConstructionCircle = _instance
+		}
+	}
+	if _reference := reference.ConstructionCircleGrid; _reference != nil {
+		reference.ConstructionCircleGrid = nil
+		if _instance, ok := stage.CircleGrids_instance[_reference]; ok {
+			reference.ConstructionCircleGrid = _instance
+		}
+	}
+	if _reference := reference.GrowthCurveSeed; _reference != nil {
+		reference.GrowthCurveSeed = nil
+		if _instance, ok := stage.Beziers_instance[_reference]; ok {
+			reference.GrowthCurveSeed = _instance
+		}
+	}
+	if _reference := reference.GrowthCurve; _reference != nil {
+		reference.GrowthCurve = nil
+		if _instance, ok := stage.BezierGrids_instance[_reference]; ok {
+			reference.GrowthCurve = _instance
+		}
+	}
+	if _reference := reference.GrowthCurveShiftedRightSeed; _reference != nil {
+		reference.GrowthCurveShiftedRightSeed = nil
+		if _instance, ok := stage.Beziers_instance[_reference]; ok {
+			reference.GrowthCurveShiftedRightSeed = _instance
+		}
+	}
+	if _reference := reference.GrowthCurveShiftedRight; _reference != nil {
+		reference.GrowthCurveShiftedRight = nil
+		if _instance, ok := stage.BezierGrids_instance[_reference]; ok {
+			reference.GrowthCurveShiftedRight = _instance
+		}
+	}
+	if _reference := reference.GrowthCurveNextSeed; _reference != nil {
+		reference.GrowthCurveNextSeed = nil
+		if _instance, ok := stage.Beziers_instance[_reference]; ok {
+			reference.GrowthCurveNextSeed = _instance
+		}
+	}
+	if _reference := reference.GrowthCurveNext; _reference != nil {
+		reference.GrowthCurveNext = nil
+		if _instance, ok := stage.BezierGrids_instance[_reference]; ok {
+			reference.GrowthCurveNext = _instance
+		}
+	}
+	if _reference := reference.GrowthCurveNextShiftedRightSeed; _reference != nil {
+		reference.GrowthCurveNextShiftedRightSeed = nil
+		if _instance, ok := stage.Beziers_instance[_reference]; ok {
+			reference.GrowthCurveNextShiftedRightSeed = _instance
+		}
+	}
+	if _reference := reference.GrowthCurveNextShiftedRight; _reference != nil {
+		reference.GrowthCurveNextShiftedRight = nil
+		if _instance, ok := stage.BezierGrids_instance[_reference]; ok {
+			reference.GrowthCurveNextShiftedRight = _instance
+		}
+	}
+	if _reference := reference.GrowthCurveStack; _reference != nil {
+		reference.GrowthCurveStack = nil
+		if _instance, ok := stage.BezierGridStacks_instance[_reference]; ok {
+			reference.GrowthCurveStack = _instance
+		}
+	}
+	if _reference := reference.SpiralRhombusGridSeed; _reference != nil {
+		reference.SpiralRhombusGridSeed = nil
+		if _instance, ok := stage.SpiralRhombuss_instance[_reference]; ok {
+			reference.SpiralRhombusGridSeed = _instance
+		}
+	}
+	if _reference := reference.SpiralRhombusGrid; _reference != nil {
+		reference.SpiralRhombusGrid = nil
+		if _instance, ok := stage.SpiralRhombusGrids_instance[_reference]; ok {
+			reference.SpiralRhombusGrid = _instance
+		}
+	}
+	if _reference := reference.SpiralCircleSeed; _reference != nil {
+		reference.SpiralCircleSeed = nil
+		if _instance, ok := stage.SpiralCircles_instance[_reference]; ok {
+			reference.SpiralCircleSeed = _instance
+		}
+	}
+	if _reference := reference.SpiralCircleGrid; _reference != nil {
+		reference.SpiralCircleGrid = nil
+		if _instance, ok := stage.SpiralCircleGrids_instance[_reference]; ok {
+			reference.SpiralCircleGrid = _instance
+		}
+	}
+	if _reference := reference.SpiralCircleFullGrid; _reference != nil {
+		reference.SpiralCircleFullGrid = nil
+		if _instance, ok := stage.SpiralCircleGrids_instance[_reference]; ok {
+			reference.SpiralCircleFullGrid = _instance
+		}
+	}
+	if _reference := reference.SpiralConstructionOuterLineSeed; _reference != nil {
+		reference.SpiralConstructionOuterLineSeed = nil
+		if _instance, ok := stage.SpiralLines_instance[_reference]; ok {
+			reference.SpiralConstructionOuterLineSeed = _instance
+		}
+	}
+	if _reference := reference.SpiralConstructionInnerLineSeed; _reference != nil {
+		reference.SpiralConstructionInnerLineSeed = nil
+		if _instance, ok := stage.SpiralLines_instance[_reference]; ok {
+			reference.SpiralConstructionInnerLineSeed = _instance
+		}
+	}
+	if _reference := reference.SpiralConstructionOuterLineGrid; _reference != nil {
+		reference.SpiralConstructionOuterLineGrid = nil
+		if _instance, ok := stage.SpiralLineGrids_instance[_reference]; ok {
+			reference.SpiralConstructionOuterLineGrid = _instance
+		}
+	}
+	if _reference := reference.SpiralConstructionInnerLineGrid; _reference != nil {
+		reference.SpiralConstructionInnerLineGrid = nil
+		if _instance, ok := stage.SpiralLineGrids_instance[_reference]; ok {
+			reference.SpiralConstructionInnerLineGrid = _instance
+		}
+	}
+	if _reference := reference.SpiralConstructionCircleGrid; _reference != nil {
+		reference.SpiralConstructionCircleGrid = nil
+		if _instance, ok := stage.SpiralCircleGrids_instance[_reference]; ok {
+			reference.SpiralConstructionCircleGrid = _instance
+		}
+	}
+	if _reference := reference.SpiralConstructionOuterLineFullGrid; _reference != nil {
+		reference.SpiralConstructionOuterLineFullGrid = nil
+		if _instance, ok := stage.SpiralLineGrids_instance[_reference]; ok {
+			reference.SpiralConstructionOuterLineFullGrid = _instance
+		}
+	}
+	if _reference := reference.SpiralBezierSeed; _reference != nil {
+		reference.SpiralBezierSeed = nil
+		if _instance, ok := stage.SpiralBeziers_instance[_reference]; ok {
+			reference.SpiralBezierSeed = _instance
+		}
+	}
+	if _reference := reference.SpiralBezierGrid; _reference != nil {
+		reference.SpiralBezierGrid = nil
+		if _instance, ok := stage.SpiralBezierGrids_instance[_reference]; ok {
+			reference.SpiralBezierGrid = _instance
+		}
+	}
+	if _reference := reference.SpiralBezierFullGrid; _reference != nil {
+		reference.SpiralBezierFullGrid = nil
+		if _instance, ok := stage.SpiralBezierGrids_instance[_reference]; ok {
+			reference.SpiralBezierFullGrid = _instance
+		}
+	}
+	if _reference := reference.FrontCurveStack; _reference != nil {
+		reference.FrontCurveStack = nil
+		if _instance, ok := stage.FrontCurveStacks_instance[_reference]; ok {
+			reference.FrontCurveStack = _instance
+		}
+	}
+	if _reference := reference.Fkey; _reference != nil {
+		reference.Fkey = nil
+		if _instance, ok := stage.Keys_instance[_reference]; ok {
+			reference.Fkey = _instance
+		}
+	}
+	if _reference := reference.PitchLines; _reference != nil {
+		reference.PitchLines = nil
+		if _instance, ok := stage.AxisGrids_instance[_reference]; ok {
+			reference.PitchLines = _instance
+		}
+	}
+	if _reference := reference.BeatLines; _reference != nil {
+		reference.BeatLines = nil
+		if _instance, ok := stage.AxisGrids_instance[_reference]; ok {
+			reference.BeatLines = _instance
+		}
+	}
+	if _reference := reference.FirstVoice; _reference != nil {
+		reference.FirstVoice = nil
+		if _instance, ok := stage.BezierGrids_instance[_reference]; ok {
+			reference.FirstVoice = _instance
+		}
+	}
+	if _reference := reference.FirstVoiceShiftedRigth; _reference != nil {
+		reference.FirstVoiceShiftedRigth = nil
+		if _instance, ok := stage.BezierGrids_instance[_reference]; ok {
+			reference.FirstVoiceShiftedRigth = _instance
+		}
+	}
+	if _reference := reference.SecondVoice; _reference != nil {
+		reference.SecondVoice = nil
+		if _instance, ok := stage.BezierGrids_instance[_reference]; ok {
+			reference.SecondVoice = _instance
+		}
+	}
+	if _reference := reference.SecondVoiceShiftedRight; _reference != nil {
+		reference.SecondVoiceShiftedRight = nil
+		if _instance, ok := stage.BezierGrids_instance[_reference]; ok {
+			reference.SecondVoiceShiftedRight = _instance
+		}
+	}
+	if _reference := reference.FirstVoiceNotes; _reference != nil {
+		reference.FirstVoiceNotes = nil
+		if _instance, ok := stage.CircleGrids_instance[_reference]; ok {
+			reference.FirstVoiceNotes = _instance
+		}
+	}
+	if _reference := reference.FirstVoiceNotesShiftedRight; _reference != nil {
+		reference.FirstVoiceNotesShiftedRight = nil
+		if _instance, ok := stage.CircleGrids_instance[_reference]; ok {
+			reference.FirstVoiceNotesShiftedRight = _instance
+		}
+	}
+	if _reference := reference.SecondVoiceNotes; _reference != nil {
+		reference.SecondVoiceNotes = nil
+		if _instance, ok := stage.CircleGrids_instance[_reference]; ok {
+			reference.SecondVoiceNotes = _instance
+		}
+	}
+	if _reference := reference.SecondVoiceNotesShiftedRight; _reference != nil {
+		reference.SecondVoiceNotesShiftedRight = nil
+		if _instance, ok := stage.CircleGrids_instance[_reference]; ok {
+			reference.SecondVoiceNotesShiftedRight = _instance
+		}
+	}
+	if _reference := reference.HorizontalAxis; _reference != nil {
+		reference.HorizontalAxis = nil
+		if _instance, ok := stage.HorizontalAxiss_instance[_reference]; ok {
+			reference.HorizontalAxis = _instance
+		}
+	}
+	if _reference := reference.VerticalAxis; _reference != nil {
+		reference.VerticalAxis = nil
+		if _instance, ok := stage.VerticalAxiss_instance[_reference]; ok {
+			reference.VerticalAxis = _instance
+		}
+	}
+	if _reference := reference.SpiralOrigin; _reference != nil {
+		reference.SpiralOrigin = nil
+		if _instance, ok := stage.SpiralOrigins_instance[_reference]; ok {
+			reference.SpiralOrigin = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *Rhombus) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *RhombusGrid) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.Reference; _reference != nil {
+		reference.Reference = nil
+		if _instance, ok := stage.Rhombuss_instance[_reference]; ok {
+			reference.Reference = _instance
+		}
+	}
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _Rhombuses []*Rhombus
+	for _, _reference := range reference.Rhombuses {
+		if _instance, ok := stage.Rhombuss_instance[_reference]; ok {
+			_Rhombuses = append(_Rhombuses, _instance)
+		}
+	}
+	reference.Rhombuses = _Rhombuses
+
+	return
+}
+
+func (reference *ShapeCategory) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *SpiralBezier) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *SpiralBezierGrid) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _SpiralBeziers []*SpiralBezier
+	for _, _reference := range reference.SpiralBeziers {
+		if _instance, ok := stage.SpiralBeziers_instance[_reference]; ok {
+			_SpiralBeziers = append(_SpiralBeziers, _instance)
+		}
+	}
+	reference.SpiralBeziers = _SpiralBeziers
+
+	return
+}
+
+func (reference *SpiralCircle) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *SpiralCircleGrid) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	if _reference := reference.SpiralRhombusGrid; _reference != nil {
+		reference.SpiralRhombusGrid = nil
+		if _instance, ok := stage.SpiralRhombusGrids_instance[_reference]; ok {
+			reference.SpiralRhombusGrid = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _SpiralCircles []*SpiralCircle
+	for _, _reference := range reference.SpiralCircles {
+		if _instance, ok := stage.SpiralCircles_instance[_reference]; ok {
+			_SpiralCircles = append(_SpiralCircles, _instance)
+		}
+	}
+	reference.SpiralCircles = _SpiralCircles
+
+	return
+}
+
+func (reference *SpiralLine) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *SpiralLineGrid) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _SpiralLines []*SpiralLine
+	for _, _reference := range reference.SpiralLines {
+		if _instance, ok := stage.SpiralLines_instance[_reference]; ok {
+			_SpiralLines = append(_SpiralLines, _instance)
+		}
+	}
+	reference.SpiralLines = _SpiralLines
+
+	return
+}
+
+func (reference *SpiralOrigin) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *SpiralRhombus) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
+func (reference *SpiralRhombusGrid) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+	var _SpiralRhombuses []*SpiralRhombus
+	for _, _reference := range reference.SpiralRhombuses {
+		if _instance, ok := stage.SpiralRhombuss_instance[_reference]; ok {
+			_SpiralRhombuses = append(_SpiralRhombuses, _instance)
+		}
+	}
+	reference.SpiralRhombuses = _SpiralRhombuses
+
+	return
+}
+
+func (reference *VerticalAxis) GongReconstructPointersFromInstances(stage *Stage) () {
+	// insertion point for pointers field
+	if _reference := reference.ShapeCategory; _reference != nil {
+		reference.ShapeCategory = nil
+		if _instance, ok := stage.ShapeCategorys_instance[_reference]; ok {
+			reference.ShapeCategory = _instance
+		}
+	}
+	// insertion point for slice of pointers fields
+
+	return
+}
+
 // insertion point for diff per struct
 // GongDiff computes the diff between the instance and another instance of same gong struct type
 // and returns the list of differences as strings

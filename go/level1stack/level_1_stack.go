@@ -4,7 +4,6 @@ package level1stack
 import (
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/thomaspeugeot/phyllotaxymusic/go/models"
@@ -26,24 +25,23 @@ type BeforeCommitImplementation struct {
 
 func (impl *BeforeCommitImplementation) BeforeCommit(stage *models.Stage) {
 
+	if stage.GetGongMarshallingMode() == models.GongMarshallingAppendCommit {
+		stage.ComputeForwardAndBackwardCommits()
+		stage.ComputeReferenceAndOrders()
+	}
+
 	// the ".go" is not provided
 	filename := impl.marshallOnCommit
 	if !strings.HasSuffix(filename, ".go") {
 		filename = filename + ".go"
 	}
 
-	file, err := os.Create(fmt.Sprintf("./%s", filename))
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	defer file.Close()
-
 	packageName := impl.packageName
 	if packageName == "" {
 		packageName = "main"
 	}
 
-	stage.Marshall(file, "github.com/thomaspeugeot/phyllotaxymusic/go/models", packageName)
+	stage.MarshallFile(fmt.Sprintf("./%s", filename), "github.com/thomaspeugeot/phyllotaxymusic/go/models", packageName)
 }
 
 type Level1Stack struct {
@@ -59,34 +57,26 @@ func NewLevel1Stack(
 	withProbe bool,
 	embeddedDiagrams bool,
 ) (level1Stack *Level1Stack) {
+	return NewLevel1StackDelta(stackPath, unmarshallFromCode, marshallOnCommit, withProbe, embeddedDiagrams, false)
+}
+
+func NewLevel1StackDelta(
+	stackPath string,
+	unmarshallFromCode string,
+	marshallOnCommit string,
+	withProbe bool,
+	embeddedDiagrams bool,
+	deltaMode bool,
+) (level1Stack *Level1Stack) {
 
 	level1Stack = new(Level1Stack)
 	stage := models.NewStage(stackPath)
+
+	if deltaMode {
+		stage.SetDeltaMode(true)
+	}
+
 	level1Stack.Stage = stage
-
-	if unmarshallFromCode != "" {
-		err := models.ParseAstFile(stage, unmarshallFromCode, true)
-
-		// if the application is run with -unmarshallFromCode=xxx.go -marshallOnCommit
-		// xxx.go might be absent the first time. However, this shall not be a show stopper.
-		if err != nil {
-			log.Println("no file to read " + err.Error())
-		}
-
-		stage.ComputeReverseMaps()
-		stage.ComputeInstancesNb()
-		stage.ComputeReference()
-	} else {
-		// in case the database is used, checkout the content to the stage
-		stage.Checkout()
-	}
-
-	// hook automatic marshall to go code at every commit
-	if marshallOnCommit != "" {
-		hook := new(BeforeCommitImplementation)
-		hook.marshallOnCommit = marshallOnCommit
-		stage.OnInitCommitCallback = hook
-	}
 
 	level1Stack.R = split_static.ServeStaticFiles(false)
 	if withProbe {
@@ -102,6 +92,30 @@ func NewLevel1Stack(
 		)
 
 		stage.SetProbeIF(level1Stack.Probe)
+	}
+
+	if unmarshallFromCode != "" {
+		err := models.ParseAstFile(stage, unmarshallFromCode, true)
+
+		// if the application is run with -unmarshallFromCode=xxx.go -marshallOnCommit
+		// xxx.go might be absent the first time. However, this shall not be a show stopper.
+		if err != nil {
+			log.Println("no file to read " + err.Error())
+		}
+
+		stage.ComputeReverseMaps()
+		stage.ComputeInstancesNb()
+		stage.ComputeReferenceAndOrders()
+	} else {
+		// in case the database is used, checkout the content to the stage
+		stage.Checkout()
+	}
+
+	// hook automatic marshall to go code at every commit
+	if marshallOnCommit != "" {
+		hook := new(BeforeCommitImplementation)
+		hook.marshallOnCommit = marshallOnCommit
+		stage.OnInitCommitCallback = hook
 	}
 
 	// add orchestration

@@ -11,6 +11,7 @@ import (
 	"slices"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	phyllotaxymusic_go "github.com/thomaspeugeot/phyllotaxymusic/go"
@@ -26,17 +27,36 @@ func __Gong__Abs(x int) int {
 	return x
 }
 
-var _ = __Gong__Abs
-var _ = strings.Clone("")
+var (
+	_ = __Gong__Abs
+	_ = strings.Clone("")
+)
 
-const ProbeTreeSidebarSuffix = ":sidebar of the probe"
-const ProbeTableSuffix = ":table of the probe"
-const ProbeNotificationTableSuffix = ":notification table of the probe"
-const ProbeFormSuffix = ":form of the probe"
-const ProbeSplitSuffix = ":probe of the probe"
+const (
+	ProbeTreeSidebarSuffix           = ":sidebar of the probe"
+	ProbeNavigationTreeSidebarSuffix = ":sidebar of the probe, navigation"
+	ProbeTableSuffix                 = ":table of the probe"
+	ProbeNotificationTableSuffix     = ":notification table of the probe"
+	ProbeFormSuffix                  = ":form of the probe"
+	ProbeSplitSuffix                 = ":probe of the probe"
+)
+
+type GongMarshallingMode string
+
+const (
+	// the whole stage is generated at each marshall. This is the default
+	GongMarshallingNormal GongMarshallingMode = "GongMarshallingNormal"
+
+	// only the last commit is append to the marshall file
+	GongMarshallingAppendCommit GongMarshallingMode = "GongMarshallingAppendCommit"
+)
 
 func (stage *Stage) GetProbeTreeSidebarStageName() string {
 	return stage.GetType() + ":" + stage.GetName() + ProbeTreeSidebarSuffix
+}
+
+func (stage *Stage) GetProbeNavigationTreeSidebarStageName() string {
+	return stage.GetType() + ":" + stage.GetName() + ProbeNavigationTreeSidebarSuffix
 }
 
 func (stage *Stage) GetProbeFormStageName() string {
@@ -56,8 +76,10 @@ func (stage *Stage) GetProbeSplitStageName() string {
 }
 
 // errUnkownEnum is returns when a value cannot match enum values
-var errUnkownEnum = errors.New("unkown enum")
-var _ = errUnkownEnum
+var (
+	errUnkownEnum = errors.New("unkown enum")
+	_             = errUnkownEnum
+)
 
 // needed to avoid when fmt package is not needed by generated code
 var __dummy__fmt_variable fmt.Scanner
@@ -73,8 +95,10 @@ var _ = __dummy_math_variable
 type __void any
 
 // needed for creating set of instances in the stage
-var __member __void
-var _ = __member
+var (
+	__member __void
+	_        = __member
+)
 
 // GongStructInterface is the interface met by GongStructs
 // It allows runtime reflexion of instances (without the hassle of the "reflect" package)
@@ -95,11 +119,20 @@ type Stage struct {
 	// succesive commit
 	isInDeltaMode bool
 
+	// gongMarshallingMode set the marshalling mode
+	gongMarshallingMode GongMarshallingMode
+	// some stages have semantic rules that forbids them to be empty
+	// like for git, the commit #0 (genesis commit) cannot be rolled back
+	isWithGenesisCommit bool
+
 	// insertion point for definition of arrays registering instances
 	Axiss                map[*Axis]struct{}
-	Axiss_reference      map[*Axis]*Axis
-	Axiss_referenceOrder map[*Axis]uint // diff Unstage needs the reference order
+	Axiss_instance       map[*Axis]*Axis
 	Axiss_mapString      map[string]*Axis
+	AxisOrder            uint
+	Axis_stagedOrder     map[*Axis]uint
+	Axiss_reference      map[*Axis]*Axis
+	Axiss_referenceOrder map[*Axis]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterAxisCreateCallback OnAfterCreateInterface[Axis]
@@ -108,9 +141,12 @@ type Stage struct {
 	OnAfterAxisReadCallback   OnAfterReadInterface[Axis]
 
 	AxisGrids                map[*AxisGrid]struct{}
-	AxisGrids_reference      map[*AxisGrid]*AxisGrid
-	AxisGrids_referenceOrder map[*AxisGrid]uint // diff Unstage needs the reference order
+	AxisGrids_instance       map[*AxisGrid]*AxisGrid
 	AxisGrids_mapString      map[string]*AxisGrid
+	AxisGridOrder            uint
+	AxisGrid_stagedOrder     map[*AxisGrid]uint
+	AxisGrids_reference      map[*AxisGrid]*AxisGrid
+	AxisGrids_referenceOrder map[*AxisGrid]uint
 
 	// insertion point for slice of pointers maps
 	AxisGrid_Axiss_reverseMap map[*Axis]*AxisGrid
@@ -121,9 +157,12 @@ type Stage struct {
 	OnAfterAxisGridReadCallback   OnAfterReadInterface[AxisGrid]
 
 	Beziers                map[*Bezier]struct{}
-	Beziers_reference      map[*Bezier]*Bezier
-	Beziers_referenceOrder map[*Bezier]uint // diff Unstage needs the reference order
+	Beziers_instance       map[*Bezier]*Bezier
 	Beziers_mapString      map[string]*Bezier
+	BezierOrder            uint
+	Bezier_stagedOrder     map[*Bezier]uint
+	Beziers_reference      map[*Bezier]*Bezier
+	Beziers_referenceOrder map[*Bezier]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterBezierCreateCallback OnAfterCreateInterface[Bezier]
@@ -132,9 +171,12 @@ type Stage struct {
 	OnAfterBezierReadCallback   OnAfterReadInterface[Bezier]
 
 	BezierGrids                map[*BezierGrid]struct{}
-	BezierGrids_reference      map[*BezierGrid]*BezierGrid
-	BezierGrids_referenceOrder map[*BezierGrid]uint // diff Unstage needs the reference order
+	BezierGrids_instance       map[*BezierGrid]*BezierGrid
 	BezierGrids_mapString      map[string]*BezierGrid
+	BezierGridOrder            uint
+	BezierGrid_stagedOrder     map[*BezierGrid]uint
+	BezierGrids_reference      map[*BezierGrid]*BezierGrid
+	BezierGrids_referenceOrder map[*BezierGrid]uint
 
 	// insertion point for slice of pointers maps
 	BezierGrid_Beziers_reverseMap map[*Bezier]*BezierGrid
@@ -145,9 +187,12 @@ type Stage struct {
 	OnAfterBezierGridReadCallback   OnAfterReadInterface[BezierGrid]
 
 	BezierGridStacks                map[*BezierGridStack]struct{}
-	BezierGridStacks_reference      map[*BezierGridStack]*BezierGridStack
-	BezierGridStacks_referenceOrder map[*BezierGridStack]uint // diff Unstage needs the reference order
+	BezierGridStacks_instance       map[*BezierGridStack]*BezierGridStack
 	BezierGridStacks_mapString      map[string]*BezierGridStack
+	BezierGridStackOrder            uint
+	BezierGridStack_stagedOrder     map[*BezierGridStack]uint
+	BezierGridStacks_reference      map[*BezierGridStack]*BezierGridStack
+	BezierGridStacks_referenceOrder map[*BezierGridStack]uint
 
 	// insertion point for slice of pointers maps
 	BezierGridStack_BezierGrids_reverseMap map[*BezierGrid]*BezierGridStack
@@ -158,9 +203,12 @@ type Stage struct {
 	OnAfterBezierGridStackReadCallback   OnAfterReadInterface[BezierGridStack]
 
 	Chapters                map[*Chapter]struct{}
-	Chapters_reference      map[*Chapter]*Chapter
-	Chapters_referenceOrder map[*Chapter]uint // diff Unstage needs the reference order
+	Chapters_instance       map[*Chapter]*Chapter
 	Chapters_mapString      map[string]*Chapter
+	ChapterOrder            uint
+	Chapter_stagedOrder     map[*Chapter]uint
+	Chapters_reference      map[*Chapter]*Chapter
+	Chapters_referenceOrder map[*Chapter]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterChapterCreateCallback OnAfterCreateInterface[Chapter]
@@ -169,9 +217,12 @@ type Stage struct {
 	OnAfterChapterReadCallback   OnAfterReadInterface[Chapter]
 
 	Circles                map[*Circle]struct{}
-	Circles_reference      map[*Circle]*Circle
-	Circles_referenceOrder map[*Circle]uint // diff Unstage needs the reference order
+	Circles_instance       map[*Circle]*Circle
 	Circles_mapString      map[string]*Circle
+	CircleOrder            uint
+	Circle_stagedOrder     map[*Circle]uint
+	Circles_reference      map[*Circle]*Circle
+	Circles_referenceOrder map[*Circle]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterCircleCreateCallback OnAfterCreateInterface[Circle]
@@ -180,9 +231,12 @@ type Stage struct {
 	OnAfterCircleReadCallback   OnAfterReadInterface[Circle]
 
 	CircleGrids                map[*CircleGrid]struct{}
-	CircleGrids_reference      map[*CircleGrid]*CircleGrid
-	CircleGrids_referenceOrder map[*CircleGrid]uint // diff Unstage needs the reference order
+	CircleGrids_instance       map[*CircleGrid]*CircleGrid
 	CircleGrids_mapString      map[string]*CircleGrid
+	CircleGridOrder            uint
+	CircleGrid_stagedOrder     map[*CircleGrid]uint
+	CircleGrids_reference      map[*CircleGrid]*CircleGrid
+	CircleGrids_referenceOrder map[*CircleGrid]uint
 
 	// insertion point for slice of pointers maps
 	CircleGrid_Circles_reverseMap map[*Circle]*CircleGrid
@@ -193,9 +247,12 @@ type Stage struct {
 	OnAfterCircleGridReadCallback   OnAfterReadInterface[CircleGrid]
 
 	Contents                map[*Content]struct{}
-	Contents_reference      map[*Content]*Content
-	Contents_referenceOrder map[*Content]uint // diff Unstage needs the reference order
+	Contents_instance       map[*Content]*Content
 	Contents_mapString      map[string]*Content
+	ContentOrder            uint
+	Content_stagedOrder     map[*Content]uint
+	Contents_reference      map[*Content]*Content
+	Contents_referenceOrder map[*Content]uint
 
 	// insertion point for slice of pointers maps
 	Content_Chapters_reverseMap map[*Chapter]*Content
@@ -206,9 +263,12 @@ type Stage struct {
 	OnAfterContentReadCallback   OnAfterReadInterface[Content]
 
 	ExportToMusicxmls                map[*ExportToMusicxml]struct{}
-	ExportToMusicxmls_reference      map[*ExportToMusicxml]*ExportToMusicxml
-	ExportToMusicxmls_referenceOrder map[*ExportToMusicxml]uint // diff Unstage needs the reference order
+	ExportToMusicxmls_instance       map[*ExportToMusicxml]*ExportToMusicxml
 	ExportToMusicxmls_mapString      map[string]*ExportToMusicxml
+	ExportToMusicxmlOrder            uint
+	ExportToMusicxml_stagedOrder     map[*ExportToMusicxml]uint
+	ExportToMusicxmls_reference      map[*ExportToMusicxml]*ExportToMusicxml
+	ExportToMusicxmls_referenceOrder map[*ExportToMusicxml]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterExportToMusicxmlCreateCallback OnAfterCreateInterface[ExportToMusicxml]
@@ -217,9 +277,12 @@ type Stage struct {
 	OnAfterExportToMusicxmlReadCallback   OnAfterReadInterface[ExportToMusicxml]
 
 	FrontCurves                map[*FrontCurve]struct{}
-	FrontCurves_reference      map[*FrontCurve]*FrontCurve
-	FrontCurves_referenceOrder map[*FrontCurve]uint // diff Unstage needs the reference order
+	FrontCurves_instance       map[*FrontCurve]*FrontCurve
 	FrontCurves_mapString      map[string]*FrontCurve
+	FrontCurveOrder            uint
+	FrontCurve_stagedOrder     map[*FrontCurve]uint
+	FrontCurves_reference      map[*FrontCurve]*FrontCurve
+	FrontCurves_referenceOrder map[*FrontCurve]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterFrontCurveCreateCallback OnAfterCreateInterface[FrontCurve]
@@ -228,9 +291,12 @@ type Stage struct {
 	OnAfterFrontCurveReadCallback   OnAfterReadInterface[FrontCurve]
 
 	FrontCurveStacks                map[*FrontCurveStack]struct{}
-	FrontCurveStacks_reference      map[*FrontCurveStack]*FrontCurveStack
-	FrontCurveStacks_referenceOrder map[*FrontCurveStack]uint // diff Unstage needs the reference order
+	FrontCurveStacks_instance       map[*FrontCurveStack]*FrontCurveStack
 	FrontCurveStacks_mapString      map[string]*FrontCurveStack
+	FrontCurveStackOrder            uint
+	FrontCurveStack_stagedOrder     map[*FrontCurveStack]uint
+	FrontCurveStacks_reference      map[*FrontCurveStack]*FrontCurveStack
+	FrontCurveStacks_referenceOrder map[*FrontCurveStack]uint
 
 	// insertion point for slice of pointers maps
 	FrontCurveStack_FrontCurves_reverseMap map[*FrontCurve]*FrontCurveStack
@@ -243,9 +309,12 @@ type Stage struct {
 	OnAfterFrontCurveStackReadCallback   OnAfterReadInterface[FrontCurveStack]
 
 	HorizontalAxiss                map[*HorizontalAxis]struct{}
-	HorizontalAxiss_reference      map[*HorizontalAxis]*HorizontalAxis
-	HorizontalAxiss_referenceOrder map[*HorizontalAxis]uint // diff Unstage needs the reference order
+	HorizontalAxiss_instance       map[*HorizontalAxis]*HorizontalAxis
 	HorizontalAxiss_mapString      map[string]*HorizontalAxis
+	HorizontalAxisOrder            uint
+	HorizontalAxis_stagedOrder     map[*HorizontalAxis]uint
+	HorizontalAxiss_reference      map[*HorizontalAxis]*HorizontalAxis
+	HorizontalAxiss_referenceOrder map[*HorizontalAxis]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterHorizontalAxisCreateCallback OnAfterCreateInterface[HorizontalAxis]
@@ -254,9 +323,12 @@ type Stage struct {
 	OnAfterHorizontalAxisReadCallback   OnAfterReadInterface[HorizontalAxis]
 
 	Keys                map[*Key]struct{}
-	Keys_reference      map[*Key]*Key
-	Keys_referenceOrder map[*Key]uint // diff Unstage needs the reference order
+	Keys_instance       map[*Key]*Key
 	Keys_mapString      map[string]*Key
+	KeyOrder            uint
+	Key_stagedOrder     map[*Key]uint
+	Keys_reference      map[*Key]*Key
+	Keys_referenceOrder map[*Key]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterKeyCreateCallback OnAfterCreateInterface[Key]
@@ -265,9 +337,12 @@ type Stage struct {
 	OnAfterKeyReadCallback   OnAfterReadInterface[Key]
 
 	Parameters                map[*Parameter]struct{}
-	Parameters_reference      map[*Parameter]*Parameter
-	Parameters_referenceOrder map[*Parameter]uint // diff Unstage needs the reference order
+	Parameters_instance       map[*Parameter]*Parameter
 	Parameters_mapString      map[string]*Parameter
+	ParameterOrder            uint
+	Parameter_stagedOrder     map[*Parameter]uint
+	Parameters_reference      map[*Parameter]*Parameter
+	Parameters_referenceOrder map[*Parameter]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterParameterCreateCallback OnAfterCreateInterface[Parameter]
@@ -276,9 +351,12 @@ type Stage struct {
 	OnAfterParameterReadCallback   OnAfterReadInterface[Parameter]
 
 	Rhombuss                map[*Rhombus]struct{}
-	Rhombuss_reference      map[*Rhombus]*Rhombus
-	Rhombuss_referenceOrder map[*Rhombus]uint // diff Unstage needs the reference order
+	Rhombuss_instance       map[*Rhombus]*Rhombus
 	Rhombuss_mapString      map[string]*Rhombus
+	RhombusOrder            uint
+	Rhombus_stagedOrder     map[*Rhombus]uint
+	Rhombuss_reference      map[*Rhombus]*Rhombus
+	Rhombuss_referenceOrder map[*Rhombus]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterRhombusCreateCallback OnAfterCreateInterface[Rhombus]
@@ -287,9 +365,12 @@ type Stage struct {
 	OnAfterRhombusReadCallback   OnAfterReadInterface[Rhombus]
 
 	RhombusGrids                map[*RhombusGrid]struct{}
-	RhombusGrids_reference      map[*RhombusGrid]*RhombusGrid
-	RhombusGrids_referenceOrder map[*RhombusGrid]uint // diff Unstage needs the reference order
+	RhombusGrids_instance       map[*RhombusGrid]*RhombusGrid
 	RhombusGrids_mapString      map[string]*RhombusGrid
+	RhombusGridOrder            uint
+	RhombusGrid_stagedOrder     map[*RhombusGrid]uint
+	RhombusGrids_reference      map[*RhombusGrid]*RhombusGrid
+	RhombusGrids_referenceOrder map[*RhombusGrid]uint
 
 	// insertion point for slice of pointers maps
 	RhombusGrid_Rhombuses_reverseMap map[*Rhombus]*RhombusGrid
@@ -300,9 +381,12 @@ type Stage struct {
 	OnAfterRhombusGridReadCallback   OnAfterReadInterface[RhombusGrid]
 
 	ShapeCategorys                map[*ShapeCategory]struct{}
-	ShapeCategorys_reference      map[*ShapeCategory]*ShapeCategory
-	ShapeCategorys_referenceOrder map[*ShapeCategory]uint // diff Unstage needs the reference order
+	ShapeCategorys_instance       map[*ShapeCategory]*ShapeCategory
 	ShapeCategorys_mapString      map[string]*ShapeCategory
+	ShapeCategoryOrder            uint
+	ShapeCategory_stagedOrder     map[*ShapeCategory]uint
+	ShapeCategorys_reference      map[*ShapeCategory]*ShapeCategory
+	ShapeCategorys_referenceOrder map[*ShapeCategory]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterShapeCategoryCreateCallback OnAfterCreateInterface[ShapeCategory]
@@ -311,9 +395,12 @@ type Stage struct {
 	OnAfterShapeCategoryReadCallback   OnAfterReadInterface[ShapeCategory]
 
 	SpiralBeziers                map[*SpiralBezier]struct{}
-	SpiralBeziers_reference      map[*SpiralBezier]*SpiralBezier
-	SpiralBeziers_referenceOrder map[*SpiralBezier]uint // diff Unstage needs the reference order
+	SpiralBeziers_instance       map[*SpiralBezier]*SpiralBezier
 	SpiralBeziers_mapString      map[string]*SpiralBezier
+	SpiralBezierOrder            uint
+	SpiralBezier_stagedOrder     map[*SpiralBezier]uint
+	SpiralBeziers_reference      map[*SpiralBezier]*SpiralBezier
+	SpiralBeziers_referenceOrder map[*SpiralBezier]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralBezierCreateCallback OnAfterCreateInterface[SpiralBezier]
@@ -322,9 +409,12 @@ type Stage struct {
 	OnAfterSpiralBezierReadCallback   OnAfterReadInterface[SpiralBezier]
 
 	SpiralBezierGrids                map[*SpiralBezierGrid]struct{}
-	SpiralBezierGrids_reference      map[*SpiralBezierGrid]*SpiralBezierGrid
-	SpiralBezierGrids_referenceOrder map[*SpiralBezierGrid]uint // diff Unstage needs the reference order
+	SpiralBezierGrids_instance       map[*SpiralBezierGrid]*SpiralBezierGrid
 	SpiralBezierGrids_mapString      map[string]*SpiralBezierGrid
+	SpiralBezierGridOrder            uint
+	SpiralBezierGrid_stagedOrder     map[*SpiralBezierGrid]uint
+	SpiralBezierGrids_reference      map[*SpiralBezierGrid]*SpiralBezierGrid
+	SpiralBezierGrids_referenceOrder map[*SpiralBezierGrid]uint
 
 	// insertion point for slice of pointers maps
 	SpiralBezierGrid_SpiralBeziers_reverseMap map[*SpiralBezier]*SpiralBezierGrid
@@ -335,9 +425,12 @@ type Stage struct {
 	OnAfterSpiralBezierGridReadCallback   OnAfterReadInterface[SpiralBezierGrid]
 
 	SpiralCircles                map[*SpiralCircle]struct{}
-	SpiralCircles_reference      map[*SpiralCircle]*SpiralCircle
-	SpiralCircles_referenceOrder map[*SpiralCircle]uint // diff Unstage needs the reference order
+	SpiralCircles_instance       map[*SpiralCircle]*SpiralCircle
 	SpiralCircles_mapString      map[string]*SpiralCircle
+	SpiralCircleOrder            uint
+	SpiralCircle_stagedOrder     map[*SpiralCircle]uint
+	SpiralCircles_reference      map[*SpiralCircle]*SpiralCircle
+	SpiralCircles_referenceOrder map[*SpiralCircle]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralCircleCreateCallback OnAfterCreateInterface[SpiralCircle]
@@ -346,9 +439,12 @@ type Stage struct {
 	OnAfterSpiralCircleReadCallback   OnAfterReadInterface[SpiralCircle]
 
 	SpiralCircleGrids                map[*SpiralCircleGrid]struct{}
-	SpiralCircleGrids_reference      map[*SpiralCircleGrid]*SpiralCircleGrid
-	SpiralCircleGrids_referenceOrder map[*SpiralCircleGrid]uint // diff Unstage needs the reference order
+	SpiralCircleGrids_instance       map[*SpiralCircleGrid]*SpiralCircleGrid
 	SpiralCircleGrids_mapString      map[string]*SpiralCircleGrid
+	SpiralCircleGridOrder            uint
+	SpiralCircleGrid_stagedOrder     map[*SpiralCircleGrid]uint
+	SpiralCircleGrids_reference      map[*SpiralCircleGrid]*SpiralCircleGrid
+	SpiralCircleGrids_referenceOrder map[*SpiralCircleGrid]uint
 
 	// insertion point for slice of pointers maps
 	SpiralCircleGrid_SpiralCircles_reverseMap map[*SpiralCircle]*SpiralCircleGrid
@@ -359,9 +455,12 @@ type Stage struct {
 	OnAfterSpiralCircleGridReadCallback   OnAfterReadInterface[SpiralCircleGrid]
 
 	SpiralLines                map[*SpiralLine]struct{}
-	SpiralLines_reference      map[*SpiralLine]*SpiralLine
-	SpiralLines_referenceOrder map[*SpiralLine]uint // diff Unstage needs the reference order
+	SpiralLines_instance       map[*SpiralLine]*SpiralLine
 	SpiralLines_mapString      map[string]*SpiralLine
+	SpiralLineOrder            uint
+	SpiralLine_stagedOrder     map[*SpiralLine]uint
+	SpiralLines_reference      map[*SpiralLine]*SpiralLine
+	SpiralLines_referenceOrder map[*SpiralLine]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralLineCreateCallback OnAfterCreateInterface[SpiralLine]
@@ -370,9 +469,12 @@ type Stage struct {
 	OnAfterSpiralLineReadCallback   OnAfterReadInterface[SpiralLine]
 
 	SpiralLineGrids                map[*SpiralLineGrid]struct{}
-	SpiralLineGrids_reference      map[*SpiralLineGrid]*SpiralLineGrid
-	SpiralLineGrids_referenceOrder map[*SpiralLineGrid]uint // diff Unstage needs the reference order
+	SpiralLineGrids_instance       map[*SpiralLineGrid]*SpiralLineGrid
 	SpiralLineGrids_mapString      map[string]*SpiralLineGrid
+	SpiralLineGridOrder            uint
+	SpiralLineGrid_stagedOrder     map[*SpiralLineGrid]uint
+	SpiralLineGrids_reference      map[*SpiralLineGrid]*SpiralLineGrid
+	SpiralLineGrids_referenceOrder map[*SpiralLineGrid]uint
 
 	// insertion point for slice of pointers maps
 	SpiralLineGrid_SpiralLines_reverseMap map[*SpiralLine]*SpiralLineGrid
@@ -383,9 +485,12 @@ type Stage struct {
 	OnAfterSpiralLineGridReadCallback   OnAfterReadInterface[SpiralLineGrid]
 
 	SpiralOrigins                map[*SpiralOrigin]struct{}
-	SpiralOrigins_reference      map[*SpiralOrigin]*SpiralOrigin
-	SpiralOrigins_referenceOrder map[*SpiralOrigin]uint // diff Unstage needs the reference order
+	SpiralOrigins_instance       map[*SpiralOrigin]*SpiralOrigin
 	SpiralOrigins_mapString      map[string]*SpiralOrigin
+	SpiralOriginOrder            uint
+	SpiralOrigin_stagedOrder     map[*SpiralOrigin]uint
+	SpiralOrigins_reference      map[*SpiralOrigin]*SpiralOrigin
+	SpiralOrigins_referenceOrder map[*SpiralOrigin]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralOriginCreateCallback OnAfterCreateInterface[SpiralOrigin]
@@ -394,9 +499,12 @@ type Stage struct {
 	OnAfterSpiralOriginReadCallback   OnAfterReadInterface[SpiralOrigin]
 
 	SpiralRhombuss                map[*SpiralRhombus]struct{}
-	SpiralRhombuss_reference      map[*SpiralRhombus]*SpiralRhombus
-	SpiralRhombuss_referenceOrder map[*SpiralRhombus]uint // diff Unstage needs the reference order
+	SpiralRhombuss_instance       map[*SpiralRhombus]*SpiralRhombus
 	SpiralRhombuss_mapString      map[string]*SpiralRhombus
+	SpiralRhombusOrder            uint
+	SpiralRhombus_stagedOrder     map[*SpiralRhombus]uint
+	SpiralRhombuss_reference      map[*SpiralRhombus]*SpiralRhombus
+	SpiralRhombuss_referenceOrder map[*SpiralRhombus]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterSpiralRhombusCreateCallback OnAfterCreateInterface[SpiralRhombus]
@@ -405,9 +513,12 @@ type Stage struct {
 	OnAfterSpiralRhombusReadCallback   OnAfterReadInterface[SpiralRhombus]
 
 	SpiralRhombusGrids                map[*SpiralRhombusGrid]struct{}
-	SpiralRhombusGrids_reference      map[*SpiralRhombusGrid]*SpiralRhombusGrid
-	SpiralRhombusGrids_referenceOrder map[*SpiralRhombusGrid]uint // diff Unstage needs the reference order
+	SpiralRhombusGrids_instance       map[*SpiralRhombusGrid]*SpiralRhombusGrid
 	SpiralRhombusGrids_mapString      map[string]*SpiralRhombusGrid
+	SpiralRhombusGridOrder            uint
+	SpiralRhombusGrid_stagedOrder     map[*SpiralRhombusGrid]uint
+	SpiralRhombusGrids_reference      map[*SpiralRhombusGrid]*SpiralRhombusGrid
+	SpiralRhombusGrids_referenceOrder map[*SpiralRhombusGrid]uint
 
 	// insertion point for slice of pointers maps
 	SpiralRhombusGrid_SpiralRhombuses_reverseMap map[*SpiralRhombus]*SpiralRhombusGrid
@@ -418,9 +529,12 @@ type Stage struct {
 	OnAfterSpiralRhombusGridReadCallback   OnAfterReadInterface[SpiralRhombusGrid]
 
 	VerticalAxiss                map[*VerticalAxis]struct{}
-	VerticalAxiss_reference      map[*VerticalAxis]*VerticalAxis
-	VerticalAxiss_referenceOrder map[*VerticalAxis]uint // diff Unstage needs the reference order
+	VerticalAxiss_instance       map[*VerticalAxis]*VerticalAxis
 	VerticalAxiss_mapString      map[string]*VerticalAxis
+	VerticalAxisOrder            uint
+	VerticalAxis_stagedOrder     map[*VerticalAxis]uint
+	VerticalAxiss_reference      map[*VerticalAxis]*VerticalAxis
+	VerticalAxiss_referenceOrder map[*VerticalAxis]uint
 
 	// insertion point for slice of pointers maps
 	OnAfterVerticalAxisCreateCallback OnAfterCreateInterface[VerticalAxis]
@@ -439,6 +553,10 @@ type Stage struct {
 	OnInitCommitFromFrontCallback OnInitCommitInterface
 	OnInitCommitFromBackCallback  OnInitCommitInterface
 
+	// Private slices to hold the registered hooks
+	beforeCommitHooks []func(stage *Stage)
+	afterCommitHooks  []func(stage *Stage)
+
 	// store the number of instance per gongstruct
 	Map_GongStructName_InstancesNb map[string]int
 
@@ -454,104 +572,751 @@ type Stage struct {
 	// store the stage order of each instance in order to
 	// preserve this order when serializing them
 	// insertion point for order fields declaration
-	AxisOrder            uint
-	AxisMap_Staged_Order map[*Axis]uint
-
-	AxisGridOrder            uint
-	AxisGridMap_Staged_Order map[*AxisGrid]uint
-
-	BezierOrder            uint
-	BezierMap_Staged_Order map[*Bezier]uint
-
-	BezierGridOrder            uint
-	BezierGridMap_Staged_Order map[*BezierGrid]uint
-
-	BezierGridStackOrder            uint
-	BezierGridStackMap_Staged_Order map[*BezierGridStack]uint
-
-	ChapterOrder            uint
-	ChapterMap_Staged_Order map[*Chapter]uint
-
-	CircleOrder            uint
-	CircleMap_Staged_Order map[*Circle]uint
-
-	CircleGridOrder            uint
-	CircleGridMap_Staged_Order map[*CircleGrid]uint
-
-	ContentOrder            uint
-	ContentMap_Staged_Order map[*Content]uint
-
-	ExportToMusicxmlOrder            uint
-	ExportToMusicxmlMap_Staged_Order map[*ExportToMusicxml]uint
-
-	FrontCurveOrder            uint
-	FrontCurveMap_Staged_Order map[*FrontCurve]uint
-
-	FrontCurveStackOrder            uint
-	FrontCurveStackMap_Staged_Order map[*FrontCurveStack]uint
-
-	HorizontalAxisOrder            uint
-	HorizontalAxisMap_Staged_Order map[*HorizontalAxis]uint
-
-	KeyOrder            uint
-	KeyMap_Staged_Order map[*Key]uint
-
-	ParameterOrder            uint
-	ParameterMap_Staged_Order map[*Parameter]uint
-
-	RhombusOrder            uint
-	RhombusMap_Staged_Order map[*Rhombus]uint
-
-	RhombusGridOrder            uint
-	RhombusGridMap_Staged_Order map[*RhombusGrid]uint
-
-	ShapeCategoryOrder            uint
-	ShapeCategoryMap_Staged_Order map[*ShapeCategory]uint
-
-	SpiralBezierOrder            uint
-	SpiralBezierMap_Staged_Order map[*SpiralBezier]uint
-
-	SpiralBezierGridOrder            uint
-	SpiralBezierGridMap_Staged_Order map[*SpiralBezierGrid]uint
-
-	SpiralCircleOrder            uint
-	SpiralCircleMap_Staged_Order map[*SpiralCircle]uint
-
-	SpiralCircleGridOrder            uint
-	SpiralCircleGridMap_Staged_Order map[*SpiralCircleGrid]uint
-
-	SpiralLineOrder            uint
-	SpiralLineMap_Staged_Order map[*SpiralLine]uint
-
-	SpiralLineGridOrder            uint
-	SpiralLineGridMap_Staged_Order map[*SpiralLineGrid]uint
-
-	SpiralOriginOrder            uint
-	SpiralOriginMap_Staged_Order map[*SpiralOrigin]uint
-
-	SpiralRhombusOrder            uint
-	SpiralRhombusMap_Staged_Order map[*SpiralRhombus]uint
-
-	SpiralRhombusGridOrder            uint
-	SpiralRhombusGridMap_Staged_Order map[*SpiralRhombusGrid]uint
-
-	VerticalAxisOrder            uint
-	VerticalAxisMap_Staged_Order map[*VerticalAxis]uint
-
 	// end of insertion point
 
 	NamedStructs []*NamedStruct
 
+	// GongUnmarshallers is the registry of all model unmarshallers
+	GongUnmarshallers map[string]ModelUnmarshaller
+
 	// probeIF is the interface to the probe that allows log
 	// commit event to the probe
 	probeIF ProbeIF
+
+	forwardCommits  []string
+	backwardCommits []string
+
+	// when navigating the commit history
+	// navigationMode is set to Navigating
+	navigationMode gongStageNavigationMode
+	commitsBehind  int // the number of commits the stage is behind the front of the history
+
+	isApplyingBackwardCommit bool
+	isApplyingForwardCommit  bool
+	isSquashing              bool
+
+	modified bool
+
+	lock sync.RWMutex
 }
 
-func (stager *Stage) SetDeltaMode(inDeltaMode bool) {
-	stager.isInDeltaMode = inDeltaMode
+func (s *Stage) SetGongMarshallingMode(mode GongMarshallingMode) {
+	s.gongMarshallingMode = mode
 }
 
-func (stage *Stage) IsDeltaMode() bool {
+func (s *Stage) GetGongMarshallingMode() GongMarshallingMode {
+	return s.gongMarshallingMode
+}
+
+func (s *Stage) SetIsWithGenesisCommit(isWithGenesisCommit bool) {
+	s.isWithGenesisCommit = isWithGenesisCommit
+}
+
+func (s *Stage) GetIsWithGenesisCommit() bool {
+	return s.isWithGenesisCommit
+}
+
+// RegisterBeforeCommit adds a hook that runs before the commit happens
+func (s *Stage) RegisterBeforeCommit(hook func(stage *Stage)) {
+	s.beforeCommitHooks = append(s.beforeCommitHooks, hook)
+}
+
+// RegisterAfterCommit adds a hook that runs after the commit succeeds
+func (s *Stage) RegisterAfterCommit(hook func(stage *Stage)) {
+	s.afterCommitHooks = append(s.afterCommitHooks, hook)
+}
+
+type gongStageNavigationMode string
+
+const (
+	GongNavigationModeNormal gongStageNavigationMode = "Normal"
+	// when the mode is navigating, each commit backward and forward
+	// it is possible to go apply the nbCommitsBackward forward commits
+	GongNavigationModeNavigating gongStageNavigationMode = "Navigating"
+)
+
+// ApplyBackwardCommit applies the commit before the current one
+func (stage *Stage) ApplyBackwardCommit() error {
+	if len(stage.backwardCommits) == 0 {
+		return errors.New("no backward commit to apply")
+	}
+
+	if stage.navigationMode == GongNavigationModeNormal && stage.commitsBehind != 0 {
+		return errors.New("in navigation mode normal, cannot have commitsBehind != 0")
+	}
+
+	if stage.navigationMode == GongNavigationModeNormal {
+		stage.navigationMode = GongNavigationModeNavigating
+	}
+
+	if stage.isWithGenesisCommit && stage.commitsBehind >= len(stage.backwardCommits)-1 {
+		return errors.New("cannot rollback genesis commit")
+	}
+
+	if stage.commitsBehind >= len(stage.backwardCommits) {
+		return errors.New("no more backward commit to apply")
+	}
+
+	commitToApply := stage.backwardCommits[len(stage.backwardCommits)-1-stage.commitsBehind]
+
+	// umarshall the backward commit to the stage
+
+	// the parsing of the commit will call the UX update
+	// therefore, it is important to stage.commitsBehind before because it is used in the
+	// UX
+	stage.commitsBehind++
+	stage.isApplyingBackwardCommit = true
+	err := GongParseAstString(stage, commitToApply, true)
+	stage.isApplyingBackwardCommit = false
+	if err != nil {
+		log.Println("error during ApplyBackwardCommit: ", err)
+		return err
+	}
+
+	stage.ComputeReferenceAndOrders()
+
+	return nil
+}
+
+func (stage *Stage) GetForwardCommits() []string {
+	return stage.forwardCommits
+}
+
+func (stage *Stage) GetBackwardCommits() []string {
+	return stage.backwardCommits
+}
+
+func (stage *Stage) ApplyForwardCommit() error {
+	if stage.navigationMode == GongNavigationModeNormal && stage.commitsBehind != 0 {
+		return errors.New("in navigation mode normal, cannot have commitsBehind != 0")
+	}
+
+	if stage.commitsBehind == 0 {
+		return errors.New("no more forward commit to apply")
+	}
+
+	if stage.navigationMode == GongNavigationModeNormal {
+		stage.navigationMode = GongNavigationModeNavigating
+	}
+
+	commitToApply := stage.forwardCommits[len(stage.forwardCommits)-1-stage.commitsBehind+1]
+
+	// the parsing of the commit will call the UX update
+	// therefore, it is important to stage.commitsBehind before because it is used in the
+	// UX
+	stage.commitsBehind--
+	stage.isApplyingForwardCommit = true
+	err := GongParseAstString(stage, commitToApply, true)
+	stage.isApplyingForwardCommit = false
+	if err != nil {
+		log.Println("error during ApplyForwardCommit: ", err)
+		return err
+	}
+	stage.ComputeReferenceAndOrders()
+
+	return nil
+}
+
+func (stage *Stage) GetCommitsBehind() int {
+	return stage.commitsBehind
+}
+
+func (stage *Stage) Lock() {
+	stage.lock.Lock()
+}
+
+func (stage *Stage) Unlock() {
+	stage.lock.Unlock()
+}
+
+func (stage *Stage) RLock() {
+	stage.lock.RLock()
+}
+
+func (stage *Stage) RUnlock() {
+	stage.lock.RUnlock()
+}
+
+// ResetHard removes the more recent
+// commitsBehind forward/backward Commits from the
+// stage
+func (stage *Stage) ResetHard() {
+	newCommitsLen := len(stage.forwardCommits) - stage.GetCommitsBehind()
+
+	stage.forwardCommits = stage.forwardCommits[:newCommitsLen]
+	stage.backwardCommits = stage.backwardCommits[:newCommitsLen]
+	stage.commitsBehind = 0
+	stage.navigationMode = GongNavigationModeNormal
+
+	stage.ComputeInstancesNb()
+	if stage.OnInitCommitCallback != nil {
+		stage.OnInitCommitCallback.BeforeCommit(stage)
+	}
+	if stage.OnInitCommitFromBackCallback != nil {
+		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
+	}
+
+	// 1. Run all Before Commit hooks
+	for _, hook := range stage.beforeCommitHooks {
+		hook(stage)
+	}
+
+	// 2. Run all After Commit hooks
+	for _, hook := range stage.afterCommitHooks {
+		hook(stage)
+	}
+}
+
+// Squash removes all commits and marshals the stage as a single commit
+func (stage *Stage) Squash() {
+	stage.forwardCommits = stage.forwardCommits[:0]
+	stage.backwardCommits = stage.backwardCommits[:0]
+	stage.commitsBehind = 0
+	stage.navigationMode = GongNavigationModeNormal
+
+	stage.modified = true
+	stage.isSquashing = true
+
+	// insertion point for clear references
+	stage.Axiss_reference = make(map[*Axis]*Axis)
+	stage.Axiss_instance = make(map[*Axis]*Axis)
+	stage.Axiss_referenceOrder = make(map[*Axis]uint)
+
+	stage.AxisGrids_reference = make(map[*AxisGrid]*AxisGrid)
+	stage.AxisGrids_instance = make(map[*AxisGrid]*AxisGrid)
+	stage.AxisGrids_referenceOrder = make(map[*AxisGrid]uint)
+
+	stage.Beziers_reference = make(map[*Bezier]*Bezier)
+	stage.Beziers_instance = make(map[*Bezier]*Bezier)
+	stage.Beziers_referenceOrder = make(map[*Bezier]uint)
+
+	stage.BezierGrids_reference = make(map[*BezierGrid]*BezierGrid)
+	stage.BezierGrids_instance = make(map[*BezierGrid]*BezierGrid)
+	stage.BezierGrids_referenceOrder = make(map[*BezierGrid]uint)
+
+	stage.BezierGridStacks_reference = make(map[*BezierGridStack]*BezierGridStack)
+	stage.BezierGridStacks_instance = make(map[*BezierGridStack]*BezierGridStack)
+	stage.BezierGridStacks_referenceOrder = make(map[*BezierGridStack]uint)
+
+	stage.Chapters_reference = make(map[*Chapter]*Chapter)
+	stage.Chapters_instance = make(map[*Chapter]*Chapter)
+	stage.Chapters_referenceOrder = make(map[*Chapter]uint)
+
+	stage.Circles_reference = make(map[*Circle]*Circle)
+	stage.Circles_instance = make(map[*Circle]*Circle)
+	stage.Circles_referenceOrder = make(map[*Circle]uint)
+
+	stage.CircleGrids_reference = make(map[*CircleGrid]*CircleGrid)
+	stage.CircleGrids_instance = make(map[*CircleGrid]*CircleGrid)
+	stage.CircleGrids_referenceOrder = make(map[*CircleGrid]uint)
+
+	stage.Contents_reference = make(map[*Content]*Content)
+	stage.Contents_instance = make(map[*Content]*Content)
+	stage.Contents_referenceOrder = make(map[*Content]uint)
+
+	stage.ExportToMusicxmls_reference = make(map[*ExportToMusicxml]*ExportToMusicxml)
+	stage.ExportToMusicxmls_instance = make(map[*ExportToMusicxml]*ExportToMusicxml)
+	stage.ExportToMusicxmls_referenceOrder = make(map[*ExportToMusicxml]uint)
+
+	stage.FrontCurves_reference = make(map[*FrontCurve]*FrontCurve)
+	stage.FrontCurves_instance = make(map[*FrontCurve]*FrontCurve)
+	stage.FrontCurves_referenceOrder = make(map[*FrontCurve]uint)
+
+	stage.FrontCurveStacks_reference = make(map[*FrontCurveStack]*FrontCurveStack)
+	stage.FrontCurveStacks_instance = make(map[*FrontCurveStack]*FrontCurveStack)
+	stage.FrontCurveStacks_referenceOrder = make(map[*FrontCurveStack]uint)
+
+	stage.HorizontalAxiss_reference = make(map[*HorizontalAxis]*HorizontalAxis)
+	stage.HorizontalAxiss_instance = make(map[*HorizontalAxis]*HorizontalAxis)
+	stage.HorizontalAxiss_referenceOrder = make(map[*HorizontalAxis]uint)
+
+	stage.Keys_reference = make(map[*Key]*Key)
+	stage.Keys_instance = make(map[*Key]*Key)
+	stage.Keys_referenceOrder = make(map[*Key]uint)
+
+	stage.Parameters_reference = make(map[*Parameter]*Parameter)
+	stage.Parameters_instance = make(map[*Parameter]*Parameter)
+	stage.Parameters_referenceOrder = make(map[*Parameter]uint)
+
+	stage.Rhombuss_reference = make(map[*Rhombus]*Rhombus)
+	stage.Rhombuss_instance = make(map[*Rhombus]*Rhombus)
+	stage.Rhombuss_referenceOrder = make(map[*Rhombus]uint)
+
+	stage.RhombusGrids_reference = make(map[*RhombusGrid]*RhombusGrid)
+	stage.RhombusGrids_instance = make(map[*RhombusGrid]*RhombusGrid)
+	stage.RhombusGrids_referenceOrder = make(map[*RhombusGrid]uint)
+
+	stage.ShapeCategorys_reference = make(map[*ShapeCategory]*ShapeCategory)
+	stage.ShapeCategorys_instance = make(map[*ShapeCategory]*ShapeCategory)
+	stage.ShapeCategorys_referenceOrder = make(map[*ShapeCategory]uint)
+
+	stage.SpiralBeziers_reference = make(map[*SpiralBezier]*SpiralBezier)
+	stage.SpiralBeziers_instance = make(map[*SpiralBezier]*SpiralBezier)
+	stage.SpiralBeziers_referenceOrder = make(map[*SpiralBezier]uint)
+
+	stage.SpiralBezierGrids_reference = make(map[*SpiralBezierGrid]*SpiralBezierGrid)
+	stage.SpiralBezierGrids_instance = make(map[*SpiralBezierGrid]*SpiralBezierGrid)
+	stage.SpiralBezierGrids_referenceOrder = make(map[*SpiralBezierGrid]uint)
+
+	stage.SpiralCircles_reference = make(map[*SpiralCircle]*SpiralCircle)
+	stage.SpiralCircles_instance = make(map[*SpiralCircle]*SpiralCircle)
+	stage.SpiralCircles_referenceOrder = make(map[*SpiralCircle]uint)
+
+	stage.SpiralCircleGrids_reference = make(map[*SpiralCircleGrid]*SpiralCircleGrid)
+	stage.SpiralCircleGrids_instance = make(map[*SpiralCircleGrid]*SpiralCircleGrid)
+	stage.SpiralCircleGrids_referenceOrder = make(map[*SpiralCircleGrid]uint)
+
+	stage.SpiralLines_reference = make(map[*SpiralLine]*SpiralLine)
+	stage.SpiralLines_instance = make(map[*SpiralLine]*SpiralLine)
+	stage.SpiralLines_referenceOrder = make(map[*SpiralLine]uint)
+
+	stage.SpiralLineGrids_reference = make(map[*SpiralLineGrid]*SpiralLineGrid)
+	stage.SpiralLineGrids_instance = make(map[*SpiralLineGrid]*SpiralLineGrid)
+	stage.SpiralLineGrids_referenceOrder = make(map[*SpiralLineGrid]uint)
+
+	stage.SpiralOrigins_reference = make(map[*SpiralOrigin]*SpiralOrigin)
+	stage.SpiralOrigins_instance = make(map[*SpiralOrigin]*SpiralOrigin)
+	stage.SpiralOrigins_referenceOrder = make(map[*SpiralOrigin]uint)
+
+	stage.SpiralRhombuss_reference = make(map[*SpiralRhombus]*SpiralRhombus)
+	stage.SpiralRhombuss_instance = make(map[*SpiralRhombus]*SpiralRhombus)
+	stage.SpiralRhombuss_referenceOrder = make(map[*SpiralRhombus]uint)
+
+	stage.SpiralRhombusGrids_reference = make(map[*SpiralRhombusGrid]*SpiralRhombusGrid)
+	stage.SpiralRhombusGrids_instance = make(map[*SpiralRhombusGrid]*SpiralRhombusGrid)
+	stage.SpiralRhombusGrids_referenceOrder = make(map[*SpiralRhombusGrid]uint)
+
+	stage.VerticalAxiss_reference = make(map[*VerticalAxis]*VerticalAxis)
+	stage.VerticalAxiss_instance = make(map[*VerticalAxis]*VerticalAxis)
+	stage.VerticalAxiss_referenceOrder = make(map[*VerticalAxis]uint)
+
+	stage.ComputeInstancesNb()
+	if stage.OnInitCommitCallback != nil {
+		stage.OnInitCommitCallback.BeforeCommit(stage)
+	}
+	if stage.OnInitCommitFromBackCallback != nil {
+		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
+	}
+
+	// 1. Run all Before Commit hooks
+	for _, hook := range stage.beforeCommitHooks {
+		hook(stage)
+	}
+
+	// 2. Run all After Commit hooks
+	for _, hook := range stage.afterCommitHooks {
+		hook(stage)
+	}
+
+	stage.isSquashing = false
+}
+
+// recomputeOrders recomputes the next order for each struct
+// this is necessary because the order might have been incremented
+// during the commits that have been discarded
+// insertion point for max order recomputation
+func (stage *Stage) recomputeOrders() {
+	// insertion point for max order recomputation
+	var maxAxisOrder uint
+	var foundAxis bool
+	for _, order := range stage.Axis_stagedOrder {
+		if !foundAxis || order > maxAxisOrder {
+			maxAxisOrder = order
+			foundAxis = true
+		}
+	}
+	if foundAxis {
+		stage.AxisOrder = maxAxisOrder + 1
+	} else {
+		stage.AxisOrder = 0
+	}
+
+	var maxAxisGridOrder uint
+	var foundAxisGrid bool
+	for _, order := range stage.AxisGrid_stagedOrder {
+		if !foundAxisGrid || order > maxAxisGridOrder {
+			maxAxisGridOrder = order
+			foundAxisGrid = true
+		}
+	}
+	if foundAxisGrid {
+		stage.AxisGridOrder = maxAxisGridOrder + 1
+	} else {
+		stage.AxisGridOrder = 0
+	}
+
+	var maxBezierOrder uint
+	var foundBezier bool
+	for _, order := range stage.Bezier_stagedOrder {
+		if !foundBezier || order > maxBezierOrder {
+			maxBezierOrder = order
+			foundBezier = true
+		}
+	}
+	if foundBezier {
+		stage.BezierOrder = maxBezierOrder + 1
+	} else {
+		stage.BezierOrder = 0
+	}
+
+	var maxBezierGridOrder uint
+	var foundBezierGrid bool
+	for _, order := range stage.BezierGrid_stagedOrder {
+		if !foundBezierGrid || order > maxBezierGridOrder {
+			maxBezierGridOrder = order
+			foundBezierGrid = true
+		}
+	}
+	if foundBezierGrid {
+		stage.BezierGridOrder = maxBezierGridOrder + 1
+	} else {
+		stage.BezierGridOrder = 0
+	}
+
+	var maxBezierGridStackOrder uint
+	var foundBezierGridStack bool
+	for _, order := range stage.BezierGridStack_stagedOrder {
+		if !foundBezierGridStack || order > maxBezierGridStackOrder {
+			maxBezierGridStackOrder = order
+			foundBezierGridStack = true
+		}
+	}
+	if foundBezierGridStack {
+		stage.BezierGridStackOrder = maxBezierGridStackOrder + 1
+	} else {
+		stage.BezierGridStackOrder = 0
+	}
+
+	var maxChapterOrder uint
+	var foundChapter bool
+	for _, order := range stage.Chapter_stagedOrder {
+		if !foundChapter || order > maxChapterOrder {
+			maxChapterOrder = order
+			foundChapter = true
+		}
+	}
+	if foundChapter {
+		stage.ChapterOrder = maxChapterOrder + 1
+	} else {
+		stage.ChapterOrder = 0
+	}
+
+	var maxCircleOrder uint
+	var foundCircle bool
+	for _, order := range stage.Circle_stagedOrder {
+		if !foundCircle || order > maxCircleOrder {
+			maxCircleOrder = order
+			foundCircle = true
+		}
+	}
+	if foundCircle {
+		stage.CircleOrder = maxCircleOrder + 1
+	} else {
+		stage.CircleOrder = 0
+	}
+
+	var maxCircleGridOrder uint
+	var foundCircleGrid bool
+	for _, order := range stage.CircleGrid_stagedOrder {
+		if !foundCircleGrid || order > maxCircleGridOrder {
+			maxCircleGridOrder = order
+			foundCircleGrid = true
+		}
+	}
+	if foundCircleGrid {
+		stage.CircleGridOrder = maxCircleGridOrder + 1
+	} else {
+		stage.CircleGridOrder = 0
+	}
+
+	var maxContentOrder uint
+	var foundContent bool
+	for _, order := range stage.Content_stagedOrder {
+		if !foundContent || order > maxContentOrder {
+			maxContentOrder = order
+			foundContent = true
+		}
+	}
+	if foundContent {
+		stage.ContentOrder = maxContentOrder + 1
+	} else {
+		stage.ContentOrder = 0
+	}
+
+	var maxExportToMusicxmlOrder uint
+	var foundExportToMusicxml bool
+	for _, order := range stage.ExportToMusicxml_stagedOrder {
+		if !foundExportToMusicxml || order > maxExportToMusicxmlOrder {
+			maxExportToMusicxmlOrder = order
+			foundExportToMusicxml = true
+		}
+	}
+	if foundExportToMusicxml {
+		stage.ExportToMusicxmlOrder = maxExportToMusicxmlOrder + 1
+	} else {
+		stage.ExportToMusicxmlOrder = 0
+	}
+
+	var maxFrontCurveOrder uint
+	var foundFrontCurve bool
+	for _, order := range stage.FrontCurve_stagedOrder {
+		if !foundFrontCurve || order > maxFrontCurveOrder {
+			maxFrontCurveOrder = order
+			foundFrontCurve = true
+		}
+	}
+	if foundFrontCurve {
+		stage.FrontCurveOrder = maxFrontCurveOrder + 1
+	} else {
+		stage.FrontCurveOrder = 0
+	}
+
+	var maxFrontCurveStackOrder uint
+	var foundFrontCurveStack bool
+	for _, order := range stage.FrontCurveStack_stagedOrder {
+		if !foundFrontCurveStack || order > maxFrontCurveStackOrder {
+			maxFrontCurveStackOrder = order
+			foundFrontCurveStack = true
+		}
+	}
+	if foundFrontCurveStack {
+		stage.FrontCurveStackOrder = maxFrontCurveStackOrder + 1
+	} else {
+		stage.FrontCurveStackOrder = 0
+	}
+
+	var maxHorizontalAxisOrder uint
+	var foundHorizontalAxis bool
+	for _, order := range stage.HorizontalAxis_stagedOrder {
+		if !foundHorizontalAxis || order > maxHorizontalAxisOrder {
+			maxHorizontalAxisOrder = order
+			foundHorizontalAxis = true
+		}
+	}
+	if foundHorizontalAxis {
+		stage.HorizontalAxisOrder = maxHorizontalAxisOrder + 1
+	} else {
+		stage.HorizontalAxisOrder = 0
+	}
+
+	var maxKeyOrder uint
+	var foundKey bool
+	for _, order := range stage.Key_stagedOrder {
+		if !foundKey || order > maxKeyOrder {
+			maxKeyOrder = order
+			foundKey = true
+		}
+	}
+	if foundKey {
+		stage.KeyOrder = maxKeyOrder + 1
+	} else {
+		stage.KeyOrder = 0
+	}
+
+	var maxParameterOrder uint
+	var foundParameter bool
+	for _, order := range stage.Parameter_stagedOrder {
+		if !foundParameter || order > maxParameterOrder {
+			maxParameterOrder = order
+			foundParameter = true
+		}
+	}
+	if foundParameter {
+		stage.ParameterOrder = maxParameterOrder + 1
+	} else {
+		stage.ParameterOrder = 0
+	}
+
+	var maxRhombusOrder uint
+	var foundRhombus bool
+	for _, order := range stage.Rhombus_stagedOrder {
+		if !foundRhombus || order > maxRhombusOrder {
+			maxRhombusOrder = order
+			foundRhombus = true
+		}
+	}
+	if foundRhombus {
+		stage.RhombusOrder = maxRhombusOrder + 1
+	} else {
+		stage.RhombusOrder = 0
+	}
+
+	var maxRhombusGridOrder uint
+	var foundRhombusGrid bool
+	for _, order := range stage.RhombusGrid_stagedOrder {
+		if !foundRhombusGrid || order > maxRhombusGridOrder {
+			maxRhombusGridOrder = order
+			foundRhombusGrid = true
+		}
+	}
+	if foundRhombusGrid {
+		stage.RhombusGridOrder = maxRhombusGridOrder + 1
+	} else {
+		stage.RhombusGridOrder = 0
+	}
+
+	var maxShapeCategoryOrder uint
+	var foundShapeCategory bool
+	for _, order := range stage.ShapeCategory_stagedOrder {
+		if !foundShapeCategory || order > maxShapeCategoryOrder {
+			maxShapeCategoryOrder = order
+			foundShapeCategory = true
+		}
+	}
+	if foundShapeCategory {
+		stage.ShapeCategoryOrder = maxShapeCategoryOrder + 1
+	} else {
+		stage.ShapeCategoryOrder = 0
+	}
+
+	var maxSpiralBezierOrder uint
+	var foundSpiralBezier bool
+	for _, order := range stage.SpiralBezier_stagedOrder {
+		if !foundSpiralBezier || order > maxSpiralBezierOrder {
+			maxSpiralBezierOrder = order
+			foundSpiralBezier = true
+		}
+	}
+	if foundSpiralBezier {
+		stage.SpiralBezierOrder = maxSpiralBezierOrder + 1
+	} else {
+		stage.SpiralBezierOrder = 0
+	}
+
+	var maxSpiralBezierGridOrder uint
+	var foundSpiralBezierGrid bool
+	for _, order := range stage.SpiralBezierGrid_stagedOrder {
+		if !foundSpiralBezierGrid || order > maxSpiralBezierGridOrder {
+			maxSpiralBezierGridOrder = order
+			foundSpiralBezierGrid = true
+		}
+	}
+	if foundSpiralBezierGrid {
+		stage.SpiralBezierGridOrder = maxSpiralBezierGridOrder + 1
+	} else {
+		stage.SpiralBezierGridOrder = 0
+	}
+
+	var maxSpiralCircleOrder uint
+	var foundSpiralCircle bool
+	for _, order := range stage.SpiralCircle_stagedOrder {
+		if !foundSpiralCircle || order > maxSpiralCircleOrder {
+			maxSpiralCircleOrder = order
+			foundSpiralCircle = true
+		}
+	}
+	if foundSpiralCircle {
+		stage.SpiralCircleOrder = maxSpiralCircleOrder + 1
+	} else {
+		stage.SpiralCircleOrder = 0
+	}
+
+	var maxSpiralCircleGridOrder uint
+	var foundSpiralCircleGrid bool
+	for _, order := range stage.SpiralCircleGrid_stagedOrder {
+		if !foundSpiralCircleGrid || order > maxSpiralCircleGridOrder {
+			maxSpiralCircleGridOrder = order
+			foundSpiralCircleGrid = true
+		}
+	}
+	if foundSpiralCircleGrid {
+		stage.SpiralCircleGridOrder = maxSpiralCircleGridOrder + 1
+	} else {
+		stage.SpiralCircleGridOrder = 0
+	}
+
+	var maxSpiralLineOrder uint
+	var foundSpiralLine bool
+	for _, order := range stage.SpiralLine_stagedOrder {
+		if !foundSpiralLine || order > maxSpiralLineOrder {
+			maxSpiralLineOrder = order
+			foundSpiralLine = true
+		}
+	}
+	if foundSpiralLine {
+		stage.SpiralLineOrder = maxSpiralLineOrder + 1
+	} else {
+		stage.SpiralLineOrder = 0
+	}
+
+	var maxSpiralLineGridOrder uint
+	var foundSpiralLineGrid bool
+	for _, order := range stage.SpiralLineGrid_stagedOrder {
+		if !foundSpiralLineGrid || order > maxSpiralLineGridOrder {
+			maxSpiralLineGridOrder = order
+			foundSpiralLineGrid = true
+		}
+	}
+	if foundSpiralLineGrid {
+		stage.SpiralLineGridOrder = maxSpiralLineGridOrder + 1
+	} else {
+		stage.SpiralLineGridOrder = 0
+	}
+
+	var maxSpiralOriginOrder uint
+	var foundSpiralOrigin bool
+	for _, order := range stage.SpiralOrigin_stagedOrder {
+		if !foundSpiralOrigin || order > maxSpiralOriginOrder {
+			maxSpiralOriginOrder = order
+			foundSpiralOrigin = true
+		}
+	}
+	if foundSpiralOrigin {
+		stage.SpiralOriginOrder = maxSpiralOriginOrder + 1
+	} else {
+		stage.SpiralOriginOrder = 0
+	}
+
+	var maxSpiralRhombusOrder uint
+	var foundSpiralRhombus bool
+	for _, order := range stage.SpiralRhombus_stagedOrder {
+		if !foundSpiralRhombus || order > maxSpiralRhombusOrder {
+			maxSpiralRhombusOrder = order
+			foundSpiralRhombus = true
+		}
+	}
+	if foundSpiralRhombus {
+		stage.SpiralRhombusOrder = maxSpiralRhombusOrder + 1
+	} else {
+		stage.SpiralRhombusOrder = 0
+	}
+
+	var maxSpiralRhombusGridOrder uint
+	var foundSpiralRhombusGrid bool
+	for _, order := range stage.SpiralRhombusGrid_stagedOrder {
+		if !foundSpiralRhombusGrid || order > maxSpiralRhombusGridOrder {
+			maxSpiralRhombusGridOrder = order
+			foundSpiralRhombusGrid = true
+		}
+	}
+	if foundSpiralRhombusGrid {
+		stage.SpiralRhombusGridOrder = maxSpiralRhombusGridOrder + 1
+	} else {
+		stage.SpiralRhombusGridOrder = 0
+	}
+
+	var maxVerticalAxisOrder uint
+	var foundVerticalAxis bool
+	for _, order := range stage.VerticalAxis_stagedOrder {
+		if !foundVerticalAxis || order > maxVerticalAxisOrder {
+			maxVerticalAxisOrder = order
+			foundVerticalAxis = true
+		}
+	}
+	if foundVerticalAxis {
+		stage.VerticalAxisOrder = maxVerticalAxisOrder + 1
+	} else {
+		stage.VerticalAxisOrder = 0
+	}
+
+	// end of insertion point for max order recomputation
+}
+
+func (stage *Stage) SetDeltaMode(inDeltaMode bool) {
+	stage.isInDeltaMode = inDeltaMode
+}
+
+func (stage *Stage) IsInDeltaMode() bool {
 	return stage.isInDeltaMode
 }
 
@@ -560,12 +1325,15 @@ func (stage *Stage) SetProbeIF(probeIF ProbeIF) {
 }
 
 func (stage *Stage) GetProbeIF() ProbeIF {
+	if stage.probeIF == nil {
+		return nil
+	}
+
 	return stage.probeIF
 }
 
 // GetNamedStructs implements models.ProbebStage.
 func (stage *Stage) GetNamedStructsNames() (res []string) {
-
 	for _, namedStruct := range stage.NamedStructs {
 		res = append(res, namedStruct.name)
 	}
@@ -574,7 +1342,6 @@ func (stage *Stage) GetNamedStructsNames() (res []string) {
 }
 
 func GetNamedStructInstances[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []string) {
-
 	orderedSet := []T{}
 	for instance := range set {
 		orderedSet = append(orderedSet, instance)
@@ -597,12 +1364,14 @@ func GetNamedStructInstances[T PointerToGongstruct](set map[T]struct{}, order ma
 	return
 }
 
+// GetStructInstancesByOrderAuto returns a slice of generic pointers to gongstructs
+// ordered by their order in the stage.
 func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T) {
 	var t T
 	switch any(t).(type) {
 	// insertion point for case
 	case *Axis:
-		tmp := GetStructInstancesByOrder(stage.Axiss, stage.AxisMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.Axiss, stage.Axis_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -616,7 +1385,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *AxisGrid:
-		tmp := GetStructInstancesByOrder(stage.AxisGrids, stage.AxisGridMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.AxisGrids, stage.AxisGrid_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -630,7 +1399,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *Bezier:
-		tmp := GetStructInstancesByOrder(stage.Beziers, stage.BezierMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.Beziers, stage.Bezier_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -644,7 +1413,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *BezierGrid:
-		tmp := GetStructInstancesByOrder(stage.BezierGrids, stage.BezierGridMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.BezierGrids, stage.BezierGrid_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -658,7 +1427,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *BezierGridStack:
-		tmp := GetStructInstancesByOrder(stage.BezierGridStacks, stage.BezierGridStackMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.BezierGridStacks, stage.BezierGridStack_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -672,7 +1441,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *Chapter:
-		tmp := GetStructInstancesByOrder(stage.Chapters, stage.ChapterMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.Chapters, stage.Chapter_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -686,7 +1455,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *Circle:
-		tmp := GetStructInstancesByOrder(stage.Circles, stage.CircleMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.Circles, stage.Circle_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -700,7 +1469,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *CircleGrid:
-		tmp := GetStructInstancesByOrder(stage.CircleGrids, stage.CircleGridMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.CircleGrids, stage.CircleGrid_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -714,7 +1483,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *Content:
-		tmp := GetStructInstancesByOrder(stage.Contents, stage.ContentMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.Contents, stage.Content_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -728,7 +1497,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *ExportToMusicxml:
-		tmp := GetStructInstancesByOrder(stage.ExportToMusicxmls, stage.ExportToMusicxmlMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.ExportToMusicxmls, stage.ExportToMusicxml_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -742,7 +1511,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *FrontCurve:
-		tmp := GetStructInstancesByOrder(stage.FrontCurves, stage.FrontCurveMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.FrontCurves, stage.FrontCurve_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -756,7 +1525,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *FrontCurveStack:
-		tmp := GetStructInstancesByOrder(stage.FrontCurveStacks, stage.FrontCurveStackMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.FrontCurveStacks, stage.FrontCurveStack_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -770,7 +1539,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *HorizontalAxis:
-		tmp := GetStructInstancesByOrder(stage.HorizontalAxiss, stage.HorizontalAxisMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.HorizontalAxiss, stage.HorizontalAxis_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -784,7 +1553,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *Key:
-		tmp := GetStructInstancesByOrder(stage.Keys, stage.KeyMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.Keys, stage.Key_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -798,7 +1567,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *Parameter:
-		tmp := GetStructInstancesByOrder(stage.Parameters, stage.ParameterMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.Parameters, stage.Parameter_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -812,7 +1581,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *Rhombus:
-		tmp := GetStructInstancesByOrder(stage.Rhombuss, stage.RhombusMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.Rhombuss, stage.Rhombus_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -826,7 +1595,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *RhombusGrid:
-		tmp := GetStructInstancesByOrder(stage.RhombusGrids, stage.RhombusGridMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.RhombusGrids, stage.RhombusGrid_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -840,7 +1609,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *ShapeCategory:
-		tmp := GetStructInstancesByOrder(stage.ShapeCategorys, stage.ShapeCategoryMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.ShapeCategorys, stage.ShapeCategory_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -854,7 +1623,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *SpiralBezier:
-		tmp := GetStructInstancesByOrder(stage.SpiralBeziers, stage.SpiralBezierMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.SpiralBeziers, stage.SpiralBezier_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -868,7 +1637,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *SpiralBezierGrid:
-		tmp := GetStructInstancesByOrder(stage.SpiralBezierGrids, stage.SpiralBezierGridMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.SpiralBezierGrids, stage.SpiralBezierGrid_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -882,7 +1651,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *SpiralCircle:
-		tmp := GetStructInstancesByOrder(stage.SpiralCircles, stage.SpiralCircleMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.SpiralCircles, stage.SpiralCircle_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -896,7 +1665,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *SpiralCircleGrid:
-		tmp := GetStructInstancesByOrder(stage.SpiralCircleGrids, stage.SpiralCircleGridMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.SpiralCircleGrids, stage.SpiralCircleGrid_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -910,7 +1679,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *SpiralLine:
-		tmp := GetStructInstancesByOrder(stage.SpiralLines, stage.SpiralLineMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.SpiralLines, stage.SpiralLine_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -924,7 +1693,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *SpiralLineGrid:
-		tmp := GetStructInstancesByOrder(stage.SpiralLineGrids, stage.SpiralLineGridMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.SpiralLineGrids, stage.SpiralLineGrid_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -938,7 +1707,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *SpiralOrigin:
-		tmp := GetStructInstancesByOrder(stage.SpiralOrigins, stage.SpiralOriginMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.SpiralOrigins, stage.SpiralOrigin_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -952,7 +1721,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *SpiralRhombus:
-		tmp := GetStructInstancesByOrder(stage.SpiralRhombuss, stage.SpiralRhombusMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.SpiralRhombuss, stage.SpiralRhombus_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -966,7 +1735,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *SpiralRhombusGrid:
-		tmp := GetStructInstancesByOrder(stage.SpiralRhombusGrids, stage.SpiralRhombusGridMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.SpiralRhombusGrids, stage.SpiralRhombusGrid_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -980,7 +1749,7 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 		}
 		return res
 	case *VerticalAxis:
-		tmp := GetStructInstancesByOrder(stage.VerticalAxiss, stage.VerticalAxisMap_Staged_Order)
+		tmp := GetStructInstancesByOrder(stage.VerticalAxiss, stage.VerticalAxis_stagedOrder)
 
 		// Create a new slice of the generic type T with the same capacity.
 		res = make([]T, 0, len(tmp))
@@ -999,7 +1768,6 @@ func GetStructInstancesByOrderAuto[T PointerToGongstruct](stage *Stage) (res []T
 }
 
 func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]struct{}, order map[T]uint) (res []T) {
-
 	orderedSet := []T{}
 	for instance := range set {
 		orderedSet = append(orderedSet, instance)
@@ -1021,65 +1789,64 @@ func GetStructInstancesByOrder[T PointerToGongstruct](set map[T]struct{}, order 
 }
 
 func (stage *Stage) GetNamedStructNamesByOrder(namedStructName string) (res []string) {
-
 	switch namedStructName {
 	// insertion point for case
 	case "Axis":
-		res = GetNamedStructInstances(stage.Axiss, stage.AxisMap_Staged_Order)
+		res = GetNamedStructInstances(stage.Axiss, stage.Axis_stagedOrder)
 	case "AxisGrid":
-		res = GetNamedStructInstances(stage.AxisGrids, stage.AxisGridMap_Staged_Order)
+		res = GetNamedStructInstances(stage.AxisGrids, stage.AxisGrid_stagedOrder)
 	case "Bezier":
-		res = GetNamedStructInstances(stage.Beziers, stage.BezierMap_Staged_Order)
+		res = GetNamedStructInstances(stage.Beziers, stage.Bezier_stagedOrder)
 	case "BezierGrid":
-		res = GetNamedStructInstances(stage.BezierGrids, stage.BezierGridMap_Staged_Order)
+		res = GetNamedStructInstances(stage.BezierGrids, stage.BezierGrid_stagedOrder)
 	case "BezierGridStack":
-		res = GetNamedStructInstances(stage.BezierGridStacks, stage.BezierGridStackMap_Staged_Order)
+		res = GetNamedStructInstances(stage.BezierGridStacks, stage.BezierGridStack_stagedOrder)
 	case "Chapter":
-		res = GetNamedStructInstances(stage.Chapters, stage.ChapterMap_Staged_Order)
+		res = GetNamedStructInstances(stage.Chapters, stage.Chapter_stagedOrder)
 	case "Circle":
-		res = GetNamedStructInstances(stage.Circles, stage.CircleMap_Staged_Order)
+		res = GetNamedStructInstances(stage.Circles, stage.Circle_stagedOrder)
 	case "CircleGrid":
-		res = GetNamedStructInstances(stage.CircleGrids, stage.CircleGridMap_Staged_Order)
+		res = GetNamedStructInstances(stage.CircleGrids, stage.CircleGrid_stagedOrder)
 	case "Content":
-		res = GetNamedStructInstances(stage.Contents, stage.ContentMap_Staged_Order)
+		res = GetNamedStructInstances(stage.Contents, stage.Content_stagedOrder)
 	case "ExportToMusicxml":
-		res = GetNamedStructInstances(stage.ExportToMusicxmls, stage.ExportToMusicxmlMap_Staged_Order)
+		res = GetNamedStructInstances(stage.ExportToMusicxmls, stage.ExportToMusicxml_stagedOrder)
 	case "FrontCurve":
-		res = GetNamedStructInstances(stage.FrontCurves, stage.FrontCurveMap_Staged_Order)
+		res = GetNamedStructInstances(stage.FrontCurves, stage.FrontCurve_stagedOrder)
 	case "FrontCurveStack":
-		res = GetNamedStructInstances(stage.FrontCurveStacks, stage.FrontCurveStackMap_Staged_Order)
+		res = GetNamedStructInstances(stage.FrontCurveStacks, stage.FrontCurveStack_stagedOrder)
 	case "HorizontalAxis":
-		res = GetNamedStructInstances(stage.HorizontalAxiss, stage.HorizontalAxisMap_Staged_Order)
+		res = GetNamedStructInstances(stage.HorizontalAxiss, stage.HorizontalAxis_stagedOrder)
 	case "Key":
-		res = GetNamedStructInstances(stage.Keys, stage.KeyMap_Staged_Order)
+		res = GetNamedStructInstances(stage.Keys, stage.Key_stagedOrder)
 	case "Parameter":
-		res = GetNamedStructInstances(stage.Parameters, stage.ParameterMap_Staged_Order)
+		res = GetNamedStructInstances(stage.Parameters, stage.Parameter_stagedOrder)
 	case "Rhombus":
-		res = GetNamedStructInstances(stage.Rhombuss, stage.RhombusMap_Staged_Order)
+		res = GetNamedStructInstances(stage.Rhombuss, stage.Rhombus_stagedOrder)
 	case "RhombusGrid":
-		res = GetNamedStructInstances(stage.RhombusGrids, stage.RhombusGridMap_Staged_Order)
+		res = GetNamedStructInstances(stage.RhombusGrids, stage.RhombusGrid_stagedOrder)
 	case "ShapeCategory":
-		res = GetNamedStructInstances(stage.ShapeCategorys, stage.ShapeCategoryMap_Staged_Order)
+		res = GetNamedStructInstances(stage.ShapeCategorys, stage.ShapeCategory_stagedOrder)
 	case "SpiralBezier":
-		res = GetNamedStructInstances(stage.SpiralBeziers, stage.SpiralBezierMap_Staged_Order)
+		res = GetNamedStructInstances(stage.SpiralBeziers, stage.SpiralBezier_stagedOrder)
 	case "SpiralBezierGrid":
-		res = GetNamedStructInstances(stage.SpiralBezierGrids, stage.SpiralBezierGridMap_Staged_Order)
+		res = GetNamedStructInstances(stage.SpiralBezierGrids, stage.SpiralBezierGrid_stagedOrder)
 	case "SpiralCircle":
-		res = GetNamedStructInstances(stage.SpiralCircles, stage.SpiralCircleMap_Staged_Order)
+		res = GetNamedStructInstances(stage.SpiralCircles, stage.SpiralCircle_stagedOrder)
 	case "SpiralCircleGrid":
-		res = GetNamedStructInstances(stage.SpiralCircleGrids, stage.SpiralCircleGridMap_Staged_Order)
+		res = GetNamedStructInstances(stage.SpiralCircleGrids, stage.SpiralCircleGrid_stagedOrder)
 	case "SpiralLine":
-		res = GetNamedStructInstances(stage.SpiralLines, stage.SpiralLineMap_Staged_Order)
+		res = GetNamedStructInstances(stage.SpiralLines, stage.SpiralLine_stagedOrder)
 	case "SpiralLineGrid":
-		res = GetNamedStructInstances(stage.SpiralLineGrids, stage.SpiralLineGridMap_Staged_Order)
+		res = GetNamedStructInstances(stage.SpiralLineGrids, stage.SpiralLineGrid_stagedOrder)
 	case "SpiralOrigin":
-		res = GetNamedStructInstances(stage.SpiralOrigins, stage.SpiralOriginMap_Staged_Order)
+		res = GetNamedStructInstances(stage.SpiralOrigins, stage.SpiralOrigin_stagedOrder)
 	case "SpiralRhombus":
-		res = GetNamedStructInstances(stage.SpiralRhombuss, stage.SpiralRhombusMap_Staged_Order)
+		res = GetNamedStructInstances(stage.SpiralRhombuss, stage.SpiralRhombus_stagedOrder)
 	case "SpiralRhombusGrid":
-		res = GetNamedStructInstances(stage.SpiralRhombusGrids, stage.SpiralRhombusGridMap_Staged_Order)
+		res = GetNamedStructInstances(stage.SpiralRhombusGrids, stage.SpiralRhombusGrid_stagedOrder)
 	case "VerticalAxis":
-		res = GetNamedStructInstances(stage.VerticalAxiss, stage.VerticalAxisMap_Staged_Order)
+		res = GetNamedStructInstances(stage.VerticalAxiss, stage.VerticalAxis_stagedOrder)
 	}
 
 	return
@@ -1210,7 +1977,6 @@ type BackRepoInterface interface {
 }
 
 func NewStage(name string) (stage *Stage) {
-
 	stage = &Stage{ // insertion point for array initiatialisation
 		Axiss:           make(map[*Axis]struct{}),
 		Axiss_mapString: make(map[string]*Axis),
@@ -1306,63 +2072,122 @@ func NewStage(name string) (stage *Stage) {
 		// the to be removed stops here
 
 		// insertion point for order map initialisations
-		AxisMap_Staged_Order: make(map[*Axis]uint),
+		Axis_stagedOrder: make(map[*Axis]uint),
 
-		AxisGridMap_Staged_Order: make(map[*AxisGrid]uint),
+		AxisGrid_stagedOrder: make(map[*AxisGrid]uint),
 
-		BezierMap_Staged_Order: make(map[*Bezier]uint),
+		Bezier_stagedOrder: make(map[*Bezier]uint),
 
-		BezierGridMap_Staged_Order: make(map[*BezierGrid]uint),
+		BezierGrid_stagedOrder: make(map[*BezierGrid]uint),
 
-		BezierGridStackMap_Staged_Order: make(map[*BezierGridStack]uint),
+		BezierGridStack_stagedOrder: make(map[*BezierGridStack]uint),
 
-		ChapterMap_Staged_Order: make(map[*Chapter]uint),
+		Chapter_stagedOrder: make(map[*Chapter]uint),
 
-		CircleMap_Staged_Order: make(map[*Circle]uint),
+		Circle_stagedOrder: make(map[*Circle]uint),
 
-		CircleGridMap_Staged_Order: make(map[*CircleGrid]uint),
+		CircleGrid_stagedOrder: make(map[*CircleGrid]uint),
 
-		ContentMap_Staged_Order: make(map[*Content]uint),
+		Content_stagedOrder: make(map[*Content]uint),
 
-		ExportToMusicxmlMap_Staged_Order: make(map[*ExportToMusicxml]uint),
+		ExportToMusicxml_stagedOrder: make(map[*ExportToMusicxml]uint),
 
-		FrontCurveMap_Staged_Order: make(map[*FrontCurve]uint),
+		FrontCurve_stagedOrder: make(map[*FrontCurve]uint),
 
-		FrontCurveStackMap_Staged_Order: make(map[*FrontCurveStack]uint),
+		FrontCurveStack_stagedOrder: make(map[*FrontCurveStack]uint),
 
-		HorizontalAxisMap_Staged_Order: make(map[*HorizontalAxis]uint),
+		HorizontalAxis_stagedOrder: make(map[*HorizontalAxis]uint),
 
-		KeyMap_Staged_Order: make(map[*Key]uint),
+		Key_stagedOrder: make(map[*Key]uint),
 
-		ParameterMap_Staged_Order: make(map[*Parameter]uint),
+		Parameter_stagedOrder: make(map[*Parameter]uint),
 
-		RhombusMap_Staged_Order: make(map[*Rhombus]uint),
+		Rhombus_stagedOrder: make(map[*Rhombus]uint),
 
-		RhombusGridMap_Staged_Order: make(map[*RhombusGrid]uint),
+		RhombusGrid_stagedOrder: make(map[*RhombusGrid]uint),
 
-		ShapeCategoryMap_Staged_Order: make(map[*ShapeCategory]uint),
+		ShapeCategory_stagedOrder: make(map[*ShapeCategory]uint),
 
-		SpiralBezierMap_Staged_Order: make(map[*SpiralBezier]uint),
+		SpiralBezier_stagedOrder: make(map[*SpiralBezier]uint),
 
-		SpiralBezierGridMap_Staged_Order: make(map[*SpiralBezierGrid]uint),
+		SpiralBezierGrid_stagedOrder: make(map[*SpiralBezierGrid]uint),
 
-		SpiralCircleMap_Staged_Order: make(map[*SpiralCircle]uint),
+		SpiralCircle_stagedOrder: make(map[*SpiralCircle]uint),
 
-		SpiralCircleGridMap_Staged_Order: make(map[*SpiralCircleGrid]uint),
+		SpiralCircleGrid_stagedOrder: make(map[*SpiralCircleGrid]uint),
 
-		SpiralLineMap_Staged_Order: make(map[*SpiralLine]uint),
+		SpiralLine_stagedOrder: make(map[*SpiralLine]uint),
 
-		SpiralLineGridMap_Staged_Order: make(map[*SpiralLineGrid]uint),
+		SpiralLineGrid_stagedOrder: make(map[*SpiralLineGrid]uint),
 
-		SpiralOriginMap_Staged_Order: make(map[*SpiralOrigin]uint),
+		SpiralOrigin_stagedOrder: make(map[*SpiralOrigin]uint),
 
-		SpiralRhombusMap_Staged_Order: make(map[*SpiralRhombus]uint),
+		SpiralRhombus_stagedOrder: make(map[*SpiralRhombus]uint),
 
-		SpiralRhombusGridMap_Staged_Order: make(map[*SpiralRhombusGrid]uint),
+		SpiralRhombusGrid_stagedOrder: make(map[*SpiralRhombusGrid]uint),
 
-		VerticalAxisMap_Staged_Order: make(map[*VerticalAxis]uint),
+		VerticalAxis_stagedOrder: make(map[*VerticalAxis]uint),
 
 		// end of insertion point
+		GongUnmarshallers: map[string]ModelUnmarshaller{ // insertion point for unmarshallers
+			"Axis": &AxisUnmarshaller{},
+
+			"AxisGrid": &AxisGridUnmarshaller{},
+
+			"Bezier": &BezierUnmarshaller{},
+
+			"BezierGrid": &BezierGridUnmarshaller{},
+
+			"BezierGridStack": &BezierGridStackUnmarshaller{},
+
+			"Chapter": &ChapterUnmarshaller{},
+
+			"Circle": &CircleUnmarshaller{},
+
+			"CircleGrid": &CircleGridUnmarshaller{},
+
+			"Content": &ContentUnmarshaller{},
+
+			"ExportToMusicxml": &ExportToMusicxmlUnmarshaller{},
+
+			"FrontCurve": &FrontCurveUnmarshaller{},
+
+			"FrontCurveStack": &FrontCurveStackUnmarshaller{},
+
+			"HorizontalAxis": &HorizontalAxisUnmarshaller{},
+
+			"Key": &KeyUnmarshaller{},
+
+			"Parameter": &ParameterUnmarshaller{},
+
+			"Rhombus": &RhombusUnmarshaller{},
+
+			"RhombusGrid": &RhombusGridUnmarshaller{},
+
+			"ShapeCategory": &ShapeCategoryUnmarshaller{},
+
+			"SpiralBezier": &SpiralBezierUnmarshaller{},
+
+			"SpiralBezierGrid": &SpiralBezierGridUnmarshaller{},
+
+			"SpiralCircle": &SpiralCircleUnmarshaller{},
+
+			"SpiralCircleGrid": &SpiralCircleGridUnmarshaller{},
+
+			"SpiralLine": &SpiralLineUnmarshaller{},
+
+			"SpiralLineGrid": &SpiralLineGridUnmarshaller{},
+
+			"SpiralOrigin": &SpiralOriginUnmarshaller{},
+
+			"SpiralRhombus": &SpiralRhombusUnmarshaller{},
+
+			"SpiralRhombusGrid": &SpiralRhombusGridUnmarshaller{},
+
+			"VerticalAxis": &VerticalAxisUnmarshaller{},
+
+			// end of insertion point
+		},
 
 		NamedStructs: []*NamedStruct{ // insertion point for order map initialisations
 			{name: "Axis"},
@@ -1394,136 +2219,136 @@ func NewStage(name string) (stage *Stage) {
 			{name: "SpiralRhombusGrid"},
 			{name: "VerticalAxis"},
 		}, // end of insertion point
+
+		navigationMode: GongNavigationModeNormal,
 	}
 
 	return
 }
 
 func GetOrder[Type Gongstruct](stage *Stage, instance *Type) uint {
-
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
 	case *Axis:
-		return stage.AxisMap_Staged_Order[instance]
+		return stage.Axis_stagedOrder[instance]
 	case *AxisGrid:
-		return stage.AxisGridMap_Staged_Order[instance]
+		return stage.AxisGrid_stagedOrder[instance]
 	case *Bezier:
-		return stage.BezierMap_Staged_Order[instance]
+		return stage.Bezier_stagedOrder[instance]
 	case *BezierGrid:
-		return stage.BezierGridMap_Staged_Order[instance]
+		return stage.BezierGrid_stagedOrder[instance]
 	case *BezierGridStack:
-		return stage.BezierGridStackMap_Staged_Order[instance]
+		return stage.BezierGridStack_stagedOrder[instance]
 	case *Chapter:
-		return stage.ChapterMap_Staged_Order[instance]
+		return stage.Chapter_stagedOrder[instance]
 	case *Circle:
-		return stage.CircleMap_Staged_Order[instance]
+		return stage.Circle_stagedOrder[instance]
 	case *CircleGrid:
-		return stage.CircleGridMap_Staged_Order[instance]
+		return stage.CircleGrid_stagedOrder[instance]
 	case *Content:
-		return stage.ContentMap_Staged_Order[instance]
+		return stage.Content_stagedOrder[instance]
 	case *ExportToMusicxml:
-		return stage.ExportToMusicxmlMap_Staged_Order[instance]
+		return stage.ExportToMusicxml_stagedOrder[instance]
 	case *FrontCurve:
-		return stage.FrontCurveMap_Staged_Order[instance]
+		return stage.FrontCurve_stagedOrder[instance]
 	case *FrontCurveStack:
-		return stage.FrontCurveStackMap_Staged_Order[instance]
+		return stage.FrontCurveStack_stagedOrder[instance]
 	case *HorizontalAxis:
-		return stage.HorizontalAxisMap_Staged_Order[instance]
+		return stage.HorizontalAxis_stagedOrder[instance]
 	case *Key:
-		return stage.KeyMap_Staged_Order[instance]
+		return stage.Key_stagedOrder[instance]
 	case *Parameter:
-		return stage.ParameterMap_Staged_Order[instance]
+		return stage.Parameter_stagedOrder[instance]
 	case *Rhombus:
-		return stage.RhombusMap_Staged_Order[instance]
+		return stage.Rhombus_stagedOrder[instance]
 	case *RhombusGrid:
-		return stage.RhombusGridMap_Staged_Order[instance]
+		return stage.RhombusGrid_stagedOrder[instance]
 	case *ShapeCategory:
-		return stage.ShapeCategoryMap_Staged_Order[instance]
+		return stage.ShapeCategory_stagedOrder[instance]
 	case *SpiralBezier:
-		return stage.SpiralBezierMap_Staged_Order[instance]
+		return stage.SpiralBezier_stagedOrder[instance]
 	case *SpiralBezierGrid:
-		return stage.SpiralBezierGridMap_Staged_Order[instance]
+		return stage.SpiralBezierGrid_stagedOrder[instance]
 	case *SpiralCircle:
-		return stage.SpiralCircleMap_Staged_Order[instance]
+		return stage.SpiralCircle_stagedOrder[instance]
 	case *SpiralCircleGrid:
-		return stage.SpiralCircleGridMap_Staged_Order[instance]
+		return stage.SpiralCircleGrid_stagedOrder[instance]
 	case *SpiralLine:
-		return stage.SpiralLineMap_Staged_Order[instance]
+		return stage.SpiralLine_stagedOrder[instance]
 	case *SpiralLineGrid:
-		return stage.SpiralLineGridMap_Staged_Order[instance]
+		return stage.SpiralLineGrid_stagedOrder[instance]
 	case *SpiralOrigin:
-		return stage.SpiralOriginMap_Staged_Order[instance]
+		return stage.SpiralOrigin_stagedOrder[instance]
 	case *SpiralRhombus:
-		return stage.SpiralRhombusMap_Staged_Order[instance]
+		return stage.SpiralRhombus_stagedOrder[instance]
 	case *SpiralRhombusGrid:
-		return stage.SpiralRhombusGridMap_Staged_Order[instance]
+		return stage.SpiralRhombusGrid_stagedOrder[instance]
 	case *VerticalAxis:
-		return stage.VerticalAxisMap_Staged_Order[instance]
+		return stage.VerticalAxis_stagedOrder[instance]
 	default:
 		return 0 // should not happen
 	}
 }
 
 func GetOrderPointerGongstruct[Type PointerToGongstruct](stage *Stage, instance Type) uint {
-
 	switch instance := any(instance).(type) {
 	// insertion point for order map initialisations
 	case *Axis:
-		return stage.AxisMap_Staged_Order[instance]
+		return stage.Axis_stagedOrder[instance]
 	case *AxisGrid:
-		return stage.AxisGridMap_Staged_Order[instance]
+		return stage.AxisGrid_stagedOrder[instance]
 	case *Bezier:
-		return stage.BezierMap_Staged_Order[instance]
+		return stage.Bezier_stagedOrder[instance]
 	case *BezierGrid:
-		return stage.BezierGridMap_Staged_Order[instance]
+		return stage.BezierGrid_stagedOrder[instance]
 	case *BezierGridStack:
-		return stage.BezierGridStackMap_Staged_Order[instance]
+		return stage.BezierGridStack_stagedOrder[instance]
 	case *Chapter:
-		return stage.ChapterMap_Staged_Order[instance]
+		return stage.Chapter_stagedOrder[instance]
 	case *Circle:
-		return stage.CircleMap_Staged_Order[instance]
+		return stage.Circle_stagedOrder[instance]
 	case *CircleGrid:
-		return stage.CircleGridMap_Staged_Order[instance]
+		return stage.CircleGrid_stagedOrder[instance]
 	case *Content:
-		return stage.ContentMap_Staged_Order[instance]
+		return stage.Content_stagedOrder[instance]
 	case *ExportToMusicxml:
-		return stage.ExportToMusicxmlMap_Staged_Order[instance]
+		return stage.ExportToMusicxml_stagedOrder[instance]
 	case *FrontCurve:
-		return stage.FrontCurveMap_Staged_Order[instance]
+		return stage.FrontCurve_stagedOrder[instance]
 	case *FrontCurveStack:
-		return stage.FrontCurveStackMap_Staged_Order[instance]
+		return stage.FrontCurveStack_stagedOrder[instance]
 	case *HorizontalAxis:
-		return stage.HorizontalAxisMap_Staged_Order[instance]
+		return stage.HorizontalAxis_stagedOrder[instance]
 	case *Key:
-		return stage.KeyMap_Staged_Order[instance]
+		return stage.Key_stagedOrder[instance]
 	case *Parameter:
-		return stage.ParameterMap_Staged_Order[instance]
+		return stage.Parameter_stagedOrder[instance]
 	case *Rhombus:
-		return stage.RhombusMap_Staged_Order[instance]
+		return stage.Rhombus_stagedOrder[instance]
 	case *RhombusGrid:
-		return stage.RhombusGridMap_Staged_Order[instance]
+		return stage.RhombusGrid_stagedOrder[instance]
 	case *ShapeCategory:
-		return stage.ShapeCategoryMap_Staged_Order[instance]
+		return stage.ShapeCategory_stagedOrder[instance]
 	case *SpiralBezier:
-		return stage.SpiralBezierMap_Staged_Order[instance]
+		return stage.SpiralBezier_stagedOrder[instance]
 	case *SpiralBezierGrid:
-		return stage.SpiralBezierGridMap_Staged_Order[instance]
+		return stage.SpiralBezierGrid_stagedOrder[instance]
 	case *SpiralCircle:
-		return stage.SpiralCircleMap_Staged_Order[instance]
+		return stage.SpiralCircle_stagedOrder[instance]
 	case *SpiralCircleGrid:
-		return stage.SpiralCircleGridMap_Staged_Order[instance]
+		return stage.SpiralCircleGrid_stagedOrder[instance]
 	case *SpiralLine:
-		return stage.SpiralLineMap_Staged_Order[instance]
+		return stage.SpiralLine_stagedOrder[instance]
 	case *SpiralLineGrid:
-		return stage.SpiralLineGridMap_Staged_Order[instance]
+		return stage.SpiralLineGrid_stagedOrder[instance]
 	case *SpiralOrigin:
-		return stage.SpiralOriginMap_Staged_Order[instance]
+		return stage.SpiralOrigin_stagedOrder[instance]
 	case *SpiralRhombus:
-		return stage.SpiralRhombusMap_Staged_Order[instance]
+		return stage.SpiralRhombus_stagedOrder[instance]
 	case *SpiralRhombusGrid:
-		return stage.SpiralRhombusGridMap_Staged_Order[instance]
+		return stage.SpiralRhombusGrid_stagedOrder[instance]
 	case *VerticalAxis:
-		return stage.VerticalAxisMap_Staged_Order[instance]
+		return stage.VerticalAxis_stagedOrder[instance]
 	default:
 		return 0 // should not happen
 	}
@@ -1534,11 +2359,16 @@ func (stage *Stage) GetName() string {
 }
 
 func (stage *Stage) CommitWithSuspendedCallbacks() {
-
 	tmp := stage.OnInitCommitFromBackCallback
 	stage.OnInitCommitFromBackCallback = nil
+	tmp2 := stage.beforeCommitHooks
+	stage.beforeCommitHooks = nil
+	tmp3 := stage.afterCommitHooks
+	stage.afterCommitHooks = nil
 	stage.Commit()
 	stage.OnInitCommitFromBackCallback = tmp
+	stage.beforeCommitHooks = tmp2
+	stage.afterCommitHooks = tmp3
 }
 
 func (stage *Stage) Commit() {
@@ -1551,13 +2381,34 @@ func (stage *Stage) Commit() {
 		stage.OnInitCommitFromBackCallback.BeforeCommit(stage)
 	}
 
+	// 1. Run all Before Commit hooks
+	for _, hook := range stage.beforeCommitHooks {
+		hook(stage)
+	}
+
 	if stage.BackRepo != nil {
 		stage.BackRepo.Commit(stage)
 	}
 	stage.ComputeInstancesNb()
-	if stage.IsDeltaMode() {
-		stage.ComputeDifference()
-		stage.ComputeReference()
+
+	// if a commit is applied when in navigation mode
+	// this will reset the commits behind and swith the
+	// naviagation
+	if stage.isInDeltaMode && stage.navigationMode == GongNavigationModeNavigating && stage.GetCommitsBehind() > 0 {
+		stage.ResetHard()
+	}
+
+	if stage.IsInDeltaMode() {
+		stage.ComputeForwardAndBackwardCommits()
+		stage.ComputeReferenceAndOrders()
+		if stage.probeIF != nil {
+			stage.probeIF.RefreshNavigationTree()
+		}
+	}
+
+	// 2. Run all After Commit hooks
+	for _, hook := range stage.afterCommitHooks {
+		hook(stage)
 	}
 }
 
@@ -1633,10 +2484,9 @@ func (stage *Stage) RestoreXL(dirPath string) {
 // insertion point for cumulative sub template with model space calls
 // Stage puts axis to the model stage
 func (axis *Axis) Stage(stage *Stage) *Axis {
-
 	if _, ok := stage.Axiss[axis]; !ok {
 		stage.Axiss[axis] = struct{}{}
-		stage.AxisMap_Staged_Order[axis] = stage.AxisOrder
+		stage.Axis_stagedOrder[axis] = stage.AxisOrder
 		stage.AxisOrder++
 	}
 	stage.Axiss_mapString[axis.Name] = axis
@@ -1650,14 +2500,13 @@ func (axis *Axis) Stage(stage *Stage) *Axis {
 // - force the order if the order is equal or greater than the stage.AxisOrder
 // - update stage.AxisOrder accordingly
 func (axis *Axis) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.Axiss[axis]; !ok {
 		stage.Axiss[axis] = struct{}{}
 
 		if order > stage.AxisOrder {
 			stage.AxisOrder = order
 		}
-		stage.AxisMap_Staged_Order[axis] = stage.AxisOrder
+		stage.Axis_stagedOrder[axis] = order
 		stage.AxisOrder++
 	}
 	stage.Axiss_mapString[axis.Name] = axis
@@ -1666,7 +2515,8 @@ func (axis *Axis) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes axis off the model stage
 func (axis *Axis) Unstage(stage *Stage) *Axis {
 	delete(stage.Axiss, axis)
-	delete(stage.AxisMap_Staged_Order, axis)
+	// issue1150
+	// delete(stage.Axis_stagedOrder, axis)
 	delete(stage.Axiss_mapString, axis.Name)
 
 	return axis
@@ -1675,7 +2525,8 @@ func (axis *Axis) Unstage(stage *Stage) *Axis {
 // UnstageVoid removes axis off the model stage
 func (axis *Axis) UnstageVoid(stage *Stage) {
 	delete(stage.Axiss, axis)
-	delete(stage.AxisMap_Staged_Order, axis)
+	// issue1150
+	// delete(stage.Axis_stagedOrder, axis)
 	delete(stage.Axiss_mapString, axis.Name)
 }
 
@@ -1719,10 +2570,9 @@ func (axis *Axis) SetName(name string) {
 
 // Stage puts axisgrid to the model stage
 func (axisgrid *AxisGrid) Stage(stage *Stage) *AxisGrid {
-
 	if _, ok := stage.AxisGrids[axisgrid]; !ok {
 		stage.AxisGrids[axisgrid] = struct{}{}
-		stage.AxisGridMap_Staged_Order[axisgrid] = stage.AxisGridOrder
+		stage.AxisGrid_stagedOrder[axisgrid] = stage.AxisGridOrder
 		stage.AxisGridOrder++
 	}
 	stage.AxisGrids_mapString[axisgrid.Name] = axisgrid
@@ -1736,14 +2586,13 @@ func (axisgrid *AxisGrid) Stage(stage *Stage) *AxisGrid {
 // - force the order if the order is equal or greater than the stage.AxisGridOrder
 // - update stage.AxisGridOrder accordingly
 func (axisgrid *AxisGrid) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.AxisGrids[axisgrid]; !ok {
 		stage.AxisGrids[axisgrid] = struct{}{}
 
 		if order > stage.AxisGridOrder {
 			stage.AxisGridOrder = order
 		}
-		stage.AxisGridMap_Staged_Order[axisgrid] = stage.AxisGridOrder
+		stage.AxisGrid_stagedOrder[axisgrid] = order
 		stage.AxisGridOrder++
 	}
 	stage.AxisGrids_mapString[axisgrid.Name] = axisgrid
@@ -1752,7 +2601,8 @@ func (axisgrid *AxisGrid) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes axisgrid off the model stage
 func (axisgrid *AxisGrid) Unstage(stage *Stage) *AxisGrid {
 	delete(stage.AxisGrids, axisgrid)
-	delete(stage.AxisGridMap_Staged_Order, axisgrid)
+	// issue1150
+	// delete(stage.AxisGrid_stagedOrder, axisgrid)
 	delete(stage.AxisGrids_mapString, axisgrid.Name)
 
 	return axisgrid
@@ -1761,7 +2611,8 @@ func (axisgrid *AxisGrid) Unstage(stage *Stage) *AxisGrid {
 // UnstageVoid removes axisgrid off the model stage
 func (axisgrid *AxisGrid) UnstageVoid(stage *Stage) {
 	delete(stage.AxisGrids, axisgrid)
-	delete(stage.AxisGridMap_Staged_Order, axisgrid)
+	// issue1150
+	// delete(stage.AxisGrid_stagedOrder, axisgrid)
 	delete(stage.AxisGrids_mapString, axisgrid.Name)
 }
 
@@ -1805,10 +2656,9 @@ func (axisgrid *AxisGrid) SetName(name string) {
 
 // Stage puts bezier to the model stage
 func (bezier *Bezier) Stage(stage *Stage) *Bezier {
-
 	if _, ok := stage.Beziers[bezier]; !ok {
 		stage.Beziers[bezier] = struct{}{}
-		stage.BezierMap_Staged_Order[bezier] = stage.BezierOrder
+		stage.Bezier_stagedOrder[bezier] = stage.BezierOrder
 		stage.BezierOrder++
 	}
 	stage.Beziers_mapString[bezier.Name] = bezier
@@ -1822,14 +2672,13 @@ func (bezier *Bezier) Stage(stage *Stage) *Bezier {
 // - force the order if the order is equal or greater than the stage.BezierOrder
 // - update stage.BezierOrder accordingly
 func (bezier *Bezier) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.Beziers[bezier]; !ok {
 		stage.Beziers[bezier] = struct{}{}
 
 		if order > stage.BezierOrder {
 			stage.BezierOrder = order
 		}
-		stage.BezierMap_Staged_Order[bezier] = stage.BezierOrder
+		stage.Bezier_stagedOrder[bezier] = order
 		stage.BezierOrder++
 	}
 	stage.Beziers_mapString[bezier.Name] = bezier
@@ -1838,7 +2687,8 @@ func (bezier *Bezier) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes bezier off the model stage
 func (bezier *Bezier) Unstage(stage *Stage) *Bezier {
 	delete(stage.Beziers, bezier)
-	delete(stage.BezierMap_Staged_Order, bezier)
+	// issue1150
+	// delete(stage.Bezier_stagedOrder, bezier)
 	delete(stage.Beziers_mapString, bezier.Name)
 
 	return bezier
@@ -1847,7 +2697,8 @@ func (bezier *Bezier) Unstage(stage *Stage) *Bezier {
 // UnstageVoid removes bezier off the model stage
 func (bezier *Bezier) UnstageVoid(stage *Stage) {
 	delete(stage.Beziers, bezier)
-	delete(stage.BezierMap_Staged_Order, bezier)
+	// issue1150
+	// delete(stage.Bezier_stagedOrder, bezier)
 	delete(stage.Beziers_mapString, bezier.Name)
 }
 
@@ -1891,10 +2742,9 @@ func (bezier *Bezier) SetName(name string) {
 
 // Stage puts beziergrid to the model stage
 func (beziergrid *BezierGrid) Stage(stage *Stage) *BezierGrid {
-
 	if _, ok := stage.BezierGrids[beziergrid]; !ok {
 		stage.BezierGrids[beziergrid] = struct{}{}
-		stage.BezierGridMap_Staged_Order[beziergrid] = stage.BezierGridOrder
+		stage.BezierGrid_stagedOrder[beziergrid] = stage.BezierGridOrder
 		stage.BezierGridOrder++
 	}
 	stage.BezierGrids_mapString[beziergrid.Name] = beziergrid
@@ -1908,14 +2758,13 @@ func (beziergrid *BezierGrid) Stage(stage *Stage) *BezierGrid {
 // - force the order if the order is equal or greater than the stage.BezierGridOrder
 // - update stage.BezierGridOrder accordingly
 func (beziergrid *BezierGrid) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.BezierGrids[beziergrid]; !ok {
 		stage.BezierGrids[beziergrid] = struct{}{}
 
 		if order > stage.BezierGridOrder {
 			stage.BezierGridOrder = order
 		}
-		stage.BezierGridMap_Staged_Order[beziergrid] = stage.BezierGridOrder
+		stage.BezierGrid_stagedOrder[beziergrid] = order
 		stage.BezierGridOrder++
 	}
 	stage.BezierGrids_mapString[beziergrid.Name] = beziergrid
@@ -1924,7 +2773,8 @@ func (beziergrid *BezierGrid) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes beziergrid off the model stage
 func (beziergrid *BezierGrid) Unstage(stage *Stage) *BezierGrid {
 	delete(stage.BezierGrids, beziergrid)
-	delete(stage.BezierGridMap_Staged_Order, beziergrid)
+	// issue1150
+	// delete(stage.BezierGrid_stagedOrder, beziergrid)
 	delete(stage.BezierGrids_mapString, beziergrid.Name)
 
 	return beziergrid
@@ -1933,7 +2783,8 @@ func (beziergrid *BezierGrid) Unstage(stage *Stage) *BezierGrid {
 // UnstageVoid removes beziergrid off the model stage
 func (beziergrid *BezierGrid) UnstageVoid(stage *Stage) {
 	delete(stage.BezierGrids, beziergrid)
-	delete(stage.BezierGridMap_Staged_Order, beziergrid)
+	// issue1150
+	// delete(stage.BezierGrid_stagedOrder, beziergrid)
 	delete(stage.BezierGrids_mapString, beziergrid.Name)
 }
 
@@ -1977,10 +2828,9 @@ func (beziergrid *BezierGrid) SetName(name string) {
 
 // Stage puts beziergridstack to the model stage
 func (beziergridstack *BezierGridStack) Stage(stage *Stage) *BezierGridStack {
-
 	if _, ok := stage.BezierGridStacks[beziergridstack]; !ok {
 		stage.BezierGridStacks[beziergridstack] = struct{}{}
-		stage.BezierGridStackMap_Staged_Order[beziergridstack] = stage.BezierGridStackOrder
+		stage.BezierGridStack_stagedOrder[beziergridstack] = stage.BezierGridStackOrder
 		stage.BezierGridStackOrder++
 	}
 	stage.BezierGridStacks_mapString[beziergridstack.Name] = beziergridstack
@@ -1994,14 +2844,13 @@ func (beziergridstack *BezierGridStack) Stage(stage *Stage) *BezierGridStack {
 // - force the order if the order is equal or greater than the stage.BezierGridStackOrder
 // - update stage.BezierGridStackOrder accordingly
 func (beziergridstack *BezierGridStack) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.BezierGridStacks[beziergridstack]; !ok {
 		stage.BezierGridStacks[beziergridstack] = struct{}{}
 
 		if order > stage.BezierGridStackOrder {
 			stage.BezierGridStackOrder = order
 		}
-		stage.BezierGridStackMap_Staged_Order[beziergridstack] = stage.BezierGridStackOrder
+		stage.BezierGridStack_stagedOrder[beziergridstack] = order
 		stage.BezierGridStackOrder++
 	}
 	stage.BezierGridStacks_mapString[beziergridstack.Name] = beziergridstack
@@ -2010,7 +2859,8 @@ func (beziergridstack *BezierGridStack) StagePreserveOrder(stage *Stage, order u
 // Unstage removes beziergridstack off the model stage
 func (beziergridstack *BezierGridStack) Unstage(stage *Stage) *BezierGridStack {
 	delete(stage.BezierGridStacks, beziergridstack)
-	delete(stage.BezierGridStackMap_Staged_Order, beziergridstack)
+	// issue1150
+	// delete(stage.BezierGridStack_stagedOrder, beziergridstack)
 	delete(stage.BezierGridStacks_mapString, beziergridstack.Name)
 
 	return beziergridstack
@@ -2019,7 +2869,8 @@ func (beziergridstack *BezierGridStack) Unstage(stage *Stage) *BezierGridStack {
 // UnstageVoid removes beziergridstack off the model stage
 func (beziergridstack *BezierGridStack) UnstageVoid(stage *Stage) {
 	delete(stage.BezierGridStacks, beziergridstack)
-	delete(stage.BezierGridStackMap_Staged_Order, beziergridstack)
+	// issue1150
+	// delete(stage.BezierGridStack_stagedOrder, beziergridstack)
 	delete(stage.BezierGridStacks_mapString, beziergridstack.Name)
 }
 
@@ -2063,10 +2914,9 @@ func (beziergridstack *BezierGridStack) SetName(name string) {
 
 // Stage puts chapter to the model stage
 func (chapter *Chapter) Stage(stage *Stage) *Chapter {
-
 	if _, ok := stage.Chapters[chapter]; !ok {
 		stage.Chapters[chapter] = struct{}{}
-		stage.ChapterMap_Staged_Order[chapter] = stage.ChapterOrder
+		stage.Chapter_stagedOrder[chapter] = stage.ChapterOrder
 		stage.ChapterOrder++
 	}
 	stage.Chapters_mapString[chapter.Name] = chapter
@@ -2080,14 +2930,13 @@ func (chapter *Chapter) Stage(stage *Stage) *Chapter {
 // - force the order if the order is equal or greater than the stage.ChapterOrder
 // - update stage.ChapterOrder accordingly
 func (chapter *Chapter) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.Chapters[chapter]; !ok {
 		stage.Chapters[chapter] = struct{}{}
 
 		if order > stage.ChapterOrder {
 			stage.ChapterOrder = order
 		}
-		stage.ChapterMap_Staged_Order[chapter] = stage.ChapterOrder
+		stage.Chapter_stagedOrder[chapter] = order
 		stage.ChapterOrder++
 	}
 	stage.Chapters_mapString[chapter.Name] = chapter
@@ -2096,7 +2945,8 @@ func (chapter *Chapter) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes chapter off the model stage
 func (chapter *Chapter) Unstage(stage *Stage) *Chapter {
 	delete(stage.Chapters, chapter)
-	delete(stage.ChapterMap_Staged_Order, chapter)
+	// issue1150
+	// delete(stage.Chapter_stagedOrder, chapter)
 	delete(stage.Chapters_mapString, chapter.Name)
 
 	return chapter
@@ -2105,7 +2955,8 @@ func (chapter *Chapter) Unstage(stage *Stage) *Chapter {
 // UnstageVoid removes chapter off the model stage
 func (chapter *Chapter) UnstageVoid(stage *Stage) {
 	delete(stage.Chapters, chapter)
-	delete(stage.ChapterMap_Staged_Order, chapter)
+	// issue1150
+	// delete(stage.Chapter_stagedOrder, chapter)
 	delete(stage.Chapters_mapString, chapter.Name)
 }
 
@@ -2149,10 +3000,9 @@ func (chapter *Chapter) SetName(name string) {
 
 // Stage puts circle to the model stage
 func (circle *Circle) Stage(stage *Stage) *Circle {
-
 	if _, ok := stage.Circles[circle]; !ok {
 		stage.Circles[circle] = struct{}{}
-		stage.CircleMap_Staged_Order[circle] = stage.CircleOrder
+		stage.Circle_stagedOrder[circle] = stage.CircleOrder
 		stage.CircleOrder++
 	}
 	stage.Circles_mapString[circle.Name] = circle
@@ -2166,14 +3016,13 @@ func (circle *Circle) Stage(stage *Stage) *Circle {
 // - force the order if the order is equal or greater than the stage.CircleOrder
 // - update stage.CircleOrder accordingly
 func (circle *Circle) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.Circles[circle]; !ok {
 		stage.Circles[circle] = struct{}{}
 
 		if order > stage.CircleOrder {
 			stage.CircleOrder = order
 		}
-		stage.CircleMap_Staged_Order[circle] = stage.CircleOrder
+		stage.Circle_stagedOrder[circle] = order
 		stage.CircleOrder++
 	}
 	stage.Circles_mapString[circle.Name] = circle
@@ -2182,7 +3031,8 @@ func (circle *Circle) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes circle off the model stage
 func (circle *Circle) Unstage(stage *Stage) *Circle {
 	delete(stage.Circles, circle)
-	delete(stage.CircleMap_Staged_Order, circle)
+	// issue1150
+	// delete(stage.Circle_stagedOrder, circle)
 	delete(stage.Circles_mapString, circle.Name)
 
 	return circle
@@ -2191,7 +3041,8 @@ func (circle *Circle) Unstage(stage *Stage) *Circle {
 // UnstageVoid removes circle off the model stage
 func (circle *Circle) UnstageVoid(stage *Stage) {
 	delete(stage.Circles, circle)
-	delete(stage.CircleMap_Staged_Order, circle)
+	// issue1150
+	// delete(stage.Circle_stagedOrder, circle)
 	delete(stage.Circles_mapString, circle.Name)
 }
 
@@ -2235,10 +3086,9 @@ func (circle *Circle) SetName(name string) {
 
 // Stage puts circlegrid to the model stage
 func (circlegrid *CircleGrid) Stage(stage *Stage) *CircleGrid {
-
 	if _, ok := stage.CircleGrids[circlegrid]; !ok {
 		stage.CircleGrids[circlegrid] = struct{}{}
-		stage.CircleGridMap_Staged_Order[circlegrid] = stage.CircleGridOrder
+		stage.CircleGrid_stagedOrder[circlegrid] = stage.CircleGridOrder
 		stage.CircleGridOrder++
 	}
 	stage.CircleGrids_mapString[circlegrid.Name] = circlegrid
@@ -2252,14 +3102,13 @@ func (circlegrid *CircleGrid) Stage(stage *Stage) *CircleGrid {
 // - force the order if the order is equal or greater than the stage.CircleGridOrder
 // - update stage.CircleGridOrder accordingly
 func (circlegrid *CircleGrid) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.CircleGrids[circlegrid]; !ok {
 		stage.CircleGrids[circlegrid] = struct{}{}
 
 		if order > stage.CircleGridOrder {
 			stage.CircleGridOrder = order
 		}
-		stage.CircleGridMap_Staged_Order[circlegrid] = stage.CircleGridOrder
+		stage.CircleGrid_stagedOrder[circlegrid] = order
 		stage.CircleGridOrder++
 	}
 	stage.CircleGrids_mapString[circlegrid.Name] = circlegrid
@@ -2268,7 +3117,8 @@ func (circlegrid *CircleGrid) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes circlegrid off the model stage
 func (circlegrid *CircleGrid) Unstage(stage *Stage) *CircleGrid {
 	delete(stage.CircleGrids, circlegrid)
-	delete(stage.CircleGridMap_Staged_Order, circlegrid)
+	// issue1150
+	// delete(stage.CircleGrid_stagedOrder, circlegrid)
 	delete(stage.CircleGrids_mapString, circlegrid.Name)
 
 	return circlegrid
@@ -2277,7 +3127,8 @@ func (circlegrid *CircleGrid) Unstage(stage *Stage) *CircleGrid {
 // UnstageVoid removes circlegrid off the model stage
 func (circlegrid *CircleGrid) UnstageVoid(stage *Stage) {
 	delete(stage.CircleGrids, circlegrid)
-	delete(stage.CircleGridMap_Staged_Order, circlegrid)
+	// issue1150
+	// delete(stage.CircleGrid_stagedOrder, circlegrid)
 	delete(stage.CircleGrids_mapString, circlegrid.Name)
 }
 
@@ -2321,10 +3172,9 @@ func (circlegrid *CircleGrid) SetName(name string) {
 
 // Stage puts content to the model stage
 func (content *Content) Stage(stage *Stage) *Content {
-
 	if _, ok := stage.Contents[content]; !ok {
 		stage.Contents[content] = struct{}{}
-		stage.ContentMap_Staged_Order[content] = stage.ContentOrder
+		stage.Content_stagedOrder[content] = stage.ContentOrder
 		stage.ContentOrder++
 	}
 	stage.Contents_mapString[content.Name] = content
@@ -2338,14 +3188,13 @@ func (content *Content) Stage(stage *Stage) *Content {
 // - force the order if the order is equal or greater than the stage.ContentOrder
 // - update stage.ContentOrder accordingly
 func (content *Content) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.Contents[content]; !ok {
 		stage.Contents[content] = struct{}{}
 
 		if order > stage.ContentOrder {
 			stage.ContentOrder = order
 		}
-		stage.ContentMap_Staged_Order[content] = stage.ContentOrder
+		stage.Content_stagedOrder[content] = order
 		stage.ContentOrder++
 	}
 	stage.Contents_mapString[content.Name] = content
@@ -2354,7 +3203,8 @@ func (content *Content) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes content off the model stage
 func (content *Content) Unstage(stage *Stage) *Content {
 	delete(stage.Contents, content)
-	delete(stage.ContentMap_Staged_Order, content)
+	// issue1150
+	// delete(stage.Content_stagedOrder, content)
 	delete(stage.Contents_mapString, content.Name)
 
 	return content
@@ -2363,7 +3213,8 @@ func (content *Content) Unstage(stage *Stage) *Content {
 // UnstageVoid removes content off the model stage
 func (content *Content) UnstageVoid(stage *Stage) {
 	delete(stage.Contents, content)
-	delete(stage.ContentMap_Staged_Order, content)
+	// issue1150
+	// delete(stage.Content_stagedOrder, content)
 	delete(stage.Contents_mapString, content.Name)
 }
 
@@ -2407,10 +3258,9 @@ func (content *Content) SetName(name string) {
 
 // Stage puts exporttomusicxml to the model stage
 func (exporttomusicxml *ExportToMusicxml) Stage(stage *Stage) *ExportToMusicxml {
-
 	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; !ok {
 		stage.ExportToMusicxmls[exporttomusicxml] = struct{}{}
-		stage.ExportToMusicxmlMap_Staged_Order[exporttomusicxml] = stage.ExportToMusicxmlOrder
+		stage.ExportToMusicxml_stagedOrder[exporttomusicxml] = stage.ExportToMusicxmlOrder
 		stage.ExportToMusicxmlOrder++
 	}
 	stage.ExportToMusicxmls_mapString[exporttomusicxml.Name] = exporttomusicxml
@@ -2424,14 +3274,13 @@ func (exporttomusicxml *ExportToMusicxml) Stage(stage *Stage) *ExportToMusicxml 
 // - force the order if the order is equal or greater than the stage.ExportToMusicxmlOrder
 // - update stage.ExportToMusicxmlOrder accordingly
 func (exporttomusicxml *ExportToMusicxml) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.ExportToMusicxmls[exporttomusicxml]; !ok {
 		stage.ExportToMusicxmls[exporttomusicxml] = struct{}{}
 
 		if order > stage.ExportToMusicxmlOrder {
 			stage.ExportToMusicxmlOrder = order
 		}
-		stage.ExportToMusicxmlMap_Staged_Order[exporttomusicxml] = stage.ExportToMusicxmlOrder
+		stage.ExportToMusicxml_stagedOrder[exporttomusicxml] = order
 		stage.ExportToMusicxmlOrder++
 	}
 	stage.ExportToMusicxmls_mapString[exporttomusicxml.Name] = exporttomusicxml
@@ -2440,7 +3289,8 @@ func (exporttomusicxml *ExportToMusicxml) StagePreserveOrder(stage *Stage, order
 // Unstage removes exporttomusicxml off the model stage
 func (exporttomusicxml *ExportToMusicxml) Unstage(stage *Stage) *ExportToMusicxml {
 	delete(stage.ExportToMusicxmls, exporttomusicxml)
-	delete(stage.ExportToMusicxmlMap_Staged_Order, exporttomusicxml)
+	// issue1150
+	// delete(stage.ExportToMusicxml_stagedOrder, exporttomusicxml)
 	delete(stage.ExportToMusicxmls_mapString, exporttomusicxml.Name)
 
 	return exporttomusicxml
@@ -2449,7 +3299,8 @@ func (exporttomusicxml *ExportToMusicxml) Unstage(stage *Stage) *ExportToMusicxm
 // UnstageVoid removes exporttomusicxml off the model stage
 func (exporttomusicxml *ExportToMusicxml) UnstageVoid(stage *Stage) {
 	delete(stage.ExportToMusicxmls, exporttomusicxml)
-	delete(stage.ExportToMusicxmlMap_Staged_Order, exporttomusicxml)
+	// issue1150
+	// delete(stage.ExportToMusicxml_stagedOrder, exporttomusicxml)
 	delete(stage.ExportToMusicxmls_mapString, exporttomusicxml.Name)
 }
 
@@ -2493,10 +3344,9 @@ func (exporttomusicxml *ExportToMusicxml) SetName(name string) {
 
 // Stage puts frontcurve to the model stage
 func (frontcurve *FrontCurve) Stage(stage *Stage) *FrontCurve {
-
 	if _, ok := stage.FrontCurves[frontcurve]; !ok {
 		stage.FrontCurves[frontcurve] = struct{}{}
-		stage.FrontCurveMap_Staged_Order[frontcurve] = stage.FrontCurveOrder
+		stage.FrontCurve_stagedOrder[frontcurve] = stage.FrontCurveOrder
 		stage.FrontCurveOrder++
 	}
 	stage.FrontCurves_mapString[frontcurve.Name] = frontcurve
@@ -2510,14 +3360,13 @@ func (frontcurve *FrontCurve) Stage(stage *Stage) *FrontCurve {
 // - force the order if the order is equal or greater than the stage.FrontCurveOrder
 // - update stage.FrontCurveOrder accordingly
 func (frontcurve *FrontCurve) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.FrontCurves[frontcurve]; !ok {
 		stage.FrontCurves[frontcurve] = struct{}{}
 
 		if order > stage.FrontCurveOrder {
 			stage.FrontCurveOrder = order
 		}
-		stage.FrontCurveMap_Staged_Order[frontcurve] = stage.FrontCurveOrder
+		stage.FrontCurve_stagedOrder[frontcurve] = order
 		stage.FrontCurveOrder++
 	}
 	stage.FrontCurves_mapString[frontcurve.Name] = frontcurve
@@ -2526,7 +3375,8 @@ func (frontcurve *FrontCurve) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes frontcurve off the model stage
 func (frontcurve *FrontCurve) Unstage(stage *Stage) *FrontCurve {
 	delete(stage.FrontCurves, frontcurve)
-	delete(stage.FrontCurveMap_Staged_Order, frontcurve)
+	// issue1150
+	// delete(stage.FrontCurve_stagedOrder, frontcurve)
 	delete(stage.FrontCurves_mapString, frontcurve.Name)
 
 	return frontcurve
@@ -2535,7 +3385,8 @@ func (frontcurve *FrontCurve) Unstage(stage *Stage) *FrontCurve {
 // UnstageVoid removes frontcurve off the model stage
 func (frontcurve *FrontCurve) UnstageVoid(stage *Stage) {
 	delete(stage.FrontCurves, frontcurve)
-	delete(stage.FrontCurveMap_Staged_Order, frontcurve)
+	// issue1150
+	// delete(stage.FrontCurve_stagedOrder, frontcurve)
 	delete(stage.FrontCurves_mapString, frontcurve.Name)
 }
 
@@ -2579,10 +3430,9 @@ func (frontcurve *FrontCurve) SetName(name string) {
 
 // Stage puts frontcurvestack to the model stage
 func (frontcurvestack *FrontCurveStack) Stage(stage *Stage) *FrontCurveStack {
-
 	if _, ok := stage.FrontCurveStacks[frontcurvestack]; !ok {
 		stage.FrontCurveStacks[frontcurvestack] = struct{}{}
-		stage.FrontCurveStackMap_Staged_Order[frontcurvestack] = stage.FrontCurveStackOrder
+		stage.FrontCurveStack_stagedOrder[frontcurvestack] = stage.FrontCurveStackOrder
 		stage.FrontCurveStackOrder++
 	}
 	stage.FrontCurveStacks_mapString[frontcurvestack.Name] = frontcurvestack
@@ -2596,14 +3446,13 @@ func (frontcurvestack *FrontCurveStack) Stage(stage *Stage) *FrontCurveStack {
 // - force the order if the order is equal or greater than the stage.FrontCurveStackOrder
 // - update stage.FrontCurveStackOrder accordingly
 func (frontcurvestack *FrontCurveStack) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.FrontCurveStacks[frontcurvestack]; !ok {
 		stage.FrontCurveStacks[frontcurvestack] = struct{}{}
 
 		if order > stage.FrontCurveStackOrder {
 			stage.FrontCurveStackOrder = order
 		}
-		stage.FrontCurveStackMap_Staged_Order[frontcurvestack] = stage.FrontCurveStackOrder
+		stage.FrontCurveStack_stagedOrder[frontcurvestack] = order
 		stage.FrontCurveStackOrder++
 	}
 	stage.FrontCurveStacks_mapString[frontcurvestack.Name] = frontcurvestack
@@ -2612,7 +3461,8 @@ func (frontcurvestack *FrontCurveStack) StagePreserveOrder(stage *Stage, order u
 // Unstage removes frontcurvestack off the model stage
 func (frontcurvestack *FrontCurveStack) Unstage(stage *Stage) *FrontCurveStack {
 	delete(stage.FrontCurveStacks, frontcurvestack)
-	delete(stage.FrontCurveStackMap_Staged_Order, frontcurvestack)
+	// issue1150
+	// delete(stage.FrontCurveStack_stagedOrder, frontcurvestack)
 	delete(stage.FrontCurveStacks_mapString, frontcurvestack.Name)
 
 	return frontcurvestack
@@ -2621,7 +3471,8 @@ func (frontcurvestack *FrontCurveStack) Unstage(stage *Stage) *FrontCurveStack {
 // UnstageVoid removes frontcurvestack off the model stage
 func (frontcurvestack *FrontCurveStack) UnstageVoid(stage *Stage) {
 	delete(stage.FrontCurveStacks, frontcurvestack)
-	delete(stage.FrontCurveStackMap_Staged_Order, frontcurvestack)
+	// issue1150
+	// delete(stage.FrontCurveStack_stagedOrder, frontcurvestack)
 	delete(stage.FrontCurveStacks_mapString, frontcurvestack.Name)
 }
 
@@ -2665,10 +3516,9 @@ func (frontcurvestack *FrontCurveStack) SetName(name string) {
 
 // Stage puts horizontalaxis to the model stage
 func (horizontalaxis *HorizontalAxis) Stage(stage *Stage) *HorizontalAxis {
-
 	if _, ok := stage.HorizontalAxiss[horizontalaxis]; !ok {
 		stage.HorizontalAxiss[horizontalaxis] = struct{}{}
-		stage.HorizontalAxisMap_Staged_Order[horizontalaxis] = stage.HorizontalAxisOrder
+		stage.HorizontalAxis_stagedOrder[horizontalaxis] = stage.HorizontalAxisOrder
 		stage.HorizontalAxisOrder++
 	}
 	stage.HorizontalAxiss_mapString[horizontalaxis.Name] = horizontalaxis
@@ -2682,14 +3532,13 @@ func (horizontalaxis *HorizontalAxis) Stage(stage *Stage) *HorizontalAxis {
 // - force the order if the order is equal or greater than the stage.HorizontalAxisOrder
 // - update stage.HorizontalAxisOrder accordingly
 func (horizontalaxis *HorizontalAxis) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.HorizontalAxiss[horizontalaxis]; !ok {
 		stage.HorizontalAxiss[horizontalaxis] = struct{}{}
 
 		if order > stage.HorizontalAxisOrder {
 			stage.HorizontalAxisOrder = order
 		}
-		stage.HorizontalAxisMap_Staged_Order[horizontalaxis] = stage.HorizontalAxisOrder
+		stage.HorizontalAxis_stagedOrder[horizontalaxis] = order
 		stage.HorizontalAxisOrder++
 	}
 	stage.HorizontalAxiss_mapString[horizontalaxis.Name] = horizontalaxis
@@ -2698,7 +3547,8 @@ func (horizontalaxis *HorizontalAxis) StagePreserveOrder(stage *Stage, order uin
 // Unstage removes horizontalaxis off the model stage
 func (horizontalaxis *HorizontalAxis) Unstage(stage *Stage) *HorizontalAxis {
 	delete(stage.HorizontalAxiss, horizontalaxis)
-	delete(stage.HorizontalAxisMap_Staged_Order, horizontalaxis)
+	// issue1150
+	// delete(stage.HorizontalAxis_stagedOrder, horizontalaxis)
 	delete(stage.HorizontalAxiss_mapString, horizontalaxis.Name)
 
 	return horizontalaxis
@@ -2707,7 +3557,8 @@ func (horizontalaxis *HorizontalAxis) Unstage(stage *Stage) *HorizontalAxis {
 // UnstageVoid removes horizontalaxis off the model stage
 func (horizontalaxis *HorizontalAxis) UnstageVoid(stage *Stage) {
 	delete(stage.HorizontalAxiss, horizontalaxis)
-	delete(stage.HorizontalAxisMap_Staged_Order, horizontalaxis)
+	// issue1150
+	// delete(stage.HorizontalAxis_stagedOrder, horizontalaxis)
 	delete(stage.HorizontalAxiss_mapString, horizontalaxis.Name)
 }
 
@@ -2751,10 +3602,9 @@ func (horizontalaxis *HorizontalAxis) SetName(name string) {
 
 // Stage puts key to the model stage
 func (key *Key) Stage(stage *Stage) *Key {
-
 	if _, ok := stage.Keys[key]; !ok {
 		stage.Keys[key] = struct{}{}
-		stage.KeyMap_Staged_Order[key] = stage.KeyOrder
+		stage.Key_stagedOrder[key] = stage.KeyOrder
 		stage.KeyOrder++
 	}
 	stage.Keys_mapString[key.Name] = key
@@ -2768,14 +3618,13 @@ func (key *Key) Stage(stage *Stage) *Key {
 // - force the order if the order is equal or greater than the stage.KeyOrder
 // - update stage.KeyOrder accordingly
 func (key *Key) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.Keys[key]; !ok {
 		stage.Keys[key] = struct{}{}
 
 		if order > stage.KeyOrder {
 			stage.KeyOrder = order
 		}
-		stage.KeyMap_Staged_Order[key] = stage.KeyOrder
+		stage.Key_stagedOrder[key] = order
 		stage.KeyOrder++
 	}
 	stage.Keys_mapString[key.Name] = key
@@ -2784,7 +3633,8 @@ func (key *Key) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes key off the model stage
 func (key *Key) Unstage(stage *Stage) *Key {
 	delete(stage.Keys, key)
-	delete(stage.KeyMap_Staged_Order, key)
+	// issue1150
+	// delete(stage.Key_stagedOrder, key)
 	delete(stage.Keys_mapString, key.Name)
 
 	return key
@@ -2793,7 +3643,8 @@ func (key *Key) Unstage(stage *Stage) *Key {
 // UnstageVoid removes key off the model stage
 func (key *Key) UnstageVoid(stage *Stage) {
 	delete(stage.Keys, key)
-	delete(stage.KeyMap_Staged_Order, key)
+	// issue1150
+	// delete(stage.Key_stagedOrder, key)
 	delete(stage.Keys_mapString, key.Name)
 }
 
@@ -2837,10 +3688,9 @@ func (key *Key) SetName(name string) {
 
 // Stage puts parameter to the model stage
 func (parameter *Parameter) Stage(stage *Stage) *Parameter {
-
 	if _, ok := stage.Parameters[parameter]; !ok {
 		stage.Parameters[parameter] = struct{}{}
-		stage.ParameterMap_Staged_Order[parameter] = stage.ParameterOrder
+		stage.Parameter_stagedOrder[parameter] = stage.ParameterOrder
 		stage.ParameterOrder++
 	}
 	stage.Parameters_mapString[parameter.Name] = parameter
@@ -2854,14 +3704,13 @@ func (parameter *Parameter) Stage(stage *Stage) *Parameter {
 // - force the order if the order is equal or greater than the stage.ParameterOrder
 // - update stage.ParameterOrder accordingly
 func (parameter *Parameter) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.Parameters[parameter]; !ok {
 		stage.Parameters[parameter] = struct{}{}
 
 		if order > stage.ParameterOrder {
 			stage.ParameterOrder = order
 		}
-		stage.ParameterMap_Staged_Order[parameter] = stage.ParameterOrder
+		stage.Parameter_stagedOrder[parameter] = order
 		stage.ParameterOrder++
 	}
 	stage.Parameters_mapString[parameter.Name] = parameter
@@ -2870,7 +3719,8 @@ func (parameter *Parameter) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes parameter off the model stage
 func (parameter *Parameter) Unstage(stage *Stage) *Parameter {
 	delete(stage.Parameters, parameter)
-	delete(stage.ParameterMap_Staged_Order, parameter)
+	// issue1150
+	// delete(stage.Parameter_stagedOrder, parameter)
 	delete(stage.Parameters_mapString, parameter.Name)
 
 	return parameter
@@ -2879,7 +3729,8 @@ func (parameter *Parameter) Unstage(stage *Stage) *Parameter {
 // UnstageVoid removes parameter off the model stage
 func (parameter *Parameter) UnstageVoid(stage *Stage) {
 	delete(stage.Parameters, parameter)
-	delete(stage.ParameterMap_Staged_Order, parameter)
+	// issue1150
+	// delete(stage.Parameter_stagedOrder, parameter)
 	delete(stage.Parameters_mapString, parameter.Name)
 }
 
@@ -2923,10 +3774,9 @@ func (parameter *Parameter) SetName(name string) {
 
 // Stage puts rhombus to the model stage
 func (rhombus *Rhombus) Stage(stage *Stage) *Rhombus {
-
 	if _, ok := stage.Rhombuss[rhombus]; !ok {
 		stage.Rhombuss[rhombus] = struct{}{}
-		stage.RhombusMap_Staged_Order[rhombus] = stage.RhombusOrder
+		stage.Rhombus_stagedOrder[rhombus] = stage.RhombusOrder
 		stage.RhombusOrder++
 	}
 	stage.Rhombuss_mapString[rhombus.Name] = rhombus
@@ -2940,14 +3790,13 @@ func (rhombus *Rhombus) Stage(stage *Stage) *Rhombus {
 // - force the order if the order is equal or greater than the stage.RhombusOrder
 // - update stage.RhombusOrder accordingly
 func (rhombus *Rhombus) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.Rhombuss[rhombus]; !ok {
 		stage.Rhombuss[rhombus] = struct{}{}
 
 		if order > stage.RhombusOrder {
 			stage.RhombusOrder = order
 		}
-		stage.RhombusMap_Staged_Order[rhombus] = stage.RhombusOrder
+		stage.Rhombus_stagedOrder[rhombus] = order
 		stage.RhombusOrder++
 	}
 	stage.Rhombuss_mapString[rhombus.Name] = rhombus
@@ -2956,7 +3805,8 @@ func (rhombus *Rhombus) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes rhombus off the model stage
 func (rhombus *Rhombus) Unstage(stage *Stage) *Rhombus {
 	delete(stage.Rhombuss, rhombus)
-	delete(stage.RhombusMap_Staged_Order, rhombus)
+	// issue1150
+	// delete(stage.Rhombus_stagedOrder, rhombus)
 	delete(stage.Rhombuss_mapString, rhombus.Name)
 
 	return rhombus
@@ -2965,7 +3815,8 @@ func (rhombus *Rhombus) Unstage(stage *Stage) *Rhombus {
 // UnstageVoid removes rhombus off the model stage
 func (rhombus *Rhombus) UnstageVoid(stage *Stage) {
 	delete(stage.Rhombuss, rhombus)
-	delete(stage.RhombusMap_Staged_Order, rhombus)
+	// issue1150
+	// delete(stage.Rhombus_stagedOrder, rhombus)
 	delete(stage.Rhombuss_mapString, rhombus.Name)
 }
 
@@ -3009,10 +3860,9 @@ func (rhombus *Rhombus) SetName(name string) {
 
 // Stage puts rhombusgrid to the model stage
 func (rhombusgrid *RhombusGrid) Stage(stage *Stage) *RhombusGrid {
-
 	if _, ok := stage.RhombusGrids[rhombusgrid]; !ok {
 		stage.RhombusGrids[rhombusgrid] = struct{}{}
-		stage.RhombusGridMap_Staged_Order[rhombusgrid] = stage.RhombusGridOrder
+		stage.RhombusGrid_stagedOrder[rhombusgrid] = stage.RhombusGridOrder
 		stage.RhombusGridOrder++
 	}
 	stage.RhombusGrids_mapString[rhombusgrid.Name] = rhombusgrid
@@ -3026,14 +3876,13 @@ func (rhombusgrid *RhombusGrid) Stage(stage *Stage) *RhombusGrid {
 // - force the order if the order is equal or greater than the stage.RhombusGridOrder
 // - update stage.RhombusGridOrder accordingly
 func (rhombusgrid *RhombusGrid) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.RhombusGrids[rhombusgrid]; !ok {
 		stage.RhombusGrids[rhombusgrid] = struct{}{}
 
 		if order > stage.RhombusGridOrder {
 			stage.RhombusGridOrder = order
 		}
-		stage.RhombusGridMap_Staged_Order[rhombusgrid] = stage.RhombusGridOrder
+		stage.RhombusGrid_stagedOrder[rhombusgrid] = order
 		stage.RhombusGridOrder++
 	}
 	stage.RhombusGrids_mapString[rhombusgrid.Name] = rhombusgrid
@@ -3042,7 +3891,8 @@ func (rhombusgrid *RhombusGrid) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes rhombusgrid off the model stage
 func (rhombusgrid *RhombusGrid) Unstage(stage *Stage) *RhombusGrid {
 	delete(stage.RhombusGrids, rhombusgrid)
-	delete(stage.RhombusGridMap_Staged_Order, rhombusgrid)
+	// issue1150
+	// delete(stage.RhombusGrid_stagedOrder, rhombusgrid)
 	delete(stage.RhombusGrids_mapString, rhombusgrid.Name)
 
 	return rhombusgrid
@@ -3051,7 +3901,8 @@ func (rhombusgrid *RhombusGrid) Unstage(stage *Stage) *RhombusGrid {
 // UnstageVoid removes rhombusgrid off the model stage
 func (rhombusgrid *RhombusGrid) UnstageVoid(stage *Stage) {
 	delete(stage.RhombusGrids, rhombusgrid)
-	delete(stage.RhombusGridMap_Staged_Order, rhombusgrid)
+	// issue1150
+	// delete(stage.RhombusGrid_stagedOrder, rhombusgrid)
 	delete(stage.RhombusGrids_mapString, rhombusgrid.Name)
 }
 
@@ -3095,10 +3946,9 @@ func (rhombusgrid *RhombusGrid) SetName(name string) {
 
 // Stage puts shapecategory to the model stage
 func (shapecategory *ShapeCategory) Stage(stage *Stage) *ShapeCategory {
-
 	if _, ok := stage.ShapeCategorys[shapecategory]; !ok {
 		stage.ShapeCategorys[shapecategory] = struct{}{}
-		stage.ShapeCategoryMap_Staged_Order[shapecategory] = stage.ShapeCategoryOrder
+		stage.ShapeCategory_stagedOrder[shapecategory] = stage.ShapeCategoryOrder
 		stage.ShapeCategoryOrder++
 	}
 	stage.ShapeCategorys_mapString[shapecategory.Name] = shapecategory
@@ -3112,14 +3962,13 @@ func (shapecategory *ShapeCategory) Stage(stage *Stage) *ShapeCategory {
 // - force the order if the order is equal or greater than the stage.ShapeCategoryOrder
 // - update stage.ShapeCategoryOrder accordingly
 func (shapecategory *ShapeCategory) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.ShapeCategorys[shapecategory]; !ok {
 		stage.ShapeCategorys[shapecategory] = struct{}{}
 
 		if order > stage.ShapeCategoryOrder {
 			stage.ShapeCategoryOrder = order
 		}
-		stage.ShapeCategoryMap_Staged_Order[shapecategory] = stage.ShapeCategoryOrder
+		stage.ShapeCategory_stagedOrder[shapecategory] = order
 		stage.ShapeCategoryOrder++
 	}
 	stage.ShapeCategorys_mapString[shapecategory.Name] = shapecategory
@@ -3128,7 +3977,8 @@ func (shapecategory *ShapeCategory) StagePreserveOrder(stage *Stage, order uint)
 // Unstage removes shapecategory off the model stage
 func (shapecategory *ShapeCategory) Unstage(stage *Stage) *ShapeCategory {
 	delete(stage.ShapeCategorys, shapecategory)
-	delete(stage.ShapeCategoryMap_Staged_Order, shapecategory)
+	// issue1150
+	// delete(stage.ShapeCategory_stagedOrder, shapecategory)
 	delete(stage.ShapeCategorys_mapString, shapecategory.Name)
 
 	return shapecategory
@@ -3137,7 +3987,8 @@ func (shapecategory *ShapeCategory) Unstage(stage *Stage) *ShapeCategory {
 // UnstageVoid removes shapecategory off the model stage
 func (shapecategory *ShapeCategory) UnstageVoid(stage *Stage) {
 	delete(stage.ShapeCategorys, shapecategory)
-	delete(stage.ShapeCategoryMap_Staged_Order, shapecategory)
+	// issue1150
+	// delete(stage.ShapeCategory_stagedOrder, shapecategory)
 	delete(stage.ShapeCategorys_mapString, shapecategory.Name)
 }
 
@@ -3181,10 +4032,9 @@ func (shapecategory *ShapeCategory) SetName(name string) {
 
 // Stage puts spiralbezier to the model stage
 func (spiralbezier *SpiralBezier) Stage(stage *Stage) *SpiralBezier {
-
 	if _, ok := stage.SpiralBeziers[spiralbezier]; !ok {
 		stage.SpiralBeziers[spiralbezier] = struct{}{}
-		stage.SpiralBezierMap_Staged_Order[spiralbezier] = stage.SpiralBezierOrder
+		stage.SpiralBezier_stagedOrder[spiralbezier] = stage.SpiralBezierOrder
 		stage.SpiralBezierOrder++
 	}
 	stage.SpiralBeziers_mapString[spiralbezier.Name] = spiralbezier
@@ -3198,14 +4048,13 @@ func (spiralbezier *SpiralBezier) Stage(stage *Stage) *SpiralBezier {
 // - force the order if the order is equal or greater than the stage.SpiralBezierOrder
 // - update stage.SpiralBezierOrder accordingly
 func (spiralbezier *SpiralBezier) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.SpiralBeziers[spiralbezier]; !ok {
 		stage.SpiralBeziers[spiralbezier] = struct{}{}
 
 		if order > stage.SpiralBezierOrder {
 			stage.SpiralBezierOrder = order
 		}
-		stage.SpiralBezierMap_Staged_Order[spiralbezier] = stage.SpiralBezierOrder
+		stage.SpiralBezier_stagedOrder[spiralbezier] = order
 		stage.SpiralBezierOrder++
 	}
 	stage.SpiralBeziers_mapString[spiralbezier.Name] = spiralbezier
@@ -3214,7 +4063,8 @@ func (spiralbezier *SpiralBezier) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes spiralbezier off the model stage
 func (spiralbezier *SpiralBezier) Unstage(stage *Stage) *SpiralBezier {
 	delete(stage.SpiralBeziers, spiralbezier)
-	delete(stage.SpiralBezierMap_Staged_Order, spiralbezier)
+	// issue1150
+	// delete(stage.SpiralBezier_stagedOrder, spiralbezier)
 	delete(stage.SpiralBeziers_mapString, spiralbezier.Name)
 
 	return spiralbezier
@@ -3223,7 +4073,8 @@ func (spiralbezier *SpiralBezier) Unstage(stage *Stage) *SpiralBezier {
 // UnstageVoid removes spiralbezier off the model stage
 func (spiralbezier *SpiralBezier) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralBeziers, spiralbezier)
-	delete(stage.SpiralBezierMap_Staged_Order, spiralbezier)
+	// issue1150
+	// delete(stage.SpiralBezier_stagedOrder, spiralbezier)
 	delete(stage.SpiralBeziers_mapString, spiralbezier.Name)
 }
 
@@ -3267,10 +4118,9 @@ func (spiralbezier *SpiralBezier) SetName(name string) {
 
 // Stage puts spiralbeziergrid to the model stage
 func (spiralbeziergrid *SpiralBezierGrid) Stage(stage *Stage) *SpiralBezierGrid {
-
 	if _, ok := stage.SpiralBezierGrids[spiralbeziergrid]; !ok {
 		stage.SpiralBezierGrids[spiralbeziergrid] = struct{}{}
-		stage.SpiralBezierGridMap_Staged_Order[spiralbeziergrid] = stage.SpiralBezierGridOrder
+		stage.SpiralBezierGrid_stagedOrder[spiralbeziergrid] = stage.SpiralBezierGridOrder
 		stage.SpiralBezierGridOrder++
 	}
 	stage.SpiralBezierGrids_mapString[spiralbeziergrid.Name] = spiralbeziergrid
@@ -3284,14 +4134,13 @@ func (spiralbeziergrid *SpiralBezierGrid) Stage(stage *Stage) *SpiralBezierGrid 
 // - force the order if the order is equal or greater than the stage.SpiralBezierGridOrder
 // - update stage.SpiralBezierGridOrder accordingly
 func (spiralbeziergrid *SpiralBezierGrid) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.SpiralBezierGrids[spiralbeziergrid]; !ok {
 		stage.SpiralBezierGrids[spiralbeziergrid] = struct{}{}
 
 		if order > stage.SpiralBezierGridOrder {
 			stage.SpiralBezierGridOrder = order
 		}
-		stage.SpiralBezierGridMap_Staged_Order[spiralbeziergrid] = stage.SpiralBezierGridOrder
+		stage.SpiralBezierGrid_stagedOrder[spiralbeziergrid] = order
 		stage.SpiralBezierGridOrder++
 	}
 	stage.SpiralBezierGrids_mapString[spiralbeziergrid.Name] = spiralbeziergrid
@@ -3300,7 +4149,8 @@ func (spiralbeziergrid *SpiralBezierGrid) StagePreserveOrder(stage *Stage, order
 // Unstage removes spiralbeziergrid off the model stage
 func (spiralbeziergrid *SpiralBezierGrid) Unstage(stage *Stage) *SpiralBezierGrid {
 	delete(stage.SpiralBezierGrids, spiralbeziergrid)
-	delete(stage.SpiralBezierGridMap_Staged_Order, spiralbeziergrid)
+	// issue1150
+	// delete(stage.SpiralBezierGrid_stagedOrder, spiralbeziergrid)
 	delete(stage.SpiralBezierGrids_mapString, spiralbeziergrid.Name)
 
 	return spiralbeziergrid
@@ -3309,7 +4159,8 @@ func (spiralbeziergrid *SpiralBezierGrid) Unstage(stage *Stage) *SpiralBezierGri
 // UnstageVoid removes spiralbeziergrid off the model stage
 func (spiralbeziergrid *SpiralBezierGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralBezierGrids, spiralbeziergrid)
-	delete(stage.SpiralBezierGridMap_Staged_Order, spiralbeziergrid)
+	// issue1150
+	// delete(stage.SpiralBezierGrid_stagedOrder, spiralbeziergrid)
 	delete(stage.SpiralBezierGrids_mapString, spiralbeziergrid.Name)
 }
 
@@ -3353,10 +4204,9 @@ func (spiralbeziergrid *SpiralBezierGrid) SetName(name string) {
 
 // Stage puts spiralcircle to the model stage
 func (spiralcircle *SpiralCircle) Stage(stage *Stage) *SpiralCircle {
-
 	if _, ok := stage.SpiralCircles[spiralcircle]; !ok {
 		stage.SpiralCircles[spiralcircle] = struct{}{}
-		stage.SpiralCircleMap_Staged_Order[spiralcircle] = stage.SpiralCircleOrder
+		stage.SpiralCircle_stagedOrder[spiralcircle] = stage.SpiralCircleOrder
 		stage.SpiralCircleOrder++
 	}
 	stage.SpiralCircles_mapString[spiralcircle.Name] = spiralcircle
@@ -3370,14 +4220,13 @@ func (spiralcircle *SpiralCircle) Stage(stage *Stage) *SpiralCircle {
 // - force the order if the order is equal or greater than the stage.SpiralCircleOrder
 // - update stage.SpiralCircleOrder accordingly
 func (spiralcircle *SpiralCircle) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.SpiralCircles[spiralcircle]; !ok {
 		stage.SpiralCircles[spiralcircle] = struct{}{}
 
 		if order > stage.SpiralCircleOrder {
 			stage.SpiralCircleOrder = order
 		}
-		stage.SpiralCircleMap_Staged_Order[spiralcircle] = stage.SpiralCircleOrder
+		stage.SpiralCircle_stagedOrder[spiralcircle] = order
 		stage.SpiralCircleOrder++
 	}
 	stage.SpiralCircles_mapString[spiralcircle.Name] = spiralcircle
@@ -3386,7 +4235,8 @@ func (spiralcircle *SpiralCircle) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes spiralcircle off the model stage
 func (spiralcircle *SpiralCircle) Unstage(stage *Stage) *SpiralCircle {
 	delete(stage.SpiralCircles, spiralcircle)
-	delete(stage.SpiralCircleMap_Staged_Order, spiralcircle)
+	// issue1150
+	// delete(stage.SpiralCircle_stagedOrder, spiralcircle)
 	delete(stage.SpiralCircles_mapString, spiralcircle.Name)
 
 	return spiralcircle
@@ -3395,7 +4245,8 @@ func (spiralcircle *SpiralCircle) Unstage(stage *Stage) *SpiralCircle {
 // UnstageVoid removes spiralcircle off the model stage
 func (spiralcircle *SpiralCircle) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralCircles, spiralcircle)
-	delete(stage.SpiralCircleMap_Staged_Order, spiralcircle)
+	// issue1150
+	// delete(stage.SpiralCircle_stagedOrder, spiralcircle)
 	delete(stage.SpiralCircles_mapString, spiralcircle.Name)
 }
 
@@ -3439,10 +4290,9 @@ func (spiralcircle *SpiralCircle) SetName(name string) {
 
 // Stage puts spiralcirclegrid to the model stage
 func (spiralcirclegrid *SpiralCircleGrid) Stage(stage *Stage) *SpiralCircleGrid {
-
 	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; !ok {
 		stage.SpiralCircleGrids[spiralcirclegrid] = struct{}{}
-		stage.SpiralCircleGridMap_Staged_Order[spiralcirclegrid] = stage.SpiralCircleGridOrder
+		stage.SpiralCircleGrid_stagedOrder[spiralcirclegrid] = stage.SpiralCircleGridOrder
 		stage.SpiralCircleGridOrder++
 	}
 	stage.SpiralCircleGrids_mapString[spiralcirclegrid.Name] = spiralcirclegrid
@@ -3456,14 +4306,13 @@ func (spiralcirclegrid *SpiralCircleGrid) Stage(stage *Stage) *SpiralCircleGrid 
 // - force the order if the order is equal or greater than the stage.SpiralCircleGridOrder
 // - update stage.SpiralCircleGridOrder accordingly
 func (spiralcirclegrid *SpiralCircleGrid) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.SpiralCircleGrids[spiralcirclegrid]; !ok {
 		stage.SpiralCircleGrids[spiralcirclegrid] = struct{}{}
 
 		if order > stage.SpiralCircleGridOrder {
 			stage.SpiralCircleGridOrder = order
 		}
-		stage.SpiralCircleGridMap_Staged_Order[spiralcirclegrid] = stage.SpiralCircleGridOrder
+		stage.SpiralCircleGrid_stagedOrder[spiralcirclegrid] = order
 		stage.SpiralCircleGridOrder++
 	}
 	stage.SpiralCircleGrids_mapString[spiralcirclegrid.Name] = spiralcirclegrid
@@ -3472,7 +4321,8 @@ func (spiralcirclegrid *SpiralCircleGrid) StagePreserveOrder(stage *Stage, order
 // Unstage removes spiralcirclegrid off the model stage
 func (spiralcirclegrid *SpiralCircleGrid) Unstage(stage *Stage) *SpiralCircleGrid {
 	delete(stage.SpiralCircleGrids, spiralcirclegrid)
-	delete(stage.SpiralCircleGridMap_Staged_Order, spiralcirclegrid)
+	// issue1150
+	// delete(stage.SpiralCircleGrid_stagedOrder, spiralcirclegrid)
 	delete(stage.SpiralCircleGrids_mapString, spiralcirclegrid.Name)
 
 	return spiralcirclegrid
@@ -3481,7 +4331,8 @@ func (spiralcirclegrid *SpiralCircleGrid) Unstage(stage *Stage) *SpiralCircleGri
 // UnstageVoid removes spiralcirclegrid off the model stage
 func (spiralcirclegrid *SpiralCircleGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralCircleGrids, spiralcirclegrid)
-	delete(stage.SpiralCircleGridMap_Staged_Order, spiralcirclegrid)
+	// issue1150
+	// delete(stage.SpiralCircleGrid_stagedOrder, spiralcirclegrid)
 	delete(stage.SpiralCircleGrids_mapString, spiralcirclegrid.Name)
 }
 
@@ -3525,10 +4376,9 @@ func (spiralcirclegrid *SpiralCircleGrid) SetName(name string) {
 
 // Stage puts spiralline to the model stage
 func (spiralline *SpiralLine) Stage(stage *Stage) *SpiralLine {
-
 	if _, ok := stage.SpiralLines[spiralline]; !ok {
 		stage.SpiralLines[spiralline] = struct{}{}
-		stage.SpiralLineMap_Staged_Order[spiralline] = stage.SpiralLineOrder
+		stage.SpiralLine_stagedOrder[spiralline] = stage.SpiralLineOrder
 		stage.SpiralLineOrder++
 	}
 	stage.SpiralLines_mapString[spiralline.Name] = spiralline
@@ -3542,14 +4392,13 @@ func (spiralline *SpiralLine) Stage(stage *Stage) *SpiralLine {
 // - force the order if the order is equal or greater than the stage.SpiralLineOrder
 // - update stage.SpiralLineOrder accordingly
 func (spiralline *SpiralLine) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.SpiralLines[spiralline]; !ok {
 		stage.SpiralLines[spiralline] = struct{}{}
 
 		if order > stage.SpiralLineOrder {
 			stage.SpiralLineOrder = order
 		}
-		stage.SpiralLineMap_Staged_Order[spiralline] = stage.SpiralLineOrder
+		stage.SpiralLine_stagedOrder[spiralline] = order
 		stage.SpiralLineOrder++
 	}
 	stage.SpiralLines_mapString[spiralline.Name] = spiralline
@@ -3558,7 +4407,8 @@ func (spiralline *SpiralLine) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes spiralline off the model stage
 func (spiralline *SpiralLine) Unstage(stage *Stage) *SpiralLine {
 	delete(stage.SpiralLines, spiralline)
-	delete(stage.SpiralLineMap_Staged_Order, spiralline)
+	// issue1150
+	// delete(stage.SpiralLine_stagedOrder, spiralline)
 	delete(stage.SpiralLines_mapString, spiralline.Name)
 
 	return spiralline
@@ -3567,7 +4417,8 @@ func (spiralline *SpiralLine) Unstage(stage *Stage) *SpiralLine {
 // UnstageVoid removes spiralline off the model stage
 func (spiralline *SpiralLine) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralLines, spiralline)
-	delete(stage.SpiralLineMap_Staged_Order, spiralline)
+	// issue1150
+	// delete(stage.SpiralLine_stagedOrder, spiralline)
 	delete(stage.SpiralLines_mapString, spiralline.Name)
 }
 
@@ -3611,10 +4462,9 @@ func (spiralline *SpiralLine) SetName(name string) {
 
 // Stage puts spirallinegrid to the model stage
 func (spirallinegrid *SpiralLineGrid) Stage(stage *Stage) *SpiralLineGrid {
-
 	if _, ok := stage.SpiralLineGrids[spirallinegrid]; !ok {
 		stage.SpiralLineGrids[spirallinegrid] = struct{}{}
-		stage.SpiralLineGridMap_Staged_Order[spirallinegrid] = stage.SpiralLineGridOrder
+		stage.SpiralLineGrid_stagedOrder[spirallinegrid] = stage.SpiralLineGridOrder
 		stage.SpiralLineGridOrder++
 	}
 	stage.SpiralLineGrids_mapString[spirallinegrid.Name] = spirallinegrid
@@ -3628,14 +4478,13 @@ func (spirallinegrid *SpiralLineGrid) Stage(stage *Stage) *SpiralLineGrid {
 // - force the order if the order is equal or greater than the stage.SpiralLineGridOrder
 // - update stage.SpiralLineGridOrder accordingly
 func (spirallinegrid *SpiralLineGrid) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.SpiralLineGrids[spirallinegrid]; !ok {
 		stage.SpiralLineGrids[spirallinegrid] = struct{}{}
 
 		if order > stage.SpiralLineGridOrder {
 			stage.SpiralLineGridOrder = order
 		}
-		stage.SpiralLineGridMap_Staged_Order[spirallinegrid] = stage.SpiralLineGridOrder
+		stage.SpiralLineGrid_stagedOrder[spirallinegrid] = order
 		stage.SpiralLineGridOrder++
 	}
 	stage.SpiralLineGrids_mapString[spirallinegrid.Name] = spirallinegrid
@@ -3644,7 +4493,8 @@ func (spirallinegrid *SpiralLineGrid) StagePreserveOrder(stage *Stage, order uin
 // Unstage removes spirallinegrid off the model stage
 func (spirallinegrid *SpiralLineGrid) Unstage(stage *Stage) *SpiralLineGrid {
 	delete(stage.SpiralLineGrids, spirallinegrid)
-	delete(stage.SpiralLineGridMap_Staged_Order, spirallinegrid)
+	// issue1150
+	// delete(stage.SpiralLineGrid_stagedOrder, spirallinegrid)
 	delete(stage.SpiralLineGrids_mapString, spirallinegrid.Name)
 
 	return spirallinegrid
@@ -3653,7 +4503,8 @@ func (spirallinegrid *SpiralLineGrid) Unstage(stage *Stage) *SpiralLineGrid {
 // UnstageVoid removes spirallinegrid off the model stage
 func (spirallinegrid *SpiralLineGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralLineGrids, spirallinegrid)
-	delete(stage.SpiralLineGridMap_Staged_Order, spirallinegrid)
+	// issue1150
+	// delete(stage.SpiralLineGrid_stagedOrder, spirallinegrid)
 	delete(stage.SpiralLineGrids_mapString, spirallinegrid.Name)
 }
 
@@ -3697,10 +4548,9 @@ func (spirallinegrid *SpiralLineGrid) SetName(name string) {
 
 // Stage puts spiralorigin to the model stage
 func (spiralorigin *SpiralOrigin) Stage(stage *Stage) *SpiralOrigin {
-
 	if _, ok := stage.SpiralOrigins[spiralorigin]; !ok {
 		stage.SpiralOrigins[spiralorigin] = struct{}{}
-		stage.SpiralOriginMap_Staged_Order[spiralorigin] = stage.SpiralOriginOrder
+		stage.SpiralOrigin_stagedOrder[spiralorigin] = stage.SpiralOriginOrder
 		stage.SpiralOriginOrder++
 	}
 	stage.SpiralOrigins_mapString[spiralorigin.Name] = spiralorigin
@@ -3714,14 +4564,13 @@ func (spiralorigin *SpiralOrigin) Stage(stage *Stage) *SpiralOrigin {
 // - force the order if the order is equal or greater than the stage.SpiralOriginOrder
 // - update stage.SpiralOriginOrder accordingly
 func (spiralorigin *SpiralOrigin) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.SpiralOrigins[spiralorigin]; !ok {
 		stage.SpiralOrigins[spiralorigin] = struct{}{}
 
 		if order > stage.SpiralOriginOrder {
 			stage.SpiralOriginOrder = order
 		}
-		stage.SpiralOriginMap_Staged_Order[spiralorigin] = stage.SpiralOriginOrder
+		stage.SpiralOrigin_stagedOrder[spiralorigin] = order
 		stage.SpiralOriginOrder++
 	}
 	stage.SpiralOrigins_mapString[spiralorigin.Name] = spiralorigin
@@ -3730,7 +4579,8 @@ func (spiralorigin *SpiralOrigin) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes spiralorigin off the model stage
 func (spiralorigin *SpiralOrigin) Unstage(stage *Stage) *SpiralOrigin {
 	delete(stage.SpiralOrigins, spiralorigin)
-	delete(stage.SpiralOriginMap_Staged_Order, spiralorigin)
+	// issue1150
+	// delete(stage.SpiralOrigin_stagedOrder, spiralorigin)
 	delete(stage.SpiralOrigins_mapString, spiralorigin.Name)
 
 	return spiralorigin
@@ -3739,7 +4589,8 @@ func (spiralorigin *SpiralOrigin) Unstage(stage *Stage) *SpiralOrigin {
 // UnstageVoid removes spiralorigin off the model stage
 func (spiralorigin *SpiralOrigin) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralOrigins, spiralorigin)
-	delete(stage.SpiralOriginMap_Staged_Order, spiralorigin)
+	// issue1150
+	// delete(stage.SpiralOrigin_stagedOrder, spiralorigin)
 	delete(stage.SpiralOrigins_mapString, spiralorigin.Name)
 }
 
@@ -3783,10 +4634,9 @@ func (spiralorigin *SpiralOrigin) SetName(name string) {
 
 // Stage puts spiralrhombus to the model stage
 func (spiralrhombus *SpiralRhombus) Stage(stage *Stage) *SpiralRhombus {
-
 	if _, ok := stage.SpiralRhombuss[spiralrhombus]; !ok {
 		stage.SpiralRhombuss[spiralrhombus] = struct{}{}
-		stage.SpiralRhombusMap_Staged_Order[spiralrhombus] = stage.SpiralRhombusOrder
+		stage.SpiralRhombus_stagedOrder[spiralrhombus] = stage.SpiralRhombusOrder
 		stage.SpiralRhombusOrder++
 	}
 	stage.SpiralRhombuss_mapString[spiralrhombus.Name] = spiralrhombus
@@ -3800,14 +4650,13 @@ func (spiralrhombus *SpiralRhombus) Stage(stage *Stage) *SpiralRhombus {
 // - force the order if the order is equal or greater than the stage.SpiralRhombusOrder
 // - update stage.SpiralRhombusOrder accordingly
 func (spiralrhombus *SpiralRhombus) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.SpiralRhombuss[spiralrhombus]; !ok {
 		stage.SpiralRhombuss[spiralrhombus] = struct{}{}
 
 		if order > stage.SpiralRhombusOrder {
 			stage.SpiralRhombusOrder = order
 		}
-		stage.SpiralRhombusMap_Staged_Order[spiralrhombus] = stage.SpiralRhombusOrder
+		stage.SpiralRhombus_stagedOrder[spiralrhombus] = order
 		stage.SpiralRhombusOrder++
 	}
 	stage.SpiralRhombuss_mapString[spiralrhombus.Name] = spiralrhombus
@@ -3816,7 +4665,8 @@ func (spiralrhombus *SpiralRhombus) StagePreserveOrder(stage *Stage, order uint)
 // Unstage removes spiralrhombus off the model stage
 func (spiralrhombus *SpiralRhombus) Unstage(stage *Stage) *SpiralRhombus {
 	delete(stage.SpiralRhombuss, spiralrhombus)
-	delete(stage.SpiralRhombusMap_Staged_Order, spiralrhombus)
+	// issue1150
+	// delete(stage.SpiralRhombus_stagedOrder, spiralrhombus)
 	delete(stage.SpiralRhombuss_mapString, spiralrhombus.Name)
 
 	return spiralrhombus
@@ -3825,7 +4675,8 @@ func (spiralrhombus *SpiralRhombus) Unstage(stage *Stage) *SpiralRhombus {
 // UnstageVoid removes spiralrhombus off the model stage
 func (spiralrhombus *SpiralRhombus) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralRhombuss, spiralrhombus)
-	delete(stage.SpiralRhombusMap_Staged_Order, spiralrhombus)
+	// issue1150
+	// delete(stage.SpiralRhombus_stagedOrder, spiralrhombus)
 	delete(stage.SpiralRhombuss_mapString, spiralrhombus.Name)
 }
 
@@ -3869,10 +4720,9 @@ func (spiralrhombus *SpiralRhombus) SetName(name string) {
 
 // Stage puts spiralrhombusgrid to the model stage
 func (spiralrhombusgrid *SpiralRhombusGrid) Stage(stage *Stage) *SpiralRhombusGrid {
-
 	if _, ok := stage.SpiralRhombusGrids[spiralrhombusgrid]; !ok {
 		stage.SpiralRhombusGrids[spiralrhombusgrid] = struct{}{}
-		stage.SpiralRhombusGridMap_Staged_Order[spiralrhombusgrid] = stage.SpiralRhombusGridOrder
+		stage.SpiralRhombusGrid_stagedOrder[spiralrhombusgrid] = stage.SpiralRhombusGridOrder
 		stage.SpiralRhombusGridOrder++
 	}
 	stage.SpiralRhombusGrids_mapString[spiralrhombusgrid.Name] = spiralrhombusgrid
@@ -3886,14 +4736,13 @@ func (spiralrhombusgrid *SpiralRhombusGrid) Stage(stage *Stage) *SpiralRhombusGr
 // - force the order if the order is equal or greater than the stage.SpiralRhombusGridOrder
 // - update stage.SpiralRhombusGridOrder accordingly
 func (spiralrhombusgrid *SpiralRhombusGrid) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.SpiralRhombusGrids[spiralrhombusgrid]; !ok {
 		stage.SpiralRhombusGrids[spiralrhombusgrid] = struct{}{}
 
 		if order > stage.SpiralRhombusGridOrder {
 			stage.SpiralRhombusGridOrder = order
 		}
-		stage.SpiralRhombusGridMap_Staged_Order[spiralrhombusgrid] = stage.SpiralRhombusGridOrder
+		stage.SpiralRhombusGrid_stagedOrder[spiralrhombusgrid] = order
 		stage.SpiralRhombusGridOrder++
 	}
 	stage.SpiralRhombusGrids_mapString[spiralrhombusgrid.Name] = spiralrhombusgrid
@@ -3902,7 +4751,8 @@ func (spiralrhombusgrid *SpiralRhombusGrid) StagePreserveOrder(stage *Stage, ord
 // Unstage removes spiralrhombusgrid off the model stage
 func (spiralrhombusgrid *SpiralRhombusGrid) Unstage(stage *Stage) *SpiralRhombusGrid {
 	delete(stage.SpiralRhombusGrids, spiralrhombusgrid)
-	delete(stage.SpiralRhombusGridMap_Staged_Order, spiralrhombusgrid)
+	// issue1150
+	// delete(stage.SpiralRhombusGrid_stagedOrder, spiralrhombusgrid)
 	delete(stage.SpiralRhombusGrids_mapString, spiralrhombusgrid.Name)
 
 	return spiralrhombusgrid
@@ -3911,7 +4761,8 @@ func (spiralrhombusgrid *SpiralRhombusGrid) Unstage(stage *Stage) *SpiralRhombus
 // UnstageVoid removes spiralrhombusgrid off the model stage
 func (spiralrhombusgrid *SpiralRhombusGrid) UnstageVoid(stage *Stage) {
 	delete(stage.SpiralRhombusGrids, spiralrhombusgrid)
-	delete(stage.SpiralRhombusGridMap_Staged_Order, spiralrhombusgrid)
+	// issue1150
+	// delete(stage.SpiralRhombusGrid_stagedOrder, spiralrhombusgrid)
 	delete(stage.SpiralRhombusGrids_mapString, spiralrhombusgrid.Name)
 }
 
@@ -3955,10 +4806,9 @@ func (spiralrhombusgrid *SpiralRhombusGrid) SetName(name string) {
 
 // Stage puts verticalaxis to the model stage
 func (verticalaxis *VerticalAxis) Stage(stage *Stage) *VerticalAxis {
-
 	if _, ok := stage.VerticalAxiss[verticalaxis]; !ok {
 		stage.VerticalAxiss[verticalaxis] = struct{}{}
-		stage.VerticalAxisMap_Staged_Order[verticalaxis] = stage.VerticalAxisOrder
+		stage.VerticalAxis_stagedOrder[verticalaxis] = stage.VerticalAxisOrder
 		stage.VerticalAxisOrder++
 	}
 	stage.VerticalAxiss_mapString[verticalaxis.Name] = verticalaxis
@@ -3972,14 +4822,13 @@ func (verticalaxis *VerticalAxis) Stage(stage *Stage) *VerticalAxis {
 // - force the order if the order is equal or greater than the stage.VerticalAxisOrder
 // - update stage.VerticalAxisOrder accordingly
 func (verticalaxis *VerticalAxis) StagePreserveOrder(stage *Stage, order uint) {
-
 	if _, ok := stage.VerticalAxiss[verticalaxis]; !ok {
 		stage.VerticalAxiss[verticalaxis] = struct{}{}
 
 		if order > stage.VerticalAxisOrder {
 			stage.VerticalAxisOrder = order
 		}
-		stage.VerticalAxisMap_Staged_Order[verticalaxis] = stage.VerticalAxisOrder
+		stage.VerticalAxis_stagedOrder[verticalaxis] = order
 		stage.VerticalAxisOrder++
 	}
 	stage.VerticalAxiss_mapString[verticalaxis.Name] = verticalaxis
@@ -3988,7 +4837,8 @@ func (verticalaxis *VerticalAxis) StagePreserveOrder(stage *Stage, order uint) {
 // Unstage removes verticalaxis off the model stage
 func (verticalaxis *VerticalAxis) Unstage(stage *Stage) *VerticalAxis {
 	delete(stage.VerticalAxiss, verticalaxis)
-	delete(stage.VerticalAxisMap_Staged_Order, verticalaxis)
+	// issue1150
+	// delete(stage.VerticalAxis_stagedOrder, verticalaxis)
 	delete(stage.VerticalAxiss_mapString, verticalaxis.Name)
 
 	return verticalaxis
@@ -3997,7 +4847,8 @@ func (verticalaxis *VerticalAxis) Unstage(stage *Stage) *VerticalAxis {
 // UnstageVoid removes verticalaxis off the model stage
 func (verticalaxis *VerticalAxis) UnstageVoid(stage *Stage) {
 	delete(stage.VerticalAxiss, verticalaxis)
-	delete(stage.VerticalAxisMap_Staged_Order, verticalaxis)
+	// issue1150
+	// delete(stage.VerticalAxis_stagedOrder, verticalaxis)
 	delete(stage.VerticalAxiss_mapString, verticalaxis.Name)
 }
 
@@ -4105,149 +4956,149 @@ type AllModelsStructDeleteInterface interface { // insertion point for Callbacks
 func (stage *Stage) Reset() { // insertion point for array reset
 	stage.Axiss = make(map[*Axis]struct{})
 	stage.Axiss_mapString = make(map[string]*Axis)
-	stage.AxisMap_Staged_Order = make(map[*Axis]uint)
+	stage.Axis_stagedOrder = make(map[*Axis]uint)
 	stage.AxisOrder = 0
 
 	stage.AxisGrids = make(map[*AxisGrid]struct{})
 	stage.AxisGrids_mapString = make(map[string]*AxisGrid)
-	stage.AxisGridMap_Staged_Order = make(map[*AxisGrid]uint)
+	stage.AxisGrid_stagedOrder = make(map[*AxisGrid]uint)
 	stage.AxisGridOrder = 0
 
 	stage.Beziers = make(map[*Bezier]struct{})
 	stage.Beziers_mapString = make(map[string]*Bezier)
-	stage.BezierMap_Staged_Order = make(map[*Bezier]uint)
+	stage.Bezier_stagedOrder = make(map[*Bezier]uint)
 	stage.BezierOrder = 0
 
 	stage.BezierGrids = make(map[*BezierGrid]struct{})
 	stage.BezierGrids_mapString = make(map[string]*BezierGrid)
-	stage.BezierGridMap_Staged_Order = make(map[*BezierGrid]uint)
+	stage.BezierGrid_stagedOrder = make(map[*BezierGrid]uint)
 	stage.BezierGridOrder = 0
 
 	stage.BezierGridStacks = make(map[*BezierGridStack]struct{})
 	stage.BezierGridStacks_mapString = make(map[string]*BezierGridStack)
-	stage.BezierGridStackMap_Staged_Order = make(map[*BezierGridStack]uint)
+	stage.BezierGridStack_stagedOrder = make(map[*BezierGridStack]uint)
 	stage.BezierGridStackOrder = 0
 
 	stage.Chapters = make(map[*Chapter]struct{})
 	stage.Chapters_mapString = make(map[string]*Chapter)
-	stage.ChapterMap_Staged_Order = make(map[*Chapter]uint)
+	stage.Chapter_stagedOrder = make(map[*Chapter]uint)
 	stage.ChapterOrder = 0
 
 	stage.Circles = make(map[*Circle]struct{})
 	stage.Circles_mapString = make(map[string]*Circle)
-	stage.CircleMap_Staged_Order = make(map[*Circle]uint)
+	stage.Circle_stagedOrder = make(map[*Circle]uint)
 	stage.CircleOrder = 0
 
 	stage.CircleGrids = make(map[*CircleGrid]struct{})
 	stage.CircleGrids_mapString = make(map[string]*CircleGrid)
-	stage.CircleGridMap_Staged_Order = make(map[*CircleGrid]uint)
+	stage.CircleGrid_stagedOrder = make(map[*CircleGrid]uint)
 	stage.CircleGridOrder = 0
 
 	stage.Contents = make(map[*Content]struct{})
 	stage.Contents_mapString = make(map[string]*Content)
-	stage.ContentMap_Staged_Order = make(map[*Content]uint)
+	stage.Content_stagedOrder = make(map[*Content]uint)
 	stage.ContentOrder = 0
 
 	stage.ExportToMusicxmls = make(map[*ExportToMusicxml]struct{})
 	stage.ExportToMusicxmls_mapString = make(map[string]*ExportToMusicxml)
-	stage.ExportToMusicxmlMap_Staged_Order = make(map[*ExportToMusicxml]uint)
+	stage.ExportToMusicxml_stagedOrder = make(map[*ExportToMusicxml]uint)
 	stage.ExportToMusicxmlOrder = 0
 
 	stage.FrontCurves = make(map[*FrontCurve]struct{})
 	stage.FrontCurves_mapString = make(map[string]*FrontCurve)
-	stage.FrontCurveMap_Staged_Order = make(map[*FrontCurve]uint)
+	stage.FrontCurve_stagedOrder = make(map[*FrontCurve]uint)
 	stage.FrontCurveOrder = 0
 
 	stage.FrontCurveStacks = make(map[*FrontCurveStack]struct{})
 	stage.FrontCurveStacks_mapString = make(map[string]*FrontCurveStack)
-	stage.FrontCurveStackMap_Staged_Order = make(map[*FrontCurveStack]uint)
+	stage.FrontCurveStack_stagedOrder = make(map[*FrontCurveStack]uint)
 	stage.FrontCurveStackOrder = 0
 
 	stage.HorizontalAxiss = make(map[*HorizontalAxis]struct{})
 	stage.HorizontalAxiss_mapString = make(map[string]*HorizontalAxis)
-	stage.HorizontalAxisMap_Staged_Order = make(map[*HorizontalAxis]uint)
+	stage.HorizontalAxis_stagedOrder = make(map[*HorizontalAxis]uint)
 	stage.HorizontalAxisOrder = 0
 
 	stage.Keys = make(map[*Key]struct{})
 	stage.Keys_mapString = make(map[string]*Key)
-	stage.KeyMap_Staged_Order = make(map[*Key]uint)
+	stage.Key_stagedOrder = make(map[*Key]uint)
 	stage.KeyOrder = 0
 
 	stage.Parameters = make(map[*Parameter]struct{})
 	stage.Parameters_mapString = make(map[string]*Parameter)
-	stage.ParameterMap_Staged_Order = make(map[*Parameter]uint)
+	stage.Parameter_stagedOrder = make(map[*Parameter]uint)
 	stage.ParameterOrder = 0
 
 	stage.Rhombuss = make(map[*Rhombus]struct{})
 	stage.Rhombuss_mapString = make(map[string]*Rhombus)
-	stage.RhombusMap_Staged_Order = make(map[*Rhombus]uint)
+	stage.Rhombus_stagedOrder = make(map[*Rhombus]uint)
 	stage.RhombusOrder = 0
 
 	stage.RhombusGrids = make(map[*RhombusGrid]struct{})
 	stage.RhombusGrids_mapString = make(map[string]*RhombusGrid)
-	stage.RhombusGridMap_Staged_Order = make(map[*RhombusGrid]uint)
+	stage.RhombusGrid_stagedOrder = make(map[*RhombusGrid]uint)
 	stage.RhombusGridOrder = 0
 
 	stage.ShapeCategorys = make(map[*ShapeCategory]struct{})
 	stage.ShapeCategorys_mapString = make(map[string]*ShapeCategory)
-	stage.ShapeCategoryMap_Staged_Order = make(map[*ShapeCategory]uint)
+	stage.ShapeCategory_stagedOrder = make(map[*ShapeCategory]uint)
 	stage.ShapeCategoryOrder = 0
 
 	stage.SpiralBeziers = make(map[*SpiralBezier]struct{})
 	stage.SpiralBeziers_mapString = make(map[string]*SpiralBezier)
-	stage.SpiralBezierMap_Staged_Order = make(map[*SpiralBezier]uint)
+	stage.SpiralBezier_stagedOrder = make(map[*SpiralBezier]uint)
 	stage.SpiralBezierOrder = 0
 
 	stage.SpiralBezierGrids = make(map[*SpiralBezierGrid]struct{})
 	stage.SpiralBezierGrids_mapString = make(map[string]*SpiralBezierGrid)
-	stage.SpiralBezierGridMap_Staged_Order = make(map[*SpiralBezierGrid]uint)
+	stage.SpiralBezierGrid_stagedOrder = make(map[*SpiralBezierGrid]uint)
 	stage.SpiralBezierGridOrder = 0
 
 	stage.SpiralCircles = make(map[*SpiralCircle]struct{})
 	stage.SpiralCircles_mapString = make(map[string]*SpiralCircle)
-	stage.SpiralCircleMap_Staged_Order = make(map[*SpiralCircle]uint)
+	stage.SpiralCircle_stagedOrder = make(map[*SpiralCircle]uint)
 	stage.SpiralCircleOrder = 0
 
 	stage.SpiralCircleGrids = make(map[*SpiralCircleGrid]struct{})
 	stage.SpiralCircleGrids_mapString = make(map[string]*SpiralCircleGrid)
-	stage.SpiralCircleGridMap_Staged_Order = make(map[*SpiralCircleGrid]uint)
+	stage.SpiralCircleGrid_stagedOrder = make(map[*SpiralCircleGrid]uint)
 	stage.SpiralCircleGridOrder = 0
 
 	stage.SpiralLines = make(map[*SpiralLine]struct{})
 	stage.SpiralLines_mapString = make(map[string]*SpiralLine)
-	stage.SpiralLineMap_Staged_Order = make(map[*SpiralLine]uint)
+	stage.SpiralLine_stagedOrder = make(map[*SpiralLine]uint)
 	stage.SpiralLineOrder = 0
 
 	stage.SpiralLineGrids = make(map[*SpiralLineGrid]struct{})
 	stage.SpiralLineGrids_mapString = make(map[string]*SpiralLineGrid)
-	stage.SpiralLineGridMap_Staged_Order = make(map[*SpiralLineGrid]uint)
+	stage.SpiralLineGrid_stagedOrder = make(map[*SpiralLineGrid]uint)
 	stage.SpiralLineGridOrder = 0
 
 	stage.SpiralOrigins = make(map[*SpiralOrigin]struct{})
 	stage.SpiralOrigins_mapString = make(map[string]*SpiralOrigin)
-	stage.SpiralOriginMap_Staged_Order = make(map[*SpiralOrigin]uint)
+	stage.SpiralOrigin_stagedOrder = make(map[*SpiralOrigin]uint)
 	stage.SpiralOriginOrder = 0
 
 	stage.SpiralRhombuss = make(map[*SpiralRhombus]struct{})
 	stage.SpiralRhombuss_mapString = make(map[string]*SpiralRhombus)
-	stage.SpiralRhombusMap_Staged_Order = make(map[*SpiralRhombus]uint)
+	stage.SpiralRhombus_stagedOrder = make(map[*SpiralRhombus]uint)
 	stage.SpiralRhombusOrder = 0
 
 	stage.SpiralRhombusGrids = make(map[*SpiralRhombusGrid]struct{})
 	stage.SpiralRhombusGrids_mapString = make(map[string]*SpiralRhombusGrid)
-	stage.SpiralRhombusGridMap_Staged_Order = make(map[*SpiralRhombusGrid]uint)
+	stage.SpiralRhombusGrid_stagedOrder = make(map[*SpiralRhombusGrid]uint)
 	stage.SpiralRhombusGridOrder = 0
 
 	stage.VerticalAxiss = make(map[*VerticalAxis]struct{})
 	stage.VerticalAxiss_mapString = make(map[string]*VerticalAxis)
-	stage.VerticalAxisMap_Staged_Order = make(map[*VerticalAxis]uint)
+	stage.VerticalAxis_stagedOrder = make(map[*VerticalAxis]uint)
 	stage.VerticalAxisOrder = 0
 
 	if stage.GetProbeIF() != nil {
 		stage.GetProbeIF().ResetNotifications()
 	}
-	if stage.IsDeltaMode() {
-		stage.ComputeReference()
+	if stage.IsInDeltaMode() {
+		stage.ComputeReferenceAndOrders()
 	}
 }
 
@@ -4336,6 +5187,7 @@ func (stage *Stage) Nil() { // insertion point for array nil
 	stage.VerticalAxiss = nil
 	stage.VerticalAxiss_mapString = nil
 
+	// end of insertion point for array nil
 }
 
 func (stage *Stage) Unstage() { // insertion point for array nil
@@ -4451,14 +5303,14 @@ func (stage *Stage) Unstage() { // insertion point for array nil
 		verticalaxis.Unstage(stage)
 	}
 
+	// end of insertion point for array nil
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
 // - access to staged instances
 // - navigation between staged instances by going backward association links between gongstruct
 // - full refactoring of Gongstruct identifiers / fields
-type Gongstruct interface {
-}
+type Gongstruct interface{}
 
 type GongtructBasicField interface {
 	int | float64 | bool | string | time.Time | time.Duration
@@ -4475,7 +5327,7 @@ type GongstructIF interface {
 	StageVoid(*Stage)
 	UnstageVoid(stage *Stage)
 	GongGetFieldHeaders() []GongFieldHeader
-	GongClean(stage *Stage)
+	GongClean(stage *Stage) (modified bool)
 	GongGetFieldValue(fieldName string, stage *Stage) GongFieldValue
 	GongSetFieldValue(fieldName string, value GongFieldValue, stage *Stage) error
 	GongGetGongstructName() string
@@ -4485,6 +5337,7 @@ type GongstructIF interface {
 	GongCopy() GongstructIF
 	GongGetReverseFieldOwnerName(stage *Stage, reverseField *ReverseField) string
 	GongGetReverseFieldOwner(stage *Stage, reverseField *ReverseField) GongstructIF
+	GongGetUUID(stage *Stage) string
 }
 type PointerToGongstruct interface {
 	GongstructIF
@@ -4496,7 +5349,6 @@ func CompareGongstructByName[T PointerToGongstruct](a, b T) int {
 }
 
 func SortGongstructSetByName[T PointerToGongstruct](set map[T]struct{}) (sortedSlice []T) {
-
 	for key := range set {
 		sortedSlice = append(sortedSlice, key)
 	}
@@ -4506,7 +5358,6 @@ func SortGongstructSetByName[T PointerToGongstruct](set map[T]struct{}) (sortedS
 }
 
 func GetGongstrucsSorted[T PointerToGongstruct](stage *Stage) (sortedSlice []T) {
-
 	set := GetGongstructInstancesSetFromPointerType[T](stage)
 	sortedSlice = SortGongstructSetByName(*set)
 
@@ -5193,7 +6044,6 @@ func GetAssociationName[Type Gongstruct]() *Type {
 // the map is construed by iterating over all Start instances and populationg keys with End instances
 // and values with slice of Start instances
 func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
-
 	var ret Start
 
 	switch any(ret).(type) {
@@ -6828,7 +7678,6 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *Stage)
 // the map is construed by iterating over all Start instances and populating keys with End instances
 // and values with the Start instances
 func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage *Stage) map[*End][]*Start {
-
 	var ret Start
 
 	switch any(ret).(type) {
@@ -7076,7 +7925,6 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 // GetPointerToGongstructName returns the name of the Gongstruct
 // this can be usefull if one want program robust to refactoring
 func GetPointerToGongstructName[Type GongstructIF]() (res string) {
-
 	var ret Type
 
 	switch any(ret).(type) {
@@ -7147,7 +7995,6 @@ type ReverseField struct {
 }
 
 func GetReverseFields[Type GongstructIF]() (res []ReverseField) {
-
 	res = make([]ReverseField, 0)
 
 	var ret Type
@@ -7285,11 +8132,11 @@ func (axis *Axis) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7298,59 +8145,59 @@ func (axis *Axis) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "AngleDegree",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Length",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "CenterX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "CenterY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "EndX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "EndY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -7361,7 +8208,7 @@ func (axisgrid *AxisGrid) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:                 "Reference",
@@ -7370,7 +8217,7 @@ func (axisgrid *AxisGrid) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7391,11 +8238,11 @@ func (bezier *Bezier) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7404,67 +8251,67 @@ func (bezier *Bezier) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "StartX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StartY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ControlPointStartX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ControlPointStartY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "EndX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "EndY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ControlPointEndX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ControlPointEndY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -7475,7 +8322,7 @@ func (beziergrid *BezierGrid) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:                 "Reference",
@@ -7484,7 +8331,7 @@ func (beziergrid *BezierGrid) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7505,11 +8352,11 @@ func (beziergridstack *BezierGridStack) GongGetFieldHeaders() (res []GongFieldHe
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7530,11 +8377,11 @@ func (chapter *Chapter) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "MardownContent",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -7545,11 +8392,11 @@ func (circle *Circle) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7558,63 +8405,63 @@ func (circle *Circle) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "CenterX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "CenterY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "HasBespokeRadius",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:               "BespopkeRadius",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Pitch",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "ShowName",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:               "BeatNb",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 	}
 	return
@@ -7625,7 +8472,7 @@ func (circlegrid *CircleGrid) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:                 "Reference",
@@ -7634,7 +8481,7 @@ func (circlegrid *CircleGrid) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7655,31 +8502,32 @@ func (content *Content) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "MardownContent",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "ContentPath",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "OutputPath",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "LayoutPath",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StaticPath",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
-			Name:               "Target",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			Name:                 "Target",
+			GongFieldValueType:   GongFieldValueTypeString,
+			TargetGongstructName: "Target",
 		},
 		{
 			Name:                 "Chapters",
@@ -7695,7 +8543,7 @@ func (exporttomusicxml *ExportToMusicxml) GongGetFieldHeaders() (res []GongField
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:                 "Parameter",
@@ -7711,11 +8559,11 @@ func (frontcurve *FrontCurve) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Path",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -7726,11 +8574,11 @@ func (frontcurvestack *FrontCurveStack) GongGetFieldHeaders() (res []GongFieldHe
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7749,35 +8597,35 @@ func (frontcurvestack *FrontCurveStack) GongGetFieldHeaders() (res []GongFieldHe
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -7788,11 +8636,11 @@ func (horizontalaxis *HorizontalAxis) GongGetFieldHeaders() (res []GongFieldHead
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7801,43 +8649,43 @@ func (horizontalaxis *HorizontalAxis) GongGetFieldHeaders() (res []GongFieldHead
 		},
 		{
 			Name:               "AxisHandleBorderLength",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Axis_Length",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -7848,11 +8696,11 @@ func (key *Key) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -7861,39 +8709,39 @@ func (key *Key) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "Path",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -7904,43 +8752,43 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "BackendColor",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "MinuteColor",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "HourColor",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "N",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "M",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "Z",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "InsideAngle",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ShiftToNearestCircle",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "SideLength",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:                 "InitialRhombus",
@@ -8094,19 +8942,19 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "StackWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "NbShitRight",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "StackHeight",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "BezierControlLengthRatio",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:                 "SpiralRhombusGridSeed",
@@ -8180,7 +9028,7 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "SpiralBezierStrength",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:                 "FrontCurveStack",
@@ -8189,7 +9037,7 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "NbInterpolationPoints",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:                 "Fkey",
@@ -8198,15 +9046,15 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "FkeySizeRatio",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "FkeyOriginRelativeX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "FkeyOriginRelativeY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:                 "PitchLines",
@@ -8215,11 +9063,11 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "PitchHeight",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "NbPitchLines",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:                 "BeatLines",
@@ -8228,15 +9076,15 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "BeatLinesHeightRatio",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "NbBeatLines",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "NbOfBeatsInTheme",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:                 "FirstVoice",
@@ -8250,11 +9098,11 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "FirstVoiceShiftX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "FirstVoiceShiftY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:                 "SecondVoice",
@@ -8268,15 +9116,15 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "PitchDifference",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "BeatsPerSecond",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Level",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:                 "FirstVoiceNotes",
@@ -8300,19 +9148,19 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "IsMinor",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:               "ThemeBinaryEncoding",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "OriginX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "OriginY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:                 "HorizontalAxis",
@@ -8331,43 +9179,43 @@ func (parameter *Parameter) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "SpiralOriginX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "SpiralOriginY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "OriginCrossWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "SpiralRadiusRatio",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ShowSpiralBezierConstruct",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:               "ShowInterpolationPoints",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:               "ActualBeatsTemporalShift",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "PathToStaticFiles",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "PathToGeneratedSVG",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "PathToGeneratedScore",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -8378,11 +9226,11 @@ func (rhombus *Rhombus) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8391,55 +9239,55 @@ func (rhombus *Rhombus) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "CenterX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "CenterY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "SideLength",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "AngleDegree",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "InsideAngle",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -8450,7 +9298,7 @@ func (rhombusgrid *RhombusGrid) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:                 "Reference",
@@ -8459,7 +9307,7 @@ func (rhombusgrid *RhombusGrid) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8480,11 +9328,11 @@ func (shapecategory *ShapeCategory) GongGetFieldHeaders() (res []GongFieldHeader
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsExpanded",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 	}
 	return
@@ -8495,11 +9343,11 @@ func (spiralbezier *SpiralBezier) GongGetFieldHeaders() (res []GongFieldHeader) 
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8508,67 +9356,67 @@ func (spiralbezier *SpiralBezier) GongGetFieldHeaders() (res []GongFieldHeader) 
 		},
 		{
 			Name:               "StartX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StartY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ControlPointStartX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ControlPointStartY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "EndX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "EndY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ControlPointEndX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "ControlPointEndY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -8579,11 +9427,11 @@ func (spiralbeziergrid *SpiralBezierGrid) GongGetFieldHeaders() (res []GongField
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8604,11 +9452,11 @@ func (spiralcircle *SpiralCircle) GongGetFieldHeaders() (res []GongFieldHeader) 
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8617,67 +9465,67 @@ func (spiralcircle *SpiralCircle) GongGetFieldHeaders() (res []GongFieldHeader) 
 		},
 		{
 			Name:               "CenterX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "CenterY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "HasBespokeRadius",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:               "BespopkeRadius",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Pitch",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "ShowName",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:               "BeatNb",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeInt,
 		},
 		{
 			Name:               "Path",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -8688,11 +9536,11 @@ func (spiralcirclegrid *SpiralCircleGrid) GongGetFieldHeaders() (res []GongField
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8718,11 +9566,11 @@ func (spiralline *SpiralLine) GongGetFieldHeaders() (res []GongFieldHeader) {
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8731,51 +9579,51 @@ func (spiralline *SpiralLine) GongGetFieldHeaders() (res []GongFieldHeader) {
 		},
 		{
 			Name:               "StartX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "EndX",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StartY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "EndY",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -8786,11 +9634,11 @@ func (spirallinegrid *SpiralLineGrid) GongGetFieldHeaders() (res []GongFieldHead
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8811,11 +9659,11 @@ func (spiralorigin *SpiralOrigin) GongGetFieldHeaders() (res []GongFieldHeader) 
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8824,35 +9672,35 @@ func (spiralorigin *SpiralOrigin) GongGetFieldHeaders() (res []GongFieldHeader) 
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -8863,11 +9711,11 @@ func (spiralrhombus *SpiralRhombus) GongGetFieldHeaders() (res []GongFieldHeader
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8876,67 +9724,67 @@ func (spiralrhombus *SpiralRhombus) GongGetFieldHeaders() (res []GongFieldHeader
 		},
 		{
 			Name:               "X_r0",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Y_r0",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "X_r1",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Y_r1",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "X_r2",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Y_r2",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "X_r3",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Y_r3",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -8947,11 +9795,11 @@ func (spiralrhombusgrid *SpiralRhombusGrid) GongGetFieldHeaders() (res []GongFie
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8972,11 +9820,11 @@ func (verticalaxis *VerticalAxis) GongGetFieldHeaders() (res []GongFieldHeader) 
 	res = []GongFieldHeader{
 		{
 			Name:               "Name",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "IsDisplayed",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeBool,
 		},
 		{
 			Name:                 "ShapeCategory",
@@ -8985,43 +9833,43 @@ func (verticalaxis *VerticalAxis) GongGetFieldHeaders() (res []GongFieldHeader) 
 		},
 		{
 			Name:               "AxisHandleBorderLength",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Axis_Length",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Color",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "FillOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "Stroke",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeOpacity",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeWidth",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeFloat,
 		},
 		{
 			Name:               "StrokeDashArray",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "StrokeDashArrayWhenSelected",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 		{
 			Name:               "Transform",
-			GongFieldValueType: GongFieldValueTypeBasicKind,
+			GongFieldValueType: GongFieldValueTypeString,
 		},
 	}
 	return
@@ -9029,7 +9877,6 @@ func (verticalaxis *VerticalAxis) GongGetFieldHeaders() (res []GongFieldHeader) 
 
 // GetFieldsFromPointer return the array of the fields
 func GetFieldsFromPointer[Type PointerToGongstruct]() (res []GongFieldHeader) {
-
 	var ret Type
 	return ret.GongGetFieldHeaders()
 }
@@ -9038,9 +9885,11 @@ type GongFieldValueType string
 
 const (
 	GongFieldValueTypeInt             GongFieldValueType = "GongFieldValueTypeInt"
+	GongFieldValueTypeIntDuration     GongFieldValueType = "GongFieldValueTypeIntDuration"
 	GongFieldValueTypeFloat           GongFieldValueType = "GongFieldValueTypeFloat"
 	GongFieldValueTypeBool            GongFieldValueType = "GongFieldValueTypeBool"
 	GongFieldValueTypeString          GongFieldValueType = "GongFieldValueTypeString"
+	GongFieldValueTypeDate            GongFieldValueType = "GongFieldValueTypeDate"
 	GongFieldValueTypeBasicKind       GongFieldValueType = "GongFieldValueTypeBasicKind"
 	GongFieldValueTypePointer         GongFieldValueType = "GongFieldValueTypePointer"
 	GongFieldValueTypeSliceOfPointers GongFieldValueType = "GongFieldValueTypeSliceOfPointers"
@@ -9094,7 +9943,7 @@ func (axis *Axis) GongGetFieldValue(fieldName string, stage *Stage) (res GongFie
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if axis.ShapeCategory != nil {
 			res.valueString = axis.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, axis.ShapeCategory))
+			res.ids = axis.ShapeCategory.GongGetUUID(stage)
 		}
 	case "AngleDegree":
 		res.valueString = fmt.Sprintf("%f", axis.AngleDegree)
@@ -9145,6 +9994,7 @@ func (axis *Axis) GongGetFieldValue(fieldName string, stage *Stage) (res GongFie
 	}
 	return
 }
+
 func (axisgrid *AxisGrid) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9154,7 +10004,7 @@ func (axisgrid *AxisGrid) GongGetFieldValue(fieldName string, stage *Stage) (res
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if axisgrid.Reference != nil {
 			res.valueString = axisgrid.Reference.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, axisgrid.Reference))
+			res.ids = axisgrid.Reference.GongGetUUID(stage)
 		}
 	case "IsDisplayed":
 		res.valueString = fmt.Sprintf("%t", axisgrid.IsDisplayed)
@@ -9164,7 +10014,7 @@ func (axisgrid *AxisGrid) GongGetFieldValue(fieldName string, stage *Stage) (res
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if axisgrid.ShapeCategory != nil {
 			res.valueString = axisgrid.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, axisgrid.ShapeCategory))
+			res.ids = axisgrid.ShapeCategory.GongGetUUID(stage)
 		}
 	case "Axiss":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -9174,11 +10024,12 @@ func (axisgrid *AxisGrid) GongGetFieldValue(fieldName string, stage *Stage) (res
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (bezier *Bezier) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9192,7 +10043,7 @@ func (bezier *Bezier) GongGetFieldValue(fieldName string, stage *Stage) (res Gon
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if bezier.ShapeCategory != nil {
 			res.valueString = bezier.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, bezier.ShapeCategory))
+			res.ids = bezier.ShapeCategory.GongGetUUID(stage)
 		}
 	case "StartX":
 		res.valueString = fmt.Sprintf("%f", bezier.StartX)
@@ -9251,6 +10102,7 @@ func (bezier *Bezier) GongGetFieldValue(fieldName string, stage *Stage) (res Gon
 	}
 	return
 }
+
 func (beziergrid *BezierGrid) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9260,7 +10112,7 @@ func (beziergrid *BezierGrid) GongGetFieldValue(fieldName string, stage *Stage) 
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if beziergrid.Reference != nil {
 			res.valueString = beziergrid.Reference.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, beziergrid.Reference))
+			res.ids = beziergrid.Reference.GongGetUUID(stage)
 		}
 	case "IsDisplayed":
 		res.valueString = fmt.Sprintf("%t", beziergrid.IsDisplayed)
@@ -9270,7 +10122,7 @@ func (beziergrid *BezierGrid) GongGetFieldValue(fieldName string, stage *Stage) 
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if beziergrid.ShapeCategory != nil {
 			res.valueString = beziergrid.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, beziergrid.ShapeCategory))
+			res.ids = beziergrid.ShapeCategory.GongGetUUID(stage)
 		}
 	case "Beziers":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -9280,11 +10132,12 @@ func (beziergrid *BezierGrid) GongGetFieldValue(fieldName string, stage *Stage) 
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (beziergridstack *BezierGridStack) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9298,7 +10151,7 @@ func (beziergridstack *BezierGridStack) GongGetFieldValue(fieldName string, stag
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if beziergridstack.ShapeCategory != nil {
 			res.valueString = beziergridstack.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, beziergridstack.ShapeCategory))
+			res.ids = beziergridstack.ShapeCategory.GongGetUUID(stage)
 		}
 	case "BezierGrids":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -9308,11 +10161,12 @@ func (beziergridstack *BezierGridStack) GongGetFieldValue(fieldName string, stag
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (chapter *Chapter) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9323,6 +10177,7 @@ func (chapter *Chapter) GongGetFieldValue(fieldName string, stage *Stage) (res G
 	}
 	return
 }
+
 func (circle *Circle) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9336,7 +10191,7 @@ func (circle *Circle) GongGetFieldValue(fieldName string, stage *Stage) (res Gon
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if circle.ShapeCategory != nil {
 			res.valueString = circle.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, circle.ShapeCategory))
+			res.ids = circle.ShapeCategory.GongGetUUID(stage)
 		}
 	case "CenterX":
 		res.valueString = fmt.Sprintf("%f", circle.CenterX)
@@ -9391,6 +10246,7 @@ func (circle *Circle) GongGetFieldValue(fieldName string, stage *Stage) (res Gon
 	}
 	return
 }
+
 func (circlegrid *CircleGrid) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9400,7 +10256,7 @@ func (circlegrid *CircleGrid) GongGetFieldValue(fieldName string, stage *Stage) 
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if circlegrid.Reference != nil {
 			res.valueString = circlegrid.Reference.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, circlegrid.Reference))
+			res.ids = circlegrid.Reference.GongGetUUID(stage)
 		}
 	case "IsDisplayed":
 		res.valueString = fmt.Sprintf("%t", circlegrid.IsDisplayed)
@@ -9410,7 +10266,7 @@ func (circlegrid *CircleGrid) GongGetFieldValue(fieldName string, stage *Stage) 
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if circlegrid.ShapeCategory != nil {
 			res.valueString = circlegrid.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, circlegrid.ShapeCategory))
+			res.ids = circlegrid.ShapeCategory.GongGetUUID(stage)
 		}
 	case "Circles":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -9420,11 +10276,12 @@ func (circlegrid *CircleGrid) GongGetFieldValue(fieldName string, stage *Stage) 
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (content *Content) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9451,11 +10308,12 @@ func (content *Content) GongGetFieldValue(fieldName string, stage *Stage) (res G
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (exporttomusicxml *ExportToMusicxml) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9465,11 +10323,12 @@ func (exporttomusicxml *ExportToMusicxml) GongGetFieldValue(fieldName string, st
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if exporttomusicxml.Parameter != nil {
 			res.valueString = exporttomusicxml.Parameter.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, exporttomusicxml.Parameter))
+			res.ids = exporttomusicxml.Parameter.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (frontcurve *FrontCurve) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9480,6 +10339,7 @@ func (frontcurve *FrontCurve) GongGetFieldValue(fieldName string, stage *Stage) 
 	}
 	return
 }
+
 func (frontcurvestack *FrontCurveStack) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9493,7 +10353,7 @@ func (frontcurvestack *FrontCurveStack) GongGetFieldValue(fieldName string, stag
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if frontcurvestack.ShapeCategory != nil {
 			res.valueString = frontcurvestack.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, frontcurvestack.ShapeCategory))
+			res.ids = frontcurvestack.ShapeCategory.GongGetUUID(stage)
 		}
 	case "FrontCurves":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -9503,7 +10363,7 @@ func (frontcurvestack *FrontCurveStack) GongGetFieldValue(fieldName string, stag
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	case "SpiralCircles":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -9513,7 +10373,7 @@ func (frontcurvestack *FrontCurveStack) GongGetFieldValue(fieldName string, stag
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	case "Color":
 		res.valueString = frontcurvestack.Color
@@ -9540,6 +10400,7 @@ func (frontcurvestack *FrontCurveStack) GongGetFieldValue(fieldName string, stag
 	}
 	return
 }
+
 func (horizontalaxis *HorizontalAxis) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9553,7 +10414,7 @@ func (horizontalaxis *HorizontalAxis) GongGetFieldValue(fieldName string, stage 
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if horizontalaxis.ShapeCategory != nil {
 			res.valueString = horizontalaxis.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, horizontalaxis.ShapeCategory))
+			res.ids = horizontalaxis.ShapeCategory.GongGetUUID(stage)
 		}
 	case "AxisHandleBorderLength":
 		res.valueString = fmt.Sprintf("%f", horizontalaxis.AxisHandleBorderLength)
@@ -9588,6 +10449,7 @@ func (horizontalaxis *HorizontalAxis) GongGetFieldValue(fieldName string, stage 
 	}
 	return
 }
+
 func (key *Key) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9601,7 +10463,7 @@ func (key *Key) GongGetFieldValue(fieldName string, stage *Stage) (res GongField
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if key.ShapeCategory != nil {
 			res.valueString = key.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, key.ShapeCategory))
+			res.ids = key.ShapeCategory.GongGetUUID(stage)
 		}
 	case "Path":
 		res.valueString = key.Path
@@ -9630,6 +10492,7 @@ func (key *Key) GongGetFieldValue(fieldName string, stage *Stage) (res GongField
 	}
 	return
 }
+
 func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -9669,181 +10532,181 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.InitialRhombus != nil {
 			res.valueString = parameter.InitialRhombus.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.InitialRhombus))
+			res.ids = parameter.InitialRhombus.GongGetUUID(stage)
 		}
 	case "InitialCircle":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.InitialCircle != nil {
 			res.valueString = parameter.InitialCircle.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.InitialCircle))
+			res.ids = parameter.InitialCircle.GongGetUUID(stage)
 		}
 	case "InitialRhombusGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.InitialRhombusGrid != nil {
 			res.valueString = parameter.InitialRhombusGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.InitialRhombusGrid))
+			res.ids = parameter.InitialRhombusGrid.GongGetUUID(stage)
 		}
 	case "InitialCircleGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.InitialCircleGrid != nil {
 			res.valueString = parameter.InitialCircleGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.InitialCircleGrid))
+			res.ids = parameter.InitialCircleGrid.GongGetUUID(stage)
 		}
 	case "InitialAxis":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.InitialAxis != nil {
 			res.valueString = parameter.InitialAxis.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.InitialAxis))
+			res.ids = parameter.InitialAxis.GongGetUUID(stage)
 		}
 	case "RotatedAxis":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.RotatedAxis != nil {
 			res.valueString = parameter.RotatedAxis.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.RotatedAxis))
+			res.ids = parameter.RotatedAxis.GongGetUUID(stage)
 		}
 	case "RotatedRhombus":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.RotatedRhombus != nil {
 			res.valueString = parameter.RotatedRhombus.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.RotatedRhombus))
+			res.ids = parameter.RotatedRhombus.GongGetUUID(stage)
 		}
 	case "RotatedRhombusGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.RotatedRhombusGrid != nil {
 			res.valueString = parameter.RotatedRhombusGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.RotatedRhombusGrid))
+			res.ids = parameter.RotatedRhombusGrid.GongGetUUID(stage)
 		}
 	case "RotatedCircleGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.RotatedCircleGrid != nil {
 			res.valueString = parameter.RotatedCircleGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.RotatedCircleGrid))
+			res.ids = parameter.RotatedCircleGrid.GongGetUUID(stage)
 		}
 	case "NextRhombus":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.NextRhombus != nil {
 			res.valueString = parameter.NextRhombus.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.NextRhombus))
+			res.ids = parameter.NextRhombus.GongGetUUID(stage)
 		}
 	case "NextCircle":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.NextCircle != nil {
 			res.valueString = parameter.NextCircle.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.NextCircle))
+			res.ids = parameter.NextCircle.GongGetUUID(stage)
 		}
 	case "GrowingRhombusGridSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowingRhombusGridSeed != nil {
 			res.valueString = parameter.GrowingRhombusGridSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowingRhombusGridSeed))
+			res.ids = parameter.GrowingRhombusGridSeed.GongGetUUID(stage)
 		}
 	case "GrowingRhombusGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowingRhombusGrid != nil {
 			res.valueString = parameter.GrowingRhombusGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowingRhombusGrid))
+			res.ids = parameter.GrowingRhombusGrid.GongGetUUID(stage)
 		}
 	case "GrowingCircleGridSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowingCircleGridSeed != nil {
 			res.valueString = parameter.GrowingCircleGridSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowingCircleGridSeed))
+			res.ids = parameter.GrowingCircleGridSeed.GongGetUUID(stage)
 		}
 	case "GrowingCircleGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowingCircleGrid != nil {
 			res.valueString = parameter.GrowingCircleGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowingCircleGrid))
+			res.ids = parameter.GrowingCircleGrid.GongGetUUID(stage)
 		}
 	case "GrowingCircleGridLeftSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowingCircleGridLeftSeed != nil {
 			res.valueString = parameter.GrowingCircleGridLeftSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowingCircleGridLeftSeed))
+			res.ids = parameter.GrowingCircleGridLeftSeed.GongGetUUID(stage)
 		}
 	case "GrowingCircleGridLeft":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowingCircleGridLeft != nil {
 			res.valueString = parameter.GrowingCircleGridLeft.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowingCircleGridLeft))
+			res.ids = parameter.GrowingCircleGridLeft.GongGetUUID(stage)
 		}
 	case "ConstructionAxis":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.ConstructionAxis != nil {
 			res.valueString = parameter.ConstructionAxis.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.ConstructionAxis))
+			res.ids = parameter.ConstructionAxis.GongGetUUID(stage)
 		}
 	case "ConstructionAxisGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.ConstructionAxisGrid != nil {
 			res.valueString = parameter.ConstructionAxisGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.ConstructionAxisGrid))
+			res.ids = parameter.ConstructionAxisGrid.GongGetUUID(stage)
 		}
 	case "ConstructionCircle":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.ConstructionCircle != nil {
 			res.valueString = parameter.ConstructionCircle.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.ConstructionCircle))
+			res.ids = parameter.ConstructionCircle.GongGetUUID(stage)
 		}
 	case "ConstructionCircleGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.ConstructionCircleGrid != nil {
 			res.valueString = parameter.ConstructionCircleGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.ConstructionCircleGrid))
+			res.ids = parameter.ConstructionCircleGrid.GongGetUUID(stage)
 		}
 	case "GrowthCurveSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowthCurveSeed != nil {
 			res.valueString = parameter.GrowthCurveSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowthCurveSeed))
+			res.ids = parameter.GrowthCurveSeed.GongGetUUID(stage)
 		}
 	case "GrowthCurve":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowthCurve != nil {
 			res.valueString = parameter.GrowthCurve.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowthCurve))
+			res.ids = parameter.GrowthCurve.GongGetUUID(stage)
 		}
 	case "GrowthCurveShiftedRightSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowthCurveShiftedRightSeed != nil {
 			res.valueString = parameter.GrowthCurveShiftedRightSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowthCurveShiftedRightSeed))
+			res.ids = parameter.GrowthCurveShiftedRightSeed.GongGetUUID(stage)
 		}
 	case "GrowthCurveShiftedRight":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowthCurveShiftedRight != nil {
 			res.valueString = parameter.GrowthCurveShiftedRight.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowthCurveShiftedRight))
+			res.ids = parameter.GrowthCurveShiftedRight.GongGetUUID(stage)
 		}
 	case "GrowthCurveNextSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowthCurveNextSeed != nil {
 			res.valueString = parameter.GrowthCurveNextSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowthCurveNextSeed))
+			res.ids = parameter.GrowthCurveNextSeed.GongGetUUID(stage)
 		}
 	case "GrowthCurveNext":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowthCurveNext != nil {
 			res.valueString = parameter.GrowthCurveNext.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowthCurveNext))
+			res.ids = parameter.GrowthCurveNext.GongGetUUID(stage)
 		}
 	case "GrowthCurveNextShiftedRightSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowthCurveNextShiftedRightSeed != nil {
 			res.valueString = parameter.GrowthCurveNextShiftedRightSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowthCurveNextShiftedRightSeed))
+			res.ids = parameter.GrowthCurveNextShiftedRightSeed.GongGetUUID(stage)
 		}
 	case "GrowthCurveNextShiftedRight":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowthCurveNextShiftedRight != nil {
 			res.valueString = parameter.GrowthCurveNextShiftedRight.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowthCurveNextShiftedRight))
+			res.ids = parameter.GrowthCurveNextShiftedRight.GongGetUUID(stage)
 		}
 	case "GrowthCurveStack":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.GrowthCurveStack != nil {
 			res.valueString = parameter.GrowthCurveStack.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.GrowthCurveStack))
+			res.ids = parameter.GrowthCurveStack.GongGetUUID(stage)
 		}
 	case "StackWidth":
 		res.valueString = fmt.Sprintf("%d", parameter.StackWidth)
@@ -9865,85 +10728,85 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralRhombusGridSeed != nil {
 			res.valueString = parameter.SpiralRhombusGridSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralRhombusGridSeed))
+			res.ids = parameter.SpiralRhombusGridSeed.GongGetUUID(stage)
 		}
 	case "SpiralRhombusGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralRhombusGrid != nil {
 			res.valueString = parameter.SpiralRhombusGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralRhombusGrid))
+			res.ids = parameter.SpiralRhombusGrid.GongGetUUID(stage)
 		}
 	case "SpiralCircleSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralCircleSeed != nil {
 			res.valueString = parameter.SpiralCircleSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralCircleSeed))
+			res.ids = parameter.SpiralCircleSeed.GongGetUUID(stage)
 		}
 	case "SpiralCircleGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralCircleGrid != nil {
 			res.valueString = parameter.SpiralCircleGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralCircleGrid))
+			res.ids = parameter.SpiralCircleGrid.GongGetUUID(stage)
 		}
 	case "SpiralCircleFullGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralCircleFullGrid != nil {
 			res.valueString = parameter.SpiralCircleFullGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralCircleFullGrid))
+			res.ids = parameter.SpiralCircleFullGrid.GongGetUUID(stage)
 		}
 	case "SpiralConstructionOuterLineSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralConstructionOuterLineSeed != nil {
 			res.valueString = parameter.SpiralConstructionOuterLineSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralConstructionOuterLineSeed))
+			res.ids = parameter.SpiralConstructionOuterLineSeed.GongGetUUID(stage)
 		}
 	case "SpiralConstructionInnerLineSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralConstructionInnerLineSeed != nil {
 			res.valueString = parameter.SpiralConstructionInnerLineSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralConstructionInnerLineSeed))
+			res.ids = parameter.SpiralConstructionInnerLineSeed.GongGetUUID(stage)
 		}
 	case "SpiralConstructionOuterLineGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralConstructionOuterLineGrid != nil {
 			res.valueString = parameter.SpiralConstructionOuterLineGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralConstructionOuterLineGrid))
+			res.ids = parameter.SpiralConstructionOuterLineGrid.GongGetUUID(stage)
 		}
 	case "SpiralConstructionInnerLineGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralConstructionInnerLineGrid != nil {
 			res.valueString = parameter.SpiralConstructionInnerLineGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralConstructionInnerLineGrid))
+			res.ids = parameter.SpiralConstructionInnerLineGrid.GongGetUUID(stage)
 		}
 	case "SpiralConstructionCircleGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralConstructionCircleGrid != nil {
 			res.valueString = parameter.SpiralConstructionCircleGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralConstructionCircleGrid))
+			res.ids = parameter.SpiralConstructionCircleGrid.GongGetUUID(stage)
 		}
 	case "SpiralConstructionOuterLineFullGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralConstructionOuterLineFullGrid != nil {
 			res.valueString = parameter.SpiralConstructionOuterLineFullGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralConstructionOuterLineFullGrid))
+			res.ids = parameter.SpiralConstructionOuterLineFullGrid.GongGetUUID(stage)
 		}
 	case "SpiralBezierSeed":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralBezierSeed != nil {
 			res.valueString = parameter.SpiralBezierSeed.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralBezierSeed))
+			res.ids = parameter.SpiralBezierSeed.GongGetUUID(stage)
 		}
 	case "SpiralBezierGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralBezierGrid != nil {
 			res.valueString = parameter.SpiralBezierGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralBezierGrid))
+			res.ids = parameter.SpiralBezierGrid.GongGetUUID(stage)
 		}
 	case "SpiralBezierFullGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralBezierFullGrid != nil {
 			res.valueString = parameter.SpiralBezierFullGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralBezierFullGrid))
+			res.ids = parameter.SpiralBezierFullGrid.GongGetUUID(stage)
 		}
 	case "SpiralBezierStrength":
 		res.valueString = fmt.Sprintf("%f", parameter.SpiralBezierStrength)
@@ -9953,7 +10816,7 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.FrontCurveStack != nil {
 			res.valueString = parameter.FrontCurveStack.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.FrontCurveStack))
+			res.ids = parameter.FrontCurveStack.GongGetUUID(stage)
 		}
 	case "NbInterpolationPoints":
 		res.valueString = fmt.Sprintf("%d", parameter.NbInterpolationPoints)
@@ -9963,7 +10826,7 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.Fkey != nil {
 			res.valueString = parameter.Fkey.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.Fkey))
+			res.ids = parameter.Fkey.GongGetUUID(stage)
 		}
 	case "FkeySizeRatio":
 		res.valueString = fmt.Sprintf("%f", parameter.FkeySizeRatio)
@@ -9981,7 +10844,7 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.PitchLines != nil {
 			res.valueString = parameter.PitchLines.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.PitchLines))
+			res.ids = parameter.PitchLines.GongGetUUID(stage)
 		}
 	case "PitchHeight":
 		res.valueString = fmt.Sprintf("%f", parameter.PitchHeight)
@@ -9995,7 +10858,7 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.BeatLines != nil {
 			res.valueString = parameter.BeatLines.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.BeatLines))
+			res.ids = parameter.BeatLines.GongGetUUID(stage)
 		}
 	case "BeatLinesHeightRatio":
 		res.valueString = fmt.Sprintf("%f", parameter.BeatLinesHeightRatio)
@@ -10013,13 +10876,13 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.FirstVoice != nil {
 			res.valueString = parameter.FirstVoice.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.FirstVoice))
+			res.ids = parameter.FirstVoice.GongGetUUID(stage)
 		}
 	case "FirstVoiceShiftedRigth":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.FirstVoiceShiftedRigth != nil {
 			res.valueString = parameter.FirstVoiceShiftedRigth.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.FirstVoiceShiftedRigth))
+			res.ids = parameter.FirstVoiceShiftedRigth.GongGetUUID(stage)
 		}
 	case "FirstVoiceShiftX":
 		res.valueString = fmt.Sprintf("%f", parameter.FirstVoiceShiftX)
@@ -10033,13 +10896,13 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SecondVoice != nil {
 			res.valueString = parameter.SecondVoice.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SecondVoice))
+			res.ids = parameter.SecondVoice.GongGetUUID(stage)
 		}
 	case "SecondVoiceShiftedRight":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SecondVoiceShiftedRight != nil {
 			res.valueString = parameter.SecondVoiceShiftedRight.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SecondVoiceShiftedRight))
+			res.ids = parameter.SecondVoiceShiftedRight.GongGetUUID(stage)
 		}
 	case "PitchDifference":
 		res.valueString = fmt.Sprintf("%d", parameter.PitchDifference)
@@ -10057,25 +10920,25 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.FirstVoiceNotes != nil {
 			res.valueString = parameter.FirstVoiceNotes.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.FirstVoiceNotes))
+			res.ids = parameter.FirstVoiceNotes.GongGetUUID(stage)
 		}
 	case "FirstVoiceNotesShiftedRight":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.FirstVoiceNotesShiftedRight != nil {
 			res.valueString = parameter.FirstVoiceNotesShiftedRight.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.FirstVoiceNotesShiftedRight))
+			res.ids = parameter.FirstVoiceNotesShiftedRight.GongGetUUID(stage)
 		}
 	case "SecondVoiceNotes":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SecondVoiceNotes != nil {
 			res.valueString = parameter.SecondVoiceNotes.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SecondVoiceNotes))
+			res.ids = parameter.SecondVoiceNotes.GongGetUUID(stage)
 		}
 	case "SecondVoiceNotesShiftedRight":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SecondVoiceNotesShiftedRight != nil {
 			res.valueString = parameter.SecondVoiceNotesShiftedRight.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SecondVoiceNotesShiftedRight))
+			res.ids = parameter.SecondVoiceNotesShiftedRight.GongGetUUID(stage)
 		}
 	case "IsMinor":
 		res.valueString = fmt.Sprintf("%t", parameter.IsMinor)
@@ -10097,19 +10960,19 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.HorizontalAxis != nil {
 			res.valueString = parameter.HorizontalAxis.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.HorizontalAxis))
+			res.ids = parameter.HorizontalAxis.GongGetUUID(stage)
 		}
 	case "VerticalAxis":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.VerticalAxis != nil {
 			res.valueString = parameter.VerticalAxis.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.VerticalAxis))
+			res.ids = parameter.VerticalAxis.GongGetUUID(stage)
 		}
 	case "SpiralOrigin":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if parameter.SpiralOrigin != nil {
 			res.valueString = parameter.SpiralOrigin.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, parameter.SpiralOrigin))
+			res.ids = parameter.SpiralOrigin.GongGetUUID(stage)
 		}
 	case "SpiralOriginX":
 		res.valueString = fmt.Sprintf("%f", parameter.SpiralOriginX)
@@ -10148,6 +11011,7 @@ func (parameter *Parameter) GongGetFieldValue(fieldName string, stage *Stage) (r
 	}
 	return
 }
+
 func (rhombus *Rhombus) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10161,7 +11025,7 @@ func (rhombus *Rhombus) GongGetFieldValue(fieldName string, stage *Stage) (res G
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if rhombus.ShapeCategory != nil {
 			res.valueString = rhombus.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, rhombus.ShapeCategory))
+			res.ids = rhombus.ShapeCategory.GongGetUUID(stage)
 		}
 	case "CenterX":
 		res.valueString = fmt.Sprintf("%f", rhombus.CenterX)
@@ -10208,6 +11072,7 @@ func (rhombus *Rhombus) GongGetFieldValue(fieldName string, stage *Stage) (res G
 	}
 	return
 }
+
 func (rhombusgrid *RhombusGrid) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10217,7 +11082,7 @@ func (rhombusgrid *RhombusGrid) GongGetFieldValue(fieldName string, stage *Stage
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if rhombusgrid.Reference != nil {
 			res.valueString = rhombusgrid.Reference.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, rhombusgrid.Reference))
+			res.ids = rhombusgrid.Reference.GongGetUUID(stage)
 		}
 	case "IsDisplayed":
 		res.valueString = fmt.Sprintf("%t", rhombusgrid.IsDisplayed)
@@ -10227,7 +11092,7 @@ func (rhombusgrid *RhombusGrid) GongGetFieldValue(fieldName string, stage *Stage
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if rhombusgrid.ShapeCategory != nil {
 			res.valueString = rhombusgrid.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, rhombusgrid.ShapeCategory))
+			res.ids = rhombusgrid.ShapeCategory.GongGetUUID(stage)
 		}
 	case "Rhombuses":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -10237,11 +11102,12 @@ func (rhombusgrid *RhombusGrid) GongGetFieldValue(fieldName string, stage *Stage
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (shapecategory *ShapeCategory) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10254,6 +11120,7 @@ func (shapecategory *ShapeCategory) GongGetFieldValue(fieldName string, stage *S
 	}
 	return
 }
+
 func (spiralbezier *SpiralBezier) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10267,7 +11134,7 @@ func (spiralbezier *SpiralBezier) GongGetFieldValue(fieldName string, stage *Sta
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spiralbezier.ShapeCategory != nil {
 			res.valueString = spiralbezier.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spiralbezier.ShapeCategory))
+			res.ids = spiralbezier.ShapeCategory.GongGetUUID(stage)
 		}
 	case "StartX":
 		res.valueString = fmt.Sprintf("%f", spiralbezier.StartX)
@@ -10326,6 +11193,7 @@ func (spiralbezier *SpiralBezier) GongGetFieldValue(fieldName string, stage *Sta
 	}
 	return
 }
+
 func (spiralbeziergrid *SpiralBezierGrid) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10339,7 +11207,7 @@ func (spiralbeziergrid *SpiralBezierGrid) GongGetFieldValue(fieldName string, st
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spiralbeziergrid.ShapeCategory != nil {
 			res.valueString = spiralbeziergrid.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spiralbeziergrid.ShapeCategory))
+			res.ids = spiralbeziergrid.ShapeCategory.GongGetUUID(stage)
 		}
 	case "SpiralBeziers":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -10349,11 +11217,12 @@ func (spiralbeziergrid *SpiralBezierGrid) GongGetFieldValue(fieldName string, st
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (spiralcircle *SpiralCircle) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10367,7 +11236,7 @@ func (spiralcircle *SpiralCircle) GongGetFieldValue(fieldName string, stage *Sta
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spiralcircle.ShapeCategory != nil {
 			res.valueString = spiralcircle.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spiralcircle.ShapeCategory))
+			res.ids = spiralcircle.ShapeCategory.GongGetUUID(stage)
 		}
 	case "CenterX":
 		res.valueString = fmt.Sprintf("%f", spiralcircle.CenterX)
@@ -10424,6 +11293,7 @@ func (spiralcircle *SpiralCircle) GongGetFieldValue(fieldName string, stage *Sta
 	}
 	return
 }
+
 func (spiralcirclegrid *SpiralCircleGrid) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10437,13 +11307,13 @@ func (spiralcirclegrid *SpiralCircleGrid) GongGetFieldValue(fieldName string, st
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spiralcirclegrid.ShapeCategory != nil {
 			res.valueString = spiralcirclegrid.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spiralcirclegrid.ShapeCategory))
+			res.ids = spiralcirclegrid.ShapeCategory.GongGetUUID(stage)
 		}
 	case "SpiralRhombusGrid":
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spiralcirclegrid.SpiralRhombusGrid != nil {
 			res.valueString = spiralcirclegrid.SpiralRhombusGrid.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spiralcirclegrid.SpiralRhombusGrid))
+			res.ids = spiralcirclegrid.SpiralRhombusGrid.GongGetUUID(stage)
 		}
 	case "SpiralCircles":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -10453,11 +11323,12 @@ func (spiralcirclegrid *SpiralCircleGrid) GongGetFieldValue(fieldName string, st
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (spiralline *SpiralLine) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10471,7 +11342,7 @@ func (spiralline *SpiralLine) GongGetFieldValue(fieldName string, stage *Stage) 
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spiralline.ShapeCategory != nil {
 			res.valueString = spiralline.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spiralline.ShapeCategory))
+			res.ids = spiralline.ShapeCategory.GongGetUUID(stage)
 		}
 	case "StartX":
 		res.valueString = fmt.Sprintf("%f", spiralline.StartX)
@@ -10514,6 +11385,7 @@ func (spiralline *SpiralLine) GongGetFieldValue(fieldName string, stage *Stage) 
 	}
 	return
 }
+
 func (spirallinegrid *SpiralLineGrid) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10527,7 +11399,7 @@ func (spirallinegrid *SpiralLineGrid) GongGetFieldValue(fieldName string, stage 
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spirallinegrid.ShapeCategory != nil {
 			res.valueString = spirallinegrid.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spirallinegrid.ShapeCategory))
+			res.ids = spirallinegrid.ShapeCategory.GongGetUUID(stage)
 		}
 	case "SpiralLines":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -10537,11 +11409,12 @@ func (spirallinegrid *SpiralLineGrid) GongGetFieldValue(fieldName string, stage 
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (spiralorigin *SpiralOrigin) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10555,7 +11428,7 @@ func (spiralorigin *SpiralOrigin) GongGetFieldValue(fieldName string, stage *Sta
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spiralorigin.ShapeCategory != nil {
 			res.valueString = spiralorigin.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spiralorigin.ShapeCategory))
+			res.ids = spiralorigin.ShapeCategory.GongGetUUID(stage)
 		}
 	case "Color":
 		res.valueString = spiralorigin.Color
@@ -10582,6 +11455,7 @@ func (spiralorigin *SpiralOrigin) GongGetFieldValue(fieldName string, stage *Sta
 	}
 	return
 }
+
 func (spiralrhombus *SpiralRhombus) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10595,7 +11469,7 @@ func (spiralrhombus *SpiralRhombus) GongGetFieldValue(fieldName string, stage *S
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spiralrhombus.ShapeCategory != nil {
 			res.valueString = spiralrhombus.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spiralrhombus.ShapeCategory))
+			res.ids = spiralrhombus.ShapeCategory.GongGetUUID(stage)
 		}
 	case "X_r0":
 		res.valueString = fmt.Sprintf("%f", spiralrhombus.X_r0)
@@ -10654,6 +11528,7 @@ func (spiralrhombus *SpiralRhombus) GongGetFieldValue(fieldName string, stage *S
 	}
 	return
 }
+
 func (spiralrhombusgrid *SpiralRhombusGrid) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10667,7 +11542,7 @@ func (spiralrhombusgrid *SpiralRhombusGrid) GongGetFieldValue(fieldName string, 
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if spiralrhombusgrid.ShapeCategory != nil {
 			res.valueString = spiralrhombusgrid.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, spiralrhombusgrid.ShapeCategory))
+			res.ids = spiralrhombusgrid.ShapeCategory.GongGetUUID(stage)
 		}
 	case "SpiralRhombuses":
 		res.GongFieldValueType = GongFieldValueTypeSliceOfPointers
@@ -10677,11 +11552,12 @@ func (spiralrhombusgrid *SpiralRhombusGrid) GongGetFieldValue(fieldName string, 
 				res.ids += ";"
 			}
 			res.valueString += __instance__.Name
-			res.ids += fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, __instance__))
+			res.ids += __instance__.GongGetUUID(stage)
 		}
 	}
 	return
 }
+
 func (verticalaxis *VerticalAxis) GongGetFieldValue(fieldName string, stage *Stage) (res GongFieldValue) {
 	switch fieldName {
 	// string value of fields
@@ -10695,7 +11571,7 @@ func (verticalaxis *VerticalAxis) GongGetFieldValue(fieldName string, stage *Sta
 		res.GongFieldValueType = GongFieldValueTypePointer
 		if verticalaxis.ShapeCategory != nil {
 			res.valueString = verticalaxis.ShapeCategory.Name
-			res.ids = fmt.Sprintf("%d", GetOrderPointerGongstruct(stage, verticalaxis.ShapeCategory))
+			res.ids = verticalaxis.ShapeCategory.GongGetUUID(stage)
 		}
 	case "AxisHandleBorderLength":
 		res.valueString = fmt.Sprintf("%f", verticalaxis.AxisHandleBorderLength)
@@ -10730,8 +11606,8 @@ func (verticalaxis *VerticalAxis) GongGetFieldValue(fieldName string, stage *Sta
 	}
 	return
 }
-func GetFieldStringValueFromPointer(instance GongstructIF, fieldName string, stage *Stage) (res GongFieldValue) {
 
+func GetFieldStringValueFromPointer(instance GongstructIF, fieldName string, stage *Stage) (res GongFieldValue) {
 	res = instance.GongGetFieldValue(fieldName, stage)
 	return
 }
@@ -10749,7 +11625,7 @@ func (axis *Axis) GongSetFieldValue(fieldName string, value GongFieldValue, stag
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			axis.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					axis.ShapeCategory = __instance__
 					break
 				}
@@ -10799,7 +11675,7 @@ func (axisgrid *AxisGrid) GongSetFieldValue(fieldName string, value GongFieldVal
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			axisgrid.Reference = nil
 			for __instance__ := range stage.Axiss {
-				if stage.AxisMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Axis_stagedOrder[__instance__] == uint(id) {
 					axisgrid.Reference = __instance__
 					break
 				}
@@ -10812,7 +11688,7 @@ func (axisgrid *AxisGrid) GongSetFieldValue(fieldName string, value GongFieldVal
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			axisgrid.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					axisgrid.ShapeCategory = __instance__
 					break
 				}
@@ -10825,7 +11701,7 @@ func (axisgrid *AxisGrid) GongSetFieldValue(fieldName string, value GongFieldVal
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.Axiss {
-					if stage.AxisMap_Staged_Order[__instance__] == uint(id) {
+					if stage.Axis_stagedOrder[__instance__] == uint(id) {
 						axisgrid.Axiss = append(axisgrid.Axiss, __instance__)
 						break
 					}
@@ -10850,7 +11726,7 @@ func (bezier *Bezier) GongSetFieldValue(fieldName string, value GongFieldValue, 
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			bezier.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					bezier.ShapeCategory = __instance__
 					break
 				}
@@ -10904,7 +11780,7 @@ func (beziergrid *BezierGrid) GongSetFieldValue(fieldName string, value GongFiel
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			beziergrid.Reference = nil
 			for __instance__ := range stage.Beziers {
-				if stage.BezierMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Bezier_stagedOrder[__instance__] == uint(id) {
 					beziergrid.Reference = __instance__
 					break
 				}
@@ -10917,7 +11793,7 @@ func (beziergrid *BezierGrid) GongSetFieldValue(fieldName string, value GongFiel
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			beziergrid.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					beziergrid.ShapeCategory = __instance__
 					break
 				}
@@ -10930,7 +11806,7 @@ func (beziergrid *BezierGrid) GongSetFieldValue(fieldName string, value GongFiel
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.Beziers {
-					if stage.BezierMap_Staged_Order[__instance__] == uint(id) {
+					if stage.Bezier_stagedOrder[__instance__] == uint(id) {
 						beziergrid.Beziers = append(beziergrid.Beziers, __instance__)
 						break
 					}
@@ -10955,7 +11831,7 @@ func (beziergridstack *BezierGridStack) GongSetFieldValue(fieldName string, valu
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			beziergridstack.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					beziergridstack.ShapeCategory = __instance__
 					break
 				}
@@ -10968,7 +11844,7 @@ func (beziergridstack *BezierGridStack) GongSetFieldValue(fieldName string, valu
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.BezierGrids {
-					if stage.BezierGridMap_Staged_Order[__instance__] == uint(id) {
+					if stage.BezierGrid_stagedOrder[__instance__] == uint(id) {
 						beziergridstack.BezierGrids = append(beziergridstack.BezierGrids, __instance__)
 						break
 					}
@@ -11006,7 +11882,7 @@ func (circle *Circle) GongSetFieldValue(fieldName string, value GongFieldValue, 
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			circle.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					circle.ShapeCategory = __instance__
 					break
 				}
@@ -11058,7 +11934,7 @@ func (circlegrid *CircleGrid) GongSetFieldValue(fieldName string, value GongFiel
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			circlegrid.Reference = nil
 			for __instance__ := range stage.Circles {
-				if stage.CircleMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Circle_stagedOrder[__instance__] == uint(id) {
 					circlegrid.Reference = __instance__
 					break
 				}
@@ -11071,7 +11947,7 @@ func (circlegrid *CircleGrid) GongSetFieldValue(fieldName string, value GongFiel
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			circlegrid.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					circlegrid.ShapeCategory = __instance__
 					break
 				}
@@ -11084,7 +11960,7 @@ func (circlegrid *CircleGrid) GongSetFieldValue(fieldName string, value GongFiel
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.Circles {
-					if stage.CircleMap_Staged_Order[__instance__] == uint(id) {
+					if stage.Circle_stagedOrder[__instance__] == uint(id) {
 						circlegrid.Circles = append(circlegrid.Circles, __instance__)
 						break
 					}
@@ -11121,7 +11997,7 @@ func (content *Content) GongSetFieldValue(fieldName string, value GongFieldValue
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.Chapters {
-					if stage.ChapterMap_Staged_Order[__instance__] == uint(id) {
+					if stage.Chapter_stagedOrder[__instance__] == uint(id) {
 						content.Chapters = append(content.Chapters, __instance__)
 						break
 					}
@@ -11144,7 +12020,7 @@ func (exporttomusicxml *ExportToMusicxml) GongSetFieldValue(fieldName string, va
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			exporttomusicxml.Parameter = nil
 			for __instance__ := range stage.Parameters {
-				if stage.ParameterMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Parameter_stagedOrder[__instance__] == uint(id) {
 					exporttomusicxml.Parameter = __instance__
 					break
 				}
@@ -11181,7 +12057,7 @@ func (frontcurvestack *FrontCurveStack) GongSetFieldValue(fieldName string, valu
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			frontcurvestack.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					frontcurvestack.ShapeCategory = __instance__
 					break
 				}
@@ -11194,7 +12070,7 @@ func (frontcurvestack *FrontCurveStack) GongSetFieldValue(fieldName string, valu
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.FrontCurves {
-					if stage.FrontCurveMap_Staged_Order[__instance__] == uint(id) {
+					if stage.FrontCurve_stagedOrder[__instance__] == uint(id) {
 						frontcurvestack.FrontCurves = append(frontcurvestack.FrontCurves, __instance__)
 						break
 					}
@@ -11208,7 +12084,7 @@ func (frontcurvestack *FrontCurveStack) GongSetFieldValue(fieldName string, valu
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.SpiralCircles {
-					if stage.SpiralCircleMap_Staged_Order[__instance__] == uint(id) {
+					if stage.SpiralCircle_stagedOrder[__instance__] == uint(id) {
 						frontcurvestack.SpiralCircles = append(frontcurvestack.SpiralCircles, __instance__)
 						break
 					}
@@ -11249,7 +12125,7 @@ func (horizontalaxis *HorizontalAxis) GongSetFieldValue(fieldName string, value 
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			horizontalaxis.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					horizontalaxis.ShapeCategory = __instance__
 					break
 				}
@@ -11293,7 +12169,7 @@ func (key *Key) GongSetFieldValue(fieldName string, value GongFieldValue, stage 
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			key.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					key.ShapeCategory = __instance__
 					break
 				}
@@ -11351,7 +12227,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.InitialRhombus = nil
 			for __instance__ := range stage.Rhombuss {
-				if stage.RhombusMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Rhombus_stagedOrder[__instance__] == uint(id) {
 					parameter.InitialRhombus = __instance__
 					break
 				}
@@ -11362,7 +12238,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.InitialCircle = nil
 			for __instance__ := range stage.Circles {
-				if stage.CircleMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Circle_stagedOrder[__instance__] == uint(id) {
 					parameter.InitialCircle = __instance__
 					break
 				}
@@ -11373,7 +12249,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.InitialRhombusGrid = nil
 			for __instance__ := range stage.RhombusGrids {
-				if stage.RhombusGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.RhombusGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.InitialRhombusGrid = __instance__
 					break
 				}
@@ -11384,7 +12260,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.InitialCircleGrid = nil
 			for __instance__ := range stage.CircleGrids {
-				if stage.CircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.CircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.InitialCircleGrid = __instance__
 					break
 				}
@@ -11395,7 +12271,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.InitialAxis = nil
 			for __instance__ := range stage.Axiss {
-				if stage.AxisMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Axis_stagedOrder[__instance__] == uint(id) {
 					parameter.InitialAxis = __instance__
 					break
 				}
@@ -11406,7 +12282,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.RotatedAxis = nil
 			for __instance__ := range stage.Axiss {
-				if stage.AxisMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Axis_stagedOrder[__instance__] == uint(id) {
 					parameter.RotatedAxis = __instance__
 					break
 				}
@@ -11417,7 +12293,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.RotatedRhombus = nil
 			for __instance__ := range stage.Rhombuss {
-				if stage.RhombusMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Rhombus_stagedOrder[__instance__] == uint(id) {
 					parameter.RotatedRhombus = __instance__
 					break
 				}
@@ -11428,7 +12304,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.RotatedRhombusGrid = nil
 			for __instance__ := range stage.RhombusGrids {
-				if stage.RhombusGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.RhombusGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.RotatedRhombusGrid = __instance__
 					break
 				}
@@ -11439,7 +12315,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.RotatedCircleGrid = nil
 			for __instance__ := range stage.CircleGrids {
-				if stage.CircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.CircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.RotatedCircleGrid = __instance__
 					break
 				}
@@ -11450,7 +12326,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.NextRhombus = nil
 			for __instance__ := range stage.Rhombuss {
-				if stage.RhombusMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Rhombus_stagedOrder[__instance__] == uint(id) {
 					parameter.NextRhombus = __instance__
 					break
 				}
@@ -11461,7 +12337,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.NextCircle = nil
 			for __instance__ := range stage.Circles {
-				if stage.CircleMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Circle_stagedOrder[__instance__] == uint(id) {
 					parameter.NextCircle = __instance__
 					break
 				}
@@ -11472,7 +12348,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowingRhombusGridSeed = nil
 			for __instance__ := range stage.Rhombuss {
-				if stage.RhombusMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Rhombus_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowingRhombusGridSeed = __instance__
 					break
 				}
@@ -11483,7 +12359,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowingRhombusGrid = nil
 			for __instance__ := range stage.RhombusGrids {
-				if stage.RhombusGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.RhombusGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowingRhombusGrid = __instance__
 					break
 				}
@@ -11494,7 +12370,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowingCircleGridSeed = nil
 			for __instance__ := range stage.Circles {
-				if stage.CircleMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Circle_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowingCircleGridSeed = __instance__
 					break
 				}
@@ -11505,7 +12381,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowingCircleGrid = nil
 			for __instance__ := range stage.CircleGrids {
-				if stage.CircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.CircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowingCircleGrid = __instance__
 					break
 				}
@@ -11516,7 +12392,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowingCircleGridLeftSeed = nil
 			for __instance__ := range stage.Circles {
-				if stage.CircleMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Circle_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowingCircleGridLeftSeed = __instance__
 					break
 				}
@@ -11527,7 +12403,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowingCircleGridLeft = nil
 			for __instance__ := range stage.CircleGrids {
-				if stage.CircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.CircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowingCircleGridLeft = __instance__
 					break
 				}
@@ -11538,7 +12414,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.ConstructionAxis = nil
 			for __instance__ := range stage.Axiss {
-				if stage.AxisMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Axis_stagedOrder[__instance__] == uint(id) {
 					parameter.ConstructionAxis = __instance__
 					break
 				}
@@ -11549,7 +12425,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.ConstructionAxisGrid = nil
 			for __instance__ := range stage.AxisGrids {
-				if stage.AxisGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.AxisGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.ConstructionAxisGrid = __instance__
 					break
 				}
@@ -11560,7 +12436,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.ConstructionCircle = nil
 			for __instance__ := range stage.Circles {
-				if stage.CircleMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Circle_stagedOrder[__instance__] == uint(id) {
 					parameter.ConstructionCircle = __instance__
 					break
 				}
@@ -11571,7 +12447,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.ConstructionCircleGrid = nil
 			for __instance__ := range stage.CircleGrids {
-				if stage.CircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.CircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.ConstructionCircleGrid = __instance__
 					break
 				}
@@ -11582,7 +12458,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowthCurveSeed = nil
 			for __instance__ := range stage.Beziers {
-				if stage.BezierMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Bezier_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowthCurveSeed = __instance__
 					break
 				}
@@ -11593,7 +12469,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowthCurve = nil
 			for __instance__ := range stage.BezierGrids {
-				if stage.BezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.BezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowthCurve = __instance__
 					break
 				}
@@ -11604,7 +12480,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowthCurveShiftedRightSeed = nil
 			for __instance__ := range stage.Beziers {
-				if stage.BezierMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Bezier_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowthCurveShiftedRightSeed = __instance__
 					break
 				}
@@ -11615,7 +12491,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowthCurveShiftedRight = nil
 			for __instance__ := range stage.BezierGrids {
-				if stage.BezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.BezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowthCurveShiftedRight = __instance__
 					break
 				}
@@ -11626,7 +12502,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowthCurveNextSeed = nil
 			for __instance__ := range stage.Beziers {
-				if stage.BezierMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Bezier_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowthCurveNextSeed = __instance__
 					break
 				}
@@ -11637,7 +12513,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowthCurveNext = nil
 			for __instance__ := range stage.BezierGrids {
-				if stage.BezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.BezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowthCurveNext = __instance__
 					break
 				}
@@ -11648,7 +12524,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowthCurveNextShiftedRightSeed = nil
 			for __instance__ := range stage.Beziers {
-				if stage.BezierMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Bezier_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowthCurveNextShiftedRightSeed = __instance__
 					break
 				}
@@ -11659,7 +12535,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowthCurveNextShiftedRight = nil
 			for __instance__ := range stage.BezierGrids {
-				if stage.BezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.BezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowthCurveNextShiftedRight = __instance__
 					break
 				}
@@ -11670,7 +12546,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.GrowthCurveStack = nil
 			for __instance__ := range stage.BezierGridStacks {
-				if stage.BezierGridStackMap_Staged_Order[__instance__] == uint(id) {
+				if stage.BezierGridStack_stagedOrder[__instance__] == uint(id) {
 					parameter.GrowthCurveStack = __instance__
 					break
 				}
@@ -11689,7 +12565,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralRhombusGridSeed = nil
 			for __instance__ := range stage.SpiralRhombuss {
-				if stage.SpiralRhombusMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralRhombus_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralRhombusGridSeed = __instance__
 					break
 				}
@@ -11700,7 +12576,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralRhombusGrid = nil
 			for __instance__ := range stage.SpiralRhombusGrids {
-				if stage.SpiralRhombusGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralRhombusGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralRhombusGrid = __instance__
 					break
 				}
@@ -11711,7 +12587,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralCircleSeed = nil
 			for __instance__ := range stage.SpiralCircles {
-				if stage.SpiralCircleMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralCircle_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralCircleSeed = __instance__
 					break
 				}
@@ -11722,7 +12598,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralCircleGrid = nil
 			for __instance__ := range stage.SpiralCircleGrids {
-				if stage.SpiralCircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralCircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralCircleGrid = __instance__
 					break
 				}
@@ -11733,7 +12609,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralCircleFullGrid = nil
 			for __instance__ := range stage.SpiralCircleGrids {
-				if stage.SpiralCircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralCircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralCircleFullGrid = __instance__
 					break
 				}
@@ -11744,7 +12620,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralConstructionOuterLineSeed = nil
 			for __instance__ := range stage.SpiralLines {
-				if stage.SpiralLineMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralLine_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralConstructionOuterLineSeed = __instance__
 					break
 				}
@@ -11755,7 +12631,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralConstructionInnerLineSeed = nil
 			for __instance__ := range stage.SpiralLines {
-				if stage.SpiralLineMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralLine_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralConstructionInnerLineSeed = __instance__
 					break
 				}
@@ -11766,7 +12642,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralConstructionOuterLineGrid = nil
 			for __instance__ := range stage.SpiralLineGrids {
-				if stage.SpiralLineGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralLineGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralConstructionOuterLineGrid = __instance__
 					break
 				}
@@ -11777,7 +12653,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralConstructionInnerLineGrid = nil
 			for __instance__ := range stage.SpiralLineGrids {
-				if stage.SpiralLineGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralLineGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralConstructionInnerLineGrid = __instance__
 					break
 				}
@@ -11788,7 +12664,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralConstructionCircleGrid = nil
 			for __instance__ := range stage.SpiralCircleGrids {
-				if stage.SpiralCircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralCircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralConstructionCircleGrid = __instance__
 					break
 				}
@@ -11799,7 +12675,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralConstructionOuterLineFullGrid = nil
 			for __instance__ := range stage.SpiralLineGrids {
-				if stage.SpiralLineGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralLineGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralConstructionOuterLineFullGrid = __instance__
 					break
 				}
@@ -11810,7 +12686,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralBezierSeed = nil
 			for __instance__ := range stage.SpiralBeziers {
-				if stage.SpiralBezierMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralBezier_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralBezierSeed = __instance__
 					break
 				}
@@ -11821,7 +12697,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralBezierGrid = nil
 			for __instance__ := range stage.SpiralBezierGrids {
-				if stage.SpiralBezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralBezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralBezierGrid = __instance__
 					break
 				}
@@ -11832,7 +12708,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralBezierFullGrid = nil
 			for __instance__ := range stage.SpiralBezierGrids {
-				if stage.SpiralBezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralBezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralBezierFullGrid = __instance__
 					break
 				}
@@ -11845,7 +12721,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.FrontCurveStack = nil
 			for __instance__ := range stage.FrontCurveStacks {
-				if stage.FrontCurveStackMap_Staged_Order[__instance__] == uint(id) {
+				if stage.FrontCurveStack_stagedOrder[__instance__] == uint(id) {
 					parameter.FrontCurveStack = __instance__
 					break
 				}
@@ -11858,7 +12734,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.Fkey = nil
 			for __instance__ := range stage.Keys {
-				if stage.KeyMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Key_stagedOrder[__instance__] == uint(id) {
 					parameter.Fkey = __instance__
 					break
 				}
@@ -11875,7 +12751,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.PitchLines = nil
 			for __instance__ := range stage.AxisGrids {
-				if stage.AxisGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.AxisGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.PitchLines = __instance__
 					break
 				}
@@ -11890,7 +12766,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.BeatLines = nil
 			for __instance__ := range stage.AxisGrids {
-				if stage.AxisGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.AxisGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.BeatLines = __instance__
 					break
 				}
@@ -11907,7 +12783,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.FirstVoice = nil
 			for __instance__ := range stage.BezierGrids {
-				if stage.BezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.BezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.FirstVoice = __instance__
 					break
 				}
@@ -11918,7 +12794,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.FirstVoiceShiftedRigth = nil
 			for __instance__ := range stage.BezierGrids {
-				if stage.BezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.BezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.FirstVoiceShiftedRigth = __instance__
 					break
 				}
@@ -11933,7 +12809,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SecondVoice = nil
 			for __instance__ := range stage.BezierGrids {
-				if stage.BezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.BezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SecondVoice = __instance__
 					break
 				}
@@ -11944,7 +12820,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SecondVoiceShiftedRight = nil
 			for __instance__ := range stage.BezierGrids {
-				if stage.BezierGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.BezierGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SecondVoiceShiftedRight = __instance__
 					break
 				}
@@ -11961,7 +12837,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.FirstVoiceNotes = nil
 			for __instance__ := range stage.CircleGrids {
-				if stage.CircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.CircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.FirstVoiceNotes = __instance__
 					break
 				}
@@ -11972,7 +12848,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.FirstVoiceNotesShiftedRight = nil
 			for __instance__ := range stage.CircleGrids {
-				if stage.CircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.CircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.FirstVoiceNotesShiftedRight = __instance__
 					break
 				}
@@ -11983,7 +12859,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SecondVoiceNotes = nil
 			for __instance__ := range stage.CircleGrids {
-				if stage.CircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.CircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SecondVoiceNotes = __instance__
 					break
 				}
@@ -11994,7 +12870,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SecondVoiceNotesShiftedRight = nil
 			for __instance__ := range stage.CircleGrids {
-				if stage.CircleGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.CircleGrid_stagedOrder[__instance__] == uint(id) {
 					parameter.SecondVoiceNotesShiftedRight = __instance__
 					break
 				}
@@ -12013,7 +12889,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.HorizontalAxis = nil
 			for __instance__ := range stage.HorizontalAxiss {
-				if stage.HorizontalAxisMap_Staged_Order[__instance__] == uint(id) {
+				if stage.HorizontalAxis_stagedOrder[__instance__] == uint(id) {
 					parameter.HorizontalAxis = __instance__
 					break
 				}
@@ -12024,7 +12900,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.VerticalAxis = nil
 			for __instance__ := range stage.VerticalAxiss {
-				if stage.VerticalAxisMap_Staged_Order[__instance__] == uint(id) {
+				if stage.VerticalAxis_stagedOrder[__instance__] == uint(id) {
 					parameter.VerticalAxis = __instance__
 					break
 				}
@@ -12035,7 +12911,7 @@ func (parameter *Parameter) GongSetFieldValue(fieldName string, value GongFieldV
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			parameter.SpiralOrigin = nil
 			for __instance__ := range stage.SpiralOrigins {
-				if stage.SpiralOriginMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralOrigin_stagedOrder[__instance__] == uint(id) {
 					parameter.SpiralOrigin = __instance__
 					break
 				}
@@ -12079,7 +12955,7 @@ func (rhombus *Rhombus) GongSetFieldValue(fieldName string, value GongFieldValue
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			rhombus.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					rhombus.ShapeCategory = __instance__
 					break
 				}
@@ -12127,7 +13003,7 @@ func (rhombusgrid *RhombusGrid) GongSetFieldValue(fieldName string, value GongFi
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			rhombusgrid.Reference = nil
 			for __instance__ := range stage.Rhombuss {
-				if stage.RhombusMap_Staged_Order[__instance__] == uint(id) {
+				if stage.Rhombus_stagedOrder[__instance__] == uint(id) {
 					rhombusgrid.Reference = __instance__
 					break
 				}
@@ -12140,7 +13016,7 @@ func (rhombusgrid *RhombusGrid) GongSetFieldValue(fieldName string, value GongFi
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			rhombusgrid.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					rhombusgrid.ShapeCategory = __instance__
 					break
 				}
@@ -12153,7 +13029,7 @@ func (rhombusgrid *RhombusGrid) GongSetFieldValue(fieldName string, value GongFi
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.Rhombuss {
-					if stage.RhombusMap_Staged_Order[__instance__] == uint(id) {
+					if stage.Rhombus_stagedOrder[__instance__] == uint(id) {
 						rhombusgrid.Rhombuses = append(rhombusgrid.Rhombuses, __instance__)
 						break
 					}
@@ -12191,7 +13067,7 @@ func (spiralbezier *SpiralBezier) GongSetFieldValue(fieldName string, value Gong
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spiralbezier.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					spiralbezier.ShapeCategory = __instance__
 					break
 				}
@@ -12247,7 +13123,7 @@ func (spiralbeziergrid *SpiralBezierGrid) GongSetFieldValue(fieldName string, va
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spiralbeziergrid.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					spiralbeziergrid.ShapeCategory = __instance__
 					break
 				}
@@ -12260,7 +13136,7 @@ func (spiralbeziergrid *SpiralBezierGrid) GongSetFieldValue(fieldName string, va
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.SpiralBeziers {
-					if stage.SpiralBezierMap_Staged_Order[__instance__] == uint(id) {
+					if stage.SpiralBezier_stagedOrder[__instance__] == uint(id) {
 						spiralbeziergrid.SpiralBeziers = append(spiralbeziergrid.SpiralBeziers, __instance__)
 						break
 					}
@@ -12285,7 +13161,7 @@ func (spiralcircle *SpiralCircle) GongSetFieldValue(fieldName string, value Gong
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spiralcircle.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					spiralcircle.ShapeCategory = __instance__
 					break
 				}
@@ -12341,7 +13217,7 @@ func (spiralcirclegrid *SpiralCircleGrid) GongSetFieldValue(fieldName string, va
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spiralcirclegrid.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					spiralcirclegrid.ShapeCategory = __instance__
 					break
 				}
@@ -12352,7 +13228,7 @@ func (spiralcirclegrid *SpiralCircleGrid) GongSetFieldValue(fieldName string, va
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spiralcirclegrid.SpiralRhombusGrid = nil
 			for __instance__ := range stage.SpiralRhombusGrids {
-				if stage.SpiralRhombusGridMap_Staged_Order[__instance__] == uint(id) {
+				if stage.SpiralRhombusGrid_stagedOrder[__instance__] == uint(id) {
 					spiralcirclegrid.SpiralRhombusGrid = __instance__
 					break
 				}
@@ -12365,7 +13241,7 @@ func (spiralcirclegrid *SpiralCircleGrid) GongSetFieldValue(fieldName string, va
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.SpiralCircles {
-					if stage.SpiralCircleMap_Staged_Order[__instance__] == uint(id) {
+					if stage.SpiralCircle_stagedOrder[__instance__] == uint(id) {
 						spiralcirclegrid.SpiralCircles = append(spiralcirclegrid.SpiralCircles, __instance__)
 						break
 					}
@@ -12390,7 +13266,7 @@ func (spiralline *SpiralLine) GongSetFieldValue(fieldName string, value GongFiel
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spiralline.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					spiralline.ShapeCategory = __instance__
 					break
 				}
@@ -12438,7 +13314,7 @@ func (spirallinegrid *SpiralLineGrid) GongSetFieldValue(fieldName string, value 
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spirallinegrid.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					spirallinegrid.ShapeCategory = __instance__
 					break
 				}
@@ -12451,7 +13327,7 @@ func (spirallinegrid *SpiralLineGrid) GongSetFieldValue(fieldName string, value 
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.SpiralLines {
-					if stage.SpiralLineMap_Staged_Order[__instance__] == uint(id) {
+					if stage.SpiralLine_stagedOrder[__instance__] == uint(id) {
 						spirallinegrid.SpiralLines = append(spirallinegrid.SpiralLines, __instance__)
 						break
 					}
@@ -12476,7 +13352,7 @@ func (spiralorigin *SpiralOrigin) GongSetFieldValue(fieldName string, value Gong
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spiralorigin.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					spiralorigin.ShapeCategory = __instance__
 					break
 				}
@@ -12516,7 +13392,7 @@ func (spiralrhombus *SpiralRhombus) GongSetFieldValue(fieldName string, value Go
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spiralrhombus.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					spiralrhombus.ShapeCategory = __instance__
 					break
 				}
@@ -12572,7 +13448,7 @@ func (spiralrhombusgrid *SpiralRhombusGrid) GongSetFieldValue(fieldName string, 
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			spiralrhombusgrid.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					spiralrhombusgrid.ShapeCategory = __instance__
 					break
 				}
@@ -12585,7 +13461,7 @@ func (spiralrhombusgrid *SpiralRhombusGrid) GongSetFieldValue(fieldName string, 
 			var id int
 			if _, err := fmt.Sscanf(idStr, "%d", &id); err == nil {
 				for __instance__ := range stage.SpiralRhombuss {
-					if stage.SpiralRhombusMap_Staged_Order[__instance__] == uint(id) {
+					if stage.SpiralRhombus_stagedOrder[__instance__] == uint(id) {
 						spiralrhombusgrid.SpiralRhombuses = append(spiralrhombusgrid.SpiralRhombuses, __instance__)
 						break
 					}
@@ -12610,7 +13486,7 @@ func (verticalaxis *VerticalAxis) GongSetFieldValue(fieldName string, value Gong
 		if _, err := fmt.Sscanf(value.ids, "%d", &id); err == nil {
 			verticalaxis.ShapeCategory = nil
 			for __instance__ := range stage.ShapeCategorys {
-				if stage.ShapeCategoryMap_Staged_Order[__instance__] == uint(id) {
+				if stage.ShapeCategory_stagedOrder[__instance__] == uint(id) {
 					verticalaxis.ShapeCategory = __instance__
 					break
 				}
@@ -12765,7 +13641,6 @@ func GetGongstructNameFromPointer(instance GongstructIF) (res string) {
 }
 
 func (stage *Stage) ResetMapStrings() {
-
 	// insertion point for generic get gongstruct name
 	stage.Axiss_mapString = make(map[string]*Axis)
 	for axis := range stage.Axiss {
@@ -12907,6 +13782,7 @@ func (stage *Stage) ResetMapStrings() {
 		stage.VerticalAxiss_mapString[verticalaxis.Name] = verticalaxis
 	}
 
+	// end of insertion point for generic get gongstruct name
 }
 
 // Last line of the template

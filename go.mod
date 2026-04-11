@@ -3,7 +3,7 @@ module github.com/thomaspeugeot/phyllotaxymusic
 go 1.25.5
 
 require (
-	github.com/fullstack-lang/gong v0.0.0-20260110131834-d4d85ade8e69
+	github.com/fullstack-lang/gong v0.0.0-20260411171006-5058ff0b2beb
 	github.com/fullstack-lang/maticons v0.0.0-20240913013021-27a7b8fd9369
 	github.com/gin-gonic/gin v1.11.0
 	github.com/xuri/excelize/v2 v2.10.0

@@ -4,9 +4,7 @@ package models
 import (
 	"cmp"
 	"fmt"
-	"log"
 	"slices"
-	"unicode/utf8"
 
 	"github.com/xuri/excelize/v2"
 )
@@ -77,20 +75,34 @@ func SerializeStage2(stage *Stage, filename string, addIDs bool) {
 	sheetList := f.GetSheetList()
 
 	for _, sheet := range sheetList {
-		// Read all rows of the current sheet
-		rows, err := f.GetRows(sheet)
+		// Use a lazy iterator instead of loading all rows into memory
+		rows, err := f.Rows(sheet)
 		if err != nil {
-			fmt.Printf("failed to get rows for sheet %q: %v\n", sheet, err)
+			fmt.Printf("failed to get rows iterator for sheet %q: %v\n", sheet, err)
 			continue
 		}
 
-		// If there's no data at all, skip this sheet
-		if len(rows) == 0 {
+		// Check if there is at least one row, and move the iterator to it
+		if !rows.Next() {
+			rows.Close() // Always close iterators
 			continue
 		}
 
-		// The first row of the sheet
-		firstRow := rows[0]
+		// Read ONLY the first row
+		firstRow, err := rows.Columns()
+
+		// Close the iterator immediately since we don't need the rest of the sheet
+		rows.Close()
+
+		if err != nil {
+			fmt.Printf("failed to get columns for sheet %q: %v\n", sheet, err)
+			continue
+		}
+
+		// If the first row is completely empty, skip
+		if len(firstRow) == 0 {
+			continue
+		}
 
 		// Track the first and last “used” column in the first row,
 		// so we can later apply an AutoFilter from the first to last used col
@@ -235,14 +247,36 @@ func SerializeExcelizePointerToGongstruct2[Type PointerToGongstruct](stage *Stag
 			f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+1)), line), fieldHeader.Name)
 			switch fieldHeader.GongFieldValueType {
 			case GongFieldValueTypePointer:
-				f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), fieldHeader.Name+":ID")
+				f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line),
+					fieldHeader.Name+":"+fieldHeader.TargetGongstructName+":ID")
 			case GongFieldValueTypeSliceOfPointers:
-				f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), fieldHeader.Name+":IDs")
+				f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line),
+					fieldHeader.Name+":"+fieldHeader.TargetGongstructName+":IDs")
 			default:
+				// if index is 0, this is the ID of the instance
 				if index == 0 {
-					f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), fieldHeader.Name+":ID")
+					f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), "ID")
 				} else {
-					f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), fieldHeader.Name+":noID")
+					// one have to put the type of the cell
+					header := fieldHeader.Name
+					switch fieldHeader.GongFieldValueType {
+					case GongFieldValueTypeInt:
+						header += ":int"
+					case GongFieldValueTypeIntDuration:
+						header += ":duration"
+					case GongFieldValueTypeFloat:
+						header += ":float"
+					case GongFieldValueTypeBool:
+						header += ":bool"
+					case GongFieldValueTypeString:
+						header += ":string"
+					case GongFieldValueTypeDate:
+						header += ":date"
+					default:
+						header += ":basicType"
+					}
+					header += ":noID"
+					f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), header)
 				}
 			}
 		}
@@ -256,9 +290,7 @@ func SerializeExcelizePointerToGongstruct2[Type PointerToGongstruct](stage *Stag
 	for _, instance := range sortedSlice {
 		line = line + 1
 
-		// 3. Add the ID value in column A
-		// We use type assertion to check if the instance implements GetID()
-		id := GetOrderPointerGongstruct(stage, instance)
+		// 3. Add the ID value in column B
 
 		for index, fieldName := range GetFieldsFromPointer[Type]() {
 			fieldStringValue := GetFieldStringValueFromPointer(instance, fieldName.Name, stage)
@@ -267,7 +299,7 @@ func SerializeExcelizePointerToGongstruct2[Type PointerToGongstruct](stage *Stag
 			} else {
 				f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+1)), line), fieldStringValue.GetValueString())
 				if index == 0 {
-					f.SetCellInt(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), int64(id))
+					f.SetCellStr(sheetName, fmt.Sprintf("%s%d", IntToLetters(int32(2*index+2)), line), instance.GongGetUUID(stage))
 				} else {
 					switch fieldStringValue.GongFieldValueType {
 					case GongFieldValueTypePointer, GongFieldValueTypeSliceOfPointers:
@@ -279,35 +311,23 @@ func SerializeExcelizePointerToGongstruct2[Type PointerToGongstruct](stage *Stag
 		}
 	}
 
-	// Autofit all columns according to their text content
-	cols, err := f.GetCols(sheetName)
-	if err != nil {
-		log.Panicln("SerializeExcelize")
-	}
-	for idx, col := range cols {
-		largestWidth := 0
-		for _, rowCell := range col {
-			cellWidth := utf8.RuneCountInString(rowCell) + 2 // + 2 for margin
-			if cellWidth > largestWidth {
-				largestWidth = cellWidth
-			}
-		}
-		name, err := excelize.ColumnNumberToName(idx + 1)
-		if err != nil {
-			log.Panicln("SerializeExcelize")
-		}
-		f.SetColWidth(sheetName, name, name, float64(largestWidth))
-	}
-}
-
-func IntToLetters(number int32) (letters string) {
-	number--
-	if firstLetter := number / 26; firstLetter > 0 {
-		letters += IntToLetters(firstLetter)
-		letters += string('A' + number%26)
-	} else {
-		letters += string('A' + number)
-	}
-
-	return
+	// // Autofit all columns according to their text content
+	// cols, err := f.GetCols(sheetName)
+	// if err != nil {
+	// 	log.Panicln("SerializeExcelize")
+	// }
+	// for idx, col := range cols {
+	// 	largestWidth := 0
+	// 	for _, rowCell := range col {
+	// 		cellWidth := utf8.RuneCountInString(rowCell) + 2 // + 2 for margin
+	// 		if cellWidth > largestWidth {
+	// 			largestWidth = cellWidth
+	// 		}
+	// 	}
+	// 	name, err := excelize.ColumnNumberToName(idx + 1)
+	// 	if err != nil {
+	// 		log.Panicln("SerializeExcelize")
+	// 	}
+	// 	f.SetColWidth(sheetName, name, name, float64(largestWidth))
+	// }
 }

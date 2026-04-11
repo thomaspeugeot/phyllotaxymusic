@@ -46,6 +46,8 @@ type AxisFormCallback struct {
 }
 
 func (axisFormCallback *AxisFormCallback) OnSave() {
+	axisFormCallback.probe.stageOfInterest.Lock()
+	defer axisFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("AxisFormCallback, OnSave")
 
@@ -191,7 +193,7 @@ func (axisFormCallback *AxisFormCallback) OnSave() {
 		axisFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(axisFormCallback.probe)
+	axisFormCallback.probe.ux_tree()
 }
 func __gong__New__AxisGridFormCallback(
 	axisgrid *models.AxisGrid,
@@ -220,6 +222,8 @@ type AxisGridFormCallback struct {
 }
 
 func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
+	axisgridFormCallback.probe.stageOfInterest.Lock()
+	defer axisgridFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("AxisGridFormCallback, OnSave")
 
@@ -304,7 +308,7 @@ func (axisgridFormCallback *AxisGridFormCallback) OnSave() {
 		axisgridFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(axisgridFormCallback.probe)
+	axisgridFormCallback.probe.ux_tree()
 }
 func __gong__New__BezierFormCallback(
 	bezier *models.Bezier,
@@ -333,6 +337,8 @@ type BezierFormCallback struct {
 }
 
 func (bezierFormCallback *BezierFormCallback) OnSave() {
+	bezierFormCallback.probe.stageOfInterest.Lock()
+	defer bezierFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("BezierFormCallback, OnSave")
 
@@ -482,7 +488,7 @@ func (bezierFormCallback *BezierFormCallback) OnSave() {
 		bezierFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(bezierFormCallback.probe)
+	bezierFormCallback.probe.ux_tree()
 }
 func __gong__New__BezierGridFormCallback(
 	beziergrid *models.BezierGrid,
@@ -511,6 +517,8 @@ type BezierGridFormCallback struct {
 }
 
 func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
+	beziergridFormCallback.probe.stageOfInterest.Lock()
+	defer beziergridFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("BezierGridFormCallback, OnSave")
 
@@ -661,7 +669,7 @@ func (beziergridFormCallback *BezierGridFormCallback) OnSave() {
 		beziergridFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(beziergridFormCallback.probe)
+	beziergridFormCallback.probe.ux_tree()
 }
 func __gong__New__BezierGridStackFormCallback(
 	beziergridstack *models.BezierGridStack,
@@ -690,6 +698,8 @@ type BezierGridStackFormCallback struct {
 }
 
 func (beziergridstackFormCallback *BezierGridStackFormCallback) OnSave() {
+	beziergridstackFormCallback.probe.stageOfInterest.Lock()
+	defer beziergridstackFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("BezierGridStackFormCallback, OnSave")
 
@@ -772,7 +782,7 @@ func (beziergridstackFormCallback *BezierGridStackFormCallback) OnSave() {
 		beziergridstackFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(beziergridstackFormCallback.probe)
+	beziergridstackFormCallback.probe.ux_tree()
 }
 func __gong__New__ChapterFormCallback(
 	chapter *models.Chapter,
@@ -801,6 +811,8 @@ type ChapterFormCallback struct {
 }
 
 func (chapterFormCallback *ChapterFormCallback) OnSave() {
+	chapterFormCallback.probe.stageOfInterest.Lock()
+	defer chapterFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("ChapterFormCallback, OnSave")
 
@@ -916,7 +928,7 @@ func (chapterFormCallback *ChapterFormCallback) OnSave() {
 		chapterFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(chapterFormCallback.probe)
+	chapterFormCallback.probe.ux_tree()
 }
 func __gong__New__CircleFormCallback(
 	circle *models.Circle,
@@ -945,6 +957,8 @@ type CircleFormCallback struct {
 }
 
 func (circleFormCallback *CircleFormCallback) OnSave() {
+	circleFormCallback.probe.stageOfInterest.Lock()
+	defer circleFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("CircleFormCallback, OnSave")
 
@@ -1092,7 +1106,7 @@ func (circleFormCallback *CircleFormCallback) OnSave() {
 		circleFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(circleFormCallback.probe)
+	circleFormCallback.probe.ux_tree()
 }
 func __gong__New__CircleGridFormCallback(
 	circlegrid *models.CircleGrid,
@@ -1121,6 +1135,8 @@ type CircleGridFormCallback struct {
 }
 
 func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
+	circlegridFormCallback.probe.stageOfInterest.Lock()
+	defer circlegridFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("CircleGridFormCallback, OnSave")
 
@@ -1205,7 +1221,7 @@ func (circlegridFormCallback *CircleGridFormCallback) OnSave() {
 		circlegridFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(circlegridFormCallback.probe)
+	circlegridFormCallback.probe.ux_tree()
 }
 func __gong__New__ContentFormCallback(
 	content *models.Content,
@@ -1234,6 +1250,8 @@ type ContentFormCallback struct {
 }
 
 func (contentFormCallback *ContentFormCallback) OnSave() {
+	contentFormCallback.probe.stageOfInterest.Lock()
+	defer contentFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("ContentFormCallback, OnSave")
 
@@ -1324,7 +1342,7 @@ func (contentFormCallback *ContentFormCallback) OnSave() {
 		contentFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(contentFormCallback.probe)
+	contentFormCallback.probe.ux_tree()
 }
 func __gong__New__ExportToMusicxmlFormCallback(
 	exporttomusicxml *models.ExportToMusicxml,
@@ -1353,6 +1371,8 @@ type ExportToMusicxmlFormCallback struct {
 }
 
 func (exporttomusicxmlFormCallback *ExportToMusicxmlFormCallback) OnSave() {
+	exporttomusicxmlFormCallback.probe.stageOfInterest.Lock()
+	defer exporttomusicxmlFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("ExportToMusicxmlFormCallback, OnSave")
 
@@ -1402,7 +1422,7 @@ func (exporttomusicxmlFormCallback *ExportToMusicxmlFormCallback) OnSave() {
 		exporttomusicxmlFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(exporttomusicxmlFormCallback.probe)
+	exporttomusicxmlFormCallback.probe.ux_tree()
 }
 func __gong__New__FrontCurveFormCallback(
 	frontcurve *models.FrontCurve,
@@ -1431,6 +1451,8 @@ type FrontCurveFormCallback struct {
 }
 
 func (frontcurveFormCallback *FrontCurveFormCallback) OnSave() {
+	frontcurveFormCallback.probe.stageOfInterest.Lock()
+	defer frontcurveFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("FrontCurveFormCallback, OnSave")
 
@@ -1546,7 +1568,7 @@ func (frontcurveFormCallback *FrontCurveFormCallback) OnSave() {
 		frontcurveFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(frontcurveFormCallback.probe)
+	frontcurveFormCallback.probe.ux_tree()
 }
 func __gong__New__FrontCurveStackFormCallback(
 	frontcurvestack *models.FrontCurveStack,
@@ -1575,6 +1597,8 @@ type FrontCurveStackFormCallback struct {
 }
 
 func (frontcurvestackFormCallback *FrontCurveStackFormCallback) OnSave() {
+	frontcurvestackFormCallback.probe.stageOfInterest.Lock()
+	defer frontcurvestackFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("FrontCurveStackFormCallback, OnSave")
 
@@ -1704,7 +1728,7 @@ func (frontcurvestackFormCallback *FrontCurveStackFormCallback) OnSave() {
 		frontcurvestackFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(frontcurvestackFormCallback.probe)
+	frontcurvestackFormCallback.probe.ux_tree()
 }
 func __gong__New__HorizontalAxisFormCallback(
 	horizontalaxis *models.HorizontalAxis,
@@ -1733,6 +1757,8 @@ type HorizontalAxisFormCallback struct {
 }
 
 func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
+	horizontalaxisFormCallback.probe.stageOfInterest.Lock()
+	defer horizontalaxisFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("HorizontalAxisFormCallback, OnSave")
 
@@ -1804,7 +1830,7 @@ func (horizontalaxisFormCallback *HorizontalAxisFormCallback) OnSave() {
 		horizontalaxisFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(horizontalaxisFormCallback.probe)
+	horizontalaxisFormCallback.probe.ux_tree()
 }
 func __gong__New__KeyFormCallback(
 	key *models.Key,
@@ -1833,6 +1859,8 @@ type KeyFormCallback struct {
 }
 
 func (keyFormCallback *KeyFormCallback) OnSave() {
+	keyFormCallback.probe.stageOfInterest.Lock()
+	defer keyFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("KeyFormCallback, OnSave")
 
@@ -1902,7 +1930,7 @@ func (keyFormCallback *KeyFormCallback) OnSave() {
 		keyFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(keyFormCallback.probe)
+	keyFormCallback.probe.ux_tree()
 }
 func __gong__New__ParameterFormCallback(
 	parameter *models.Parameter,
@@ -1931,6 +1959,8 @@ type ParameterFormCallback struct {
 }
 
 func (parameterFormCallback *ParameterFormCallback) OnSave() {
+	parameterFormCallback.probe.stageOfInterest.Lock()
+	defer parameterFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("ParameterFormCallback, OnSave")
 
@@ -2180,7 +2210,7 @@ func (parameterFormCallback *ParameterFormCallback) OnSave() {
 		parameterFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(parameterFormCallback.probe)
+	parameterFormCallback.probe.ux_tree()
 }
 func __gong__New__RhombusFormCallback(
 	rhombus *models.Rhombus,
@@ -2209,6 +2239,8 @@ type RhombusFormCallback struct {
 }
 
 func (rhombusFormCallback *RhombusFormCallback) OnSave() {
+	rhombusFormCallback.probe.stageOfInterest.Lock()
+	defer rhombusFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("RhombusFormCallback, OnSave")
 
@@ -2352,7 +2384,7 @@ func (rhombusFormCallback *RhombusFormCallback) OnSave() {
 		rhombusFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(rhombusFormCallback.probe)
+	rhombusFormCallback.probe.ux_tree()
 }
 func __gong__New__RhombusGridFormCallback(
 	rhombusgrid *models.RhombusGrid,
@@ -2381,6 +2413,8 @@ type RhombusGridFormCallback struct {
 }
 
 func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
+	rhombusgridFormCallback.probe.stageOfInterest.Lock()
+	defer rhombusgridFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("RhombusGridFormCallback, OnSave")
 
@@ -2465,7 +2499,7 @@ func (rhombusgridFormCallback *RhombusGridFormCallback) OnSave() {
 		rhombusgridFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(rhombusgridFormCallback.probe)
+	rhombusgridFormCallback.probe.ux_tree()
 }
 func __gong__New__ShapeCategoryFormCallback(
 	shapecategory *models.ShapeCategory,
@@ -2494,6 +2528,8 @@ type ShapeCategoryFormCallback struct {
 }
 
 func (shapecategoryFormCallback *ShapeCategoryFormCallback) OnSave() {
+	shapecategoryFormCallback.probe.stageOfInterest.Lock()
+	defer shapecategoryFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("ShapeCategoryFormCallback, OnSave")
 
@@ -2543,7 +2579,7 @@ func (shapecategoryFormCallback *ShapeCategoryFormCallback) OnSave() {
 		shapecategoryFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(shapecategoryFormCallback.probe)
+	shapecategoryFormCallback.probe.ux_tree()
 }
 func __gong__New__SpiralBezierFormCallback(
 	spiralbezier *models.SpiralBezier,
@@ -2572,6 +2608,8 @@ type SpiralBezierFormCallback struct {
 }
 
 func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
+	spiralbezierFormCallback.probe.stageOfInterest.Lock()
+	defer spiralbezierFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("SpiralBezierFormCallback, OnSave")
 
@@ -2721,7 +2759,7 @@ func (spiralbezierFormCallback *SpiralBezierFormCallback) OnSave() {
 		spiralbezierFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(spiralbezierFormCallback.probe)
+	spiralbezierFormCallback.probe.ux_tree()
 }
 func __gong__New__SpiralBezierGridFormCallback(
 	spiralbeziergrid *models.SpiralBezierGrid,
@@ -2750,6 +2788,8 @@ type SpiralBezierGridFormCallback struct {
 }
 
 func (spiralbeziergridFormCallback *SpiralBezierGridFormCallback) OnSave() {
+	spiralbeziergridFormCallback.probe.stageOfInterest.Lock()
+	defer spiralbeziergridFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("SpiralBezierGridFormCallback, OnSave")
 
@@ -2832,7 +2872,7 @@ func (spiralbeziergridFormCallback *SpiralBezierGridFormCallback) OnSave() {
 		spiralbeziergridFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(spiralbeziergridFormCallback.probe)
+	spiralbeziergridFormCallback.probe.ux_tree()
 }
 func __gong__New__SpiralCircleFormCallback(
 	spiralcircle *models.SpiralCircle,
@@ -2861,6 +2901,8 @@ type SpiralCircleFormCallback struct {
 }
 
 func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
+	spiralcircleFormCallback.probe.stageOfInterest.Lock()
+	defer spiralcircleFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("SpiralCircleFormCallback, OnSave")
 
@@ -3076,7 +3118,7 @@ func (spiralcircleFormCallback *SpiralCircleFormCallback) OnSave() {
 		spiralcircleFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(spiralcircleFormCallback.probe)
+	spiralcircleFormCallback.probe.ux_tree()
 }
 func __gong__New__SpiralCircleGridFormCallback(
 	spiralcirclegrid *models.SpiralCircleGrid,
@@ -3105,6 +3147,8 @@ type SpiralCircleGridFormCallback struct {
 }
 
 func (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) OnSave() {
+	spiralcirclegridFormCallback.probe.stageOfInterest.Lock()
+	defer spiralcirclegridFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("SpiralCircleGridFormCallback, OnSave")
 
@@ -3189,7 +3233,7 @@ func (spiralcirclegridFormCallback *SpiralCircleGridFormCallback) OnSave() {
 		spiralcirclegridFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(spiralcirclegridFormCallback.probe)
+	spiralcirclegridFormCallback.probe.ux_tree()
 }
 func __gong__New__SpiralLineFormCallback(
 	spiralline *models.SpiralLine,
@@ -3218,6 +3262,8 @@ type SpiralLineFormCallback struct {
 }
 
 func (spirallineFormCallback *SpiralLineFormCallback) OnSave() {
+	spirallineFormCallback.probe.stageOfInterest.Lock()
+	defer spirallineFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("SpiralLineFormCallback, OnSave")
 
@@ -3359,7 +3405,7 @@ func (spirallineFormCallback *SpiralLineFormCallback) OnSave() {
 		spirallineFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(spirallineFormCallback.probe)
+	spirallineFormCallback.probe.ux_tree()
 }
 func __gong__New__SpiralLineGridFormCallback(
 	spirallinegrid *models.SpiralLineGrid,
@@ -3388,6 +3434,8 @@ type SpiralLineGridFormCallback struct {
 }
 
 func (spirallinegridFormCallback *SpiralLineGridFormCallback) OnSave() {
+	spirallinegridFormCallback.probe.stageOfInterest.Lock()
+	defer spirallinegridFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("SpiralLineGridFormCallback, OnSave")
 
@@ -3470,7 +3518,7 @@ func (spirallinegridFormCallback *SpiralLineGridFormCallback) OnSave() {
 		spirallinegridFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(spirallinegridFormCallback.probe)
+	spirallinegridFormCallback.probe.ux_tree()
 }
 func __gong__New__SpiralOriginFormCallback(
 	spiralorigin *models.SpiralOrigin,
@@ -3499,6 +3547,8 @@ type SpiralOriginFormCallback struct {
 }
 
 func (spiraloriginFormCallback *SpiralOriginFormCallback) OnSave() {
+	spiraloriginFormCallback.probe.stageOfInterest.Lock()
+	defer spiraloriginFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("SpiralOriginFormCallback, OnSave")
 
@@ -3566,7 +3616,7 @@ func (spiraloriginFormCallback *SpiralOriginFormCallback) OnSave() {
 		spiraloriginFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(spiraloriginFormCallback.probe)
+	spiraloriginFormCallback.probe.ux_tree()
 }
 func __gong__New__SpiralRhombusFormCallback(
 	spiralrhombus *models.SpiralRhombus,
@@ -3595,6 +3645,8 @@ type SpiralRhombusFormCallback struct {
 }
 
 func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
+	spiralrhombusFormCallback.probe.stageOfInterest.Lock()
+	defer spiralrhombusFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("SpiralRhombusFormCallback, OnSave")
 
@@ -3744,7 +3796,7 @@ func (spiralrhombusFormCallback *SpiralRhombusFormCallback) OnSave() {
 		spiralrhombusFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(spiralrhombusFormCallback.probe)
+	spiralrhombusFormCallback.probe.ux_tree()
 }
 func __gong__New__SpiralRhombusGridFormCallback(
 	spiralrhombusgrid *models.SpiralRhombusGrid,
@@ -3773,6 +3825,8 @@ type SpiralRhombusGridFormCallback struct {
 }
 
 func (spiralrhombusgridFormCallback *SpiralRhombusGridFormCallback) OnSave() {
+	spiralrhombusgridFormCallback.probe.stageOfInterest.Lock()
+	defer spiralrhombusgridFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("SpiralRhombusGridFormCallback, OnSave")
 
@@ -3855,7 +3909,7 @@ func (spiralrhombusgridFormCallback *SpiralRhombusGridFormCallback) OnSave() {
 		spiralrhombusgridFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(spiralrhombusgridFormCallback.probe)
+	spiralrhombusgridFormCallback.probe.ux_tree()
 }
 func __gong__New__VerticalAxisFormCallback(
 	verticalaxis *models.VerticalAxis,
@@ -3884,6 +3938,8 @@ type VerticalAxisFormCallback struct {
 }
 
 func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
+	verticalaxisFormCallback.probe.stageOfInterest.Lock()
+	defer verticalaxisFormCallback.probe.stageOfInterest.Unlock()
 
 	// log.Println("VerticalAxisFormCallback, OnSave")
 
@@ -3955,5 +4011,5 @@ func (verticalaxisFormCallback *VerticalAxisFormCallback) OnSave() {
 		verticalaxisFormCallback.probe.formStage.Commit()
 	}
 
-	updateAndCommitTree(verticalaxisFormCallback.probe)
+	verticalaxisFormCallback.probe.ux_tree()
 }
