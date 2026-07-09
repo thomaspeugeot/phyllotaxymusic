@@ -2,6 +2,23 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "02 - run phyllotaxymusic 8090",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}/go/cmd/phyllotaxymusic"
+			},
+			"command": "go",
+			"args": [
+				"run",
+				"main.go",
+				"-unmarshallFromCode",
+				"data/frecon open ended curve.go",
+				"-port",
+				"8090"
+			],
+			"group": "build"
+		},
+		{
 			"label": "02 - run phyllotaxymusic -unmarshallFromCode=stage.go -marshallOnCommit=stage",
 			"type": "shell",
 			"options": {
