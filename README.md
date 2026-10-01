@@ -1,3 +1,5 @@
+**archived** see https://github.com/fullstack-lang/gong/tree/main/dsm/phylla/go
+
 # Phylotaxy music
 
 [Check out the generated web site from default parameter](https://thomaspeugeot.github.io/phyllotaxymusic)
